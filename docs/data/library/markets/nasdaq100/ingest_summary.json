@@ -1,23 +1,80 @@
 {
-  "run_at": "2026-09-19T18:48:57.291132+00:00",
+  "run_at": "2026-09-21T13:39:08.376543+00:00",
   "market_id": "nasdaq100",
-  "targets": [],
-  "target_details": [],
-  "results": [],
+  "targets": [
+    "CCEP"
+  ],
+  "target_details": [
+    {
+      "ticker": "CCEP",
+      "priority_score": 15.0083,
+      "filings_total": 95,
+      "filings_with_body": 94,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "CCEP",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 95,
+        "filings_with_body": 94,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 115,
+        "filings_with_body": 109,
+        "indexed_without_body": 6
+      },
+      "improved": false,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 95,
+        "annual": 1,
+        "interim": 45,
+        "trading_update": 0,
+        "other": 49,
+        "with_body": 95,
+        "period_coverage": {
+          "annual": {
+            "total": 1,
+            "with_body": 1
+          },
+          "interim": {
+            "total": 45,
+            "with_body": 45
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 49,
+            "with_body": 49
+          }
+        }
+      },
+      "ticker_budget_hit": true,
+      "ir_exhausted": false,
+      "ir_refetch": null
+    }
+  ],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-19T18:48:44.265403+00:00",
+    "snapshot_at": "2026-09-21T13:33:38.147369+00:00",
     "market_id": "nasdaq100",
-    "buy_tier_count": 38,
+    "buy_tier_count": 37,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 9,
     "bodies_min": 17,
-    "bodies_median": 20.0,
+    "bodies_median": 20,
     "bodies_max": 94,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -44,16 +101,16 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-19T18:48:52.310840+00:00",
+    "snapshot_at": "2026-09-21T13:39:04.192691+00:00",
     "market_id": "nasdaq100",
-    "buy_tier_count": 38,
+    "buy_tier_count": 37,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 9,
+    "indexed_without_body": 15,
     "bodies_min": 17,
-    "bodies_median": 20.0,
-    "bodies_max": 94,
+    "bodies_median": 20,
+    "bodies_max": 109,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -61,11 +118,13 @@
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
       "TRI",
-      "PDD"
+      "PDD",
+      "CCEP"
     ],
     "indexed_without_body_by_ticker": {
       "TRI": 8,
-      "PDD": 1
+      "PDD": 1,
+      "CCEP": 6
     },
     "parked_tickers": [
       "PDD",
@@ -74,9 +133,11 @@
     "parked_count": 2,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 6,
+    "effective_indexed_without_body_tickers": [
+      "CCEP"
+    ],
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -85,7 +146,7 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 38,
+    "scanned": 37,
     "hits": 0,
     "new_rows_total": 0,
     "curiosity_total": 0,
@@ -107,14 +168,10 @@
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "nasdaq100"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "nasdaq100",
-    "assessed_at": "2026-09-19T18:48:46.030076+00:00",
+    "assessed_at": "2026-09-21T13:33:39.928395+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -151,19 +208,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 4.558094619000002,
+  "used_seconds": 322.513983885,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3595.441905381,
-  "blocker_ticker": null,
+  "leftover_seconds": 3277.486016115,
+  "blocker_ticker": "CCEP",
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "nasdaq100",
-    "updated_at": "2026-09-19T18:48:52.313413+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-09-21T13:39:04.195327+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -188,38 +245,28 @@
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
+      "CCEP",
       "PDD",
       "TRI"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "CCEP"
+    ],
     "path": "docs/data/library/markets/nasdaq100/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "nasdaq100",
-    "ingest_exhausted_markets": [
-      "asx200",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_smallcap",
-      "nasdaq100",
-      "sp500",
-      "tsx60"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "nasdaq100"
   },
   "parked_hunter_compile": {
-    "compiled_count": 1,
-    "task_ids": [
-      "eng-20260919-10"
-    ],
-    "task_count": 66,
+    "compiled_count": 0,
+    "task_ids": [],
+    "task_count": 92,
     "market_id": "nasdaq100",
-    "hunter_ticker": "TRI",
+    "hunter_ticker": "PDD",
     "priority_score": 12.0
   }
 }
