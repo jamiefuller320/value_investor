@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-21T19:03:34.290992+00:00",
+  "generated_at": "2026-09-21T19:31:09.725961+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -43,7 +43,7 @@
       "1": "dax",
       "2": "cac40"
     },
-    "equal_support_generated_at": "2026-09-21T15:20:48.527144+00:00"
+    "equal_support_generated_at": "2026-09-21T19:26:11.981056+00:00"
   },
   "markets": [
     {
@@ -723,9 +723,9 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 10,
-        "targets": 90,
-        "improved": 4,
+        "run_count": 9,
+        "targets": 79,
+        "improved": 3,
         "improved_tickers": [
           "FME.DE"
         ],
@@ -735,8 +735,8 @@
         "gaps_before": {
           "unmeasured": 7,
           "zero_body": 0,
-          "thin": 4,
-          "indexed_without_body": 46,
+          "thin": 3,
+          "indexed_without_body": 42,
           "filing_gaps": 7
         },
         "gaps_after": {
@@ -749,8 +749,8 @@
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": -1,
-          "indexed_without_body": -8,
+          "thin": 0,
+          "indexed_without_body": -4,
           "filing_gaps": 0
         },
         "remaining": {
@@ -1025,8 +1025,8 @@
           "TEP.PA",
           "TTE.PA"
         ],
-        "last_run_at": "2026-09-21T15:14:03.887990+00:00",
-        "runtime_cutoff_runs": 4,
+        "last_run_at": "2026-09-21T19:29:54.062126+00:00",
+        "runtime_cutoff_runs": 3,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
@@ -1062,7 +1062,7 @@
           {
             "id": "runtime_cutoff",
             "severity": "high",
-            "summary": "4 ingest run(s) hit the runtime cutoff"
+            "summary": "3 ingest run(s) hit the runtime cutoff"
           }
         ],
         "sprint_entered_at": "2026-09-19T12:34:58.542846+00:00"
@@ -2310,7 +2310,7 @@
         "hold_near_buy_count": 60,
         "not_buy_tier_count": 168,
         "never_buy_tier_count": 150,
-        "rememo_eligible_count": 0,
+        "rememo_eligible_count": 1,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
