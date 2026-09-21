@@ -61,6 +61,7 @@ from value_investor.research.filings import (
     filter_misattributed_filings,
     headline_relevant_to_issuer,
     ingest_filings,
+    install_fetch_cashflow_fallback,
     load_ir_url_allowlist,
     merge_filings,
     merge_ir_allowlist_filings,
@@ -76,6 +77,7 @@ from value_investor.research.filings import (
     refetch_residual_filing_bodies,
     refetch_ticker_rns_api_filing_bodies,
     refetch_uk_primary_filing_bodies,
+    refresh_sources_yahoo_cashflow_metrics,
     resolve_filings_regime,
     resolve_google_news_publisher_url,
     resolve_investegate_document_url,
@@ -87,6 +89,7 @@ from value_investor.research.filings import (
     select_research_filing_slot_rows,
     standardise_investegate_lse_fetch_url,
     summarize_filings,
+    supplement_company_metrics_cashflow,
 )
 from value_investor.research.ingest import (
     apply_cashflow_metrics_fallback,
@@ -95,11 +98,9 @@ from value_investor.research.ingest import (
     extract_ttm_cashflow_metrics_from_quarterly,
     fetch_annual_financials,
     ingest_research_sources,
-    install_fetch_cashflow_fallback,
     quarterly_cashflow_has_usable_series,
     quarterly_income_has_usable_series,
     summarize_yahoo_quarterly_for_snapshot,
-    supplement_company_metrics_cashflow,
     sync_snapshot_fcf_screen_ttm_verification,
 )
 
@@ -641,7 +642,7 @@ def test_install_fetch_cashflow_fallback_patches_fetch(monkeypatch):
         return ["operating_cashflow"]
 
     monkeypatch.setattr(
-        "value_investor.research.ingest.supplement_company_metrics_cashflow",
+        "value_investor.research.filings.supplement_company_metrics_cashflow",
         fake_supplement,
     )
 
@@ -693,6 +694,101 @@ def test_fetch_cashflow_fallback_does_not_double_fetch_yfinance(monkeypatch):
         fetch_mod.fetch_company_metrics("MEGP.L")
 
     assert seen == ["MEGP.L"]
+
+
+def test_eng_20260921_04_refresh_sources_yahoo_cashflow_metrics_from_annual_rows(
+    tmp_path: Path,
+):
+    """OCF: mirror Yahoo annual cash_flow rows onto financials + screening snapshot."""
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "MEGP.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 90_762_000.0,
+                "Free Cash Flow": 25_153_000.0,
+            },
+        },
+        "cashflow_metrics": {},
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (sources / "screening_snapshot.json").write_text(
+        json.dumps(
+            {
+                "ticker": "MEGP.L",
+                "operating_cashflow": None,
+                "free_cashflow": None,
+                "cashflow_metrics": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = refresh_sources_yahoo_cashflow_metrics(ticker="MEGP.L", sources_dir=sources)
+
+    assert result["updated"] is True
+    assert result["operating_cashflow"] == pytest.approx(90_762_000.0)
+    stored = json.loads((sources / "financials_annual.json").read_text(encoding="utf-8"))
+    assert stored["cashflow_metrics"]["operating_cashflow"] == pytest.approx(90_762_000.0)
+    snapshot = json.loads((sources / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert snapshot["operating_cashflow"] == pytest.approx(90_762_000.0)
+    assert snapshot["cashflow_metrics"]["operating_cashflow"] == pytest.approx(90_762_000.0)
+
+
+def test_eng_20260921_04_fetch_backfills_ocf_from_refreshed_financials_annual(
+    tmp_path: Path, monkeypatch
+):
+    """Regression: fetch uses OCF from sources/financials_annual.json when Yahoo cashflow is null."""
+    from types import SimpleNamespace
+
+    from value_investor import fetch as fetch_mod
+
+    monkeypatch.chdir(tmp_path)
+    sources = tmp_path / "output" / "research" / "MEGP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "MEGP.L",
+        "cash_flow": {
+            "2025": {"Operating Cash Flow": 90_762_000.0, "Free Cash Flow": 25_153_000.0},
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    refresh_sources_yahoo_cashflow_metrics(ticker="MEGP.L", sources_dir=sources)
+
+    class DummyTicker:
+        @property
+        def info(self):
+            return {"longName": "ME Group International plc", "marketCap": 2_000_000}
+
+        @property
+        def fast_info(self):
+            return SimpleNamespace(market_cap=2_000_000)
+
+        @property
+        def balance_sheet(self):
+            return None
+
+        @property
+        def income_stmt(self):
+            return None
+
+        @property
+        def cashflow(self):
+            return None
+
+        financials = pd.DataFrame()
+        quarterly_financials = None
+
+    fetch_mod.fetch_company_metrics._cashflow_fallback_installed = False  # type: ignore[attr-defined]
+    install_fetch_cashflow_fallback()
+
+    with patch.object(fetch_mod.yf, "Ticker", lambda _sym: DummyTicker()):
+        metrics = fetch_mod.fetch_company_metrics("MEGP.L")
+
+    assert metrics.operating_cashflow == pytest.approx(90_762_000.0)
+    assert metrics.free_cashflow == pytest.approx(25_153_000.0)
+    assert metrics.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
 
 
 def test_fetch_annual_financials_includes_cashflow_metrics(monkeypatch):

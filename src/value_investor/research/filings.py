@@ -9448,10 +9448,155 @@ def ingest_filings(
     prune_orphaned_filing_bodies(filings_dir)
     written = resolve_json_path(index_path) or index_path
 
+    cashflow_refresh = refresh_sources_yahoo_cashflow_metrics(
+        ticker=ticker,
+        sources_dir=sources_dir,
+    )
+
     return {
         "filings_index_path": str(written),
         "filings_dir": str(filings_dir),
         "filings_summary": index["summary"],
         "filings_sources": index["sources_used"],
         "filings_regime": regime,
+        "yahoo_cashflow_metrics_refresh": cashflow_refresh,
     }
+
+
+def refresh_sources_yahoo_cashflow_metrics(
+    *,
+    ticker: str,
+    sources_dir: Path,
+) -> dict[str, Any]:
+    """
+    Mirror Yahoo operating/free cash-flow fields onto ``financials_annual.json``.
+
+    Keeps ``cashflow_metrics`` aligned with annual ``cash_flow`` rows so
+    ``CompanyMetrics`` fetch backfill can read OCF when yfinance returns null.
+    Also backfills top-level ``operating_cashflow`` on ``screening_snapshot.json``
+    when that snapshot was written before fetch fallback ran.
+    """
+    from value_investor.research.ingest import (
+        apply_cashflow_metrics_fallback,
+        extract_cashflow_metrics_from_annual_financials,
+    )
+    from value_investor.storage import read_json, resolve_json_path, write_json
+
+    normalized = ticker.strip().upper()
+    financials_path = sources_dir / "financials_annual.json"
+    resolved_financials = resolve_json_path(financials_path)
+    if resolved_financials is None:
+        return {"updated": False, "note": "financials_annual_missing", "ticker": normalized}
+
+    try:
+        financials = read_json(resolved_financials)
+    except (OSError, ValueError, TypeError) as exc:
+        return {
+            "updated": False,
+            "note": f"financials_annual_unreadable: {exc}",
+            "ticker": normalized,
+        }
+    if not isinstance(financials, dict):
+        return {"updated": False, "note": "financials_annual_invalid", "ticker": normalized}
+
+    extracted = extract_cashflow_metrics_from_annual_financials(financials)
+    if not extracted:
+        return {"updated": False, "note": "no_cashflow_rows", "ticker": normalized}
+
+    existing_metrics = dict(financials.get("cashflow_metrics") or {})
+    merged_metrics = dict(existing_metrics)
+    for key, value in extracted.items():
+        if value is not None:
+            merged_metrics[key] = value
+
+    financials_updated = merged_metrics != existing_metrics
+    if financials_updated:
+        financials["cashflow_metrics"] = merged_metrics
+        write_json(financials_path, financials, compact=True, compress=False)
+
+    snapshot_path = sources_dir / "screening_snapshot.json"
+    snapshot_updated = False
+    resolved_snapshot = resolve_json_path(snapshot_path)
+    if resolved_snapshot is not None:
+        try:
+            snapshot = read_json(resolved_snapshot)
+        except (OSError, ValueError, TypeError):
+            snapshot = None
+        if isinstance(snapshot, dict):
+            filled = apply_cashflow_metrics_fallback(snapshot, financials)
+            nested = dict(snapshot.get("cashflow_metrics") or {})
+            for key, value in merged_metrics.items():
+                if value is not None and nested.get(key) is None:
+                    nested[key] = value
+                    filled.append(f"cashflow_metrics.{key}")
+            if nested and nested != (snapshot.get("cashflow_metrics") or {}):
+                snapshot["cashflow_metrics"] = nested
+                if "cashflow_metrics" not in filled:
+                    filled.append("cashflow_metrics")
+            if filled:
+                write_json(snapshot_path, snapshot, compact=True, compress=False)
+                snapshot_updated = True
+
+    return {
+        "updated": financials_updated or snapshot_updated,
+        "financials_updated": financials_updated,
+        "snapshot_updated": snapshot_updated,
+        "operating_cashflow": merged_metrics.get("operating_cashflow"),
+        "ticker": normalized,
+    }
+
+
+def supplement_company_metrics_cashflow(
+    metrics: Any,
+    *,
+    financials: dict[str, Any] | None = None,
+    ticker: str | None = None,
+    output_dir: Path | None = None,
+    sources_dir: Path | None = None,
+    allow_live_fetch: bool = True,
+) -> list[str]:
+    """Backfill ``CompanyMetrics`` cash-flow fields from cached ``financials_annual.json``."""
+    from value_investor.research.ingest import supplement_company_metrics_cashflow as _supplement
+
+    return _supplement(
+        metrics,
+        financials=financials,
+        ticker=ticker,
+        output_dir=output_dir,
+        sources_dir=sources_dir,
+        allow_live_fetch=allow_live_fetch,
+    )
+
+
+def install_fetch_cashflow_fallback() -> None:
+    """Patch ``fetch_company_metrics`` to backfill OCF/FCF from ``financials_annual.json``."""
+    from value_investor import fetch as fetch_mod
+
+    if getattr(fetch_mod.fetch_company_metrics, "_cashflow_fallback_installed", False):
+        return
+
+    original = fetch_mod.fetch_company_metrics
+
+    def fetch_company_metrics_with_cashflow_fallback(
+        ticker: str,
+        name: str | None = None,
+        sector: str | None = None,
+        *,
+        market: str | None = None,
+    ):
+        metrics = original(ticker, name=name, sector=sector, market=market)
+        try:
+            supplement_company_metrics_cashflow(
+                metrics,
+                output_dir=Path("output"),
+                allow_live_fetch=False,
+            )
+        except Exception as exc:  # noqa: BLE001 — screening should continue
+            logger.debug("Cash-flow fallback failed for %s: %s", ticker, exc)
+        return metrics
+
+    fetch_company_metrics_with_cashflow_fallback._cashflow_fallback_installed = True  # type: ignore[attr-defined]
+    fetch_mod.fetch_company_metrics = fetch_company_metrics_with_cashflow_fallback
+
+
+install_fetch_cashflow_fallback()
