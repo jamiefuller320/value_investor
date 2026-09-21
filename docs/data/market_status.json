@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-21T10:22:45.455133+00:00",
+  "generated_at": "2026-09-21T10:39:22.052304+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -414,14 +414,14 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 5,
-        "targets": 31,
-        "improved": 10,
+        "run_count": 4,
+        "targets": 25,
+        "improved": 8,
         "improved_tickers": [
-          "C5H.IR",
-          "TTE.PA",
           "ADYEN.AS",
           "ESSITY-B.ST",
+          "C5H.IR",
+          "TTE.PA",
           "BOL.ST",
           "ERIC-B.ST"
         ],
@@ -429,11 +429,11 @@
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
-          "unmeasured": 0,
+          "unmeasured": 1,
           "zero_body": 0,
-          "thin": 11,
+          "thin": 12,
           "indexed_without_body": 19,
-          "filing_gaps": 0
+          "filing_gaps": 1
         },
         "gaps_after": {
           "unmeasured": 0,
@@ -443,11 +443,11 @@
           "filing_gaps": 0
         },
         "gap_delta": {
-          "unmeasured": 0,
+          "unmeasured": -1,
           "zero_body": 0,
-          "thin": 2,
+          "thin": 1,
           "indexed_without_body": -2,
-          "filing_gaps": 0
+          "filing_gaps": -1
         },
         "remaining": {
           "unmeasured": 0,
