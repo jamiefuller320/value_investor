@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-21T11:23:10.825721+00:00",
+  "generated_at": "2026-09-21T11:30:04.320716+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1168,36 +1168,23 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-21T11:23:08.242214+00:00",
-    "queue_ui_updated_at": "2026-09-21T11:23:10.731183+00:00",
+    "compiled_at": "2026-09-21T11:30:02.191056+00:00",
+    "queue_ui_updated_at": "2026-09-21T11:30:04.196984+00:00",
     "task_count": 92,
     "status": {
       "open_count": 0,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "parked_count": 3,
-      "merged_count": 68,
+      "merged_count": 69,
       "failed_count": 0,
       "next_task_id": null,
-      "in_flight_branch": "cursor/eng-20260921-04-1de3",
-      "in_flight_pr": 777,
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [
-      {
-        "id": "eng-20260921-04",
-        "area": "ingest",
-        "title": "Wire Yahoo/`CompanyMetrics` OCF (and related cash-flow fields) from `financials_annual.json` when fetch returns null",
-        "priority": "high",
-        "priority_score": 97.0,
-        "status": "pr_open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": "cursor/eng-20260921-04-1de3"
-      }
-    ],
+    "queued_tasks": [],
     "attention_tasks": [
       {
         "id": "eng-20260921-02",
@@ -1517,46 +1504,40 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-21T11:23:10.825721+00:00",
-    "overall": "blocked",
-    "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
+    "generated_at": "2026-09-21T11:30:04.320716+00:00",
+    "overall": "idle",
+    "headline": "Queue and hunter idle.",
     "merge_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
-      "pr_open_count": 1,
-      "open_engineering_prs": [
-        {
-          "number": 777,
-          "branch": "cursor/eng-20260921-04-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 777,
-      "detail": "Open engineering PR(s) #777 — merge fires on CI success."
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "blocked",
-      "idle": false,
+      "state": "idle",
+      "idle": true,
       "running": false,
-      "blocked": true,
+      "blocked": false,
       "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 3,
       "open_count": 0,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
       "next_task_id": null,
       "reason": "no open engineering tasks in queue",
-      "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
+      "detail": "No open engineering tasks — queue is idle."
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 3,
-      "evaluated_at": "2026-09-21T11:23:09.867636+00:00"
+      "evaluated_at": "2026-09-21T11:30:03.209411+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1576,8 +1557,19 @@
         "area": "scoring",
         "pr_number": 776,
         "pr_url": "https://github.com/jamiefuller320/value_investor/pull/776",
-        "merged_at": "2026-09-21T11:21:49.390758+00:00",
-        "merge_class": "scoring_narrow",
+        "merged_at": "2026-09-21T11:29:54.436741+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260921-04",
+        "title": "Wire Yahoo/`CompanyMetrics` OCF (and related cash-flow fields) from `financials_annual.json` when fetch returns null",
+        "area": "ingest",
+        "pr_number": 777,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/777",
+        "merged_at": "2026-09-21T11:28:50.275597+00:00",
+        "merge_class": "ingest_narrow",
         "auto_merge": false,
         "independently_verified": true
       },
