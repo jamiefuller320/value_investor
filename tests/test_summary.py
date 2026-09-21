@@ -1305,6 +1305,12 @@ def test_reconcile_fcf_binds_filing_year_company_adjusted_over_stale_bridge(tmp_
     assert bundle["company_adjusted_stale_year"] is True
     assert bundle["company_adjusted_snapshot"] == 113_500_000.0
     assert bundle["policy_fcf"] == 73_800_000.0
+    assert bundle["canonical"] == pytest.approx(73_800_000.0)
+    registry = bundle["fcf_basis_registry"]
+    assert registry["selected_fcf"] == pytest.approx(73_800_000.0)
+    assert registry["selected_basis"] == "company_adjusted"
+    assert registry["screen_ttm_unverified"] is False
+    assert registry["company_adjusted_stale_year"] is True
     assert overlay_free_cashflow_from_bundle(
         pd.Series({"free_cashflow": 362_600_000.0}),
         bundle,
@@ -1431,6 +1437,8 @@ def test_build_company_reports_exports_filing_year_company_adjusted_stale_flag(t
 
     assert snapshot["fcf"]["company_adjusted"] == 73_800_000.0
     assert snapshot["fcf"]["company_adjusted_stale_year"] is True
+    assert snapshot["fcf"]["canonical"] == pytest.approx(73_800_000.0)
+    assert snapshot["fcf"]["fcf_basis_registry"]["selected_fcf"] == pytest.approx(73_800_000.0)
     assert snapshot["cashflow_metrics"]["free_cashflow"] == 73_800_000.0
     assert snapshot["key_metrics"]["FCF"] == "73800000.0"
     assert "company-adj £73.8M" in snapshot["action_note"]

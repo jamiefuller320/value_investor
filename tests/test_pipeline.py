@@ -290,8 +290,84 @@ def test_refresh_snapshot_honours_fcf_action_note_when_overlay_false(tmp_path: P
     assert refresh_snapshot_from_document(tmp_path, doc) is True
     written = json.loads((sources_dir / "screening_snapshot.json").read_text(encoding="utf-8"))
     assert written["fcf_basis_overlay"] is True
+    assert written["fcf_basis_bound"] is True
     assert written["adjusted_signal"] == "hold"
     assert written["conviction_score"] == pytest.approx(0.8022 * 0.85)
+
+
+def test_guard_screening_snapshot_export_attaches_fcf_basis_registry(tmp_path: Path):
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "FGP.L",
+                "cash_flow": {
+                    "2026": {
+                        "Operating Cash Flow": 615_600_000.0,
+                        "Capital Expenditure": -253_000_000.0,
+                        "Free Cash Flow": 362_600_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "fcf_bridge.json").write_text(
+        json.dumps(
+            {
+                "ticker": "FGP.L",
+                "fiscal_year": "2026",
+                "currency": "GBP",
+                "resolved": True,
+                "policy_basis": "company_adjusted",
+                "policy_fcf": 113_500_000.0,
+                "company_adjusted": 113_500_000.0,
+            }
+        ),
+        encoding="utf-8",
+    )
+    rns_body = filings / "fy2026_results.txt"
+    rns_body.write_text(
+        "Free cash flow of £73.8m before acquisitions and returns",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "published_at": "2026-06-18T08:00:00Z",
+                        "has_body": True,
+                        "body_path": str(rns_body),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    snapshot = {
+        "ticker": "FGP.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5,
+        "fcf_basis_overlay": True,
+        "free_cashflow": 362_600_000.0,
+        "free_cashflow_screen_ttm": 302_812_512.0,
+        "action_note": (
+            "Buy — neutral timing | FCF basis mismatch: filing £362.6M | "
+            "screen TTM £302.8M | company-adj £73.8M"
+        ),
+    }
+    guarded = guard_screening_snapshot_export(snapshot, output_dir=tmp_path)
+    fcf = guarded["fcf"]
+    assert fcf["fcf_basis_registry"]["selected_fcf"] == pytest.approx(73_800_000.0)
+    assert fcf["canonical"] == pytest.approx(73_800_000.0)
+    assert guarded["fcf_basis_bound"] is True
 
 
 def test_statutory_fcf_moat_leverage_overlay_caps_buy_despite_research_accumulate():

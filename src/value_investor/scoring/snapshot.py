@@ -53,6 +53,7 @@ _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
     "research_as_of",
     "research_confidence",
     "fcf_basis_overlay",
+    "fcf_basis_bound",
     "media_cyclical_thin_fcf_overlay",
     "advertising_revenue_share",
     "dividend_sustainability_overlay",
@@ -171,7 +172,13 @@ def enforce_fcf_basis_in_snapshot(
     )
     updated["adjusted_signal"] = merged_adjusted
     updated["fcf_basis_overlay"] = overlay
+    updated["fcf_basis_bound"] = overlay
     updated["conviction_score"] = conviction
+    fcf_out = updated.get("fcf")
+    if isinstance(fcf_out, dict):
+        from value_investor.scoring.fcf import finalize_fcf_basis_bundle
+
+        updated["fcf"] = finalize_fcf_basis_bundle(fcf_out)
 
     piotroski_f_score = _piotroski_f_score_int(updated.get("piotroski_f_score"))
     if piotroski_f_score is None and model_results is not None and not model_results.empty:
