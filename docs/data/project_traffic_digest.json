@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-22T17:31:44.016305+00:00",
+  "generated_at": "2026-09-22T20:21:29.286725+00:00",
   "role": "end_of_day_project_traffic",
-  "trajectory": "blocked_by_pr_queue",
-  "pause_active": true,
+  "trajectory": "on_track",
+  "pause_active": false,
   "stuck_pr_count": 0,
   "achieved": [
     "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
@@ -24,8 +24,8 @@
   ],
   "actions_taken": [
     {
-      "kind": "stop_automation_waste",
-      "detail": "cleared automation-waste hold — no remediable signal",
+      "kind": "resume_dispatch",
+      "detail": "resumed — no stuck monitored PRs and idle window elapsed",
       "pr_number": null,
       "branch": null,
       "applied": true
@@ -82,7 +82,7 @@
         "probe": "human_gate block is structural, not free text"
       },
       {
-        "claim": "Queue health overall=idle; headline=Queue and hunter idle.",
+        "claim": "Queue health overall=blocked; headline=Traffic pause — 0 stuck PR(s). project traffic pause (0 stuck PR(s); stuck_prs) — clear CI failures / merge conflicts before new PR generation",
         "source": "docs/data/queue_health.json",
         "grounded": true,
         "probe": "queue_health.overall must be set by refresh_queue_health_ui"
@@ -94,7 +94,7 @@
         "probe": "ops_status.run_at required for same-day claims"
       },
       {
-        "claim": "Traffic pause_active=True; stuck_pr_count=0",
+        "claim": "Traffic pause_active=False; stuck_pr_count=0",
         "source": "docs/data/engineering_tasks.json#traffic_control",
         "grounded": true,
         "probe": "pause state must match stuck PR classification on this run"
@@ -163,7 +163,7 @@
     }
   ],
   "pr_fix_common_issues": {
-    "occasion_count": 26,
+    "occasion_count": 27,
     "by_reason": [
       {
         "failure_reason": "PR mergeable=CONFLICTING against main",
@@ -277,13 +277,13 @@
       },
       {
         "kind": "ci_check",
-        "count": 7
+        "count": 8
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 26
+        "count": 27
       }
     ]
   },
