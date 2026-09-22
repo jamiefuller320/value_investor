@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-22T11:08:15+00:00",
+  "updated_at": "2026-09-22T11:12:48+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9907,6 +9907,23 @@
       "status": "open",
       "source": "conversation: does primary suite matter",
       "added_at": "2026-09-22T11:08:15+00:00"
+    },
+    {
+      "id": "L440",
+      "category": "later",
+      "section": "learning",
+      "title": "Fix momentum_grace still-buy-tier blocking rank rotation",
+      "summary": "evaluate_grace_holding returns keep=True for any buy-tier signal; paper_fund then grace_keeps holdings outside the top-N target set, so the book never sells (0 exits since Aug) and never tests downgrade+momentum. Intended grace is only after leaving buy-tier.",
+      "revisit_when": "Prioritising lifecycle/exit experiments or retiring/restarting the momentum_grace track",
+      "tags": [
+        "momentum_grace",
+        "lifecycle",
+        "bug",
+        "exit"
+      ],
+      "status": "open",
+      "source": "conversation: why momentum grace failed",
+      "added_at": "2026-09-22T11:12:48+00:00"
     }
   ],
   "fragments": [

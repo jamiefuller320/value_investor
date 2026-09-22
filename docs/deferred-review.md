@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:08:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:12:48+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -261,6 +261,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L423 | **Shadow-buy every filter refusal into the downstream sample** | If a buy/no-buy fork drops a name, downstream DCA and exit tests on the fork never see it, including when the drop was a mistake. Shadow-buy the entire refusal set at the decision date under the fork's downstream rules, and score those episodes in a refused stratum. Do not wait until a drop looks wrong, and do not pool shadow fills into the fork's live result. Skip the shadow buy when that same downstream rule is already overlaid on epoch-0, which still holds the name. | A buy-set fork is open and a downstream rule runs only on the fork's actual buys, not as an overlay on epoch-0 |
 | L437 | **Fund PIT decision-autopsy attribution loop (L368)** | Automated data-vs-logic gap attribution from frozen decision packs would lift learning/alpha score by steering eng queue; design locked, implementation deferred behind Phase C. | L367 Phase C readiness met and memo retarget funded |
 | L438 | **Evolutionary genomes after walk-forward thickness (L2)** | Stage 5 evolution only after primary loop has thick cost-aware walk-forward history; premature evolution would inflate eng score without alpha. | Stage 2b complete and decision-review epochs show stable positive Suite B excess |
+| L440 | **Fix momentum_grace still-buy-tier blocking rank rotation** | evaluate_grace_holding returns keep=True for any buy-tier signal; paper_fund then grace_keeps holdings outside the top-N target set, so the book never sells (0 exits since Aug) and never tests downgrade+momentum. Intended grace is only after leaving buy-tier. | Prioritising lifecycle/exit experiments or retiring/restarting the momentum_grace track |
 
 ### Universe & data
 
