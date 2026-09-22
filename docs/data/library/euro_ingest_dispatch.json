@@ -25,7 +25,7 @@
     "primary track must beat rules control on latest review"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-22T10:59:26.095252+00:00",
+    "snapshot_at": "2026-09-22T11:20:50.954988+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 48,
     "unmeasured_buy_tier": 2,
@@ -108,7 +108,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-22T10:59:26.097363+00:00",
+  "evaluated_at": "2026-09-22T11:20:50.957100+00:00",
   "maintenance_markets": [
     "asx200",
     "cac40",
@@ -148,7 +148,7 @@
         "dax not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-22T10:59:45.335572+00:00",
+        "snapshot_at": "2026-09-22T11:21:06.402218+00:00",
         "market_id": "dax",
         "buy_tier_count": 11,
         "unmeasured_buy_tier": 6,
@@ -206,88 +206,83 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-22T10:59:45.336214+00:00",
+      "evaluated_at": "2026-09-22T11:21:06.402734+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "sp500"
+    "ftse_smallcap"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "sp500",
+      "market_id": "ftse_smallcap",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=0, indexed_without_body=13)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=38)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
       "parked_tickers": [
-        "APTV",
-        "BXP",
-        "CRH",
-        "FICO",
-        "LDOS",
-        "LMT",
-        "TSN"
+        "APTD.L",
+        "BOOT.L",
+        "DFS.L",
+        "TPT.L"
       ],
       "phase3_ready": false,
       "current_phase": 1,
       "next_phase": 1,
       "phase_blockers": [
-        "sp500 not in ladder.weekly_paper_shard_markets"
+        "ftse_smallcap not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-22T10:59:53.368402+00:00",
-        "market_id": "sp500",
-        "buy_tier_count": 143,
-        "unmeasured_buy_tier": 1,
+        "snapshot_at": "2026-09-22T11:21:07.213216+00:00",
+        "market_id": "ftse_smallcap",
+        "buy_tier_count": 8,
+        "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 13,
-        "bodies_min": 14,
-        "bodies_median": 20.0,
-        "bodies_max": 74,
-        "coverage_scope": "canonical",
-        "ftse_equivalent": true,
-        "unmeasured_tickers": [
-          "PCAR"
-        ],
+        "indexed_without_body": 38,
+        "bodies_min": 49,
+        "bodies_median": 54.5,
+        "bodies_max": 81,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [],
         "indexed_without_body_tickers": [
-          "LDOS",
-          "APTV",
-          "CRH",
-          "LMT",
-          "FICO",
-          "BXP"
+          "ULTP.L",
+          "TPT.L",
+          "DFS.L",
+          "APTD.L",
+          "MER.L",
+          "BOOT.L"
         ],
         "indexed_without_body_by_ticker": {
-          "LDOS": 1,
-          "APTV": 2,
-          "CRH": 2,
-          "LMT": 1,
-          "FICO": 5,
-          "BXP": 2
+          "ULTP.L": 5,
+          "TPT.L": 8,
+          "DFS.L": 6,
+          "APTD.L": 6,
+          "MER.L": 5,
+          "BOOT.L": 8
         },
         "parked_tickers": [
-          "APTV",
-          "BXP",
-          "CRH",
-          "FICO",
-          "LDOS",
-          "LMT",
-          "TSN"
+          "APTD.L",
+          "BOOT.L",
+          "DFS.L",
+          "TPT.L"
         ],
-        "parked_count": 7,
+        "parked_count": 4,
         "effective_thin_body_buy_tier": 0,
         "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 0,
-        "effective_indexed_without_body_tickers": [],
+        "effective_indexed_without_body": 10,
+        "effective_indexed_without_body_tickers": [
+          "ULTP.L",
+          "MER.L"
+        ],
         "ingest_exhausted": false
       },
-      "filing_gaps": 1,
+      "filing_gaps": 0,
       "max_daily_successes": 4,
       "max_targets": 24,
       "cron_morning": true,
@@ -299,14 +294,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-22T10:59:53.373670+00:00",
+      "evaluated_at": "2026-09-22T11:21:07.213625+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "dax",
-    "sp500"
+    "ftse_smallcap"
   ],
   "market_queue": [
     "sp500",
@@ -349,7 +344,7 @@
     "dax"
   ],
   "scheduler_stream_2_markets": [
-    "sp500"
+    "ftse_smallcap"
   ],
   "should_run_library_maintenance": true
 }
