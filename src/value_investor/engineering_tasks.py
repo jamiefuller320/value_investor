@@ -622,6 +622,19 @@ def _merge_task_rows(
                 "pr_number",
                 "completed_at",
                 "merged_at",
+                # Park / cancel metadata — compile rematch must not strip these
+                # (weekday ingest recompile was leaving status=parked with null policy).
+                "parked_reason",
+                "parked_at",
+                "parked_policy",
+                "duplicate_of",
+                "cancelled_reason",
+                "cancelled_at",
+                "cancelled_policy",
+                "no_diff_count",
+                "last_no_diff_at",
+                "failure_count",
+                "last_failed_at",
             ):
                 if prior.get(field) is not None:
                     row[field] = prior[field]
