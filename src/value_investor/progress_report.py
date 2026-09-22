@@ -35,6 +35,7 @@ from value_investor.storage import read_json
 
 DEFAULT_REPORT_PATH = Path("docs/data/progress_report.json")
 DEFAULT_MARKDOWN_PATH = Path("docs/data/progress_report.md")
+DEFAULT_ASSESSMENT_PATH = Path("docs/data/experiment_assessment.json")
 
 DATA_DIR = Path("docs/data")
 
@@ -513,6 +514,74 @@ def _title_linked(title: str, candidates: list[str]) -> bool:
     return False
 
 
+def build_lifecycle_ack_section(
+    *,
+    data_dir: Path = DATA_DIR,
+    assessment_path: Path | None = None,
+) -> dict[str, Any]:
+    """Summarise experiment_assessment recommend rows awaiting / holding human observe-acks."""
+    from value_investor.experiment_acks import apply_ack_to_experiment, load_acks
+
+    path = Path(assessment_path or (Path(data_dir) / "experiment_assessment.json"))
+    try:
+        assessment = read_json(path)
+    except FileNotFoundError:
+        assessment = {}
+    if not isinstance(assessment, dict):
+        assessment = {}
+    acks = load_acks(Path(data_dir))
+    # Dashboard Acknowledge / lifecycle-experiment-ack only applies to ledger rows the
+    # Lifecycle board can observe-ack — not analysis / learning-director recommend tasks.
+    ACKABLE_KINDS = frozenset({"lifecycle_overlay", "experimental_paper_track"})
+    pending: list[dict[str, Any]] = []
+    acked: list[dict[str, Any]] = []
+    for raw in assessment.get("experiments") or []:
+        if not isinstance(raw, dict):
+            continue
+        if str(raw.get("status") or "") != "recommend":
+            continue
+        if str(raw.get("kind") or "") not in ACKABLE_KINDS:
+            continue
+        row = apply_ack_to_experiment(dict(raw), acks)
+        item = {
+            "experiment_id": row.get("experiment_id"),
+            "title": row.get("title") or row.get("experiment_id"),
+            "kind": row.get("kind"),
+            "pipeline": row.get("pipeline"),
+            "human_acked": bool(row.get("human_acked")),
+            "human_ack_required": bool(row.get("human_ack_required")),
+            "acked_at": row.get("acked_at"),
+            "ack_decision": row.get("ack_decision"),
+            # Dashboard Acknowledge payload (observe-only).
+            "acknowledge": {
+                "action": "lifecycle-experiment-ack",
+                "enabled": bool(row.get("human_ack_required")) and not bool(row.get("human_acked")),
+                "payload": {
+                    "experiment_id": row.get("experiment_id"),
+                    "factor_id": "progress_report",
+                    "kind": "human_ack",
+                    "decision": "ack_observe",
+                },
+            },
+        }
+        if item["human_acked"]:
+            acked.append(item)
+        elif item["human_ack_required"]:
+            pending.append(item)
+    overall: Severity = "ok"
+    if pending:
+        overall = "info"
+    return {
+        "overall": overall,
+        "pending_count": len(pending),
+        "acked_count": len(acked),
+        "pending": pending,
+        "acked": acked,
+        "assessment_path": str(path),
+        "acks_path": str(Path(data_dir) / "experiment_acks.json"),
+    }
+
+
 def build_integration_checks(
     *,
     latest_path: Path = DEFAULT_LATEST_PATH,
@@ -672,10 +741,12 @@ def build_progress_report(
         tasks_path=tasks_path,
         snapshot_path=data_dir / "so_what_closure.json",
     )
+    lifecycle_acks = build_lifecycle_ack_section(data_dir=data_dir)
 
     severities = [
         str(integration.get("overall") or "ok"),
         _overall_status(role_coherence),
+        str(lifecycle_acks.get("overall") or "ok"),
     ]
     so_what_counts = so_what.get("counts") or {}
     if int(so_what_counts.get("auto_queue") or 0) > 0:
@@ -700,11 +771,14 @@ def build_progress_report(
             "checks": role_coherence,
         },
         "so_what": so_what,
+        "lifecycle_acks": lifecycle_acks,
         "references": {
             "deferred_review": "docs/deferred-review.md",
             "ops_cadence": "docs/ops/ops-review-cadence.md",
             "human_tasks": "docs/ops/human-tasks-checklist.md",
             "so_what_closure": "docs/ops/so-what-gap-closure.md",
+            "position_lifecycle": "docs/ops/position-lifecycle.md",
+            "dashboard_bridge": "docs/ops/dashboard-bridge.md",
         },
     }
 
@@ -841,6 +915,44 @@ def format_progress_report_markdown(report: dict[str, Any]) -> str:
     so_what = report.get("so_what") or {}
     lines.extend(["", render_so_what_markdown(so_what).rstrip(), ""])
 
+    lifecycle_acks = report.get("lifecycle_acks") or {}
+    lines.extend(
+        [
+            "",
+            "## Lifecycle observe-acks",
+            "",
+            f"Overall: **{str(lifecycle_acks.get('overall') or 'ok').upper()}** · "
+            f"pending **{lifecycle_acks.get('pending_count', 0)}** · "
+            f"acked **{lifecycle_acks.get('acked_count', 0)}**",
+            "",
+            "Acknowledge is observe-only (does not execute DCA or change starter fraction). "
+            "Use the Overview progress-report buttons or Lifecycle cards; both go through the "
+            "Supabase dashboard bridge.",
+            "",
+            "### Pending human ack",
+            "",
+        ]
+    )
+    pending_acks = lifecycle_acks.get("pending") or []
+    if pending_acks:
+        for row in pending_acks:
+            lines.append(
+                f"- **{row.get('experiment_id')}** — {row.get('title')} "
+                f"([{row.get('kind') or 'experiment'}] {row.get('pipeline') or '—'})"
+            )
+    else:
+        lines.append("_None pending._")
+    lines.extend(["", "### Recently acked", ""])
+    acked_rows = lifecycle_acks.get("acked") or []
+    if acked_rows:
+        for row in acked_rows:
+            lines.append(
+                f"- **{row.get('experiment_id')}** — {row.get('title')} "
+                f"(acked `{row.get('acked_at') or '—'}` · {row.get('ack_decision') or 'ack_observe'})"
+            )
+    else:
+        lines.append("_None._")
+
     refs = report.get("references") or {}
     lines.extend(
         [
@@ -851,8 +963,11 @@ def format_progress_report_markdown(report: dict[str, Any]) -> str:
             f"- Ops cadence: `{refs.get('ops_cadence')}`",
             f"- Human tasks: `{refs.get('human_tasks')}`",
             f"- So-what gap closure: `{refs.get('so_what_closure')}`",
+            f"- Position lifecycle / Acknowledge: `{refs.get('position_lifecycle')}`",
+            f"- Dashboard bridge (Supabase): `{refs.get('dashboard_bridge')}`",
             "",
-            "Regenerate: `ftse-progress-report build --write`",
+            "Regenerate: `ftse-progress-report build --write` "
+            "(or Overview **Generate fresh report** via Supabase bridge)",
             "Queue enforcement gaps: `ftse-progress-report so-what --apply`",
             "",
         ]

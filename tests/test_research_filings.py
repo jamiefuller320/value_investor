@@ -7558,6 +7558,43 @@ def test_sanitize_filings_index_propagates_imperial_own_share_sibling(tmp_path: 
     assert html_row["body_path"] == str(body_path)
 
 
+def test_filing_lacks_material_body_excludes_routine_own_shares():
+    """IMB.L leftover own-shares IWB must not count as a stubborn ingest gap."""
+    from value_investor.research.filings import filing_lacks_material_body
+
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Transaction in Own Shares",
+                "url": "http://www.rns-pdf.londonstockexchange.com/rns/5705V_1-2026-9-21.pdf",
+                "has_body": False,
+            }
+        )
+        is False
+    )
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Half year results",
+                "url": "http://www.rns-pdf.londonstockexchange.com/rns/8727D_1-2026-5-11.pdf",
+                "has_body": False,
+                "period": "interim",
+            }
+        )
+        is True
+    )
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Half year results",
+                "url": "http://www.rns-pdf.londonstockexchange.com/rns/8727D_1-2026-5-11.pdf",
+                "has_body": True,
+            }
+        )
+        is False
+    )
+
+
 def test_refetch_ir_allowlist_filing_bodies_itv_l(tmp_path: Path, monkeypatch):
     allowlist_path = tmp_path / "empty_ir.json"
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")

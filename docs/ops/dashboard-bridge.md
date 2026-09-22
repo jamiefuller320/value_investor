@@ -7,7 +7,7 @@ GitHub Pages cannot run Python or hold repo secrets. This bridge uses a **single
 ```mermaid
 flowchart LR
   A[Static dashboard] -->|insert command row + broadcast ping| B[Supabase ftse-dashboard]
-  B -->|poll every 10m weekdays| C[dashboard-bridge.yml]
+  B -->|poll every 10m weekdays (best-effort; often slower)| C[dashboard-bridge.yml]
   C -->|repository_dispatch| D[Target workflows]
   D -->|commit JSON + broadcast artifact-updated| B
   B -->|realtime| A
@@ -23,6 +23,8 @@ flowchart LR
 | Target workflows | `progress-report.yml`, `engineering-queue.yml`, `ops-monitor.yml`, `dashboard-bridge.yml` (`refresh-queue-ui`) |
 
 **Yes — one Supabase channel/table can cover all page→git actions.** Add new actions by extending `SUPPORTED_ACTIONS` in `dashboard_bridge.py` and wiring a workflow handler.
+
+GitHub Actions **schedule** pickup is best-effort: the weekday `*/10` cron often drifts to tens of minutes (sometimes longer). The Acknowledge UI waits up to ~12 minutes for the command row to leave `pending`. Use **Actions → Dashboard bridge worker → Run workflow** to drain the queue immediately when needed.
 
 ## Supabase setup
 

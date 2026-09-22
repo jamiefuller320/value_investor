@@ -54,20 +54,26 @@ items, and integration / role-coherence warnings.
 
 | Control | Behaviour |
 |---------|-----------|
-| **Generate fresh report** | Local: `POST /api/progress-report` via `ftse-dashboard-serve`. On GitHub Pages: Supabase bridge (`data/dashboard_config.json`, see [`dashboard-bridge.md`](dashboard-bridge.md)) or legacy PAT dispatch of `progress-report` workflow |
+| **Generate fresh report** | Local: `POST /api/progress-report` via `ftse-dashboard-serve`. On GitHub Pages: **Supabase bridge** (`data/dashboard_config.json`, see [`dashboard-bridge.md`](dashboard-bridge.md)) — no browser token |
 | **Reload** | Re-fetches published dashboard JSON (cache-busted; same as a full page load, including market status). Local serve also `POST /api/refresh` to rebuild `market_status.json` first |
 | **View full report** | Opens `data/progress_report.md` in the memo dialog |
-| **Pages token** | Save / clear the browser-local PAT used for Pages generate (never committed) |
+| **Lifecycle observe-acks** | Pending recommend experiments with **Acknowledge** (same observe-only Supabase action as Lifecycle cards) |
+| **Legacy Pages token** | Optional PAT fallback if Supabase is disabled (collapsed under details; never committed) |
 
 ### GitHub Pages generate
 
 Pages is static and cannot run `ftse-progress-report`. The Generate button:
 
 1. Tries the local API (`ftse-dashboard-serve`).
-2. If that is unavailable (404/405/network), dispatches
-   [`.github/workflows/progress-report.yml`](../../.github/workflows/progress-report.yml)
-   via the GitHub API.
-3. Polls the workflow, then reloads `data/progress_report.json` after Pages deploy.
+2. If that is unavailable (404/405/network), inserts a `progress-report` command into
+   Supabase; the **Dashboard bridge worker** dispatches
+   [`.github/workflows/progress-report.yml`](../../.github/workflows/progress-report.yml).
+3. Polls until Pages publishes a newer `data/progress_report.json`, then reloads the dashboard.
+
+If the status stays on “Queued — waiting for GitHub worker”, run
+**Actions → Dashboard bridge worker → Run workflow**.
+
+Legacy: a browser-stored fine-grained PAT can still `workflow_dispatch` directly when the bridge is disabled.
 
 Initial Overview load also cache-busts `data/progress_report.json` (`?ts=…` +
 `cache: "no-store"`). Sidecars (`market_status.json`, `automation.json`, and
