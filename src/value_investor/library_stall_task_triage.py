@@ -16,7 +16,6 @@ from value_investor.engineering_tasks import (
     mark_task_status,
 )
 from value_investor.library_ingest_escalation import (
-    LIBRARY_INGEST_STALL_SOURCES,
     library_ingest_filing_gaps,
     snapshot_library_buy_tier_filing_health,
 )
@@ -209,7 +208,9 @@ def analyze_library_stall_task(
     bundled = len(active_lanes) > 1 or filing_gaps >= 8
 
     parked_policy = str(row.get("parked_policy") or "").strip()
-    reburn = parked_policy == "reburn_loop" or "reburn" in str(row.get("parked_reason") or "").lower()
+    reburn = (
+        parked_policy == "reburn_loop" or "reburn" in str(row.get("parked_reason") or "").lower()
+    )
 
     recommendations: list[str] = []
     if focus_ticker and focus_lane:
@@ -263,9 +264,9 @@ def _narrow_title_summary(
     focus_lane: str,
     filing_gaps: int,
 ) -> tuple[str, str]:
-    title = (
-        f"Library ingest stall ({market_id}): narrow fix for {focus_ticker} ({focus_lane})"
-    )[:160]
+    title = (f"Library ingest stall ({market_id}): narrow fix for {focus_ticker} ({focus_lane})")[
+        :160
+    ]
     summary = (
         f"Reframed from broad market stall task — focus {focus_ticker} "
         f"({focus_lane}) while {filing_gaps} buy-tier filing gaps remain for {market_id}. "
@@ -382,8 +383,10 @@ def triage_library_stall_tasks(
                 )
                 continue
 
-        if auto_cancel_resolved and status == "parked" and library_stall_park_is_resolved(
-            row, library_root=library_root
+        if (
+            auto_cancel_resolved
+            and status == "parked"
+            and library_stall_park_is_resolved(row, library_root=library_root)
         ):
             cancel_reason = (
                 "tier-1 housekeep: library stall resolved — no buy-tier filing gaps remain"
