@@ -287,6 +287,11 @@ def default_policy() -> dict[str, Any]:
                 "auto_cancel_resolved_gap_closure": True,
                 "auto_cancel_superseded_gap_closure": True,
                 "auto_unpark_healed_preflight": True,
+                "auto_cancel_superseded_library_stall": True,
+                "auto_cancel_resolved_library_stall": True,
+                "auto_annotate_library_stall_triage": True,
+                "auto_reframe_bundled_library_stall": False,
+                "auto_reframe_reburn_when_cleared": False,
                 "note": (
                     "immediate_park_unfixable_pr parks open/pr_open tasks when hunter-fix is "
                     "ineligible/exhausted and CI is all-red (or trust-local-gate after verify); "
@@ -304,7 +309,14 @@ def default_policy() -> dict[str, Any]:
                     "ticker no longer has material gaps; auto_cancel_superseded_gap_closure "
                     "cancels parked gap-closure when a same-ticker sibling already merged; "
                     "auto_unpark_healed_preflight reopens preflight_clash parks once clash "
-                    "checks are clean again."
+                    "checks are clean again; auto_cancel_superseded_library_stall cancels "
+                    "older parked library_ingest_stall rows when a newer same-market sibling "
+                    "exists; auto_cancel_resolved_library_stall cancels when buy-tier filing "
+                    "gaps are zero; auto_annotate_library_stall_triage writes evidence.stall_triage "
+                    "(focus ticker / lanes); auto_reframe_bundled_library_stall rewrites parked "
+                    "bundled stalls in place (off by default; skips reburn_loop); "
+                    "auto_reframe_reburn_when_cleared narrow-reframes reburn_loop parks "
+                    "only when reburn_investigation reports allow_narrow_reframe."
                 ),
             },
             "traffic_control": {

@@ -264,6 +264,52 @@ ftse-library learning-depth --market sp500 --json
 5. Register cron via `scripts/import_cron_jobs.py` when the market graduates from
    manual pilot.
 
+## Library stall task triage
+
+When `library_ingest_stall` tasks stack up (duplicate DAX parks, reburn loops, or
+one broad market title), **`ftse-engineering recover-queue`** and
+**`triage-library-stall`** run automated analysis:
+
+| Step | Default | Behaviour |
+|------|---------|-----------|
+| **Supersede cancel** | on | Cancel older parked/open/pr_open stall rows when a newer same-`market_id` sibling exists (keeps newest `eng-YYYYMMDD-NN`). |
+| **Resolved cancel** | on | Cancel parked stalls when a fresh buy-tier health snapshot shows zero filing gaps. |
+| **Annotate** | on | Write `evidence.stall_triage` (lanes, focus ticker, bundled flag, recommendations). |
+| **Narrow reframe** | off | Rewrite a **parked** bundled task in place to one ticker (`--reframe-bundled` / policy `auto_reframe_bundled_library_stall`). Skips `reburn_loop` parks. |
+
+```bash
+# Dry-run (same gates as recover-queue stall pass)
+ftse-engineering triage-library-stall --json
+
+# Apply supersede + annotation on committed queue
+ftse-engineering triage-library-stall --apply --json
+
+# Optional: narrow reframe for parked bundled work (not reburn)
+ftse-engineering triage-library-stall --apply --reframe-bundled
+```
+
+Manual split guidance (when automation stays conservative): prefer **intensive pin** /
+**parked hunter** / **allowlist batch** per ticker rather than one market-wide eng task.
+
+### Library stall reburn investigation
+
+**Why narrow reframe skips `reburn_loop` by default:** those parks come from PM
+`stop_automation_waste` after repeated **engineering-agent** failures with an open task
+and **no in-flight PR** — the burn is usually preflight clash, no-diff cap, or stamp lag,
+not “task title too broad.” Reframing without clearing blockers re-dispatches Composer spend.
+
+**Investigation subroutine:** `investigate_reburn_loop_library_stall` (called from
+`stall_triage` when `reburn_loop` is true) records:
+
+- `primary_hypothesis` — active reburn, preflight clash, no-diff cap, or secondary scope
+- `blockers` / `safe_next_steps`
+- `allow_narrow_reframe` — true only when automation waste is cleared, preflight is clean,
+  and no-diff cap has not tripped
+
+Use **`--reframe-reburn-when-cleared`** (or policy `auto_reframe_reburn_when_cleared`)
+to narrow-reframe reburn parks once investigation allows. Plain **`--reframe-bundled`**
+still skips reburn rows.
+
 ## Related
 
 - [`euro-depth-sprint.md`](euro-depth-sprint.md) — sprint cadence and Phase 3 gates

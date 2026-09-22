@@ -67,6 +67,7 @@ ftse-library parked-hunter-compile --market euro_depth --json
 
 ## Human review
 
-- **Parked** library ingest tasks still need triage (`ftse-engineering list-parked`).
+- **Parked** library ingest tasks: `ftse-engineering triage-library-stall` (also runs on
+  `recover-queue` when tier-1 housekeep is enabled).
 - Do not widen to a fourth parallel sprint stream or second concurrent ingest
   eng agent — see [`engineering-sync.md`](engineering-sync.md).
