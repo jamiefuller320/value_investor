@@ -2226,6 +2226,26 @@ def run_ops_monitor(
             )
             drafted_ids = list(drafted_ids) + list(compile_result.get("added_open_task_ids") or [])
 
+        from value_investor.market_eng_gap_burndown import try_market_rotating_eng_gap_burndown
+
+        burndown = try_market_rotating_eng_gap_burndown(
+            apply=True,
+            tasks_path=tasks_path,
+        )
+        if int(burndown.get("compiled_count") or 0) > 0:
+            task_id = str(burndown.get("task_id") or "")
+            auto_fixes.append(
+                {
+                    "action": "market_eng_gap_burndown",
+                    "detail": (
+                        f"{burndown.get('action')} for {burndown.get('market_id')} "
+                        f"→ {task_id}"
+                    ),
+                }
+            )
+            if task_id:
+                drafted_ids = list(drafted_ids) + [task_id]
+
     dispatch = evaluate_engineering_dispatch(tasks_path=tasks_path, open_prs=open_prs)
     should_dispatch = dispatch.should_dispatch or sync_report.should_redispatch
 

@@ -26,6 +26,7 @@ treat Persistent weaknesses as N separate alert emails.
 - Restamp `open` → `pr_open` when a live engineering PR already exists (stamp lag after orphan-reconcile races; unblocks scoped auto-merge)
 - Normalize corrupt `ingest_health_log.json` (with sibling backup)
 - Micro-compile ingest engineering tasks when buy-tier filing ingest is stalled
+- Market-rotating library eng gap burn-down when the ingest eng slot is free ([`market-eng-gap-burndown.md`](market-eng-gap-burndown.md))
 - Grade parked engineering tasks and auto-cancel duplicates of merged work
 - Quarantine corrupt or duplicate backtest history snapshots (see [backtest-health.md](backtest-health.md))
 - Reconcile engineering queue sync issues and redispatch when the agent failed on a stale task id (see [engineering-sync.md](engineering-sync.md))
