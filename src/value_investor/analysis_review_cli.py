@@ -22,6 +22,7 @@ from value_investor.analysis_review import (
     run_analysis_review,
 )
 from value_investor.cursor_api_key import resolve_cursor_api_key
+from value_investor.exit_timing_reconciliation import write_exit_timing_reconciliation
 from value_investor.system_gap_analysis import (
     COMMITTED_GAPS_PATH,
     build_system_gap_snapshot,
@@ -31,6 +32,29 @@ from value_investor.system_gap_analysis import (
 
 def _print_json(data: object) -> None:
     print(json.dumps(data, indent=2))
+
+
+def _cmd_reconcile(args: argparse.Namespace) -> int:
+    paper_root = args.paper_root or (args.data_dir / "paper_automation")
+    reconciliation = write_exit_timing_reconciliation(
+        paper_root=paper_root,
+        data_dir=args.data_dir,
+    )
+    if args.json:
+        _print_json(reconciliation)
+    else:
+        comp = reconciliation.get("comparability") or {}
+        live = (reconciliation.get("sources") or {}).get("live_primary") or {}
+        hold = (live.get("hold_recovery") or {}).get("hold_closed_count")
+        arch = ((reconciliation.get("sources") or {}).get("archive_near_miss") or {}).get(
+            "hold_recovery"
+        ) or {}
+        print(
+            f"Wrote {args.data_dir / 'exit_timing_reconciliation.json'} — "
+            f"live_primary hold_closed={hold} archive hold_closed={arch.get('hold_closed_count')} "
+            f"blended_ok={comp.get('blended_rate_narrative_allowed')}"
+        )
+    return 0
 
 
 def _cmd_payload(args: argparse.Namespace) -> int:
@@ -195,6 +219,19 @@ def main(argv: list[str] | None = None) -> int:
 
     def add_json_flags(subparser: argparse.ArgumentParser) -> None:
         subparser.add_argument("--json", action="store_true")
+
+    reconcile = sub.add_parser(
+        "reconcile",
+        help="Regenerate exit_timing_reconciliation.json (L121)",
+    )
+    add_json_flags(reconcile)
+    reconcile.add_argument(
+        "--paper-root",
+        type=Path,
+        default=None,
+        help="Paper automation root (default: <data-dir>/paper_automation)",
+    )
+    reconcile.set_defaults(func=_cmd_reconcile)
 
     payload = sub.add_parser("payload", help="Show deterministic analysis inputs")
     add_json_flags(payload)

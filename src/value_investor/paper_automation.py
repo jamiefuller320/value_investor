@@ -1636,6 +1636,10 @@ def run_learning_tracks(
         json.dumps(timing_summary, indent=2) + "\n",
         encoding="utf-8",
     )
+    if base_dir.name == "paper_automation" and base_dir.parent.exists():
+        from value_investor.exit_timing_reconciliation import write_exit_timing_reconciliation
+
+        write_exit_timing_reconciliation(paper_root=base_dir, data_dir=base_dir.parent)
     hypothesis_summary = summarize_learning_tracks_hypothesis_integrity(base_dir)
     (base_dir / HYPOTHESIS_ROLLUP_FILENAME).write_text(
         json.dumps(hypothesis_summary, indent=2) + "\n",
