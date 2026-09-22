@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:36:02+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:44:31+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -266,6 +266,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L441 | **Fixed-notional sleeve cohort lab beside NAV books** | Observe-only: each new buy gets a fixed notional (e.g. £100), capped open sleeves, optional monthly deposit into a cash queue for new sleeves only. Primary metrics: per-sleeve forward return, hit rate, hold/exit quality; NAV vs ^FTSE stays on existing equal-weight books. Aligns with buy_tier_level cohort spirit and entry-lifecycle experiments. | Exit-timing / hypothesis outcome cohorts ready for probability analysis, or buy_tier_level has enough closed sleeves to compare designs |
 | L442 | **Opportunity-cost rotation instead of always exiting demoted buy-tier** | Softer than always exit_confirm on off-target buy-tier: only free capital when higher-conviction buys are skipped for cash. Preserves long holds for lifecycle experiments when the buy pipeline is idle; still unblocks sleeves when targets need funding. Ranked books vs buy_tier_level remain the dual instrument. | After momentum_grace rank-rotation fix merges and Sunday review shows exit cohorts thickening or over-churn on demoted buy-tier names |
 | L443 | **Dual-path sleeve lab: monthly deposit capital + tagged observe lifecycle** | Capital book gets realistic monthly deposits (£500) and rotation. Parallel observe path: every name that crosses a frozen buy threshold opens a sleeve episode; tag on_book only if funded that day, off_book if capital exits early but mark to experimental sell, never_funded if never allocated. Stratify sleeve metrics by tag; NAV vs ^FTSE stays on the capital book only. Builds on exit_shadow post-exit marks + buy_tier_level + monthly_deposit. | Rank-rotation fix merged and exit-timing/hypothesis cohorts approaching readiness; or human prioritises sleeve scoreboard companion lab (L441) |
+| L444 | **Freeze widest earliest/latest markers; discover best via counterfactual** | Observe sleeve recording should open on the earliest eligible entry marker and close marks on the latest experimental exit marker so tighter policies are nested counterfactuals. Capital on_book uses the selective funded gate. Do not freeze only a guessed best threshold for recording — that truncates timing evidence. Wrapper: decision-recording freeze at t + exit_shadow/near-miss join-forward. | Implementing dual-path sleeve lab L443 or Phase C autopsy freeze writer |
 
 ### Universe & data
 
