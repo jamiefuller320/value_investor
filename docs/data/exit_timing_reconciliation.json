@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "deferred_id": "L121",
+  "generated_at": "2026-09-22T09:23:51.508183+00:00",
+  "framework": {
+    "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+    "hold_recovery": {
+      "question": "When a position is stressed but still held, does it recover to breakeven?",
+      "episode_triggers": [
+        "unrealized below underwater_threshold",
+        "exit_streak >= 1 (hold buffer active)",
+        "momentum_grace on position",
+        "effective signal no longer buy-tier while still held"
+      ],
+      "outcomes": [
+        "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+        "sold_while_underwater",
+        "max_window_elapsed"
+      ],
+      "fields_for_later_analysis": [
+        "data_quality_score",
+        "conviction_score",
+        "screen_signal",
+        "effective_signal",
+        "exit_streak",
+        "stress_triggers",
+        "thesis_status_at_start",
+        "recommended_action_at_start",
+        "checkpoints"
+      ]
+    },
+    "swap_rotation": {
+      "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+      "pairing": "same rebalance pass sells vs buys on one track",
+      "outcomes": [
+        "replacement_outperformed",
+        "exit_outperformed",
+        "inconclusive"
+      ],
+      "fields_for_later_analysis": [
+        "sell_tickers",
+        "buy_tickers",
+        "sell_realized_pct",
+        "post_rotation_returns",
+        "trade_costs"
+      ]
+    },
+    "related_artifacts": [
+      "exit_shadow.json (post-exit path after sell)",
+      "rebalance_log.json (counterfactual replay)",
+      "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+      "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+      "learning_tracks_churn_health.json"
+    ]
+  },
+  "primary_live_track_id": "rules",
+  "sources": {
+    "live_primary": {
+      "hold_recovery": {
+        "present": true,
+        "track_id": "rules",
+        "scope": null,
+        "readiness": {
+          "ready_for_probability_analysis": false,
+          "hold_closed_count": 7,
+          "swap_closed_count": 0,
+          "hold_with_data_quality_count": 10,
+          "gaps": [
+            "hold_recovery closed episodes=7 (target >=15)",
+            "swap_rotation closed rotations=0 (target >=10)"
+          ],
+          "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
+        },
+        "hold_closed_count": 7,
+        "recovered_to_breakeven_count": 3,
+        "hold_recovery_rate": 0.4286,
+        "close_reasons_raw": {
+          "sold_while_recovered": 3,
+          "sold_while_underwater": 4
+        },
+        "close_reasons_canonical": {
+          "recovered_at_close": 3,
+          "not_recovered_at_close": 4
+        }
+      },
+      "swap_rotation": {
+        "present": true,
+        "track_id": "rules",
+        "scope": null,
+        "readiness": {
+          "ready_for_probability_analysis": false,
+          "hold_closed_count": 7,
+          "swap_closed_count": 0,
+          "hold_with_data_quality_count": 10,
+          "gaps": [
+            "hold_recovery closed episodes=7 (target >=15)",
+            "swap_rotation closed rotations=0 (target >=10)"
+          ],
+          "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
+        },
+        "swap_closed_count": 0,
+        "verdicts": {},
+        "swap_replacement_outperformed_rate": null
+      }
+    },
+    "live_all_tracks_pooled": {
+      "track_ids": [
+        "rules",
+        "ai_judgment",
+        "momentum_grace",
+        "graduated_allocation",
+        "technical",
+        "buy_tier_level",
+        "ai_judgment_calibrated",
+        "ai_judgment_calibrated_r2",
+        "ai_judgment_calibrated_r3",
+        "ai_judgment_exclusion_u4",
+        "ai_judgment_fair",
+        "rules_fair"
+      ],
+      "hold_closed_count": 68,
+      "recovered_to_breakeven_count": 27,
+      "hold_recovery_rate": 0.3971,
+      "close_reasons_canonical": {
+        "recovered_at_close": 27,
+        "not_recovered_at_close": 41
+      },
+      "swap_closed_count": 0,
+      "swap_replacement_outperformed_rate": null,
+      "readiness": {
+        "ready_for_probability_analysis": false,
+        "hold_closed_count": 68,
+        "swap_closed_count": 0,
+        "gaps": [
+          "swap_rotation closed rotations=0 (target >=10)"
+        ],
+        "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
+      },
+      "note": "Pooled across FTSE paper tracks; episodes are per-track (same ticker may appear on multiple tracks)."
+    },
+    "archive_near_miss": {
+      "hold_recovery": {
+        "present": true,
+        "track_id": "archive_near_miss",
+        "scope": "archive_near_miss",
+        "readiness": {
+          "ready_for_probability_analysis": true,
+          "hold_closed_count": 202,
+          "swap_closed_count": 209,
+          "hold_with_data_quality_count": 202,
+          "gaps": [],
+          "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
+        },
+        "hold_closed_count": 202,
+        "recovered_to_breakeven_count": 148,
+        "hold_recovery_rate": 0.7327,
+        "close_reasons_raw": {
+          "recovered_archive_end": 148,
+          "underwater_archive_end": 54
+        },
+        "close_reasons_canonical": {
+          "recovered_at_close": 148,
+          "not_recovered_at_close": 54
+        }
+      },
+      "swap_rotation": {
+        "present": true,
+        "track_id": "archive_near_miss",
+        "scope": "archive_near_miss",
+        "readiness": {
+          "ready_for_probability_analysis": true,
+          "hold_closed_count": 202,
+          "swap_closed_count": 209,
+          "hold_with_data_quality_count": 202,
+          "gaps": [],
+          "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
+        },
+        "swap_closed_count": 209,
+        "verdicts": {
+          "replacement_outperformed": 118,
+          "exit_outperformed": 63,
+          "inconclusive": 28
+        },
+        "swap_replacement_outperformed_rate": 0.5646
+      },
+      "episodes_opened": {
+        "hold_recovery": 202,
+        "hold_recovery_near_miss": 202,
+        "hold_recovery_held_book": 0,
+        "swap_rotation": 209,
+        "swap_rotation_near_miss": 202,
+        "swap_rotation_log_book": 7
+      },
+      "by_conviction_band": {
+        "pre_buy_0.28_0.45": {
+          "closed_count": 202,
+          "recovered_to_breakeven_count": 148,
+          "recovery_rate": 0.7327
+        }
+      }
+    }
+  },
+  "comparability": {
+    "shared_metric_definitions": {
+      "breakeven_threshold": 0.0,
+      "checkpoint_windows_days": [
+        7,
+        28,
+        56,
+        84
+      ],
+      "hold_recovery_rate_numerator": "closed episodes with recovered_to_breakeven=true",
+      "hold_recovery_rate_denominator": "closed hold-recovery episodes (status != open)",
+      "swap_success_rate_numerator": "closed rotations with verdict=replacement_outperformed",
+      "swap_success_rate_denominator": "closed swap rotations (status != open)",
+      "close_reason_canonical_map": {
+        "sold_while_recovered": {
+          "outcome": "recovered_at_close",
+          "exit_mechanism": "sold_while_held"
+        },
+        "sold_while_underwater": {
+          "outcome": "not_recovered_at_close",
+          "exit_mechanism": "sold_while_held"
+        },
+        "recovered_max_window": {
+          "outcome": "recovered_at_close",
+          "exit_mechanism": "max_scoring_window"
+        },
+        "underwater_max_window": {
+          "outcome": "not_recovered_at_close",
+          "exit_mechanism": "max_scoring_window"
+        },
+        "recovered_archive_end": {
+          "outcome": "recovered_at_close",
+          "exit_mechanism": "archive_horizon"
+        },
+        "underwater_archive_end": {
+          "outcome": "not_recovered_at_close",
+          "exit_mechanism": "archive_horizon"
+        }
+      }
+    },
+    "episode_sources": {
+      "live_paper_book": {
+        "artifact": "paper_automation/<track>/exit_timing_cohorts_review.json",
+        "population": "Names on the paper book when hold-recovery stress triggers fire.",
+        "hold_entry_triggers": [
+          "underwater vs avg_cost",
+          "exit_streak >= 1",
+          "momentum_grace",
+          "effective signal no longer buy-tier while held"
+        ],
+        "swap_pairing": "Same rebalance pass sells and buys on one track.",
+        "role": "Primary evidence for knob promotion after readiness targets."
+      },
+      "archive_near_miss": {
+        "artifact": "docs/data/exit_timing_near_miss_review.json",
+        "population": "Synthetic observe-only holds on near-miss screen rows (default signal hold).",
+        "hold_entry_triggers": [
+          "signal below buy tier",
+          "conviction >= pre_buy floor (default 0.28)",
+          "capped episodes per archive week"
+        ],
+        "swap_pairing": "Near-miss hold vs top buy-tier name from same weekly screen snapshot.",
+        "role": "Offline priors until live paper cohorts mature; not interchangeable denominators."
+      }
+    },
+    "hold_recovery_rates_directly_comparable": false,
+    "hold_recovery_comparability_blockers": [
+      "Hold-recovery episodes enter on different populations (live book stress vs archive near-miss observe)."
+    ],
+    "swap_rotation_rates_directly_comparable": false,
+    "swap_rotation_comparability_blockers": [
+      "live pooled swap_closed_count=0 (target >=10 for probability work)"
+    ],
+    "archive_may_inform_priors_while_live_collects": true,
+    "live_primary_ready_for_probability": false,
+    "archive_ready_for_probability": true,
+    "blended_rate_narrative_allowed": true,
+    "analysis_contract": "Cite exit_timing_reconciliation before comparing live vs archive rates. Use archive hold_recovery_rate as offline_sim prior only until live primary track hits readiness; never average rates across sources."
+  },
+  "note": "Observe-only reconciliation for exit-timing learning. Regenerated on paper-auto rollup, exit-timing archive, and analysis-review payload."
+}
