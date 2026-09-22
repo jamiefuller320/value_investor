@@ -35,7 +35,10 @@ def test_process_pending_dedupes_lifecycle_ack_aliases(monkeypatch) -> None:
         {
             "id": "a1",
             "action": "lifecycle-experiment-ack",
-            "payload": {"experiment_id": "graduated_allocation_track", "factor_id": "entry_appetite"},
+            "payload": {
+                "experiment_id": "graduated_allocation_track",
+                "factor_id": "entry_appetite",
+            },
             "status": "pending",
         },
         {
@@ -76,7 +79,8 @@ def test_process_pending_dedupes_lifecycle_ack_aliases(monkeypatch) -> None:
     result = process_pending_dashboard_commands(config=cfg)
     assert result["ok"] is True
     assert dispatches == ["a1", "b1"]
-    skipped = [row for row in result["processed"] if row.get("skipped") == "duplicate_lifecycle_ack"]
+    skipped = [
+        row for row in result["processed"] if row.get("skipped") == "duplicate_lifecycle_ack"
+    ]
     assert len(skipped) == 1
     assert skipped[0]["id"] == "a2"
-

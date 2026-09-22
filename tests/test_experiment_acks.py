@@ -35,14 +35,17 @@ def test_matching_ack_accepts_catalog_alias(tmp_path: Path):
         experiment_id="graduated_allocation_track",
         known_ids={"graduated_allocation"},
     )
-    store = {"schema_version": 1, "acks": [
-        {
-            "experiment_id": "graduated_allocation",
-            "decision": "ack_observe",
-            "status": "open",
-            "finding": {},
-        }
-    ]}
+    store = {
+        "schema_version": 1,
+        "acks": [
+            {
+                "experiment_id": "graduated_allocation",
+                "decision": "ack_observe",
+                "status": "open",
+                "finding": {},
+            }
+        ],
+    }
     assert matching_ack(store, experiment_id="graduated_allocation_track") is not None
     row = apply_ack_to_experiment(
         {

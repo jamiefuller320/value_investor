@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 from value_investor.lifecycle_experiment_ack import (
     ACK_DECISION,
     run_lifecycle_experiment_ack,
@@ -100,4 +98,3 @@ def test_ack_canonicalizes_catalog_track_alias(tmp_path: Path):
     assert result["requested_experiment_id"] == "graduated_allocation_track"
     assert result["ack"]["experiment_id"] == "graduated_allocation"
     assert "factor=entry_appetite" in result["ack"]["note"]
-
