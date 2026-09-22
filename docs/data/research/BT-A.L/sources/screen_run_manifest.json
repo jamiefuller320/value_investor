@@ -1,18 +1,18 @@
 {
   "ticker": "BT-A.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-15T13:20:24.072671+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-09-21T16:54:50.935061+00:00",
+  "attached_at": "2026-09-22T16:20:39.460358+00:00",
+  "history_run_path": "docs/data/history/run_20260921_165450.json.gz",
+  "history_models_path": "docs/data/history/models_20260921_165450.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
-      "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "strong_buy": 13,
+      "buy": 46,
+      "hold": 131,
+      "avoid": 58
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 13,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 16,
+      "buy": 29,
+      "hold": 41,
+      "avoid": 16
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -30,45 +33,68 @@
   "ticker_signal": {
     "ticker": "BT-A.L",
     "signal": "buy",
-    "conviction_score": 0.48356925,
+    "conviction_score": 0.288133,
     "data_quality_score": 1.0,
     "name": "BT Group plc",
     "sector": "Communication Services",
-    "timing_signal": "neutral",
-    "timing_score": 0.375,
-    "action_note": "Buy — neutral timing",
-    "models_passed": 6.0,
-    "weighted_model_score": 0.5165545454545454,
+    "timing_signal": "wait",
+    "timing_score": 0.25,
+    "action_note": "Buy — wait for pullback | FCF basis mismatch: filing £1861M | screen TTM (unverified) £1200.4M | FCF definition divergence",
+    "models_passed": 4.0,
+    "weighted_model_score": 0.5615954545454546,
     "research_verdict": null,
     "adjusted_signal": "hold",
     "research_as_of": null,
     "research_confidence": null,
     "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": -0.08974611296988781,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": -0.08974611296988781,
     "signal_trend": "stable",
-    "weeks_at_signal": 10,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": 0.011967456885565659,
+    "weeks_at_signal": 12,
+    "passed_families": "cheapness,quality,risk",
+    "price_vs_sma200_pct": -0.013920640005475955,
     "core_order": "limit",
-    "core_limit": 199.03,
-    "core_allocation_pct": 0.6,
-    "tactical_limit": 193.53,
-    "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 181.79,
-    "tactical_take_profit": 213.9,
-    "trade_plan_summary": "Trade plan: core 60% limit £199.03; tactical 40% limit £193.53; tactical stop £181.79, target £213.90.",
-    "atr_14": 4.0804,
-    "volume_ratio_20": 0.0175,
+    "core_limit": 197.11,
+    "core_allocation_pct": 0.5,
+    "tactical_limit": 189.15,
+    "tactical_allocation_pct": 0.5,
+    "tactical_stop_loss": 177.68,
+    "tactical_take_profit": 215.03,
+    "trade_plan_summary": "Trade plan: core 50% limit £197.11; tactical 50% limit £189.15; tactical stop £177.68, target £215.03.",
+    "atr_14": 4.6443,
+    "volume_ratio_20": 1.1635,
     "operating_cashflow": 7030000000.0,
     "operating_cashflow_gross": null,
     "fcf_dividend_coverage_gross": null,
     "fcf_dividend_coverage_net": 2.3060718711276333,
-    "fcf_definition_divergence": false,
+    "fcf_definition_divergence": true,
     "fcf_divergence_flagged": true,
-    "fcf_dividend_coverage": null
+    "fcf_dividend_coverage": {
+      "statutory_ocf_minus_capex": {
+        "label": "Statutory OCF−CapEx",
+        "ratio": 2.3060718711276333
+      },
+      "management_cash_generated_minus_capex": {
+        "label": "Management cash-generated−CapEx",
+        "ratio": null
+      }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 2.31×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -80,8 +106,8 @@
     {
       "ticker": "BT-A.L",
       "model_id": "graham_enterprising",
-      "passed": false,
-      "score": 0.6
+      "passed": true,
+      "score": 0.8
     },
     {
       "ticker": "BT-A.L",
@@ -105,13 +131,13 @@
       "ticker": "BT-A.L",
       "model_id": "earnings_yield",
       "passed": false,
-      "score": 0.4502
+      "score": 0.4604
     },
     {
       "ticker": "BT-A.L",
       "model_id": "fcf_yield",
-      "passed": true,
-      "score": 0.9276
+      "passed": false,
+      "score": 0.9486
     },
     {
       "ticker": "BT-A.L",
@@ -123,13 +149,13 @@
       "ticker": "BT-A.L",
       "model_id": "lynch_peg",
       "passed": false,
-      "score": 0.2
+      "score": 0.5475
     },
     {
       "ticker": "BT-A.L",
       "model_id": "neff_pegy",
-      "passed": true,
-      "score": 0.9542
+      "passed": false,
+      "score": 0.9609
     },
     {
       "ticker": "BT-A.L",
@@ -153,31 +179,31 @@
       "ticker": "BT-A.L",
       "model_id": "high_dividend",
       "passed": false,
-      "score": 0.7176
+      "score": 0.75
     },
     {
       "ticker": "BT-A.L",
       "model_id": "dividend_growth",
-      "passed": true,
-      "score": 0.6667
+      "passed": false,
+      "score": 1.0
     },
     {
       "ticker": "BT-A.L",
       "model_id": "magic_formula",
       "passed": false,
-      "score": 0.4861
+      "score": 0.4883
     },
     {
       "ticker": "BT-A.L",
       "model_id": "acquirers_multiple",
       "passed": false,
-      "score": 0.5701
+      "score": 0.5935
     },
     {
       "ticker": "BT-A.L",
       "model_id": "dreman_contrarian",
       "passed": false,
-      "score": 0.6068
+      "score": 0.6304
     },
     {
       "ticker": "BT-A.L",
@@ -189,7 +215,7 @@
       "ticker": "BT-A.L",
       "model_id": "composite_value",
       "passed": true,
-      "score": 0.7071
+      "score": 0.6977
     },
     {
       "ticker": "BT-A.L",
@@ -204,6 +230,6 @@
       "score": 0.6
     }
   ],
-  "models_passed": 6,
+  "models_passed": 4,
   "models_total": 22
 }
