@@ -4978,6 +4978,71 @@ def test_sanitize_filings_index_reclassifies_ch_period_and_entity_type(tmp_path:
     assert saved["summary"]["interim"] == 1
 
 
+def test_classify_rns_headline_vty_annual_report_and_accounts_with_agm_notice():
+    """eng-20260922-02: AR&A + AGM notice RNS is annual, not routine AGM trivia."""
+    headline = "Annual Report and Accounts 2025 and Notice of AGM"
+    assert classify_rns_headline(headline) == "annual"
+    assert classify_filing_period(headline) == "annual"
+
+
+def test_fetch_filings_investegate_company_vty_l_results_rns_periods(monkeypatch):
+    """eng-20260922-02: Investegate issuer page tags Vistry statutory results headlines."""
+    html = """
+    <table>
+      <tr>
+        <td>27 Mar 2026</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/vistry-group--vty/annual-report-and-accounts-2025-and-notice-of-agm/9496585">Annual Report and Accounts 2025 and Notice of AGM</a></td>
+      </tr>
+      <tr>
+        <td>12 Sep 2024</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/vistry-group--vty/half-year-results/1">Half Year Results</a></td>
+      </tr>
+    </table>
+    """
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: html.encode("utf-8"),
+    )
+    rows = fetch_filings_investegate_company(
+        ticker="VTY.L",
+        company_name="Vistry Group PLC",
+    )
+    by_headline = {row["headline"]: row["period"] for row in rows}
+    assert by_headline["Annual Report and Accounts 2025 and Notice of AGM"] == "annual"
+    assert by_headline["Half Year Results"] == "interim"
+
+
+def test_filter_misattributed_filings_drops_vty_investegate_aggregator_pages():
+    """eng-20260922-02: quarantine Short Positions and Across The Markets hub rows."""
+    rows = [
+        {
+            "id": "short_pos",
+            "source": "investegate_resolved",
+            "headline": "Vistry Group (VTY) Short Positions - Investegate",
+            "url": "https://www.investegate.co.uk/company/VTY/short-positions",
+        },
+        {
+            "id": "digest",
+            "source": "investegate_resolved",
+            "headline": "Across The Markets: Vistry Group, Evoke, Babcock International - Investegate",
+            "url": "https://www.investegate.co.uk/across-the-markets/across-the-markets-vistry-group-evoke-babcock-international",
+        },
+        {
+            "id": "trading",
+            "source": "investegate_direct",
+            "headline": "Trading Update",
+            "url": "https://www.investegate.co.uk/announcement/rns/vistry-group--vty/trading-update/9657171",
+        },
+    ]
+    kept = filter_misattributed_filings(
+        rows,
+        company_name="Vistry Group PLC",
+        ticker="VTY.L",
+        regime="uk_rns",
+    )
+    assert [row["id"] for row in kept] == ["trading"]
+
+
 def test_classify_rns_headline_annual_interim_and_trading_update():
     assert classify_rns_headline("ME Group Full Year Results") == "annual"
     assert classify_rns_headline("Half-year Results for the six months ended 30 June") == "interim"
