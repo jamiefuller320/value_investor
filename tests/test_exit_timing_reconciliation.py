@@ -8,9 +8,27 @@ from pathlib import Path
 from value_investor.exit_timing_reconciliation import (
     build_exit_timing_reconciliation,
     canonicalize_hold_close_reasons,
+    resolve_live_exit_timing_review,
     write_exit_timing_reconciliation,
 )
 from value_investor.review_payload_slim import slim_exit_timing_reconciliation
+
+
+def test_resolve_live_exit_timing_review_falls_back_to_flat_rollup(tmp_path: Path):
+    paper = tmp_path / "paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "learning_tracks_exit_timing.json").write_text(
+        json.dumps(
+            {
+                "readiness": {"hold_closed_count": 5},
+                "hold_recovery": {"closed": {"count": 5}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    review = resolve_live_exit_timing_review(paper)
+    assert review is not None
+    assert review["readiness"]["hold_closed_count"] == 5
 
 
 def test_canonicalize_hold_close_reasons_maps_live_and_archive_labels():

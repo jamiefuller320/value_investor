@@ -143,6 +143,9 @@ def resolve_live_exit_timing_review(
     if isinstance(tracks, dict) and primary_track_id in tracks:
         row = tracks[primary_track_id]
         return row if isinstance(row, dict) else None
+    # Legacy / test rollups may embed readiness on the rollup root (pre-tracks shape).
+    if rollup.get("readiness") is not None or rollup.get("hold_recovery") is not None:
+        return rollup
     return None
 
 
