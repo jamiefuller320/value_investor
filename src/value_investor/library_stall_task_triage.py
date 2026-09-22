@@ -128,6 +128,24 @@ def find_superseded_library_stall_canonical(
     return canonical
 
 
+_STALL_TRIAGE_STABLE_KEYS = (
+    "market_id",
+    "filing_gaps",
+    "lanes",
+    "active_lanes",
+    "bundled",
+    "focus_ticker",
+    "focus_lane",
+    "reburn_loop",
+    "recommendations",
+)
+
+
+def _stall_triage_semantics_changed(prior: dict[str, Any], current: dict[str, Any]) -> bool:
+    """Ignore timestamp-only drift between recover-queue passes."""
+    return any(prior.get(key) != current.get(key) for key in _STALL_TRIAGE_STABLE_KEYS)
+
+
 def _lane_counts(health: dict[str, Any]) -> dict[str, int]:
     return {
         "unmeasured": int(health.get("unmeasured_buy_tier") or 0),
@@ -394,7 +412,9 @@ def triage_library_stall_tasks(
 
         triage = analyze_library_stall_task(row, library_root=library_root, refresh_health=True)
         prior = (row.get("evidence") or {}).get("stall_triage") or {}
-        triage_changed = triage != prior
+        if not isinstance(prior, dict):
+            prior = {}
+        triage_changed = _stall_triage_semantics_changed(prior, triage)
 
         if auto_reframe_bundled:
             reframed = reframe_bundled_library_stall_task(
