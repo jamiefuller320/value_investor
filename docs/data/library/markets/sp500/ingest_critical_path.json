@@ -1,15 +1,11 @@
 {
   "market_id": "sp500",
-  "assessed_at": "2026-09-21T14:29:22.899139+00:00",
-  "unmeasured": [],
+  "assessed_at": "2026-09-22T11:18:59.126686+00:00",
+  "unmeasured": [
+    "PCAR"
+  ],
   "zero_body": [],
   "indexed_without_body": [
-    {
-      "ticker": "STE",
-      "indexed_without_body": 9,
-      "filings_total": 19,
-      "filings_with_body": 10
-    },
     {
       "ticker": "FICO",
       "indexed_without_body": 5,
@@ -45,36 +41,31 @@
       "indexed_without_body": 1,
       "filings_total": 20,
       "filings_with_body": 19
-    },
-    {
-      "ticker": "TSN",
-      "indexed_without_body": 1,
-      "filings_total": 21,
-      "filings_with_body": 20
     }
   ],
   "thin_need_discovery": [],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "STE",
+    "PCAR",
     "FICO",
     "APTV",
     "BXP",
     "CRH",
     "LDOS",
-    "LMT",
-    "TSN"
+    "LMT"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (8 tickers, top: STE(9), FICO(5), APTV(2), BXP(2), CRH(2))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (6 tickers, top: FICO(5), APTV(2), BXP(2), CRH(2), LDOS(1))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 8,
-    "indexed_without_body_rows": 23,
+    "indexed_without_body_tickers": 6,
+    "indexed_without_body_rows": 13,
     "thin_need_discovery": 0,
     "thin_need_bodies": 0
   }
