@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-18T09:27:09.509384+01:00",
+    "local_time": "2026-09-22T09:27:27.649808+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-18T08:00:00+01:00",
-    "settle_at": "2026-09-18T09:15:00+01:00",
+    "market_open_at": "2026-09-22T08:00:00+01:00",
+    "settle_at": "2026-09-22T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 630.44,
+    "nav": 644.49,
     "cash": 0.0,
     "max_positions": 3,
     "min_conviction": 0.6,
@@ -33,39 +33,41 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 207.99,
+    "target_sleeve_value": 315.91,
     "targets": [
       {
-        "ticker": "GEN.L",
-        "name": "Genuit Group plc",
-        "signal": "strong_buy",
-        "conviction_score": 1.0,
-        "price": 263.4
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "signal": "buy",
+        "conviction_score": 0.8429000000000001,
+        "price": 3226.0
       },
       {
-        "ticker": "CURY.L",
-        "name": "Currys plc",
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
         "signal": "buy",
-        "conviction_score": 1.0,
-        "price": 146.8
-      },
-      {
-        "ticker": "DSCV.L",
-        "name": "discoverIE Group plc",
-        "signal": "buy",
-        "conviction_score": 1.0,
-        "price": 784.0
+        "conviction_score": 0.7677000000000002,
+        "price": 1542.0
       }
     ],
     "anticipated_exits": [
       {
         "action": "sell",
-        "ticker": "KLR.L",
-        "name": "Keller Group plc",
+        "ticker": "DSCV.L",
+        "name": "discoverIE Group plc",
         "reason": "No longer in the top conviction target set",
-        "shares": 0.068738,
-        "price": 3140.0,
-        "value": 215.84
+        "shares": 0.277487,
+        "price": 808.0,
+        "value": 224.21
+      },
+      {
+        "action": "sell",
+        "ticker": "CURY.L",
+        "name": "Currys plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 1.342356,
+        "price": 147.9,
+        "value": 198.53
       }
     ],
     "anticipated_grace_holds": [],
@@ -73,31 +75,31 @@
     "anticipated_buys": [
       {
         "action": "buy",
-        "ticker": "GEN.L",
-        "name": "Genuit Group plc",
-        "reason": "New sleeve",
-        "value": 207.99,
-        "price": 263.4,
-        "target_value": 207.99,
-        "conviction_score": 1.0,
-        "signal": "strong_buy"
-      }
-    ],
-    "anticipated_holds": [
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "reason": "Top-up to equal weight",
+        "value": 94.16,
+        "price": 3226.0,
+        "target_value": 315.91,
+        "conviction_score": 0.8429000000000001,
+        "signal": "buy"
+      },
       {
-        "action": "hold",
-        "ticker": "CURY.L",
-        "name": "Currys plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 197.06,
-        "target_value": 207.99,
-        "conviction_score": 1.0,
+        "action": "buy",
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
+        "reason": "New sleeve",
+        "value": 315.91,
+        "price": 1542.0,
+        "target_value": 315.91,
+        "conviction_score": 0.7677000000000002,
         "signal": "buy"
       }
     ],
+    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 2 buy(s)."
   },
   "alerts": [
     {
@@ -106,7 +108,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3140.0,
+      "mark": 3226.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -117,7 +119,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 784.0,
+      "mark": 808.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -128,7 +130,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 146.8000030517578,
+      "mark": 147.89999389648438,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -1819,12 +1821,29 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-22T09:27:27.649808+01:00",
+        "portfolio_value": 644.49,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-18T09:27:09.509384+01:00",
+    "last_mark_at": "2026-09-22T09:27:27.649808+01:00",
     "rebalance_state": {
       "exit_streak": {
-        "KLR.L": 1
+        "DSCV.L": 1,
+        "CURY.L": 1
       },
       "reentry_cooldown": {}
     }
@@ -1833,7 +1852,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-09-18T08:27:33.199820+00:00",
+    "generated_at": "2026-09-22T08:27:42.133074+00:00",
     "open_count": 20,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -1852,7 +1871,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-09-18T08:27:33.201264+00:00",
+    "generated_at": "2026-09-22T08:27:42.134455+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1945,11 +1964,11 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 2,
       "swap_rotations": 0
     }
   },
@@ -1958,8 +1977,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "rules",
-    "updated_at": "2026-09-18T08:27:33.202539+00:00",
-    "as_of": "2026-09-18T09:27:09.509384+01:00",
+    "updated_at": "2026-09-22T08:27:42.135728+00:00",
+    "as_of": "2026-09-22T09:27:27.649808+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1974,8 +1993,8 @@
     "holding_count": 3,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 3,
-      "weakening": 0,
+      "intact": 2,
+      "weakening": 1,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -1998,10 +2017,10 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.0,
+        "cheapness": 0.3333,
         "quality": 0.0,
         "dividend": 0.0,
-        "garp": 0.0,
+        "garp": 0.6667,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -2016,35 +2035,36 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0134,
-        "mark": 146.8,
+        "unrealized_pct": -0.006,
+        "mark": 147.9,
         "avg_cost": 148.8,
-        "signal": "buy",
+        "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 1.0,
+        "conviction_score": 0.5718,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
           "quality",
           "dividend",
-          "garp",
           "risk"
         ],
-        "failed_families": [],
+        "failed_families": [
+          "garp"
+        ],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 100%"
+          "conviction 57%"
         ],
         "intact_reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 100%"
+          "conviction 57%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2052,41 +2072,41 @@
       {
         "ticker": "DSCV.L",
         "name": "discoverIE Group plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0103,
-        "mark": 784.0,
+        "unrealized_pct": 0.0412,
+        "mark": 808.0,
         "avg_cost": 776.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 1.0,
+        "conviction_score": 0.4003,
         "data_quality_score": 1.0,
         "passed_families": [
-          "cheapness",
           "quality",
           "dividend",
-          "garp",
           "risk"
         ],
-        "failed_families": [],
+        "failed_families": [
+          "cheapness",
+          "garp"
+        ],
         "research_verdict": "accumulate",
         "reasons": [
+          "cheapness family no longer passes",
           "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 100%"
+          "research accumulate"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
-          "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 100%"
+          "conviction 40%"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "cheapness family no longer passes"
+        ],
         "broken_reasons": []
       },
       {
@@ -2096,12 +2116,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0537,
-        "mark": 3140.0,
+        "unrealized_pct": 0.0826,
+        "mark": 3226.0,
         "avg_cost": 2980.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 1.0,
+        "conviction_score": 0.8429,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2117,14 +2137,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 100%"
+          "conviction 84%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 100%"
+          "conviction 84%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2137,7 +2157,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "rules",
-    "generated_at": "2026-09-18T08:27:33.204129+00:00",
+    "generated_at": "2026-09-22T08:27:42.137325+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2205,7 +2225,7 @@
     "schema_version": 1,
     "track_id": "rules",
     "observe_only": true,
-    "generated_at": "2026-09-18T08:27:33.207154+00:00",
+    "generated_at": "2026-09-22T08:27:42.140388+00:00",
     "open_count": 3,
     "closed_count": 5,
     "scored_count": 1,
@@ -2268,7 +2288,7 @@
     "marked_this_pass": 3,
     "closed_this_pass": 0
   },
-  "generated_at": "2026-09-18T08:27:33.207642+00:00",
+  "generated_at": "2026-09-22T08:27:42.140881+00:00",
   "track_id": "rules",
   "track_label": "Screen rules (control)",
   "is_primary_learning_track": false,

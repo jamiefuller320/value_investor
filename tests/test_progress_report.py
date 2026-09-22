@@ -322,3 +322,24 @@ def test_lifecycle_ack_section_lists_pending_and_acked(tmp_path: Path):
     assert section["acked_count"] == 1
     assert section["acked"][0]["experiment_id"] == "entry_dca_overlay"
     assert section["overall"] == "info"
+
+    # Analysis recommend tasks are not dashboard Acknowledge targets.
+    write_json(
+        data_dir / "experiment_assessment.json",
+        {
+            "schema_version": 1,
+            "experiments": [
+                {
+                    "experiment_id": "ana-1",
+                    "title": "Analysis recommend",
+                    "kind": "analysis_task",
+                    "pipeline": "analysis",
+                    "status": "recommend",
+                    "human_ack_required": True,
+                }
+            ],
+        },
+    )
+    section2 = build_lifecycle_ack_section(data_dir=data_dir)
+    assert section2["pending_count"] == 0
+    assert section2["overall"] == "ok"

@@ -530,12 +530,17 @@ def build_lifecycle_ack_section(
     if not isinstance(assessment, dict):
         assessment = {}
     acks = load_acks(Path(data_dir))
+    # Dashboard Acknowledge / lifecycle-experiment-ack only applies to ledger rows the
+    # Lifecycle board can observe-ack — not analysis / learning-director recommend tasks.
+    ACKABLE_KINDS = frozenset({"lifecycle_overlay", "experimental_paper_track"})
     pending: list[dict[str, Any]] = []
     acked: list[dict[str, Any]] = []
     for raw in assessment.get("experiments") or []:
         if not isinstance(raw, dict):
             continue
         if str(raw.get("status") or "") != "recommend":
+            continue
+        if str(raw.get("kind") or "") not in ACKABLE_KINDS:
             continue
         row = apply_ack_to_experiment(dict(raw), acks)
         item = {

@@ -270,6 +270,31 @@ def test_import_cron_jobs_dry_run_ops_monitor():
     assert "ops-monitor.yml" in payload["url"]
 
 
+def test_import_cron_jobs_dry_run_project_traffic_weekday():
+    script = Path("scripts/import_cron_jobs.py")
+    expected = {
+        "project-traffic-midday": (12, 30, "FTSE project traffic (weekday midday)"),
+        "project-traffic-eod": (17, 30, "FTSE project traffic (weekday EOD)"),
+    }
+    for key, (hour, minute, title) in expected.items():
+        proc = subprocess.run(
+            [sys.executable, str(script), "--job", key, "--dry-run", "--json"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        rows = json.loads(proc.stdout)
+        assert len(rows) == 1, key
+        payload = rows[0]["payload"]["job"]
+        assert payload["title"] == title
+        assert payload["schedule"]["hours"] == [hour], key
+        assert payload["schedule"]["minutes"] == [minute], key
+        assert payload["schedule"]["wdays"] == [1, 2, 3, 4, 5], key
+        assert "project-traffic.yml" in payload["url"]
+        body = json.loads(payload["extendedData"]["body"])
+        assert body["ref"] == "main"
+
+
 def _load_import_cron_jobs_module(name: str):
     import importlib.util
     import sys

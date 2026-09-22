@@ -133,11 +133,11 @@ Each occasion stores: timestamp, PR, branch, kind (`ci_check` / `merge_conflict`
 | Ops monitor | Also runs traffic on morning / 13:15 catch-up |
 | Manual | Actions → **FTSE Project Traffic** |
 
-Register after merge:
+Register on cron-job.org (primary; GitHub `schedule` is backup only):
 
 ```bash
-# Example cron-job.org import (adjust secrets)
-WORKFLOW=project-traffic.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py \
+  --job project-traffic-midday --job project-traffic-eod
 ```
 
 See [`orchestrator-cron.md`](orchestrator-cron.md).

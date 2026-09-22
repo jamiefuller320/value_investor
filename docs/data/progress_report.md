@@ -1,6 +1,6 @@
 # FTSE progress report
 
-Generated `2026-09-22T08:27:43+00:00` · overall **WARN**
+Generated `2026-09-22T08:34:03+00:00` · overall **WARN**
 
 Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
 
@@ -23,11 +23,11 @@ Infrastructure and offline library are ahead of schedule; the primary AI learnin
 - Offline library: 21 graduated markets (focus: euro_depth).
 - Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.
 - Engineering queue: 0 open, 72 merged supervised tasks.
-- AI-judgment track beating rules control (-33.0% vs -40.8% excess).
+- AI-judgment track beating rules control (-32.3% vs -40.1% excess).
 
 ### Gaps
 
-- Primary AI track still below ^FTSE after costs (-33.0% excess; history still thin).
+- Primary AI track still below ^FTSE after costs (-32.3% excess; history still thin).
 - Ingest coverage gap: 4 buy-tier tickers have no filings index yet.
 
 ### Suggested next actions
@@ -222,7 +222,7 @@ Overall: **WARN**
 
 Overall: **WARN**
 
-- **[INFO]** Stage 2b focus aligned with primary learning gap: North-star focus is stage 2b while AI-judgment excess after costs is still negative (-33.0%). Breadth expansion and new tracks should stay deferred.
+- **[INFO]** Stage 2b focus aligned with primary learning gap: North-star focus is stage 2b while AI-judgment excess after costs is still negative (-32.3%). Breadth expansion and new tracks should stay deferred.
 - **[INFO]** Offline library ahead of live learning edge: 21 graduated library markets vs stage 2b still in progress — library growth is correctly offline; live universe expansion remains gated.
 - **[WARN]** Deferred now items without matching queue work: 1 item(s) marked `now` have no obvious engineering or review-task counterpart (L121). Promote via ftse-defer status or draft a supervised task.
 - **[INFO]** Post-run plan items without matching open engineering task: 5 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Harden Investegate/LSE direct fetch for indexed RNS items (FY/HY results, annual reports)—replace Google News wrapper URLs and empty Ticker RNS bodies—starting with buy-tier partial coverage (PAF.L 16 missing bodies) and backlog patterns (AEP.L-style zero-body indexes).; Fix Companies House PDF/iXBRL download and OCR quality gate (retry, iXBRL-first, reject garbled OCR)—target ITV.L/MGNS.L failure modes cited in recent suggestions.; Standardize IR results-presentation ingest: allowlist fetch, full-text extract, and populate `ir_presentation_metrics.json` FCF/dividend bridges (FGP.L FY2026 report + presentation; MEGP.L H1 FY2026; HIK.L hikma.com PDFs per backlog).). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. All match merged/parked tasks — schedule email_only for a fresh post-run; idle compile backstop will not reopen them.
@@ -241,7 +241,7 @@ Overall: **WARN**
 
 ## Lifecycle observe-acks
 
-Overall: **OK** · pending **0** · acked **2**
+Overall: **OK** · pending **0** · acked **1**
 
 Acknowledge is observe-only (does not execute DCA or change starter fraction). Use the Overview progress-report buttons or Lifecycle cards; both go through the Supabase dashboard bridge.
 
@@ -251,7 +251,6 @@ _None pending._
 
 ### Recently acked
 
-- **graduated_allocation** — Screen rules + graduated allocation (acked `2026-09-22T08:14:45.342024+00:00` · ack_observe)
 - **entry_dca_overlay** — Model-independent entry DCA / graduated-entry cadence (acked `2026-09-13T17:41:11.138086+00:00` · ack_observe)
 
 ## References
