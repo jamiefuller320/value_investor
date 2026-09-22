@@ -1730,6 +1730,7 @@ def _tagged_statutory_period_refetch_priority(row: dict[str, Any]) -> int:
 
 def _investegate_refetch_rank_key(row: dict[str, Any]) -> tuple:
     return (
+        0 if not row.get("has_body") else 1,
         -_tagged_statutory_period_refetch_priority(row),
         -_material_other_rns_refetch_priority(row),
         -_other_results_rns_priority(row),
@@ -2061,6 +2062,7 @@ def enrich_filing_rows(
     *,
     ticker: str,
     company_name: str,
+    append_catalog: bool = True,
 ) -> list[dict[str, Any]]:
     """Rewrite wrapper URLs and merge direct Investegate links where possible."""
     investegate_rows = fetch_filings_investegate_company(
@@ -2089,11 +2091,12 @@ def enrich_filing_rows(
         if url:
             seen_urls.add(url)
         enriched.append(item)
-    for row in investegate_rows:
-        url = str(row.get("url") or "")
-        if url and url not in seen_urls:
-            enriched.append(_apply_headline_period(row))
-            seen_urls.add(url)
+    if append_catalog:
+        for row in investegate_rows:
+            url = str(row.get("url") or "")
+            if url and url not in seen_urls:
+                enriched.append(_apply_headline_period(row))
+                seen_urls.add(url)
     return enriched
 
 
@@ -8644,6 +8647,7 @@ def refetch_investegate_filing_bodies(
         filings,
         ticker=ticker,
         company_name=company_name,
+        append_catalog=False,
     )
     filtered = filter_misattributed_filings(
         enriched,
@@ -8733,6 +8737,7 @@ def refetch_investegate_filing_bodies(
                     downloaded += 1
         updated.append(item)
 
+    updated, shared_body_propagated = _propagate_bodies_across_shared_filing_ids(updated)
     after = sum(1 for row in updated if row.get("has_body"))
     payload["filings"] = updated
     payload["summary"] = summarize_filings(updated)
@@ -8749,6 +8754,7 @@ def refetch_investegate_filing_bodies(
         "html_fallbacks": html_fallbacks,
         "lse_html_fallbacks": lse_html_fallbacks,
         "other_results_candidates": other_results_candidates,
+        "shared_body_propagated": shared_body_propagated,
         "note": "refetch_investegate_filing_bodies",
     }
 
@@ -8869,6 +8875,7 @@ def refetch_residual_filing_bodies(
         filings,
         ticker=ticker,
         company_name=company_name,
+        append_catalog=False,
     )
     missing = [row for row in enriched if row.get("url") and not row.get("has_body")]
     if not missing:
@@ -9130,6 +9137,7 @@ def refetch_missing_filing_bodies(
             filings,
             ticker=ticker,
             company_name=company_name,
+            append_catalog=False,
         )
     bodies_dir.mkdir(parents=True, exist_ok=True)
     ch_result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=max_bodies)

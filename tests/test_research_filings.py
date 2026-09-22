@@ -7558,6 +7558,124 @@ def test_sanitize_filings_index_propagates_imperial_own_share_sibling(tmp_path: 
     assert html_row["body_path"] == str(body_path)
 
 
+def test_enrich_filing_rows_refetch_skips_investegate_catalog_append(monkeypatch):
+    """eng-20260921-08: body refetch must not inflate the index with catalog-only rows."""
+    indexed = [
+        {
+            "id": "imb_gap",
+            "source": "investegate_direct",
+            "headline": "Transaction in Own Shares",
+            "published_at": "2026-09-16T00:00:00+00:00",
+            "url": "http://www.rns-pdf.londonstockexchange.com/rns/0280V_1-2026-9-16.pdf",
+            "period": "other",
+            "has_body": False,
+        }
+    ]
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [
+            {
+                "id": "catalog_only",
+                "source": "investegate_direct",
+                "headline": "Director Declaration",
+                "published_at": "2026-01-01T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/imperial-brands--imb/director/1",
+                "period": "other",
+                "has_body": False,
+            }
+        ],
+    )
+    enriched = enrich_filing_rows(
+        indexed,
+        ticker="IMB.L",
+        company_name="Imperial Brands PLC",
+        append_catalog=False,
+    )
+    assert len(enriched) == 1
+    assert enriched[0]["id"] == "imb_gap"
+
+
+def test_refetch_investegate_imb_own_shares_gap_closes_without_catalog_bloat(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20260921-08: IMB.L own-shares IWB refetch fills LSE PDF and propagates to HTML sibling."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    shared_id = "d75b4132ced449ca"
+    pdf_url = "http://www.rns-pdf.londonstockexchange.com/rns/0280V_1-2026-9-16.pdf"
+    html_url = (
+        "https://www.investegate.co.uk/announcement/rns/imperial-brands--imb/"
+        "transaction-in-own-shares/9999001"
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "IMB.L",
+                "company_name": "Imperial Brands PLC",
+                "filings": [
+                    {
+                        "id": shared_id,
+                        "source": "investegate_direct",
+                        "headline": "Transaction in Own Shares",
+                        "published_at": "2026-09-16T00:00:00+00:00",
+                        "url": pdf_url,
+                        "period": "other",
+                        "has_body": False,
+                    },
+                    {
+                        "id": shared_id,
+                        "source": "investegate_direct",
+                        "headline": "Transaction in Own Shares",
+                        "published_at": "2026-09-16T00:00:00+00:00",
+                        "url": html_url,
+                        "period": "other",
+                        "has_body": False,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [
+            {
+                "id": "catalog_only",
+                "source": "investegate_direct",
+                "headline": "Director Declaration",
+                "published_at": "2026-01-01T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/imperial-brands--imb/director/1",
+                "period": "other",
+                "has_body": False,
+            }
+        ],
+    )
+    sample_body = "Imperial Brands PLC transaction in own shares programme update.\n" + (
+        "purchase " * 80
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda url: (sample_body, None) if url == pdf_url else (None, None),
+    )
+
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="IMB.L",
+        company_name="Imperial Brands PLC",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 2
+    assert result["fetched"] == 2
+    assert result["shared_body_propagated"] == 1
+
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert len(saved["filings"]) == 2
+    assert all(row["has_body"] for row in saved["filings"])
+    html_row = next(row for row in saved["filings"] if row["url"] == html_url)
+    pdf_row = next(row for row in saved["filings"] if row["url"] == pdf_url)
+    assert html_row["body_path"] == pdf_row["body_path"]
+
+
 def test_refetch_ir_allowlist_filing_bodies_itv_l(tmp_path: Path, monkeypatch):
     allowlist_path = tmp_path / "empty_ir.json"
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
