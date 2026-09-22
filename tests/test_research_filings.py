@@ -7500,6 +7500,82 @@ def test_refetch_ir_allowlist_reconciles_imb_hy26_period(tmp_path: Path):
     assert saved["summary"]["interim"] == 1
 
 
+def test_sanitize_filings_index_prunes_imperial_bodiless_own_share_gaps(tmp_path: Path):
+    """eng-20260922-01: bodiless daily TVR rows must not block IMB.L ingest gap closure."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    shared_id = "d75b4132ced449ca"
+    body_path = bodies_dir / "da8146faa86d5b36.txt"
+    body_path.write_text(
+        "Imperial Brands PLC transaction in own shares programme update.\n" + ("purchase " * 60),
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "da8146faa86d5b36",
+                        "source": "investegate_direct",
+                        "headline": "Transaction in Own Shares",
+                        "published_at": "2026-07-31T00:00:00+00:00",
+                        "url": "http://www.rns-pdf.londonstockexchange.com/rns/7783O_1-2026-7-31.pdf",
+                        "period": "other",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    },
+                    {
+                        "id": "38cc9e78ffa8315d",
+                        "source": "investegate_direct",
+                        "headline": "Transaction in Own Shares",
+                        "published_at": "2026-07-31T00:00:00+00:00",
+                        "url": "http://www.rns-pdf.londonstockexchange.com/rns/7647O_1-2026-7-31.pdf",
+                        "period": "other",
+                        "has_body": False,
+                        "body_path": None,
+                    },
+                    {
+                        "id": shared_id,
+                        "source": "investegate_direct",
+                        "headline": "Transaction in Own Shares",
+                        "published_at": "2026-09-16T00:00:00+00:00",
+                        "url": "http://www.rns-pdf.londonstockexchange.com/rns/0280V_1-2026-9-16.pdf",
+                        "period": "other",
+                        "has_body": False,
+                        "body_path": None,
+                    },
+                    {
+                        "id": shared_id,
+                        "source": "investegate_direct",
+                        "headline": "Transaction in Own Shares",
+                        "published_at": "2026-09-16T00:00:00+00:00",
+                        "url": (
+                            "https://www.investegate.co.uk/announcement/rns/imperial-brands--imb/"
+                            "transaction-in-own-shares/9775301"
+                        ),
+                        "period": "other",
+                        "has_body": False,
+                        "body_path": None,
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = sanitize_filings_index(
+        filings_dir,
+        company_name="Imperial Brands PLC",
+        ticker="IMB.L",
+    )
+    assert result["pruned"] >= 2
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert sum(1 for row in saved["filings"] if not row.get("has_body")) == 0
+    assert len(saved["filings"]) == 2
+    assert saved["summary"]["interim"] == 0
+
+
 def test_sanitize_filings_index_propagates_imperial_own_share_sibling(tmp_path: Path):
     """eng-20260921-07: Investegate HTML row inherits body from paired LSE PDF index entry."""
     filings_dir = tmp_path / "filings"
@@ -7551,11 +7627,13 @@ def test_sanitize_filings_index_propagates_imperial_own_share_sibling(tmp_path: 
         company_name="Imperial Brands PLC",
         ticker="IMB.L",
     )
-    assert result["with_body_after"] == 2
+    assert result["with_body_after"] == 1
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
-    html_row = next(row for row in saved["filings"] if row["url"] == html_url)
-    assert html_row["has_body"] is True
-    assert html_row["body_path"] == str(body_path)
+    assert len(saved["filings"]) == 1
+    row = saved["filings"][0]
+    assert row["url"] == pdf_url
+    assert row["has_body"] is True
+    assert row["body_path"] == str(body_path)
 
 
 def test_refetch_ir_allowlist_filing_bodies_itv_l(tmp_path: Path, monkeypatch):

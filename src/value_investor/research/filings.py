@@ -1590,13 +1590,127 @@ def dedupe_rns_index_rows(
     *,
     filings_dir: Path,
 ) -> tuple[list[dict[str, Any]], int]:
-    """Apply results-PDF and Investegate announcement dedupe passes."""
+    """Apply results-PDF, Investegate announcement, and shared-id dedupe passes."""
     merged, pruned_pdf = dedupe_rns_results_document_rows(filings, filings_dir=filings_dir)
     merged, pruned_page = dedupe_rns_investegate_announcement_rows(
         merged,
         filings_dir=filings_dir,
     )
-    return merged, pruned_pdf + pruned_page
+    merged, pruned_id = dedupe_rns_shared_filing_id_rows(merged, filings_dir=filings_dir)
+    merged, pruned_redundant_own = prune_redundant_bodiless_own_share_rows(merged)
+    merged, pruned_bodiless_own = prune_bodiless_daily_own_share_rows(merged)
+    return (
+        merged,
+        pruned_pdf + pruned_page + pruned_id + pruned_redundant_own + pruned_bodiless_own,
+    )
+
+
+def _is_daily_own_shares_row(row: dict[str, Any]) -> bool:
+    """True for routine LSE buyback/PDMR purchase announcements (not programme launches)."""
+    return "transaction in own shares" in _headline_blob(row)
+
+
+def _prefer_rns_shared_filing_id_row(
+    existing: dict[str, Any],
+    candidate: dict[str, Any],
+    *,
+    filings_dir: Path,
+) -> dict[str, Any]:
+    """Pick one index row when Investegate indexes PDF and HTML under the same ``id``."""
+    if candidate.get("has_body") and not existing.get("has_body"):
+        return dict(candidate)
+    if existing.get("has_body") and not candidate.get("has_body"):
+        return dict(existing)
+    cand_lse = _is_lse_rns_url(str(candidate.get("url") or ""))
+    ex_lse = _is_lse_rns_url(str(existing.get("url") or ""))
+    if cand_lse and not ex_lse:
+        return dict(candidate)
+    if ex_lse and not cand_lse:
+        return dict(existing)
+    if _rns_body_quality_score(candidate, filings_dir) > _rns_body_quality_score(
+        existing, filings_dir
+    ):
+        return dict(candidate)
+    return dict(existing)
+
+
+def dedupe_rns_shared_filing_id_rows(
+    filings: list[dict[str, Any]],
+    *,
+    filings_dir: Path,
+) -> tuple[list[dict[str, Any]], int]:
+    """Collapse duplicate rows that share one filing ``id`` (LSE PDF vs Investegate HTML)."""
+    by_id: dict[str, list[dict[str, Any]]] = {}
+    for row in filings:
+        row_id = str(row.get("id") or "").strip()
+        if row_id:
+            by_id.setdefault(row_id, []).append(row)
+    if not any(len(group) > 1 for group in by_id.values()):
+        return filings, 0
+
+    winners: dict[str, dict[str, Any]] = {}
+    for row_id, group in by_id.items():
+        if len(group) == 1:
+            winners[row_id] = dict(group[0])
+            continue
+        winner = dict(group[0])
+        for candidate in group[1:]:
+            winner = _prefer_rns_shared_filing_id_row(winner, candidate, filings_dir=filings_dir)
+        winners[row_id] = winner
+    pruned = sum(len(group) - 1 for group in by_id.values() if len(group) > 1)
+    out: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for row in filings:
+        row_id = str(row.get("id") or "").strip()
+        if not row_id:
+            out.append(row)
+            continue
+        if row_id in seen:
+            continue
+        seen.add(row_id)
+        out.append(dict(winners[row_id]))
+    return out, pruned
+
+
+def prune_redundant_bodiless_own_share_rows(
+    filings: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], int]:
+    """Drop bodiless own-share rows when the same day already has a bodied twin PDF."""
+    bodied_keys = {
+        (str(row.get("published_at") or ""), _headline_blob(row))
+        for row in filings
+        if row.get("has_body") and _is_daily_own_shares_row(row)
+    }
+    if not bodied_keys:
+        return filings, 0
+    kept: list[dict[str, Any]] = []
+    pruned = 0
+    for row in filings:
+        key = (str(row.get("published_at") or ""), _headline_blob(row))
+        if not row.get("has_body") and _is_daily_own_shares_row(row) and key in bodied_keys:
+            pruned += 1
+            continue
+        kept.append(row)
+    return kept, pruned
+
+
+def prune_bodiless_daily_own_share_rows(
+    filings: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], int]:
+    """
+    Remove routine buyback rows that still lack bodies after refetch.
+
+    Imperial-style indexes accumulate daily TVR lines; they should not block
+    ingest gap closure once statutory annual/interim bodies are present.
+    """
+    kept: list[dict[str, Any]] = []
+    pruned = 0
+    for row in filings:
+        if not row.get("has_body") and _is_daily_own_shares_row(row):
+            pruned += 1
+            continue
+        kept.append(row)
+    return kept, pruned
 
 
 def _propagate_bodies_across_shared_filing_ids(
@@ -8659,6 +8773,7 @@ def refetch_investegate_filing_bodies(
             ticker,
         )
     enriched = filtered
+    enriched, shared_body_propagated = _propagate_bodies_across_shared_filing_ids(enriched)
     enriched, rns_doc_deduped = dedupe_rns_index_rows(
         enriched,
         filings_dir=filings_dir,
@@ -8671,7 +8786,12 @@ def refetch_investegate_filing_bodies(
     missing = [row for row in enriched if _rns_row_needs_body_refetch(row, filings_dir)]
     missing.sort(key=_investegate_refetch_rank_key)
     other_results_candidates = sum(1 for row in missing if _is_other_results_rns_row(row))
-    index_changed = enriched != filings or misattributed_pruned > 0 or rns_doc_deduped > 0
+    index_changed = (
+        enriched != filings
+        or misattributed_pruned > 0
+        or rns_doc_deduped > 0
+        or shared_body_propagated > 0
+    )
     if not missing:
         if index_changed:
             payload["filings"] = enriched
@@ -8681,9 +8801,11 @@ def refetch_investegate_filing_bodies(
             "attempted": 0,
             "fetched": 0,
             "with_body_before": before,
-            "with_body_after": before,
+            "with_body_after": sum(1 for row in enriched if row.get("has_body")),
             "google_news_rejected": google_news_rejected,
             "misattributed_pruned": misattributed_pruned,
+            "shared_body_propagated": shared_body_propagated,
+            "rns_index_pruned": rns_doc_deduped,
             "note": "no missing Investegate/LSE bodies",
         }
 
