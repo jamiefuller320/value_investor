@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-22T12:34:20+00:00",
+  "updated_at": "2026-09-22T16:27:55+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10064,6 +10064,24 @@
       "source": "https://cursor.com/agents/bc-01a0c90d-5565-7fd3-b55e-7ffe1558a936",
       "added_at": "2026-09-22T12:21:20+00:00",
       "updated_at": "2026-09-22T12:34:20+00:00"
+    },
+    {
+      "id": "L448",
+      "category": "later",
+      "section": "ops",
+      "title": "Market-rotating eng gap burn-down (ingest maintenance cursor)",
+      "summary": "Align eng escalation (stall micro-compile, gap-closure pins, parked-hunter) with maintenance_slot_cursor so admitted markets get serial gap burn-down while FTSE live path keeps P1 pins; avoids one global queue starved by post-run dedupe while library gaps (e.g. DAX) linger parked.",
+      "revisit_when": "Two or more admitted maintenance markets show ingest stall with zero open eng tasks for that market_id for 7+ days while FTSE gap-closure fills the queue",
+      "tags": [
+        "P2",
+        "ingest",
+        "engineering-queue",
+        "market-cascade",
+        "gap-backlog"
+      ],
+      "status": "open",
+      "source": "conversation: keep on top of gap backlog market cascade",
+      "added_at": "2026-09-22T16:27:55+00:00"
     }
   ],
   "fragments": [
