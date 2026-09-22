@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-22T09:01:06.876097+00:00",
+  "generated_at": "2026-09-22T09:11:57.141537+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1168,44 +1168,40 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-22T09:01:03.645373+00:00",
-    "queue_ui_updated_at": "2026-09-22T09:01:06.788128+00:00",
+    "compiled_at": "2026-09-22T09:11:55.836340+00:00",
+    "queue_ui_updated_at": "2026-09-22T09:11:57.095609+00:00",
     "task_count": 96,
     "status": {
-      "open_count": 1,
+      "open_count": 0,
       "pr_open_count": 0,
-      "parked_count": 0,
+      "parked_count": 1,
       "merged_count": 72,
       "failed_count": 0,
-      "next_task_id": "eng-20260920-16",
+      "next_task_id": null,
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [
+    "queued_tasks": [],
+    "attention_tasks": [
       {
         "id": "eng-20260920-16",
         "area": "ingest",
         "title": "Close library ingest filing gaps for DAX (dax): 7 buy-tier gaps after stalled weekday loop",
         "priority": "high",
         "priority_score": 86.0,
-        "status": "open",
+        "status": "parked",
         "source": "library_ingest_stall",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "full"
+        "branch_name": null
       }
     ],
-    "attention_tasks": [],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_task_count": 0,
+      "dispatch_eligible_count": 0,
       "blocked_count": 0
     }
   },
@@ -1484,9 +1480,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-22T09:01:06.876097+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
+    "generated_at": "2026-09-22T09:11:57.141537+00:00",
+    "overall": "idle",
+    "headline": "Queue and hunter idle.",
     "merge_lane": {
       "state": "idle",
       "idle": true,
@@ -1498,26 +1494,26 @@
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
-      "should_dispatch": true,
+      "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
-      "attention_parked_count": 0,
-      "open_count": 1,
+      "attention_parked_count": 1,
+      "open_count": 0,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 1,
+      "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260920-16",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "next_task_id": null,
+      "reason": "no open engineering tasks in queue",
+      "detail": "No open engineering tasks — queue is idle."
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 0,
-      "evaluated_at": "2026-09-22T09:01:05.741552+00:00"
+      "attention_parked_count": 1,
+      "evaluated_at": "2026-09-22T09:11:56.467684+00:00"
     },
     "traffic_control": {
       "pause_active": false,
