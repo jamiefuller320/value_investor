@@ -2,8 +2,9 @@
 
 Sunday ``ftse-experiment-assess refresh`` rebuilds the ledger from evidence.
 Acks live in ``docs/data/experiment_acks.json`` so a human read/ack is not
-wiped. Matching is by experiment id plus leading finding key (for the DCA
-overlay: ``leading_cadence``). A new leading cadence re-opens ack.
+wiped. Matching is by experiment id (including catalog ``*_track`` aliases of
+ledger track ids) plus leading finding key (for the DCA overlay:
+``leading_cadence``). A new leading cadence re-opens ack.
 """
 
 from __future__ import annotations
@@ -24,6 +25,39 @@ def _utcnow() -> str:
 
 def _as_dict(raw: Any) -> dict[str, Any]:
     return raw if isinstance(raw, dict) else {}
+
+
+def experiment_id_aliases(experiment_id: str) -> frozenset[str]:
+    """Catalog keys like ``graduated_allocation_track`` alias ledger ``graduated_allocation``."""
+    key = str(experiment_id or "").strip()
+    if not key:
+        return frozenset()
+    aliases = {key}
+    if key.endswith("_track"):
+        aliases.add(key[: -len("_track")])
+    else:
+        aliases.add(f"{key}_track")
+    return frozenset(aliases)
+
+
+def canonical_experiment_id(
+    experiment_id: str,
+    *,
+    known_ids: set[str] | frozenset[str] | None = None,
+) -> str:
+    """Prefer the assessment/ledger id when catalog uses a ``*_track`` alias."""
+    key = str(experiment_id or "").strip()
+    if not key:
+        return key
+    aliases = experiment_id_aliases(key)
+    known = {str(item).strip() for item in (known_ids or set()) if str(item).strip()}
+    if known:
+        for alias in aliases:
+            if alias in known:
+                return alias
+    if key.endswith("_track"):
+        return key[: -len("_track")]
+    return key
 
 
 def load_acks(data_dir: Path) -> dict[str, Any]:
@@ -61,12 +95,14 @@ def matching_ack(
     experiment_id = str(experiment_id or "").strip()
     if not experiment_id:
         return None
+    aliases = experiment_id_aliases(experiment_id)
     finding = _as_dict(finding)
     lead = str(finding.get("leading_cadence") or "").strip() or None
     for row in (acks or {}).get("acks") or []:
         if not isinstance(row, dict):
             continue
-        if str(row.get("experiment_id") or "") != experiment_id:
+        row_id = str(row.get("experiment_id") or "").strip()
+        if row_id not in aliases:
             continue
         if str(row.get("status") or "open") != "open":
             continue
@@ -106,9 +142,13 @@ def record_ack(
     finding: dict[str, Any] | None = None,
     source: str = "",
     acked_by: str = "human",
+    known_ids: set[str] | frozenset[str] | None = None,
 ) -> dict[str, Any]:
     """Append or refresh an open ack. Returns the stored ack row."""
-    experiment_id = str(experiment_id or "").strip()
+    experiment_id = canonical_experiment_id(
+        str(experiment_id or "").strip(),
+        known_ids=known_ids,
+    )
     if not experiment_id:
         raise ValueError("experiment_id is required")
     decision = str(decision or "ack_observe").strip()

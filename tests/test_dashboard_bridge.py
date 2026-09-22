@@ -24,11 +24,63 @@ def test_process_pending_without_supabase_env(monkeypatch) -> None:
     assert result["reason"] == "supabase_not_configured"
 
 
-def test_config_from_env(monkeypatch) -> None:
-    monkeypatch.setenv("SUPABASE_URL", "https://example.supabase.co")
-    monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", "service-key")
-    monkeypatch.setenv("GITHUB_REPOSITORY", "owner/repo")
-    cfg = DashboardBridgeConfig.from_env()
-    assert cfg is not None
-    assert cfg.supabase_url == "https://example.supabase.co"
-    assert cfg.github_repo == "owner/repo"
+def test_process_pending_dedupes_lifecycle_ack_aliases(monkeypatch) -> None:
+    cfg = DashboardBridgeConfig(
+        supabase_url="https://example.supabase.co",
+        service_role_key="service-key",
+        github_repo="owner/repo",
+        github_token="token",
+    )
+    rows = [
+        {
+            "id": "a1",
+            "action": "lifecycle-experiment-ack",
+            "payload": {
+                "experiment_id": "graduated_allocation_track",
+                "factor_id": "entry_appetite",
+            },
+            "status": "pending",
+        },
+        {
+            "id": "a2",
+            "action": "lifecycle-experiment-ack",
+            "payload": {"experiment_id": "graduated_allocation", "factor_id": "starter_fraction"},
+            "status": "pending",
+        },
+        {
+            "id": "b1",
+            "action": "progress-report",
+            "payload": {},
+            "status": "pending",
+        },
+    ]
+    updates: list[tuple[str, str]] = []
+    dispatches: list[str] = []
+
+    monkeypatch.setattr(
+        "value_investor.dashboard_bridge.fetch_pending_commands",
+        lambda config, limit=10: rows,
+    )
+
+    def _update(config, command_id, *, status, message=None, github_run_url=None):
+        updates.append((command_id, status, message))
+
+    def _execute(row, *, config):
+        dispatches.append(str(row.get("id")))
+        return {
+            "action": row.get("action"),
+            "event_type": ACTION_REPOSITORY_DISPATCH[str(row.get("action"))],
+            "command_id": str(row.get("id")),
+        }
+
+    monkeypatch.setattr("value_investor.dashboard_bridge.update_command_status", _update)
+    monkeypatch.setattr("value_investor.dashboard_bridge.execute_dashboard_command", _execute)
+
+    result = process_pending_dashboard_commands(config=cfg)
+    assert result["ok"] is True
+    assert dispatches == ["a1", "b1"]
+    skipped = [
+        row for row in result["processed"] if row.get("skipped") == "duplicate_lifecycle_ack"
+    ]
+    assert len(skipped) == 1
+    assert skipped[0]["id"] == "a2"

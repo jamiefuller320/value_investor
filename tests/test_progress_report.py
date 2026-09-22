@@ -8,6 +8,7 @@ from pathlib import Path
 from value_investor.progress_report import (
     build_actionable_items,
     build_integration_checks,
+    build_lifecycle_ack_section,
     build_progress_report,
     build_role_coherence,
     format_progress_report_markdown,
@@ -262,6 +263,83 @@ def test_write_progress_report_and_markdown(tmp_path: Path, monkeypatch):
     )
     saved = json.loads(out_json.read_text(encoding="utf-8"))
     assert saved["schema_version"] == payload["schema_version"]
+    assert "lifecycle_acks" in saved
     md = out_md.read_text(encoding="utf-8")
     assert "# FTSE progress report" in md
+    assert "Lifecycle observe-acks" in md
     assert "Overall progress" in format_progress_report_markdown(payload)
+
+
+def test_lifecycle_ack_section_lists_pending_and_acked(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    write_json(
+        data_dir / "experiment_assessment.json",
+        {
+            "schema_version": 1,
+            "experiments": [
+                {
+                    "experiment_id": "graduated_allocation",
+                    "title": "Screen rules + graduated allocation",
+                    "kind": "experimental_paper_track",
+                    "pipeline": "paper_automation",
+                    "status": "recommend",
+                    "human_ack_required": True,
+                },
+                {
+                    "experiment_id": "entry_dca_overlay",
+                    "title": "Entry DCA overlay",
+                    "kind": "lifecycle_overlay",
+                    "pipeline": "position_lifecycle",
+                    "status": "recommend",
+                    "human_ack_required": False,
+                    "human_acked": True,
+                    "acked_at": "2026-09-13T17:41:11+00:00",
+                    "ack_decision": "ack_observe",
+                },
+            ],
+        },
+    )
+    write_json(
+        data_dir / "experiment_acks.json",
+        {
+            "schema_version": 1,
+            "acks": [
+                {
+                    "experiment_id": "entry_dca_overlay",
+                    "decision": "ack_observe",
+                    "status": "open",
+                    "acked_at": "2026-09-13T17:41:11+00:00",
+                    "finding": {},
+                }
+            ],
+        },
+    )
+    section = build_lifecycle_ack_section(data_dir=data_dir)
+    assert section["pending_count"] == 1
+    assert section["pending"][0]["experiment_id"] == "graduated_allocation"
+    assert section["pending"][0]["acknowledge"]["enabled"] is True
+    assert section["acked_count"] == 1
+    assert section["acked"][0]["experiment_id"] == "entry_dca_overlay"
+    assert section["overall"] == "info"
+
+    # Analysis recommend tasks are not dashboard Acknowledge targets.
+    write_json(
+        data_dir / "experiment_assessment.json",
+        {
+            "schema_version": 1,
+            "experiments": [
+                {
+                    "experiment_id": "ana-1",
+                    "title": "Analysis recommend",
+                    "kind": "analysis_task",
+                    "pipeline": "analysis",
+                    "status": "recommend",
+                    "human_ack_required": True,
+                }
+            ],
+        },
+    )
+    section2 = build_lifecycle_ack_section(data_dir=data_dir)
+    assert section2["pending_count"] == 0
+    assert section2["overall"] == "ok"
