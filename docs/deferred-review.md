@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T10:49:43+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:01:25+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -194,6 +194,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N142 | **Add more paper tracks before Suite B edge** | Extra tracks dilute marks and churn ops without fixing primary AI excess. Keep existing experiments observe-only until ai_judgment_fair clears ^FTSE after fair costs. | ai_judgment_fair shows persistent excess vs ^FTSE on Suite B and decision-review has applied at least one primary epoch |
 | N143 | **Live universe expansion before stage 2b edge** | Stage 4 live non-UK screen should wait until primary learning track shows after-cost edge; offline library growth (P2) continues. | Stage 2b exit: AI judgment persistent excess after fair costs vs ^FTSE and vs rules |
 | N144 | **Auto-apply decision-review knobs on thin primary history** | Primary ai_judgment still deeply negative on stress book; auto --apply before thick Suite B marks risks locking in churn. Keep proposals observe-only until epoch gates pass. | Primary or fair AI book has thick marks, churn_health ok, and human Sunday prior review greenlights apply |
+| N145 | **Make ai_judgment_fair the is_primary_learning_track flag** | Day-to-day Suite B NAV stability is expected under T212 costs and is not the promotion gate. Keep is_primary on stress ai_judgment until fair AI clears ^FTSE and rules_fair with a thick forward window (N48 human flip). Until then Suite B remains the adoption scoreboard, not the primary flag. | ai_judgment_fair beat_market and beat rules_fair on a thick forward window; Sunday fair-cost gate green; human accepts N48 |
 
 ---
 
@@ -504,6 +505,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L433 | **Wake dashboard-bridge immediately on Supabase command insert** | Acknowledge clicks wait on weekday Actions schedule poll which often drifts past 10 minutes. A Supabase webhook, Edge Function, or denser external cron that workflow_dispatches dashboard-bridge.yml would clear queued commands without waiting for schedule drift. | Dashboard Acknowledge or other bridge buttons time out waiting for GitHub worker more than once a week |
 | L434 | **EngineeringTask dataclass should carry parked/cancelled lifecycle fields** | Parked metadata can still be lost if any path round-trips queue rows through EngineeringTask.to_dict(). Consider first-class parked_*/cancelled_* fields on the dataclass so compile rematch cannot strip them. | Another parked_reason strip appears after the _merge_task_rows preserve fix, or EngineeringTask schema is next refactored |
 | L436 | **Bundle multi-ticker IR allowlist fills into one eng task** | Instead of N intensive pins or N hunter tasks that all touch research_ir_urls.json, coalesce stuck no-allowlist tickers in the same regime into one data PR editing the allowlist (plus seed fallback) so Lane B pays one clash cycle for many names. | Open no-allowlist blockers across one regime exceed ~5 concurrent names and hunter tasks are serializing on research_ir_urls.json |
+| L439 | **Progress report dual-suite excess (stress + fair)** | project_progress currently pulls ai_excess from stress ai_judgment decision_review, so stage 2b looks brutal. Later: surface ai_judgment_fair excess alongside stress without flipping is_primary — adoption scoreboard vs churn lab. | Human wants dashboard/progress narrative aligned with Suite B adoption truth while keeping Suite A primary flag |
 
 ---
 
