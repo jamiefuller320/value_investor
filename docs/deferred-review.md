@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:25:12+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:26:26+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -264,6 +264,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L438 | **Evolutionary genomes after walk-forward thickness (L2)** | Stage 5 evolution only after primary loop has thick cost-aware walk-forward history; premature evolution would inflate eng score without alpha. | Stage 2b complete and decision-review epochs show stable positive Suite B excess |
 | L440 | **Fix momentum_grace still-buy-tier blocking rank rotation** | evaluate_grace_holding returns keep=True for any buy-tier signal; paper_fund then grace_keeps holdings outside the top-N target set, so the book never sells (0 exits since Aug) and never tests downgrade+momentum. Intended grace is only after leaving buy-tier. | Prioritising lifecycle/exit experiments or retiring/restarting the momentum_grace track |
 | L441 | **Fixed-notional sleeve cohort lab beside NAV books** | Observe-only: each new buy gets a fixed notional (e.g. £100), capped open sleeves, optional monthly deposit into a cash queue for new sleeves only. Primary metrics: per-sleeve forward return, hit rate, hold/exit quality; NAV vs ^FTSE stays on existing equal-weight books. Aligns with buy_tier_level cohort spirit and entry-lifecycle experiments. | Exit-timing / hypothesis outcome cohorts ready for probability analysis, or buy_tier_level has enough closed sleeves to compare designs |
+| L442 | **Opportunity-cost rotation instead of always exiting demoted buy-tier** | Softer than always exit_confirm on off-target buy-tier: only free capital when higher-conviction buys are skipped for cash. Preserves long holds for lifecycle experiments when the buy pipeline is idle; still unblocks sleeves when targets need funding. Ranked books vs buy_tier_level remain the dual instrument. | After momentum_grace rank-rotation fix merges and Sunday review shows exit cohorts thickening or over-churn on demoted buy-tier names |
 
 ### Universe & data
 
