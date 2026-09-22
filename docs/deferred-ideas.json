@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-21T23:10:10+00:00",
+  "updated_at": "2026-09-22T08:14:05+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9677,6 +9677,22 @@
       "status": "open",
       "source": "https://github.com/jamiefuller320/value_investor/pull/789",
       "added_at": "2026-09-21T23:10:10+00:00"
+    },
+    {
+      "id": "L433",
+      "category": "later",
+      "section": "ops",
+      "title": "EngineeringTask dataclass should carry parked/cancelled lifecycle fields",
+      "summary": "Parked metadata can still be lost if any path round-trips queue rows through EngineeringTask.to_dict(). Consider first-class parked_*/cancelled_* fields (or a raw extras passthrough) so compile/sync writers cannot drop them.",
+      "revisit_when": "Another parked_reason strip appears after the _merge_task_rows preserve fix, or EngineeringTask schema is next refactored",
+      "tags": [
+        "engineering",
+        "queue",
+        "parked"
+      ],
+      "status": "open",
+      "source": "fix parked engineering tasks triage",
+      "added_at": "2026-09-22T08:14:05+00:00"
     }
   ],
   "fragments": [
