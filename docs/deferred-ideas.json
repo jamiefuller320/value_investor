@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-21T23:10:10+00:00",
+  "updated_at": "2026-09-22T08:18:51+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9677,6 +9677,23 @@
       "status": "open",
       "source": "https://github.com/jamiefuller320/value_investor/pull/789",
       "added_at": "2026-09-21T23:10:10+00:00"
+    },
+    {
+      "id": "L433",
+      "category": "later",
+      "section": "ops",
+      "title": "Wake dashboard-bridge immediately on Supabase command insert",
+      "summary": "Acknowledge clicks wait on weekday Actions schedule poll which often drifts past 10 minutes. A Supabase webhook, Edge Function, or denser external cron that workflow_dispatches dashboard-bridge.yml would clear queued commands without waiting for schedule drift.",
+      "revisit_when": "Dashboard Acknowledge or other bridge buttons time out waiting for GitHub worker more than once a week",
+      "tags": [
+        "dashboard",
+        "supabase",
+        "actions",
+        "latency"
+      ],
+      "status": "open",
+      "source": "dashboard acknowledge queue investigation 2026-09-22",
+      "added_at": "2026-09-22T08:18:51+00:00"
     }
   ],
   "fragments": [
