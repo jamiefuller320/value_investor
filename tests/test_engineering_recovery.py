@@ -1050,7 +1050,9 @@ def test_housekeep_cancels_superseded_gap_closure_sibling(tmp_path: Path, monkey
         auto_unpark_healed_preflight=False,
     )
     assert any(row.action == "cancel_superseded_gap_closure" for row in result.cancelled)
-    parked = next(row for row in load_engineering_tasks(tasks_path)["tasks"] if row["id"] == "eng-20260921-08")
+    parked = next(
+        row for row in load_engineering_tasks(tasks_path)["tasks"] if row["id"] == "eng-20260921-08"
+    )
     assert parked["status"] == "cancelled"
     assert parked.get("duplicate_of") == "eng-20260921-07"
 

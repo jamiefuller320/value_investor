@@ -1790,9 +1790,7 @@ def recover_engineering_queue(
             auto_cancel_superseded_gap_closure=bool(
                 recovery_policy.get("auto_cancel_superseded_gap_closure")
             ),
-            auto_unpark_healed_preflight=bool(
-                recovery_policy.get("auto_unpark_healed_preflight")
-            ),
+            auto_unpark_healed_preflight=bool(recovery_policy.get("auto_unpark_healed_preflight")),
             open_prs=list(augmented_open_prs or open_prs or []),
         ).to_dict()
 
@@ -1979,10 +1977,14 @@ def find_merged_gap_closure_sibling(
         if chain_root and other_chain and chain_root == other_chain:
             return other_id
         other_base = _gap_closure_title_base(str(other.get("title") or ""))
-        if title_base and other_base and (
-            title_base == other_base
-            or title_base.startswith(other_base)
-            or other_base.startswith(title_base)
+        if (
+            title_base
+            and other_base
+            and (
+                title_base == other_base
+                or title_base.startswith(other_base)
+                or other_base.startswith(title_base)
+            )
         ):
             return other_id
     return None
