@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T08:55:45+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T08:57:38+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -189,6 +189,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N137 | **Eng-agent merge_tree park after successful Composer (vs concurrent PRs)** | Sep18 evening burns were full Composer+pytest then park on merge_tree vs open non-eng PR (#720), not missing early preflight. Do not reorder full preflight before Composer. Prefer leave alone while parked-backlog pause holds. | Parked attention count drops below 7 and eng-agent resumes with merge_tree parks against concurrent open PRs |
 | N138 | **Focus-market ingest for off-buy-tier zero-filing memos** | Names like AGS.BR: memo on disk (often initial/zero-body) but no longer buy-tier and filings_total=0. Sprint ingest targets buy-tier gaps only; rememo stays off until bodies land. IR may be bot-blocked (Cloudflare). Not the same as NBA-style zero-body catch-up on current buy-tier. | euro_depth buy-tier filing sprint is ingest_exhausted with zero_body=0 and operators still want focus-book memo filing parity for hold-tier names with accumulate verdicts |
 | N139 | **Do not add a new ingest run-repair service** | Overnight deepen failed because a stuck PDF overran the between-ticker budget and the 75m timeout killed the process before JSON was written. workflow-failure-responder already matches that signature and skip_drafts it. Repair belongs in the ingest loop (hard per-ticker abort + SIGTERM flush), not a new monitor. | FTSE ingest still exits 124 with no ingest_loop.json after a per-ticker hard deadline and SIGTERM flush are in place |
+| N141 | **Raise max_parallel_engineering_agents above 2** | Third concurrent eng agent would mostly serialize on the same hot allowlist (filings.py / companies_house / ingest.py) and increase merge clashes without lifting gap-closure rate. Clash-aware pairing of ingest_narrow + scoring_narrow is the better use of two slots. | Hot-path overlap among open ingest tasks drops (most open tasks no longer share filings.py/CH) and dispatch_eligible_count routinely exceeds 2 with complementary path sets |
 
 ---
 
@@ -496,6 +497,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L432 | **Path guard always-allow docs/data/pr_fix_occasions.json** | Recording PR fix occasions on eng-* branches fails engineering-path-guard because pr_fix_occasions.json is outside task allowed_paths. Consider adding it to PATH_GUARD_ALWAYS_ALLOWED or writing occasions from a non-eng branch. | Next eng PR CI fails solely because a CI fix occasion was committed on the eng branch |
 | L433 | **Wake dashboard-bridge immediately on Supabase command insert** | Acknowledge clicks wait on weekday Actions schedule poll which often drifts past 10 minutes. A Supabase webhook, Edge Function, or denser external cron that workflow_dispatches dashboard-bridge.yml would clear queued commands without waiting for schedule drift. | Dashboard Acknowledge or other bridge buttons time out waiting for GitHub worker more than once a week |
 | L434 | **EngineeringTask dataclass should carry parked/cancelled lifecycle fields** | Parked metadata can still be lost if any path round-trips queue rows through EngineeringTask.to_dict(). Consider first-class parked_*/cancelled_* fields on the dataclass so compile rematch cannot strip them. | Another parked_reason strip appears after the _merge_task_rows preserve fix, or EngineeringTask schema is next refactored |
+| L436 | **Bundle multi-ticker IR allowlist fills into one eng task** | Instead of N intensive pins or N hunter tasks that all touch research_ir_urls.json, coalesce stuck no-allowlist tickers in the same regime into one data PR editing the allowlist (plus seed fallback) so Lane B pays one clash cycle for many names. | Open no-allowlist blockers across one regime exceed ~5 concurrent names and hunter tasks are serializing on research_ir_urls.json |
 
 ---
 

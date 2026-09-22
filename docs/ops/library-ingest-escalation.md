@@ -81,7 +81,11 @@ dispatch.
 
 Pinned intensive follow-up prefers **effective** (unparked) IWB tickers, then
 effective thin names (`effective_indexed_without_body_tickers`, then
-`effective_thin_body_tickers` on the health snapshot).
+`effective_thin_body_tickers` on the health snapshot). Among IWB/thin names it
+prefers tickers that still have IR allowlist URLs. A ticker that already burned a
+**zero-yield** intensive pin (no body gain, often empty allowlist) is skipped for
+**72h** so stall_slowdown does not re-pin dead names — compile hunter / allowlist
+eng instead (`gaps_remain_without_allowlist`).
 
 When pending gap-closure runs finish with gaps still open and **zero refetch
 attempts**, compile engineering manually or via:
