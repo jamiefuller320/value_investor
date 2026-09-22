@@ -21,6 +21,7 @@ from value_investor.analysis_review import (
 )
 from value_investor.deferred_ideas import DEFAULT_STORE as DEFAULT_DEFER_STORE
 from value_investor.deferred_ideas import add_fragment, list_open_fragments, write_markdown
+from value_investor.exit_timing_reconciliation import resolve_live_exit_timing_review
 from value_investor.experiment_assessment import (
     CLOSED_TASK_STATUSES,
     slim_experiment_assessment_for_review,
@@ -38,6 +39,7 @@ from value_investor.review_payload_slim import (
     slim_exclusion_ladder_replay,
     slim_exclusion_universe,
     slim_exit_timing,
+    slim_exit_timing_reconciliation,
     slim_hypothesis_integrity,
     slim_hypothesis_outcomes,
     slim_loser_snapshot_cards,
@@ -252,12 +254,15 @@ def build_learning_director_payload(
             _safe_read(paper_root / "exclusion_ladder_replay_review.json")
         ),
         "exit_timing_cohorts": slim_exit_timing(
-            _safe_read(paper_root / "learning_tracks_exit_timing.json"),
-            label="Live exit-timing cohorts",
+            resolve_live_exit_timing_review(paper_root),
+            label="Live exit-timing cohorts (primary rules track)",
         ),
         "exit_timing_near_miss": slim_exit_timing(
             _safe_read(data_dir / "exit_timing_near_miss_review.json"),
             label="Archive near-miss exit-timing",
+        ),
+        "exit_timing_reconciliation": slim_exit_timing_reconciliation(
+            _safe_read(data_dir / "exit_timing_reconciliation.json")
         ),
         "loser_snapshot_cards": slim_loser_snapshot_cards(
             _safe_read(data_dir / "loser_snapshot_cards.json")

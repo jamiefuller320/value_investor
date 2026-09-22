@@ -615,6 +615,11 @@ def run_exit_timing_archive_sim(
         f"max_episodes_per_week={cfg.max_episodes_per_week}."
     )
     _write_artifacts(output_dir, store, review)
+    paper_root = cfg.paper_root or (output_dir / "paper_automation")
+    if paper_root.exists():
+        from value_investor.exit_timing_reconciliation import write_exit_timing_reconciliation
+
+        write_exit_timing_reconciliation(paper_root=paper_root, data_dir=output_dir)
     return review
 
 

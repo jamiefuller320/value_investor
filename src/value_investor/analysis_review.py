@@ -32,8 +32,15 @@ from value_investor.review_payload_slim import (
 from value_investor.review_payload_slim import (
     slim_exclusion_universe as _slim_exclusion_universe,
 )
+from value_investor.exit_timing_reconciliation import (
+    resolve_live_exit_timing_review,
+    write_exit_timing_reconciliation,
+)
 from value_investor.review_payload_slim import (
     slim_exit_timing as _slim_exit_timing,
+)
+from value_investor.review_payload_slim import (
+    slim_exit_timing_reconciliation as _slim_exit_timing_reconciliation,
 )
 from value_investor.review_payload_slim import (
     slim_historical as _slim_historical,
@@ -234,13 +241,21 @@ def build_analysis_payload(
     learning_review = _safe_read(paper_root / "learning_tracks_review.json")
     learning_summary = _safe_read(paper_root / "learning_tracks_summary.json")
     exit_shadow = _safe_read(paper_root / "learning_tracks_exit_shadow.json")
+    live_timing_review = resolve_live_exit_timing_review(paper_root)
     exit_timing = _slim_exit_timing(
-        _safe_read(paper_root / "learning_tracks_exit_timing.json"),
-        label="Live exit-timing cohorts",
+        live_timing_review,
+        label="Live exit-timing cohorts (primary rules track)",
     )
     exit_timing_near_miss = _slim_exit_timing(
         _safe_read(data_dir / "exit_timing_near_miss_review.json"),
         label="Archive near-miss exit-timing",
+    )
+    exit_timing_reconciliation_full = write_exit_timing_reconciliation(
+        paper_root=paper_root,
+        data_dir=data_dir,
+    )
+    exit_timing_reconciliation = _slim_exit_timing_reconciliation(
+        exit_timing_reconciliation_full
     )
     exclusion_universe = _slim_exclusion_universe(
         _safe_read(data_dir / "exclusion_universe_review.json")
@@ -305,6 +320,7 @@ def build_analysis_payload(
         "exit_shadow": exit_shadow,
         "exit_timing_cohorts": exit_timing,
         "exit_timing_near_miss": exit_timing_near_miss,
+        "exit_timing_reconciliation": exit_timing_reconciliation,
         "exclusion_universe": exclusion_universe,
         "exclusion_ladder_replay": exclusion_ladder_replay,
         "trajectory_evidence": trajectory_evidence,
@@ -870,6 +886,8 @@ PAPER TRACK COMPARISON
 Compare ai_judgment, rules, and momentum_grace using learning_tracks_review,
 knob_calibration_priors (recommended_prior per track, confidence, changed_vs_current),
 and exit_shadow when present. Cite exit_timing_cohorts.readiness (hold/swap closed counts)
+and exit_timing_reconciliation.comparability before comparing live vs archive hold/swap rates
+(do not average rates across sources when hold_recovery_rates_directly_comparable is false).
 and exclusion_ladder_replay.readiness.ready_for_shadow_spawn when present.
 When hypothesis_integrity is present, cite per-track loser_share, within_tolerance,
 balancing_hint, and any selection_feedback_flags (intact losers are expected in a value book).
@@ -913,7 +931,8 @@ Action contracts (include a line when the trigger fires — do not invent metric
    (never auto-spawn; do not open an engineering PR for the spawn itself).
 5. If exit_timing_cohorts.readiness.ready_for_probability_analysis is true OR
    exit_timing_near_miss.readiness.ready_for_probability_analysis is true → ≥1
-   [paper_churn] or [offline_sim] hold-vs-swap experiment citing closed counts.
+   [paper_churn] or [offline_sim] hold-vs-swap experiment citing closed counts and
+   exit_timing_reconciliation (archive priors only when archive_may_inform_priors_while_live_collects).
 6. If ingest_trials_pending_review is non-empty → ≥1 [ingest] line with trial id(s) and
    PROMOTE / DEFER / DISMISS.
 7. If experiment_assessment.recommendations is non-empty → ≥1 [monitoring] line listing

@@ -177,6 +177,42 @@ def slim_exclusion_ladder_replay(payload: dict[str, Any] | None) -> dict[str, An
     }
 
 
+def slim_exit_timing_reconciliation(payload: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not isinstance(payload, dict):
+        return None
+    comparability = payload.get("comparability") or {}
+    sources = payload.get("sources") or {}
+    live_primary = sources.get("live_primary") or {}
+    archive = sources.get("archive_near_miss") or {}
+    return {
+        "purpose": (
+            "L121 — shared exit-timing denominators and comparability gates before blending "
+            "live paper vs archive near-miss rates"
+        ),
+        "observe_only": True,
+        "primary_live_track_id": payload.get("primary_live_track_id"),
+        "comparability": {
+            "hold_recovery_rates_directly_comparable": comparability.get(
+                "hold_recovery_rates_directly_comparable"
+            ),
+            "swap_rotation_rates_directly_comparable": comparability.get(
+                "swap_rotation_rates_directly_comparable"
+            ),
+            "blended_rate_narrative_allowed": comparability.get("blended_rate_narrative_allowed"),
+            "archive_may_inform_priors_while_live_collects": comparability.get(
+                "archive_may_inform_priors_while_live_collects"
+            ),
+            "analysis_contract": comparability.get("analysis_contract"),
+        },
+        "live_primary_hold": (live_primary.get("hold_recovery") or {}),
+        "live_primary_swap": (live_primary.get("swap_rotation") or {}),
+        "live_all_tracks_pooled": sources.get("live_all_tracks_pooled"),
+        "archive_near_miss_hold": (archive.get("hold_recovery") or {}),
+        "archive_near_miss_swap": (archive.get("swap_rotation") or {}),
+        "note": payload.get("note"),
+    }
+
+
 def slim_exit_timing(payload: dict[str, Any] | None, *, label: str) -> dict[str, Any] | None:
     if not isinstance(payload, dict):
         return None
