@@ -261,6 +261,8 @@ function renderProgressReport(data) {
   const autoQueueCount = Number(soCounts.auto_queue || 0);
   const observeCount = Number(soCounts.observe || 0);
   const gateGroups = soWhat.human_gate_groups || [];
+  const lpGapGroups = soWhat.learning_path_gap_groups || [];
+  const lpGapCount = Number(soCounts.learning_path_gaps || lpGapGroups.length || 0);
   const gates = soWhat.human_gates_preview || [];
   const soWhatDocUrl = githubOpsDocUrl("docs/ops/so-what-gap-closure.md");
   const formatTickerPreview = (tickers, limit = 10) => {
@@ -318,8 +320,36 @@ function renderProgressReport(data) {
   } else {
     gatesHtml = '<p class="small muted">No human gates right now.</p>';
   }
+  const analysisReviewUrl = githubOpsDocUrl("docs/ops/analysis-review.md", "system-gaps-learning-path-integrity");
+  let lpGapsHtml = "";
+  if (lpGapGroups.length) {
+    lpGapsHtml = `<ul class="list-plain small so-what-gate-list">${lpGapGroups
+      .map((group) => {
+        const flagKind = String(group.kind || "").replace(/^system_gap_/, "");
+        const action = group.human_action || group.so_what || group.label || "";
+        const closure = group.recommended_closure || "—";
+        return `<li class="so-what-gate-item">
+            <div class="so-what-gate-group-head">
+              <strong>${esc(flagKind || "gap")}</strong>
+              <span class="muted so-what-gate-kind">${esc(closure)}</span>
+              ${
+                analysisReviewUrl
+                  ? `<a class="small" href="${esc(analysisReviewUrl)}" target="_blank" rel="noopener">Runbook</a>`
+                  : ""
+              }
+            </div>
+            <span class="so-what-gate-action">${esc(action)}</span>
+          </li>`;
+      })
+      .join("")}</ul>`;
+  } else if (lpGapCount > 0) {
+    lpGapsHtml =
+      '<p class="small muted">Learning-path gaps present — open the full progress report markdown.</p>';
+  } else {
+    lpGapsHtml = '<p class="small muted">No active learning-path gap flags in so-what.</p>';
+  }
   const soWhatSection = `
-      <section class="so-what-section${humanGateCount > 0 ? " so-what-section-attention" : ""}">
+      <section class="so-what-section${humanGateCount > 0 || lpGapCount > 0 ? " so-what-section-attention" : ""}">
         <div class="so-what-section-header">
           <h4>So what? — needs your judgment</h4>
           ${soWhatDocUrl ? `<a class="small" href="${esc(soWhatDocUrl)}" target="_blank" rel="noopener">How this works</a>` : ""}
@@ -328,13 +358,19 @@ function renderProgressReport(data) {
           Human gates need a policy/filing choice. Same-issue names are grouped into one row.
           Enforcement gaps (<strong>${esc(String(autoQueueCount))}</strong> auto-queued) are handled by the engineering queue without a prompt.
           ${observeCount ? ` · ${esc(String(observeCount))} observe-only` : ""}
+          ${lpGapCount ? ` · <strong>${esc(String(lpGapCount))}</strong> learning-path gap(s)` : ""}
         </p>
         <div class="grid so-what-count-grid">
           <div class="setting-row"><span class="setting-label">Human gates</span><span class="setting-value">${esc(String(humanGateCount))}</span></div>
           <div class="setting-row"><span class="setting-label">Auto-queued</span><span class="setting-value">${esc(String(autoQueueCount))}</span></div>
           <div class="setting-row"><span class="setting-label">Observe</span><span class="setting-value">${esc(String(observeCount))}</span></div>
+          <div class="setting-row"><span class="setting-label">Learning gaps</span><span class="setting-value">${esc(String(lpGapCount))}</span></div>
         </div>
         ${gatesHtml}
+        <div class="so-what-learning-gaps" style="margin-top:0.75rem">
+          <h5 class="small" style="margin:0 0 0.35rem">Learning-path gaps (system_gaps)</h5>
+          ${lpGapsHtml}
+        </div>
       </section>`;
 
   return `
@@ -1204,6 +1240,58 @@ function openSystemGapCard(flagId) {
   dialog.showModal();
 }
 
+function renderLearningCompletenessCard(data) {
+  const payload = data.learning_data_completeness;
+  const docUrl = githubOpsDocUrl("docs/ops/post-run-improvement-clearance.md");
+  if (!payload || payload.score == null) {
+    return `
+    <section class="card learning-completeness-section" id="learning-completeness-card">
+      <div class="market-status-header">
+        <h3>Learning data completeness</h3>
+      </div>
+      <p class="muted small">Score not published yet — needs <code>system_gaps.json</code> from Sunday analysis-review.</p>
+    </section>`;
+  }
+  const score = Number(payload.score);
+  const band = String(payload.band || "partial");
+  const bandCls =
+    band === "strong" ? "badge-info" : band === "weak" ? "badge-action" : "badge-watch";
+  const components = payload.components || {};
+  const rows = Object.entries(components)
+    .map(([key, row]) => {
+      const pct = Number(row.score_pct);
+      const bar = Number.isFinite(pct)
+        ? `<div class="signal-bar" style="height:6px;margin-top:4px"><span style="width:${pct}%;background:var(--accent)"></span></div>`
+        : "";
+      return `<div class="setting-row" style="flex-direction:column;align-items:stretch">
+        <div style="display:flex;justify-content:space-between;gap:0.5rem">
+          <span class="setting-label">${esc(key.replace(/_/g, " "))}</span>
+          <span class="setting-value">${Number.isFinite(pct) ? `${pct}%` : "—"}</span>
+        </div>
+        ${bar}
+        <span class="small muted">${esc(row.detail || "")}</span>
+      </div>`;
+    })
+    .join("");
+  return `
+    <section class="card learning-completeness-section" id="learning-completeness-card">
+      <div class="market-status-header">
+        <h3>Learning data completeness</h3>
+        <p class="small muted" style="margin:0">
+          Composite wiring + bodies + gap penalty (not memo prose length).
+          ${payload.assessed_at ? ` · ${esc(fmtDate(payload.assessed_at))}` : ""}
+        </p>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:0.75rem;margin:0.5rem 0">
+        <div class="stat-value">${esc(String(score))}</div>
+        <span class="badge ${bandCls}">${esc(band)}</span>
+      </div>
+      <p class="small">${esc(payload.summary || "")}</p>
+      <div class="grid" style="margin-top:0.75rem">${rows}</div>
+      ${docUrl ? `<p class="small" style="margin:0.75rem 0 0"><a href="${esc(docUrl)}" target="_blank" rel="noopener">Clearance policy</a></p>` : ""}
+    </section>`;
+}
+
 function renderSystemGapsCard(data) {
   const payload = data.system_gaps;
   const docUrl = githubOpsDocUrl("docs/ops/analysis-review.md", "system-gaps-learning-path-integrity");
@@ -1550,6 +1638,7 @@ function renderOverview(data) {
   document.getElementById("panel-overview").innerHTML = `
     ${note}
     ${renderMarketStatusGrid(data)}
+    ${renderLearningCompletenessCard(data)}
     ${renderSystemGapsCard(data)}
     <div class="grid">
       <div class="card">

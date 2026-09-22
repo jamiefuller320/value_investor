@@ -574,6 +574,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         logger.warning("Market status assembly skipped: %s", exc)
         market_status = None
 
+    gaps_full = None
     try:
         from value_investor.system_gap_analysis import (
             COMMITTED_GAPS_PATH,
@@ -583,14 +584,26 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
 
         committed_gaps = _read_json(COMMITTED_GAPS_PATH)
         if isinstance(committed_gaps, dict) and committed_gaps.get("flags") is not None:
-            system_gaps = slim_system_gaps_for_dashboard(committed_gaps)
+            gaps_full = committed_gaps
         else:
-            system_gaps = slim_system_gaps_for_dashboard(
-                build_system_gap_snapshot(output_dir=output_dir)
-            )
+            gaps_full = build_system_gap_snapshot(output_dir=output_dir)
+        system_gaps = slim_system_gaps_for_dashboard(gaps_full)
     except Exception as exc:  # noqa: BLE001 — dashboard must still publish
         logger.warning("System gaps assembly skipped: %s", exc)
+        gaps_full = None
         system_gaps = None
+
+    learning_data_completeness = None
+    try:
+        from value_investor.learning_data_completeness import compute_learning_data_completeness
+
+        if isinstance(gaps_full, dict):
+            learning_data_completeness = compute_learning_data_completeness(
+                gaps_full,
+                market_status=market_status,
+            )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Learning data completeness skipped: %s", exc)
 
     try:
         from value_investor.lifecycle_board import build_lifecycle_board
@@ -653,6 +666,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "human_tasks_checklist": human_tasks_checklist,
         "market_status": market_status,
         "system_gaps": system_gaps,
+        "learning_data_completeness": learning_data_completeness,
         "lifecycle_board": lifecycle_board,
     }
 
@@ -788,6 +802,13 @@ def publish_dashboard(
     if bundle.get("market_status"):
         write_json(data_dir / "market_status.json", bundle["market_status"], compact=False)
 
+    if bundle.get("learning_data_completeness"):
+        write_json(
+            data_dir / "learning_data_completeness.json",
+            bundle["learning_data_completeness"],
+            compact=False,
+        )
+
     if bundle.get("lifecycle_board"):
         write_json(data_dir / "lifecycle_board.json", bundle["lifecycle_board"], compact=False)
 
@@ -836,6 +857,7 @@ def empty_dashboard_bundle() -> dict[str, Any]:
         "project_progress": None,
         "market_status": None,
         "system_gaps": None,
+        "learning_data_completeness": None,
         "lifecycle_board": None,
         "research": [],
         "note": "Dashboard data not published yet. Run ftse-screen and ftse-publish locally, or wait for the weekly workflow.",
