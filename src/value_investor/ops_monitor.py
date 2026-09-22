@@ -2238,8 +2238,7 @@ def run_ops_monitor(
                 {
                     "action": "market_eng_gap_burndown",
                     "detail": (
-                        f"{burndown.get('action')} for {burndown.get('market_id')} "
-                        f"→ {task_id}"
+                        f"{burndown.get('action')} for {burndown.get('market_id')} → {task_id}"
                     ),
                 }
             )

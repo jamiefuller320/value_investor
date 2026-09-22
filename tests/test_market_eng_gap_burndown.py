@@ -15,7 +15,9 @@ from value_investor.storage import write_json
 
 
 def test_rotate_burndown_uses_maintenance_cursor(tmp_path: Path):
-    write_maintenance_slot_cursor(tmp_path, last_head="asx200", selected=["euro_depth"], deferred=[])
+    write_maintenance_slot_cursor(
+        tmp_path, last_head="asx200", selected=["euro_depth"], deferred=[]
+    )
     order = rotate_burndown_markets(["sp500", "asx200", "euro_depth"], library_root=tmp_path)
     assert order[0] == "euro_depth"
 
