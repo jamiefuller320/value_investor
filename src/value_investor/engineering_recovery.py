@@ -61,6 +61,15 @@ DEFAULT_RESUME_ATTENTION_PARKED_BELOW = 7
 DEFAULT_RESUME_IDLE_MINUTES = 30
 DEFAULT_IMMEDIATE_PARK_UNFIXABLE_PR = True
 DEFAULT_AUTO_CANCEL_MIS_SCOPED_ALLOWLIST = True
+DEFAULT_AUTO_CANCEL_RESOLVED_GAP_CLOSURE = True
+DEFAULT_AUTO_CANCEL_SUPERSEDED_GAP_CLOSURE = True
+DEFAULT_AUTO_UNPARK_HEALED_PREFLIGHT = True
+GAP_CLOSURE_ENGINEERING_SOURCES = frozenset({"ingest_gap_closure", "ingest_trial"})
+_GAP_CLOSURE_TITLE_RUN_SUFFIX_RE = re.compile(r",\s*run\s+\S+\s*$", re.IGNORECASE)
+_GAP_CLOSURE_TITLE_CHAIN_RE = re.compile(
+    r"\s*\(chain\s+\d+\s*/\s*\d+\s*:[^)]*\)\s*",
+    re.IGNORECASE,
+)
 GITHUB_API_VERSION = "2022-11-28"
 WORKFLOW_PATH_PREFIX = ".github/workflows/"
 
@@ -410,6 +419,15 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
     mis_scoped = block.get("auto_cancel_mis_scoped_allowlist")
     if mis_scoped is None:
         mis_scoped = DEFAULT_AUTO_CANCEL_MIS_SCOPED_ALLOWLIST
+    resolved_gap = block.get("auto_cancel_resolved_gap_closure")
+    if resolved_gap is None:
+        resolved_gap = DEFAULT_AUTO_CANCEL_RESOLVED_GAP_CLOSURE
+    superseded_gap = block.get("auto_cancel_superseded_gap_closure")
+    if superseded_gap is None:
+        superseded_gap = DEFAULT_AUTO_CANCEL_SUPERSEDED_GAP_CLOSURE
+    unpark_preflight = block.get("auto_unpark_healed_preflight")
+    if unpark_preflight is None:
+        unpark_preflight = DEFAULT_AUTO_UNPARK_HEALED_PREFLIGHT
     return {
         "immediate_park_unfixable_pr": bool(immediate),
         "max_attention_parked_tasks": max_attention,
@@ -420,6 +438,9 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
         "auto_cancel_no_diff_cap": raw_no_diff,
         "auto_cancel_superseded_parked_hunter": bool(superseded_hunter),
         "auto_cancel_mis_scoped_allowlist": bool(mis_scoped),
+        "auto_cancel_resolved_gap_closure": bool(resolved_gap),
+        "auto_cancel_superseded_gap_closure": bool(superseded_gap),
+        "auto_unpark_healed_preflight": bool(unpark_preflight),
     }
 
 
@@ -1748,6 +1769,8 @@ def recover_engineering_queue(
 
     recovery_policy = _engineering_queue_recovery_policy()
     if recovery_policy.get("tier1_housekeep_on_recover"):
+        # Self-heal parked backlog *before* evaluate_queue_clearing_pause so a
+        # resolved/superseded/healed park can avert the full-queue warning email.
         result.housekeep = housekeep_parked_tasks(
             tasks_path=tasks_path,
             apply=apply,
@@ -1761,6 +1784,16 @@ def recover_engineering_queue(
             auto_cancel_mis_scoped_allowlist=bool(
                 recovery_policy.get("auto_cancel_mis_scoped_allowlist")
             ),
+            auto_cancel_resolved_gap_closure=bool(
+                recovery_policy.get("auto_cancel_resolved_gap_closure")
+            ),
+            auto_cancel_superseded_gap_closure=bool(
+                recovery_policy.get("auto_cancel_superseded_gap_closure")
+            ),
+            auto_unpark_healed_preflight=bool(
+                recovery_policy.get("auto_unpark_healed_preflight")
+            ),
+            open_prs=list(augmented_open_prs or open_prs or []),
         ).to_dict()
 
     result.queue_clearing = evaluate_queue_clearing_pause(
@@ -1871,15 +1904,156 @@ class ParkedHousekeepAction:
 class ParkedHousekeepResult:
     cancelled: list[ParkedHousekeepAction] = field(default_factory=list)
     annotated: list[ParkedHousekeepAction] = field(default_factory=list)
+    unparked: list[ParkedHousekeepAction] = field(default_factory=list)
     skipped: list[dict[str, str]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "cancelled": [row.to_dict() for row in self.cancelled],
             "annotated": [row.to_dict() for row in self.annotated],
+            "unparked": [row.to_dict() for row in self.unparked],
             "skipped": self.skipped,
-            "action_count": len(self.cancelled) + len(self.annotated),
+            "action_count": len(self.cancelled) + len(self.annotated) + len(self.unparked),
         }
+
+
+def _evidence_gap_ticker(row: dict[str, Any]) -> str:
+    evidence = row.get("evidence") or {}
+    ticker = str(evidence.get("ticker") or "").strip().upper()
+    if ticker:
+        return ticker
+    tickers = evidence.get("tickers") or []
+    if isinstance(tickers, list) and tickers:
+        return str(tickers[0] or "").strip().upper()
+    return ""
+
+
+def _evidence_gap_market_id(row: dict[str, Any]) -> str | None:
+    evidence = row.get("evidence") or {}
+    market = str(evidence.get("market_id") or evidence.get("library_market") or "").strip()
+    return market or None
+
+
+def _gap_closure_title_base(title: str) -> str:
+    from value_investor.engineering_tasks import task_title_key
+
+    text = task_title_key(title)
+    text = _GAP_CLOSURE_TITLE_RUN_SUFFIX_RE.sub("", text)
+    text = _GAP_CLOSURE_TITLE_CHAIN_RE.sub(" ", text)
+    return re.sub(r"\s+", " ", text).strip(" -")
+
+
+def _is_gap_closure_engineering_row(row: dict[str, Any]) -> bool:
+    source = str(row.get("source") or "").strip()
+    if source in GAP_CLOSURE_ENGINEERING_SOURCES:
+        return True
+    title = str(row.get("title") or "").lower()
+    return "stubborn ingest gaps" in title or "ingest gap" in title
+
+
+def find_merged_gap_closure_sibling(
+    row: dict[str, Any],
+    tasks: list[dict[str, Any]],
+) -> str | None:
+    """Return merged task id that already closed the same ticker gap theme."""
+    ticker = _evidence_gap_ticker(row)
+    if not ticker:
+        return None
+    evidence = row.get("evidence") or {}
+    chain_root = str(evidence.get("chain_root_id") or "").strip()
+    title_base = _gap_closure_title_base(str(row.get("title") or ""))
+    parked_id = str(row.get("id") or "")
+
+    for other in tasks:
+        other_id = str(other.get("id") or "")
+        if not other_id or other_id == parked_id:
+            continue
+        if str(other.get("status") or "") != "merged":
+            continue
+        if not _is_gap_closure_engineering_row(other):
+            continue
+        if _evidence_gap_ticker(other) != ticker:
+            continue
+        other_evidence = other.get("evidence") or {}
+        other_chain = str(other_evidence.get("chain_root_id") or "").strip()
+        if chain_root and other_chain and chain_root == other_chain:
+            return other_id
+        other_base = _gap_closure_title_base(str(other.get("title") or ""))
+        if title_base and other_base and (
+            title_base == other_base
+            or title_base.startswith(other_base)
+            or other_base.startswith(title_base)
+        ):
+            return other_id
+    return None
+
+
+def gap_closure_park_is_resolved(row: dict[str, Any]) -> bool:
+    """True when parked gap-closure ticker no longer has outstanding material gaps."""
+    if not _is_gap_closure_engineering_row(row):
+        return False
+    ticker = _evidence_gap_ticker(row)
+    if not ticker:
+        return False
+    market_id = _evidence_gap_market_id(row)
+    try:
+        from value_investor.ingest_gap_closure import gap_closure_ticker_has_gaps
+
+        return not gap_closure_ticker_has_gaps(ticker, market_id=market_id)
+    except (OSError, ValueError, TypeError, ImportError):
+        return False
+
+
+def preflight_park_is_healed(
+    row: dict[str, Any],
+    *,
+    tasks: list[dict[str, Any]],
+    open_prs: list[dict[str, Any]] | None = None,
+) -> bool:
+    """True when a preflight_clash park would dispatch cleanly against current in-flight work."""
+    if allowlist_mismatches_filing_title(row):
+        return False
+    try:
+        from value_investor.engineering_preflight import (
+            build_open_pr_file_index,
+            effective_allowed_paths,
+            predict_task_clashes,
+        )
+        from value_investor.engineering_tasks import EngineeringTask
+    except ImportError:
+        return False
+
+    try:
+        task = EngineeringTask.from_dict({**row, "status": "open"})
+    except (TypeError, ValueError, KeyError):
+        return False
+
+    occupied_paths: list[str] = []
+    for item in tasks:
+        status = str(item.get("status") or "")
+        if status not in {"open", "pr_open"}:
+            continue
+        if str(item.get("id") or "") == str(row.get("id") or ""):
+            continue
+        try:
+            other = EngineeringTask.from_dict(item)
+        except (TypeError, ValueError, KeyError):
+            continue
+        occupied_paths.extend(effective_allowed_paths(other))
+
+    try:
+        pr_index = build_open_pr_file_index(list(open_prs or []), repo=None, cache={})
+        report = predict_task_clashes(
+            task,
+            occupied_paths=occupied_paths,
+            open_pr_index=pr_index,
+            candidate_branch=str(task.branch_name or "").strip() or None,
+            skip_merge_tree=True,
+            clash_scan="partial" if not open_prs else "full",
+        )
+    except (OSError, ValueError, TypeError, RuntimeError):
+        return False
+    return bool(report.dispatch_eligible)
 
 
 def housekeep_parked_tasks(
@@ -1890,6 +2064,10 @@ def housekeep_parked_tasks(
     auto_cancel_no_diff_cap: bool = False,
     auto_cancel_superseded_parked_hunter: bool = True,
     auto_cancel_mis_scoped_allowlist: bool = True,
+    auto_cancel_resolved_gap_closure: bool = True,
+    auto_cancel_superseded_gap_closure: bool = True,
+    auto_unpark_healed_preflight: bool = True,
+    open_prs: list[dict[str, Any]] | None = None,
 ) -> ParkedHousekeepResult:
     """
     Grade parked tasks and take safe automatic actions.
@@ -1899,8 +2077,13 @@ def housekeep_parked_tasks(
     - Cancel parked ``parked_source_hunter`` rows when ticker already on main.
     - Cancel ``preflight_clash`` / ``workflow_permission`` parks whose filings/CH/OCR
       title cannot be implemented by an ops/workflow allowlist.
+    - Cancel parked gap-closure rows when the ticker's material gaps are already closed.
+    - Cancel parked gap-closure rows superseded by a merged same-ticker sibling.
+    - Unpark healed ``preflight_clash`` rows when clash checks are clean again.
     - Backfill ``parked_policy`` on informational parks (no-diff cap, duplicate).
-    Does not reopen or merge tasks — invoked from ``recover_engineering_queue``.
+
+    Runs from ``recover_engineering_queue`` **before** the attention-parked pause /
+    full-queue warning so self-heal can avert the email when possible.
     """
     now = now or datetime.now(UTC)
     result = ParkedHousekeepResult()
@@ -2009,6 +2192,90 @@ def housekeep_parked_tasks(
                     reason=cancel_reason,
                 )
             )
+            continue
+
+        if auto_cancel_resolved_gap_closure and gap_closure_park_is_resolved(row):
+            cancel_reason = (
+                "tier-1 housekeep: gap closed — ticker no longer has outstanding material gaps"
+            )
+            if apply:
+                mark_task_status(
+                    task_id,
+                    "cancelled",
+                    path=tasks_path,
+                    committed_path=tasks_path,
+                    cancelled_at=now.isoformat(),
+                    cancelled_reason=cancel_reason,
+                    cancelled_policy="resolved_gap_closure",
+                )
+            result.cancelled.append(
+                ParkedHousekeepAction(
+                    task_id=task_id,
+                    action="cancel_resolved_gap_closure",
+                    reason=cancel_reason,
+                )
+            )
+            continue
+
+        if auto_cancel_superseded_gap_closure:
+            sibling_id = find_merged_gap_closure_sibling(row, tasks)
+            if sibling_id:
+                cancel_reason = (
+                    f"tier-1 housekeep: superseded gap-closure — duplicate of merged {sibling_id}"
+                )
+                if apply:
+                    mark_task_status(
+                        task_id,
+                        "cancelled",
+                        path=tasks_path,
+                        committed_path=tasks_path,
+                        parked_policy=PARKED_POLICY_DUPLICATE,
+                        duplicate_of=sibling_id,
+                        cancelled_at=now.isoformat(),
+                        cancelled_reason=cancel_reason,
+                        cancelled_policy="superseded_gap_closure",
+                    )
+                result.cancelled.append(
+                    ParkedHousekeepAction(
+                        task_id=task_id,
+                        action="cancel_superseded_gap_closure",
+                        reason=cancel_reason,
+                        duplicate_of=sibling_id,
+                    )
+                )
+                continue
+
+        if (
+            auto_unpark_healed_preflight
+            and policy == PARKED_POLICY_PREFLIGHT
+            and preflight_park_is_healed(row, tasks=tasks, open_prs=open_prs)
+        ):
+            unpark_reason = (
+                "tier-1 housekeep: preflight clash healed — reopen for engineering-agent dispatch"
+            )
+            if apply:
+                action = unpark_agent_task(
+                    task_id,
+                    reason=unpark_reason,
+                    tasks_path=tasks_path,
+                    apply=True,
+                )
+                if action is None:
+                    result.skipped.append(
+                        {"task_id": task_id, "reason": "unpark_healed_preflight_failed"}
+                    )
+                    continue
+            result.unparked.append(
+                ParkedHousekeepAction(
+                    task_id=task_id,
+                    action="unpark_healed_preflight",
+                    reason=unpark_reason,
+                )
+            )
+            # Refresh in-memory status so later rows see this as open for clash checks.
+            row["status"] = "open"
+            for key in ("parked_reason", "parked_at", "parked_policy"):
+                row.pop(key, None)
             continue
 
         if auto_cancel_no_diff_cap and policy == PARKED_POLICY_NO_DIFF:
