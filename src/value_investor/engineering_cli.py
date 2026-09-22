@@ -1883,6 +1883,7 @@ def main(argv: list[str] | None = None) -> int:
             auto_cancel_resolved=not args.no_resolved_cancel,
             auto_annotate=not args.no_annotate,
             auto_reframe_bundled=bool(args.reframe_bundled),
+            auto_reframe_reburn_when_cleared=bool(args.reframe_reburn_when_cleared),
         )
         if args.json:
             _print_json(payload.to_dict())
@@ -1920,6 +1921,14 @@ def main(argv: list[str] | None = None) -> int:
         "--reframe-bundled",
         action="store_true",
         help="Rewrite parked bundled stall tasks in place to focus one ticker",
+    )
+    lst.add_argument(
+        "--reframe-reburn-when-cleared",
+        action="store_true",
+        help=(
+            "Narrow-reframe reburn_loop parks when reburn_investigation allows "
+            "(automation waste cleared, preflight clean)"
+        ),
     )
     lst.add_argument(
         "--no-supersede-cancel",

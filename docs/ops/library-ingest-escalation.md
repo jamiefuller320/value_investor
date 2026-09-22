@@ -290,7 +290,25 @@ ftse-engineering triage-library-stall --apply --reframe-bundled
 
 Manual split guidance (when automation stays conservative): prefer **intensive pin** /
 **parked hunter** / **allowlist batch** per ticker rather than one market-wide eng task.
-Do not unpark **reburn_loop** stalls until the automation-waste root cause is fixed.
+
+### Library stall reburn investigation
+
+**Why narrow reframe skips `reburn_loop` by default:** those parks come from PM
+`stop_automation_waste` after repeated **engineering-agent** failures with an open task
+and **no in-flight PR** — the burn is usually preflight clash, no-diff cap, or stamp lag,
+not “task title too broad.” Reframing without clearing blockers re-dispatches Composer spend.
+
+**Investigation subroutine:** `investigate_reburn_loop_library_stall` (called from
+`stall_triage` when `reburn_loop` is true) records:
+
+- `primary_hypothesis` — active reburn, preflight clash, no-diff cap, or secondary scope
+- `blockers` / `safe_next_steps`
+- `allow_narrow_reframe` — true only when automation waste is cleared, preflight is clean,
+  and no-diff cap has not tripped
+
+Use **`--reframe-reburn-when-cleared`** (or policy `auto_reframe_reburn_when_cleared`)
+to narrow-reframe reburn parks once investigation allows. Plain **`--reframe-bundled`**
+still skips reburn rows.
 
 ## Related
 

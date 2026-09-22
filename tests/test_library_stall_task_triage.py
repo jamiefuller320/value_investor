@@ -9,6 +9,7 @@ from value_investor.engineering_tasks import load_engineering_tasks
 from value_investor.library_stall_task_triage import (
     analyze_library_stall_task,
     find_superseded_library_stall_canonical,
+    investigate_reburn_loop_library_stall,
     triage_library_stall_tasks,
 )
 
@@ -131,6 +132,65 @@ def test_reframe_bundled_parked_task(tmp_path: Path, monkeypatch):
     assert "AAA.DE" in updated["title"]
     assert updated["evidence"].get("focus_ticker") == "AAA.DE"
     assert updated["evidence"].get("narrow_reframe_at")
+
+
+def test_reburn_investigation_blocks_reframe_when_waste_active(tmp_path: Path, monkeypatch):
+    row = _stall_row(
+        "eng-20260922-05",
+        parked_policy="reburn_loop",
+        parked_reason="automation waste reburn",
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic.get_traffic_control_state",
+        lambda **kwargs: {
+            "automation_waste_active": True,
+            "automation_waste_parked_task_ids": ["eng-20260922-05"],
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.automation_waste.detect_engineering_agent_reburn",
+        lambda **kwargs: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.preflight_park_is_healed",
+        lambda row, **kwargs: True,
+    )
+    inv = investigate_reburn_loop_library_stall(
+        row, tasks_path=tmp_path / "missing.json", bundled=True, focus_ticker="AAA.DE"
+    )
+    assert inv["primary_hypothesis"] == "eng_agent_reburn_active"
+    assert inv["allow_narrow_reframe"] is False
+    assert "automation_waste" in inv["blockers"]
+
+    triage = analyze_library_stall_task(row, refresh_health=False)
+    triage["reburn_investigation"] = inv
+    from value_investor.library_stall_task_triage import reframe_bundled_library_stall_task
+
+    assert reframe_bundled_library_stall_task(row, triage, tasks_path=tmp_path / "t.json", apply=False) is None
+
+
+def test_reburn_investigation_allows_reframe_when_cleared(tmp_path: Path, monkeypatch):
+    row = _stall_row(
+        "eng-20260922-05",
+        parked_policy="reburn_loop",
+        parked_reason="automation waste reburn",
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic.get_traffic_control_state",
+        lambda **kwargs: {"automation_waste_active": False},
+    )
+    monkeypatch.setattr(
+        "value_investor.automation_waste.detect_engineering_agent_reburn",
+        lambda **kwargs: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.preflight_park_is_healed",
+        lambda row, **kwargs: True,
+    )
+    inv = investigate_reburn_loop_library_stall(
+        row, tasks_path=tmp_path / "missing.json", bundled=True, focus_ticker="AAA.DE"
+    )
+    assert inv["allow_narrow_reframe"] is True
 
 
 def test_triage_cancels_resolved_stall(tmp_path: Path, monkeypatch):

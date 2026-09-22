@@ -1635,8 +1635,18 @@ def mark_task_status(
     if status in {"pr_open", "merged"}:
         fields["no_diff_count"] = 0
     if status == "parked":
-        fields.setdefault("parked_at", datetime.now(UTC).isoformat())
-        fields.setdefault("parked_reason", "manual review required")
+        if "parked_at" not in fields:
+            prior_at = (prior_row or {}).get("parked_at")
+            fields.setdefault(
+                "parked_at",
+                prior_at if prior_at else datetime.now(UTC).isoformat(),
+            )
+        if "parked_reason" not in fields:
+            prior_reason = (prior_row or {}).get("parked_reason")
+            fields.setdefault(
+                "parked_reason",
+                prior_reason if prior_reason else "manual review required",
+            )
     if status == "cancelled":
         fields.setdefault("cancelled_at", datetime.now(UTC).isoformat())
     if status in {"pr_open", "completed"}:

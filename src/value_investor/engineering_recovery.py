@@ -68,6 +68,7 @@ DEFAULT_AUTO_CANCEL_SUPERSEDED_LIBRARY_STALL = True
 DEFAULT_AUTO_CANCEL_RESOLVED_LIBRARY_STALL = True
 DEFAULT_AUTO_ANNOTATE_LIBRARY_STALL_TRIAGE = True
 DEFAULT_AUTO_REFRAME_BUNDLED_LIBRARY_STALL = False
+DEFAULT_AUTO_REFRAME_REBURN_WHEN_CLEARED = False
 GAP_CLOSURE_ENGINEERING_SOURCES = frozenset({"ingest_gap_closure", "ingest_trial"})
 _GAP_CLOSURE_TITLE_RUN_SUFFIX_RE = re.compile(r",\s*run\s+\S+\s*$", re.IGNORECASE)
 _GAP_CLOSURE_TITLE_CHAIN_RE = re.compile(
@@ -446,6 +447,9 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
     reframe_stall = block.get("auto_reframe_bundled_library_stall")
     if reframe_stall is None:
         reframe_stall = DEFAULT_AUTO_REFRAME_BUNDLED_LIBRARY_STALL
+    reframe_reburn = block.get("auto_reframe_reburn_when_cleared")
+    if reframe_reburn is None:
+        reframe_reburn = DEFAULT_AUTO_REFRAME_REBURN_WHEN_CLEARED
     return {
         "immediate_park_unfixable_pr": bool(immediate),
         "max_attention_parked_tasks": max_attention,
@@ -463,6 +467,7 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
         "auto_cancel_resolved_library_stall": bool(resolved_stall),
         "auto_annotate_library_stall_triage": bool(annotate_stall),
         "auto_reframe_bundled_library_stall": bool(reframe_stall),
+        "auto_reframe_reburn_when_cleared": bool(reframe_reburn),
     }
 
 
@@ -1826,7 +1831,18 @@ def recover_engineering_queue(
             ),
             auto_cancel_resolved=bool(recovery_policy.get("auto_cancel_resolved_library_stall")),
             auto_annotate=bool(recovery_policy.get("auto_annotate_library_stall_triage")),
+<<<<<<< HEAD
             auto_reframe_bundled=bool(recovery_policy.get("auto_reframe_bundled_library_stall")),
+=======
+            auto_reframe_bundled=bool(
+                recovery_policy.get("auto_reframe_bundled_library_stall")
+            ),
+            auto_reframe_reburn_when_cleared=bool(
+                recovery_policy.get("auto_reframe_reburn_when_cleared")
+            ),
+            open_prs=list(augmented_open_prs or open_prs or []),
+            recent_agent_failures=recent_agent_failures,
+>>>>>>> f361e191a (Add reburn_loop investigation for library stall triage)
         )
         stall_payload = stall_result.to_dict()
         result.library_stall_triage = stall_payload

@@ -140,9 +140,150 @@ _STALL_TRIAGE_STABLE_KEYS = (
 )
 
 
+_REBURN_INVESTIGATION_STABLE_KEYS = (
+    "primary_hypothesis",
+    "allow_narrow_reframe",
+    "allow_unpark",
+    "automation_waste_active",
+    "live_reburn_signal",
+    "preflight_healed",
+    "safe_next_steps",
+)
+
+
+def _reburn_investigation_stable(payload: dict[str, Any] | None) -> dict[str, Any]:
+    if not isinstance(payload, dict):
+        return {}
+    return {key: payload.get(key) for key in _REBURN_INVESTIGATION_STABLE_KEYS}
+
+
 def _stall_triage_semantics_changed(prior: dict[str, Any], current: dict[str, Any]) -> bool:
     """Ignore timestamp-only drift between recover-queue passes."""
-    return any(prior.get(key) != current.get(key) for key in _STALL_TRIAGE_STABLE_KEYS)
+    if any(prior.get(key) != current.get(key) for key in _STALL_TRIAGE_STABLE_KEYS):
+        return True
+    return _reburn_investigation_stable(prior.get("reburn_investigation")) != _reburn_investigation_stable(
+        current.get("reburn_investigation")
+    )
+
+
+def investigate_reburn_loop_library_stall(
+    row: dict[str, Any],
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    tasks: list[dict[str, Any]] | None = None,
+    open_prs: list[dict[str, Any]] | None = None,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
+    bundled: bool = False,
+    focus_ticker: str | None = None,
+) -> dict[str, Any]:
+    """Classify why PM parked a reburn_loop stall and what must clear before reframe/unpark.
+
+    Narrow reframe / unpark are skipped for ``reburn_loop`` because the failure mode is
+    usually **dispatch pathology** (Composer reburn, preflight clash, no-diff cap) — not
+    missing filing-health analysis. Reframing the title without fixing that re-queues spend.
+    """
+    from value_investor.automation_waste import detect_engineering_agent_reburn
+    from value_investor.engineering_recovery import (
+        DEFAULT_MAX_NO_DIFF_RUNS,
+        preflight_park_is_healed,
+    )
+    from value_investor.project_traffic import get_traffic_control_state
+
+    task_id = str(row.get("id") or "")
+    task_rows = tasks if tasks is not None else list(load_engineering_tasks(tasks_path).get("tasks") or [])
+    traffic = get_traffic_control_state(tasks_path=tasks_path)
+    waste_active = bool(traffic.get("automation_waste_active"))
+    pm_parked = task_id in list(traffic.get("automation_waste_parked_task_ids") or [])
+
+    live_signal = detect_engineering_agent_reburn(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        recent_agent_failures=recent_agent_failures,
+    )
+    live_reburn = live_signal is not None and task_id in list(live_signal.task_ids or [])
+
+    no_diff_count = int(row.get("no_diff_count") or 0)
+    failure_count = int(row.get("failure_count") or 0)
+    preflight_healed = preflight_park_is_healed(row, tasks=task_rows, open_prs=open_prs)
+
+    if live_reburn or waste_active:
+        primary = "eng_agent_reburn_active"
+    elif no_diff_count >= DEFAULT_MAX_NO_DIFF_RUNS:
+        primary = "no_diff_cap"
+    elif not preflight_healed:
+        primary = "preflight_clash"
+    elif bundled and focus_ticker:
+        primary = "scope_too_broad_secondary"
+    else:
+        primary = "eng_agent_reburn_cleared"
+
+    blockers: list[str] = []
+    if waste_active or live_reburn:
+        blockers.append("automation_waste")
+    if not preflight_healed:
+        blockers.append("preflight_clash")
+    if no_diff_count >= DEFAULT_MAX_NO_DIFF_RUNS:
+        blockers.append("no_diff_cap")
+
+    allow_narrow_reframe = (
+        bundled
+        and bool(focus_ticker)
+        and not blockers
+        and primary in {"scope_too_broad_secondary", "eng_agent_reburn_cleared"}
+    )
+    allow_unpark = allow_narrow_reframe and str(row.get("status") or "") == "parked"
+
+    safe_next_steps: list[str] = []
+    if "automation_waste" in blockers:
+        safe_next_steps.append(
+            "Wait for engineering-agent failures to stop; confirm traffic PM cleared "
+            "automation_waste (recover-queue / ops monitor)."
+        )
+    if "preflight_clash" in blockers:
+        safe_next_steps.append(
+            "Resolve path clashes (merge sibling eng PR, cancel duplicate branch, or "
+            "narrow allowed_paths); re-run preflight before unpark."
+        )
+    if "no_diff_cap" in blockers:
+        safe_next_steps.append(
+            "Inspect last agent runs for no-diff / park-not-committed; fix task scope or "
+            "merge stamp lag before re-dispatch."
+        )
+    if allow_narrow_reframe:
+        safe_next_steps.append(
+            f"Safe to narrow-reframe to focus ticker {focus_ticker} (then unpark manually "
+            "or via recover-queue when dispatch gates allow)."
+        )
+    elif bundled and focus_ticker and blockers:
+        safe_next_steps.append(
+            f"After blockers clear, narrow-reframe to {focus_ticker} before re-dispatch."
+        )
+    if not safe_next_steps:
+        safe_next_steps.append("Review parked_reason and last engineering-agent run logs.")
+
+    return {
+        "investigated_at": datetime.now(UTC).isoformat(),
+        "primary_hypothesis": primary,
+        "blockers": blockers,
+        "automation_waste_active": waste_active,
+        "live_reburn_signal": live_reburn,
+        "pm_parked_by_traffic": pm_parked,
+        "preflight_healed": preflight_healed,
+        "no_diff_count": no_diff_count,
+        "failure_count": failure_count,
+        "allow_narrow_reframe": allow_narrow_reframe,
+        "allow_unpark": allow_unpark,
+        "skip_reframe_reason": (
+            None
+            if allow_narrow_reframe
+            else (
+                "reburn_loop: fix dispatch blockers before narrow reframe — "
+                + (", ".join(blockers) if blockers else primary)
+            )
+        ),
+        "safe_next_steps": safe_next_steps,
+        "doc": "docs/ops/library-ingest-escalation.md#library-stall-reburn-investigation",
+    }
 
 
 def _lane_counts(health: dict[str, Any]) -> dict[str, int]:
@@ -187,6 +328,10 @@ def analyze_library_stall_task(
     library_root: Path = DEFAULT_LIBRARY_ROOT,
     refresh_health: bool = True,
     health: dict[str, Any] | None = None,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    tasks: list[dict[str, Any]] | None = None,
+    open_prs: list[dict[str, Any]] | None = None,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Build a ``stall_triage`` payload for UI / recovery (no queue writes)."""
     market_id = library_stall_market_id(row)
@@ -222,6 +367,19 @@ def analyze_library_stall_task(
     if bundled:
         recommendations.append("split_by_ticker_not_broad_market_task")
 
+    reburn_investigation: dict[str, Any] | None = None
+    if reburn:
+        reburn_investigation = investigate_reburn_loop_library_stall(
+            row,
+            tasks_path=tasks_path,
+            tasks=tasks,
+            open_prs=open_prs,
+            recent_agent_failures=recent_agent_failures,
+            bundled=bundled,
+            focus_ticker=focus_ticker,
+        )
+        recommendations.append("investigate_reburn_loop_before_unpark")
+
     return {
         "analyzed_at": datetime.now(UTC).isoformat(),
         "market_id": market_id,
@@ -234,6 +392,7 @@ def analyze_library_stall_task(
         "focus_ticker": focus_ticker,
         "focus_lane": focus_lane,
         "reburn_loop": reburn,
+        "reburn_investigation": reburn_investigation,
         "recommendations": recommendations,
         "filing_health_snapshot_at": filing_health.get("snapshot_at"),
         "doc": "docs/ops/library-ingest-escalation.md#library-stall-task-triage",
@@ -287,7 +446,9 @@ def reframe_bundled_library_stall_task(
     if not triage.get("bundled") or not triage.get("focus_ticker"):
         return None
     if triage.get("reburn_loop"):
-        return None
+        investigation = triage.get("reburn_investigation") or {}
+        if not investigation.get("allow_narrow_reframe"):
+            return None
     if str(row.get("status") or "") != "parked":
         return None
     prior_evidence = row.get("evidence") or {}
@@ -338,6 +499,9 @@ def triage_library_stall_tasks(
     auto_cancel_resolved: bool = True,
     auto_annotate: bool = True,
     auto_reframe_bundled: bool = False,
+    auto_reframe_reburn_when_cleared: bool = False,
+    open_prs: list[dict[str, Any]] | None = None,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
 ) -> LibraryStallTriageResult:
     """Run analysis / supersession / optional in-place reframe for library stall rows."""
     now = now or datetime.now(UTC)
@@ -413,13 +577,24 @@ def triage_library_stall_tasks(
         if not auto_annotate and not auto_reframe_bundled:
             continue
 
-        triage = analyze_library_stall_task(row, library_root=library_root, refresh_health=True)
+        triage = analyze_library_stall_task(
+            row,
+            library_root=library_root,
+            refresh_health=True,
+            tasks_path=tasks_path,
+            tasks=tasks,
+            open_prs=open_prs,
+            recent_agent_failures=recent_agent_failures,
+        )
         prior = (row.get("evidence") or {}).get("stall_triage") or {}
         if not isinstance(prior, dict):
             prior = {}
         triage_changed = _stall_triage_semantics_changed(prior, triage)
 
-        if auto_reframe_bundled:
+        should_reframe = (auto_reframe_bundled and not triage.get("reburn_loop")) or (
+            auto_reframe_reburn_when_cleared and bool(triage.get("reburn_loop"))
+        )
+        if should_reframe:
             reframed = reframe_bundled_library_stall_task(
                 row, triage, tasks_path=tasks_path, apply=apply
             )
@@ -458,6 +633,7 @@ __all__ = [
     "LibraryStallTriageAction",
     "LibraryStallTriageResult",
     "analyze_library_stall_task",
+    "investigate_reburn_loop_library_stall",
     "canonical_library_stall_task_id",
     "find_superseded_library_stall_canonical",
     "is_library_stall_engineering_row",
