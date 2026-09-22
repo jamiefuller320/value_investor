@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-22T17:11:03.374641+00:00`
+Generated: `2026-09-22T17:31:44.016305+00:00`
 Trajectory: **blocked_by_pr_queue**
 Dispatch pause: **active** (stuck PRs: 0)
 
@@ -30,7 +30,7 @@ Dispatch pause: **active** (stuck PRs: 0)
 - [ok] Traffic pause_active=True; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `stop_automation_waste` — signals=1; parked=eng-20260922-05; pause=True (applied)
+- `stop_automation_waste` — cleared automation-waste hold — no remediable signal (applied)
 
 ## Merges today (monitor independent verify)
 - `ingest_narrow`/verified PR #804 `eng-20260922-04` — Close stubborn ingest gaps for SHEL.L (chain 1/3: 0/0 bodies, run igc-20260922-04)
