@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T09:24:05+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:19:58+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -253,6 +253,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L419 | **Shared NaN-safe overlay text helper for sector/name fields** | UK heavyside now coerces float NaN sector/name; other overlays mostly use str() or truthiness checks. A shared helper would prevent the next (x or '').lower() crash on pandas NaN. | Another overlay AttributeError on float/NaN sector or name in CI or ingest logs |
 | L422 | **Fork complement is an observe-only set, not a shadow holding** | When a fork changes who is bought, do not re-buy the refused names inside the fork. Keep epoch-0 marking the full set and record the weekly complement (epoch-0 minus fork) so the selection effect stays identifiable. Downstream exit and DCA experiments run on the fork's real holdings. A price watch is not an exit cohort; simulate the refused path only if the claim is about names the filter dropped, and only if epoch-0 will stop marking them. | A buy-set fork is about to open (filter, conviction floor, or exclusion step) and epoch-0 would stop or would not contain the refused names |
 | L423 | **Shadow-buy every filter refusal into the downstream sample** | If a buy/no-buy fork drops a name, downstream DCA and exit tests on the fork never see it, including when the drop was a mistake. Shadow-buy the entire refusal set at the decision date under the fork's downstream rules, and score those episodes in a refused stratum. Do not wait until a drop looks wrong, and do not pool shadow fills into the fork's live result. Skip the shadow buy when that same downstream rule is already overlaid on epoch-0, which still holds the name. | A buy-set fork is open and a downstream rule runs only on the fork's actual buys, not as an overlay on epoch-0 |
+| L437 | **Cash buffer sleeve after rank-rotation works** | Prefer fixing blocked exits (done L440) so fully-invested books recycle into better sleeves. A 5-10% dry-powder buffer remains optional capital-allocation v2 — do not use idle cash as a substitute for broken rotation. | capital_rotation_coordinator / cash buffer target phase activates and rank rotation is healthy on momentum_grace |
 
 ### Universe & data
 

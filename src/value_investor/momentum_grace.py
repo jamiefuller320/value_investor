@@ -257,11 +257,15 @@ def evaluate_grace_holding(
         )
 
     if signal in BUY_SIGNALS:
+        # Buy-tier is not a grace hold. Paper/sim callers must treat off-target
+        # buy-tier names as rank demotion (exit buffer / rotate), not grace_kept.
+        # This branch exists for direct evaluate() callers; keep=False so a
+        # naive keep→hold path cannot freeze capital away from better sleeves.
         return GraceDecision(
-            keep=True,
+            keep=False,
             enter_grace=False,
             exit_grace=momentum_grace,
-            reason="still buy-tier",
+            reason="still buy-tier — rank rotation, not grace",
         )
 
     if momentum_grace:

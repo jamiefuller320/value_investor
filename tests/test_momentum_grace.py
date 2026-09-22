@@ -53,6 +53,24 @@ def test_momentum_strength_archive_fallback_uses_timing_and_sma200():
     assert weak is False
 
 
+def test_buy_tier_is_not_a_grace_keep():
+    decision = evaluate_grace_holding(
+        {"timing_signal": "neutral", "price": 120, "sma_50": 110},
+        signal="buy",
+        avg_cost=100,
+        mark=120,
+        momentum_grace=False,
+        grace_started_at=None,
+        stop_loss=None,
+        take_profit=None,
+        grace_entry_stop=None,
+        as_of="2026-07-20",
+    )
+    assert decision.keep is False
+    assert decision.enter_grace is False
+    assert "rank rotation" in decision.reason
+
+
 def test_grace_entry_when_hold_signal_but_momentum_strong():
     decision = evaluate_grace_holding(
         {
