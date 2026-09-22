@@ -1820,6 +1820,57 @@ def main(argv: list[str] | None = None) -> int:
     )
     cap_drain.set_defaults(func=_cmd_try_compile_cap_drain)
 
+    def _cmd_try_market_gap_burndown(args: argparse.Namespace) -> int:
+        from value_investor.market_eng_gap_burndown import try_market_rotating_eng_gap_burndown
+
+        tasks_path = _resolve_tasks_path(args.tasks_path)
+        payload = try_market_rotating_eng_gap_burndown(
+            apply=bool(args.apply),
+            tasks_path=tasks_path,
+            library_root=args.library_root,
+            data_dir=args.data_dir,
+        )
+        if args.json:
+            _print_json(payload)
+        else:
+            compiled = int(payload.get("compiled_count") or 0)
+            reason = str(payload.get("reason") or "")
+            if compiled:
+                print(
+                    f"market-gap-burndown: {payload.get('action')} "
+                    f"market={payload.get('market_id')} task={payload.get('task_id')}"
+                )
+            else:
+                print(f"market-gap-burndown: skipped — {reason}")
+        return 0
+
+    mgb = sub.add_parser(
+        "try-market-gap-burndown",
+        parents=[common],
+        help=(
+            "Rotate library markets (maintenance cursor) and queue one ingest eng "
+            "task when the shared ingest slot is free (L448)"
+        ),
+    )
+    mgb.add_argument(
+        "--library-root",
+        type=Path,
+        default=Path("docs/data/library"),
+        help="Library root (default: docs/data/library)",
+    )
+    mgb.add_argument(
+        "--data-dir",
+        type=Path,
+        default=Path("docs/data"),
+        help="Data dir for gap-closure runs (default: docs/data)",
+    )
+    mgb.add_argument(
+        "--apply",
+        action="store_true",
+        help="Write a library ingest task when guards pass (default: evaluate only)",
+    )
+    mgb.set_defaults(func=_cmd_try_market_gap_burndown)
+
     cap_audit = sub.add_parser(
         "compile-cap-audit",
         parents=[common],

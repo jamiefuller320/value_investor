@@ -8,6 +8,11 @@ when adding the next market shard (e.g. `asx200` offline depth).
 Live FTSE reference: [`ingest-loop.yml`](../../.github/workflows/ingest-loop.yml),
 [`docs/ops/horizon-scan.md`](horizon-scan.md) (gap-closure runs).
 
+**Market-rotating eng gap burn-down (L448):** when the shared ingest engineering
+slot is free, ops monitor and `ftse-engineering try-market-gap-burndown` rotate
+maintenance-eligible markets (same cursor as L323) and compile gap-closure /
+stall / parked-hunter work — see [`market-eng-gap-burndown.md`](market-eng-gap-burndown.md).
+
 ## Cascade model
 
 ```text
