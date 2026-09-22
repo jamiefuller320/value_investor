@@ -7741,6 +7741,81 @@ def test_sanitize_filings_index_propagates_imperial_own_share_sibling(tmp_path: 
     assert html_row["body_path"] == str(body_path)
 
 
+def test_propagate_shared_url_shel_ir_allowlist_inherits_sec_edgar_body(tmp_path: Path):
+    """eng-20260922-04: IR allowlist SEC rows inherit bodies from sec_edgar siblings."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    sec_url = "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm"
+    body_path = bodies_dir / "74018f3f90d5a582.txt"
+    body_path.write_text(
+        "Shell plc Form 20-F annual report consolidated financial statements.\n"
+        + ("operations " * 80),
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_9e25fe48b60d5b55",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — shel-20251231.htm",
+                        "url": sec_url,
+                        "period": "annual",
+                        "has_body": False,
+                        "body_path": None,
+                    },
+                    {
+                        "id": "74018f3f90d5a582",
+                        "source": "sec_edgar",
+                        "headline": "20-F: 20-F",
+                        "url": sec_url,
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                        "entity_type": "consolidated",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = sanitize_filings_index(
+        filings_dir,
+        company_name="Shell plc",
+        ticker="SHEL.L",
+    )
+    assert result["with_body_after"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    annual_rows = [row for row in saved["filings"] if row.get("period") == "annual"]
+    assert annual_rows
+    assert all(row["has_body"] for row in annual_rows)
+    assert any(str(row.get("body_path") or "") == str(body_path) for row in annual_rows)
+    summary = saved["summary"]["period_coverage"]["annual"]
+    assert summary["with_body"] == summary["total"]
+
+
+def test_classify_rns_headline_shel_equivalent_dividend_payment_is_other():
+    """eng-20260922-04: routine dividend payment RNS is not an interim results gap."""
+    headline = "Shell plc Fourth Quarter 2024 Euro and GBP Equivalent Dividend Payments"
+    assert classify_rns_headline(headline) == "other"
+    assert classify_filing_period(headline) == "other"
+
+
+def test_fetch_filings_ir_allowlist_shel_l_includes_q1_6k(tmp_path: Path):
+    """SHEL.L built-in allowlist includes Q1 2026 6-K for interim gap-fill."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+    rows = fetch_filings_ir_allowlist("SHEL.L", path=allowlist_path)
+    urls = [row["url"] for row in rows]
+    assert len(urls) == 4
+    assert any("shellq120266-k.htm" in url for url in urls)
+    q1 = next(row for row in rows if "shellq120266-k.htm" in row["url"])
+    assert q1["period"] == "interim"
+
+
 def test_filing_lacks_material_body_excludes_routine_own_shares():
     """IMB.L leftover own-shares IWB must not count as a stubborn ingest gap."""
     from value_investor.research.filings import filing_lacks_material_body

@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
+from value_investor.research.filings import sanitize_filings_index
 from value_investor.research.format import format_ingest_improvement_text
 from value_investor.research.ingest_improvement import (
     BODY_GAP_BATCH_TICKERS,
@@ -342,6 +343,82 @@ def test_filing_coverage_vty_s838_interim_does_not_false_gap(tmp_path: Path):
     assert coverage["filings_interim"] == 1
     assert coverage["interim_with_body"] == 1
     assert not _has_outstanding_ingest_gap(coverage, ticker="VTY.L")
+
+
+def test_filing_coverage_shel_duplicate_sec_url_does_not_false_gap(tmp_path: Path):
+    """eng-20260922-04: sec_edgar + ir_allowlist twins must not inflate period body gaps."""
+    from value_investor.research.ingest_improvement import (
+        _filing_coverage,
+        _has_outstanding_ingest_gap,
+    )
+    from value_investor.research.store import ResearchStore
+
+    output_dir = tmp_path / "output"
+    filings_dir = output_dir / "research" / "SHEL.L" / "sources" / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    sec_url = "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm"
+    body_path = bodies_dir / "sec20f.txt"
+    body_path.write_text(
+        "Shell plc consolidated financial statements.\n" + ("x" * 400), encoding="utf-8"
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 2,
+                    "annual": 2,
+                    "interim": 0,
+                    "with_body": 1,
+                    "period_coverage": {
+                        "annual": {"total": 2, "with_body": 1},
+                        "interim": {"total": 0, "with_body": 0},
+                    },
+                },
+                "filings": [
+                    {
+                        "id": "ir_annual",
+                        "source": "ir_allowlist",
+                        "period": "annual",
+                        "entity_type": "consolidated",
+                        "url": sec_url,
+                        "has_body": False,
+                    },
+                    {
+                        "id": "sec_annual",
+                        "source": "sec_edgar",
+                        "period": "annual",
+                        "entity_type": "consolidated",
+                        "url": sec_url,
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    },
+                    {
+                        "id": "h1_rns",
+                        "source": "investegate_direct",
+                        "headline": "Half Year Results",
+                        "period": "interim",
+                        "entity_type": "consolidated",
+                        "url": "https://www.investegate.co.uk/announcement/rns/shell--shel/half-year-results/1",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    sanitize_filings_index(
+        filings_dir,
+        company_name="Shell plc",
+        ticker="SHEL.L",
+    )
+    store = ResearchStore(output_dir)
+    coverage = _filing_coverage(store, "SHEL.L", output_dir)
+    assert coverage["indexed_without_body"] == 0
+    assert coverage["filings_annual"] == coverage["annual_with_body"]
+    assert coverage["filings_interim"] == coverage["interim_with_body"]
+    assert not _has_outstanding_ingest_gap(coverage, ticker="SHEL.L")
 
 
 def test_filing_coverage_kgf_missing_interim_listing_flags_gap(tmp_path: Path):

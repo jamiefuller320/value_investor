@@ -189,6 +189,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm",
         "https://www.sec.gov/Archives/edgar/data/1306965/000130696525000007/shel-20241231.htm",
         "https://www.sec.gov/Archives/edgar/data/1306965/000130696524000026/shel-20231231.htm",
+        "https://www.sec.gov/Archives/edgar/data/1306965/000162828026031628/shellq120266-k.htm",
     ],
     "VOE.VI": [
         "https://www.voestalpine.com/group/static/sites/group/.downloads/en/publications-2025-26/2025-26-annual-report.pdf",
@@ -1622,6 +1623,45 @@ def dedupe_rns_index_rows(
     return merged, pruned_pdf + pruned_page
 
 
+def _propagate_bodies_across_shared_document_urls(
+    filings: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], int]:
+    """
+    Copy ``has_body`` when multiple index entries point at the same document URL.
+
+    Dual-listed UK names (e.g. SHEL.L) often index the same SEC 20-F/6-K twice as
+    ``sec_edgar`` and ``ir_allowlist`` with different row ids; only one row is fetched.
+    """
+    donors_by_url: dict[str, dict[str, Any]] = {}
+    for row in filings:
+        if not row.get("has_body") or not row.get("body_path"):
+            continue
+        url_key = _normalize_rns_document_url(str(row.get("url") or ""))
+        if not url_key:
+            continue
+        existing = donors_by_url.get(url_key)
+        if existing is None:
+            donors_by_url[url_key] = row
+            continue
+        if str(row.get("published_at") or "") > str(existing.get("published_at") or ""):
+            donors_by_url[url_key] = row
+    propagated = 0
+    updated: list[dict[str, Any]] = []
+    for row in filings:
+        item = dict(row)
+        if not item.get("has_body"):
+            url_key = _normalize_rns_document_url(str(item.get("url") or ""))
+            donor = donors_by_url.get(url_key) if url_key else None
+            if donor is not None:
+                item["has_body"] = True
+                item["body_path"] = donor.get("body_path")
+                if donor.get("body_content_hash"):
+                    item["body_content_hash"] = donor["body_content_hash"]
+                propagated += 1
+        updated.append(item)
+    return updated, propagated
+
+
 def _propagate_bodies_across_shared_filing_ids(
     filings: list[dict[str, Any]],
 ) -> tuple[list[dict[str, Any]], int]:
@@ -1657,7 +1697,8 @@ def _propagate_bodies_across_shared_filing_ids(
                     item["body_content_hash"] = donor["body_content_hash"]
                 propagated += 1
         updated.append(item)
-    return updated, propagated
+    updated, url_propagated = _propagate_bodies_across_shared_document_urls(updated)
+    return updated, propagated + url_propagated
 
 
 def _reconcile_ir_allowlist_row_metadata(
@@ -2673,8 +2714,9 @@ def classify_rns_headline(
 
     # Dividends / buybacks / exchange offers are not results packs.
     if re.search(
-        r"\b(interim dividend|final dividend|dividend timetable|transaction in own shares|"
-        r"director/?pdmr|exchange offers?|total voting rights|block listing)\b",
+        r"\b(interim dividend|final dividend|dividend timetable|equivalent dividend payments?|"
+        r"transaction in own shares|director/?pdmr|exchange offers?|total voting rights|"
+        r"block listing)\b",
         blob,
     ):
         return "other"
