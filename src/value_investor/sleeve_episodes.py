@@ -400,9 +400,7 @@ def run_sleeve_episodes_pass(
                 episode,
                 as_of=when,
                 price=float(price) if price else None,
-                reason=(
-                    f"left buy-tier for {streak} confirm screen(s) — latest experimental exit"
-                ),
+                reason=(f"left buy-tier for {streak} confirm screen(s) — latest experimental exit"),
             )
             store.setdefault("closed", []).append(closed_ep)
             closed += 1
