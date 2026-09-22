@@ -64,6 +64,10 @@ DEFAULT_AUTO_CANCEL_MIS_SCOPED_ALLOWLIST = True
 DEFAULT_AUTO_CANCEL_RESOLVED_GAP_CLOSURE = True
 DEFAULT_AUTO_CANCEL_SUPERSEDED_GAP_CLOSURE = True
 DEFAULT_AUTO_UNPARK_HEALED_PREFLIGHT = True
+DEFAULT_AUTO_CANCEL_SUPERSEDED_LIBRARY_STALL = True
+DEFAULT_AUTO_CANCEL_RESOLVED_LIBRARY_STALL = True
+DEFAULT_AUTO_ANNOTATE_LIBRARY_STALL_TRIAGE = True
+DEFAULT_AUTO_REFRAME_BUNDLED_LIBRARY_STALL = False
 GAP_CLOSURE_ENGINEERING_SOURCES = frozenset({"ingest_gap_closure", "ingest_trial"})
 _GAP_CLOSURE_TITLE_RUN_SUFFIX_RE = re.compile(r",\s*run\s+\S+\s*$", re.IGNORECASE)
 _GAP_CLOSURE_TITLE_CHAIN_RE = re.compile(
@@ -192,6 +196,7 @@ class RecoveryResult:
     queue_clearing: dict[str, Any] = field(default_factory=dict)
     hunter_url_monitor: dict[str, Any] = field(default_factory=dict)
     housekeep: dict[str, Any] = field(default_factory=dict)
+    library_stall_triage: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         housekeep_count = int(self.housekeep.get("action_count") or 0)
@@ -206,6 +211,7 @@ class RecoveryResult:
             "queue_clearing": self.queue_clearing,
             "hunter_url_monitor": self.hunter_url_monitor,
             "housekeep": self.housekeep,
+            "library_stall_triage": self.library_stall_triage,
             "action_count": len(self.merged)
             + len(self.restamped)
             + len(self.reconciled)
@@ -428,6 +434,18 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
     unpark_preflight = block.get("auto_unpark_healed_preflight")
     if unpark_preflight is None:
         unpark_preflight = DEFAULT_AUTO_UNPARK_HEALED_PREFLIGHT
+    superseded_stall = block.get("auto_cancel_superseded_library_stall")
+    if superseded_stall is None:
+        superseded_stall = DEFAULT_AUTO_CANCEL_SUPERSEDED_LIBRARY_STALL
+    resolved_stall = block.get("auto_cancel_resolved_library_stall")
+    if resolved_stall is None:
+        resolved_stall = DEFAULT_AUTO_CANCEL_RESOLVED_LIBRARY_STALL
+    annotate_stall = block.get("auto_annotate_library_stall_triage")
+    if annotate_stall is None:
+        annotate_stall = DEFAULT_AUTO_ANNOTATE_LIBRARY_STALL_TRIAGE
+    reframe_stall = block.get("auto_reframe_bundled_library_stall")
+    if reframe_stall is None:
+        reframe_stall = DEFAULT_AUTO_REFRAME_BUNDLED_LIBRARY_STALL
     return {
         "immediate_park_unfixable_pr": bool(immediate),
         "max_attention_parked_tasks": max_attention,
@@ -441,6 +459,10 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
         "auto_cancel_resolved_gap_closure": bool(resolved_gap),
         "auto_cancel_superseded_gap_closure": bool(superseded_gap),
         "auto_unpark_healed_preflight": bool(unpark_preflight),
+        "auto_cancel_superseded_library_stall": bool(superseded_stall),
+        "auto_cancel_resolved_library_stall": bool(resolved_stall),
+        "auto_annotate_library_stall_triage": bool(annotate_stall),
+        "auto_reframe_bundled_library_stall": bool(reframe_stall),
     }
 
 
@@ -1793,6 +1815,38 @@ def recover_engineering_queue(
             auto_unpark_healed_preflight=bool(recovery_policy.get("auto_unpark_healed_preflight")),
             open_prs=list(augmented_open_prs or open_prs or []),
         ).to_dict()
+
+        from value_investor.library_stall_task_triage import triage_library_stall_tasks
+
+        stall_result = triage_library_stall_tasks(
+            tasks_path=tasks_path,
+            apply=apply,
+            auto_cancel_superseded=bool(
+                recovery_policy.get("auto_cancel_superseded_library_stall")
+            ),
+            auto_cancel_resolved=bool(recovery_policy.get("auto_cancel_resolved_library_stall")),
+            auto_annotate=bool(recovery_policy.get("auto_annotate_library_stall_triage")),
+            auto_reframe_bundled=bool(
+                recovery_policy.get("auto_reframe_bundled_library_stall")
+            ),
+        )
+        stall_payload = stall_result.to_dict()
+        result.library_stall_triage = stall_payload
+        hk = dict(result.housekeep)
+        hk["library_stall_triage"] = stall_payload
+        hk["action_count"] = int(hk.get("action_count") or 0) + int(
+            stall_payload.get("action_count") or 0
+        )
+        for key in ("cancelled", "annotated"):
+            hk[key] = list(hk.get(key) or []) + [
+                row.to_dict() for row in getattr(stall_result, key)
+            ]
+        if stall_result.reframed:
+            hk.setdefault("reframed", [])
+            hk["reframed"] = list(hk.get("reframed") or []) + [
+                row.to_dict() for row in stall_result.reframed
+            ]
+        result.housekeep = hk
 
     result.queue_clearing = evaluate_queue_clearing_pause(
         tasks_path=tasks_path,

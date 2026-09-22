@@ -1,0 +1,155 @@
+"""Tests for library ingest stall task triage."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from value_investor.engineering_tasks import load_engineering_tasks
+from value_investor.library_stall_task_triage import (
+    analyze_library_stall_task,
+    find_superseded_library_stall_canonical,
+    triage_library_stall_tasks,
+)
+
+
+def _stall_row(
+    task_id: str,
+    *,
+    status: str = "parked",
+    market_id: str = "dax",
+    parked_policy: str = "",
+    parked_reason: str = "",
+) -> dict:
+    return {
+        "id": task_id,
+        "area": "ingest",
+        "status": status,
+        "source": "library_ingest_stall",
+        "title": f"Close library ingest filing gaps for {market_id}",
+        "summary": "Broad market stall",
+        "evidence": {
+            "market_id": market_id,
+            "filing_health": {
+                "unmeasured_buy_tier": 2,
+                "zero_body_buy_tier": 0,
+                "indexed_without_body": 30,
+                "thin_body_buy_tier": 1,
+                "unmeasured_tickers": ["AAA.DE", "BBB.DE"],
+                "indexed_without_body_tickers": ["FME.DE"],
+                "indexed_without_body_by_ticker": {"FME.DE": 30},
+            },
+        },
+        "parked_policy": parked_policy,
+        "parked_reason": parked_reason,
+    }
+
+
+def test_find_superseded_library_stall_canonical():
+    tasks = [
+        _stall_row("eng-20260920-16"),
+        _stall_row("eng-20260922-05"),
+    ]
+    older = tasks[0]
+    assert find_superseded_library_stall_canonical(older, tasks) == "eng-20260922-05"
+    assert find_superseded_library_stall_canonical(tasks[1], tasks) is None
+
+
+def test_triage_cancels_superseded_stall(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _stall_row("eng-20260920-16"),
+            _stall_row("eng-20260922-05", parked_policy="reburn_loop", parked_reason="reburn"),
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    result = triage_library_stall_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_cancel_superseded=True,
+        auto_cancel_resolved=False,
+        auto_annotate=False,
+    )
+    assert any(row.action == "cancel_superseded_library_stall" for row in result.cancelled)
+    rows = {row["id"]: row for row in load_engineering_tasks(tasks_path)["tasks"]}
+    assert rows["eng-20260920-16"]["status"] == "cancelled"
+    assert rows["eng-20260920-16"].get("duplicate_of") == "eng-20260922-05"
+    assert rows["eng-20260922-05"]["status"] == "parked"
+
+
+def test_analyze_library_stall_task_bundled_and_focus(monkeypatch):
+    row = _stall_row("eng-20260922-05")
+    triage = analyze_library_stall_task(row, refresh_health=False)
+    assert triage["bundled"] is True
+    assert triage["focus_ticker"] == "AAA.DE"
+    assert triage["focus_lane"] == "unmeasured"
+    assert "split_by_ticker_not_broad_market_task" in triage["recommendations"]
+
+
+def test_reframe_skips_reburn_loop(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    row = _stall_row(
+        "eng-20260922-05",
+        parked_policy="reburn_loop",
+        parked_reason="automation waste reburn",
+    )
+    tasks_path.write_text(json.dumps({"tasks": [row]}), encoding="utf-8")
+
+    result = triage_library_stall_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_cancel_superseded=False,
+        auto_annotate=True,
+        auto_reframe_bundled=True,
+    )
+    assert not result.reframed
+    kept = load_engineering_tasks(tasks_path)["tasks"][0]
+    assert kept.get("evidence", {}).get("stall_triage", {}).get("reburn_loop") is True
+
+
+def test_reframe_bundled_parked_task(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    row = _stall_row("eng-20260922-05", parked_policy="preflight_clash")
+    tasks_path.write_text(json.dumps({"tasks": [row]}), encoding="utf-8")
+    health = row["evidence"]["filing_health"]
+    monkeypatch.setattr(
+        "value_investor.library_stall_task_triage.snapshot_library_buy_tier_filing_health",
+        lambda market_id, **kwargs: {**health, "snapshot_at": "2026-09-22T00:00:00+00:00"},
+    )
+
+    result = triage_library_stall_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_cancel_superseded=False,
+        auto_annotate=False,
+        auto_reframe_bundled=True,
+    )
+    assert any(row.action == "reframe_narrow" for row in result.reframed)
+    updated = load_engineering_tasks(tasks_path)["tasks"][0]
+    assert "AAA.DE" in updated["title"]
+    assert updated["evidence"].get("focus_ticker") == "AAA.DE"
+    assert updated["evidence"].get("narrow_reframe_at")
+
+
+def test_triage_cancels_resolved_stall(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(json.dumps({"tasks": [_stall_row("eng-20260922-05")]}), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.library_stall_task_triage.snapshot_library_buy_tier_filing_health",
+        lambda market_id, **kwargs: {
+            "unmeasured_buy_tier": 0,
+            "zero_body_buy_tier": 0,
+            "snapshot_at": "2026-09-22T00:00:00+00:00",
+        },
+    )
+
+    result = triage_library_stall_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_cancel_superseded=False,
+        auto_cancel_resolved=True,
+        auto_annotate=False,
+    )
+    assert any(row.action == "cancel_resolved_library_stall" for row in result.cancelled)

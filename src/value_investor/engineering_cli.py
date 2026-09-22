@@ -1871,6 +1871,73 @@ def main(argv: list[str] | None = None) -> int:
     )
     mgb.set_defaults(func=_cmd_try_market_gap_burndown)
 
+    def _cmd_triage_library_stall(args: argparse.Namespace) -> int:
+        from value_investor.library_stall_task_triage import triage_library_stall_tasks
+
+        tasks_path = _resolve_tasks_path(args.tasks_path)
+        payload = triage_library_stall_tasks(
+            tasks_path=tasks_path,
+            library_root=args.library_root,
+            apply=bool(args.apply),
+            auto_cancel_superseded=not args.no_supersede_cancel,
+            auto_cancel_resolved=not args.no_resolved_cancel,
+            auto_annotate=not args.no_annotate,
+            auto_reframe_bundled=bool(args.reframe_bundled),
+        )
+        if args.json:
+            _print_json(payload.to_dict())
+        else:
+            for row in payload.cancelled:
+                print(f"Cancelled {row.task_id}: {row.action} — {row.reason}")
+            for row in payload.annotated:
+                print(f"Annotated {row.task_id}: {row.reason}")
+            for row in payload.reframed:
+                print(f"Reframed {row.task_id}: {row.reason}")
+            if not payload.to_dict()["action_count"]:
+                print("No library stall triage actions")
+        return 0
+
+    lst = sub.add_parser(
+        "triage-library-stall",
+        parents=[common],
+        help=(
+            "Analyze library_ingest_stall tasks: supersede duplicates, annotate split plan, "
+            "optional narrow reframe"
+        ),
+    )
+    lst.add_argument(
+        "--library-root",
+        type=Path,
+        default=Path("docs/data/library"),
+        help="Library root for fresh filing health (default: docs/data/library)",
+    )
+    lst.add_argument(
+        "--apply",
+        action="store_true",
+        help="Write cancellations / evidence updates (default: dry-run)",
+    )
+    lst.add_argument(
+        "--reframe-bundled",
+        action="store_true",
+        help="Rewrite parked bundled stall tasks in place to focus one ticker",
+    )
+    lst.add_argument(
+        "--no-supersede-cancel",
+        action="store_true",
+        help="Do not auto-cancel older same-market stall duplicates",
+    )
+    lst.add_argument(
+        "--no-resolved-cancel",
+        action="store_true",
+        help="Do not auto-cancel stalls when filing gaps are zero",
+    )
+    lst.add_argument(
+        "--no-annotate",
+        action="store_true",
+        help="Skip writing evidence.stall_triage",
+    )
+    lst.set_defaults(func=_cmd_triage_library_stall)
+
     cap_audit = sub.add_parser(
         "compile-cap-audit",
         parents=[common],
