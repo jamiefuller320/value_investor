@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T16:34:30+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T22:49:17+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -514,6 +514,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L434 | **EngineeringTask dataclass should carry parked/cancelled lifecycle fields** | Parked metadata can still be lost if any path round-trips queue rows through EngineeringTask.to_dict(). Consider first-class parked_*/cancelled_* fields on the dataclass so compile rematch cannot strip them. | Another parked_reason strip appears after the _merge_task_rows preserve fix, or EngineeringTask schema is next refactored |
 | L436 | **Bundle multi-ticker IR allowlist fills into one eng task** | Instead of N intensive pins or N hunter tasks that all touch research_ir_urls.json, coalesce stuck no-allowlist tickers in the same regime into one data PR editing the allowlist (plus seed fallback) so Lane B pays one clash cycle for many names. | Open no-allowlist blockers across one regime exceed ~5 concurrent names and hunter tasks are serializing on research_ir_urls.json |
 | L439 | **Progress report dual-suite excess (stress + fair)** | project_progress currently pulls ai_excess from stress ai_judgment decision_review, so stage 2b looks brutal. Later: surface ai_judgment_fair excess alongside stress without flipping is_primary — adoption scoreboard vs churn lab. | Human wants dashboard/progress narrative aligned with Suite B adoption truth while keeping Suite A primary flag |
+| L449 | **Invoke market eng gap burndown from eng-queue when idle** | L448 burndown only runs inside ops-monitor apply_fixes, and ops-monitor skips after the first successful finalize of the day. After #805 landed mid-day, later scheduled/dispatch runs skipped monitor so burndown never applied until the next morning run (or force). Consider also calling try-market-gap-burndown from engineering-queue idle path beside compile-cap drain / parked hunter. | Next weekday where eng queue is idle after ~15:00 UTC with library IWB/thin remaining and ops-monitor already finalized that morning |
 
 ---
 
