@@ -88,6 +88,7 @@ ftse-project-traffic common-issues
 | `docs/data/pr_fix_occasions.json` | Durable log of human / traffic fix-request occasions + failure reasons |
 | `docs/data/project_traffic_ops_email_handoff.json` | Latest ops-monitor email package (findings + planned rectification + email body) |
 | `docs/data/queue_health.json` → `traffic_control` | Dashboard slice |
+| `docs/data/queue_health.json` → `completion_monitor` | Today/yesterday merge counts, 14-day auto vs manual bars, PR-fix intervention tallies (Automation tab) |
 
 ## PR fix occasion log
 
