@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-21T21:10:56.422636+00:00`
+Generated: `2026-09-22T07:46:53.716119+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -31,14 +31,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `human`/human PR #782 `eng-20260921-03` — Implement canonical FCF basis selector for overlays (filing-year statutory OCF−CapEx vs company-adjusted vs screen TTM) with explicit stale-year flag when scree
-- `human`/human PR #783 `eng-20260921-02` — Fix Companies House PDF/iXBRL download and OCR quality gate (retry, iXBRL-first, reject garbled OCR)—target ITV.L/MGNS.L failure modes cited in recent suggestio
-- `human`/human PR #776 `eng-20260921-05` — Wire `operating_cashflow` (and related cash-flow fields) from `financials_annual.json` into `CompanyMetrics` when Yahoo fetch returns None—validate on MEGP.L be
-- `human`/human PR #777 `eng-20260921-04` — Standardize IR results-presentation ingest: allowlist fetch, full-text extract, and populate `ir_presentation_metrics.json` FCF/dividend bridges (FGP.L FY2026 r
-- `human`/human PR #773 `eng-20260921-01` — Harden Investegate/LSE direct fetch for indexed RNS items (FY/HY results, annual reports)—replace Google News wrapper URLs and empty Ticker RNS bodies—starting
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 16
+- Occasion count: 17
 - `PR mergeable=CONFLICTING against main` — 4×
 - `ruff_format` — 1×
 - `dirty merge: deferred-ideas.json / deferred-review.md vs main after L424-L426 landings` — 1×
@@ -47,6 +43,11 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `engineering_tasks.json queue_clearing + automation.json queue snapshots vs main (#757 ledger)` — 1×
 - `engineering_tasks/automation/queue_health vs main after #756 merge` — 1×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 1 (open=1, resolved=0)
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
