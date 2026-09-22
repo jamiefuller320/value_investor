@@ -1,15 +1,31 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-21T10:16:46.540211-04:00",
+    "local_time": "2026-09-22T03:44:51.899746-04:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-09-21T09:30:00-04:00",
-    "settle_at": "2026-09-21T10:00:00-04:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-09-22T09:30:00-04:00",
+    "settle_at": "2026-09-22T10:00:00-04:00",
+    "can_act": false,
+    "reason": "before market open"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "b950b921-45ad-4eb8-89ea-d31d164afa68",
+      "fund_id": "8e88c089-7a66-4156-a459-2048d84db043",
+      "acted_at": "2026-09-22T03:44:51.899746-04:00",
+      "ticker": "CVE.TO",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.103089,
+      "price": 44.35,
+      "gross": 4.57,
+      "cost": 0.01,
+      "net_cash": -4.58,
+      "note": "Automated buy",
+      "name": "Cenovus Energy Inc."
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +39,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 972.88,
-    "cash": 4.58,
+    "nav": 972.01,
+    "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -33,207 +49,132 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 74.84,
+    "target_sleeve_value": 69.43,
     "targets": [
       {
         "ticker": "OTEX.TO",
         "name": "Open Text Corporation",
         "signal": "strong_buy",
         "conviction_score": 0.9117000000000001,
-        "price": 31.53
+        "price": 32.42
       },
       {
         "ticker": "ABX.TO",
         "name": "Barrick Mining Corporation",
         "signal": "strong_buy",
         "conviction_score": 0.7955000000000001,
-        "price": 60.24
+        "price": 59.95
+      },
+      {
+        "ticker": "CVE.TO",
+        "name": "Cenovus Energy Inc.",
+        "signal": "strong_buy",
+        "conviction_score": 0.7705000000000001,
+        "price": 44.35
       },
       {
         "ticker": "CNQ.TO",
         "name": "Canadian Natural Resources Limited",
         "signal": "buy",
         "conviction_score": 0.7354,
-        "price": 69.37
+        "price": 67.82
       },
       {
         "ticker": "K.TO",
         "name": "Kinross Gold Corporation",
         "signal": "strong_buy",
         "conviction_score": 0.7281,
-        "price": 39.25
+        "price": 39.07
+      },
+      {
+        "ticker": "CNR.TO",
+        "name": "Canadian National Railway Company",
+        "signal": "buy",
+        "conviction_score": 0.7050000000000001,
+        "price": 165.03
       },
       {
         "ticker": "MRU.TO",
         "name": "Metro Inc.",
         "signal": "buy",
         "conviction_score": 0.6900000000000001,
-        "price": 91.46
+        "price": 91.44
       },
       {
-        "ticker": "CNR.TO",
-        "name": "Canadian National Railway Company",
+        "ticker": "IFC.TO",
+        "name": "Intact Financial Corporation",
         "signal": "buy",
-        "conviction_score": 0.6841,
-        "price": 166.68
+        "conviction_score": 0.6686000000000001,
+        "price": 256.4
       },
       {
         "ticker": "MG.TO",
         "name": "Magna International Inc.",
         "signal": "buy",
         "conviction_score": 0.6625,
-        "price": 88.58
-      },
-      {
-        "ticker": "IFC.TO",
-        "name": "Intact Financial Corporation",
-        "signal": "buy",
-        "conviction_score": 0.6528,
-        "price": 258.34
+        "price": 88.49
       },
       {
         "ticker": "SAP.TO",
         "name": "Saputo Inc.",
         "signal": "strong_buy",
         "conviction_score": 0.646,
-        "price": 39.82
+        "price": 39.85
       },
       {
         "ticker": "TECK-B.TO",
         "name": "Teck Resources Limited",
         "signal": "buy",
         "conviction_score": 0.6134000000000001,
-        "price": 91.7
+        "price": 93.71
       },
       {
         "ticker": "WSP.TO",
         "name": "WSP Global Inc.",
         "signal": "buy",
-        "conviction_score": 0.5367000000000001,
-        "price": 176.15
+        "conviction_score": 0.52,
+        "price": 180.8
       },
       {
         "ticker": "PPL.TO",
         "name": "Pembina Pipeline Corporation",
         "signal": "buy",
         "conviction_score": 0.5111,
-        "price": 66.51
+        "price": 65.2
       },
       {
         "ticker": "RCI-B.TO",
         "name": "Rogers Communications Inc.",
         "signal": "buy",
         "conviction_score": 0.4867,
-        "price": 49.17
+        "price": 48.28
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
-    "anticipated_holds": [
-      {
-        "action": "hold",
-        "ticker": "OTEX.TO",
-        "name": "Open Text Corporation",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 72.51,
-        "target_value": 74.84,
-        "conviction_score": 0.9117000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "CNQ.TO",
-        "name": "Canadian Natural Resources Limited",
-        "reason": "Already near equal-weight target",
-        "value": 74.21,
-        "target_value": 74.84,
-        "conviction_score": 0.7354,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "K.TO",
-        "name": "Kinross Gold Corporation",
-        "reason": "Already near equal-weight target",
-        "value": 74.59,
-        "target_value": 74.84,
-        "conviction_score": 0.7281,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "MRU.TO",
-        "name": "Metro Inc.",
-        "reason": "Already near equal-weight target",
-        "value": 75.36,
-        "target_value": 74.84,
-        "conviction_score": 0.6900000000000001,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "CNR.TO",
-        "name": "Canadian National Railway Company",
-        "reason": "Already near equal-weight target",
-        "value": 75.01,
-        "target_value": 74.84,
-        "conviction_score": 0.6841,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "MG.TO",
-        "name": "Magna International Inc.",
-        "reason": "Already near equal-weight target",
-        "value": 74.73,
-        "target_value": 74.84,
-        "conviction_score": 0.6625,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "IFC.TO",
-        "name": "Intact Financial Corporation",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 68.82,
-        "target_value": 74.84,
-        "conviction_score": 0.6528,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "SAP.TO",
-        "name": "Saputo Inc.",
-        "reason": "Already near equal-weight target",
-        "value": 75.36,
-        "target_value": 74.84,
-        "conviction_score": 0.646,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "WSP.TO",
-        "name": "WSP Global Inc.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 73.87,
-        "target_value": 74.84,
-        "conviction_score": 0.5367000000000001,
-        "signal": "buy"
-      }
-    ],
-    "skipped": [],
-    "waitlisted": [
+    "anticipated_holds": [],
+    "skipped": [
       {
         "ticker": "CVE.TO",
         "name": "Cenovus Energy Inc.",
-        "signal": "strong_buy",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 69.43,
         "conviction_score": 0.7705000000000001,
-        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+        "signal": "strong_buy"
+      },
+      {
+        "ticker": "IFC.TO",
+        "name": "Intact Financial Corporation",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 69.43,
+        "conviction_score": 0.6686000000000001,
+        "signal": "buy"
       }
     ],
-    "summary": "Next rebalance would target 13 equal-weight sleeve(s); leave 9 near-target holding(s)."
+    "waitlisted": [],
+    "summary": "Next rebalance would target 14 equal-weight sleeve(s)."
   },
   "alerts": [
     {
@@ -242,7 +183,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 31.53,
+      "mark": 32.42,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -253,7 +194,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 60.24,
+      "mark": 59.95,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -264,7 +205,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 39.82,
+      "mark": 39.85,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -275,7 +216,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 166.68,
+      "mark": 165.03,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -286,7 +227,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 88.58,
+      "mark": 88.49,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -295,9 +236,9 @@
       "ticker": "K.TO",
       "name": "Kinross Gold Corporation",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 39.25,
+      "severity": "watch",
+      "message": "Underwater \u2014 re-check hypothesis: research verdict neutral; still strong_buy",
+      "mark": 39.07,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -308,10 +249,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 258.34,
+      "mark": 256.4,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "RCI-B.TO",
@@ -319,7 +260,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 49.17,
+      "mark": 48.28,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -330,7 +271,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 91.46,
+      "mark": 91.44,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -341,7 +282,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 176.15,
+      "mark": 180.8,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -351,8 +292,8 @@
       "name": "Teck Resources Limited",
       "source": "paper",
       "severity": "info",
-      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 91.7,
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 93.71,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -363,7 +304,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 69.37,
+      "mark": 67.82,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -374,7 +315,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 66.51,
+      "mark": 65.2,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "CVE.TO",
+      "name": "Cenovus Energy Inc.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 44.35,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -395,7 +347,7 @@
       "id": "8e88c089-7a66-4156-a459-2048d84db043",
       "created_at": "2026-09-10T17:42:17.375213+00:00"
     },
-    "cash": 4.58,
+    "cash": 0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -541,6 +493,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-09-16T03:19:12.629549-04:00"
+      },
+      "CVE.TO": {
+        "ticker": "CVE.TO",
+        "shares": 0.103089,
+        "avg_cost": 44.35,
+        "name": "Cenovus Energy Inc.",
+        "sector": "Energy",
+        "currency": "CAD",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-22T03:44:51.899746-04:00"
       }
     },
     "trades": [
@@ -1457,6 +1420,21 @@
         "net_cash": -14.06,
         "note": "Automated buy",
         "name": "Pembina Pipeline Corporation"
+      },
+      {
+        "id": "b950b921-45ad-4eb8-89ea-d31d164afa68",
+        "fund_id": "8e88c089-7a66-4156-a459-2048d84db043",
+        "acted_at": "2026-09-22T03:44:51.899746-04:00",
+        "ticker": "CVE.TO",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.103089,
+        "price": 44.35,
+        "gross": 4.57,
+        "cost": 0.01,
+        "net_cash": -4.58,
+        "note": "Automated buy",
+        "name": "Cenovus Energy Inc."
       }
     ],
     "equity_curve": [
@@ -1670,19 +1648,36 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-22T03:44:51.899746-04:00",
+        "portfolio_value": 517.79,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 14,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CAD": 0.5327
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-21T10:16:46.540211-04:00",
+    "last_mark_at": "2026-09-22T03:44:51.899746-04:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-21T14:16:46.678307+00:00",
+    "generated_at": "2026-09-22T07:44:52.044474+00:00",
     "open_count": 7,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -1696,12 +1691,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "checkpoints_added_this_pass": 1
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-21T14:16:46.679323+00:00",
+    "generated_at": "2026-09-22T07:44:52.045350+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1757,7 +1752,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 6,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 14,
+      "hold_with_data_quality_count": 15,
       "gaps": [
         "hold_recovery closed episodes=6 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -1766,10 +1761,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 12,
+        "count": 13,
         "recovered_to_breakeven": 6,
         "close_reasons": {
-          "open": 12
+          "open": 13
         }
       },
       "closed": {
@@ -1793,12 +1788,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 1,
-      "swap_rotations": 0
+      "hold_episodes": 2,
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -1806,8 +1801,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-21T14:16:46.681299+00:00",
-    "as_of": "2026-09-21T10:16:46.540211-04:00",
+    "updated_at": "2026-09-22T07:44:52.047066+00:00",
+    "as_of": "2026-09-22T03:44:51.899746-04:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1819,24 +1814,24 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 13,
+    "holding_count": 14,
     "underwater_count": 1,
     "thesis_status_counts": {
-      "intact": 9,
+      "intact": 10,
       "weakening": 4,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 13,
+      "holding_count": 14,
       "loser_count": 1,
-      "loser_share": 0.0769,
-      "loser_nav_share": 0.0786,
+      "loser_share": 0.0714,
+      "loser_nav_share": 0.0764,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
-      "intact_loser_count": 1,
-      "weakening_loser_count": 0,
+      "intact_loser_count": 0,
+      "weakening_loser_count": 1,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
@@ -1847,66 +1842,25 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.0833,
-        "dividend": 0.0833,
-        "garp": 0.0833,
+        "quality": 0.0769,
+        "dividend": 0.0769,
+        "garp": 0.0769,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
-      "balancing_hint": "tolerate_intact_losers",
+      "balancing_hint": "maintain",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
-      {
-        "ticker": "TECK-B.TO",
-        "name": "Teck Resources Limited",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": true,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0574,
-        "mark": 91.7,
-        "avg_cost": 97.287,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.6134,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "price drawdown alone does not invalidate value thesis",
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 61%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 61%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
       {
         "ticker": "K.TO",
         "name": "Kinross Gold Corporation",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
-        "underwater": false,
+        "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.047,
-        "mark": 39.25,
+        "unrealized_pct": -0.0513,
+        "mark": 39.07,
         "avg_cost": 41.1837,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -1938,134 +1892,14 @@
         "broken_reasons": []
       },
       {
-        "ticker": "WSP.TO",
-        "name": "WSP Global Inc.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0339,
-        "mark": 176.15,
-        "avg_cost": 182.3323,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5367,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "dividend"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 54%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 54%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "OTEX.TO",
-        "name": "Open Text Corporation",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0292,
-        "mark": 31.53,
-        "avg_cost": 32.4798,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.9117,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 91%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 91%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "MG.TO",
-        "name": "Magna International Inc.",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0283,
-        "mark": 88.58,
-        "avg_cost": 91.1603,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.6625,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "neutral",
-        "reasons": [
-          "research verdict neutral",
-          "still buy",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 66%"
-        ],
-        "weaken_reasons": [
-          "research verdict neutral"
-        ],
-        "broken_reasons": []
-      },
-      {
         "ticker": "RCI-B.TO",
         "name": "Rogers Communications Inc.",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0241,
-        "mark": 49.17,
+        "unrealized_pct": -0.0418,
+        "mark": 48.28,
         "avg_cost": 50.3846,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2098,18 +1932,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "CNR.TO",
-        "name": "Canadian National Railway Company",
+        "ticker": "TECK-B.TO",
+        "name": "Teck Resources Limited",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0127,
-        "mark": 166.68,
-        "avg_cost": 168.8271,
+        "unrealized_pct": -0.0368,
+        "mark": 93.71,
+        "avg_cost": 97.287,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6841,
+        "conviction_score": 0.6134,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2125,71 +1959,31 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 68%"
+          "conviction 61%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 68%"
+          "conviction 61%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
       },
       {
-        "ticker": "IFC.TO",
-        "name": "Intact Financial Corporation",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0093,
-        "mark": 258.34,
-        "avg_cost": 260.7556,
-        "signal": "buy",
-        "timing_signal": "accumulate",
-        "conviction_score": 0.6528,
-        "data_quality_score": 0.95,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.95",
-          "conviction 65%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.95",
-          "conviction 65%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "SAP.TO",
-        "name": "Saputo Inc.",
+        "ticker": "MG.TO",
+        "name": "Magna International Inc.",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0048,
-        "mark": 39.82,
-        "avg_cost": 40.0136,
-        "signal": "strong_buy",
+        "unrealized_pct": -0.0293,
+        "mark": 88.49,
+        "avg_cost": 91.1603,
+        "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.646,
+        "conviction_score": 0.6625,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2199,20 +1993,20 @@
           "risk"
         ],
         "failed_families": [],
-        "research_verdict": "caution",
+        "research_verdict": "neutral",
         "reasons": [
-          "research verdict caution",
-          "still strong_buy",
+          "research verdict neutral",
+          "still buy",
           "cheapness family still passes"
         ],
         "intact_reasons": [
-          "still strong_buy",
+          "still buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 65%"
+          "conviction 66%"
         ],
         "weaken_reasons": [
-          "research verdict caution"
+          "research verdict neutral"
         ],
         "broken_reasons": []
       },
@@ -2223,8 +2017,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0033,
-        "mark": 69.37,
+        "unrealized_pct": -0.0256,
+        "mark": 67.82,
         "avg_cost": 69.6018,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2257,18 +2051,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "ABX.TO",
-        "name": "Barrick Mining Corporation",
+        "ticker": "CNR.TO",
+        "name": "Canadian National Railway Company",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0009,
-        "mark": 60.24,
-        "avg_cost": 60.1861,
-        "signal": "strong_buy",
+        "unrealized_pct": -0.0225,
+        "mark": 165.03,
+        "avg_cost": 168.8271,
+        "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.7955,
+        "conviction_score": 0.705,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2280,18 +2074,58 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 80%"
+          "conviction 70%"
         ],
         "intact_reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 80%"
+          "conviction 70%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "IFC.TO",
+        "name": "Intact Financial Corporation",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0167,
+        "mark": 256.4,
+        "avg_cost": 260.7556,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6686,
+        "data_quality_score": 0.95,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.95",
+          "conviction 67%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.95",
+          "conviction 67%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2303,8 +2137,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0083,
-        "mark": 66.51,
+        "unrealized_pct": -0.0116,
+        "mark": 65.2,
         "avg_cost": 65.9645,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2338,14 +2172,214 @@
         "broken_reasons": []
       },
       {
+        "ticker": "WSP.TO",
+        "name": "WSP Global Inc.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0084,
+        "mark": 180.8,
+        "avg_cost": 182.3323,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.52,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "dividend"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 52%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 52%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "SAP.TO",
+        "name": "Saputo Inc.",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0041,
+        "mark": 39.85,
+        "avg_cost": 40.0136,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.646,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "still strong_buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 65%"
+        ],
+        "weaken_reasons": [
+          "research verdict caution"
+        ],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "ABX.TO",
+        "name": "Barrick Mining Corporation",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0039,
+        "mark": 59.95,
+        "avg_cost": 60.1861,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.7955,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 80%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 80%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "OTEX.TO",
+        "name": "Open Text Corporation",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0018,
+        "mark": 32.42,
+        "avg_cost": 32.4798,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.9117,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 91%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 91%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "CVE.TO",
+        "name": "Cenovus Energy Inc.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 44.35,
+        "avg_cost": 44.35,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.7705,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 77%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 77%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "MRU.TO",
         "name": "Metro Inc.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0121,
-        "mark": 91.46,
+        "unrealized_pct": 0.0119,
+        "mark": 91.44,
         "avg_cost": 90.3689,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2385,7 +2419,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-21T14:16:46.683902+00:00",
+    "generated_at": "2026-09-22T07:44:52.049141+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2393,7 +2427,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 6,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 12,
+      "open_with_thesis": 13,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -2460,8 +2494,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-21T14:16:46.688609+00:00",
-    "open_count": 13,
+    "generated_at": "2026-09-22T07:44:52.052919+00:00",
+    "open_count": 14,
     "closed_count": 7,
     "scored_count": 7,
     "scored_count_all": 7,
@@ -2520,11 +2554,11 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 13,
     "closed_this_pass": 0
   },
-  "generated_at": "2026-09-21T14:16:46.689059+00:00",
+  "generated_at": "2026-09-22T07:44:52.053281+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

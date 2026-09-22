@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-22T07:16:40.446634+00:00",
+  "generated_at": "2026-09-22T07:45:42.205105+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -201,15 +201,15 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 70.1,
+        "remaining_weekly_ops_usd": 59.3,
         "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) — warning only, not a hard cap.",
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 26.4,
-        "estimated_spend_weekly_ops_usd_this_week": 14.4,
-        "estimated_spend_usd_this_cycle": 713.3,
+        "estimated_spend_usd_this_week": 40.8,
+        "estimated_spend_weekly_ops_usd_this_week": 25.2,
+        "estimated_spend_usd_this_cycle": 727.7,
         "week_id": "2026-W39",
         "cycle_id": "2026-09-d8"
       },
@@ -237,7 +237,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-09-21T15:23:02.415470+00:00"
+      "updated_at": "2026-09-22T07:45:37.612337+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -338,10 +338,10 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-09-21T01:12:49.994931+00:00",
+        "at": "2026-09-22T06:52:33.527446+00:00",
         "kind": "ladder_run",
         "title": "Library ladder run (focus euro_depth)",
-        "detail": "shortlist=49 research created=2 updated=0 spend≈0.8"
+        "detail": "shortlist=48 research created=1 updated=0 spend≈0.4"
       },
       {
         "at": "2026-09-20T06:54:20.282932+00:00",
@@ -723,7 +723,7 @@
       }
     ],
     "last_ladder": {
-      "run_at": "2026-09-21T01:12:49.994931+00:00",
+      "run_at": "2026-09-22T06:52:33.527446+00:00",
       "focus_market": "euro_depth",
       "graduated_markets": [
         "sp500",
@@ -780,13 +780,13 @@
           "omxs30",
           "iseq20"
         ],
-        "screen_shortlist": 49,
+        "screen_shortlist": 48,
         "screen_strong_buy": 20,
-        "screen_buy": 29,
-        "research_executed": 2,
-        "research_created": 2,
+        "screen_buy": 28,
+        "research_executed": 1,
+        "research_created": 1,
         "research_updated": 0,
-        "research_estimated_spend_usd": 0.8,
+        "research_estimated_spend_usd": 0.4,
         "graduation_skipped": false,
         "graduated_to": null
       }
@@ -1168,8 +1168,8 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-22T07:16:38.165437+00:00",
-    "queue_ui_updated_at": "2026-09-22T07:16:40.322983+00:00",
+    "compiled_at": "2026-09-22T06:30:43.222216+00:00",
+    "queue_ui_updated_at": "2026-09-22T07:45:42.230720+00:00",
     "task_count": 96,
     "status": {
       "open_count": 0,
@@ -1243,7 +1243,7 @@
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-21T17:53:27.378449+00:00",
+    "generated_at": "2026-09-22T07:45:42.247521+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1513,56 +1513,5 @@
       "tracks_insufficient_epoch_marks": 2,
       "all_benchmark_spans_insufficient": false
     }
-  },
-  "queue_health": {
-    "schema_version": 1,
-    "generated_at": "2026-09-22T07:16:40.446634+00:00",
-    "overall": "idle",
-    "headline": "Queue and hunter idle.",
-    "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
-    },
-    "agent_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "should_dispatch": false,
-      "pause_active": false,
-      "traffic_pause_active": false,
-      "attention_parked_count": 4,
-      "open_count": 0,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 0,
-      "blocked_task_count": 0,
-      "next_task_id": null,
-      "reason": "no open engineering tasks in queue",
-      "detail": "No open engineering tasks — queue is idle."
-    },
-    "queue_clearing": {
-      "pause_active": false,
-      "attention_parked_count": 4,
-      "evaluated_at": "2026-09-22T07:16:39.256431+00:00"
-    },
-    "traffic_control": {
-      "pause_active": false,
-      "stuck_pr_count": 0,
-      "pause_reasons": [],
-      "evaluated_at": "2026-09-21T21:10:56.422636+00:00"
-    },
-    "ops_monitor": {
-      "run_at": "2026-09-21T18:56:17.226028+00:00",
-      "overall": "warn",
-      "should_dispatch_engineering": false
-    },
-    "merges_today": [],
-    "verified_merges_today_count": 0
   }
 }

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-21T01:43:14.884801+00:00
+Track: `buy_tier_level` · updated 2026-09-22T07:44:52.756756+00:00
 
 ## Portfolio loser feedback
 
@@ -12,7 +12,7 @@ Track: `buy_tier_level` · updated 2026-09-21T01:43:14.884801+00:00
 
 ## Holding reviews
 
-### VOW.DE — intact / hold_tolerate (-5.3%)
+### VOW.DE — intact / hold_tolerate (-6.4%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
@@ -20,54 +20,55 @@ Track: `buy_tier_level` · updated 2026-09-21T01:43:14.884801+00:00
 - data_quality 1.00
 - conviction 68%
 
-### ENI.MI — intact / hold_tolerate (-1.8%)
+### ENI.MI — intact / hold_tolerate (-3.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 65%
+- conviction 66%
 
-### ABI.BR — intact / hold_tolerate (-1.7%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 63%
-
-### AD.AS — intact / hold_tolerate (-1.1%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 88%
-
-### MC.PA — intact / hold_tolerate (-1.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 62%
-
-### WKL.AS — intact / hold_tolerate (-0.7%)
+### WKL.AS — intact / hold_tolerate (-1.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
 
-### ADYEN.AS — weakening / watch_review (+0.0%)
-- conviction 34% below intact floor
+### ABI.BR — intact / hold_tolerate (-1.3%)
 - still buy
 - research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 63%
 
-### DG.PA — intact / hold_tolerate (+0.2%)
+### MC.PA — intact / hold_tolerate (-0.4%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 62%
+
+### AD.AS — intact / hold_tolerate (-0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 88%
+
+### DG.PA — intact / hold_tolerate (+1.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 92%
 
-### DHL.DE — intact / hold_tolerate (+0.2%)
+### ADYEN.AS — weakening / watch_review (+1.4%)
+- left buy tier (hold)
+- conviction 27% below intact floor
+- research accumulate
+- cheapness family still passes
+
+### DHL.DE — intact / hold_tolerate (+2.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

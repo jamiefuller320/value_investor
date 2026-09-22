@@ -1,46 +1,44 @@
 {
-  "market_id": "nasdaq100",
-  "assessed_at": "2026-09-22T07:33:34.386892+00:00",
+  "market_id": "cac40",
+  "assessed_at": "2026-09-21T21:06:52.591317+00:00",
   "unmeasured": [],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "TRI",
-      "indexed_without_body": 8,
-      "filings_total": 93,
-      "filings_with_body": 85
-    },
-    {
-      "ticker": "CCEP",
-      "indexed_without_body": 6,
-      "filings_total": 115,
-      "filings_with_body": 109
-    },
-    {
-      "ticker": "PDD",
+      "ticker": "SGO.PA",
       "indexed_without_body": 1,
-      "filings_total": 18,
-      "filings_with_body": 17
+      "filings_total": 2,
+      "filings_with_body": 1
     }
   ],
-  "thin_need_discovery": [],
-  "thin_need_bodies": [],
+  "thin_need_discovery": [
+    "CAP.PA",
+    "EN.PA",
+    "RI.PA",
+    "SGO.PA",
+    "VIE.PA",
+    "URW.PA",
+    "CA.PA"
+  ],
+  "thin_need_bodies": [
+    "SGO.PA"
+  ],
   "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "TRI",
-    "CCEP",
-    "PDD"
+    "SGO.PA"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (3 tickers, top: TRI(8), CCEP(6), PDD(1))"
+    "Prefer indexed-without-body body refetch (1 tickers, top: SGO.PA(1))",
+    "Discovery/IR seed for 7 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 3,
-    "indexed_without_body_rows": 15,
-    "thin_need_discovery": 0,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 1,
+    "indexed_without_body_rows": 1,
+    "thin_need_discovery": 7,
+    "thin_need_bodies": 1
   }
 }
