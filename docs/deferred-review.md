@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:01:25+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:08:15+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -52,6 +52,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260914-01 | Recurring miss pattern: we analyze enacted choices and counterfactuals months later, but only fields frozen at decision time are fair. Default bias should be over-record cheap machine flags (revision_id, bind presence, confidence/risk enums) and under-record expensive prose. | recording, pit, counterfactual, philosophy |
 | frag-20260919-01 | Traffic common-issues log has almost no signal (1 human ruff_format). Live-fetch flakes and hunter-fix tip wipes are not auto-recorded as fix occasions, so EOD common-issues understates recurring CI blockers. | traffic, common-issues, observation |
 | frag-20260919-02 | Sep18 evening eng-agent parks were merge_tree vs concurrent non-eng PR #720 after Composer+pytest already passed — not a simple preflight-reorder. Leave alone while parked-backlog pause holds. | spend, engineering-agent, merge_tree |
+| frag-20260922-01 | Absolute edge decomposes into (1) stock ID / research gate quality (mostly suite-shared inputs) and (2) lifecycle timing/sizing (suite-sensitive via cost interaction). Hold-set drift under different costs can still contaminate realized ID metrics on the book. | learning, suite-b, lifecycle, identification |
 
 ---
 
@@ -195,6 +196,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N143 | **Live universe expansion before stage 2b edge** | Stage 4 live non-UK screen should wait until primary learning track shows after-cost edge; offline library growth (P2) continues. | Stage 2b exit: AI judgment persistent excess after fair costs vs ^FTSE and vs rules |
 | N144 | **Auto-apply decision-review knobs on thin primary history** | Primary ai_judgment still deeply negative on stress book; auto --apply before thick Suite B marks risks locking in churn. Keep proposals observe-only until epoch gates pass. | Primary or fair AI book has thick marks, churn_health ok, and human Sunday prior review greenlights apply |
 | N145 | **Make ai_judgment_fair the is_primary_learning_track flag** | Day-to-day Suite B NAV stability is expected under T212 costs and is not the promotion gate. Keep is_primary on stress ai_judgment until fair AI clears ^FTSE and rules_fair with a thick forward window (N48 human flip). Until then Suite B remains the adoption scoreboard, not the primary flag. | ai_judgment_fair beat_market and beat rules_fair on a thick forward window; Sunday fair-cost gate green; human accepts N48 |
+| N146 | **Switch primary because Suite B NAV beats Suite A** | B-vs-A absolute NAV is mostly cost drag (same picks, lower friction). Do not use it as the primary flip criterion. Short-term steer on within-suite relatives (AI vs rules on same costs) and A churn; flip primary only on thick Suite B absolute edge vs ^FTSE and fair rules (N48). | Revisiting N48 primary flip criteria |
 
 ---
 
