@@ -349,6 +349,26 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-strengthens-financial-resilience-in-2025-strong-fourth-quarter-in-a-challenging-environment-20202/download?disposition=attachment",
         "https://www.volkswagen-group.com/en/publications/more/annual-report-2025-1886",
     ],
+    # dax buy-tier deepen — unmeasured names when ESEF/news miss (eng-20260920-16).
+    "HEI.DE": [
+        "https://www.heidelbergmaterials.com/system/files/2026-03/HM_Annual_Financial_Statements_2025.pdf",
+        "https://www.eqs-news.com/media/document/86940b2a-a5f1-41b6-8b27-6ee13543a147/assets/DE0006047004-JA-2025-EQ-D-00.pdf",
+    ],
+    "DTG.DE": [
+        "https://www.daimlertruck.com/fileadmin/user_upload/documents/investors/reports/annual-reports/2025/daimler-truck-ir-annual-report-2025-incl-combined-management-report-dth-ag.pdf",
+    ],
+    "HNR1.DE": [
+        "https://www.eqs-news.com/media/document/22ee41c6-c9f1-4e10-9033-7e82455c96f5/assets/DE0008402215-JA-2025-EQ-E-00.pdf",
+    ],
+    "HEN3.DE": [
+        "https://www.henkel.com/resource/blob/2131544/eae43b38b5da9c89268a532af1dfbe4f/data/2025-annual-report.pdf",
+    ],
+    "FRE.DE": [
+        "https://report.fresenius.com/2025/annual-report/_assets/downloads/entire-fresenius-ar25.pdf",
+    ],
+    "G1A.DE": [
+        "https://cdn.gea.com/-/media/investors/annual-report/2025/annual-report-2025-en.pdf?rev=332c57163aed46b19f5915ea2da3b747",
+    ],
     # euro_depth IWB blocker — DTE.DE parked awaiting_periodic_report; FY2025 entire annual report PDF.
     "DTE.DE": [
         "https://report.telekom.com/annual-report-2025/_assets/downloads/entire-dtag-ar25.pdf",
@@ -570,6 +590,7 @@ _SEC_ENTITY_NAME_FALLBACK: dict[int, str] = {
 # Cross-listing inheritance for manual IR allowlist URLs (e.g. Amsterdam vs LSE Shell).
 _IR_ALLOWLIST_TICKER_ALIASES: dict[str, tuple[str, ...]] = {
     "SHELL.AS": ("SHEL.L",),
+    "VOW3.DE": ("VOW.DE",),
 }
 
 # filings.xbrl.org entity search aliases when Yahoo/legal names miss the ESEF index.
@@ -588,8 +609,15 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "AGS": ("ageas", "Ageas SA/NV"),
     "UCB": ("UCB", "UCB SA"),
     "VOW": ("Volkswagen", "Volkswagen AG"),
+    "VOW3": ("Volkswagen", "Volkswagen AG"),
     "DTE": ("Deutsche Telekom", "Deutsche Telekom AG"),
     "BAS": ("BASF", "BASF SE"),
+    "HEI": ("Heidelberg Materials", "Heidelberg Materials AG"),
+    "DTG": ("Daimler Truck", "Daimler Truck Holding AG"),
+    "HNR1": ("Hannover Re", "Hannover Rück SE", "Hannover Rueck SE"),
+    "HEN3": ("Henkel", "Henkel AG & Co. KGaA"),
+    "FRE": ("Fresenius", "Fresenius SE & Co. KGaA"),
+    "G1A": ("GEA Group", "GEA Group Aktiengesellschaft"),
     "TTE": ("TotalEnergies", "TotalEnergies SE"),
     "ABI": ("Anheuser-Busch InBev", "Anheuser Busch InBev"),
     "RAND": ("Randstad", "Randstad N.V."),
@@ -4723,6 +4751,9 @@ def _ir_allowlist_period_from_url(url: str) -> str:
     if override:
         return override
     lower = cleaned.lower()
+    # EQS News annual report asset codes (e.g. DE0006047004-JA-2025-EQ-E-00.pdf).
+    if re.search(r"-ja-\d{4}-eq-", lower):
+        return "annual"
     if any(
         token in lower
         for token in (

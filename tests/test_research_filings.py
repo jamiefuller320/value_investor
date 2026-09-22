@@ -6311,6 +6311,38 @@ def test_fetch_filings_ir_allowlist_euro_depth_dte_de_builtins(tmp_path: Path):
     assert "entire-dtag-ar25.pdf" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_dax_unmeasured_builtins(tmp_path: Path):
+    """Regression: dax buy-tier unmeasured — IR allowlist seeds FY2025 statutory PDFs (eng-20260920-16)."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    cases = {
+        "HEI.DE": "heidelbergmaterials.com",
+        "DTG.DE": "daimlertruck.com",
+        "HNR1.DE": "eqs-news.com",
+        "HEN3.DE": "henkel.com",
+        "FRE.DE": "report.fresenius.com",
+        "G1A.DE": "cdn.gea.com",
+    }
+    for ticker, host_fragment in cases.items():
+        rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
+        assert len(rows) >= 1, ticker
+        assert all(row["source"] == "ir_allowlist" for row in rows)
+        assert rows[0]["period"] == "annual"
+        assert host_fragment in rows[0]["url"]
+
+
+def test_fetch_filings_ir_allowlist_vow3_de_inherits_vow_de(tmp_path: Path):
+    """Regression: VOW3.DE preference share inherits VOW.DE IR allowlist rows."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("VOW3.DE", path=allowlist_path)
+    assert len(rows) >= 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert any("volkswagen-group.com" in row["url"] for row in rows)
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_jmt_ls_builtins(tmp_path: Path):
     """Regression: JMT.LS awaiting_periodic_report — reports.jeronimomartins.com FY2025 annual PDF."""
     allowlist_path = tmp_path / "ir.json"
