@@ -402,6 +402,43 @@ def test_merge_task_rows_preserves_merged_status():
     assert merged[0]["id"] == "eng-20260726-01"
 
 
+def test_merge_task_rows_preserves_parked_metadata():
+    """Compile rematch must keep parked_reason/policy (IMB gap-closure recompile bug)."""
+    existing = [
+        {
+            "id": "eng-20260922-01",
+            "area": "ingest",
+            "title": "Close stubborn ingest gaps for IMB.L",
+            "summary": "x",
+            "priority": "high",
+            "priority_score": 88.0,
+            "source": "ingest_gap_closure",
+            "status": "parked",
+            "parked_reason": "preflight blocked PR open — preflight failed",
+            "parked_policy": "preflight_clash",
+            "parked_at": "2026-09-22T01:02:41.607559+00:00",
+            "evidence": {},
+            "acceptance_criteria": [],
+            "allowed_paths": [],
+            "blocked_paths": [],
+        }
+    ]
+    compiled = [
+        _task(
+            "eng-20260922-99",
+            title="Close stubborn ingest gaps for IMB.L (chain 1/3: 0/0 bodies, run igc-new)",
+        )
+    ]
+    merged = _merge_task_rows(existing, compiled)
+    assert len(merged) == 1
+    row = merged[0]
+    assert row["status"] == "parked"
+    assert row["id"] == "eng-20260922-01"
+    assert row["parked_policy"] == "preflight_clash"
+    assert "preflight blocked" in str(row["parked_reason"])
+    assert row["parked_at"] == "2026-09-22T01:02:41.607559+00:00"
+
+
 def test_merge_task_rows_preserves_unmatched_open_tasks():
     existing = [
         _task("eng-20260802-02", title="Reconcile canonical FCF field").to_dict(),

@@ -327,6 +327,8 @@ def should_auto_compile_gap_engineering(
     if stats["attempted"] <= 0 and gap_closure_ticker_has_gaps(
         ticker, data_dir=data_dir, market_id=market_id
     ):
+        if ticker_ir_allowlist_count(ticker) <= 0:
+            return True, "gaps_remain_without_allowlist"
         return True, "gaps_remain_without_refetch"
     return False, "no_actionable_failure"
 
@@ -610,6 +612,104 @@ def trial_refetch_stats(trial: dict[str, Any]) -> dict[str, int]:
     return gap_closure_refetch_stats(trial)
 
 
+ZERO_YIELD_INTENSIVE_COOLDOWN_HOURS = 72.0
+_IWB_LIKE_REASONS = frozenset({"indexed_without_body", "thin_bodies"})
+
+
+def ticker_ir_allowlist_count(ticker: str) -> int:
+    """Count manual IR allowlist URLs for a ticker (0 when unset)."""
+    token = str(ticker or "").strip()
+    if not token:
+        return 0
+    from value_investor.research.filings import fetch_filings_ir_allowlist
+
+    return len(fetch_filings_ir_allowlist(token))
+
+
+def intensive_run_was_zero_yield(run: dict[str, Any]) -> bool:
+    """True when a completed intensive pin did not improve bodies (often empty allowlist)."""
+    outcome = run.get("outcome")
+    if not isinstance(outcome, dict):
+        return False
+    if int(outcome.get("delta_filings_with_body") or 0) > 0:
+        return False
+    for row in outcome.get("per_ticker") or []:
+        if isinstance(row, dict) and row.get("improved"):
+            return False
+    for row in outcome.get("results") or []:
+        if isinstance(row, dict) and row.get("improved"):
+            return False
+    stats = gap_closure_refetch_stats(run)
+    if stats["attempted"] <= 0:
+        return True
+    return stats["fetched"] <= 0
+
+
+def has_recent_zero_yield_intensive_for_ticker(
+    ticker: str,
+    *,
+    within_hours: float = ZERO_YIELD_INTENSIVE_COOLDOWN_HOURS,
+    runs_path: Path | None = None,
+    market_id: str | None = None,
+) -> bool:
+    """True when this ticker already burned an intensive pin with no body gain.
+
+    Prevents stall_slowdown from re-pinning empty-allowlist / dead-IR names every
+    6h; route those to hunter / allowlist eng / exhaustion instead.
+    """
+    token = str(ticker or "").strip().upper()
+    if not token:
+        return False
+    wanted_market = str(market_id or "").strip()
+    store = load_ingest_gap_closure_runs(runs_path)
+    now = datetime.now(UTC)
+    for row in reversed(store.get("runs") or []):
+        if str(row.get("ticker") or "").strip().upper() != token:
+            continue
+        params = row.get("params") or {}
+        if not params.get("intensive_gap_closure"):
+            continue
+        row_market = str(params.get("market_id") or "").strip()
+        row_universe = str(params.get("universe") or "").strip()
+        if wanted_market:
+            if row_market != wanted_market:
+                continue
+        elif row_market or row_universe == "library":
+            continue
+        if not intensive_run_was_zero_yield(row):
+            continue
+        stamp = str(row.get("completed_at") or row.get("recorded_at") or "")
+        if not stamp:
+            continue
+        try:
+            recorded = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        age_hours = (now - recorded).total_seconds() / 3600.0
+        if age_hours <= within_hours:
+            return True
+    return False
+
+
+def _gap_pin_sort_key(
+    *,
+    reason: str,
+    ticker: str,
+    priority_score: float,
+    sticky_rank: dict[str, int],
+) -> tuple[Any, ...]:
+    """Prefer coverage holes, then IWB names that still have IR allowlist URLs."""
+    reason_key = str(reason or "")
+    allow = ticker_ir_allowlist_count(ticker)
+    iwb_without_allowlist = 1 if reason_key in _IWB_LIKE_REASONS and allow <= 0 else 0
+    return (
+        sticky_rank.get(reason_key, 9),
+        iwb_without_allowlist,
+        -float(priority_score or 0.0),
+        str(ticker),
+    )
+
+
 def gap_closure_needs_engineering(run: dict[str, Any]) -> bool:
     """True when a gap-required run did refetches but did not close indexed gaps."""
     if str(run.get("status") or "") != _STATUS_PENDING:
@@ -688,6 +788,7 @@ def select_gap_closure_candidate(
     data_dir: Path = Path("docs/data"),
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
     prefer_paper_holdings: bool = False,
+    runs_path: Path | None = None,
 ) -> dict[str, Any]:
     """Pick the top buy-tier ticker with outstanding ingest gaps."""
     from value_investor.ingest_loop import reports_from_latest
@@ -710,14 +811,57 @@ def select_gap_closure_candidate(
             candidates = paper_candidates
     if not candidates:
         return {"should_dispatch": False, "reason": "no buy-tier tickers with outstanding gaps"}
-    top = candidates[0]
+
+    sticky_rank = {
+        "unmeasured": 0,
+        "zero_body": 1,
+        "indexed_without_body": 2,
+        "thin_bodies": 3,
+    }
+    viable: list[Any] = []
+    skipped_zero_yield = 0
+    for row in candidates:
+        ticker = str(row.ticker or "").strip()
+        if has_recent_zero_yield_intensive_for_ticker(
+            ticker,
+            runs_path=runs_path,
+            market_id=None,
+        ):
+            skipped_zero_yield += 1
+            continue
+        viable.append(row)
+    if not viable:
+        return {
+            "should_dispatch": False,
+            "reason": (
+                "all gap candidates recently burned a zero-yield intensive pin — "
+                "route to hunter / allowlist eng instead of re-pinning"
+            ),
+            "skipped_zero_yield": skipped_zero_yield,
+        }
+    viable = sorted(
+        viable,
+        key=lambda row: _gap_pin_sort_key(
+            reason=str(getattr(row, "reason", "") or ""),
+            ticker=str(row.ticker or ""),
+            priority_score=float(getattr(row, "priority_score", 0.0) or 0.0),
+            sticky_rank=sticky_rank,
+        ),
+    )
+    top = viable[0]
+    reason = str(getattr(top, "reason", "") or "")
+    allow = ticker_ir_allowlist_count(top.ticker)
     return {
         "should_dispatch": True,
         "pin_ticker": top.ticker,
         "reason": (
             f"top gap candidate {top.ticker} "
-            f"(priority_score={top.priority_score}, indexed_without_body={top.indexed_without_body})"
+            f"(priority_score={top.priority_score}, indexed_without_body="
+            f"{getattr(top, 'indexed_without_body', None)}, reason={reason or 'n/a'}, "
+            f"ir_allowlist={allow})"
         ),
+        "ir_allowlist_count": allow,
+        "skipped_zero_yield": skipped_zero_yield,
     }
 
 
@@ -840,6 +984,7 @@ def select_library_gap_closure_candidate(
     health_after: dict[str, Any] | None = None,
     reports: list[Any] | None = None,
     max_candidates: int = 8,
+    runs_path: Path | None = None,
 ) -> dict[str, Any]:
     """Pick the stickiest library buy-tier ticker with outstanding filing gaps."""
     from value_investor.data_library import DEFAULT_LIBRARY_ROOT
@@ -877,10 +1022,11 @@ def select_library_gap_closure_candidate(
     }
     targets = sorted(
         targets,
-        key=lambda row: (
-            sticky_rank.get(str(row.reason), 9),
-            -float(row.priority_score or 0.0),
-            str(row.ticker),
+        key=lambda row: _gap_pin_sort_key(
+            reason=str(row.reason),
+            ticker=str(row.ticker),
+            priority_score=float(row.priority_score or 0.0),
+            sticky_rank=sticky_rank,
         ),
     )
     effective_order = _effective_gap_ticker_priority(health_after)
@@ -896,44 +1042,84 @@ def select_library_gap_closure_candidate(
             targets,
             key=lambda row: (
                 _effective_rank(row),
+                1
+                if str(row.reason) in _IWB_LIKE_REASONS
+                and ticker_ir_allowlist_count(row.ticker) <= 0
+                else 0,
                 -float(row.priority_score or 0.0),
                 str(row.ticker),
             ),
         )
+
+    def _viable(row: Any) -> bool:
+        return not has_recent_zero_yield_intensive_for_ticker(
+            str(row.ticker or ""),
+            runs_path=runs_path,
+            market_id=market,
+        )
+
+    skipped_zero_yield = sum(1 for row in targets if not _viable(row))
+    viable = [row for row in targets if _viable(row)]
+
     prefer = str(prefer_ticker or "").strip().upper()
     if prefer:
-        for row in targets:
-            if str(row.ticker).upper() == prefer:
+        if has_recent_zero_yield_intensive_for_ticker(
+            prefer,
+            runs_path=runs_path,
+            market_id=market,
+        ):
+            prefer = ""
+        else:
+            for row in viable:
+                if str(row.ticker).upper() == prefer:
+                    allow = ticker_ir_allowlist_count(row.ticker)
+                    return {
+                        "should_dispatch": True,
+                        "pin_ticker": row.ticker,
+                        "market_id": market,
+                        "reason": (
+                            f"preferred sticky ticker {row.ticker} "
+                            f"(reason={row.reason}, indexed_without_body="
+                            f"{row.indexed_without_body}, ir_allowlist={allow})"
+                        ),
+                        "ir_allowlist_count": allow,
+                        "skipped_zero_yield": skipped_zero_yield,
+                    }
+            if library_ingest_ticker_has_gaps(prefer, market_id=market, library_root=root):
+                allow = ticker_ir_allowlist_count(prefer)
                 return {
                     "should_dispatch": True,
-                    "pin_ticker": row.ticker,
+                    "pin_ticker": prefer,
                     "market_id": market,
                     "reason": (
-                        f"preferred sticky ticker {row.ticker} "
-                        f"(reason={row.reason}, indexed_without_body={row.indexed_without_body})"
+                        f"preferred sticky ticker {prefer} still has filing gaps "
+                        f"(ir_allowlist={allow})"
                     ),
+                    "ir_allowlist_count": allow,
+                    "skipped_zero_yield": skipped_zero_yield,
                 }
-        if library_ingest_ticker_has_gaps(prefer, market_id=market, library_root=root):
-            return {
-                "should_dispatch": True,
-                "pin_ticker": prefer,
-                "market_id": market,
-                "reason": f"preferred sticky ticker {prefer} still has filing gaps",
-            }
-    if not targets:
+    if not viable:
         return {
             "should_dispatch": False,
-            "reason": f"no {market} buy-tier tickers with outstanding filing gaps",
+            "reason": (
+                f"no {market} buy-tier gap candidates left after skipping recent "
+                "zero-yield intensive pins — route to hunter / allowlist eng"
+            ),
+            "skipped_zero_yield": skipped_zero_yield,
         }
-    top = targets[0]
+    top = viable[0]
+    allow = ticker_ir_allowlist_count(top.ticker)
     return {
         "should_dispatch": True,
         "pin_ticker": top.ticker,
         "market_id": market,
         "reason": (
             f"top {market} gap candidate {top.ticker} "
-            f"(reason={top.reason}, indexed_without_body={top.indexed_without_body})"
+            f"(reason={top.reason}, indexed_without_body={top.indexed_without_body}, "
+            f"ir_allowlist={allow})"
         ),
+        "ir_allowlist_count": allow,
+        "skipped_zero_yield": skipped_zero_yield,
     }
 
 
@@ -1066,6 +1252,7 @@ def evaluate_library_ingest_gap_closure_followup(
         prefer_ticker=prefer,
         health_after=health_after,
         reports=reports,
+        runs_path=runs_path,
     )
     if not candidate.get("should_dispatch"):
         return candidate
@@ -1202,6 +1389,7 @@ def evaluate_weekly_gap_closure_followup(
         data_dir=data_dir,
         suggestions_path=suggestions_path,
         prefer_paper_holdings=False,
+        runs_path=runs_path,
     )
     if not candidate.get("should_dispatch"):
         return candidate
@@ -1243,6 +1431,7 @@ def evaluate_eng_idle_gap_closure_dispatch(
         data_dir=data_dir,
         suggestions_path=suggestions_path,
         prefer_paper_holdings=True,
+        runs_path=runs_path,
     )
     if not candidate.get("should_dispatch"):
         return candidate

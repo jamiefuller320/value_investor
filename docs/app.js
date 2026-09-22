@@ -201,6 +201,22 @@ function overallStatusBadge(status) {
 function renderProgressReport(data) {
   const report = data.progress_report;
   const runbookUrl = githubOpsDocUrl("docs/ops/progress-report.md");
+  const bridgeUrl = githubOpsDocUrl("docs/ops/dashboard-bridge.md");
+  const generateHelp = `
+      <p class="small muted" style="margin-top:0.75rem">
+        <strong>Generate fresh report</strong> queues via the Supabase dashboard bridge
+        (no browser token). Local serve uses <code>POST /api/progress-report</code>.
+        ${bridgeUrl ? `<a href="${esc(bridgeUrl)}" target="_blank" rel="noopener">Bridge runbook</a>` : ""}
+        ${runbookUrl ? ` · <a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Progress report runbook</a>` : ""}
+      </p>
+      <details class="overview-secondary" style="margin-top:0.5rem">
+        <summary class="small">Legacy Pages token (optional fallback)</summary>
+        <p class="small muted" style="margin:0.35rem 0">
+          Only needed if Supabase bridge is disabled. Prefer Actions →
+          <code>Dashboard bridge worker</code> → Run workflow to drain the queue.
+        </p>
+        <button type="button" class="btn" id="progress-report-token-btn" title="Fine-grained PAT fallback">Configure Pages token</button>
+      </details>`;
   if (!report) {
     return `
     <div class="card progress-report-card" style="margin-top:1rem" id="progress-report-card">
@@ -209,16 +225,14 @@ function renderProgressReport(data) {
         <div class="progress-report-actions">
           <button type="button" class="btn btn-primary" id="progress-report-generate-btn">Generate fresh report</button>
           <button type="button" class="btn" id="progress-report-reload-btn">Reload</button>
-          <button type="button" class="btn" id="progress-report-token-btn" title="Fine-grained PAT for Pages generate">Pages token</button>
         </div>
       </div>
-      <p class="muted small">No published progress report yet.</p>
+      <p class="muted small">No published progress report yet (or the published JSON failed to load).</p>
       <p class="small">
-        On GitHub Pages, Generate dispatches the <code>progress-report</code> workflow
-        (configure a one-time PAT with <strong>Pages token</strong>).
-        Locally use <code>ftse-dashboard-serve</code> or <code>ftse-progress-report build --write</code>.
+        Click <strong>Generate fresh report</strong> — on GitHub Pages this goes through Supabase,
+        then the weekday bridge worker dispatches Actions (same path as Lifecycle Acknowledge).
       </p>
-      ${runbookUrl ? `<p class="small"><a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Runbook</a></p>` : ""}
+      ${generateHelp}
       <p class="small muted" id="progress-report-status" aria-live="polite"></p>
     </div>`;
   }
@@ -373,6 +387,78 @@ function renderProgressReport(data) {
         </div>
       </section>`;
 
+  const lifecycleAcks = report.lifecycle_acks || {};
+  const pendingAcks = lifecycleAcks.pending || [];
+  const ackedRows = lifecycleAcks.acked || [];
+  const pendingAckCount = Number(lifecycleAcks.pending_count || pendingAcks.length || 0);
+  const ackedAckCount = Number(lifecycleAcks.acked_count || ackedRows.length || 0);
+  const lifecycleDocUrl = githubOpsDocUrl("docs/ops/position-lifecycle.md", "entry-dca-adoption-plan");
+  let lifecycleAckList = "";
+  if (pendingAcks.length) {
+    lifecycleAckList = `<ul class="list-plain small so-what-gate-list">${pendingAcks
+      .map((row) => {
+        const ack = row.acknowledge || {};
+        const payload = JSON.stringify(
+          ack.payload || {
+            experiment_id: row.experiment_id,
+            factor_id: "progress_report",
+            kind: "human_ack",
+            decision: "ack_observe",
+          }
+        );
+        const enabled = ack.enabled !== false;
+        return `<li class="so-what-gate-item">
+            <div class="so-what-gate-group-head">
+              <strong>${esc(row.experiment_id || "—")}</strong>
+              <span class="muted so-what-gate-kind">${esc(row.kind || "experiment")}</span>
+              <button type="button" class="btn btn-primary"
+                data-progress-ack="${esc(payload)}"
+                ${enabled ? "" : "disabled"}
+                title="${esc(enabled ? "Record observe-only ack via Supabase" : "Already acknowledged")}">
+                Acknowledge
+              </button>
+            </div>
+            <span class="so-what-gate-action">${esc(row.title || "")}</span>
+          </li>`;
+      })
+      .join("")}</ul>`;
+  } else {
+    lifecycleAckList = '<p class="small muted">No recommend experiments waiting on Acknowledge.</p>';
+  }
+  let lifecycleAckedList = "";
+  if (ackedRows.length) {
+    lifecycleAckedList = `<ul class="list-plain small">${ackedRows
+      .slice(0, 6)
+      .map(
+        (row) =>
+          `<li><strong>${esc(row.experiment_id || "—")}</strong> ${esc(row.title || "")}
+            <span class="muted">· acked ${esc(fmtDate(row.acked_at))}</span></li>`
+      )
+      .join("")}</ul>`;
+  } else {
+    lifecycleAckedList = '<p class="small muted">None recorded yet.</p>';
+  }
+  const lifecycleAckSection = `
+      <section class="so-what-section${pendingAckCount > 0 ? " so-what-section-attention" : ""}" style="margin-top:0.75rem">
+        <div class="so-what-section-header">
+          <h4>Lifecycle observe-acks</h4>
+          ${lifecycleDocUrl ? `<a class="small" href="${esc(lifecycleDocUrl)}" target="_blank" rel="noopener">Lifecycle runbook</a>` : ""}
+        </div>
+        <p class="small muted" style="margin-top:0">
+          Same observe-only Acknowledge as the Lifecycle cards — queued through Supabase
+          (does not execute DCA or change starter fraction).
+          Pending <strong>${esc(String(pendingAckCount))}</strong>
+          · acked <strong>${esc(String(ackedAckCount))}</strong>
+          ${overallStatusBadge(lifecycleAcks.overall || "ok")}
+        </p>
+        ${lifecycleAckList}
+        <details class="overview-secondary" style="margin-top:0.5rem">
+          <summary class="small">Recently acked (${esc(String(ackedAckCount))})</summary>
+          ${lifecycleAckedList}
+        </details>
+        <p class="small muted" id="progress-lifecycle-ack-status" aria-live="polite"></p>
+      </section>`;
+
   return `
     <div class="card progress-report-card" style="margin-top:1rem" id="progress-report-card">
       <div class="progress-report-header">
@@ -387,11 +473,11 @@ function renderProgressReport(data) {
           <button type="button" class="btn btn-primary" id="progress-report-generate-btn">Generate fresh report</button>
           <button type="button" class="btn" id="progress-report-reload-btn">Reload</button>
           <button type="button" class="btn" id="progress-report-view-btn">View full report</button>
-          <button type="button" class="btn" id="progress-report-token-btn" title="Fine-grained PAT for Pages generate">Pages token</button>
         </div>
       </div>
       <p>${esc(headline)}</p>
       ${soWhatSection}
+      ${lifecycleAckSection}
       <div class="grid" style="margin-top:0.75rem">
         <div class="setting-row"><span class="setting-label">Deferred now</span><span class="setting-value">${esc(String(counts.defer_now ?? 0))}</span></div>
         <div class="setting-row"><span class="setting-label">Open fragments</span><span class="setting-value">${esc(String(counts.open_fragments ?? 0))}</span></div>
@@ -415,12 +501,7 @@ function renderProgressReport(data) {
           </section>
         </div>
       </details>
-      <p class="small muted" style="margin-top:0.75rem">
-        GitHub Pages: Generate dispatches the <code>progress-report</code> Actions workflow
-        (one-time PAT via <strong>Pages token</strong>).
-        Local: <code>ftse-dashboard-serve</code> or <code>ftse-progress-report build --write</code>.
-        ${runbookUrl ? ` <a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Runbook</a>` : ""}
-      </p>
+      ${generateHelp}
       <p class="small muted" id="progress-report-status" aria-live="polite"></p>
     </div>
   `;
@@ -807,7 +888,15 @@ async function generateProgressReportFromUi() {
         }
       } catch (bridgeErr) {
         if (String(bridgeErr.message) !== "BRIDGE_DISABLED") {
-          setProgressReportStatus(`Bridge generate failed: ${bridgeErr.message}`, true);
+          const msg = String(bridgeErr.message || bridgeErr);
+          if (/timed out waiting for dashboard command/i.test(msg)) {
+            setProgressReportStatus(
+              "Queued in Supabase, but the GitHub bridge worker has not picked it up yet. Run Actions → Dashboard bridge worker → Run workflow, then Reload.",
+              true
+            );
+            return;
+          }
+          setProgressReportStatus(`Bridge generate failed: ${msg}`, true);
           return;
         }
       }
@@ -815,7 +904,7 @@ async function generateProgressReportFromUi() {
     const token = getProgressReportPat();
     if (!token) {
       showProgressReportPatPrompt(
-        "Configure Supabase in data/dashboard_config.json (recommended) or save a PAT to dispatch Actions from this button."
+        "Supabase bridge unavailable. Prefer enabling data/dashboard_config.json, or save a legacy PAT as a last resort."
       );
       return;
     }
@@ -862,17 +951,20 @@ function bindProgressReportActions() {
       void openProgressReportMarkdown();
     } else if (target.id === "progress-report-token-btn") {
       event.preventDefault();
-      showProgressReportPatPrompt("Configure the GitHub Pages generate token.");
+      showProgressReportPatPrompt("Legacy fallback only — prefer Supabase Generate / Dashboard bridge worker.");
     } else if (target.id === "progress-report-pat-save-btn") {
       event.preventDefault();
       handleProgressReportPatSave();
     } else if (target.id === "progress-report-pat-actions-btn") {
       event.preventDefault();
       window.open(PROGRESS_REPORT_ACTIONS_URL, "_blank", "noopener");
-    } else     if (target.id === "progress-report-pat-clear-btn") {
+    } else if (target.id === "progress-report-pat-clear-btn") {
       event.preventDefault();
       clearProgressReportPat();
       setProgressReportStatus("Cleared saved Pages generate token.");
+    } else if (target.hasAttribute("data-progress-ack")) {
+      event.preventDefault();
+      void acknowledgeLifecycleExperimentFromProgressReport(target);
     } else if (target.dataset.marketId) {
       event.preventDefault();
       openMarketStatusCard(target.dataset.marketId);
@@ -4149,6 +4241,114 @@ function openLifecycleExperimentCard(factorId) {
     });
   }
   dialog.showModal();
+}
+
+async function acknowledgeLifecycleExperimentFromProgressReport(button) {
+  const statusEl = document.getElementById("progress-lifecycle-ack-status");
+  const setStatus = (msg, isError) => {
+    if (!statusEl) return;
+    statusEl.textContent = msg || "";
+    statusEl.classList.toggle("progress-report-status-error", Boolean(isError));
+  };
+  let payload = {};
+  try {
+    payload = JSON.parse(button.getAttribute("data-progress-ack") || "{}");
+  } catch (err) {
+    setStatus("Invalid ack payload", true);
+    return;
+  }
+  if (!payload.experiment_id) {
+    setStatus("Missing experiment id", true);
+    return;
+  }
+  button.disabled = true;
+  setStatus("Acknowledging…");
+  try {
+    const local = await fetch("/api/lifecycle-experiment-ack", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (local.ok) {
+      const body = await local.json();
+      if (!body.ok) throw new Error(body.error || "Ack API failed");
+      setStatus("Ack recorded — refreshing report…");
+      try {
+        const regen = await fetch("/api/progress-report", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: "{}",
+        });
+        if (regen.ok) {
+          await reloadDashboard({ silent: true, rebuild: true });
+          setStatus("Observe-ack recorded · progress report refreshed");
+          return;
+        }
+      } catch {
+        /* fall through to dashboard reload */
+      }
+      await reloadDashboard({ silent: true, rebuild: true });
+      setStatus("Observe-ack recorded — click Generate fresh report to refresh this checklist");
+      return;
+    }
+    if (local.status !== 404 && local.status !== 405) {
+      let detail = `HTTP ${local.status}`;
+      try {
+        const body = await local.json();
+        detail = body.error || detail;
+      } catch {
+        /* ignore */
+      }
+      throw new Error(detail);
+    }
+  } catch (err) {
+    if (!(err instanceof TypeError) && String(err.message) !== "API_UNAVAILABLE") {
+      if (!String(err.message).includes("Failed to fetch")) {
+        setStatus(`Ack failed: ${err.message}`, true);
+        button.disabled = false;
+        return;
+      }
+    }
+  }
+  if (!window.DashboardBridge) {
+    setStatus("Supabase bridge unavailable", true);
+    button.disabled = false;
+    return;
+  }
+  try {
+    const bridgeReady = await window.DashboardBridge.init();
+    if (!bridgeReady) throw new Error("BRIDGE_DISABLED");
+    await window.DashboardBridge.submitCommand(
+      "lifecycle-experiment-ack",
+      payload,
+      (msg) => setStatus(msg || "Queued via Supabase…")
+    );
+    setStatus("Ack dispatched — queueing progress-report refresh…");
+    await window.DashboardBridge.submitCommand(
+      "progress-report",
+      { force: true },
+      (msg) => setStatus(msg || "Queued progress-report…")
+    );
+    setStatus("Waiting for Pages to publish refreshed report…");
+    const previousGeneratedAt =
+      dashboardData && dashboardData.progress_report
+        ? dashboardData.progress_report.generated_at
+        : null;
+    await waitForPublishedProgressReport(previousGeneratedAt, setStatus);
+    await reloadDashboard({ silent: true, rebuild: true });
+    setStatus("Observe-ack recorded · progress report refreshed via Supabase");
+  } catch (err) {
+    const msg = String(err.message || err);
+    if (/timed out waiting for dashboard command/i.test(msg)) {
+      setStatus(
+        "Queued in Supabase — run Actions → Dashboard bridge worker → Run workflow, then Reload.",
+        true
+      );
+    } else {
+      setStatus(`Bridge ack failed: ${msg}`, true);
+    }
+    button.disabled = false;
+  }
 }
 
 async function acknowledgeLifecycleExperimentFromCard(button) {

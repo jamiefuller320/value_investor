@@ -460,7 +460,12 @@ def select_clash_aware_dispatch_tasks(
     repo_root: Path | None = None,
     skip_merge_tree: bool = False,
 ) -> tuple[list[EngineeringTask], list[TaskDispatchReport]]:
-    """Pick highest-priority open tasks that are not blocked by clashes."""
+    """Pick highest-priority open tasks that are not blocked by clashes.
+
+    After the first pick, prefer a complementary ``area`` (e.g. scoring next to
+    ingest) among still-eligible tasks so two slots buy more impact with fewer
+    same-hotspot merge clashes.
+    """
     clash_scan = "partial" if not open_prs else "full"
     cache: dict[int, list[str]] = {}
     pr_index = build_open_pr_file_index(open_prs, repo=repo, cache=cache)
@@ -469,13 +474,13 @@ def select_clash_aware_dispatch_tasks(
     for pr in pr_index:
         occupied_files.update(pr.get("changed_files") or [])
 
-    selected: list[EngineeringTask] = []
-    all_reports: list[TaskDispatchReport] = []
-    rank = 0
-
     from value_investor.engineering_tasks import select_engineering_tasks
 
-    for task in select_engineering_tasks(data, max_tasks=999):
+    ranked = list(select_engineering_tasks(data, max_tasks=999))
+    pending: list[tuple[int, EngineeringTask, list[str], TaskDispatchReport]] = []
+    all_reports: list[TaskDispatchReport] = []
+
+    for priority_index, task in enumerate(ranked):
         branch = str(task.branch_name or "").strip()
         files = git_changed_files_vs_main(branch, repo_root=repo_root) if branch else []
         if not files:
@@ -493,20 +498,55 @@ def select_clash_aware_dispatch_tasks(
             clash_scan=clash_scan,
         )
         all_reports.append(report)
+        if report.dispatch_eligible:
+            pending.append((priority_index, task, files, report))
 
+    selected: list[EngineeringTask] = []
+    selected_areas: set[str] = set()
+    rank = 0
+    limit = max(0, int(max_tasks))
+
+    while pending and len(selected) < limit:
+        def _pick_key(item: tuple[int, EngineeringTask, list[str], TaskDispatchReport]) -> tuple:
+            priority_index, task, _files, _report = item
+            area = str(task.area or "").strip().lower()
+            # Prefer a different area once we already hold a slot.
+            same_area = 1 if selected_areas and area in selected_areas else 0
+            return (same_area, priority_index)
+
+        pending.sort(key=_pick_key)
+        priority_index, task, files, report = pending.pop(0)
+
+        # Re-check against paths occupied by already-selected siblings.
+        report = predict_task_clashes(
+            task,
+            occupied_paths=occupied_paths,
+            open_pr_index=pr_index,
+            candidate_files=files,
+            candidate_branch=str(task.branch_name or "").strip() or None,
+            occupied_files=occupied_files,
+            repo_root=repo_root,
+            skip_merge_tree=skip_merge_tree,
+            clash_scan=clash_scan,
+        )
+        # Replace the initial eligibility report for this task id.
+        for idx, existing in enumerate(all_reports):
+            if existing.task.id == task.id:
+                all_reports[idx] = report
+                break
         if not report.dispatch_eligible:
             continue
 
         rank += 1
         report.effective_dispatch_rank = rank
         selected.append(task)
+        area = str(task.area or "").strip().lower()
+        if area:
+            selected_areas.add(area)
         for path in effective_allowed_paths(task):
             if path not in occupied_paths:
                 occupied_paths.append(path)
         occupied_files.update(files)
-
-        if len(selected) >= max(0, int(max_tasks)):
-            break
 
     return selected, all_reports
 

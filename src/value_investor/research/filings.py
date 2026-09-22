@@ -1392,6 +1392,29 @@ def _is_index_noise_row(row: dict[str, Any]) -> bool:
     return False
 
 
+def _is_routine_own_share_or_pdmr_row(row: dict[str, Any]) -> bool:
+    """Daily buyback / PDMR RNS — not a statutory or material financing gap."""
+    headline = _headline_blob(row)
+    return "transaction in own shares" in headline or "director/pdmr" in headline
+
+
+def filing_lacks_material_body(row: dict[str, Any]) -> bool:
+    """
+    True when a missing body should count toward ingest gap / IWB scoring.
+
+    Excludes index-noise wrappers and routine own-shares / PDMR rows so names
+    like IMB.L (statutory covered; leftover TVR buybacks) do not keep minting
+    stubborn gap-closure engineering tasks.
+    """
+    if row.get("has_body"):
+        return False
+    if _is_index_noise_row(row):
+        return False
+    if _is_routine_own_share_or_pdmr_row(row):
+        return False
+    return True
+
+
 def _is_rns_body_fetch_candidate(row: dict[str, Any]) -> bool:
     """True when a row points at Investegate or LSE RNS content worth body-fetching."""
     url = str(row.get("url") or "")
