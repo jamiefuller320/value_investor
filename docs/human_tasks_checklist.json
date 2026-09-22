@@ -362,16 +362,16 @@
         {
           "id": "adhoc-ops-monitor-catchup-cron",
           "title": "Register ops-monitor 13:15 UTC catch-up on cron-job.org",
-          "summary": "After merging email-deferral catch-up, run import_cron_jobs.py --job ops-monitor-catchup (or --all) so external primary fires daily 13:15 UTC. GitHub schedule alone is backup. Verify with gh run list --workflow=ops-monitor.yml.",
-          "automated": false,
+          "summary": "Already live on cron-job.org (title FTSE ops monitor catch-up). Re-import only if deleted: import_cron_jobs.py --job ops-monitor-catchup. GitHub schedule is backup. Verify with gh run list --workflow=ops-monitor.yml.",
+          "automated": true,
           "doc_path": "docs/ops/ops-monitor.md",
           "doc_anchor": "email-deferral-day-complete-gate"
         },
         {
           "id": "adhoc-project-traffic-cron-register",
           "title": "Register project-traffic weekday crons",
-          "summary": "After project-traffic merge, upsert cron-job.org jobs for weekdays 12:30 and 17:30 UTC dispatching project-traffic.yml (GitHub schedule is backup only).",
-          "automated": false,
+          "summary": "Already live on cron-job.org (midday 12:30 + EOD 17:30 UTC weekdays). Re-import only if deleted: import_cron_jobs.py --job project-traffic-midday --job project-traffic-eod. GitHub schedule is backup only.",
+          "automated": true,
           "doc_path": "docs/ops/project-traffic.md",
           "doc_anchor": "schedule"
         },
@@ -386,8 +386,8 @@
         {
           "id": "adhoc-gha-secret-hygiene-cron",
           "title": "Register daily GHA secret-hygiene cron on cron-job.org",
-          "summary": "After merging gha-secret-hygiene.yml, run import_cron_jobs.py --job gha-secret-hygiene (or --all) so external primary fires daily 06:20 UTC. GitHub schedule alone is backup. Verify with gh run list --workflow=gha-secret-hygiene.yml.",
-          "automated": false,
+          "summary": "Already live on cron-job.org (title GHA secret hygiene). Re-import only if deleted: import_cron_jobs.py --job gha-secret-hygiene. GitHub schedule is backup. Verify with gh run list --workflow=gha-secret-hygiene.yml.",
+          "automated": true,
           "doc_path": "docs/ops/gha-secret-hygiene.md",
           "doc_anchor": "automated-daily-check"
         },
