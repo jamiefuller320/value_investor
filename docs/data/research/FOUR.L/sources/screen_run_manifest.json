@@ -1,18 +1,18 @@
 {
   "ticker": "FOUR.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-15T13:10:38.382453+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-09-21T16:54:50.935061+00:00",
+  "attached_at": "2026-09-22T11:05:26.650317+00:00",
+  "history_run_path": "docs/data/history/run_20260921_165450.json.gz",
+  "history_models_path": "docs/data/history/models_20260921_165450.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
-      "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "strong_buy": 13,
+      "buy": 46,
+      "hold": 131,
+      "avoid": 58
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 13,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 16,
+      "buy": 29,
+      "hold": 41,
+      "avoid": 16
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -30,45 +33,68 @@
   "ticker_signal": {
     "ticker": "FOUR.L",
     "signal": "buy",
-    "conviction_score": 0.44433749999999994,
+    "conviction_score": 0.343043,
     "data_quality_score": 1.0,
     "name": "4imprint Group plc",
     "sector": "Communication Services",
     "timing_signal": "neutral",
     "timing_score": 0.5,
-    "action_note": "Buy — neutral timing",
-    "models_passed": 10.0,
-    "weighted_model_score": 0.663959090909091,
+    "action_note": "Buy — neutral timing | FCF basis mismatch: filing £127M | company-adj $74.6M | FCF definition divergence",
+    "models_passed": 9.0,
+    "weighted_model_score": 0.6613181818181818,
     "research_verdict": null,
     "adjusted_signal": "hold",
     "research_as_of": null,
     "research_confidence": null,
     "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": -0.030716723549488054,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": -0.030716723549488054,
     "signal_trend": "stable",
-    "weeks_at_signal": 10,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": 0.08767091809309605,
+    "weeks_at_signal": 12,
+    "passed_families": "cheapness,quality,garp,risk",
+    "price_vs_sma200_pct": 0.13816224471219457,
     "core_order": "limit",
-    "core_limit": 4226.32,
+    "core_limit": 4369.48,
     "core_allocation_pct": 0.6,
-    "tactical_limit": 3924.91,
+    "tactical_limit": 3937.93,
     "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 3797.68,
-    "tactical_take_profit": 4298.41,
-    "trade_plan_summary": "Trade plan: core 60% limit £4226.32; tactical 40% limit £3924.91; tactical stop £3797.68, target £4298.41.",
-    "atr_14": 235.6672,
-    "volume_ratio_20": 0.2284,
+    "tactical_stop_loss": 3819.79,
+    "tactical_take_profit": 4840.56,
+    "trade_plan_summary": "Trade plan: core 60% limit £4369.48; tactical 40% limit £3937.93; tactical stop £3819.79, target £4840.56.",
+    "atr_14": 224.0025,
+    "volume_ratio_20": 0.7147,
     "operating_cashflow": 130900000.0,
     "operating_cashflow_gross": 7000000.0,
     "fcf_dividend_coverage_gross": 0.021708683473389355,
     "fcf_dividend_coverage_net": 0.8893557422969187,
-    "fcf_definition_divergence": false,
+    "fcf_definition_divergence": true,
     "fcf_divergence_flagged": true,
-    "fcf_dividend_coverage": null
+    "fcf_dividend_coverage": {
+      "statutory_ocf_minus_capex": {
+        "label": "Statutory OCF−CapEx",
+        "ratio": 0.8893557422969187
+      },
+      "management_cash_generated_minus_capex": {
+        "label": "Management cash-generated−CapEx",
+        "ratio": 0.021708683473389355
+      }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 0.89× vs management 0.02×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -105,7 +131,7 @@
       "ticker": "FOUR.L",
       "model_id": "earnings_yield",
       "passed": false,
-      "score": 0.5223
+      "score": 0.502
     },
     {
       "ticker": "FOUR.L",
@@ -129,7 +155,7 @@
       "ticker": "FOUR.L",
       "model_id": "neff_pegy",
       "passed": true,
-      "score": 0.9609
+      "score": 0.9588
     },
     {
       "ticker": "FOUR.L",
@@ -158,26 +184,26 @@
     {
       "ticker": "FOUR.L",
       "model_id": "dividend_growth",
-      "passed": true,
+      "passed": false,
       "score": 0.6667
     },
     {
       "ticker": "FOUR.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.927
+      "score": 0.9223
     },
     {
       "ticker": "FOUR.L",
       "model_id": "acquirers_multiple",
       "passed": true,
-      "score": 0.8084
+      "score": 0.8131
     },
     {
       "ticker": "FOUR.L",
       "model_id": "dreman_contrarian",
       "passed": false,
-      "score": 0.4455
+      "score": 0.4348
     },
     {
       "ticker": "FOUR.L",
@@ -189,7 +215,7 @@
       "ticker": "FOUR.L",
       "model_id": "composite_value",
       "passed": false,
-      "score": 0.6291
+      "score": 0.6041
     },
     {
       "ticker": "FOUR.L",
@@ -204,6 +230,6 @@
       "score": 1.0
     }
   ],
-  "models_passed": 10,
+  "models_passed": 9,
   "models_total": 22
 }
