@@ -67,11 +67,37 @@ def test_ack_records_observe_only(tmp_path: Path):
     assert Path(result["lifecycle_board_path"]).exists()
 
 
-def test_ack_rejects_optional_execute(tmp_path: Path):
-    _seed(tmp_path)
-    with pytest.raises(ValueError, match="human_ack"):
-        run_lifecycle_experiment_ack(
-            tmp_path,
-            experiment_id="entry_dca_overlay",
-            kind="optional_execute",
-        )
+def test_ack_canonicalizes_catalog_track_alias(tmp_path: Path):
+    paper = tmp_path / "paper_automation"
+    paper.mkdir(parents=True)
+    write_json(
+        tmp_path / "experiment_assessment.json",
+        {
+            "schema_version": 1,
+            "experiments": [
+                {
+                    "experiment_id": "graduated_allocation",
+                    "status": "recommend",
+                    "human_ack_required": True,
+                    "human_acked": False,
+                    "gate_marks": 12,
+                    "gate_excess_after_costs": 0.04,
+                }
+            ],
+        },
+    )
+    write_json(tmp_path / "experiment_acks.json", {"schema_version": 1, "acks": []})
+    write_json(tmp_path / "latest.json", {"reports": [], "run_at": "2026-09-14T00:00:00Z"})
+    write_json(paper / "learning_tracks_entry_dca.json", {"tracks": {}})
+    result = run_lifecycle_experiment_ack(
+        tmp_path,
+        experiment_id="graduated_allocation_track",
+        factor_id="entry_appetite",
+        kind="human_ack",
+    )
+    assert result["ok"] is True
+    assert result["experiment_id"] == "graduated_allocation"
+    assert result["requested_experiment_id"] == "graduated_allocation_track"
+    assert result["ack"]["experiment_id"] == "graduated_allocation"
+    assert "factor=entry_appetite" in result["ack"]["note"]
+

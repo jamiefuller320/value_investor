@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-21T17:54:04.027223+00:00",
+  "updated_at": "2026-09-22T08:17:20.053003+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -32,7 +32,7 @@
     "continue": 3,
     "recommend": 2,
     "proposed": 0,
-    "human_ack_pending": 1,
+    "human_ack_pending": 0,
     "total": 10
   },
   "experiments": [
@@ -140,7 +140,7 @@
       "pipeline": "paper_automation",
       "status": "recommend",
       "source_status": "surviving",
-      "human_ack_required": true,
+      "human_ack_required": false,
       "track_id": "graduated_allocation",
       "gate_marks": 11,
       "gate_excess_after_costs": 0.0109,
@@ -151,7 +151,10 @@
         "use_graduated_allocation": true
       },
       "evidence_path": "docs/data/paper_automation/markets/euro_depth/graduated_allocation/config.json",
-      "initiated_at": "2026-09-07T08:30:22.057015+00:00"
+      "initiated_at": "2026-09-07T08:30:22.057015+00:00",
+      "human_acked": true,
+      "acked_at": "2026-09-22T08:14:45.342024+00:00",
+      "ack_decision": "ack_observe"
     },
     {
       "experiment_id": "momentum_grace",
@@ -328,18 +331,7 @@
       "evidence_path": "docs/data/learning_director_tasks.json"
     }
   ],
-  "recommendations": [
-    {
-      "experiment_id": "graduated_allocation",
-      "kind": "experimental_paper_track",
-      "title": "Screen rules + graduated allocation",
-      "pipeline": "paper_automation",
-      "track_id": "graduated_allocation",
-      "gate_marks": 11,
-      "gate_excess_after_costs": 0.0109,
-      "area": "paper_knobs"
-    }
-  ],
+  "recommendations": [],
   "entry_dca_adoption": {
     "observe_only": true,
     "acked": true,
