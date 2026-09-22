@@ -9983,19 +9983,17 @@
       "category": "later",
       "section": "learning",
       "title": "Dual-path sleeve lab: monthly deposit capital + tagged observe lifecycle",
-      "summary": "Capital book gets realistic monthly deposits (\u00a3500) and rotation. Parallel observe path: every name that crosses a frozen buy threshold opens a sleeve episode; tag on_book only if funded that day, off_book if capital exits early but mark to experimental sell, never_funded if never allocated. Stratify sleeve metrics by tag; NAV vs ^FTSE stays on the capital book only. Builds on exit_shadow post-exit marks + buy_tier_level + monthly_deposit.",
-      "revisit_when": "Rank-rotation fix merged and exit-timing/hypothesis cohorts approaching readiness; or human prioritises sleeve scoreboard companion lab (L441)",
+      "summary": "IMPLEMENTED v1 observe path: sleeve_episodes on paper-auto with on_book/off_book/never_funded. Monthly deposit still optional (new capital epoch). Nested counterfactual best-policy scoring remains future work.",
+      "revisit_when": "Sleeve readiness fires; or enabling monthly_deposit on a Suite B twin",
       "tags": [
         "sleeves",
-        "on-book",
-        "off-book",
-        "monthly-deposit",
-        "dual-path",
-        "evidence"
+        "implemented",
+        "L443"
       ],
-      "status": "open",
-      "source": "conversation: dual-path on-book off-book evidence",
-      "added_at": "2026-09-22T11:36:02+00:00"
+      "status": "done",
+      "source": "conversation: implement dual-path sleeve lab",
+      "added_at": "2026-09-22T11:36:02+00:00",
+      "updated_at": "2026-09-22T11:51:58+00:00"
     },
     {
       "id": "L444",
@@ -10034,6 +10032,22 @@
     },
     {
       "id": "L446",
+      "category": "later",
+      "section": "learning",
+      "title": "Nested counterfactual best-policy scoring inside sleeve episodes",
+      "summary": "Wide earliest/latest episodes are recording. Next: score tighter entry/exit policies as nested counterfactuals inside closed episodes once readiness.ready_for_sleeve_timing_analysis is true.",
+      "revisit_when": "learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true on primary or fair tracks",
+      "tags": [
+        "sleeves",
+        "counterfactual",
+        "timing"
+      ],
+      "status": "open",
+      "source": "conversation: implement dual-path sleeve lab",
+      "added_at": "2026-09-22T11:51:58+00:00"
+    },
+    {
+      "id": "L447",
       "category": "later",
       "section": "ops",
       "title": "PR/task completion monitor with auto vs manual merge history",

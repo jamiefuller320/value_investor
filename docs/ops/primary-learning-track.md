@@ -63,6 +63,11 @@ See also [`exit-timing-cohorts.md`](exit-timing-cohorts.md) for live paper cohor
 Human verify-before-trade packs remain useful for live capital, but they are
 **not** the primary learning loop.
 
+**Dual-path sleeve lab (observe-only):** widest buy-tier lifecycle episodes with
+`on_book` / `off_book` / `never_funded` tags run on weekday paper-auto — see
+[`dual-path-sleeve-lab.md`](dual-path-sleeve-lab.md). Sleeve timing is stratified
+by tag; NAV vs ^FTSE stays on the capital books.
+
 ## Decision learning loop (target)
 
 Track excess vs ^FTSE / rules is necessary but not sufficient. The intended

@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-22T07:46:53.716119+00:00`
+Generated: `2026-09-22T12:32:01.224764+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -9,45 +9,42 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - FTSE 350 live screen and published dashboard are operational.
 - Offline library: 21 graduated markets (focus: euro_depth).
 - Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.
-- Engineering queue: 0 open, 71 merged supervised tasks.
+- Engineering queue: 0 open, 72 merged supervised tasks.
 
 ## Gaps / watch
-- Primary AI track still below ^FTSE after costs (-33.0% excess; history still thin).
-- Ingest coverage gap: 3 buy-tier tickers have no filings index yet.
+- Primary AI track still below ^FTSE after costs (-32.3% excess; history still thin).
+- Ingest coverage gap: 4 buy-tier tickers have no filings index yet.
 
 ## Checkpoint probe
-- Grounded rows: 9; ungrounded: 0
+- Grounded rows: 11; ungrounded: 0
 - [ok] Stage 0 (UK quant core): complete _(source: docs/data/project_progress.json)_
 - [ok] Stage 1 (Decision-review learning): in_progress _(source: docs/data/project_progress.json)_
 - [ok] Stage 2b (Primary learning track): in_progress _(source: docs/data/project_progress.json)_
 - [ok] Stage 3 (Library-ready global data): complete _(source: docs/data/project_progress.json)_
 - [ok] Stage 4 (Controlled universe expansion): not_started _(source: docs/data/project_progress.json)_
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
-- [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-09-21T18:56:17.226028+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Progress report present (generated_at=2026-09-22T08:34:03+00:00) _(source: docs/data/progress_report.json)_
+- [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
+- [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
+- [ok] Ops monitor overall=warn at 2026-09-22T07:46:36.040299+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `human`/human PR #797 `eng-20260922-02` — Close stubborn ingest gaps for VTY.L (chain 1/3: 0/0 bodies, run igc-20260922-01)
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 17
+- Occasion count: 23
 - `PR mergeable=CONFLICTING against main` — 4×
+- `Merge conflicts in deferred-ideas.json with main` — 2×
 - `ruff_format` — 1×
 - `dirty merge: deferred-ideas.json / deferred-review.md vs main after L424-L426 landings` — 1×
 - `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
 - `pytest test_summary: WIX/BT action notes lost screen TTM after overly broad eng-20260919-14 suppress` — 1×
 - `engineering_tasks.json queue_clearing + automation.json queue snapshots vs main (#757 ledger)` — 1×
 - `engineering_tasks/automation/queue_health vs main after #756 merge` — 1×
-- `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 1×
-
-## Ops-monitor email handoff
-- Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 1 (open=1, resolved=0)
-- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**

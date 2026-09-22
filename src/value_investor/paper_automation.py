@@ -61,6 +61,11 @@ from value_investor.rebalance_log import (
     resolve_screen_source,
     snapshot_holdings,
 )
+from value_investor.sleeve_episodes import (
+    SleeveEpisodeConfig,
+    run_sleeve_episodes_pass,
+    summarize_learning_tracks_sleeve_episodes,
+)
 from value_investor.technical_analysis import (
     compute_indicators,
     compute_trade_plan,
@@ -997,6 +1002,7 @@ class AutomationRunResult:
     hypothesis_integrity: dict[str, Any] = field(default_factory=dict)
     hypothesis_outcome_link: dict[str, Any] = field(default_factory=dict)
     entry_dca_overlay_review: dict[str, Any] = field(default_factory=dict)
+    sleeve_episodes_review: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -1012,6 +1018,7 @@ class AutomationRunResult:
             "hypothesis_integrity": self.hypothesis_integrity,
             "hypothesis_outcome_link": self.hypothesis_outcome_link,
             "entry_dca_overlay_review": self.entry_dca_overlay_review,
+            "sleeve_episodes_review": self.sleeve_episodes_review,
             "generated_at": datetime.now(UTC).isoformat(),
         }
 
@@ -1202,6 +1209,22 @@ def run_daily_automation(
         as_of=gate["local_time"],
         history_trades=history_trades,
     )
+    sleeve_episodes_review = run_sleeve_episodes_pass(
+        output_dir=output_dir,
+        fund=fund,
+        track_id=str(config.track_id or "rules"),
+        candidates=decision_candidates,
+        trades=trades,
+        prices_by_ticker=price_map,
+        as_of=gate["local_time"],
+        config=SleeveEpisodeConfig(
+            exit_confirm_screens=int(
+                getattr(config, "exit_confirm_screens", DEFAULT_EXIT_CONFIRM_SCREENS)
+                or DEFAULT_EXIT_CONFIRM_SCREENS
+            ),
+            use_adjusted_signal=bool(config.use_adjusted_signal),
+        ),
+    )
 
     result = AutomationRunResult(
         acted=acted,
@@ -1216,6 +1239,7 @@ def run_daily_automation(
         hypothesis_integrity=hypothesis_integrity,
         hypothesis_outcome_link=hypothesis_outcome_link,
         entry_dca_overlay_review=entry_dca_overlay_review,
+        sleeve_episodes_review=sleeve_episodes_review,
     )
     payload = result.to_dict()
     payload["track_id"] = config.track_id
@@ -1618,6 +1642,8 @@ def run_learning_tracks(
             "graduated_allocation tests trade-plan entry sizing and harvest skims; "
             "buy_tier_level is a Suite B unfiltered buy-tier cohort (frozen knobs); "
             "entry_dca_overlay scores counterfactual entry cadences on every track; "
+            "sleeve_episodes records widest buy-tier lifecycles tagged on_book/off_book/"
+            "never_funded (observe-only); "
             "hypothesis_integrity reviews underwater holdings before crude stops."
         ),
         "tracks": results,
@@ -1653,6 +1679,11 @@ def run_learning_tracks(
     entry_dca_summary = summarize_learning_tracks_entry_dca(base_dir)
     (base_dir / ENTRY_DCA_ROLLUP_FILENAME).write_text(
         json.dumps(entry_dca_summary, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    sleeve_summary = summarize_learning_tracks_sleeve_episodes(base_dir)
+    (base_dir / "learning_tracks_sleeve_episodes.json").write_text(
+        json.dumps(sleeve_summary, indent=2) + "\n",
         encoding="utf-8",
     )
     return summary
