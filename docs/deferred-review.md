@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T08:57:38+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T09:00:36+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -189,6 +189,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N137 | **Eng-agent merge_tree park after successful Composer (vs concurrent PRs)** | Sep18 evening burns were full Composer+pytest then park on merge_tree vs open non-eng PR (#720), not missing early preflight. Do not reorder full preflight before Composer. Prefer leave alone while parked-backlog pause holds. | Parked attention count drops below 7 and eng-agent resumes with merge_tree parks against concurrent open PRs |
 | N138 | **Focus-market ingest for off-buy-tier zero-filing memos** | Names like AGS.BR: memo on disk (often initial/zero-body) but no longer buy-tier and filings_total=0. Sprint ingest targets buy-tier gaps only; rememo stays off until bodies land. IR may be bot-blocked (Cloudflare). Not the same as NBA-style zero-body catch-up on current buy-tier. | euro_depth buy-tier filing sprint is ingest_exhausted with zero_body=0 and operators still want focus-book memo filing parity for hold-tier names with accumulate verdicts |
 | N139 | **Do not add a new ingest run-repair service** | Overnight deepen failed because a stuck PDF overran the between-ticker budget and the 75m timeout killed the process before JSON was written. workflow-failure-responder already matches that signature and skip_drafts it. Repair belongs in the ingest loop (hard per-ticker abort + SIGTERM flush), not a new monitor. | FTSE ingest still exits 124 with no ingest_loop.json after a per-ticker hard deadline and SIGTERM flush are in place |
+| N140 | **Do not plot Suite B fair twins on Overview held_vs_market market cards** | Fair-cost twins of Suite A experiments (e.g. graduated_allocation_fair) belong on Automation learning-track equity. Overview held_vs_market already shows buy_tier_level (Suite B costs) vs local index; branch overlays are for knob changes (N108/N99), not cost twins. | A human asks to overlay graduated_allocation_fair or other *_fair tracks on market-status held_vs_market charts |
 | N141 | **Raise max_parallel_engineering_agents above 2** | Third concurrent eng agent would mostly serialize on the same hot allowlist (filings.py / companies_house / ingest.py) and increase merge clashes without lifting gap-closure rate. Clash-aware pairing of ingest_narrow + scoring_narrow is the better use of two slots. | Hot-path overlap among open ingest tasks drops (most open tasks no longer share filings.py/CH) and dispatch_eligible_count routinely exceeds 2 with complementary path sets |
 
 ---
