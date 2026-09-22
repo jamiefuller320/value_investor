@@ -1831,9 +1831,6 @@ def recover_engineering_queue(
             ),
             auto_cancel_resolved=bool(recovery_policy.get("auto_cancel_resolved_library_stall")),
             auto_annotate=bool(recovery_policy.get("auto_annotate_library_stall_triage")),
-<<<<<<< HEAD
-            auto_reframe_bundled=bool(recovery_policy.get("auto_reframe_bundled_library_stall")),
-=======
             auto_reframe_bundled=bool(
                 recovery_policy.get("auto_reframe_bundled_library_stall")
             ),
@@ -1842,7 +1839,6 @@ def recover_engineering_queue(
             ),
             open_prs=list(augmented_open_prs or open_prs or []),
             recent_agent_failures=recent_agent_failures,
->>>>>>> f361e191a (Add reburn_loop investigation for library stall triage)
         )
         stall_payload = stall_result.to_dict()
         result.library_stall_triage = stall_payload
