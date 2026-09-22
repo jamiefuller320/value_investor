@@ -975,3 +975,162 @@ def test_evaluate_dispatch_heals_merge_sync(tmp_path: Path, monkeypatch):
     assert updated["status"] == "merged"
     assert decision.should_dispatch is False
     assert "no open" in decision.reason
+
+
+def test_housekeep_cancels_resolved_gap_closure(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task(
+                "eng-20260922-01",
+                status="parked",
+                title="Close stubborn ingest gaps for IMB.L (chain 1/3: 0/0 bodies)",
+            ).to_dict()
+            | {
+                "source": "ingest_gap_closure",
+                "parked_policy": "preflight_clash",
+                "parked_reason": "preflight blocked PR open — preflight failed",
+                "evidence": {"ticker": "IMB.L", "tickers": ["IMB.L"]},
+            }
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.ingest_gap_closure.gap_closure_ticker_has_gaps",
+        lambda ticker, **kwargs: False,
+    )
+
+    result = housekeep_parked_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_cancel_resolved_gap_closure=True,
+        auto_unpark_healed_preflight=False,
+    )
+    assert any(row.action == "cancel_resolved_gap_closure" for row in result.cancelled)
+    assert load_engineering_tasks(tasks_path)["tasks"][0]["status"] == "cancelled"
+
+
+def test_housekeep_cancels_superseded_gap_closure_sibling(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task(
+                "eng-20260921-07",
+                status="merged",
+                title="Close stubborn ingest gaps for IMB.L (chain 1/3: 0/0 bodies, run igc-20260921-07)",
+            ).to_dict()
+            | {
+                "source": "ingest_gap_closure",
+                "evidence": {"ticker": "IMB.L", "chain_root_id": "igc-20260921-07"},
+            },
+            _task(
+                "eng-20260921-08",
+                status="parked",
+                title="Close stubborn ingest gaps for IMB.L (chain 2/3: 0/0 bodies, run igc-20260921-07)",
+            ).to_dict()
+            | {
+                "source": "ingest_gap_closure",
+                "parked_policy": "preflight_clash",
+                "parked_reason": "preflight blocked PR open — preflight failed",
+                "evidence": {"ticker": "IMB.L", "chain_root_id": "igc-20260921-07"},
+            },
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.ingest_gap_closure.gap_closure_ticker_has_gaps",
+        lambda ticker, **kwargs: True,
+    )
+
+    result = housekeep_parked_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_cancel_resolved_gap_closure=True,
+        auto_cancel_superseded_gap_closure=True,
+        auto_unpark_healed_preflight=False,
+    )
+    assert any(row.action == "cancel_superseded_gap_closure" for row in result.cancelled)
+    parked = next(
+        row for row in load_engineering_tasks(tasks_path)["tasks"] if row["id"] == "eng-20260921-08"
+    )
+    assert parked["status"] == "cancelled"
+    assert parked.get("duplicate_of") == "eng-20260921-07"
+
+
+def test_housekeep_unparks_healed_preflight(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task(
+                "eng-20260920-16",
+                status="parked",
+                title="Close library ingest filing gaps for DAX",
+            ).to_dict()
+            | {
+                "parked_policy": "preflight_clash",
+                "parked_reason": "preflight blocked PR open — preflight failed",
+                "allowed_paths": [
+                    "src/value_investor/research/filings.py",
+                    "tests/test_research_filings.py",
+                ],
+            }
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.preflight_park_is_healed",
+        lambda *args, **kwargs: True,
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_queue.refresh_engineering_queue_ui",
+        lambda **kwargs: None,
+    )
+
+    result = housekeep_parked_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_unpark_healed_preflight=True,
+        auto_cancel_resolved_gap_closure=False,
+    )
+    assert any(row.action == "unpark_healed_preflight" for row in result.unparked)
+    row = load_engineering_tasks(tasks_path)["tasks"][0]
+    assert row["status"] == "open"
+    assert "parked_reason" not in row
+
+
+def test_recover_self_heals_before_full_queue_warning(tmp_path: Path, monkeypatch):
+    """Housekeep runs before pause evaluation so self-heal can avert the warning email."""
+    monkeypatch.setattr(
+        "value_investor.engineering_queue.refresh_engineering_queue_ui",
+        lambda **kwargs: None,
+    )
+    tasks_path = tmp_path / "engineering_tasks.json"
+    parked_rows = []
+    for idx in range(8):
+        parked_rows.append(
+            _task(
+                f"eng-20260922-{idx + 1:02d}",
+                status="parked",
+                title=f"Close stubborn ingest gaps for IMB.L park {idx}",
+            ).to_dict()
+            | {
+                "source": "ingest_gap_closure",
+                "parked_policy": "preflight_clash",
+                "parked_reason": "preflight blocked PR open — preflight failed",
+                "parked_at": datetime.now(UTC).isoformat(),
+                "evidence": {"ticker": "IMB.L"},
+            }
+        )
+    tasks_path.write_text(json.dumps({"tasks": parked_rows}), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.ingest_gap_closure.gap_closure_ticker_has_gaps",
+        lambda ticker, **kwargs: False,
+    )
+
+    result = recover_engineering_queue(tasks_path=tasks_path, open_prs=[], apply=True)
+    assert int(result.housekeep.get("action_count") or 0) >= 8
+    clearing = result.queue_clearing
+    assert int(clearing.get("attention_parked_count") or 0) == 0
+    assert clearing.get("should_send_full_queue_warning") is False
+    assert clearing.get("pause_active") is not True

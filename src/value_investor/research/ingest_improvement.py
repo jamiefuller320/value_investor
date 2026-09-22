@@ -286,7 +286,11 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
         coverage["filings_annual"] = int(summary.get("annual") or 0)
         coverage["filings_interim"] = int(summary.get("interim") or 0)
         coverage["filings_trading_update"] = int(summary.get("trading_update") or 0)
-        coverage["indexed_without_body"] = sum(1 for row in filings if not row.get("has_body"))
+        from value_investor.research.filings import filing_lacks_material_body
+
+        coverage["indexed_without_body"] = sum(
+            1 for row in filings if filing_lacks_material_body(row)
+        )
         period_cov = period_body_coverage(filings)
         coverage["annual_with_body"] = int(period_cov["annual"]["with_body"])
         coverage["interim_with_body"] = int(period_cov["interim"]["with_body"])
