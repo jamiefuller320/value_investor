@@ -212,10 +212,10 @@ def _comparability_gates(
     archive_swap: dict[str, Any],
 ) -> dict[str, Any]:
     live_primary_ready = bool(
-        ((live_primary.get("readiness") or {}).get("ready_for_probability_analysis"))
+        (live_primary.get("readiness") or {}).get("ready_for_probability_analysis")
     )
     archive_ready = bool(
-        ((archive_hold.get("readiness") or {}).get("ready_for_probability_analysis"))
+        (archive_hold.get("readiness") or {}).get("ready_for_probability_analysis")
     )
     live_swap_closed = int(live_aggregate.get("swap_closed_count") or 0)
     archive_swap_closed = int(archive_swap.get("swap_closed_count") or 0)
@@ -291,9 +291,7 @@ def build_exit_timing_reconciliation(
             if review:
                 live_reviews.append(review)
 
-    primary_review = resolve_live_exit_timing_review(
-        paper_root, primary_track_id=primary_track_id
-    )
+    primary_review = resolve_live_exit_timing_review(paper_root, primary_track_id=primary_track_id)
     archive_review = _load_json(data_dir / ARCHIVE_REVIEW_FILENAME)
 
     live_primary_hold = hold_recovery_metrics(primary_review)

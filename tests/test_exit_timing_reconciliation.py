@@ -90,9 +90,7 @@ def test_build_reconciliation_flags_non_comparable_hold_populations(tmp_path: Pa
     assert comp["hold_recovery_rates_directly_comparable"] is False
     assert comp["archive_may_inform_priors_while_live_collects"] is True
     assert comp["swap_rotation_rates_directly_comparable"] is False
-    assert rec["sources"]["live_primary"]["hold_recovery"]["hold_recovery_rate"] == round(
-        3 / 7, 4
-    )
+    assert rec["sources"]["live_primary"]["hold_recovery"]["hold_recovery_rate"] == round(3 / 7, 4)
 
     written = write_exit_timing_reconciliation(paper_root=paper, data_dir=data_dir)
     assert (data_dir / "exit_timing_reconciliation.json").exists()

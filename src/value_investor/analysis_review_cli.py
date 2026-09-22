@@ -7,7 +7,6 @@ import json
 import sys
 from pathlib import Path
 
-from value_investor.exit_timing_reconciliation import write_exit_timing_reconciliation
 from value_investor.analysis_review import (
     COMMITTED_REVIEW_PATH,
     COMMITTED_TASKS_PATH,
@@ -23,6 +22,7 @@ from value_investor.analysis_review import (
     run_analysis_review,
 )
 from value_investor.cursor_api_key import resolve_cursor_api_key
+from value_investor.exit_timing_reconciliation import write_exit_timing_reconciliation
 from value_investor.system_gap_analysis import (
     COMMITTED_GAPS_PATH,
     build_system_gap_snapshot,
@@ -46,9 +46,9 @@ def _cmd_reconcile(args: argparse.Namespace) -> int:
         comp = reconciliation.get("comparability") or {}
         live = (reconciliation.get("sources") or {}).get("live_primary") or {}
         hold = (live.get("hold_recovery") or {}).get("hold_closed_count")
-        arch = (
-            (reconciliation.get("sources") or {}).get("archive_near_miss") or {}
-        ).get("hold_recovery") or {}
+        arch = ((reconciliation.get("sources") or {}).get("archive_near_miss") or {}).get(
+            "hold_recovery"
+        ) or {}
         print(
             f"Wrote {args.data_dir / 'exit_timing_reconciliation.json'} — "
             f"live_primary hold_closed={hold} archive hold_closed={arch.get('hold_closed_count')} "

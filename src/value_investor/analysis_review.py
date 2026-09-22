@@ -12,6 +12,10 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
+from value_investor.exit_timing_reconciliation import (
+    resolve_live_exit_timing_review,
+    write_exit_timing_reconciliation,
+)
 from value_investor.experiment_assessment import (
     CLOSED_TASK_STATUSES,
     slim_experiment_assessment_for_review,
@@ -31,10 +35,6 @@ from value_investor.review_payload_slim import (
 )
 from value_investor.review_payload_slim import (
     slim_exclusion_universe as _slim_exclusion_universe,
-)
-from value_investor.exit_timing_reconciliation import (
-    resolve_live_exit_timing_review,
-    write_exit_timing_reconciliation,
 )
 from value_investor.review_payload_slim import (
     slim_exit_timing as _slim_exit_timing,
@@ -254,9 +254,7 @@ def build_analysis_payload(
         paper_root=paper_root,
         data_dir=data_dir,
     )
-    exit_timing_reconciliation = _slim_exit_timing_reconciliation(
-        exit_timing_reconciliation_full
-    )
+    exit_timing_reconciliation = _slim_exit_timing_reconciliation(exit_timing_reconciliation_full)
     exclusion_universe = _slim_exclusion_universe(
         _safe_read(data_dir / "exclusion_universe_review.json")
     )
