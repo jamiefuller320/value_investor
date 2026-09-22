@@ -344,6 +344,48 @@ def test_filing_coverage_vty_s838_interim_does_not_false_gap(tmp_path: Path):
     assert not _has_outstanding_ingest_gap(coverage, ticker="VTY.L")
 
 
+def test_filing_coverage_kgf_missing_interim_listing_flags_gap(tmp_path: Path):
+    """eng-20260922-03: bodied FY without indexed H1 must stay on ingest-improvement queue."""
+    from value_investor.research.ingest_improvement import (
+        _filing_coverage,
+        _has_outstanding_ingest_gap,
+    )
+    from value_investor.research.store import ResearchStore
+
+    output_dir = tmp_path / "output"
+    filings_dir = output_dir / "research" / "KGF.L" / "sources" / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 1,
+                    "annual": 1,
+                    "interim": 0,
+                    "with_body": 1,
+                    "period_coverage": {
+                        "annual": {"total": 1, "with_body": 1},
+                        "interim": {"total": 0, "with_body": 0},
+                    },
+                },
+                "filings": [
+                    {
+                        "id": "fy",
+                        "period": "annual",
+                        "has_body": True,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    store = ResearchStore(output_dir)
+    coverage = _filing_coverage(store, "KGF.L", output_dir)
+    assert coverage["filings_interim"] == 0
+    assert coverage["annual_with_body"] == 1
+    assert _has_outstanding_ingest_gap(coverage, ticker="KGF.L")
+
+
 def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Path):
     output_dir = tmp_path / "output"
     suggestions_path = tmp_path / "suggestions.json"

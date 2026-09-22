@@ -8109,6 +8109,111 @@ def _load_prior_filings_rows(filings_dir: Path) -> list[dict[str, Any]]:
     return list(filings) if isinstance(filings, list) else []
 
 
+def refresh_uk_filing_listings_into_index(
+    filings_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    market: str | None = "ftse350",
+    max_investegate_items: int = _INVESTEGATE_MAX_ITEMS,
+    max_rns_items: int = 40,
+    max_ch_accounts: int | None = None,
+) -> dict[str, Any]:
+    """
+    Merge fresh Investegate / ticker-api / CH listing rows before UK body refetch.
+
+    Gap-closure refetch only downloads bodies for indexed rows. Issuer pages can
+    publish new statutory RNS (e.g. KGF.L Half Year Results) after the last index
+    write; listing refresh merges them so refetch and reconcile can attach bodies.
+    """
+    from value_investor.research.companies_house import (
+        DEFAULT_MAX_ACCOUNTS,
+        fetch_filings_companies_house,
+    )
+    from value_investor.storage import write_json
+
+    filings_dir = Path(filings_dir)
+    filings_dir.mkdir(parents=True, exist_ok=True)
+    index_path = filings_dir / "filings_index.json"
+    prior = _load_prior_filings_rows(filings_dir)
+    prior_keys = {_merge_filings_row_key(row) for row in prior}
+    if max_ch_accounts is None:
+        max_ch_accounts = DEFAULT_MAX_ACCOUNTS
+    listing_groups = [
+        fetch_filings_ticker_api(
+            ticker=ticker,
+            company_name=company_name,
+            max_items=max_rns_items,
+        ),
+        fetch_filings_investegate_company(
+            ticker=ticker,
+            company_name=company_name,
+            max_items=max_investegate_items,
+        ),
+        fetch_filings_companies_house(
+            ticker=ticker,
+            company_name=company_name,
+            max_accounts=int(max_ch_accounts),
+        ),
+        fetch_filings_ir_allowlist(ticker),
+    ]
+    discovered = merge_filings(*listing_groups)
+    cleaned_discovered: list[dict[str, Any]] = []
+    for row in discovered:
+        item = dict(row)
+        if not item.get("has_body"):
+            item["has_body"] = False
+            item["body_path"] = None
+        cleaned_discovered.append(item)
+    merged = merge_filings(prior, cleaned_discovered)
+    merged_keys = {_merge_filings_row_key(row) for row in merged}
+    added_keys = merged_keys - prior_keys
+    added_interim = sum(
+        1
+        for row in merged
+        if _merge_filings_row_key(row) in added_keys and str(row.get("period") or "") == "interim"
+    )
+    if not added_keys and prior:
+        return {
+            "prior_count": len(prior),
+            "merged_count": len(merged),
+            "added": 0,
+            "added_interim": 0,
+            "note": "unchanged",
+        }
+    payload: dict[str, Any] = {}
+    if index_path.exists():
+        try:
+            payload = json.loads(index_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            payload = {}
+    sources_used = sorted({str(row.get("source")) for row in merged if row.get("source")})
+    index = {
+        "ticker": ticker,
+        "company_name": company_name,
+        "market": payload.get("market") or market,
+        "regime": payload.get("regime") or "uk_rns",
+        "fetched_at": payload.get("fetched_at") or datetime.now(UTC).isoformat(),
+        "note": payload.get("note")
+        or (
+            "Scan-then-target listing merge (no body download). "
+            "Bodies filled by subsequent deepen pass."
+        ),
+        "sources_used": sources_used,
+        "summary": summarize_filings(merged),
+        "filings": merged,
+        "listing_refresh_at": datetime.now(UTC).isoformat(),
+    }
+    write_json(index_path, index, compact=True, compress=False)
+    return {
+        "prior_count": len(prior),
+        "merged_count": len(merged),
+        "added": len(added_keys),
+        "added_interim": added_interim,
+        "note": "refresh_uk_filing_listings_into_index",
+    }
+
+
 def reconcile_filing_body_flags(
     filings: list[dict[str, Any]],
     bodies_dir: Path,
@@ -8973,6 +9078,16 @@ def refetch_uk_primary_filing_bodies(
     adjusting items, and cash-flow statements), then fills remaining RNS rows.
     A residual sweep runs last for SEC Edgar and other direct URLs still lacking bodies.
     """
+    listing_refresh = refresh_uk_filing_listings_into_index(
+        filings_dir,
+        ticker=ticker,
+        company_name=company_name,
+    )
+    body_reconcile = reconcile_filings_index_body_flags(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
     ch = refetch_companies_house_filing_bodies(
         filings_dir,
         max_bodies=max_bodies,
@@ -8998,6 +9113,8 @@ def refetch_uk_primary_filing_bodies(
         "companies_house": ch,
         "rns": rns,
         "residual": residual,
+        "listing_refresh": listing_refresh,
+        "body_reconcile": body_reconcile,
         "attempted": (
             int(ch.get("attempted") or 0)
             + int(rns.get("attempted") or 0)
