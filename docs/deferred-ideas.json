@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-21T23:10:10+00:00",
+  "updated_at": "2026-09-22T08:50:06+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9677,6 +9677,54 @@
       "status": "open",
       "source": "https://github.com/jamiefuller320/value_investor/pull/789",
       "added_at": "2026-09-21T23:10:10+00:00"
+    },
+    {
+      "id": "N140",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Raise max_parallel_engineering_agents above 2",
+      "summary": "Third concurrent eng agent would mostly serialize on the same hot allowlist (filings.py / companies_house / ingest.py) and increase merge clashes without lifting gap-closure rate. Clash-aware pairing of ingest_narrow + scoring_narrow is the better use of two slots.",
+      "revisit_when": "Hot-path overlap among open ingest tasks drops (most open tasks no longer share filings.py/CH) and dispatch_eligible_count routinely exceeds 2 with complementary path sets",
+      "tags": [
+        "engineering",
+        "parallel",
+        "clash"
+      ],
+      "status": "open",
+      "source": "conversation: gap-closure rate and eng bundling",
+      "added_at": "2026-09-22T08:50:06+00:00"
+    },
+    {
+      "id": "L433",
+      "category": "later",
+      "section": "ops",
+      "title": "Skip stall_slowdown gap-closure when IR allowlist is empty",
+      "summary": "Most non-improving gap-closure runs have zero IR attempts because the ticker has no allowlist URLs or nothing left to fetch. Auto-dispatch should route those names to parked_source_hunter / allowlist eng / exhaustion park instead of burning another intensive pin.",
+      "revisit_when": "Gap-closure improve rate stays below ~20% over a rolling week while blocked_no_allowlist_url remains the dominant failure class",
+      "tags": [
+        "ingest",
+        "gap-closure",
+        "allowlist"
+      ],
+      "status": "open",
+      "source": "conversation: gap-closure rate and eng bundling",
+      "added_at": "2026-09-22T08:50:06+00:00"
+    },
+    {
+      "id": "L434",
+      "category": "later",
+      "section": "ops",
+      "title": "Bundle multi-ticker IR allowlist fills into one eng task",
+      "summary": "Instead of N intensive pins or N hunter tasks that all touch research_ir_urls.json, coalesce stuck no-allowlist tickers in the same regime into one data PR editing the allowlist (plus seed fallback) so Lane B pays one clash cycle for many names.",
+      "revisit_when": "Open no-allowlist blockers across one regime exceed ~5 concurrent names and hunter tasks are serializing on research_ir_urls.json",
+      "tags": [
+        "ingest",
+        "allowlist",
+        "batching"
+      ],
+      "status": "open",
+      "source": "conversation: gap-closure rate and eng bundling",
+      "added_at": "2026-09-22T08:50:06+00:00"
     }
   ],
   "fragments": [

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-21T23:10:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T08:50:06+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -189,6 +189,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N137 | **Eng-agent merge_tree park after successful Composer (vs concurrent PRs)** | Sep18 evening burns were full Composer+pytest then park on merge_tree vs open non-eng PR (#720), not missing early preflight. Do not reorder full preflight before Composer. Prefer leave alone while parked-backlog pause holds. | Parked attention count drops below 7 and eng-agent resumes with merge_tree parks against concurrent open PRs |
 | N138 | **Focus-market ingest for off-buy-tier zero-filing memos** | Names like AGS.BR: memo on disk (often initial/zero-body) but no longer buy-tier and filings_total=0. Sprint ingest targets buy-tier gaps only; rememo stays off until bodies land. IR may be bot-blocked (Cloudflare). Not the same as NBA-style zero-body catch-up on current buy-tier. | euro_depth buy-tier filing sprint is ingest_exhausted with zero_body=0 and operators still want focus-book memo filing parity for hold-tier names with accumulate verdicts |
 | N139 | **Do not add a new ingest run-repair service** | Overnight deepen failed because a stuck PDF overran the between-ticker budget and the 75m timeout killed the process before JSON was written. workflow-failure-responder already matches that signature and skip_drafts it. Repair belongs in the ingest loop (hard per-ticker abort + SIGTERM flush), not a new monitor. | FTSE ingest still exits 124 with no ingest_loop.json after a per-ticker hard deadline and SIGTERM flush are in place |
+| N140 | **Raise max_parallel_engineering_agents above 2** | Third concurrent eng agent would mostly serialize on the same hot allowlist (filings.py / companies_house / ingest.py) and increase merge clashes without lifting gap-closure rate. Clash-aware pairing of ingest_narrow + scoring_narrow is the better use of two slots. | Hot-path overlap among open ingest tasks drops (most open tasks no longer share filings.py/CH) and dispatch_eligible_count routinely exceeds 2 with complementary path sets |
 
 ---
 
@@ -494,6 +495,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L430 | **Sunday email-report hits 6h GHA timeout mid OCR/PDF ingest** | 2026-09-20 email-report #35514032032 (and morning recovery #35495407776) cancelled at ~6h still inside Screen/build ftse-email; logs show ongoing PDF startxref/Object Streams parsing near timeout. Send/commit/deploy skipped. Consider raising timeout-minutes, capping OCR work, or splitting ingest from report send. | Next Sunday email-report timeout or next ops pass on quiet-bundle runtime |
 | L431 | **Dedupe engineering queue-block emails on alert kind** | Parallel-cap mail uses the full gate reason as the 12h fingerprint, so '2 agents running' and '1 pr_open + 1 agent' both send the same day. merged_reconcile has no cooldown and uses the blocked subject even when the queue healed itself. | Another burst of FTSE Engineering queue blocked mail that is parallel cap or merged reconcile rather than a real pause |
 | L432 | **Path guard always-allow docs/data/pr_fix_occasions.json** | Recording PR fix occasions on eng-* branches fails engineering-path-guard because pr_fix_occasions.json is outside task allowed_paths. Consider adding it to PATH_GUARD_ALWAYS_ALLOWED or writing occasions from a non-eng branch. | Next eng PR CI fails solely because a CI fix occasion was committed on the eng branch |
+| L433 | **Skip stall_slowdown gap-closure when IR allowlist is empty** | Most non-improving gap-closure runs have zero IR attempts because the ticker has no allowlist URLs or nothing left to fetch. Auto-dispatch should route those names to parked_source_hunter / allowlist eng / exhaustion park instead of burning another intensive pin. | Gap-closure improve rate stays below ~20% over a rolling week while blocked_no_allowlist_url remains the dominant failure class |
+| L434 | **Bundle multi-ticker IR allowlist fills into one eng task** | Instead of N intensive pins or N hunter tasks that all touch research_ir_urls.json, coalesce stuck no-allowlist tickers in the same regime into one data PR editing the allowlist (plus seed fallback) so Lane B pays one clash cycle for many names. | Open no-allowlist blockers across one regime exceed ~5 concurrent names and hunter tasks are serializing on research_ir_urls.json |
 
 ---
 
