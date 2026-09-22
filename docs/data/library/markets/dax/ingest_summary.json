@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-22T12:58:12.199772+00:00",
+  "run_at": "2026-09-22T13:52:34.466956+00:00",
   "market_id": "dax",
   "targets": [
     "HEI.DE",
@@ -66,8 +66,8 @@
       "ticker": "FME.DE",
       "priority_score": 23.9125,
       "filings_total": 88,
-      "filings_with_body": 54,
-      "indexed_without_body": 34,
+      "filings_with_body": 58,
+      "indexed_without_body": 30,
       "reason": "indexed_without_body"
     },
     {
@@ -473,15 +473,15 @@
       "reason": "indexed_without_body",
       "before": {
         "filings_total": 88,
-        "filings_with_body": 54,
-        "indexed_without_body": 34
+        "filings_with_body": 58,
+        "indexed_without_body": 30
       },
       "after": {
         "filings_total": 88,
         "filings_with_body": 58,
         "indexed_without_body": 30
       },
-      "improved": true,
+      "improved": false,
       "regime": "euro_filings",
       "filings_summary": {
         "total": 74,
@@ -497,7 +497,7 @@
           },
           "interim": {
             "total": 3,
-            "with_body": 2
+            "with_body": 3
           },
           "trading_update": {
             "total": 0,
@@ -505,7 +505,7 @@
           },
           "other": {
             "total": 67,
-            "with_body": 36
+            "with_body": 35
           }
         }
       },
@@ -717,23 +717,21 @@
       }
     }
   ],
-  "improved": [
-    "FME.DE"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-22T12:52:27.476317+00:00",
+    "snapshot_at": "2026-09-22T13:48:28.649962+00:00",
     "market_id": "dax",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 6,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 3,
-    "indexed_without_body": 34,
+    "indexed_without_body": 30,
     "bodies_min": 1,
     "bodies_median": 2,
-    "bodies_max": 54,
+    "bodies_max": 58,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
@@ -754,7 +752,7 @@
       "FME.DE"
     ],
     "indexed_without_body_by_ticker": {
-      "FME.DE": 34
+      "FME.DE": 30
     },
     "parked_tickers": [],
     "parked_count": 0,
@@ -764,14 +762,14 @@
       "DTE.DE",
       "BAS.DE"
     ],
-    "effective_indexed_without_body": 34,
+    "effective_indexed_without_body": 30,
     "effective_indexed_without_body_tickers": [
       "FME.DE"
     ],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-22T12:58:07.468465+00:00",
+    "snapshot_at": "2026-09-22T13:52:30.378794+00:00",
     "market_id": "dax",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 6,
@@ -829,7 +827,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "dax",
-    "assessed_at": "2026-09-22T12:52:28.261136+00:00",
+    "assessed_at": "2026-09-22T13:48:29.447673+00:00",
     "unmeasured": [
       "HEI.DE",
       "DTG.DE",
@@ -842,9 +840,9 @@
     "indexed_without_body": [
       {
         "ticker": "FME.DE",
-        "indexed_without_body": 34,
+        "indexed_without_body": 30,
         "filings_total": 88,
-        "filings_with_body": 54
+        "filings_with_body": 58
       }
     ],
     "thin_need_discovery": [
@@ -866,7 +864,7 @@
     ],
     "recommended_actions": [
       "Bootstrap 6 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
-      "Prefer indexed-without-body body refetch (1 tickers, top: FME.DE(34))",
+      "Prefer indexed-without-body body refetch (1 tickers, top: FME.DE(30))",
       "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
@@ -874,14 +872,14 @@
       "unmeasured": 6,
       "zero_body": 0,
       "indexed_without_body_tickers": 1,
-      "indexed_without_body_rows": 34,
+      "indexed_without_body_rows": 30,
       "thin_need_discovery": 3,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 338.385680261,
+  "used_seconds": 240.11264353999997,
   "budget_seconds": 1050.0,
-  "leftover_seconds": 711.6143197389999,
+  "leftover_seconds": 809.8873564600001,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -889,13 +887,13 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "dax",
-    "updated_at": "2026-09-22T12:58:07.471141+00:00",
+    "updated_at": "2026-09-22T13:52:30.381574+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "BAS.DE",
       "DTE.DE",
@@ -918,7 +916,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 97,
+    "task_count": 98,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
