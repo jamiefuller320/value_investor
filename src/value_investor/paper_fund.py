@@ -783,10 +783,29 @@ def _evaluate_momentum_grace_holdings(
             continue
 
         row = by_ticker.get(ticker) or {"ticker": ticker, "signal": "hold"}
+        signal = _candidate_screen_signal(row, use_adjusted_signal=use_adjusted_signal)
+        # Still buy-tier but off the top-N board is rank demotion, not momentum
+        # grace. Do not grace_keep (that froze cash at £0 and skipped new sleeves).
+        # Leave exit_confirm_screens to free capital for higher-conviction buys.
+        if signal in BUY_SIGNALS:
+            if position.momentum_grace:
+                transitions.append(
+                    {
+                        "ticker": ticker,
+                        "action": "grace_clear",
+                        "reason": "still buy-tier — rank demotion, not grace",
+                    }
+                )
+                if mutate:
+                    position.momentum_grace = False
+                    position.grace_started_at = None
+                    position.grace_entry_stop = None
+            continue
+
         mark = _candidate_price(row) or position.avg_cost
         decision = evaluate_grace_holding(
             row,
-            signal=_candidate_screen_signal(row, use_adjusted_signal=use_adjusted_signal),
+            signal=signal,
             avg_cost=position.avg_cost,
             mark=mark,
             momentum_grace=position.momentum_grace,

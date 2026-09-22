@@ -7,6 +7,7 @@ from value_investor.paper_fund import (
     Position,
     compare_funds,
     create_parallel_book,
+    preview_automated_plan,
     resolve_order_shares,
     run_automated_rebalance,
     run_technical_pass,
@@ -412,6 +413,85 @@ def test_momentum_grace_keeps_winner_after_value_downgrade():
     assert old.grace_started_at is not None
     assert old.stop_loss is not None and old.stop_loss >= 100
     assert old.take_profit is not None and old.take_profit >= 130
+
+
+def test_momentum_grace_rank_demotion_uses_exit_buffer_not_grace_keep():
+    """Off-target buy-tier names must not freeze cash via grace_kept."""
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Rank demotion",
+            mode="automated",
+            initial_cash=0,
+            trade_cost_pct=0.0,
+            max_positions=1,
+        )
+    )
+    fund.holdings["OLD.L"] = Position(
+        ticker="OLD.L",
+        shares=10,
+        avg_cost=100,
+        name="Lower conviction buy",
+        sector="Tech",
+    )
+    candidates = [
+        {
+            "ticker": "NEW.L",
+            "name": "Higher conviction",
+            "signal": "strong_buy",
+            "conviction_score": 0.95,
+            "price": 100,
+            "timing_signal": "neutral",
+            "sector": "Tech",
+        },
+        {
+            "ticker": "OLD.L",
+            "name": "Lower conviction buy",
+            "signal": "buy",
+            "conviction_score": 0.2,
+            "price": 100,
+            "timing_signal": "neutral",
+            "sector": "Tech",
+        },
+    ]
+
+    plan = preview_automated_plan(
+        fund,
+        candidates,
+        use_momentum_grace=True,
+        exit_confirm_screens=2,
+    )
+    assert plan["targets"][0]["ticker"] == "NEW.L"
+    assert not any(
+        item.get("ticker") == "OLD.L" and item.get("action") in {"grace_hold", "grace_enter"}
+        for item in plan.get("anticipated_grace_holds") or []
+    )
+    # First confirm screen: still held, exit streak starts (preview does not mutate).
+    assert "OLD.L" in {p.ticker for p in fund.holdings.values()} or "OLD.L" in fund.holdings
+
+    run_automated_rebalance(
+        fund,
+        candidates,
+        acted_at="2026-07-20T09:15:00+01:00",
+        use_momentum_grace=True,
+        exit_confirm_screens=2,
+        reentry_cooldown_screens=0,
+    )
+    assert "OLD.L" in fund.holdings
+    assert fund.rebalance_state.exit_streak.get("OLD.L") == 1
+    assert fund.holdings["OLD.L"].momentum_grace is False
+    assert "NEW.L" not in fund.holdings  # no cash until exit confirms
+
+    run_automated_rebalance(
+        fund,
+        candidates,
+        acted_at="2026-07-21T09:15:00+01:00",
+        use_momentum_grace=True,
+        exit_confirm_screens=2,
+        reentry_cooldown_screens=0,
+    )
+    assert "OLD.L" not in fund.holdings
+    assert "NEW.L" in fund.holdings
+    assert fund.cash < 1.0  # capital recycled into the new sleeve
 
 
 def _auto_candidates() -> list[dict]:

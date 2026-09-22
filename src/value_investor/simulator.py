@@ -629,6 +629,24 @@ def _rebalance_momentum_grace(
             _clear_grace(ticker)
             continue
 
+        signal = _screen_signal(row, config)
+        # Off-target but still buy-tier: rotate immediately in archive sim so
+        # higher-conviction sleeves can enter (no exit-confirm buffer here).
+        if signal in BUY_SIGNALS:
+            shares = holdings.pop(ticker)
+            avg_costs.pop(ticker, None)
+            _clear_grace(ticker)
+            proceeds, trade = _execute_sell(
+                run_at=run_at,
+                ticker=ticker,
+                shares=shares,
+                price=price,
+                trade_cost_pct=config.trade_cost_pct,
+            )
+            cash += proceeds
+            trades.append(trade)
+            continue
+
         state = grace_states.get(ticker)
         if state is None:
             state = SimGraceState(avg_cost=avg_costs.get(ticker, price))
@@ -637,7 +655,7 @@ def _rebalance_momentum_grace(
 
         decision = evaluate_grace_holding(
             row,
-            signal=_screen_signal(row, config),
+            signal=signal,
             avg_cost=avg_costs.get(ticker, price),
             mark=price,
             momentum_grace=state.active,
