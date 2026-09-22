@@ -113,6 +113,47 @@ def test_predict_task_clashes_shared_mutable():
     assert report.blocked_by[0].kind == CLASH_KIND_SHARED
 
 
+def test_select_clash_aware_prefers_complementary_area(monkeypatch):
+    """Second slot prefers a different area when paths do not clash."""
+    payload = {
+        "tasks": [
+            _task(
+                "eng-20260726-01",
+                area="ingest",
+                allowed_paths=["src/value_investor/research/ingest.py"],
+            ).to_dict(),
+            _task(
+                "eng-20260726-02",
+                area="ingest",
+                allowed_paths=["src/value_investor/research/filings.py"],
+            ).to_dict(),
+            _task(
+                "eng-20260726-03",
+                area="scoring",
+                allowed_paths=["src/value_investor/summary.py"],
+            ).to_dict(),
+        ]
+    }
+    # Lower score on scoring so priority alone would pick both ingest tasks first.
+    payload["tasks"][2]["priority_score"] = 80.0
+    monkeypatch.setattr(
+        "value_investor.engineering_preflight.build_open_pr_file_index",
+        lambda *args, **kwargs: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_preflight.git_changed_files_vs_main",
+        lambda *args, **kwargs: [],
+    )
+    selected, _reports = select_clash_aware_dispatch_tasks(
+        payload,
+        max_tasks=2,
+        open_prs=[],
+        skip_merge_tree=True,
+    )
+    assert [task.id for task in selected] == ["eng-20260726-01", "eng-20260726-03"]
+    assert [task.area for task in selected] == ["ingest", "scoring"]
+
+
 def test_select_clash_aware_overtakes_blocked_task(monkeypatch):
     payload = {
         "tasks": [

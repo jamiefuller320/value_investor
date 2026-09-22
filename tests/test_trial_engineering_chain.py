@@ -294,7 +294,13 @@ def test_should_auto_compile_when_partial_improvement_leaves_gaps(tmp_path: Path
     assert reason == "zero_yield_refetch"
 
 
-def test_should_auto_compile_when_no_refetch_attempted_but_gaps_remain(tmp_path: Path):
+def test_should_auto_compile_when_no_refetch_attempted_but_gaps_remain(
+    tmp_path: Path, monkeypatch
+):
+    monkeypatch.setattr(
+        "value_investor.ingest_gap_closure.ticker_ir_allowlist_count",
+        lambda ticker: 0,
+    )
     data_dir = tmp_path / "docs" / "data"
     market = "euro_depth"
     filings = (
@@ -345,7 +351,7 @@ def test_should_auto_compile_when_no_refetch_attempted_but_gaps_remain(tmp_path:
         runs_path=trials_path,
     )
     assert should is True
-    assert reason == "gaps_remain_without_refetch"
+    assert reason == "gaps_remain_without_allowlist"
 
 
 def test_chain_exhausted_after_max_engineering_rounds(tmp_path: Path):
