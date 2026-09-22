@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:12:48+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-22T11:25:12+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -197,6 +197,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N144 | **Auto-apply decision-review knobs on thin primary history** | Primary ai_judgment still deeply negative on stress book; auto --apply before thick Suite B marks risks locking in churn. Keep proposals observe-only until epoch gates pass. | Primary or fair AI book has thick marks, churn_health ok, and human Sunday prior review greenlights apply |
 | N145 | **Make ai_judgment_fair the is_primary_learning_track flag** | Day-to-day Suite B NAV stability is expected under T212 costs and is not the promotion gate. Keep is_primary on stress ai_judgment until fair AI clears ^FTSE and rules_fair with a thick forward window (N48 human flip). Until then Suite B remains the adoption scoreboard, not the primary flag. | ai_judgment_fair beat_market and beat rules_fair on a thick forward window; Sunday fair-cost gate green; human accepts N48 |
 | N146 | **Switch primary because Suite B NAV beats Suite A** | B-vs-A absolute NAV is mostly cost drag (same picks, lower friction). Do not use it as the primary flip criterion. Short-term steer on within-suite relatives (AI vs rules on same costs) and A churn; flip primary only on thick Suite B absolute edge vs ^FTSE and fair rules (N48). | Revisiting N48 primary flip criteria |
+| N147 | **Replace primary scoreboard with fixed-notional sleeve P&L** | Fixed £/$ notional per buy is excellent for identification accuracy and lifecycle sleeve stats, but must not replace Suite B book excess vs ^FTSE as stage 2b / adoption truth. Capital path (sizing, deposits, rotation) is a separate question the NAV book answers. | Sleeve-level outcome linker is thick enough to sit beside (not instead of) primary excess gates |
 
 ---
 
@@ -262,6 +263,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L437 | **Fund PIT decision-autopsy attribution loop (L368)** | Automated data-vs-logic gap attribution from frozen decision packs would lift learning/alpha score by steering eng queue; design locked, implementation deferred behind Phase C. | L367 Phase C readiness met and memo retarget funded |
 | L438 | **Evolutionary genomes after walk-forward thickness (L2)** | Stage 5 evolution only after primary loop has thick cost-aware walk-forward history; premature evolution would inflate eng score without alpha. | Stage 2b complete and decision-review epochs show stable positive Suite B excess |
 | L440 | **Fix momentum_grace still-buy-tier blocking rank rotation** | evaluate_grace_holding returns keep=True for any buy-tier signal; paper_fund then grace_keeps holdings outside the top-N target set, so the book never sells (0 exits since Aug) and never tests downgrade+momentum. Intended grace is only after leaving buy-tier. | Prioritising lifecycle/exit experiments or retiring/restarting the momentum_grace track |
+| L441 | **Fixed-notional sleeve cohort lab beside NAV books** | Observe-only: each new buy gets a fixed notional (e.g. £100), capped open sleeves, optional monthly deposit into a cash queue for new sleeves only. Primary metrics: per-sleeve forward return, hit rate, hold/exit quality; NAV vs ^FTSE stays on existing equal-weight books. Aligns with buy_tier_level cohort spirit and entry-lifecycle experiments. | Exit-timing / hypothesis outcome cohorts ready for probability analysis, or buy_tier_level has enough closed sleeves to compare designs |
 
 ### Universe & data
 
