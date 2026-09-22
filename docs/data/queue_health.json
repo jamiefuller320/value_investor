@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-22T13:39:28.811165+00:00",
-  "overall": "active",
-  "headline": "Agent lane active.",
+  "generated_at": "2026-09-22T17:11:08.109046+00:00",
+  "overall": "idle",
+  "headline": "Queue and hunter idle.",
   "merge_lane": {
     "state": "idle",
     "idle": true,
@@ -14,32 +14,32 @@
     "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
   },
   "agent_lane": {
-    "state": "running",
-    "idle": false,
-    "running": true,
+    "state": "idle",
+    "idle": true,
+    "running": false,
     "blocked": false,
-    "should_dispatch": true,
+    "should_dispatch": false,
     "pause_active": false,
     "traffic_pause_active": false,
-    "attention_parked_count": 1,
-    "open_count": 1,
+    "attention_parked_count": 2,
+    "open_count": 0,
     "pr_open_count": 0,
-    "dispatch_eligible_count": 1,
+    "dispatch_eligible_count": 0,
     "blocked_task_count": 0,
-    "next_task_id": "eng-20260922-03",
-    "reason": "queue ready — dispatch next open task",
-    "detail": "queue ready — dispatch next open task"
+    "next_task_id": null,
+    "reason": "no open engineering tasks in queue",
+    "detail": "No open engineering tasks — queue is idle."
   },
   "queue_clearing": {
     "pause_active": false,
     "attention_parked_count": 1,
-    "evaluated_at": "2026-09-22T13:24:56.218899+00:00"
+    "evaluated_at": "2026-09-22T16:16:34.739524+00:00"
   },
   "traffic_control": {
     "pause_active": false,
     "stuck_pr_count": 0,
     "pause_reasons": [],
-    "evaluated_at": "2026-09-22T12:32:01.224764+00:00"
+    "evaluated_at": "2026-09-22T17:11:03.374641+00:00"
   },
   "ops_monitor": {
     "run_at": "2026-09-22T07:46:36.040299+00:00",
@@ -47,6 +47,28 @@
     "should_dispatch_engineering": false
   },
   "merges_today": [
+    {
+      "task_id": "eng-20260922-04",
+      "title": "Close stubborn ingest gaps for SHEL.L (chain 1/3: 0/0 bodies, run igc-20260922-04)",
+      "area": "ingest",
+      "pr_number": 804,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/804",
+      "merged_at": "2026-09-22T15:53:54.495600+00:00",
+      "merge_class": "ingest_narrow",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260922-03",
+      "title": "Close stubborn ingest gaps for KGF.L (chain 1/3: 0/0 bodies, run igc-20260922-03)",
+      "area": "ingest",
+      "pr_number": 803,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/803",
+      "merged_at": "2026-09-22T14:45:21.206847+00:00",
+      "merge_class": "ingest_narrow",
+      "auto_merge": false,
+      "independently_verified": true
+    },
     {
       "task_id": "eng-20260922-02",
       "title": "Close stubborn ingest gaps for VTY.L (chain 1/3: 0/0 bodies, run igc-20260922-01)",
@@ -59,19 +81,19 @@
       "independently_verified": false
     }
   ],
-  "verified_merges_today_count": 0,
+  "verified_merges_today_count": 2,
   "completion_monitor": {
     "timezone": "UTC",
     "history_days": 14,
     "today": {
       "date": "2026-09-22",
-      "merged_total": 1,
+      "merged_total": 3,
       "merged_auto": 0,
-      "merged_manual": 1,
-      "verified": 0,
-      "fix_interventions": 8,
+      "merged_manual": 3,
+      "verified": 2,
+      "fix_interventions": 9,
       "fix_ci_check": 0,
-      "fix_merge_conflict": 8,
+      "fix_merge_conflict": 9,
       "fix_ci_and_merge": 0
     },
     "yesterday": {
@@ -231,17 +253,39 @@
       },
       {
         "date": "2026-09-22",
-        "merged_total": 1,
+        "merged_total": 3,
         "merged_auto": 0,
-        "merged_manual": 1,
-        "verified": 0,
-        "fix_interventions": 8,
+        "merged_manual": 3,
+        "verified": 2,
+        "fix_interventions": 9,
         "fix_ci_check": 0,
-        "fix_merge_conflict": 8,
+        "fix_merge_conflict": 9,
         "fix_ci_and_merge": 0
       }
     ],
     "merges_today": [
+      {
+        "task_id": "eng-20260922-04",
+        "title": "Close stubborn ingest gaps for SHEL.L (chain 1/3: 0/0 bodies, run igc-20260922-04)",
+        "area": "ingest",
+        "pr_number": 804,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/804",
+        "merged_at": "2026-09-22T15:53:54.495600+00:00",
+        "merge_class": "ingest_narrow",
+        "auto_merge": false,
+        "independently_verified": true
+      },
+      {
+        "task_id": "eng-20260922-03",
+        "title": "Close stubborn ingest gaps for KGF.L (chain 1/3: 0/0 bodies, run igc-20260922-03)",
+        "area": "ingest",
+        "pr_number": 803,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/803",
+        "merged_at": "2026-09-22T14:45:21.206847+00:00",
+        "merge_class": "ingest_narrow",
+        "auto_merge": false,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260922-02",
         "title": "Close stubborn ingest gaps for VTY.L (chain 1/3: 0/0 bodies, run igc-20260922-01)",
