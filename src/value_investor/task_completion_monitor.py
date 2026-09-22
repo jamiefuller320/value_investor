@@ -75,12 +75,8 @@ def build_task_completion_monitor(
     path = Path(tasks_path) if tasks_path is not None else COMMITTED_TASKS_PATH
     fix_path = Path(pr_fix_path) if pr_fix_path is not None else DEFAULT_PR_FIX_OCCASIONS_PATH
 
-    merge_history = summarize_engineering_merges_by_day(
-        tasks_path=path, days=window, now=now
-    )
-    fix_history = summarize_pr_fix_occasions_by_day(
-        path=fix_path, days=window, now=now
-    )
+    merge_history = summarize_engineering_merges_by_day(tasks_path=path, days=window, now=now)
+    fix_history = summarize_pr_fix_occasions_by_day(path=fix_path, days=window, now=now)
     merge_by_day = {str(row.get("date")): row for row in merge_history}
     fix_by_day = {str(row.get("date")): row for row in fix_history}
 
