@@ -193,6 +193,77 @@ def test_reburn_investigation_allows_reframe_when_cleared(tmp_path: Path, monkey
     assert inv["allow_narrow_reframe"] is True
 
 
+def test_allow_unpark_without_bundled_narrow_reframe(tmp_path: Path, monkeypatch):
+    row = _stall_row(
+        "eng-20260922-05",
+        parked_policy="reburn_loop",
+        parked_reason="automation waste reburn",
+    )
+    row["evidence"]["filing_health"] = {
+        **row["evidence"]["filing_health"],
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 1,
+        "unmeasured_tickers": [],
+        "zero_body_tickers": ["ZZZ.DE"],
+    }
+    monkeypatch.setattr(
+        "value_investor.project_traffic.get_traffic_control_state",
+        lambda **kwargs: {"automation_waste_active": False},
+    )
+    monkeypatch.setattr(
+        "value_investor.automation_waste.detect_engineering_agent_reburn",
+        lambda **kwargs: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.preflight_park_is_healed",
+        lambda row, **kwargs: True,
+    )
+    inv = investigate_reburn_loop_library_stall(
+        row,
+        tasks_path=tmp_path / "missing.json",
+        bundled=False,
+        focus_ticker="ZZZ.DE",
+    )
+    assert inv["allow_unpark"] is True
+    assert inv["allow_narrow_reframe"] is False
+
+
+def test_auto_unpark_reburn_when_gates_clear(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    row = _stall_row(
+        "eng-20260922-05",
+        parked_policy="reburn_loop",
+        parked_reason="automation waste reburn",
+    )
+    tasks_path.write_text(json.dumps({"tasks": [row]}), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.project_traffic.get_traffic_control_state",
+        lambda **kwargs: {"automation_waste_active": False},
+    )
+    monkeypatch.setattr(
+        "value_investor.automation_waste.detect_engineering_agent_reburn",
+        lambda **kwargs: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.preflight_park_is_healed",
+        lambda row, **kwargs: True,
+    )
+    monkeypatch.setattr(
+        "value_investor.library_stall_task_triage.reburn_unpark_dispatch_gates",
+        lambda **kwargs: (True, "dispatch gates clear"),
+    )
+
+    result = triage_library_stall_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_cancel_superseded=False,
+        auto_annotate=False,
+        auto_unpark_cleared_reburn=True,
+    )
+    assert any(a.action == "unpark_reburn_library_stall" for a in result.unparked)
+    assert load_engineering_tasks(tasks_path)["tasks"][0]["status"] == "open"
+
+
 def test_triage_cancels_resolved_stall(tmp_path: Path, monkeypatch):
     tasks_path = tmp_path / "engineering_tasks.json"
     tasks_path.write_text(json.dumps({"tasks": [_stall_row("eng-20260922-05")]}), encoding="utf-8")

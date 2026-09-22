@@ -292,6 +292,7 @@ def default_policy() -> dict[str, Any]:
                 "auto_annotate_library_stall_triage": True,
                 "auto_reframe_bundled_library_stall": False,
                 "auto_reframe_reburn_when_cleared": False,
+                "auto_unpark_cleared_reburn_library_stall": True,
                 "note": (
                     "immediate_park_unfixable_pr parks open/pr_open tasks when hunter-fix is "
                     "ineligible/exhausted and CI is all-red (or trust-local-gate after verify); "
@@ -316,7 +317,9 @@ def default_policy() -> dict[str, Any]:
                     "(focus ticker / lanes); auto_reframe_bundled_library_stall rewrites parked "
                     "bundled stalls in place (off by default; skips reburn_loop); "
                     "auto_reframe_reburn_when_cleared narrow-reframes reburn_loop parks "
-                    "only when reburn_investigation reports allow_narrow_reframe."
+                    "only when reburn_investigation reports allow_narrow_reframe; "
+                    "auto_unpark_cleared_reburn_library_stall reopens reburn_loop library "
+                    "stalls when investigation and traffic/queue-clearing gates allow."
                 ),
             },
             "traffic_control": {
@@ -334,6 +337,13 @@ def default_policy() -> dict[str, Any]:
                 "automation_waste_enabled": True,
                 "waste_fail_threshold": 3,
                 "waste_window_hours": 6,
+                "waste_threshold_note": (
+                    "Three engineering-agent failures in six hours while an open task has "
+                    "no in-flight PR triggers automation-waste park (one more than "
+                    "no_diff_cap=2 on the task row). That spacing reduces false parks on "
+                    "flaky preflight while still stopping Composer reburn before a fourth "
+                    "full agent run."
+                ),
                 "pause_on_automation_waste": True,
                 "park_on_automation_waste": True,
                 "note": (

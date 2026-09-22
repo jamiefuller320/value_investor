@@ -1872,9 +1872,15 @@ def main(argv: list[str] | None = None) -> int:
     mgb.set_defaults(func=_cmd_try_market_gap_burndown)
 
     def _cmd_triage_library_stall(args: argparse.Namespace) -> int:
+        from value_investor.engineering_recovery import _engineering_queue_recovery_policy
         from value_investor.library_stall_task_triage import triage_library_stall_tasks
 
         tasks_path = _resolve_tasks_path(args.tasks_path)
+        recovery_policy = _engineering_queue_recovery_policy()
+        auto_unpark = not getattr(args, "no_unpark_reburn", False) and (
+            bool(getattr(args, "unpark_reburn_when_cleared", False))
+            or bool(recovery_policy.get("auto_unpark_cleared_reburn_library_stall"))
+        )
         payload = triage_library_stall_tasks(
             tasks_path=tasks_path,
             library_root=args.library_root,
@@ -1884,6 +1890,7 @@ def main(argv: list[str] | None = None) -> int:
             auto_annotate=not args.no_annotate,
             auto_reframe_bundled=bool(args.reframe_bundled),
             auto_reframe_reburn_when_cleared=bool(args.reframe_reburn_when_cleared),
+            auto_unpark_cleared_reburn=auto_unpark,
         )
         if args.json:
             _print_json(payload.to_dict())
@@ -1894,6 +1901,8 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"Annotated {row.task_id}: {row.reason}")
             for row in payload.reframed:
                 print(f"Reframed {row.task_id}: {row.reason}")
+            for row in payload.unparked:
+                print(f"Unparked {row.task_id}: {row.reason}")
             if not payload.to_dict()["action_count"]:
                 print("No library stall triage actions")
         return 0
@@ -1929,6 +1938,19 @@ def main(argv: list[str] | None = None) -> int:
             "Narrow-reframe reburn_loop parks when reburn_investigation allows "
             "(automation waste cleared, preflight clean)"
         ),
+    )
+    lst.add_argument(
+        "--unpark-reburn-when-cleared",
+        action="store_true",
+        help=(
+            "Reopen reburn_loop library stalls when investigation and dispatch gates "
+            "allow (default policy: on via recover-queue)"
+        ),
+    )
+    lst.add_argument(
+        "--no-unpark-reburn",
+        action="store_true",
+        help="Skip auto-unpark for cleared reburn_loop stalls",
     )
     lst.add_argument(
         "--no-supersede-cancel",

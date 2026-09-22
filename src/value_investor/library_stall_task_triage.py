@@ -53,6 +53,7 @@ class LibraryStallTriageResult:
     cancelled: list[LibraryStallTriageAction] = field(default_factory=list)
     annotated: list[LibraryStallTriageAction] = field(default_factory=list)
     reframed: list[LibraryStallTriageAction] = field(default_factory=list)
+    unparked: list[LibraryStallTriageAction] = field(default_factory=list)
     skipped: list[dict[str, str]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
@@ -60,8 +61,12 @@ class LibraryStallTriageResult:
             "cancelled": [row.to_dict() for row in self.cancelled],
             "annotated": [row.to_dict() for row in self.annotated],
             "reframed": [row.to_dict() for row in self.reframed],
+            "unparked": [row.to_dict() for row in self.unparked],
             "skipped": list(self.skipped),
-            "action_count": len(self.cancelled) + len(self.annotated) + len(self.reframed),
+            "action_count": len(self.cancelled)
+            + len(self.annotated)
+            + len(self.reframed)
+            + len(self.unparked),
         }
 
 
@@ -231,7 +236,7 @@ def investigate_reburn_loop_library_stall(
         and not blockers
         and primary in {"scope_too_broad_secondary", "eng_agent_reburn_cleared"}
     )
-    allow_unpark = allow_narrow_reframe and str(row.get("status") or "") == "parked"
+    allow_unpark = str(row.get("status") or "") == "parked" and not blockers
 
     safe_next_steps: list[str] = []
     if "automation_waste" in blockers:
@@ -251,8 +256,12 @@ def investigate_reburn_loop_library_stall(
         )
     if allow_narrow_reframe:
         safe_next_steps.append(
-            f"Safe to narrow-reframe to focus ticker {focus_ticker} (then unpark manually "
-            "or via recover-queue when dispatch gates allow)."
+            f"Safe to narrow-reframe to focus ticker {focus_ticker} before re-dispatch."
+        )
+    if allow_unpark:
+        safe_next_steps.append(
+            "Reburn blockers cleared — eligible for auto-unpark on recover-queue when "
+            "traffic / queue-clearing gates allow."
         )
     elif bundled and focus_ticker and blockers:
         safe_next_steps.append(
@@ -273,6 +282,14 @@ def investigate_reburn_loop_library_stall(
         "failure_count": failure_count,
         "allow_narrow_reframe": allow_narrow_reframe,
         "allow_unpark": allow_unpark,
+        "skip_unpark_reason": (
+            None
+            if allow_unpark
+            else (
+                "reburn_loop: dispatch blockers remain — "
+                + (", ".join(blockers) if blockers else primary)
+            )
+        ),
         "skip_reframe_reason": (
             None
             if allow_narrow_reframe
@@ -489,6 +506,111 @@ def reframe_bundled_library_stall_task(
     return LibraryStallTriageAction(task_id=task_id, action="reframe_narrow", reason=reason)
 
 
+def reburn_unpark_dispatch_gates(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
+    task_id: str | None = None,
+) -> tuple[bool, str]:
+    """Return whether reopening a cleared reburn_loop stall is safe for dispatch."""
+    from value_investor.automation_waste import detect_engineering_agent_reburn
+    from value_investor.engineering_queue import (
+        is_queue_clearing_pause_active,
+        is_traffic_pause_active,
+    )
+    from value_investor.project_traffic import get_traffic_control_state
+
+    traffic = get_traffic_control_state(tasks_path=tasks_path)
+    if bool(traffic.get("automation_waste_active")):
+        return False, "automation_waste_active"
+
+    live = detect_engineering_agent_reburn(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        recent_agent_failures=recent_agent_failures,
+    )
+    if live is not None and task_id and task_id in list(live.task_ids or []):
+        return False, "live_eng_agent_reburn_signal"
+
+    if is_traffic_pause_active(tasks_path=tasks_path):
+        reasons = list(traffic.get("pause_reasons") or [])
+        return False, f"traffic_pause:{','.join(reasons) or 'active'}"
+
+    if is_queue_clearing_pause_active(tasks_path=tasks_path):
+        return False, "queue_clearing_pause_active"
+
+    return True, "dispatch gates clear"
+
+
+def try_auto_unpark_reburn_library_stall(
+    row: dict[str, Any],
+    triage: dict[str, Any],
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
+    apply: bool = True,
+) -> LibraryStallTriageAction | None:
+    """Reopen a reburn_loop library stall when investigation and dispatch gates allow."""
+    if not triage.get("reburn_loop"):
+        return None
+    if str(row.get("status") or "") != "parked":
+        return None
+    investigation = triage.get("reburn_investigation") or {}
+    if not investigation.get("allow_unpark"):
+        return None
+
+    task_id = str(row.get("id") or "")
+    gates_ok, gate_detail = reburn_unpark_dispatch_gates(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        recent_agent_failures=recent_agent_failures,
+        task_id=task_id,
+    )
+    if not gates_ok:
+        return None
+
+    unpark_reason = (
+        "tier-1 stall triage: reburn_loop cleared — "
+        f"{investigation.get('primary_hypothesis')} ({gate_detail})"
+    )
+    if not apply:
+        return LibraryStallTriageAction(
+            task_id=task_id,
+            action="unpark_reburn_library_stall",
+            reason=unpark_reason,
+        )
+
+    from value_investor.engineering_recovery import PARKED_STATUS, unpark_agent_task
+
+    evidence = dict(row.get("evidence") or {})
+    if not isinstance(evidence, dict):
+        evidence = {}
+    evidence["stall_triage"] = triage
+    evidence["reburn_unpark_at"] = datetime.now(UTC).isoformat()
+    mark_task_status(
+        task_id,
+        PARKED_STATUS,
+        path=tasks_path,
+        committed_path=tasks_path,
+        evidence=evidence,
+    )
+    action = unpark_agent_task(
+        task_id,
+        reason=unpark_reason,
+        tasks_path=tasks_path,
+        apply=True,
+    )
+    if action is None:
+        return None
+    return LibraryStallTriageAction(
+        task_id=task_id,
+        action="unpark_reburn_library_stall",
+        reason=unpark_reason,
+    )
+
+
 def triage_library_stall_tasks(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
@@ -500,6 +622,7 @@ def triage_library_stall_tasks(
     auto_annotate: bool = True,
     auto_reframe_bundled: bool = False,
     auto_reframe_reburn_when_cleared: bool = False,
+    auto_unpark_cleared_reburn: bool = False,
     open_prs: list[dict[str, Any]] | None = None,
     recent_agent_failures: list[dict[str, Any]] | None = None,
 ) -> LibraryStallTriageResult:
@@ -574,7 +697,12 @@ def triage_library_stall_tasks(
             )
             continue
 
-        if not auto_annotate and not auto_reframe_bundled:
+        if not (
+            auto_annotate
+            or auto_reframe_bundled
+            or auto_reframe_reburn_when_cleared
+            or auto_unpark_cleared_reburn
+        ):
             continue
 
         triage = analyze_library_stall_task(
@@ -600,6 +728,23 @@ def triage_library_stall_tasks(
             )
             if reframed is not None:
                 result.reframed.append(reframed)
+                data = load_engineering_tasks(tasks_path)
+                row = next(
+                    (item for item in data.get("tasks") or [] if str(item.get("id")) == task_id),
+                    row,
+                )
+
+        if auto_unpark_cleared_reburn:
+            unparked = try_auto_unpark_reburn_library_stall(
+                row,
+                triage,
+                tasks_path=tasks_path,
+                open_prs=open_prs,
+                recent_agent_failures=recent_agent_failures,
+                apply=apply,
+            )
+            if unparked is not None:
+                result.unparked.append(unparked)
                 continue
 
         if auto_annotate and triage_changed:
@@ -639,6 +784,8 @@ __all__ = [
     "is_library_stall_engineering_row",
     "library_stall_market_id",
     "library_stall_park_is_resolved",
+    "reburn_unpark_dispatch_gates",
     "reframe_bundled_library_stall_task",
+    "try_auto_unpark_reburn_library_stall",
     "triage_library_stall_tasks",
 ]
