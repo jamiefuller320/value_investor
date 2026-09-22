@@ -1,8 +1,9 @@
 name: Progress report
 
 # Rebuild docs/data/progress_report.{json,md} (+ synced project_progress.json)
-# and refresh GitHub Pages. Triggered from the dashboard Generate button
-# (workflow_dispatch via a browser-stored PAT), Actions UI, or repository_dispatch.
+# and refresh GitHub Pages. Prefer the Supabase dashboard bridge (Overview
+# Generate → dashboard_commands → dashboard-bridge worker → this workflow).
+# Also: Actions UI workflow_dispatch, or legacy browser PAT fallback.
 on:
   workflow_dispatch:
     inputs:

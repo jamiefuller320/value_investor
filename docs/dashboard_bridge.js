@@ -164,7 +164,9 @@
         payload: { v: 1, id: commandId, action, payload: body.payload },
       });
     }
-    if (onStatus) onStatus("Queued — waiting for GitHub worker…");
+    if (onStatus) {
+      onStatus("Queued — waiting for GitHub worker (weekday poll; can take 10–60+ min)…");
+    }
     return waitForCommandRow(commandId, onStatus);
   }
 
