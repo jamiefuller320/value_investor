@@ -3281,6 +3281,96 @@ function resolveQueueHealth(data) {
   return auto.queue_health || null;
 }
 
+function completionDayLabel(day) {
+  if (!day || typeof day !== "object") return "—";
+  const total = Number(day.merged_total || 0);
+  const auto = Number(day.merged_auto || 0);
+  const manual = Number(day.merged_manual || 0);
+  const fixes = Number(day.fix_interventions || 0);
+  const fixBits = [];
+  if (Number(day.fix_ci_check || 0)) fixBits.push(`${day.fix_ci_check} CI`);
+  if (Number(day.fix_merge_conflict || 0)) fixBits.push(`${day.fix_merge_conflict} merge`);
+  if (Number(day.fix_ci_and_merge || 0)) fixBits.push(`${day.fix_ci_and_merge} both`);
+  const fixDetail = fixBits.length ? ` (${fixBits.join(", ")})` : "";
+  return `${total} merged · ${auto} auto / ${manual} manual · ${fixes} fix intervention${fixes === 1 ? "" : "s"}${fixDetail}`;
+}
+
+function renderCompletionHistoryChart(monitor) {
+  const history = Array.isArray(monitor?.history) ? monitor.history : [];
+  if (!history.length) {
+    return `<p class="small muted">No completion history yet.</p>`;
+  }
+  const maxMerged = Math.max(1, ...history.map((d) => Number(d.merged_total || 0)));
+  const maxFix = Math.max(1, ...history.map((d) => Number(d.fix_interventions || 0)));
+  const chartH = 120;
+  const labelH = 18;
+  const gap = 4;
+  const barW = 18;
+  const groupW = barW + 10;
+  const width = Math.max(history.length * groupW + 8, 200);
+  const bars = history
+    .map((day, idx) => {
+      const x = 6 + idx * groupW;
+      const auto = Number(day.merged_auto || 0);
+      const manual = Number(day.merged_manual || 0);
+      const fixes = Number(day.fix_interventions || 0);
+      const autoH = (auto / maxMerged) * chartH;
+      const manualH = (manual / maxMerged) * chartH;
+      const fixH = (fixes / maxFix) * chartH;
+      const manualY = chartH - manualH;
+      const autoY = manualY - autoH;
+      const dateLabel = String(day.date || "").slice(5);
+      const title = `${day.date}: ${auto} auto, ${manual} manual, ${fixes} interventions`;
+      return `
+        <g class="completion-bar-group" transform="translate(${x},0)">
+          <title>${esc(title)}</title>
+          <rect class="completion-bar-manual" x="0" y="${manualY}" width="${barW}" height="${Math.max(manualH, 0)}" rx="1"></rect>
+          <rect class="completion-bar-auto" x="0" y="${autoY}" width="${barW}" height="${Math.max(autoH, 0)}" rx="1"></rect>
+          <rect class="completion-bar-fix" x="${barW + 1}" y="${chartH - fixH}" width="3" height="${Math.max(fixH, fixes ? 2 : 0)}" rx="1"></rect>
+          <text class="completion-bar-label" x="${barW / 2}" y="${chartH + labelH - 4}" text-anchor="middle">${esc(dateLabel)}</text>
+        </g>`;
+    })
+    .join("");
+  return `
+    <div class="completion-chart-wrap">
+      <svg class="completion-history-svg" viewBox="0 0 ${width} ${chartH + labelH + gap}" role="img" aria-label="Task completion history">
+        ${bars}
+      </svg>
+      <div class="completion-chart-legend small muted">
+        <span><i class="completion-swatch auto"></i> Auto merge</span>
+        <span><i class="completion-swatch manual"></i> Manual merge</span>
+        <span><i class="completion-swatch fix"></i> Fix interventions</span>
+      </div>
+    </div>`;
+}
+
+function renderTaskCompletionMonitor(health) {
+  const monitor = health?.completion_monitor;
+  if (!monitor || typeof monitor !== "object") return "";
+  const today = monitor.today || {};
+  const yesterday = monitor.yesterday || {};
+  const days = Number(monitor.history_days || (monitor.history || []).length || 14);
+  return `
+    <div class="card completion-monitor-card" style="margin-top:0.75rem">
+      <h3>Task / PR completion</h3>
+      <p class="small muted" style="margin-top:0.25rem">UTC day buckets from engineering merges and PR-fix occasions (CI / merge conflict interventions).</p>
+      <div class="grid completion-readout-grid" style="margin-top:0.75rem">
+        <div class="completion-readout">
+          <div class="completion-readout-label">Today (${esc(String(today.date || "—"))})</div>
+          <div class="completion-readout-value">${esc(String(today.merged_total ?? 0))}</div>
+          <p class="small muted">${esc(completionDayLabel(today))}</p>
+        </div>
+        <div class="completion-readout">
+          <div class="completion-readout-label">Yesterday (${esc(String(yesterday.date || "—"))})</div>
+          <div class="completion-readout-value">${esc(String(yesterday.merged_total ?? 0))}</div>
+          <p class="small muted">${esc(completionDayLabel(yesterday))}</p>
+        </div>
+      </div>
+      <h4 style="margin:1rem 0 0.35rem">Last ${esc(String(days))} days</h4>
+      ${renderCompletionHistoryChart(monitor)}
+    </div>`;
+}
+
 function renderQueueHealthMonitor(data) {
   const health = resolveQueueHealth(data);
   const runbookUrl = githubOpsDocUrl("docs/ops/dashboard-bridge.md");
@@ -3296,6 +3386,14 @@ function renderQueueHealthMonitor(data) {
   const agent = health.agent_lane || {};
   const clearing = health.queue_clearing || {};
   const ops = health.ops_monitor || {};
+  const monitor = health.completion_monitor || {};
+  const todayCount = monitor.today
+    ? Number(monitor.today.merged_total || 0)
+    : Array.isArray(health.merges_today)
+      ? health.merges_today.length
+      : 0;
+  const yesterdayCount = monitor.yesterday ? Number(monitor.yesterday.merged_total || 0) : 0;
+  const todayFixes = monitor.today ? Number(monitor.today.fix_interventions || 0) : 0;
 
   return `
     <section class="automation-section automation-section-full queue-health-section">
@@ -3317,10 +3415,15 @@ function renderQueueHealthMonitor(data) {
           ${agent.next_task_id ? settingRow("Next task", `<code>${esc(agent.next_task_id)}</code>`) : ""}
           ${clearing.pause_active ? settingRow("Backlog pause", `<span class="badge badge-ii-no">active</span> (${esc(String(clearing.attention_parked_count ?? 0))} parked)`) : ""}
           ${(health.traffic_control || {}).pause_active ? settingRow("Traffic pause", `<span class="badge badge-ii-no">active</span> (${esc(String((health.traffic_control || {}).stuck_pr_count ?? 0))} stuck)`) : ""}
+          ${settingRow(
+            "Merges today / yesterday",
+            `${esc(String(todayCount))} / ${esc(String(yesterdayCount))}`
+          )}
+          ${settingRow("Fix interventions today", esc(String(todayFixes)))}
           ${Array.isArray(health.merges_today) && health.merges_today.length
             ? settingRow(
-                "Merges today",
-                `${esc(String(health.merges_today.length))} total / ${esc(String(health.verified_merges_today_count ?? health.merges_today.filter((r) => r.independently_verified).length))} verified`
+                "Verified today",
+                esc(String(health.verified_merges_today_count ?? health.merges_today.filter((r) => r.independently_verified).length))
               )
             : ""}
         </div>
@@ -3330,6 +3433,7 @@ function renderQueueHealthMonitor(data) {
           ${settingRow("Dispatch signal", ops.should_dispatch_engineering ? "ready" : "hold")}
         </div>
       </div>
+      ${renderTaskCompletionMonitor(health)}
       ${Array.isArray(health.merges_today) && health.merges_today.length ? `
       <div class="card" style="margin-top:0.75rem">
         <h3>Engineering merges today</h3>
