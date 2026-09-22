@@ -284,6 +284,9 @@ def default_policy() -> dict[str, Any]:
                 "auto_cancel_no_diff_cap": "at_cap",
                 "auto_cancel_superseded_parked_hunter": True,
                 "auto_cancel_mis_scoped_allowlist": True,
+                "auto_cancel_resolved_gap_closure": True,
+                "auto_cancel_superseded_gap_closure": True,
+                "auto_unpark_healed_preflight": True,
                 "note": (
                     "immediate_park_unfixable_pr parks open/pr_open tasks when hunter-fix is "
                     "ineligible/exhausted and CI is all-red (or trust-local-gate after verify); "
@@ -291,11 +294,17 @@ def default_policy() -> dict[str, Any]:
                     "attention-parked backlog is full. Resume when count drops below "
                     "resume_attention_parked_below and resume_idle_minutes have elapsed since "
                     "the last clearing action. tier1_housekeep_on_recover runs housekeep from "
-                    "recover-queue after parking steps; auto_cancel_no_diff_cap is off | at_cap "
-                    "| always; auto_cancel_superseded_parked_hunter cancels parked hunter rows "
-                    "whose ticker is already resolved on main; auto_cancel_mis_scoped_allowlist "
+                    "recover-queue **before** the pause/email evaluation so self-heal can avert "
+                    "the warning; auto_cancel_no_diff_cap is off | at_cap | always; "
+                    "auto_cancel_superseded_parked_hunter cancels parked hunter rows whose "
+                    "ticker is already resolved on main; auto_cancel_mis_scoped_allowlist "
                     "cancels preflight_clash/workflow_permission parks whose filings/CH/OCR "
-                    "title cannot be implemented by an ops/workflow allowlist."
+                    "title cannot be implemented by an ops/workflow allowlist; "
+                    "auto_cancel_resolved_gap_closure cancels parked gap-closure when the "
+                    "ticker no longer has material gaps; auto_cancel_superseded_gap_closure "
+                    "cancels parked gap-closure when a same-ticker sibling already merged; "
+                    "auto_unpark_healed_preflight reopens preflight_clash parks once clash "
+                    "checks are clean again."
                 ),
             },
             "traffic_control": {

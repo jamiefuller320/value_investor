@@ -11,6 +11,8 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any
 
+from value_investor.experiment_acks import canonical_experiment_id
+
 DEFAULT_COMMANDS_TABLE = "dashboard_commands"
 DEFAULT_CHANNEL = "ftse-dashboard"
 SUPPORTED_ACTIONS = frozenset(
@@ -192,23 +194,65 @@ def execute_dashboard_command(
     return {"action": action, "event_type": event_type, "command_id": command_id}
 
 
+def _lifecycle_ack_dedupe_key(row: dict[str, Any]) -> str | None:
+    """Collapse catalog aliases (``*_track``) so parallel factor acks dispatch once."""
+    action = str(row.get("action") or "").strip()
+    if action != "lifecycle-experiment-ack":
+        return None
+    payload = row.get("payload") if isinstance(row.get("payload"), dict) else {}
+    experiment_id = canonical_experiment_id(str(payload.get("experiment_id") or ""))
+    if not experiment_id:
+        return None
+    return f"{action}:{experiment_id}"
+
+
 def process_pending_dashboard_commands(
     *,
     config: DashboardBridgeConfig | None = None,
     limit: int = 10,
     dry_run: bool = False,
 ) -> dict[str, Any]:
-    """Poll Supabase for pending commands and dispatch repository events."""
+    """Poll Supabase for pending commands and dispatch GitHub repository events."""
     cfg = config or DashboardBridgeConfig.from_env()
     if cfg is None:
         return {"ok": False, "reason": "supabase_not_configured", "processed": []}
 
     pending = fetch_pending_commands(cfg, limit=limit)
     processed: list[dict[str, Any]] = []
+    seen_lifecycle_acks: set[str] = set()
     for row in pending:
         command_id = str(row.get("id") or "")
         if not command_id:
             continue
+        dedupe_key = _lifecycle_ack_dedupe_key(row)
+        if dedupe_key and dedupe_key in seen_lifecycle_acks:
+            if dry_run:
+                processed.append(
+                    {
+                        "id": command_id,
+                        "action": row.get("action"),
+                        "dry_run": True,
+                        "skipped": "duplicate_lifecycle_ack",
+                    }
+                )
+                continue
+            update_command_status(
+                cfg,
+                command_id,
+                status="done",
+                message="Skipped duplicate lifecycle-experiment-ack (same experiment)",
+            )
+            processed.append(
+                {
+                    "id": command_id,
+                    "action": row.get("action"),
+                    "status": "done",
+                    "skipped": "duplicate_lifecycle_ack",
+                }
+            )
+            continue
+        if dedupe_key:
+            seen_lifecycle_acks.add(dedupe_key)
         if dry_run:
             processed.append({"id": command_id, "action": row.get("action"), "dry_run": True})
             continue

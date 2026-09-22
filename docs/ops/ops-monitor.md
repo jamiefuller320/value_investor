@@ -352,24 +352,34 @@ pauses new **engineering-agent** dispatch and **parked-hunter-compile**, and sen
 full-queue email (ordered `list-parked` summary).
 
 **Tier-1 auto housekeep** (hourly `recover-queue`, policy
-`engineering.queue_recovery`): cancels duplicate-of-merged parks, parked hunters whose
-ticker is already on `main`, (when at the attention cap) `no_diff_cap` parks, and
-mis-scoped `preflight_clash` / `workflow_permission` parks whose filings/CH/OCR title
-cannot be implemented by an ops/workflow allowlist. Remaining `preflight_clash` /
-`ci_blocked` parks still need human triage.
+`engineering.queue_recovery`) runs **before** the pause / warning-email evaluation so
+self-heal can avert the alert when possible:
 
-Human triage (oldest first) for remaining attention parks:
+| Auto action | When |
+|-------------|------|
+| Cancel `duplicate_of` merged | Explicit duplicate parks |
+| Cancel superseded parked hunters | Ticker already on `main` |
+| Cancel mis-scoped allowlist parks | Filings/CH/OCR title + ops/workflow allowlist |
+| Cancel `no_diff_cap` parks | When at the attention cap (`auto_cancel_no_diff_cap=at_cap`) |
+| Cancel resolved gap-closure parks | Ticker no longer has outstanding *material* gaps |
+| Cancel superseded gap-closure parks | Same-ticker sibling already merged |
+| Unpark healed `preflight_clash` | Clash checks clean against current in-flight work |
+
+Remaining `ci_blocked` / stubborn `preflight_clash` / manual parks still need human triage.
+
+Human triage (oldest first) for parks that survive self-heal:
 
 1. `ftse-engineering list-parked`
 2. For each task: merge the PR, cancel stale work, or `ftse-engineering unpark-task --task-id … --reason …` when appropriate
-3. Tier-1 trims obvious duplicates only — do not rely on it for preflight parks
+3. Tier-1 trims resolved/superseded/healed parks automatically — do not re-triage those
 
 **Auto-resume:** dispatch restarts when attention-parked count drops **below 7** **and**
 **30 minutes** have elapsed since the last clearing action (cancel / merge / unpark).
 Brief dips while you are still triaging therefore do not restart the queue mid-session.
 
 Policy keys: `engineering.queue_recovery.max_attention_parked_tasks`,
-`resume_attention_parked_below`, `resume_idle_minutes` in agent model policy.
+`resume_attention_parked_below`, `resume_idle_minutes`, plus the
+`auto_cancel_*` / `auto_unpark_healed_preflight` flags in agent model policy.
 
 ### Project traffic controller (stuck PR pause)
 

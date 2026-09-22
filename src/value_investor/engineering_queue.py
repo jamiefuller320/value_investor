@@ -497,6 +497,7 @@ def _filing_index_paths_for_ticker(ticker: str, *, roots: list[Path]) -> list[Pa
 
 
 def _coverage_from_index(path: Path) -> dict[str, int]:
+    from value_investor.research.filings import filing_lacks_material_body
     from value_investor.storage import read_json
 
     coverage = {
@@ -512,7 +513,7 @@ def _coverage_from_index(path: Path) -> dict[str, int]:
     filings = list(index.get("filings") or [])
     coverage["filings_total"] = int(summary.get("total") or len(filings))
     coverage["filings_with_body"] = int(summary.get("with_body") or 0)
-    coverage["indexed_without_body"] = sum(1 for row in filings if not row.get("has_body"))
+    coverage["indexed_without_body"] = sum(1 for row in filings if filing_lacks_material_body(row))
     return coverage
 
 

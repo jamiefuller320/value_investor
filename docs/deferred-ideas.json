@@ -9694,6 +9694,39 @@
       "status": "open",
       "source": "product-intent clarification: spawn fair twins and plot on all market graphs",
       "added_at": "2026-09-22T09:00:36+00:00"
+    },
+    {
+      "id": "L433",
+      "category": "later",
+      "section": "ops",
+      "title": "Wake dashboard-bridge immediately on Supabase command insert",
+      "summary": "Acknowledge clicks wait on weekday Actions schedule poll which often drifts past 10 minutes. A Supabase webhook, Edge Function, or denser external cron that workflow_dispatches dashboard-bridge.yml would clear queued commands without waiting for schedule drift.",
+      "revisit_when": "Dashboard Acknowledge or other bridge buttons time out waiting for GitHub worker more than once a week",
+      "tags": [
+        "dashboard",
+        "supabase",
+        "actions",
+        "latency"
+      ],
+      "status": "open",
+      "source": "dashboard acknowledge queue investigation 2026-09-22",
+      "added_at": "2026-09-22T08:18:51+00:00"
+    },
+    {
+      "id": "L434",
+      "category": "later",
+      "section": "ops",
+      "title": "EngineeringTask dataclass should carry parked/cancelled lifecycle fields",
+      "summary": "Parked metadata can still be lost if any path round-trips queue rows through EngineeringTask.to_dict(). Consider first-class parked_*/cancelled_* fields on the dataclass so compile rematch cannot strip them.",
+      "revisit_when": "Another parked_reason strip appears after the _merge_task_rows preserve fix, or EngineeringTask schema is next refactored",
+      "tags": [
+        "engineering",
+        "queue",
+        "parked"
+      ],
+      "status": "open",
+      "source": "fix parked engineering tasks triage",
+      "added_at": "2026-09-22T08:55:45+00:00"
     }
   ],
   "fragments": [
