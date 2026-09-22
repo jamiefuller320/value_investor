@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-22T17:11:08.109046+00:00",
+  "generated_at": "2026-09-22T17:13:08.023985+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1169,7 +1169,7 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-22T16:55:06.217611+00:00",
-    "queue_ui_updated_at": "2026-09-22T17:11:08.004555+00:00",
+    "queue_ui_updated_at": "2026-09-22T17:13:07.934080+00:00",
     "task_count": 100,
     "status": {
       "open_count": 0,
@@ -1492,9 +1492,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-22T17:11:08.109046+00:00",
-    "overall": "idle",
-    "headline": "Queue and hunter idle.",
+    "generated_at": "2026-09-22T17:13:08.023985+00:00",
+    "overall": "blocked",
+    "headline": "Traffic pause — 0 stuck PR(s). project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
     "merge_lane": {
       "state": "idle",
       "idle": true,
@@ -1506,31 +1506,33 @@
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "idle",
+      "state": "blocked",
       "idle": true,
       "running": false,
-      "blocked": false,
+      "blocked": true,
       "should_dispatch": false,
       "pause_active": false,
-      "traffic_pause_active": false,
+      "traffic_pause_active": true,
       "attention_parked_count": 2,
       "open_count": 0,
       "pr_open_count": 0,
       "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
       "next_task_id": null,
-      "reason": "no open engineering tasks in queue",
-      "detail": "No open engineering tasks — queue is idle."
+      "reason": "project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
+      "detail": "Traffic pause — 0 stuck PR(s). project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation"
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 1,
-      "evaluated_at": "2026-09-22T16:16:34.739524+00:00"
+      "attention_parked_count": 2,
+      "evaluated_at": "2026-09-22T17:13:06.944021+00:00"
     },
     "traffic_control": {
-      "pause_active": false,
+      "pause_active": true,
       "stuck_pr_count": 0,
-      "pause_reasons": [],
+      "pause_reasons": [
+        "automation_waste"
+      ],
       "evaluated_at": "2026-09-22T17:11:03.374641+00:00"
     },
     "ops_monitor": {
