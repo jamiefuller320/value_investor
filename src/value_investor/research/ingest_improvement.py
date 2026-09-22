@@ -282,16 +282,15 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
     try:
         index = read_json(index_path)
         filings = list(index.get("filings") or [])
-        summary = index.get("summary") or {}
-        coverage["filings_annual"] = int(summary.get("annual") or 0)
-        coverage["filings_interim"] = int(summary.get("interim") or 0)
-        coverage["filings_trading_update"] = int(summary.get("trading_update") or 0)
         from value_investor.research.filings import filing_lacks_material_body
 
         coverage["indexed_without_body"] = sum(
             1 for row in filings if filing_lacks_material_body(row)
         )
         period_cov = period_body_coverage(filings)
+        coverage["filings_annual"] = int(period_cov["annual"]["total"])
+        coverage["filings_interim"] = int(period_cov["interim"]["total"])
+        coverage["filings_trading_update"] = int(period_cov["trading_update"]["total"])
         coverage["annual_with_body"] = int(period_cov["annual"]["with_body"])
         coverage["interim_with_body"] = int(period_cov["interim"]["with_body"])
         coverage["trading_update_with_body"] = int(period_cov["trading_update"]["with_body"])

@@ -2668,6 +2668,9 @@ def classify_rns_headline(
     """
     blob = f"{headline or ''} {category or ''}".lower()
 
+    if re.search(r"\bannual report and accounts\b", blob):
+        return "annual"
+
     # Dividends / buybacks / exchange offers are not results packs.
     if re.search(
         r"\b(interim dividend|final dividend|dividend timetable|transaction in own shares|"
@@ -3037,6 +3040,17 @@ def _sec_edgar_supplement_allowed(ticker: str, company_name: str) -> bool:
     return _issuer_matches_sec_name(company_name, sec_name, ticker)
 
 
+def _is_investegate_aggregator_row(row: dict[str, Any]) -> bool:
+    """Investegate hub pages that are not issuer primary RNS (Short Positions, market digests)."""
+    url = str(row.get("url") or "").lower()
+    headline = str(row.get("headline") or "").lower()
+    if "/short-positions" in url or re.search(r"\bshort positions\b", headline):
+        return True
+    if "/across-the-markets/" in url or headline.startswith("across the markets:"):
+        return True
+    return False
+
+
 def filter_misattributed_filings(
     rows: list[dict[str, Any]],
     *,
@@ -3052,6 +3066,8 @@ def filter_misattributed_filings(
     for row in rows:
         headline = str(row.get("headline") or "")
         source = str(row.get("source") or "")
+        if regime == "uk_rns" and _is_investegate_aggregator_row(row):
+            continue
         if regime == "uk_rns" and _is_third_party_collateral_rns_headline(headline):
             continue
         if regime == "uk_rns" and (

@@ -285,6 +285,65 @@ def test_inspect_local_sources_includes_period_coverage(tmp_path: Path):
     assert inventory["filings_summary"]["period_coverage"]["annual"]["with_body"] == 0
 
 
+def test_filing_coverage_vty_s838_interim_does_not_false_gap(tmp_path: Path):
+    """eng-20260922-02: s838 parent-only interim must not inflate interim gap scoring."""
+    from value_investor.research.ingest_improvement import (
+        _filing_coverage,
+        _has_outstanding_ingest_gap,
+    )
+    from value_investor.research.store import ResearchStore
+
+    output_dir = tmp_path / "output"
+    filings_dir = output_dir / "research" / "VTY.L" / "sources" / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 3,
+                    "annual": 1,
+                    "interim": 2,
+                    "trading_update": 0,
+                    "other": 0,
+                    "with_body": 3,
+                    "period_coverage": {
+                        "annual": {"total": 1, "with_body": 1},
+                        "interim": {"total": 1, "with_body": 1},
+                        "trading_update": {"total": 0, "with_body": 0},
+                        "other": {"total": 0, "with_body": 0},
+                    },
+                },
+                "filings": [
+                    {
+                        "id": "ch_group",
+                        "period": "annual",
+                        "entity_type": "consolidated",
+                        "has_body": True,
+                    },
+                    {
+                        "id": "ch_interim_consolidated",
+                        "period": "interim",
+                        "entity_type": "consolidated",
+                        "has_body": True,
+                    },
+                    {
+                        "id": "ch_interim_s838",
+                        "period": "interim",
+                        "entity_type": "s838_holding",
+                        "has_body": True,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    store = ResearchStore(output_dir)
+    coverage = _filing_coverage(store, "VTY.L", output_dir)
+    assert coverage["filings_interim"] == 1
+    assert coverage["interim_with_body"] == 1
+    assert not _has_outstanding_ingest_gap(coverage, ticker="VTY.L")
+
+
 def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Path):
     output_dir = tmp_path / "output"
     suggestions_path = tmp_path / "suggestions.json"
