@@ -218,6 +218,9 @@ def build_queue_health_snapshot(
         pr_fix_path=pr_fix_path,
         now=clock,
     )
+    from value_investor.library_stall_task_triage import summarize_library_stall_parks
+
+    library_stall_parks = summarize_library_stall_parks(list(data.get("tasks") or []))
 
     overall = "ok"
     if agent_lane["blocked"] or merge_lane["blocked"]:
@@ -268,6 +271,7 @@ def build_queue_health_snapshot(
             1 for row in merges_today if row.get("independently_verified")
         ),
         "completion_monitor": completion_monitor,
+        "library_stall_parks": library_stall_parks,
     }
 
 

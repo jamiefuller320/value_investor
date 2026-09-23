@@ -365,6 +365,7 @@ self-heal can avert the alert when possible:
 | Cancel resolved gap-closure parks | Ticker no longer has outstanding *material* gaps |
 | Cancel superseded gap-closure parks | Same-ticker sibling already merged |
 | Unpark healed `preflight_clash` | Clash checks clean against current in-flight work |
+| Library stall triage | `recover_engineering_queue` tier-1 housekeep: supersede/resolve cancel, `stall_triage` annotate, optional reburn narrow-reframe, **auto-unpark** cleared `reburn_loop` stalls when dispatch gates allow (`library_stall_task_triage`) |
 
 Remaining `ci_blocked` / stubborn `preflight_clash` / manual parks still need human triage.
 
@@ -380,7 +381,8 @@ Brief dips while you are still triaging therefore do not restart the queue mid-s
 
 Policy keys: `engineering.queue_recovery.max_attention_parked_tasks`,
 `resume_attention_parked_below`, `resume_idle_minutes`, plus the
-`auto_cancel_*` / `auto_unpark_healed_preflight` flags in agent model policy.
+`auto_cancel_*` / `auto_unpark_healed_preflight` / `auto_unpark_cleared_reburn_library_stall`
+flags in agent model policy.
 
 ### Project traffic controller (stuck PR pause)
 

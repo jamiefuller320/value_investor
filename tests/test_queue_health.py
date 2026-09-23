@@ -37,6 +37,7 @@ def test_build_queue_health_idle_snapshot(tmp_path: Path, monkeypatch):
     assert snapshot["overall"] == "idle"
     assert snapshot["merge_lane"]["state"] == "idle"
     assert snapshot["agent_lane"]["state"] == "idle"
+    assert snapshot.get("library_stall_parks") == []
 
 
 def test_build_queue_health_blocked_agent_lane(tmp_path: Path, monkeypatch):

@@ -69,6 +69,7 @@ DEFAULT_AUTO_CANCEL_RESOLVED_LIBRARY_STALL = True
 DEFAULT_AUTO_ANNOTATE_LIBRARY_STALL_TRIAGE = True
 DEFAULT_AUTO_REFRAME_BUNDLED_LIBRARY_STALL = False
 DEFAULT_AUTO_REFRAME_REBURN_WHEN_CLEARED = False
+DEFAULT_AUTO_UNPARK_CLEARED_REBURN_LIBRARY_STALL = True
 GAP_CLOSURE_ENGINEERING_SOURCES = frozenset({"ingest_gap_closure", "ingest_trial"})
 _GAP_CLOSURE_TITLE_RUN_SUFFIX_RE = re.compile(r",\s*run\s+\S+\s*$", re.IGNORECASE)
 _GAP_CLOSURE_TITLE_CHAIN_RE = re.compile(
@@ -450,6 +451,9 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
     reframe_reburn = block.get("auto_reframe_reburn_when_cleared")
     if reframe_reburn is None:
         reframe_reburn = DEFAULT_AUTO_REFRAME_REBURN_WHEN_CLEARED
+    unpark_reburn = block.get("auto_unpark_cleared_reburn_library_stall")
+    if unpark_reburn is None:
+        unpark_reburn = DEFAULT_AUTO_UNPARK_CLEARED_REBURN_LIBRARY_STALL
     return {
         "immediate_park_unfixable_pr": bool(immediate),
         "max_attention_parked_tasks": max_attention,
@@ -468,6 +472,7 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
         "auto_annotate_library_stall_triage": bool(annotate_stall),
         "auto_reframe_bundled_library_stall": bool(reframe_stall),
         "auto_reframe_reburn_when_cleared": bool(reframe_reburn),
+        "auto_unpark_cleared_reburn_library_stall": bool(unpark_reburn),
     }
 
 
@@ -1831,11 +1836,12 @@ def recover_engineering_queue(
             ),
             auto_cancel_resolved=bool(recovery_policy.get("auto_cancel_resolved_library_stall")),
             auto_annotate=bool(recovery_policy.get("auto_annotate_library_stall_triage")),
-            auto_reframe_bundled=bool(
-                recovery_policy.get("auto_reframe_bundled_library_stall")
-            ),
+            auto_reframe_bundled=bool(recovery_policy.get("auto_reframe_bundled_library_stall")),
             auto_reframe_reburn_when_cleared=bool(
                 recovery_policy.get("auto_reframe_reburn_when_cleared")
+            ),
+            auto_unpark_cleared_reburn=bool(
+                recovery_policy.get("auto_unpark_cleared_reburn_library_stall")
             ),
             open_prs=list(augmented_open_prs or open_prs or []),
             recent_agent_failures=recent_agent_failures,
@@ -1855,6 +1861,11 @@ def recover_engineering_queue(
             hk.setdefault("reframed", [])
             hk["reframed"] = list(hk.get("reframed") or []) + [
                 row.to_dict() for row in stall_result.reframed
+            ]
+        if stall_result.unparked:
+            hk.setdefault("unparked", [])
+            hk["unparked"] = list(hk.get("unparked") or []) + [
+                row.to_dict() for row in stall_result.unparked
             ]
         result.housekeep = hk
 
