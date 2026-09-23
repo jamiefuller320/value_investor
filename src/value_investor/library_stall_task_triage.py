@@ -517,11 +517,11 @@ def reburn_unpark_dispatch_gates(
 ) -> tuple[bool, str]:
     """Return whether reopening a cleared reburn_loop stall is safe for dispatch."""
     from value_investor.automation_waste import detect_engineering_agent_reburn
-    from value_investor.engineering_queue import (
-        is_queue_clearing_pause_active,
+    from value_investor.engineering_recovery import is_queue_clearing_pause_active
+    from value_investor.project_traffic import (
+        get_traffic_control_state,
         is_traffic_pause_active,
     )
-    from value_investor.project_traffic import get_traffic_control_state
 
     traffic = get_traffic_control_state(tasks_path=tasks_path)
     if bool(traffic.get("automation_waste_active")):
