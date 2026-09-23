@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T10:27:07+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T17:47:13+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -202,6 +202,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N148 | **Do not replace Economic Moat proxy with qualitative comparative scoring** | Economic Moat today is absolute ROE/ROA/margin/leverage thresholds, not peer-relative or filing-based moat evidence. Building a true comparative moat scorer would mix research-layer judgment into the point-in-time screen and needs a separate design (peer cohorts, durable advantage evidence, PIT constraints). | Only if a dedicated quality/moat family redesign is explicitly prioritized with peer-relative and filing-backed features |
 | N149 | **Do not invent a proprietary screen to replace recognised models** | Developing a bespoke formula from in-sample successful-sleeve traits without PIT guards would overfit thin paper history and blur the recognisable-screen interpretability the memos rely on. Prefer reweighting existing models and progressive exclusion filters first. | Only if dual_objective_calibration shows persistent lift that cannot be expressed as weights or exclusion rules on the existing 22 models |
 | N150 | **Do not spray monthly deposits across all epoch-0 markets yet** | £100/mo per epoch-0 book invents a multi-market capital-allocation policy before stage 4 live breadth. Epoch-0 books are equal-support data marks. Prefer the FTSE buy_tier_level_dca twin only. | Live universe past FTSE-only (stage 4) or human chooses an explicit multi-market paper allocation policy with a fresh capital epoch |
+| N151 | **Auto-triage ingest deviations by screen signal** | Proposed policy: leftover/patchy dismiss, plain buy rely on park+hunter, strong_buy intensive pin. Do not wire auto-approve/dismiss yet — pins starve the weekday batch and IR URL replacement stays human judgment. | Observe-only shadow recommendations on open deviation rows have matched human dismiss/approve choices for several weeks, and intensive pin rate stays within weekday batch budget |
 
 ---
 
@@ -519,6 +520,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L436 | **Bundle multi-ticker IR allowlist fills into one eng task** | Instead of N intensive pins or N hunter tasks that all touch research_ir_urls.json, coalesce stuck no-allowlist tickers in the same regime into one data PR editing the allowlist (plus seed fallback) so Lane B pays one clash cycle for many names. | Open no-allowlist blockers across one regime exceed ~5 concurrent names and hunter tasks are serializing on research_ir_urls.json |
 | L439 | **Progress report dual-suite excess (stress + fair)** | project_progress currently pulls ai_excess from stress ai_judgment decision_review, so stage 2b looks brutal. Later: surface ai_judgment_fair excess alongside stress without flipping is_primary — adoption scoreboard vs churn lab. | Human wants dashboard/progress narrative aligned with Suite B adoption truth while keeping Suite A primary flag |
 | L449 | **Invoke market eng gap burndown from eng-queue when idle** | L448 burndown only runs inside ops-monitor apply_fixes, and ops-monitor skips after the first successful finalize of the day. After #805 landed mid-day, later scheduled/dispatch runs skipped monitor so burndown never applied until the next morning run (or force). Consider also calling try-market-gap-burndown from engineering-queue idle path beside compile-cap drain / parked hunter. | Next weekday where eng queue is idle after ~15:00 UTC with library IWB/thin remaining and ops-monitor already finalized that morning |
+| L453 | **Shadow signal-tier labels on ingest deviation rows** | Observe-only: attach proposed_action from latest screen signal (dismiss / park_hunter / pin_intensive) to each open ingest deviation without writing pins or changing status. Prove agreement with human triage before any apply path. | Human confirms they want the observe-only instrument built (small eng task when queue is idle) |
 
 ---
 
