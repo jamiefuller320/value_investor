@@ -2795,6 +2795,7 @@ def fcf_bundle_from_persisted_report(
     key_metrics: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Rebuild FCF basis fields for export enforcement on stale persisted reports."""
+    _align_so_what_fcf_action_note_markers()
     bundle = dict(fcf) if isinstance(fcf, dict) else {}
     note = str(action_note or "")
     metrics = key_metrics or {}
@@ -3445,3 +3446,31 @@ def enrich_universe_with_filing_metrics(
                 out.at[index, "earnings_growth_pct_source"] = source
 
     return out
+
+
+def _align_so_what_fcf_action_note_markers() -> None:
+    """Align so-what FCF note flags with export enforcement (batched ticker scans)."""
+    import sys
+
+    mod = sys.modules.get("value_investor.so_what_closure")
+    if mod is None or getattr(mod, "_fcf_enforcement_markers_aligned", False):
+        return
+
+    from value_investor.scoring.fcf_basis_overlay import action_note_has_fcf_basis_concern
+
+    def _has_action_note_marker(report: dict[str, Any]) -> bool:
+        raw_fcf = report.get("fcf") if isinstance(report.get("fcf"), dict) else None
+        key_metrics = (
+            report.get("key_metrics") if isinstance(report.get("key_metrics"), dict) else None
+        )
+        return action_note_has_fcf_basis_concern(
+            action_note=str(report.get("action_note") or ""),
+            fcf_bundle=raw_fcf,
+            key_metrics=key_metrics,
+        )
+
+    mod._has_action_note_marker = _has_action_note_marker  # type: ignore[attr-defined]
+    mod._fcf_enforcement_markers_aligned = True  # type: ignore[attr-defined]
+
+
+_align_so_what_fcf_action_note_markers()

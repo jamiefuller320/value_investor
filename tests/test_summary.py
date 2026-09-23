@@ -41,6 +41,7 @@ from value_investor.scoring.fcf import (
     reconcile_fcf,
     reconcile_fcf_for_ticker,
 )
+from value_investor.scoring.fcf_basis_overlay import action_note_has_fcf_basis_concern
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
 from value_investor.signals import Signal, assign_signal
 from value_investor.summary import (
@@ -861,6 +862,26 @@ def test_fcf_filing_screen_mismatch_flags_pine_style_opposite_sign_gap():
         filing_aligned=-4_600_000.0,
         screen_ttm=12_825_000.0,
         divergence_flagged=False,
+    )
+
+
+def test_action_note_has_fcf_basis_concern_ignores_paf_style_supportive_prose():
+    """Research prose must not imply FCF export enforcement when gaps are immaterial."""
+    note = (
+        "Strong Buy — neutral timing | Research: Accumulate, Medium risk — "
+        "Audited FY26 cash, buyback and filing-aligned FCF support the strong-buy screen; "
+        "higher FY27 AISC, gold cyclicality and pending chair succession keep the research "
+        "overlay below full strong buy."
+    )
+    fcf = {"screen_ttm": 327_180_512.0, "filing_aligned": 340_848_000.0}
+    assert not action_note_has_fcf_basis_concern(action_note=note, fcf_bundle=fcf)
+
+
+def test_action_note_has_fcf_basis_concern_honours_explicit_mismatch_note():
+    note = "Strong Buy | FCF basis mismatch: filing £100M | screen TTM £130M"
+    assert action_note_has_fcf_basis_concern(
+        action_note=note,
+        fcf_bundle={"screen_ttm": 130_000_000.0, "filing_aligned": 100_000_000.0},
     )
 
 
