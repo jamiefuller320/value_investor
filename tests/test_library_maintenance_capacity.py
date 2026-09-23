@@ -4,16 +4,16 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from value_investor.data_library_cli import main as library_main
 from value_investor.library_maintenance_capacity import (
     DEFAULT_MAX_MARKETS_WHEN_CROWDED,
     assess_maintenance_capacity,
+    empty_capacity,
     record_maintenance_capacity_sample,
     review_maintenance_capacity,
     save_maintenance_capacity,
-    empty_capacity,
 )
 from value_investor.library_maintenance_stagger import plan_maintenance_slot
-from value_investor.data_library_cli import main as library_main
 
 
 def test_default_crowded_width_is_two():
@@ -123,8 +123,6 @@ def test_record_sample_and_cli(tmp_path: Path, capsys):
             "errors": [],
         },
     )
-    assert library_main(
-        ["maintenance-capacity-review", "--root", str(tmp_path), "--json"]
-    ) == 0
+    assert library_main(["maintenance-capacity-review", "--root", str(tmp_path), "--json"]) == 0
     out = capsys.readouterr().out
     assert "decision" in out or "assessment" in out

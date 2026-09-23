@@ -335,7 +335,9 @@ def review_maintenance_capacity(
     assessment = assess_maintenance_capacity(library_root, now=now)
     result = {"assessment": assessment, "applied": False}
     if apply and assessment.get("decision") in {"step_down", "step_up", "propose_matrix"}:
-        result.update(apply_maintenance_capacity_review(assessment, library_root=library_root, now=now))
+        result.update(
+            apply_maintenance_capacity_review(assessment, library_root=library_root, now=now)
+        )
     elif apply:
         # Still stamp last_review on hold so ops can see the check ran.
         capacity = load_maintenance_capacity(Path(library_root), now=now)

@@ -33,13 +33,13 @@ from value_investor.library_ingest_loop import (
     LibraryIngestLoopResult,
     run_library_ingest_loop,
 )
-from value_investor.library_maintenance_stagger import (
-    plan_maintenance_slot,
-    write_maintenance_slot_cursor,
-)
 from value_investor.library_maintenance_capacity import (
     record_maintenance_capacity_sample,
     review_maintenance_capacity,
+)
+from value_investor.library_maintenance_stagger import (
+    plan_maintenance_slot,
+    write_maintenance_slot_cursor,
 )
 
 logger = logging.getLogger(__name__)
