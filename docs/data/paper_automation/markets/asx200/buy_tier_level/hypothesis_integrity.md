@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-22T07:44:47.420726+00:00
+Track: `buy_tier_level` · updated 2026-09-23T00:46:58.334031+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **13** / 27 (48% count, 46% NAV)
+- Losers: **13** / 26 (50% count, 48% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -127,12 +127,6 @@ Track: `buy_tier_level` · updated 2026-09-22T07:44:47.420726+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 50%
-
-### BWP.AX — weakening / watch_review (-2.7%)
-- left buy tier (hold)
-- conviction 31% below intact floor
-- cheapness family still passes
-- data_quality 0.90
 
 ### SHL.AX — intact / hold_tolerate (-2.2%)
 - still strong_buy
