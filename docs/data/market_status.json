@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-23T10:56:50.267035+00:00",
+  "generated_at": "2026-09-23T11:28:44.192065+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -24,8 +24,8 @@
       "live": 1,
       "focus": 1,
       "sprint": 2,
-      "admitted": 6,
-      "graduated": 13
+      "admitted": 7,
+      "graduated": 12
     },
     "sprint_count": 3,
     "maintenance_count": 19,
@@ -43,7 +43,7 @@
     ],
     "spare_sprint": {
       "1": "dax",
-      "2": "cac40"
+      "2": "aim"
     },
     "equal_support_generated_at": "2026-09-23T08:46:35.579304+00:00"
   },
@@ -769,8 +769,8 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 16,
-        "targets": 121,
+        "run_count": 15,
+        "targets": 120,
         "improved": 3,
         "improved_tickers": [
           "FME.DE"
@@ -990,21 +990,210 @@
       }
     },
     {
+      "market_id": "aim",
+      "label": "AIM (liquid Wikipedia slice)",
+      "exchange": "LSE AIM",
+      "currency": "GBP",
+      "role": "sprint",
+      "is_live": false,
+      "is_focus": false,
+      "is_graduated": true,
+      "is_queue": true,
+      "is_admitted": false,
+      "is_ftse_equivalent": false,
+      "ingest": "sprint",
+      "ingest_stream": 2,
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=5, zero_body=10, thin=1, indexed_without_body=90)",
+      "ingest_parity_met": false,
+      "ingest_exhausted": false,
+      "queue_rank": 9,
+      "shared_maintenance": false,
+      "health": "warn",
+      "coverage_pct": 0.5758,
+      "honest_coverage_pct": 0.5758,
+      "ticker_count": 57,
+      "stale": 0,
+      "fresh": 99,
+      "failed_fetch_count": 42,
+      "last_metrics_refresh": "2026-09-23T07:13:03.849787+00:00",
+      "last_constituents_refresh": "2026-09-23T07:09:24.204396+00:00",
+      "last_screen_at": "2026-09-23T11:26:50.286313+00:00",
+      "signal_counts": {
+        "hold": 27,
+        "buy": 16,
+        "avoid": 13,
+        "strong_buy": 1
+      },
+      "shortlist_count": 17,
+      "strong_buy": 1,
+      "buy": 16,
+      "learning_phase": 0,
+      "learning_phase_label": "Ingest only",
+      "phase_blockers": [
+        "no benchmark configured for aim"
+      ],
+      "expected_epoch0_blockers": [],
+      "learning": {
+        "current_phase": 0,
+        "next_phase": 1,
+        "phase1_ready": false,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": false,
+        "blockers": [
+          "no benchmark configured for aim"
+        ],
+        "phase1": {
+          "screen_archives": 0,
+          "observe_snapshot_count": 0
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 0
+        }
+      },
+      "filing_health": {
+        "buy_tier_count": 17,
+        "unmeasured_buy_tier": 5,
+        "zero_body_buy_tier": 10,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 90,
+        "bodies_median": 4.0,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "ingest_exhausted": false,
+        "parked_count": 0,
+        "zero_body_tickers": [
+          "IPX.L",
+          "TFW.L",
+          "JHD.L",
+          "ASY.L",
+          "CAML.L",
+          "DOTD.L",
+          "RWS.L",
+          "IGR.L"
+        ],
+        "thin_body_tickers": [
+          "YNGN.L"
+        ],
+        "unmeasured_tickers": [
+          "KGH.L",
+          "MPE.L",
+          "CAM.L",
+          "CREO.L",
+          "PMI.L"
+        ],
+        "parked_tickers": []
+      },
+      "filing_gaps": 15,
+      "paper_instrument": null,
+      "ai_judgment": null,
+      "knob_apply": null,
+      "epoch0": null,
+      "equal_support": null,
+      "near_miss": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 0,
+        "targets": 0,
+        "improved": 0,
+        "improved_tickers": [],
+        "last_run_at": null,
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 90,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 90,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "remaining": {
+          "unmeasured": 5,
+          "zero_body": 10,
+          "thin": 1,
+          "indexed_without_body": 90,
+          "filing_gaps": 15
+        },
+        "admission_ready": false,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "awaiting_first_ingest",
+            "severity": "warn",
+            "summary": "Entered sprint on 2026-09-23; waiting on the first deepen slot"
+          },
+          {
+            "id": "no_observe_benchmark",
+            "severity": "warn",
+            "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
+          }
+        ],
+        "sprint_entered_at": "2026-09-23T11:25:55.801525+00:00"
+      },
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "aim",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "GBP",
+        "benchmark_ticker": "^FTSE",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^FTSE equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
+    },
+    {
       "market_id": "cac40",
       "label": "CAC 40",
       "exchange": "Euronext Paris",
       "currency": "EUR",
-      "role": "sprint",
+      "role": "admitted",
       "is_live": false,
       "is_focus": false,
       "is_graduated": true,
       "is_queue": true,
       "is_admitted": true,
       "is_ftse_equivalent": false,
-      "ingest": "sprint",
-      "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=8, indexed_without_body=2)",
-      "ingest_parity_met": false,
+      "ingest": "maintenance",
+      "ingest_stream": null,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
       "ingest_exhausted": true,
       "queue_rank": 8,
       "shared_maintenance": true,
@@ -1055,40 +1244,8 @@
           "min_weekly_batches": 4
         }
       },
-      "filing_health": {
-        "buy_tier_count": 13,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 8,
-        "indexed_without_body": 2,
-        "bodies_median": 2.0,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
-        "ingest_exhausted": false,
-        "parked_count": 7,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "CAP.PA",
-          "EN.PA",
-          "RI.PA",
-          "URW.PA",
-          "SGO.PA",
-          "VIE.PA",
-          "MC.PA",
-          "CA.PA"
-        ],
-        "unmeasured_tickers": [],
-        "parked_tickers": [
-          "CA.PA",
-          "CAP.PA",
-          "EN.PA",
-          "RI.PA",
-          "SGO.PA",
-          "URW.PA",
-          "VIE.PA"
-        ]
-      },
-      "filing_gaps": 0,
+      "filing_health": null,
+      "filing_gaps": null,
       "paper_instrument": "buy_tier_level",
       "ai_judgment": false,
       "knob_apply": false,
@@ -1140,51 +1297,7 @@
           "EL.PA"
         ]
       },
-      "sprint_progress": {
-        "window_days": 2,
-        "run_count": 6,
-        "targets": 25,
-        "improved": 4,
-        "improved_tickers": [
-          "TTE.PA",
-          "TEP.PA"
-        ],
-        "last_run_at": "2026-09-22T16:46:35.342876+00:00",
-        "runtime_cutoff_runs": 0,
-        "error_runs": 0,
-        "gaps_before": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 9,
-          "indexed_without_body": 94,
-          "filing_gaps": 0
-        },
-        "gaps_after": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 7,
-          "indexed_without_body": 1,
-          "filing_gaps": 0
-        },
-        "gap_delta": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": -2,
-          "indexed_without_body": -93,
-          "filing_gaps": 0
-        },
-        "remaining": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 8,
-          "indexed_without_body": 2,
-          "filing_gaps": 0
-        },
-        "admission_ready": true,
-        "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [],
-        "sprint_entered_at": "2026-09-23T08:19:23.904632+00:00"
-      },
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -3017,91 +3130,6 @@
           {
             "id": "market",
             "label": "^STOXX50E equivalent",
-            "kind": "market",
-            "color": "#64748b"
-          }
-        ],
-        "branches": [],
-        "last": null
-      }
-    },
-    {
-      "market_id": "aim",
-      "label": "AIM (liquid Wikipedia slice)",
-      "exchange": "LSE AIM",
-      "currency": "GBP",
-      "role": "graduated",
-      "is_live": false,
-      "is_focus": false,
-      "is_graduated": true,
-      "is_queue": false,
-      "is_admitted": false,
-      "is_ftse_equivalent": false,
-      "ingest": "maintenance",
-      "ingest_stream": null,
-      "ingest_reason": null,
-      "ingest_parity_met": null,
-      "ingest_exhausted": false,
-      "queue_rank": null,
-      "shared_maintenance": false,
-      "health": "warn",
-      "coverage_pct": 0.5758,
-      "honest_coverage_pct": 0.5758,
-      "ticker_count": 57,
-      "stale": 0,
-      "fresh": 99,
-      "failed_fetch_count": 42,
-      "last_metrics_refresh": "2026-09-23T07:13:03.849787+00:00",
-      "last_constituents_refresh": "2026-09-23T07:09:24.204396+00:00",
-      "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
-      "signal_counts": {
-        "hold": 32,
-        "buy": 11,
-        "avoid": 10,
-        "strong_buy": 3,
-        "insufficient_data": 1
-      },
-      "shortlist_count": 14,
-      "strong_buy": 3,
-      "buy": 11,
-      "learning_phase": null,
-      "learning_phase_label": "Not started",
-      "phase_blockers": [],
-      "expected_epoch0_blockers": [],
-      "learning": null,
-      "filing_health": null,
-      "filing_gaps": null,
-      "paper_instrument": null,
-      "ai_judgment": null,
-      "knob_apply": null,
-      "epoch0": null,
-      "equal_support": null,
-      "near_miss": null,
-      "sprint_progress": null,
-      "held_vs_market": {
-        "schema_version": 1,
-        "status": "empty",
-        "reason": "No paper book or observe-sim marks",
-        "market_id": "aim",
-        "source": null,
-        "paper_instrument": null,
-        "currency": "GBP",
-        "benchmark_ticker": "^FTSE",
-        "held_path": null,
-        "market_path": null,
-        "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
-        "points": [],
-        "series": [
-          {
-            "id": "held",
-            "label": "Held book",
-            "kind": "held",
-            "color": "#2b6cb0"
-          },
-          {
-            "id": "market",
-            "label": "^FTSE equivalent",
             "kind": "market",
             "color": "#64748b"
           }
