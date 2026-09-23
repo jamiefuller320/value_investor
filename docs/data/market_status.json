@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-23T10:35:16.823181+00:00",
+  "generated_at": "2026-09-23T10:38:56.835552+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -248,9 +248,32 @@
             "label": "^FTSE equivalent",
             "kind": "market",
             "color": "#64748b"
+          },
+          {
+            "id": "branch:buy_tier_level_dca",
+            "label": "DCA £500/mo book",
+            "kind": "branch",
+            "status": "pending",
+            "color": "#7c3aed",
+            "knobs": {
+              "monthly_deposit": 500.0,
+              "policy": "buy_tier_level"
+            }
           }
         ],
-        "branches": [],
+        "branches": [
+          {
+            "id": "buy_tier_level_dca",
+            "label": "DCA £500/mo book",
+            "kind": "branch",
+            "status": "pending",
+            "knobs": {
+              "monthly_deposit": 500.0,
+              "policy": "buy_tier_level"
+            },
+            "point_count": 0
+          }
+        ],
         "last": {
           "date": "2026-09-21",
           "held": 952.52,
