@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-09-23T09:23:33.970594+00:00",
+  "compiled_at": "2026-09-23T09:24:50.670306+00:00",
   "run_at": null,
   "task_count": 101,
   "tasks": [
@@ -1754,7 +1754,7 @@
         "rerun_library_ingest_loop": true,
         "doc": "docs/ops/library-ingest-escalation.md",
         "stall_triage": {
-          "analyzed_at": "2026-09-23T08:02:25.114797+00:00",
+          "analyzed_at": "2026-09-23T09:24:41.411920+00:00",
           "market_id": "dax",
           "task_id": "eng-20260922-05",
           "status": "parked",
@@ -1775,20 +1775,23 @@
           "focus_lane": "unmeasured",
           "reburn_loop": true,
           "reburn_investigation": {
-            "investigated_at": "2026-09-23T08:02:25.114782+00:00",
-            "primary_hypothesis": "scope_too_broad_secondary",
-            "blockers": [],
+            "investigated_at": "2026-09-23T09:24:41.411896+00:00",
+            "primary_hypothesis": "preflight_clash",
+            "blockers": [
+              "preflight_clash"
+            ],
             "automation_waste_active": false,
             "live_reburn_signal": false,
             "pm_parked_by_traffic": true,
-            "preflight_healed": true,
+            "preflight_healed": false,
             "no_diff_count": 0,
             "failure_count": 0,
-            "allow_narrow_reframe": true,
-            "allow_unpark": true,
-            "skip_reframe_reason": null,
+            "allow_narrow_reframe": false,
+            "allow_unpark": false,
+            "skip_reframe_reason": "reburn_loop: fix dispatch blockers before narrow reframe — preflight_clash",
             "safe_next_steps": [
-              "Safe to narrow-reframe to focus ticker HEI.DE (then unpark manually or via recover-queue when dispatch gates allow)."
+              "Resolve path clashes (merge sibling eng PR, cancel duplicate branch, or narrow allowed_paths); re-run preflight before unpark.",
+              "After blockers clear, narrow-reframe to HEI.DE before re-dispatch."
             ],
             "doc": "docs/ops/library-ingest-escalation.md#library-stall-reburn-investigation"
           },
@@ -1798,7 +1801,7 @@
             "split_by_ticker_not_broad_market_task",
             "investigate_reburn_loop_before_unpark"
           ],
-          "filing_health_snapshot_at": "2026-09-23T08:02:25.093469+00:00",
+          "filing_health_snapshot_at": "2026-09-23T09:24:40.123359+00:00",
           "doc": "docs/ops/library-ingest-escalation.md#library-stall-task-triage"
         }
       },
@@ -6207,7 +6210,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 1,
-    "evaluated_at": "2026-09-23T09:16:34.361597+00:00",
+    "evaluated_at": "2026-09-23T09:24:55.155189+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -6215,7 +6218,7 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "ingest_gap_closure",
+  "micro_compile_source": "parked_source_hunter",
   "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
   "source_gap_closure_run_id": "igc-20260923-03",
