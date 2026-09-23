@@ -778,6 +778,66 @@ def _pop_ingest_sigterm_handler() -> None:
         signal.signal(signal.SIGTERM, previous)
 
 
+def _accumulate_refetch_block(
+    existing: dict[str, Any],
+    new: dict[str, Any],
+    *,
+    count_keys: tuple[str, ...] = ("attempted", "fetched"),
+) -> dict[str, Any]:
+    if not new:
+        return existing
+    if not existing:
+        return dict(new)
+    merged = dict(existing)
+    for key in count_keys:
+        merged[key] = int(existing.get(key) or 0) + int(new.get(key) or 0)
+    for key, value in new.items():
+        if key not in count_keys:
+            merged[key] = value
+    return merged
+
+
+def _unpack_uk_primary_refetch(
+    primary_refetch: dict[str, Any],
+    *,
+    accumulate: bool,
+    ch_refetch: dict[str, Any],
+    indexed_refetch: dict[str, Any],
+    investegate_refetch: dict[str, Any],
+    ticker_rns_refetch: dict[str, Any],
+    residual_refetch: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+    ch = dict(primary_refetch.get("companies_house") or {})
+    indexed = dict(primary_refetch.get("rns") or {})
+    inv = dict(indexed.get("investegate") or {})
+    trns = dict(indexed.get("ticker_rns") or {})
+    res = dict(primary_refetch.get("residual") or {})
+    if accumulate:
+        ch = _accumulate_refetch_block(ch_refetch, ch)
+        indexed = _accumulate_refetch_block(indexed_refetch, indexed)
+        inv = _accumulate_refetch_block(investegate_refetch, inv)
+        trns = _accumulate_refetch_block(ticker_rns_refetch, trns)
+        res = _accumulate_refetch_block(residual_refetch, res)
+    return ch, indexed, inv, trns, res
+
+
+def _should_prefetch_uk_filing_bodies(
+    *,
+    intensive_gap_closure: bool,
+    coverage: dict[str, int],
+    market: str | None,
+    ticker: str,
+) -> bool:
+    """Run body refetch before slow full ingest when the index already has IWB gaps."""
+    if not _is_uk_listed(market=market, ticker=ticker):
+        return False
+    if int(coverage.get("filings_total") or 0) <= 0:
+        return False
+    if intensive_gap_closure:
+        return True
+    return int(coverage.get("indexed_without_body") or 0) > 0
+
+
 def _record_ticker_budget_hit(
     summary: IngestImprovementSummary,
     target: IngestImprovementTarget,
@@ -1043,6 +1103,44 @@ def _execute_ingest_improvement_pass(
                 company_name=target.name,
                 ticker=target.ticker,
             )
+            coverage = _filing_coverage(store, target.ticker, output_dir)
+            ch_refetch: dict[str, Any] = {}
+            ch_annual_year_in_numbers: dict[str, Any] = {}
+            investegate_refetch: dict[str, Any] = {}
+            ticker_rns_refetch: dict[str, Any] = {}
+            indexed_refetch: dict[str, Any] = {}
+            residual_refetch: dict[str, Any] = {}
+            uk_prefetch_ran = False
+            if _should_prefetch_uk_filing_bodies(
+                intensive_gap_closure=intensive_gap_closure,
+                coverage=coverage,
+                market=market,
+                ticker=target.ticker,
+            ):
+                primary_prefetch = _invoke_with_transient_fetch_retry(
+                    refetch_uk_primary_filing_bodies,
+                    sources_dir / "filings",
+                    ticker=target.ticker,
+                    company_name=target.name,
+                    max_bodies=target_max_bodies,
+                    prune_failed_residual_fetches=prune_failed_residual_fetches,
+                )
+                (
+                    ch_refetch,
+                    indexed_refetch,
+                    investegate_refetch,
+                    ticker_rns_refetch,
+                    residual_refetch,
+                ) = _unpack_uk_primary_refetch(
+                    primary_prefetch,
+                    accumulate=False,
+                    ch_refetch=ch_refetch,
+                    indexed_refetch=indexed_refetch,
+                    investegate_refetch=investegate_refetch,
+                    ticker_rns_refetch=ticker_rns_refetch,
+                    residual_refetch=residual_refetch,
+                )
+                uk_prefetch_ran = True
             source_meta = ingest_research_sources(
                 ticker=target.ticker,
                 company_name=target.name,
@@ -1059,12 +1157,6 @@ def _execute_ingest_improvement_pass(
                 or inventory.get("filings_indexed_bodies")
                 or 0
             )
-            ch_refetch: dict[str, Any] = {}
-            ch_annual_year_in_numbers: dict[str, Any] = {}
-            investegate_refetch: dict[str, Any] = {}
-            ticker_rns_refetch: dict[str, Any] = {}
-            indexed_refetch: dict[str, Any] = {}
-            residual_refetch: dict[str, Any] = {}
             if _is_uk_listed(market=market, ticker=target.ticker):
                 primary_refetch = _invoke_with_transient_fetch_retry(
                     refetch_uk_primary_filing_bodies,
@@ -1072,12 +1164,23 @@ def _execute_ingest_improvement_pass(
                     ticker=target.ticker,
                     company_name=target.name,
                     max_bodies=target_max_bodies,
+                    prune_failed_residual_fetches=prune_failed_residual_fetches,
                 )
-                ch_refetch = dict(primary_refetch.get("companies_house") or {})
-                indexed_refetch = dict(primary_refetch.get("rns") or {})
-                investegate_refetch = dict(indexed_refetch.get("investegate") or {})
-                ticker_rns_refetch = dict(indexed_refetch.get("ticker_rns") or {})
-                residual_refetch = dict(primary_refetch.get("residual") or {})
+                (
+                    ch_refetch,
+                    indexed_refetch,
+                    investegate_refetch,
+                    ticker_rns_refetch,
+                    residual_refetch,
+                ) = _unpack_uk_primary_refetch(
+                    primary_refetch,
+                    accumulate=uk_prefetch_ran,
+                    ch_refetch=ch_refetch,
+                    indexed_refetch=indexed_refetch,
+                    investegate_refetch=investegate_refetch,
+                    ticker_rns_refetch=ticker_rns_refetch,
+                    residual_refetch=residual_refetch,
+                )
                 if int(primary_refetch.get("fetched") or 0) > 0:
                     inventory = inspect_local_sources(sources_dir)
                     before = int(
