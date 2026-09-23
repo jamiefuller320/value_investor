@@ -430,7 +430,8 @@ def test_run_ingest_improvement_pass_continues_after_bootstrap_http_error(
 
     assert any("bootstrap:" in row for row in summary.errors)
     assert len(summary.results) == 1
-    mock_primary_refetch.assert_called_once()
+    # Prefetch (IWB gaps in index) + post-ingest refetch when bodies remain thin.
+    assert mock_primary_refetch.call_count == 2
 
 
 def test_ingest_loop_workflow_step_timeout_has_headroom_above_soft_budget() -> None:
