@@ -2927,7 +2927,14 @@ def fcf_filing_screen_mismatch(
         return False
     abs_gap = abs(filing_aligned - screen_ttm)
     if _fcf_sign(filing_aligned) != _fcf_sign(screen_ttm):
-        return abs_gap > sign_min_abs
+        if abs_gap > sign_min_abs:
+            return True
+        # Small-cap opposite signs (e.g. PINE.L positive screen vs negative filing)
+        # can exceed filing/screen thresholds without hitting sign_min_abs.
+        denominator = max(abs(filing_aligned), abs(screen_ttm))
+        if denominator == 0:
+            return False
+        return abs_gap / denominator > threshold
     filing_abs = abs(filing_aligned)
     if filing_abs == 0:
         return False
