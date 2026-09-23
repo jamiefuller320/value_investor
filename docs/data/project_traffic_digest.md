@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-22T20:21:29.286725+00:00`
+Generated: `2026-09-23T09:55:21.758073+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -30,15 +30,13 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `resume_dispatch` — resumed — no stuck monitored PRs and idle window elapsed (applied)
+- _(none)_
 
 ## Merges today (monitor independent verify)
-- `ingest_narrow`/verified PR #804 `eng-20260922-04` — Close stubborn ingest gaps for SHEL.L (chain 1/3: 0/0 bodies, run igc-20260922-04)
-- `ingest_narrow`/verified PR #803 `eng-20260922-03` — Close stubborn ingest gaps for KGF.L (chain 1/3: 0/0 bodies, run igc-20260922-03)
-- `human`/human PR #797 `eng-20260922-02` — Close stubborn ingest gaps for VTY.L (chain 1/3: 0/0 bodies, run igc-20260922-01)
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 27
+- Occasion count: 28
 - `PR mergeable=CONFLICTING against main` — 4×
 - `Merge conflicts in deferred-ideas.json with main` — 2×
 - `ruff_format` — 1×
