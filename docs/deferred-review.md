@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T09:22:58+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T09:28:55+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -199,6 +199,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N146 | **Switch primary because Suite B NAV beats Suite A** | B-vs-A absolute NAV is mostly cost drag (same picks, lower friction). Do not use it as the primary flip criterion. Short-term steer on within-suite relatives (AI vs rules on same costs) and A churn; flip primary only on thick Suite B absolute edge vs ^FTSE and fair rules (N48). | Revisiting N48 primary flip criteria |
 | N147 | **Replace primary scoreboard with fixed-notional sleeve P&L** | Fixed £/$ notional per buy is excellent for identification accuracy and lifecycle sleeve stats, but must not replace Suite B book excess vs ^FTSE as stage 2b / adoption truth. Capital path (sizing, deposits, rotation) is a separate question the NAV book answers. | Sleeve-level outcome linker is thick enough to sit beside (not instead of) primary excess gates |
 | N148 | **Do not replace Economic Moat proxy with qualitative comparative scoring** | Economic Moat today is absolute ROE/ROA/margin/leverage thresholds, not peer-relative or filing-based moat evidence. Building a true comparative moat scorer would mix research-layer judgment into the point-in-time screen and needs a separate design (peer cohorts, durable advantage evidence, PIT constraints). | Only if a dedicated quality/moat family redesign is explicitly prioritized with peer-relative and filing-backed features |
+| N149 | **Do not invent a proprietary screen to replace recognised models** | Developing a bespoke formula from in-sample successful-sleeve traits without PIT guards would overfit thin paper history and blur the recognisable-screen interpretability the memos rely on. Prefer reweighting existing models and progressive exclusion filters first. | Only if dual_objective_calibration shows persistent lift that cannot be expressed as weights or exclusion rules on the existing 22 models |
 
 ---
 
@@ -268,6 +269,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L444 | **Freeze widest earliest/latest markers; discover best via counterfactual** | Observe sleeve recording should open on the earliest eligible entry marker and close marks on the latest experimental exit marker so tighter policies are nested counterfactuals. Capital on_book uses the selective funded gate. Do not freeze only a guessed best threshold for recording — that truncates timing evidence. Wrapper: decision-recording freeze at t + exit_shadow/near-miss join-forward. | Implementing dual-path sleeve lab L443 or Phase C autopsy freeze writer |
 | L445 | **Cash buffer sleeve after rank-rotation works** | Prefer fixing blocked exits (done L440) so fully-invested books recycle into better sleeves. A 5-10% dry-powder buffer remains optional capital-allocation v2 — do not use idle cash as a substitute for broken rotation. | capital_rotation_coordinator / cash buffer target phase activates and rank rotation is healthy on momentum_grace |
 | L446 | **Nested counterfactual best-policy scoring inside sleeve episodes** | Wide earliest/latest episodes are recording. Next: score tighter entry/exit policies as nested counterfactuals inside closed episodes once readiness.ready_for_sleeve_timing_analysis is true. | learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true on primary or fair tracks |
+| L451 | **Outcome-led internal screen formula from successful sleeves** | Benefit is real but already partly covered: model_weights reweights recognised screens from archive outcomes; Composite Value is an internal blend; learning-director roadmap prefers progressive loser filters then filter_invention_loop over inventing a parallel proprietary formula. A new sleeve-trait formula should wait until filtered_cohort_track / sleeve-episode thickness gates fire, use PIT out-of-sample tests, and stay alongside (not instead of) Graham/Buffett/etc. | filtered_cohort_track has ≥8 epoch marks OR sleeve episodes ready_for_sleeve_timing_analysis (≥15 closed per capital_status tag) AND loser_pattern_lab has ≥3 validated patterns |
 
 ### Universe & data
 
