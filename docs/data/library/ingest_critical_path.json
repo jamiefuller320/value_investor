@@ -1,32 +1,48 @@
 {
-  "market_id": "asx200",
-  "assessed_at": "2026-09-23T15:11:19.027068+00:00",
-  "unmeasured": [],
+  "market_id": "dax",
+  "assessed_at": "2026-09-23T15:14:30.412818+00:00",
+  "unmeasured": [
+    "G1A.DE"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "BPT.AX",
-      "indexed_without_body": 2,
-      "filings_total": 106,
-      "filings_with_body": 104
+      "ticker": "FME.DE",
+      "indexed_without_body": 30,
+      "filings_total": 88,
+      "filings_with_body": 58
     }
   ],
-  "thin_need_discovery": [],
+  "thin_need_discovery": [
+    "HEI.DE",
+    "MUV2.DE",
+    "DTG.DE",
+    "DTE.DE",
+    "BAS.DE",
+    "HNR1.DE",
+    "FRE.DE",
+    "HEN3.DE",
+    "VOW3.DE"
+  ],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "BPT.AX"
+    "G1A.DE",
+    "FME.DE"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (1 tickers, top: BPT.AX(2))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (1 tickers, top: FME.DE(30))",
+    "Discovery/IR seed for 9 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
     "indexed_without_body_tickers": 1,
-    "indexed_without_body_rows": 2,
-    "thin_need_discovery": 0,
+    "indexed_without_body_rows": 30,
+    "thin_need_discovery": 9,
     "thin_need_bodies": 0
   }
 }
