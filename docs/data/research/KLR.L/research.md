@@ -1,6 +1,6 @@
 # Keller Group plc (KLR.L) — Research memo
 
-_Version 4 · Updated 2026-09-21T17:11:59.304065+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-09-23T11:36:14.398310+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: H1 filing-backed FCF, deleveraging and order book still support the buy screen; this refresh adds no new disclosures, with cyclical and valuation limits unchanged.
+Rationale: H1-backed cash flow and order book still support the buy screen; only routine buyback and FIL holding notifications since the last refresh, with cyclical and valuation caveats unchanged.
 RiskTags: cyclical, competitive, liquidity, leverage, pension, regulatory, governance, key_person, litigation, accounting
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Capital Markets Day remains scheduled for 14 October 2026.
 No new RNS or trading updates since the 4 August H1 interim results; the afternoon news pull since this morning’s refresh returned no articles.  
 The buy screen remains (six weeks, stable); RSI is a bit higher (~68) with neutral timing—valuation and cyclical caveats unchanged.  
 Capital Markets Day is still scheduled for 14 October 2026.
+
+### 2026-09-23T11:36:14.398310+00:00
+No trading update or results since the 4 August H1 interim results; 22–23 September RNS is routine (buyback, FIL Ltd holding notification after a sub-threshold disposal).  
+News since 21 September is price-range commentary only; buy screen now seven weeks at signal (stable), RSI ~69, neutral timing.  
+Capital Markets Day remains 14 October 2026.

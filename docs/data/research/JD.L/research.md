@@ -1,6 +1,6 @@
 # JD Sports Fashion Plc (JD.L) — Research memo
 
-_Version 4 · Updated 2026-09-21T17:24:03.856664+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-09-23T11:46:51.097838+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.69
-Rationale: Cheapness and filings still support the buy screen; Mexico franchise is a modest positive, but missing interim or August trading RNS leaves FY27 US/footwear guidance risks unresolved.
+Confidence: 0.71
+Rationale: First-half profit modestly beat expectations and full-year guidance was unchanged, slightly confirming the buy screen; weak sales and North America still cap conviction amid leverage and cyclicality.
 RiskTags: cyclical, competitive, leverage, customer_concentration, governance, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Persistent Buy screen (18 weeks; timing accumulate, P/E ~8.3); John Mersho appoi
 No material change since the 21 Sep Grupo Axo Mexico RNS.  
 Afternoon press only echoed the franchise deal; the filings index still has no interim or formal August trading update.  
 Persistent Buy screen (19 weeks; timing accumulate; P/E ~8.2).
+
+### 2026-09-23T11:46:51.097838+00:00
+23 Sep press: first-half adjusted PBT modestly ahead of consensus; full-year £700–800m PBT guidance unchanged.  
+Weaker sales, consumer pressure and softer North America profitability dominate coverage; Mexico franchise still echoed (22 Sep).  
+Persistent Buy screen (20 weeks; timing accumulate; P/E ~8.4); automated filings index still has no tagged interim/H1 RNS.

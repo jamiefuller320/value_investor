@@ -1,6 +1,6 @@
 # Morgan Sindall Group plc (MGNS.L) — Research memo
 
-_Version 4 · Updated 2026-09-21T17:21:23.791903+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-09-23T11:44:01.974327+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.76
-Rationale: Filing-aligned net-cash quality still supports the persistent Strong Buy; no news or trading update since H1, so cyclical risks keep phased accumulate.
+Rationale: Filing-aligned net-cash quality still confirms the persistent Strong Buy; no post-H1 disclosures or news, so cyclical and sector risks keep a phased accumulate overlay.
 RiskTags: cyclical, regulatory, competitive, other
 
 ## Weekly updates
@@ -27,4 +27,9 @@ Filings thesis and risk register unchanged pending the next trading update.
 ### 2026-09-21T17:21:23.791903+00:00
 Strong Buy persists (19 weeks, composite ~80%); timing neutral (~8% below 200-day MA, RSI ~50).  
 News batch since the morning refresh is empty; no new RNS or trading statement.  
+Filings thesis and risk register unchanged pending the next trading update.
+
+### 2026-09-23T11:44:01.974327+00:00
+Strong Buy persists (20 weeks, composite ~82%); timing still neutral (~10% below the 200-day MA, RSI ~44).  
+News batch since 21 Sep is empty; no new RNS or trading statement.  
 Filings thesis and risk register unchanged pending the next trading update.

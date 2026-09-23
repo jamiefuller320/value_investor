@@ -1,17 +1,106 @@
 {
   "schema_version": "so_what_closure.v1",
-  "generated_at": "2026-09-21T17:57:04Z",
+  "generated_at": "2026-09-23T13:11:59Z",
   "dry_run": false,
   "counts": {
-    "findings": 0,
-    "auto_queue": 0,
+    "findings": 3,
+    "auto_queue": 2,
     "human_gate": 0,
-    "observe": 0,
-    "tasks_created": 0,
+    "observe": 1,
+    "tasks_created": 2,
     "tasks_skipped": 0
   },
-  "findings": [],
-  "created_tasks": [],
+  "findings": [
+    {
+      "finding_id": "fcf_enforcement_gap:PINE.L",
+      "kind": "fcf_enforcement_gap",
+      "ticker": "PINE.L",
+      "severity": "high",
+      "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~136%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+      "recommended_closure": "auto_queue",
+      "evidence": {
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "screen_ttm": 12825000.0,
+        "filing_aligned": -4600000.0,
+        "gap_pct": 135.9,
+        "fcf_basis_overlay": false,
+        "bridge_resolved": true,
+        "action_note": "Buy — neutral timing"
+      },
+      "engineering_area": "scoring",
+      "engineering_title": "Close FCF basis enforcement gap for PINE.L",
+      "engineering_summary": "PINE.L: material FCF basis mismatch (~136%) with buy-tier signal='buy' / adjusted='buy' and fcf_basis_overlay=False. Implement fail-closed overlay so strong_buy cannot ship uncapped on a divergent Yahoo TTM basis. Prefer code/policy fix over one-off manual triage.",
+      "human_action": null,
+      "human_doc_path": null
+    },
+    {
+      "finding_id": "fcf_note_without_overlay:PAF.L",
+      "kind": "fcf_note_without_overlay",
+      "ticker": "PAF.L",
+      "severity": "medium",
+      "so_what": "Action note flags an FCF basis concern but adjusted_signal was not downgraded. Treat as an enforcement gap.",
+      "recommended_closure": "auto_queue",
+      "evidence": {
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "screen_ttm": 327180512.0,
+        "filing_aligned": 340848000.0,
+        "gap_pct": 4.0,
+        "fcf_basis_overlay": false,
+        "action_note": "Strong Buy — neutral timing | Research: Accumulate, Medium risk — Audited FY26 cash, buyback and filing-aligned FCF support the strong-buy screen; higher FY27 AISC, gold cyclicality and pending chair succession keep the research overlay below full strong buy."
+      },
+      "engineering_area": "scoring",
+      "engineering_title": "Honour FCF action-note enforcement for PAF.L",
+      "engineering_summary": "PAF.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "human_action": null,
+      "human_doc_path": null
+    },
+    {
+      "finding_id": "system_gap:thin_memo_counted_as_coverage",
+      "kind": "system_gap_thin_memo_counted_as_coverage",
+      "ticker": "thin_memo_counted_as_coverage",
+      "severity": "medium",
+      "so_what": "7 sampled euro_depth memos are thin or have 0 filing bodies (2 memo(s) executed this pass). Observe-sim / AI-judgment that gates on accumulate still consumes those weak labels. Do not widen rememo_reason; thicken filings then body-lag rememo (Phase B slim verdicts).",
+      "recommended_closure": "observe",
+      "evidence": {
+        "system_gap_flag": "thin_memo_counted_as_coverage",
+        "layer": "produce",
+        "title": "First-pass / zero-body memos are counted as research done"
+      },
+      "engineering_area": null,
+      "engineering_title": null,
+      "engineering_summary": null,
+      "human_action": "Lane A: ingest filing bodies for named tickers, then body-lag rememo only. Do not widen rememo eligibility for thin/zero-body memos (system_gaps policy).",
+      "human_doc_path": "docs/ops/analysis-review.md"
+    }
+  ],
+  "created_tasks": [
+    {
+      "finding_id": "fcf_enforcement_gap:PINE.L",
+      "task_id": "eng-20260923-06",
+      "title": "Close FCF basis enforcement gap (batched tickers)",
+      "area": "scoring",
+      "severity": "high",
+      "batched": true,
+      "tickers": [
+        "PINE.L"
+      ],
+      "finding_count": 1
+    },
+    {
+      "finding_id": "fcf_note_without_overlay:PAF.L",
+      "task_id": "eng-20260923-07",
+      "title": "Honour FCF action-note enforcement (batched tickers)",
+      "area": "scoring",
+      "severity": "medium",
+      "batched": true,
+      "tickers": [
+        "PAF.L"
+      ],
+      "finding_count": 1
+    }
+  ],
   "skipped_tasks": [],
   "human_gates": []
 }

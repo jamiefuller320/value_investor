@@ -1,6 +1,6 @@
 # Hikma Pharmaceuticals PLC (HIK.L) — Research memo
 
-_Version 3 · Updated 2026-09-21T17:23:29.387798+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-09-23T11:46:11.900918+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: FY25/H1-26 filings still support cheapness and quality with FY26 guidance intact, but withdrawn medium-term targets, Injectables pressure and ~0.64× statutory FCF dividend cover only partly confirm the Strong Buy.
+Confidence: 0.73
+Rationale: FY25/H1-26 filings still support cheapness with FY26 guidance intact, but unverified third-party recall coverage and ongoing Injectables/FCF-cover gaps only partly confirm the Strong Buy.
 RiskTags: regulatory, competitive, leverage, litigation
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Strong Buy screen remains stable (17 weeks); accumulate overlay unchanged.
 No new RNS or filings since the 21 Sep morning refresh; one third-party Kalkine piece on capital activity adds no primary evidence.  
 Strong Buy screen unchanged (19 weeks, stable); quant timing overlay moved to favourable accumulate.  
 Accumulate research overlay unchanged.
+
+### 2026-09-23T11:46:11.900918+00:00
+One third-party Kalkine item flags a blood-pressure drug recall; no matching company RNS in scope, so materiality is unresolved.  
+22 Sep RNS: R&D investor spotlight and routine PDMR shareholding only.  
+Strong Buy screen stable (20 weeks); accumulate overlay unchanged.

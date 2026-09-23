@@ -1,6 +1,6 @@
 # Imperial Brands PLC (IMB.L) — Research memo
 
-_Version 1 · Updated 2026-09-21T19:10:30.121649+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-09-23T11:52:58.017500+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,5 +9,12 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: HY26 results confirm progressive dividends and buybacks; FY25 statutory FCF (~£3.2bn) supports ~2× cover vs unverified screen TTM (~£2.5bn), but leverage ~2.4×, GAAP EPS decline and open FCF-definition tensions warrant buy not strong buy.
+Rationale: Filings still support yield and capital returns, but leverage, GAAP EPS decline and the filing–screen FCF gap weaken the case for strong buy; accumulate remains appropriate.
 RiskTags: regulatory, leverage, litigation, accounting
+
+## Weekly updates
+
+### 2026-09-23T11:52:58.017500+00:00
+No new company filings or results since the 21 Sep HY26-led verdict.
+News since then is one secondary buyback commentary piece (22 Sep); no regulatory or litigation developments sourced.
+Screen metrics unchanged (strong buy, persistent); filing vs screen TTM FCF gap (~£3.2bn vs ~£2.5bn) still unresolved.
