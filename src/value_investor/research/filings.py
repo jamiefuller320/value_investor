@@ -5536,6 +5536,11 @@ def refetch_ir_allowlist_filing_bodies(
             "merge": merge_meta,
             "note": "no filings_index.json",
         }
+    reconcile_filings_index_body_flags(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
     try:
         payload = json.loads(index_path.read_text(encoding="utf-8"))
     except (OSError, ValueError, TypeError) as exc:
@@ -9118,6 +9123,11 @@ def refetch_residual_filing_bodies(
     }
     if not index_path.exists():
         return {**empty, "note": "no filings_index.json"}
+    reconcile_filings_index_body_flags(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
     try:
         payload = json.loads(index_path.read_text(encoding="utf-8"))
     except (OSError, ValueError, TypeError) as exc:
@@ -9165,6 +9175,12 @@ def refetch_residual_filing_bodies(
     index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     if pruned:
         prune_orphaned_filing_bodies(filings_dir)
+    post_reconcile = reconcile_filings_index_body_flags(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
+    after = int(post_reconcile.get("with_body_after") or after)
     return {
         "attempted": len(attempted_ids),
         "fetched": max(0, after - before),
@@ -9245,6 +9261,68 @@ def refetch_uk_primary_filing_bodies(
         "with_body_after": after,
         "google_news_rejected": int(rns.get("google_news_rejected") or 0),
         "note": "refetch_uk_primary_filing_bodies",
+    }
+
+
+def refetch_euro_filings_primary_bodies(
+    filings_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    max_bodies: int = 20,
+    prune_failed_residual_fetches: bool = False,
+) -> dict[str, Any]:
+    """
+    Euro / ESEF primary-body pipeline: reconcile disk bodies, residual fetch, IR allowlist.
+
+    Mirrors ``refetch_uk_primary_filing_bodies`` for ``euro_filings`` regimes so
+    weekday ingest and library deepen can land statutory PDFs before body-lag rememo.
+    """
+    body_reconcile = reconcile_filings_index_body_flags(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
+    residual = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker=ticker,
+        company_name=company_name,
+        max_bodies=max_bodies,
+        prune_unfetchable_after_attempt=prune_failed_residual_fetches,
+    )
+    ir: dict[str, Any] = {}
+    allowlist_rows = fetch_filings_ir_allowlist(ticker)
+    if allowlist_rows:
+        ir = refetch_ir_allowlist_filing_bodies(
+            filings_dir,
+            ticker,
+            company_name=company_name,
+            max_bodies=max_bodies,
+        )
+        ir["mandatory"] = True
+        ir["allowlist_count"] = len(allowlist_rows)
+    final_reconcile = reconcile_filings_index_body_flags(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
+    before = int(body_reconcile.get("with_body_after") or residual.get("with_body_before") or 0)
+    after = int(
+        final_reconcile.get("with_body_after")
+        or ir.get("with_body_after")
+        or residual.get("with_body_after")
+        or before
+    )
+    return {
+        "body_reconcile": body_reconcile,
+        "residual": residual,
+        "ir_allowlist": ir,
+        "final_reconcile": final_reconcile,
+        "attempted": int(residual.get("attempted") or 0) + int(ir.get("attempted") or 0),
+        "fetched": max(0, after - before),
+        "with_body_before": before,
+        "with_body_after": after,
+        "note": "refetch_euro_filings_primary_bodies",
     }
 
 
@@ -9431,6 +9509,61 @@ def refetch_missing_filing_bodies(
         "with_body_before": before,
         "with_body_after": after,
         "note": "refetch_missing_filing_bodies",
+    }
+
+
+def count_filings_with_body(filings_dir: Path) -> int:
+    """Indexed ``summary.with_body`` for ladder/rememo body-lag comparisons."""
+    index_path = Path(filings_dir) / "filings_index.json"
+    if not index_path.exists():
+        return 0
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return 0
+    if not isinstance(payload, dict):
+        return 0
+    summary = payload.get("summary") or {}
+    indexed = int(summary.get("with_body") or 0)
+    if indexed:
+        return indexed
+    filings = payload.get("filings") or []
+    return sum(1 for row in filings if isinstance(row, dict) and row.get("has_body"))
+
+
+def body_lag_rememo_gate(
+    *,
+    grade: str | None,
+    memo_bodies: int,
+    filings_dir: Path,
+    body_lag_threshold: int = 10,
+    has_verdict: bool = True,
+    ingest_improved: bool = False,
+) -> dict[str, Any]:
+    """
+    Whether a thin/zero-body memo should rememo after filing bodies land.
+
+    Uses the shared ``rememo_reason`` rule — thin grade alone does not qualify;
+    disk must exceed the memo snapshot (zero-body catchup or full body-lag).
+    """
+    from value_investor.research.market_store import rememo_reason
+
+    disk_bodies = count_filings_with_body(filings_dir)
+    reason = rememo_reason(
+        grade=grade,
+        memo_bodies=int(memo_bodies),
+        disk_bodies=disk_bodies,
+        body_lag_threshold=int(body_lag_threshold),
+        ingest_improved=bool(ingest_improved),
+        has_verdict=has_verdict,
+    )
+    return {
+        "eligible": reason is not None,
+        "reason": reason,
+        "disk_bodies": disk_bodies,
+        "memo_bodies": int(memo_bodies),
+        "body_lag": max(0, disk_bodies - int(memo_bodies)),
+        "ingest_improved": bool(ingest_improved),
     }
 
 
