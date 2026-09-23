@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T09:56:35.561063+00:00",
+  "generated_at": "2026-09-23T12:31:44.687029+00:00",
   "role": "end_of_day_project_traffic",
-  "trajectory": "on_track",
-  "pause_active": false,
+  "trajectory": "blocked_by_pr_queue",
+  "pause_active": true,
   "stuck_pr_count": 0,
   "achieved": [
     "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
@@ -22,7 +22,15 @@
     "Prioritise buy-tier filing depth (Companies House + RNS body fetch).",
     "Keep library growing offline; defer live universe expansion until stage 2b shows edge."
   ],
-  "actions_taken": [],
+  "actions_taken": [
+    {
+      "kind": "stop_automation_waste",
+      "detail": "signals=1; parked=eng-20260923-02; pause=True",
+      "pr_number": null,
+      "branch": null,
+      "applied": true
+    }
+  ],
   "checkpoint_probe": {
     "evidence_rows": [
       {
@@ -62,7 +70,7 @@
         "probe": "status must be one of complete|in_progress|not_started"
       },
       {
-        "claim": "Progress report present (generated_at=2026-09-22T08:34:03+00:00)",
+        "claim": "Progress report present (generated_at=2026-09-23T12:17:58+00:00)",
         "source": "docs/data/progress_report.json",
         "grounded": true,
         "probe": "progress_report.json must exist with a timestamp"
@@ -74,7 +82,7 @@
         "probe": "human_gate block is structural, not free text"
       },
       {
-        "claim": "Queue health overall=active; headline=Agent lane active.",
+        "claim": "Queue health overall=idle; headline=Queue and hunter idle.",
         "source": "docs/data/queue_health.json",
         "grounded": true,
         "probe": "queue_health.overall must be set by refresh_queue_health_ui"
@@ -86,7 +94,7 @@
         "probe": "ops_status.run_at required for same-day claims"
       },
       {
-        "claim": "Traffic pause_active=False; stuck_pr_count=0",
+        "claim": "Traffic pause_active=True; stuck_pr_count=0",
         "source": "docs/data/engineering_tasks.json#traffic_control",
         "grounded": true,
         "probe": "pause state must match stuck PR classification on this run"
@@ -95,22 +103,71 @@
     "ungrounded_count": 0,
     "grounded_count": 11
   },
-  "merges_today": [],
-  "verified_merges_today": [],
+  "merges_today": [
+    {
+      "task_id": "eng-20260922-05",
+      "title": "Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop",
+      "area": "ingest",
+      "pr_number": 818,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/818",
+      "merged_at": "2026-09-23T12:14:11.695961+00:00",
+      "merge_class": "ingest_narrow",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260923-01",
+      "title": "Close stubborn ingest gaps for PINE.L (chain 1/3: 0/0 bodies, run igc-20260923-03)",
+      "area": "ingest",
+      "pr_number": 816,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/816",
+      "merged_at": "2026-09-23T11:12:36.697818+00:00",
+      "merge_class": "ingest_narrow",
+      "auto_merge": false,
+      "independently_verified": true
+    }
+  ],
+  "verified_merges_today": [
+    {
+      "task_id": "eng-20260922-05",
+      "title": "Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop",
+      "area": "ingest",
+      "pr_number": 818,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/818",
+      "merged_at": "2026-09-23T12:14:11.695961+00:00",
+      "merge_class": "ingest_narrow",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260923-01",
+      "title": "Close stubborn ingest gaps for PINE.L (chain 1/3: 0/0 bodies, run igc-20260923-03)",
+      "area": "ingest",
+      "pr_number": 816,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/816",
+      "merged_at": "2026-09-23T11:12:36.697818+00:00",
+      "merge_class": "ingest_narrow",
+      "auto_merge": false,
+      "independently_verified": true
+    }
+  ],
   "pr_fix_common_issues": {
-    "occasion_count": 29,
+    "occasion_count": 32,
     "by_reason": [
       {
         "failure_reason": "PR mergeable=CONFLICTING against main",
-        "count": 4,
+        "count": 7,
         "sources": {
-          "human_request": 4
+          "human_request": 7
         },
         "recent_prs": [
           766,
           767,
           779,
-          780
+          780,
+          810,
+          812,
+          814
         ]
       },
       {
@@ -208,7 +265,7 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 20
+        "count": 23
       },
       {
         "kind": "ci_check",
@@ -218,7 +275,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 29
+        "count": 32
       }
     ]
   },
