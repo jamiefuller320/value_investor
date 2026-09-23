@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-09-23T07:33:06.750768+00:00",
+  "compiled_at": "2026-09-23T07:33:30.913943+00:00",
   "run_at": null,
   "task_count": 100,
   "tasks": [
@@ -1677,13 +1677,13 @@
         "rerun_library_ingest_loop": true,
         "doc": "docs/ops/library-ingest-escalation.md",
         "stall_triage": {
-          "analyzed_at": "2026-09-23T07:32:59.086527+00:00",
+          "analyzed_at": "2026-09-22T20:45:12.294086+00:00",
           "market_id": "dax",
           "task_id": "eng-20260922-05",
           "status": "parked",
-          "filing_gaps": 7,
+          "filing_gaps": 6,
           "lanes": {
-            "unmeasured": 7,
+            "unmeasured": 6,
             "zero_body": 0,
             "indexed_without_body": 30,
             "thin_bodies": 3
@@ -1698,23 +1698,20 @@
           "focus_lane": "unmeasured",
           "reburn_loop": true,
           "reburn_investigation": {
-            "investigated_at": "2026-09-23T07:32:59.086503+00:00",
-            "primary_hypothesis": "preflight_clash",
-            "blockers": [
-              "preflight_clash"
-            ],
+            "investigated_at": "2026-09-22T20:45:12.294070+00:00",
+            "primary_hypothesis": "scope_too_broad_secondary",
+            "blockers": [],
             "automation_waste_active": false,
             "live_reburn_signal": false,
             "pm_parked_by_traffic": true,
-            "preflight_healed": false,
+            "preflight_healed": true,
             "no_diff_count": 0,
             "failure_count": 0,
-            "allow_narrow_reframe": false,
-            "allow_unpark": false,
-            "skip_reframe_reason": "reburn_loop: fix dispatch blockers before narrow reframe — preflight_clash",
+            "allow_narrow_reframe": true,
+            "allow_unpark": true,
+            "skip_reframe_reason": null,
             "safe_next_steps": [
-              "Resolve path clashes (merge sibling eng PR, cancel duplicate branch, or narrow allowed_paths); re-run preflight before unpark.",
-              "After blockers clear, narrow-reframe to HEI.DE before re-dispatch."
+              "Safe to narrow-reframe to focus ticker HEI.DE (then unpark manually or via recover-queue when dispatch gates allow)."
             ],
             "doc": "docs/ops/library-ingest-escalation.md#library-stall-reburn-investigation"
           },
@@ -1724,7 +1721,7 @@
             "split_by_ticker_not_broad_market_task",
             "investigate_reburn_loop_before_unpark"
           ],
-          "filing_health_snapshot_at": "2026-09-23T07:32:57.838042+00:00",
+          "filing_health_snapshot_at": "2026-09-22T20:45:12.269699+00:00",
           "doc": "docs/ops/library-ingest-escalation.md#library-stall-task-triage"
         }
       },
@@ -6133,7 +6130,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 1,
-    "evaluated_at": "2026-09-23T07:33:09.533415+00:00",
+    "evaluated_at": "2026-09-23T06:16:43.364113+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
