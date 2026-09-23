@@ -742,6 +742,9 @@ def build_progress_report(
         snapshot_path=data_dir / "so_what_closure.json",
     )
     lifecycle_acks = build_lifecycle_ack_section(data_dir=data_dir)
+    from value_investor.thin_memo_clearance import build_thin_memo_clearance_status
+
+    thin_memo_clearance = build_thin_memo_clearance_status(data_dir=data_dir)
 
     severities = [
         str(integration.get("overall") or "ok"),
@@ -771,6 +774,7 @@ def build_progress_report(
             "checks": role_coherence,
         },
         "so_what": so_what,
+        "thin_memo_clearance": thin_memo_clearance,
         "lifecycle_acks": lifecycle_acks,
         "references": {
             "deferred_review": "docs/deferred-review.md",
@@ -914,6 +918,12 @@ def format_progress_report_markdown(report: dict[str, Any]) -> str:
 
     so_what = report.get("so_what") or {}
     lines.extend(["", render_so_what_markdown(so_what).rstrip(), ""])
+
+    from value_investor.thin_memo_clearance import render_thin_memo_clearance_markdown
+
+    thin_md = render_thin_memo_clearance_markdown(report.get("thin_memo_clearance") or {})
+    if thin_md.strip():
+        lines.extend(["", thin_md.rstrip(), ""])
 
     lifecycle_acks = report.get("lifecycle_acks") or {}
     lines.extend(

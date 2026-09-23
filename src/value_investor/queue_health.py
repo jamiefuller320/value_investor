@@ -179,6 +179,8 @@ def build_queue_health_snapshot(
     tasks_path: Path = COMMITTED_TASKS_PATH,
     ops_status_path: Path = DEFAULT_OPS_STATUS_PATH,
     open_prs: list[dict[str, Any]] | None = None,
+    pr_fix_path: Path | None = None,
+    now: datetime | None = None,
 ) -> dict[str, Any]:
     """Roll up merge lane, agent lane, and ops monitor into one dashboard snapshot."""
     from value_investor.engineering_preflight import clash_report_for_queue
@@ -207,8 +209,15 @@ def build_queue_health_snapshot(
     traffic = get_traffic_control_state(tasks_path=tasks_path)
     ops_status = _read_ops_status(ops_status_path)
     from value_investor.engineering_narrow_merge import list_todays_engineering_merges
+    from value_investor.task_completion_monitor import build_task_completion_monitor
 
-    merges_today = list_todays_engineering_merges(tasks_path=tasks_path)
+    clock = now or datetime.now(UTC)
+    merges_today = list_todays_engineering_merges(tasks_path=tasks_path, now=clock)
+    completion_monitor = build_task_completion_monitor(
+        tasks_path=tasks_path,
+        pr_fix_path=pr_fix_path,
+        now=clock,
+    )
 
     overall = "ok"
     if agent_lane["blocked"] or merge_lane["blocked"]:
@@ -231,7 +240,7 @@ def build_queue_health_snapshot(
 
     return {
         "schema_version": SCHEMA_VERSION,
-        "generated_at": datetime.now(UTC).isoformat(),
+        "generated_at": clock.isoformat(),
         "overall": overall,
         "headline": headline,
         "merge_lane": merge_lane,
@@ -258,6 +267,7 @@ def build_queue_health_snapshot(
         "verified_merges_today_count": sum(
             1 for row in merges_today if row.get("independently_verified")
         ),
+        "completion_monitor": completion_monitor,
     }
 
 

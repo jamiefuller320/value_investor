@@ -189,6 +189,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm",
         "https://www.sec.gov/Archives/edgar/data/1306965/000130696525000007/shel-20241231.htm",
         "https://www.sec.gov/Archives/edgar/data/1306965/000130696524000026/shel-20231231.htm",
+        "https://www.sec.gov/Archives/edgar/data/1306965/000162828026031628/shellq120266-k.htm",
     ],
     "VOE.VI": [
         "https://www.voestalpine.com/group/static/sites/group/.downloads/en/publications-2025-26/2025-26-annual-report.pdf",
@@ -274,8 +275,21 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.ucb.com/sites/default/files/2026-03/UCB%20SA_Management%20Report_Statutory%20Acccounts%202025_EN.pdf",
         "https://reports.ucb.com/",
     ],
+    # euro_depth thin_memo_counted_as_coverage — ageas.com is Cloudflare-gated; Contentful PDF + Euronext FY25.
     "AGS.BR": [
-        "https://ageas.com/en/annual-report-2025",
+        "https://downloads.ctfassets.net/o6mf177wvfka/KuRHStfskhn2PLR18lgoi/efc6b1dcba3a29dab7da646009b0a2b1/Ageas-AR-ENG-FULL-25.pdf",
+        "https://live.euronext.com/sites/default/files/company_press_releases/attachments/2026/02/25/cpr01_notified_EN_Results_FY25_003_25022026.pdf",
+    ],
+    # euro_depth critical-path unmeasured — BN.PA / EL.PA (system_gaps thin_memo_counted_as_coverage).
+    "BN.PA": [
+        "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf",
+    ],
+    "EL.PA": [
+        "https://www.essilorluxottica.com/api/getCapContent/?download=true&id=284350",
+    ],
+    # euro_depth zero-body initial memo — IFX.DE ESEF lag; direct FY2025 annual report PDF.
+    "IFX.DE": [
+        "https://www.infineon.com/assets/row/public/documents/corporate/investors/annual-reports/2025/2025-annual-report-v01-00-en.pdf",
     ],
     "TTE.PA": [
         "https://totalenergies.com/system/files/documents/totalenergies_universal-registration-document-2025_2026_en.pdf",
@@ -600,6 +614,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
+    "BN": ("Danone", "Danone SA"),
+    "EL": ("EssilorLuxottica", "EssilorLuxottica SA"),
+    "IFX": ("Infineon", "Infineon Technologies AG"),
 }
 
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
@@ -1622,6 +1639,45 @@ def dedupe_rns_index_rows(
     return merged, pruned_pdf + pruned_page
 
 
+def _propagate_bodies_across_shared_document_urls(
+    filings: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], int]:
+    """
+    Copy ``has_body`` when multiple index entries point at the same document URL.
+
+    Dual-listed UK names (e.g. SHEL.L) often index the same SEC 20-F/6-K twice as
+    ``sec_edgar`` and ``ir_allowlist`` with different row ids; only one row is fetched.
+    """
+    donors_by_url: dict[str, dict[str, Any]] = {}
+    for row in filings:
+        if not row.get("has_body") or not row.get("body_path"):
+            continue
+        url_key = _normalize_rns_document_url(str(row.get("url") or ""))
+        if not url_key:
+            continue
+        existing = donors_by_url.get(url_key)
+        if existing is None:
+            donors_by_url[url_key] = row
+            continue
+        if str(row.get("published_at") or "") > str(existing.get("published_at") or ""):
+            donors_by_url[url_key] = row
+    propagated = 0
+    updated: list[dict[str, Any]] = []
+    for row in filings:
+        item = dict(row)
+        if not item.get("has_body"):
+            url_key = _normalize_rns_document_url(str(item.get("url") or ""))
+            donor = donors_by_url.get(url_key) if url_key else None
+            if donor is not None:
+                item["has_body"] = True
+                item["body_path"] = donor.get("body_path")
+                if donor.get("body_content_hash"):
+                    item["body_content_hash"] = donor["body_content_hash"]
+                propagated += 1
+        updated.append(item)
+    return updated, propagated
+
+
 def _propagate_bodies_across_shared_filing_ids(
     filings: list[dict[str, Any]],
 ) -> tuple[list[dict[str, Any]], int]:
@@ -1657,7 +1713,8 @@ def _propagate_bodies_across_shared_filing_ids(
                     item["body_content_hash"] = donor["body_content_hash"]
                 propagated += 1
         updated.append(item)
-    return updated, propagated
+    updated, url_propagated = _propagate_bodies_across_shared_document_urls(updated)
+    return updated, propagated + url_propagated
 
 
 def _reconcile_ir_allowlist_row_metadata(
@@ -2673,8 +2730,9 @@ def classify_rns_headline(
 
     # Dividends / buybacks / exchange offers are not results packs.
     if re.search(
-        r"\b(interim dividend|final dividend|dividend timetable|transaction in own shares|"
-        r"director/?pdmr|exchange offers?|total voting rights|block listing)\b",
+        r"\b(interim dividend|final dividend|dividend timetable|equivalent dividend payments?|"
+        r"transaction in own shares|director/?pdmr|exchange offers?|total voting rights|"
+        r"block listing)\b",
         blob,
     ):
         return "other"
@@ -4729,6 +4787,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://investorpa.com/announcement-pdf/20260511/291611.pdf": "interim",
     # Imperial Brands HY26 statutory RNS — opaque LSE rns-pdf slug (eng-20260921-07).
     "https://www.rns-pdf.londonstockexchange.com/rns/8727D_1-2026-5-11.pdf": "interim",
+    # euro_depth thin_memo — opaque issuer CMS/API filenames (system_gaps BN.PA / EL.PA).
+    "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf": "annual",
+    "https://www.essilorluxottica.com/api/getCapContent/?download=true&id=284350": "annual",
 }
 
 
@@ -8109,6 +8170,111 @@ def _load_prior_filings_rows(filings_dir: Path) -> list[dict[str, Any]]:
     return list(filings) if isinstance(filings, list) else []
 
 
+def refresh_uk_filing_listings_into_index(
+    filings_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    market: str | None = "ftse350",
+    max_investegate_items: int = _INVESTEGATE_MAX_ITEMS,
+    max_rns_items: int = 40,
+    max_ch_accounts: int | None = None,
+) -> dict[str, Any]:
+    """
+    Merge fresh Investegate / ticker-api / CH listing rows before UK body refetch.
+
+    Gap-closure refetch only downloads bodies for indexed rows. Issuer pages can
+    publish new statutory RNS (e.g. KGF.L Half Year Results) after the last index
+    write; listing refresh merges them so refetch and reconcile can attach bodies.
+    """
+    from value_investor.research.companies_house import (
+        DEFAULT_MAX_ACCOUNTS,
+        fetch_filings_companies_house,
+    )
+    from value_investor.storage import write_json
+
+    filings_dir = Path(filings_dir)
+    filings_dir.mkdir(parents=True, exist_ok=True)
+    index_path = filings_dir / "filings_index.json"
+    prior = _load_prior_filings_rows(filings_dir)
+    prior_keys = {_merge_filings_row_key(row) for row in prior}
+    if max_ch_accounts is None:
+        max_ch_accounts = DEFAULT_MAX_ACCOUNTS
+    listing_groups = [
+        fetch_filings_ticker_api(
+            ticker=ticker,
+            company_name=company_name,
+            max_items=max_rns_items,
+        ),
+        fetch_filings_investegate_company(
+            ticker=ticker,
+            company_name=company_name,
+            max_items=max_investegate_items,
+        ),
+        fetch_filings_companies_house(
+            ticker=ticker,
+            company_name=company_name,
+            max_accounts=int(max_ch_accounts),
+        ),
+        fetch_filings_ir_allowlist(ticker),
+    ]
+    discovered = merge_filings(*listing_groups)
+    cleaned_discovered: list[dict[str, Any]] = []
+    for row in discovered:
+        item = dict(row)
+        if not item.get("has_body"):
+            item["has_body"] = False
+            item["body_path"] = None
+        cleaned_discovered.append(item)
+    merged = merge_filings(prior, cleaned_discovered)
+    merged_keys = {_merge_filings_row_key(row) for row in merged}
+    added_keys = merged_keys - prior_keys
+    added_interim = sum(
+        1
+        for row in merged
+        if _merge_filings_row_key(row) in added_keys and str(row.get("period") or "") == "interim"
+    )
+    if not added_keys and prior:
+        return {
+            "prior_count": len(prior),
+            "merged_count": len(merged),
+            "added": 0,
+            "added_interim": 0,
+            "note": "unchanged",
+        }
+    payload: dict[str, Any] = {}
+    if index_path.exists():
+        try:
+            payload = json.loads(index_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            payload = {}
+    sources_used = sorted({str(row.get("source")) for row in merged if row.get("source")})
+    index = {
+        "ticker": ticker,
+        "company_name": company_name,
+        "market": payload.get("market") or market,
+        "regime": payload.get("regime") or "uk_rns",
+        "fetched_at": payload.get("fetched_at") or datetime.now(UTC).isoformat(),
+        "note": payload.get("note")
+        or (
+            "Scan-then-target listing merge (no body download). "
+            "Bodies filled by subsequent deepen pass."
+        ),
+        "sources_used": sources_used,
+        "summary": summarize_filings(merged),
+        "filings": merged,
+        "listing_refresh_at": datetime.now(UTC).isoformat(),
+    }
+    write_json(index_path, index, compact=True, compress=False)
+    return {
+        "prior_count": len(prior),
+        "merged_count": len(merged),
+        "added": len(added_keys),
+        "added_interim": added_interim,
+        "note": "refresh_uk_filing_listings_into_index",
+    }
+
+
 def reconcile_filing_body_flags(
     filings: list[dict[str, Any]],
     bodies_dir: Path,
@@ -8973,6 +9139,16 @@ def refetch_uk_primary_filing_bodies(
     adjusting items, and cash-flow statements), then fills remaining RNS rows.
     A residual sweep runs last for SEC Edgar and other direct URLs still lacking bodies.
     """
+    listing_refresh = refresh_uk_filing_listings_into_index(
+        filings_dir,
+        ticker=ticker,
+        company_name=company_name,
+    )
+    body_reconcile = reconcile_filings_index_body_flags(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
     ch = refetch_companies_house_filing_bodies(
         filings_dir,
         max_bodies=max_bodies,
@@ -8998,6 +9174,8 @@ def refetch_uk_primary_filing_bodies(
         "companies_house": ch,
         "rns": rns,
         "residual": residual,
+        "listing_refresh": listing_refresh,
+        "body_reconcile": body_reconcile,
         "attempted": (
             int(ch.get("attempted") or 0)
             + int(rns.get("attempted") or 0)

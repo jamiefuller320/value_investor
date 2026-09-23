@@ -1,7 +1,8 @@
 # Dual-path sleeve lab (observe-only)
 
 Parallel **capital book** + **widest sleeve observe path** with capital-status
-tags. Implements the recording half of deferred **L443** / **L444**.
+tags. Implements the recording half of deferred **L443** / **L444**
+(schema **v2**: near-buy → grace-end + ~1 month).
 
 Does **not** change live paper allocation, knobs, or decision-review `--apply`.
 
@@ -10,36 +11,16 @@ Does **not** change live paper allocation, knobs, or decision-review `--apply`.
 | Path | Job | Success metric |
 |------|-----|----------------|
 | **Capital book** (existing paper tracks) | Monthly deposits (optional config) + rotation | NAV excess vs ^FTSE after fair costs |
-| **Sleeve episodes** (this lab) | Every buy-tier crossing opens an episode | Sleeve return / timing **by** `capital_status` |
+| **Sleeve episodes** (this lab) | Every near-buy / buy-tier crossing opens an episode | Sleeve return / timing **by** `capital_status` |
 
-## Markers (widest freeze)
-
-### v1 (shipping)
+## Markers (widest freeze, schema v2)
 
 | Marker | Definition |
 |--------|------------|
-| **Earliest entry** | First paper-auto pass the name is `buy` / `strong_buy` |
-| **Latest experimental exit** | Left buy-tier for `exit_confirm_screens` (default 2) consecutive passes, or hard `avoid` |
+| **Earliest entry** | First paper-auto pass the name is **near-buy** (`hold` + conviction ≥ `0.28` pre_buy floor) **or** `buy` / `strong_buy` — whichever comes first |
+| **Latest experimental exit** | Momentum-grace end + `post_grace_extra_days` (~30d / ~1 month). **Fallback** if grace never arms: left the wide zone (near-buy ∪ buy-tier) for `exit_confirm_screens` consecutive passes, then + `post_grace_extra_days`. Hard `avoid` closes immediately |
+| **Sub-markers** (stamped, not gates) | `first_near_buy_at`, `first_buy_tier_at`, `grace_started_at`, `grace_ended_at`, `experimental_exit_due_at` — for nested counterfactuals later (**L446**) |
 | **Best policy** | Nested counterfactual *inside* the wide episode — not the recording gate |
-
-### v2 planned — near-buy → grace-end+1m (**L439**)
-
-For **maximum** entry/exit timing assessment, widen the observe envelope further
-(still nested-counterfactual friendly):
-
-| Marker | Planned definition |
-|--------|--------------------|
-| **Earliest entry** | First print on the **near-buy** watch: `hold` (or equivalent) with conviction ≥ trajectory `pre_buy` floor (**0.28**), i.e. hold-near-buy — same cut as equal-support near-miss |
-| **Sub-markers (stamp, do not gate)** | `first_near_buy_at`, `first_buy_tier_at`, `grace_started_at`, `grace_ended_at` |
-| **Latest experimental exit** | Momentum-grace **end + ~1 calendar month** (grace default 6 weeks → ~10 weeks post leave-buy-tier when grace arms). **Fallback** if grace never arms: leave buy-tier × confirms + 1 month, or hard `avoid` |
-| **Volume guard** | Cap new opens per pass (already `max_new_episodes_per_pass`); prefer conviction-ranked near-buy intake |
-
-Capital tags stay as in v1: `on_book` only when the paper book actually funds the name
-(usually at/after buy-tier). Near-buy-only episodes are almost always `never_funded`
-until they graduate — that is intended for early-entry counterfactuals.
-
-Do **not** shrink v1 recording while v2 is unfinished; widen by adding markers,
-not by replacing buy-tier opens mid-cohort.
 
 ## Capital status tags
 
@@ -86,6 +67,7 @@ documented epoch reset when deposits begin.
 | Exit shadow / exit-timing / entry DCA / hypothesis | **Unchanged** — separate strands continue |
 | Momentum grace / rules churn history | **Still valid** for what it measured (capital-path under then-current rules) |
 | Reinterpreting old NAV as dual-path sleeve tags | **Invalid** — do not back-label |
+| v1 episodes (buy-tier open → leave-tier × confirms) | **Prior cohort** — v2 widens the window; do not merge without schema_version |
 
 Forward sleeve episodes are a **new cohort clock**. Thickness gates
 (`ready_for_sleeve_timing_analysis`) require ≥15 closed episodes per

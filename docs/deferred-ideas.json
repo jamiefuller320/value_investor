@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-23T08:43:23+00:00",
+  "updated_at": "2026-09-23T08:55:23+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10010,9 +10010,10 @@
         "timing",
         "L443"
       ],
-      "status": "open",
+      "status": "done",
       "source": "conversation: earliest/latest vs best freeze thresholds",
-      "added_at": "2026-09-22T11:44:31+00:00"
+      "added_at": "2026-09-22T11:44:31+00:00",
+      "updated_at": "2026-09-23T08:55:23+00:00"
     },
     {
       "id": "L445",
@@ -10047,22 +10048,59 @@
       "added_at": "2026-09-22T11:51:58+00:00"
     },
     {
-      "id": "L439",
+      "id": "L447",
       "category": "later",
-      "section": "learning",
-      "title": "Widen sleeve episodes: near-buy start to grace-end+1m",
-      "summary": "v1 opens on buy-tier. Widest useful observe window: earliest = hold-near-buy / pre_buy (conviction\u22650.28), latest = momentum-grace end + ~1 month (with fallback if grace never arms). Stamp sub-markers (near_buy, buy_tier, grace_start/end) for nested entry/exit counterfactuals; keep volume caps.",
-      "revisit_when": "Sleeve episodes v1 merged and collecting; next marker-policy revision",
+      "section": "ops",
+      "title": "PR/task completion monitor with auto vs manual merge history",
+      "summary": "Extend Automation \u2192 Queue & hunter monitor: today/yesterday numeric merge counts (auto vs manual), ~14-day stacked bar of auto_merge vs human merges from engineering_tasks.merged_at, and per-day PR-fix intervention counts from pr_fix_occasions.json (ci_check/merge_conflict). Data already exists; needs queue_health history series + simple SVG/CSS bars in docs/app.js.",
+      "revisit_when": "Next dashboard UX pass on Automation tab, or when ops wants merge-throughput visibility beyond merges-today list",
       "tags": [
-        "sleeves",
-        "near-buy",
-        "grace",
-        "widest",
-        "timing"
+        "dashboard",
+        "project-traffic",
+        "queue-health",
+        "auto-merge",
+        "pr-fix"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a0c90d-5565-7fd3-b55e-7ffe1558a936",
+      "added_at": "2026-09-22T12:21:20+00:00",
+      "updated_at": "2026-09-22T12:34:20+00:00"
+    },
+    {
+      "id": "L448",
+      "category": "later",
+      "section": "ops",
+      "title": "Market-rotating eng gap burn-down (ingest maintenance cursor)",
+      "summary": "Align eng escalation (stall micro-compile, gap-closure pins, parked-hunter) with maintenance_slot_cursor so admitted markets get serial gap burn-down while FTSE live path keeps P1 pins; avoids one global queue starved by post-run dedupe while library gaps (e.g. DAX) linger parked.",
+      "revisit_when": "Two or more admitted maintenance markets show ingest stall with zero open eng tasks for that market_id for 7+ days while FTSE gap-closure fills the queue",
+      "tags": [
+        "P2",
+        "ingest",
+        "engineering-queue",
+        "market-cascade",
+        "gap-backlog"
+      ],
+      "status": "done",
+      "source": "conversation: keep on top of gap backlog market cascade",
+      "added_at": "2026-09-22T16:27:55+00:00",
+      "updated_at": "2026-09-22T16:34:30+00:00"
+    },
+    {
+      "id": "L449",
+      "category": "later",
+      "section": "ops",
+      "title": "Invoke market eng gap burndown from eng-queue when idle",
+      "summary": "L448 burndown only runs inside ops-monitor apply_fixes, and ops-monitor skips after the first successful finalize of the day. After #805 landed mid-day, later scheduled/dispatch runs skipped monitor so burndown never applied until the next morning run (or force). Consider also calling try-market-gap-burndown from engineering-queue idle path beside compile-cap drain / parked hunter.",
+      "revisit_when": "Next weekday where eng queue is idle after ~15:00 UTC with library IWB/thin remaining and ops-monitor already finalized that morning",
+      "tags": [
+        "L448",
+        "market-gap-burndown",
+        "ops-monitor",
+        "engineering-queue"
       ],
       "status": "open",
-      "source": "conversation: near-buy to grace+1m window",
-      "added_at": "2026-09-23T08:43:23+00:00"
+      "source": "conversation: has market rotating backlog clearing fired",
+      "added_at": "2026-09-22T22:49:17+00:00"
     }
   ],
   "fragments": [

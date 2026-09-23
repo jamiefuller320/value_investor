@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-22T12:16:36.874840+00:00",
+  "compiled_at": "2026-09-23T09:58:40.091868+00:00",
   "run_at": null,
-  "task_count": 97,
+  "task_count": 101,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1023,6 +1023,257 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20260923-01",
+      "area": "ingest",
+      "title": "Close stubborn ingest gaps for PINE.L (chain 1/3: 0/0 bodies, run igc-20260923-03)",
+      "summary": "Ingest gap-closure run igc-20260923-03 (chain root igc-20260923-03, round 1) targeted PINE.L with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20260923-03",
+        "trial_id": "igc-20260923-03",
+        "chain_root_id": "igc-20260923-03",
+        "chain_round": 1,
+        "tickers": [
+          "PINE.L"
+        ],
+        "ticker": "PINE.L",
+        "market_id": null,
+        "library_market": null,
+        "universe": "ftse350",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": false,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "PINE.L"
+          ]
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "PINE.L"
+          ]
+        },
+        "compile_reason": "gaps_remain_without_allowlist"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for PINE.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260922-04",
+      "area": "ingest",
+      "title": "Close stubborn ingest gaps for SHEL.L (chain 1/3: 0/0 bodies, run igc-20260922-04)",
+      "summary": "Ingest gap-closure run igc-20260922-04 (chain root igc-20260922-04, round 1) targeted SHEL.L with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20260922-04",
+        "trial_id": "igc-20260922-04",
+        "chain_root_id": "igc-20260922-04",
+        "chain_round": 1,
+        "tickers": [
+          "SHEL.L"
+        ],
+        "ticker": "SHEL.L",
+        "market_id": null,
+        "library_market": null,
+        "universe": "ftse350",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": false,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "SHEL.L"
+          ]
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "SHEL.L"
+          ]
+        },
+        "compile_reason": "gaps_remain_without_refetch",
+        "merge_class": "ingest_narrow"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for SHEL.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "branch_name": "cursor/eng-20260922-04-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/804",
+      "pr_number": 804,
+      "no_diff_count": 0,
+      "completed_at": "2026-09-22T15:53:44.294464+00:00",
+      "merge_class": "ingest_narrow",
+      "merged_at": "2026-09-22T15:53:54.495600+00:00"
+    },
+    {
+      "id": "eng-20260922-03",
+      "area": "ingest",
+      "title": "Close stubborn ingest gaps for KGF.L (chain 1/3: 0/0 bodies, run igc-20260922-03)",
+      "summary": "Ingest gap-closure run igc-20260922-03 (chain root igc-20260922-03, round 1) targeted KGF.L with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20260922-03",
+        "trial_id": "igc-20260922-03",
+        "chain_root_id": "igc-20260922-03",
+        "chain_round": 1,
+        "tickers": [
+          "KGF.L"
+        ],
+        "ticker": "KGF.L",
+        "market_id": null,
+        "library_market": null,
+        "universe": "ftse350",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": false,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "KGF.L"
+          ]
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "KGF.L"
+          ]
+        },
+        "compile_reason": "gaps_remain_without_allowlist",
+        "merge_class": "ingest_narrow"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for KGF.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_policy": "preflight_clash",
+      "parked_at": "2026-09-22T13:59:03.852388+00:00",
+      "result_path": "output/engineering_result_eng-20260922-03.md",
+      "branch_name": "cursor/eng-20260922-03-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-09-22T14:30:39.568961+00:00",
+      "merge_class": "ingest_narrow",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/803",
+      "pr_number": 803,
+      "merged_at": "2026-09-22T14:45:21.206847+00:00"
+    },
+    {
       "id": "eng-20260922-02",
       "area": "ingest",
       "title": "Close stubborn ingest gaps for VTY.L (chain 1/3: 0/0 bodies, run igc-20260922-01)",
@@ -1433,6 +1684,160 @@
       "cancelled_policy": "resolved_gap_closure"
     },
     {
+      "id": "eng-20260922-05",
+      "area": "ingest",
+      "title": "Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop",
+      "summary": "Library market dax buy-tier filing deepen stalled with 6 unmeasured and 0 zero-body names (buy_tier_count=11). Improve euro_filings / ESEF / IR allowlist source coverage for representative tickers and add regression tests; verify with ftse-library ingest-loop --market dax. Sample unmeasured: HEI.DE, DTG.DE, FRE.DE, HNR1.DE, HEN3.DE.",
+      "priority": "high",
+      "priority_score": 86.0,
+      "source": "library_ingest_stall",
+      "evidence": {
+        "market_id": "dax",
+        "library_market": "dax",
+        "universe": "library",
+        "filing_health": {
+          "snapshot_at": "2026-09-22T20:02:16.029838+00:00",
+          "market_id": "dax",
+          "buy_tier_count": 11,
+          "unmeasured_buy_tier": 6,
+          "zero_body_buy_tier": 0,
+          "thin_body_buy_tier": 3,
+          "indexed_without_body": 30,
+          "bodies_min": 1,
+          "bodies_median": 2,
+          "bodies_max": 58,
+          "coverage_scope": "canonical_plus_shards",
+          "ftse_equivalent": false,
+          "unmeasured_tickers": [
+            "HEI.DE",
+            "DTG.DE",
+            "FRE.DE",
+            "HNR1.DE",
+            "HEN3.DE",
+            "VOW3.DE"
+          ],
+          "zero_body_tickers": [],
+          "thin_body_tickers": [
+            "MUV2.DE",
+            "DTE.DE",
+            "BAS.DE"
+          ],
+          "indexed_without_body_tickers": [
+            "FME.DE"
+          ],
+          "indexed_without_body_by_ticker": {
+            "FME.DE": 30
+          },
+          "parked_tickers": [],
+          "parked_count": 0,
+          "effective_thin_body_buy_tier": 3,
+          "effective_thin_body_tickers": [
+            "MUV2.DE",
+            "DTE.DE",
+            "BAS.DE"
+          ],
+          "effective_indexed_without_body": 30,
+          "effective_indexed_without_body_tickers": [
+            "FME.DE"
+          ],
+          "ingest_exhausted": false
+        },
+        "filing_gaps": 6,
+        "sample_unmeasured": [
+          "HEI.DE",
+          "DTG.DE",
+          "FRE.DE",
+          "HNR1.DE",
+          "HEN3.DE"
+        ],
+        "sample_zero_body": [],
+        "rerun_library_ingest_loop": true,
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "stall_triage": {
+          "analyzed_at": "2026-09-23T09:24:41.411920+00:00",
+          "market_id": "dax",
+          "task_id": "eng-20260922-05",
+          "status": "parked",
+          "filing_gaps": 7,
+          "lanes": {
+            "unmeasured": 7,
+            "zero_body": 0,
+            "indexed_without_body": 30,
+            "thin_bodies": 3
+          },
+          "active_lanes": [
+            "unmeasured",
+            "indexed_without_body",
+            "thin_bodies"
+          ],
+          "bundled": true,
+          "focus_ticker": "HEI.DE",
+          "focus_lane": "unmeasured",
+          "reburn_loop": true,
+          "reburn_investigation": {
+            "investigated_at": "2026-09-23T09:24:41.411896+00:00",
+            "primary_hypothesis": "preflight_clash",
+            "blockers": [
+              "preflight_clash"
+            ],
+            "automation_waste_active": false,
+            "live_reburn_signal": false,
+            "pm_parked_by_traffic": true,
+            "preflight_healed": false,
+            "no_diff_count": 0,
+            "failure_count": 0,
+            "allow_narrow_reframe": false,
+            "allow_unpark": false,
+            "skip_reframe_reason": "reburn_loop: fix dispatch blockers before narrow reframe — preflight_clash",
+            "safe_next_steps": [
+              "Resolve path clashes (merge sibling eng PR, cancel duplicate branch, or narrow allowed_paths); re-run preflight before unpark.",
+              "After blockers clear, narrow-reframe to HEI.DE before re-dispatch."
+            ],
+            "doc": "docs/ops/library-ingest-escalation.md#library-stall-reburn-investigation"
+          },
+          "recommendations": [
+            "narrow_reframe:HEI.DE:unmeasured",
+            "intensive_pin_or_allowlist_batch",
+            "split_by_ticker_not_broad_market_task",
+            "investigate_reburn_loop_before_unpark"
+          ],
+          "filing_health_snapshot_at": "2026-09-23T09:24:40.123359+00:00",
+          "doc": "docs/ops/library-ingest-escalation.md#library-stall-task-triage"
+        }
+      },
+      "acceptance_criteria": [
+        "Representative dax buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
+        "ftse-library ingest-loop --market dax reports improved > 0 on a verification run",
+        "Add focused regression tests for the source/parser fix",
+        "No change to live FTSE 350 ingest path or blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "parked",
+      "parked_reason": "manual review required",
+      "parked_at": "2026-09-22T18:24:03.063622+00:00",
+      "parked_policy": "reburn_loop"
+    },
+    {
       "id": "eng-20260920-16",
       "area": "ingest",
       "title": "Close library ingest filing gaps for DAX (dax): 7 buy-tier gaps after stalled weekday loop",
@@ -1531,7 +1936,12 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "parked"
+      "status": "cancelled",
+      "parked_policy": "duplicate",
+      "duplicate_of": "eng-20260922-05",
+      "cancelled_at": "2026-09-22T18:24:02.196809+00:00",
+      "cancelled_reason": "tier-1 housekeep: superseded library stall — duplicate of eng-20260922-05",
+      "cancelled_policy": "superseded_library_stall"
     },
     {
       "id": "eng-20260918-04",
@@ -5766,11 +6176,41 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-09-21T21:10:56.422636+00:00"
+    "evaluated_at": "2026-09-22T20:21:29.286725+00:00",
+    "pause_active": false,
+    "automation_waste_active": false,
+    "automation_waste_signals": [
+      {
+        "kind": "eng_agent_reburn",
+        "title": "Automation waste: engineering agent reburn",
+        "severity": "fail",
+        "summary": "3 engineering-agent failure(s) in 6h while open task(s) remain (eng-20260922-05) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
+        "workflow": "engineering-agent.yml",
+        "task_ids": [
+          "eng-20260922-05"
+        ],
+        "failure_count": 3,
+        "window_hours": 6.0,
+        "auto_remediable": true,
+        "evidence": {
+          "open_count": 1,
+          "in_flight_pr": null,
+          "fail_threshold": 3
+        }
+      }
+    ],
+    "automation_waste_parked_task_ids": [
+      "eng-20260922-05"
+    ],
+    "automation_waste_cleared_at": "2026-09-22T17:31:44.016305+00:00",
+    "resumed_at": "2026-09-22T20:21:29.286725+00:00",
+    "last_change": {
+      "resumed": true
+    }
   },
   "queue_clearing": {
     "attention_parked_count": 1,
-    "evaluated_at": "2026-09-22T12:16:37.900960+00:00",
+    "evaluated_at": "2026-09-23T09:58:44.842961+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -5781,7 +6221,54 @@
   "micro_compile_source": "parked_source_hunter",
   "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
-  "source_gap_closure_run_id": "igc-20260922-01",
-  "source_trial_id": "igc-20260922-01",
-  "source_chain_root_id": "igc-20260922-01"
+  "source_gap_closure_run_id": "igc-20260923-03",
+  "source_trial_id": "igc-20260923-03",
+  "source_chain_root_id": "igc-20260923-03",
+  "library_ingest_health": {
+    "snapshot_at": "2026-09-22T20:02:16.029838+00:00",
+    "market_id": "dax",
+    "buy_tier_count": 11,
+    "unmeasured_buy_tier": 6,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 3,
+    "indexed_without_body": 30,
+    "bodies_min": 1,
+    "bodies_median": 2,
+    "bodies_max": 58,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [
+      "HEI.DE",
+      "DTG.DE",
+      "FRE.DE",
+      "HNR1.DE",
+      "HEN3.DE",
+      "VOW3.DE"
+    ],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [
+      "MUV2.DE",
+      "DTE.DE",
+      "BAS.DE"
+    ],
+    "indexed_without_body_tickers": [
+      "FME.DE"
+    ],
+    "indexed_without_body_by_ticker": {
+      "FME.DE": 30
+    },
+    "parked_tickers": [],
+    "parked_count": 0,
+    "effective_thin_body_buy_tier": 3,
+    "effective_thin_body_tickers": [
+      "MUV2.DE",
+      "DTE.DE",
+      "BAS.DE"
+    ],
+    "effective_indexed_without_body": 30,
+    "effective_indexed_without_body_tickers": [
+      "FME.DE"
+    ],
+    "ingest_exhausted": false
+  }
 }

@@ -409,16 +409,34 @@ def _parse_iso_day(value: str | None) -> str | None:
         return None
 
 
-def list_todays_engineering_merges(
+def _merge_row_from_task(raw: dict[str, Any]) -> dict[str, Any]:
+    evidence = dict(raw.get("evidence") or {})
+    merge_class = str(
+        evidence.get("merge_class")
+        or raw.get("merge_class")
+        or ("ci_fix" if raw.get("auto_merge") else "human")
+    )
+    return {
+        "task_id": str(raw.get("id") or ""),
+        "title": str(raw.get("title") or ""),
+        "area": str(raw.get("area") or ""),
+        "pr_number": raw.get("pr_number"),
+        "pr_url": raw.get("pr_url"),
+        "merged_at": raw.get("merged_at"),
+        "merge_class": merge_class,
+        "auto_merge": bool(raw.get("auto_merge")),
+        "independently_verified": merge_class in INDEPENDENTLY_VERIFIED_MERGE_CLASSES,
+    }
+
+
+def list_engineering_merges_on_day(
     *,
+    day: str,
     tasks_path: Path | None = None,
-    now: datetime | None = None,
 ) -> list[dict[str, Any]]:
-    """Return engineering tasks merged today (UTC) for EOD digest / dashboard / email."""
+    """Return engineering tasks merged on ``day`` (UTC ``YYYY-MM-DD``)."""
     from value_investor.engineering_tasks import COMMITTED_TASKS_PATH, load_engineering_tasks
 
-    now = now or datetime.now(UTC)
-    today = now.astimezone(UTC).date().isoformat()
     path = Path(tasks_path) if tasks_path is not None else COMMITTED_TASKS_PATH
     payload = load_engineering_tasks(path)
     rows: list[dict[str, Any]] = []
@@ -429,26 +447,77 @@ def list_todays_engineering_merges(
         if status not in {"merged", "completed"}:
             continue
         merged_day = _parse_iso_day(str(raw.get("merged_at") or ""))
-        if merged_day != today:
+        if merged_day != day:
             continue
-        evidence = dict(raw.get("evidence") or {})
-        merge_class = str(
-            evidence.get("merge_class")
-            or raw.get("merge_class")
-            or ("ci_fix" if raw.get("auto_merge") else "human")
-        )
-        rows.append(
-            {
-                "task_id": str(raw.get("id") or ""),
-                "title": str(raw.get("title") or ""),
-                "area": str(raw.get("area") or ""),
-                "pr_number": raw.get("pr_number"),
-                "pr_url": raw.get("pr_url"),
-                "merged_at": raw.get("merged_at"),
-                "merge_class": merge_class,
-                "auto_merge": bool(raw.get("auto_merge")),
-                "independently_verified": merge_class in INDEPENDENTLY_VERIFIED_MERGE_CLASSES,
-            }
-        )
+        rows.append(_merge_row_from_task(raw))
     rows.sort(key=lambda row: str(row.get("merged_at") or ""), reverse=True)
     return rows
+
+
+def list_todays_engineering_merges(
+    *,
+    tasks_path: Path | None = None,
+    now: datetime | None = None,
+) -> list[dict[str, Any]]:
+    """Return engineering tasks merged today (UTC) for EOD digest / dashboard / email."""
+    now = now or datetime.now(UTC)
+    today = now.astimezone(UTC).date().isoformat()
+    return list_engineering_merges_on_day(day=today, tasks_path=tasks_path)
+
+
+def summarize_engineering_merges_by_day(
+    *,
+    tasks_path: Path | None = None,
+    days: int = 14,
+    now: datetime | None = None,
+) -> list[dict[str, Any]]:
+    """Daily auto vs manual merge counts for the last ``days`` UTC calendar days.
+
+    Includes empty days so the dashboard history series is contiguous.
+    """
+    from datetime import timedelta
+
+    from value_investor.engineering_tasks import COMMITTED_TASKS_PATH, load_engineering_tasks
+
+    now = now or datetime.now(UTC)
+    today = now.astimezone(UTC).date()
+    window = max(1, int(days))
+    start = today - timedelta(days=window - 1)
+    path = Path(tasks_path) if tasks_path is not None else COMMITTED_TASKS_PATH
+    payload = load_engineering_tasks(path)
+
+    buckets: dict[str, dict[str, int]] = {}
+    cursor = start
+    while cursor <= today:
+        key = cursor.isoformat()
+        buckets[key] = {
+            "merged_auto": 0,
+            "merged_manual": 0,
+            "merged_total": 0,
+            "verified": 0,
+        }
+        cursor += timedelta(days=1)
+
+    for raw in payload.get("tasks") or []:
+        if not isinstance(raw, dict):
+            continue
+        status = str(raw.get("status") or "")
+        if status not in {"merged", "completed"}:
+            continue
+        merged_day = _parse_iso_day(str(raw.get("merged_at") or ""))
+        if not merged_day or merged_day not in buckets:
+            continue
+        row = _merge_row_from_task(raw)
+        buckets[merged_day]["merged_total"] += 1
+        if row["auto_merge"]:
+            buckets[merged_day]["merged_auto"] += 1
+        else:
+            buckets[merged_day]["merged_manual"] += 1
+        if row["independently_verified"]:
+            buckets[merged_day]["verified"] += 1
+
+    history: list[dict[str, Any]] = []
+    for day_key in sorted(buckets):
+        counts = buckets[day_key]
+        history.append({"date": day_key, **counts})
+    return history

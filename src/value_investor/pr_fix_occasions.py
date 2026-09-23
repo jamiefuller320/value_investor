@@ -108,6 +108,65 @@ def _next_occasion_id(occasions: list[dict[str, Any]], *, now: datetime) -> str:
     return f"{prefix}{seq + 1:03d}"
 
 
+def _occasion_day(value: str | None) -> str | None:
+    if not value:
+        return None
+    try:
+        return (
+            datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+            .astimezone(UTC)
+            .date()
+            .isoformat()
+        )
+    except ValueError:
+        return None
+
+
+def summarize_pr_fix_occasions_by_day(
+    *,
+    path: Path | None = None,
+    days: int = 14,
+    now: datetime | None = None,
+) -> list[dict[str, Any]]:
+    """Daily PR-fix intervention counts for the last ``days`` UTC calendar days."""
+    from datetime import timedelta
+
+    now = now or datetime.now(UTC)
+    today = now.astimezone(UTC).date()
+    window = max(1, int(days))
+    start = today - timedelta(days=window - 1)
+    occasions = list(load_pr_fix_occasions(path).get("occasions") or [])
+
+    buckets: dict[str, dict[str, int]] = {}
+    cursor = start
+    while cursor <= today:
+        key = cursor.isoformat()
+        buckets[key] = {
+            "fix_interventions": 0,
+            "fix_ci_check": 0,
+            "fix_merge_conflict": 0,
+            "fix_ci_and_merge": 0,
+        }
+        cursor += timedelta(days=1)
+
+    for row in occasions:
+        if not isinstance(row, dict):
+            continue
+        day = _occasion_day(str(row.get("recorded_at") or ""))
+        if not day or day not in buckets:
+            continue
+        buckets[day]["fix_interventions"] += 1
+        kind = str(row.get("kind") or "")
+        if kind == KIND_CI:
+            buckets[day]["fix_ci_check"] += 1
+        elif kind == KIND_MERGE:
+            buckets[day]["fix_merge_conflict"] += 1
+        elif kind == KIND_BOTH:
+            buckets[day]["fix_ci_and_merge"] += 1
+
+    return [{"date": day_key, **buckets[day_key]} for day_key in sorted(buckets)]
+
+
 def summarize_common_failure_reasons(
     occasions: list[dict[str, Any]] | None = None,
     *,
@@ -297,4 +356,5 @@ __all__ = [
     "normalize_failure_reason",
     "record_pr_fix_occasion",
     "summarize_common_failure_reasons",
+    "summarize_pr_fix_occasions_by_day",
 ]

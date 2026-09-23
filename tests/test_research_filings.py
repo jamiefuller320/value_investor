@@ -78,6 +78,7 @@ from value_investor.research.filings import (
     refetch_ticker_rns_api_filing_bodies,
     refetch_uk_primary_filing_bodies,
     refresh_sources_yahoo_cashflow_metrics,
+    refresh_uk_filing_listings_into_index,
     resolve_filings_regime,
     resolve_google_news_publisher_url,
     resolve_investegate_document_url,
@@ -3616,6 +3617,22 @@ def test_refetch_uk_primary_filing_bodies_orchestrates_ch_and_lse(tmp_path, monk
         lambda *args, **kwargs: dict(ch_result),
     )
     monkeypatch.setattr(
+        "value_investor.research.filings.refresh_uk_filing_listings_into_index",
+        lambda *args, **kwargs: {
+            "added": 0,
+            "added_interim": 0,
+            "note": "unchanged",
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.reconcile_filings_index_body_flags",
+        lambda *args, **kwargs: {
+            "restored": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+        },
+    )
+    monkeypatch.setattr(
         "value_investor.research.filings.refetch_indexed_without_body_filing_bodies",
         lambda *args, **kwargs: dict(rns_result),
     )
@@ -3669,6 +3686,22 @@ def test_uk_primary_pipeline_investegate_lse_pdf_persists_with_validation_gate(
         ],
     }
     (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.refresh_uk_filing_listings_into_index",
+        lambda *args, **kwargs: {
+            "added": 0,
+            "added_interim": 0,
+            "note": "unchanged",
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.reconcile_filings_index_body_flags",
+        lambda *args, **kwargs: {
+            "restored": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+        },
+    )
     annual_body = (
         "ITV plc full year results for the year ended 31 December 2025. "
         "Total revenue £3.5bn with final dividend of 5.0p per share." + ("x" * 220)
@@ -5041,6 +5074,91 @@ def test_filter_misattributed_filings_drops_vty_investegate_aggregator_pages():
         regime="uk_rns",
     )
     assert [row["id"] for row in kept] == ["trading"]
+
+
+def test_refresh_uk_filing_listings_merges_kgf_half_year_and_reconciles_orphan_body(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20260922-03: merge fresh Investegate H1 row and link pre-fetched orphan body."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    orphan_id = "0041639123b0a2b0"
+    (bodies_dir / f"{orphan_id}.txt").write_text(
+        "Kingfisher PLC Half year results for the six months ended 31 July 2026. "
+        "Adjusted profit before tax £404m with revenue and cash flow commentary. "
+        + ("Segment performance and dividend policy details. " * 30),
+        encoding="utf-8",
+    )
+    annual_id = "9ad87b6b08ec41b6"
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "KGF.L",
+                "company_name": "Kingfisher plc",
+                "filings": [
+                    {
+                        "id": annual_id,
+                        "source": "investegate_direct",
+                        "headline": "Final Results",
+                        "published_at": "2026-03-24T00:00:00+00:00",
+                        "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/final-results/9487865",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(bodies_dir / f"{annual_id}.txt"),
+                        "priority": 120,
+                    },
+                ],
+                "summary": {"total": 1, "annual": 1, "interim": 0, "with_body": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    half_row = {
+        "id": orphan_id,
+        "source": "investegate_direct",
+        "headline": "Half Year Results",
+        "published_at": "2026-09-22T00:00:00+00:00",
+        "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/half-year-results/9783183",
+        "period": "interim",
+        "has_body": False,
+        "body_path": None,
+        "priority": 125,
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_ticker_api",
+        lambda **kwargs: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [half_row],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.fetch_filings_companies_house",
+        lambda **kwargs: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_ir_allowlist",
+        lambda ticker, path=None: [],
+    )
+    meta = refresh_uk_filing_listings_into_index(
+        filings_dir,
+        ticker="KGF.L",
+        company_name="Kingfisher plc",
+    )
+    assert meta["added"] == 1
+    assert meta["added_interim"] == 1
+    reconcile = reconcile_filings_index_body_flags(
+        filings_dir,
+        company_name="Kingfisher plc",
+        ticker="KGF.L",
+    )
+    assert reconcile["restored"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    interim_rows = [row for row in saved["filings"] if row.get("period") == "interim"]
+    assert len(interim_rows) == 1
+    assert interim_rows[0]["id"] == orphan_id
+    assert interim_rows[0]["has_body"] is True
 
 
 def test_classify_rns_headline_annual_interim_and_trading_update():
@@ -6463,6 +6581,10 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         "UCB.BR": "ucb.com",
         "TTE.PA": "totalenergies.com",
         "ABI.BR": "sec.gov/Archives/edgar/data/1668717",
+        "BN.PA": "danone.com",
+        "EL.PA": "essilorluxottica.com",
+        "IFX.DE": "infineon.com",
+        "AGS.BR": "ctfassets.net",
     }
     for ticker, host_fragment in cases.items():
         rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
@@ -7621,6 +7743,81 @@ def test_sanitize_filings_index_propagates_imperial_own_share_sibling(tmp_path: 
     html_row = next(row for row in saved["filings"] if row["url"] == html_url)
     assert html_row["has_body"] is True
     assert html_row["body_path"] == str(body_path)
+
+
+def test_propagate_shared_url_shel_ir_allowlist_inherits_sec_edgar_body(tmp_path: Path):
+    """eng-20260922-04: IR allowlist SEC rows inherit bodies from sec_edgar siblings."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    sec_url = "https://www.sec.gov/Archives/edgar/data/1306965/000162828026017024/shel-20251231.htm"
+    body_path = bodies_dir / "74018f3f90d5a582.txt"
+    body_path.write_text(
+        "Shell plc Form 20-F annual report consolidated financial statements.\n"
+        + ("operations " * 80),
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_9e25fe48b60d5b55",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — shel-20251231.htm",
+                        "url": sec_url,
+                        "period": "annual",
+                        "has_body": False,
+                        "body_path": None,
+                    },
+                    {
+                        "id": "74018f3f90d5a582",
+                        "source": "sec_edgar",
+                        "headline": "20-F: 20-F",
+                        "url": sec_url,
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                        "entity_type": "consolidated",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = sanitize_filings_index(
+        filings_dir,
+        company_name="Shell plc",
+        ticker="SHEL.L",
+    )
+    assert result["with_body_after"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    annual_rows = [row for row in saved["filings"] if row.get("period") == "annual"]
+    assert annual_rows
+    assert all(row["has_body"] for row in annual_rows)
+    assert any(str(row.get("body_path") or "") == str(body_path) for row in annual_rows)
+    summary = saved["summary"]["period_coverage"]["annual"]
+    assert summary["with_body"] == summary["total"]
+
+
+def test_classify_rns_headline_shel_equivalent_dividend_payment_is_other():
+    """eng-20260922-04: routine dividend payment RNS is not an interim results gap."""
+    headline = "Shell plc Fourth Quarter 2024 Euro and GBP Equivalent Dividend Payments"
+    assert classify_rns_headline(headline) == "other"
+    assert classify_filing_period(headline) == "other"
+
+
+def test_fetch_filings_ir_allowlist_shel_l_includes_q1_6k(tmp_path: Path):
+    """SHEL.L built-in allowlist includes Q1 2026 6-K for interim gap-fill."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+    rows = fetch_filings_ir_allowlist("SHEL.L", path=allowlist_path)
+    urls = [row["url"] for row in rows]
+    assert len(urls) == 4
+    assert any("shellq120266-k.htm" in url for url in urls)
+    q1 = next(row for row in rows if "shellq120266-k.htm" in row["url"])
+    assert q1["period"] == "interim"
 
 
 def test_filing_lacks_material_body_excludes_routine_own_shares():

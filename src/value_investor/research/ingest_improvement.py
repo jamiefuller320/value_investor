@@ -330,9 +330,22 @@ def _is_uk_listed(*, market: str | None, ticker: str) -> bool:
     return _market_bucket(market, ticker) == "uk"
 
 
+def _uk_statutory_interim_listing_missing(coverage: dict[str, int], *, ticker: str) -> bool:
+    """UK issuer with bodied annual index but no interim row (e.g. fresh H1 RNS)."""
+    if not ticker.upper().endswith(".L"):
+        return False
+    if int(coverage.get("filings_annual") or 0) < 1:
+        return False
+    if int(coverage.get("annual_with_body") or 0) < 1:
+        return False
+    return int(coverage.get("filings_interim") or 0) == 0
+
+
 def _has_outstanding_ingest_gap(coverage: dict[str, int], *, ticker: str = "") -> bool:
     """True when indexed filings or period buckets still lack bodies."""
     if coverage["filings_total"] == 0:
+        return True
+    if _uk_statutory_interim_listing_missing(coverage, ticker=ticker):
         return True
     if coverage["indexed_without_body"] > 0:
         return True
