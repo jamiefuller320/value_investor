@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T07:47:56.025476+00:00",
+  "generated_at": "2026-09-23T09:56:35.561063+00:00",
   "role": "end_of_day_project_traffic",
   "trajectory": "on_track",
   "pause_active": false,
@@ -74,13 +74,13 @@
         "probe": "human_gate block is structural, not free text"
       },
       {
-        "claim": "Queue health overall=idle; headline=Queue and hunter idle.",
+        "claim": "Queue health overall=active; headline=Agent lane active.",
         "source": "docs/data/queue_health.json",
         "grounded": true,
         "probe": "queue_health.overall must be set by refresh_queue_health_ui"
       },
       {
-        "claim": "Ops monitor overall=warn at 2026-09-22T07:46:36.040299+00:00",
+        "claim": "Ops monitor overall=warn at 2026-09-23T07:46:36.280037+00:00",
         "source": "docs/data/ops_status.json",
         "grounded": true,
         "probe": "ops_status.run_at required for same-day claims"
@@ -98,7 +98,7 @@
   "merges_today": [],
   "verified_merges_today": [],
   "pr_fix_common_issues": {
-    "occasion_count": 27,
+    "occasion_count": 29,
     "by_reason": [
       {
         "failure_reason": "PR mergeable=CONFLICTING against main",
@@ -208,17 +208,17 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 19
+        "count": 20
       },
       {
         "kind": "ci_check",
-        "count": 8
+        "count": 9
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 27
+        "count": 29
       }
     ]
   },
@@ -226,38 +226,7 @@
     "status": "scoped_auto_merge",
     "note": "Traffic controller does not merge. Scoped auto-merge may merge ci_fix, ingest_narrow / scoring_narrow (independent deterministic verify), and parked_hunter PRs. EOD lists today's merges for monitoring."
   },
-  "ops_email_handoff": {
-    "schema_version": 1,
-    "generated_at": "2026-09-23T07:47:56.025476+00:00",
-    "email_subject": "FTSE Ops Monitor — WARN",
-    "email_text": "FTSE Ops Monitor — 2026-09-23T07:46:36.280037+00:00\nOverall: WARN\n\nNEEDS INVESTIGATION\n----------------------------------------\n[WARN] Parked engineering tasks need manual review\n  1 parked task(s): eng-20260922-05\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\nAUTO-FIXES APPLIED\n----------------------------------------\n  • annotate_parked_task: eng-20260922-05: stall_triage: focus=HEI.DE bundled=True gaps=7\n  • market_eng_gap_burndown: gap_closure_compile for cac40 → \n\nWORKFLOW FRESHNESS\n----------------------------------------\n  [OK] FTSE Ingest Loop: last success 2026-09-23T07:33:31+00:00, age 0.2h\n  [OK] Automation Orchestrator: last success 2026-09-23T06:50:44+00:00, age 0.9h\n  [OK] FTSE Engineering Queue: last success 2026-09-23T07:31:15+00:00, age 0.3h\n  [OK] CI main nightly: last success 2026-09-23T07:31:04+00:00, age 0.3h\n  [OK] Modelling analysis review: last success 2026-09-20T13:06:34+00:00, age 66.7h (not scheduled today)\n  [OK] FTSE Library Ladder: last success 2026-09-23T06:51:49+00:00, age 0.9h (not scheduled today)\n  [OK] Library model review: last success 2026-09-21T01:48:21+00:00, age 54.0h (not scheduled today)\n  [OK] Email report: last success 2026-09-21T16:53:51+00:00, age 38.9h (not scheduled today)\n  [OK] FTSE Data Backup: last success 2026-09-20T16:18:13+00:00, age 63.5h (not scheduled today)\n  [OK] FTSE Paper Automation: last success 2026-09-22T08:26:24+00:00, age 23.3h\n  [OK] FTSE Ops Monitor: last success 2026-09-22T17:37:37+00:00, age 14.2h\n\nEngineering queue ready to dispatch the next supervised PR.\n",
-    "email_html": "<!DOCTYPE html>\n<html><body style=\"font-family:Arial,sans-serif;color:#222;max-width:720px\">\n  <h2>FTSE Ops Monitor</h2>\n  <p style=\"color:#666\">2026-09-23T07:46:36.280037+00:00</p>\n  <p><strong>Overall:</strong> WARN</p>\n  \n  <h3>Needs investigation</h3><ul><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Parked engineering tasks need manual review<br><span style='color:#555'>1 parked task(s): eng-20260922-05</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li></ul>\n  \n  <h3>Auto-fixes</h3><ul><li>annotate_parked_task: eng-20260922-05: stall_triage: focus=HEI.DE bundled=True gaps=7</li><li>market_eng_gap_burndown: gap_closure_compile for cac40 → </li></ul>\n  \n  <h3>Workflow freshness</h3><table style='border-collapse:collapse;width:100%;font-size:13px;margin-top:8px'><thead><tr style='background:#f0f0f0;text-align:left'><th style='padding:6px 8px;border:1px solid #ddd'>Status</th><th style='padding:6px 8px;border:1px solid #ddd'>Workflow</th><th style='padding:6px 8px;border:1px solid #ddd'>Last success</th><th style='padding:6px 8px;border:1px solid #ddd'>Age</th><th style='padding:6px 8px;border:1px solid #ddd'>Limit</th><th style='padding:6px 8px;border:1px solid #ddd'>Notes</th></tr></thead><tbody><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Ingest Loop</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-23T07:33:31+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.2h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>30h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>Automation Orchestrator</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-23T06:50:44+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.9h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Engineering Queue</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-23T07:31:15+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.3h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>26h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>CI main nightly</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-23T07:31:04+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.3h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Modelling analysis review</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-09-20T13:06:34+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>66.7h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>FTSE Library Ladder</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-09-23T06:51:49+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>0.9h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Library model review</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-09-21T01:48:21+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>54.0h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Email report</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-09-21T16:53:51+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>38.9h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>FTSE Data Backup</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-09-20T16:18:13+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>63.5h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Paper Automation</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-22T08:26:24+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>23.3h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Ops Monitor</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-22T17:37:37+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>14.2h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr></tbody></table>\n  <p><strong>Engineering queue ready</strong> for next supervised PR.</p>\n</body></html>",
-    "drafted_task_ids": [],
-    "items": [
-      {
-        "severity": "warn",
-        "category": "engineering",
-        "title": "Parked engineering tasks need manual review",
-        "summary": "1 parked task(s): eng-20260922-05",
-        "planned_rectification": "human_triage",
-        "rectification_detail": "Surface in PM digest for human / eng follow-up",
-        "auto_attempted": false,
-        "auto_resolved": false,
-        "status": "open"
-      }
-    ],
-    "actions": [
-      {
-        "kind": "ops_email_handoff",
-        "detail": "handed 1 ops email finding(s) to PM (open=1, resolved=0)",
-        "pr_number": null,
-        "branch": null,
-        "applied": true
-      }
-    ],
-    "open_count": 1,
-    "resolved_count": 0
-  },
+  "ops_email_handoff": null,
   "sources": {
     "progress_report": "docs/data/progress_report.json",
     "project_progress": "docs/data/project_progress.json",

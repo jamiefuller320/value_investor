@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-22T18:47:06.005577+00:00",
-  "occasion_count": 27,
+  "updated_at": "2026-09-23T10:27:07.460071+00:00",
+  "occasion_count": 32,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -478,21 +478,111 @@
       ],
       "notes": null,
       "details": {}
+    },
+    {
+      "id": "prf-20260923-001",
+      "recorded_at": "2026-09-23T09:55:20.462629+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test_run_ops_monitor_reverifies_after_health_log_repair fails: unmocked check_thin_memo_learning_gap returns live fail finding",
+      "pr_number": 809,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (2)"
+      ],
+      "notes": "PR added check_thin_memo_learning_gap to run_ops_monitor; test needs same empty mock as sibling check_* patches",
+      "details": {}
+    },
+    {
+      "id": "prf-20260923-002",
+      "recorded_at": "2026-09-23T09:56:15.537361+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR mergeable=CONFLICTING against main after CI fix push",
+      "pr_number": 809,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Need rebase/merge main before merge",
+      "details": {}
+    },
+    {
+      "id": "prf-20260923-003",
+      "recorded_at": "2026-09-23T10:01:37.618656+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR mergeable=CONFLICTING against main",
+      "pr_number": 810,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Fix merge conflicts so PR 810 can merge",
+      "details": {}
+    },
+    {
+      "id": "prf-20260923-004",
+      "recorded_at": "2026-09-23T10:05:50.318341+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR mergeable=CONFLICTING against main",
+      "pr_number": 812,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Resolve deferred-ideas/review conflicts; preserve L450/N148/N149 + drop L451 + fragment",
+      "details": {}
+    },
+    {
+      "id": "prf-20260923-005",
+      "recorded_at": "2026-09-23T10:27:07.460071+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR mergeable=CONFLICTING against main",
+      "pr_number": 814,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "L450/N148 id collision with #812; reassigned deposit-twin ideas via ftse-defer",
+      "details": {}
     }
   ],
   "common_issues": {
     "by_reason": [
       {
         "failure_reason": "PR mergeable=CONFLICTING against main",
-        "count": 4,
+        "count": 7,
         "sources": {
-          "human_request": 4
+          "human_request": 7
         },
         "recent_prs": [
           766,
           767,
           779,
-          780
+          780,
+          810,
+          812,
+          814
         ]
       },
       {
@@ -690,17 +780,17 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 19
+        "count": 23
       },
       {
         "kind": "ci_check",
-        "count": 8
+        "count": 9
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 27
+        "count": 32
       }
     ]
   }

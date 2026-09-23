@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-23T10:01:13+00:00",
+  "updated_at": "2026-09-23T10:27:07+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10105,6 +10105,75 @@
     {
       "id": "L450",
       "category": "later",
+      "section": "research",
+      "title": "Screening model\u00d7input coverage matrix (criteria inventory)",
+      "summary": "Tabulate each of the 22 screening models' criteria/fields, mark absolute vs universe-relative, map overlaps (esp. quality/moat ROE-margin-leverage cluster), and reconcile KEY_SCREENING_METRICS vs fetch fields so missing inputs (earnings_growth, interest cover, Piotroski YoY deltas) are visible. Do not expand Economic Moat into qualitative peer analysis without a separate design \u2014 screen moat is a numerical proxy; true comparative moat lives in research/filings + peer_model_pass_table.",
+      "revisit_when": "After P1 FTSE buy-tier body/FCF/overlay bind work is idle, or when post-run themes repeatedly cite unsupported moat/quality claims",
+      "tags": [
+        "screening",
+        "models",
+        "data-quality",
+        "moat",
+        "inputs"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0cd91-9309-7f43-9395-9a80aa80b2ea",
+      "added_at": "2026-09-23T10:05:38+00:00"
+    },
+    {
+      "id": "N148",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not replace Economic Moat proxy with qualitative comparative scoring",
+      "summary": "Economic Moat today is absolute ROE/ROA/margin/leverage thresholds, not peer-relative or filing-based moat evidence. Building a true comparative moat scorer would mix research-layer judgment into the point-in-time screen and needs a separate design (peer cohorts, durable advantage evidence, PIT constraints).",
+      "revisit_when": "Only if a dedicated quality/moat family redesign is explicitly prioritized with peer-relative and filing-backed features",
+      "tags": [
+        "screening",
+        "moat",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0cd91-9309-7f43-9395-9a80aa80b2ea",
+      "added_at": "2026-09-23T10:05:38+00:00"
+    },
+    {
+      "id": "N149",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not invent a proprietary screen to replace recognised models",
+      "summary": "Developing a bespoke formula from in-sample successful-sleeve traits without PIT guards would overfit thin paper history and blur the recognisable-screen interpretability the memos rely on. Prefer reweighting existing models and progressive exclusion filters first.",
+      "revisit_when": "Only if dual_objective_calibration shows persistent lift that cannot be expressed as weights or exclusion rules on the existing 22 models",
+      "tags": [
+        "screening",
+        "overfitting",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0cd91-9309-7f43-9395-9a80aa80b2ea",
+      "added_at": "2026-09-23T10:05:38+00:00"
+    },
+    {
+      "id": "L451",
+      "category": "later",
+      "section": "learning",
+      "title": "Outcome-led internal screen formula from successful sleeves",
+      "summary": "Benefit is real but already partly covered: model_weights reweights recognised screens from archive outcomes; Composite Value is an internal blend; learning-director roadmap prefers progressive loser filters then filter_invention_loop over inventing a parallel proprietary formula. A new sleeve-trait formula should wait until filtered_cohort_track / sleeve-episode thickness gates fire, use PIT out-of-sample tests, and stay alongside (not instead of) Graham/Buffett/etc.",
+      "revisit_when": "filtered_cohort_track has \u22658 epoch marks OR sleeve episodes ready_for_sleeve_timing_analysis (\u226515 closed per capital_status tag) AND loser_pattern_lab has \u22653 validated patterns",
+      "tags": [
+        "screening",
+        "sleeves",
+        "learning",
+        "model-weights",
+        "not-primary"
+      ],
+      "status": "drop",
+      "source": "https://cursor.com/agents/bc-01a0cd91-9309-7f43-9395-9a80aa80b2ea",
+      "added_at": "2026-09-23T10:05:38+00:00",
+      "updated_at": "2026-09-23T10:05:50+00:00"
+    },
+    {
+      "id": "L452",
+      "category": "later",
       "section": "learning",
       "title": "Optional Suite B fair twin monthly deposit capital epoch",
       "summary": "IMPLEMENTED as buy_tier_level_dca (\u00a3500/mo cold-start twin of the FTSE level book). Recycling buy_tier_level stays deposit=0. Overlays Overview held-vs-market with deposit-matched ^FTSE branch.",
@@ -10117,11 +10186,11 @@
       ],
       "status": "done",
       "source": "conversation: FTSE realism experiment",
-      "added_at": "2026-09-23T10:01:13+00:00",
-      "updated_at": "2026-09-23T10:01:13+00:00"
+      "added_at": "2026-09-23T10:27:07+00:00",
+      "updated_at": "2026-09-23T10:27:07+00:00"
     },
     {
-      "id": "N148",
+      "id": "N150",
       "category": "not_now",
       "section": "learning",
       "title": "Do not spray monthly deposits across all epoch-0 markets yet",
@@ -10135,7 +10204,7 @@
       ],
       "status": "open",
       "source": "conversation: FTSE realism experiment",
-      "added_at": "2026-09-23T10:01:13+00:00"
+      "added_at": "2026-09-23T10:27:07+00:00"
     }
   ],
   "fragments": [
@@ -10664,6 +10733,19 @@
       "status": "open",
       "source": "conversation: does primary suite matter",
       "added_at": "2026-09-22T11:08:15+00:00"
+    },
+    {
+      "id": "frag-20260923-01",
+      "text": "Internal screening formula from successful-sleeve traits: only useful with a substantial evidence body; park as a thought until filtered_cohort / sleeve-episode thickness and loser-pattern validation exist. Not a near-term idea.",
+      "tags": [
+        "screening",
+        "sleeves",
+        "thought",
+        "learning"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0cd91-9309-7f43-9395-9a80aa80b2ea",
+      "added_at": "2026-09-23T10:05:50+00:00"
     }
   ],
   "schema_version": 1
