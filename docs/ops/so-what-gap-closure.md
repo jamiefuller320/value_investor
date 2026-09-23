@@ -33,6 +33,21 @@ duplicate `eng-sgap-*` engineering rows — persist/publish/apply highs already 
 the queue are **observe**; produce / learning-clock flags stay **human_gate** with
 runbook actions (ingest → body-lag rememo; `ftse-analysis-review promote`).
 
+**`thin_memo_counted_as_coverage` clearance** (produce, usually **observe** in
+so-what): sample must drop below 5 thin/zero-body focus memos after Lane A — not
+rememo widening.
+
+```bash
+ftse-progress-report thin-memo-clearance              # status + commands
+ftse-progress-report thin-memo-clearance --run-deepen --refresh-gaps
+ftse-library deepen-thin --markets euro_depth --rememo   # when bodies land (API key)
+ftse-analysis-review system-gaps --write
+ftse-progress-report so-what
+```
+
+Daily **ops monitor** surfaces an open gap; progress report includes a **Thin-memo
+clearance** section when the flag is live.
+
 Structured `fcf.filing_aligned` / `screen_ttm` are recovered from persisted mismatch action notes when the `fcf` blob was dropped on overlay/export refresh, so auto policy can resolve without hand-writing bridges.
 
 First detector: buy-tier names in `docs/data/latest.json` with material screen vs
