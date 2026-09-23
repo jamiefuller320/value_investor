@@ -2661,13 +2661,20 @@ function renderSundayReview(data) {
       });
     }
   }
-  trackWeekRows.sort((a, b) => String(b.week_ending).localeCompare(String(a.week_ending)));
+  // Track then week (oldest→newest within each track) so per-track trends scan cleanly.
+  trackWeekRows.sort((a, b) => {
+    const trackA = String(a.track_id || a.track_label || "");
+    const trackB = String(b.track_id || b.track_label || "");
+    const byTrack = trackA.localeCompare(trackB);
+    if (byTrack !== 0) return byTrack;
+    return String(a.week_ending || "").localeCompare(String(b.week_ending || ""));
+  });
 
   const paperTrackTableRows = trackWeekRows
     .map(
       (row) => `<tr>
-        <td>${esc(row.week_ending || "—")}</td>
         <td><strong>${esc(row.track_label || row.track_id)}</strong><br><span class="small muted">${esc(row.track_id || "")}</span></td>
+        <td>${esc(row.week_ending || "—")}</td>
         <td class="${alphaClass(row.excess_after_costs)}">${pctOrDash(row.excess_after_costs)}</td>
         <td>${pctOrDash(row.benchmark_return)}</td>
         <td>${pctOrDash(row.cost_drag)}</td>
@@ -2684,8 +2691,8 @@ function renderSundayReview(data) {
         <table class="eng-queue-table sunday-review-table">
           <thead>
             <tr>
-              <th>Week</th>
               <th>Track</th>
+              <th>Week</th>
               <th>Excess vs ^FTSE</th>
               <th>Benchmark</th>
               <th>Cost drag</th>
@@ -2767,11 +2774,15 @@ function renderSundayReview(data) {
       ${exclusionTable}
 
       <h3>Regime snapshots by week</h3>
-      <p class="small muted">One row per publish week — cumulative exclusion alpha, primary excess, readiness flags.</p>
+      <p class="small muted">
+        One row per publish week. Filter health: step, cumul. excl. α, +α rate, pairs.
+        Book health: primary excess + beat mkt. Ops gates: shadow ready + flags.
+        Flat filter/gate columns with only primary excess moving means the live book is slipping while the exclusion case is unchanged.
+      </p>
       ${regimeTable}
 
       <h3>Paper tracks by week</h3>
-      <p class="small muted">Learning-track excess vs ^FTSE and cost drag from each archived dashboard snapshot.</p>
+      <p class="small muted">Learning-track excess vs ^FTSE and cost drag — grouped by track, weeks oldest→newest within each track.</p>
       ${paperTrackTable}
 
       <h3>Experiments</h3>
