@@ -291,6 +291,23 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "IFX.DE": [
         "https://www.infineon.com/assets/row/public/documents/corporate/investors/annual-reports/2025/2025-annual-report-v01-00-en.pdf",
     ],
+    # dax buy-tier deepen — eng-20260922-05: ESEF index empty; IR PDF seeds unmeasured names.
+    "HEI.DE": [
+        "https://www.heidelbergmaterials.com/system/files/2026-03/HM_Annual_Financial_Statements_2025.pdf",
+        "https://www.eqs-news.com/media/document/86940b2a-a5f1-41b6-8b27-6ee13543a147/assets/DE0006047004-JA-2025-EQ-D-00.pdf",
+    ],
+    "DTG.DE": [
+        "https://www.eqs-news.com/media/document/b1126fe6-ed3f-4d89-8d25-6c6d0e5aef50/assets/DE000DTR0CK8-JA-2025-EQ-E-00.pdf",
+    ],
+    "FRE.DE": [
+        "https://www.fresenius.com/sites/default/files/2026-03/fresenius_annual_report_2025_0.pdf",
+    ],
+    "HNR1.DE": [
+        "https://www.eqs-news.com/media/document/22ee41c6-c9f1-4e10-9033-7e82455c96f5/assets/DE0008402215-JA-2025-EQ-E-00.pdf",
+    ],
+    "HEN3.DE": [
+        "https://ir-api.eqs.com/storage/ir/deb4b5/documents/34b94849-45e1-46c9-88f4-15e01195eafc/DE0006048432-JA-2025-EQ-E-00.pdf",
+    ],
     "TTE.PA": [
         "https://totalenergies.com/system/files/documents/totalenergies_universal-registration-document-2025_2026_en.pdf",
     ],
@@ -584,6 +601,8 @@ _SEC_ENTITY_NAME_FALLBACK: dict[int, str] = {
 # Cross-listing inheritance for manual IR allowlist URLs (e.g. Amsterdam vs LSE Shell).
 _IR_ALLOWLIST_TICKER_ALIASES: dict[str, tuple[str, ...]] = {
     "SHELL.AS": ("SHEL.L",),
+    "VOW3.DE": ("VOW.DE",),
+    "VOW3": ("VOW.DE", "VOW"),
 }
 
 # filings.xbrl.org entity search aliases when Yahoo/legal names miss the ESEF index.
@@ -617,6 +636,11 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "BN": ("Danone", "Danone SA"),
     "EL": ("EssilorLuxottica", "EssilorLuxottica SA"),
     "IFX": ("Infineon", "Infineon Technologies AG"),
+    "HEI": ("Heidelberg Materials", "Heidelberg Materials AG"),
+    "DTG": ("Daimler Truck", "Daimler Truck Holding AG"),
+    "FRE": ("Fresenius", "Fresenius SE & Co. KGaA"),
+    "HNR1": ("Hannover Re", "Hannover Rück SE", "Hannover Rueck SE"),
+    "HEN3": ("Henkel", "Henkel AG & Co. KGaA"),
 }
 
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
@@ -4834,6 +4858,9 @@ def _ir_allowlist_period_from_url(url: str) -> str:
         return "annual"
     # DACH annual-report shorthand (e.g. BASF/OMV *-ar25.pdf).
     if re.search(r"[-_/]ar\d{2}(?:[_\-]|\.|$)", lower):
+        return "annual"
+    # EQS statutory annual report slugs (e.g. DE000…-JA-2025-EQ-E-00.pdf).
+    if re.search(r"-ja-20\d{2}-eq-[de]", lower):
         return "annual"
     if any(token in lower for token in ("trading",)):
         return "trading_update"
