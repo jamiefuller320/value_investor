@@ -2143,6 +2143,29 @@ def test_enforce_fcf_basis_accepts_structured_piotroski_dict():
     assert enforced["piotroski_f_score"]["score"] == 6
 
 
+def test_enforce_fcf_basis_in_snapshot_caps_pine_style_opposite_sign_buy():
+    """Buy-tier rows with positive screen vs negative filing must fail closed on export."""
+    enforced = enforce_fcf_basis_in_snapshot(
+        {
+            "ticker": "PINE.L",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "fcf_basis_overlay": False,
+            "conviction_score": 0.45,
+            "action_note": "Buy — neutral timing",
+            "fcf": {
+                "screen_ttm": 12_825_000.0,
+                "filing_aligned": -4_600_000.0,
+                "bridge_resolved": True,
+                "policy_fcf": -4_600_000.0,
+                "policy_basis": "filing_aligned",
+            },
+        }
+    )
+    assert enforced["fcf_basis_overlay"] is True
+    assert enforced["adjusted_signal"] == "hold"
+
+
 def test_enforce_fcf_basis_in_snapshot_without_research_verdict():
     """Stale snapshots with overlay=false must still honour FCF mismatch notes."""
     enforced = enforce_fcf_basis_in_snapshot(

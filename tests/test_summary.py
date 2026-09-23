@@ -855,6 +855,15 @@ def test_fcf_filing_screen_mismatch_measures_gap_against_filing_fcf():
     )
 
 
+def test_fcf_filing_screen_mismatch_flags_pine_style_opposite_sign_gap():
+    """Opposite-sign gaps below sign_min_abs still fail the 25% filing/screen threshold."""
+    assert fcf_filing_screen_mismatch(
+        filing_aligned=-4_600_000.0,
+        screen_ttm=12_825_000.0,
+        divergence_flagged=False,
+    )
+
+
 def test_reconcile_fcf_discards_company_adjusted_outlier():
     # FGP-like: filing OCF−CapEx ≈ screen TTM; company-adjusted is the outlier.
     bundle = reconcile_fcf(
