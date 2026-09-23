@@ -9899,6 +9899,35 @@ def refresh_sources_yahoo_cashflow_metrics(
     }
 
 
+def _default_research_sources_dir(ticker: str, output_dir: Path | None = None) -> Path:
+    base = output_dir if output_dir is not None else Path("output")
+    return base / "research" / ticker.strip().upper() / "sources"
+
+
+def _financials_with_merged_yahoo_cashflow(
+    financials: dict[str, Any],
+) -> dict[str, Any]:
+    """Ensure ``cashflow_metrics`` reflects Yahoo ``cash_flow`` rows for fetch backfill."""
+    from value_investor.research.ingest import extract_cashflow_metrics_from_annual_financials
+
+    extracted = extract_cashflow_metrics_from_annual_financials(financials)
+    if not extracted:
+        return financials
+
+    merged_metrics = dict(financials.get("cashflow_metrics") or {})
+    changed = False
+    for key, value in extracted.items():
+        if value is not None and merged_metrics.get(key) != value:
+            merged_metrics[key] = value
+            changed = True
+    if not changed:
+        return financials
+
+    updated = dict(financials)
+    updated["cashflow_metrics"] = merged_metrics
+    return updated
+
+
 def supplement_company_metrics_cashflow(
     metrics: Any,
     *,
@@ -9909,11 +9938,27 @@ def supplement_company_metrics_cashflow(
     allow_live_fetch: bool = True,
 ) -> list[str]:
     """Backfill ``CompanyMetrics`` cash-flow fields from cached ``financials_annual.json``."""
-    from value_investor.research.ingest import supplement_company_metrics_cashflow as _supplement
+    from value_investor.research.ingest import (
+        _resolve_cached_annual_financials,
+    )
+    from value_investor.research.ingest import (
+        supplement_company_metrics_cashflow as _supplement,
+    )
+
+    resolved_ticker = ticker or getattr(metrics, "ticker", None)
+    payload = financials
+    if payload is None and resolved_ticker:
+        payload = _resolve_cached_annual_financials(
+            str(resolved_ticker),
+            output_dir=output_dir,
+            sources_dir=sources_dir,
+        )
+    if payload is not None:
+        payload = _financials_with_merged_yahoo_cashflow(payload)
 
     return _supplement(
         metrics,
-        financials=financials,
+        financials=payload,
         ticker=ticker,
         output_dir=output_dir,
         sources_dir=sources_dir,
@@ -9925,10 +9970,9 @@ def install_fetch_cashflow_fallback() -> None:
     """Patch ``fetch_company_metrics`` to backfill OCF/FCF from ``financials_annual.json``."""
     from value_investor import fetch as fetch_mod
 
-    if getattr(fetch_mod.fetch_company_metrics, "_cashflow_fallback_installed", False):
+    current = fetch_mod.fetch_company_metrics
+    if getattr(current, "_filings_cashflow_fallback_installed", False):
         return
-
-    original = fetch_mod.fetch_company_metrics
 
     def fetch_company_metrics_with_cashflow_fallback(
         ticker: str,
@@ -9937,17 +9981,22 @@ def install_fetch_cashflow_fallback() -> None:
         *,
         market: str | None = None,
     ):
-        metrics = original(ticker, name=name, sector=sector, market=market)
+        metrics = current(ticker, name=name, sector=sector, market=market)
         try:
+            resolved = (metrics.ticker or ticker or "").strip().upper()
+            output_dir = Path("output")
             supplement_company_metrics_cashflow(
                 metrics,
-                output_dir=Path("output"),
+                ticker=resolved,
+                output_dir=output_dir,
+                sources_dir=_default_research_sources_dir(resolved, output_dir),
                 allow_live_fetch=False,
             )
         except Exception as exc:  # noqa: BLE001 — screening should continue
             logger.debug("Cash-flow fallback failed for %s: %s", ticker, exc)
         return metrics
 
+    fetch_company_metrics_with_cashflow_fallback._filings_cashflow_fallback_installed = True  # type: ignore[attr-defined]
     fetch_company_metrics_with_cashflow_fallback._cashflow_fallback_installed = True  # type: ignore[attr-defined]
     fetch_mod.fetch_company_metrics = fetch_company_metrics_with_cashflow_fallback
 

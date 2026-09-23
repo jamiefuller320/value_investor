@@ -792,6 +792,90 @@ def test_eng_20260921_04_fetch_backfills_ocf_from_refreshed_financials_annual(
     assert metrics.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
 
 
+def test_eng_20260923_03_install_fetch_chains_when_ingest_patch_active():
+    """Filings wrapper must stack on ingest so per-ticker sources_dir backfill always runs."""
+    from value_investor import fetch as fetch_mod
+
+    ingest_calls: list[str] = []
+
+    def fake_ingest_wrapper(
+        ticker: str,
+        name: str | None = None,
+        sector: str | None = None,
+        *,
+        market: str | None = None,
+    ):
+        ingest_calls.append(ticker)
+        return CompanyMetrics(ticker=ticker.strip().upper())
+
+    fake_ingest_wrapper._cashflow_fallback_installed = True  # type: ignore[attr-defined]
+    fetch_mod.fetch_company_metrics = fake_ingest_wrapper
+
+    install_fetch_cashflow_fallback()
+    outer = fetch_mod.fetch_company_metrics
+    assert outer is not fake_ingest_wrapper
+    assert getattr(outer, "_filings_cashflow_fallback_installed", False)
+
+    outer("MEGP.L")
+    assert ingest_calls == ["MEGP.L"]
+
+
+def test_eng_20260923_03_fetch_backfills_ocf_from_annual_rows_without_cashflow_metrics_block(
+    tmp_path: Path, monkeypatch
+):
+    """Regression: merge Yahoo ``cash_flow`` rows when ``cashflow_metrics`` on disk is empty."""
+    from types import SimpleNamespace
+
+    import value_investor.research.ingest  # noqa: F401
+    from value_investor import fetch as fetch_mod
+
+    monkeypatch.chdir(tmp_path)
+    sources = tmp_path / "output" / "research" / "MEGP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "MEGP.L",
+        "cash_flow": {
+            "2025": {"Operating Cash Flow": 90_762_000.0, "Free Cash Flow": 25_153_000.0},
+        },
+        "cashflow_metrics": {},
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    class DummyTicker:
+        @property
+        def info(self):
+            return {"longName": "ME Group International plc", "marketCap": 2_000_000}
+
+        @property
+        def fast_info(self):
+            return SimpleNamespace(market_cap=2_000_000)
+
+        @property
+        def balance_sheet(self):
+            return None
+
+        @property
+        def income_stmt(self):
+            return None
+
+        @property
+        def cashflow(self):
+            return None
+
+        financials = pd.DataFrame()
+        quarterly_financials = None
+
+    fetch_mod.fetch_company_metrics._cashflow_fallback_installed = False  # type: ignore[attr-defined]
+    install_fetch_cashflow_fallback()
+
+    with patch.object(fetch_mod.yf, "Ticker", lambda _sym: DummyTicker()):
+        metrics = fetch_mod.fetch_company_metrics("MEGP.L")
+
+    assert metrics.operating_cashflow == pytest.approx(90_762_000.0)
+    assert metrics.free_cashflow == pytest.approx(25_153_000.0)
+    assert metrics.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
+
+
 def test_fetch_annual_financials_includes_cashflow_metrics(monkeypatch):
     cashflow_df = pd.DataFrame(
         {"2024": [90_800_000.0, 55_000_000.0]},
