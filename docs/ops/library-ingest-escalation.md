@@ -310,6 +310,18 @@ Use **`--reframe-reburn-when-cleared`** (or policy `auto_reframe_reburn_when_cle
 to narrow-reframe reburn parks once investigation allows. Plain **`--reframe-bundled`**
 still skips reburn rows.
 
+**Auto-unpark (wired):** policy `auto_unpark_cleared_reburn_library_stall` (default **on**)
+runs on `recover-queue` / `triage-library-stall` when `reburn_investigation.allow_unpark`
+is true **and** traffic + queue-clearing gates are clear (`reburn_unpark_dispatch_gates`).
+CLI: `--no-unpark-reburn` to dry-run or apply without reopening.
+
+**Attempt budget (reburn vs completion):** layered limits — task `no_diff_cap` parks after
+**2** empty agent runs; queue recovery reopens **failed** tasks up to **2** times with
+cooldown; **traffic** `waste_fail_threshold` **3** failures in **6h** with open task and
+no PR triggers PM park + dispatch pause. Three is intentionally one step above no-diff so
+a single flaky preflight does not instantly fleet-pause, while a fourth full agent run is
+still blocked. Tighten to **2** only if reburn parks prove too late in practice.
+
 ## Related
 
 - [`euro-depth-sprint.md`](euro-depth-sprint.md) — sprint cadence and Phase 3 gates
