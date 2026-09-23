@@ -15,12 +15,16 @@ from value_investor.research.ingest_improvement import (
     LOW_PENETRATION_BATCH_TICKERS,
     IngestImprovementSummary,
     IngestImprovementTarget,
+    _filing_coverage,
+    _has_outstanding_ingest_gap,
+    _is_low_penetration_pack,
     _planned_sources_for_ticker,
     map_suggestion_to_source_ids,
     run_ingest_improvement_pass,
     select_ingest_improvement_targets,
     ticker_deadline_budget,
 )
+from value_investor.research.store import ResearchStore
 from value_investor.summary import CompanyReport
 
 
@@ -552,6 +556,73 @@ def test_select_ingest_improvement_targets_prioritizes_body_gap_batch(tmp_path: 
     assert targets[0].ticker == "ITV.L"
     assert targets[0].ticker in BODY_GAP_BATCH_TICKERS
     assert targets[0].priority_score > targets[1].priority_score
+
+
+def test_rat_l_form_83_stubs_do_not_count_as_low_penetration_pack(tmp_path: Path):
+    """eng-20260923-02: RAT.L statutory pack bodied; Form 8.3 audit rows must not reopen gaps."""
+    output_dir = tmp_path / "output"
+    filings_dir = output_dir / "research" / "RAT.L" / "sources" / "filings"
+    filings_dir.mkdir(parents=True)
+    material = (
+        [
+            {
+                "headline": "Companies House accounts — group",
+                "has_body": True,
+                "period": "annual",
+                "source": "companies_house",
+            }
+            for _ in range(4)
+        ]
+        + [
+            {
+                "headline": "Companies House accounts — interim",
+                "has_body": True,
+                "period": "interim",
+                "source": "companies_house",
+            }
+        ]
+        + [
+            {
+                "headline": "Total Voting Rights",
+                "has_body": True,
+                "period": "other",
+                "source": "investegate_direct",
+            }
+            for _ in range(5)
+        ]
+    )
+    form_83 = [
+        {
+            "headline": "Form 8.3 - NextEnergy Solar Fund Limited",
+            "has_body": False,
+            "period": "other",
+            "source": "investegate_direct",
+            "entity_type": "holding_disclosure",
+            "url": "https://www.investegate.co.uk/announcement/gnw/rathbones-group--rat/form-8-3-nextenergy-solar-fund-limited/9737162",
+        }
+        for _ in range(46)
+    ]
+    filings = material + form_83
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": len(filings),
+                    "annual": 4,
+                    "interim": 1,
+                    "with_body": 10,
+                },
+                "filings": filings,
+            }
+        ),
+        encoding="utf-8",
+    )
+    store = ResearchStore(output_dir)
+    coverage = _filing_coverage(store, "RAT.L", output_dir)
+    assert coverage["material_filings_total"] == 10
+    assert coverage["material_filings_with_body"] == 10
+    assert _is_low_penetration_pack(coverage, ticker="RAT.L") is False
+    assert _has_outstanding_ingest_gap(coverage, ticker="RAT.L") is False
 
 
 def test_select_ingest_improvement_targets_prioritises_low_penetration_batch(tmp_path: Path):

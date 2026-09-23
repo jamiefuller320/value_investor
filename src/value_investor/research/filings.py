@@ -1465,6 +1465,23 @@ def filing_lacks_material_body(row: dict[str, Any]) -> bool:
     return True
 
 
+def filing_counts_toward_body_penetration(row: dict[str, Any]) -> bool:
+    """
+    True when an indexed row belongs in the ingest body-penetration denominator.
+
+    Excludes audit-only holding disclosures and routine noise so names like
+    RAT.L (statutory + material RNS bodied; many Form 8.3 stubs indexed) do
+    not read as low-penetration gap packs.
+    """
+    if _is_index_noise_row(row):
+        return False
+    if _is_routine_own_share_or_pdmr_row(row):
+        return False
+    if _is_holding_disclosure_row(row):
+        return False
+    return True
+
+
 def _is_rns_body_fetch_candidate(row: dict[str, Any]) -> bool:
     """True when a row points at Investegate or LSE RNS content worth body-fetching."""
     url = str(row.get("url") or "")

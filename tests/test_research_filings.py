@@ -7885,6 +7885,33 @@ def test_filing_lacks_material_body_excludes_routine_own_shares():
     )
 
 
+def test_filing_counts_toward_body_penetration_excludes_rathbones_form_83():
+    """eng-20260923-02: RAT.L Form 8.3 stubs must not inflate low-penetration scoring."""
+    from value_investor.research.filings import filing_counts_toward_body_penetration
+
+    assert (
+        filing_counts_toward_body_penetration(
+            {
+                "headline": "Form 8.3 - NextEnergy Solar Fund Limited",
+                "url": "https://www.investegate.co.uk/announcement/gnw/rathbones-group--rat/form-8-3-nextenergy-solar-fund-limited/9737162",
+                "has_body": False,
+                "entity_type": "holding_disclosure",
+            }
+        )
+        is False
+    )
+    assert (
+        filing_counts_toward_body_penetration(
+            {
+                "headline": "Total Voting Rights",
+                "url": "https://www.investegate.co.uk/announcement/rns/rathbones-group--rat/total-voting-rights/9750019",
+                "has_body": True,
+            }
+        )
+        is True
+    )
+
+
 def test_filing_lacks_material_body_excludes_pinewood_holding_disclosures():
     """eng-20260923-01: PINE.L Form 8.3/8.5 and major-holding RNS are not IWB gaps."""
     from value_investor.research.filings import filing_lacks_material_body
