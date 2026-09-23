@@ -1642,8 +1642,8 @@ def run_learning_tracks(
             "graduated_allocation tests trade-plan entry sizing and harvest skims; "
             "buy_tier_level is a Suite B unfiltered buy-tier cohort (frozen knobs); "
             "entry_dca_overlay scores counterfactual entry cadences on every track; "
-            "sleeve_episodes records widest buy-tier lifecycles tagged on_book/off_book/"
-            "never_funded (observe-only); "
+            "sleeve_episodes records widest near-buy→grace-end+~1m lifecycles tagged "
+            "on_book/off_book/never_funded (observe-only); "
             "hypothesis_integrity reviews underwater holdings before crude stops."
         ),
         "tracks": results,
