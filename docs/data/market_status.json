@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-23T07:27:16.446989+00:00",
+  "generated_at": "2026-09-23T07:32:24.654397+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -45,7 +45,7 @@
       "1": "dax",
       "2": "asx200"
     },
-    "equal_support_generated_at": "2026-09-23T07:25:45.467609+00:00"
+    "equal_support_generated_at": "2026-09-23T05:09:27.921671+00:00"
   },
   "markets": [
     {
@@ -275,7 +275,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=12, indexed_without_body=17)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=2, zero_body=0, thin=12, indexed_without_body=17)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
@@ -287,17 +287,17 @@
       "stale": 0,
       "fresh": 0,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:18:19.015872+00:00",
-      "last_constituents_refresh": "2026-09-23T06:52:39.974323+00:00",
-      "last_screen_at": "2026-09-23T06:52:38.805268+00:00",
+      "last_metrics_refresh": "2026-09-22T07:37:38.993251+00:00",
+      "last_constituents_refresh": "2026-09-22T06:52:36.205367+00:00",
+      "last_screen_at": "2026-09-22T06:52:33.527446+00:00",
       "signal_counts": {
-        "hold": 122,
+        "hold": 121,
         "buy": 28,
         "avoid": 24,
-        "strong_buy": 19
+        "strong_buy": 20
       },
-      "shortlist_count": 47,
-      "strong_buy": 19,
+      "shortlist_count": 48,
+      "strong_buy": 20,
       "buy": 28,
       "learning_phase": 2,
       "learning_phase_label": "Weekly paper",
@@ -317,21 +317,21 @@
           "primary track must beat rules control on latest review"
         ],
         "phase1": {
-          "screen_archives": 29,
-          "observe_snapshot_count": 29
+          "screen_archives": 28,
+          "observe_snapshot_count": 28
         },
         "phase2": {
-          "weekly_batch_count": 12,
+          "weekly_batch_count": 11,
           "min_weekly_batches": 4
         }
       },
       "filing_health": {
-        "buy_tier_count": 47,
-        "unmeasured_buy_tier": 0,
+        "buy_tier_count": 48,
+        "unmeasured_buy_tier": 2,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 12,
         "indexed_without_body": 17,
-        "bodies_median": 3.0,
+        "bodies_median": 3.5,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
@@ -347,7 +347,10 @@
           "SKA-B.ST",
           "UCB.BR"
         ],
-        "unmeasured_tickers": [],
+        "unmeasured_tickers": [
+          "BN.PA",
+          "EL.PA"
+        ],
         "parked_tickers": [
           "ABI.BR",
           "APAM.AS",
@@ -359,7 +362,7 @@
           "SKA-B.ST"
         ]
       },
-      "filing_gaps": 0,
+      "filing_gaps": 2,
       "paper_instrument": "buy_tier_level",
       "ai_judgment": false,
       "knob_apply": false,
@@ -369,48 +372,48 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-09-23T07:26:01.748096+00:00",
+        "last_run_at": "2026-09-22T07:44:50.281861+00:00",
         "holdings": 36,
-        "nav": 759.34,
+        "nav": 754.76,
         "cash": -0.0,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 13,
-        "epoch0_batch_count": 12
+        "weekday_batch_count": 12,
+        "epoch0_batch_count": 11
       },
       "equal_support": {
         "present": true,
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 3,
-        "hold_near_buy_count": 68,
-        "not_buy_tier_count": 146,
+        "hold_near_buy_count": 66,
+        "not_buy_tier_count": 145,
         "never_buy_tier_count": 127,
         "rememo_eligible_count": 0,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 3,
-        "hold_near_buy_count": 68,
-        "not_buy_tier_count": 146,
+        "hold_near_buy_count": 66,
+        "not_buy_tier_count": 145,
         "never_buy_tier_count": 127,
         "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
         "buy_tier_not_now_sample": [
-          "POST.VI",
-          "OMV.VI",
-          "SHELL.AS"
+          "STR.VI",
+          "SHELL.AS",
+          "OMV.VI"
         ],
         "hold_near_buy_sample": [
           "NOS.LS",
           "ASSA-B.ST",
-          "ENI.MI",
+          "MC.PA",
           "TEL2-B.ST",
-          "HM-B.ST",
           "PGHN.SW",
+          "HM-B.ST",
           "AGS.BR",
           "REN.AS"
         ]
@@ -418,23 +421,20 @@
       "sprint_progress": {
         "window_days": 2,
         "run_count": 3,
-        "targets": 17,
-        "improved": 6,
+        "targets": 9,
+        "improved": 2,
         "improved_tickers": [
-          "C5H.IR",
-          "TTE.PA",
-          "BOL.ST",
-          "ESSITY-B.ST",
-          "ERIC-B.ST"
+          "ERIC-B.ST",
+          "ESSITY-B.ST"
         ],
-        "last_run_at": "2026-09-22T10:35:08.743189+00:00",
+        "last_run_at": "2026-09-23T07:30:06.698594+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 13,
-          "indexed_without_body": 19,
+          "indexed_without_body": 17,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -448,19 +448,25 @@
           "unmeasured": 2,
           "zero_body": 0,
           "thin": -1,
-          "indexed_without_body": -2,
+          "indexed_without_body": 0,
           "filing_gaps": 2
         },
         "remaining": {
-          "unmeasured": 0,
+          "unmeasured": 2,
           "zero_body": 0,
           "thin": 12,
           "indexed_without_body": 17,
-          "filing_gaps": 0
+          "filing_gaps": 2
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [],
+        "admission_warnings": [
+          {
+            "id": "unmeasured_stuck",
+            "severity": "high",
+            "summary": "2 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
+          }
+        ],
         "sprint_entered_at": null
       },
       "held_vs_market": {
@@ -608,17 +614,6 @@
             "contributed_capital": 1000.0,
             "branches": {},
             "market": 765.4
-          },
-          {
-            "date": "2026-09-23",
-            "held": 759.34,
-            "nav": 759.34,
-            "held_stock": 759.34,
-            "cash": 0.0,
-            "positions": 36,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 771.98
           }
         ],
         "series": [
@@ -637,12 +632,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-23",
-          "held": 759.34,
-          "market": 771.98,
-          "nav": 759.34,
+          "date": "2026-09-22",
+          "held": 754.76,
+          "market": 765.4,
+          "nav": 754.76,
           "positions": 36,
-          "excess_pct": -0.016373
+          "excess_pct": -0.013901
         }
       }
     },
@@ -660,7 +655,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=7, zero_body=0, thin=3, indexed_without_body=30)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=6, zero_body=0, thin=3, indexed_without_body=30)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 7,
@@ -672,18 +667,18 @@
       "stale": 0,
       "fresh": 40,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:08:12.050941+00:00",
-      "last_constituents_refresh": "2026-09-23T07:07:52.658282+00:00",
-      "last_screen_at": "2026-09-23T06:52:38.805268+00:00",
+      "last_metrics_refresh": "2026-09-22T07:06:49.114973+00:00",
+      "last_constituents_refresh": "2026-09-22T07:06:31.053748+00:00",
+      "last_screen_at": "2026-09-22T06:52:33.527446+00:00",
       "signal_counts": {
-        "hold": 26,
-        "buy": 7,
+        "hold": 27,
+        "buy": 6,
         "strong_buy": 5,
         "avoid": 2
       },
-      "shortlist_count": 12,
+      "shortlist_count": 11,
       "strong_buy": 5,
-      "buy": 7,
+      "buy": 6,
       "learning_phase": 1,
       "learning_phase_label": "Observe",
       "phase_blockers": [
@@ -702,8 +697,8 @@
           "dax not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
-          "screen_archives": 17,
-          "observe_snapshot_count": 17
+          "screen_archives": 16,
+          "observe_snapshot_count": 16
         },
         "phase2": {
           "weekly_batch_count": 0,
@@ -711,8 +706,8 @@
         }
       },
       "filing_health": {
-        "buy_tier_count": 12,
-        "unmeasured_buy_tier": 7,
+        "buy_tier_count": 11,
+        "unmeasured_buy_tier": 6,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 3,
         "indexed_without_body": 30,
@@ -730,15 +725,14 @@
         "unmeasured_tickers": [
           "HEI.DE",
           "DTG.DE",
-          "HNR1.DE",
           "FRE.DE",
+          "HNR1.DE",
           "HEN3.DE",
-          "VOW3.DE",
-          "G1A.DE"
+          "VOW3.DE"
         ],
         "parked_tickers": []
       },
-      "filing_gaps": 7,
+      "filing_gaps": 6,
       "paper_instrument": "observe_sim",
       "ai_judgment": null,
       "knob_apply": null,
@@ -778,11 +772,11 @@
           "filing_gaps": -1
         },
         "remaining": {
-          "unmeasured": 7,
+          "unmeasured": 6,
           "zero_body": 0,
           "thin": 3,
           "indexed_without_body": 30,
-          "filing_gaps": 7
+          "filing_gaps": 6
         },
         "admission_ready": false,
         "admission_gate": "sprint_ingest_complete",
@@ -923,17 +917,6 @@
             "contributed_capital": 1000.0,
             "branches": {},
             "market": 1009.34
-          },
-          {
-            "date": "2026-09-23",
-            "held": 988.43,
-            "nav": 988.43,
-            "held_stock": 988.43,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 1018.02
           }
         ],
         "series": [
@@ -952,12 +935,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-23",
-          "held": 988.43,
-          "market": 1018.02,
-          "nav": 988.43,
+          "date": "2026-09-22",
+          "held": 974.69,
+          "market": 1009.34,
+          "nav": 974.69,
           "positions": 5,
-          "excess_pct": -0.029066
+          "excess_pct": -0.034329
         }
       }
     },
@@ -987,19 +970,19 @@
       "stale": 0,
       "fresh": 200,
       "failed_fetch_count": 4,
-      "last_metrics_refresh": "2026-09-23T07:06:04.054479+00:00",
-      "last_constituents_refresh": "2026-09-23T07:03:05.960596+00:00",
-      "last_screen_at": "2026-09-23T06:52:38.805268+00:00",
+      "last_metrics_refresh": "2026-09-22T07:04:46.196521+00:00",
+      "last_constituents_refresh": "2026-09-22T07:02:01.777161+00:00",
+      "last_screen_at": "2026-09-22T18:13:12.610280+00:00",
       "signal_counts": {
-        "hold": 117,
+        "hold": 119,
         "avoid": 48,
-        "buy": 22,
+        "buy": 21,
         "strong_buy": 6,
-        "insufficient_data": 3
+        "insufficient_data": 2
       },
-      "shortlist_count": 28,
+      "shortlist_count": 27,
       "strong_buy": 6,
-      "buy": 22,
+      "buy": 21,
       "learning_phase": 1,
       "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
@@ -1020,8 +1003,8 @@
           "asx200 not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
-          "screen_archives": 30,
-          "observe_snapshot_count": 30
+          "screen_archives": 28,
+          "observe_snapshot_count": 28
         },
         "phase2": {
           "weekly_batch_count": 0,
@@ -1029,12 +1012,12 @@
         }
       },
       "filing_health": {
-        "buy_tier_count": 28,
+        "buy_tier_count": 27,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
         "indexed_without_body": 2,
-        "bodies_median": 24.5,
+        "bodies_median": 26.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
@@ -1054,48 +1037,46 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-09-23T07:25:58.185209+00:00",
+        "last_run_at": "2026-09-22T07:44:47.532487+00:00",
         "holdings": 26,
-        "nav": 555.28,
+        "nav": 554.89,
         "cash": 98.93,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 24,
-        "epoch0_batch_count": 13
+        "weekday_batch_count": 23,
+        "epoch0_batch_count": 12
       },
       "equal_support": {
         "present": true,
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
-        "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 62,
-        "not_buy_tier_count": 168,
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 63,
+        "not_buy_tier_count": 169,
         "never_buy_tier_count": 150,
         "rememo_eligible_count": 0,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 62,
-        "not_buy_tier_count": 168,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 63,
+        "not_buy_tier_count": 169,
         "never_buy_tier_count": 150,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "ANN.AX"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "GQG.AX",
-          "ARB.AX",
           "LSF.AX",
-          "QBE.AX",
+          "ARB.AX",
           "SPK.AX",
+          "QBE.AX",
           "IMD.AX",
-          "TLS.AX",
-          "MTS.AX"
+          "MTS.AX",
+          "DRR.AX"
         ]
       },
       "sprint_progress": {
@@ -1309,14 +1290,14 @@
           },
           {
             "date": "2026-09-23",
-            "held": 456.35,
-            "nav": 555.28,
-            "held_stock": 456.35,
+            "held": 455.96,
+            "nav": 554.89,
+            "held_stock": 455.96,
             "cash": 98.93,
             "positions": 26,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": 517.37
+            "market": 516.93
           }
         ],
         "series": [
@@ -1336,11 +1317,11 @@
         "branches": [],
         "last": {
           "date": "2026-09-23",
-          "held": 456.35,
-          "market": 517.37,
-          "nav": 555.28,
+          "held": 455.96,
+          "market": 516.93,
+          "nav": 554.89,
           "positions": 26,
-          "excess_pct": -0.117943
+          "excess_pct": -0.117946
         }
       }
     },
@@ -1370,9 +1351,9 @@
       "stale": 0,
       "fresh": 40,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:08:34.993358+00:00",
-      "last_constituents_refresh": "2026-09-23T07:08:12.197951+00:00",
-      "last_screen_at": "2026-09-23T06:52:38.805268+00:00",
+      "last_metrics_refresh": "2026-09-22T07:07:10.353599+00:00",
+      "last_constituents_refresh": "2026-09-22T07:06:49.263179+00:00",
+      "last_screen_at": "2026-09-22T06:52:33.527446+00:00",
       "signal_counts": {
         "hold": 20,
         "strong_buy": 7,
@@ -1402,8 +1383,8 @@
           "cac40 not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
-          "screen_archives": 17,
-          "observe_snapshot_count": 17
+          "screen_archives": 16,
+          "observe_snapshot_count": 16
         },
         "phase2": {
           "weekly_batch_count": 0,
@@ -1421,30 +1402,30 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-09-23T07:26:08.395846+00:00",
+        "last_run_at": "2026-09-22T07:44:55.366190+00:00",
         "holdings": 6,
-        "nav": 849.05,
-        "cash": 0.0,
+        "nav": 855.59,
+        "cash": -0.0,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 2,
-        "epoch0_batch_count": 2
+        "weekday_batch_count": 1,
+        "epoch0_batch_count": 1
       },
       "equal_support": {
         "present": true,
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 10,
+        "hold_near_buy_count": 9,
         "not_buy_tier_count": 27,
         "never_buy_tier_count": 25,
         "rememo_eligible_count": 5,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 10,
+        "hold_near_buy_count": 9,
         "not_buy_tier_count": 27,
         "never_buy_tier_count": 25,
         "timing_signal_present": true,
@@ -1455,12 +1436,12 @@
         "hold_near_buy_sample": [
           "PUB.PA",
           "EDEN.PA",
-          "DSY.PA",
-          "RNO.PA",
           "BN.PA",
+          "DSY.PA",
+          "EL.PA",
+          "RNO.PA",
           "ENGI.PA",
-          "BVI.PA",
-          "EL.PA"
+          "BVI.PA"
         ]
       },
       "sprint_progress": null,
@@ -1488,17 +1469,6 @@
             "contributed_capital": 1000.0,
             "branches": {},
             "market": 855.59
-          },
-          {
-            "date": "2026-09-23",
-            "held": 849.05,
-            "nav": 849.05,
-            "held_stock": 849.05,
-            "cash": 0.0,
-            "positions": 6,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 862.95
           }
         ],
         "series": [
@@ -1517,12 +1487,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-23",
-          "held": 849.05,
-          "market": 862.95,
-          "nav": 849.05,
+          "date": "2026-09-22",
+          "held": 855.59,
+          "market": 855.59,
+          "nav": 855.59,
           "positions": 6,
-          "excess_pct": -0.016108
+          "excess_pct": 0.0
         }
       }
     },
@@ -1552,18 +1522,18 @@
       "stale": 0,
       "fresh": 50,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:03:05.798705+00:00",
-      "last_constituents_refresh": "2026-09-23T07:02:24.607803+00:00",
-      "last_screen_at": "2026-09-23T06:52:38.805268+00:00",
+      "last_metrics_refresh": "2026-09-22T07:02:01.618545+00:00",
+      "last_constituents_refresh": "2026-09-22T07:01:24.846323+00:00",
+      "last_screen_at": "2026-09-22T06:52:33.527446+00:00",
       "signal_counts": {
-        "hold": 31,
-        "strong_buy": 8,
-        "buy": 7,
-        "avoid": 4
+        "hold": 30,
+        "strong_buy": 9,
+        "buy": 6,
+        "avoid": 5
       },
       "shortlist_count": 15,
-      "strong_buy": 8,
-      "buy": 7,
+      "strong_buy": 9,
+      "buy": 6,
       "learning_phase": 1,
       "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
@@ -1584,8 +1554,8 @@
           "euro_stoxx50 not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
-          "screen_archives": 20,
-          "observe_snapshot_count": 20
+          "screen_archives": 19,
+          "observe_snapshot_count": 19
         },
         "phase2": {
           "weekly_batch_count": 1,
@@ -1603,30 +1573,30 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-09-23T07:26:05.497921+00:00",
-        "holdings": 8,
-        "nav": 850.98,
-        "cash": 8.03,
+        "last_run_at": "2026-09-22T07:44:52.792735+00:00",
+        "holdings": 9,
+        "nav": 846.41,
+        "cash": 0.0,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 7,
-        "epoch0_batch_count": 6
+        "weekday_batch_count": 6,
+        "epoch0_batch_count": 5
       },
       "equal_support": {
         "present": true,
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 15,
+        "hold_near_buy_count": 16,
         "not_buy_tier_count": 35,
         "never_buy_tier_count": 34,
         "rememo_eligible_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 15,
+        "hold_near_buy_count": 16,
         "not_buy_tier_count": 35,
         "never_buy_tier_count": 34,
         "timing_signal_present": true,
@@ -1636,13 +1606,13 @@
         "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "BMW.DE",
+          "BN.PA",
+          "ADS.DE",
           "ALV.DE",
           "SIE.DE",
-          "ADS.DE",
-          "MBG.DE",
           "ITX.MC",
-          "AIR.PA",
-          "BN.PA"
+          "EL.PA",
+          "AIR.PA"
         ]
       },
       "sprint_progress": null,
@@ -1725,17 +1695,6 @@
             "contributed_capital": 1000.0,
             "branches": {},
             "market": 864.68
-          },
-          {
-            "date": "2026-09-23",
-            "held": 842.95,
-            "nav": 850.98,
-            "held_stock": 842.95,
-            "cash": 8.03,
-            "positions": 8,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 872.11
           }
         ],
         "series": [
@@ -1754,12 +1713,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-23",
-          "held": 842.95,
-          "market": 872.11,
-          "nav": 850.98,
-          "positions": 8,
-          "excess_pct": -0.033436
+          "date": "2026-09-22",
+          "held": 846.41,
+          "market": 864.68,
+          "nav": 846.41,
+          "positions": 9,
+          "excess_pct": -0.021129
         }
       }
     },
@@ -1782,21 +1741,21 @@
       "ingest_exhausted": true,
       "queue_rank": 3,
       "shared_maintenance": true,
-      "health": "ok",
-      "coverage_pct": 0.907,
-      "honest_coverage_pct": 0.907,
-      "ticker_count": 78,
+      "health": "warn",
+      "coverage_pct": 0.8953,
+      "honest_coverage_pct": 0.8953,
+      "ticker_count": 77,
       "stale": 0,
       "fresh": 86,
-      "failed_fetch_count": 8,
-      "last_metrics_refresh": "2026-09-23T07:07:39.117503+00:00",
-      "last_constituents_refresh": "2026-09-23T07:06:04.414745+00:00",
-      "last_screen_at": "2026-09-23T06:52:38.805268+00:00",
+      "failed_fetch_count": 9,
+      "last_metrics_refresh": "2026-09-22T07:06:20.193410+00:00",
+      "last_constituents_refresh": "2026-09-22T07:04:46.673184+00:00",
+      "last_screen_at": "2026-09-22T11:19:56.823713+00:00",
       "signal_counts": {
         "hold": 50,
         "avoid": 14,
         "buy": 6,
-        "insufficient_data": 6,
+        "insufficient_data": 5,
         "strong_buy": 2
       },
       "shortlist_count": 8,
@@ -1822,8 +1781,8 @@
           "ftse_smallcap not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
-          "screen_archives": 25,
-          "observe_snapshot_count": 25
+          "screen_archives": 23,
+          "observe_snapshot_count": 23
         },
         "phase2": {
           "weekly_batch_count": 0,
@@ -1841,47 +1800,45 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-09-23T07:26:03.065559+00:00",
+        "last_run_at": "2026-09-22T07:44:51.172345+00:00",
         "holdings": 4,
-        "nav": 1047.25,
+        "nav": 1042.02,
         "cash": 0.0,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 13,
-        "epoch0_batch_count": 12
+        "weekday_batch_count": 12,
+        "epoch0_batch_count": 11
       },
       "equal_support": {
         "present": true,
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
-        "buy_tier_not_now_count": 1,
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 22,
-        "not_buy_tier_count": 70,
+        "not_buy_tier_count": 69,
         "never_buy_tier_count": 62,
         "rememo_eligible_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 22,
-        "not_buy_tier_count": 70,
+        "not_buy_tier_count": 69,
         "never_buy_tier_count": 62,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "APTD.L"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "FOXT.L",
-          "REC.L",
+          "CLIG.L",
           "NRR.L",
           "FORT.L",
           "LSL.L",
+          "REC.L",
           "SBRE.L",
-          "CLIG.L",
           "LUCE.L"
         ]
       },
@@ -2031,17 +1988,6 @@
             "contributed_capital": 1000.0,
             "branches": {},
             "market": 987.97
-          },
-          {
-            "date": "2026-09-23",
-            "held": 1047.25,
-            "nav": 1047.25,
-            "held_stock": 1047.25,
-            "cash": 0.0,
-            "positions": 4,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 989.41
           }
         ],
         "series": [
@@ -2060,12 +2006,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-23",
-          "held": 1047.25,
-          "market": 989.41,
-          "nav": 1047.25,
+          "date": "2026-09-22",
+          "held": 1042.02,
+          "market": 987.97,
+          "nav": 1042.02,
           "positions": 4,
-          "excess_pct": 0.058459
+          "excess_pct": 0.054708
         }
       }
     },
@@ -2095,18 +2041,18 @@
       "stale": 0,
       "fresh": 101,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:07:52.466160+00:00",
-      "last_constituents_refresh": "2026-09-23T07:07:39.287686+00:00",
-      "last_screen_at": "2026-09-23T06:52:38.805268+00:00",
+      "last_metrics_refresh": "2026-09-22T07:06:30.894598+00:00",
+      "last_constituents_refresh": "2026-09-22T07:06:20.328701+00:00",
+      "last_screen_at": "2026-09-22T06:52:33.527446+00:00",
       "signal_counts": {
-        "hold": 44,
+        "hold": 45,
         "strong_buy": 20,
         "avoid": 20,
-        "buy": 17
+        "buy": 16
       },
-      "shortlist_count": 37,
+      "shortlist_count": 36,
       "strong_buy": 20,
-      "buy": 17,
+      "buy": 16,
       "learning_phase": 1,
       "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
@@ -2127,8 +2073,8 @@
           "nasdaq100 not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
-          "screen_archives": 18,
-          "observe_snapshot_count": 18
+          "screen_archives": 17,
+          "observe_snapshot_count": 17
         },
         "phase2": {
           "weekly_batch_count": 0,
@@ -2146,31 +2092,31 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-09-23T07:26:07.565545+00:00",
+        "last_run_at": "2026-09-22T07:44:54.203297+00:00",
         "holdings": 35,
-        "nav": 758.81,
+        "nav": 753.57,
         "cash": 0.0,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 7,
-        "epoch0_batch_count": 5
+        "weekday_batch_count": 6,
+        "epoch0_batch_count": 4
       },
       "equal_support": {
         "present": true,
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 25,
-        "not_buy_tier_count": 64,
+        "hold_near_buy_count": 27,
+        "not_buy_tier_count": 65,
         "never_buy_tier_count": 60,
-        "rememo_eligible_count": 1,
-        "exclusion_ready_for_priors": true
+        "rememo_eligible_count": 0,
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 25,
-        "not_buy_tier_count": 64,
+        "hold_near_buy_count": 27,
+        "not_buy_tier_count": 65,
         "never_buy_tier_count": 60,
         "timing_signal_present": true,
         "observe_only": true,
@@ -2180,12 +2126,12 @@
         "hold_near_buy_sample": [
           "EXC",
           "HON",
-          "MAR",
           "AAPL",
           "AMAT",
+          "MAR",
+          "GOOG",
           "NVDA",
-          "ODFL",
-          "CSX"
+          "ODFL"
         ]
       },
       "sprint_progress": null,
@@ -2257,17 +2203,6 @@
             "contributed_capital": 1000.0,
             "branches": {},
             "market": 759.66
-          },
-          {
-            "date": "2026-09-23",
-            "held": 758.81,
-            "nav": 758.81,
-            "held_stock": 758.81,
-            "cash": 0.0,
-            "positions": 35,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 759.66
           }
         ],
         "series": [
@@ -2286,12 +2221,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-23",
-          "held": 758.81,
+          "date": "2026-09-22",
+          "held": 753.57,
           "market": 759.66,
-          "nav": 758.81,
+          "nav": 753.57,
           "positions": 35,
-          "excess_pct": -0.001119
+          "excess_pct": -0.008017
         }
       }
     },
@@ -2321,17 +2256,17 @@
       "stale": 0,
       "fresh": 503,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:02:24.416584+00:00",
-      "last_constituents_refresh": "2026-09-23T06:55:26.187343+00:00",
-      "last_screen_at": "2026-09-23T06:52:38.805268+00:00",
+      "last_metrics_refresh": "2026-09-22T07:01:24.635549+00:00",
+      "last_constituents_refresh": "2026-09-22T06:55:05.181380+00:00",
+      "last_screen_at": "2026-09-22T08:21:14.454136+00:00",
       "signal_counts": {
-        "hold": 280,
+        "hold": 283,
         "buy": 84,
-        "avoid": 79,
-        "strong_buy": 60
+        "avoid": 77,
+        "strong_buy": 59
       },
-      "shortlist_count": 144,
-      "strong_buy": 60,
+      "shortlist_count": 143,
+      "strong_buy": 59,
       "buy": 84,
       "learning_phase": 1,
       "learning_phase_label": "Epoch-0 level",
@@ -2353,8 +2288,8 @@
           "sp500 not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
-          "screen_archives": 28,
-          "observe_snapshot_count": 28
+          "screen_archives": 26,
+          "observe_snapshot_count": 26
         },
         "phase2": {
           "weekly_batch_count": 0,
@@ -2372,39 +2307,37 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-09-23T07:25:54.826841+00:00",
+        "last_run_at": "2026-09-22T07:44:45.318847+00:00",
         "holdings": 120,
-        "nav": 721.58,
-        "cash": 4.59,
+        "nav": 718.53,
+        "cash": 1.48,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 15,
-        "epoch0_batch_count": 13
+        "weekday_batch_count": 14,
+        "epoch0_batch_count": 12
       },
       "equal_support": {
         "present": true,
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
-        "buy_tier_not_now_count": 1,
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 157,
-        "not_buy_tier_count": 359,
+        "not_buy_tier_count": 360,
         "never_buy_tier_count": 330,
         "rememo_eligible_count": 2,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 157,
-        "not_buy_tier_count": 359,
+        "not_buy_tier_count": 360,
         "never_buy_tier_count": 330,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "DG"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "EIX",
           "ES",
@@ -2412,8 +2345,8 @@
           "T",
           "HON",
           "DAL",
-          "DUK",
-          "UHS"
+          "UHS",
+          "DUK"
         ]
       },
       "sprint_progress": null,
@@ -2573,17 +2506,6 @@
             "contributed_capital": 1000.0,
             "branches": {},
             "market": 741.81
-          },
-          {
-            "date": "2026-09-23",
-            "held": 716.99,
-            "nav": 721.58,
-            "held_stock": 716.99,
-            "cash": 4.59,
-            "positions": 120,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 741.81
           }
         ],
         "series": [
@@ -2602,12 +2524,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-23",
-          "held": 716.99,
+          "date": "2026-09-22",
+          "held": 717.05,
           "market": 741.81,
-          "nav": 721.58,
+          "nav": 718.53,
           "positions": 120,
-          "excess_pct": -0.033459
+          "excess_pct": -0.033378
         }
       }
     },
@@ -2637,9 +2559,9 @@
       "stale": 0,
       "fresh": 59,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:09:23.946615+00:00",
-      "last_constituents_refresh": "2026-09-23T07:08:35.122909+00:00",
-      "last_screen_at": "2026-09-23T06:52:38.805268+00:00",
+      "last_metrics_refresh": "2026-09-22T07:07:55.336325+00:00",
+      "last_constituents_refresh": "2026-09-22T07:07:10.483276+00:00",
+      "last_screen_at": "2026-09-22T06:52:33.527446+00:00",
       "signal_counts": {
         "hold": 31,
         "buy": 11,
@@ -2669,8 +2591,8 @@
           "tsx60 not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
-          "screen_archives": 25,
-          "observe_snapshot_count": 25
+          "screen_archives": 24,
+          "observe_snapshot_count": 24
         },
         "phase2": {
           "weekly_batch_count": 0,
@@ -2688,26 +2610,26 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-09-23T07:26:04.418473+00:00",
+        "last_run_at": "2026-09-22T07:44:52.100468+00:00",
         "holdings": 14,
-        "nav": 533.46,
-        "cash": 20.5,
+        "nav": 517.79,
+        "cash": 0.0,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 13,
-        "epoch0_batch_count": 11
+        "weekday_batch_count": 12,
+        "epoch0_batch_count": 10
       },
       "equal_support": {
         "present": true,
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 20,
         "not_buy_tier_count": 41,
         "never_buy_tier_count": 36,
         "rememo_eligible_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
@@ -2865,17 +2787,6 @@
             "contributed_capital": 1000.0,
             "branches": {},
             "market": 540.83
-          },
-          {
-            "date": "2026-09-23",
-            "held": 512.96,
-            "nav": 533.46,
-            "held_stock": 512.96,
-            "cash": 20.5,
-            "positions": 14,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 540.83
           }
         ],
         "series": [
@@ -2894,12 +2805,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-23",
-          "held": 512.96,
+          "date": "2026-09-22",
+          "held": 517.79,
           "market": 540.83,
-          "nav": 533.46,
+          "nav": 517.79,
           "positions": 14,
-          "excess_pct": -0.051532
+          "excess_pct": -0.042601
         }
       }
     },
@@ -2929,8 +2840,8 @@
       "stale": 0,
       "fresh": 25,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:14:13.528341+00:00",
-      "last_constituents_refresh": "2026-09-23T07:13:57.982178+00:00",
+      "last_metrics_refresh": "2026-09-22T07:32:42.153227+00:00",
+      "last_constituents_refresh": "2026-09-22T07:32:29.433880+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 16,
@@ -3007,14 +2918,14 @@
       "queue_rank": null,
       "shared_maintenance": false,
       "health": "warn",
-      "coverage_pct": 0.5758,
-      "honest_coverage_pct": 0.5758,
+      "coverage_pct": 0.5859,
+      "honest_coverage_pct": 0.5859,
       "ticker_count": 57,
       "stale": 0,
       "fresh": 99,
-      "failed_fetch_count": 42,
-      "last_metrics_refresh": "2026-09-23T07:13:03.849787+00:00",
-      "last_constituents_refresh": "2026-09-23T07:09:24.204396+00:00",
+      "failed_fetch_count": 41,
+      "last_metrics_refresh": "2026-09-22T07:31:39.917772+00:00",
+      "last_constituents_refresh": "2026-09-22T07:07:55.487032+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 32,
@@ -3098,8 +3009,8 @@
       "stale": 0,
       "fresh": 19,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:16:44.763267+00:00",
-      "last_constituents_refresh": "2026-09-23T07:16:28.123682+00:00",
+      "last_metrics_refresh": "2026-09-22T07:34:52.889174+00:00",
+      "last_constituents_refresh": "2026-09-22T07:34:39.073382+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 13,
@@ -3182,8 +3093,8 @@
       "stale": 0,
       "fresh": 20,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:14:30.382166+00:00",
-      "last_constituents_refresh": "2026-09-23T07:14:13.675654+00:00",
+      "last_metrics_refresh": "2026-09-22T07:32:57.168220+00:00",
+      "last_constituents_refresh": "2026-09-22T07:32:42.360468+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 10,
@@ -3266,8 +3177,8 @@
       "stale": 0,
       "fresh": 40,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:13:57.835001+00:00",
-      "last_constituents_refresh": "2026-09-23T07:13:29.011196+00:00",
+      "last_metrics_refresh": "2026-09-22T07:32:29.287360+00:00",
+      "last_constituents_refresh": "2026-09-22T07:32:03.392165+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 23,
@@ -3350,8 +3261,8 @@
       "stale": 0,
       "fresh": 85,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:15:39.793276+00:00",
-      "last_constituents_refresh": "2026-09-23T07:14:30.544615+00:00",
+      "last_metrics_refresh": "2026-09-22T07:33:59.869380+00:00",
+      "last_constituents_refresh": "2026-09-22T07:32:57.326279+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 52,
@@ -3434,8 +3345,8 @@
       "stale": 0,
       "fresh": 35,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:13:28.886228+00:00",
-      "last_constituents_refresh": "2026-09-23T07:13:03.998214+00:00",
+      "last_metrics_refresh": "2026-09-22T07:32:03.262815+00:00",
+      "last_constituents_refresh": "2026-09-22T07:31:40.141424+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 24,
@@ -3518,8 +3429,8 @@
       "stale": 0,
       "fresh": 20,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:18:00.986208+00:00",
-      "last_constituents_refresh": "2026-09-23T07:17:45.350448+00:00",
+      "last_metrics_refresh": "2026-09-22T07:37:22.957420+00:00",
+      "last_constituents_refresh": "2026-09-22T07:37:08.026477+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 12,
@@ -3602,8 +3513,8 @@
       "stale": 0,
       "fresh": 30,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:17:45.221691+00:00",
-      "last_constituents_refresh": "2026-09-23T07:17:20.521810+00:00",
+      "last_metrics_refresh": "2026-09-22T07:37:07.867525+00:00",
+      "last_constituents_refresh": "2026-09-22T07:36:46.075331+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 17,
@@ -3686,8 +3597,8 @@
       "stale": 0,
       "fresh": 18,
       "failed_fetch_count": 1,
-      "last_metrics_refresh": "2026-09-23T07:17:04.164846+00:00",
-      "last_constituents_refresh": "2026-09-23T07:16:44.897466+00:00",
+      "last_metrics_refresh": "2026-09-22T07:36:30.470884+00:00",
+      "last_constituents_refresh": "2026-09-22T07:34:53.125943+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 13,
@@ -3769,8 +3680,8 @@
       "stale": 0,
       "fresh": 20,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:17:20.371041+00:00",
-      "last_constituents_refresh": "2026-09-23T07:17:04.313352+00:00",
+      "last_metrics_refresh": "2026-09-22T07:36:45.941975+00:00",
+      "last_constituents_refresh": "2026-09-22T07:36:30.621171+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 12,
@@ -3853,8 +3764,8 @@
       "stale": 0,
       "fresh": 30,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:16:09.048263+00:00",
-      "last_constituents_refresh": "2026-09-23T07:15:39.963066+00:00",
+      "last_metrics_refresh": "2026-09-22T07:34:22.325056+00:00",
+      "last_constituents_refresh": "2026-09-22T07:34:00.092907+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 17,
@@ -3937,8 +3848,8 @@
       "stale": 0,
       "fresh": 24,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-23T07:16:28.121239+00:00",
-      "last_constituents_refresh": "2026-09-23T07:16:09.051255+00:00",
+      "last_metrics_refresh": "2026-09-22T07:34:39.071479+00:00",
+      "last_constituents_refresh": "2026-09-22T07:34:22.327279+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 17,
