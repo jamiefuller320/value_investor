@@ -2260,6 +2260,35 @@ def test_honour_fcf_action_notes_on_signals_caps_wix_style_numeric_row_without_n
     assert honoured.iloc[0]["adjusted_signal"] == "hold"
 
 
+def test_scan_so_what_skips_paf_style_supportive_fcf_prose(tmp_path: Path):
+    """Batched so-what scans must not queue enforcement when export would not cap."""
+    from value_investor.so_what_closure import scan_so_what_issues
+
+    note = (
+        "Strong Buy — neutral timing | Research: Accumulate, Medium risk — "
+        "Audited FY26 cash, buyback and filing-aligned FCF support the strong-buy screen; "
+        "higher FY27 AISC, gold cyclicality and pending chair succession keep the research "
+        "overlay below full strong buy."
+    )
+    findings = scan_so_what_issues(
+        reports=[
+            {
+                "ticker": "PAF.L",
+                "signal": "strong_buy",
+                "adjusted_signal": "strong_buy",
+                "fcf_basis_overlay": False,
+                "action_note": note,
+                "fcf": {
+                    "screen_ttm": 327_180_512.0,
+                    "filing_aligned": 340_848_000.0,
+                },
+            }
+        ],
+        artifacts_dir=tmp_path,
+    )
+    assert not any(f.kind == "fcf_note_without_overlay" for f in findings)
+
+
 def test_write_screening_snapshot_enforces_wix_style_fcf_note(tmp_path: Path):
     """Persisted WIX.L snapshots must not ship buy beside an FCF mismatch action note."""
     sources = tmp_path / "research" / "WIX.L" / "sources"

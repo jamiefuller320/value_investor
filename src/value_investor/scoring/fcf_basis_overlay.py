@@ -61,6 +61,45 @@ def fcf_basis_enforcement_needed(
     return action_note_mismatch or action_note_has_fcf_basis_mismatch(action_note)
 
 
+def action_note_has_fcf_basis_concern(
+    *,
+    action_note: str | None,
+    fcf_bundle: dict[str, Any] | None = None,
+    key_metrics: dict[str, Any] | None = None,
+    screen_ttm: float | None = None,
+) -> bool:
+    """True when export enforcement would cap buy-tier signals for this note and FCF row.
+
+    Matches ``apply_fcf_export_enforcement`` / ``honour_fcf_action_note_enforcement`` so
+    so-what scans do not treat supportive research prose (e.g. "filing-aligned FCF support")
+    as a cosmetic mismatch when filing vs screen gaps are below enforcement thresholds.
+    """
+    from value_investor.scoring.fcf import fcf_bundle_from_persisted_report
+
+    bundle = _fcf_bundle_for_enforcement(
+        fcf_bundle,
+        action_note=action_note,
+        screen_ttm=screen_ttm,
+    )
+    if key_metrics:
+        enriched = fcf_bundle_from_persisted_report(
+            bundle if bundle else None,
+            action_note=action_note,
+            key_metrics=key_metrics,
+        )
+        for key, value in enriched.items():
+            if value is not None:
+                bundle[key] = value
+    resolved_screen = screen_ttm or bundle.get("screen_ttm")
+    return fcf_basis_enforcement_needed(
+        action_note_mismatch=fcf_basis_action_note_mismatch(
+            bundle,
+            screen_ttm=resolved_screen,
+        ),
+        action_note=action_note,
+    )
+
+
 def fcf_basis_action_note_mismatch(
     fcf_bundle: dict[str, Any],
     *,
@@ -326,11 +365,23 @@ def honour_fcf_action_notes_on_signals(signals: pd.DataFrame) -> pd.DataFrame:
         action_note = str(row.get("action_note") or "")
         screen_ttm = screen_ttm_from_row(row)
         row_fcf = row.get("fcf") if isinstance(row.get("fcf"), dict) else None
+        row_metrics = row.get("key_metrics") if isinstance(row.get("key_metrics"), dict) else None
         fcf_bundle = _fcf_bundle_for_enforcement(
             row_fcf,
             action_note=action_note,
             screen_ttm=screen_ttm,
         )
+        if row_metrics:
+            from value_investor.scoring.fcf import fcf_bundle_from_persisted_report
+
+            enriched = fcf_bundle_from_persisted_report(
+                fcf_bundle if fcf_bundle else None,
+                action_note=action_note,
+                key_metrics=row_metrics,
+            )
+            for key, value in enriched.items():
+                if value is not None:
+                    fcf_bundle[key] = value
         filing = fcf_bundle.get("filing_aligned")
         if filing is None:
             from value_investor.scoring.fcf import _float_or_none
