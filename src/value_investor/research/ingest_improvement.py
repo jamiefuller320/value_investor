@@ -287,6 +287,11 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
         coverage["indexed_without_body"] = sum(
             1 for row in filings if filing_lacks_material_body(row)
         )
+        from value_investor.research.filings import filing_counts_toward_body_penetration
+
+        material = [row for row in filings if filing_counts_toward_body_penetration(row)]
+        coverage["material_filings_total"] = len(material)
+        coverage["material_filings_with_body"] = sum(1 for row in material if row.get("has_body"))
         period_cov = period_body_coverage(filings)
         coverage["filings_annual"] = int(period_cov["annual"]["total"])
         coverage["filings_interim"] = int(period_cov["interim"]["total"])
@@ -299,12 +304,20 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
     return coverage
 
 
+def _penetration_index_counts(coverage: dict[str, int]) -> tuple[int, int]:
+    """(indexed_total, with_body) for penetration — prefer material-only when measured."""
+    material_total = int(coverage.get("material_filings_total") or 0)
+    if material_total > 0:
+        return material_total, int(coverage.get("material_filings_with_body") or 0)
+    return int(coverage.get("filings_total") or 0), int(coverage.get("filings_with_body") or 0)
+
+
 def _body_penetration_ratio(coverage: dict[str, int]) -> float:
     """Fraction of indexed filings that carry on-disk bodies."""
-    total = int(coverage.get("filings_total") or 0)
+    total, with_body = _penetration_index_counts(coverage)
     if total <= 0:
         return 1.0
-    return int(coverage.get("filings_with_body") or 0) / total
+    return with_body / total
 
 
 def _is_low_penetration_pack(coverage: dict[str, int], *, ticker: str = "") -> bool:
@@ -313,10 +326,9 @@ def _is_low_penetration_pack(coverage: dict[str, int], *, ticker: str = "") -> b
 
     Targets initial-mode memos stuck at adequate source quality despite a full index.
     """
-    total = int(coverage.get("filings_total") or 0)
+    total, with_body = _penetration_index_counts(coverage)
     if total < LOW_PENETRATION_MIN_INDEXED:
         return False
-    with_body = int(coverage.get("filings_with_body") or 0)
     ratio = _body_penetration_ratio(coverage)
     if ratio >= LOW_PENETRATION_RATIO_THRESHOLD:
         return False
