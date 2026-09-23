@@ -1415,6 +1415,13 @@ def _is_routine_own_share_or_pdmr_row(row: dict[str, Any]) -> bool:
     return "transaction in own shares" in headline or "director/pdmr" in headline
 
 
+def _is_holding_disclosure_row(row: dict[str, Any]) -> bool:
+    """Form 8.3/8.5 and major-holding RNS — indexed for audit, not ingest ROI."""
+    if str(row.get("entity_type") or "") == "holding_disclosure":
+        return True
+    return classify_filing_entity_type(row) == "holding_disclosure"
+
+
 def filing_lacks_material_body(row: dict[str, Any]) -> bool:
     """
     True when a missing body should count toward ingest gap / IWB scoring.
@@ -1428,6 +1435,8 @@ def filing_lacks_material_body(row: dict[str, Any]) -> bool:
     if _is_index_noise_row(row):
         return False
     if _is_routine_own_share_or_pdmr_row(row):
+        return False
+    if _is_holding_disclosure_row(row):
         return False
     return True
 
@@ -2842,6 +2851,8 @@ _S838_BODY_PATTERNS = (
 )
 _HOLDING_DISCLOSURE_PATTERNS = (
     r"\bform\s+8\.3\b",
+    r"\bform\s+8\.5\b",
+    r"\bnotification of major holdings\b",
     r"\bsection\s+838\b.*\bdisclosure\b",
     r"\bholding[s]?\s+disclosure\b",
 )

@@ -7834,6 +7834,54 @@ def test_filing_lacks_material_body_excludes_routine_own_shares():
         )
         is False
     )
+
+
+def test_filing_lacks_material_body_excludes_pinewood_holding_disclosures():
+    """eng-20260923-01: PINE.L Form 8.3/8.5 and major-holding RNS are not IWB gaps."""
+    from value_investor.research.filings import filing_lacks_material_body
+
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Form 8.3 - Pinewood Technologies Group plc",
+                "url": "https://www.investegate.co.uk/announcement/rns/pinewood-technologies-group--pine/form-8-3-pinewood-technologies-group-plc/9763653",
+                "has_body": False,
+                "entity_type": "holding_disclosure",
+            }
+        )
+        is False
+    )
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Form 8.5 (EPT/NON-RI) Pinewood Technologies Group",
+                "url": "https://www.investegate.co.uk/announcement/rns/pinewood-technologies-group--pine/form-8-5-ept-non-ri-pinewood-technologies-group/9763292",
+                "has_body": False,
+            }
+        )
+        is False
+    )
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Standard form for notification of major holdings",
+                "url": "https://www.investegate.co.uk/announcement/rns/pinewood-technologies-group--pine/standard-form-for-notification-of-major-holdings-/9761561",
+                "has_body": False,
+            }
+        )
+        is False
+    )
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Update on Letter of Intent",
+                "url": "https://www.investegate.co.uk/announcement/rns/pinewood-technologies-group--pine/update-on-letter-of-intent-/9761772",
+                "has_body": False,
+                "period": "other",
+            }
+        )
+        is True
+    )
     assert (
         filing_lacks_material_body(
             {
