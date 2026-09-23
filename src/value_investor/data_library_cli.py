@@ -2040,9 +2040,7 @@ def cmd_library_ingest_deviations(args: argparse.Namespace) -> int:
         if args.json:
             print(json.dumps(payload, indent=2))
         else:
-            open_rows = annotate_deviations_with_signal_triage(
-                open_ingest_deviations(store_path)
-            )
+            open_rows = annotate_deviations_with_signal_triage(open_ingest_deviations(store_path))
             print(f"open_count={len(open_rows)} store={store_path}")
             for row in open_rows:
                 print(

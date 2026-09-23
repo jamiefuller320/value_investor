@@ -529,9 +529,7 @@ def propose_signal_triage(
     elif parked or normalized not in {"buy", "strong_buy"}:
         action = SHADOW_ACTION_DISMISS
         reason = (
-            "parked_leftover"
-            if parked
-            else ("not_buy_tier" if normalized else "signal_missing")
+            "parked_leftover" if parked else ("not_buy_tier" if normalized else "signal_missing")
         )
         rationale = (
             "Parked leftover — dismiss and leave to hunter / next report."
@@ -573,8 +571,10 @@ def annotate_deviation_with_signal_triage(
     market_id = str(item.get("market_id") or "").strip()
     ticker = str(item.get("ticker") or "").strip().upper()
     root = Path(library_root or DEFAULT_LIBRARY_ROOT)
-    lookup = screen if screen is not None else load_library_screen_signal(
-        market_id, ticker, library_root=root
+    lookup = (
+        screen
+        if screen is not None
+        else load_library_screen_signal(market_id, ticker, library_root=root)
     )
     is_parked = (
         bool(parked)
@@ -620,9 +620,7 @@ def slim_ingest_deviations_for_dashboard(
     items = [row for row in (payload or {}).get("items") or [] if isinstance(row, dict)]
     open_items = [row for row in items if str(row.get("status") or "") in OPEN_STATUSES]
     if annotate_signal_triage:
-        open_items = annotate_deviations_with_signal_triage(
-            open_items, library_root=library_root
-        )
+        open_items = annotate_deviations_with_signal_triage(open_items, library_root=library_root)
     reviewed = [row for row in items if str(row.get("status") or "") in REVIEWED_STATUSES]
     reviewed.sort(key=lambda row: str(row.get("reviewed_at") or row.get("resolved_at") or ""))
     return {
