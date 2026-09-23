@@ -10,6 +10,7 @@ from value_investor.library_stall_task_triage import (
     analyze_library_stall_task,
     find_superseded_library_stall_canonical,
     investigate_reburn_loop_library_stall,
+    reburn_unpark_dispatch_gates,
     summarize_library_stall_parks,
     triage_library_stall_tasks,
 )
@@ -230,6 +231,33 @@ def test_allow_unpark_without_bundled_narrow_reframe(tmp_path: Path, monkeypatch
     )
     assert inv["allow_unpark"] is True
     assert inv["allow_narrow_reframe"] is False
+
+
+def test_reburn_unpark_dispatch_gates_imports_resolve(tmp_path: Path, monkeypatch):
+    """Regression: eng-queue recover-queue ImportError (runs 35853220275 / 35853482034).
+
+    ``is_queue_clearing_pause_active`` lives in engineering_recovery and
+    ``is_traffic_pause_active`` in project_traffic — not engineering_queue.
+    """
+    monkeypatch.setattr(
+        "value_investor.project_traffic.get_traffic_control_state",
+        lambda **kwargs: {"automation_waste_active": False, "pause_reasons": []},
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic.is_traffic_pause_active",
+        lambda **kwargs: False,
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.is_queue_clearing_pause_active",
+        lambda **kwargs: False,
+    )
+    monkeypatch.setattr(
+        "value_investor.automation_waste.detect_engineering_agent_reburn",
+        lambda **kwargs: None,
+    )
+    ok, detail = reburn_unpark_dispatch_gates(tasks_path=tmp_path / "missing.json")
+    assert ok is True
+    assert detail == "dispatch gates clear"
 
 
 def test_auto_unpark_reburn_when_gates_clear(tmp_path: Path, monkeypatch):
