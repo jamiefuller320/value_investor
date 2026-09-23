@@ -3,52 +3,56 @@
   "last_run": {
     "schema_version": 1,
     "trigger": "post_run_review_email",
-    "evaluated_at": "2026-09-23T13:11:59.026045+00:00",
+    "evaluated_at": "2026-09-23T18:10:46.691515+00:00",
     "review_source": "output/post_run_review.md",
-    "fingerprint": "0cc42c45330fd0a1aa24",
+    "fingerprint": "4029b2d1c2aa2e7a8f57",
     "skipped": false,
     "skip_reason": null,
     "applied": true,
     "lanes": {
       "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
     },
-    "should_dispatch_engineering": true,
-    "lane_c_recommended": false,
+    "should_dispatch_engineering": false,
+    "lane_c_recommended": true,
     "actions": [
       {
-        "kind": "so_what_auto_queue",
-        "created_count": 2,
-        "task_ids": [
-          "eng-20260923-06",
-          "eng-20260923-07"
-        ]
+        "kind": "lane_c_note",
+        "detail": "Post-run plan lines lack open queue matches — after eng merges idle, run accelerated email_only (Lane C); do not re-compile verbatim plan"
       }
     ],
     "queue_before": {
-      "open_count": 4,
+      "open_count": 0,
       "pr_open_count": 0
     },
     "compile_cap_audit": {
-      "candidate_count": 11,
-      "truncated_count": 3,
-      "post_run_plan_beyond_cap": []
+      "candidate_count": 10,
+      "truncated_count": 2,
+      "post_run_plan_beyond_cap": [
+        "Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags"
+      ]
     },
     "plan_alignment": {
       "unlinked_plan_titles": [
-        "Harden RNS/Investegate/LSE direct fetch for indexed announcements (replace Google News redirect URLs) with PDF/HTML body persistence into `filings/bodies/`"
+        "Standardize Investegate/LSE direct HTML/PDF fetch for indexed RNS (Full Year / Half Year / annual report headlines), replacing Google News wrapper URLs",
+        "Wire `operating_cashflow` (and related cash-flow statement fields) from Yahoo/`financials_annual.json` into `CompanyMetrics` with validation when fetch returns null",
+        "Expand IR presentation pipeline: allowlist FY/H1 PDFs, non-truncated text extract, and structured parse into `ir_presentation_metrics.json` (FCF/dividend bridges, segment tables)",
+        "Companies House group accounts: iXBRL-first with OCR fallback, quality gate rejecting garbled bodies",
+        "Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags"
       ],
       "terminal_only_titles": [
-        "Harden RNS/Investegate/LSE direct fetch for indexed announcements (replace Google News redirect URLs) with PDF/HTML body persistence into `filings/bodies/`"
+        "Expand IR presentation pipeline: allowlist FY/H1 PDFs, non-truncated text extract, and structured parse into `ir_presentation_metrics.json` (FCF/dividend bridges, segment tables)",
+        "Companies House group accounts: iXBRL-first with OCR fallback, quality gate rejecting garbled bodies",
+        "Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags"
       ]
     },
-    "compile_cap_drain_skipped": "priority engineering queue not empty",
+    "compile_cap_drain_skipped": "no compile-cap / role-coherence backlog candidates remaining",
     "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
     "queue_after": {
-      "open_count": 6,
+      "open_count": 0,
       "pr_open_count": 0
     },
-    "tasks_added_estimate": 2,
-    "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    "tasks_added_estimate": 0,
+    "dispatch_reason": "no open engineering tasks in queue"
   },
   "runs": [
     {
@@ -154,6 +158,60 @@
       },
       "tasks_added_estimate": 2,
       "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    },
+    {
+      "schema_version": 1,
+      "trigger": "post_run_review_email",
+      "evaluated_at": "2026-09-23T18:10:46.691515+00:00",
+      "review_source": "output/post_run_review.md",
+      "fingerprint": "4029b2d1c2aa2e7a8f57",
+      "skipped": false,
+      "skip_reason": null,
+      "applied": true,
+      "lanes": {
+        "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
+      },
+      "should_dispatch_engineering": false,
+      "lane_c_recommended": true,
+      "actions": [
+        {
+          "kind": "lane_c_note",
+          "detail": "Post-run plan lines lack open queue matches — after eng merges idle, run accelerated email_only (Lane C); do not re-compile verbatim plan"
+        }
+      ],
+      "queue_before": {
+        "open_count": 0,
+        "pr_open_count": 0
+      },
+      "compile_cap_audit": {
+        "candidate_count": 10,
+        "truncated_count": 2,
+        "post_run_plan_beyond_cap": [
+          "Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags"
+        ]
+      },
+      "plan_alignment": {
+        "unlinked_plan_titles": [
+          "Standardize Investegate/LSE direct HTML/PDF fetch for indexed RNS (Full Year / Half Year / annual report headlines), replacing Google News wrapper URLs",
+          "Wire `operating_cashflow` (and related cash-flow statement fields) from Yahoo/`financials_annual.json` into `CompanyMetrics` with validation when fetch returns null",
+          "Expand IR presentation pipeline: allowlist FY/H1 PDFs, non-truncated text extract, and structured parse into `ir_presentation_metrics.json` (FCF/dividend bridges, segment tables)",
+          "Companies House group accounts: iXBRL-first with OCR fallback, quality gate rejecting garbled bodies",
+          "Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags"
+        ],
+        "terminal_only_titles": [
+          "Expand IR presentation pipeline: allowlist FY/H1 PDFs, non-truncated text extract, and structured parse into `ir_presentation_metrics.json` (FCF/dividend bridges, segment tables)",
+          "Companies House group accounts: iXBRL-first with OCR fallback, quality gate rejecting garbled bodies",
+          "Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags"
+        ]
+      },
+      "compile_cap_drain_skipped": "no compile-cap / role-coherence backlog candidates remaining",
+      "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+      "queue_after": {
+        "open_count": 0,
+        "pr_open_count": 0
+      },
+      "tasks_added_estimate": 0,
+      "dispatch_reason": "no open engineering tasks in queue"
     }
   ]
 }

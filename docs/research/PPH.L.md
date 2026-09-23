@@ -1,6 +1,6 @@
 # PPHE Hotel Group Limited (PPH.L) — Research memo
 
-_Version 5 · Updated 2026-09-23T11:41:13.273755+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-09-23T17:28:39.869107+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -32,4 +32,9 @@ No change to the H1 2026 interim anchor or prior governance, leverage, liquidity
 ### 2026-09-23T11:41:13.273755+00:00
 No new RNS or press in the 23 September news batch since the 21 September refresh.  
 The buy screen is now ten weeks persistent (9/22 models, neutral timing); headline metrics are unchanged versus last week.  
+No change to the H1 2026 interim anchor or prior governance, leverage, liquidity and earnings-basis concerns.
+
+### 2026-09-23T17:28:39.869107+00:00
+No new RNS or press in the 23 September afternoon news batch since the morning refresh.  
+The buy screen is now eleven weeks persistent (9/22 models, neutral timing); headline metrics are unchanged versus last week.  
 No change to the H1 2026 interim anchor or prior governance, leverage, liquidity and earnings-basis concerns.
