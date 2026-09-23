@@ -54,10 +54,19 @@ ftse-sleeve-episodes --output-dir docs/data/paper_automation --tracks ai_judgmen
 
 ## Monthly deposits
 
-`PaperFundConfig.monthly_deposit` already exists. Enabling e.g. `500` on a
-**Suite B** book is optional and **starts a new capital epoch** — do not silently
-turn it on for stress primary books mid-flight. Prefer a fair-lab twin or a
-documented epoch reset when deposits begin.
+`PaperFundConfig.monthly_deposit` already exists. The FTSE **realism experiment**
+is a cold-start twin:
+
+| Book | `monthly_deposit` | Role |
+|------|-------------------|------|
+| `buy_tier_level` | `0` | Recycling epoch-0 (Overview primary held line) |
+| `buy_tier_level_dca` | `500` | New capital epoch — household DCA realism |
+
+Do **not** silently turn deposits on for stress primary books mid-flight. Prefer
+this dedicated twin (or a fair-lab twin) with a documented epoch reset.
+
+Overview FTSE held-vs-market overlays the DCA twin as branch series (held +
+deposit-matched ^FTSE). See [`buy-tier-cohort-labs.md`](buy-tier-cohort-labs.md#ftse-dca-realism-twin-buy_tier_level_dca).
 
 ## Evidence gathered to date — validity
 

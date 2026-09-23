@@ -9,6 +9,7 @@ from pathlib import Path
 
 from value_investor.paper_automation import (
     AI_JUDGMENT_TRACK_ID,
+    BUY_TIER_LEVEL_DCA_TRACK_ID,
     BUY_TIER_LEVEL_TRACK_ID,
     DEFAULT_AUTOMATION_DIR,
     GRADUATED_ALLOCATION_TRACK_ID,
@@ -75,6 +76,7 @@ def main(argv: list[str] | None = None) -> int:
             "ai_judgment_fair",
             "rules_fair",
             "buy_tier_level",
+            "buy_tier_level_dca",
         ],
         help="Which learning track(s) to run (default: all, includes Suite B when present)",
     )
@@ -151,6 +153,7 @@ def main(argv: list[str] | None = None) -> int:
         "ai_judgment_fair": "ai_judgment_fair",
         "rules_fair": "rules_fair",
         "buy_tier_level": BUY_TIER_LEVEL_TRACK_ID,
+        "buy_tier_level_dca": BUY_TIER_LEVEL_DCA_TRACK_ID,
     }[args.tracks]
     dirs = learning_track_dirs(output_dir)
     if track_id not in dirs:

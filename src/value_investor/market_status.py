@@ -15,8 +15,12 @@ from value_investor.data_library import (
 from value_investor.held_vs_market import (
     assemble_held_vs_market,
     bench_closes_for_market,
+    contribution_deltas_from_marks,
     empty_held_vs_market,
     load_macro_index_closes,
+    market_values_with_contributions,
+    marks_from_fund,
+    merge_branch_series,
 )
 from value_investor.library_equal_support import PACKAGE_FILENAME as EQUAL_SUPPORT_FILENAME
 from value_investor.library_ingest_dispatch import (
@@ -49,6 +53,8 @@ DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 DEFAULT_PAPER_ROOT = Path("docs/data/paper_automation")
 DEFAULT_CHARTS_DIR = Path("docs/data/charts")
 BUY_TIER_LEVEL_TRACK = "buy_tier_level"
+BUY_TIER_LEVEL_DCA_TRACK = "buy_tier_level_dca"
+BUY_TIER_LEVEL_DCA_MARKET_BRANCH = "buy_tier_level_dca_market"
 EXPECTED_ADMITTED_BLOCKER_NEEDLE = "weekly_paper_shard_markets"
 SPRINT_PROGRESS_WINDOW_DAYS = 2
 STALE_SCREEN_AFTER_DAYS = 8
@@ -842,7 +848,7 @@ def _held_vs_market_row(
     if market_id != LIVE_MARKET_ID:
         observe = _as_dict(_safe_read(_observe_summary_path(library_root, market_id)))
     try:
-        return assemble_held_vs_market(
+        payload = assemble_held_vs_market(
             market_id,
             fund=fund or None,
             observe=observe or None,
@@ -857,6 +863,76 @@ def _held_vs_market_row(
             currency=currency,
             reason="Held vs market series failed to assemble",
         )
+    if market_id == LIVE_MARKET_ID:
+        payload = _overlay_ftse_dca_realism(
+            payload,
+            paper_root=paper_root,
+            macro_closes=macro_closes,
+        )
+    return payload
+
+
+def _overlay_ftse_dca_realism(
+    payload: dict[str, Any],
+    *,
+    paper_root: Path,
+    macro_closes: dict[str, dict[str, float]],
+) -> dict[str, Any]:
+    """Overlay FTSE £500/mo DCA twin + deposit-matched ^FTSE on the epoch-0 chart."""
+    dca_path = Path(paper_root) / BUY_TIER_LEVEL_DCA_TRACK / "automated_fund.json"
+    dca_fund = _as_dict(_safe_read(dca_path))
+    if not dca_fund:
+        # Pending branch so the legend shows the experiment before first fill.
+        return merge_branch_series(
+            payload,
+            branch_id=BUY_TIER_LEVEL_DCA_TRACK,
+            label="DCA £500/mo book",
+            values={},
+            knobs={"monthly_deposit": 500.0, "policy": "buy_tier_level"},
+            status="pending",
+        )
+
+    dca_marks = marks_from_fund(dca_fund)
+    held_values = {
+        str(row["date"]): float(row["held"])
+        for row in dca_marks
+        if row.get("date") is not None and _float(row.get("held")) is not None
+    }
+    payload = merge_branch_series(
+        payload,
+        branch_id=BUY_TIER_LEVEL_DCA_TRACK,
+        label="DCA £500/mo book",
+        values=held_values,
+        knobs={"monthly_deposit": 500.0, "policy": "buy_tier_level"},
+        status="active" if held_values else "pending",
+    )
+
+    dates = [str(row.get("date")) for row in _as_list(payload.get("points")) if row.get("date")]
+    if not dates:
+        dates = list(held_values)
+    bench = bench_closes_for_market(LIVE_MARKET_ID, macro_closes=macro_closes)
+    deltas = contribution_deltas_from_marks(dca_marks)
+    market_map, _path = market_values_with_contributions(
+        dates,
+        bench,
+        contribution_deltas=deltas,
+    )
+    if market_map:
+        payload = merge_branch_series(
+            payload,
+            branch_id=BUY_TIER_LEVEL_DCA_MARKET_BRANCH,
+            label="DCA £500/mo in ^FTSE",
+            values=market_map,
+            knobs={"monthly_deposit": 500.0, "kind": "deposit_matched_index"},
+            status="active",
+        )
+    payload = dict(payload)
+    payload["note"] = (
+        "Held-stock value vs the same capital in ^FTSE (recycling epoch-0). "
+        "DCA £500/mo book overlays the cold-start realism twin; "
+        "DCA £500/mo in ^FTSE is the deposit-matched index path for that twin."
+    )
+    return payload
 
 
 def _slim_epoch0(market_id: str, *, shard_root: Path | None = None) -> dict[str, Any] | None:

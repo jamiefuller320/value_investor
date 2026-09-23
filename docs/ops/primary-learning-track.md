@@ -18,6 +18,7 @@ trade checklist — it is a performance comparison to market datums. Success =
 | **Graduated allocation** *(experimental)* | `docs/data/paper_automation/graduated_allocation/` | Screen rules + trade-plan starter sizing + harvest skims (`max_positions=4`) | Capital recycling experiment |
 | **Exclusion ladder** *(experimental)* | `docs/data/paper_automation/ai_judgment_exclusion_u4/` | AI judgment + frozen archive ladder `u4` knobs (spawned shadow) | Loser-filter ladder experiment |
 | **Buy-tier level** *(cohort lab)* | `docs/data/paper_automation/buy_tier_level/` | Raw screen buy-tier, no conviction/sector cap, Suite B T212 costs, frozen knobs | Unfiltered cohort baseline (Monday cold start) |
+| **Buy-tier level DCA** *(realism)* | `docs/data/paper_automation/buy_tier_level_dca/` | Same level-book policy + £500/mo deposits (cold-start capital epoch) | Household DCA realism; overlays FTSE held-vs-market |
 
 Both primary books use the same costs, position caps, and weekday paper-auto schedule.
 Live FTSE configs keep the **3% per-side stress** cost by default (Suite A —

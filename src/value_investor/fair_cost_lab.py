@@ -22,6 +22,7 @@ from value_investor.decision_review import (
 from value_investor.market_trading_costs import LIVE_PAPER_MARKET_ID, cost_fields_for_config
 from value_investor.paper_automation import (
     AI_JUDGMENT_TRACK_ID,
+    BUY_TIER_LEVEL_DCA_TRACK_ID,
     BUY_TIER_LEVEL_TRACK_ID,
     CONFIG_FILENAME,
     FUND_FILENAME,
@@ -98,7 +99,8 @@ def is_fair_cost_lab_track_id(track_id: str | None) -> bool:
 
 
 def is_cohort_lab_track_id(track_id: str | None) -> bool:
-    return str(track_id or "").strip() == BUY_TIER_LEVEL_TRACK_ID
+    tid = str(track_id or "").strip()
+    return tid in {BUY_TIER_LEVEL_TRACK_ID, BUY_TIER_LEVEL_DCA_TRACK_ID}
 
 
 def is_suite_b_track_id(track_id: str | None) -> bool:
