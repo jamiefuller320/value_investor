@@ -16,6 +16,35 @@ Prefer work that serves these two, in order. Anything else should be parked with
 
 See [`docs/ops/market-sharded-learning.md`](docs/ops/market-sharded-learning.md) and [`docs/ops/euro-depth-sprint.md`](docs/ops/euro-depth-sprint.md).
 
+## Dialogue → instrument (working style)
+
+Open question / dialogue is the preferred way to turn loose ideas into system
+changes. Keep this loop:
+
+1. **Pin the learning question** before building (what must this prove or
+   disprove?).
+2. **Prefer one instrument** — often observe-only — over a stack of live tracks.
+3. **Freeze markers / capital epoch** explicitly (widest window, documented twin,
+   readiness gate). Mid-flight silent rewrites of live books are not OK.
+4. **Park the rest** with `ftse-defer` so chat does not become the backlog.
+
+Also keep:
+
+- **Separate ID, timing, and capital-path questions** — do not collapse them into
+  one NAV line or one track.
+- **Twins over edits** for capital-policy experiments (e.g. deposits): new cold
+  start / epoch, not toggling the recycling book mid-flight.
+- **Do not back-label** prior NAV or marks as evidence for a new dual-path /
+  deposit / sleeve design.
+- **Readiness before promotion** — thick closed cohorts / stated gates before
+  treating an experiment as adoption truth.
+- **Not every good idea is a live track** — shadows, archives, and deferred
+  entries are first-class outcomes of a good dialogue turn.
+
+Spend priorities (P1/P2), clash-aware eng capacity, and “new agent session after
+a long multi-topic chat” still apply; this section is about *how* ideas enter
+the system, not *what* to work on first.
+
 ## Post-run persistent weaknesses & intensive clearance (required)
 
 The Analysis tab **Post-run improvement review** (`docs/data/latest.json` →
