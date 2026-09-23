@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T12:54:05.069427+00:00",
+  "generated_at": "2026-09-23T13:02:24.163659+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1204,27 +1204,44 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-23T12:30:21.823163+00:00",
-    "queue_ui_updated_at": "2026-09-23T12:54:04.996231+00:00",
-    "task_count": 102,
+    "compiled_at": "2026-09-23T13:01:07.861257+00:00",
+    "queue_ui_updated_at": "2026-09-23T13:02:24.072754+00:00",
+    "task_count": 103,
     "status": {
-      "open_count": 0,
+      "open_count": 1,
       "pr_open_count": 0,
       "parked_count": 0,
       "merged_count": 78,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260923-03",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
+    "queued_tasks": [
+      {
+        "id": "eng-20260923-03",
+        "area": "ingest",
+        "title": "Close stubborn ingest gaps for RTO.L (chain 3/3: 0/0 bodies, run igc-20260923-03)",
+        "priority": "high",
+        "priority_score": 88.0,
+        "status": "open",
+        "source": "ingest_gap_closure",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "partial"
+      }
+    ],
     "attention_tasks": [],
     "clash_summary": {
-      "open_task_count": 0,
-      "dispatch_eligible_count": 0,
+      "open_task_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_count": 0
     }
   },
@@ -1503,7 +1520,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-23T12:54:05.069427+00:00",
+    "generated_at": "2026-09-23T13:02:24.163659+00:00",
     "overall": "blocked",
     "headline": "Traffic pause — 0 stuck PR(s). project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
     "merge_lane": {
@@ -1518,25 +1535,25 @@
     },
     "agent_lane": {
       "state": "blocked",
-      "idle": true,
+      "idle": false,
       "running": false,
       "blocked": true,
       "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": true,
       "attention_parked_count": 0,
-      "open_count": 0,
+      "open_count": 1,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 0,
+      "dispatch_eligible_count": 1,
       "blocked_task_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260923-03",
       "reason": "project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
       "detail": "Traffic pause — 0 stuck PR(s). project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-23T12:54:04.187439+00:00"
+      "evaluated_at": "2026-09-23T13:02:23.055052+00:00"
     },
     "traffic_control": {
       "pause_active": true,
