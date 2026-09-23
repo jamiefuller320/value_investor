@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-22T20:15:31.141461+00:00",
+  "run_at": "2026-09-23T08:20:01.026539+00:00",
   "market_id": "asx200",
   "targets": [
     "BPT.AX"
@@ -83,15 +83,15 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-22T20:14:28.543812+00:00",
+    "snapshot_at": "2026-09-23T08:18:05.520730+00:00",
     "market_id": "asx200",
-    "buy_tier_count": 27,
+    "buy_tier_count": 28,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 2,
     "bodies_min": 4,
-    "bodies_median": 26,
+    "bodies_median": 24.5,
     "bodies_max": 138,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -115,15 +115,15 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-22T20:15:26.006158+00:00",
+    "snapshot_at": "2026-09-23T08:19:15.156729+00:00",
     "market_id": "asx200",
-    "buy_tier_count": 27,
+    "buy_tier_count": 28,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 2,
     "bodies_min": 4,
-    "bodies_median": 26,
+    "bodies_median": 24.5,
     "bodies_max": 138,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -136,15 +136,15 @@
     "indexed_without_body_by_ticker": {
       "BPT.AX": 2
     },
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 2,
-    "effective_indexed_without_body_tickers": [
+    "parked_tickers": [
       "BPT.AX"
     ],
-    "ingest_exhausted": false
+    "parked_count": 1,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -155,10 +155,42 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "asx200",
+    "to_market": "cac40",
+    "stream_markets_after": [
+      "cac40"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "asx200",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "BPT.AX"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "cac40",
+      "forced": true,
+      "prior_screen_at": "2026-09-23T06:52:38.805268+00:00",
+      "prior_age_days": 0,
+      "run_at": "2026-09-23T08:19:57.579772+00:00",
+      "shortlist_count": 13,
+      "ticker_count": 40
+    },
+    "at": "2026-09-23T08:19:23.904632+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "asx200",
-    "assessed_at": "2026-09-22T20:14:30.950508+00:00",
+    "assessed_at": "2026-09-23T08:18:07.343942+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -188,9 +220,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 52.68524270099999,
+  "used_seconds": 66.06356574199998,
   "budget_seconds": 525.0,
-  "leftover_seconds": 472.314757299,
+  "leftover_seconds": 458.936434258,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -198,25 +230,46 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "asx200",
-    "updated_at": "2026-09-22T20:15:26.011502+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-09-23T08:19:15.160820+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "BPT.AX",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-23T08:19:15.160820+00:00",
+        "filings_total": 106,
+        "filings_with_body": 104,
+        "indexed_without_body": 2,
+        "thin": false
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
     "had_complete_targets": true,
     "leftover_tickers": [
       "BPT.AX"
     ],
-    "unparked_leftover": [
-      "BPT.AX"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/asx200/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "asx200"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "asx200",
+    "ingest_exhausted_markets": [
+      "asx200",
+      "cac40",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_smallcap",
+      "nasdaq100",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
