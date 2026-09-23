@@ -3160,11 +3160,19 @@ function renderIngestDeviationsSection(payload) {
         .map((row) => {
           const approve = (row.reprocess || {}).approve || "";
           const dismiss = (row.reprocess || {}).dismiss || "";
+          const triage = row.signal_triage || {};
+          const triageAction = triage.proposed_action || "";
+          const triageHuman = triage.human_action || "";
+          const triageSignal = triage.signal || "";
+          const triageHtml = triageAction
+            ? `<div class="small"><span class="badge badge-neutral" title="Observe-only; does not auto-apply">signal triage</span> ${esc(triageAction)}${triageHuman ? ` → <code>${esc(triageHuman)}</code>` : ""}${triageSignal ? ` <span class="muted">(${esc(triageSignal)})</span>` : ""}${triage.rationale ? `<div class="muted">${esc(triage.rationale)}</div>` : ""}</div>`
+            : "";
           return `<li class="human-task-item ingest-deviation-open">
             <strong>${esc(row.ticker || row.id || "Deviation")}</strong>
             <span class="badge badge-watch">${esc(row.kind || "open")}</span>
             <span class="small muted">${esc(row.market_id || "")}</span>
             <div class="small muted">${esc(row.summary || "")}</div>
+            ${triageHtml}
             ${
               approve
                 ? `<div class="small"><strong>Reprocess</strong> <code>${esc(approve)}</code></div>`
@@ -3197,8 +3205,10 @@ function renderIngestDeviationsSection(payload) {
     <section class="automation-section automation-section-full ingest-deviations-section">
       <h2>Ingest deviations</h2>
       <p class="small muted" style="margin-top:0">
-        Auto-recorded after library deepen. URL replacement stays a judged allowlist edit;
-        approve writes a 7-day intensive pin for the next euro slot (Pages cannot dispatch).
+        Auto-recorded after library deepen. Observe-only signal triage:
+        leftover → dismiss, buy → park/hunter, strong_buy → pin (never auto-applied).
+        URL replacement stays a judged allowlist edit; approve writes a 7-day intensive pin
+        for the next euro slot (Pages cannot dispatch).
         ${openCount ? ` <strong>${esc(String(openCount))} open</strong>.` : ""}
         Updated ${esc(updated)}.
       </p>

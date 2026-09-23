@@ -8,6 +8,11 @@ Safe automation after a library deepen:
 - Do **not** auto-replace allowlist URLs (wrong-issuer vs official IR is judgment).
 - Do **not** auto-pin every blocker (that starves the weekday batch).
 
+Observe-only **signal triage** labels each open row from the latest library
+screen (``strong_buy`` → pin, plain ``buy`` → park/hunter, else dismiss).
+Labels never write pins or change status — humans (or an explicit review
+command) still approve / dismiss.
+
 Human review lives on the dashboard Automation tab. Reprocess is
 ``ftse-library ingest-deviations approve <id>`` (writes a dated intensive pin
 the next scheduled euro slot will honour). Pages is static, so the dashboard
@@ -16,6 +21,7 @@ cannot dispatch workflows.
 
 from __future__ import annotations
 
+import csv
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -23,12 +29,23 @@ from typing import Any
 from value_investor.storage import read_json, write_json
 
 DEFAULT_INGEST_DEVIATIONS_PATH = Path("docs/data/ingest_deviations.json")
+DEFAULT_LIBRARY_ROOT = Path("docs/data/library")
 DEFAULT_PIN_UNTIL_DAYS = 7.0
 DISMISS_COOLDOWN_HOURS = 168.0  # 7 days
 KIND_IR_EXHAUSTED = "ir_exhausted"
 KIND_BLOCKER_NO_IMPROVE = "blocker_no_improve"
 OPEN_STATUSES = frozenset({"open"})
 REVIEWED_STATUSES = frozenset({"approved", "dismissed", "resolved"})
+
+# Observe-only signal-tier triage (L453). Not an auto-apply path (N151).
+SHADOW_ACTION_PIN = "pin_intensive"
+SHADOW_ACTION_PARK = "park_hunter"
+SHADOW_ACTION_DISMISS = "dismiss"
+SHADOW_HUMAN_ACTION = {
+    SHADOW_ACTION_PIN: "approve",
+    SHADOW_ACTION_PARK: "dismiss",
+    SHADOW_ACTION_DISMISS: "dismiss",
+}
 
 
 def deviation_id(market_id: str, ticker: str, kind: str) -> str:
@@ -234,6 +251,8 @@ def record_library_ingest_deviations(
     ]
     open_rows.sort(key=lambda row: str(row.get("last_seen_at") or ""), reverse=True)
     closed_rows.sort(key=lambda row: str(row.get("last_seen_at") or ""), reverse=True)
+    # Fresh observe-only labels for the dashboard static JSON.
+    open_rows = annotate_deviations_with_signal_triage(open_rows)
     items = open_rows + closed_rows
     open_items = [row for row in items if str(row.get("status") or "") in OPEN_STATUSES]
     reviewed = [row for row in items if str(row.get("status") or "") in REVIEWED_STATUSES]
@@ -244,6 +263,9 @@ def record_library_ingest_deviations(
         "open_count": len(open_items),
         "open_items": open_items,
         "recent_reviewed": list(reversed(reviewed[-8:])),
+        "signal_triage_policy": (
+            "observe_only: leftover/dismiss, buy/park_hunter, strong_buy/pin_intensive"
+        ),
         "items": items,
     }
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -362,10 +384,20 @@ def review_ingest_deviation(
     found["review_action"] = verb
     if note:
         found["review_note"] = note
+    # Snapshot the observe-only triage that informed this review (if any).
+    found = annotate_deviation_with_signal_triage(found)
 
     replaced = [found if str(row.get("id") or "") == wanted else row for row in items]
-    open_items = [row for row in replaced if str(row.get("status") or "") in OPEN_STATUSES]
-    reviewed = [row for row in replaced if str(row.get("status") or "") in REVIEWED_STATUSES]
+    open_items = annotate_deviations_with_signal_triage(
+        [row for row in replaced if str(row.get("status") or "") in OPEN_STATUSES]
+    )
+    open_ids = {str(row.get("id") or "") for row in open_items}
+    items_out = open_items + [
+        found if str(row.get("id") or "") == wanted else row
+        for row in replaced
+        if str(row.get("id") or "") not in open_ids
+    ]
+    reviewed = [row for row in items_out if str(row.get("status") or "") in REVIEWED_STATUSES]
     reviewed.sort(key=lambda row: str(row.get("reviewed_at") or row.get("resolved_at") or ""))
     payload = {
         "schema_version": 1,
@@ -373,7 +405,10 @@ def review_ingest_deviation(
         "open_count": len(open_items),
         "open_items": open_items,
         "recent_reviewed": list(reversed(reviewed[-8:])),
-        "items": replaced,
+        "signal_triage_policy": (
+            "observe_only: leftover/dismiss, buy/park_hunter, strong_buy/pin_intensive"
+        ),
+        "items": items_out,
     }
     write_json(path, payload, compact=False)
     return {
@@ -386,10 +421,208 @@ def review_ingest_deviation(
     }
 
 
-def slim_ingest_deviations_for_dashboard(payload: dict[str, Any] | None) -> dict[str, Any]:
+def _library_signals_csv(library_root: Path, market_id: str) -> Path:
+    return Path(library_root) / "markets" / str(market_id).strip() / "screen" / "latest_signals.csv"
+
+
+def load_library_screen_signal(
+    market_id: str,
+    ticker: str,
+    *,
+    library_root: Path | None = None,
+) -> dict[str, Any]:
+    """Read one ticker's latest library screen signal (csv; no pandas)."""
+    root = Path(library_root or DEFAULT_LIBRARY_ROOT)
+    market = str(market_id or "").strip()
+    name = str(ticker or "").strip().upper()
+    path = _library_signals_csv(root, market)
+    empty = {
+        "ticker": name,
+        "market_id": market,
+        "signal": None,
+        "conviction_score": None,
+        "found": False,
+        "path": str(path),
+    }
+    if not market or not name or not path.exists():
+        return empty
+    try:
+        with path.open(newline="", encoding="utf-8") as handle:
+            reader = csv.DictReader(handle)
+            for row in reader:
+                if str(row.get("ticker") or "").strip().upper() != name:
+                    continue
+                signal = str(row.get("signal") or "").strip().lower() or None
+                conviction_raw = row.get("conviction_score")
+                try:
+                    conviction = float(conviction_raw) if conviction_raw not in (None, "") else None
+                except (TypeError, ValueError):
+                    conviction = None
+                return {
+                    "ticker": name,
+                    "market_id": market,
+                    "signal": signal,
+                    "conviction_score": conviction,
+                    "found": True,
+                    "path": str(path),
+                }
+    except OSError:
+        return empty
+    return empty
+
+
+def ticker_is_parked_leftover(
+    market_id: str,
+    ticker: str,
+    *,
+    library_root: Path | None = None,
+) -> bool:
+    """True when the ticker is in that market's ingest_exhaustion parked list."""
+    root = Path(library_root or DEFAULT_LIBRARY_ROOT)
+    market = str(market_id or "").strip()
+    name = str(ticker or "").strip().upper()
+    if not market or not name:
+        return False
+    path = root / "markets" / market / "ingest_exhaustion.json"
+    if not path.exists():
+        return False
+    try:
+        payload = read_json(path)
+    except (OSError, ValueError, TypeError):
+        return False
+    if not isinstance(payload, dict):
+        return False
+    for row in payload.get("parked") or []:
+        if not isinstance(row, dict):
+            continue
+        if str(row.get("ticker") or "").strip().upper() == name:
+            return True
+    return False
+
+
+def propose_signal_triage(
+    *,
+    signal: str | None,
+    parked: bool = False,
+    indexed_without_body: int | None = None,
+    filings_with_body: int | None = None,
+    filings_total: int | None = None,
+) -> dict[str, Any]:
+    """Map screen signal (+ leftover park) to an observe-only triage action.
+
+    Policy (dialogue → instrument):
+    - parked / off buy-tier leftovers → dismiss
+    - plain ``buy`` → park_hunter (dismiss the deviation; rely on exhaustion + hunter)
+    - ``strong_buy`` → pin_intensive (approve)
+    """
+    normalized = str(signal or "").strip().lower() or None
+    iwb = int(indexed_without_body or 0)
+    bodies = int(filings_with_body or 0)
+    total = int(filings_total or 0)
+    # Thin leftover IWB on an otherwise-bodied book (cold-start patchiness).
+    patchy = bool(iwb > 0 and iwb <= 3 and (bodies > 0 or total > iwb))
+
+    if normalized == "strong_buy":
+        action = SHADOW_ACTION_PIN
+        reason = "strong_buy"
+        rationale = "Strong-buy — intensive pin so the next slot skips the weekday ticker cap."
+    elif parked or normalized not in {"buy", "strong_buy"}:
+        action = SHADOW_ACTION_DISMISS
+        reason = (
+            "parked_leftover"
+            if parked
+            else ("not_buy_tier" if normalized else "signal_missing")
+        )
+        rationale = (
+            "Parked leftover — dismiss and leave to hunter / next report."
+            if parked
+            else "Not on current buy-tier (or signal missing) — dismiss patchy leftover."
+        )
+    else:
+        # Plain buy: park/hunter path. Very thin leftover IWB still dismisses the
+        # deviation row (same human action) so cold-start patchiness does not pin.
+        action = SHADOW_ACTION_PARK
+        reason = "buy_park_hunter" if not patchy else "buy_patchy_leftover"
+        rationale = (
+            "Plain buy with thin leftover IWB — dismiss; maintenance / park-hunter."
+            if patchy
+            else "Plain buy — dismiss deviation; rely on exhaustion park + source hunter."
+        )
+
+    return {
+        "observe_only": True,
+        "proposed_action": action,
+        "human_action": SHADOW_HUMAN_ACTION[action],
+        "reason": reason,
+        "signal": normalized,
+        "parked": bool(parked),
+        "rationale": rationale,
+        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
+    }
+
+
+def annotate_deviation_with_signal_triage(
+    row: dict[str, Any],
+    *,
+    library_root: Path | None = None,
+    screen: dict[str, Any] | None = None,
+    parked: bool | None = None,
+) -> dict[str, Any]:
+    """Attach a fresh ``signal_triage`` block (observe-only) onto one deviation row."""
+    item = dict(row)
+    market_id = str(item.get("market_id") or "").strip()
+    ticker = str(item.get("ticker") or "").strip().upper()
+    root = Path(library_root or DEFAULT_LIBRARY_ROOT)
+    lookup = screen if screen is not None else load_library_screen_signal(
+        market_id, ticker, library_root=root
+    )
+    is_parked = (
+        bool(parked)
+        if parked is not None
+        else ticker_is_parked_leftover(market_id, ticker, library_root=root)
+    )
+    evidence = item.get("evidence") if isinstance(item.get("evidence"), dict) else {}
+    triage = propose_signal_triage(
+        signal=lookup.get("signal") if isinstance(lookup, dict) else None,
+        parked=is_parked,
+        indexed_without_body=evidence.get("indexed_without_body"),
+        filings_with_body=evidence.get("filings_with_body"),
+        filings_total=evidence.get("filings_total"),
+    )
+    if isinstance(lookup, dict):
+        triage["conviction_score"] = lookup.get("conviction_score")
+        triage["screen_found"] = bool(lookup.get("found"))
+    item["signal_triage"] = triage
+    return item
+
+
+def annotate_deviations_with_signal_triage(
+    rows: list[dict[str, Any]],
+    *,
+    library_root: Path | None = None,
+) -> list[dict[str, Any]]:
+    """Annotate many deviation rows with observe-only signal triage."""
+    root = Path(library_root or DEFAULT_LIBRARY_ROOT)
+    return [
+        annotate_deviation_with_signal_triage(row, library_root=root)
+        for row in rows
+        if isinstance(row, dict)
+    ]
+
+
+def slim_ingest_deviations_for_dashboard(
+    payload: dict[str, Any] | None,
+    *,
+    library_root: Path | None = None,
+    annotate_signal_triage: bool = True,
+) -> dict[str, Any]:
     """Keep the dashboard payload small: open items plus recent reviewed."""
     items = [row for row in (payload or {}).get("items") or [] if isinstance(row, dict)]
     open_items = [row for row in items if str(row.get("status") or "") in OPEN_STATUSES]
+    if annotate_signal_triage:
+        open_items = annotate_deviations_with_signal_triage(
+            open_items, library_root=library_root
+        )
     reviewed = [row for row in items if str(row.get("status") or "") in REVIEWED_STATUSES]
     reviewed.sort(key=lambda row: str(row.get("reviewed_at") or row.get("resolved_at") or ""))
     return {
@@ -398,4 +631,9 @@ def slim_ingest_deviations_for_dashboard(payload: dict[str, Any] | None) -> dict
         "open_count": len(open_items),
         "open_items": open_items,
         "recent_reviewed": list(reversed(reviewed[-8:])),
+        "signal_triage_policy": (
+            "observe_only: leftover/dismiss, buy/park_hunter, strong_buy/pin_intensive"
+            if annotate_signal_triage
+            else None
+        ),
     }

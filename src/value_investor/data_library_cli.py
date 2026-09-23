@@ -2034,20 +2034,34 @@ def cmd_library_ingest_deviations(args: argparse.Namespace) -> int:
     store_path = Path(args.store or DEFAULT_INGEST_DEVIATIONS_PATH)
     action = str(args.action or "").strip()
     if action == "list":
+        from value_investor.ingest_deviations import annotate_deviations_with_signal_triage
+
         payload = slim_ingest_deviations_for_dashboard(load_ingest_deviations(store_path))
         if args.json:
             print(json.dumps(payload, indent=2))
         else:
-            open_rows = open_ingest_deviations(store_path)
+            open_rows = annotate_deviations_with_signal_triage(
+                open_ingest_deviations(store_path)
+            )
             print(f"open_count={len(open_rows)} store={store_path}")
             for row in open_rows:
                 print(
                     f"  {row.get('id')}: {row.get('ticker')} {row.get('kind')} "
                     f"— {row.get('summary')}"
                 )
+                triage = row.get("signal_triage") or {}
+                if triage:
+                    print(
+                        f"    signal_triage: {triage.get('proposed_action')} "
+                        f"(human={triage.get('human_action')}, "
+                        f"signal={triage.get('signal') or '—'}, "
+                        f"{triage.get('reason')})"
+                    )
                 reprocess = row.get("reprocess") or {}
                 if reprocess.get("approve"):
                     print(f"    approve: {reprocess['approve']}")
+                if reprocess.get("dismiss"):
+                    print(f"    dismiss: {reprocess['dismiss']}")
         return 0
     deviation_id = str(args.deviation_id or "").strip()
     if not deviation_id:

@@ -97,7 +97,7 @@ Survivors are **starting priors for learning-loop refinement** — never auto-ap
 | **Rotate `CURSOR_API_KEY`** (and review Actions) if Cursor API misuse or secret exposure is suspected | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#if-cursor_api_key-may-already-be-compromised) |
 | **Sync valid Cursor key into GitHub Actions** (`CURSOR_API_KEY_V2` + `CURSOR_API_KEY`) when legacy secret is dead/missing | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#which-secret-workflows-use) |
 | **Override FCF auto policy** only when majority/filing fallback is wrong (or so-what `fcf_bridge_needed` with no filing/company figure) | Human (residual) | [fcf-basis-bridges.md](fcf-basis-bridges.md#when-to-review-residual) |
-| **Review ingest deviations** when Automation → Ingest deviations has open rows (IR exhausted / weekday cap + leftover IWB). Approve pins intensive; dismiss closes 7 days. Do not auto-replace IR URLs | Human | [ingest-deviations.md](ingest-deviations.md#what-needs-a-human) |
+| **Review ingest deviations** when Automation → Ingest deviations has open rows. Prefer observe-only `signal_triage` (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Do not auto-replace IR URLs | Human | [ingest-deviations.md](ingest-deviations.md#what-needs-a-human) |
 
 ## Maintenance
 
