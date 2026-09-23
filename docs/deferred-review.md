@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T17:35:26+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T18:13:51+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -54,6 +54,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260919-02 | Sep18 evening eng-agent parks were merge_tree vs concurrent non-eng PR #720 after Composer+pytest already passed — not a simple preflight-reorder. Leave alone while parked-backlog pause holds. | spend, engineering-agent, merge_tree |
 | frag-20260922-01 | Absolute edge decomposes into (1) stock ID / research gate quality (mostly suite-shared inputs) and (2) lifecycle timing/sizing (suite-sensitive via cost interaction). Hold-set drift under different costs can still contaminate realized ID metrics on the book. | learning, suite-b, lifecycle, identification |
 | frag-20260923-01 | Internal screening formula from successful-sleeve traits: only useful with a substantial evidence body; park as a thought until filtered_cohort / sleeve-episode thickness and loser-pattern validation exist. Not a near-term idea. | screening, sleeves, thought, learning |
+| frag-20260923-02 | Library maintenance jobs under L323 (1 market/slot) finish in ~5–14 min wall vs 120 min timeout (2026-09-22/23 sample). Seven maintenance markets → ~1.75 day rotation. Headroom suggests MAX_MARKETS_WHEN_CROWDED=2 (sequential) or a 2-wide matrix is feasible before true N-wide parallel; watch artifact push races and ESEF/EDGAR/IR rate limits. | ingest, maintenance, L323, L454, capacity |
+| frag-20260923-03 | Maintenance 62-name cap is NOT binding: latest maint runs used 0–8 targets of 62, runtime_cutoff=false, budget_hits≈0. Binding limit is L323 one-market-per-slot (7 books). Option1 (MAX_MARKETS_WHEN_CROWDED=2) is the high-ROI step; option2 matrix is an upgrade after an automated review of job minutes / cutoff / artifact races. | ingest, maintenance, L323, L454, max_targets |
 
 ---
 
@@ -202,6 +204,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N148 | **Do not replace Economic Moat proxy with qualitative comparative scoring** | Economic Moat today is absolute ROE/ROA/margin/leverage thresholds, not peer-relative or filing-based moat evidence. Building a true comparative moat scorer would mix research-layer judgment into the point-in-time screen and needs a separate design (peer cohorts, durable advantage evidence, PIT constraints). | Only if a dedicated quality/moat family redesign is explicitly prioritized with peer-relative and filing-backed features |
 | N149 | **Do not invent a proprietary screen to replace recognised models** | Developing a bespoke formula from in-sample successful-sleeve traits without PIT guards would overfit thin paper history and blur the recognisable-screen interpretability the memos rely on. Prefer reweighting existing models and progressive exclusion filters first. | Only if dual_objective_calibration shows persistent lift that cannot be expressed as weights or exclusion rules on the existing 22 models |
 | N150 | **Do not spray monthly deposits across all epoch-0 markets yet** | £100/mo per epoch-0 book invents a multi-market capital-allocation policy before stage 4 live breadth. Epoch-0 books are equal-support data marks. Prefer the FTSE buy_tier_level_dca twin only. | Live universe past FTSE-only (stage 4) or human chooses an explicit multi-market paper allocation policy with a fresh capital epoch |
+| N151 | **Auto-triage ingest deviations by screen signal** | Proposed policy: leftover/patchy dismiss, plain buy rely on park+hunter, strong_buy intensive pin. Do not wire auto-approve/dismiss yet — pins starve the weekday batch and IR URL replacement stays human judgment. | Observe-only shadow recommendations on open deviation rows have matched human dismiss/approve choices for several weeks, and intensive pin rate stays within weekday batch budget |
 
 ---
 

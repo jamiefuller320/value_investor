@@ -33,6 +33,10 @@ from value_investor.library_ingest_loop import (
     LibraryIngestLoopResult,
     run_library_ingest_loop,
 )
+from value_investor.library_maintenance_capacity import (
+    record_maintenance_capacity_sample,
+    review_maintenance_capacity,
+)
 from value_investor.library_maintenance_stagger import (
     plan_maintenance_slot,
     write_maintenance_slot_cursor,
@@ -139,6 +143,8 @@ class LibraryIngestMaintenanceResult:
     stagger: dict[str, Any] = field(default_factory=dict)
     results: list[dict[str, Any]] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
+    capacity_sample: dict[str, Any] | None = None
+    capacity_review: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -149,6 +155,8 @@ class LibraryIngestMaintenanceResult:
             "stagger": self.stagger,
             "results": self.results,
             "errors": self.errors,
+            "capacity_sample": self.capacity_sample,
+            "capacity_review": self.capacity_review,
         }
 
 
@@ -289,6 +297,15 @@ def run_library_ingest_maintenance(
             )
         except OSError as exc:
             logger.warning("Maintenance slot cursor write failed: %s", exc)
+
+    # Capacity sample + automated width review (step_down/up / propose_matrix).
+    try:
+        sample_meta = record_maintenance_capacity_sample(library_root, outcome)
+        outcome.capacity_sample = sample_meta.get("sample")
+        outcome.capacity_review = review_maintenance_capacity(library_root, apply=True)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Maintenance capacity sample/review failed: %s", exc)
+        outcome.capacity_review = {"error": str(exc)}
 
     return outcome
 

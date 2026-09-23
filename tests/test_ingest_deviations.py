@@ -7,7 +7,12 @@ from pathlib import Path
 
 from value_investor.data_library_cli import main as library_main
 from value_investor.ingest_deviations import (
+    SHADOW_ACTION_DISMISS,
+    SHADOW_ACTION_PARK,
+    SHADOW_ACTION_PIN,
+    annotate_deviation_with_signal_triage,
     collect_library_ingest_deviations,
+    propose_signal_triage,
     record_library_ingest_deviations,
     review_ingest_deviation,
 )
@@ -177,3 +182,61 @@ def test_cli_list_and_approve(tmp_path: Path, capsys):
         == 0
     )
     assert read_json(pins)["pins"][0]["ticker"] == "ABI.BR"
+
+
+def test_propose_signal_triage_ladder():
+    strong = propose_signal_triage(signal="strong_buy", indexed_without_body=17)
+    assert strong["proposed_action"] == SHADOW_ACTION_PIN
+    assert strong["human_action"] == "approve"
+    assert strong["observe_only"] is True
+
+    buy = propose_signal_triage(signal="buy", indexed_without_body=17, filings_with_body=10)
+    assert buy["proposed_action"] == SHADOW_ACTION_PARK
+    assert buy["human_action"] == "dismiss"
+
+    patchy = propose_signal_triage(
+        signal="buy",
+        indexed_without_body=2,
+        filings_with_body=111,
+        filings_total=116,
+    )
+    assert patchy["proposed_action"] == SHADOW_ACTION_PARK
+    assert patchy["reason"] == "buy_patchy_leftover"
+
+    leftover = propose_signal_triage(signal="hold")
+    assert leftover["proposed_action"] == SHADOW_ACTION_DISMISS
+
+    parked = propose_signal_triage(signal="buy", parked=True)
+    assert parked["proposed_action"] == SHADOW_ACTION_DISMISS
+    assert parked["reason"] == "parked_leftover"
+
+    # strong_buy still pins even when the name is already parked.
+    strong_parked = propose_signal_triage(signal="strong_buy", parked=True)
+    assert strong_parked["proposed_action"] == SHADOW_ACTION_PIN
+    assert strong_parked["reason"] == "strong_buy"
+
+
+def test_annotate_reads_screen_csv(tmp_path: Path):
+    market = tmp_path / "markets" / "tsx60" / "screen"
+    market.mkdir(parents=True)
+    (market / "latest_signals.csv").write_text(
+        "ticker,signal,conviction_score\nSU.TO,strong_buy,0.77\nXIU.TO,hold,0.1\n",
+        encoding="utf-8",
+    )
+    row = {
+        "id": "dev-tsx60-SU.TO-ir_exhausted",
+        "market_id": "tsx60",
+        "ticker": "SU.TO",
+        "status": "open",
+        "evidence": {
+            "indexed_without_body": 17,
+            "filings_with_body": 31,
+            "filings_total": 48,
+        },
+    }
+    annotated = annotate_deviation_with_signal_triage(row, library_root=tmp_path)
+    triage = annotated["signal_triage"]
+    assert triage["proposed_action"] == SHADOW_ACTION_PIN
+    assert triage["signal"] == "strong_buy"
+    assert triage["screen_found"] is True
+    assert triage["conviction_score"] == 0.77

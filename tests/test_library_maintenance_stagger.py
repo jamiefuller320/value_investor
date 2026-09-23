@@ -25,14 +25,15 @@ def test_plan_fits_two_markets_in_one_job():
     assert plan["deferred"] == []
 
 
-def test_plan_rotates_one_when_three_markets():
+def test_plan_rotates_two_when_three_markets():
     plan = plan_maintenance_slot(
         ["sp500", "asx200", "euro_depth"],
         last_head="asx200",
     )
     assert plan["staggered"] is True
-    assert plan["selected"] == ["euro_depth"]
-    assert plan["deferred"] == ["sp500", "asx200"]
+    assert plan["selected"] == ["euro_depth", "sp500"]
+    assert plan["deferred"] == ["asx200"]
+    assert plan["max_markets_when_crowded"] == 2
 
 
 def test_run_maintenance_staggers_three_default_markets(tmp_path: Path):
@@ -62,14 +63,21 @@ def test_run_maintenance_staggers_three_default_markets(tmp_path: Path):
         ),
         patch("value_investor.library_ingest_maintenance.run_library_ingest_loop") as run_loop,
     ):
-        run_loop.return_value.to_dict.return_value = {"market_id": "asx200"}
+        run_loop.return_value.to_dict.return_value = {
+            "market_id": "asx200",
+            "targets": [],
+            "used_seconds": 30,
+            "runtime_cutoff": False,
+        }
         outcome = run_library_ingest_maintenance(library_root=tmp_path)
     assert outcome.stagger["staggered"] is True
-    assert outcome.markets == ["asx200"]
-    assert outcome.deferred_markets == ["euro_depth", "sp500"]
-    run_loop.assert_called_once()
+    assert outcome.markets == ["asx200", "euro_depth"]
+    assert outcome.deferred_markets == ["sp500"]
+    assert run_loop.call_count == 2
     cursor = tmp_path / "maintenance_slot_cursor.json"
     assert cursor.exists()
+    capacity = tmp_path / "maintenance_capacity.json"
+    assert capacity.exists()
 
 
 def test_explicit_markets_bypass_stagger(tmp_path: Path):

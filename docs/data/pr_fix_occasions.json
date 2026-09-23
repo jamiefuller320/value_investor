@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-23T20:36:52.646641+00:00",
-  "occasion_count": 33,
+  "updated_at": "2026-09-23T20:42:35.055806+00:00",
+  "occasion_count": 36,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -110,23 +110,6 @@
       "details": {}
     },
     {
-      "id": "prf-20260920-004",
-      "recorded_at": "2026-09-20T17:57:21.744621+00:00",
-      "source": "human_request",
-      "kind": "merge_conflict",
-      "failure_reason": "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main",
-      "pr_number": 765,
-      "branch": null,
-      "title": null,
-      "url": null,
-      "task_id": null,
-      "head_sha": null,
-      "mergeable_state": null,
-      "failed_check_names": [],
-      "notes": "Conflicts in automation.json, engineering_tasks.json, latest.json",
-      "details": {}
-    },
-    {
       "id": "prf-20260920-005",
       "recorded_at": "2026-09-20T17:56:27.130704+00:00",
       "source": "human_request",
@@ -143,6 +126,23 @@
         "CI / validate"
       ],
       "notes": "auto-unblock harden PR",
+      "details": {}
+    },
+    {
+      "id": "prf-20260920-004",
+      "recorded_at": "2026-09-20T17:57:21.744621+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main",
+      "pr_number": 765,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Conflicts in automation.json, engineering_tasks.json, latest.json",
       "details": {}
     },
     {
@@ -568,25 +568,73 @@
     },
     {
       "id": "prf-20260923-006",
-      "recorded_at": "2026-09-23T20:36:52.646641+00:00",
-      "source": "traffic_controller",
+      "recorded_at": "2026-09-23T18:00:39.217487+00:00",
+      "source": "human_request",
       "kind": "merge_conflict",
-      "failure_reason": "merge_conflict:dirty",
+      "failure_reason": "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main",
       "pr_number": 828,
-      "branch": "cursor/ingest-deviation-signal-triage-defer-f703",
-      "title": "Park signal-tier ingest deviation triage (observe later)",
-      "url": "https://github.com/jamiefuller320/value_investor/pull/828",
+      "branch": null,
+      "title": null,
+      "url": null,
       "task_id": null,
       "head_sha": null,
-      "mergeable_state": "dirty",
+      "mergeable_state": null,
       "failed_check_names": [],
-      "notes": "traffic action=request_conflict_resolve",
-      "details": {
-        "reasons": [
-          "merge_conflict"
-        ],
-        "action_kind": "request_conflict_resolve"
-      }
+      "notes": "deferred-ideas.json L453 id clash + deferred-review.md; renumber PR shadow item to L455",
+      "details": {}
+    },
+    {
+      "id": "prf-20260923-007",
+      "recorded_at": "2026-09-23T18:05:12.863053+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ruff format failed on data_library_cli.py and ingest_deviations.py",
+      "pr_number": 828,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "unformatted signal_triage call sites / ternary wrapping",
+      "details": {}
+    },
+    {
+      "id": "prf-20260923-008",
+      "recorded_at": "2026-09-23T19:06:40.197496+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main",
+      "pr_number": 828,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Second merge-conflict fix request after ruff format",
+      "details": {}
+    },
+    {
+      "id": "prf-20260923-009",
+      "recorded_at": "2026-09-23T20:42:35.055806+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main",
+      "pr_number": 828,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Third merge-conflict fix request on PR 828",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -605,6 +653,17 @@
           810,
           812,
           814
+        ]
+      },
+      {
+        "failure_reason": "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main",
+        "count": 4,
+        "sources": {
+          "human_request": 4
+        },
+        "recent_prs": [
+          765,
+          828
         ]
       },
       {
@@ -676,16 +735,6 @@
         },
         "recent_prs": [
           757
-        ]
-      },
-      {
-        "failure_reason": "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main",
-        "count": 1,
-        "sources": {
-          "human_request": 1
-        },
-        "recent_prs": [
-          765
         ]
       },
       {
@@ -802,21 +851,17 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 24
+        "count": 26
       },
       {
         "kind": "ci_check",
-        "count": 9
+        "count": 10
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 32
-      },
-      {
-        "source": "traffic_controller",
-        "count": 1
+        "count": 36
       }
     ]
   }

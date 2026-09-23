@@ -141,8 +141,8 @@
         {
           "id": "sunday-ingest-capacity-watch",
           "title": "Watch ingest capacity as more markets come on stream",
-          "summary": "Spare sprint auto-advance down the queue is correct (tsx60 / ftse_smallcap after sp500 / asx200 admitted). Do not pause it. Three-plus maintenance books rotate one market per slot (L323). Check whether library-ingest-maintenance and spare sprint jobs still finish: 120-minute timeout, spare_wait, source rate limits.",
-          "automated": false,
+          "summary": "Spare sprint auto-advance down the queue is correct. Crowded maintenance defaults to 2 markets/slot (L454); ftse-library maintenance-capacity-review steps width or proposes matrix from samples. Confirm library-ingest-maintenance still finishes inside 120 minutes; the 62-name deepen cap is usually not binding.",
+          "automated": true,
           "doc_path": "docs/ops/market-sharded-learning.md",
           "doc_anchor": "what-enter-learning-means"
         },
@@ -426,7 +426,7 @@
         {
           "id": "adhoc-review-ingest-deviations",
           "title": "Review open ingest deviations and reprocess if needed",
-          "summary": "When Automation → Ingest deviations shows open rows (IR exhausted or weekday cap with leftover IWB), inspect the ticker. Approve writes a 7-day intensive pin for the next euro slot; dismiss closes the row for 7 days. Do not auto-replace IR URLs — that stays a judged allowlist edit.",
+          "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
           "automated": false,
           "doc_path": "docs/ops/ingest-deviations.md",
           "doc_anchor": "what-needs-a-human"
