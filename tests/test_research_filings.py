@@ -11427,3 +11427,125 @@ def test_eng_20260919_03_extract_ch_annual_year_in_numbers_mgns_l(tmp_path: Path
     assert payload["years"][-1]["year"] == 2025
     assert payload["latest_secured_workload_to_revenue_ratio"] == pytest.approx(2.386, rel=1e-3)
     assert (sources_dir / "ch_annual_year_in_numbers.json").exists()
+
+
+def test_body_lag_rememo_gate_thin_alone_without_disk_bodies(tmp_path: Path):
+    """eng-20260923-05: thin grade does not rememo until filing bodies land."""
+    from value_investor.research.filings import body_lag_rememo_gate
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"with_body": 0}}),
+        encoding="utf-8",
+    )
+    gate = body_lag_rememo_gate(grade="thin", memo_bodies=0, filings_dir=filings_dir)
+    assert gate["eligible"] is False
+    assert gate["reason"] is None
+
+
+def test_body_lag_rememo_gate_zero_body_catchup_after_ingest(tmp_path: Path):
+    """eng-20260923-05: zero-body euro_depth memo rememos once index reports bodies."""
+    from value_investor.research.filings import body_lag_rememo_gate, count_filings_with_body
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    row_id = "ir_bn_pa_annual"
+    body_path = bodies_dir / f"{row_id}.txt"
+    body_path.write_text(
+        "Danone consolidated financial statements revenue operating profit cash flow " * 40,
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": row_id,
+                        "source": "ir_allowlist",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ],
+                "summary": {"with_body": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert count_filings_with_body(filings_dir) == 1
+    gate = body_lag_rememo_gate(grade="adequate", memo_bodies=0, filings_dir=filings_dir)
+    assert gate["eligible"] is True
+    assert gate["reason"] == "stale_adequate_grade_zero_body_catchup_1"
+
+
+def test_refetch_residual_reconciles_orphan_bodies_before_count(tmp_path: Path):
+    """eng-20260923-05: residual refetch counts on-disk bodies for ingest-improved signal."""
+    from value_investor.research.filings import refetch_residual_filing_bodies
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    row_id = "ifx_fy25"
+    body_path = bodies_dir / f"{row_id}.txt"
+    body_path.write_text(
+        "Infineon Technologies AG consolidated statement of financial position "
+        "revenue operating segment result cash flow " * 30,
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": row_id,
+                        "source": "ir_allowlist",
+                        "url": "https://www.infineon.com/assets/row/public/documents/corporate/investors/annual-reports/2025/2025-annual-report-v01-00-en.pdf",
+                        "period": "annual",
+                        "has_body": False,
+                    }
+                ],
+                "summary": {"with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="IFX.DE",
+        company_name="Infineon Technologies AG",
+        max_bodies=5,
+    )
+    assert result["with_body_after"] >= 1
+    assert result["with_body_before"] >= 1
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["with_body"]) >= 1
+
+
+@patch("value_investor.research.filings.fetch_filing_body")
+def test_refetch_euro_filings_primary_bodies_merges_allowlist(mock_fetch, tmp_path: Path):
+    """eng-20260923-05: euro primary pipeline merges IR allowlist and persists bodies."""
+    from value_investor.research.filings import refetch_euro_filings_primary_bodies
+
+    mock_fetch.return_value = (
+        "Danone universal registration document revenue operating margin "
+        "free cash flow consolidated statements " * 35
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"with_body": 0, "total": 0}}),
+        encoding="utf-8",
+    )
+    result = refetch_euro_filings_primary_bodies(
+        filings_dir,
+        ticker="BN.PA",
+        company_name="Danone S.A.",
+        max_bodies=5,
+    )
+    assert result["with_body_after"] >= 1
+    assert result["fetched"] >= 1
+    assert result["ir_allowlist"].get("allowlist_count", 0) >= 1
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert any(row.get("has_body") for row in payload.get("filings") or [])
