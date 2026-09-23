@@ -1836,9 +1836,7 @@ def recover_engineering_queue(
             ),
             auto_cancel_resolved=bool(recovery_policy.get("auto_cancel_resolved_library_stall")),
             auto_annotate=bool(recovery_policy.get("auto_annotate_library_stall_triage")),
-            auto_reframe_bundled=bool(
-                recovery_policy.get("auto_reframe_bundled_library_stall")
-            ),
+            auto_reframe_bundled=bool(recovery_policy.get("auto_reframe_bundled_library_stall")),
             auto_reframe_reburn_when_cleared=bool(
                 recovery_policy.get("auto_reframe_reburn_when_cleared")
             ),

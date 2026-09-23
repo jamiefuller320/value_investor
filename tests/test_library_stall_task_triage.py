@@ -167,7 +167,10 @@ def test_reburn_investigation_blocks_reframe_when_waste_active(tmp_path: Path, m
     triage["reburn_investigation"] = inv
     from value_investor.library_stall_task_triage import reframe_bundled_library_stall_task
 
-    assert reframe_bundled_library_stall_task(row, triage, tasks_path=tmp_path / "t.json", apply=False) is None
+    assert (
+        reframe_bundled_library_stall_task(row, triage, tasks_path=tmp_path / "t.json", apply=False)
+        is None
+    )
 
 
 def test_reburn_investigation_allows_reframe_when_cleared(tmp_path: Path, monkeypatch):

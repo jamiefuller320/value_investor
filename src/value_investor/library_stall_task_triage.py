@@ -166,9 +166,9 @@ def _stall_triage_semantics_changed(prior: dict[str, Any], current: dict[str, An
     """Ignore timestamp-only drift between recover-queue passes."""
     if any(prior.get(key) != current.get(key) for key in _STALL_TRIAGE_STABLE_KEYS):
         return True
-    return _reburn_investigation_stable(prior.get("reburn_investigation")) != _reburn_investigation_stable(
-        current.get("reburn_investigation")
-    )
+    return _reburn_investigation_stable(
+        prior.get("reburn_investigation")
+    ) != _reburn_investigation_stable(current.get("reburn_investigation"))
 
 
 def investigate_reburn_loop_library_stall(
@@ -195,7 +195,9 @@ def investigate_reburn_loop_library_stall(
     from value_investor.project_traffic import get_traffic_control_state
 
     task_id = str(row.get("id") or "")
-    task_rows = tasks if tasks is not None else list(load_engineering_tasks(tasks_path).get("tasks") or [])
+    task_rows = (
+        tasks if tasks is not None else list(load_engineering_tasks(tasks_path).get("tasks") or [])
+    )
     traffic = get_traffic_control_state(tasks_path=tasks_path)
     waste_active = bool(traffic.get("automation_waste_active"))
     pm_parked = task_id in list(traffic.get("automation_waste_parked_task_ids") or [])

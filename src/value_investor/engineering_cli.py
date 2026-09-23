@@ -590,7 +590,9 @@ def _cmd_list_parked(args: argparse.Namespace) -> int:
 
     stall_hints = {
         hint["task_id"]: hint
-        for hint in summarize_library_stall_parks(list(load_engineering_tasks(tasks_path).get("tasks") or []))
+        for hint in summarize_library_stall_parks(
+            list(load_engineering_tasks(tasks_path).get("tasks") or [])
+        )
     }
     if args.json:
         enriched = []
