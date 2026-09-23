@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-23T07:31:13.081619+00:00",
+  "compiled_at": "2026-09-23T07:33:06.750768+00:00",
   "run_at": null,
-  "task_count": 102,
+  "task_count": 100,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1023,91 +1023,6 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
-      "id": "eng-20260923-02",
-      "area": "ingest",
-      "title": "Close library ingest gaps for euro_depth / BN.PA (chain 1/3: 0/0 improved, run igc-20260923-01)",
-      "summary": "Ingest gap-closure run igc-20260923-01 (chain root igc-20260923-01, round 1) targeted BN.PA with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
-      "priority": "high",
-      "priority_score": 88.0,
-      "source": "ingest_gap_closure",
-      "evidence": {
-        "gap_closure_run_id": "igc-20260923-01",
-        "trial_id": "igc-20260923-01",
-        "chain_root_id": "igc-20260923-01",
-        "chain_round": 1,
-        "tickers": [
-          "BN.PA"
-        ],
-        "ticker": "BN.PA",
-        "market_id": "euro_depth",
-        "library_market": "euro_depth",
-        "universe": "library",
-        "rerun_ingest_gap_closure": true,
-        "rerun_ingest_trial": true,
-        "rerun_library_ingest_loop": true,
-        "refetch_attempted": 0,
-        "refetch_fetched": 0,
-        "gap_closure_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "BN.PA",
-            "EL.PA",
-            "ACKB.BR"
-          ],
-          "market_id": "euro_depth",
-          "universe": "library",
-          "critical_path_blocker": "unmeasured"
-        },
-        "trial_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "BN.PA",
-            "EL.PA",
-            "ACKB.BR"
-          ],
-          "market_id": "euro_depth",
-          "universe": "library",
-          "critical_path_blocker": "unmeasured"
-        },
-        "compile_reason": "gaps_remain_without_allowlist"
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for BN.PA",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
-    },
-    {
       "id": "eng-20260922-04",
       "area": "ingest",
       "title": "Close stubborn ingest gaps for SHEL.L (chain 1/3: 0/0 bodies, run igc-20260922-04)",
@@ -1692,128 +1607,6 @@
       "cancelled_policy": "resolved_gap_closure"
     },
     {
-      "id": "eng-20260923-01",
-      "area": "ingest",
-      "title": "Close library ingest filing gaps for EU depth composite (STOXX50 + periphery) (euro_depth): 2 buy-tier gaps after stalled weekday loop",
-      "summary": "Library market euro_depth buy-tier filing deepen stalled with 2 unmeasured and 0 zero-body names (buy_tier_count=48). Improve euro_filings / ESEF / IR allowlist source coverage for representative tickers and add regression tests; verify with ftse-library ingest-loop --market euro_depth. Sample unmeasured: BN.PA, EL.PA.",
-      "priority": "high",
-      "priority_score": 86.0,
-      "source": "library_ingest_stall",
-      "evidence": {
-        "market_id": "euro_depth",
-        "library_market": "euro_depth",
-        "universe": "library",
-        "filing_health": {
-          "snapshot_at": "2026-09-23T07:30:06.696831+00:00",
-          "market_id": "euro_depth",
-          "buy_tier_count": 48,
-          "unmeasured_buy_tier": 2,
-          "zero_body_buy_tier": 0,
-          "thin_body_buy_tier": 12,
-          "indexed_without_body": 17,
-          "bodies_min": 1,
-          "bodies_median": 3.5,
-          "bodies_max": 104,
-          "coverage_scope": "canonical_plus_shards",
-          "ftse_equivalent": false,
-          "unmeasured_tickers": [
-            "BN.PA",
-            "EL.PA"
-          ],
-          "zero_body_tickers": [],
-          "thin_body_tickers": [
-            "SGO.PA",
-            "ACKB.BR",
-            "DTE.DE",
-            "EVN.VI",
-            "WIE.VI",
-            "MUV2.DE",
-            "SKA-B.ST",
-            "UCB.BR",
-            "APAM.AS",
-            "BAS.DE",
-            "DQ7A.IR",
-            "NBA.LS"
-          ],
-          "indexed_without_body_tickers": [
-            "SGO.PA",
-            "EVN.VI",
-            "WIE.VI",
-            "ABI.BR",
-            "SAP.DE",
-            "UCB.BR"
-          ],
-          "indexed_without_body_by_ticker": {
-            "SGO.PA": 1,
-            "EVN.VI": 1,
-            "WIE.VI": 1,
-            "ABI.BR": 12,
-            "SAP.DE": 1,
-            "UCB.BR": 1
-          },
-          "parked_tickers": [
-            "ABI.BR",
-            "APAM.AS",
-            "BAS.DE",
-            "EVN.VI",
-            "MUV2.DE",
-            "SAP.DE",
-            "SGO.PA",
-            "SKA-B.ST",
-            "UCB.BR",
-            "WIE.VI"
-          ],
-          "parked_count": 10,
-          "effective_thin_body_buy_tier": 4,
-          "effective_thin_body_tickers": [
-            "ACKB.BR",
-            "DTE.DE",
-            "DQ7A.IR",
-            "NBA.LS"
-          ],
-          "effective_indexed_without_body": 0,
-          "effective_indexed_without_body_tickers": [],
-          "ingest_exhausted": false
-        },
-        "filing_gaps": 2,
-        "sample_unmeasured": [
-          "BN.PA",
-          "EL.PA"
-        ],
-        "sample_zero_body": [],
-        "rerun_library_ingest_loop": true,
-        "doc": "docs/ops/library-ingest-escalation.md"
-      },
-      "acceptance_criteria": [
-        "Representative euro_depth buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
-        "ftse-library ingest-loop --market euro_depth reports improved > 0 on a verification run",
-        "Add focused regression tests for the source/parser fix",
-        "No change to live FTSE 350 ingest path or blocked_paths"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
-    },
-    {
       "id": "eng-20260922-05",
       "area": "ingest",
       "title": "Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop",
@@ -1884,13 +1677,13 @@
         "rerun_library_ingest_loop": true,
         "doc": "docs/ops/library-ingest-escalation.md",
         "stall_triage": {
-          "analyzed_at": "2026-09-22T20:45:12.294086+00:00",
+          "analyzed_at": "2026-09-23T07:32:59.086527+00:00",
           "market_id": "dax",
           "task_id": "eng-20260922-05",
           "status": "parked",
-          "filing_gaps": 6,
+          "filing_gaps": 7,
           "lanes": {
-            "unmeasured": 6,
+            "unmeasured": 7,
             "zero_body": 0,
             "indexed_without_body": 30,
             "thin_bodies": 3
@@ -1905,20 +1698,23 @@
           "focus_lane": "unmeasured",
           "reburn_loop": true,
           "reburn_investigation": {
-            "investigated_at": "2026-09-22T20:45:12.294070+00:00",
-            "primary_hypothesis": "scope_too_broad_secondary",
-            "blockers": [],
+            "investigated_at": "2026-09-23T07:32:59.086503+00:00",
+            "primary_hypothesis": "preflight_clash",
+            "blockers": [
+              "preflight_clash"
+            ],
             "automation_waste_active": false,
             "live_reburn_signal": false,
             "pm_parked_by_traffic": true,
-            "preflight_healed": true,
+            "preflight_healed": false,
             "no_diff_count": 0,
             "failure_count": 0,
-            "allow_narrow_reframe": true,
-            "allow_unpark": true,
-            "skip_reframe_reason": null,
+            "allow_narrow_reframe": false,
+            "allow_unpark": false,
+            "skip_reframe_reason": "reburn_loop: fix dispatch blockers before narrow reframe — preflight_clash",
             "safe_next_steps": [
-              "Safe to narrow-reframe to focus ticker HEI.DE (then unpark manually or via recover-queue when dispatch gates allow)."
+              "Resolve path clashes (merge sibling eng PR, cancel duplicate branch, or narrow allowed_paths); re-run preflight before unpark.",
+              "After blockers clear, narrow-reframe to HEI.DE before re-dispatch."
             ],
             "doc": "docs/ops/library-ingest-escalation.md#library-stall-reburn-investigation"
           },
@@ -1928,7 +1724,7 @@
             "split_by_ticker_not_broad_market_task",
             "investigate_reburn_loop_before_unpark"
           ],
-          "filing_health_snapshot_at": "2026-09-22T20:45:12.269699+00:00",
+          "filing_health_snapshot_at": "2026-09-23T07:32:57.838042+00:00",
           "doc": "docs/ops/library-ingest-escalation.md#library-stall-task-triage"
         }
       },
@@ -6337,7 +6133,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 1,
-    "evaluated_at": "2026-09-23T07:16:41.500597+00:00",
+    "evaluated_at": "2026-09-23T07:33:09.533415+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -6345,82 +6141,57 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "ingest_gap_closure",
-  "library_market_id": "euro_depth",
+  "micro_compile_source": "parked_source_hunter",
+  "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
-  "source_gap_closure_run_id": "igc-20260923-01",
-  "source_trial_id": "igc-20260923-01",
-  "source_chain_root_id": "igc-20260923-01",
+  "source_gap_closure_run_id": "igc-20260922-04",
+  "source_trial_id": "igc-20260922-04",
+  "source_chain_root_id": "igc-20260922-04",
   "library_ingest_health": {
-    "snapshot_at": "2026-09-23T07:30:06.696831+00:00",
-    "market_id": "euro_depth",
-    "buy_tier_count": 48,
-    "unmeasured_buy_tier": 2,
+    "snapshot_at": "2026-09-22T20:02:16.029838+00:00",
+    "market_id": "dax",
+    "buy_tier_count": 11,
+    "unmeasured_buy_tier": 6,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 12,
-    "indexed_without_body": 17,
+    "thin_body_buy_tier": 3,
+    "indexed_without_body": 30,
     "bodies_min": 1,
-    "bodies_median": 3.5,
-    "bodies_max": 104,
+    "bodies_median": 2,
+    "bodies_max": 58,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
-      "BN.PA",
-      "EL.PA"
+      "HEI.DE",
+      "DTG.DE",
+      "FRE.DE",
+      "HNR1.DE",
+      "HEN3.DE",
+      "VOW3.DE"
     ],
     "zero_body_tickers": [],
     "thin_body_tickers": [
-      "SGO.PA",
-      "ACKB.BR",
-      "DTE.DE",
-      "EVN.VI",
-      "WIE.VI",
       "MUV2.DE",
-      "SKA-B.ST",
-      "UCB.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "DQ7A.IR",
-      "NBA.LS"
+      "DTE.DE",
+      "BAS.DE"
     ],
     "indexed_without_body_tickers": [
-      "SGO.PA",
-      "EVN.VI",
-      "WIE.VI",
-      "ABI.BR",
-      "SAP.DE",
-      "UCB.BR"
+      "FME.DE"
     ],
     "indexed_without_body_by_ticker": {
-      "SGO.PA": 1,
-      "EVN.VI": 1,
-      "WIE.VI": 1,
-      "ABI.BR": 12,
-      "SAP.DE": 1,
-      "UCB.BR": 1
+      "FME.DE": 30
     },
-    "parked_tickers": [
-      "ABI.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "EVN.VI",
-      "MUV2.DE",
-      "SAP.DE",
-      "SGO.PA",
-      "SKA-B.ST",
-      "UCB.BR",
-      "WIE.VI"
-    ],
-    "parked_count": 10,
-    "effective_thin_body_buy_tier": 4,
+    "parked_tickers": [],
+    "parked_count": 0,
+    "effective_thin_body_buy_tier": 3,
     "effective_thin_body_tickers": [
-      "ACKB.BR",
+      "MUV2.DE",
       "DTE.DE",
-      "DQ7A.IR",
-      "NBA.LS"
+      "BAS.DE"
     ],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
+    "effective_indexed_without_body": 30,
+    "effective_indexed_without_body_tickers": [
+      "FME.DE"
+    ],
     "ingest_exhausted": false
   }
 }
