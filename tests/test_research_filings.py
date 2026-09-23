@@ -6350,6 +6350,12 @@ def test_ir_allowlist_period_classifies_belgian_ra_pack_as_annual():
 
     assert (
         _ir_allowlist_period_from_url(
+            "https://www.eqs-news.com/media/document/b1126fe6-ed3f-4d89-8d25-6c6d0e5aef50/assets/DE000DTR0CK8-JA-2025-EQ-E-00.pdf"
+        )
+        == "annual"
+    )
+    assert (
+        _ir_allowlist_period_from_url(
             "https://aedifica.eu/wp-content/uploads/2026/03/AEDIFICA-RA25_EN_2026-03-24b.pdf"
         )
         == "annual"
@@ -6453,6 +6459,43 @@ def test_fetch_filings_ir_allowlist_euro_depth_apam_as_builtins(tmp_path: Path):
     assert rows[0]["period"] == "annual"
     assert "aperam.com" in rows[0]["url"]
     assert "AnnualReport_2025" in rows[0]["url"]
+
+
+def test_fetch_filings_ir_allowlist_dax_unmeasured_builtins_eng_20260922_05(tmp_path: Path):
+    """eng-20260922-05: dax buy-tier unmeasured — IR allowlist when ESEF index is empty."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    for ticker in ("HEI.DE", "DTG.DE", "FRE.DE", "HNR1.DE", "HEN3.DE"):
+        rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
+        assert rows, ticker
+        assert all(row["source"] == "ir_allowlist" for row in rows)
+        assert any(row["period"] == "annual" for row in rows)
+
+    vow3 = fetch_filings_ir_allowlist("VOW3.DE", path=allowlist_path)
+    assert len(vow3) == 2
+    assert all(row["source"] == "ir_allowlist" for row in vow3)
+    assert any("volkswagen-group.com" in row["url"] for row in vow3)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_hei_de_index(tmp_path: Path):
+    """Empty HEI.DE filings_index.json must gain IR rows for library dax measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("HEI.DE", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] >= 1
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 1
+    assert "ir_allowlist" in payload["sources_used"]
 
 
 def test_fetch_filings_ir_allowlist_euro_depth_bas_de_builtins(tmp_path: Path):
@@ -6585,6 +6628,12 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         "EL.PA": "essilorluxottica.com",
         "IFX.DE": "infineon.com",
         "AGS.BR": "ctfassets.net",
+        "HEI.DE": "heidelbergmaterials.com",
+        "DTG.DE": "eqs-news.com",
+        "FRE.DE": "fresenius.com",
+        "HNR1.DE": "eqs-news.com",
+        "HEN3.DE": "eqs.com",
+        "VOW3.DE": "volkswagen-group.com",
     }
     for ticker, host_fragment in cases.items():
         rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
