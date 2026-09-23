@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T13:23:33.946296+00:00",
+  "generated_at": "2026-09-23T13:42:47.521534+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1204,18 +1204,18 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-23T13:23:25.456704+00:00",
-    "queue_ui_updated_at": "2026-09-23T13:23:33.824045+00:00",
+    "compiled_at": "2026-09-23T13:42:41.323219+00:00",
+    "queue_ui_updated_at": "2026-09-23T13:42:47.421953+00:00",
     "task_count": 107,
     "status": {
-      "open_count": 5,
-      "pr_open_count": 0,
+      "open_count": 3,
+      "pr_open_count": 1,
       "parked_count": 1,
-      "merged_count": 77,
+      "merged_count": 78,
       "failed_count": 0,
-      "next_task_id": "eng-20260923-03",
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "next_task_id": "eng-20260923-04",
+      "in_flight_branch": "cursor/eng-20260923-03-1de3",
+      "in_flight_pr": 821,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1227,15 +1227,11 @@
         "title": "Wire Yahoo cash-flow fields into `CompanyMetrics` (e.g. `operating_cashflow`) from existing `financials_annual.json` when fetch returns null",
         "priority": "high",
         "priority_score": 97.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "post_run_review",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
+        "branch_name": "cursor/eng-20260923-03-1de3"
       },
       {
         "id": "eng-20260923-04",
@@ -1248,10 +1244,22 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 2,
-        "clash_scan": "partial"
+        "dispatch_eligible": false,
+        "blocked_by": [
+          {
+            "pr_number": null,
+            "branch": null,
+            "task_id": null,
+            "title": "in-flight allowlist overlap",
+            "clash_files": [
+              "src/value_investor/research/filings.py",
+              "tests/test_research_filings.py"
+            ],
+            "kind": "allowlist_overlap"
+          }
+        ],
+        "effective_dispatch_rank": null,
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260923-05",
@@ -1264,26 +1272,22 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 3,
-        "clash_scan": "partial"
-      },
-      {
-        "id": "eng-20260923-06",
-        "area": "scoring",
-        "title": "Close FCF basis enforcement gap (batched tickers)",
-        "priority": "high",
-        "priority_score": 82.0,
-        "status": "open",
-        "source": "so_what_closure",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 4,
-        "clash_scan": "partial"
+        "dispatch_eligible": false,
+        "blocked_by": [
+          {
+            "pr_number": null,
+            "branch": null,
+            "task_id": null,
+            "title": "in-flight allowlist overlap",
+            "clash_files": [
+              "src/value_investor/research/filings.py",
+              "tests/test_research_filings.py"
+            ],
+            "kind": "allowlist_overlap"
+          }
+        ],
+        "effective_dispatch_rank": null,
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260923-07",
@@ -1298,8 +1302,8 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 5,
-        "clash_scan": "partial"
+        "effective_dispatch_rank": 1,
+        "clash_scan": "full"
       }
     ],
     "attention_tasks": [
@@ -1317,9 +1321,9 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 5,
-      "dispatch_eligible_count": 5,
-      "blocked_count": 0
+      "open_task_count": 3,
+      "dispatch_eligible_count": 1,
+      "blocked_count": 2
     }
   },
   "learning_track_epoch_datum": {
@@ -1597,40 +1601,46 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-23T13:23:33.946296+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
+    "generated_at": "2026-09-23T13:42:47.521534+00:00",
+    "overall": "blocked",
+    "headline": "queue ready — dispatch next open task",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
-    },
-    "agent_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
+      "pr_open_count": 1,
+      "open_engineering_prs": [
+        {
+          "number": 821,
+          "branch": "cursor/eng-20260923-03-1de3",
+          "draft": false
+        }
+      ],
+      "in_flight_pr": 821,
+      "detail": "Open engineering PR(s) #821 — merge fires on CI success."
+    },
+    "agent_lane": {
+      "state": "blocked",
+      "idle": false,
+      "running": true,
+      "blocked": true,
       "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 1,
-      "open_count": 5,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 5,
-      "blocked_task_count": 0,
-      "next_task_id": "eng-20260923-03",
-      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+      "open_count": 3,
+      "pr_open_count": 1,
+      "dispatch_eligible_count": 1,
+      "blocked_task_count": 2,
+      "next_task_id": "eng-20260923-04",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 1,
-      "evaluated_at": "2026-09-23T13:23:32.782522+00:00"
+      "evaluated_at": "2026-09-23T13:42:46.549631+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1644,6 +1654,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260923-06",
+        "title": "Close FCF basis enforcement gap (batched tickers)",
+        "area": "scoring",
+        "pr_number": 820,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/820",
+        "merged_at": "2026-09-23T13:41:16.050404+00:00",
+        "merge_class": "scoring_narrow",
+        "auto_merge": false,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260923-02",
         "title": "Companies House filed-accounts pipeline: PDF/iXBRL download, OCR quality gates, and reject/trigger refetch on garbled extracts",
@@ -1667,16 +1688,16 @@
         "independently_verified": false
       }
     ],
-    "verified_merges_today_count": 0,
+    "verified_merges_today_count": 1,
     "completion_monitor": {
       "timezone": "UTC",
       "history_days": 14,
       "today": {
         "date": "2026-09-23",
-        "merged_total": 2,
+        "merged_total": 3,
         "merged_auto": 0,
-        "merged_manual": 2,
-        "verified": 0,
+        "merged_manual": 3,
+        "verified": 1,
         "fix_interventions": 5,
         "fix_ci_check": 1,
         "fix_merge_conflict": 4,
@@ -1839,10 +1860,10 @@
         },
         {
           "date": "2026-09-23",
-          "merged_total": 2,
+          "merged_total": 3,
           "merged_auto": 0,
-          "merged_manual": 2,
-          "verified": 0,
+          "merged_manual": 3,
+          "verified": 1,
           "fix_interventions": 5,
           "fix_ci_check": 1,
           "fix_merge_conflict": 4,
@@ -1850,6 +1871,17 @@
         }
       ],
       "merges_today": [
+        {
+          "task_id": "eng-20260923-06",
+          "title": "Close FCF basis enforcement gap (batched tickers)",
+          "area": "scoring",
+          "pr_number": 820,
+          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/820",
+          "merged_at": "2026-09-23T13:41:16.050404+00:00",
+          "merge_class": "scoring_narrow",
+          "auto_merge": false,
+          "independently_verified": true
+        },
         {
           "task_id": "eng-20260923-02",
           "title": "Companies House filed-accounts pipeline: PDF/iXBRL download, OCR quality gates, and reject/trigger refetch on garbled extracts",
