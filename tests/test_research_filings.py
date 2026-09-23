@@ -7996,6 +7996,22 @@ def test_filing_counts_toward_body_penetration_excludes_rathbones_form_83():
     )
 
 
+def test_filing_lacks_material_body_excludes_trst_holding_in_company():
+    """eng-20260923-09: TRST.L Holding(s) in Company stubs must not inflate IWB gaps."""
+    from value_investor.research.filings import filing_lacks_material_body
+
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Holding(s) in Company",
+                "url": "https://www.investegate.co.uk/announcement/rns/trustpilot-group--trst/holding-s-in-company/9760000",
+                "has_body": False,
+            }
+        )
+        is False
+    )
+
+
 def test_filing_lacks_material_body_excludes_pinewood_holding_disclosures():
     """eng-20260923-01: PINE.L Form 8.3/8.5 and major-holding RNS are not IWB gaps."""
     from value_investor.research.filings import filing_lacks_material_body
@@ -8483,6 +8499,59 @@ def test_fetch_filings_ir_allowlist_hik_l_builtin(tmp_path: Path):
     assert any("april-2026-trading-update-vfinal.pdf" in url for url in urls)
     assert any("annual-report" in url for url in urls)
     assert all(row["source"] == "ir_allowlist" for row in rows)
+
+
+def test_fetch_filings_ir_allowlist_trst_l_builtin(tmp_path: Path):
+    """eng-20260923-09: TRST.L statutory FY/H1 PDFs ship in the built-in IR allowlist."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("TRST.L", path=allowlist_path)
+    urls = {row["url"] for row in rows}
+    assert len(rows) >= 5
+    assert any("Trustpilot_Annual_Report_2025_FINAL.pdf" in url for url in urls)
+    assert any("FY_2025_-_Prelims_FINAL.pdf" in url for url in urls)
+    assert any("H1-26_Results_FINAL.pdf" in url for url in urls)
+    assert any(row["period"] == "annual" for row in rows)
+    assert any(row["period"] == "interim" for row in rows)
+    assert any("FY25_Trading_Update" in url for url in urls)
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+
+
+def test_refetch_ir_allowlist_trst_l_prelims_pdf(tmp_path: Path, monkeypatch):
+    """eng-20260923-09: TRST FY25 prelims allowlist PDF extracts a substantive body."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    rows = fetch_filings_ir_allowlist("TRST.L", path=allowlist_path)
+    prelims = next(row for row in rows if "Prelims_FINAL" in row["url"])
+    prelims_body = (
+        "Trustpilot Group plc Strong FY25 results supported by AI growth.\n"
+        "Bookings $291.4m up 18% at constant currency. Adjusted EBITDA $40.7m margin 15.6%.\n"
+        "Operating cash flow $59.2m. Adjusted free cash flow $46.6m.\n" + ("detail " * 80)
+    )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: prelims_body if url == prelims["url"] else None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_pdf_alternate_candidates",
+        lambda _url: [],
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "TRST.L",
+        company_name="Trustpilot Group plc",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    bodied = [row for row in saved["filings"] if row.get("has_body")]
+    assert any("Prelims_FINAL" in row.get("url", "") for row in bodied)
 
 
 def test_fetch_filings_ir_allowlist_ebo_ax_builtin(tmp_path: Path):

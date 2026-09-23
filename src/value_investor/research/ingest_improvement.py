@@ -69,14 +69,14 @@ TRANSIENT_FETCH_RETRY_DELAY_SECONDS = 2.0
 UNMEASURED_PRIORITY_BONUS = 10.0
 # Buy-tier tickers with recurring indexed-without-body gaps — batch-prioritized in ingest pass.
 BODY_GAP_BATCH_TICKERS = frozenset(
-    {"ITV.L", "GFTU.L", "MGNS.L", "AEP.L", "FGP.L", "MEGP.L", "HIK.L"}
+    {"ITV.L", "GFTU.L", "MGNS.L", "AEP.L", "FGP.L", "MEGP.L", "HIK.L", "TRST.L"}
 )
 BODY_GAP_BATCH_PRIORITY_BONUS = 8.0
 # Buy-tier tickers with low body penetration (many indexed rows, few substantive bodies).
 LOW_PENETRATION_RATIO_THRESHOLD = 0.35
 LOW_PENETRATION_MIN_INDEXED = 15
 LOW_PENETRATION_BATCH_TICKERS = frozenset(
-    {"MEGP.L", "GFTU.L", "GSK.L", "JSG.L", "MGNS.L", "AEP.L", "IMB.L", "KLR.L"}
+    {"MEGP.L", "GFTU.L", "GSK.L", "JSG.L", "MGNS.L", "AEP.L", "IMB.L", "KLR.L", "TRST.L"}
 )
 LOW_PENETRATION_BATCH_PRIORITY_BONUS = 12.0
 KNOWN_SOURCE_IDS = frozenset(

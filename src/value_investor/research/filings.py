@@ -113,6 +113,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/251118-firstgroup-plc-h1-2026-results-presentation.pdf",
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/press-release/firstgroup-plc-h1-2026-results.pdf",
     ],
+    # eng-20260923-09: TRST.L gap-closure had 0/0 refetch (no IR allowlist); issuer PDFs on ctfassets.
+    "TRST.L": [
+        "https://downloads.ctfassets.net/wonkqgvit51x/3ZteL0rrKrX9tFmBauBuPX/010202ae42bdac8e876e0f28384bcc88/Trustpilot_Annual_Report_2025_FINAL.pdf",
+        "https://assets.ctfassets.net/wonkqgvit51x/2WWj44BFNmKw9G8YtHr2dh/dc1d227af7d4da701b02237c52bf299f/Trustpilot_-_FY_2025_-_Prelims_FINAL.pdf",
+        "https://assets.ctfassets.net/wonkqgvit51x/6QmrQNW4amCt0091L7NaB6/3190aab8a78d51e4a333b5589e91fac4/FY25_Investor_presentation_FINAL_2.pptx.pdf",
+        "https://images.ctfassets.net/wonkqgvit51x/54xred4udXVr4NktIfZGQd/472c8ba6301bb3a312644b5c78cabc5e/FY25_Trading_Update_FINAL__1_.pdf",
+        "https://assets.ctfassets.net/wonkqgvit51x/4Bu64w8O1N70GkDYTswhfX/1271472bb018cd9b1acf95b6d2d72984/Trustpilot_-_H1-26_Results_FINAL.pdf",
+    ],
     # ftse_smallcap IWB blocker — BOOT.L parked unfetchable_iwb; CH PDFs fail but henryboot.co.uk statutory PDFs fetch.
     "BOOT.L": [
         "https://www.henryboot.co.uk/media/qlhercoe/32783-henry-boot-ar2025-interactive.pdf",
@@ -2896,6 +2904,7 @@ _HOLDING_DISCLOSURE_PATTERNS = (
     r"\bnotification of major holdings\b",
     r"\bsection\s+838\b.*\bdisclosure\b",
     r"\bholding[s]?\s+disclosure\b",
+    r"\bholding\(s\)\s+in\s+company\b",
 )
 
 
