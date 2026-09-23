@@ -1,19 +1,20 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-23T09:56:35.561063+00:00`
-Trajectory: **on_track**
-Dispatch pause: **inactive** (stuck PRs: 0)
+Generated: `2026-09-23T17:23:18.720513+00:00`
+Trajectory: **blocked_by_pr_queue**
+Dispatch pause: **active** (stuck PRs: 0)
 
 ## Achieved (grounded)
 - Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
 - FTSE 350 live screen and published dashboard are operational.
 - Offline library: 21 graduated markets (focus: euro_depth).
 - Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.
-- Engineering queue: 0 open, 72 merged supervised tasks.
+- Engineering queue: 4 open, 76 merged supervised tasks.
 
 ## Gaps / watch
-- Primary AI track still below ^FTSE after costs (-32.3% excess; history still thin).
-- Ingest coverage gap: 4 buy-tier tickers have no filings index yet.
+- Primary AI track still below ^FTSE after costs (-34.0% excess; history still thin).
+- Ingest coverage gap: 3 buy-tier tickers have no filings index yet.
+- Published screen bundle dated 2026-09-21 — confirm Sunday refresh.
 
 ## Checkpoint probe
 - Grounded rows: 11; ungrounded: 0
@@ -23,21 +24,29 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 3 (Library-ready global data): complete _(source: docs/data/project_progress.json)_
 - [ok] Stage 4 (Controlled universe expansion): not_started _(source: docs/data/project_progress.json)_
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
-- [ok] Progress report present (generated_at=2026-09-22T08:34:03+00:00) _(source: docs/data/progress_report.json)_
+- [ok] Progress report present (generated_at=2026-09-23T17:17:04+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
+- [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
 - [ok] Ops monitor overall=warn at 2026-09-23T07:46:36.280037+00:00 _(source: docs/data/ops_status.json)_
-- [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
+- [ok] Traffic pause_active=True; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- _(none)_
+- `stop_automation_waste` — signals=1; parked=eng-20260923-09; pause=True (applied)
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `human`/human PR #818 `eng-20260922-05` — Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop
+- `human`/human PR #825 `eng-20260923-08` — Rework verify round 2/3: IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-di
+- `human`/human PR #823 `eng-20260923-05` — Body-lag rememo gate: after new filing bodies land, rememo thin/zero-body euro_depth memos without widening generic rememo_reason; tie ladder eligibility to bod
+- `human`/human PR #824 `eng-20260923-04` — IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP
+- `scoring_narrow`/verified PR #822 `eng-20260923-07` — Honour FCF action-note enforcement (batched tickers)
+- `human`/human PR #821 `eng-20260923-03` — Wire Yahoo cash-flow fields into `CompanyMetrics` (e.g. `operating_cashflow`) from existing `financials_annual.json` when fetch returns null
+- `scoring_narrow`/verified PR #820 `eng-20260923-06` — Close FCF basis enforcement gap (batched tickers)
+- `human`/human PR #819 `eng-20260923-02` — Companies House filed-accounts pipeline: PDF/iXBRL download, OCR quality gates, and reject/trigger refetch on garbled extracts
+- `human`/human PR #816 `eng-20260923-01` — Harden RNS/Investegate/LSE direct fetch for indexed announcements (replace Google News redirect URLs) with PDF/HTML body persistence into `filings/bodies/`
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 29
-- `PR mergeable=CONFLICTING against main` — 4×
+- Occasion count: 32
+- `PR mergeable=CONFLICTING against main` — 7×
 - `Merge conflicts in deferred-ideas.json with main` — 2×
 - `ruff_format` — 1×
 - `dirty merge: deferred-ideas.json / deferred-review.md vs main after L424-L426 landings` — 1×

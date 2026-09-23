@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T13:07:18.594446+00:00",
-  "overall": "active",
-  "headline": "Agent lane active.",
+  "generated_at": "2026-09-23T17:23:22.432333+00:00",
+  "overall": "idle",
+  "headline": "Queue and hunter idle.",
   "merge_lane": {
     "state": "idle",
     "idle": true,
@@ -14,32 +14,32 @@
     "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
   },
   "agent_lane": {
-    "state": "running",
-    "idle": false,
-    "running": true,
+    "state": "idle",
+    "idle": true,
+    "running": false,
     "blocked": false,
-    "should_dispatch": true,
+    "should_dispatch": false,
     "pause_active": false,
     "traffic_pause_active": false,
     "attention_parked_count": 1,
-    "open_count": 4,
+    "open_count": 0,
     "pr_open_count": 0,
-    "dispatch_eligible_count": 4,
+    "dispatch_eligible_count": 0,
     "blocked_task_count": 0,
-    "next_task_id": "eng-20260923-02",
-    "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-    "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    "next_task_id": null,
+    "reason": "no open engineering tasks in queue",
+    "detail": "No open engineering tasks — queue is idle."
   },
   "queue_clearing": {
     "pause_active": false,
-    "attention_parked_count": 1,
-    "evaluated_at": "2026-09-23T10:30:09.579642+00:00"
+    "attention_parked_count": 0,
+    "evaluated_at": "2026-09-23T17:17:47.476046+00:00"
   },
   "traffic_control": {
     "pause_active": false,
     "stuck_pr_count": 0,
     "pause_reasons": [],
-    "evaluated_at": "2026-09-22T20:21:29.286725+00:00"
+    "evaluated_at": "2026-09-23T17:23:18.720513+00:00"
   },
   "ops_monitor": {
     "run_at": "2026-09-23T07:46:36.280037+00:00",
@@ -47,6 +47,94 @@
     "should_dispatch_engineering": true
   },
   "merges_today": [
+    {
+      "task_id": "eng-20260922-05",
+      "title": "Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop",
+      "area": "ingest",
+      "pr_number": 818,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/818",
+      "merged_at": "2026-09-23T17:06:31.351894+00:00",
+      "merge_class": "human",
+      "auto_merge": false,
+      "independently_verified": false
+    },
+    {
+      "task_id": "eng-20260923-08",
+      "title": "Rework verify round 2/3: IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-di",
+      "area": "ingest",
+      "pr_number": 825,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/825",
+      "merged_at": "2026-09-23T17:06:15.107744+00:00",
+      "merge_class": "human",
+      "auto_merge": false,
+      "independently_verified": false
+    },
+    {
+      "task_id": "eng-20260923-05",
+      "title": "Body-lag rememo gate: after new filing bodies land, rememo thin/zero-body euro_depth memos without widening generic rememo_reason; tie ladder eligibility to bod",
+      "area": "ingest",
+      "pr_number": 823,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/823",
+      "merged_at": "2026-09-23T15:58:10.515099+00:00",
+      "merge_class": "human",
+      "auto_merge": false,
+      "independently_verified": false
+    },
+    {
+      "task_id": "eng-20260923-04",
+      "title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
+      "area": "ingest",
+      "pr_number": 824,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/824",
+      "merged_at": "2026-09-23T15:58:00.436337+00:00",
+      "merge_class": "human",
+      "auto_merge": false,
+      "independently_verified": false
+    },
+    {
+      "task_id": "eng-20260923-07",
+      "title": "Honour FCF action-note enforcement (batched tickers)",
+      "area": "scoring",
+      "pr_number": 822,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/822",
+      "merged_at": "2026-09-23T14:03:28.833948+00:00",
+      "merge_class": "scoring_narrow",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260923-03",
+      "title": "Wire Yahoo cash-flow fields into `CompanyMetrics` (e.g. `operating_cashflow`) from existing `financials_annual.json` when fetch returns null",
+      "area": "ingest",
+      "pr_number": 821,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/821",
+      "merged_at": "2026-09-23T14:01:13.654448+00:00",
+      "merge_class": "human",
+      "auto_merge": false,
+      "independently_verified": false
+    },
+    {
+      "task_id": "eng-20260923-06",
+      "title": "Close FCF basis enforcement gap (batched tickers)",
+      "area": "scoring",
+      "pr_number": 820,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/820",
+      "merged_at": "2026-09-23T13:41:16.050404+00:00",
+      "merge_class": "scoring_narrow",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260923-02",
+      "title": "Companies House filed-accounts pipeline: PDF/iXBRL download, OCR quality gates, and reject/trigger refetch on garbled extracts",
+      "area": "ingest",
+      "pr_number": 819,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/819",
+      "merged_at": "2026-09-23T13:23:10.613513+00:00",
+      "merge_class": "human",
+      "auto_merge": false,
+      "independently_verified": false
+    },
     {
       "task_id": "eng-20260923-01",
       "title": "Harden RNS/Investegate/LSE direct fetch for indexed announcements (replace Google News redirect URLs) with PDF/HTML body persistence into `filings/bodies/`",
@@ -59,16 +147,16 @@
       "independently_verified": false
     }
   ],
-  "verified_merges_today_count": 0,
+  "verified_merges_today_count": 2,
   "completion_monitor": {
     "timezone": "UTC",
     "history_days": 14,
     "today": {
       "date": "2026-09-23",
-      "merged_total": 1,
+      "merged_total": 9,
       "merged_auto": 0,
-      "merged_manual": 1,
-      "verified": 0,
+      "merged_manual": 9,
+      "verified": 2,
       "fix_interventions": 5,
       "fix_ci_check": 1,
       "fix_merge_conflict": 4,
@@ -231,10 +319,10 @@
       },
       {
         "date": "2026-09-23",
-        "merged_total": 1,
+        "merged_total": 9,
         "merged_auto": 0,
-        "merged_manual": 1,
-        "verified": 0,
+        "merged_manual": 9,
+        "verified": 2,
         "fix_interventions": 5,
         "fix_ci_check": 1,
         "fix_merge_conflict": 4,
@@ -242,6 +330,94 @@
       }
     ],
     "merges_today": [
+      {
+        "task_id": "eng-20260922-05",
+        "title": "Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop",
+        "area": "ingest",
+        "pr_number": 818,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/818",
+        "merged_at": "2026-09-23T17:06:31.351894+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260923-08",
+        "title": "Rework verify round 2/3: IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-di",
+        "area": "ingest",
+        "pr_number": 825,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/825",
+        "merged_at": "2026-09-23T17:06:15.107744+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260923-05",
+        "title": "Body-lag rememo gate: after new filing bodies land, rememo thin/zero-body euro_depth memos without widening generic rememo_reason; tie ladder eligibility to bod",
+        "area": "ingest",
+        "pr_number": 823,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/823",
+        "merged_at": "2026-09-23T15:58:10.515099+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260923-04",
+        "title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
+        "area": "ingest",
+        "pr_number": 824,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/824",
+        "merged_at": "2026-09-23T15:58:00.436337+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260923-07",
+        "title": "Honour FCF action-note enforcement (batched tickers)",
+        "area": "scoring",
+        "pr_number": 822,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/822",
+        "merged_at": "2026-09-23T14:03:28.833948+00:00",
+        "merge_class": "scoring_narrow",
+        "auto_merge": false,
+        "independently_verified": true
+      },
+      {
+        "task_id": "eng-20260923-03",
+        "title": "Wire Yahoo cash-flow fields into `CompanyMetrics` (e.g. `operating_cashflow`) from existing `financials_annual.json` when fetch returns null",
+        "area": "ingest",
+        "pr_number": 821,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/821",
+        "merged_at": "2026-09-23T14:01:13.654448+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260923-06",
+        "title": "Close FCF basis enforcement gap (batched tickers)",
+        "area": "scoring",
+        "pr_number": 820,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/820",
+        "merged_at": "2026-09-23T13:41:16.050404+00:00",
+        "merge_class": "scoring_narrow",
+        "auto_merge": false,
+        "independently_verified": true
+      },
+      {
+        "task_id": "eng-20260923-02",
+        "title": "Companies House filed-accounts pipeline: PDF/iXBRL download, OCR quality gates, and reject/trigger refetch on garbled extracts",
+        "area": "ingest",
+        "pr_number": 819,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/819",
+        "merged_at": "2026-09-23T13:23:10.613513+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
       {
         "task_id": "eng-20260923-01",
         "title": "Harden RNS/Investegate/LSE direct fetch for indexed announcements (replace Google News redirect URLs) with PDF/HTML body persistence into `filings/bodies/`",
@@ -290,21 +466,5 @@
       }
     ]
   },
-  "library_stall_parks": [
-    {
-      "task_id": "eng-20260922-05",
-      "market_id": "dax",
-      "parked_policy": "reburn_loop",
-      "focus_ticker": "HEI.DE",
-      "focus_lane": "unmeasured",
-      "bundled": true,
-      "filing_gaps": 7,
-      "reburn_loop": true,
-      "allow_unpark": false,
-      "blockers": [
-        "preflight_clash"
-      ],
-      "primary_hypothesis": "preflight_clash"
-    }
-  ]
+  "library_stall_parks": []
 }
