@@ -36,3 +36,18 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     load_fn = text.split("async function loadDashboard()", 1)[1].split("\ninitTabs()", 1)[0]
     assert "reloadDashboard()" in load_fn
     assert 'fetch("data/progress_report.json")' not in load_fn
+
+
+def test_sunday_review_paper_tracks_sorted_by_track_then_week() -> None:
+    """Analysis → Sunday review paper table groups by track, weeks ascending within track."""
+    text = APP_JS.read_text(encoding="utf-8")
+    fn = text.split("function renderSundayReview(", 1)[1].split(
+        "\nfunction renderAnalysis(", 1
+    )[0]
+    assert "trackA.localeCompare(trackB)" in fn
+    assert 'String(a.week_ending || "").localeCompare(String(b.week_ending || ""))' in fn
+    # Column order: Track before Week (sort keys left-to-right).
+    assert "<th>Track</th>" in fn
+    assert fn.index("<th>Track</th>") < fn.index("<th>Week</th>")
+    # Must not revert to week-only newest-first sort of the flattened rows.
+    assert 'String(b.week_ending).localeCompare(String(a.week_ending))' not in fn
