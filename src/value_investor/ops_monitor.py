@@ -1267,7 +1267,10 @@ def check_ops_budget() -> list[OpsFinding]:
 
 def check_thin_memo_learning_gap() -> list[OpsFinding]:
     """Monitor so-what ``thin_memo_counted_as_coverage`` clearance on the focus library."""
-    from value_investor.thin_memo_clearance import THIN_MEMO_FLAG_ID, build_thin_memo_clearance_status
+    from value_investor.thin_memo_clearance import (
+        THIN_MEMO_FLAG_ID,
+        build_thin_memo_clearance_status,
+    )
 
     try:
         status = build_thin_memo_clearance_status()

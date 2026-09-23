@@ -127,7 +127,9 @@ def build_thin_memo_clearance_status(
         "rememo_pending_tickers": rememo_pending[:24],
         "committed_flag_present": bool(committed_flag),
         "live_flag_would_fire": bool(live_flag),
-        "committed_assessed_at": committed.get("assessed_at") if isinstance(committed, dict) else None,
+        "committed_assessed_at": committed.get("assessed_at")
+        if isinstance(committed, dict)
+        else None,
         "live_assessed_at": live_snapshot.get("assessed_at"),
         "steps": steps,
         "summary": (
@@ -162,9 +164,7 @@ def render_thin_memo_clearance_markdown(section: dict[str, Any]) -> str:
         "",
     ]
     for step in section.get("steps") or []:
-        lines.append(
-            f"- **{step.get('title')}** ({step.get('status')}): `{step.get('command')}`"
-        )
+        lines.append(f"- **{step.get('title')}** ({step.get('status')}): `{step.get('command')}`")
     lines.append("")
     return "\n".join(lines)
 

@@ -7,7 +7,6 @@ from pathlib import Path
 
 from value_investor.library_ingest_loop import (
     _augment_reports_for_pin_tickers,
-    load_library_buy_tier_reports,
 )
 from value_investor.summary import CompanyReport
 from value_investor.thin_memo_clearance import (
