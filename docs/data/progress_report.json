@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-22T08:34:03+00:00",
+  "generated_at": "2026-09-23T17:17:04+00:00",
   "overall": "warn",
   "progress": {
     "schema_version": 1,
-    "generated_at": "2026-09-22T08:34:02.952123+00:00",
+    "generated_at": "2026-09-23T17:17:03.080111+00:00",
     "current_focus": "stage_2b",
     "headline": "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "stages": [
@@ -47,20 +47,20 @@
     ],
     "evidence": {
       "screen_company_count": 248,
-      "strong_buy_count": 13,
-      "screen_run_at": "2026-09-21T16:54:50.935061+00:00",
+      "strong_buy_count": 12,
+      "screen_run_at": "2026-09-23T11:22:08.725230+00:00",
       "library_graduated_count": 21,
       "library_focus_market": "euro_depth",
       "decision_review_applied": false,
-      "ai_excess_after_costs": -0.3229,
-      "rules_excess_after_costs": -0.4005,
-      "ai_total_return": -0.3135,
-      "rules_total_return": -0.3801,
+      "ai_excess_after_costs": -0.34,
+      "rules_excess_after_costs": -0.4159,
+      "ai_total_return": -0.3306,
+      "rules_total_return": -0.3955,
       "ops_overall": "warn",
       "zero_body_buy_tier": 0,
-      "unmeasured_buy_tier": 4,
-      "measured_tickers": 55,
-      "buy_tier_count": 59,
+      "unmeasured_buy_tier": 0,
+      "measured_tickers": 54,
+      "buy_tier_count": 54,
       "ingest_stalled": false
     },
     "appraisal": {
@@ -68,12 +68,11 @@
         "FTSE 350 live screen and published dashboard are operational.",
         "Offline library: 21 graduated markets (focus: euro_depth).",
         "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-        "Engineering queue: 0 open, 72 merged supervised tasks.",
-        "AI-judgment track beating rules control (-32.3% vs -40.1% excess)."
+        "Engineering queue: 1 open, 84 merged supervised tasks.",
+        "AI-judgment track beating rules control (-34.0% vs -41.6% excess)."
       ],
       "gaps": [
-        "Primary AI track still below ^FTSE after costs (-32.3% excess; history still thin).",
-        "Ingest coverage gap: 4 buy-tier tickers have no filings index yet."
+        "Primary AI track still below ^FTSE after costs (-34.0% excess; history still thin)."
       ],
       "next_actions": [
         "Let the learning loop accumulate before adding tracks or knobs.",
@@ -86,20 +85,15 @@
       "stalled": false,
       "zero_body_buy_tier": 0,
       "health": {
-        "snapshot_at": "2026-09-22T08:23:43.604094+00:00",
-        "buy_tier_count": 59,
-        "measured_tickers": 55,
-        "unmeasured_buy_tier": 4,
-        "unmeasured_tickers": [
-          "TRST.L",
-          "PINE.L",
-          "RTO.L",
-          "RAT.L"
-        ],
+        "snapshot_at": "2026-09-23T17:13:42.303838+00:00",
+        "buy_tier_count": 54,
+        "measured_tickers": 54,
+        "unmeasured_buy_tier": 0,
+        "unmeasured_tickers": [],
         "zero_body_buy_tier": 0,
         "zero_body_tickers": [],
-        "indexed_without_body": 52,
-        "filings_with_body": 3833
+        "indexed_without_body": 18,
+        "filings_with_body": 3771
       },
       "summary": "Live buy-tier ingest now canonicalises under docs/data/research/, bootstraps missing indexes on Sunday/weekday passes, and sanitises mis-attributed RNS rows before refetching bodies.",
       "fixes": [
@@ -117,18 +111,7 @@
     }
   },
   "actionable": {
-    "defer_now": [
-      {
-        "id": "L121",
-        "title": "Reconcile live vs archive exit-timing denominators",
-        "summary": "Shared episode definitions before comparing hold→breakeven vs swap-success rates",
-        "category": "later",
-        "section": "learning",
-        "revisit_when": "`exit_timing_cohorts` artifact exists and `exit_timing_near_miss.readiness.hold_closed_count` ≥ 15.",
-        "tags": [],
-        "status": "now"
-      }
-    ],
+    "defer_now": [],
     "defer_not_now": [
       {
         "id": "N1",
@@ -2025,6 +2008,165 @@
           "ops-monitor"
         ],
         "status": "open"
+      },
+      {
+        "id": "N140",
+        "title": "Do not plot Suite B fair twins on Overview held_vs_market market cards",
+        "summary": "Fair-cost twins of Suite A experiments (e.g. graduated_allocation_fair) belong on Automation learning-track equity. Overview held_vs_market already shows buy_tier_level (Suite B costs) vs local index; branch overlays are for knob changes (N108/N99), not cost twins.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "A human asks to overlay graduated_allocation_fair or other *_fair tracks on market-status held_vs_market charts",
+        "tags": [
+          "fair-twins",
+          "held-vs-market",
+          "graduated-allocation",
+          "dashboard"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N141",
+        "title": "Raise max_parallel_engineering_agents above 2",
+        "summary": "Third concurrent eng agent would mostly serialize on the same hot allowlist (filings.py / companies_house / ingest.py) and increase merge clashes without lifting gap-closure rate. Clash-aware pairing of ingest_narrow + scoring_narrow is the better use of two slots.",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "Hot-path overlap among open ingest tasks drops (most open tasks no longer share filings.py/CH) and dispatch_eligible_count routinely exceeds 2 with complementary path sets",
+        "tags": [
+          "engineering",
+          "parallel",
+          "clash"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N142",
+        "title": "Add more paper tracks before Suite B edge",
+        "summary": "Extra tracks dilute marks and churn ops without fixing primary AI excess. Keep existing experiments observe-only until ai_judgment_fair clears ^FTSE after fair costs.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "ai_judgment_fair shows persistent excess vs ^FTSE on Suite B and decision-review has applied at least one primary epoch",
+        "tags": [
+          "paper",
+          "tracks",
+          "score-lift"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N143",
+        "title": "Live universe expansion before stage 2b edge",
+        "summary": "Stage 4 live non-UK screen should wait until primary learning track shows after-cost edge; offline library growth (P2) continues.",
+        "category": "not_now",
+        "section": "universe",
+        "revisit_when": "Stage 2b exit: AI judgment persistent excess after fair costs vs ^FTSE and vs rules",
+        "tags": [
+          "stage4",
+          "live-screen",
+          "score-lift"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N144",
+        "title": "Auto-apply decision-review knobs on thin primary history",
+        "summary": "Primary ai_judgment still deeply negative on stress book; auto --apply before thick Suite B marks risks locking in churn. Keep proposals observe-only until epoch gates pass.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Primary or fair AI book has thick marks, churn_health ok, and human Sunday prior review greenlights apply",
+        "tags": [
+          "decision-review",
+          "knobs",
+          "score-lift"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N145",
+        "title": "Make ai_judgment_fair the is_primary_learning_track flag",
+        "summary": "Day-to-day Suite B NAV stability is expected under T212 costs and is not the promotion gate. Keep is_primary on stress ai_judgment until fair AI clears ^FTSE and rules_fair with a thick forward window (N48 human flip). Until then Suite B remains the adoption scoreboard, not the primary flag.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "ai_judgment_fair beat_market and beat rules_fair on a thick forward window; Sunday fair-cost gate green; human accepts N48",
+        "tags": [
+          "suite-b",
+          "primary",
+          "N48",
+          "scoreboard"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N146",
+        "title": "Switch primary because Suite B NAV beats Suite A",
+        "summary": "B-vs-A absolute NAV is mostly cost drag (same picks, lower friction). Do not use it as the primary flip criterion. Short-term steer on within-suite relatives (AI vs rules on same costs) and A churn; flip primary only on thick Suite B absolute edge vs ^FTSE and fair rules (N48).",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Revisiting N48 primary flip criteria",
+        "tags": [
+          "suite-a",
+          "suite-b",
+          "primary",
+          "scoreboard"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N147",
+        "title": "Replace primary scoreboard with fixed-notional sleeve P&L",
+        "summary": "Fixed £/$ notional per buy is excellent for identification accuracy and lifecycle sleeve stats, but must not replace Suite B book excess vs ^FTSE as stage 2b / adoption truth. Capital path (sizing, deposits, rotation) is a separate question the NAV book answers.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Sleeve-level outcome linker is thick enough to sit beside (not instead of) primary excess gates",
+        "tags": [
+          "sleeves",
+          "scoreboard",
+          "experiment-design",
+          "notional"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N148",
+        "title": "Do not replace Economic Moat proxy with qualitative comparative scoring",
+        "summary": "Economic Moat today is absolute ROE/ROA/margin/leverage thresholds, not peer-relative or filing-based moat evidence. Building a true comparative moat scorer would mix research-layer judgment into the point-in-time screen and needs a separate design (peer cohorts, durable advantage evidence, PIT constraints).",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "Only if a dedicated quality/moat family redesign is explicitly prioritized with peer-relative and filing-backed features",
+        "tags": [
+          "screening",
+          "moat",
+          "not-now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N149",
+        "title": "Do not invent a proprietary screen to replace recognised models",
+        "summary": "Developing a bespoke formula from in-sample successful-sleeve traits without PIT guards would overfit thin paper history and blur the recognisable-screen interpretability the memos rely on. Prefer reweighting existing models and progressive exclusion filters first.",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "Only if dual_objective_calibration shows persistent lift that cannot be expressed as weights or exclusion rules on the existing 22 models",
+        "tags": [
+          "screening",
+          "overfitting",
+          "not-now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N150",
+        "title": "Do not spray monthly deposits across all epoch-0 markets yet",
+        "summary": "£100/mo per epoch-0 book invents a multi-market capital-allocation policy before stage 4 live breadth. Epoch-0 books are equal-support data marks. Prefer the FTSE buy_tier_level_dca twin only.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Live universe past FTSE-only (stage 4) or human chooses an explicit multi-market paper allocation policy with a fresh capital epoch",
+        "tags": [
+          "monthly_deposit",
+          "epoch-0",
+          "capital",
+          "not_now"
+        ],
+        "status": "open"
       }
     ],
     "defer_later": [
@@ -3018,16 +3160,6 @@
           "fragments"
         ],
         "status": "open"
-      },
-      {
-        "id": "L121",
-        "title": "Reconcile live vs archive exit-timing denominators",
-        "summary": "Shared episode definitions before comparing hold→breakeven vs swap-success rates",
-        "category": "later",
-        "section": "learning",
-        "revisit_when": "`exit_timing_cohorts` artifact exists and `exit_timing_near_miss.readiness.hold_closed_count` ≥ 15.",
-        "tags": [],
-        "status": "now"
       },
       {
         "id": "L125",
@@ -6196,6 +6328,167 @@
           "latency"
         ],
         "status": "open"
+      },
+      {
+        "id": "L434",
+        "title": "EngineeringTask dataclass should carry parked/cancelled lifecycle fields",
+        "summary": "Parked metadata can still be lost if any path round-trips queue rows through EngineeringTask.to_dict(). Consider first-class parked_*/cancelled_* fields on the dataclass so compile rematch cannot strip them.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Another parked_reason strip appears after the _merge_task_rows preserve fix, or EngineeringTask schema is next refactored",
+        "tags": [
+          "engineering",
+          "queue",
+          "parked"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L436",
+        "title": "Bundle multi-ticker IR allowlist fills into one eng task",
+        "summary": "Instead of N intensive pins or N hunter tasks that all touch research_ir_urls.json, coalesce stuck no-allowlist tickers in the same regime into one data PR editing the allowlist (plus seed fallback) so Lane B pays one clash cycle for many names.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Open no-allowlist blockers across one regime exceed ~5 concurrent names and hunter tasks are serializing on research_ir_urls.json",
+        "tags": [
+          "ingest",
+          "allowlist",
+          "batching"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L437",
+        "title": "Fund PIT decision-autopsy attribution loop (L368)",
+        "summary": "Automated data-vs-logic gap attribution from frozen decision packs would lift learning/alpha score by steering eng queue; design locked, implementation deferred behind Phase C.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "L367 Phase C readiness met and memo retarget funded",
+        "tags": [
+          "L368",
+          "autopsy",
+          "score-lift"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L438",
+        "title": "Evolutionary genomes after walk-forward thickness (L2)",
+        "summary": "Stage 5 evolution only after primary loop has thick cost-aware walk-forward history; premature evolution would inflate eng score without alpha.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "Stage 2b complete and decision-review epochs show stable positive Suite B excess",
+        "tags": [
+          "L2",
+          "evolution",
+          "stage5",
+          "score-lift"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L439",
+        "title": "Progress report dual-suite excess (stress + fair)",
+        "summary": "project_progress currently pulls ai_excess from stress ai_judgment decision_review, so stage 2b looks brutal. Later: surface ai_judgment_fair excess alongside stress without flipping is_primary — adoption scoreboard vs churn lab.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Human wants dashboard/progress narrative aligned with Suite B adoption truth while keeping Suite A primary flag",
+        "tags": [
+          "progress-report",
+          "suite-b",
+          "dashboard"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L441",
+        "title": "Fixed-notional sleeve cohort lab beside NAV books",
+        "summary": "Observe-only: each new buy gets a fixed notional (e.g. £100), capped open sleeves, optional monthly deposit into a cash queue for new sleeves only. Primary metrics: per-sleeve forward return, hit rate, hold/exit quality; NAV vs ^FTSE stays on existing equal-weight books. Aligns with buy_tier_level cohort spirit and entry-lifecycle experiments.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "Exit-timing / hypothesis outcome cohorts ready for probability analysis, or buy_tier_level has enough closed sleeves to compare designs",
+        "tags": [
+          "sleeves",
+          "cohort",
+          "notional",
+          "lifecycle",
+          "monthly-deposit"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L442",
+        "title": "Opportunity-cost rotation instead of always exiting demoted buy-tier",
+        "summary": "Softer than always exit_confirm on off-target buy-tier: only free capital when higher-conviction buys are skipped for cash. Preserves long holds for lifecycle experiments when the buy pipeline is idle; still unblocks sleeves when targets need funding. Ranked books vs buy_tier_level remain the dual instrument.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "After momentum_grace rank-rotation fix merges and Sunday review shows exit cohorts thickening or over-churn on demoted buy-tier names",
+        "tags": [
+          "rotation",
+          "lifecycle",
+          "experiments",
+          "momentum_grace"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L445",
+        "title": "Cash buffer sleeve after rank-rotation works",
+        "summary": "Prefer fixing blocked exits (done L440) so fully-invested books recycle into better sleeves. A 5-10% dry-powder buffer remains optional capital-allocation v2 — do not use idle cash as a substitute for broken rotation.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "capital_rotation_coordinator / cash buffer target phase activates and rank rotation is healthy on momentum_grace",
+        "tags": [
+          "cash-buffer",
+          "capital-allocation",
+          "buy-pipeline"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L446",
+        "title": "Nested counterfactual best-policy scoring inside sleeve episodes",
+        "summary": "Wide earliest/latest episodes are recording. Next: score tighter entry/exit policies as nested counterfactuals inside closed episodes once readiness.ready_for_sleeve_timing_analysis is true.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true on primary or fair tracks",
+        "tags": [
+          "sleeves",
+          "counterfactual",
+          "timing"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L449",
+        "title": "Invoke market eng gap burndown from eng-queue when idle",
+        "summary": "L448 burndown only runs inside ops-monitor apply_fixes, and ops-monitor skips after the first successful finalize of the day. After #805 landed mid-day, later scheduled/dispatch runs skipped monitor so burndown never applied until the next morning run (or force). Consider also calling try-market-gap-burndown from engineering-queue idle path beside compile-cap drain / parked hunter.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Next weekday where eng queue is idle after ~15:00 UTC with library IWB/thin remaining and ops-monitor already finalized that morning",
+        "tags": [
+          "L448",
+          "market-gap-burndown",
+          "ops-monitor",
+          "engineering-queue"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L450",
+        "title": "Screening model×input coverage matrix (criteria inventory)",
+        "summary": "Tabulate each of the 22 screening models' criteria/fields, mark absolute vs universe-relative, map overlaps (esp. quality/moat ROE-margin-leverage cluster), and reconcile KEY_SCREENING_METRICS vs fetch fields so missing inputs (earnings_growth, interest cover, Piotroski YoY deltas) are visible. Do not expand Economic Moat into qualitative peer analysis without a separate design — screen moat is a numerical proxy; true comparative moat lives in research/filings + peer_model_pass_table.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After P1 FTSE buy-tier body/FCF/overlay bind work is idle, or when post-run themes repeatedly cite unsupported moat/quality claims",
+        "tags": [
+          "screening",
+          "models",
+          "data-quality",
+          "moat",
+          "inputs"
+        ],
+        "status": "open"
       }
     ],
     "defer_security": [
@@ -6492,6 +6785,28 @@
           "merge_tree"
         ],
         "status": "open"
+      },
+      {
+        "id": "frag-20260922-01",
+        "text": "Absolute edge decomposes into (1) stock ID / research gate quality (mostly suite-shared inputs) and (2) lifecycle timing/sizing (suite-sensitive via cost interaction). Hold-set drift under different costs can still contaminate realized ID metrics on the book.",
+        "tags": [
+          "learning",
+          "suite-b",
+          "lifecycle",
+          "identification"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "frag-20260923-01",
+        "text": "Internal screening formula from successful-sleeve traits: only useful with a substantial evidence body; park as a thought until filtered_cohort / sleeve-episode thickness and loser-pattern validation exist. Not a near-term idea.",
+        "tags": [
+          "screening",
+          "sleeves",
+          "thought",
+          "learning"
+        ],
+        "status": "open"
       }
     ],
     "proposed_tasks": {
@@ -6554,35 +6869,37 @@
       "horizon": [],
       "learning_director": []
     },
-    "engineering_open": [],
+    "engineering_open": [
+      {
+        "id": "eng-20260923-09",
+        "source": "engineering",
+        "title": "Close stubborn ingest gaps for TRST.L (chain 1/3: 0/0 bodies, run igc-20260923-05)",
+        "summary": "Ingest gap-closure run igc-20260923-05 (chain root igc-20260923-05, round 1) targeted TRST.L with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+        "status": "open",
+        "added_at": null,
+        "area": "ingest"
+      }
+    ],
     "counts": {
-      "defer_now": 1,
-      "defer_not_now": 130,
-      "defer_later": 286,
+      "defer_now": 0,
+      "defer_not_now": 141,
+      "defer_later": 296,
       "defer_security": 5,
-      "open_fragments": 22,
+      "open_fragments": 24,
       "proposed_total": 6,
-      "engineering_open": 0
+      "engineering_open": 1
     }
   },
   "integration": {
-    "overall": "warn",
-    "checks": [
-      {
-        "id": "parked_engineering_tasks_need_manual_review",
-        "severity": "warn",
-        "category": "engineering",
-        "title": "Parked engineering tasks need manual review",
-        "summary": "4 parked task(s): eng-20260922-01, eng-20260921-08, eng-20260921-06, eng-20260920-16"
-      }
-    ],
+    "overall": "ok",
+    "checks": [],
     "queue_status": {
-      "open_count": 0,
+      "open_count": 1,
       "pr_open_count": 0,
-      "parked_count": 4,
-      "merged_count": 72,
+      "parked_count": 0,
+      "merged_count": 84,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260923-09",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -6591,14 +6908,14 @@
     }
   },
   "role_coherence": {
-    "overall": "warn",
+    "overall": "info",
     "checks": [
       {
         "id": "stage_2b_learning_edge",
         "severity": "info",
         "category": "doctrine",
         "title": "Stage 2b focus aligned with primary learning gap",
-        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-32.3%). Breadth expansion and new tracks should stay deferred."
+        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-34.0%). Breadth expansion and new tracks should stay deferred."
       },
       {
         "id": "library_ahead_of_live",
@@ -6608,18 +6925,11 @@
         "summary": "21 graduated library markets vs stage 2b still in progress — library growth is correctly offline; live universe expansion remains gated."
       },
       {
-        "id": "defer_now_without_queue_link",
-        "severity": "warn",
-        "category": "join_up",
-        "title": "Deferred now items without matching queue work",
-        "summary": "1 item(s) marked `now` have no obvious engineering or review-task counterpart (L121). Promote via ftse-defer status or draft a supervised task."
-      },
-      {
         "id": "post_run_plan_without_queue_link",
         "severity": "info",
         "category": "join_up",
         "title": "Post-run plan items without matching open engineering task",
-        "summary": "5 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Harden Investegate/LSE direct fetch for indexed RNS items (FY/HY results, annual reports)—replace Google News wrapper URLs and empty Ticker RNS bodies—starting with buy-tier partial coverage (PAF.L 16 missing bodies) and backlog patterns (AEP.L-style zero-body indexes).; Fix Companies House PDF/iXBRL download and OCR quality gate (retry, iXBRL-first, reject garbled OCR)—target ITV.L/MGNS.L failure modes cited in recent suggestions.; Standardize IR results-presentation ingest: allowlist fetch, full-text extract, and populate `ir_presentation_metrics.json` FCF/dividend bridges (FGP.L FY2026 report + presentation; MEGP.L H1 FY2026; HIK.L hikma.com PDFs per backlog).). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. All match merged/parked tasks — schedule email_only for a fresh post-run; idle compile backstop will not reopen them."
+        "summary": "5 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Harden RNS/Investegate/LSE direct fetch for indexed announcements (replace Google News redirect URLs) with PDF/HTML body persistence into `filings/bodies/`; Companies House filed-accounts pipeline: PDF/iXBRL download, OCR quality gates, and reject/trigger refetch on garbled extracts; Wire Yahoo cash-flow fields into `CompanyMetrics` (e.g. `operating_cashflow`) from existing `financials_annual.json` when fetch returns null). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. All match merged/parked tasks — schedule email_only for a fresh post-run; idle compile backstop will not reopen them."
       },
       {
         "id": "compile_cap_truncated_candidates",
@@ -6631,10 +6941,10 @@
     ]
   },
   "so_what": {
-    "generated_at": "2026-09-22T08:34:03Z",
+    "generated_at": "2026-09-23T17:17:03Z",
     "counts": {
-      "findings": 1,
-      "auto_queue": 0,
+      "findings": 2,
+      "auto_queue": 1,
       "human_gate": 0,
       "observe": 1,
       "learning_path_gaps": 1,
@@ -6658,10 +6968,90 @@
         ]
       }
     ],
-    "high_severity": [],
-    "high_severity_groups": [],
+    "high_severity": [
+      {
+        "finding_id": "fcf_enforcement_gap:PINE.L",
+        "kind": "fcf_enforcement_gap",
+        "ticker": "PINE.L",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~136%. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue"
+      }
+    ],
+    "high_severity_groups": [
+      {
+        "kind": "fcf_enforcement_gap",
+        "label": "Buy-tier signal remains uncapped while screen vs filing FCF diverge materially. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "recommended_closure": "auto_queue",
+        "severity": "high",
+        "so_what": "Buy-tier signal remains uncapped while screen vs filing FCF diverge materially. Enforcement must fail closed (overlay) without waiting for a human prompt.",
+        "human_action": "",
+        "human_doc_path": null,
+        "count": 1,
+        "tickers": [
+          "PINE.L"
+        ],
+        "tickers_preview": [
+          "PINE.L"
+        ]
+      }
+    ],
     "human_gates_preview": [],
     "human_gate_groups": []
+  },
+  "thin_memo_clearance": {
+    "flag_id": "thin_memo_counted_as_coverage",
+    "market_id": "euro_depth",
+    "cleared": false,
+    "thin_sample_count": 8,
+    "thin_sample_threshold": 5,
+    "memos_sampled": 20,
+    "memo_count": 20,
+    "deficit_to_clear": 4,
+    "zero_body_target_count": 7,
+    "zero_body_tickers": [
+      "AGS.BR",
+      "BN.PA",
+      "EL.PA",
+      "IFX.DE",
+      "REN.AS",
+      "SIE.DE",
+      "UQA.VI"
+    ],
+    "rememo_pending_count": 1,
+    "rememo_pending_tickers": [
+      "VIG.VI"
+    ],
+    "committed_flag_present": true,
+    "live_flag_would_fire": true,
+    "committed_assessed_at": "2026-09-21T19:07:49.423417+00:00",
+    "live_assessed_at": "2026-09-23T17:17:04.004217+00:00",
+    "steps": [
+      {
+        "id": "ingest_deepen",
+        "title": "Ingest filing bodies (library thin memos)",
+        "command": "ftse-library deepen-thin --markets euro_depth",
+        "status": "needed"
+      },
+      {
+        "id": "body_lag_rememo",
+        "title": "Body-lag rememo when disk bodies increase",
+        "command": "ftse-library deepen-thin --markets euro_depth --rememo (or ftse-library admitted-rememo when eligible)",
+        "status": "needed"
+      },
+      {
+        "id": "refresh_system_gaps",
+        "title": "Refresh system_gaps.json",
+        "command": "ftse-analysis-review system-gaps --write",
+        "status": "needed"
+      },
+      {
+        "id": "verify_so_what",
+        "title": "Verify so-what learning-path row cleared",
+        "command": "ftse-progress-report so-what",
+        "status": "needed"
+      }
+    ],
+    "summary": "euro_depth: 8/20 sampled memos thin/zero-body (need <5 to clear thin_memo_counted_as_coverage). 7 memo(s) with 0 filing bodies on disk; 1 pending body-lag rememo (disk has bodies, memo label stale)."
   },
   "lifecycle_acks": {
     "overall": "ok",
