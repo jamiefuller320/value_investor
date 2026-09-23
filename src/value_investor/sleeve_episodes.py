@@ -470,9 +470,7 @@ def run_sleeve_episodes_pass(
             signal=signal,
             conviction=_conviction(row),
             capital_status=capital,
-            opened_as_near_buy=_is_near_buy(
-                row, cfg=cfg, use_adjusted=cfg.use_adjusted_signal
-            ),
+            opened_as_near_buy=_is_near_buy(row, cfg=cfg, use_adjusted=cfg.use_adjusted_signal),
             opened_as_buy_tier=_is_buy_tier(row, use_adjusted=cfg.use_adjusted_signal),
         )
         store["open"].append(episode)
