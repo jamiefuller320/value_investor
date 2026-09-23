@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T08:55:23+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T09:51:19+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -198,6 +198,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N145 | **Make ai_judgment_fair the is_primary_learning_track flag** | Day-to-day Suite B NAV stability is expected under T212 costs and is not the promotion gate. Keep is_primary on stress ai_judgment until fair AI clears ^FTSE and rules_fair with a thick forward window (N48 human flip). Until then Suite B remains the adoption scoreboard, not the primary flag. | ai_judgment_fair beat_market and beat rules_fair on a thick forward window; Sunday fair-cost gate green; human accepts N48 |
 | N146 | **Switch primary because Suite B NAV beats Suite A** | B-vs-A absolute NAV is mostly cost drag (same picks, lower friction). Do not use it as the primary flip criterion. Short-term steer on within-suite relatives (AI vs rules on same costs) and A churn; flip primary only on thick Suite B absolute edge vs ^FTSE and fair rules (N48). | Revisiting N48 primary flip criteria |
 | N147 | **Replace primary scoreboard with fixed-notional sleeve P&L** | Fixed £/$ notional per buy is excellent for identification accuracy and lifecycle sleeve stats, but must not replace Suite B book excess vs ^FTSE as stage 2b / adoption truth. Capital path (sizing, deposits, rotation) is a separate question the NAV book answers. | Sleeve-level outcome linker is thick enough to sit beside (not instead of) primary excess gates |
+| N148 | **Do not spray monthly deposits across all epoch-0 markets yet** | £100/mo per epoch-0 book invents a multi-market capital-allocation policy before stage 4 live breadth and before Suite B edge is proven. Epoch-0 books are equal-support data marks, not a household split. Prefer one documented Suite B fair twin deposit epoch (or keep recycling) for capital-path realism. | Live universe past FTSE-only (stage 4) or human chooses an explicit multi-market paper allocation policy with a fresh capital epoch |
 
 ---
 
@@ -266,6 +267,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L442 | **Opportunity-cost rotation instead of always exiting demoted buy-tier** | Softer than always exit_confirm on off-target buy-tier: only free capital when higher-conviction buys are skipped for cash. Preserves long holds for lifecycle experiments when the buy pipeline is idle; still unblocks sleeves when targets need funding. Ranked books vs buy_tier_level remain the dual instrument. | After momentum_grace rank-rotation fix merges and Sunday review shows exit cohorts thickening or over-churn on demoted buy-tier names |
 | L445 | **Cash buffer sleeve after rank-rotation works** | Prefer fixing blocked exits (done L440) so fully-invested books recycle into better sleeves. A 5-10% dry-powder buffer remains optional capital-allocation v2 — do not use idle cash as a substitute for broken rotation. | capital_rotation_coordinator / cash buffer target phase activates and rank rotation is healthy on momentum_grace |
 | L446 | **Nested counterfactual best-policy scoring inside sleeve episodes** | Wide earliest/latest episodes are recording. Next: score tighter entry/exit policies as nested counterfactuals inside closed episodes once readiness.ready_for_sleeve_timing_analysis is true. | learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true on primary or fair tracks |
+| L450 | **Optional Suite B fair twin monthly deposit capital epoch** | If household realism is wanted on the capital book, enable a non-zero monthly_deposit (e.g. £500) only on a fair Suite B twin with a documented new capital epoch — never silently mid-flight on stress primary. Keep recycling on primary/stress so cash scarcity and rotation remain visible. Sleeve episodes stay observe-only and do not need deposits. | Human wants DCA/deployment realism on fair excess scoreboard; or skipped buys from 0 cash are no longer informative because rank-rotation + sleeves already cover opportunity cost |
 
 ### Universe & data
 
