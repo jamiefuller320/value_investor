@@ -18,8 +18,8 @@ from value_investor.held_vs_market import (
     contribution_deltas_from_marks,
     empty_held_vs_market,
     load_macro_index_closes,
-    marks_from_fund,
     market_values_with_contributions,
+    marks_from_fund,
     merge_branch_series,
 )
 from value_investor.library_equal_support import PACKAGE_FILENAME as EQUAL_SUPPORT_FILENAME

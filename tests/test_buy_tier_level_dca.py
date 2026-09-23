@@ -3,6 +3,7 @@
 from pathlib import Path
 
 from value_investor.fair_cost_lab import is_cohort_lab_track_id, is_suite_b_track_id
+from value_investor.held_vs_market import build_held_vs_market_payload
 from value_investor.market_status import _overlay_ftse_dca_realism
 from value_investor.paper_automation import (
     BUY_TIER_LEVEL_DCA_MONTHLY_DEPOSIT,
@@ -12,7 +13,6 @@ from value_investor.paper_automation import (
     ensure_learning_track_configs,
     learning_track_dirs,
 )
-from value_investor.held_vs_market import build_held_vs_market_payload
 
 
 def test_default_dca_config_is_suite_b_cohort_with_deposit():
