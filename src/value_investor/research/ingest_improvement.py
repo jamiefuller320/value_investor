@@ -287,7 +287,7 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
         from value_investor.research.filings import filing_lacks_material_body
 
         coverage["indexed_without_body"] = sum(
-            1 for row in filings if filing_lacks_material_body(row)
+            1 for row in filings if filing_lacks_material_body(row, filings=filings, ticker=ticker)
         )
         from value_investor.research.filings import filing_counts_toward_body_penetration
 

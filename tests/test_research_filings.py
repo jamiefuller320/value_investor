@@ -8518,6 +8518,105 @@ def test_fetch_filings_ir_allowlist_trst_l_builtin(tmp_path: Path):
     assert all(row["source"] == "ir_allowlist" for row in rows)
 
 
+def test_filing_lacks_material_body_excludes_trst_routine_admin_rns():
+    """eng-20260923-10: TRST TVR/block-listing rows must not reopen gap-closure chains."""
+    from value_investor.research.filings import filing_lacks_material_body
+
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Total Voting Rights",
+                "url": "https://www.investegate.co.uk/announcement/rns/trustpilot-group--trst/total-voting-rights/9592638",
+                "has_body": False,
+            }
+        )
+        is False
+    )
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Block Listing Interim Review",
+                "url": "https://www.investegate.co.uk/announcement/rns/trustpilot-group--trst/block-listing-interim-review/9647885",
+                "has_body": False,
+            }
+        )
+        is False
+    )
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Director Declaration",
+                "url": "https://www.investegate.co.uk/announcement/rns/trustpilot-group--trst/director-declaration/9621512",
+                "has_body": False,
+            }
+        )
+        is False
+    )
+
+
+def test_filing_lacks_material_body_trst_supplemental_h1_when_statutory_bodied():
+    """eng-20260923-10: Marketing H1 RNS is not a gap when FY/H1 statutory pack is bodied."""
+    from value_investor.research.filings import filing_lacks_material_body
+
+    filings = [
+        {
+            "headline": "IR allowlist document — Trustpilot_-_H1-26_Results_FINAL.pdf",
+            "period": "interim",
+            "has_body": True,
+            "source": "ir_allowlist",
+        },
+        {
+            "headline": "2025 Annual Report and Notice of 2026 AGM",
+            "period": "annual",
+            "has_body": True,
+            "source": "investegate_direct",
+        },
+        {
+            "headline": "AI, Enterprise and US momentum fuel strong growth",
+            "period": "other",
+            "has_body": False,
+            "url": "https://www.investegate.co.uk/announcement/rns/trustpilot-group--trst/ai-enterprise-and-us-momentum-fuel-strong-growth/9771535",
+            "source": "investegate_direct",
+        },
+        {
+            "headline": "Trustpilot and Shopify Strengthen Partnership",
+            "period": "other",
+            "has_body": False,
+            "url": "https://www.investegate.co.uk/announcement/rns/trustpilot-group--trst/trustpilot-and-shopify-strengthen-partnership/9641569",
+            "source": "investegate_resolved",
+        },
+    ]
+    assert (
+        filing_lacks_material_body(
+            filings[2],
+            filings=filings,
+            ticker="TRST.L",
+        )
+        is False
+    )
+    assert (
+        filing_lacks_material_body(
+            filings[3],
+            filings=filings,
+            ticker="TRST.L",
+        )
+        is False
+    )
+
+
+def test_is_other_results_rns_row_trst_marketing_h1_headline():
+    """eng-20260923-10: TRST H1 marketing headline ranks as other-results refetch."""
+    from value_investor.research.filings import _is_other_results_rns_row
+
+    row = {
+        "headline": "AI, Enterprise and US momentum fuel strong growth",
+        "period": "other",
+        "has_body": False,
+        "url": "https://www.investegate.co.uk/announcement/rns/trustpilot-group--trst/ai-enterprise-and-us-momentum-fuel-strong-growth/9771535",
+    }
+    assert _is_other_results_rns_row(row) is True
+
+
 def test_refetch_ir_allowlist_trst_l_prelims_pdf(tmp_path: Path, monkeypatch):
     """eng-20260923-09: TRST FY25 prelims allowlist PDF extracts a substantive body."""
     allowlist_path = tmp_path / "empty_ir.json"

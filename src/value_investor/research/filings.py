@@ -735,9 +735,11 @@ _BUYBACK_PROGRAMME_PATTERNS = (
 
 _NON_RESULTS_RNS_PATTERNS = (
     r"\bdirectorate change\b",
+    r"\bdirector declaration\b",
     r"\bholding\(s\)? in company\b",
     r"\btotal voting rights\b",
     r"\bblock listing\b",
+    r"\bstrengthen partnership\b",
     r"\b(?:annual )?general meetings?\b",
     r"\bnotice of agm\b",
     r"\bagm results?\b",
@@ -1108,6 +1110,8 @@ def _is_other_results_rns_row(row: dict[str, Any]) -> bool:
     blob = f"{headline} {str(row.get('url') or '').rsplit('/', 1)[-1].replace('-', ' ')}"
     if classify_filing_period(blob, category=row.get("category")) != "other":
         return True
+    if re.search(r"\bfuel strong growth\b|\bmomentum fuel strong growth\b", blob):
+        return True
     return bool(re.search(r"\bfy\s*20\d{2}\b|\bfy20\d{2}\b", blob))
 
 
@@ -1454,7 +1458,28 @@ def _is_holding_disclosure_row(row: dict[str, Any]) -> bool:
     return classify_filing_entity_type(row) == "holding_disclosure"
 
 
-def filing_lacks_material_body(row: dict[str, Any]) -> bool:
+def _is_routine_non_results_rns_row(row: dict[str, Any]) -> bool:
+    """TVR, block listing, director forms — indexed for audit, not ingest gap ROI."""
+    if row.get("has_body"):
+        return False
+    headline = _headline_blob(row)
+    return any(re.search(pat, headline) for pat in _NON_RESULTS_RNS_PATTERNS)
+
+
+def _uk_statutory_annual_and_interim_bodied(filings: list[dict[str, Any]]) -> bool:
+    """True when indexed annual and interim buckets each carry at least one body."""
+    cov = period_body_coverage(filings)
+    annual = cov.get("annual") or {}
+    interim = cov.get("interim") or {}
+    return int(annual.get("with_body") or 0) >= 1 and int(interim.get("with_body") or 0) >= 1
+
+
+def filing_lacks_material_body(
+    row: dict[str, Any],
+    *,
+    filings: list[dict[str, Any]] | None = None,
+    ticker: str = "",
+) -> bool:
     """
     True when a missing body should count toward ingest gap / IWB scoring.
 
@@ -1469,6 +1494,15 @@ def filing_lacks_material_body(row: dict[str, Any]) -> bool:
     if _is_routine_own_share_or_pdmr_row(row):
         return False
     if _is_holding_disclosure_row(row):
+        return False
+    if _is_routine_non_results_rns_row(row):
+        return False
+    if (
+        filings is not None
+        and str(ticker or "").upper().endswith(".L")
+        and _is_other_results_rns_row(row)
+        and _uk_statutory_annual_and_interim_bodied(filings)
+    ):
         return False
     return True
 
@@ -1486,6 +1520,8 @@ def filing_counts_toward_body_penetration(row: dict[str, Any]) -> bool:
     if _is_routine_own_share_or_pdmr_row(row):
         return False
     if _is_holding_disclosure_row(row):
+        return False
+    if _is_routine_non_results_rns_row(row):
         return False
     return True
 
