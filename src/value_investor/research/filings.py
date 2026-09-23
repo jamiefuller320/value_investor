@@ -6069,7 +6069,7 @@ def parse_ir_cash_bridge_slides(body_text: str) -> dict[str, Any] | None:
 
 
 _FCF_DIVISION_SECTION_RE = re.compile(
-    r"Appendix:\s*Cash flow by division",
+    r"(?:Appendix:\s*)?Cash flow by division",
     re.IGNORECASE,
 )
 _FCF_DIVISION_LABELS = (
@@ -6432,8 +6432,8 @@ _LEASES_MATURITY_ROW_RE = re.compile(
     re.MULTILINE | re.IGNORECASE,
 )
 _IFRS16_LIABILITY_TOTAL_RE = re.compile(
-    r"£\s*([\d,.]+)\s*m(?:illion)? of IFRS\s*16 lease liabilities",
-    re.IGNORECASE,
+    r"£\s*([\d,.]+)\s*m(?:illion)?\s+of\s+IFRS\s*16\s+lease\s+liabilities",
+    re.IGNORECASE | re.DOTALL,
 )
 _LEASE_MATURITY_BUCKETS = (
     "within_one_year",
@@ -6473,7 +6473,9 @@ def parse_ir_fcf_division_bridge(body_text: str) -> dict[str, Any] | None:
     match = _FCF_DIVISION_SECTION_RE.search(body_text)
     if match is None:
         return None
-    section = body_text[match.start() : match.start() + 2500]
+    # FY2026 decks place the division table before the slide title; include lookback.
+    start = max(0, match.start() - 1800)
+    section = body_text[start : match.start() + 2500]
     for line in section.splitlines():
         if not re.match(r"^\s*Free cash flow\b", line, re.IGNORECASE):
             continue
