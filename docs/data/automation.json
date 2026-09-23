@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T12:31:48.392017+00:00",
+  "generated_at": "2026-09-23T12:54:05.069427+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1205,13 +1205,13 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-23T12:30:21.823163+00:00",
-    "queue_ui_updated_at": "2026-09-23T12:31:48.310948+00:00",
+    "queue_ui_updated_at": "2026-09-23T12:54:04.996231+00:00",
     "task_count": 102,
     "status": {
       "open_count": 0,
       "pr_open_count": 0,
-      "parked_count": 1,
-      "merged_count": 77,
+      "parked_count": 0,
+      "merged_count": 78,
       "failed_count": 0,
       "next_task_id": null,
       "in_flight_branch": null,
@@ -1221,20 +1221,7 @@
       "spend_blocked": false
     },
     "queued_tasks": [],
-    "attention_tasks": [
-      {
-        "id": "eng-20260923-02",
-        "area": "ingest",
-        "title": "Close stubborn ingest gaps for RAT.L (chain 2/3: 0/0 bodies, run igc-20260923-03)",
-        "priority": "high",
-        "priority_score": 88.0,
-        "status": "parked",
-        "source": "ingest_gap_closure",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      }
-    ],
+    "attention_tasks": [],
     "clash_summary": {
       "open_task_count": 0,
       "dispatch_eligible_count": 0,
@@ -1516,9 +1503,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-23T12:31:48.392017+00:00",
-    "overall": "idle",
-    "headline": "Queue and hunter idle.",
+    "generated_at": "2026-09-23T12:54:05.069427+00:00",
+    "overall": "blocked",
+    "headline": "Traffic pause — 0 stuck PR(s). project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
     "merge_lane": {
       "state": "idle",
       "idle": true,
@@ -1530,31 +1517,33 @@
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "idle",
+      "state": "blocked",
       "idle": true,
       "running": false,
-      "blocked": false,
+      "blocked": true,
       "should_dispatch": false,
       "pause_active": false,
-      "traffic_pause_active": false,
-      "attention_parked_count": 1,
+      "traffic_pause_active": true,
+      "attention_parked_count": 0,
       "open_count": 0,
       "pr_open_count": 0,
       "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
       "next_task_id": null,
-      "reason": "no open engineering tasks in queue",
-      "detail": "No open engineering tasks — queue is idle."
+      "reason": "project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
+      "detail": "Traffic pause — 0 stuck PR(s). project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-23T12:30:23.611562+00:00"
+      "evaluated_at": "2026-09-23T12:54:04.187439+00:00"
     },
     "traffic_control": {
-      "pause_active": false,
+      "pause_active": true,
       "stuck_pr_count": 0,
-      "pause_reasons": [],
+      "pause_reasons": [
+        "automation_waste"
+      ],
       "evaluated_at": "2026-09-23T12:31:44.687029+00:00"
     },
     "ops_monitor": {
@@ -1563,6 +1552,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260923-02",
+        "title": "Close stubborn ingest gaps for RAT.L (chain 2/3: 0/0 bodies, run igc-20260923-03)",
+        "area": "ingest",
+        "pr_number": 819,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/819",
+        "merged_at": "2026-09-23T12:52:50.761090+00:00",
+        "merge_class": "ingest_narrow",
+        "auto_merge": false,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260922-05",
         "title": "Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop",
@@ -1586,16 +1586,16 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 2,
+    "verified_merges_today_count": 3,
     "completion_monitor": {
       "timezone": "UTC",
       "history_days": 14,
       "today": {
         "date": "2026-09-23",
-        "merged_total": 2,
+        "merged_total": 3,
         "merged_auto": 0,
-        "merged_manual": 2,
-        "verified": 2,
+        "merged_manual": 3,
+        "verified": 3,
         "fix_interventions": 5,
         "fix_ci_check": 1,
         "fix_merge_conflict": 4,
@@ -1758,10 +1758,10 @@
         },
         {
           "date": "2026-09-23",
-          "merged_total": 2,
+          "merged_total": 3,
           "merged_auto": 0,
-          "merged_manual": 2,
-          "verified": 2,
+          "merged_manual": 3,
+          "verified": 3,
           "fix_interventions": 5,
           "fix_ci_check": 1,
           "fix_merge_conflict": 4,
@@ -1769,6 +1769,17 @@
         }
       ],
       "merges_today": [
+        {
+          "task_id": "eng-20260923-02",
+          "title": "Close stubborn ingest gaps for RAT.L (chain 2/3: 0/0 bodies, run igc-20260923-03)",
+          "area": "ingest",
+          "pr_number": 819,
+          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/819",
+          "merged_at": "2026-09-23T12:52:50.761090+00:00",
+          "merge_class": "ingest_narrow",
+          "auto_merge": false,
+          "independently_verified": true
+        },
         {
           "task_id": "eng-20260922-05",
           "title": "Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop",
