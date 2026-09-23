@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T08:55:23+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T10:01:13+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -198,6 +198,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N145 | **Make ai_judgment_fair the is_primary_learning_track flag** | Day-to-day Suite B NAV stability is expected under T212 costs and is not the promotion gate. Keep is_primary on stress ai_judgment until fair AI clears ^FTSE and rules_fair with a thick forward window (N48 human flip). Until then Suite B remains the adoption scoreboard, not the primary flag. | ai_judgment_fair beat_market and beat rules_fair on a thick forward window; Sunday fair-cost gate green; human accepts N48 |
 | N146 | **Switch primary because Suite B NAV beats Suite A** | B-vs-A absolute NAV is mostly cost drag (same picks, lower friction). Do not use it as the primary flip criterion. Short-term steer on within-suite relatives (AI vs rules on same costs) and A churn; flip primary only on thick Suite B absolute edge vs ^FTSE and fair rules (N48). | Revisiting N48 primary flip criteria |
 | N147 | **Replace primary scoreboard with fixed-notional sleeve P&L** | Fixed £/$ notional per buy is excellent for identification accuracy and lifecycle sleeve stats, but must not replace Suite B book excess vs ^FTSE as stage 2b / adoption truth. Capital path (sizing, deposits, rotation) is a separate question the NAV book answers. | Sleeve-level outcome linker is thick enough to sit beside (not instead of) primary excess gates |
+| N148 | **Do not spray monthly deposits across all epoch-0 markets yet** | £100/mo per epoch-0 book invents a multi-market capital-allocation policy before stage 4 live breadth. Epoch-0 books are equal-support data marks. Prefer the FTSE buy_tier_level_dca twin only. | Live universe past FTSE-only (stage 4) or human chooses an explicit multi-market paper allocation policy with a fresh capital epoch |
 
 ---
 

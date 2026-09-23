@@ -312,13 +312,17 @@ MOMENTUM_GRACE_TRACK_ID = "momentum_grace"
 GRADUATED_ALLOCATION_TRACK_ID = "graduated_allocation"
 TECHNICAL_TRACK_ID = "technical"
 BUY_TIER_LEVEL_TRACK_ID = "buy_tier_level"
+BUY_TIER_LEVEL_DCA_TRACK_ID = "buy_tier_level_dca"
 AI_JUDGMENT_SUBDIR = "ai_judgment"
 AI_JUDGMENT_CALIBRATED_SUBDIR = "ai_judgment_calibrated"
 MOMENTUM_GRACE_SUBDIR = "momentum_grace"
 GRADUATED_ALLOCATION_SUBDIR = "graduated_allocation"
 TECHNICAL_SUBDIR = "technical"
 BUY_TIER_LEVEL_SUBDIR = "buy_tier_level"
+BUY_TIER_LEVEL_DCA_SUBDIR = "buy_tier_level_dca"
 BUY_TIER_LEVEL_MAX_POSITIONS = 120
+# FTSE household-realism capital epoch: £500/mo on a cold-start level twin.
+BUY_TIER_LEVEL_DCA_MONTHLY_DEPOSIT = 500.0
 LEARNING_TRACK_IDS = (
     RULES_TRACK_ID,
     AI_JUDGMENT_TRACK_ID,
@@ -327,6 +331,7 @@ LEARNING_TRACK_IDS = (
     GRADUATED_ALLOCATION_TRACK_ID,
     TECHNICAL_TRACK_ID,
     BUY_TIER_LEVEL_TRACK_ID,
+    BUY_TIER_LEVEL_DCA_TRACK_ID,
 )
 
 
@@ -410,7 +415,19 @@ def default_buy_tier_level_config(base: AutomationConfig | None = None) -> Autom
     cfg.max_positions = BUY_TIER_LEVEL_MAX_POSITIONS
     cfg.exit_confirm_screens = DEFAULT_EXIT_CONFIRM_SCREENS
     cfg.reentry_cooldown_screens = DEFAULT_REENTRY_COOLDOWN_SCREENS
+    cfg.monthly_deposit = 0.0
     stamp_fair_costs(cfg)
+    return cfg
+
+
+def default_buy_tier_level_dca_config(base: AutomationConfig | None = None) -> AutomationConfig:
+    """FTSE realism twin: same level-book policy + £500/mo (new capital epoch)."""
+    cfg = default_buy_tier_level_config(base)
+    cfg.track_id = BUY_TIER_LEVEL_DCA_TRACK_ID
+    cfg.track_label = (
+        "Buy-tier level DCA realism (£500/mo, Suite B costs, cold-start capital epoch)"
+    )
+    cfg.monthly_deposit = float(BUY_TIER_LEVEL_DCA_MONTHLY_DEPOSIT)
     return cfg
 
 
@@ -435,6 +452,7 @@ def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
         GRADUATED_ALLOCATION_TRACK_ID: root / GRADUATED_ALLOCATION_SUBDIR,
         TECHNICAL_TRACK_ID: root / TECHNICAL_SUBDIR,
         BUY_TIER_LEVEL_TRACK_ID: root / BUY_TIER_LEVEL_SUBDIR,
+        BUY_TIER_LEVEL_DCA_TRACK_ID: root / BUY_TIER_LEVEL_DCA_SUBDIR,
     }
     for rank in discover_calibration_shadow_ranks(root):
         track_id = calibrated_shadow_track_id(rank)
@@ -1562,6 +1580,40 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
     btl_path.write_text(json.dumps(btl.to_dict(), indent=2), encoding="utf-8")
     configs[BUY_TIER_LEVEL_TRACK_ID] = btl
 
+    dca_dir = dirs[BUY_TIER_LEVEL_DCA_TRACK_ID]
+    dca_path = dca_dir / CONFIG_FILENAME
+    dca_dir.mkdir(parents=True, exist_ok=True)
+    if dca_path.exists():
+        dca = AutomationConfig.from_dict(json.loads(dca_path.read_text(encoding="utf-8")))
+        dca.track_id = BUY_TIER_LEVEL_DCA_TRACK_ID
+        dca.is_primary_learning_track = False
+        dca.is_cohort_lab = True
+        dca.is_fair_cost_lab = False
+        dca.is_calibration_shadow = False
+        dca.is_exclusion_shadow = False
+        dca.use_adjusted_signal = False
+        dca.require_research_accumulate = False
+        dca.use_momentum_grace = False
+        dca.use_graduated_allocation = False
+        dca.skip_timing_wait = True
+        dca.min_conviction = 0.0
+        dca.sector_cap = 1.0
+        if int(dca.max_positions) < BUY_TIER_LEVEL_MAX_POSITIONS:
+            dca.max_positions = BUY_TIER_LEVEL_MAX_POSITIONS
+        dca.monthly_deposit = float(BUY_TIER_LEVEL_DCA_MONTHLY_DEPOSIT)
+        dca.track_label = dca.track_label or (
+            "Buy-tier level DCA realism (£500/mo, Suite B costs, cold-start capital epoch)"
+        )
+        dca.timezone = rules.timezone
+        dca.market_open = rules.market_open
+        dca.settle_minutes_after_open = rules.settle_minutes_after_open
+        dca.weekdays_only = rules.weekdays_only
+        stamp_fair_costs(dca)
+    else:
+        dca = default_buy_tier_level_dca_config(rules)
+    dca_path.write_text(json.dumps(dca.to_dict(), indent=2), encoding="utf-8")
+    configs[BUY_TIER_LEVEL_DCA_TRACK_ID] = dca
+
     return configs
 
 
@@ -1641,6 +1693,7 @@ def run_learning_tracks(
             "momentum_grace is an experimental exit overlay; "
             "graduated_allocation tests trade-plan entry sizing and harvest skims; "
             "buy_tier_level is a Suite B unfiltered buy-tier cohort (frozen knobs); "
+            "buy_tier_level_dca is the FTSE £500/mo realism capital epoch (same policy); "
             "entry_dca_overlay scores counterfactual entry cadences on every track; "
             "sleeve_episodes records widest near-buy→grace-end+~1m lifecycles tagged "
             "on_book/off_book/never_funded (observe-only); "

@@ -8,9 +8,11 @@ from value_investor.held_vs_market import (
     assemble_held_vs_market,
     bench_closes_for_market,
     build_held_vs_market_payload,
+    contribution_deltas_from_marks,
     densify_held_from_charts,
     empty_held_vs_market,
     load_macro_index_closes,
+    market_values_with_contributions,
     merge_branch_series,
 )
 from value_investor.storage import write_json
@@ -174,6 +176,40 @@ def test_merge_branch_series_overlays_same_dates():
     pending = merge_branch_series(payload, branch_id="skip_timing_wait_false", status="pending")
     assert pending["branches"][0]["status"] == "pending"
     assert pending["points"][-1]["branches"] == {}
+
+
+def test_contribution_deltas_and_deposit_matched_market():
+    marks = [
+        {
+            "date": "2026-09-01",
+            "held": 1000.0,
+            "nav": 1000.0,
+            "cash": 0.0,
+            "positions": 1,
+            "contributed_capital": 1000.0,
+            "branches": {},
+        },
+        {
+            "date": "2026-10-01",
+            "held": 1480.0,
+            "nav": 1480.0,
+            "cash": 0.0,
+            "positions": 2,
+            "contributed_capital": 1500.0,
+            "branches": {},
+        },
+    ]
+    deltas = contribution_deltas_from_marks(marks)
+    assert deltas == {"2026-09-01": 1000.0, "2026-10-01": 500.0}
+    market, path = market_values_with_contributions(
+        ["2026-09-01", "2026-10-01"],
+        {"2026-09-01": 100.0, "2026-10-01": 110.0},
+        contribution_deltas=deltas,
+    )
+    assert path == "index_dca_contributions"
+    # Day1: buy 1000/100 = 10 units → 1000. Day2: +500/110 units, mark all.
+    assert market["2026-09-01"] == 1000.0
+    assert abs(market["2026-10-01"] - (10 * 110 + 500)) < 1e-6
 
 
 def test_densify_current_book_from_charts_clips_to_start():

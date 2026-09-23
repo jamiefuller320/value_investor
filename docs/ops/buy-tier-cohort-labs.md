@@ -21,6 +21,17 @@ This live FTSE epoch-zero **is** the intended start instrument. Admitted shards 
 - Frozen: `is_cohort_lab=true` — decision-review `--apply` cannot retune knobs
 - Suite: included in `--tracks all` and `--suite B`; excluded from `--suite A`
 - Cold start: committed `config.json` only — no `automated_fund.json`. First weekday paper-auto creates the fund and is epoch-zero.
+- Deposits: `monthly_deposit=0` (pure recycling) — do **not** enable deposits mid-flight on this book
+
+### FTSE DCA realism twin (`buy_tier_level_dca`)
+
+Parallel **new capital epoch** with the same level-book policy plus **£500/mo** household deposits:
+
+- Directory: `docs/data/paper_automation/buy_tier_level_dca/`
+- Same Suite B costs / knobs / frozen cohort lab as `buy_tier_level`
+- `monthly_deposit=500` — cold start only (no warm-start from the recycling book)
+- Included in weekday `--tracks all` / Suite B; not a promotion gate
+- Overview FTSE **held vs market** overlays this twin as branch series (see below)
 
 Spot-check after Monday paper-auto is now an **ops-monitor** check: an acted
 `buy_tier_level` pass with empty `automated_fund.json` holdings is a fail.
@@ -35,12 +46,13 @@ Each Overview **market card** plots **held-stock value** (paper NAV minus cash) 
 | Book present | Series source |
 |--------------|---------------|
 | Frozen `buy_tier_level` (live FTSE or admitted shard) | Paper `equity_curve` marks. Live FTSE may densify daily from buy-tier chart JSON on the *current* book, clipped to the first fill date. Short epoch-0 histories label **every** mark day on the tile sparkline and detail chart (last date uses end-anchor so it stays inside the tile). |
+| Live FTSE + `buy_tier_level_dca` | Same chart adds branch overlays: **DCA £500/mo book** (held) and **DCA £500/mo in ^FTSE** (deposit-matched index path). Recycling held/market lines stay the primary pair. |
 | No paper book yet | Observe-sim `screen_rules` equity curve when that clock exists |
 | Neither | Empty placeholder |
 
 Index levels come from dated `docs/data/library/macro/` snapshots (no extra Yahoo fetch on dashboard refresh), including US `^GSPC` for S&P cards. If those are missing, the market line falls back to the observe-sim period return as start/end points. `ftse-library macro --backfill-indexes` fills missing equity-index markers into existing dated files.
 
-**Branch overlays.** The payload is `branch_ready`: extra series of `kind=branch` plot on the same dates once a knob-changed book is applied. Use `merge_branch_series()` — do **not** spawn a warm-started twin per knob (N99). Pending branches render in the legend with no line.
+**Branch overlays.** The payload is `branch_ready`: extra series of `kind=branch` plot on the same dates once a knob-changed book is applied. Use `merge_branch_series()` — do **not** spawn a warm-started twin per knob (N99). Pending branches render in the legend with no line. The FTSE DCA realism twin is an intentional capital-path branch (not a cost twin — see N140).
 
 `ftse-publish` / `ftse-library market-status` / dashboard `POST /api/refresh` rebuild `docs/data/market_status.json` (`schema_version` 3, `held_vs_market` per row).
 

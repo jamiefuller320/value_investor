@@ -106,10 +106,12 @@ def test_suite_filter_and_cli_spawn(tmp_path: Path, capsys):
         "ai_judgment_calibrated",
     ]
     ids.append("buy_tier_level")
+    ids.append("buy_tier_level_dca")
     assert filter_track_ids_for_suite(ids, "B") == [
         AI_JUDGMENT_FAIR_TRACK_ID,
         RULES_FAIR_TRACK_ID,
         "buy_tier_level",
+        "buy_tier_level_dca",
     ]
     assert AI_JUDGMENT_FAIR_TRACK_ID not in filter_track_ids_for_suite(ids, "A")
     assert "buy_tier_level" not in filter_track_ids_for_suite(ids, "A")

@@ -208,6 +208,45 @@ def _market_values(
     return out, path
 
 
+def contribution_deltas_from_marks(marks: list[dict[str, Any]]) -> dict[str, float]:
+    """Map date → newly contributed cash (from equity-curve ``contributed_capital``)."""
+    deltas: dict[str, float] = {}
+    prev = 0.0
+    for row in marks:
+        day = str(row.get("date") or "")
+        contrib = _float(row.get("contributed_capital"))
+        if not day or contrib is None:
+            continue
+        delta = contrib - prev
+        if delta > 1e-9:
+            deltas[day] = round(delta, 2)
+        prev = contrib
+    return deltas
+
+
+def market_values_with_contributions(
+    dates: list[str],
+    bench_closes: dict[str, float],
+    *,
+    contribution_deltas: dict[str, float],
+) -> tuple[dict[str, float], str]:
+    """Dollar-cost the contribution schedule into the index (units × price)."""
+    if not dates or not bench_closes or not contribution_deltas:
+        return {}, "none"
+    units = 0.0
+    out: dict[str, float] = {}
+    for day in dates:
+        px = _forward_fill(bench_closes, day)
+        if px is None or px <= 0:
+            continue
+        add = float(contribution_deltas.get(day) or 0.0)
+        if add > 0:
+            units += add / px
+        if units > 0:
+            out[day] = round(units * px, 2)
+    return out, "index_dca_contributions"
+
+
 def _endpoint_market(
     dates: list[str],
     *,
@@ -635,6 +674,7 @@ __all__ = [
     "bench_closes_for_market",
     "benchmark_ticker_for_market",
     "build_held_vs_market_payload",
+    "contribution_deltas_from_marks",
     "densify_held_from_charts",
     "empty_held_vs_market",
     "holdings_shares",
@@ -642,5 +682,6 @@ __all__ = [
     "load_macro_index_closes",
     "marks_from_fund",
     "marks_from_observe_sim",
+    "market_values_with_contributions",
     "merge_branch_series",
 ]
