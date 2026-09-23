@@ -1,8 +1,8 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-23T17:23:18.720513+00:00`
-Trajectory: **blocked_by_pr_queue**
-Dispatch pause: **active** (stuck PRs: 0)
+Generated: `2026-09-23T17:31:49.172761+00:00`
+Trajectory: **on_track**
+Dispatch pause: **inactive** (stuck PRs: 0)
 
 ## Achieved (grounded)
 - Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
@@ -28,10 +28,10 @@ Dispatch pause: **active** (stuck PRs: 0)
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
 - [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
 - [ok] Ops monitor overall=warn at 2026-09-23T07:46:36.280037+00:00 _(source: docs/data/ops_status.json)_
-- [ok] Traffic pause_active=True; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
+- [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `stop_automation_waste` — signals=1; parked=eng-20260923-09; pause=True (applied)
+- _(none)_
 
 ## Merges today (monitor independent verify)
 - `human`/human PR #818 `eng-20260922-05` — Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop
