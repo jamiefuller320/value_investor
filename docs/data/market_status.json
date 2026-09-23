@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-23T14:28:45.859328+00:00",
+  "generated_at": "2026-09-23T14:35:49.509769+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -1024,7 +1024,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=2, zero_body=10, thin=4, indexed_without_body=152)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=4, zero_body=10, thin=1, indexed_without_body=103)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 9,
@@ -1076,11 +1076,11 @@
       },
       "filing_health": {
         "buy_tier_count": 17,
-        "unmeasured_buy_tier": 2,
+        "unmeasured_buy_tier": 4,
         "zero_body_buy_tier": 10,
-        "thin_body_buy_tier": 4,
-        "indexed_without_body": 152,
-        "bodies_median": 20.0,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 103,
+        "bodies_median": 7.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
@@ -1096,18 +1096,17 @@
           "IGR.L"
         ],
         "thin_body_tickers": [
-          "KGH.L",
-          "MPE.L",
-          "YNGN.L",
-          "CAM.L"
+          "YNGN.L"
         ],
         "unmeasured_tickers": [
+          "MPE.L",
+          "CAM.L",
           "CREO.L",
           "PMI.L"
         ],
         "parked_tickers": []
       },
-      "filing_gaps": 12,
+      "filing_gaps": 14,
       "paper_instrument": null,
       "ai_judgment": null,
       "knob_apply": null,
@@ -1117,15 +1116,13 @@
       "sprint_progress": {
         "window_days": 2,
         "run_count": 1,
-        "targets": 6,
-        "improved": 3,
+        "targets": 1,
+        "improved": 1,
         "improved_tickers": [
-          "KGH.L",
-          "MPE.L",
-          "CAM.L"
+          "KGH.L"
         ],
-        "last_run_at": "2026-09-23T14:26:50.599463+00:00",
-        "runtime_cutoff_runs": 1,
+        "last_run_at": "2026-09-23T14:33:43.077404+00:00",
+        "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 5,
@@ -1135,34 +1132,29 @@
           "filing_gaps": 15
         },
         "gaps_after": {
-          "unmeasured": 2,
+          "unmeasured": 4,
           "zero_body": 10,
-          "thin": 4,
-          "indexed_without_body": 152,
-          "filing_gaps": 12
+          "thin": 1,
+          "indexed_without_body": 103,
+          "filing_gaps": 14
         },
         "gap_delta": {
-          "unmeasured": -3,
+          "unmeasured": -1,
           "zero_body": 0,
-          "thin": 3,
-          "indexed_without_body": 62,
-          "filing_gaps": -3
+          "thin": 0,
+          "indexed_without_body": 13,
+          "filing_gaps": -1
         },
         "remaining": {
-          "unmeasured": 2,
+          "unmeasured": 4,
           "zero_body": 10,
-          "thin": 4,
-          "indexed_without_body": 152,
-          "filing_gaps": 12
+          "thin": 1,
+          "indexed_without_body": 103,
+          "filing_gaps": 14
         },
         "admission_ready": false,
         "admission_gate": "sprint_ingest_complete",
         "admission_warnings": [
-          {
-            "id": "runtime_cutoff",
-            "severity": "high",
-            "summary": "1 ingest run(s) hit the runtime cutoff"
-          },
           {
             "id": "zero_body_stuck",
             "severity": "high",
