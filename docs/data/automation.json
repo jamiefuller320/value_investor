@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T13:42:47.521534+00:00",
+  "generated_at": "2026-09-23T13:52:14.116305+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1204,35 +1204,23 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-23T13:42:41.323219+00:00",
-    "queue_ui_updated_at": "2026-09-23T13:42:47.421953+00:00",
+    "compiled_at": "2026-09-23T13:52:07.834457+00:00",
+    "queue_ui_updated_at": "2026-09-23T13:52:13.996408+00:00",
     "task_count": 107,
     "status": {
-      "open_count": 3,
+      "open_count": 2,
       "pr_open_count": 1,
       "parked_count": 1,
-      "merged_count": 78,
+      "merged_count": 79,
       "failed_count": 0,
       "next_task_id": "eng-20260923-04",
-      "in_flight_branch": "cursor/eng-20260923-03-1de3",
-      "in_flight_pr": 821,
+      "in_flight_branch": "cursor/eng-20260923-07-1de3",
+      "in_flight_pr": 822,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
-      {
-        "id": "eng-20260923-03",
-        "area": "ingest",
-        "title": "Wire Yahoo cash-flow fields into `CompanyMetrics` (e.g. `operating_cashflow`) from existing `financials_annual.json` when fetch returns null",
-        "priority": "high",
-        "priority_score": 97.0,
-        "status": "pr_open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": "cursor/eng-20260923-03-1de3"
-      },
       {
         "id": "eng-20260923-04",
         "area": "ingest",
@@ -1244,21 +1232,9 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": false,
-        "blocked_by": [
-          {
-            "pr_number": null,
-            "branch": null,
-            "task_id": null,
-            "title": "in-flight allowlist overlap",
-            "clash_files": [
-              "src/value_investor/research/filings.py",
-              "tests/test_research_filings.py"
-            ],
-            "kind": "allowlist_overlap"
-          }
-        ],
-        "effective_dispatch_rank": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
         "clash_scan": "full"
       },
       {
@@ -1272,21 +1248,9 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": false,
-        "blocked_by": [
-          {
-            "pr_number": null,
-            "branch": null,
-            "task_id": null,
-            "title": "in-flight allowlist overlap",
-            "clash_files": [
-              "src/value_investor/research/filings.py",
-              "tests/test_research_filings.py"
-            ],
-            "kind": "allowlist_overlap"
-          }
-        ],
-        "effective_dispatch_rank": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 2,
         "clash_scan": "full"
       },
       {
@@ -1295,15 +1259,11 @@
         "title": "Honour FCF action-note enforcement (batched tickers)",
         "priority": "medium",
         "priority_score": 70.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "so_what_closure",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "full"
+        "branch_name": "cursor/eng-20260923-07-1de3"
       }
     ],
     "attention_tasks": [
@@ -1321,9 +1281,9 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 3,
-      "dispatch_eligible_count": 1,
-      "blocked_count": 2
+      "open_task_count": 2,
+      "dispatch_eligible_count": 2,
+      "blocked_count": 0
     }
   },
   "learning_track_epoch_datum": {
@@ -1601,9 +1561,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-23T13:42:47.521534+00:00",
-    "overall": "blocked",
-    "headline": "queue ready — dispatch next open task",
+    "generated_at": "2026-09-23T13:52:14.116305+00:00",
+    "overall": "active",
+    "headline": "Merge lane active; agent lane active.",
     "merge_lane": {
       "state": "running",
       "idle": false,
@@ -1612,27 +1572,27 @@
       "pr_open_count": 1,
       "open_engineering_prs": [
         {
-          "number": 821,
-          "branch": "cursor/eng-20260923-03-1de3",
+          "number": 822,
+          "branch": "cursor/eng-20260923-07-1de3",
           "draft": false
         }
       ],
-      "in_flight_pr": 821,
-      "detail": "Open engineering PR(s) #821 — merge fires on CI success."
+      "in_flight_pr": 822,
+      "detail": "Open engineering PR(s) #822 — merge fires on CI success."
     },
     "agent_lane": {
-      "state": "blocked",
+      "state": "running",
       "idle": false,
       "running": true,
-      "blocked": true,
+      "blocked": false,
       "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 1,
-      "open_count": 3,
+      "open_count": 2,
       "pr_open_count": 1,
-      "dispatch_eligible_count": 1,
-      "blocked_task_count": 2,
+      "dispatch_eligible_count": 2,
+      "blocked_task_count": 0,
       "next_task_id": "eng-20260923-04",
       "reason": "queue ready — dispatch next open task",
       "detail": "queue ready — dispatch next open task"
@@ -1640,7 +1600,7 @@
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 1,
-      "evaluated_at": "2026-09-23T13:42:46.549631+00:00"
+      "evaluated_at": "2026-09-23T13:52:12.959590+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1660,8 +1620,19 @@
         "area": "scoring",
         "pr_number": 820,
         "pr_url": "https://github.com/jamiefuller320/value_investor/pull/820",
-        "merged_at": "2026-09-23T13:41:16.050404+00:00",
-        "merge_class": "scoring_narrow",
+        "merged_at": "2026-09-23T13:51:56.233176+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260923-03",
+        "title": "Wire Yahoo cash-flow fields into `CompanyMetrics` (e.g. `operating_cashflow`) from existing `financials_annual.json` when fetch returns null",
+        "area": "ingest",
+        "pr_number": 821,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/821",
+        "merged_at": "2026-09-23T13:50:48.182172+00:00",
+        "merge_class": "ingest_narrow",
         "auto_merge": false,
         "independently_verified": true
       },
@@ -1694,9 +1665,9 @@
       "history_days": 14,
       "today": {
         "date": "2026-09-23",
-        "merged_total": 3,
+        "merged_total": 4,
         "merged_auto": 0,
-        "merged_manual": 3,
+        "merged_manual": 4,
         "verified": 1,
         "fix_interventions": 5,
         "fix_ci_check": 1,
@@ -1860,9 +1831,9 @@
         },
         {
           "date": "2026-09-23",
-          "merged_total": 3,
+          "merged_total": 4,
           "merged_auto": 0,
-          "merged_manual": 3,
+          "merged_manual": 4,
           "verified": 1,
           "fix_interventions": 5,
           "fix_ci_check": 1,
@@ -1877,8 +1848,19 @@
           "area": "scoring",
           "pr_number": 820,
           "pr_url": "https://github.com/jamiefuller320/value_investor/pull/820",
-          "merged_at": "2026-09-23T13:41:16.050404+00:00",
-          "merge_class": "scoring_narrow",
+          "merged_at": "2026-09-23T13:51:56.233176+00:00",
+          "merge_class": "human",
+          "auto_merge": false,
+          "independently_verified": false
+        },
+        {
+          "task_id": "eng-20260923-03",
+          "title": "Wire Yahoo cash-flow fields into `CompanyMetrics` (e.g. `operating_cashflow`) from existing `financials_annual.json` when fetch returns null",
+          "area": "ingest",
+          "pr_number": 821,
+          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/821",
+          "merged_at": "2026-09-23T13:50:48.182172+00:00",
+          "merge_class": "ingest_narrow",
           "auto_merge": false,
           "independently_verified": true
         },
