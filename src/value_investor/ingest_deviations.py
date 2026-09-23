@@ -37,7 +37,7 @@ KIND_BLOCKER_NO_IMPROVE = "blocker_no_improve"
 OPEN_STATUSES = frozenset({"open"})
 REVIEWED_STATUSES = frozenset({"approved", "dismissed", "resolved"})
 
-# Observe-only signal-tier triage (L453). Not an auto-apply path (N151).
+# Observe-only signal-tier triage (L455). Not an auto-apply path (N151).
 SHADOW_ACTION_PIN = "pin_intensive"
 SHADOW_ACTION_PARK = "park_hunter"
 SHADOW_ACTION_DISMISS = "dismiss"
