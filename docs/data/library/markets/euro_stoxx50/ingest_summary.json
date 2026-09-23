@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-22T17:49:00.709039+00:00",
+  "run_at": "2026-09-23T19:49:20.480939+00:00",
   "market_id": "euro_stoxx50",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-22T17:48:54.891180+00:00",
+    "snapshot_at": "2026-09-23T19:48:42.342213+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 15,
     "unmeasured_buy_tier": 0,
@@ -58,13 +58,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-22T17:48:56.324300+00:00",
+    "snapshot_at": "2026-09-23T19:49:15.996621+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 15,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 4,
-    "indexed_without_body": 4,
+    "indexed_without_body": 5,
     "bodies_min": 1,
     "bodies_median": 3,
     "bodies_max": 100,
@@ -86,7 +86,7 @@
     ],
     "indexed_without_body_by_ticker": {
       "SAN.PA": 1,
-      "TTE.PA": 1,
+      "TTE.PA": 2,
       "SGO.PA": 1,
       "SAP.DE": 1
     },
@@ -109,11 +109,36 @@
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 15,
+    "hits": 14,
+    "new_rows_total": 1,
+    "curiosity_total": 16,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "SGO.PA",
+      "MUV2.DE",
+      "DTE.DE",
+      "BAS.DE",
+      "SAN.PA",
+      "SAP.DE",
+      "TTE.PA"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
     "skipped": true,
@@ -122,7 +147,7 @@
   },
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-09-22T17:48:55.593901+00:00",
+    "assessed_at": "2026-09-23T19:48:43.166308+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -147,7 +172,7 @@
       {
         "ticker": "TTE.PA",
         "indexed_without_body": 1,
-        "filings_total": 101,
+        "filings_total": 102,
         "filings_with_body": 100
       }
     ],
@@ -182,21 +207,19 @@
       "thin_need_bodies": 1
     }
   },
-  "used_seconds": 0.0018804599999953098,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2099.99811954,
+  "used_seconds": 31.992319416999976,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3568.007680583,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "TTE.PA"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-09-22T17:48:56.327100+00:00",
+    "updated_at": "2026-09-23T19:49:15.999439+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -263,10 +286,10 @@
         "ticker": "TTE.PA",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-09-19T12:07:57.624453+00:00",
-        "filings_total": 101,
+        "parked_at": "2026-09-23T19:49:15.999439+00:00",
+        "filings_total": 103,
         "filings_with_body": 100,
-        "indexed_without_body": 1,
+        "indexed_without_body": 2,
         "thin": false
       }
     ],
@@ -304,7 +327,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 100,
+    "task_count": 108,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
