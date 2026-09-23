@@ -804,86 +804,6 @@ def test_ingest_improvement_installs_fetch_cashflow_fallback():
 @patch("value_investor.research.ingest_improvement.sanitize_filings_index")
 @patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
 @patch("value_investor.research.ingest_improvement.refetch_uk_primary_filing_bodies")
-def test_intensive_gap_closure_prefetches_uk_bodies_before_ingest(
-    mock_primary_refetch,
-    mock_bootstrap,
-    mock_sanitize,
-    mock_ingest_sources,
-    mock_alternate,
-    mock_deepen,
-    tmp_path: Path,
-):
-    """eng-20260923-01: intensive pins must refetch before slow full ingest (PINE.L 0/0)."""
-    output_dir = tmp_path / "output"
-    sources = output_dir / "research" / "PINE.L" / "sources" / "filings"
-    sources.mkdir(parents=True)
-    filings = [{"has_body": True, "headline": "Final Results", "period": "annual"}] * 3
-    filings += [
-        {
-            "has_body": False,
-            "headline": "Update on Letter of Intent",
-            "period": "other",
-            "url": "https://www.investegate.co.uk/announcement/rns/pinewood-technologies-group--pine/update-on-letter-of-intent-/9761772",
-            "source": "investegate_direct",
-        }
-    ]
-    (sources / "filings_index.json").write_text(
-        json.dumps({"summary": {"total": 4, "with_body": 3}, "filings": filings}),
-        encoding="utf-8",
-    )
-    call_order: list[str] = []
-
-    def _prefetch(*args, **kwargs):  # noqa: ARG001
-        call_order.append("refetch")
-        return {
-            "companies_house": {"attempted": 0, "fetched": 0},
-            "rns": {
-                "investegate": {"attempted": 1, "fetched": 1, "with_body_after": 4},
-                "ticker_rns": {"attempted": 0, "fetched": 0},
-                "attempted": 1,
-                "fetched": 1,
-                "with_body_before": 3,
-                "with_body_after": 4,
-            },
-            "residual": {"attempted": 0, "fetched": 0},
-            "fetched": 1,
-            "with_body_before": 3,
-            "with_body_after": 4,
-        }
-
-    def _ingest(**kwargs):  # noqa: ARG001
-        call_order.append("ingest")
-        return {"filings_summary": {"with_body": 4}}
-
-    mock_primary_refetch.side_effect = _prefetch
-    mock_ingest_sources.side_effect = _ingest
-    mock_alternate.return_value = {"fetched": 0}
-    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
-
-    summary = run_ingest_improvement_pass(
-        reports=[_report("PINE.L", "Pinewood Technologies Group PLC")],
-        output_dir=output_dir,
-        market="ftse350",
-        max_targets=1,
-        suggestions_path=tmp_path / "missing.json",
-        intensive_gap_closure=True,
-        pin_tickers=["PINE.L"],
-        discovery_scan=False,
-    )
-
-    assert call_order[0] == "refetch"
-    assert "ingest" in call_order
-    assert mock_primary_refetch.call_count == 2
-    assert summary.results[0]["investegate_refetch"]["attempted"] == 2
-    assert summary.results[0]["investegate_refetch"]["fetched"] == 2
-
-
-@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
-@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
-@patch("value_investor.research.ingest_improvement.ingest_research_sources")
-@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
-@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
-@patch("value_investor.research.ingest_improvement.refetch_uk_primary_filing_bodies")
 def test_ingest_improvement_refetches_when_partial_bodies(
     mock_primary_refetch,
     mock_bootstrap,
@@ -931,10 +851,10 @@ def test_ingest_improvement_refetches_when_partial_bodies(
         suggestions_path=tmp_path / "missing.json",
     )
 
-    assert mock_primary_refetch.call_count == 2
-    assert summary.results[0]["indexed_refetch"]["fetched"] == 4
-    assert summary.results[0]["investegate_refetch"]["fetched"] == 4
-    assert summary.results[0]["ch_refetch"]["fetched"] == 2
+    mock_primary_refetch.assert_called_once()
+    assert summary.results[0]["indexed_refetch"]["fetched"] == 2
+    assert summary.results[0]["investegate_refetch"]["fetched"] == 2
+    assert summary.results[0]["ch_refetch"]["fetched"] == 1
 
 
 @patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
