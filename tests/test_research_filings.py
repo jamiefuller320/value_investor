@@ -8794,6 +8794,115 @@ Free cash flow 391.6 46.6 (364.4) - 73.8
     assert parsed["derived"]["adjusted_free_cash_flow_millions"] == pytest.approx(73.8)
 
 
+def test_eng_20260923_04_parse_ir_fcf_division_bridge_fgp_fy2026_fixture():
+    """FGP FY2026 deck: divisional FCF row precedes slide title (not Appendix-prefixed)."""
+    from value_investor.research.filings import parse_ir_fcf_division_bridge
+
+    fixture = Path("docs/data/research/FGP.L/sources/filings/bodies/ir_f5cc65dca4e5855a.txt")
+    if not fixture.is_file():
+        pytest.skip("FGP FY2026 IR body fixture not present")
+    parsed = parse_ir_fcf_division_bridge(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    assert parsed["bridge_type"] == "fcf_by_division"
+    by_label = {row["label"]: row["amount_millions"] for row in parsed["lines"]}
+    assert by_label["total"] == pytest.approx(73.8)
+    assert by_label["first_bus"] == pytest.approx(10.5)
+    assert by_label["group_items"] == pytest.approx(-36.4)
+
+
+def test_eng_20260923_04_parse_ir_ifrs16_lease_total_fgp_fy2026_fixture():
+    from value_investor.research.filings import parse_ir_ifrs16_lease_maturity
+
+    fixture = Path("docs/data/research/FGP.L/sources/filings/bodies/ir_f5cc65dca4e5855a.txt")
+    if not fixture.is_file():
+        pytest.skip("FGP FY2026 IR body fixture not present")
+    parsed = parse_ir_ifrs16_lease_maturity(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    assert parsed["table_type"] == "ifrs16_lease_liability_total"
+    assert parsed["total_lease_liabilities"] == pytest.approx(850.0)
+
+
+def test_eng_20260923_04_extract_ir_presentation_metrics_fgp_megp_hik(tmp_path: Path):
+    """FCF-disputed buy-tier names emit statutory/adjusted and segment bridges from IR bodies."""
+    from value_investor.research.filings import extract_ir_presentation_metrics
+
+    cases = [
+        (
+            "FGP.L",
+            "ir_f5cc65dca4e5855a",
+            Path("docs/data/research/FGP.L/sources/filings/bodies/ir_f5cc65dca4e5855a.txt"),
+            lambda metrics: (
+                metrics["bridge_count"] >= 2
+                and any(
+                    b.get("bridge_type") == "statutory_to_adjusted_cash_flow"
+                    for b in metrics["bridges"]
+                )
+                and any(b.get("bridge_type") == "fcf_by_division" for b in metrics["bridges"])
+            ),
+        ),
+        (
+            "MEGP.L",
+            "ir_a1826e96c65c7841",
+            Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_a1826e96c65c7841.txt"),
+            lambda metrics: (
+                metrics["bridge_count"] >= 1
+                and metrics["segment_split_count"] >= 1
+                and any(b.get("bridge_type") == "net_cash_bridge" for b in metrics["bridges"])
+            ),
+        ),
+        (
+            "HIK.L",
+            "ir_3a67962eb8770824",
+            Path("docs/data/research/HIK.L/sources/filings/bodies/ir_3a67962eb8770824.txt"),
+            lambda metrics: (
+                metrics["segment_split_count"] >= 1
+                and any(
+                    s.get("split_type") == "segmental_core_revenue"
+                    for s in metrics["segment_revenue_splits"]
+                )
+            ),
+        ),
+    ]
+    for ticker, body_id, fixture, check in cases:
+        if not fixture.is_file():
+            pytest.skip(f"{fixture} not present")
+        filings_dir = tmp_path / ticker / "filings"
+        bodies_dir = filings_dir / "bodies"
+        bodies_dir.mkdir(parents=True)
+        body_path = bodies_dir / f"{body_id}.txt"
+        body_path.write_text(fixture.read_text(encoding="utf-8"), encoding="utf-8")
+        (filings_dir / "filings_index.json").write_text(
+            json.dumps(
+                {
+                    "filings": [
+                        {
+                            "id": body_id,
+                            "source": "ir_allowlist",
+                            "headline": f"IR allowlist document — {body_id}",
+                            "period": "annual",
+                            "has_body": True,
+                            "body_path": str(body_path),
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        sources_dir = tmp_path / ticker / "sources"
+        sources_dir.mkdir()
+        metrics = extract_ir_presentation_metrics(
+            filings_dir,
+            ticker,
+            sources_dir=sources_dir,
+        )
+        assert check(metrics), ticker
+        saved = json.loads(
+            (sources_dir / "ir_presentation_metrics.json").read_text(encoding="utf-8")
+        )
+        assert saved["mandatory"] is True
+        assert saved["bridge_count"] == metrics["bridge_count"]
+
+
 def test_eng_20260919_04_refetch_ir_allowlist_fetches_fgp_fy2026_body(tmp_path, monkeypatch):
     """FGP FY2026 results deck merges into filings index and accepts fetched PDF body."""
     from value_investor.research.filings import refetch_ir_allowlist_filing_bodies
