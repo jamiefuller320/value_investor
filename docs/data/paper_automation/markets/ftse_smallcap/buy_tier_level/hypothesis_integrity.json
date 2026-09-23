@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-09-22T07:44:51.127604+00:00",
-  "as_of": "2026-09-22T08:44:51.118860+01:00",
+  "updated_at": "2026-09-23T07:26:03.001923+00:00",
+  "as_of": "2026-09-23T08:26:02.991568+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -19,9 +19,9 @@
   "holding_count": 4,
   "underwater_count": 0,
   "thesis_status_counts": {
-    "intact": 3,
-    "weakening": 1,
-    "broken": 0,
+    "intact": 2,
+    "weakening": 0,
+    "broken": 2,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
@@ -43,11 +43,11 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
+      "cheapness": 0.5,
       "quality": 0.75,
-      "dividend": 0.0,
-      "garp": 0.0,
-      "risk": 0.0
+      "dividend": 0.5,
+      "garp": 0.5,
+      "risk": 0.5
     },
     "selection_feedback_flags": [],
     "balancing_hint": "maintain",
@@ -56,125 +56,67 @@
   "holdings": [
     {
       "ticker": "ULTP.L",
-      "name": "Ultimate Products Plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
+      "name": "ULTP.L",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
       "underwater": false,
       "deep_underwater": false,
       "unrealized_pct": 0.0,
       "mark": 45.7,
       "avg_cost": 45.7,
-      "signal": "strong_buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.5907,
-      "data_quality_score": 1.0,
-      "passed_families": [
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
         "cheapness",
+        "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "neutral",
+      "research_verdict": null,
       "reasons": [
-        "research verdict neutral",
-        "still strong_buy",
-        "cheapness family still passes"
+        "cheapness lost and not in buy tier"
       ],
-      "intact_reasons": [
-        "still strong_buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 59%"
-      ],
-      "weaken_reasons": [
-        "research verdict neutral"
-      ],
-      "broken_reasons": []
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
     },
     {
       "ticker": "MER.L",
-      "name": "Mears Group plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "name": "MER.L",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
       "underwater": false,
       "deep_underwater": false,
       "unrealized_pct": 0.0,
       "mark": 414.5,
       "avg_cost": 414.5,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5809,
-      "data_quality_score": 1.0,
-      "passed_families": [
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
         "cheapness",
+        "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
+      "research_verdict": null,
       "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 58%"
+        "cheapness lost and not in buy tier"
       ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 58%"
-      ],
+      "intact_reasons": [],
       "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CARD.L",
-      "name": "Card Factory plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0249,
-      "mark": 69.9,
-      "avg_cost": 68.2043,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6979,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 70%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 70%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
     },
     {
       "ticker": "CAPD.L",
@@ -212,6 +154,47 @@
         "cheapness family still passes",
         "data_quality 1.00",
         "conviction 71%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CARD.L",
+      "name": "Card Factory plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0454,
+      "mark": 71.3,
+      "avg_cost": 68.2043,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6979,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 70%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 70%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
