@@ -10107,6 +10107,8 @@ def install_fetch_cashflow_fallback() -> None:
 
     current = fetch_mod.fetch_company_metrics
     if getattr(current, "_filings_cashflow_fallback_installed", False):
+        # Tests may clear ``_cashflow_fallback_installed`` on the live wrapper; keep flags aligned.
+        current._cashflow_fallback_installed = True  # type: ignore[attr-defined]
         return
 
     def fetch_company_metrics_with_cashflow_fallback(
