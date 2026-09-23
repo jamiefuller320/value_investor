@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-22T16:34:30+00:00",
+  "updated_at": "2026-09-22T22:49:17+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10083,6 +10083,23 @@
       "source": "conversation: keep on top of gap backlog market cascade",
       "added_at": "2026-09-22T16:27:55+00:00",
       "updated_at": "2026-09-22T16:34:30+00:00"
+    },
+    {
+      "id": "L449",
+      "category": "later",
+      "section": "ops",
+      "title": "Invoke market eng gap burndown from eng-queue when idle",
+      "summary": "L448 burndown only runs inside ops-monitor apply_fixes, and ops-monitor skips after the first successful finalize of the day. After #805 landed mid-day, later scheduled/dispatch runs skipped monitor so burndown never applied until the next morning run (or force). Consider also calling try-market-gap-burndown from engineering-queue idle path beside compile-cap drain / parked hunter.",
+      "revisit_when": "Next weekday where eng queue is idle after ~15:00 UTC with library IWB/thin remaining and ops-monitor already finalized that morning",
+      "tags": [
+        "L448",
+        "market-gap-burndown",
+        "ops-monitor",
+        "engineering-queue"
+      ],
+      "status": "open",
+      "source": "conversation: has market rotating backlog clearing fired",
+      "added_at": "2026-09-22T22:49:17+00:00"
     }
   ],
   "fragments": [
