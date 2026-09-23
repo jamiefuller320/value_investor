@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-09-23T11:26:55.519596+00:00",
+  "compiled_at": "2026-09-23T11:50:12.132172+00:00",
   "run_at": null,
   "task_count": 101,
   "tasks": [
@@ -1763,10 +1763,10 @@
         "rerun_library_ingest_loop": true,
         "doc": "docs/ops/library-ingest-escalation.md",
         "stall_triage": {
-          "analyzed_at": "2026-09-23T09:24:41.411920+00:00",
+          "analyzed_at": "2026-09-23T11:50:14.321263+00:00",
           "market_id": "dax",
           "task_id": "eng-20260922-05",
-          "status": "parked",
+          "status": "open",
           "filing_gaps": 7,
           "lanes": {
             "unmeasured": 7,
@@ -1782,37 +1782,17 @@
           "bundled": true,
           "focus_ticker": "HEI.DE",
           "focus_lane": "unmeasured",
-          "reburn_loop": true,
-          "reburn_investigation": {
-            "investigated_at": "2026-09-23T09:24:41.411896+00:00",
-            "primary_hypothesis": "preflight_clash",
-            "blockers": [
-              "preflight_clash"
-            ],
-            "automation_waste_active": false,
-            "live_reburn_signal": false,
-            "pm_parked_by_traffic": true,
-            "preflight_healed": false,
-            "no_diff_count": 0,
-            "failure_count": 0,
-            "allow_narrow_reframe": false,
-            "allow_unpark": false,
-            "skip_reframe_reason": "reburn_loop: fix dispatch blockers before narrow reframe — preflight_clash",
-            "safe_next_steps": [
-              "Resolve path clashes (merge sibling eng PR, cancel duplicate branch, or narrow allowed_paths); re-run preflight before unpark.",
-              "After blockers clear, narrow-reframe to HEI.DE before re-dispatch."
-            ],
-            "doc": "docs/ops/library-ingest-escalation.md#library-stall-reburn-investigation"
-          },
+          "reburn_loop": false,
+          "reburn_investigation": null,
           "recommendations": [
             "narrow_reframe:HEI.DE:unmeasured",
             "intensive_pin_or_allowlist_batch",
-            "split_by_ticker_not_broad_market_task",
-            "investigate_reburn_loop_before_unpark"
+            "split_by_ticker_not_broad_market_task"
           ],
-          "filing_health_snapshot_at": "2026-09-23T09:24:40.123359+00:00",
+          "filing_health_snapshot_at": "2026-09-23T11:50:14.320448+00:00",
           "doc": "docs/ops/library-ingest-escalation.md#library-stall-task-triage"
-        }
+        },
+        "reburn_unpark_at": "2026-09-23T11:50:05.836049+00:00"
       },
       "acceptance_criteria": [
         "Representative dax buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
@@ -1841,10 +1821,7 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "parked",
-      "parked_reason": "manual review required",
-      "parked_at": "2026-09-22T18:24:03.063622+00:00",
-      "parked_policy": "reburn_loop"
+      "status": "open"
     },
     {
       "id": "eng-20260920-16",
@@ -6218,8 +6195,8 @@
     }
   },
   "queue_clearing": {
-    "attention_parked_count": 1,
-    "evaluated_at": "2026-09-23T10:30:09.579642+00:00",
+    "attention_parked_count": 0,
+    "evaluated_at": "2026-09-23T11:50:14.459609+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
