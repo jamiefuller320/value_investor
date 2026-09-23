@@ -6581,6 +6581,10 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         "UCB.BR": "ucb.com",
         "TTE.PA": "totalenergies.com",
         "ABI.BR": "sec.gov/Archives/edgar/data/1668717",
+        "BN.PA": "danone.com",
+        "EL.PA": "essilorluxottica.com",
+        "IFX.DE": "infineon.com",
+        "AGS.BR": "ctfassets.net",
     }
     for ticker, host_fragment in cases.items():
         rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)

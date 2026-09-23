@@ -275,8 +275,21 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.ucb.com/sites/default/files/2026-03/UCB%20SA_Management%20Report_Statutory%20Acccounts%202025_EN.pdf",
         "https://reports.ucb.com/",
     ],
+    # euro_depth thin_memo_counted_as_coverage — ageas.com is Cloudflare-gated; Contentful PDF + Euronext FY25.
     "AGS.BR": [
-        "https://ageas.com/en/annual-report-2025",
+        "https://downloads.ctfassets.net/o6mf177wvfka/KuRHStfskhn2PLR18lgoi/efc6b1dcba3a29dab7da646009b0a2b1/Ageas-AR-ENG-FULL-25.pdf",
+        "https://live.euronext.com/sites/default/files/company_press_releases/attachments/2026/02/25/cpr01_notified_EN_Results_FY25_003_25022026.pdf",
+    ],
+    # euro_depth critical-path unmeasured — BN.PA / EL.PA (system_gaps thin_memo_counted_as_coverage).
+    "BN.PA": [
+        "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf",
+    ],
+    "EL.PA": [
+        "https://www.essilorluxottica.com/api/getCapContent/?download=true&id=284350",
+    ],
+    # euro_depth zero-body initial memo — IFX.DE ESEF lag; direct FY2025 annual report PDF.
+    "IFX.DE": [
+        "https://www.infineon.com/assets/row/public/documents/corporate/investors/annual-reports/2025/2025-annual-report-v01-00-en.pdf",
     ],
     "TTE.PA": [
         "https://totalenergies.com/system/files/documents/totalenergies_universal-registration-document-2025_2026_en.pdf",
@@ -601,6 +614,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
+    "BN": ("Danone", "Danone SA"),
+    "EL": ("EssilorLuxottica", "EssilorLuxottica SA"),
+    "IFX": ("Infineon", "Infineon Technologies AG"),
 }
 
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
@@ -4771,6 +4787,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://investorpa.com/announcement-pdf/20260511/291611.pdf": "interim",
     # Imperial Brands HY26 statutory RNS — opaque LSE rns-pdf slug (eng-20260921-07).
     "https://www.rns-pdf.londonstockexchange.com/rns/8727D_1-2026-5-11.pdf": "interim",
+    # euro_depth thin_memo — opaque issuer CMS/API filenames (system_gaps BN.PA / EL.PA).
+    "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf": "annual",
+    "https://www.essilorluxottica.com/api/getCapContent/?download=true&id=284350": "annual",
 }
 
 
