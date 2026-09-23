@@ -294,6 +294,73 @@ def _filing_coverage_for_ticker(
     return _best_filing_coverage(paths)
 
 
+def _augment_reports_for_pin_tickers(
+    reports: list[CompanyReport],
+    *,
+    pin_tickers: list[str] | None,
+    library_root: Path,
+    market_id: str,
+) -> list[CompanyReport]:
+    """Ensure explicit pin tickers can deepen even when off the latest screen shortlist."""
+    if not pin_tickers:
+        return reports
+    from value_investor.library_maintenance import _company_name_for_memo
+    from value_investor.storage import read_json
+
+    by_ticker = {row.ticker.upper(): row for row in reports}
+    extra: list[CompanyReport] = []
+    research_root = Path(library_root) / "markets" / market_id / "screen" / "research"
+    for raw in pin_tickers:
+        ticker = str(raw or "").strip().upper()
+        if not ticker or ticker in by_ticker:
+            continue
+        ticker_dir = research_root / ticker
+        research_path = ticker_dir / "research.json"
+        if not research_path.exists():
+            continue
+        payload = read_json(research_path) if research_path.exists() else {}
+        if not isinstance(payload, dict):
+            payload = {}
+        signal = str(payload.get("signal") or "buy").strip().lower() or "buy"
+        extra.append(
+            CompanyReport(
+                ticker=ticker,
+                name=_company_name_for_memo(ticker_dir, ticker),
+                sector=None,
+                signal=signal if signal in ("strong_buy", "buy") else "buy",
+                models_passed=0,
+                model_count=0,
+                composite_score=None,
+                sector_composite_score=None,
+                families_passed=0,
+                passed_families=None,
+                data_quality_score=0.0,
+                metrics_present=0,
+                metrics_total=0,
+                weeks_at_signal=0,
+                signal_trend="unknown",
+                conviction_score=float(payload.get("research_confidence") or 0.0),
+                stability_label="unknown",
+                timing_signal="unknown",
+                timing_score=0.0,
+                rsi_14=None,
+                price_vs_sma200_pct=None,
+                action_note="library_pin_off_shortlist",
+                trade_plan=None,
+                summary=str(payload.get("research_rationale") or "")[:240],
+                passed_models=[],
+                key_metrics={},
+            )
+        )
+    if not extra:
+        return reports
+    merged = list(reports) + extra
+    merged.sort(
+        key=lambda row: (0 if row.signal == "strong_buy" else 1, -row.conviction_score, row.ticker)
+    )
+    return merged
+
+
 def load_library_buy_tier_reports(
     library_root: Path,
     market_id: str,
@@ -672,6 +739,13 @@ def run_library_ingest_loop(
         result.errors.append(f"No buy-tier reports for {market_id}")
         result.health_after = dict(result.health_before)
         return result
+
+    reports = _augment_reports_for_pin_tickers(
+        reports,
+        pin_tickers=pin_tickers,
+        library_root=library_root,
+        market_id=market_id,
+    )
 
     from value_investor.ingest_critical_path import (
         apply_critical_path_to_target_order,

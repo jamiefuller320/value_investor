@@ -1265,6 +1265,47 @@ def check_ops_budget() -> list[OpsFinding]:
     return findings
 
 
+def check_thin_memo_learning_gap() -> list[OpsFinding]:
+    """Monitor so-what ``thin_memo_counted_as_coverage`` clearance on the focus library."""
+    from value_investor.thin_memo_clearance import THIN_MEMO_FLAG_ID, build_thin_memo_clearance_status
+
+    try:
+        status = build_thin_memo_clearance_status()
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title="Thin-memo learning gap check failed",
+                summary=str(exc),
+            )
+        ]
+
+    if status.get("cleared") and not status.get("live_flag_would_fire"):
+        return []
+
+    thin = int(status.get("thin_sample_count") or 0)
+    threshold = int(status.get("thin_sample_threshold") or 5)
+    market = str(status.get("market_id") or "euro_depth")
+    zero_n = int(status.get("zero_body_target_count") or 0)
+    summary = (
+        f"{status.get('summary')} "
+        f"Run: `ftse-library deepen-thin --markets {market}` then body-lag rememo; "
+        f"refresh with `ftse-analysis-review system-gaps --write` and "
+        f"`ftse-progress-report so-what`."
+    )
+    severity = "warn" if thin <= threshold + 2 else "fail"
+    return [
+        OpsFinding(
+            severity=severity,
+            category="research",
+            title=f"So-what learning gap active ({THIN_MEMO_FLAG_ID})",
+            summary=summary,
+            auto_fixable=zero_n > 0,
+        )
+    ]
+
+
 def check_memo_rememo_backlog() -> list[OpsFinding]:
     """Flag when body-lag rememo backlog exceeds in-week maintenance capacity."""
     from value_investor.research.weekday_rememo import assess_rememo_backlog
@@ -1903,6 +1944,7 @@ def collect_ops_findings(
     findings.extend(check_latest_bundle(latest_path))
     findings.extend(check_ops_budget())
     findings.extend(check_memo_rememo_backlog())
+    findings.extend(check_thin_memo_learning_gap())
     findings.extend(check_phase_b_producer_progress())
     findings.extend(check_indicator_integrity())
     findings.extend(check_backtest_history())

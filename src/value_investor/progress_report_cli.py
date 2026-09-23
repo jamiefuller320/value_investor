@@ -69,6 +69,23 @@ def main(argv: list[str] | None = None) -> int:
     md_p.add_argument("--fresh", action="store_true", help="Ignore saved JSON; build fresh")
     md_p.set_defaults(func=_cmd_markdown)
 
+    tmc_p = sub.add_parser(
+        "thin-memo-clearance",
+        help="Assess so-what thin_memo_counted_as_coverage and optionally run deepen-thin",
+    )
+    tmc_p.add_argument("--json", action="store_true")
+    tmc_p.add_argument(
+        "--run-deepen",
+        action="store_true",
+        help="Run ftse-library deepen-thin on the focus market (ingest bodies, no rememo)",
+    )
+    tmc_p.add_argument(
+        "--refresh-gaps",
+        action="store_true",
+        help="After deepen, refresh docs/data/system_gaps.json",
+    )
+    tmc_p.set_defaults(func=_cmd_thin_memo_clearance)
+
     args = parser.parse_args(argv)
     return int(args.func(args))
 
@@ -134,6 +151,50 @@ def _cmd_so_what(args: argparse.Namespace) -> int:
         elif args.apply:
             print("No new auto_queue tasks (already open or none found).")
     return 0
+
+
+def _cmd_thin_memo_clearance(args: argparse.Namespace) -> int:
+    from pathlib import Path
+
+    from value_investor.analysis_review_cli import _cmd_system_gaps
+    from value_investor.data_library_cli import cmd_deepen_thin
+    from value_investor.thin_memo_clearance import (
+        build_thin_memo_clearance_status,
+        render_thin_memo_clearance_markdown,
+    )
+
+    status = build_thin_memo_clearance_status()
+    if args.run_deepen:
+        market = str(status.get("market_id") or "euro_depth")
+        deepen_args = argparse.Namespace(
+            root=Path("docs/data/library"),
+            markets=market,
+            max_with_body=0,
+            rememo=False,
+            rememo_all=False,
+            api_key=None,
+            json=True,
+        )
+        code = cmd_deepen_thin(deepen_args)
+        if code != 0:
+            return code
+        status = build_thin_memo_clearance_status()
+    if args.refresh_gaps:
+        gap_args = argparse.Namespace(
+            data_dir=Path("docs/data"),
+            output_dir=Path("output"),
+            write=True,
+            write_path=Path("docs/data/system_gaps.json"),
+            json=False,
+        )
+        _cmd_system_gaps(gap_args)
+        status = build_thin_memo_clearance_status()
+
+    if args.json:
+        print(json.dumps(status, indent=2))
+    else:
+        print(render_thin_memo_clearance_markdown(status))
+    return 0 if status.get("cleared") else 1
 
 
 def _cmd_markdown(args: argparse.Namespace) -> int:
