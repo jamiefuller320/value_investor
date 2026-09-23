@@ -1,6 +1,6 @@
 # JD Sports Fashion Plc (JD.L) — Research memo
 
-_Version 5 · Updated 2026-09-23T11:46:51.097838+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-09-23T17:33:58.301651+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -33,3 +33,8 @@ Persistent Buy screen (19 weeks; timing accumulate; P/E ~8.2).
 23 Sep press: first-half adjusted PBT modestly ahead of consensus; full-year £700–800m PBT guidance unchanged.  
 Weaker sales, consumer pressure and softer North America profitability dominate coverage; Mexico franchise still echoed (22 Sep).  
 Persistent Buy screen (20 weeks; timing accumulate; P/E ~8.4); automated filings index still has no tagged interim/H1 RNS.
+
+### 2026-09-23T17:33:58.301651+00:00
+No material change since the 23 Sep morning H1 press recap (modest adjusted PBT beat; £700–800m full-year guidance unchanged).  
+Afternoon coverage is CEO wellness/running commentary and a generic UK market roundup only.  
+Persistent Buy screen (21 weeks; P/E ~8.2); filings index still has no tagged interim/H1 RNS.

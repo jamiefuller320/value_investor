@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T17:31:49.172761+00:00",
+  "generated_at": "2026-09-23T09:56:35.561063+00:00",
   "role": "end_of_day_project_traffic",
   "trajectory": "on_track",
   "pause_active": false,
@@ -10,12 +10,11 @@
     "FTSE 350 live screen and published dashboard are operational.",
     "Offline library: 21 graduated markets (focus: euro_depth).",
     "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-    "Engineering queue: 4 open, 76 merged supervised tasks."
+    "Engineering queue: 0 open, 72 merged supervised tasks."
   ],
   "gaps": [
-    "Primary AI track still below ^FTSE after costs (-34.0% excess; history still thin).",
-    "Ingest coverage gap: 3 buy-tier tickers have no filings index yet.",
-    "Published screen bundle dated 2026-09-21 — confirm Sunday refresh."
+    "Primary AI track still below ^FTSE after costs (-32.3% excess; history still thin).",
+    "Ingest coverage gap: 4 buy-tier tickers have no filings index yet."
   ],
   "next_actions": [
     "Let the learning loop accumulate before adding tracks or knobs.",
@@ -63,7 +62,7 @@
         "probe": "status must be one of complete|in_progress|not_started"
       },
       {
-        "claim": "Progress report present (generated_at=2026-09-23T17:17:04+00:00)",
+        "claim": "Progress report present (generated_at=2026-09-22T08:34:03+00:00)",
         "source": "docs/data/progress_report.json",
         "grounded": true,
         "probe": "progress_report.json must exist with a timestamp"
@@ -75,7 +74,7 @@
         "probe": "human_gate block is structural, not free text"
       },
       {
-        "claim": "Queue health overall=idle; headline=Queue and hunter idle.",
+        "claim": "Queue health overall=active; headline=Agent lane active.",
         "source": "docs/data/queue_health.json",
         "grounded": true,
         "probe": "queue_health.overall must be set by refresh_queue_health_ui"
@@ -96,148 +95,22 @@
     "ungrounded_count": 0,
     "grounded_count": 11
   },
-  "merges_today": [
-    {
-      "task_id": "eng-20260922-05",
-      "title": "Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop",
-      "area": "ingest",
-      "pr_number": 818,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/818",
-      "merged_at": "2026-09-23T17:06:31.351894+00:00",
-      "merge_class": "human",
-      "auto_merge": false,
-      "independently_verified": false
-    },
-    {
-      "task_id": "eng-20260923-08",
-      "title": "Rework verify round 2/3: IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-di",
-      "area": "ingest",
-      "pr_number": 825,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/825",
-      "merged_at": "2026-09-23T17:06:15.107744+00:00",
-      "merge_class": "human",
-      "auto_merge": false,
-      "independently_verified": false
-    },
-    {
-      "task_id": "eng-20260923-05",
-      "title": "Body-lag rememo gate: after new filing bodies land, rememo thin/zero-body euro_depth memos without widening generic rememo_reason; tie ladder eligibility to bod",
-      "area": "ingest",
-      "pr_number": 823,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/823",
-      "merged_at": "2026-09-23T15:58:10.515099+00:00",
-      "merge_class": "human",
-      "auto_merge": false,
-      "independently_verified": false
-    },
-    {
-      "task_id": "eng-20260923-04",
-      "title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
-      "area": "ingest",
-      "pr_number": 824,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/824",
-      "merged_at": "2026-09-23T15:58:00.436337+00:00",
-      "merge_class": "human",
-      "auto_merge": false,
-      "independently_verified": false
-    },
-    {
-      "task_id": "eng-20260923-07",
-      "title": "Honour FCF action-note enforcement (batched tickers)",
-      "area": "scoring",
-      "pr_number": 822,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/822",
-      "merged_at": "2026-09-23T14:03:28.833948+00:00",
-      "merge_class": "scoring_narrow",
-      "auto_merge": false,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260923-03",
-      "title": "Wire Yahoo cash-flow fields into `CompanyMetrics` (e.g. `operating_cashflow`) from existing `financials_annual.json` when fetch returns null",
-      "area": "ingest",
-      "pr_number": 821,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/821",
-      "merged_at": "2026-09-23T14:01:13.654448+00:00",
-      "merge_class": "human",
-      "auto_merge": false,
-      "independently_verified": false
-    },
-    {
-      "task_id": "eng-20260923-06",
-      "title": "Close FCF basis enforcement gap (batched tickers)",
-      "area": "scoring",
-      "pr_number": 820,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/820",
-      "merged_at": "2026-09-23T13:41:16.050404+00:00",
-      "merge_class": "scoring_narrow",
-      "auto_merge": false,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260923-02",
-      "title": "Companies House filed-accounts pipeline: PDF/iXBRL download, OCR quality gates, and reject/trigger refetch on garbled extracts",
-      "area": "ingest",
-      "pr_number": 819,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/819",
-      "merged_at": "2026-09-23T13:23:10.613513+00:00",
-      "merge_class": "human",
-      "auto_merge": false,
-      "independently_verified": false
-    },
-    {
-      "task_id": "eng-20260923-01",
-      "title": "Harden RNS/Investegate/LSE direct fetch for indexed announcements (replace Google News redirect URLs) with PDF/HTML body persistence into `filings/bodies/`",
-      "area": "ingest",
-      "pr_number": 816,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/816",
-      "merged_at": "2026-09-23T11:12:36.697818+00:00",
-      "merge_class": "human",
-      "auto_merge": false,
-      "independently_verified": false
-    }
-  ],
-  "verified_merges_today": [
-    {
-      "task_id": "eng-20260923-07",
-      "title": "Honour FCF action-note enforcement (batched tickers)",
-      "area": "scoring",
-      "pr_number": 822,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/822",
-      "merged_at": "2026-09-23T14:03:28.833948+00:00",
-      "merge_class": "scoring_narrow",
-      "auto_merge": false,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260923-06",
-      "title": "Close FCF basis enforcement gap (batched tickers)",
-      "area": "scoring",
-      "pr_number": 820,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/820",
-      "merged_at": "2026-09-23T13:41:16.050404+00:00",
-      "merge_class": "scoring_narrow",
-      "auto_merge": false,
-      "independently_verified": true
-    }
-  ],
+  "merges_today": [],
+  "verified_merges_today": [],
   "pr_fix_common_issues": {
-    "occasion_count": 32,
+    "occasion_count": 29,
     "by_reason": [
       {
         "failure_reason": "PR mergeable=CONFLICTING against main",
-        "count": 7,
+        "count": 4,
         "sources": {
-          "human_request": 7
+          "human_request": 4
         },
         "recent_prs": [
           766,
           767,
           779,
-          780,
-          810,
-          812,
-          814
+          780
         ]
       },
       {
@@ -335,7 +208,7 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 23
+        "count": 20
       },
       {
         "kind": "ci_check",
@@ -345,7 +218,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 32
+        "count": 29
       }
     ]
   },

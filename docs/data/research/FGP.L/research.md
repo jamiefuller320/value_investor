@@ -1,6 +1,6 @@
 # FirstGroup plc (FGP.L) — Research memo
 
-_Version 4 · Updated 2026-09-23T11:42:12.811306+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-09-23T17:29:44.015384+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -28,3 +28,8 @@ Strong buy screen unchanged (19 weeks, stable); RSI ~43, still neutral timing.
 No material change.  
 Empty news batch since 21 Sep; no new filings or headlines in this refresh.  
 Strong buy screen unchanged (20 weeks, stable); neutral timing, RSI ~44.
+
+### 2026-09-23T17:29:44.015384+00:00
+No material change.  
+Empty news batch since the morning refresh; no new filings or headlines.  
+Strong buy screen unchanged (21 weeks, stable); neutral timing, RSI ~45.

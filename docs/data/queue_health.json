@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T17:23:22.432333+00:00",
+  "generated_at": "2026-09-23T18:05:31.232636+00:00",
   "overall": "idle",
   "headline": "Queue and hunter idle.",
   "merge_lane": {
@@ -21,7 +21,7 @@
     "should_dispatch": false,
     "pause_active": false,
     "traffic_pause_active": false,
-    "attention_parked_count": 1,
+    "attention_parked_count": 0,
     "open_count": 0,
     "pr_open_count": 0,
     "dispatch_eligible_count": 0,
@@ -33,13 +33,13 @@
   "queue_clearing": {
     "pause_active": false,
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-23T17:17:47.476046+00:00"
+    "evaluated_at": "2026-09-23T17:06:31.588975+00:00"
   },
   "traffic_control": {
     "pause_active": false,
     "stuck_pr_count": 0,
     "pause_reasons": [],
-    "evaluated_at": "2026-09-23T17:23:18.720513+00:00"
+    "evaluated_at": "2026-09-22T20:21:29.286725+00:00"
   },
   "ops_monitor": {
     "run_at": "2026-09-23T07:46:36.280037+00:00",
@@ -82,7 +82,7 @@
     },
     {
       "task_id": "eng-20260923-04",
-      "title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
+      "title": "Companies House group accounts: iXBRL-first with OCR fallback, quality gate rejecting garbled bodies",
       "area": "ingest",
       "pr_number": 824,
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/824",
@@ -104,8 +104,8 @@
     },
     {
       "task_id": "eng-20260923-03",
-      "title": "Wire Yahoo cash-flow fields into `CompanyMetrics` (e.g. `operating_cashflow`) from existing `financials_annual.json` when fetch returns null",
-      "area": "ingest",
+      "title": "dividend: Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags [2/2]",
+      "area": "scoring",
       "pr_number": 821,
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/821",
       "merged_at": "2026-09-23T14:01:13.654448+00:00",
@@ -126,8 +126,8 @@
     },
     {
       "task_id": "eng-20260923-02",
-      "title": "Companies House filed-accounts pipeline: PDF/iXBRL download, OCR quality gates, and reject/trigger refetch on garbled extracts",
-      "area": "ingest",
+      "title": "fcf: Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags [1/2]",
+      "area": "scoring",
       "pr_number": 819,
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/819",
       "merged_at": "2026-09-23T13:23:10.613513+00:00",
@@ -137,7 +137,7 @@
     },
     {
       "task_id": "eng-20260923-01",
-      "title": "Harden RNS/Investegate/LSE direct fetch for indexed announcements (replace Google News redirect URLs) with PDF/HTML body persistence into `filings/bodies/`",
+      "title": "Expand IR presentation pipeline: allowlist FY/H1 PDFs, non-truncated text extract, and structured parse into `ir_presentation_metrics.json` (FCF/dividend bridge",
       "area": "ingest",
       "pr_number": 816,
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/816",
@@ -265,9 +265,9 @@
       {
         "date": "2026-09-18",
         "merged_total": 16,
-        "merged_auto": 6,
-        "merged_manual": 10,
-        "verified": 12,
+        "merged_auto": 5,
+        "merged_manual": 11,
+        "verified": 11,
         "fix_interventions": 0,
         "fix_ci_check": 0,
         "fix_merge_conflict": 0,
@@ -365,7 +365,7 @@
       },
       {
         "task_id": "eng-20260923-04",
-        "title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
+        "title": "Companies House group accounts: iXBRL-first with OCR fallback, quality gate rejecting garbled bodies",
         "area": "ingest",
         "pr_number": 824,
         "pr_url": "https://github.com/jamiefuller320/value_investor/pull/824",
@@ -387,8 +387,8 @@
       },
       {
         "task_id": "eng-20260923-03",
-        "title": "Wire Yahoo cash-flow fields into `CompanyMetrics` (e.g. `operating_cashflow`) from existing `financials_annual.json` when fetch returns null",
-        "area": "ingest",
+        "title": "dividend: Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags [2/2]",
+        "area": "scoring",
         "pr_number": 821,
         "pr_url": "https://github.com/jamiefuller320/value_investor/pull/821",
         "merged_at": "2026-09-23T14:01:13.654448+00:00",
@@ -409,8 +409,8 @@
       },
       {
         "task_id": "eng-20260923-02",
-        "title": "Companies House filed-accounts pipeline: PDF/iXBRL download, OCR quality gates, and reject/trigger refetch on garbled extracts",
-        "area": "ingest",
+        "title": "fcf: Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags [1/2]",
+        "area": "scoring",
         "pr_number": 819,
         "pr_url": "https://github.com/jamiefuller320/value_investor/pull/819",
         "merged_at": "2026-09-23T13:23:10.613513+00:00",
@@ -420,7 +420,7 @@
       },
       {
         "task_id": "eng-20260923-01",
-        "title": "Harden RNS/Investegate/LSE direct fetch for indexed announcements (replace Google News redirect URLs) with PDF/HTML body persistence into `filings/bodies/`",
+        "title": "Expand IR presentation pipeline: allowlist FY/H1 PDFs, non-truncated text extract, and structured parse into `ir_presentation_metrics.json` (FCF/dividend bridge",
         "area": "ingest",
         "pr_number": 816,
         "pr_url": "https://github.com/jamiefuller320/value_investor/pull/816",
