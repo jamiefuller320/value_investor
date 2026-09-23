@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T14:33:43.734127+00:00",
+  "generated_at": "2026-09-23T15:16:53.483302+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1204,18 +1204,18 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-23T14:33:39.111820+00:00",
-    "queue_ui_updated_at": "2026-09-23T14:33:43.617188+00:00",
+    "compiled_at": "2026-09-23T15:16:48.770536+00:00",
+    "queue_ui_updated_at": "2026-09-23T15:16:53.362243+00:00",
     "task_count": 107,
     "status": {
-      "open_count": 1,
-      "pr_open_count": 0,
+      "open_count": 0,
+      "pr_open_count": 1,
       "parked_count": 1,
       "merged_count": 81,
       "failed_count": 0,
-      "next_task_id": "eng-20260923-04",
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "next_task_id": null,
+      "in_flight_branch": "cursor/eng-20260923-04-1de3",
+      "in_flight_pr": 824,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1227,15 +1227,11 @@
         "title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
         "priority": "high",
         "priority_score": 96.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "post_run_review",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
+        "branch_name": "cursor/eng-20260923-04-1de3"
       }
     ],
     "attention_tasks": [
@@ -1253,8 +1249,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_task_count": 0,
+      "dispatch_eligible_count": 0,
       "blocked_count": 0
     }
   },
@@ -1533,40 +1529,46 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-23T14:33:43.734127+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
+    "generated_at": "2026-09-23T15:16:53.483302+00:00",
+    "overall": "blocked",
+    "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
-    },
-    "agent_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "should_dispatch": true,
+      "pr_open_count": 1,
+      "open_engineering_prs": [
+        {
+          "number": 824,
+          "branch": "cursor/eng-20260923-04-1de3",
+          "draft": false
+        }
+      ],
+      "in_flight_pr": 824,
+      "detail": "Open engineering PR(s) #824 — merge fires on CI success."
+    },
+    "agent_lane": {
+      "state": "blocked",
+      "idle": false,
+      "running": false,
+      "blocked": true,
+      "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 1,
-      "open_count": 1,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 1,
+      "open_count": 0,
+      "pr_open_count": 1,
+      "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260923-04",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "next_task_id": null,
+      "reason": "no open engineering tasks in queue",
+      "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 1,
-      "evaluated_at": "2026-09-23T14:33:42.638195+00:00"
+      "evaluated_at": "2026-09-23T15:16:52.266381+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1586,10 +1588,10 @@
         "area": "ingest",
         "pr_number": 823,
         "pr_url": "https://github.com/jamiefuller320/value_investor/pull/823",
-        "merged_at": "2026-09-23T14:32:20.337855+00:00",
-        "merge_class": "ingest_narrow",
+        "merged_at": "2026-09-23T15:16:37.732609+00:00",
+        "merge_class": "human",
         "auto_merge": false,
-        "independently_verified": true
+        "independently_verified": false
       },
       {
         "task_id": "eng-20260923-07",
@@ -1647,7 +1649,7 @@
         "independently_verified": false
       }
     ],
-    "verified_merges_today_count": 3,
+    "verified_merges_today_count": 2,
     "completion_monitor": {
       "timezone": "UTC",
       "history_days": 14,
@@ -1656,7 +1658,7 @@
         "merged_total": 6,
         "merged_auto": 0,
         "merged_manual": 6,
-        "verified": 3,
+        "verified": 2,
         "fix_interventions": 5,
         "fix_ci_check": 1,
         "fix_merge_conflict": 4,
@@ -1822,7 +1824,7 @@
           "merged_total": 6,
           "merged_auto": 0,
           "merged_manual": 6,
-          "verified": 3,
+          "verified": 2,
           "fix_interventions": 5,
           "fix_ci_check": 1,
           "fix_merge_conflict": 4,
@@ -1836,10 +1838,10 @@
           "area": "ingest",
           "pr_number": 823,
           "pr_url": "https://github.com/jamiefuller320/value_investor/pull/823",
-          "merged_at": "2026-09-23T14:32:20.337855+00:00",
-          "merge_class": "ingest_narrow",
+          "merged_at": "2026-09-23T15:16:37.732609+00:00",
+          "merge_class": "human",
           "auto_merge": false,
-          "independently_verified": true
+          "independently_verified": false
         },
         {
           "task_id": "eng-20260923-07",
