@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T15:27:58.931154+00:00",
+  "generated_at": "2026-09-23T15:58:25.867471+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1204,34 +1204,38 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-23T15:27:53.980314+00:00",
-    "queue_ui_updated_at": "2026-09-23T15:27:58.802310+00:00",
-    "task_count": 107,
+    "compiled_at": "2026-09-23T15:58:20.899047+00:00",
+    "queue_ui_updated_at": "2026-09-23T15:58:25.746732+00:00",
+    "task_count": 108,
     "status": {
-      "open_count": 0,
-      "pr_open_count": 1,
+      "open_count": 1,
+      "pr_open_count": 0,
       "parked_count": 1,
-      "merged_count": 81,
+      "merged_count": 82,
       "failed_count": 0,
-      "next_task_id": null,
-      "in_flight_branch": "cursor/eng-20260923-04-1de3",
-      "in_flight_pr": 824,
+      "next_task_id": "eng-20260923-08",
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
       {
-        "id": "eng-20260923-04",
+        "id": "eng-20260923-08",
         "area": "ingest",
-        "title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
+        "title": "Rework verify round 2/3: IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-di",
         "priority": "high",
-        "priority_score": 96.0,
-        "status": "pr_open",
-        "source": "post_run_review",
+        "priority_score": 97.0,
+        "status": "open",
+        "source": "post_merge_verify_rework",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": "cursor/eng-20260923-04-1de3"
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "partial"
       }
     ],
     "attention_tasks": [
@@ -1249,8 +1253,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 0,
-      "dispatch_eligible_count": 0,
+      "open_task_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_count": 0
     }
   },
@@ -1529,46 +1533,40 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-23T15:27:58.931154+00:00",
-    "overall": "blocked",
-    "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
+    "generated_at": "2026-09-23T15:58:25.867471+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
     "merge_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    },
+    "agent_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "pr_open_count": 1,
-      "open_engineering_prs": [
-        {
-          "number": 824,
-          "branch": "cursor/eng-20260923-04-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 824,
-      "detail": "Open engineering PR(s) #824 — merge fires on CI success."
-    },
-    "agent_lane": {
-      "state": "blocked",
-      "idle": false,
-      "running": false,
-      "blocked": true,
-      "should_dispatch": false,
+      "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 1,
-      "open_count": 0,
-      "pr_open_count": 1,
-      "dispatch_eligible_count": 0,
+      "open_count": 1,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 1,
       "blocked_task_count": 0,
-      "next_task_id": null,
-      "reason": "no open engineering tasks in queue",
-      "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
+      "next_task_id": "eng-20260923-08",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 1,
-      "evaluated_at": "2026-09-23T15:27:57.795279+00:00"
+      "evaluated_at": "2026-09-23T15:58:24.661771+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1588,7 +1586,18 @@
         "area": "ingest",
         "pr_number": 823,
         "pr_url": "https://github.com/jamiefuller320/value_investor/pull/823",
-        "merged_at": "2026-09-23T15:27:43.384728+00:00",
+        "merged_at": "2026-09-23T15:58:10.515099+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260923-04",
+        "title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
+        "area": "ingest",
+        "pr_number": 824,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/824",
+        "merged_at": "2026-09-23T15:58:00.436337+00:00",
         "merge_class": "human",
         "auto_merge": false,
         "independently_verified": false
@@ -1655,9 +1664,9 @@
       "history_days": 14,
       "today": {
         "date": "2026-09-23",
-        "merged_total": 6,
+        "merged_total": 7,
         "merged_auto": 0,
-        "merged_manual": 6,
+        "merged_manual": 7,
         "verified": 2,
         "fix_interventions": 5,
         "fix_ci_check": 1,
@@ -1821,9 +1830,9 @@
         },
         {
           "date": "2026-09-23",
-          "merged_total": 6,
+          "merged_total": 7,
           "merged_auto": 0,
-          "merged_manual": 6,
+          "merged_manual": 7,
           "verified": 2,
           "fix_interventions": 5,
           "fix_ci_check": 1,
@@ -1838,7 +1847,18 @@
           "area": "ingest",
           "pr_number": 823,
           "pr_url": "https://github.com/jamiefuller320/value_investor/pull/823",
-          "merged_at": "2026-09-23T15:27:43.384728+00:00",
+          "merged_at": "2026-09-23T15:58:10.515099+00:00",
+          "merge_class": "human",
+          "auto_merge": false,
+          "independently_verified": false
+        },
+        {
+          "task_id": "eng-20260923-04",
+          "title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
+          "area": "ingest",
+          "pr_number": 824,
+          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/824",
+          "merged_at": "2026-09-23T15:58:00.436337+00:00",
           "merge_class": "human",
           "auto_merge": false,
           "independently_verified": false

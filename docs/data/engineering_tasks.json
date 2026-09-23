@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-23T15:38:08.425399+00:00",
+  "compiled_at": "2026-09-23T15:58:20.899047+00:00",
   "run_at": null,
-  "task_count": 107,
+  "task_count": 108,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -889,26 +889,35 @@
       "cancelled_at": "2026-09-19T20:41:16.721291+00:00"
     },
     {
-      "id": "eng-20260923-04",
+      "id": "eng-20260923-08",
       "area": "ingest",
-      "title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
-      "summary": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP.L, MEGP.L, HIK.L (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "title": "Rework verify round 2/3: IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-di",
+      "summary": "Post-merge acceptance pytest failed for eng-20260923-04. Re-implement until acceptance tests pass (chain eng-20260923-04, round 2/3). pytest rc=1: ........................................................................ [ 14%]\n........................................................................ [ 29%]\n........................................................................ [ 44%]\n........................................................................ [ 59%]\n........................................................................ [ 73%]\n........................................................................ [ 88%]\n....................",
       "priority": "high",
-      "priority_score": 96.0,
-      "source": "post_run_review",
+      "priority_score": 97.0,
+      "source": "post_merge_verify_rework",
       "evidence": {
+        "verify_chain_root_id": "eng-20260923-04",
+        "parent_task_id": "eng-20260923-04",
+        "verify_round": 2,
+        "max_verify_rounds": 3,
+        "prior_pr_url": "https://github.com/jamiefuller320/value_investor/pull/824",
+        "prior_pr_number": 824,
+        "pytest_returncode": 1,
+        "pytest_paths": [
+          "tests/test_research_filings.py",
+          "tests/test_research_ingest.py",
+          "tests/test_gap_fill_deepen.py",
+          "tests/test_ingest_improvement.py",
+          "tests/test_companies_house.py"
+        ],
         "tickers": [
           "IR",
           "FCF",
           "FGP.L",
           "MEGP.L",
           "HIK.L"
-        ],
-        "plan_index": 4,
-        "narrow_scope_mode": "cohesion_bypass",
-        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
-        "narrow_parent_title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
-        "narrow_cohesion_bypass": true
+        ]
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for IR",
@@ -936,14 +945,82 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "open"
+    },
+    {
+      "id": "eng-20260923-04",
+      "area": "ingest",
+      "title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
+      "summary": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP.L, MEGP.L, HIK.L (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "high",
+      "priority_score": 96.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "IR",
+          "FCF",
+          "FGP.L",
+          "MEGP.L",
+          "HIK.L"
+        ],
+        "plan_index": 4,
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-disputed buy-tier names FGP",
+        "narrow_cohesion_bypass": true,
+        "verify_status": "rework_queued",
+        "verify_chain_root_id": "eng-20260923-04",
+        "verify_rework_task_id": "eng-20260923-08",
+        "verify_failed_at": "2026-09-23T15:58:00.434612+00:00",
+        "verify_pytest": {
+          "returncode": 1,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_research_ingest.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py"
+          ],
+          "output_tail": ".............................. [ 88%]\n...........................F...........................                  [100%]\n=================================== FAILURES ===================================\nE   AssertionError: assert False\n     +  where False = getattr(<function install_fetch_cashflow_fallback.<locals>.fetch_company_metrics_with_cashflow_fallback at 0x7f2b035e11c0>, '_cashflow_fallback_installed', False)\n     +    where <function install_fetch_cashflow_fallback.<locals>.fetch_company_metrics_with_cashflow_fallback at 0x7f2b035e11c0> = <module 'value_investor.fetch' from '/home/runner/work/value_investor/value_investor/src/value_investor/fetch.py'>.fetch_company_metrics\n/home/runner/work/value_investor/value_investor/tests/test_ingest_improvement.py:869: AssertionError: assert False\n=========================== short test summary info ============================\nFAILED tests/test_ingest_improvement.py::test_ingest_improvement_installs_fetch_cashflow_fallback - AssertionError: assert False\n +  where False = getattr(<function install_fetch_cashflow_fallback.<locals>.fetch_company_metrics_with_cashflow_fallback at 0x7f2b035e11c0>, '_cashflow_fallback_installed', False)\n +    where <function install_fetch_cashflow_fallback.<locals>.fetch_company_metrics_with_cashflow_fallback at 0x7f2b035e11c0> = <module 'value_investor.fetch' from '/home/runner/work/value_investor/value_investor/src/value_investor/fetch.py'>.fetch_company_metrics\n1 failed, 486 passed in 443.64s (0:07:23)"
+        }
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
       "parked_reason": "preflight blocked PR open — preflight failed",
       "parked_policy": "preflight_clash",
       "parked_at": "2026-09-23T14:05:25.707580+00:00",
       "result_path": "output/engineering_result_eng-20260923-04.md",
       "branch_name": "cursor/eng-20260923-04-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-23T14:46:09.824321+00:00"
+      "completed_at": "2026-09-23T14:46:09.824321+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/824",
+      "pr_number": 824,
+      "merged_at": "2026-09-23T15:58:00.436337+00:00"
     },
     {
       "id": "eng-20260915-02",
@@ -1033,11 +1110,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260923-05.md",
       "branch_name": "cursor/eng-20260923-05-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-23T14:18:30.733860+00:00"
+      "completed_at": "2026-09-23T14:18:30.733860+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/823",
+      "pr_number": 823,
+      "merged_at": "2026-09-23T15:58:10.515099+00:00"
     },
     {
       "id": "eng-20260921-05",
@@ -6466,19 +6546,17 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-09-23T13:07:18.442116+00:00",
-    "buy_tier_count": 59,
-    "measured_tickers": 56,
-    "unmeasured_buy_tier": 3,
+    "snapshot_at": "2026-09-23T15:50:32.866576+00:00",
+    "buy_tier_count": 54,
+    "measured_tickers": 53,
+    "unmeasured_buy_tier": 1,
     "unmeasured_tickers": [
-      "TRST.L",
-      "RTO.L",
-      "RAT.L"
+      "TRST.L"
     ],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
     "indexed_without_body": 0,
-    "filings_with_body": 3975
+    "filings_with_body": 3761
   },
   "traffic_control": {
     "stuck_pr_count": 0,
@@ -6516,8 +6594,8 @@
     }
   },
   "queue_clearing": {
-    "attention_parked_count": 2,
-    "evaluated_at": "2026-09-23T14:16:37.223373+00:00",
+    "attention_parked_count": 1,
+    "evaluated_at": "2026-09-23T15:58:24.661771+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -6536,5 +6614,22 @@
     "last_fingerprint": "parallel_cap|parallel cap reached — 1 pr_open, 1 agent run(s) (max_parallel=2)",
     "last_sent_at": "2026-09-23T14:01:45.752036+00:00",
     "cooldown_hours": 12.0
-  }
+  },
+  "ingest_health_before": {
+    "snapshot_at": "2026-09-23T13:07:18.442116+00:00",
+    "buy_tier_count": 59,
+    "measured_tickers": 56,
+    "unmeasured_buy_tier": 3,
+    "unmeasured_tickers": [
+      "TRST.L",
+      "RTO.L",
+      "RAT.L"
+    ],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 0,
+    "filings_with_body": 3975
+  },
+  "reprioritized_at": "2026-09-23T15:50:32.866830+00:00",
+  "reprioritized_after_task": "eng-20260923-04"
 }
