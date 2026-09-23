@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T09:28:55+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T09:31:29+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -53,6 +53,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260919-01 | Traffic common-issues log has almost no signal (1 human ruff_format). Live-fetch flakes and hunter-fix tip wipes are not auto-recorded as fix occasions, so EOD common-issues understates recurring CI blockers. | traffic, common-issues, observation |
 | frag-20260919-02 | Sep18 evening eng-agent parks were merge_tree vs concurrent non-eng PR #720 after Composer+pytest already passed — not a simple preflight-reorder. Leave alone while parked-backlog pause holds. | spend, engineering-agent, merge_tree |
 | frag-20260922-01 | Absolute edge decomposes into (1) stock ID / research gate quality (mostly suite-shared inputs) and (2) lifecycle timing/sizing (suite-sensitive via cost interaction). Hold-set drift under different costs can still contaminate realized ID metrics on the book. | learning, suite-b, lifecycle, identification |
+| frag-20260923-01 | Internal screening formula from successful-sleeve traits: only useful with a substantial evidence body; park as a thought until filtered_cohort / sleeve-episode thickness and loser-pattern validation exist. Not a near-term idea. | screening, sleeves, thought, learning |
 
 ---
 
@@ -269,7 +270,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L444 | **Freeze widest earliest/latest markers; discover best via counterfactual** | Observe sleeve recording should open on the earliest eligible entry marker and close marks on the latest experimental exit marker so tighter policies are nested counterfactuals. Capital on_book uses the selective funded gate. Do not freeze only a guessed best threshold for recording — that truncates timing evidence. Wrapper: decision-recording freeze at t + exit_shadow/near-miss join-forward. | Implementing dual-path sleeve lab L443 or Phase C autopsy freeze writer |
 | L445 | **Cash buffer sleeve after rank-rotation works** | Prefer fixing blocked exits (done L440) so fully-invested books recycle into better sleeves. A 5-10% dry-powder buffer remains optional capital-allocation v2 — do not use idle cash as a substitute for broken rotation. | capital_rotation_coordinator / cash buffer target phase activates and rank rotation is healthy on momentum_grace |
 | L446 | **Nested counterfactual best-policy scoring inside sleeve episodes** | Wide earliest/latest episodes are recording. Next: score tighter entry/exit policies as nested counterfactuals inside closed episodes once readiness.ready_for_sleeve_timing_analysis is true. | learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true on primary or fair tracks |
-| L451 | **Outcome-led internal screen formula from successful sleeves** | Benefit is real but already partly covered: model_weights reweights recognised screens from archive outcomes; Composite Value is an internal blend; learning-director roadmap prefers progressive loser filters then filter_invention_loop over inventing a parallel proprietary formula. A new sleeve-trait formula should wait until filtered_cohort_track / sleeve-episode thickness gates fire, use PIT out-of-sample tests, and stay alongside (not instead of) Graham/Buffett/etc. | filtered_cohort_track has ≥8 epoch marks OR sleeve episodes ready_for_sleeve_timing_analysis (≥15 closed per capital_status tag) AND loser_pattern_lab has ≥3 validated patterns |
 
 ### Universe & data
 
