@@ -673,6 +673,28 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ingest_maint_p.set_defaults(func=cmd_library_ingest_maintenance)
 
+    maint_cap_p = sub.add_parser(
+        "maintenance-capacity-review",
+        parents=[common],
+        help=(
+            "Assess / apply crowded maintenance slot width (L454): "
+            "step_down/up sequential markets or propose matrix"
+        ),
+    )
+    maint_cap_p.add_argument(
+        "--apply",
+        action="store_true",
+        help="Persist step_up / step_down / matrix proposal from the assessment",
+    )
+    maint_cap_p.add_argument("--json", action="store_true")
+    maint_cap_p.add_argument(
+        "--json-path",
+        type=Path,
+        default=None,
+        help="Write review JSON to this path",
+    )
+    maint_cap_p.set_defaults(func=cmd_library_maintenance_capacity_review)
+
     parked_hunter_p = sub.add_parser(
         "parked-hunter-compile",
         parents=[common],
@@ -2177,6 +2199,26 @@ def cmd_library_ingest_maintenance(args: argparse.Namespace) -> int:
         for err in outcome.errors:
             print(f"  error: {err}", file=sys.stderr)
     return 0 if not outcome.errors else 1
+
+
+def cmd_library_maintenance_capacity_review(args: argparse.Namespace) -> int:
+    from value_investor.library_maintenance_capacity import review_maintenance_capacity
+
+    result = review_maintenance_capacity(Path(args.root), apply=bool(args.apply))
+    if args.json or args.json_path is not None:
+        _emit_cli_json(result, args)
+    else:
+        assessment = result.get("assessment") or {}
+        print(
+            f"maintenance-capacity: decision={assessment.get('decision')} "
+            f"width={assessment.get('current_width')}→{assessment.get('proposed_width')} "
+            f"reason={assessment.get('reason')} applied={result.get('applied')}"
+        )
+        if assessment.get("median_used_seconds") is not None:
+            print(f"  median_used_seconds={assessment.get('median_used_seconds')}")
+        if assessment.get("matrix_parallel_proposed"):
+            print("  matrix_parallel: proposed (flag only — no workflow yet)")
+    return 0
 
 
 def cmd_parked_hunter_compile(args: argparse.Namespace) -> int:

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T18:08:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T18:13:51+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -523,7 +523,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L439 | **Progress report dual-suite excess (stress + fair)** | project_progress currently pulls ai_excess from stress ai_judgment decision_review, so stage 2b looks brutal. Later: surface ai_judgment_fair excess alongside stress without flipping is_primary — adoption scoreboard vs churn lab. | Human wants dashboard/progress narrative aligned with Suite B adoption truth while keeping Suite A primary flag |
 | L449 | **Invoke market eng gap burndown from eng-queue when idle** | L448 burndown only runs inside ops-monitor apply_fixes, and ops-monitor skips after the first successful finalize of the day. After #805 landed mid-day, later scheduled/dispatch runs skipped monitor so burndown never applied until the next morning run (or force). Consider also calling try-market-gap-burndown from engineering-queue idle path beside compile-cap drain / parked hunter. | Next weekday where eng queue is idle after ~15:00 UTC with library IWB/thin remaining and ops-monitor already finalized that morning |
 | L453 | **Regime snapshot week-over-week delta highlighting** | Sunday review regime table columns (step, +α rate, pairs, shadow ready, flags) are often static for weeks while only primary excess moves. Highlight week-over-week deltas or collapse unchanged filter/gate columns so the table does not read as undifferentiated worsening. | Another Analysis-tab Sunday review UX pass, or when exclusion week-pairs grow past the regime_slices gate and filter columns start moving again |
-| L454 | **Parallel library maintenance jobs when crowded** | With 7 maintenance markets, L323 serves one market per 120-min slot (4/day), so each book refreshes about every 2 days. Revisit parallel jobs or a second maintenance workflow when runner capacity and source rate limits allow, without starving the euro fat sprint. | Maintenance markets stay at 6+ for two weeks AND buy-tier body lag on admitted books is visibly worse than FTSE, or job timeouts are rare with spare GHA capacity |
 
 ---
 

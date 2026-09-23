@@ -175,7 +175,7 @@ ftse-library euro-ingest-dispatch --json
 | Sprint ingest (focus) | `euro-ingest-loop.yml` | Runs only when focus `should_run_sprint_ingest` |
 | Sprint ingest (parallel 1) | `library-ingest-sprint.yml` | Runs `ingest_parallel_sprint` markets with gaps (e.g. sp500) |
 | Sprint ingest (parallel 2) | `library-ingest-sprint-2.yml` | Spare stream: `ingest_parallel_sprint_2` (e.g. asx200). Waits on euro + stream 1, then leftover / spare fraction or queue fill-down. Peak-hour skip is a local fallback only. Auto-advances queue on parity. |
-| Maintenance ingest | `library-ingest-maintenance.yml` | 2×/weekday FTSE-standard scan-then-target (`max_targets=62`) for markets at the FTSE quality bar **or** exhausted leftovers (unparked names only) |
+| Maintenance ingest | `library-ingest-maintenance.yml` | ≤4×/day FTSE-standard scan-then-target (`max_targets=62`) for parity / exhausted leftovers; crowded roster serves **up to 2 markets/slot** by default (`maintenance_capacity.json`, L454) |
 | Stall / slowdown follow-up | all library ingest workflows | After stall or `improved=0` leftover gaps (including cutoff deepens that already ran), dispatches pinned `euro-ingest-loop.yml` (`record_gap_closure=true`, `max_targets=1`) via `scripts/dispatch_library_gap_closure_followups.sh` |
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
@@ -223,6 +223,29 @@ names are excluded from the observe-sim / paper learning pool until coverage
 improves. Unparked names stay on FTSE-volume maintenance
 (`ingest_exhausted_markets`); parked leftovers do not count as
 `ingest_parity_met`.
+
+## Maintenance capacity (L454)
+
+Crowded maintenance (≥3 books) serves **`max_markets_when_crowded`** markets per
+cron slot (default **2**, sequential, full FTSE volume). State lives in
+[`docs/data/library/maintenance_capacity.json`](../data/library/maintenance_capacity.json).
+Each maintenance run appends a sample and runs
+`ftse-library maintenance-capacity-review --apply`:
+
+| Decision | When |
+|----------|------|
+| `step_down` | Runtime cutoffs / errors / high median used-seconds |
+| `step_up` | ≥4 green samples at current width, headroom under ~35 min, width &lt; 3 |
+| `propose_matrix` | Width already 3, roster still ≥6, headroom green — **flag only** (no second workflow yet) |
+
+The per-market `max_targets=62` name cap is usually **not** binding on maintenance
+books (recent slots used single-digit targets). Rotation width is the lever.
+
+```bash
+ftse-library maintenance-capacity-review --json
+ftse-library maintenance-capacity-review --apply --json
+```
+
 A capped `parked_source_hunter` engineering task (`priority=low`, score 12) sits
 at the back of the queue: ingest loop / `ftse-library parked-hunter-compile` /
 hourly `engineering-queue.yml` compile one parked ticker; after that task is

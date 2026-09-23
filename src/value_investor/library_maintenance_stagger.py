@@ -6,11 +6,16 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.library_maintenance_capacity import (
+    DEFAULT_MAX_MARKETS_WHEN_CROWDED,
+    resolve_max_markets_when_crowded,
+)
 from value_investor.storage import read_json, write_json
 
 CURSOR_FILENAME = "maintenance_slot_cursor.json"
 CROWDED_MARKET_THRESHOLD = 3
-MAX_MARKETS_WHEN_CROWDED = 1
+# Default width when crowded; live value comes from maintenance_capacity.json (L454).
+MAX_MARKETS_WHEN_CROWDED = DEFAULT_MAX_MARKETS_WHEN_CROWDED
 
 
 def rotate_after(markets: list[str], last_head: str | None) -> list[str]:
@@ -61,16 +66,25 @@ def plan_maintenance_slot(
     library_root: Path | None = None,
     last_head: str | None = None,
     crowded_threshold: int = CROWDED_MARKET_THRESHOLD,
-    max_markets_when_crowded: int = MAX_MARKETS_WHEN_CROWDED,
+    max_markets_when_crowded: int | None = None,
 ) -> dict[str, Any]:
     """Pick this slot's maintenance markets.
 
-    One sequential job at 62 targets / 3600s cannot finish three books inside
-    ``timeout-minutes: 120`` (especially after the euro fat-slot wait). When the
-    list is crowded, serve one market per slot and rotate.
+    One sequential job at 62 targets / 3600s historically could not finish three
+    books inside ``timeout-minutes: 120``. Crowded rosters therefore rotate a
+    bounded number of markets per slot (default **2**, from
+    ``maintenance_capacity.json``) at full FTSE volume — see L323 / L454.
     """
     wanted = [str(m).strip() for m in markets if str(m).strip()]
     unique = list(dict.fromkeys(wanted))
+    if max_markets_when_crowded is None:
+        width = (
+            resolve_max_markets_when_crowded(library_root)
+            if library_root is not None
+            else DEFAULT_MAX_MARKETS_WHEN_CROWDED
+        )
+    else:
+        width = max(1, int(max_markets_when_crowded))
     if len(unique) < int(crowded_threshold):
         return {
             "staggered": False,
@@ -79,24 +93,27 @@ def plan_maintenance_slot(
             "selected": unique,
             "deferred": [],
             "last_head": last_head,
+            "max_markets_when_crowded": width,
         }
     if last_head is None and library_root is not None:
         last_head = str(load_maintenance_slot_cursor(library_root).get("last_head") or "") or None
     rotated = rotate_after(unique, last_head)
-    cap = max(1, int(max_markets_when_crowded))
+    cap = max(1, int(width))
     selected = rotated[:cap]
     deferred = rotated[cap:]
     return {
         "staggered": True,
-        "reason": "crowded_rotate_one",
+        "reason": "crowded_rotate_bounded",
         "configured": unique,
         "selected": selected,
         "deferred": deferred,
         "last_head": last_head,
+        "max_markets_when_crowded": cap,
         "note": (
-            "Three-plus maintenance books share one 120-minute job. "
-            "This slot runs one market at full FTSE volume; the rest wait "
-            "for the next cron (4 slots/day)."
+            f"Three-plus maintenance books share one 120-minute job. "
+            f"This slot runs up to {cap} market(s) at full FTSE volume; the rest "
+            f"wait for the next cron (4 slots/day). Width is reviewed by "
+            f"maintenance-capacity-review (L454)."
         ),
     }
 
