@@ -323,10 +323,13 @@ Observe-only composition twin for open books. Spot mix already lives on
 | Median age | Median `days_in_column` on held columns (shown cards; truncated flagged) |
 | UW-by-stage | Share of shown cards with `unrealized_pnl_pct < 0` per held column |
 
+FTSE live reports may omit `last_price`; board enrich (L464) fills marks from
+library signals / HI price map so UW is not blank. Still local P&L vs
+`avg_cost` — not FX.
+
 **Separation (hard):** does not feed or rewrite cumulative / epoch
 `beat_market` / `excess_after_costs`, exit_shadow / realized-at-exit reviews,
 L462 WoW NAV twin, N153 FX bookkeeping, or decision-review knob apply.
-
 | Surface | Detail |
 |---------|--------|
 | Store | `docs/data/lifecycle_maturity_trajectory.json` (ops-monitor optional commit + dashboard-bridge; email-report excludes) |

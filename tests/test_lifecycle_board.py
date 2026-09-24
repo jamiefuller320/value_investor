@@ -420,3 +420,147 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert "levels_basis" in charts
     assert "prospective" in charts
     assert "formatChartPrice(value, currency)" in charts
+
+
+def _write_btl_fund(paper: Path, *, ticker: str, avg_cost: float, opened_days: int = 60) -> None:
+    btl = paper / "buy_tier_level"
+    btl.mkdir(parents=True)
+    write_json(
+        btl / "config.json",
+        {"track_id": "buy_tier_level", "is_cohort_lab": True, "max_positions": 2},
+    )
+    write_json(
+        btl / "automated_fund.json",
+        {
+            "config": {"max_positions": 2},
+            "cash": 0,
+            "holdings": {
+                ticker: {
+                    "ticker": ticker,
+                    "shares": 10,
+                    "avg_cost": avg_cost,
+                    "opened_at": (NOW - timedelta(days=opened_days)).isoformat(),
+                }
+            },
+            "trades": [],
+            "equity_curve": [{"at": NOW.isoformat(), "portfolio_value": 1000}],
+            "rebalance_state": {"exit_streak": {}, "reentry_cooldown": {}},
+        },
+    )
+
+
+def test_ftse_board_enriches_last_price_from_library_signals(tmp_path: Path):
+    """Live reports omit prices; library latest_signals.csv fills marks (shard path)."""
+    library = tmp_path / "library"
+    screen = library / "markets" / "ftse350" / "screen"
+    screen.mkdir(parents=True)
+    (screen / "latest_signals.csv").write_text(
+        "ticker,last_price,signal\nGAP.L,90.0,buy\n",
+        encoding="utf-8",
+    )
+    paper = tmp_path / "paper"
+    _write_btl_fund(paper, ticker="GAP.L", avg_cost=100.0)
+    payload = build_lifecycle_board(
+        library_root=library,
+        paper_root=paper,
+        shard_root=tmp_path / "shards",
+        live_reports=[
+            {
+                "ticker": "GAP.L",
+                "name": "Gap PLC",
+                "signal": "buy",
+                "timing_signal": "accumulate",
+                "conviction_score": 0.7,
+            }
+        ],
+        now=NOW,
+    )
+    ftse = next(row for row in payload["markets"] if row["market_id"] == "ftse350")
+    cols = merge_track_columns(ftse["screen_columns"], ftse["tracks"][0])
+    card = next(row for row in cols["growth"]["shown"] if row["ticker"] == "GAP.L")
+    assert card["unrealized_pnl_pct"] == -0.1
+
+
+def test_ftse_board_enriches_last_price_from_hi_marks(tmp_path: Path):
+    """When library CSV is absent, reuse HI marks from the paper-auto price path."""
+    paper = tmp_path / "paper"
+    _write_btl_fund(paper, ticker="HI.L", avg_cost=200.0)
+    write_json(
+        paper / "buy_tier_level" / "hypothesis_integrity.json",
+        {
+            "holdings": [
+                {"ticker": "HI.L", "mark": 180.0, "avg_cost": 200.0, "unrealized_pct": -0.1}
+            ]
+        },
+    )
+    payload = build_lifecycle_board(
+        library_root=tmp_path / "library",
+        paper_root=paper,
+        shard_root=tmp_path / "shards",
+        live_reports=[
+            {
+                "ticker": "HI.L",
+                "name": "HI PLC",
+                "signal": "buy",
+                "timing_signal": "accumulate",
+                "conviction_score": 0.65,
+            }
+        ],
+        now=NOW,
+    )
+    ftse = next(row for row in payload["markets"] if row["market_id"] == "ftse350")
+    cols = merge_track_columns(ftse["screen_columns"], ftse["tracks"][0])
+    card = next(row for row in cols["growth"]["shown"] if row["ticker"] == "HI.L")
+    assert card["unrealized_pnl_pct"] == -0.1
+
+
+def test_ftse_board_screen_last_price_wins_over_hi(tmp_path: Path):
+    paper = tmp_path / "paper"
+    _write_btl_fund(paper, ticker="WIN.L", avg_cost=50.0)
+    write_json(
+        paper / "buy_tier_level" / "hypothesis_integrity.json",
+        {"holdings": [{"ticker": "WIN.L", "mark": 40.0}]},
+    )
+    payload = build_lifecycle_board(
+        library_root=tmp_path / "library",
+        paper_root=paper,
+        shard_root=tmp_path / "shards",
+        live_reports=[
+            {
+                "ticker": "WIN.L",
+                "signal": "buy",
+                "timing_signal": "accumulate",
+                "conviction_score": 0.7,
+                "last_price": 55.0,
+            }
+        ],
+        now=NOW,
+    )
+    ftse = next(row for row in payload["markets"] if row["market_id"] == "ftse350")
+    cols = merge_track_columns(ftse["screen_columns"], ftse["tracks"][0])
+    card = next(row for row in cols["growth"]["shown"] if row["ticker"] == "WIN.L")
+    assert card["unrealized_pnl_pct"] == 0.1
+
+
+def test_ftse_board_accepts_price_alias_keys(tmp_path: Path):
+    paper = tmp_path / "paper"
+    _write_btl_fund(paper, ticker="ALIAS.L", avg_cost=100.0)
+    payload = build_lifecycle_board(
+        library_root=tmp_path / "library",
+        paper_root=paper,
+        shard_root=tmp_path / "shards",
+        live_reports=[
+            {
+                "ticker": "ALIAS.L",
+                "signal": "buy",
+                "timing_signal": "accumulate",
+                "conviction_score": 0.7,
+                "last": 110.0,
+            }
+        ],
+        now=NOW,
+    )
+    ftse = next(row for row in payload["markets"] if row["market_id"] == "ftse350")
+    cols = merge_track_columns(ftse["screen_columns"], ftse["tracks"][0])
+    card = next(row for row in cols["growth"]["shown"] if row["ticker"] == "ALIAS.L")
+    assert card["unrealized_pnl_pct"] == 0.1
