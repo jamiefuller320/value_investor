@@ -1,50 +1,50 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-24T12:55:21.368452+00:00",
-  "overall": "active",
-  "headline": "Agent lane active.",
+  "generated_at": "2026-09-24T13:17:49.269727+00:00",
+  "overall": "blocked",
+  "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
   "merge_lane": {
-    "state": "idle",
-    "idle": true,
-    "running": false,
-    "blocked": false,
-    "pr_open_count": 0,
-    "open_engineering_prs": [],
-    "in_flight_pr": null,
-    "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
-  },
-  "agent_lane": {
     "state": "running",
     "idle": false,
     "running": true,
     "blocked": false,
-    "should_dispatch": true,
+    "pr_open_count": 1,
+    "open_engineering_prs": [],
+    "in_flight_pr": 840,
+    "detail": "In-flight PR #840 — auto-merge is event-driven (not a background merger)."
+  },
+  "agent_lane": {
+    "state": "blocked",
+    "idle": false,
+    "running": false,
+    "blocked": true,
+    "should_dispatch": false,
     "pause_active": false,
     "traffic_pause_active": false,
     "attention_parked_count": 0,
-    "open_count": 1,
-    "pr_open_count": 0,
-    "dispatch_eligible_count": 1,
+    "open_count": 0,
+    "pr_open_count": 1,
+    "dispatch_eligible_count": 0,
     "blocked_task_count": 0,
-    "next_task_id": "eng-20260924-01",
-    "reason": "queue ready — dispatch next open task",
-    "detail": "queue ready — dispatch next open task"
+    "next_task_id": null,
+    "reason": "no open engineering tasks in queue",
+    "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
   },
   "queue_clearing": {
     "pause_active": false,
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-24T12:54:50.543034+00:00"
+    "evaluated_at": "2026-09-24T13:17:07.084098+00:00"
   },
   "traffic_control": {
     "pause_active": false,
     "stuck_pr_count": 0,
     "pause_reasons": [],
-    "evaluated_at": "2026-09-24T12:54:50.560856+00:00"
+    "evaluated_at": "2026-09-24T13:17:46.298248+00:00"
   },
   "ops_monitor": {
-    "run_at": "2026-09-24T12:54:14.957524+00:00",
+    "run_at": "2026-09-24T13:16:23.945058+00:00",
     "overall": "fail",
-    "should_dispatch_engineering": true
+    "should_dispatch_engineering": false
   },
   "merges_today": [],
   "verified_merges_today_count": 0,
@@ -346,11 +346,11 @@
   "library_stall_parks": [],
   "observe_utilization": {
     "schema_version": 1,
-    "generated_at": "2026-09-24T12:55:21.348920+00:00",
+    "generated_at": "2026-09-24T13:17:48.098847+00:00",
     "observe_only": true,
     "headline": "2 warn instrument(s); improving vs last cycle on 1.",
     "surface_freshness": "fresh",
-    "ops_run_at": "2026-09-24T12:54:14.957524+00:00",
+    "ops_run_at": "2026-09-24T13:16:23.945058+00:00",
     "warn_instrument_count": 2,
     "trajectory_summary": {
       "improving": 1,
@@ -368,7 +368,7 @@
         "observe_only": true,
         "warn_active": true,
         "severity": "warn",
-        "finding_summary": "25 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across asx200, cac40, euro_depth, ftse350, nasdaq100, sp500 (+1 more): sp500/NXPI (no_memo, 492.9h since flip), asx200/CLW.AX (no_memo, 444.9h since flip), euro_depth/NVG.LS (no_memo, 444.9h since flip), euro_depth/OMV.VI (no_memo, 372.9h since flip), sp500/BKNG (no_memo, 372.9h since flip), tsx60/TECK-B.TO (no_key_bodies, 372.9h since flip), EWG.L (no_memo, 300.9h since flip), GNS.L (no_memo, 300.9h since flip), sp500/PEP (no_memo, 276.9h since flip), euro_depth/RAND.AS (no_memo, 204.9h since flip) (+15 more). Blocking: no_key_bodies=5, no_memo=20.",
+        "finding_summary": "25 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across asx200, cac40, euro_depth, ftse350, nasdaq100, sp500 (+1 more): sp500/NXPI (no_memo, 493.29h since flip), asx200/CLW.AX (no_memo, 445.29h since flip), euro_depth/NVG.LS (no_memo, 445.29h since flip), euro_depth/OMV.VI (no_memo, 373.29h since flip), sp500/BKNG (no_memo, 373.29h since flip), tsx60/TECK-B.TO (no_key_bodies, 373.29h since flip), EWG.L (no_memo, 301.29h since flip), GNS.L (no_memo, 301.29h since flip), sp500/PEP (no_memo, 277.29h since flip), euro_depth/RAND.AS (no_memo, 205.29h since flip) (+15 more). Blocking: no_key_bodies=5, no_memo=20.",
         "metrics": {
           "warn_not_usable": 25,
           "open_not_usable": 46,
@@ -388,8 +388,8 @@
           "state": "fresh",
           "label": "Fresh",
           "detail": "Last refresh 0.0h ago.",
-          "as_of": "2026-09-24T12:54:16.421905+00:00",
-          "age_hours": 0.02,
+          "as_of": "2026-09-24T13:17:07.961476+00:00",
+          "age_hours": 0.01,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
         },
@@ -430,7 +430,7 @@
           "state": "fresh",
           "label": "Fresh",
           "detail": "Last refresh 0.0h ago.",
-          "as_of": "2026-09-24T12:54:29.019687+00:00",
+          "as_of": "2026-09-24T13:17:26.449821+00:00",
           "age_hours": 0.01,
           "store_lag_hours": null,
           "stale_after_hours": 30.0
