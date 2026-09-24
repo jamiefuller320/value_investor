@@ -72,7 +72,7 @@ def test_triage_cancels_superseded_stall(tmp_path: Path):
         tasks_path=tasks_path,
         apply=True,
         auto_cancel_superseded=True,
-        auto_cancel_resolved=False,
+        auto_cancel_resolved=False,  # do not depend on live market filing gaps
         auto_annotate=False,
     )
     assert any(row.action == "cancel_superseded_library_stall" for row in result.cancelled)
@@ -104,6 +104,9 @@ def test_reframe_skips_reburn_loop(tmp_path: Path, monkeypatch):
         tasks_path=tasks_path,
         apply=True,
         auto_cancel_superseded=False,
+        # Isolate from live library health: default auto_cancel_resolved would
+        # cancel a reburn_loop stall when the market's real buy-tier gaps are 0.
+        auto_cancel_resolved=False,
         auto_annotate=True,
         auto_reframe_bundled=True,
     )
@@ -289,6 +292,8 @@ def test_auto_unpark_reburn_when_gates_clear(tmp_path: Path, monkeypatch):
         tasks_path=tasks_path,
         apply=True,
         auto_cancel_superseded=False,
+        # Same live-health isolation as test_reframe_skips_reburn_loop.
+        auto_cancel_resolved=False,
         auto_annotate=False,
         auto_unpark_cleared_reburn=True,
     )
