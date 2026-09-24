@@ -127,8 +127,17 @@ starter-size knobs from this overlay.
 
 ## Dashboard board
 
-The dashboard **Lifecycle** tab is a per-market funnel of individual names plus
-the catalog experiments that watch each column. It is **observe-only** — the
+The dashboard **Lifecycle** tab has two sub-pages (same `paper-subnav` pattern
+as Portfolio / Performance):
+
+| Sub-page | Hash | Contents |
+|----------|------|----------|
+| **Positions** (default) | `#lifecycle` · `#lifecycle/{market}` · `#lifecycle/{market}/{track}` | Per-market funnel of individual names + catalog experiment chips |
+| **Maturity mix** | `#lifecycle/maturity` | L463 observe twin — early-share trajectory, freshness, UW-by-stage / column shares (prefer Better/Worse over raw mix %). Separate store from `observe_utilization`, `beat_market`, and exit_shadow |
+
+Legacy `#lifecycle/{market}/{track}` bookmarks still open **Positions**.
+
+The Positions board is **observe-only** — the
 same diagnostic labels as `classify_lifecycle_phase()`, not the deferred L177
 state machine.
 

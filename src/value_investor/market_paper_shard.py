@@ -27,11 +27,18 @@ from value_investor.market_shard_phases import (
     weekly_paper_shard_markets_for_policy,
     write_market_phase_status,
 )
-from value_investor.market_trading_costs import cost_fields_for_config, costs_for_market
+from value_investor.market_trading_costs import (
+    cost_fields_for_config,
+    cost_fields_for_native_book,
+    costs_for_market,
+)
 from value_investor.paper_automation import (
+    BUY_TIER_LEVEL_NATIVE_SUBDIR,
+    BUY_TIER_LEVEL_NATIVE_TRACK_ID,
     BUY_TIER_LEVEL_TRACK_ID,
     CONFIG_FILENAME,
     default_buy_tier_level_config,
+    default_buy_tier_level_native_config,
     ensure_learning_track_configs,
     learning_track_dirs,
     local_now,
@@ -44,6 +51,7 @@ from value_investor.storage import read_json, write_json
 logger = logging.getLogger(__name__)
 
 SHARD_META_FILENAME = "shard_meta.json"
+NATIVE_CURRENCY_PROVENANCE_FILENAME = "native_currency_provenance.json"
 
 MARKET_SESSION_DEFAULTS: dict[str, dict[str, Any]] = {
     "sp500": {
@@ -187,6 +195,62 @@ def apply_epoch0_level_config(shard_root: Path, session: dict[str, Any]) -> Path
         json.dumps(cfg.to_dict(), indent=2) + "\n",
         encoding="utf-8",
     )
+    return track_dir
+
+
+def market_needs_native_currency_twin(market_id: str) -> bool:
+    """True when the market currency differs from GBP (N153 FX unit-mismatch risk)."""
+    from value_investor.fx import currency_for_market
+
+    mid = str(market_id or "").strip()
+    if not mid:
+        return False
+    return str(currency_for_market(mid) or "GBP").upper() != "GBP"
+
+
+def apply_epoch0_native_config(shard_root: Path, session: dict[str, Any]) -> Path | None:
+    """Cold-start native-currency twin for non-GBP shards (N153). Leaves GBP book alone."""
+    market_id = str(session.get("market_id") or "").strip()
+    if not market_needs_native_currency_twin(market_id):
+        return None
+    shard_root = Path(shard_root)
+    cfg = default_buy_tier_level_native_config(market_id)
+    cfg.timezone = str(session.get("timezone") or cfg.timezone)
+    cfg.market_open = str(session.get("market_open") or cfg.market_open)
+    cfg.settle_minutes_after_open = int(
+        session.get("settle_minutes_after_open") or cfg.settle_minutes_after_open
+    )
+    if "weekdays_only" in session:
+        cfg.weekdays_only = bool(session["weekdays_only"])
+    # Re-stamp native costs after session merge (default builder already set them).
+    cost_fields = cost_fields_for_native_book(market_id)
+    cfg.trade_cost_pct = float(cost_fields["trade_cost_pct"])
+    cfg.buy_cost_pct = float(cost_fields["buy_cost_pct"])
+    cfg.sell_cost_pct = float(cost_fields["sell_cost_pct"])
+    track_dir = shard_root / BUY_TIER_LEVEL_NATIVE_SUBDIR
+    track_dir.mkdir(parents=True, exist_ok=True)
+    (track_dir / CONFIG_FILENAME).write_text(
+        json.dumps(cfg.to_dict(), indent=2) + "\n",
+        encoding="utf-8",
+    )
+    from value_investor.fx import currency_for_market
+
+    provenance = {
+        "schema_version": 1,
+        "track_id": BUY_TIER_LEVEL_NATIVE_TRACK_ID,
+        "parent_track_id": BUY_TIER_LEVEL_TRACK_ID,
+        "market_id": market_id,
+        "reporting_currency": currency_for_market(market_id),
+        "capital_epoch": "n153_native_currency",
+        "warm_start": False,
+        "note": (
+            "N153 cold-start capital epoch — trade and mark in market currency. "
+            "Do not compare NAV to the GBP-reporting buy_tier_level book without an "
+            "FX disclaimer; do not back-label prior GBP NAV as evidence for this design."
+        ),
+        "updated_at": datetime.now(UTC).isoformat(),
+    }
+    write_json(track_dir / NATIVE_CURRENCY_PROVENANCE_FILENAME, provenance, compact=False)
     return track_dir
 
 
@@ -353,21 +417,45 @@ def run_epoch0_market_shard(
         prefer_listed_prices=True,
         now=now,
     )
-    track_summary = {
-        "tracks": {
-            BUY_TIER_LEVEL_TRACK_ID: {
-                "acted": pass_result.acted,
-                "trades": len(pass_result.trades),
-                "note": pass_result.note,
-            }
+    tracks_out: dict[str, Any] = {
+        BUY_TIER_LEVEL_TRACK_ID: {
+            "acted": pass_result.acted,
+            "trades": len(pass_result.trades),
+            "note": pass_result.note,
         }
     }
+    track_ids = [BUY_TIER_LEVEL_TRACK_ID]
+    native_dir = apply_epoch0_native_config(shard_root, meta)
+    if native_dir is not None:
+        native_cfg = default_buy_tier_level_native_config(market_id)
+        try:
+            native_cfg = type(native_cfg).from_dict(read_json(native_dir / CONFIG_FILENAME))
+        except (OSError, ValueError, TypeError):
+            pass
+        native_pass = run_daily_automation(
+            output_dir=native_dir,
+            config=native_cfg,
+            reports_path=bundle_path,
+            force=force,
+            market=market_id,
+            prefer_listed_prices=True,
+            now=now,
+        )
+        tracks_out[BUY_TIER_LEVEL_NATIVE_TRACK_ID] = {
+            "acted": native_pass.acted,
+            "trades": len(native_pass.trades),
+            "note": native_pass.note,
+            "reporting_currency": native_cfg.reporting_currency,
+            "capital_epoch": "n153_native_currency",
+        }
+        track_ids.append(BUY_TIER_LEVEL_NATIVE_TRACK_ID)
+    track_summary = {"tracks": tracks_out}
     near_miss = write_library_near_miss_watch(library_root, market_id)
     batch_entry = {
         "run_at": (now or datetime.now(UTC)).isoformat(),
         "cadence": cadence,
         "screen_bundle": bundle_path.name,
-        "tracks": [BUY_TIER_LEVEL_TRACK_ID],
+        "tracks": track_ids,
         "ai_judgment": False,
         "knob_apply": False,
         "tracks_acted": {

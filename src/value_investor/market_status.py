@@ -54,7 +54,9 @@ DEFAULT_PAPER_ROOT = Path("docs/data/paper_automation")
 DEFAULT_CHARTS_DIR = Path("docs/data/charts")
 BUY_TIER_LEVEL_TRACK = "buy_tier_level"
 BUY_TIER_LEVEL_DCA_TRACK = "buy_tier_level_dca"
+BUY_TIER_LEVEL_NATIVE_TRACK = "buy_tier_level_native"
 BUY_TIER_LEVEL_DCA_MARKET_BRANCH = "buy_tier_level_dca_market"
+GBP_FX_WARPED_BRANCH = "buy_tier_level_gbp_fx_warped"
 EXPECTED_ADMITTED_BLOCKER_NEEDLE = "weekly_paper_shard_markets"
 SPRINT_PROGRESS_WINDOW_DAYS = 2
 STALE_SCREEN_AFTER_DAYS = 8
@@ -828,6 +830,18 @@ def _paper_fund_path(
     )
 
 
+def _native_paper_fund_path(
+    market_id: str,
+    *,
+    shard_root: Path,
+) -> Path:
+    return (
+        shard_root_for_market(market_id, base=shard_root)
+        / BUY_TIER_LEVEL_NATIVE_TRACK
+        / "automated_fund.json"
+    )
+
+
 def _observe_summary_path(library_root: Path, market_id: str) -> Path:
     return screen_dir_for(library_root, market_id) / "sim" / "observe_summary.json"
 
@@ -844,6 +858,20 @@ def _held_vs_market_row(
 ) -> dict[str, Any]:
     fund_path = _paper_fund_path(market_id, paper_root=paper_root, shard_root=shard_root)
     fund = _as_dict(_safe_read(fund_path))
+    paper_instrument = BUY_TIER_LEVEL_TRACK
+    chart_currency = currency
+    # Non-UK shards: prefer the N153 native-currency twin when it has marks so
+    # held-vs-market is not the GBP day-0 FX-warped book.
+    if market_id != LIVE_MARKET_ID:
+        native_path = _native_paper_fund_path(market_id, shard_root=shard_root)
+        native_fund = _as_dict(_safe_read(native_path))
+        native_curve = native_fund.get("equity_curve") if native_fund else None
+        if isinstance(native_curve, list) and native_curve:
+            fund = native_fund
+            paper_instrument = BUY_TIER_LEVEL_NATIVE_TRACK
+            fund_ccy = _as_dict(native_fund.get("config")).get("reporting_currency")
+            if fund_ccy:
+                chart_currency = str(fund_ccy)
     observe = None
     if market_id != LIVE_MARKET_ID:
         observe = _as_dict(_safe_read(_observe_summary_path(library_root, market_id)))
@@ -854,22 +882,76 @@ def _held_vs_market_row(
             observe=observe or None,
             charts_dir=charts_dir if market_id == LIVE_MARKET_ID else None,
             bench_closes=bench_closes_for_market(market_id, macro_closes=macro_closes),
-            currency=currency,
+            currency=chart_currency,
             allow_chart_densify=market_id == LIVE_MARKET_ID,
         )
     except Exception:  # noqa: BLE001 — grid must still render
         return empty_held_vs_market(
             market_id=market_id,
-            currency=currency,
+            currency=chart_currency,
             reason="Held vs market series failed to assemble",
         )
+    if isinstance(payload, dict):
+        payload["paper_instrument"] = paper_instrument
     if market_id == LIVE_MARKET_ID:
         payload = _overlay_ftse_dca_realism(
             payload,
             paper_root=paper_root,
             macro_closes=macro_closes,
         )
+    elif paper_instrument == BUY_TIER_LEVEL_NATIVE_TRACK:
+        payload = _overlay_gbp_fx_warped_archive(
+            payload,
+            market_id=market_id,
+            paper_root=paper_root,
+            shard_root=shard_root,
+        )
+    else:
+        native_dir = shard_root_for_market(market_id, base=shard_root) / BUY_TIER_LEVEL_NATIVE_TRACK
+        if (native_dir / "config.json").exists() and not (
+            native_dir / "automated_fund.json"
+        ).exists():
+            payload = merge_branch_series(
+                payload,
+                branch_id=BUY_TIER_LEVEL_NATIVE_TRACK,
+                label="Native-currency twin (pending)",
+                values={},
+                knobs={"capital_epoch": "n153_native_currency", "policy": "buy_tier_level"},
+                status="pending",
+            )
     return payload
+
+
+def _overlay_gbp_fx_warped_archive(
+    payload: dict[str, Any],
+    *,
+    market_id: str,
+    paper_root: Path,
+    shard_root: Path,
+) -> dict[str, Any]:
+    """Overlay the contaminated GBP buy_tier_level book as an observe archive branch."""
+    gbp_path = _paper_fund_path(market_id, paper_root=paper_root, shard_root=shard_root)
+    gbp_fund = _as_dict(_safe_read(gbp_path))
+    if not gbp_fund:
+        return payload
+    gbp_marks = marks_from_fund(gbp_fund)
+    held_values = {
+        str(row["date"]): float(row["held"])
+        for row in gbp_marks
+        if row.get("date") is not None and _float(row.get("held")) is not None
+    }
+    return merge_branch_series(
+        payload,
+        branch_id=GBP_FX_WARPED_BRANCH,
+        label="GBP book (FX-warped archive)",
+        values=held_values,
+        knobs={
+            "reporting_currency": "GBP",
+            "capital_epoch": "contaminated_gbp_unit_mismatch",
+            "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer.",
+        },
+        status="active" if held_values else "pending",
+    )
 
 
 def _overlay_ftse_dca_realism(

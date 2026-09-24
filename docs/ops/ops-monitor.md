@@ -46,7 +46,7 @@ lane change and readiness gate (see N152 / P1 pin rules).
   `decision_input_inventory.json`) in ops-monitor `GHA_COMMIT_OPTIONAL` so
   daily cohort history persists in git (email-report excludes them so a broad
   `docs/data` overlay cannot rewind fresher ops commits).
-- **L463** — **Lifecycle maturity mix trajectory** on the Lifecycle tab
+- **L463** — **Lifecycle maturity mix trajectory** on Lifecycle → **Maturity mix**
   (`docs/data/lifecycle_maturity_trajectory.json`): per-market held-column
   shares / median age / UW-by-stage with freshness + Better/Worse history.
   Observe-only; **separated** from cumulative `beat_market`, exit_shadow,
@@ -300,6 +300,7 @@ They do **not** deepen ingest or rememo.
 |-------|---------------|---------------|----------------|--------|
 | `check_buy_tier_flip_lag` | **New buy-tier not yet usable** | Path-incomplete ≥24h cohort non-empty (FTSE live ∪ admitted; schema v2) | `docs/data/buy_tier_flip_lag.json` | Live on main |
 | `check_decision_input_inventory` | **FTSE decision-input utilization gap** | Dominant bind gap count ≥3 on FTSE holdings ∪ buy-tier (else quiet / `P1 green-enough`) | `docs/data/decision_input_inventory.json` | Live on main |
+| `check_shard_nav_fx_warp` | **Shard NAV FX unit mismatch** | Non-GBP shard GBP book shows day-0 NAV≈FX and `buy_tier_level_native` is not yet active (N153) | `docs/data/shard_nav_fx_warp.json` | Live with N153 |
 
 Called from `collect_ops_findings` on the daily ops-monitor schedule. Raw
 instrument store JSON **is** in `GHA_COMMIT_OPTIONAL` (**L460**) so day-over-day
@@ -334,7 +335,7 @@ L462 WoW NAV twin, N153 FX bookkeeping, or decision-review knob apply.
 |---------|--------|
 | Store | `docs/data/lifecycle_maturity_trajectory.json` (ops-monitor optional commit + dashboard-bridge; email-report excludes) |
 | Trigger | `collect_ops_findings` → `check_lifecycle_maturity_trajectory`; also queue-health / board refresh |
-| Dashboard | Lifecycle tab — trajectory badges + freshness (prefer over raw counts) |
+| Dashboard | Lifecycle → **Maturity mix** (`#lifecycle/maturity`) — trajectory badges + freshness (prefer over raw counts); Positions board stays on `#lifecycle` / `#lifecycle/{market}` |
 | Finding | **Lifecycle maturity mix trajectory stalled** when missing/stale (`auto_fixable=False`) |
 | CLI (optional) | `ftse-dashboard-bridge refresh-lifecycle-maturity` |
 

@@ -354,8 +354,8 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 780.1,
-    "estimated_spend_usd_this_week": 93.2,
+    "estimated_spend_usd_this_cycle": 783.7,
+    "estimated_spend_usd_this_week": 96.8,
     "week_id": "2026-W39",
     "cycle_id": "2026-09-d8",
     "weekly_ops_cap_usd": 84.5,
@@ -537,16 +537,17 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-09-24T15:50:25.918364+00:00",
+  "updated_at": "2026-09-24T18:29:54.048443+00:00",
   "ingest_parity_markets": [
+    "aim",
     "asx200",
     "euro_depth"
   ],
   "ingest_parallel_sprint": [
-    "dax"
+    "asx200"
   ],
   "ingest_parallel_sprint_2": [
-    "aim"
+    "ftse_smallcap"
   ],
   "ladder": {
     "enabled": true,
@@ -774,7 +775,9 @@
       "tsx60",
       "euro_stoxx50",
       "nasdaq100",
-      "cac40"
+      "cac40",
+      "dax",
+      "aim"
     ],
     "epoch0_shard_after_screen": true,
     "equal_support_after_screen": true,
@@ -1125,12 +1128,33 @@
           "aim"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-09-24T16:52:50.360488+00:00",
+        "parallel_stream": 1,
+        "from_market": "dax",
+        "to_market": "asx200",
+        "stream_markets_after": [
+          "asx200"
+        ],
+        "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-09-24T18:29:54.048433+00:00",
+        "parallel_stream": 2,
+        "from_market": "aim",
+        "to_market": "ftse_smallcap",
+        "stream_markets_after": [
+          "ftse_smallcap"
+        ],
+        "ingest_parity_recorded": true
       }
     ]
   },
   "ingest_exhausted_markets": [
     "asx200",
     "cac40",
+    "dax",
     "euro_depth",
     "euro_stoxx50",
     "ftse_smallcap",

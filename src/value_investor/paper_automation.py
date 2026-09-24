@@ -197,6 +197,8 @@ class AutomationConfig:
     fair_cost_parent_track: str | None = None
     # Cohort lab — unfiltered buy-tier book; frozen vs decision-review --apply.
     is_cohort_lab: bool = False
+    # Paper NAV reporting currency (create-time only on the fund — never mid-flight).
+    reporting_currency: str = "GBP"
     # Churn guards — tuneable via config.json (not decision-review knobs yet).
     exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS
     reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS
@@ -295,6 +297,7 @@ class AutomationConfig:
                 str(raw["fair_cost_parent_track"]) if raw.get("fair_cost_parent_track") else None
             ),
             is_cohort_lab=bool(raw.get("is_cohort_lab", False)),
+            reporting_currency=str(raw.get("reporting_currency") or "GBP").upper(),
             exit_confirm_screens=int(raw.get("exit_confirm_screens", DEFAULT_EXIT_CONFIRM_SCREENS)),
             reentry_cooldown_screens=int(
                 raw.get("reentry_cooldown_screens", DEFAULT_REENTRY_COOLDOWN_SCREENS)
@@ -313,6 +316,9 @@ GRADUATED_ALLOCATION_TRACK_ID = "graduated_allocation"
 TECHNICAL_TRACK_ID = "technical"
 BUY_TIER_LEVEL_TRACK_ID = "buy_tier_level"
 BUY_TIER_LEVEL_DCA_TRACK_ID = "buy_tier_level_dca"
+# Non-UK shard capital epoch: trade + mark in market currency (N153). Shard-only —
+# not registered on the FTSE live learning-track list.
+BUY_TIER_LEVEL_NATIVE_TRACK_ID = "buy_tier_level_native"
 AI_JUDGMENT_SUBDIR = "ai_judgment"
 AI_JUDGMENT_CALIBRATED_SUBDIR = "ai_judgment_calibrated"
 MOMENTUM_GRACE_SUBDIR = "momentum_grace"
@@ -320,6 +326,7 @@ GRADUATED_ALLOCATION_SUBDIR = "graduated_allocation"
 TECHNICAL_SUBDIR = "technical"
 BUY_TIER_LEVEL_SUBDIR = "buy_tier_level"
 BUY_TIER_LEVEL_DCA_SUBDIR = "buy_tier_level_dca"
+BUY_TIER_LEVEL_NATIVE_SUBDIR = "buy_tier_level_native"
 BUY_TIER_LEVEL_MAX_POSITIONS = 120
 # FTSE household-realism capital epoch: £500/mo on a cold-start level twin.
 BUY_TIER_LEVEL_DCA_MONTHLY_DEPOSIT = 500.0
@@ -428,6 +435,34 @@ def default_buy_tier_level_dca_config(base: AutomationConfig | None = None) -> A
         "Buy-tier level DCA realism (£500/mo, Suite B costs, cold-start capital epoch)"
     )
     cfg.monthly_deposit = float(BUY_TIER_LEVEL_DCA_MONTHLY_DEPOSIT)
+    return cfg
+
+
+def default_buy_tier_level_native_config(
+    market_id: str,
+    base: AutomationConfig | None = None,
+) -> AutomationConfig:
+    """Non-UK shard twin: same level policy, market-native reporting (N153 epoch).
+
+    Cold start only — do not warm-start from a GBP-warped ``buy_tier_level`` book.
+    Cash and marks share ``currency_for_market`` so day-0 FX NAV warp cannot recur.
+    """
+    from value_investor.fx import currency_for_market
+    from value_investor.market_trading_costs import cost_fields_for_native_book
+
+    mid = str(market_id or "").strip()
+    ccy = currency_for_market(mid) if mid else "USD"
+    cfg = default_buy_tier_level_config(base)
+    cfg.track_id = BUY_TIER_LEVEL_NATIVE_TRACK_ID
+    cfg.track_label = (
+        f"Buy-tier level native ({ccy} reporting, no FX friction, cold-start capital epoch)"
+    )
+    cfg.reporting_currency = str(ccy).upper()
+    cfg.monthly_deposit = 0.0
+    fields = cost_fields_for_native_book(mid)
+    cfg.trade_cost_pct = float(fields["trade_cost_pct"])
+    cfg.buy_cost_pct = float(fields["buy_cost_pct"])
+    cfg.sell_cost_pct = float(fields["sell_cost_pct"])
     return cfg
 
 
@@ -830,6 +865,8 @@ def ensure_automated_fund(path: Path, config: AutomationConfig) -> PaperFund:
             buy_cost_pct=config.buy_cost_pct,
             sell_cost_pct=config.sell_cost_pct,
             max_positions=config.max_positions,
+            # Create-time only — never rewrite reporting_currency on an existing fund.
+            reporting_currency=str(config.reporting_currency or "GBP"),
         )
     )
     path.parent.mkdir(parents=True, exist_ok=True)

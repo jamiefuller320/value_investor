@@ -155,7 +155,7 @@ def test_epoch0_weekday_marks_after_settle(tmp_path: Path):
         patch(
             "value_investor.market_paper_shard.run_daily_automation",
             return_value=_Pass(),
-        ),
+        ) as mock_auto,
         patch(
             "value_investor.market_paper_shard.write_library_near_miss_watch",
             return_value={"buy_tier_not_now_count": 1, "hold_near_buy_count": 2},
@@ -172,12 +172,19 @@ def test_epoch0_weekday_marks_after_settle(tmp_path: Path):
     assert result.get("skipped") is False
     assert result["cadence"] == "weekday"
     assert result["ai_judgment"] is False
+    # Level book + N153 native twin both marked.
+    assert mock_auto.call_count == 2
+    tracks = (result.get("learning_tracks") or {}).get("tracks") or {}
+    assert "buy_tier_level" in tracks
+    assert "buy_tier_level_native" in tracks
+    assert (shard_root / "buy_tier_level_native" / "config.json").exists()
     log = shard_root / "weekday_batch_log.json"
     assert log.exists()
     import json
 
     entries = json.loads(log.read_text())["entries"]
     assert entries[-1]["cadence"] == "weekday"
+    assert "buy_tier_level_native" in entries[-1]["tracks"]
 
 
 def _seed_epoch0_wait_screen(library_root: Path, market_id: str) -> None:
@@ -262,7 +269,7 @@ def test_epoch0_stamps_timing_before_paper_when_unresolved(tmp_path: Path):
             library_root=library_root,
             shard_root=shard_root,
         )
-    assert order == ["stamp", "daily"]
+    assert order == ["stamp", "daily", "daily"]  # level book + N153 native twin
 
 
 def test_epoch0_excludes_wait_from_buys_and_keeps_near_miss(tmp_path: Path):
