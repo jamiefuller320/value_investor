@@ -11,9 +11,9 @@ POSITION_LIFECYCLE = Path("docs/ops/position-lifecycle.md")
 
 
 def _lifecycle_render_fn(text: str) -> str:
-    return text.split("function renderLifecycle(", 1)[1].split(
-        "\nfunction bindLifecyclePanel", 1
-    )[0]
+    return text.split("function renderLifecycle(", 1)[1].split("\nfunction bindLifecyclePanel", 1)[
+        0
+    ]
 
 
 def test_lifecycle_subnav_and_hash_routes() -> None:
