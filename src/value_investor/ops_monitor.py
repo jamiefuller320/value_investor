@@ -1451,9 +1451,9 @@ def check_lifecycle_maturity_trajectory(
         DEFAULT_OPS_STATUS_PATH,
         DEFAULT_STORE_PATH,
         FINDING_TITLE,
+        build_lifecycle_maturity_snapshot,
         ops_finding_from_maturity,
         refresh_lifecycle_maturity_trajectory,
-        build_lifecycle_maturity_snapshot,
     )
 
     board = Path(board_path) if board_path is not None else DEFAULT_BOARD_PATH

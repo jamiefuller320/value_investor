@@ -53,6 +53,8 @@ def _refresh_lifecycle_board(repo_root: Path) -> dict[str, Any]:
     )
     from value_investor.lifecycle_maturity_trajectory import (
         DEFAULT_STORE_PATH as MATURITY_STORE_PATH,
+    )
+    from value_investor.lifecycle_maturity_trajectory import (
         refresh_lifecycle_maturity_trajectory,
     )
     from value_investor.storage import read_json

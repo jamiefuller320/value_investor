@@ -156,7 +156,9 @@ def _freshness_block(
     }
 
 
-def _delta_lower_better(current: int | float | None, previous: int | float | None) -> dict[str, Any]:
+def _delta_lower_better(
+    current: int | float | None, previous: int | float | None
+) -> dict[str, Any]:
     """Trajectory for maturity mix: lower early_share / UW rate = improving."""
     if current is None or previous is None:
         return {"delta": None, "direction": "unknown", "label": "No prior cycle"}
@@ -211,9 +213,7 @@ def _column_cards(track: dict[str, Any], column_id: str) -> tuple[int, list[dict
 
 def _column_rollups(shown: list[dict[str, Any]]) -> dict[str, Any]:
     days = [
-        float(v)
-        for card in shown
-        if (v := _optional_float(card.get("days_in_column"))) is not None
+        float(v) for card in shown if (v := _optional_float(card.get("days_in_column"))) is not None
     ]
     pnl_known = [
         float(v)
@@ -545,9 +545,7 @@ def build_lifecycle_maturity_snapshot(
                 1 for row in markets if (row.get("trajectory") or {}).get("direction") == "flat"
             ),
             "unknown": sum(
-                1
-                for row in markets
-                if (row.get("trajectory") or {}).get("direction") == "unknown"
+                1 for row in markets if (row.get("trajectory") or {}).get("direction") == "unknown"
             ),
             "history_points": len(history),
             "note": (

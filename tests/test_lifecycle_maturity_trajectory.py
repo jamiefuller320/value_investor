@@ -270,9 +270,7 @@ def test_maturity_stale_board(tmp_path: Path):
 
 def test_maturity_separation_block_lists_excluded_layers():
     """L463 store documents hard separation from other analysis measures."""
-    text = Path("src/value_investor/lifecycle_maturity_trajectory.py").read_text(
-        encoding="utf-8"
-    )
+    text = Path("src/value_investor/lifecycle_maturity_trajectory.py").read_text(encoding="utf-8")
     for needle in (
         "beat_market",
         "excess_after_costs",
