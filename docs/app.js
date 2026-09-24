@@ -3540,8 +3540,8 @@ function renderLifecycleMaturitySection(data, { marketId = null, compact = false
         : "";
   const cards = markets.map((row) => renderLifecycleMaturityMarketCard(row, history)).join("");
   const note = compact
-    ? `<p class="small muted">Per-market early-share trajectory (lower = more mature). Not beat_market / exit P&amp;L.</p>`
-    : `<p class="small muted">Observe-only L463 twin — held-column shares, median age, UW-by-stage. Trajectory over raw counts. Separated from cumulative beat_market, exit_shadow, L462 WoW, N153 FX, and decision-review. ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>`;
+    ? `<p class="small muted">Per-market early-share trajectory (lower = more mature). Prefer Better/Worse over raw mix %. Not beat_market / exit P&amp;L.</p>`
+    : `<p class="small muted">Observe-only L463 twin — held-column shares, median age, UW-by-stage. Prefer trajectory (Better/Worse + sparkline) over raw mix counts. Separated from cumulative beat_market, exit_shadow, L462 WoW, N153 FX, observe utilization, and decision-review. ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>`;
   return `
     <section class="automation-section automation-section-full lifecycle-maturity-section">
       <h2>Lifecycle maturity mix ${observeFreshnessBadge(payload.surface_freshness)}</h2>
@@ -4357,6 +4357,7 @@ function renderAutomation(data) {
 
 let lifecycleMarketId = null;
 let lifecycleTrackId = null;
+let lifecycleSubpage = "positions";
 
 const LIFECYCLE_CHIP_SORT_KEY = "ftseValueInvestor.lifecycleChipSort.v1";
 const LIFECYCLE_CHIP_SORT_DIR_KEY = "ftseValueInvestor.lifecycleChipSortDir.v1";
@@ -4444,14 +4445,48 @@ function sortLifecycleCards(shown, mode, dir) {
   return descending ? rows.reverse() : rows;
 }
 
+const LIFECYCLE_SUBPAGE_IDS = new Set(["positions", "maturity"]);
+
+function normalizeLifecycleSubpage(value) {
+  const key = String(value || "").toLowerCase();
+  if (key === "maturity" || key === "maturity-mix") return "maturity";
+  if (key === "positions" || key === "board" || key === "tiles") return "positions";
+  return "positions";
+}
+
 function parseDashboardHash() {
   const raw = String(location.hash || "").replace(/^#/, "").trim();
   if (!raw) return null;
   const parts = raw.split("/").filter(Boolean);
-  return { tab: parts[0], market: parts[1] || null, track: parts[2] || null };
+  const tab = parts[0] || null;
+  if (tab !== "lifecycle") {
+    return { tab, subpage: null, market: parts[1] || null, track: parts[2] || null };
+  }
+  let rest = parts.slice(1);
+  let subpage = "positions";
+  if (rest[0] === "maturity" || rest[0] === "maturity-mix") {
+    subpage = "maturity";
+    rest = rest.slice(1);
+  } else if (rest[0] === "positions") {
+    subpage = "positions";
+    rest = rest.slice(1);
+  } else if (rest[0] && LIFECYCLE_SUBPAGE_IDS.has(rest[0])) {
+    subpage = rest[0];
+    rest = rest.slice(1);
+  }
+  return {
+    tab: "lifecycle",
+    subpage,
+    market: rest[0] || null,
+    track: rest[1] || null,
+  };
 }
 
 function syncLifecycleHash() {
+  if (lifecycleSubpage === "maturity") {
+    history.replaceState(null, "", "#lifecycle/maturity");
+    return;
+  }
   if (!lifecycleMarketId) {
     history.replaceState(null, "", "#lifecycle");
     return;
@@ -4465,6 +4500,7 @@ function applyDashboardHash() {
   const parsed = parseDashboardHash();
   if (!parsed || !parsed.tab) return;
   if (parsed.tab === "lifecycle") {
+    if (parsed.subpage) lifecycleSubpage = normalizeLifecycleSubpage(parsed.subpage);
     if (parsed.market) lifecycleMarketId = parsed.market;
     if (parsed.track) lifecycleTrackId = parsed.track;
   }
@@ -4474,10 +4510,23 @@ function applyDashboardHash() {
 function openLifecycleBoard(marketId) {
   if (marketId) lifecycleMarketId = marketId;
   lifecycleTrackId = null;
+  lifecycleSubpage = "positions";
   activateTab("lifecycle", { updateHash: true });
   const dialog = document.getElementById("market-status-dialog");
   if (dialog && dialog.open) dialog.close();
   if (dashboardData) renderLifecycle(dashboardData);
+}
+
+function renderLifecycleSubnav() {
+  const sub = lifecycleSubpage === "maturity" ? "maturity" : "positions";
+  return `<nav class="paper-subnav lifecycle-subnav" aria-label="Lifecycle sections">
+    <button type="button" class="paper-subtab${
+      sub === "positions" ? " active" : ""
+    }" data-lifecycle-subpage="positions">Positions</button>
+    <button type="button" class="paper-subtab${
+      sub === "maturity" ? " active" : ""
+    }" data-lifecycle-subpage="maturity">Maturity mix</button>
+  </nav>`;
 }
 
 function lifecycleStatusChip(status) {
@@ -5194,15 +5243,30 @@ function renderLifecycle(data) {
   const panel = document.getElementById("panel-lifecycle");
   if (!panel) return;
   bindLifecyclePanel();
+  lifecycleSubpage = normalizeLifecycleSubpage(lifecycleSubpage);
+
+  if (lifecycleSubpage === "maturity") {
+    panel.innerHTML = `
+      ${renderLifecycleSubnav()}
+      ${renderLifecycleMaturitySection(data)}
+    `;
+    return;
+  }
+
   const board = data.lifecycle_board;
   if (!board || !(board.columns || []).length) {
-    panel.innerHTML =
-      '<div class="empty-state">Lifecycle board not published yet. Run <code>ftse-publish</code> or refresh the local dashboard so <code>data/lifecycle_board.json</code> is rebuilt.</div>';
+    panel.innerHTML = `
+      ${renderLifecycleSubnav()}
+      <div class="empty-state">Lifecycle board not published yet. Run <code>ftse-publish</code> or refresh the local dashboard so <code>data/lifecycle_board.json</code> is rebuilt.</div>
+    `;
     return;
   }
   const markets = board.markets || [];
   if (!markets.length) {
-    panel.innerHTML = '<div class="empty-state">No market screens or paper books available for the lifecycle board.</div>';
+    panel.innerHTML = `
+      ${renderLifecycleSubnav()}
+      <div class="empty-state">No market screens or paper books available for the lifecycle board.</div>
+    `;
     return;
   }
   if (!lifecycleMarketId || !markets.some((row) => row.market_id === lifecycleMarketId)) {
@@ -5285,7 +5349,7 @@ function renderLifecycle(data) {
     .join(" · ");
 
   panel.innerHTML = `
-    ${renderLifecycleMaturitySection(data)}
+    ${renderLifecycleSubnav()}
     <section class="card lifecycle-board-section">
       <div class="market-status-header">
         <div>
@@ -5320,6 +5384,14 @@ function bindLifecyclePanel() {
   if (panel && !panel.dataset.lifecycleBound) {
     panel.dataset.lifecycleBound = "1";
     panel.addEventListener("click", (event) => {
+      const subpageBtn = event.target.closest("[data-lifecycle-subpage]");
+      if (subpageBtn) {
+        event.preventDefault();
+        lifecycleSubpage = normalizeLifecycleSubpage(subpageBtn.dataset.lifecycleSubpage);
+        syncLifecycleHash();
+        renderLifecycle(dashboardData);
+        return;
+      }
       const marketBtn = event.target.closest("[data-lifecycle-market]");
       if (marketBtn) {
         event.preventDefault();
@@ -5395,6 +5467,7 @@ function renderDashboard(data) {
 
   const parsed = parseDashboardHash();
   if (parsed && parsed.tab === "lifecycle") {
+    if (parsed.subpage) lifecycleSubpage = normalizeLifecycleSubpage(parsed.subpage);
     if (parsed.market) lifecycleMarketId = parsed.market;
     if (parsed.track) lifecycleTrackId = parsed.track;
   }

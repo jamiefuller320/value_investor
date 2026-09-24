@@ -46,7 +46,7 @@ lane change and readiness gate (see N152 / P1 pin rules).
   `decision_input_inventory.json`) in ops-monitor `GHA_COMMIT_OPTIONAL` so
   daily cohort history persists in git (email-report excludes them so a broad
   `docs/data` overlay cannot rewind fresher ops commits).
-- **L463** — **Lifecycle maturity mix trajectory** on the Lifecycle tab
+- **L463** — **Lifecycle maturity mix trajectory** on Lifecycle → **Maturity mix**
   (`docs/data/lifecycle_maturity_trajectory.json`): per-market held-column
   shares / median age / UW-by-stage with freshness + Better/Worse history.
   Observe-only; **separated** from cumulative `beat_market`, exit_shadow,
@@ -331,7 +331,7 @@ L462 WoW NAV twin, N153 FX bookkeeping, or decision-review knob apply.
 |---------|--------|
 | Store | `docs/data/lifecycle_maturity_trajectory.json` (ops-monitor optional commit + dashboard-bridge; email-report excludes) |
 | Trigger | `collect_ops_findings` → `check_lifecycle_maturity_trajectory`; also queue-health / board refresh |
-| Dashboard | Lifecycle tab — trajectory badges + freshness (prefer over raw counts) |
+| Dashboard | Lifecycle → **Maturity mix** (`#lifecycle/maturity`) — trajectory badges + freshness (prefer over raw counts); Positions board stays on `#lifecycle` / `#lifecycle/{market}` |
 | Finding | **Lifecycle maturity mix trajectory stalled** when missing/stale (`auto_fixable=False`) |
 | CLI (optional) | `ftse-dashboard-bridge refresh-lifecycle-maturity` |
 
