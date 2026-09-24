@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-24T15:08:56+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-24T15:25:36+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -277,7 +277,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L445 | **Cash buffer sleeve after rank-rotation works** | Prefer fixing blocked exits (done L440) so fully-invested books recycle into better sleeves. A 5-10% dry-powder buffer remains optional capital-allocation v2 — do not use idle cash as a substitute for broken rotation. | capital_rotation_coordinator / cash buffer target phase activates and rank rotation is healthy on momentum_grace |
 | L446 | **Nested counterfactual best-policy scoring inside sleeve episodes** | Wide earliest/latest episodes are recording. Next: score tighter entry/exit policies as nested counterfactuals inside closed episodes once readiness.ready_for_sleeve_timing_analysis is true. | learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true on primary or fair tracks |
 | L462 | **Observe-only recent week-pair excess twin beside cumulative beat_market** | Do not replace epoch beat_market / excess_after_costs with decay-weighted or equal WoW excess. Optionally publish an observe-only recent-relative-edge twin (mean or mild decay of week-pair book−bench deltas + positive-week rate) beside cumulative once a fair-cost primary has a thick clean window. Cumulative wealth vs market stays adoption truth; WoW answers edge lately, not did the epoch beat. | Fair-cost primary (post-N153-clean epoch on any shard under review) has ≥8 weekday week-pairs of usable NAV marks AND humans repeatedly misread cumulative excess after a documented early drawdown as policy is currently failing. |
-| L463 | **Lifecycle maturity mix trajectory (observe twin)** | Spot lifecycle_board already has column_counts plus per-card tenure and unrealized_pnl_pct; there is no history of held-column shares, median age, or underwater-by-stage. That L461-shaped trajectory is the right observe instrument for whether a book is still early-lifecycle-heavy vs maturing into a fair sample — better forward composition signal than N154 rolling exit P&L. Do not replace beat_market, exit_shadow, or hypothesis_integrity; auto_fixable=False if/when wired. | Young admitted books (euro_depth / sp500 epoch-0 class) have ≥8 weeks of published lifecycle_board snapshots OR humans repeatedly misread early underwater as ultimate health, AND L461 observe-utilization is the accepted template for new trajectory twins. |
 
 ### Universe & data
 

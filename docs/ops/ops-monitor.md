@@ -46,6 +46,12 @@ lane change and readiness gate (see N152 / P1 pin rules).
   `decision_input_inventory.json`) in ops-monitor `GHA_COMMIT_OPTIONAL` so
   daily cohort history persists in git (email-report excludes them so a broad
   `docs/data` overlay cannot rewind fresher ops commits).
+- **L463** — **Lifecycle maturity mix trajectory** on the Lifecycle tab
+  (`docs/data/lifecycle_maturity_trajectory.json`): per-market held-column
+  shares / median age / UW-by-stage with freshness + Better/Worse history.
+  Observe-only; **separated** from cumulative `beat_market`, exit_shadow,
+  L462 WoW NAV, N153 FX, and decision-review. Ops finding only when the
+  series is missing/stale (`auto_fixable=False`).
 
 Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-required).
 
@@ -305,6 +311,31 @@ lower warn/gap = better). Prefer those trajectory indicators over
 non-contextual absolute counts. A `lagging` freshness badge now means a
 commit-path anomaly (stores should co-commit with `ops_status`); it is no
 longer an intentional gap.
+
+## Lifecycle maturity mix trajectory (L463)
+
+Observe-only composition twin for open books. Spot mix already lives on
+`lifecycle_board`; this instrument appends a slim **history** of:
+
+| Metric | Definition |
+|--------|------------|
+| Early share | `(just_bought + growth) / held` on `buy_tier_level` (else default track) |
+| Median age | Median `days_in_column` on held columns (shown cards; truncated flagged) |
+| UW-by-stage | Share of shown cards with `unrealized_pnl_pct < 0` per held column |
+
+**Separation (hard):** does not feed or rewrite cumulative / epoch
+`beat_market` / `excess_after_costs`, exit_shadow / realized-at-exit reviews,
+L462 WoW NAV twin, N153 FX bookkeeping, or decision-review knob apply.
+
+| Surface | Detail |
+|---------|--------|
+| Store | `docs/data/lifecycle_maturity_trajectory.json` (ops-monitor optional commit + dashboard-bridge; email-report excludes) |
+| Trigger | `collect_ops_findings` → `check_lifecycle_maturity_trajectory`; also queue-health / board refresh |
+| Dashboard | Lifecycle tab — trajectory badges + freshness (prefer over raw counts) |
+| Finding | **Lifecycle maturity mix trajectory stalled** when missing/stale (`auto_fixable=False`) |
+| CLI (optional) | `ftse-dashboard-bridge refresh-lifecycle-maturity` |
+
+Young / focus books looking early-heavy is expected — headline context, not a heal cue.
 
 ## CLI
 

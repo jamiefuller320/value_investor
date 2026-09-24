@@ -45,6 +45,27 @@ def _cmd_refresh_queue_health(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_refresh_lifecycle_maturity(args: argparse.Namespace) -> int:
+    """Ad-hoc drill-down for L463 — production path is ops-monitor / queue-health."""
+    from value_investor.lifecycle_maturity_trajectory import (
+        refresh_lifecycle_maturity_trajectory,
+    )
+
+    snap = refresh_lifecycle_maturity_trajectory()
+    if args.json:
+        _print_json(snap)
+    else:
+        traj = snap.get("trajectory_summary") or {}
+        print(
+            f"lifecycle_maturity markets={snap.get('market_count')} "
+            f"freshness={snap.get('surface_freshness')} "
+            f"history={traj.get('history_points')} "
+            f"traj↑{traj.get('improving')}/↓{traj.get('worsening')}"
+        )
+        print(snap.get("headline") or "")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="FTSE dashboard Supabase bridge")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -59,6 +80,13 @@ def main(argv: list[str] | None = None) -> int:
     health_p.add_argument("--open-prs-json")
     health_p.add_argument("--json", action="store_true")
     health_p.set_defaults(func=_cmd_refresh_queue_health)
+
+    maturity_p = sub.add_parser(
+        "refresh-lifecycle-maturity",
+        help="Write docs/data/lifecycle_maturity_trajectory.json (L463 observe twin)",
+    )
+    maturity_p.add_argument("--json", action="store_true")
+    maturity_p.set_defaults(func=_cmd_refresh_lifecycle_maturity)
 
     args = parser.parse_args(argv)
     return int(args.func(args))
