@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-24T17:23:39.714003+00:00",
+  "compiled_at": "2026-09-24T17:53:10.729721+00:00",
   "run_at": null,
-  "task_count": 111,
+  "task_count": 112,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1357,6 +1357,87 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
+    },
+    {
+      "id": "eng-20260924-03",
+      "area": "ingest",
+      "title": "Close library ingest gaps for cac40 / SGO.PA (chain 2/3: 0/0 improved, run igc-20260921-04)",
+      "summary": "Ingest gap-closure run igc-20260921-04 (chain root igc-20260921-04, round 2) targeted SGO.PA with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20260921-04",
+        "trial_id": "igc-20260921-04",
+        "chain_root_id": "igc-20260921-04",
+        "chain_round": 2,
+        "tickers": [
+          "SGO.PA"
+        ],
+        "ticker": "SGO.PA",
+        "market_id": "cac40",
+        "library_market": "cac40",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "SGO.PA"
+          ],
+          "market_id": "cac40",
+          "universe": "library",
+          "critical_path_blocker": "indexed_without_body"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "SGO.PA"
+          ],
+          "market_id": "cac40",
+          "universe": "library",
+          "critical_path_blocker": "indexed_without_body"
+        },
+        "compile_reason": "gaps_remain_without_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for SGO.PA",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260924-01",
@@ -6559,9 +6640,9 @@
       ],
       "auto_merge": false,
       "status": "parked",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "preflight_clash",
-      "parked_at": "2026-09-24T16:49:15.981397+00:00"
+      "parked_reason": "automation waste reburn — 6 engineering-agent failure(s) in 6h without an in-flight PR (PM stop_automation_waste)",
+      "parked_policy": "reburn_loop",
+      "parked_at": "2026-09-24T17:52:42.108411+00:00"
     },
     {
       "id": "eng-20260919-10",
@@ -6814,20 +6895,20 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-09-24T17:31:46.300382+00:00",
-    "pause_active": false,
-    "automation_waste_active": false,
+    "evaluated_at": "2026-09-24T17:52:41.530093+00:00",
+    "pause_active": true,
+    "automation_waste_active": true,
     "automation_waste_signals": [
       {
         "kind": "eng_agent_reburn",
         "title": "Automation waste: engineering agent reburn",
         "severity": "fail",
-        "summary": "3 engineering-agent failure(s) in 6h while open task(s) remain (eng-20260922-05) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
+        "summary": "6 engineering-agent failure(s) in 6h while open task(s) remain (eng-20260924-02) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
         "workflow": "engineering-agent.yml",
         "task_ids": [
-          "eng-20260922-05"
+          "eng-20260924-02"
         ],
-        "failure_count": 3,
+        "failure_count": 6,
         "window_hours": 6.0,
         "auto_remediable": true,
         "evidence": {
@@ -6838,17 +6919,21 @@
       }
     ],
     "automation_waste_parked_task_ids": [
-      "eng-20260922-05"
+      "eng-20260924-02"
     ],
     "automation_waste_cleared_at": "2026-09-22T17:31:44.016305+00:00",
-    "resumed_at": "2026-09-22T20:21:29.286725+00:00",
     "last_change": {
       "resumed": true
-    }
+    },
+    "pause_reasons": [
+      "automation_waste"
+    ],
+    "pause_started_at": "2026-09-24T17:52:41.530093+00:00",
+    "last_action_at": "2026-09-24T17:52:41.530093+00:00"
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-24T16:32:17.979565+00:00",
+    "evaluated_at": "2026-09-24T17:52:40.947134+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -6856,7 +6941,7 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "ingest_gap_closure",
   "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
   "library_ingest_health": {
