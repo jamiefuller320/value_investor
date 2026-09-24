@@ -1,8 +1,46 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-23T20:40:10.124661+00:00",
-  "open_count": 1,
+  "updated_at": "2026-09-24T07:34:03.347027+00:00",
+  "open_count": 2,
   "open_items": [
+    {
+      "id": "dev-euro_depth-MC.PA-blocker_no_improve",
+      "market_id": "euro_depth",
+      "ticker": "MC.PA",
+      "kind": "blocker_no_improve",
+      "status": "open",
+      "recommended_action": "pin_intensive",
+      "summary": "MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.",
+      "human_required": true,
+      "auto_actions": [],
+      "evidence": {
+        "improved": false,
+        "ticker_budget_hit": true,
+        "ir_exhausted": false,
+        "indexed_without_body": 1,
+        "filings_with_body": 2,
+        "filings_total": 3
+      },
+      "reprocess": {
+        "approve": "ftse-library ingest-deviations approve dev-euro_depth-MC.PA-blocker_no_improve",
+        "dismiss": "ftse-library ingest-deviations dismiss dev-euro_depth-MC.PA-blocker_no_improve"
+      },
+      "first_seen_at": "2026-09-24T07:34:03.347027+00:00",
+      "last_seen_at": "2026-09-24T07:34:03.347027+00:00",
+      "run_at": "2026-09-24T07:34:03.347027+00:00",
+      "signal_triage": {
+        "observe_only": true,
+        "proposed_action": "park_hunter",
+        "human_action": "dismiss",
+        "reason": "buy_patchy_leftover",
+        "signal": "buy",
+        "parked": false,
+        "rationale": "Plain buy with thin leftover IWB — dismiss; maintenance / park-hunter.",
+        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
+        "conviction_score": 0.3521,
+        "screen_found": true
+      }
+    },
     {
       "id": "dev-aim-RWS.L-blocker_no_improve",
       "market_id": "aim",
@@ -35,7 +73,7 @@
         "reason": "buy_park_hunter",
         "signal": "buy",
         "parked": false,
-        "rationale": "Plain buy \u2014 dismiss deviation; rely on exhaustion park + source hunter.",
+        "rationale": "Plain buy — dismiss deviation; rely on exhaustion park + source hunter.",
         "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
         "conviction_score": 0.303,
         "screen_found": true
@@ -77,7 +115,7 @@
         "reason": "strong_buy",
         "signal": "strong_buy",
         "parked": true,
-        "rationale": "Strong-buy \u2014 intensive pin so the next slot skips the weekday ticker cap.",
+        "rationale": "Strong-buy — intensive pin so the next slot skips the weekday ticker cap.",
         "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
         "conviction_score": 0.7667,
         "screen_found": true
@@ -85,7 +123,7 @@
       "pin_until": "2026-09-30T17:55:29.137828+00:00",
       "reviewed_at": "2026-09-23T17:55:29.137828+00:00",
       "review_action": "approve",
-      "review_note": "signal_triage strong_buy\u2192pin_intensive; 17 IWB"
+      "review_note": "signal_triage strong_buy→pin_intensive; 17 IWB"
     },
     {
       "id": "dev-asx200-BSL.AX-ir_exhausted",
@@ -121,14 +159,14 @@
         "reason": "buy_park_hunter",
         "signal": "buy",
         "parked": false,
-        "rationale": "Plain buy \u2014 dismiss deviation; rely on exhaustion park + source hunter.",
+        "rationale": "Plain buy — dismiss deviation; rely on exhaustion park + source hunter.",
         "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
         "conviction_score": 0.3336,
         "screen_found": true
       },
       "reviewed_at": "2026-09-23T17:55:28.568522+00:00",
       "review_action": "dismiss",
-      "review_note": "signal_triage buy\u2192park_hunter; IR dead but bodies complete"
+      "review_note": "signal_triage buy→park_hunter; IR dead but bodies complete"
     },
     {
       "id": "dev-nasdaq100-CCEP-blocker_no_improve",
@@ -162,14 +200,14 @@
         "reason": "buy_patchy_leftover",
         "signal": "buy",
         "parked": false,
-        "rationale": "Plain buy with thin leftover IWB \u2014 dismiss; maintenance / park-hunter.",
+        "rationale": "Plain buy with thin leftover IWB — dismiss; maintenance / park-hunter.",
         "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
         "conviction_score": 0.6583,
         "screen_found": true
       },
       "reviewed_at": "2026-09-23T17:55:27.990538+00:00",
       "review_action": "dismiss",
-      "review_note": "signal_triage buy\u2192park_hunter; thin IWB on near-full book"
+      "review_note": "signal_triage buy→park_hunter; thin IWB on near-full book"
     },
     {
       "id": "dev-aim-TFW.L-blocker_no_improve",
@@ -198,7 +236,7 @@
       "run_at": "2026-09-23T15:38:38.532755+00:00",
       "reviewed_at": "2026-09-23T17:55:27.407961+00:00",
       "review_action": "dismiss",
-      "review_note": "signal_triage buy\u2192park_hunter; cold-start patchiness OK",
+      "review_note": "signal_triage buy→park_hunter; cold-start patchiness OK",
       "signal_triage": {
         "observe_only": true,
         "proposed_action": "park_hunter",
@@ -206,7 +244,7 @@
         "reason": "buy_park_hunter",
         "signal": "buy",
         "parked": false,
-        "rationale": "Plain buy \u2014 dismiss deviation; rely on exhaustion park + source hunter.",
+        "rationale": "Plain buy — dismiss deviation; rely on exhaustion park + source hunter.",
         "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
         "conviction_score": 0.6011,
         "screen_found": true
@@ -299,36 +337,6 @@
       "resolved_reason": "ticker_improved_on_later_ingest"
     },
     {
-      "id": "dev-tsx60-SU.TO-blocker_no_improve",
-      "market_id": "tsx60",
-      "ticker": "SU.TO",
-      "kind": "blocker_no_improve",
-      "status": "resolved",
-      "recommended_action": "pin_intensive",
-      "summary": "SU.TO hit the weekday ticker cap with no coverage gain and 25 indexed-without-body row(s). Pin intensive or fix sources.",
-      "human_required": true,
-      "auto_actions": [],
-      "evidence": {
-        "improved": false,
-        "ticker_budget_hit": true,
-        "ir_exhausted": false,
-        "indexed_without_body": 25,
-        "filings_with_body": 18,
-        "filings_total": 43
-      },
-      "reprocess": {
-        "approve": "ftse-library ingest-deviations approve dev-tsx60-SU.TO-blocker_no_improve",
-        "dismiss": "ftse-library ingest-deviations dismiss dev-tsx60-SU.TO-blocker_no_improve"
-      },
-      "first_seen_at": "2026-09-09T19:53:06.701452+00:00",
-      "last_seen_at": "2026-09-12T17:42:23.352503+00:00",
-      "run_at": "2026-09-12T17:42:23.352503+00:00",
-      "reopened_at": "2026-09-12T17:42:23.352503+00:00",
-      "previous_status": "resolved",
-      "resolved_at": "2026-09-13T17:19:28.411000+00:00",
-      "resolved_reason": "ticker_improved_on_later_ingest"
-    },
-    {
       "id": "dev-tsx60-NTR.TO-blocker_no_improve",
       "market_id": "tsx60",
       "ticker": "NTR.TO",
@@ -355,70 +363,48 @@
       "run_at": "2026-09-12T17:42:23.352503+00:00",
       "resolved_at": "2026-09-13T17:19:28.411000+00:00",
       "resolved_reason": "ticker_improved_on_later_ingest"
-    },
+    }
+  ],
+  "signal_triage_policy": "observe_only: leftover/dismiss, buy/park_hunter, strong_buy/pin_intensive",
+  "items": [
     {
-      "id": "dev-tsx60-TRI.TO-blocker_no_improve",
-      "market_id": "tsx60",
-      "ticker": "TRI.TO",
+      "id": "dev-euro_depth-MC.PA-blocker_no_improve",
+      "market_id": "euro_depth",
+      "ticker": "MC.PA",
       "kind": "blocker_no_improve",
-      "status": "resolved",
+      "status": "open",
       "recommended_action": "pin_intensive",
-      "summary": "TRI.TO hit the weekday ticker cap with no coverage gain and 30 indexed-without-body row(s). Pin intensive or fix sources.",
+      "summary": "MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.",
       "human_required": true,
       "auto_actions": [],
       "evidence": {
         "improved": false,
         "ticker_budget_hit": true,
         "ir_exhausted": false,
-        "indexed_without_body": 30,
-        "filings_with_body": 124,
-        "filings_total": 154
+        "indexed_without_body": 1,
+        "filings_with_body": 2,
+        "filings_total": 3
       },
       "reprocess": {
-        "approve": "ftse-library ingest-deviations approve dev-tsx60-TRI.TO-blocker_no_improve",
-        "dismiss": "ftse-library ingest-deviations dismiss dev-tsx60-TRI.TO-blocker_no_improve"
+        "approve": "ftse-library ingest-deviations approve dev-euro_depth-MC.PA-blocker_no_improve",
+        "dismiss": "ftse-library ingest-deviations dismiss dev-euro_depth-MC.PA-blocker_no_improve"
       },
-      "first_seen_at": "2026-09-09T19:53:06.701452+00:00",
-      "last_seen_at": "2026-09-12T19:34:20.234466+00:00",
-      "run_at": "2026-09-12T19:34:20.234466+00:00",
-      "reopened_at": "2026-09-12T19:34:20.234466+00:00",
-      "previous_status": "resolved",
-      "resolved_at": "2026-09-13T14:19:17.186721+00:00",
-      "resolved_reason": "ticker_improved_on_later_ingest"
+      "first_seen_at": "2026-09-24T07:34:03.347027+00:00",
+      "last_seen_at": "2026-09-24T07:34:03.347027+00:00",
+      "run_at": "2026-09-24T07:34:03.347027+00:00",
+      "signal_triage": {
+        "observe_only": true,
+        "proposed_action": "park_hunter",
+        "human_action": "dismiss",
+        "reason": "buy_patchy_leftover",
+        "signal": "buy",
+        "parked": false,
+        "rationale": "Plain buy with thin leftover IWB — dismiss; maintenance / park-hunter.",
+        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
+        "conviction_score": 0.3521,
+        "screen_found": true
+      }
     },
-    {
-      "id": "dev-tsx60-NTR.TO-ir_exhausted",
-      "market_id": "tsx60",
-      "ticker": "NTR.TO",
-      "kind": "ir_exhausted",
-      "status": "resolved",
-      "recommended_action": "replace_allowlist_or_pin",
-      "summary": "NTR.TO IR allowlist refetch failed with 0 bodies fetched. Failed rows are marked unfetchable; replace the URL or pin intensive.",
-      "human_required": true,
-      "auto_actions": [
-        "ir_rows_marked_unfetchable"
-      ],
-      "evidence": {
-        "improved": false,
-        "ticker_budget_hit": false,
-        "ir_exhausted": true,
-        "indexed_without_body": 20,
-        "filings_with_body": 9,
-        "filings_total": 29
-      },
-      "reprocess": {
-        "approve": "ftse-library ingest-deviations approve dev-tsx60-NTR.TO-ir_exhausted",
-        "dismiss": "ftse-library ingest-deviations dismiss dev-tsx60-NTR.TO-ir_exhausted"
-      },
-      "first_seen_at": "2026-09-12T11:19:11.463249+00:00",
-      "last_seen_at": "2026-09-12T11:19:11.463249+00:00",
-      "run_at": "2026-09-12T11:19:11.463249+00:00",
-      "resolved_at": "2026-09-12T14:10:07.565528+00:00",
-      "resolved_reason": "ticker_improved_on_later_ingest"
-    }
-  ],
-  "signal_triage_policy": "observe_only: leftover/dismiss, buy/park_hunter, strong_buy/pin_intensive",
-  "items": [
     {
       "id": "dev-aim-RWS.L-blocker_no_improve",
       "market_id": "aim",
@@ -451,7 +437,7 @@
         "reason": "buy_park_hunter",
         "signal": "buy",
         "parked": false,
-        "rationale": "Plain buy \u2014 dismiss deviation; rely on exhaustion park + source hunter.",
+        "rationale": "Plain buy — dismiss deviation; rely on exhaustion park + source hunter.",
         "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
         "conviction_score": 0.303,
         "screen_found": true
@@ -484,7 +470,7 @@
       "run_at": "2026-09-23T15:38:38.532755+00:00",
       "reviewed_at": "2026-09-23T17:55:27.407961+00:00",
       "review_action": "dismiss",
-      "review_note": "signal_triage buy\u2192park_hunter; cold-start patchiness OK",
+      "review_note": "signal_triage buy→park_hunter; cold-start patchiness OK",
       "signal_triage": {
         "observe_only": true,
         "proposed_action": "park_hunter",
@@ -492,7 +478,7 @@
         "reason": "buy_park_hunter",
         "signal": "buy",
         "parked": false,
-        "rationale": "Plain buy \u2014 dismiss deviation; rely on exhaustion park + source hunter.",
+        "rationale": "Plain buy — dismiss deviation; rely on exhaustion park + source hunter.",
         "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
         "conviction_score": 0.6011,
         "screen_found": true
@@ -530,101 +516,14 @@
         "reason": "buy_patchy_leftover",
         "signal": "buy",
         "parked": false,
-        "rationale": "Plain buy with thin leftover IWB \u2014 dismiss; maintenance / park-hunter.",
+        "rationale": "Plain buy with thin leftover IWB — dismiss; maintenance / park-hunter.",
         "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
         "conviction_score": 0.6583,
         "screen_found": true
       },
       "reviewed_at": "2026-09-23T17:55:27.990538+00:00",
       "review_action": "dismiss",
-      "review_note": "signal_triage buy\u2192park_hunter; thin IWB on near-full book"
-    },
-    {
-      "id": "dev-asx200-BSL.AX-ir_exhausted",
-      "market_id": "asx200",
-      "ticker": "BSL.AX",
-      "kind": "ir_exhausted",
-      "status": "dismissed",
-      "recommended_action": "replace_allowlist_or_pin",
-      "summary": "BSL.AX IR allowlist refetch failed with 0 bodies fetched. Failed rows are marked unfetchable; replace the URL or pin intensive.",
-      "human_required": true,
-      "auto_actions": [
-        "ir_rows_marked_unfetchable"
-      ],
-      "evidence": {
-        "improved": true,
-        "ticker_budget_hit": false,
-        "ir_exhausted": true,
-        "indexed_without_body": 0,
-        "filings_with_body": 22,
-        "filings_total": 22
-      },
-      "reprocess": {
-        "approve": "ftse-library ingest-deviations approve dev-asx200-BSL.AX-ir_exhausted",
-        "dismiss": "ftse-library ingest-deviations dismiss dev-asx200-BSL.AX-ir_exhausted"
-      },
-      "first_seen_at": "2026-09-17T13:38:13.209666+00:00",
-      "last_seen_at": "2026-09-17T13:38:13.209666+00:00",
-      "run_at": "2026-09-17T13:38:13.209666+00:00",
-      "signal_triage": {
-        "observe_only": true,
-        "proposed_action": "park_hunter",
-        "human_action": "dismiss",
-        "reason": "buy_park_hunter",
-        "signal": "buy",
-        "parked": false,
-        "rationale": "Plain buy \u2014 dismiss deviation; rely on exhaustion park + source hunter.",
-        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
-        "conviction_score": 0.3336,
-        "screen_found": true
-      },
-      "reviewed_at": "2026-09-23T17:55:28.568522+00:00",
-      "review_action": "dismiss",
-      "review_note": "signal_triage buy\u2192park_hunter; IR dead but bodies complete"
-    },
-    {
-      "id": "dev-tsx60-SU.TO-ir_exhausted",
-      "market_id": "tsx60",
-      "ticker": "SU.TO",
-      "kind": "ir_exhausted",
-      "status": "approved",
-      "recommended_action": "replace_allowlist_or_pin",
-      "summary": "SU.TO IR allowlist refetch failed with 0 bodies fetched. Failed rows are marked unfetchable; replace the URL or pin intensive.",
-      "human_required": true,
-      "auto_actions": [
-        "ir_rows_marked_unfetchable"
-      ],
-      "evidence": {
-        "improved": false,
-        "ticker_budget_hit": false,
-        "ir_exhausted": true,
-        "indexed_without_body": 17,
-        "filings_with_body": 31,
-        "filings_total": 48
-      },
-      "reprocess": {
-        "approve": "ftse-library ingest-deviations approve dev-tsx60-SU.TO-ir_exhausted",
-        "dismiss": "ftse-library ingest-deviations dismiss dev-tsx60-SU.TO-ir_exhausted"
-      },
-      "first_seen_at": "2026-09-14T11:19:31.934215+00:00",
-      "last_seen_at": "2026-09-14T11:19:31.934215+00:00",
-      "run_at": "2026-09-14T11:19:31.934215+00:00",
-      "signal_triage": {
-        "observe_only": true,
-        "proposed_action": "pin_intensive",
-        "human_action": "approve",
-        "reason": "strong_buy",
-        "signal": "strong_buy",
-        "parked": true,
-        "rationale": "Strong-buy \u2014 intensive pin so the next slot skips the weekday ticker cap.",
-        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
-        "conviction_score": 0.7667,
-        "screen_found": true
-      },
-      "pin_until": "2026-09-30T17:55:29.137828+00:00",
-      "reviewed_at": "2026-09-23T17:55:29.137828+00:00",
-      "review_action": "approve",
-      "review_note": "signal_triage strong_buy\u2192pin_intensive; 17 IWB"
+      "review_note": "signal_triage buy→park_hunter; thin IWB on near-full book"
     },
     {
       "id": "dev-cac40-TTE.PA-blocker_no_improve",
@@ -681,6 +580,93 @@
       "run_at": "2026-09-20T17:43:40.282501+00:00",
       "resolved_at": "2026-09-20T19:39:16.836523+00:00",
       "resolved_reason": "ticker_improved_on_later_ingest"
+    },
+    {
+      "id": "dev-asx200-BSL.AX-ir_exhausted",
+      "market_id": "asx200",
+      "ticker": "BSL.AX",
+      "kind": "ir_exhausted",
+      "status": "dismissed",
+      "recommended_action": "replace_allowlist_or_pin",
+      "summary": "BSL.AX IR allowlist refetch failed with 0 bodies fetched. Failed rows are marked unfetchable; replace the URL or pin intensive.",
+      "human_required": true,
+      "auto_actions": [
+        "ir_rows_marked_unfetchable"
+      ],
+      "evidence": {
+        "improved": true,
+        "ticker_budget_hit": false,
+        "ir_exhausted": true,
+        "indexed_without_body": 0,
+        "filings_with_body": 22,
+        "filings_total": 22
+      },
+      "reprocess": {
+        "approve": "ftse-library ingest-deviations approve dev-asx200-BSL.AX-ir_exhausted",
+        "dismiss": "ftse-library ingest-deviations dismiss dev-asx200-BSL.AX-ir_exhausted"
+      },
+      "first_seen_at": "2026-09-17T13:38:13.209666+00:00",
+      "last_seen_at": "2026-09-17T13:38:13.209666+00:00",
+      "run_at": "2026-09-17T13:38:13.209666+00:00",
+      "signal_triage": {
+        "observe_only": true,
+        "proposed_action": "park_hunter",
+        "human_action": "dismiss",
+        "reason": "buy_park_hunter",
+        "signal": "buy",
+        "parked": false,
+        "rationale": "Plain buy — dismiss deviation; rely on exhaustion park + source hunter.",
+        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
+        "conviction_score": 0.3336,
+        "screen_found": true
+      },
+      "reviewed_at": "2026-09-23T17:55:28.568522+00:00",
+      "review_action": "dismiss",
+      "review_note": "signal_triage buy→park_hunter; IR dead but bodies complete"
+    },
+    {
+      "id": "dev-tsx60-SU.TO-ir_exhausted",
+      "market_id": "tsx60",
+      "ticker": "SU.TO",
+      "kind": "ir_exhausted",
+      "status": "approved",
+      "recommended_action": "replace_allowlist_or_pin",
+      "summary": "SU.TO IR allowlist refetch failed with 0 bodies fetched. Failed rows are marked unfetchable; replace the URL or pin intensive.",
+      "human_required": true,
+      "auto_actions": [
+        "ir_rows_marked_unfetchable"
+      ],
+      "evidence": {
+        "improved": false,
+        "ticker_budget_hit": false,
+        "ir_exhausted": true,
+        "indexed_without_body": 17,
+        "filings_with_body": 31,
+        "filings_total": 48
+      },
+      "reprocess": {
+        "approve": "ftse-library ingest-deviations approve dev-tsx60-SU.TO-ir_exhausted",
+        "dismiss": "ftse-library ingest-deviations dismiss dev-tsx60-SU.TO-ir_exhausted"
+      },
+      "first_seen_at": "2026-09-14T11:19:31.934215+00:00",
+      "last_seen_at": "2026-09-14T11:19:31.934215+00:00",
+      "run_at": "2026-09-14T11:19:31.934215+00:00",
+      "signal_triage": {
+        "observe_only": true,
+        "proposed_action": "pin_intensive",
+        "human_action": "approve",
+        "reason": "strong_buy",
+        "signal": "strong_buy",
+        "parked": true,
+        "rationale": "Strong-buy — intensive pin so the next slot skips the weekday ticker cap.",
+        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
+        "conviction_score": 0.7667,
+        "screen_found": true
+      },
+      "pin_until": "2026-09-30T17:55:29.137828+00:00",
+      "reviewed_at": "2026-09-23T17:55:29.137828+00:00",
+      "review_action": "approve",
+      "review_note": "signal_triage strong_buy→pin_intensive; 17 IWB"
     },
     {
       "id": "dev-tsx60-TRI.TO-blocker_no_improve",
