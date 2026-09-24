@@ -13929,8 +13929,45 @@
       },
       "trigger": "stall_slowdown",
       "engineering_task_id": "eng-20260924-01"
+    },
+    {
+      "id": "igc-20260924-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "DFS.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "DFS.L"
+        ],
+        "market_id": "ftse_smallcap",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260924-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-24T07:57:02.512412+00:00",
+      "completed_at": "2026-09-24T07:57:51.579368+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [],
+        "results": [],
+        "per_ticker": []
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-24T07:48:13.469458+00:00",
+  "updated_at": "2026-09-24T07:57:51.579382+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
