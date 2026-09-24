@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-24T06:20:21+00:00",
+  "updated_at": "2026-09-24T06:41:07+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10293,6 +10293,25 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-8a71222d-5452-5b24-abab-e736cdaa56c8",
       "added_at": "2026-09-24T06:20:21+00:00"
+    },
+    {
+      "id": "L457",
+      "title": "Same-session research for new buy-tier after filings",
+      "summary": "Do not build a net-new same-day ingest\u2192memo pipeline on hold\u2192buy flips. Filings already rank via weekday ingest-loop unmeasured priority + eng-idle intensive pins; first-time memos stay Sunday (N114). Same-day fully usable is blocked by memo policy, not missing plumbing. Prefer an observe-only lag pin; only later consider a narrow new-flip unmeasured priority bump inside the existing loop.",
+      "category": "later",
+      "section": "ops",
+      "revisit_when": "Observe pin shows >=2 FTSE buy-tier flips in a fortnight staying unmeasured across >1 full weekday ingest day AND the following Sunday first-memo pass still hits thin/zero-body on those names (bodies would have helped) \u2014 or N114 is deliberately revisited.",
+      "tags": [
+        "ingest",
+        "buy-tier",
+        "rememo",
+        "P1",
+        "N114",
+        "N152"
+      ],
+      "source": "https://cursor.com/agents/bc-2f3bc3e1-66c0-5e04-a679-25040c802e19",
+      "status": "open",
+      "created_at": "2026-09-24"
     }
   ],
   "fragments": [
