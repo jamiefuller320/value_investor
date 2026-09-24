@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "track_id": "buy_tier_level_dca",
+  "framework": {
+    "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+    "hold_recovery": {
+      "question": "When a position is stressed but still held, does it recover to breakeven?",
+      "episode_triggers": [
+        "unrealized below underwater_threshold",
+        "exit_streak >= 1 (hold buffer active)",
+        "momentum_grace on position",
+        "effective signal no longer buy-tier while still held"
+      ],
+      "outcomes": [
+        "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+        "sold_while_underwater",
+        "max_window_elapsed"
+      ],
+      "fields_for_later_analysis": [
+        "data_quality_score",
+        "conviction_score",
+        "screen_signal",
+        "effective_signal",
+        "exit_streak",
+        "stress_triggers",
+        "thesis_status_at_start",
+        "recommended_action_at_start",
+        "checkpoints"
+      ]
+    },
+    "swap_rotation": {
+      "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+      "pairing": "same rebalance pass sells vs buys on one track",
+      "outcomes": [
+        "replacement_outperformed",
+        "exit_outperformed",
+        "inconclusive"
+      ],
+      "fields_for_later_analysis": [
+        "sell_tickers",
+        "buy_tickers",
+        "sell_realized_pct",
+        "post_rotation_returns",
+        "trade_costs"
+      ]
+    },
+    "related_artifacts": [
+      "exit_shadow.json (post-exit path after sell)",
+      "rebalance_log.json (counterfactual replay)",
+      "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+      "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+      "learning_tracks_churn_health.json"
+    ]
+  },
+  "updated_at": "2026-09-24T07:45:54.813204+00:00",
+  "hold_episodes": [
+    {
+      "episode_id": "buy_tier_level_dca:DQ7A.IR:2026-09-24T09:40:37.714342+02:00",
+      "track_id": "buy_tier_level_dca",
+      "ticker": "DQ7A.IR",
+      "name": "Donegal Investment Group plc",
+      "started_at": "2026-09-24T09:40:37.714342+02:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 10.0,
+      "avg_cost": 10.0,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "research verdict caution",
+        "cheapness family no longer passes",
+        "still buy",
+        "data_quality 0.90"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "caution",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.366095,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level_dca:NVG.LS:2026-09-24T09:40:37.714342+02:00",
+      "track_id": "buy_tier_level_dca",
+      "ticker": "NVG.LS",
+      "name": "The Navigator Company, S.A.",
+      "started_at": "2026-09-24T09:40:37.714342+02:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 3.268,
+      "avg_cost": 3.268,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "research verdict caution",
+        "cheapness family no longer passes",
+        "still buy",
+        "data_quality 0.90"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "caution",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.35972,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0,
+      "trough_unrealized_pct": -0.0,
+      "recovered_to_breakeven": null,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level_dca:NBA.LS:2026-09-24T09:40:37.714342+02:00",
+      "track_id": "buy_tier_level_dca",
+      "ticker": "NBA.LS",
+      "name": "Novabase S.G.P.S., S.A.",
+      "started_at": "2026-09-24T09:40:37.714342+02:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 7.1,
+      "avg_cost": 7.1,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "research verdict caution",
+        "cheapness family no longer passes",
+        "conviction 35% below intact floor",
+        "still buy"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "caution",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.345185,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0,
+      "trough_unrealized_pct": -0.0,
+      "recovered_to_breakeven": null,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level_dca:OIZ.IR:2026-09-24T09:40:37.714342+02:00",
+      "track_id": "buy_tier_level_dca",
+      "ticker": "OIZ.IR",
+      "name": "Origin Enterprises plc",
+      "started_at": "2026-09-24T09:40:37.714342+02:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 4.17,
+      "avg_cost": 4.17,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "research verdict caution",
+        "cheapness family no longer passes",
+        "conviction 29% below intact floor",
+        "still buy"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "caution",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.292315,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    }
+  ],
+  "swap_rotations": [],
+  "hypothesis_outcome_link_updated_at": "2026-09-24T09:45:47.718230+02:00"
+}

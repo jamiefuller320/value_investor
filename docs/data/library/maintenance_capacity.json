@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-24T07:54:20.778155+00:00",
+  "updated_at": "2026-09-23T18:10:00+00:00",
   "max_markets_when_crowded": 2,
   "matrix_parallel": {
     "enabled": false,
@@ -8,55 +8,7 @@
     "proposed_at": null,
     "reason": null
   },
-  "samples": [
-    {
-      "run_at": "2026-09-24T07:54:20.777783+00:00",
-      "configured_count": 7,
-      "selected": [
-        "ftse_smallcap",
-        "nasdaq100"
-      ],
-      "selected_count": 2,
-      "deferred_count": 5,
-      "width": 2,
-      "staggered": true,
-      "error_count": 0,
-      "runtime_cutoff_count": 0,
-      "used_seconds_total": 132.8,
-      "used_seconds_max": 126.3,
-      "target_count_total": 2,
-      "target_count_max": 1,
-      "name_cap_hit": false
-    }
-  ],
-  "last_review": {
-    "schema_version": 1,
-    "assessed_at": "2026-09-24T07:54:20.778032+00:00",
-    "path": "docs/data/library/maintenance_capacity.json",
-    "current_width": 2,
-    "proposed_width": 2,
-    "decision": "hold",
-    "reason": "insufficient_samples",
-    "sample_count": 1,
-    "sample_count_total": 1,
-    "median_used_seconds": 132.8,
-    "runtime_cutoff_count": 0,
-    "error_count": 0,
-    "name_cap_hits": 0,
-    "configured_markets_peak": 7,
-    "matrix_parallel_proposed": false,
-    "matrix_parallel_enabled": false,
-    "thresholds": {
-      "min_samples": 4,
-      "step_down_used_seconds": 3000,
-      "step_up_used_seconds": 2100,
-      "propose_matrix_used_seconds": 2400,
-      "max_sequential": 3,
-      "min_configured_for_matrix": 6
-    },
-    "apply_safe": true,
-    "note": "Name cap (62 targets) hits are informational — usually not binding. Matrix stays a proposal flag until a separate workflow is wired.",
-    "applied_at": null
-  },
+  "samples": [],
+  "last_review": null,
   "note": "Crowded maintenance slot width (L323/L454). Default 2 markets per cron; reviewer may step 1–3 sequential or propose matrix (flag only)."
 }

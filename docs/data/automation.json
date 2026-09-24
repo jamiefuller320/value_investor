@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-24T07:50:54.838766+00:00",
+  "generated_at": "2026-09-24T07:47:37.401773+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -202,15 +202,15 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 42.9,
+        "remaining_weekly_ops_usd": 32.1,
         "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) — warning only, not a hard cap.",
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 78.8,
-        "estimated_spend_weekly_ops_usd_this_week": 41.6,
-        "estimated_spend_usd_this_cycle": 765.7,
+        "estimated_spend_usd_this_week": 89.6,
+        "estimated_spend_weekly_ops_usd_this_week": 52.4,
+        "estimated_spend_usd_this_cycle": 776.5,
         "week_id": "2026-W39",
         "cycle_id": "2026-09-d8"
       },
@@ -238,7 +238,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-09-23T16:15:51.903295+00:00"
+      "updated_at": "2026-09-24T07:47:31.092049+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -339,16 +339,16 @@
   "achievements": {
     "timeline": [
       {
+        "at": "2026-09-24T06:52:36.732987+00:00",
+        "kind": "ladder_run",
+        "title": "Library ladder run (focus euro_depth)",
+        "detail": "shortlist=52 research created=1 updated=0 spend≈0.4"
+      },
+      {
         "at": "2026-09-23T08:27:32.992409+00:00",
         "kind": "paper_run",
         "title": "Paper automation acted",
         "detail": "Rebalanced after open settle (5 trade(s))."
-      },
-      {
-        "at": "2026-09-23T06:52:38.805268+00:00",
-        "kind": "ladder_run",
-        "title": "Library ladder run (focus euro_depth)",
-        "detail": "shortlist=47 research created=None updated=None spend≈None"
       },
       {
         "at": "2026-09-20T06:54:20.282932+00:00",
@@ -724,7 +724,7 @@
       }
     ],
     "last_ladder": {
-      "run_at": "2026-09-23T06:52:38.805268+00:00",
+      "run_at": "2026-09-24T06:52:36.732987+00:00",
       "focus_market": "euro_depth",
       "graduated_markets": [
         "sp500",
@@ -781,13 +781,13 @@
           "omxs30",
           "iseq20"
         ],
-        "screen_shortlist": 47,
-        "screen_strong_buy": 19,
-        "screen_buy": 28,
-        "research_executed": 0,
-        "research_created": null,
-        "research_updated": null,
-        "research_estimated_spend_usd": null,
+        "screen_shortlist": 52,
+        "screen_strong_buy": 20,
+        "screen_buy": 32,
+        "research_executed": 1,
+        "research_created": 1,
+        "research_updated": 0,
+        "research_estimated_spend_usd": 0.4,
         "graduation_skipped": false,
         "graduated_to": null
       }
@@ -1205,8 +1205,8 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-24T07:50:52.632910+00:00",
-    "queue_ui_updated_at": "2026-09-24T07:50:54.706733+00:00",
+    "compiled_at": "2026-09-24T06:47:57.191307+00:00",
+    "queue_ui_updated_at": "2026-09-24T07:47:37.435337+00:00",
     "task_count": 109,
     "status": {
       "open_count": 0,
@@ -1231,7 +1231,7 @@
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-23T18:05:59.788684+00:00",
+    "generated_at": "2026-09-24T07:47:37.459073+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1501,352 +1501,5 @@
       "tracks_insufficient_epoch_marks": 1,
       "all_benchmark_spans_insufficient": false
     }
-  },
-  "queue_health": {
-    "schema_version": 1,
-    "generated_at": "2026-09-24T07:50:54.838766+00:00",
-    "overall": "idle",
-    "headline": "Queue and hunter idle.",
-    "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
-    },
-    "agent_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "should_dispatch": false,
-      "pause_active": false,
-      "traffic_pause_active": false,
-      "attention_parked_count": 0,
-      "open_count": 0,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 0,
-      "blocked_task_count": 0,
-      "next_task_id": null,
-      "reason": "no open engineering tasks in queue",
-      "detail": "No open engineering tasks — queue is idle."
-    },
-    "queue_clearing": {
-      "pause_active": false,
-      "attention_parked_count": 0,
-      "evaluated_at": "2026-09-24T07:50:53.668298+00:00"
-    },
-    "traffic_control": {
-      "pause_active": false,
-      "stuck_pr_count": 0,
-      "pause_reasons": [],
-      "evaluated_at": "2026-09-22T20:21:29.286725+00:00"
-    },
-    "ops_monitor": {
-      "run_at": "2026-09-24T07:46:43.918854+00:00",
-      "overall": "fail",
-      "should_dispatch_engineering": true
-    },
-    "merges_today": [],
-    "verified_merges_today_count": 0,
-    "completion_monitor": {
-      "timezone": "UTC",
-      "history_days": 14,
-      "today": {
-        "date": "2026-09-24",
-        "merged_total": 0,
-        "merged_auto": 0,
-        "merged_manual": 0,
-        "verified": 0,
-        "fix_interventions": 2,
-        "fix_ci_check": 1,
-        "fix_merge_conflict": 1,
-        "fix_ci_and_merge": 0
-      },
-      "yesterday": {
-        "date": "2026-09-23",
-        "merged_total": 10,
-        "merged_auto": 0,
-        "merged_manual": 10,
-        "verified": 2,
-        "fix_interventions": 9,
-        "fix_ci_check": 2,
-        "fix_merge_conflict": 7,
-        "fix_ci_and_merge": 0
-      },
-      "history": [
-        {
-          "date": "2026-09-11",
-          "merged_total": 0,
-          "merged_auto": 0,
-          "merged_manual": 0,
-          "verified": 0,
-          "fix_interventions": 0,
-          "fix_ci_check": 0,
-          "fix_merge_conflict": 0,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-12",
-          "merged_total": 0,
-          "merged_auto": 0,
-          "merged_manual": 0,
-          "verified": 0,
-          "fix_interventions": 0,
-          "fix_ci_check": 0,
-          "fix_merge_conflict": 0,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-13",
-          "merged_total": 0,
-          "merged_auto": 0,
-          "merged_manual": 0,
-          "verified": 0,
-          "fix_interventions": 0,
-          "fix_ci_check": 0,
-          "fix_merge_conflict": 0,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-14",
-          "merged_total": 2,
-          "merged_auto": 0,
-          "merged_manual": 2,
-          "verified": 0,
-          "fix_interventions": 0,
-          "fix_ci_check": 0,
-          "fix_merge_conflict": 0,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-15",
-          "merged_total": 9,
-          "merged_auto": 0,
-          "merged_manual": 9,
-          "verified": 0,
-          "fix_interventions": 0,
-          "fix_ci_check": 0,
-          "fix_merge_conflict": 0,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-16",
-          "merged_total": 4,
-          "merged_auto": 0,
-          "merged_manual": 4,
-          "verified": 1,
-          "fix_interventions": 1,
-          "fix_ci_check": 1,
-          "fix_merge_conflict": 0,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-17",
-          "merged_total": 7,
-          "merged_auto": 2,
-          "merged_manual": 5,
-          "verified": 5,
-          "fix_interventions": 0,
-          "fix_ci_check": 0,
-          "fix_merge_conflict": 0,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-18",
-          "merged_total": 16,
-          "merged_auto": 5,
-          "merged_manual": 11,
-          "verified": 11,
-          "fix_interventions": 0,
-          "fix_ci_check": 0,
-          "fix_merge_conflict": 0,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-19",
-          "merged_total": 14,
-          "merged_auto": 7,
-          "merged_manual": 7,
-          "verified": 14,
-          "fix_interventions": 2,
-          "fix_ci_check": 0,
-          "fix_merge_conflict": 2,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-20",
-          "merged_total": 14,
-          "merged_auto": 12,
-          "merged_manual": 2,
-          "verified": 14,
-          "fix_interventions": 8,
-          "fix_ci_check": 2,
-          "fix_merge_conflict": 6,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-21",
-          "merged_total": 6,
-          "merged_auto": 0,
-          "merged_manual": 6,
-          "verified": 0,
-          "fix_interventions": 6,
-          "fix_ci_check": 4,
-          "fix_merge_conflict": 2,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-22",
-          "merged_total": 3,
-          "merged_auto": 0,
-          "merged_manual": 3,
-          "verified": 2,
-          "fix_interventions": 10,
-          "fix_ci_check": 1,
-          "fix_merge_conflict": 9,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-23",
-          "merged_total": 10,
-          "merged_auto": 0,
-          "merged_manual": 10,
-          "verified": 2,
-          "fix_interventions": 9,
-          "fix_ci_check": 2,
-          "fix_merge_conflict": 7,
-          "fix_ci_and_merge": 0
-        },
-        {
-          "date": "2026-09-24",
-          "merged_total": 0,
-          "merged_auto": 0,
-          "merged_manual": 0,
-          "verified": 0,
-          "fix_interventions": 2,
-          "fix_ci_check": 1,
-          "fix_merge_conflict": 1,
-          "fix_ci_and_merge": 0
-        }
-      ],
-      "merges_today": [],
-      "merges_yesterday": [
-        {
-          "task_id": "eng-20260923-09",
-          "title": "Close library ingest filing gaps for DAX (dax): 1 buy-tier gaps after stalled weekday loop",
-          "area": "ingest",
-          "pr_number": 827,
-          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/827",
-          "merged_at": "2026-09-23T20:16:26.649715+00:00",
-          "merge_class": "human",
-          "auto_merge": false,
-          "independently_verified": false
-        },
-        {
-          "task_id": "eng-20260922-05",
-          "title": "Close library ingest filing gaps for DAX (dax): 6 buy-tier gaps after stalled weekday loop",
-          "area": "ingest",
-          "pr_number": 818,
-          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/818",
-          "merged_at": "2026-09-23T17:06:31.351894+00:00",
-          "merge_class": "human",
-          "auto_merge": false,
-          "independently_verified": false
-        },
-        {
-          "task_id": "eng-20260923-08",
-          "title": "Rework verify round 2/3: IR presentation allowlist + parser to `ir_presentation_metrics.json` (statutory-to-adjusted FCF bridges, segment tables) for top FCF-di",
-          "area": "ingest",
-          "pr_number": 825,
-          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/825",
-          "merged_at": "2026-09-23T17:06:15.107744+00:00",
-          "merge_class": "human",
-          "auto_merge": false,
-          "independently_verified": false
-        },
-        {
-          "task_id": "eng-20260923-05",
-          "title": "Body-lag rememo gate: after new filing bodies land, rememo thin/zero-body euro_depth memos without widening generic rememo_reason; tie ladder eligibility to bod",
-          "area": "ingest",
-          "pr_number": 823,
-          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/823",
-          "merged_at": "2026-09-23T15:58:10.515099+00:00",
-          "merge_class": "human",
-          "auto_merge": false,
-          "independently_verified": false
-        },
-        {
-          "task_id": "eng-20260923-04",
-          "title": "Companies House group accounts: iXBRL-first with OCR fallback, quality gate rejecting garbled bodies",
-          "area": "ingest",
-          "pr_number": 824,
-          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/824",
-          "merged_at": "2026-09-23T15:58:00.436337+00:00",
-          "merge_class": "human",
-          "auto_merge": false,
-          "independently_verified": false
-        },
-        {
-          "task_id": "eng-20260923-07",
-          "title": "Honour FCF action-note enforcement (batched tickers)",
-          "area": "scoring",
-          "pr_number": 822,
-          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/822",
-          "merged_at": "2026-09-23T14:03:28.833948+00:00",
-          "merge_class": "scoring_narrow",
-          "auto_merge": false,
-          "independently_verified": true
-        },
-        {
-          "task_id": "eng-20260923-03",
-          "title": "dividend: Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags [2/2]",
-          "area": "scoring",
-          "pr_number": 821,
-          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/821",
-          "merged_at": "2026-09-23T14:01:13.654448+00:00",
-          "merge_class": "human",
-          "auto_merge": false,
-          "independently_verified": false
-        },
-        {
-          "task_id": "eng-20260923-06",
-          "title": "Close FCF basis enforcement gap (batched tickers)",
-          "area": "scoring",
-          "pr_number": 820,
-          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/820",
-          "merged_at": "2026-09-23T13:41:16.050404+00:00",
-          "merge_class": "scoring_narrow",
-          "auto_merge": false,
-          "independently_verified": true
-        },
-        {
-          "task_id": "eng-20260923-02",
-          "title": "fcf: Statutory FCF/dividend primary overlay plus company-adjusted FCF bind to latest filing year with staleness flag when screen numerator lags [1/2]",
-          "area": "scoring",
-          "pr_number": 819,
-          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/819",
-          "merged_at": "2026-09-23T13:23:10.613513+00:00",
-          "merge_class": "human",
-          "auto_merge": false,
-          "independently_verified": false
-        },
-        {
-          "task_id": "eng-20260923-01",
-          "title": "Expand IR presentation pipeline: allowlist FY/H1 PDFs, non-truncated text extract, and structured parse into `ir_presentation_metrics.json` (FCF/dividend bridge",
-          "area": "ingest",
-          "pr_number": 816,
-          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/816",
-          "merged_at": "2026-09-23T11:12:36.697818+00:00",
-          "merge_class": "human",
-          "auto_merge": false,
-          "independently_verified": false
-        }
-      ]
-    },
-    "library_stall_parks": []
   }
 }

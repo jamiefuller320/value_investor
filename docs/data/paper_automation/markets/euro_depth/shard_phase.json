@@ -1,33 +1,33 @@
 {
   "market_id": "euro_depth",
   "benchmark_ticker": "^STOXX50E",
-  "current_phase": 2,
-  "next_phase": 2,
+  "current_phase": 3,
+  "next_phase": 3,
   "phase1_ready": true,
-  "phase2_ready": false,
+  "phase2_ready": true,
   "phase3_ready": false,
   "weekly_paper_enabled": true,
   "weekday_paper_enabled": true,
   "phase1": {
-    "screen_archives": 29,
-    "observe_snapshot_count": 29,
+    "screen_archives": 30,
+    "observe_snapshot_count": 30,
     "min_archives": 4,
     "ai_beat_rules_observe_sim": true,
     "phase1_require_ai_beat_rules": false
   },
   "phase2": {
-    "weekly_batch_count": 12,
+    "weekly_batch_count": 13,
     "min_weekly_batches": 4,
-    "beat_control_latest": false
+    "beat_control_latest": true
   },
   "phase3": {
-    "weekday_batch_count": 13,
+    "weekday_batch_count": 15,
     "min_weekday_batches": 8,
     "exit_shadow_closed": 0,
     "min_exit_shadow_closed": 8
   },
   "blockers": [
-    "primary track must beat rules control on latest review"
+    "need 8 closed exit-shadow episodes (have 0)"
   ],
-  "evaluated_at": "2026-09-23T07:26:08.409605+00:00"
+  "evaluated_at": "2026-09-24T07:46:30.353260+00:00"
 }

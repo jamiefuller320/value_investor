@@ -933,5 +933,444 @@
       "exit_streak": {},
       "reentry_cooldown": {}
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-09-24T07:45:22.431421+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/cac40/screen_latest.json",
+      "run_at": "2026-09-24T06:52:36.732987+00:00",
+      "generated_at": "2026-09-24T07:45:22.383932+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-09-24T08:45:22.398527+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-09-24T08:00:00+01:00",
+      "settle_at": "2026-09-24T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (0 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "TEP.PA",
+        "name": "Teleperformance SE",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.76,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 73.7,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.875,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 73.11,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "ORA.PA",
+        "name": "Orange S.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.535075,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Communication Services",
+        "price": 14.06,
+        "research_verdict": "caution"
+      },
+      {
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7576,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 110.9,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7330000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 79.62,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "TEP.PA",
+        "name": "Teleperformance SE",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.76,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 73.7,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.875,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 73.11,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "ORA.PA",
+        "name": "Orange S.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.535075,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Communication Services",
+        "price": 14.06,
+        "research_verdict": "caution"
+      },
+      {
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7576,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 110.9,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7330000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 79.62,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 994.05,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 198.75,
+      "targets": [
+        {
+          "ticker": "SAN.PA",
+          "name": "Sanofi",
+          "signal": "strong_buy",
+          "conviction_score": 0.875,
+          "price": 73.11
+        },
+        {
+          "ticker": "TEP.PA",
+          "name": "Teleperformance SE",
+          "signal": "strong_buy",
+          "conviction_score": 0.76,
+          "price": 73.7
+        },
+        {
+          "ticker": "DG.PA",
+          "name": "Vinci SA",
+          "signal": "strong_buy",
+          "conviction_score": 0.7576,
+          "price": 110.9
+        },
+        {
+          "ticker": "TTE.PA",
+          "name": "TotalEnergies SE",
+          "signal": "buy",
+          "conviction_score": 0.7330000000000001,
+          "price": 79.62
+        },
+        {
+          "ticker": "ORA.PA",
+          "name": "Orange S.A.",
+          "signal": "strong_buy",
+          "conviction_score": 0.535075,
+          "price": 14.06
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "MC.PA",
+          "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
+          "reason": "No longer in the top conviction target set",
+          "shares": 0.410297,
+          "price": 405.5,
+          "value": 166.38
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "SAN.PA",
+          "name": "Sanofi",
+          "reason": "Top-up to equal weight",
+          "value": 35.68,
+          "price": 73.11,
+          "target_value": 198.75,
+          "conviction_score": 0.875,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "TEP.PA",
+          "name": "Teleperformance SE",
+          "reason": "Top-up to equal weight",
+          "value": 23.38,
+          "price": 73.7,
+          "target_value": 198.75,
+          "conviction_score": 0.76,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "DG.PA",
+          "name": "Vinci SA",
+          "reason": "Top-up to equal weight",
+          "value": 33.94,
+          "price": 110.9,
+          "target_value": 198.75,
+          "conviction_score": 0.7576,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "TTE.PA",
+          "name": "TotalEnergies SE",
+          "reason": "Top-up to equal weight",
+          "value": 30.13,
+          "price": 79.62,
+          "target_value": 198.75,
+          "conviction_score": 0.7330000000000001,
+          "signal": "buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "ORA.PA",
+          "name": "Orange S.A.",
+          "reason": "Top-up to equal weight",
+          "value": 42.96,
+          "price": 14.06,
+          "target_value": 198.75,
+          "conviction_score": 0.535075,
+          "signal": "strong_buy"
+        }
+      ],
+      "anticipated_holds": [],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 5 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 5 buy(s)."
+    },
+    "trades": [],
+    "nav_before": 994.05,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "SAN.PA",
+        "shares": 2.230534,
+        "avg_cost": 74.59,
+        "sector": "Healthcare",
+        "name": "Sanofi",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TEP.PA",
+        "shares": 2.379512,
+        "avg_cost": 69.92,
+        "sector": "Industrials",
+        "name": "Teleperformance SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DG.PA",
+        "shares": 1.486159,
+        "avg_cost": 111.95,
+        "sector": "Industrials",
+        "name": "Vinci SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TTE.PA",
+        "shares": 2.117815,
+        "avg_cost": 78.56,
+        "sector": "Energy",
+        "name": "TotalEnergies SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ORA.PA",
+        "shares": 11.08062,
+        "avg_cost": 15.015,
+        "sector": "Communication Services",
+        "name": "Orange S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "MC.PA",
+        "shares": 0.410297,
+        "avg_cost": 405.5,
+        "sector": "Consumer Cyclical",
+        "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 994.05,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "SAN.PA",
+        "shares": 2.230534,
+        "avg_cost": 74.59,
+        "sector": "Healthcare",
+        "name": "Sanofi",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TEP.PA",
+        "shares": 2.379512,
+        "avg_cost": 69.92,
+        "sector": "Industrials",
+        "name": "Teleperformance SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DG.PA",
+        "shares": 1.486159,
+        "avg_cost": 111.95,
+        "sector": "Industrials",
+        "name": "Vinci SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TTE.PA",
+        "shares": 2.117815,
+        "avg_cost": 78.56,
+        "sector": "Energy",
+        "name": "TotalEnergies SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ORA.PA",
+        "shares": 11.08062,
+        "avg_cost": 15.015,
+        "sector": "Communication Services",
+        "name": "Orange S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "MC.PA",
+        "shares": 0.410297,
+        "avg_cost": 405.5,
+        "sector": "Consumer Cyclical",
+        "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {
+        "MC.PA": 1
+      },
+      "reentry_cooldown": {}
+    }
   }
 ]

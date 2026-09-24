@@ -1,11 +1,19 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "track_id": "buy_tier_level",
   "framework": {
     "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
+    "schema_version": 2,
     "recording": {
-      "earliest_entry": "First pass the name is buy-tier (widest gate)",
-      "latest_exit": "Leave buy-tier for exit_confirm_screens consecutive passes, or hard avoid",
+      "earliest_entry": "First pass on near-buy (hold + conviction >= pre_buy floor 0.28) or buy-tier \u2014 whichever comes first",
+      "latest_exit": "Momentum-grace end + post_grace_extra_days (~1 month); fallback if grace never arms: leave wide zone \u00d7 exit_confirm_screens + post_grace_extra_days; or hard avoid",
+      "sub_markers": [
+        "first_near_buy_at",
+        "first_buy_tier_at",
+        "grace_started_at",
+        "grace_ended_at",
+        "experimental_exit_due_at"
+      ],
       "best_policy": "Nested counterfactual inside the wide episode \u2014 not the freeze gate"
     },
     "capital_status": {
@@ -35,9 +43,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 74.39,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0172,
+      "last_price": 73.11,
+      "last_return_since_entry_pct": -0.0172,
+      "first_buy_tier_at": "2026-09-24T08:45:22.398527+01:00"
     },
     {
       "episode_id": "ce1b8e2a-b3d2-4c4d-a545-49d27e8a0fd9",
@@ -57,10 +66,11 @@
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
+      "peak_return_pct": 0.0514,
       "trough_return_pct": 0.0,
-      "last_price": 70.1,
-      "last_return_since_entry_pct": 0.0
+      "last_price": 73.7,
+      "last_return_since_entry_pct": 0.0514,
+      "first_buy_tier_at": "2026-09-24T08:45:22.398527+01:00"
     },
     {
       "episode_id": "3c4d5dc8-add9-43cf-b180-3c85f6f5bf8e",
@@ -81,9 +91,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 112.3,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0125,
+      "last_price": 110.9,
+      "last_return_since_entry_pct": -0.0125,
+      "first_buy_tier_at": "2026-09-24T08:45:22.398527+01:00"
     },
     {
       "episode_id": "9ae4ca36-78c6-4ebf-afe8-d396f82d5a91",
@@ -103,10 +114,11 @@
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
+      "peak_return_pct": 0.0188,
       "trough_return_pct": 0.0,
-      "last_price": 78.15,
-      "last_return_since_entry_pct": 0.0
+      "last_price": 79.62,
+      "last_return_since_entry_pct": 0.0188,
+      "first_buy_tier_at": "2026-09-24T08:45:22.398527+01:00"
     },
     {
       "episode_id": "552bfce7-3e79-450c-8974-dae68078e9a9",
@@ -127,9 +139,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 14.395,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0233,
+      "last_price": 14.06,
+      "last_return_since_entry_pct": -0.0233,
+      "first_buy_tier_at": "2026-09-24T08:45:22.398527+01:00"
     },
     {
       "episode_id": "5e162e2d-1ab7-4420-b57e-f29e5759a79d",
@@ -147,14 +160,14 @@
       "capital_status": "on_book",
       "on_book_at": "2026-09-23T08:26:08.324563+01:00",
       "off_book_at": null,
-      "exit_streak": 0,
+      "exit_streak": 1,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
+      "peak_return_pct": 0.0088,
       "trough_return_pct": 0.0,
-      "last_price": 401.95,
-      "last_return_since_entry_pct": 0.0
+      "last_price": 405.5,
+      "last_return_since_entry_pct": 0.0088
     }
   ],
   "closed": [],
-  "updated_at": "2026-09-23T07:26:08.360314+00:00"
+  "updated_at": "2026-09-24T07:45:22.425847+00:00"
 }

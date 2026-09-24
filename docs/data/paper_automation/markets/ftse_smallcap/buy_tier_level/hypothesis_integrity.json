@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-09-23T07:26:03.001923+00:00",
-  "as_of": "2026-09-23T08:26:02.991568+01:00",
+  "updated_at": "2026-09-24T07:45:17.033658+00:00",
+  "as_of": "2026-09-24T08:45:17.021668+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -19,9 +19,9 @@
   "holding_count": 4,
   "underwater_count": 0,
   "thesis_status_counts": {
-    "intact": 2,
-    "weakening": 0,
-    "broken": 2,
+    "intact": 3,
+    "weakening": 1,
+    "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
@@ -43,11 +43,11 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.5,
-      "quality": 0.75,
-      "dividend": 0.5,
-      "garp": 0.5,
-      "risk": 0.5
+      "cheapness": 0.0,
+      "quality": 0.25,
+      "dividend": 0.0,
+      "garp": 0.0,
+      "risk": 0.0
     },
     "selection_feedback_flags": [],
     "balancing_hint": "maintain",
@@ -55,82 +55,18 @@
   },
   "holdings": [
     {
-      "ticker": "ULTP.L",
-      "name": "ULTP.L",
-      "thesis_status": "broken",
-      "recommended_action": "exit_candidate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 45.7,
-      "avg_cost": 45.7,
-      "signal": null,
-      "timing_signal": null,
-      "conviction_score": null,
-      "data_quality_score": null,
-      "passed_families": [],
-      "failed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "research_verdict": null,
-      "reasons": [
-        "cheapness lost and not in buy tier"
-      ],
-      "intact_reasons": [],
-      "weaken_reasons": [],
-      "broken_reasons": [
-        "cheapness lost and not in buy tier"
-      ]
-    },
-    {
-      "ticker": "MER.L",
-      "name": "MER.L",
-      "thesis_status": "broken",
-      "recommended_action": "exit_candidate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 414.5,
-      "avg_cost": 414.5,
-      "signal": null,
-      "timing_signal": null,
-      "conviction_score": null,
-      "data_quality_score": null,
-      "passed_families": [],
-      "failed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "research_verdict": null,
-      "reasons": [
-        "cheapness lost and not in buy tier"
-      ],
-      "intact_reasons": [],
-      "weaken_reasons": [],
-      "broken_reasons": [
-        "cheapness lost and not in buy tier"
-      ]
-    },
-    {
-      "ticker": "CAPD.L",
-      "name": "Capital Limited",
+      "ticker": "REC.L",
+      "name": "Record plc",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0285,
-      "mark": 117.0,
-      "avg_cost": 113.7561,
+      "unrealized_pct": 0.0,
+      "mark": 42.1,
+      "avg_cost": 42.1,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7125,
+      "conviction_score": 0.399,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -146,16 +82,56 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 71%"
+        "conviction 40%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 71%"
+        "conviction 40%"
       ],
       "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "FOXT.L",
+      "name": "Foxtons Group plc",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 36.5,
+      "avg_cost": 36.5,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3125,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "conviction 31% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "research verdict caution",
+        "conviction 31% below intact floor"
+      ],
       "broken_reasons": []
     },
     {
@@ -195,6 +171,46 @@
         "cheapness family still passes",
         "data_quality 1.00",
         "conviction 70%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CAPD.L",
+      "name": "Capital Limited",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0549,
+      "mark": 120.0,
+      "avg_cost": 113.7561,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7125,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 71%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 71%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []

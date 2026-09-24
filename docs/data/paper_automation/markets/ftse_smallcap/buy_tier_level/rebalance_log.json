@@ -4919,5 +4919,396 @@
       },
       "reentry_cooldown": {}
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-09-24T07:45:17.051407+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_smallcap/screen_latest.json",
+      "run_at": "2026-09-24T06:52:36.732987+00:00",
+      "generated_at": "2026-09-24T07:45:16.998205+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-09-24T08:45:17.021668+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-09-24T08:00:00+01:00",
+      "settle_at": "2026-09-24T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (4 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.003,
+    "candidates": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6979000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 71.3,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 120.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "FOXT.L",
+        "name": "Foxtons Group plc",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.312545,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 36.5,
+        "research_verdict": "caution"
+      },
+      {
+        "ticker": "REC.L",
+        "name": "Record plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.39899999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 42.1,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6979000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 71.3,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 120.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "FOXT.L",
+        "name": "Foxtons Group plc",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.312545,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 36.5,
+        "research_verdict": "caution"
+      },
+      {
+        "ticker": "REC.L",
+        "name": "Record plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.39899999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 42.1,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.55% / sell 0.05% (legacy symmetric slot 0.30%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1050.85,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 262.71,
+      "targets": [
+        {
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "signal": "buy",
+          "conviction_score": 0.7125,
+          "price": 120.0
+        },
+        {
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "signal": "strong_buy",
+          "conviction_score": 0.6979000000000001,
+          "price": 71.3
+        },
+        {
+          "ticker": "REC.L",
+          "name": "Record plc",
+          "signal": "buy",
+          "conviction_score": 0.39899999999999997,
+          "price": 42.1
+        },
+        {
+          "ticker": "FOXT.L",
+          "name": "Foxtons Group plc",
+          "signal": "buy",
+          "conviction_score": 0.312545,
+          "price": 36.5
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "REC.L",
+          "name": "Record plc",
+          "reason": "Already near equal-weight target",
+          "value": 261.98,
+          "target_value": 262.71,
+          "conviction_score": 0.39899999999999997,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [
+        {
+          "ticker": "FOXT.L",
+          "name": "Foxtons Group plc",
+          "reason": "Insufficient cash after higher-conviction fills",
+          "target_value": 262.71,
+          "conviction_score": 0.312545,
+          "signal": "buy"
+        }
+      ],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "e3e9f7d6-ac4a-4411-b5ae-6836d3920c9e",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-24T08:45:17.021668+01:00",
+        "ticker": "ULTP.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 5.686132,
+        "price": 45.7,
+        "gross": 259.86,
+        "cost": 0.13,
+        "net_cash": 259.73,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Ultimate Products Plc",
+        "avg_cost_at_exit": 45.7,
+        "position_closed": true
+      },
+      {
+        "id": "446b4ac5-d886-46dc-a35b-ee2d85edf818",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-24T08:45:17.021668+01:00",
+        "ticker": "MER.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.626915,
+        "price": 414.5,
+        "gross": 259.86,
+        "cost": 0.13,
+        "net_cash": 259.73,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Mears Group plc",
+        "avg_cost_at_exit": 414.5,
+        "position_closed": true
+      },
+      {
+        "id": "3194e55d-1d81-4821-9fa6-5b26c8a2dcd4",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-24T08:45:17.021668+01:00",
+        "ticker": "REC.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 6.222837,
+        "price": 42.1,
+        "gross": 261.98,
+        "cost": 1.44,
+        "net_cash": -263.42,
+        "note": "Automated buy",
+        "name": "Record plc"
+      },
+      {
+        "id": "797afa24-ce3d-4ad9-b78e-97c392d78423",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-24T08:45:17.021668+01:00",
+        "ticker": "FOXT.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 6.97616,
+        "price": 36.5,
+        "gross": 254.63,
+        "cost": 1.4,
+        "net_cash": -256.03,
+        "note": "Automated buy",
+        "name": "Foxtons Group plc"
+      }
+    ],
+    "nav_before": 1053.95,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "CARD.L",
+        "shares": 3.736119,
+        "avg_cost": 68.2043,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 2.232095,
+        "avg_cost": 113.7561,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ULTP.L",
+        "shares": 5.686132,
+        "avg_cost": 45.7,
+        "sector": "Consumer Cyclical",
+        "name": "Ultimate Products Plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "MER.L",
+        "shares": 0.626915,
+        "avg_cost": 414.5,
+        "sector": "Consumer Cyclical",
+        "name": "Mears Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "ULTP.L": 1,
+        "MER.L": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "nav_after": 1050.85,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "CARD.L",
+        "shares": 3.736119,
+        "avg_cost": 68.2043,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 2.232095,
+        "avg_cost": 113.7561,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "REC.L",
+        "shares": 6.222837,
+        "avg_cost": 42.1,
+        "sector": "Financial Services",
+        "name": "Record plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "FOXT.L",
+        "shares": 6.97616,
+        "avg_cost": 36.5,
+        "sector": "Real Estate",
+        "name": "Foxtons Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "ULTP.L": 1,
+        "MER.L": 1
+      }
+    }
   }
 ]

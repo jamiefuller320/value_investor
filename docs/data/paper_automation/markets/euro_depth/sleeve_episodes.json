@@ -1,11 +1,19 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "track_id": "rules",
   "framework": {
     "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
+    "schema_version": 2,
     "recording": {
-      "earliest_entry": "First pass the name is buy-tier (widest gate)",
-      "latest_exit": "Leave buy-tier for exit_confirm_screens consecutive passes, or hard avoid",
+      "earliest_entry": "First pass on near-buy (hold + conviction >= pre_buy floor 0.28) or buy-tier \u2014 whichever comes first",
+      "latest_exit": "Momentum-grace end + post_grace_extra_days (~1 month); fallback if grace never arms: leave wide zone \u00d7 exit_confirm_screens + post_grace_extra_days; or hard avoid",
+      "sub_markers": [
+        "first_near_buy_at",
+        "first_buy_tier_at",
+        "grace_started_at",
+        "grace_ended_at",
+        "experimental_exit_due_at"
+      ],
       "best_policy": "Nested counterfactual inside the wide episode \u2014 not the freeze gate"
     },
     "capital_status": {
@@ -35,9 +43,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 97.0,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0107,
+      "last_price": 95.96,
+      "last_return_since_entry_pct": -0.0107,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "d7ad8857-2167-41d0-bb6a-be4d2ae2efdf",
@@ -58,9 +67,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 112.35,
-      "last_return_since_entry_pct": -0.0
+      "trough_return_pct": -0.0138,
+      "last_price": 110.9,
+      "last_return_since_entry_pct": -0.0129,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "1acf5c5b-307b-4e8c-9319-ade355409ffb",
@@ -81,9 +91,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 32.03,
-      "last_return_since_entry_pct": -0.0
+      "trough_return_pct": -0.0097,
+      "last_price": 31.76,
+      "last_return_since_entry_pct": -0.0084,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "3066b4c6-2a86-44fe-95d6-392e94fb3838",
@@ -104,9 +115,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 21.86,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0101,
+      "last_price": 21.64,
+      "last_return_since_entry_pct": -0.0101,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "b1679955-3242-4c2e-8137-a7f86e4504ba",
@@ -127,9 +139,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 74.65,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0186,
+      "last_price": 73.26,
+      "last_return_since_entry_pct": -0.0186,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "8c740e40-3c54-43a2-9108-3f76a6a05a03",
@@ -150,9 +163,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 108.0,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0333,
+      "last_price": 104.4,
+      "last_return_since_entry_pct": -0.0333,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "c3991063-293c-4ced-8288-6641e00d8699",
@@ -173,9 +187,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 21.86,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0128,
+      "last_price": 21.59,
+      "last_return_since_entry_pct": -0.0124,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "01fd4b17-4e9c-413e-a988-78ad0ea1de3b",
@@ -196,9 +211,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 87.06,
-      "last_return_since_entry_pct": -0.0
+      "trough_return_pct": -0.0172,
+      "last_price": 85.64,
+      "last_return_since_entry_pct": -0.0163,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "f5b38737-de99-4476-b289-fe3a05b83d9a",
@@ -219,9 +235,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 58.4,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.013,
+      "last_price": 57.78,
+      "last_return_since_entry_pct": -0.0106,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "8d18bdd4-5d06-41ee-8e50-85c890c78483",
@@ -241,10 +258,11 @@
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
+      "peak_return_pct": 0.0156,
       "trough_return_pct": 0.0,
-      "last_price": 35.79,
-      "last_return_since_entry_pct": 0.0
+      "last_price": 36.35,
+      "last_return_since_entry_pct": 0.0156,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "77426be8-e59e-495e-a59a-a47c1cdb71bf",
@@ -265,9 +283,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 272.0,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0059,
+      "last_price": 270.6,
+      "last_return_since_entry_pct": -0.0051,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "1234597d-7985-4f86-9989-c7696027b1b5",
@@ -287,10 +306,11 @@
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 66.92,
-      "last_return_since_entry_pct": -0.0
+      "peak_return_pct": 0.0152,
+      "trough_return_pct": 0.0,
+      "last_price": 67.94,
+      "last_return_since_entry_pct": 0.0152,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "29a7b2a8-cf55-416e-817e-280884941202",
@@ -305,15 +325,16 @@
       "latest_exit_at": null,
       "latest_exit_price": null,
       "latest_exit_reason": null,
-      "capital_status": "never_funded",
-      "on_book_at": null,
+      "capital_status": "on_book",
+      "on_book_at": "2026-09-24T09:40:23.196827+02:00",
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 19.1,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0052,
+      "last_price": 19.0,
+      "last_return_since_entry_pct": -0.0052,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "71efabb9-3914-4ae0-b745-5bd720130f8c",
@@ -333,10 +354,11 @@
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 27.07,
-      "last_return_since_entry_pct": -0.0
+      "peak_return_pct": 0.0011,
+      "trough_return_pct": 0.0,
+      "last_price": 27.1,
+      "last_return_since_entry_pct": 0.0011,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "c39c271b-a9c6-4d17-9248-ff2f8f0180a4",
@@ -357,9 +379,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 87.2,
-      "last_return_since_entry_pct": -0.0
+      "trough_return_pct": -0.0218,
+      "last_price": 85.3,
+      "last_return_since_entry_pct": -0.0218,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "acadb325-bbba-4bd2-bf19-3760152613a9",
@@ -380,9 +403,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 45.88,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0139,
+      "last_price": 45.48,
+      "last_return_since_entry_pct": -0.0087,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "f92e0308-8bc6-4a55-be20-715f266fb463",
@@ -403,9 +427,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 2.7,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0093,
+      "last_price": 2.675,
+      "last_return_since_entry_pct": -0.0093,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "8d3533de-83d8-4a98-b0f7-ce599dcc23df",
@@ -426,9 +451,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 70.1,
-      "last_return_since_entry_pct": -0.0
+      "trough_return_pct": -0.0271,
+      "last_price": 68.2,
+      "last_return_since_entry_pct": -0.0271,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "3f8cf2f8-421f-4164-8ee1-daf80022647a",
@@ -449,9 +475,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 57.8,
-      "last_return_since_entry_pct": -0.0
+      "trough_return_pct": -0.0097,
+      "last_price": 57.24,
+      "last_return_since_entry_pct": -0.0097,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "462e2b0f-b233-4cd5-ad4b-b48ef27b28b9",
@@ -472,9 +499,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 264.5,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0072,
+      "last_price": 262.6,
+      "last_return_since_entry_pct": -0.0072,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "60cbc347-0e13-40cc-ba18-c14a829b9944",
@@ -495,9 +523,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 66.35,
-      "last_return_since_entry_pct": -0.0
+      "trough_return_pct": -0.0136,
+      "last_price": 65.45,
+      "last_return_since_entry_pct": -0.0136,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "2efa993e-2f59-4470-936f-485452b000f4",
@@ -518,9 +547,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 75.35,
-      "last_return_since_entry_pct": -0.0
+      "trough_return_pct": -0.0511,
+      "last_price": 71.6,
+      "last_return_since_entry_pct": -0.0498,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "448f16f9-b76f-4cbf-826c-c650e90a183e",
@@ -540,10 +570,11 @@
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
+      "peak_return_pct": 0.0187,
       "trough_return_pct": 0.0,
-      "last_price": 116.5,
-      "last_return_since_entry_pct": 0.0
+      "last_price": 118.62,
+      "last_return_since_entry_pct": 0.0182,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "d51866a1-2497-4c3c-8726-069caa8ed9cc",
@@ -564,9 +595,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 192.4,
-      "last_return_since_entry_pct": -0.0
+      "trough_return_pct": -0.0281,
+      "last_price": 187.2,
+      "last_return_since_entry_pct": -0.027,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "e59285fe-5aac-4fd3-8687-e3048cbf993c",
@@ -586,10 +618,11 @@
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 71.02,
-      "last_return_since_entry_pct": -0.0
+      "peak_return_pct": 0.0079,
+      "trough_return_pct": 0.0,
+      "last_price": 71.56,
+      "last_return_since_entry_pct": 0.0076,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "b4a78996-a9e9-4447-8068-e395e3870bb2",
@@ -610,9 +643,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 332.5,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0268,
+      "last_price": 323.7,
+      "last_return_since_entry_pct": -0.0265,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "c0e4abbc-d466-4081-a27d-55b6b0dc34eb",
@@ -632,10 +666,11 @@
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 77.81,
-      "last_return_since_entry_pct": -0.0
+      "peak_return_pct": 0.0284,
+      "trough_return_pct": 0.0,
+      "last_price": 79.79,
+      "last_return_since_entry_pct": 0.0254,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "154fe771-7581-42d7-bfa7-2a1240dc361d",
@@ -656,9 +691,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 535.4,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0134,
+      "last_price": 528.2,
+      "last_return_since_entry_pct": -0.0134,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "e90c73ca-def9-44e2-a611-b3dd0f409d63",
@@ -678,10 +714,11 @@
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
+      "peak_return_pct": 0.0267,
       "trough_return_pct": 0.0,
-      "last_price": 0.75,
-      "last_return_since_entry_pct": 0.0
+      "last_price": 0.77,
+      "last_return_since_entry_pct": 0.0267,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "e91bbba7-7de3-4126-b826-e0bc80558733",
@@ -702,9 +739,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": 0.0,
-      "last_price": 31.2,
-      "last_return_since_entry_pct": 0.0
+      "trough_return_pct": -0.0112,
+      "last_price": 31.05,
+      "last_return_since_entry_pct": -0.0048,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "ffffed5a-b498-4eaf-a1d3-5c8da5b1fef7",
@@ -725,9 +763,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 18.3,
-      "last_return_since_entry_pct": -0.0
+      "trough_return_pct": -0.018,
+      "last_price": 17.97,
+      "last_return_since_entry_pct": -0.018,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "3631224f-df9e-4b45-889d-69e46e8cf3e7",
@@ -747,10 +786,11 @@
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
+      "peak_return_pct": 0.0099,
       "trough_return_pct": 0.0,
-      "last_price": 70.9,
-      "last_return_since_entry_pct": 0.0
+      "last_price": 71.6,
+      "last_return_since_entry_pct": 0.0099,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "d335be7a-cc6f-46f6-b5ad-be31690365c2",
@@ -765,15 +805,16 @@
       "latest_exit_at": null,
       "latest_exit_price": null,
       "latest_exit_reason": null,
-      "capital_status": "on_book",
+      "capital_status": "off_book",
       "on_book_at": "2026-09-23T09:20:55.184707+02:00",
-      "off_book_at": null,
+      "off_book_at": "2026-09-24T09:40:23.196827+02:00",
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 41.085,
-      "last_return_since_entry_pct": -0.0
+      "peak_return_pct": 0.0231,
+      "trough_return_pct": 0.0,
+      "last_price": 42.035,
+      "last_return_since_entry_pct": 0.0231,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "3ea2cd95-f545-4c90-94c4-1633979b13a7",
@@ -794,9 +835,10 @@
       "exit_streak": 0,
       "checkpoints": [],
       "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 405.9,
-      "last_return_since_entry_pct": -0.0
+      "trough_return_pct": -0.0174,
+      "last_price": 399.1,
+      "last_return_since_entry_pct": -0.0168,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "ae7b36ee-1e78-4769-8b19-9c8f31a03de8",
@@ -819,7 +861,8 @@
       "peak_return_pct": 0.0,
       "trough_return_pct": 0.0,
       "last_price": 10.0,
-      "last_return_since_entry_pct": 0.0
+      "last_return_since_entry_pct": 0.0,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "3f38dc01-13b4-404c-b09d-d68b111622e7",
@@ -839,10 +882,11 @@
       "off_book_at": null,
       "exit_streak": 0,
       "checkpoints": [],
-      "peak_return_pct": 0.0,
-      "trough_return_pct": -0.0,
-      "last_price": 3.258,
-      "last_return_since_entry_pct": -0.0
+      "peak_return_pct": 0.0031,
+      "trough_return_pct": 0.0,
+      "last_price": 3.268,
+      "last_return_since_entry_pct": 0.0031,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
     },
     {
       "episode_id": "e3508605-f8ef-4d53-8e91-47075499d474",
@@ -865,9 +909,150 @@
       "peak_return_pct": 0.0,
       "trough_return_pct": -0.0,
       "last_price": 7.1,
-      "last_return_since_entry_pct": -0.0
+      "last_return_since_entry_pct": -0.0,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00"
+    },
+    {
+      "episode_id": "afdbb76f-ab8c-4463-b3c4-5c8c3c8eea8b",
+      "track_id": "rules",
+      "ticker": "BN.PA",
+      "name": "Danone S.A.",
+      "status": "open",
+      "earliest_entry_at": "2026-09-24T09:40:23.196827+02:00",
+      "earliest_entry_price": 60.42,
+      "earliest_entry_signal": "buy",
+      "earliest_entry_conviction": 0.3498,
+      "first_near_buy_at": null,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00",
+      "grace_started_at": null,
+      "grace_ended_at": null,
+      "experimental_exit_due_at": null,
+      "latest_exit_at": null,
+      "latest_exit_price": null,
+      "latest_exit_reason": null,
+      "capital_status": "never_funded",
+      "on_book_at": null,
+      "off_book_at": null,
+      "exit_streak": 0,
+      "checkpoints": [],
+      "peak_return_pct": 0.0007,
+      "trough_return_pct": 0.0,
+      "last_price": 60.46,
+      "last_return_since_entry_pct": 0.0007
+    },
+    {
+      "episode_id": "2183b04b-26cd-4f96-ad8e-881f8d3e6803",
+      "track_id": "rules",
+      "ticker": "AZE.BR",
+      "name": "Azelis Group NV",
+      "status": "open",
+      "earliest_entry_at": "2026-09-24T09:40:23.196827+02:00",
+      "earliest_entry_price": 11.82,
+      "earliest_entry_signal": "buy",
+      "earliest_entry_conviction": 0.3393,
+      "first_near_buy_at": null,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00",
+      "grace_started_at": null,
+      "grace_ended_at": null,
+      "experimental_exit_due_at": null,
+      "latest_exit_at": null,
+      "latest_exit_price": null,
+      "latest_exit_reason": null,
+      "capital_status": "never_funded",
+      "on_book_at": null,
+      "off_book_at": null,
+      "exit_streak": 0,
+      "checkpoints": [],
+      "peak_return_pct": 0.0,
+      "trough_return_pct": -0.0025,
+      "last_price": 11.79,
+      "last_return_since_entry_pct": -0.0025
+    },
+    {
+      "episode_id": "ca1c7044-3c6c-440d-98e8-6b7982ad05c5",
+      "track_id": "rules",
+      "ticker": "AMRZ.SW",
+      "name": "Amrize AG",
+      "status": "open",
+      "earliest_entry_at": "2026-09-24T09:40:23.196827+02:00",
+      "earliest_entry_price": 31.31,
+      "earliest_entry_signal": "buy",
+      "earliest_entry_conviction": 0.327,
+      "first_near_buy_at": null,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00",
+      "grace_started_at": null,
+      "grace_ended_at": null,
+      "experimental_exit_due_at": null,
+      "latest_exit_at": null,
+      "latest_exit_price": null,
+      "latest_exit_reason": null,
+      "capital_status": "never_funded",
+      "on_book_at": null,
+      "off_book_at": null,
+      "exit_streak": 0,
+      "checkpoints": [],
+      "peak_return_pct": 0.0019,
+      "trough_return_pct": 0.0,
+      "last_price": 31.37,
+      "last_return_since_entry_pct": 0.0019
+    },
+    {
+      "episode_id": "692e07b8-dd57-4f3a-b889-5b459801f858",
+      "track_id": "rules",
+      "ticker": "OIZ.IR",
+      "name": "Origin Enterprises plc",
+      "status": "open",
+      "earliest_entry_at": "2026-09-24T09:40:23.196827+02:00",
+      "earliest_entry_price": 4.17,
+      "earliest_entry_signal": "buy",
+      "earliest_entry_conviction": 0.292315,
+      "first_near_buy_at": null,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00",
+      "grace_started_at": null,
+      "grace_ended_at": null,
+      "experimental_exit_due_at": null,
+      "latest_exit_at": null,
+      "latest_exit_price": null,
+      "latest_exit_reason": null,
+      "capital_status": "never_funded",
+      "on_book_at": null,
+      "off_book_at": null,
+      "exit_streak": 0,
+      "checkpoints": [],
+      "peak_return_pct": 0.0,
+      "trough_return_pct": 0.0,
+      "last_price": 4.17,
+      "last_return_since_entry_pct": 0.0
+    },
+    {
+      "episode_id": "e794e82c-f163-46d7-bbeb-44ef2de7d9dc",
+      "track_id": "rules",
+      "ticker": "ADYEN.AS",
+      "name": "Adyen N.V.",
+      "status": "open",
+      "earliest_entry_at": "2026-09-24T09:40:23.196827+02:00",
+      "earliest_entry_price": 856.9,
+      "earliest_entry_signal": "buy",
+      "earliest_entry_conviction": 0.2536,
+      "first_near_buy_at": null,
+      "first_buy_tier_at": "2026-09-24T09:40:23.196827+02:00",
+      "grace_started_at": null,
+      "grace_ended_at": null,
+      "experimental_exit_due_at": null,
+      "latest_exit_at": null,
+      "latest_exit_price": null,
+      "latest_exit_reason": null,
+      "capital_status": "never_funded",
+      "on_book_at": null,
+      "off_book_at": null,
+      "exit_streak": 0,
+      "checkpoints": [],
+      "peak_return_pct": 0.0,
+      "trough_return_pct": 0.0,
+      "last_price": 856.9,
+      "last_return_since_entry_pct": 0.0
     }
   ],
   "closed": [],
-  "updated_at": "2026-09-23T07:21:07.950756+00:00"
+  "updated_at": "2026-09-24T07:45:40.371551+00:00"
 }

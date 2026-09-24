@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "graduated_allocation",
-  "generated_at": "2026-09-23T07:21:38.514758+00:00",
+  "generated_at": "2026-09-24T07:46:09.645192+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 1,
+    "closed_total": 2,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 4,
     "by_thesis_status": {
@@ -17,13 +17,13 @@
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 1,
+        "closed_count": 2,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0033,
-        "mean_trough_unrealized_pct": 0.0033,
+        "mean_peak_unrealized_pct": 0.0108,
+        "mean_trough_unrealized_pct": 0.0003,
         "outcome_labels": {
-          "recovered": 1
+          "recovered": 2
         }
       },
       "broken": {
@@ -55,11 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 1,
+    "hold_closed_with_thesis": 2,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=1 (target >=8)",
-      "hold thesis buckets thin (weakening=1; target >=3 each)",
+      "hold closed with thesis=2 (target >=8)",
+      "hold thesis buckets thin (weakening=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -209,7 +209,7 @@
         }
       ],
       "peak_unrealized_pct": 0.0149,
-      "trough_unrealized_pct": -0.0041,
+      "trough_unrealized_pct": -0.0096,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -273,7 +273,7 @@
       "ticker": "SHELL.AS",
       "name": "Shell plc",
       "started_at": "2026-09-23T09:21:29.797221+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -303,8 +303,51 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0028,
+      "peak_unrealized_pct": 0.0182,
       "trough_unrealized_pct": -0.0028,
+      "recovered_to_breakeven": true,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-24T09:40:52.953187+02:00",
+      "linked_sell_trade_id": "3959b7e4-1318-4d8a-85ff-7554626eb9e7"
+    },
+    {
+      "episode_id": "graduated_allocation:ERIC-B.ST:2026-09-24T09:40:52.953187+02:00",
+      "track_id": "graduated_allocation",
+      "ticker": "ERIC-B.ST",
+      "name": "Telefonaktiebolaget LM Ericsson (publ)",
+      "started_at": "2026-09-24T09:40:52.953187+02:00",
+      "status": "open",
+      "stress_triggers": [
+        "underwater"
+      ],
+      "entry_mark": 96.08,
+      "avg_cost": 97.6,
+      "unrealized_pct_at_start": -0.0156,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "still strong_buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": -0.0156,
+      "screen_signal": "strong_buy",
+      "effective_signal": "strong_buy",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.9335,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0156,
+      "trough_unrealized_pct": -0.017,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -364,10 +407,62 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "DHL.DE": 0.0614
+        "DHL.DE": 0.0491
       },
       "buy_returns_since_rotation": {
-        "DG.PA": 0.0081
+        "DG.PA": -0.0067
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "graduated_allocation:2026-09-24T09:40:52.953187+02:00",
+      "track_id": "graduated_allocation",
+      "logged_at": "2026-09-24T09:40:52.953187+02:00",
+      "status": "open",
+      "trade_cost_pct": 0.0019,
+      "sells": [
+        {
+          "ticker": "SHELL.AS",
+          "price": 42.02,
+          "shares": 2.612081,
+          "gross": 109.76,
+          "cost": 0.2,
+          "avg_cost_at_exit": 41.27,
+          "realized_pct": 0.0182,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0182
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "EG7.IR",
+          "price": 19.0,
+          "shares": 5.670386,
+          "gross": 107.74,
+          "cost": 0.2
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "SHELL.AS": 0.0007
+      },
+      "buy_returns_since_rotation": {
+        "EG7.IR": 0.0
       },
       "verdict": null,
       "closed_at": null

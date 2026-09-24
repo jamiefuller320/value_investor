@@ -1,15 +1,80 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-23T08:26:02.991568+01:00",
+    "local_time": "2026-09-24T08:45:17.021668+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-09-23T08:00:00+01:00",
-    "settle_at": "2026-09-23T09:15:00+01:00",
+    "market_open_at": "2026-09-24T08:00:00+01:00",
+    "settle_at": "2026-09-24T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "e3e9f7d6-ac4a-4411-b5ae-6836d3920c9e",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-09-24T08:45:17.021668+01:00",
+      "ticker": "ULTP.L",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 5.686132,
+      "price": 45.7,
+      "gross": 259.86,
+      "cost": 0.13,
+      "net_cash": 259.73,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Ultimate Products Plc",
+      "avg_cost_at_exit": 45.7,
+      "position_closed": true
+    },
+    {
+      "id": "446b4ac5-d886-46dc-a35b-ee2d85edf818",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-09-24T08:45:17.021668+01:00",
+      "ticker": "MER.L",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.626915,
+      "price": 414.5,
+      "gross": 259.86,
+      "cost": 0.13,
+      "net_cash": 259.73,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Mears Group plc",
+      "avg_cost_at_exit": 414.5,
+      "position_closed": true
+    },
+    {
+      "id": "3194e55d-1d81-4821-9fa6-5b26c8a2dcd4",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-09-24T08:45:17.021668+01:00",
+      "ticker": "REC.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 6.222837,
+      "price": 42.1,
+      "gross": 261.98,
+      "cost": 1.44,
+      "net_cash": -263.42,
+      "note": "Automated buy",
+      "name": "Record plc"
+    },
+    {
+      "id": "797afa24-ce3d-4ad9-b78e-97c392d78423",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-09-24T08:45:17.021668+01:00",
+      "ticker": "FOXT.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 6.97616,
+      "price": 36.5,
+      "gross": 254.63,
+      "cost": 1.4,
+      "net_cash": -256.03,
+      "note": "Automated buy",
+      "name": "Foxtons Group plc"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,7 +88,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1047.25,
+    "nav": 1050.85,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -33,14 +98,14 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 523.5,
+    "target_sleeve_value": 262.71,
     "targets": [
       {
         "ticker": "CAPD.L",
         "name": "Capital Limited",
         "signal": "buy",
         "conviction_score": 0.7125,
-        "price": 117.0
+        "price": 120.0
       },
       {
         "ticker": "CARD.L",
@@ -48,58 +113,50 @@
         "signal": "strong_buy",
         "conviction_score": 0.6979000000000001,
         "price": 71.3
-      }
-    ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "ULTP.L",
-        "name": "Ultimate Products Plc",
-        "reason": "No longer in the top conviction target set",
-        "shares": 5.686132,
-        "price": 45.7,
-        "value": 259.86
       },
       {
-        "action": "sell",
-        "ticker": "MER.L",
-        "name": "Mears Group plc",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.626915,
-        "price": 414.5,
-        "value": 259.86
+        "ticker": "REC.L",
+        "name": "Record plc",
+        "signal": "buy",
+        "conviction_score": 0.39899999999999997,
+        "price": 42.1
+      },
+      {
+        "ticker": "FOXT.L",
+        "name": "Foxtons Group plc",
+        "signal": "buy",
+        "conviction_score": 0.312545,
+        "price": 36.5
       }
     ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
+    "anticipated_buys": [],
+    "anticipated_holds": [
       {
-        "action": "buy",
-        "ticker": "CAPD.L",
-        "name": "Capital Limited",
-        "reason": "Top-up to equal weight",
-        "value": 262.34,
-        "price": 117.0,
-        "target_value": 523.5,
-        "conviction_score": 0.7125,
+        "action": "hold",
+        "ticker": "REC.L",
+        "name": "Record plc",
+        "reason": "Already near equal-weight target",
+        "value": 261.98,
+        "target_value": 262.71,
+        "conviction_score": 0.39899999999999997,
         "signal": "buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "CARD.L",
-        "name": "Card Factory plc",
-        "reason": "Top-up to equal weight",
-        "value": 257.11,
-        "price": 71.3,
-        "target_value": 523.5,
-        "conviction_score": 0.6979000000000001,
-        "signal": "strong_buy"
       }
     ],
-    "anticipated_holds": [],
-    "skipped": [],
+    "skipped": [
+      {
+        "ticker": "FOXT.L",
+        "name": "Foxtons Group plc",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 262.71,
+        "conviction_score": 0.312545,
+        "signal": "buy"
+      }
+    ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 2 buy(s)."
+    "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -119,32 +176,32 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 117.0,
+      "mark": 120.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
     },
     {
-      "ticker": "ULTP.L",
-      "name": "Ultimate Products Plc",
+      "ticker": "REC.L",
+      "name": "Record plc",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 45.7,
+      "mark": 42.1,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": null
+      "timing_signal": "neutral"
     },
     {
-      "ticker": "MER.L",
-      "name": "Mears Group plc",
+      "ticker": "FOXT.L",
+      "name": "Foxtons Group plc",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 414.5,
+      "mark": 36.5,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": null
+      "timing_signal": "neutral"
     }
   ],
   "fund": {
@@ -188,27 +245,27 @@
         "take_profit": null,
         "opened_at": "2026-09-09T08:23:01.537702+01:00"
       },
-      "ULTP.L": {
-        "ticker": "ULTP.L",
-        "shares": 5.686132,
-        "avg_cost": 45.7,
-        "name": "Ultimate Products Plc",
-        "sector": "Consumer Cyclical",
+      "REC.L": {
+        "ticker": "REC.L",
+        "shares": 6.222837,
+        "avg_cost": 42.1,
+        "name": "Record plc",
+        "sector": "Financial Services",
         "currency": "GBP",
         "stop_loss": null,
         "take_profit": null,
-        "opened_at": "2026-09-22T08:44:51.118860+01:00"
+        "opened_at": "2026-09-24T08:45:17.021668+01:00"
       },
-      "MER.L": {
-        "ticker": "MER.L",
-        "shares": 0.626915,
-        "avg_cost": 414.5,
-        "name": "Mears Group plc",
-        "sector": "Consumer Cyclical",
+      "FOXT.L": {
+        "ticker": "FOXT.L",
+        "shares": 6.97616,
+        "avg_cost": 36.5,
+        "name": "Foxtons Group plc",
+        "sector": "Real Estate",
         "currency": "GBP",
         "stop_loss": null,
         "take_profit": null,
-        "opened_at": "2026-09-22T08:44:51.118860+01:00"
+        "opened_at": "2026-09-24T08:45:17.021668+01:00"
       }
     },
     "trades": [
@@ -853,6 +910,70 @@
         "net_cash": -261.29,
         "note": "Automated buy",
         "name": "Mears Group plc"
+      },
+      {
+        "id": "e3e9f7d6-ac4a-4411-b5ae-6836d3920c9e",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-24T08:45:17.021668+01:00",
+        "ticker": "ULTP.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 5.686132,
+        "price": 45.7,
+        "gross": 259.86,
+        "cost": 0.13,
+        "net_cash": 259.73,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Ultimate Products Plc",
+        "avg_cost_at_exit": 45.7,
+        "position_closed": true
+      },
+      {
+        "id": "446b4ac5-d886-46dc-a35b-ee2d85edf818",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-24T08:45:17.021668+01:00",
+        "ticker": "MER.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.626915,
+        "price": 414.5,
+        "gross": 259.86,
+        "cost": 0.13,
+        "net_cash": 259.73,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Mears Group plc",
+        "avg_cost_at_exit": 414.5,
+        "position_closed": true
+      },
+      {
+        "id": "3194e55d-1d81-4821-9fa6-5b26c8a2dcd4",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-24T08:45:17.021668+01:00",
+        "ticker": "REC.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 6.222837,
+        "price": 42.1,
+        "gross": 261.98,
+        "cost": 1.44,
+        "net_cash": -263.42,
+        "note": "Automated buy",
+        "name": "Record plc"
+      },
+      {
+        "id": "797afa24-ce3d-4ad9-b78e-97c392d78423",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-24T08:45:17.021668+01:00",
+        "ticker": "FOXT.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 6.97616,
+        "price": 36.5,
+        "gross": 254.63,
+        "cost": 1.4,
+        "net_cash": -256.03,
+        "note": "Automated buy",
+        "name": "Foxtons Group plc"
       }
     ],
     "equity_curve": [
@@ -1087,23 +1208,39 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-24T08:45:17.021668+01:00",
+        "portfolio_value": 1050.85,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-23T08:26:02.991568+01:00",
+    "last_mark_at": "2026-09-24T08:45:17.021668+01:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "ULTP.L": 1,
         "MER.L": 1
-      },
-      "reentry_cooldown": {}
+      }
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (4 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-23T07:26:02.999268+00:00",
-    "open_count": 8,
+    "generated_at": "2026-09-24T07:45:17.030228+00:00",
+    "open_count": 10,
     "closed_count": 0,
     "by_exit_kind": {},
     "grace_vs_rotation": {
@@ -1115,13 +1252,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 2,
     "checkpoints_added_this_pass": 1
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-23T07:26:03.000312+00:00",
+    "generated_at": "2026-09-24T07:45:17.031638+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1175,36 +1312,36 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 6,
+      "hold_closed_count": 8,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 5,
+      "hold_with_data_quality_count": 6,
       "gaps": [
-        "hold_recovery closed episodes=6 (target >=15)",
+        "hold_recovery closed episodes=8 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 4,
-        "recovered_to_breakeven": 4,
+        "count": 3,
+        "recovered_to_breakeven": 3,
         "close_reasons": {
-          "open": 4
+          "open": 3
         }
       },
       "closed": {
-        "count": 6,
-        "recovered_to_breakeven": 6,
+        "count": 8,
+        "recovered_to_breakeven": 8,
         "close_reasons": {
-          "sold_while_recovered": 6
+          "sold_while_recovered": 8
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 9,
+        "count": 10,
         "verdicts": {
-          "open": 9
+          "open": 10
         }
       },
       "closed": {
@@ -1213,11 +1350,11 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 2,
-      "swap_rotations": 0
+      "hold_episodes": 1,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 1
     }
   },
@@ -1226,8 +1363,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-23T07:26:03.001923+00:00",
-    "as_of": "2026-09-23T08:26:02.991568+01:00",
+    "updated_at": "2026-09-24T07:45:17.033658+00:00",
+    "as_of": "2026-09-24T08:45:17.021668+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1242,9 +1379,9 @@
     "holding_count": 4,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 2,
-      "weakening": 0,
-      "broken": 2,
+      "intact": 3,
+      "weakening": 1,
+      "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
@@ -1266,11 +1403,11 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.5,
-        "quality": 0.75,
-        "dividend": 0.5,
-        "garp": 0.5,
-        "risk": 0.5
+        "cheapness": 0.0,
+        "quality": 0.25,
+        "dividend": 0.0,
+        "garp": 0.0,
+        "risk": 0.0
       },
       "selection_feedback_flags": [],
       "balancing_hint": "maintain",
@@ -1278,82 +1415,18 @@
     },
     "holdings": [
       {
-        "ticker": "ULTP.L",
-        "name": "ULTP.L",
-        "thesis_status": "broken",
-        "recommended_action": "exit_candidate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 45.7,
-        "avg_cost": 45.7,
-        "signal": null,
-        "timing_signal": null,
-        "conviction_score": null,
-        "data_quality_score": null,
-        "passed_families": [],
-        "failed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "research_verdict": null,
-        "reasons": [
-          "cheapness lost and not in buy tier"
-        ],
-        "intact_reasons": [],
-        "weaken_reasons": [],
-        "broken_reasons": [
-          "cheapness lost and not in buy tier"
-        ]
-      },
-      {
-        "ticker": "MER.L",
-        "name": "MER.L",
-        "thesis_status": "broken",
-        "recommended_action": "exit_candidate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 414.5,
-        "avg_cost": 414.5,
-        "signal": null,
-        "timing_signal": null,
-        "conviction_score": null,
-        "data_quality_score": null,
-        "passed_families": [],
-        "failed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "research_verdict": null,
-        "reasons": [
-          "cheapness lost and not in buy tier"
-        ],
-        "intact_reasons": [],
-        "weaken_reasons": [],
-        "broken_reasons": [
-          "cheapness lost and not in buy tier"
-        ]
-      },
-      {
-        "ticker": "CAPD.L",
-        "name": "Capital Limited",
+        "ticker": "REC.L",
+        "name": "Record plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0285,
-        "mark": 117.0,
-        "avg_cost": 113.7561,
+        "unrealized_pct": 0.0,
+        "mark": 42.1,
+        "avg_cost": 42.1,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.7125,
+        "conviction_score": 0.399,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1369,16 +1442,56 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 71%"
+          "conviction 40%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 71%"
+          "conviction 40%"
         ],
         "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "FOXT.L",
+        "name": "Foxtons Group plc",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 36.5,
+        "avg_cost": 36.5,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.3125,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "conviction 31% below intact floor",
+          "still buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "cheapness family still passes",
+          "data_quality 1.00"
+        ],
+        "weaken_reasons": [
+          "research verdict caution",
+          "conviction 31% below intact floor"
+        ],
         "broken_reasons": []
       },
       {
@@ -1421,6 +1534,46 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0549,
+        "mark": 120.0,
+        "avg_cost": 113.7561,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 71%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 71%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -1430,15 +1583,15 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-23T07:26:03.004040+00:00",
+    "generated_at": "2026-09-24T07:45:17.036114+00:00",
     "stamped_this_pass": {
-      "hold_episodes": 2,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 6,
+      "closed_total": 8,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 4,
+      "open_with_thesis": 3,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -1454,13 +1607,13 @@
           }
         },
         "broken": {
-          "closed_count": 5,
+          "closed_count": 7,
           "recovery_rate": 1.0,
           "sold_underwater_rate": 0.0,
-          "mean_peak_unrealized_pct": 0.0343,
-          "mean_trough_unrealized_pct": 0.0297,
+          "mean_peak_unrealized_pct": 0.0245,
+          "mean_trough_unrealized_pct": 0.0212,
           "outcome_labels": {
-            "recovered": 5
+            "recovered": 7
           }
         },
         "insufficient_data": {
@@ -1489,10 +1642,9 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 6,
+      "hold_closed_with_thesis": 8,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=6 (target >=8)",
         "hold thesis buckets thin (weakening=1; target >=3 each)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
@@ -1505,79 +1657,87 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-23T07:26:03.007403+00:00",
+    "generated_at": "2026-09-24T07:45:17.040671+00:00",
     "open_count": 2,
-    "closed_count": 6,
-    "scored_count": 5,
-    "scored_count_all": 6,
+    "closed_count": 8,
+    "scored_count": 7,
+    "scored_count_all": 8,
     "recommit_scored_count": 1,
     "entry_kind_counts": {
-      "first_entry": 5,
+      "first_entry": 7,
       "recommit": 1
     },
     "any_de_risk_count": 0,
     "winning_cadence_counts": {
-      "dca_2x_weekly": 5
+      "dca_2x_weekly": 7
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 5,
-        "mean_end_value_delta": -1.848,
+        "scored_episodes": 7,
+        "mean_end_value_delta": -1.32,
         "mean_de_risk_gbp": 0.0,
         "de_risk_rate": 0.0,
-        "win_count": 5
+        "win_count": 7
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 5,
-        "mean_end_value_delta": -2.772,
+        "scored_episodes": 7,
+        "mean_end_value_delta": -1.98,
         "mean_de_risk_gbp": 0.0,
         "de_risk_rate": 0.0,
         "win_count": 0
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 5,
-        "mean_end_value_delta": -1.848,
+        "scored_episodes": 7,
+        "mean_end_value_delta": -1.32,
         "mean_de_risk_gbp": 0.0,
         "de_risk_rate": 0.0,
         "win_count": 0
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 5,
-        "mean_end_value_delta": -3.018,
-        "mean_de_risk_gbp": -1.696,
+        "scored_episodes": 7,
+        "mean_end_value_delta": -2.3186,
+        "mean_de_risk_gbp": -1.2114,
         "de_risk_rate": 0.0,
         "win_count": 0
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 5,
+      "closed_episodes": 7,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 5,
+      "first_entry_scored": 7,
       "recommit_scored": 1
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 2,
     "marked_this_pass": 2,
-    "closed_this_pass": 0
+    "closed_this_pass": 2
   },
   "sleeve_episodes_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-23T08:26:02.991568+01:00",
+    "generated_at": "2026-09-24T08:45:17.021668+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
+      "schema_version": 2,
       "recording": {
-        "earliest_entry": "First pass the name is buy-tier (widest gate)",
-        "latest_exit": "Leave buy-tier for exit_confirm_screens consecutive passes, or hard avoid",
+        "earliest_entry": "First pass on near-buy (hold + conviction >= pre_buy floor 0.28) or buy-tier \u2014 whichever comes first",
+        "latest_exit": "Momentum-grace end + post_grace_extra_days (~1 month); fallback if grace never arms: leave wide zone \u00d7 exit_confirm_screens + post_grace_extra_days; or hard avoid",
+        "sub_markers": [
+          "first_near_buy_at",
+          "first_buy_tier_at",
+          "grace_started_at",
+          "grace_ended_at",
+          "experimental_exit_due_at"
+        ],
         "best_policy": "Nested counterfactual inside the wide episode \u2014 not the freeze gate"
       },
       "capital_status": {
@@ -1587,10 +1747,10 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 2,
+    "open_count": 4,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 2,
+      "on_book": 4,
       "off_book": 0,
       "never_funded": 0
     },
@@ -1617,7 +1777,7 @@
       "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-23T07:26:03.008671+00:00",
+  "generated_at": "2026-09-24T07:45:17.043788+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-09-23T07:21:29.755499+00:00",
+  "updated_at": "2026-09-24T07:46:02.218282+00:00",
   "hold_episodes": [
     {
       "episode_id": "momentum_grace:AD.AS:2026-09-13T08:49:07.244621+02:00",
@@ -143,7 +143,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0066,
-      "trough_unrealized_pct": -0.01,
+      "trough_unrealized_pct": -0.017,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -155,7 +155,7 @@
       "ticker": "DHL.DE",
       "name": "DHL AG",
       "started_at": "2026-09-23T09:21:20.844693+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -186,11 +186,11 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": 0.0649,
-      "trough_unrealized_pct": 0.0649,
+      "trough_unrealized_pct": 0.0511,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-24T09:40:45.371569+02:00",
+      "linked_sell_trade_id": "b1e23db6-9097-436b-af81-a8fc161d3d45"
     },
     {
       "episode_id": "momentum_grace:SHELL.AS:2026-09-23T09:21:20.844693+02:00",
@@ -198,7 +198,7 @@
       "ticker": "SHELL.AS",
       "name": "Shell plc",
       "started_at": "2026-09-23T09:21:20.844693+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -228,14 +228,101 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0032,
+      "peak_unrealized_pct": 0.0183,
       "trough_unrealized_pct": -0.0032,
-      "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "recovered_to_breakeven": true,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-24T09:40:45.371569+02:00",
+      "linked_sell_trade_id": "c59b1433-5584-4bac-9d44-dfb9aecb4ebb"
     }
   ],
-  "swap_rotations": [],
-  "hypothesis_outcome_link_updated_at": "2026-09-23T09:21:20.844693+02:00"
+  "swap_rotations": [
+    {
+      "rotation_id": "momentum_grace:2026-09-24T09:40:45.371569+02:00",
+      "track_id": "momentum_grace",
+      "logged_at": "2026-09-24T09:40:45.371569+02:00",
+      "status": "open",
+      "trade_cost_pct": 0.0019,
+      "sells": [
+        {
+          "ticker": "DHL.DE",
+          "price": 57.64,
+          "shares": 3.640239,
+          "gross": 209.82,
+          "cost": 0.39,
+          "avg_cost_at_exit": 54.84,
+          "realized_pct": 0.0511,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0511
+        },
+        {
+          "ticker": "SHELL.AS",
+          "price": 42.02,
+          "shares": 4.837773,
+          "gross": 203.28,
+          "cost": 0.38,
+          "avg_cost_at_exit": 41.265,
+          "realized_pct": 0.0183,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0183
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "DG.PA",
+          "price": 110.8,
+          "shares": 1.819459,
+          "gross": 201.6,
+          "cost": 0.37
+        },
+        {
+          "ticker": "EG7.IR",
+          "price": 19.0,
+          "shares": 10.610321,
+          "gross": 201.6,
+          "cost": 0.37
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "DHL.DE": 0.0017,
+        "SHELL.AS": 0.0002
+      },
+      "buy_returns_since_rotation": {
+        "DG.PA": -0.0009,
+        "EG7.IR": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    }
+  ],
+  "hypothesis_outcome_link_updated_at": "2026-09-24T09:45:54.857295+02:00"
 }
