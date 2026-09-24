@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-24T14:54:43.897215+00:00",
+  "generated_at": "2026-09-24T15:10:05.644012+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1169,36 +1169,23 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-24T14:54:40.585687+00:00",
-    "queue_ui_updated_at": "2026-09-24T14:54:43.796176+00:00",
+    "compiled_at": "2026-09-24T15:10:03.436421+00:00",
+    "queue_ui_updated_at": "2026-09-24T15:10:05.552861+00:00",
     "task_count": 110,
     "status": {
       "open_count": 0,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "parked_count": 0,
-      "merged_count": 85,
+      "merged_count": 86,
       "failed_count": 0,
       "next_task_id": null,
-      "in_flight_branch": "cursor/eng-20260924-01-1de3",
-      "in_flight_pr": 840,
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [
-      {
-        "id": "eng-20260924-01",
-        "area": "ingest",
-        "title": "Close library ingest gaps for cac40 / SGO.PA (chain 1/3: 0/0 improved, run igc-20260921-04)",
-        "priority": "high",
-        "priority_score": 88.0,
-        "status": "pr_open",
-        "source": "ingest_gap_closure",
-        "pr_url": null,
-        "pr_number": 840,
-        "branch_name": "cursor/eng-20260924-01-1de3"
-      }
-    ],
+    "queued_tasks": [],
     "attention_tasks": [],
     "clash_summary": {
       "open_task_count": 0,
@@ -1499,46 +1486,40 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-24T14:54:43.897215+00:00",
-    "overall": "blocked",
-    "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
+    "generated_at": "2026-09-24T15:10:05.644012+00:00",
+    "overall": "idle",
+    "headline": "Queue and hunter idle.",
     "merge_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
-      "pr_open_count": 1,
-      "open_engineering_prs": [
-        {
-          "number": 840,
-          "branch": "cursor/eng-20260924-01-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 840,
-      "detail": "Open engineering PR(s) #840 — merge fires on CI success."
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "blocked",
-      "idle": false,
+      "state": "idle",
+      "idle": true,
       "running": false,
-      "blocked": true,
+      "blocked": false,
       "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
       "open_count": 0,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
       "next_task_id": null,
       "reason": "no open engineering tasks in queue",
-      "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
+      "detail": "No open engineering tasks — queue is idle."
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-24T14:54:42.764578+00:00"
+      "evaluated_at": "2026-09-24T15:10:04.492683+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1551,16 +1532,28 @@
       "overall": "fail",
       "should_dispatch_engineering": false
     },
-    "merges_today": [],
+    "merges_today": [
+      {
+        "task_id": "eng-20260924-01",
+        "title": "Close library ingest gaps for cac40 / SGO.PA (chain 1/3: 0/0 improved, run igc-20260921-04)",
+        "area": "ingest",
+        "pr_number": 840,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/840",
+        "merged_at": "2026-09-24T15:09:32.578124+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      }
+    ],
     "verified_merges_today_count": 0,
     "completion_monitor": {
       "timezone": "UTC",
       "history_days": 14,
       "today": {
         "date": "2026-09-24",
-        "merged_total": 0,
+        "merged_total": 1,
         "merged_auto": 0,
-        "merged_manual": 0,
+        "merged_manual": 1,
         "verified": 0,
         "fix_interventions": 12,
         "fix_ci_check": 6,
@@ -1724,9 +1717,9 @@
         },
         {
           "date": "2026-09-24",
-          "merged_total": 0,
+          "merged_total": 1,
           "merged_auto": 0,
-          "merged_manual": 0,
+          "merged_manual": 1,
           "verified": 0,
           "fix_interventions": 12,
           "fix_ci_check": 6,
@@ -1734,7 +1727,19 @@
           "fix_ci_and_merge": 0
         }
       ],
-      "merges_today": [],
+      "merges_today": [
+        {
+          "task_id": "eng-20260924-01",
+          "title": "Close library ingest gaps for cac40 / SGO.PA (chain 1/3: 0/0 improved, run igc-20260921-04)",
+          "area": "ingest",
+          "pr_number": 840,
+          "pr_url": "https://github.com/jamiefuller320/value_investor/pull/840",
+          "merged_at": "2026-09-24T15:09:32.578124+00:00",
+          "merge_class": "human",
+          "auto_merge": false,
+          "independently_verified": false
+        }
+      ],
       "merges_yesterday": [
         {
           "task_id": "eng-20260923-09",
@@ -1851,7 +1856,7 @@
     "library_stall_parks": [],
     "observe_utilization": {
       "schema_version": 1,
-      "generated_at": "2026-09-24T14:54:43.860298+00:00",
+      "generated_at": "2026-09-24T15:10:05.613243+00:00",
       "observe_only": true,
       "headline": "2 warn instrument(s); improving vs last cycle on 1.",
       "surface_freshness": "fresh",
@@ -1892,9 +1897,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 1.6h ago.",
+            "detail": "Last refresh 1.9h ago.",
             "as_of": "2026-09-24T13:17:07.961476+00:00",
-            "age_hours": 1.63,
+            "age_hours": 1.88,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1934,9 +1939,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 1.6h ago.",
+            "detail": "Last refresh 1.9h ago.",
             "as_of": "2026-09-24T13:17:26.449821+00:00",
-            "age_hours": 1.62,
+            "age_hours": 1.88,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
