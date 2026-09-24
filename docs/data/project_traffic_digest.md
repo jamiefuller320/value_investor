@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-24T12:31:42.260004+00:00`
+Generated: `2026-09-24T12:55:21.458586+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -45,6 +45,13 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
 - `pytest test_summary: WIX/BT action notes lost screen TTM after overly broad eng-20260919-14 suppress` — 1×
 - `engineering_tasks.json queue_clearing + automation.json queue snapshots vs main (#757 ledger)` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — FAIL`
+- Findings: 3 (open=3, resolved=0)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] FAIL So-what learning gap active (thin_memo_counted_as_coverage) — planned: `draft_ops_engineering_task` (Draft supervised ops engineering task (ops-monitor draft path))
 
 ## Merge authority
 - Status: **scoped_auto_merge**
