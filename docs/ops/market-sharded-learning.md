@@ -145,7 +145,7 @@ Use when the next T212 / `DEFAULT_MARKET_QUEUE` index should enter the sprint ro
 
 Do **not** hand-fill parallel stream lists except incident recovery; do **not** add a fourth equal sprint workflow. Do **not** set `ftse_equivalent_markets` unless canonical-only measurement like `sp500` is intended.
 
-**Equal-support package (market-agnostic).** Once a market is admitted, the same elements apply regardless of exchange suffix:
+**Equal-support package (market-agnostic).** Once a market is admitted, the same elements apply regardless of exchange suffix. **Structural** observe monitors, ingest hooks, and rememo/memo gates that serve this package (or shared factory-path utilization) must be designed for the admitted set — not FTSE-`latest.json`-only special cases. Capacity-scoped exemptions stay: FTSE live AI paper-auto, shard AI / `decision-review --apply` before marks, N94 weekly paper, eng-idle FTSE-first pins (N152). Market-wide flip-lag observe generalization is deferred **L458** (FTSE pin #831 stays until that revisit).
 
 | Element | Wiring | Not this |
 |---------|--------|----------|
