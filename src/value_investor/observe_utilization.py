@@ -24,6 +24,7 @@ DEFAULT_STORE_PATH = Path("docs/data/observe_utilization.json")
 DEFAULT_OPS_STATUS_PATH = Path("docs/data/ops_status.json")
 DEFAULT_FLIP_LAG_PATH = Path("docs/data/buy_tier_flip_lag.json")
 DEFAULT_DECISION_INPUT_PATH = Path("docs/data/decision_input_inventory.json")
+DEFAULT_SHARD_NAV_FX_PATH = Path("docs/data/shard_nav_fx_warp.json")
 
 SCHEMA_VERSION = 1
 # Ops-monitor runs ~2×/day; past this the surface is obviously stale.
@@ -36,6 +37,7 @@ HISTORY_MIN_INTERVAL_HOURS = 6.0
 
 FLIP_LAG_FINDING_TITLE = "New buy-tier not yet usable"
 DECISION_INPUT_FINDING_TITLE = "FTSE decision-input utilization gap"
+SHARD_NAV_FX_FINDING_TITLE = "Shard NAV FX unit mismatch"
 
 _WARN_COUNT_RE = re.compile(r"^(\d+)\s+recent buy-tier flip", re.I)
 _GAP_COUNT_RE = re.compile(r"(\d+)\s+of\s+\d+\s+names", re.I)
@@ -293,6 +295,54 @@ def _decision_input_instrument(
     }
 
 
+def _shard_nav_fx_instrument(
+    *,
+    store: dict[str, Any] | None,
+    finding: dict[str, Any] | None,
+    now: datetime,
+    ops_run_at: datetime | None,
+    stale_after_hours: float,
+    store_lag_warn_hours: float,
+) -> dict[str, Any]:
+    summary = (store or {}).get("summary") or {}
+    warn_count = summary.get("warn_count")
+    as_of = _parse_dt((store or {}).get("updated_at"))
+    freshness = _freshness_block(
+        as_of=as_of,
+        now=now,
+        ops_run_at=ops_run_at,
+        stale_after_hours=stale_after_hours,
+        store_lag_warn_hours=store_lag_warn_hours,
+        present=store is not None,
+    )
+    warn_active = finding is not None or (
+        isinstance(warn_count, (int, float)) and int(warn_count) > 0
+    )
+    return {
+        "id": "shard_nav_fx_warp",
+        "title": "Shard NAV FX unit mismatch",
+        "finding_title": SHARD_NAV_FX_FINDING_TITLE,
+        "observe_only": True,
+        "warn_active": bool(warn_active),
+        "severity": (finding or {}).get("severity")
+        if finding
+        else ("warn" if warn_active else "ok"),
+        "finding_summary": (finding or {}).get("summary"),
+        "metrics": {
+            "warn_count": int(warn_count) if warn_count is not None else None,
+            "gbp_warp_count": summary.get("gbp_warp_count"),
+            "native_twin_active": summary.get("native_twin_active"),
+            "native_twin_pending": summary.get("native_twin_pending"),
+            "market_count": summary.get("market_count"),
+            "warn_markets": summary.get("warn_markets") or [],
+        },
+        "primary_metric": "warn_count",
+        "primary_value": int(warn_count) if warn_count is not None else None,
+        "primary_label": "Markets with GBP warp and no active native twin",
+        "freshness": freshness,
+    }
+
+
 def _history_point(instruments: list[dict[str, Any]], *, now: datetime) -> dict[str, Any]:
     point: dict[str, Any] = {"at": now.isoformat()}
     for inst in instruments:
@@ -346,6 +396,7 @@ def build_observe_utilization_snapshot(
     *,
     flip_lag_path: Path = DEFAULT_FLIP_LAG_PATH,
     decision_input_path: Path = DEFAULT_DECISION_INPUT_PATH,
+    shard_nav_fx_path: Path = DEFAULT_SHARD_NAV_FX_PATH,
     ops_status_path: Path = DEFAULT_OPS_STATUS_PATH,
     prior_path: Path = DEFAULT_STORE_PATH,
     now: datetime | None = None,
@@ -359,6 +410,7 @@ def build_observe_utilization_snapshot(
     ops_run_at = _parse_dt((ops_status or {}).get("run_at"))
     flip_store = _safe_read(Path(flip_lag_path))
     decision_store = _safe_read(Path(decision_input_path))
+    shard_fx_store = _safe_read(Path(shard_nav_fx_path))
     prior = _safe_read(Path(prior_path))
 
     instruments = [
@@ -373,6 +425,14 @@ def build_observe_utilization_snapshot(
         _decision_input_instrument(
             store=decision_store,
             finding=findings.get(DECISION_INPUT_FINDING_TITLE),
+            now=clock,
+            ops_run_at=ops_run_at,
+            stale_after_hours=stale_after_hours,
+            store_lag_warn_hours=store_lag_warn_hours,
+        ),
+        _shard_nav_fx_instrument(
+            store=shard_fx_store,
+            finding=findings.get(SHARD_NAV_FX_FINDING_TITLE),
             now=clock,
             ops_run_at=ops_run_at,
             stale_after_hours=stale_after_hours,
@@ -458,6 +518,7 @@ def refresh_observe_utilization(
     store_path: Path = DEFAULT_STORE_PATH,
     flip_lag_path: Path = DEFAULT_FLIP_LAG_PATH,
     decision_input_path: Path = DEFAULT_DECISION_INPUT_PATH,
+    shard_nav_fx_path: Path = DEFAULT_SHARD_NAV_FX_PATH,
     ops_status_path: Path = DEFAULT_OPS_STATUS_PATH,
     now: datetime | None = None,
 ) -> dict[str, Any]:
@@ -466,6 +527,7 @@ def refresh_observe_utilization(
     snapshot = build_observe_utilization_snapshot(
         flip_lag_path=flip_lag_path,
         decision_input_path=decision_input_path,
+        shard_nav_fx_path=shard_nav_fx_path,
         ops_status_path=ops_status_path,
         prior_path=store_path,
         now=now,
@@ -480,11 +542,13 @@ __all__ = [
     "DEFAULT_DECISION_INPUT_PATH",
     "DEFAULT_FLIP_LAG_PATH",
     "DEFAULT_OPS_STATUS_PATH",
+    "DEFAULT_SHARD_NAV_FX_PATH",
     "DEFAULT_STALE_AFTER_HOURS",
     "DEFAULT_STORE_LAG_WARN_HOURS",
     "DEFAULT_STORE_PATH",
     "FLIP_LAG_FINDING_TITLE",
     "SCHEMA_VERSION",
+    "SHARD_NAV_FX_FINDING_TITLE",
     "build_observe_utilization_snapshot",
     "refresh_observe_utilization",
 ]

@@ -1434,6 +1434,59 @@ def check_decision_input_inventory(
     ]
 
 
+def check_shard_nav_fx_warp(
+    *,
+    store_path: Path | None = None,
+    policy_path: Path | None = None,
+    paper_root: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only: warn when GBP-reporting shard books show day-0 FX NAV warp.
+
+    Refreshes ``docs/data/shard_nav_fx_warp.json``. Does not rewrite mid-flight
+    funds — points operators at the ``buy_tier_level_native`` capital epoch (N153).
+    """
+    from value_investor.shard_nav_fx_warp import (
+        DEFAULT_PAPER_ROOT,
+        DEFAULT_POLICY_PATH,
+        DEFAULT_STORE_PATH,
+        FINDING_TITLE,
+        ops_finding_from_shard_nav_fx_warp,
+        update_shard_nav_fx_warp,
+    )
+
+    path = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+    try:
+        payload = update_shard_nav_fx_warp(
+            store_path=path,
+            policy_path=Path(policy_path) if policy_path is not None else DEFAULT_POLICY_PATH,
+            paper_root=Path(paper_root) if paper_root is not None else DEFAULT_PAPER_ROOT,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title="Shard NAV FX warp observe failed",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_shard_nav_fx_warp(payload)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "warn"),
+            category=str(finding.get("category") or "paper"),
+            title=str(finding.get("title") or FINDING_TITLE),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_lifecycle_maturity_trajectory(
     *,
     board_path: Path | None = None,
@@ -2136,6 +2189,7 @@ def collect_ops_findings(
     findings.extend(check_memo_rememo_backlog())
     findings.extend(check_buy_tier_flip_lag(latest_path=latest_path))
     findings.extend(check_decision_input_inventory(latest_path=latest_path))
+    findings.extend(check_shard_nav_fx_warp())
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_thin_memo_learning_gap())
     findings.extend(check_phase_b_producer_progress())

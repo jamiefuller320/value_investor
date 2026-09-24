@@ -104,7 +104,7 @@ def test_epoch0_runs_only_buy_tier_level(tmp_path: Path):
         screen / "latest_model_results.csv", index=False
     )
     shard_root = tmp_path / "paper" / "markets" / "sp500"
-    captured: dict[str, object] = {}
+    captured_dirs: list[str] = []
 
     class _Pass:
         acted = True
@@ -112,7 +112,7 @@ def test_epoch0_runs_only_buy_tier_level(tmp_path: Path):
         note = "ok"
 
     def _fake_daily(**kwargs):
-        captured["output_dir"] = str(kwargs.get("output_dir"))
+        captured_dirs.append(str(kwargs.get("output_dir")))
         return _Pass()
 
     with (
@@ -132,7 +132,12 @@ def test_epoch0_runs_only_buy_tier_level(tmp_path: Path):
             library_root=library_root,
             shard_root=shard_root,
         )
-    assert str(captured["output_dir"]).endswith("buy_tier_level")
+    # GBP primary still runs first; N153 native twin follows for non-UK shards.
+    assert len(captured_dirs) == 2
+    assert captured_dirs[0].endswith("/buy_tier_level")
+    assert captured_dirs[1].endswith("/buy_tier_level_native")
+    tracks = (result.get("learning_tracks") or {}).get("tracks") or {}
+    assert set(tracks) == {"buy_tier_level", "buy_tier_level_native"}
     assert not (shard_root / "ai_judgment").exists()
     assert result["ai_judgment"] is False
     assert result["knob_apply"] is False

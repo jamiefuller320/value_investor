@@ -39,6 +39,32 @@ Holdings should cover the current buy-tier (minus timing-wait), and
 `rebalance_log` should have the first fill row. Do **not** treat first-fill NAV
 as promotion truth.
 
+### Native-currency twin for non-UK shards (`buy_tier_level_native`)
+
+**Learning question (N153):** Does a market-native reporting currency (e.g. USD for
+SP500) remove spurious day-0 FX NAV drag vs the GBP-reporting `buy_tier_level`
+book that trades local prices, without changing local realized %?
+
+Non-UK admitted shards that trade local prices while marking NAV in GBP collapse
+day-0 NAV by ~FX (SP500 opened `1000 → ~737`). That is a **unit mismatch**, not
+stock performance. Fix via a **new capital epoch / cold-start twin** — never a
+mid-flight rewrite of the live GBP book.
+
+| Item | Value |
+|------|-------|
+| Track / dir | `buy_tier_level_native/` under `docs/data/paper_automation/markets/<id>/` |
+| Reporting currency | `currency_for_market` (SP500→USD, ASX→AUD, …) |
+| Costs | Native-funded Suite B (half-spread only; **no** FX conversion leg) |
+| Epoch | Cold start only — `native_currency_provenance.json`; **no** warm-start from GBP book |
+| Marks | Epoch-0 Sunday + weekday local-open run both `buy_tier_level` (archive) and the native twin |
+| Held vs market | Prefers native twin when it has marks; overlays GBP book as **GBP book (FX-warped archive)** |
+| Frozen | `is_cohort_lab=true` — no knob apply |
+
+Do **not** back-label prior GBP NAV / excess as evidence for the native design.
+Do **not** treat the GBP-warped book as adoption truth. UK / FTSE live path is
+unchanged (GBP=GBP). Observe: ops-monitor `check_shard_nav_fx_warp` →
+`docs/data/shard_nav_fx_warp.json` (warn while warp present and twin not yet marking).
+
 ## Dashboard: held vs market
 
 Each Overview **market card** plots **held-stock value** (paper NAV minus cash) against a **whole-market equivalent** of the same starting capital in the local index (`^FTSE`, `^STOXX50E`, `^AXJO`, …).
@@ -46,6 +72,7 @@ Each Overview **market card** plots **held-stock value** (paper NAV minus cash) 
 | Book present | Series source |
 |--------------|---------------|
 | Frozen `buy_tier_level` (live FTSE or admitted shard) | Paper `equity_curve` marks. Live FTSE may densify daily from buy-tier chart JSON on the *current* book, clipped to the first fill date. Short epoch-0 histories label **every** mark day on the tile sparkline and detail chart (last date uses end-anchor so it stays inside the tile). |
+| Non-UK shard + `buy_tier_level_native` (N153) | Primary series uses the **native-currency** twin when it has marks (matches local index currency). GBP `buy_tier_level` overlays as **GBP book (FX-warped archive)** — not adoption-truth NAV. |
 | Live FTSE + `buy_tier_level_dca` | Same chart adds branch overlays: **DCA £500/mo book** (held) and **DCA £500/mo in ^FTSE** (deposit-matched index path). Recycling held/market lines stay the primary pair. |
 | No paper book yet | Observe-sim `screen_rules` equity curve when that clock exists |
 | Neither | Empty placeholder |
