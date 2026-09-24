@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-24T08:43:22.244369+00:00",
-  "occasion_count": 43,
+  "updated_at": "2026-09-24T09:14:57.404767+00:00",
+  "occasion_count": 46,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -727,6 +727,25 @@
     },
     {
       "id": "prf-20260924-006",
+      "recorded_at": "2026-09-24T08:36:47.431394+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "validate: ruff format on decision_input_inventory (+ cli/tests)",
+      "pr_number": 835,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "ruff format only; ci-pr-autofix in progress — waiting for new head",
+      "details": {}
+    },
+    {
+      "id": "prf-20260924-007",
       "recorded_at": "2026-09-24T08:41:30.013006+00:00",
       "source": "human_request",
       "kind": "ci_check",
@@ -745,7 +764,7 @@
       "details": {}
     },
     {
-      "id": "prf-20260924-007",
+      "id": "prf-20260924-008",
       "recorded_at": "2026-09-24T08:43:22.244369+00:00",
       "source": "human_request",
       "kind": "ci_check",
@@ -761,6 +780,42 @@
         "test (0)"
       ],
       "notes": "Set auto_cancel_resolved=False on reburn annotate/unpark tests; isolate from live library health",
+      "details": {}
+    },
+    {
+      "id": "prf-20260924-009",
+      "recorded_at": "2026-09-24T08:48:48.665085+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test(1): library_stall_task_triage flake (auto_cancel_resolved vs live DAX gaps; same as #834)",
+      "pr_number": 835,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (1)"
+      ],
+      "notes": "Ported test-only auto_cancel_resolved=False from #834 a69545960; no inventory logic change",
+      "details": {}
+    },
+    {
+      "id": "prf-20260924-010",
+      "recorded_at": "2026-09-24T09:14:57.404767+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "merge conflict in docs/data/pr_fix_occasions.json vs main after #833/#834 landings",
+      "pr_number": 835,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Resolved by union of both sides' occasions (45 total); wiring unchanged",
       "details": {}
     }
   ],
@@ -979,17 +1034,17 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 29
+        "count": 30
       },
       {
         "kind": "ci_check",
-        "count": 14
+        "count": 16
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 43
+        "count": 46
       }
     ]
   }
