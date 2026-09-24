@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-24T12:56:44.965166+00:00",
+  "generated_at": "2026-09-24T13:16:38.035654+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1169,18 +1169,18 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-24T12:56:42.105042+00:00",
-    "queue_ui_updated_at": "2026-09-24T12:56:44.884758+00:00",
+    "compiled_at": "2026-09-24T13:16:35.276461+00:00",
+    "queue_ui_updated_at": "2026-09-24T13:16:37.961732+00:00",
     "task_count": 110,
     "status": {
-      "open_count": 1,
-      "pr_open_count": 0,
+      "open_count": 0,
+      "pr_open_count": 1,
       "parked_count": 0,
       "merged_count": 85,
       "failed_count": 0,
-      "next_task_id": "eng-20260924-01",
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "next_task_id": null,
+      "in_flight_branch": "cursor/eng-20260924-01-1de3",
+      "in_flight_pr": 840,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1192,21 +1192,17 @@
         "title": "Close library ingest gaps for cac40 / SGO.PA (chain 1/3: 0/0 improved, run igc-20260921-04)",
         "priority": "high",
         "priority_score": 88.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "ingest_gap_closure",
         "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
+        "pr_number": 840,
+        "branch_name": "cursor/eng-20260924-01-1de3"
       }
     ],
     "attention_tasks": [],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_task_count": 0,
+      "dispatch_eligible_count": 0,
       "blocked_count": 0
     }
   },
@@ -1503,40 +1499,46 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-24T12:56:44.965166+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
+    "generated_at": "2026-09-24T13:16:38.035654+00:00",
+    "overall": "blocked",
+    "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
-    },
-    "agent_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "should_dispatch": true,
+      "pr_open_count": 1,
+      "open_engineering_prs": [
+        {
+          "number": 840,
+          "branch": "cursor/eng-20260924-01-1de3",
+          "draft": false
+        }
+      ],
+      "in_flight_pr": 840,
+      "detail": "Open engineering PR(s) #840 — merge fires on CI success."
+    },
+    "agent_lane": {
+      "state": "blocked",
+      "idle": false,
+      "running": false,
+      "blocked": true,
+      "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 1,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 1,
+      "open_count": 0,
+      "pr_open_count": 1,
+      "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260924-01",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "next_task_id": null,
+      "reason": "no open engineering tasks in queue",
+      "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-24T12:56:44.092259+00:00"
+      "evaluated_at": "2026-09-24T13:16:37.197400+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1849,7 +1851,7 @@
     "library_stall_parks": [],
     "observe_utilization": {
       "schema_version": 1,
-      "generated_at": "2026-09-24T12:56:44.935711+00:00",
+      "generated_at": "2026-09-24T13:16:38.011224+00:00",
       "observe_only": true,
       "headline": "2 warn instrument(s); improving vs last cycle on 1.",
       "surface_freshness": "fresh",
@@ -1890,9 +1892,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 0.0h ago.",
+            "detail": "Last refresh 0.4h ago.",
             "as_of": "2026-09-24T12:54:16.421905+00:00",
-            "age_hours": 0.04,
+            "age_hours": 0.37,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1932,9 +1934,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 0.0h ago.",
+            "detail": "Last refresh 0.4h ago.",
             "as_of": "2026-09-24T12:54:29.019687+00:00",
-            "age_hours": 0.04,
+            "age_hours": 0.37,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
