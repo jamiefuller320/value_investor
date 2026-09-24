@@ -100,11 +100,7 @@ def _write_fund(path: Path, holdings: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         json.dumps(
-            {
-                "holdings": {
-                    t: {"shares": 1.0, "avg_cost": 1.0, "ticker": t} for t in holdings
-                }
-            }
+            {"holdings": {t: {"shares": 1.0, "avg_cost": 1.0, "ticker": t} for t in holdings}}
         ),
         encoding="utf-8",
     )
@@ -357,7 +353,7 @@ def test_check_decision_input_inventory_ops_hook(tmp_path: Path):
     )
     assert len(findings) == 1
     assert findings[0].severity == "warn"
-    assert "decision-input" in findings[0].title.lower() or "utilization" in findings[
-        0
-    ].title.lower()
+    assert (
+        "decision-input" in findings[0].title.lower() or "utilization" in findings[0].title.lower()
+    )
     assert store.is_file()

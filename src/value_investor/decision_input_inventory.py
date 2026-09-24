@@ -27,9 +27,7 @@ from value_investor.storage import read_json, write_json
 DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 DEFAULT_RESEARCH_ROOT = Path("docs/data/research")
 DEFAULT_MEMO_DIR = Path("docs/research")
-DEFAULT_PAPER_FUND_PATH = Path(
-    "docs/data/paper_automation/ai_judgment/automated_fund.json"
-)
+DEFAULT_PAPER_FUND_PATH = Path("docs/data/paper_automation/ai_judgment/automated_fund.json")
 DEFAULT_STORE_PATH = Path("docs/data/decision_input_inventory.json")
 
 SCHEMA_VERSION = 1
@@ -186,9 +184,7 @@ def snapshot_decision_input(
     has_memo = has_disk_memo or memo_md
     memo_at = memo_created
     age = _memo_age_days(memo_at, now=now)
-    memo_recent = bool(
-        has_memo and age is not None and age <= float(memo_max_age_days)
-    )
+    memo_recent = bool(has_memo and age is not None and age <= float(memo_max_age_days))
 
     screen_verdict = report.get("research_verdict")
     verdict_str = (
@@ -250,9 +246,7 @@ def _rollup(
             gap_counts["memo_recent"] += 1
 
     n = len(rows)
-    gap_rates = {
-        name: (round(count / n, 4) if n else 0.0) for name, count in gap_counts.items()
-    }
+    gap_rates = {name: (round(count / n, 4) if n else 0.0) for name, count in gap_counts.items()}
 
     # Prefer the P1-ranked field among those tied for the maximum gap count.
     max_gaps = max(gap_counts.values()) if gap_counts else 0
@@ -419,11 +413,7 @@ def format_decision_input_summary(payload: dict[str, Any]) -> str:
         lines.append(f"  Note: {note}")
     gapped = payload.get("gapped_tickers") or []
     if gapped:
-        lines.append(
-            "  Gapped: "
-            + ", ".join(gapped[:16])
-            + (" …" if len(gapped) > 16 else "")
-        )
+        lines.append("  Gapped: " + ", ".join(gapped[:16]) + (" …" if len(gapped) > 16 else ""))
     return "\n".join(lines)
 
 

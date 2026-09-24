@@ -121,10 +121,7 @@ def main(argv: list[str] | None = None) -> int:
         "--decision-inputs-store",
         type=Path,
         default=DEFAULT_DECISION_INPUT_STORE,
-        help=(
-            "Decision-input inventory store path "
-            f"(default: {DEFAULT_DECISION_INPUT_STORE})"
-        ),
+        help=(f"Decision-input inventory store path (default: {DEFAULT_DECISION_INPUT_STORE})"),
     )
     parser.add_argument(
         "--paper-fund",
