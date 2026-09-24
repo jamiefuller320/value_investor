@@ -1,0 +1,231 @@
+[
+  {
+    "schema_version": 2,
+    "logged_at": "2026-09-24T18:25:31.537878+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/dax/screen_latest.json",
+      "run_at": "2026-09-24T06:52:36.732987+00:00",
+      "generated_at": "2026-09-24T18:25:30.433878+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-09-24T19:25:30.441595+01:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-09-24T08:00:00+01:00",
+      "settle_at": "2026-09-24T09:15:00+01:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (2 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "FME.DE",
+        "name": "Fresenius Medical Care AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.9625,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 39.47,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "DHL.DE",
+        "name": "DHL AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.8938,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 57.62,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "FME.DE",
+        "name": "Fresenius Medical Care AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.9625,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 39.47,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "DHL.DE",
+        "name": "DHL AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.8938,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 57.62,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 998.25,
+      "cash": -0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 499.13,
+      "targets": [
+        {
+          "ticker": "FME.DE",
+          "name": "Fresenius Medical Care AG",
+          "signal": "strong_buy",
+          "conviction_score": 0.9625,
+          "price": 39.47
+        },
+        {
+          "ticker": "DHL.DE",
+          "name": "DHL AG",
+          "signal": "strong_buy",
+          "conviction_score": 0.8938,
+          "price": 57.62
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "FME.DE",
+          "name": "Fresenius Medical Care AG",
+          "reason": "Already near equal-weight target",
+          "value": 499.13,
+          "target_value": 499.13,
+          "conviction_score": 0.9625,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "DHL.DE",
+          "name": "DHL AG",
+          "reason": "Already near equal-weight target",
+          "value": 499.13,
+          "target_value": 499.13,
+          "conviction_score": 0.8938,
+          "signal": "strong_buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "9c0a6d97-3a51-4658-9c07-516d1c6619ec",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-09-24T19:25:30.441595+01:00",
+        "ticker": "FME.DE",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 12.645719,
+        "price": 39.47,
+        "gross": 499.13,
+        "cost": 0.87,
+        "net_cash": -500.0,
+        "note": "Automated buy",
+        "name": "Fresenius Medical Care AG"
+      },
+      {
+        "id": "9590dcd1-da76-4325-baf3-56b935272ca0",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-09-24T19:25:30.441595+01:00",
+        "ticker": "DHL.DE",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 8.662383,
+        "price": 57.62,
+        "gross": 499.13,
+        "cost": 0.87,
+        "net_cash": -500.0,
+        "note": "Automated buy",
+        "name": "DHL AG"
+      }
+    ],
+    "nav_before": 1000.0,
+    "cash_before": 1000.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 998.25,
+    "cash_after": -0.0,
+    "holdings_after": [
+      {
+        "ticker": "FME.DE",
+        "shares": 12.645719,
+        "avg_cost": 39.47,
+        "sector": "Healthcare",
+        "name": "Fresenius Medical Care AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DHL.DE",
+        "shares": 8.662383,
+        "avg_cost": 57.62,
+        "sector": "Industrials",
+        "name": "DHL AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    }
+  }
+]
