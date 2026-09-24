@@ -10642,6 +10642,103 @@ def test_parked_source_hunter_san_pa_euro_stoxx50_has_fetchable_ir():
         assert body and len(body) > 5000
 
 
+def test_fetch_filings_ir_allowlist_cac40_sgo_pa_builtins(tmp_path: Path):
+    """eng-20260924-01: SGO.PA FY2025 results PDF replaces bot-gated regulated-information hub."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("SGO.PA", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("letter-to-shareholders-n102" in url for url in urls)
+    assert any("CP_Resultats_2025_VA_t.pdf" in url for url in urls)
+    assert not any("regulated-information" in url for url in urls)
+    annual = next(row for row in rows if "CP_Resultats_2025_VA_t.pdf" in row["url"])
+    assert annual["period"] == "annual"
+
+
+def test_load_ir_url_allowlist_canonicalizes_sgo_pa_dead_regulated_information_hub(
+    tmp_path: Path,
+):
+    """Dead saint-gobain.com regulated-information hub maps to FY2025 results PDF."""
+    dead = "https://www.saint-gobain.com/en/finance/regulated-information"
+    live = _BUILTIN_IR_URLS["SGO.PA"][1]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"SGO.PA": [dead]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["SGO.PA"]
+    assert dead not in mapping["SGO.PA"]
+
+
+def test_refetch_ir_allowlist_migrates_sgo_pa_regulated_information_hub(
+    tmp_path: Path, monkeypatch
+):
+    """Indexed unfetchable SGO.PA hub row is rewritten to FY2025 results PDF."""
+    dead = "https://www.saint-gobain.com/en/finance/regulated-information"
+    live = _BUILTIN_IR_URLS["SGO.PA"][1]
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(
+        json.dumps({"urls": {"SGO.PA": _BUILTIN_IR_URLS["SGO.PA"]}}), encoding="utf-8"
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_0cfd9d28fbf83154",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — regulated-information",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "ir_allowlist_fetch_failed",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return (
+            "Saint-Gobain Compagnie de Saint-Gobain consolidated financial statements "
+            "2025 results operating income free cash flow " * 20,
+            "pdf",
+        )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "SGO.PA",
+        company_name="Compagnie de Saint-Gobain S.A.",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["attempted"] >= 1
+    assert result["fetched"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = next(item for item in saved["filings"] if item["url"] == live)
+    assert row.get("unfetchable") is not True
+    assert row["has_body"] is True
+    assert row["period"] == "annual"
+    assert not any(str(item.get("url") or "").strip() == dead for item in saved["filings"])
+
+
+def test_parked_source_hunter_sgo_pa_fy2025_results_pdf_fetches():
+    """eng-20260924-01: live FY2025 results PDF passes IR allowlist body gate."""
+    rows = fetch_filings_ir_allowlist("SGO.PA")
+    pdf_row = next(row for row in rows if "CP_Resultats_2025_VA_t.pdf" in row["url"])
+    body = fetch_filing_body(pdf_row["url"])
+    assert body and len(body) > 5000
+
+
 def test_parked_source_hunter_skip_san_pa_euro_stoxx50():
     """eng-20260916-02: leftover IWB is WAF-gated Euronext product press release."""
     assert "SAN.PA" in PARKED_SOURCE_HUNTER_SKIP

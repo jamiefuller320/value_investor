@@ -374,9 +374,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.azelis.com/sites/default/files/uploads/Azelis%20Group%20NV%20-%20Integrated%20report%202025%20(2).pdf",
         "https://www.azelis.com/sites/default/files/uploads/AZELIS~1_1.PDF",
     ],
+    # cac40 / euro IWB blocker — SGO.PA saint-gobain.com regulated-information hub is Akamai 403;
+    # FY2025 results statutory PDF mirrors on webdisclosure (Euronext press release).
     "SGO.PA": [
         "https://media.saint-gobain.com/group/lettreauxactionnaires/letter-to-shareholders-n102/",
-        "https://www.saint-gobain.com/en/finance/regulated-information",
+        "https://files.webdisclosure.com/1391369/CP_Resultats_2025_VA_t.pdf",
     ],
     # euro_stoxx50 IWB blocker — SAN.PA unfetchable_iwb; sanofi.com Form 20-F/HY PDFs fetch.
     "SAN.PA": [
@@ -4706,6 +4708,10 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     "https://announcements.asx.com.au/asxpdf/20260511/pdf/06zg0w0pw5rswl.pdf": (
         "https://investorpa.com/announcement-pdf/20260511/291611.pdf"
     ),
+    # eng-20260924-01: saint-gobain.com regulated-information hub is bot-gated (403).
+    "https://www.saint-gobain.com/en/finance/regulated-information": (
+        "https://files.webdisclosure.com/1391369/CP_Resultats_2025_VA_t.pdf"
+    ),
 }
 
 # Per-ticker dead URL overrides when a global canonical target would hit the wrong issuer.
@@ -4848,6 +4854,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://investorpa.com/announcement-pdf/20260511/291611.pdf": "interim",
     # Imperial Brands HY26 statutory RNS — opaque LSE rns-pdf slug (eng-20260921-07).
     "https://www.rns-pdf.londonstockexchange.com/rns/8727D_1-2026-5-11.pdf": "interim",
+    # eng-20260924-01: Saint-Gobain FY2025 results PDF (opaque webdisclosure filename).
+    "https://files.webdisclosure.com/1391369/CP_Resultats_2025_VA_t.pdf": "annual",
     # euro_depth thin_memo — opaque issuer CMS/API filenames (system_gaps BN.PA / EL.PA).
     "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf": "annual",
     "https://www.essilorluxottica.com/api/getCapContent/?download=true&id=284350": "annual",
