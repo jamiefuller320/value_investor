@@ -592,6 +592,7 @@ const DASHBOARD_SIDECARS = [
   ["system_gaps", "data/system_gaps.json"],
   ["progress_report", "data/progress_report.json"],
   ["queue_health", "data/queue_health.json"],
+  ["observe_utilization", "data/observe_utilization.json"],
   ["chart_outcome_review", "data/chart_outcome_review.json"],
   ["engineering_tasks", "data/engineering_tasks.json"],
   ["ingest_deviations", "data/ingest_deviations.json"],
@@ -2855,6 +2856,7 @@ function renderAnalysis(data) {
   }
 
   panel.innerHTML = `
+    ${renderObserveUtilizationSection(data, { compact: true })}
     ${renderSundayReview(data)}
     <h2 class="small muted" style="margin-top:1.5rem">Buy-tier chart outcomes</h2>
     ${renderChartOutcomeReview(data, { compact: true }) || '<div class="empty-state">Chart outcome review not published yet. Run <code>ftse-chart-outcomes</code> after buy-tier charts exist.</div>'}
@@ -3277,6 +3279,164 @@ function renderHumanTasksChecklistSection(checklist) {
     </section>`;
 }
 
+function resolveObserveUtilization(data) {
+  if (data.observe_utilization) return data.observe_utilization;
+  const health = resolveQueueHealth(data);
+  return health?.observe_utilization || null;
+}
+
+function observeFreshnessBadge(state) {
+  const key = String(state || "unknown").toLowerCase();
+  const labels = {
+    fresh: "fresh",
+    lagging: "lagging ops",
+    stale: "stale",
+    missing: "missing",
+    degraded: "degraded",
+    unknown: "unknown",
+  };
+  const cls = {
+    fresh: "observe-fresh-ok",
+    lagging: "observe-fresh-warn",
+    stale: "observe-fresh-stale",
+    missing: "observe-fresh-stale",
+    degraded: "observe-fresh-stale",
+    unknown: "observe-fresh-unknown",
+  };
+  return `<span class="observe-fresh-badge ${cls[key] || "observe-fresh-unknown"}">${esc(labels[key] || key)}</span>`;
+}
+
+function observeTrajectoryBadge(traj) {
+  const direction = String(traj?.direction || "unknown").toLowerCase();
+  const delta = traj?.delta;
+  const deltaBit =
+    delta == null ? "" : ` ${_signedDelta(delta)}`;
+  const labels = {
+    improving: `Better${deltaBit}`,
+    worsening: `Worse${deltaBit}`,
+    flat: `Flat${deltaBit || " · 0"}`,
+    unknown: "No prior cycle",
+  };
+  const cls = {
+    improving: "observe-traj-better",
+    worsening: "observe-traj-worse",
+    flat: "observe-traj-flat",
+    unknown: "observe-traj-unknown",
+  };
+  return `<span class="observe-traj-badge ${cls[direction] || "observe-traj-unknown"}" title="${esc(traj?.label || "")}">${esc(labels[direction] || direction)}</span>`;
+}
+
+function renderObserveHistorySparkline(history, instrumentId) {
+  const points = Array.isArray(history) ? history : [];
+  const values = points
+    .map((row) => {
+      const cell = row?.[instrumentId];
+      const v = cell?.primary_value;
+      return v == null ? null : Number(v);
+    })
+    .filter((v) => v != null && Number.isFinite(v));
+  if (values.length < 2) {
+    return `<p class="small muted">Trajectory needs a second cycle (builds on each ops / queue refresh).</p>`;
+  }
+  const max = Math.max(...values, 1);
+  const min = Math.min(...values, 0);
+  const span = Math.max(max - min, 1);
+  const w = Math.max(values.length * 14, 80);
+  const h = 36;
+  const coords = values
+    .map((v, i) => {
+      const x = (i / (values.length - 1)) * (w - 4) + 2;
+      const y = h - 4 - ((v - min) / span) * (h - 8);
+      return `${x},${y}`;
+    })
+    .join(" ");
+  return `
+    <svg class="observe-sparkline" viewBox="0 0 ${w} ${h}" role="img" aria-label="Trajectory sparkline">
+      <polyline fill="none" stroke="currentColor" stroke-width="1.5" points="${coords}"></polyline>
+    </svg>`;
+}
+
+function renderObserveInstrumentCard(inst, history) {
+  if (!inst) return "";
+  const metrics = inst.metrics || {};
+  const freshness = inst.freshness || {};
+  const traj = inst.trajectory || {};
+  const warnBadge = inst.warn_active
+    ? `<span class="badge badge-ii-no">warn</span>`
+    : `<span class="badge badge-ii-ok">quiet</span>`;
+  let metricRows = "";
+  if (inst.id === "buy_tier_flip_lag") {
+    metricRows = `
+      ${settingRow("Warn cohort", esc(String(metrics.warn_not_usable ?? "—")))}
+      ${settingRow("Open / cohort", esc(`${metrics.open_not_usable ?? "—"} / ${metrics.cohort_count ?? "—"}`))}
+      ${settingRow("Usable in window", esc(String(metrics.usable_in_window ?? "—")))}`;
+  } else {
+    metricRows = `
+      ${settingRow("Dominant gap", esc(`${metrics.dominant_gap_field || "—"} · ${metrics.dominant_gap_count ?? "—"}`))}
+      ${settingRow("Fully ready / inventory", esc(`${metrics.fully_ready_count ?? "—"} / ${metrics.inventory_count ?? "—"}`))}
+      ${settingRow("Verdict", esc(String(metrics.verdict || "—")))}`;
+  }
+  const findingBit = inst.finding_summary
+    ? `<p class="small muted observe-finding-summary">${esc(String(inst.finding_summary).slice(0, 280))}${String(inst.finding_summary).length > 280 ? "…" : ""}</p>`
+    : "";
+  return `
+    <div class="card observe-instrument-card">
+      <h3>${esc(inst.title || inst.id)} ${warnBadge} ${observeFreshnessBadge(freshness.state)}</h3>
+      <p class="small muted" style="margin-top:0.2rem">${esc(inst.primary_label || "")}</p>
+      <div class="observe-primary-row">
+        <div class="observe-primary-value">${esc(String(inst.primary_value ?? "—"))}</div>
+        <div class="observe-primary-traj">
+          ${observeTrajectoryBadge(traj)}
+          <div class="small muted">${esc(traj.label || "")}</div>
+        </div>
+      </div>
+      ${metricRows}
+      ${settingRow("Data freshness", `${observeFreshnessBadge(freshness.state)} · ${esc(freshness.detail || "")}`)}
+      ${renderObserveHistorySparkline(history, inst.id)}
+      ${findingBit}
+    </div>`;
+}
+
+function renderObserveUtilizationSection(data, { compact = false } = {}) {
+  const payload = resolveObserveUtilization(data);
+  const runbookUrl = githubOpsDocUrl("docs/ops/ops-monitor.md");
+  if (!payload) {
+    return `
+      <section class="automation-section automation-section-full observe-utilization-section">
+        <h2>Observe utilization</h2>
+        <p class="muted small">Flip-lag / decision-input dashboard not published yet. Refreshes with ops monitor / queue health.</p>
+      </section>`;
+  }
+  const instruments = Array.isArray(payload.instruments) ? payload.instruments : [];
+  const history = Array.isArray(payload.history) ? payload.history : [];
+  const traj = payload.trajectory_summary || {};
+  const staleBanner =
+    payload.surface_freshness === "stale" || payload.surface_freshness === "degraded"
+      ? `<div class="observe-stale-banner" role="status">Surface ${esc(payload.surface_freshness)} — treat absolute counts as outdated; prefer trajectory only when history points look continuous.</div>`
+      : payload.surface_freshness === "lagging"
+        ? `<div class="observe-lag-banner" role="status">Instrument JSON lags ops_status (runner refresh may not be committed — L460). Trajectory uses this dashboard series.</div>`
+        : "";
+  const cards = instruments.map((inst) => renderObserveInstrumentCard(inst, history)).join("");
+  const compactNote = compact
+    ? `<p class="small muted">Same instruments as Automation → Queue &amp; hunter. Observe-only — no auto rememo / eng spray.</p>`
+    : `<p class="small muted">Observe-only P1 instruments (flip-lag + decision-input). Trajectory = delta vs last dashboard cycle (lower warn/gap is better). ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>`;
+  return `
+    <section class="automation-section automation-section-full observe-utilization-section">
+      <h2>Observe utilization ${observeFreshnessBadge(payload.surface_freshness)}</h2>
+      <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
+      <p class="small muted">Updated ${esc(fmtDate(payload.generated_at))}
+        · ops ${esc(fmtDate(payload.ops_run_at))}
+        · history ${esc(String(traj.history_points ?? history.length))} pts
+        · traj ↑${esc(String(traj.improving ?? 0))} / ↓${esc(String(traj.worsening ?? 0))} / →${esc(String(traj.flat ?? 0))}
+      </p>
+      ${staleBanner}
+      ${compactNote}
+      <div class="grid observe-instrument-grid" style="margin-top:0.75rem">
+        ${cards || '<p class="muted">No instruments in snapshot.</p>'}
+      </div>
+    </section>`;
+}
+
 function queueLaneBadge(state) {
   const key = String(state || "unknown").toLowerCase();
   const labels = {
@@ -3455,6 +3615,7 @@ function renderQueueHealthMonitor(data) {
         </div>
       </div>
       ${renderTaskCompletionMonitor(health)}
+      ${renderObserveUtilizationSection({ queue_health: health, observe_utilization: health.observe_utilization })}
       ${Array.isArray(health.merges_today) && health.merges_today.length ? `
       <div class="card" style="margin-top:0.75rem">
         <h3>Engineering merges today</h3>
