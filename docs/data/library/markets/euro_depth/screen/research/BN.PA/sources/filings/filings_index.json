@@ -3,20 +3,23 @@
   "company_name": "Danone S.A.",
   "market": "euro_depth",
   "regime": "euro_filings",
-  "fetched_at": "2026-09-23T07:30:00.153466+00:00",
+  "fetched_at": "2026-09-24T10:21:06.985060+00:00",
   "note": "Euro-listed results discovery via ESEF (filings.xbrl.org when available), Belgium official / Euronext Brussels regulated-information for .BR names, Google News, optional IR allowlist URLs, Investegate (when listed), plus SEC 20-F/6-K when the issuer is dual-listed. period=annual|interim|other. Bodies when a direct HTML/PDF URL is available.",
-  "sources_used": [],
+  "sources_used": [
+    "esef_direct",
+    "ir_allowlist"
+  ],
   "summary": {
-    "total": 0,
-    "annual": 0,
+    "total": 2,
+    "annual": 1,
     "interim": 0,
     "trading_update": 0,
-    "other": 0,
-    "with_body": 0,
+    "other": 1,
+    "with_body": 2,
     "period_coverage": {
       "annual": {
-        "total": 0,
-        "with_body": 0
+        "total": 1,
+        "with_body": 1
       },
       "interim": {
         "total": 0,
@@ -27,11 +30,41 @@
         "with_body": 0
       },
       "other": {
-        "total": 0,
-        "with_body": 0
+        "total": 1,
+        "with_body": 1
       }
     }
   },
-  "filings": [],
-  "refetched_at": "2026-09-23T07:30:01.779089+00:00"
+  "filings": [
+    {
+      "id": "ir_df14983411a75a3d",
+      "source": "ir_allowlist",
+      "headline": "IR allowlist document \u2014 danoneurdaccessible.pdf",
+      "published_at": null,
+      "url": "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf",
+      "period": "annual",
+      "category": "ir_allowlist",
+      "summary": "Manual IR/results URL from docs/data/research_ir_urls.json",
+      "has_body": true,
+      "body_path": "docs/data/library/markets/euro_depth/screen/research/BN.PA/sources/filings/bodies/ir_df14983411a75a3d.txt",
+      "priority": 100,
+      "entity_type": "other"
+    },
+    {
+      "id": "e09b7f4dd6257be5",
+      "source": "esef_direct",
+      "headline": "ESEF report period end 2024-12-31",
+      "published_at": "2024-12-31T00:00:00+00:00",
+      "url": "https://filings.xbrl.org/969500KMUQ2B6CBAF162/2024-12-31/ESEF/FR/0/dan-2024-12-31-fr/reports/dan-2024-12-31-fr.xhtml",
+      "period": "other",
+      "period_end": "2024-12-31",
+      "category": "ESEF",
+      "summary": "ESEF report period end 2024-12-31",
+      "has_body": true,
+      "body_path": "docs/data/library/markets/euro_depth/screen/research/BN.PA/sources/filings/bodies/e09b7f4dd6257be5.txt",
+      "priority": 0,
+      "entity_identifier": "969500KMUQ2B6CBAF162",
+      "entity_type": "other"
+    }
+  ]
 }

@@ -1,8 +1,46 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-24T08:27:46.979853+00:00",
-  "open_count": 1,
+  "updated_at": "2026-09-24T10:34:15.404546+00:00",
+  "open_count": 2,
   "open_items": [
+    {
+      "id": "dev-euro_depth-MC.PA-blocker_no_improve",
+      "market_id": "euro_depth",
+      "ticker": "MC.PA",
+      "kind": "blocker_no_improve",
+      "status": "open",
+      "recommended_action": "pin_intensive",
+      "summary": "MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.",
+      "human_required": true,
+      "auto_actions": [],
+      "evidence": {
+        "improved": false,
+        "ticker_budget_hit": true,
+        "ir_exhausted": false,
+        "indexed_without_body": 1,
+        "filings_with_body": 2,
+        "filings_total": 3
+      },
+      "reprocess": {
+        "approve": "ftse-library ingest-deviations approve dev-euro_depth-MC.PA-blocker_no_improve",
+        "dismiss": "ftse-library ingest-deviations dismiss dev-euro_depth-MC.PA-blocker_no_improve"
+      },
+      "first_seen_at": "2026-09-24T10:34:15.404546+00:00",
+      "last_seen_at": "2026-09-24T10:34:15.404546+00:00",
+      "run_at": "2026-09-24T10:34:15.404546+00:00",
+      "signal_triage": {
+        "observe_only": true,
+        "proposed_action": "park_hunter",
+        "human_action": "dismiss",
+        "reason": "buy_patchy_leftover",
+        "signal": "buy",
+        "parked": false,
+        "rationale": "Plain buy with thin leftover IWB — dismiss; maintenance / park-hunter.",
+        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
+        "conviction_score": 0.4225,
+        "screen_found": true
+      }
+    },
     {
       "id": "dev-aim-RWS.L-blocker_no_improve",
       "market_id": "aim",
@@ -329,6 +367,44 @@
   ],
   "signal_triage_policy": "observe_only: leftover/dismiss, buy/park_hunter, strong_buy/pin_intensive",
   "items": [
+    {
+      "id": "dev-euro_depth-MC.PA-blocker_no_improve",
+      "market_id": "euro_depth",
+      "ticker": "MC.PA",
+      "kind": "blocker_no_improve",
+      "status": "open",
+      "recommended_action": "pin_intensive",
+      "summary": "MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.",
+      "human_required": true,
+      "auto_actions": [],
+      "evidence": {
+        "improved": false,
+        "ticker_budget_hit": true,
+        "ir_exhausted": false,
+        "indexed_without_body": 1,
+        "filings_with_body": 2,
+        "filings_total": 3
+      },
+      "reprocess": {
+        "approve": "ftse-library ingest-deviations approve dev-euro_depth-MC.PA-blocker_no_improve",
+        "dismiss": "ftse-library ingest-deviations dismiss dev-euro_depth-MC.PA-blocker_no_improve"
+      },
+      "first_seen_at": "2026-09-24T10:34:15.404546+00:00",
+      "last_seen_at": "2026-09-24T10:34:15.404546+00:00",
+      "run_at": "2026-09-24T10:34:15.404546+00:00",
+      "signal_triage": {
+        "observe_only": true,
+        "proposed_action": "park_hunter",
+        "human_action": "dismiss",
+        "reason": "buy_patchy_leftover",
+        "signal": "buy",
+        "parked": false,
+        "rationale": "Plain buy with thin leftover IWB — dismiss; maintenance / park-hunter.",
+        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
+        "conviction_score": 0.4225,
+        "screen_found": true
+      }
+    },
     {
       "id": "dev-aim-RWS.L-blocker_no_improve",
       "market_id": "aim",
