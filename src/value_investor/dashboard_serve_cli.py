@@ -51,13 +51,31 @@ def _refresh_lifecycle_board(repo_root: Path) -> dict[str, Any]:
         DEFAULT_LIFECYCLE_BOARD_PATH,
         write_lifecycle_board,
     )
+    from value_investor.lifecycle_maturity_trajectory import (
+        DEFAULT_STORE_PATH as MATURITY_STORE_PATH,
+    )
+    from value_investor.lifecycle_maturity_trajectory import (
+        refresh_lifecycle_maturity_trajectory,
+    )
     from value_investor.storage import read_json
 
     path = write_lifecycle_board(
         latest_path=repo_root / "docs" / "data" / "latest.json",
         path=repo_root / DEFAULT_LIFECYCLE_BOARD_PATH,
     )
-    return {"path": str(DEFAULT_LIFECYCLE_BOARD_PATH), "payload": read_json(path)}
+    board_payload = read_json(path)
+    maturity = refresh_lifecycle_maturity_trajectory(
+        store_path=repo_root / MATURITY_STORE_PATH,
+        board_path=path,
+        ops_status_path=repo_root / "docs" / "data" / "ops_status.json",
+        board=board_payload if isinstance(board_payload, dict) else None,
+    )
+    return {
+        "path": str(DEFAULT_LIFECYCLE_BOARD_PATH),
+        "payload": board_payload,
+        "maturity_path": str(MATURITY_STORE_PATH),
+        "maturity": maturity,
+    }
 
 
 def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandler]:

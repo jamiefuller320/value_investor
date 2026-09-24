@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-24T14:27:39.999919+00:00",
+  "compiled_at": "2026-09-24T15:23:36.495414+00:00",
   "run_at": null,
-  "task_count": 110,
+  "task_count": 111,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1437,11 +1437,13 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "branch_name": "cursor/eng-20260924-01-1de3",
       "pr_number": 840,
       "no_diff_count": 0,
-      "completed_at": "2026-09-24T13:16:28.786470+00:00"
+      "completed_at": "2026-09-24T13:16:28.786470+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/840",
+      "merged_at": "2026-09-24T15:16:49.153530+00:00"
     },
     {
       "id": "eng-20260922-04",
@@ -6465,6 +6467,53 @@
       "cancelled_at": "2026-09-15T17:49:28.000706+00:00"
     },
     {
+      "id": "eng-20260924-02",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked euro_stoxx50 leftover ADYEN.AS",
+      "summary": "Library market euro_stoxx50 (EURO STOXX 50) parked ADYEN.AS after ingest avenues were exhausted (awaiting_periodic_report). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: Next statutory ",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "euro_stoxx50",
+        "library_market": "euro_stoxx50",
+        "hunter_market_id": "euro_stoxx50",
+        "hunter_ticker": "ADYEN.AS",
+        "parked_reason": "awaiting_periodic_report",
+        "parked_revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for ADYEN.AS only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260918-16",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
@@ -6796,7 +6845,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-24T13:16:37.197400+00:00",
+    "evaluated_at": "2026-09-24T16:02:57.728518+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -6805,8 +6854,8 @@
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
   "micro_compile_source": "parked_source_hunter",
-  "library_market_id": "nasdaq100",
-  "hunter_ticker": "PDD",
+  "library_market_id": "euro_stoxx50",
+  "hunter_ticker": "ADYEN.AS",
   "library_ingest_health": {
     "snapshot_at": "2026-09-23T19:56:10.516132+00:00",
     "market_id": "dax",

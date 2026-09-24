@@ -182,6 +182,7 @@ def build_queue_health_snapshot(
     pr_fix_path: Path | None = None,
     now: datetime | None = None,
     observe_utilization: dict[str, Any] | None = None,
+    lifecycle_maturity: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Roll up merge lane, agent lane, and ops monitor into one dashboard snapshot."""
     from value_investor.engineering_preflight import clash_report_for_queue
@@ -226,6 +227,15 @@ def build_queue_health_snapshot(
         from value_investor.observe_utilization import build_observe_utilization_snapshot
 
         observe_utilization = build_observe_utilization_snapshot(
+            ops_status_path=ops_status_path,
+            now=clock,
+        )
+    if lifecycle_maturity is None:
+        from value_investor.lifecycle_maturity_trajectory import (
+            build_lifecycle_maturity_snapshot,
+        )
+
+        lifecycle_maturity = build_lifecycle_maturity_snapshot(
             ops_status_path=ops_status_path,
             now=clock,
         )
@@ -281,6 +291,8 @@ def build_queue_health_snapshot(
         "completion_monitor": completion_monitor,
         "library_stall_parks": library_stall_parks,
         "observe_utilization": observe_utilization,
+        # L463 — separate from observe_utilization / beat_market / exit_shadow.
+        "lifecycle_maturity_trajectory": lifecycle_maturity,
     }
 
 
@@ -294,14 +306,19 @@ def refresh_queue_health_ui(
     open_prs: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Write queue_health.json and embed in automation.json / latest.json."""
+    from value_investor.lifecycle_maturity_trajectory import (
+        refresh_lifecycle_maturity_trajectory,
+    )
     from value_investor.observe_utilization import refresh_observe_utilization
 
     observe = refresh_observe_utilization(ops_status_path=ops_status_path)
+    maturity = refresh_lifecycle_maturity_trajectory(ops_status_path=ops_status_path)
     snapshot = build_queue_health_snapshot(
         tasks_path=tasks_path,
         ops_status_path=ops_status_path,
         open_prs=open_prs,
         observe_utilization=observe,
+        lifecycle_maturity=maturity,
     )
     now = snapshot["generated_at"]
     queue_health_path = Path(queue_health_path)

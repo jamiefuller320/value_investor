@@ -1487,6 +1487,68 @@ def check_shard_nav_fx_warp(
     ]
 
 
+def check_lifecycle_maturity_trajectory(
+    *,
+    board_path: Path | None = None,
+    store_path: Path | None = None,
+    ops_status_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only L463: refresh maturity mix history; warn if stalled/missing.
+
+    Does **not** touch beat_market, exit_shadow, L462 WoW, N153 FX, or
+    decision-review. ``auto_fixable=False``.
+    """
+    from value_investor.lifecycle_maturity_trajectory import (
+        DEFAULT_BOARD_PATH,
+        DEFAULT_OPS_STATUS_PATH,
+        DEFAULT_STORE_PATH,
+        FINDING_TITLE,
+        build_lifecycle_maturity_snapshot,
+        ops_finding_from_maturity,
+        refresh_lifecycle_maturity_trajectory,
+    )
+
+    board = Path(board_path) if board_path is not None else DEFAULT_BOARD_PATH
+    store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+    ops_path = Path(ops_status_path) if ops_status_path is not None else DEFAULT_OPS_STATUS_PATH
+    try:
+        if persist:
+            payload = refresh_lifecycle_maturity_trajectory(
+                store_path=store,
+                board_path=board,
+                ops_status_path=ops_path,
+            )
+        else:
+            payload = build_lifecycle_maturity_snapshot(
+                board_path=board,
+                ops_status_path=ops_path,
+                prior_path=store,
+            )
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="observe",
+                title=FINDING_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_maturity(payload)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "warn"),
+            category=str(finding.get("category") or "observe"),
+            title=str(finding.get("title") or FINDING_TITLE),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+    ]
+
+
 def check_memo_rememo_backlog() -> list[OpsFinding]:
     """Flag when body-lag rememo backlog exceeds in-week maintenance capacity."""
     from value_investor.research.weekday_rememo import assess_rememo_backlog
@@ -2128,6 +2190,7 @@ def collect_ops_findings(
     findings.extend(check_buy_tier_flip_lag(latest_path=latest_path))
     findings.extend(check_decision_input_inventory(latest_path=latest_path))
     findings.extend(check_shard_nav_fx_warp())
+    findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_thin_memo_learning_gap())
     findings.extend(check_phase_b_producer_progress())
     findings.extend(check_indicator_integrity())

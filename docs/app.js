@@ -593,6 +593,7 @@ const DASHBOARD_SIDECARS = [
   ["progress_report", "data/progress_report.json"],
   ["queue_health", "data/queue_health.json"],
   ["observe_utilization", "data/observe_utilization.json"],
+  ["lifecycle_maturity_trajectory", "data/lifecycle_maturity_trajectory.json"],
   ["chart_outcome_review", "data/chart_outcome_review.json"],
   ["engineering_tasks", "data/engineering_tasks.json"],
   ["ingest_deviations", "data/ingest_deviations.json"],
@@ -3285,6 +3286,12 @@ function resolveObserveUtilization(data) {
   return health?.observe_utilization || null;
 }
 
+function resolveLifecycleMaturity(data) {
+  if (data.lifecycle_maturity_trajectory) return data.lifecycle_maturity_trajectory;
+  const health = resolveQueueHealth(data);
+  return health?.lifecycle_maturity_trajectory || null;
+}
+
 function observeFreshnessBadge(state) {
   const key = String(state || "unknown").toLowerCase();
   const labels = {
@@ -3433,6 +3440,121 @@ function renderObserveUtilizationSection(data, { compact = false } = {}) {
       ${compactNote}
       <div class="grid observe-instrument-grid" style="margin-top:0.75rem">
         ${cards || '<p class="muted">No instruments in snapshot.</p>'}
+      </div>
+    </section>`;
+}
+
+function renderLifecycleMaturityHistorySparkline(history, marketId) {
+  const points = Array.isArray(history) ? history : [];
+  const values = points
+    .map((row) => {
+      const cell = row?.[marketId];
+      const v = cell?.primary_value;
+      return v == null ? null : Number(v);
+    })
+    .filter((v) => v != null && Number.isFinite(v));
+  if (values.length < 2) {
+    return `<p class="small muted">Trajectory needs a second cycle (ops / queue / board refresh).</p>`;
+  }
+  const max = Math.max(...values, 1);
+  const min = Math.min(...values, 0);
+  const span = Math.max(max - min, 1);
+  const w = Math.max(values.length * 14, 80);
+  const h = 36;
+  const coords = values
+    .map((v, i) => {
+      const x = (i / (values.length - 1)) * (w - 4) + 2;
+      const y = h - 4 - ((v - min) / span) * (h - 8);
+      return `${x},${y}`;
+    })
+    .join(" ");
+  return `
+    <svg class="observe-sparkline" viewBox="0 0 ${w} ${h}" role="img" aria-label="Early-share trajectory">
+      <polyline fill="none" stroke="currentColor" stroke-width="1.5" points="${coords}"></polyline>
+    </svg>`;
+}
+
+function _pctLabel(v, digits = 0) {
+  if (v == null || !Number.isFinite(Number(v))) return "—";
+  return `${(Number(v) * 100).toFixed(digits)}%`;
+}
+
+function renderLifecycleMaturityMarketCard(row, history) {
+  if (!row) return "";
+  const metrics = row.metrics || {};
+  const freshness = row.freshness || {};
+  const traj = row.trajectory || {};
+  const shares = metrics.shares || {};
+  const uw = metrics.uw_rate_by_column || {};
+  const med = metrics.median_days_by_column || {};
+  const focusBit = row.is_focus
+    ? `<span class="badge badge-ii-ok">focus</span>`
+    : row.is_live
+      ? `<span class="badge badge-ii-ok">live</span>`
+      : "";
+  const truncBit = metrics.shown_truncated
+    ? `<p class="small muted">UW / median age use shown cards (board cap); shares use full column counts.</p>`
+    : "";
+  return `
+    <div class="card lifecycle-maturity-card">
+      <h3>${esc(row.title || row.market_id)} ${focusBit} ${observeFreshnessBadge(freshness.state)}</h3>
+      <p class="small muted" style="margin-top:0.2rem">${esc(row.track_label || row.track_id || "")} · ${esc(row.primary_label || "")}</p>
+      <div class="observe-primary-row">
+        <div class="observe-primary-value">${esc(row.primary_value != null ? `${Number(row.primary_value).toFixed(0)}%` : "—")}</div>
+        <div class="observe-primary-traj">
+          ${observeTrajectoryBadge(traj)}
+          <div class="small muted">${esc(traj.label || "")}</div>
+        </div>
+      </div>
+      ${settingRow("Held mix", esc(`JB ${_pctLabel(shares.just_bought)} · G ${_pctLabel(shares.growth)} · NS ${_pctLabel(shares.near_sell)} · n=${metrics.held_count ?? "—"}`))}
+      ${settingRow("Median days", esc(`held ${metrics.median_days_held ?? "—"} · JB ${med.just_bought ?? "—"} · G ${med.growth ?? "—"} · NS ${med.near_sell ?? "—"}`))}
+      ${settingRow("UW by stage", esc(`JB ${_pctLabel(uw.just_bought)} · G ${_pctLabel(uw.growth)} · NS ${_pctLabel(uw.near_sell)} · held ${_pctLabel(metrics.uw_rate_held)}`))}
+      ${settingRow("Data freshness", `${observeFreshnessBadge(freshness.state)} · ${esc(freshness.detail || "")}`)}
+      ${renderLifecycleMaturityHistorySparkline(history, row.id || row.market_id)}
+      ${truncBit}
+    </div>`;
+}
+
+function renderLifecycleMaturitySection(data, { marketId = null, compact = false } = {}) {
+  const payload = resolveLifecycleMaturity(data);
+  const runbookUrl = githubOpsDocUrl("docs/ops/ops-monitor.md");
+  if (!payload) {
+    return `
+      <section class="automation-section automation-section-full lifecycle-maturity-section">
+        <h2>Lifecycle maturity mix</h2>
+        <p class="muted small">Trajectory twin not published yet. Refreshes with ops monitor / queue health / board refresh. Observe-only — separate from beat_market, exit_shadow, and observe utilization.</p>
+      </section>`;
+  }
+  let markets = Array.isArray(payload.markets) ? payload.markets : [];
+  if (marketId) {
+    const focused = markets.filter((row) => row.market_id === marketId);
+    if (focused.length) markets = focused;
+  }
+  const history = Array.isArray(payload.history) ? payload.history : [];
+  const traj = payload.trajectory_summary || {};
+  const staleBanner =
+    payload.surface_freshness === "stale" || payload.surface_freshness === "degraded" || payload.surface_freshness === "missing"
+      ? `<div class="observe-stale-banner" role="status">Surface ${esc(payload.surface_freshness)} — treat absolute mix counts as outdated; prefer trajectory only when history looks continuous.</div>`
+      : payload.surface_freshness === "lagging"
+        ? `<div class="observe-lag-banner" role="status">Maturity store / board lags ops_status (commit-path anomaly). Prefer trajectory only if history looks continuous.</div>`
+        : "";
+  const cards = markets.map((row) => renderLifecycleMaturityMarketCard(row, history)).join("");
+  const note = compact
+    ? `<p class="small muted">Per-market early-share trajectory (lower = more mature). Not beat_market / exit P&amp;L.</p>`
+    : `<p class="small muted">Observe-only L463 twin — held-column shares, median age, UW-by-stage. Trajectory over raw counts. Separated from cumulative beat_market, exit_shadow, L462 WoW, N153 FX, and decision-review. ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>`;
+  return `
+    <section class="automation-section automation-section-full lifecycle-maturity-section">
+      <h2>Lifecycle maturity mix ${observeFreshnessBadge(payload.surface_freshness)}</h2>
+      <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
+      <p class="small muted">Updated ${esc(fmtDate(payload.generated_at))}
+        · board ${esc(fmtDate(payload.board_generated_at))}
+        · history ${esc(String(traj.history_points ?? history.length))} pts
+        · traj ↑${esc(String(traj.improving ?? 0))} / ↓${esc(String(traj.worsening ?? 0))} / →${esc(String(traj.flat ?? 0))}
+      </p>
+      ${staleBanner}
+      ${note}
+      <div class="grid observe-instrument-grid lifecycle-maturity-grid" style="margin-top:0.75rem">
+        ${cards || '<p class="muted">No admitted / live markets in maturity snapshot.</p>'}
       </div>
     </section>`;
 }
@@ -5163,6 +5285,7 @@ function renderLifecycle(data) {
     .join(" · ");
 
   panel.innerHTML = `
+    ${renderLifecycleMaturitySection(data)}
     <section class="card lifecycle-board-section">
       <div class="market-status-header">
         <div>
