@@ -1,13 +1,21 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-09-23T17:25:57.807078+10:00",
+  "generated_at": "2026-09-24T10:46:30.972277+10:00",
   "observe_only": true,
   "framework": {
     "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
+    "schema_version": 2,
     "recording": {
-      "earliest_entry": "First pass the name is buy-tier (widest gate)",
-      "latest_exit": "Leave buy-tier for exit_confirm_screens consecutive passes, or hard avoid",
+      "earliest_entry": "First pass on near-buy (hold + conviction >= pre_buy floor 0.28) or buy-tier \u2014 whichever comes first",
+      "latest_exit": "Momentum-grace end + post_grace_extra_days (~1 month); fallback if grace never arms: leave wide zone \u00d7 exit_confirm_screens + post_grace_extra_days; or hard avoid",
+      "sub_markers": [
+        "first_near_buy_at",
+        "first_buy_tier_at",
+        "grace_started_at",
+        "grace_ended_at",
+        "experimental_exit_due_at"
+      ],
       "best_policy": "Nested counterfactual inside the wide episode \u2014 not the freeze gate"
     },
     "capital_status": {
@@ -20,9 +28,9 @@
   "open_count": 28,
   "closed_count": 0,
   "open_by_capital_status": {
-    "on_book": 26,
+    "on_book": 27,
     "off_book": 0,
-    "never_funded": 2
+    "never_funded": 1
   },
   "closed_by_capital_status": {
     "on_book": 0,
@@ -41,9 +49,9 @@
   },
   "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
   "ingested_this_pass": {
-    "opened": 1,
+    "opened": 0,
     "closed": 0,
-    "tagged_on_book": 0,
+    "tagged_on_book": 1,
     "tagged_off_book": 0
   }
 }

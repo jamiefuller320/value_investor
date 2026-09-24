@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-23T07:25:58.029326+00:00
+Track: `buy_tier_level` · updated 2026-09-24T00:46:31.277316+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **10** / 26 (38% count, 37% NAV)
+- Losers: **10** / 27 (37% count, 35% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -152,6 +152,11 @@ Track: `buy_tier_level` · updated 2026-09-23T07:25:58.029326+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 49%
+
+### BWP.AX — weakening / watch_review (+0.0%)
+- conviction 32% below intact floor
+- still buy
+- cheapness family still passes
 
 ### JBH.AX — intact / hold_tolerate (+0.2%)
 - still buy
