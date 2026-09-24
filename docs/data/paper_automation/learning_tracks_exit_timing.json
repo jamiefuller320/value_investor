@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-23T08:30:19.377451+00:00",
+  "generated_at": "2026-09-24T08:30:19.590974+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -56,7 +56,7 @@
     "rules": {
       "schema_version": 1,
       "track_id": "rules",
-      "generated_at": "2026-09-23T08:27:32.983018+00:00",
+      "generated_at": "2026-09-24T08:27:18.590228+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -112,7 +112,7 @@
         "ready_for_probability_analysis": false,
         "hold_closed_count": 9,
         "swap_closed_count": 0,
-        "hold_with_data_quality_count": 10,
+        "hold_with_data_quality_count": 12,
         "gaps": [
           "hold_recovery closed episodes=9 (target >=15)",
           "swap_rotation closed rotations=0 (target >=10)"
@@ -121,10 +121,10 @@
       },
       "hold_recovery": {
         "open": {
-          "count": 1,
+          "count": 3,
           "recovered_to_breakeven": 1,
           "close_reasons": {
-            "open": 1
+            "open": 3
           }
         },
         "closed": {
@@ -149,18 +149,18 @@
       },
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
       "ingested_this_pass": {
-        "hold_episodes": 0,
-        "swap_rotations": 1
+        "hold_episodes": 2,
+        "swap_rotations": 0
       },
       "checkpoints_added_this_pass": {
         "hold_episodes": 0,
-        "swap_rotations": 1
+        "swap_rotations": 0
       }
     },
     "ai_judgment": {
       "schema_version": 1,
       "track_id": "ai_judgment",
-      "generated_at": "2026-09-23T08:27:48.292975+00:00",
+      "generated_at": "2026-09-24T08:27:33.125138+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -216,7 +216,7 @@
         "ready_for_probability_analysis": false,
         "hold_closed_count": 9,
         "swap_closed_count": 0,
-        "hold_with_data_quality_count": 10,
+        "hold_with_data_quality_count": 12,
         "gaps": [
           "hold_recovery closed episodes=9 (target >=15)",
           "swap_rotation closed rotations=0 (target >=10)"
@@ -225,10 +225,10 @@
       },
       "hold_recovery": {
         "open": {
-          "count": 1,
+          "count": 3,
           "recovered_to_breakeven": 1,
           "close_reasons": {
-            "open": 1
+            "open": 3
           }
         },
         "closed": {
@@ -253,18 +253,18 @@
       },
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
       "ingested_this_pass": {
-        "hold_episodes": 0,
-        "swap_rotations": 1
+        "hold_episodes": 2,
+        "swap_rotations": 0
       },
       "checkpoints_added_this_pass": {
         "hold_episodes": 0,
-        "swap_rotations": 1
+        "swap_rotations": 0
       }
     },
     "momentum_grace": {
       "schema_version": 1,
       "track_id": "momentum_grace",
-      "generated_at": "2026-09-23T08:28:03.318363+00:00",
+      "generated_at": "2026-09-24T08:27:49.459831+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -318,30 +318,34 @@
       },
       "readiness": {
         "ready_for_probability_analysis": false,
-        "hold_closed_count": 0,
+        "hold_closed_count": 5,
         "swap_closed_count": 0,
         "hold_with_data_quality_count": 5,
         "gaps": [
-          "hold_recovery closed episodes=0 (target >=15)",
+          "hold_recovery closed episodes=5 (target >=15)",
           "swap_rotation closed rotations=0 (target >=10)"
         ],
         "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
       },
       "hold_recovery": {
         "open": {
+          "count": 0
+        },
+        "closed": {
           "count": 5,
           "recovered_to_breakeven": 2,
           "close_reasons": {
-            "open": 5
+            "sold_while_underwater": 3,
+            "sold_while_recovered": 2
           }
-        },
-        "closed": {
-          "count": 0
         }
       },
       "swap_rotation": {
         "open": {
-          "count": 0
+          "count": 1,
+          "verdicts": {
+            "open": 1
+          }
         },
         "closed": {
           "count": 0
@@ -349,8 +353,8 @@
       },
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
       "ingested_this_pass": {
-        "hold_episodes": 1,
-        "swap_rotations": 0
+        "hold_episodes": 0,
+        "swap_rotations": 1
       },
       "checkpoints_added_this_pass": {
         "hold_episodes": 0,
@@ -360,7 +364,7 @@
     "graduated_allocation": {
       "schema_version": 1,
       "track_id": "graduated_allocation",
-      "generated_at": "2026-09-23T08:28:18.540719+00:00",
+      "generated_at": "2026-09-24T08:28:06.170339+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -416,7 +420,7 @@
         "ready_for_probability_analysis": false,
         "hold_closed_count": 9,
         "swap_closed_count": 0,
-        "hold_with_data_quality_count": 10,
+        "hold_with_data_quality_count": 12,
         "gaps": [
           "hold_recovery closed episodes=9 (target >=15)",
           "swap_rotation closed rotations=0 (target >=10)"
@@ -425,10 +429,10 @@
       },
       "hold_recovery": {
         "open": {
-          "count": 1,
-          "recovered_to_breakeven": 1,
+          "count": 3,
+          "recovered_to_breakeven": 2,
           "close_reasons": {
-            "open": 1
+            "open": 3
           }
         },
         "closed": {
@@ -453,8 +457,8 @@
       },
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
       "ingested_this_pass": {
-        "hold_episodes": 0,
-        "swap_rotations": 1
+        "hold_episodes": 2,
+        "swap_rotations": 0
       },
       "checkpoints_added_this_pass": {
         "hold_episodes": 0,
@@ -464,7 +468,7 @@
     "technical": {
       "schema_version": 1,
       "track_id": "technical",
-      "generated_at": "2026-09-23T08:28:33.573400+00:00",
+      "generated_at": "2026-09-24T08:28:22.279594+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -560,7 +564,7 @@
     "buy_tier_level": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-09-23T08:30:19.280210+00:00",
+      "generated_at": "2026-09-24T08:30:04.581227+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -616,7 +620,7 @@
         "ready_for_probability_analysis": false,
         "hold_closed_count": 11,
         "swap_closed_count": 0,
-        "hold_with_data_quality_count": 62,
+        "hold_with_data_quality_count": 68,
         "gaps": [
           "hold_recovery closed episodes=11 (target >=15)",
           "swap_rotation closed rotations=0 (target >=10)"
@@ -625,10 +629,10 @@
       },
       "hold_recovery": {
         "open": {
-          "count": 51,
-          "recovered_to_breakeven": 34,
+          "count": 57,
+          "recovered_to_breakeven": 36,
           "close_reasons": {
-            "open": 51
+            "open": 57
           }
         },
         "closed": {
@@ -653,18 +657,114 @@
       },
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
       "ingested_this_pass": {
-        "hold_episodes": 0,
-        "swap_rotations": 1
+        "hold_episodes": 6,
+        "swap_rotations": 0
       },
       "checkpoints_added_this_pass": {
-        "hold_episodes": 3,
+        "hold_episodes": 1,
         "swap_rotations": 1
+      }
+    },
+    "buy_tier_level_dca": {
+      "schema_version": 1,
+      "track_id": "buy_tier_level_dca",
+      "generated_at": "2026-09-24T08:30:19.552549+00:00",
+      "framework": {
+        "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+        "hold_recovery": {
+          "question": "When a position is stressed but still held, does it recover to breakeven?",
+          "episode_triggers": [
+            "unrealized below underwater_threshold",
+            "exit_streak >= 1 (hold buffer active)",
+            "momentum_grace on position",
+            "effective signal no longer buy-tier while still held"
+          ],
+          "outcomes": [
+            "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+            "sold_while_underwater",
+            "max_window_elapsed"
+          ],
+          "fields_for_later_analysis": [
+            "data_quality_score",
+            "conviction_score",
+            "screen_signal",
+            "effective_signal",
+            "exit_streak",
+            "stress_triggers",
+            "thesis_status_at_start",
+            "recommended_action_at_start",
+            "checkpoints"
+          ]
+        },
+        "swap_rotation": {
+          "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+          "pairing": "same rebalance pass sells vs buys on one track",
+          "outcomes": [
+            "replacement_outperformed",
+            "exit_outperformed",
+            "inconclusive"
+          ],
+          "fields_for_later_analysis": [
+            "sell_tickers",
+            "buy_tickers",
+            "sell_realized_pct",
+            "post_rotation_returns",
+            "trade_costs"
+          ]
+        },
+        "related_artifacts": [
+          "exit_shadow.json (post-exit path after sell)",
+          "rebalance_log.json (counterfactual replay)",
+          "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+          "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+          "learning_tracks_churn_health.json"
+        ]
+      },
+      "readiness": {
+        "ready_for_probability_analysis": false,
+        "hold_closed_count": 0,
+        "swap_closed_count": 0,
+        "hold_with_data_quality_count": 35,
+        "gaps": [
+          "hold_recovery closed episodes=0 (target >=15)",
+          "swap_rotation closed rotations=0 (target >=10)"
+        ],
+        "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
+      },
+      "hold_recovery": {
+        "open": {
+          "count": 35,
+          "recovered_to_breakeven": 28,
+          "close_reasons": {
+            "open": 35
+          }
+        },
+        "closed": {
+          "count": 0
+        }
+      },
+      "swap_rotation": {
+        "open": {
+          "count": 0
+        },
+        "closed": {
+          "count": 0
+        }
+      },
+      "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
+      "ingested_this_pass": {
+        "hold_episodes": 35,
+        "swap_rotations": 0
+      },
+      "checkpoints_added_this_pass": {
+        "hold_episodes": 0,
+        "swap_rotations": 0
       }
     },
     "ai_judgment_calibrated": {
       "schema_version": 1,
       "track_id": "ai_judgment_calibrated",
-      "generated_at": "2026-09-23T08:28:48.620754+00:00",
+      "generated_at": "2026-09-24T08:28:36.723539+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -720,7 +820,7 @@
         "ready_for_probability_analysis": false,
         "hold_closed_count": 13,
         "swap_closed_count": 0,
-        "hold_with_data_quality_count": 14,
+        "hold_with_data_quality_count": 17,
         "gaps": [
           "hold_recovery closed episodes=13 (target >=15)",
           "swap_rotation closed rotations=0 (target >=10)"
@@ -729,10 +829,10 @@
       },
       "hold_recovery": {
         "open": {
-          "count": 1,
+          "count": 4,
           "recovered_to_breakeven": 1,
           "close_reasons": {
-            "open": 1
+            "open": 4
           }
         },
         "closed": {
@@ -757,8 +857,8 @@
       },
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
       "ingested_this_pass": {
-        "hold_episodes": 0,
-        "swap_rotations": 1
+        "hold_episodes": 3,
+        "swap_rotations": 0
       },
       "checkpoints_added_this_pass": {
         "hold_episodes": 0,
@@ -768,7 +868,7 @@
     "ai_judgment_calibrated_r2": {
       "schema_version": 1,
       "track_id": "ai_judgment_calibrated_r2",
-      "generated_at": "2026-09-23T08:29:03.606897+00:00",
+      "generated_at": "2026-09-24T08:28:51.101940+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -824,7 +924,7 @@
         "ready_for_probability_analysis": false,
         "hold_closed_count": 13,
         "swap_closed_count": 0,
-        "hold_with_data_quality_count": 14,
+        "hold_with_data_quality_count": 17,
         "gaps": [
           "hold_recovery closed episodes=13 (target >=15)",
           "swap_rotation closed rotations=0 (target >=10)"
@@ -833,10 +933,10 @@
       },
       "hold_recovery": {
         "open": {
-          "count": 1,
+          "count": 4,
           "recovered_to_breakeven": 1,
           "close_reasons": {
-            "open": 1
+            "open": 4
           }
         },
         "closed": {
@@ -861,8 +961,8 @@
       },
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
       "ingested_this_pass": {
-        "hold_episodes": 0,
-        "swap_rotations": 1
+        "hold_episodes": 3,
+        "swap_rotations": 0
       },
       "checkpoints_added_this_pass": {
         "hold_episodes": 0,
@@ -872,7 +972,7 @@
     "ai_judgment_calibrated_r3": {
       "schema_version": 1,
       "track_id": "ai_judgment_calibrated_r3",
-      "generated_at": "2026-09-23T08:29:18.827540+00:00",
+      "generated_at": "2026-09-24T08:29:05.340430+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -928,7 +1028,7 @@
         "ready_for_probability_analysis": false,
         "hold_closed_count": 13,
         "swap_closed_count": 0,
-        "hold_with_data_quality_count": 14,
+        "hold_with_data_quality_count": 17,
         "gaps": [
           "hold_recovery closed episodes=13 (target >=15)",
           "swap_rotation closed rotations=0 (target >=10)"
@@ -937,10 +1037,10 @@
       },
       "hold_recovery": {
         "open": {
-          "count": 1,
+          "count": 4,
           "recovered_to_breakeven": 1,
           "close_reasons": {
-            "open": 1
+            "open": 4
           }
         },
         "closed": {
@@ -954,9 +1054,9 @@
       },
       "swap_rotation": {
         "open": {
-          "count": 7,
+          "count": 8,
           "verdicts": {
-            "open": 7
+            "open": 8
           }
         },
         "closed": {
@@ -965,7 +1065,7 @@
       },
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
       "ingested_this_pass": {
-        "hold_episodes": 0,
+        "hold_episodes": 3,
         "swap_rotations": 1
       },
       "checkpoints_added_this_pass": {
@@ -976,7 +1076,7 @@
     "ai_judgment_exclusion_u4": {
       "schema_version": 1,
       "track_id": "ai_judgment_exclusion_u4",
-      "generated_at": "2026-09-23T08:29:33.950025+00:00",
+      "generated_at": "2026-09-24T08:29:20.390710+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -1032,7 +1132,7 @@
         "ready_for_probability_analysis": false,
         "hold_closed_count": 8,
         "swap_closed_count": 0,
-        "hold_with_data_quality_count": 9,
+        "hold_with_data_quality_count": 11,
         "gaps": [
           "hold_recovery closed episodes=8 (target >=15)",
           "swap_rotation closed rotations=0 (target >=10)"
@@ -1041,10 +1141,10 @@
       },
       "hold_recovery": {
         "open": {
-          "count": 1,
+          "count": 3,
           "recovered_to_breakeven": 1,
           "close_reasons": {
-            "open": 1
+            "open": 3
           }
         },
         "closed": {
@@ -1069,18 +1169,18 @@
       },
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
       "ingested_this_pass": {
-        "hold_episodes": 0,
-        "swap_rotations": 1
+        "hold_episodes": 2,
+        "swap_rotations": 0
       },
       "checkpoints_added_this_pass": {
         "hold_episodes": 0,
-        "swap_rotations": 1
+        "swap_rotations": 0
       }
     },
     "ai_judgment_fair": {
       "schema_version": 1,
       "track_id": "ai_judgment_fair",
-      "generated_at": "2026-09-23T08:29:49.102936+00:00",
+      "generated_at": "2026-09-24T08:29:35.622635+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -1136,7 +1236,7 @@
         "ready_for_probability_analysis": false,
         "hold_closed_count": 8,
         "swap_closed_count": 0,
-        "hold_with_data_quality_count": 9,
+        "hold_with_data_quality_count": 11,
         "gaps": [
           "hold_recovery closed episodes=8 (target >=15)",
           "swap_rotation closed rotations=0 (target >=10)"
@@ -1145,10 +1245,10 @@
       },
       "hold_recovery": {
         "open": {
-          "count": 1,
+          "count": 3,
           "recovered_to_breakeven": 1,
           "close_reasons": {
-            "open": 1
+            "open": 3
           }
         },
         "closed": {
@@ -1173,18 +1273,18 @@
       },
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
       "ingested_this_pass": {
-        "hold_episodes": 0,
-        "swap_rotations": 1
+        "hold_episodes": 2,
+        "swap_rotations": 0
       },
       "checkpoints_added_this_pass": {
         "hold_episodes": 0,
-        "swap_rotations": 1
+        "swap_rotations": 0
       }
     },
     "rules_fair": {
       "schema_version": 1,
       "track_id": "rules_fair",
-      "generated_at": "2026-09-23T08:30:04.162075+00:00",
+      "generated_at": "2026-09-24T08:29:49.451022+00:00",
       "framework": {
         "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
         "hold_recovery": {
@@ -1240,7 +1340,7 @@
         "ready_for_probability_analysis": false,
         "hold_closed_count": 8,
         "swap_closed_count": 0,
-        "hold_with_data_quality_count": 9,
+        "hold_with_data_quality_count": 11,
         "gaps": [
           "hold_recovery closed episodes=8 (target >=15)",
           "swap_rotation closed rotations=0 (target >=10)"
@@ -1249,10 +1349,10 @@
       },
       "hold_recovery": {
         "open": {
-          "count": 1,
+          "count": 3,
           "recovered_to_breakeven": 1,
           "close_reasons": {
-            "open": 1
+            "open": 3
           }
         },
         "closed": {
@@ -1277,12 +1377,12 @@
       },
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
       "ingested_this_pass": {
-        "hold_episodes": 0,
-        "swap_rotations": 1
+        "hold_episodes": 2,
+        "swap_rotations": 0
       },
       "checkpoints_added_this_pass": {
         "hold_episodes": 0,
-        "swap_rotations": 1
+        "swap_rotations": 0
       }
     }
   },

@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-23T18:06:52.202437+00:00",
+  "updated_at": "2026-09-24T08:30:28.260501+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -19,7 +19,7 @@
   },
   "context": {
     "history_run_count": 21,
-    "backtest_run_count": 20,
+    "backtest_run_count": 21,
     "trajectory_labeled_events": 336,
     "exit_shadow_closed_total": 0,
     "experimental_track_count": 2,
@@ -27,11 +27,11 @@
     "entry_dca_ready": true
   },
   "summary": {
-    "proposed": 1,
-    "continue": 7,
-    "fail": 4,
-    "recommend": 3,
+    "recommend": 4,
+    "fail": 5,
     "observing": 0,
+    "proposed": 1,
+    "continue": 5,
     "human_ack_pending": 2,
     "total": 15
   },
@@ -54,10 +54,10 @@
         "sector_cap": 0.2,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 24,
-      "gate_excess_after_costs": -0.2444,
-      "excess_vs_primary": 0.0956,
-      "excess_vs_rules": 0.1715,
+      "gate_marks": 25,
+      "gate_excess_after_costs": -0.2407,
+      "excess_vs_primary": 0.0961,
+      "excess_vs_rules": 0.1719,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated/calibration_provenance.json"
     },
@@ -79,10 +79,10 @@
         "sector_cap": 0.25,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 21,
-      "gate_excess_after_costs": -0.21,
-      "excess_vs_primary": 0.13,
-      "excess_vs_rules": 0.2059,
+      "gate_marks": 22,
+      "gate_excess_after_costs": -0.2062,
+      "excess_vs_primary": 0.1306,
+      "excess_vs_rules": 0.2064,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r2/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -105,10 +105,10 @@
         "sector_cap": 0.3,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 21,
-      "gate_excess_after_costs": -0.2101,
-      "excess_vs_primary": 0.1299,
-      "excess_vs_rules": 0.2058,
+      "gate_marks": 22,
+      "gate_excess_after_costs": -0.2067,
+      "excess_vs_primary": 0.1301,
+      "excess_vs_rules": 0.2059,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r3/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -125,9 +125,9 @@
       "track_id": "ai_judgment_exclusion_u4",
       "exclusion_ladder_step_id": "u4",
       "parent_track_id": "ai_judgment",
-      "gate_marks": 11,
-      "gate_excess_after_costs": -0.1449,
-      "excess_vs_parent": 0.1951,
+      "gate_marks": 12,
+      "gate_excess_after_costs": -0.1418,
+      "excess_vs_parent": 0.195,
       "gate_uses_post_seed": true,
       "evidence_path": "docs/data/paper_automation/ai_judgment_exclusion_u4/exclusion_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -138,20 +138,23 @@
       "title": "Screen rules + graduated allocation",
       "area": "paper_knobs",
       "pipeline": "paper_automation",
-      "status": "continue",
-      "source_status": "observing",
+      "status": "recommend",
+      "source_status": "surviving",
       "human_ack_required": false,
       "track_id": "graduated_allocation",
-      "gate_marks": 13,
-      "gate_excess_after_costs": -0.0021,
-      "excess_vs_primary": 0.3379,
+      "gate_marks": 15,
+      "gate_excess_after_costs": 0.0024,
+      "excess_vs_primary": 0.3392,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": false,
         "use_graduated_allocation": true
       },
       "evidence_path": "docs/data/paper_automation/markets/euro_depth/graduated_allocation/config.json",
-      "initiated_at": "2026-09-07T08:30:22.057015+00:00"
+      "initiated_at": "2026-09-07T08:30:22.057015+00:00",
+      "human_acked": true,
+      "acked_at": "2026-09-22T08:14:45.342024+00:00",
+      "ack_decision": "ack_observe"
     },
     {
       "experiment_id": "momentum_grace",
@@ -159,13 +162,13 @@
       "title": "Screen rules + momentum grace",
       "area": "paper_churn",
       "pipeline": "paper_automation",
-      "status": "continue",
-      "source_status": "observing",
+      "status": "fail",
+      "source_status": "failed",
       "human_ack_required": false,
       "track_id": "momentum_grace",
-      "gate_marks": 32,
-      "gate_excess_after_costs": -0.017,
-      "excess_vs_primary": 0.323,
+      "gate_marks": 33,
+      "gate_excess_after_costs": -0.0693,
+      "excess_vs_primary": 0.2675,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": true,
@@ -276,7 +279,7 @@
         },
         "archive": {
           "history_run_count": 21,
-          "backtest_run_count": 20,
+          "backtest_run_count": 21,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -437,7 +440,7 @@
         },
         "archive": {
           "history_run_count": 21,
-          "backtest_run_count": 20,
+          "backtest_run_count": 21,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -583,7 +586,7 @@
         },
         "archive": {
           "history_run_count": 21,
-          "backtest_run_count": 20,
+          "backtest_run_count": 21,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -679,7 +682,20 @@
     ],
     "note": "Human review/implementation plan for the 2026-09-13 overlay recommend. Never auto-apply. Revisit on Sunday or when first-entry windows close."
   },
-  "task_sync": null,
+  "task_sync": {
+    "updated": [
+      "ana-20260728-04",
+      "ana-20260921-01",
+      "ana-20260921-03",
+      "ana-20260921-05",
+      "ldr-20260823-02",
+      "ldr-20260823-03"
+    ],
+    "skipped": [
+      "ana-20260921-02",
+      "ana-20260921-04"
+    ]
+  },
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
     "analysis_tasks": "docs/data/analysis_tasks.json",
