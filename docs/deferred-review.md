@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-23T18:13:51+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-24T06:20:21+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -205,6 +205,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N149 | **Do not invent a proprietary screen to replace recognised models** | Developing a bespoke formula from in-sample successful-sleeve traits without PIT guards would overfit thin paper history and blur the recognisable-screen interpretability the memos rely on. Prefer reweighting existing models and progressive exclusion filters first. | Only if dual_objective_calibration shows persistent lift that cannot be expressed as weights or exclusion rules on the existing 22 models |
 | N150 | **Do not spray monthly deposits across all epoch-0 markets yet** | £100/mo per epoch-0 book invents a multi-market capital-allocation policy before stage 4 live breadth. Epoch-0 books are equal-support data marks. Prefer the FTSE buy_tier_level_dca twin only. | Live universe past FTSE-only (stage 4) or human chooses an explicit multi-market paper allocation policy with a fresh capital epoch |
 | N151 | **Auto-triage ingest deviations by screen signal** | Proposed policy: leftover/patchy dismiss, plain buy rely on park+hunter, strong_buy intensive pin. Do not wire auto-approve/dismiss yet — pins starve the weekday batch and IR URL replacement stays human judgment. | Observe-only shadow recommendations on open deviation rows have matched human dismiss/approve choices for several weeks, and intensive pin rate stays within weekday batch budget |
+| N152 | **Overnight idle eng agents targeting admitted-market gaps** | Do not invent overnight engineering-agent work aimed at sp500/asx200/etc filing or score gaps when the eng queue is idle. Overnight body thicken already belongs to maintenance + spare sprint streams; eng-idle already prefers FTSE gap-closure then focus ladder_only. L448/L449 handle serial library eng compile under P1-first — not equal overnight eng capacity. | Weekday eng queue idle after ~15:00 UTC on >=2 consecutive days while maintenance-eligible admitted markets still show buy-tier IWB/thin AND FTSE eng-idle gap-closure has no candidate AND L449 has landed or been rejected after one measured try-market-gap-burndown trial on the eng-queue idle path |
 
 ---
 
