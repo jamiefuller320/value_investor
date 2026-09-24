@@ -14,11 +14,11 @@ from typing import Any
 
 from value_investor.capital_allocation import classify_lifecycle_phase
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT, MARKET_REGISTRY
+from value_investor.hypothesis_integrity import REVIEW_FILENAME as HYPOTHESIS_INTEGRITY_FILENAME
 from value_investor.library_near_miss_watch import DEFAULT_PRE_BUY_CONVICTION, NEAR_MISS_FILENAME
 from value_investor.library_screen import screen_dir_for
 from value_investor.market_shard_phases import DEFAULT_SHARD_ROOT, shard_root_for_market
 from value_investor.market_status import LIVE_MARKET_ID
-from value_investor.hypothesis_integrity import REVIEW_FILENAME as HYPOTHESIS_INTEGRITY_FILENAME
 from value_investor.paper_automation import (
     BUY_TIER_LEVEL_TRACK_ID,
     CONFIG_FILENAME,
@@ -1184,13 +1184,19 @@ def lifecycle_chart_reports_by_market(
             continue
         by_ticker: dict[str, dict[str, Any]] = {}
 
-        def _ingest(card: Any, *, board_column: str, held: bool) -> None:
+        def _ingest(
+            card: Any,
+            *,
+            board_column: str,
+            held: bool,
+            store: dict[str, dict[str, Any]] = by_ticker,
+        ) -> None:
             if not isinstance(card, dict):
                 return
             ticker = str(card.get("ticker") or "").strip()
             if not ticker:
                 return
-            row = by_ticker.get(ticker)
+            row = store.get(ticker)
             if row is None:
                 row = {
                     "ticker": ticker,
@@ -1204,7 +1210,7 @@ def lifecycle_chart_reports_by_market(
                     row["avg_cost"] = card.get("avg_cost")
                 if card.get("opened_at"):
                     row["opened_at"] = card.get("opened_at")
-                by_ticker[ticker] = row
+                store[ticker] = row
                 return
             # Prefer richer signal / name when merging screen + position cards.
             if not row.get("signal") and card.get("signal"):
