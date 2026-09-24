@@ -156,6 +156,11 @@ Switch market (and paper track) rather than stacking every universe on one
 page. Payload: `docs/data/lifecycle_board.json` (also rebuilt by local
 `POST /api/refresh`).
 
+**FTSE marks (L464):** live `latest.json` reports often omit `last_price`, so
+held cards would lack `unrealized_pnl_pct` and L463 UW-by-stage would show
+blank. Board build enriches FTSE rows from library `latest_signals.csv` when
+present, else from paper-auto / HI persisted marks (same Yahoo→price_map path
+HI already uses). Local currency only — not N153 FX.
 Each column’s experiment chips open a detail card (aim, catalog/ledger
 progress, artifact). A `recommend` row shows structured **evidence**, a
 **recommendation**, and a Supabase-linked **Start** button that records an

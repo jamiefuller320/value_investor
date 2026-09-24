@@ -14,6 +14,7 @@ from typing import Any
 
 from value_investor.capital_allocation import classify_lifecycle_phase
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT, MARKET_REGISTRY
+from value_investor.hypothesis_integrity import REVIEW_FILENAME as HYPOTHESIS_INTEGRITY_FILENAME
 from value_investor.library_near_miss_watch import DEFAULT_PRE_BUY_CONVICTION, NEAR_MISS_FILENAME
 from value_investor.library_screen import screen_dir_for
 from value_investor.market_shard_phases import DEFAULT_SHARD_ROOT, shard_root_for_market
@@ -33,6 +34,9 @@ from value_investor.position_lifecycle import (
     stage_for_phase,
 )
 from value_investor.storage import read_json, write_json
+
+# Same listed-price keys as paper_automation._marked_price_map / HI marks.
+_LISTED_PRICE_KEYS = ("last_price", "price", "last", "close")
 
 logger = logging.getLogger(__name__)
 
@@ -280,6 +284,119 @@ def _column_reason(
     return str(phase or "below buy-tier")
 
 
+def _listed_price_from_row(row: dict[str, Any] | None) -> float | None:
+    """Local mark from screen/HI row — same key order as paper-auto price maps."""
+    if not isinstance(row, dict):
+        return None
+    for key in _LISTED_PRICE_KEYS:
+        value = _optional_float(row.get(key))
+        if value is not None and value > 0:
+            return value
+    return None
+
+
+def _price_map_from_signals_csv(path: Path) -> dict[str, float]:
+    """last_price (or price/last/close) keyed by ticker from a library signals CSV."""
+    prices: dict[str, float] = {}
+    if not path.exists():
+        return prices
+    try:
+        with path.open(newline="", encoding="utf-8") as handle:
+            reader = csv.DictReader(handle)
+            for raw in reader:
+                if not isinstance(raw, dict):
+                    continue
+                ticker = _ticker(raw)
+                if not ticker or ticker in prices:
+                    continue
+                mark = _listed_price_from_row(raw)
+                if mark is not None:
+                    prices[ticker] = mark
+    except OSError:
+        return prices
+    return prices
+
+
+def _price_map_from_hypothesis_integrity(paper_root: Path) -> dict[str, float]:
+    """Reuse marks already written by HI / paper-auto (same Yahoo→price_map path)."""
+    prices: dict[str, float] = {}
+    root = Path(paper_root)
+    if not root.exists():
+        return prices
+    track_dirs = learning_track_dirs(root)
+    # Prefer buy_tier_level (L463 default book), then other learning tracks.
+    ordered: list[Path] = []
+    preferred = track_dirs.get(BUY_TIER_LEVEL_TRACK_ID)
+    if preferred is not None:
+        ordered.append(Path(preferred) / HYPOTHESIS_INTEGRITY_FILENAME)
+    for track_id, track_dir in track_dirs.items():
+        if track_id == BUY_TIER_LEVEL_TRACK_ID:
+            continue
+        ordered.append(Path(track_dir) / HYPOTHESIS_INTEGRITY_FILENAME)
+    if root.is_dir():
+        for path in sorted(root.glob(f"*/{HYPOTHESIS_INTEGRITY_FILENAME}")):
+            if path not in ordered:
+                ordered.append(path)
+    for path in ordered:
+        payload = _as_dict(_safe_read(path))
+        for row in _as_list(payload.get("holdings")):
+            if not isinstance(row, dict):
+                continue
+            ticker = _ticker(row)
+            if not ticker or ticker in prices:
+                continue
+            mark = _optional_float(row.get("mark"))
+            if mark is None:
+                mark = _listed_price_from_row(row)
+            if mark is not None and mark > 0:
+                prices[ticker] = mark
+    return prices
+
+
+def _merge_price_maps(*maps: dict[str, float]) -> dict[str, float]:
+    merged: dict[str, float] = {}
+    for price_map in maps:
+        for ticker, price in price_map.items():
+            if ticker and price > 0 and ticker not in merged:
+                merged[ticker] = float(price)
+    return merged
+
+
+def _enrich_row_with_price(
+    row: dict[str, Any] | None,
+    *,
+    ticker: str,
+    price_map: dict[str, float] | None,
+) -> dict[str, Any] | None:
+    """Attach last_price when the screen row lacks a listed mark (FTSE live gap)."""
+    if _listed_price_from_row(row) is not None:
+        return row
+    mark = None if not price_map else price_map.get(ticker)
+    if mark is None or mark <= 0:
+        return row
+    out = dict(row) if isinstance(row, dict) else {"ticker": ticker}
+    out["last_price"] = float(mark)
+    out.setdefault("price", float(mark))
+    out.setdefault("last", float(mark))
+    return out
+
+
+def _enrich_screen_rows_with_prices(
+    rows: list[dict[str, Any]],
+    price_map: dict[str, float],
+) -> list[dict[str, Any]]:
+    if not price_map:
+        return rows
+    enriched: list[dict[str, Any]] = []
+    for row in rows:
+        ticker = _ticker(row)
+        if not ticker:
+            enriched.append(row)
+            continue
+        enriched.append(_enrich_row_with_price(row, ticker=ticker, price_map=price_map) or row)
+    return enriched
+
+
 def _slim_card(
     *,
     ticker: str,
@@ -299,9 +416,7 @@ def _slim_card(
     opened_days = _days_since(opened_at, now)
     sold_days = _days_since(sold_at, now)
     avg_cost = _optional_float(hold.get("avg_cost"))
-    mark = _optional_float(src.get("last_price"))
-    if mark is None:
-        mark = _optional_float(src.get("price"))
+    mark = _listed_price_from_row(src)
     pnl_pct = None
     if avg_cost and avg_cost > 0 and mark and mark > 0:
         pnl_pct = round((mark - avg_cost) / avg_cost, 4)
@@ -465,9 +580,7 @@ def _holding_phase(
     exit_streak: int,
 ) -> str:
     shares = _float(holding.get("shares"))
-    price = _optional_float((row or {}).get("last_price"))
-    if price is None:
-        price = _optional_float((row or {}).get("price"))
+    price = _listed_price_from_row(row)
     if price is None or price <= 0:
         price = _float(holding.get("avg_cost"))
     current_value = shares * price if price else 0.0
@@ -503,6 +616,7 @@ def _classify_market_track(
     screen_rows: list[dict[str, Any]],
     fund: dict[str, Any] | None,
     now: datetime,
+    price_map: dict[str, float] | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
     buckets = _empty_columns()
     row_index = _index_rows(screen_rows)
@@ -526,7 +640,11 @@ def _classify_market_track(
             continue
         holding = _as_dict(raw_holding)
         holding.setdefault("ticker", ticker_key)
-        row = row_index.get(ticker_key)
+        row = _enrich_row_with_price(
+            row_index.get(ticker_key),
+            ticker=ticker_key,
+            price_map=price_map,
+        )
         phase = _holding_phase(
             holding=holding,
             row=row,
@@ -719,14 +837,37 @@ def _default_track_id(tracks: list[dict[str, Any]]) -> str | None:
     return str(tracks[0]["track_id"])
 
 
+def _live_ftse_price_map(
+    *,
+    library_root: Path,
+    paper_root: Path,
+) -> dict[str, float]:
+    """FTSE marks for board P&L: library signals first, then HI/paper-auto marks.
+
+    Live ``latest.json`` reports often omit ``last_price``; shards already carry
+    it on ``latest_signals.csv``. HI still sees marks via paper-auto's Yahoo
+    refresh → ``_marked_price_map``; reuse that path's persisted HI marks so
+    L463 UW is not blank. Local currency only — no FX conversion (N153).
+    """
+    signals_path = screen_dir_for(library_root, LIVE_MARKET_ID) / "latest_signals.csv"
+    return _merge_price_maps(
+        _price_map_from_signals_csv(signals_path),
+        _price_map_from_hypothesis_integrity(paper_root),
+    )
+
+
 def _load_screen_rows(
     market_id: str,
     *,
     library_root: Path,
     live_reports: list[dict[str, Any]] | None,
+    price_map: dict[str, float] | None = None,
 ) -> list[dict[str, Any]]:
     if market_id == LIVE_MARKET_ID:
-        return [row for row in (live_reports or []) if isinstance(row, dict) and _ticker(row)]
+        rows = [row for row in (live_reports or []) if isinstance(row, dict) and _ticker(row)]
+        if price_map:
+            return _enrich_screen_rows_with_prices(rows, price_map)
+        return rows
     path = screen_dir_for(library_root, market_id) / "latest_signals.csv"
     rows = _load_csv_rows(path)
     if rows:
@@ -830,10 +971,15 @@ def build_lifecycle_board(
     market_ids.extend(mid for mid in MARKET_REGISTRY if mid != LIVE_MARKET_ID)
 
     markets: list[dict[str, Any]] = []
+    live_price_map = _live_ftse_price_map(library_root=library_root, paper_root=paper_root)
     for market_id in market_ids:
         spec = MARKET_REGISTRY.get(market_id)
+        price_map = live_price_map if market_id == LIVE_MARKET_ID else None
         screen_rows = _load_screen_rows(
-            market_id, library_root=library_root, live_reports=live_reports
+            market_id,
+            library_root=library_root,
+            live_reports=live_reports,
+            price_map=price_map,
         )
         tracks_raw = _load_tracks(market_id, paper_root=paper_root, shard_root=shard_root)
         if not _has_market_data(
@@ -845,7 +991,12 @@ def build_lifecycle_board(
         ):
             continue
         default_track = _default_track_id(tracks_raw)
-        screen_buckets = _classify_market_track(screen_rows=screen_rows, fund=None, now=as_of)
+        screen_buckets = _classify_market_track(
+            screen_rows=screen_rows,
+            fund=None,
+            now=as_of,
+            price_map=price_map,
+        )
         screen_columns = _pack_columns(screen_buckets, column_ids=SCREEN_COLUMN_IDS)
         track_payloads: list[dict[str, Any]] = []
         source_tracks = tracks_raw or [
@@ -863,6 +1014,7 @@ def build_lifecycle_board(
                 screen_rows=screen_rows,
                 fund=track.get("fund"),
                 now=as_of,
+                price_map=price_map,
             )
             occupied: list[str] = []
             for column_id in POSITION_COLUMN_IDS:
@@ -1032,13 +1184,19 @@ def lifecycle_chart_reports_by_market(
             continue
         by_ticker: dict[str, dict[str, Any]] = {}
 
-        def _ingest(card: Any, *, board_column: str, held: bool) -> None:
+        def _ingest(
+            card: Any,
+            *,
+            board_column: str,
+            held: bool,
+            store: dict[str, dict[str, Any]] = by_ticker,
+        ) -> None:
             if not isinstance(card, dict):
                 return
             ticker = str(card.get("ticker") or "").strip()
             if not ticker:
                 return
-            row = by_ticker.get(ticker)
+            row = store.get(ticker)
             if row is None:
                 row = {
                     "ticker": ticker,
@@ -1052,7 +1210,7 @@ def lifecycle_chart_reports_by_market(
                     row["avg_cost"] = card.get("avg_cost")
                 if card.get("opened_at"):
                     row["opened_at"] = card.get("opened_at")
-                by_ticker[ticker] = row
+                store[ticker] = row
                 return
             # Prefer richer signal / name when merging screen + position cards.
             if not row.get("signal") and card.get("signal"):
