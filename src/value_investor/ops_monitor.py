@@ -1345,9 +1345,7 @@ def check_buy_tier_flip_lag(
             else DEFAULT_RESEARCH_ROOT,
             memo_dir=Path(memo_dir) if memo_dir is not None else DEFAULT_MEMO_DIR,
             store_path=path,
-            library_root=Path(library_root)
-            if library_root is not None
-            else DEFAULT_LIBRARY_ROOT,
+            library_root=Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT,
             policy_path=Path(policy_path) if policy_path is not None else DEFAULT_POLICY_PATH,
             include_admitted=include_admitted,
             persist=persist,

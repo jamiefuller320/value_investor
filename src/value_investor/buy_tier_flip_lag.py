@@ -350,7 +350,9 @@ def _migrate_legacy_name_keys(names: dict[str, Any]) -> dict[str, Any]:
         if not tick:
             continue
         migrated = {**row, "market_id": mid, "ticker": tick}
-        migrated.setdefault("usable_mode", "ai_eligible" if mid == FTSE_MARKET_ID else "factory_path")
+        migrated.setdefault(
+            "usable_mode", "ai_eligible" if mid == FTSE_MARKET_ID else "factory_path"
+        )
         out[name_key(mid, tick)] = migrated
     return out
 
@@ -373,9 +375,7 @@ def load_flip_lag_store(path: Path = DEFAULT_STORE_PATH) -> dict[str, Any]:
     payload.setdefault("recently_usable", [])
     payload.setdefault("markets", [])
     raw_names = dict(payload.get("names") or {})
-    if int(payload.get("schema_version") or 1) < 2 or any(
-        ":" not in str(k) for k in raw_names
-    ):
+    if int(payload.get("schema_version") or 1) < 2 or any(":" not in str(k) for k in raw_names):
         payload["names"] = _migrate_legacy_name_keys(raw_names)
         payload["schema_version"] = SCHEMA_VERSION
     return payload
@@ -415,9 +415,7 @@ def library_flip_source(
         # Library memos live under screen/research/<TICKER>/research.md (alongside JSON).
         memo_dir=research_root,
         usable_mode="factory_path",
-        screen_source=str(
-            Path(library_root) / "markets" / mid / "screen" / "latest_signals.csv"
-        ),
+        screen_source=str(Path(library_root) / "markets" / mid / "screen" / "latest_signals.csv"),
     )
 
 
@@ -673,9 +671,7 @@ def update_buy_tier_flip_lag(
     market_meta: list[dict[str, Any]] = []
 
     for source in active_sources:
-        cohort_rows = select_flip_cohort(
-            source.reports, lookback_days=lookback_days, now=now
-        )
+        cohort_rows = select_flip_cohort(source.reports, lookback_days=lookback_days, now=now)
         market_meta.append(
             {
                 "market_id": source.market_id,
@@ -916,9 +912,7 @@ def ops_finding_from_flip_lag(
             f"{row.get('hours_since_flip')}h since flip)"
         )
     extra = len(warn_open) - 10
-    market_ids = sorted(
-        {str(row.get("market_id") or FTSE_MARKET_ID) for row in warn_open}
-    )
+    market_ids = sorted({str(row.get("market_id") or FTSE_MARKET_ID) for row in warn_open})
     market_bit = ", ".join(market_ids[:6])
     if len(market_ids) > 6:
         market_bit += f" (+{len(market_ids) - 6} more)"

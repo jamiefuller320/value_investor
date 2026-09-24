@@ -338,9 +338,7 @@ def test_multi_market_cohort_keys_do_not_collide(tmp_path: Path):
     sources = [
         FlipMarketSource(
             market_id=FTSE_MARKET_ID,
-            reports=[
-                {"ticker": "SAME", "name": "FTSE", "signal": "buy", "signal_since": flip_day}
-            ],
+            reports=[{"ticker": "SAME", "name": "FTSE", "signal": "buy", "signal_since": flip_day}],
             research_root=ftse_research,
             memo_dir=tmp_path / "memos",
             usable_mode="ai_eligible",
@@ -348,9 +346,7 @@ def test_multi_market_cohort_keys_do_not_collide(tmp_path: Path):
         ),
         FlipMarketSource(
             market_id="nasdaq100",
-            reports=[
-                {"ticker": "SAME", "name": "NDX", "signal": "buy", "signal_since": flip_day}
-            ],
+            reports=[{"ticker": "SAME", "name": "NDX", "signal": "buy", "signal_since": flip_day}],
             research_root=shard_research,
             memo_dir=shard_research,
             usable_mode="factory_path",
