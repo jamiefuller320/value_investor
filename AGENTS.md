@@ -62,8 +62,9 @@ not shipped as CLI / manual-only. Minimal bar (detail:
 **Lanes:** observe / warn-only → `auto_fixable=False` (email/PM handoff; no
 rememo / ingest / eng spray from the finding alone). Auto-fixable →
 `auto_fixable=True` plus a safe heal path (or documented supervised draft).
-Optional beyond the bar (defer unless needed): ops-monitor commit of instrument
-store JSON, instrument-specific dashboard.
+Optional beyond the bar (defer unless needed): ops-monitor commit of raw
+instrument store JSON (**L460**). Instrument-specific observe-utilization
+dashboard with freshness + trajectory is shipped (**L461**).
 
 ## Post-run persistent weaknesses & intensive clearance (required)
 

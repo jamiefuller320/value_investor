@@ -35,12 +35,14 @@ lane change and readiness gate (see N152 / P1 pin rules).
 
 ### Optional (not ship-blocking — park with `ftse-defer`)
 
-- Commit of instrument store JSON from ops-monitor (`GHA_COMMIT_OPTIONAL` /
-  `GHA_COMMIT_OWNED` in `scripts/gha_commit_ops_monitor.sh`) for day-over-day
-  cohort history in git.
-- Instrument-specific dashboard / Analysis surface (ops overall slice is enough
-  for the bar).
+- Commit of **raw** instrument store JSON from ops-monitor (`buy_tier_flip_lag.json`,
+  `decision_input_inventory.json` via `GHA_COMMIT_OPTIONAL` /
+  `GHA_COMMIT_OWNED`) for day-over-day cohort history in git (**L460** — still open).
 - A dedicated workflow beyond the shared ops-monitor cron.
+
+**Shipped above the bar (L461):** instrument-specific **Observe utilization**
+dashboard on Queue & hunter + Analysis (`docs/data/observe_utilization.json`),
+with freshness / staleness banners and trajectory deltas vs last cycle.
 
 Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-required).
 
@@ -282,19 +284,22 @@ pass.
 Both checks are **observe / warn-only** (`auto_fixable=False`). They refresh a
 runner-local store JSON and emit an ops finding when the warn cohort is material.
 Manual drill-down: `ftse-ingest-audit --flip-lag` /
-`ftse-ingest-audit --decision-inputs` (mutually exclusive; `--decision-inputs`
-lands with [#835](https://github.com/jamiefuller320/value_investor/pull/835)).
+`ftse-ingest-audit --decision-inputs` (mutually exclusive).
 They do **not** deepen ingest or rememo.
 
 | Check | Finding title | When it warns | Store (runner) | Status |
 |-------|---------------|---------------|----------------|--------|
 | `check_buy_tier_flip_lag` | **New buy-tier not yet usable** | Path-incomplete ≥24h cohort non-empty (FTSE live ∪ admitted; schema v2) | `docs/data/buy_tier_flip_lag.json` | Live on main |
-| `check_decision_input_inventory` | **FTSE decision-input utilization gap** | Dominant bind gap count ≥3 on FTSE holdings ∪ buy-tier (else quiet / `P1 green-enough`) | `docs/data/decision_input_inventory.json` | Wired on [#835](https://github.com/jamiefuller320/value_investor/pull/835); not on main until merge |
+| `check_decision_input_inventory` | **FTSE decision-input utilization gap** | Dominant bind gap count ≥3 on FTSE holdings ∪ buy-tier (else quiet / `P1 green-enough`) | `docs/data/decision_input_inventory.json` | Live on main |
 
-Called from `collect_ops_findings` on the daily ops-monitor schedule (decision-input
-after #835 merges). Instrument store JSON is **not** yet in `GHA_COMMIT_OPTIONAL`
-— findings persist via `ops_status.json`; day-over-day store history in git is
-optional (deferred).
+Called from `collect_ops_findings` on the daily ops-monitor schedule. Raw
+instrument store JSON is **not** yet in `GHA_COMMIT_OPTIONAL` (L460 — day-over-day
+of the full stores). The **instrument dashboard** rollup
+`docs/data/observe_utilization.json` **is** committed with queue-health refresh
+(ops-monitor / dashboard-bridge): Queue & hunter + Analysis show warn state,
+**freshness / staleness**, and **trajectory** (delta vs last cycle; lower
+warn/gap = better). Prefer those trajectory indicators over non-contextual
+absolute counts.
 
 ## CLI
 

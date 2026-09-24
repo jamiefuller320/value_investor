@@ -14,6 +14,7 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     assert 'fetchDashboardJson("data/latest.json")' in text
     assert '["progress_report", "data/progress_report.json"]' in text
     assert '["queue_health", "data/queue_health.json"]' in text
+    assert '["observe_utilization", "data/observe_utilization.json"]' in text
     assert '["market_status", "data/market_status.json"]' in text
     assert '["system_gaps", "data/system_gaps.json"]' in text
     assert '["ingest_deviations", "data/ingest_deviations.json"]' in text
