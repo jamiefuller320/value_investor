@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-24T15:38:59.222781+00:00",
+  "run_at": "2026-09-24T16:53:23.740320+00:00",
   "market_id": "dax",
   "targets": [
     "FME.DE",
@@ -722,7 +722,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-24T15:33:41.436066+00:00",
+    "snapshot_at": "2026-09-24T16:48:46.516359+00:00",
     "market_id": "dax",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -774,7 +774,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-24T15:38:55.363147+00:00",
+    "snapshot_at": "2026-09-24T16:52:44.435538+00:00",
     "market_id": "dax",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -805,25 +805,24 @@
     "indexed_without_body_by_ticker": {
       "FME.DE": 17
     },
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 9,
-    "effective_thin_body_tickers": [
-      "HEI.DE",
-      "MUV2.DE",
-      "DTG.DE",
-      "DTE.DE",
+    "parked_tickers": [
       "BAS.DE",
-      "HNR1.DE",
+      "DTE.DE",
+      "DTG.DE",
+      "FME.DE",
       "FRE.DE",
+      "HEI.DE",
       "HEN3.DE",
+      "HNR1.DE",
+      "MUV2.DE",
       "VOW3.DE"
     ],
-    "effective_indexed_without_body": 17,
-    "effective_indexed_without_body_tickers": [
-      "FME.DE"
-    ],
-    "ingest_exhausted": false
+    "parked_count": 10,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -834,10 +833,51 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "dax",
+    "to_market": "asx200",
+    "stream_markets_after": [
+      "asx200"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "dax",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "BAS.DE",
+        "DTE.DE",
+        "DTG.DE",
+        "FME.DE",
+        "FRE.DE",
+        "HEI.DE",
+        "HEN3.DE",
+        "HNR1.DE",
+        "MUV2.DE",
+        "VOW3.DE"
+      ],
+      "learning_admitted_changed": true,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "asx200",
+      "forced": true,
+      "prior_screen_at": "2026-09-24T06:52:36.732987+00:00",
+      "prior_age_days": 0,
+      "run_at": "2026-09-24T16:53:22.018609+00:00",
+      "shortlist_count": 27,
+      "ticker_count": 196
+    },
+    "at": "2026-09-24T16:52:50.360488+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "dax",
-    "assessed_at": "2026-09-24T15:33:42.220036+00:00",
+    "assessed_at": "2026-09-24T16:48:46.924582+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -879,9 +919,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 312.36553616599997,
+  "used_seconds": 237.117899572,
   "budget_seconds": 1050.0,
-  "leftover_seconds": 737.634463834,
+  "leftover_seconds": 812.8821004280001,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -889,11 +929,112 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "dax",
-    "updated_at": "2026-09-24T15:38:55.367267+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-09-24T16:52:44.438531+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "BAS.DE",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-24T16:52:44.438531+00:00",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "DTE.DE",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-24T16:52:44.438531+00:00",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "DTG.DE",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-24T16:52:44.438531+00:00",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "FME.DE",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-24T16:52:44.438531+00:00",
+        "filings_total": 88,
+        "filings_with_body": 71,
+        "indexed_without_body": 17,
+        "thin": false
+      },
+      {
+        "ticker": "FRE.DE",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-24T16:52:44.438531+00:00",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "HEI.DE",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-24T16:52:44.438531+00:00",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "HEN3.DE",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-24T16:52:44.438531+00:00",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "HNR1.DE",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-24T16:52:44.438531+00:00",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "MUV2.DE",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-24T16:52:44.438531+00:00",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "VOW3.DE",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-24T16:52:44.438531+00:00",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
     "had_complete_targets": true,
     "leftover_tickers": [
@@ -908,33 +1049,30 @@
       "MUV2.DE",
       "VOW3.DE"
     ],
-    "unparked_leftover": [
-      "BAS.DE",
-      "DTE.DE",
-      "DTG.DE",
-      "FME.DE",
-      "FRE.DE",
-      "HEI.DE",
-      "HEN3.DE",
-      "HNR1.DE",
-      "MUV2.DE",
-      "VOW3.DE"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/dax/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "dax"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "dax",
+    "ingest_exhausted_markets": [
+      "asx200",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_smallcap",
+      "nasdaq100",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
-    "compiled_count": 1,
-    "task_ids": [
-      "eng-20260924-02"
-    ],
-    "task_count": 111,
-    "market_id": "euro_stoxx50",
-    "hunter_ticker": "ADYEN.AS",
-    "priority_score": 12.0
+    "compiled_count": 0,
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20260924-02"
   }
 }
