@@ -65,7 +65,10 @@ def test_apply_epoch0_native_writes_cold_start_config(tmp_path: Path):
     assert provenance["warm_start"] is False
     assert provenance["capital_epoch"] == "n153_native_currency"
     # UK markets skip the twin.
-    assert apply_epoch0_native_config(tmp_path / "ftse_smallcap", {"market_id": "ftse_smallcap"}) is None
+    assert (
+        apply_epoch0_native_config(tmp_path / "ftse_smallcap", {"market_id": "ftse_smallcap"})
+        is None
+    )
 
 
 def test_ensure_automated_fund_stamps_reporting_currency_on_create(tmp_path: Path):

@@ -908,7 +908,9 @@ def _held_vs_market_row(
         )
     else:
         native_dir = shard_root_for_market(market_id, base=shard_root) / BUY_TIER_LEVEL_NATIVE_TRACK
-        if (native_dir / "config.json").exists() and not (native_dir / "automated_fund.json").exists():
+        if (native_dir / "config.json").exists() and not (
+            native_dir / "automated_fund.json"
+        ).exists():
             payload = merge_branch_series(
                 payload,
                 branch_id=BUY_TIER_LEVEL_NATIVE_TRACK,
@@ -950,6 +952,7 @@ def _overlay_gbp_fx_warped_archive(
         },
         status="active" if held_values else "pending",
     )
+
 
 def _overlay_ftse_dca_realism(
     payload: dict[str, Any],

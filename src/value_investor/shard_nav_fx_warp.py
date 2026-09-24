@@ -102,11 +102,7 @@ def _native_twin_status(shard_root: Path) -> dict[str, Any]:
         "has_fills": filled,
         "mark_count": len(curve),
         "reporting_currency": reporting,
-        "status": (
-            "active"
-            if filled
-            else ("pending" if config_present else "missing")
-        ),
+        "status": ("active" if filled else ("pending" if config_present else "missing")),
     }
 
 
@@ -171,9 +167,11 @@ def update_shard_nav_fx_warp(
     """Refresh the observe store for admitted non-GBP shards."""
     policy = _load_policy(Path(policy_path))
     admitted = admitted_learning_markets_for_policy(policy)
-    wanted = list(markets) if markets is not None else [
-        mid for mid in admitted if str(currency_for_market(mid) or "GBP").upper() != "GBP"
-    ]
+    wanted = (
+        list(markets)
+        if markets is not None
+        else [mid for mid in admitted if str(currency_for_market(mid) or "GBP").upper() != "GBP"]
+    )
     rows: list[dict[str, Any]] = []
     warped = 0
     twin_active = 0
