@@ -13819,8 +13819,118 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260924-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "MC.PA",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "MC.PA"
+        ],
+        "market_id": "euro_depth",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260924-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-24T07:37:58.747335+00:00",
+      "completed_at": "2026-09-24T07:48:13.113449+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "MC.PA"
+        ],
+        "results": [
+          {
+            "ticker": "MC.PA",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 3,
+              "filings_with_body": 2,
+              "indexed_without_body": 1
+            },
+            "after": {
+              "filings_total": 3,
+              "filings_with_body": 2,
+              "indexed_without_body": 1
+            },
+            "improved": false,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 3,
+              "annual": 0,
+              "interim": 0,
+              "trading_update": 1,
+              "other": 2,
+              "with_body": 2,
+              "period_coverage": {
+                "annual": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "interim": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "trading_update": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "other": {
+                  "total": 2,
+                  "with_body": 1
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 2,
+              "with_body_after": 2,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 1,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 2,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "MC.PA",
+            "with_body_before": 2,
+            "with_body_after": 2,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown",
+      "engineering_task_id": "eng-20260924-01"
     }
   ],
-  "updated_at": "2026-09-23T20:40:10.104988+00:00",
+  "updated_at": "2026-09-24T07:48:13.469458+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
