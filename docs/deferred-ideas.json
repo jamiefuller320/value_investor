@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-24T07:44:31+00:00",
+  "updated_at": "2026-09-24T08:26:36+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10332,6 +10332,41 @@
       "source": "https://cursor.com/agents/bc-9e908323-0e50-53ef-b9b0-ecb6407a2d99",
       "added_at": "2026-09-24T07:44:13+00:00",
       "updated_at": "2026-09-24T07:44:31+00:00"
+    },
+    {
+      "id": "N153",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Fix market-shard paper FX: trade cash vs GBP NAV marks",
+      "summary": "SP500 (and other non-GBP) buy_tier_level books debit cash at raw local prices while equity_curve NAV converts marks to GBP. Day-0 NAV collapses by ~FX (SP500 opened 1000\u2192737). Do not rewrite mid-flight books; next capital epoch should trade and mark in one unit (USD reporting or convert trade cash at spot).",
+      "revisit_when": "Next SP500/admitted-market paper capital epoch or cold-start twin; before treating shard NAV/excess as adoption truth",
+      "tags": [
+        "paper",
+        "fx",
+        "sp500",
+        "market-shard",
+        "nav"
+      ],
+      "status": "open",
+      "source": "sp500-zero-gain-sells investigation",
+      "added_at": "2026-09-24T08:26:36+00:00"
+    },
+    {
+      "id": "L459",
+      "category": "later",
+      "section": "ops",
+      "title": "Show realized % on paper trade rows",
+      "summary": "Paper tradesTableHtml shows net_cash only; tiny ~\u00a38 sleeves make sell round-trips look flat \u00a30 without a realized_pct column (avg_cost_at_exit vs price already on PaperTrade).",
+      "revisit_when": "Next paper-sims / lifecycle UX pass or when humans keep misreading shard sell P&L",
+      "tags": [
+        "paper",
+        "ux",
+        "realized",
+        "sp500"
+      ],
+      "status": "open",
+      "source": "sp500-zero-gain-sells investigation; L458 taken by #833 market-agnostic",
+      "added_at": "2026-09-24T08:26:36+00:00"
     }
   ],
   "fragments": [
