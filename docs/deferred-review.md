@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-24T07:30:07.481151+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-24T07:44:31+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -525,7 +525,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L449 | **Invoke market eng gap burndown from eng-queue when idle** | L448 burndown only runs inside ops-monitor apply_fixes, and ops-monitor skips after the first successful finalize of the day. After #805 landed mid-day, later scheduled/dispatch runs skipped monitor so burndown never applied until the next morning run (or force). Consider also calling try-market-gap-burndown from engineering-queue idle path beside compile-cap drain / parked hunter. | Next weekday where eng queue is idle after ~15:00 UTC with library IWB/thin remaining and ops-monitor already finalized that morning |
 | L453 | **Regime snapshot week-over-week delta highlighting** | Sunday review regime table columns (step, +α rate, pairs, shadow ready, flags) are often static for weeks while only primary excess moves. Highlight week-over-week deltas or collapse unchanged filter/gate columns so the table does not read as undifferentiated worsening. | Another Analysis-tab Sunday review UX pass, or when exclusion week-pairs grow past the regime_slices gate and filter columns start moving again |
 | L457 | **Same-session research for new buy-tier after filings** | Do not build a net-new same-day ingest→memo pipeline on hold→buy flips. Filings already rank via weekday ingest-loop unmeasured priority + eng-idle intensive pins; first-time memos stay Sunday (N114). Same-day fully usable is blocked by memo policy, not missing plumbing. Prefer an observe-only lag pin; only later consider a narrow new-flip unmeasured priority bump inside the existing loop. | Observe pin shows >=2 FTSE buy-tier flips in a fortnight staying unmeasured across >1 full weekday ingest day AND the following Sunday first-memo pass still hits thin/zero-body on those names (bodies would have helped) — or N114 is deliberately revisited. |
-| L458 | **Market-agnostic buy-tier flip lag monitor** | Generalize the FTSE buy-tier flip→usable observe pin (#831) across admitted learning markets (screen signal_since + per-market research roots). Keep FTSE ai_track_buy_eligible semantics off shards; measure factory-path lag (index → key bodies → memo) only. One parameterized instrument — not per-market forks or eng spray (N152). | FTSE flip-lag store shows ≥2 flips in a fortnight with path-incomplete >1 weekday ingest day, OR the next new structural observe/ingest monitor is designed — then implement market-parameterized from day one rather than accumulating another FTSE-only special case |
 
 ---
 
