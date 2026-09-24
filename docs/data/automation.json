@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-24T12:16:49.036515+00:00",
+  "generated_at": "2026-09-24T12:56:44.965166+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1169,27 +1169,44 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-24T12:16:47.160928+00:00",
-    "queue_ui_updated_at": "2026-09-24T12:16:48.954965+00:00",
-    "task_count": 109,
+    "compiled_at": "2026-09-24T12:56:42.105042+00:00",
+    "queue_ui_updated_at": "2026-09-24T12:56:44.884758+00:00",
+    "task_count": 110,
     "status": {
-      "open_count": 0,
+      "open_count": 1,
       "pr_open_count": 0,
       "parked_count": 0,
       "merged_count": 85,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260924-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
+    "queued_tasks": [
+      {
+        "id": "eng-20260924-01",
+        "area": "ingest",
+        "title": "Close library ingest gaps for cac40 / SGO.PA (chain 1/3: 0/0 improved, run igc-20260921-04)",
+        "priority": "high",
+        "priority_score": 88.0,
+        "status": "open",
+        "source": "ingest_gap_closure",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "partial"
+      }
+    ],
     "attention_tasks": [],
     "clash_summary": {
-      "open_task_count": 0,
-      "dispatch_eligible_count": 0,
+      "open_task_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_count": 0
     }
   },
@@ -1486,9 +1503,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-24T12:16:49.036515+00:00",
-    "overall": "idle",
-    "headline": "Queue and hunter idle.",
+    "generated_at": "2026-09-24T12:56:44.965166+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
     "merge_lane": {
       "state": "idle",
       "idle": true,
@@ -1500,35 +1517,35 @@
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
+      "state": "running",
+      "idle": false,
+      "running": true,
       "blocked": false,
-      "should_dispatch": false,
+      "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 0,
+      "open_count": 1,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 0,
+      "dispatch_eligible_count": 1,
       "blocked_task_count": 0,
-      "next_task_id": null,
-      "reason": "no open engineering tasks in queue",
-      "detail": "No open engineering tasks — queue is idle."
+      "next_task_id": "eng-20260924-01",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-24T12:16:48.067857+00:00"
+      "evaluated_at": "2026-09-24T12:56:44.092259+00:00"
     },
     "traffic_control": {
       "pause_active": false,
       "stuck_pr_count": 0,
       "pause_reasons": [],
-      "evaluated_at": "2026-09-22T20:21:29.286725+00:00"
+      "evaluated_at": "2026-09-24T12:54:50.560856+00:00"
     },
     "ops_monitor": {
-      "run_at": "2026-09-24T07:46:43.918854+00:00",
+      "run_at": "2026-09-24T12:54:14.957524+00:00",
       "overall": "fail",
       "should_dispatch_engineering": true
     },
@@ -1832,18 +1849,18 @@
     "library_stall_parks": [],
     "observe_utilization": {
       "schema_version": 1,
-      "generated_at": "2026-09-24T12:16:49.007247+00:00",
+      "generated_at": "2026-09-24T12:56:44.935711+00:00",
       "observe_only": true,
-      "headline": "2 observe utilization warn(s) — cohorts need attention.",
+      "headline": "2 warn instrument(s); improving vs last cycle on 1.",
       "surface_freshness": "fresh",
-      "ops_run_at": "2026-09-24T07:46:43.918854+00:00",
+      "ops_run_at": "2026-09-24T12:54:14.957524+00:00",
       "warn_instrument_count": 2,
       "trajectory_summary": {
-        "improving": 0,
+        "improving": 1,
         "worsening": 0,
-        "flat": 0,
-        "unknown": 2,
-        "history_points": 1,
+        "flat": 1,
+        "unknown": 0,
+        "history_points": 2,
         "note": "Deltas vs prior dashboard cycle (warn/gap counts; lower is better). Raw instrument stores commit with ops-monitor (L460)."
       },
       "instruments": [
@@ -1854,37 +1871,37 @@
           "observe_only": true,
           "warn_active": true,
           "severity": "warn",
-          "finding_summary": "4 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (AI-usable path incomplete): EWG.L (no_memo, 295.78h since flip), GNS.L (no_memo, 295.78h since flip), PINE.L (no_memo, 79.78h since flip), TRST.L (no_memo, 79.78h since flip). Blocking: no_memo=4.",
+          "finding_summary": "25 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across asx200, cac40, euro_depth, ftse350, nasdaq100, sp500 (+1 more): sp500/NXPI (no_memo, 492.9h since flip), asx200/CLW.AX (no_memo, 444.9h since flip), euro_depth/NVG.LS (no_memo, 444.9h since flip), euro_depth/OMV.VI (no_memo, 372.9h since flip), sp500/BKNG (no_memo, 372.9h since flip), tsx60/TECK-B.TO (no_key_bodies, 372.9h since flip), EWG.L (no_memo, 300.9h since flip), GNS.L (no_memo, 300.9h since flip), sp500/PEP (no_memo, 276.9h since flip), euro_depth/RAND.AS (no_memo, 204.9h since flip) (+15 more). Blocking: no_key_bodies=5, no_memo=20.",
           "metrics": {
-            "warn_not_usable": 26,
-            "open_not_usable": 41,
-            "cohort_count": 110,
-            "usable_in_window": 69,
+            "warn_not_usable": 25,
+            "open_not_usable": 46,
+            "cohort_count": 117,
+            "usable_in_window": 71,
             "market_count": 9,
             "blocking_stage_counts": {
-              "no_memo": 21,
+              "no_memo": 23,
               "no_accumulate_verdict": 15,
-              "no_key_bodies": 5
+              "no_key_bodies": 8
             }
           },
           "primary_metric": "warn_not_usable",
-          "primary_value": 26,
+          "primary_value": 25,
           "primary_label": "Warn cohort (≥24h path-incomplete)",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 4.5h ago.",
-            "as_of": "2026-09-24T07:43:49.331979+00:00",
-            "age_hours": 4.55,
-            "store_lag_hours": 0.05,
+            "detail": "Last refresh 0.0h ago.",
+            "as_of": "2026-09-24T12:54:16.421905+00:00",
+            "age_hours": 0.04,
+            "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
           "trajectory": {
-            "delta": null,
-            "direction": "unknown",
-            "label": "No prior cycle",
-            "prior_value": null,
-            "prior_at": null
+            "delta": -1,
+            "direction": "improving",
+            "label": "Better since last cycle",
+            "prior_value": 26,
+            "prior_at": "2026-09-24T09:48:26.211141+00:00"
           }
         },
         {
@@ -1894,7 +1911,7 @@
           "observe_only": true,
           "warn_active": true,
           "severity": "warn",
-          "finding_summary": null,
+          "finding_summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 42/56 names (e.g. BYIT.L, EWG.L, GNS.L, PINE.L, TRST.L, KLR.L, PAF.L, ABDN.L, ABF.L, ALFA.L +32 more). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
           "metrics": {
             "inventory_count": 56,
             "fully_ready_count": 14,
@@ -1915,18 +1932,18 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 3.7h ago.",
-            "as_of": "2026-09-24T08:32:40.914655+00:00",
-            "age_hours": 3.74,
+            "detail": "Last refresh 0.0h ago.",
+            "as_of": "2026-09-24T12:54:29.019687+00:00",
+            "age_hours": 0.04,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
           "trajectory": {
-            "delta": null,
-            "direction": "unknown",
-            "label": "No prior cycle",
-            "prior_value": null,
-            "prior_at": null
+            "delta": 0,
+            "direction": "flat",
+            "label": "Unchanged vs last cycle",
+            "prior_value": 42,
+            "prior_at": "2026-09-24T09:48:26.211141+00:00"
           }
         }
       ],
@@ -1935,6 +1952,19 @@
           "at": "2026-09-24T09:48:26.211141+00:00",
           "buy_tier_flip_lag": {
             "primary_value": 26,
+            "warn_active": true,
+            "freshness_state": "fresh"
+          },
+          "decision_input_inventory": {
+            "primary_value": 42,
+            "warn_active": true,
+            "freshness_state": "fresh"
+          }
+        },
+        {
+          "at": "2026-09-24T12:55:21.054597+00:00",
+          "buy_tier_flip_lag": {
+            "primary_value": 25,
             "warn_active": true,
             "freshness_state": "fresh"
           },
