@@ -1012,6 +1012,7 @@ def test_check_workflow_freshness_suppresses_failure_when_recovery_in_flight():
 @patch("value_investor.ops_monitor.check_indicator_integrity", return_value=[])
 @patch("value_investor.ops_monitor.check_phase_b_producer_progress", return_value=[])
 @patch("value_investor.ops_monitor.check_thin_memo_learning_gap", return_value=[])
+@patch("value_investor.ops_monitor.check_buy_tier_flip_lag", return_value=[])
 @patch("value_investor.ops_monitor.check_memo_rememo_backlog", return_value=[])
 @patch("value_investor.ops_monitor.check_ops_budget", return_value=[])
 @patch("value_investor.ops_monitor.check_paper_learning_tracks", return_value=[])
@@ -1019,6 +1020,7 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
     _paper,
     _budget,
     _rememo,
+    _flip_lag,
     _thin_memo,
     _phase_b,
     _integrity,
@@ -1086,6 +1088,7 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
 @patch("value_investor.ops_monitor.check_indicator_integrity", return_value=[])
 @patch("value_investor.ops_monitor.check_phase_b_producer_progress", return_value=[])
 @patch("value_investor.ops_monitor.check_thin_memo_learning_gap", return_value=[])
+@patch("value_investor.ops_monitor.check_buy_tier_flip_lag", return_value=[])
 @patch("value_investor.ops_monitor.check_memo_rememo_backlog", return_value=[])
 @patch("value_investor.ops_monitor.check_ops_budget", return_value=[])
 @patch("value_investor.ops_monitor.check_paper_learning_tracks", return_value=[])
@@ -1093,6 +1096,7 @@ def test_run_ops_monitor_writes_status(
     _paper,
     _budget,
     _rememo,
+    _flip_lag,
     _thin_memo,
     _phase_b,
     _integrity,
