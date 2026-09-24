@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-24T08:26:36+00:00",
+  "updated_at": "2026-09-24T09:13:48+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10367,6 +10367,41 @@
       "status": "open",
       "source": "sp500-zero-gain-sells investigation; L458 taken by #833 market-agnostic",
       "added_at": "2026-09-24T08:26:36+00:00"
+    },
+    {
+      "id": "L460",
+      "category": "later",
+      "section": "ops",
+      "title": "Commit observe-instrument JSON stores from ops-monitor",
+      "summary": "Add buy_tier_flip_lag.json and decision_input_inventory.json to GHA_COMMIT_OPTIONAL (or OWNED) in gha_commit_ops_monitor.sh so daily ops-monitor persists cohort history in git, not only ops_status finding text.",
+      "revisit_when": "After #835 merges, or when day-over-day cohort history from committed stores is needed for audits / dashboards",
+      "tags": [
+        "ops-monitor",
+        "observe",
+        "full-wiring",
+        "flip-lag",
+        "decision-input"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-710d6dc7-48cb-5f61-9619-83534519a9fa",
+      "added_at": "2026-09-24T09:13:48+00:00"
+    },
+    {
+      "id": "L461",
+      "category": "later",
+      "section": "ops",
+      "title": "Instrument-specific dashboard for observe utilization warns",
+      "summary": "Surface flip-lag and decision-input finding titles / cohort counts on Queue & hunter or Analysis beyond ops overall status. Ops email + ops_status findings already meet the full-wiring minimal bar.",
+      "revisit_when": "Ops email alone is repeatedly missed for P1 utilization gaps, or Analysis tab gains a utilization strip",
+      "tags": [
+        "dashboard",
+        "observe",
+        "full-wiring",
+        "P1"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-710d6dc7-48cb-5f61-9619-83534519a9fa",
+      "added_at": "2026-09-24T09:13:48+00:00"
     }
   ],
   "fragments": [
