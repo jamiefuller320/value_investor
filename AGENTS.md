@@ -45,6 +45,26 @@ Spend priorities (P1/P2), clash-aware eng capacity, and “new agent session aft
 a long multi-topic chat” still apply; this section is about *how* ideas enter
 the system, not *what* to work on first.
 
+## Full automation wiring (required)
+
+**Any new component must be fully wired into automation so findings are usable** —
+not shipped as CLI / manual-only. Minimal bar (detail:
+[`docs/ops/ops-monitor.md`](docs/ops/ops-monitor.md#full-automation-wiring)):
+
+1. **Scheduled trigger** — usually daily ops-monitor `collect_ops_findings` (or a
+   named workflow with cron); not “run when someone remembers.”
+2. **Persisted finding** — lands in committed `docs/data/ops_status.json` with a
+   stable title, severity, and category.
+3. **Runbook mention** — named in `docs/ops/ops-monitor.md` (or a sibling
+   instrument doc linked from there).
+4. **CLI optional** — for ad-hoc drill-down only; never the sole path.
+
+**Lanes:** observe / warn-only → `auto_fixable=False` (email/PM handoff; no
+rememo / ingest / eng spray from the finding alone). Auto-fixable →
+`auto_fixable=True` plus a safe heal path (or documented supervised draft).
+Optional beyond the bar (defer unless needed): ops-monitor commit of instrument
+store JSON, instrument-specific dashboard.
+
 ## Post-run persistent weaknesses & intensive clearance (required)
 
 The Analysis tab **Post-run improvement review** (`docs/data/latest.json` →

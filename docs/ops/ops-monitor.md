@@ -8,6 +8,42 @@ micro-compile, `so-what --apply`, engineering redispatch). Interpret post-run th
 via [`post-run-improvement-clearance.md`](post-run-improvement-clearance.md) — do not
 treat Persistent weaknesses as N separate alert emails.
 
+## Full automation wiring
+
+**Any new component must be fully wired into automation so findings are usable** —
+not shipped as CLI / manual-only. Applies to observe instruments, health checks,
+utilization audits, and similar surfaces that produce actionable findings.
+
+### Minimal bar (ship-blocking)
+
+| Requirement | What “done” means |
+|-------------|-------------------|
+| **Scheduled trigger** | Invoked from daily ops-monitor `collect_ops_findings` (preferred) **or** a named workflow with cron / documented dispatch. No “remember to run the CLI.” |
+| **Persisted finding** | When the condition fires, a finding lands in committed `docs/data/ops_status.json` (stable `title`, `severity`, `category`) via the ops-monitor artifact commit. |
+| **Runbook mention** | Named in this doc (or a sibling instrument doc linked from here). |
+| **CLI optional** | Manual `ftse-*` flags are for drill-down only — never the sole production path. |
+
+### Observe vs auto-fixable lanes
+
+| Lane | `auto_fixable` | Outcome when red |
+|------|-----------------|------------------|
+| **Observe / warn-only** | `False` | Finding + ops email / project-traffic PM handoff. Does **not** deepen ingest, rememo, or mint eng tasks from the finding alone. |
+| **Auto-fixable** | `True` | Safe heal path in ops-monitor (or a documented supervised draft). Heal → re-verify before email. |
+
+Do not promote an observe instrument into auto-fix / eng spray without an explicit
+lane change and readiness gate (see N152 / P1 pin rules).
+
+### Optional (not ship-blocking — park with `ftse-defer`)
+
+- Commit of instrument store JSON from ops-monitor (`GHA_COMMIT_OPTIONAL` /
+  `GHA_COMMIT_OWNED` in `scripts/gha_commit_ops_monitor.sh`) for day-over-day
+  cohort history in git.
+- Instrument-specific dashboard / Analysis surface (ops overall slice is enough
+  for the bar).
+- A dedicated workflow beyond the shared ops-monitor cron.
+
+Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-required).
+
 **Heal → re-verify → report** (when `--apply` / default in CI):
 
 1. Detect findings (artifacts, ingest health, workflows, engineering queue, Phase B
@@ -240,6 +276,25 @@ shadow-vs-primary / promotion gates.
 Weekday paper findings before **10:00 UTC** defer alert email (same ready time
 as `paper-auto.yml` workflow freshness). The 13:15 catch-up is the actionable
 pass.
+
+## Observe utilization instruments (P1)
+
+Both checks are **observe / warn-only** (`auto_fixable=False`). They refresh a
+runner-local store JSON and emit an ops finding when the warn cohort is material.
+Manual drill-down: `ftse-ingest-audit --flip-lag` /
+`ftse-ingest-audit --decision-inputs` (mutually exclusive; `--decision-inputs`
+lands with [#835](https://github.com/jamiefuller320/value_investor/pull/835)).
+They do **not** deepen ingest or rememo.
+
+| Check | Finding title | When it warns | Store (runner) | Status |
+|-------|---------------|---------------|----------------|--------|
+| `check_buy_tier_flip_lag` | **New buy-tier not yet usable** | Path-incomplete ≥24h cohort non-empty (FTSE live ∪ admitted; schema v2) | `docs/data/buy_tier_flip_lag.json` | Live on main |
+| `check_decision_input_inventory` | **FTSE decision-input utilization gap** | Dominant bind gap count ≥3 on FTSE holdings ∪ buy-tier (else quiet / `P1 green-enough`) | `docs/data/decision_input_inventory.json` | Wired on [#835](https://github.com/jamiefuller320/value_investor/pull/835); not on main until merge |
+
+Called from `collect_ops_findings` on the daily ops-monitor schedule (decision-input
+after #835 merges). Instrument store JSON is **not** yet in `GHA_COMMIT_OPTIONAL`
+— findings persist via `ops_status.json`; day-over-day store history in git is
+optional (deferred).
 
 ## CLI
 

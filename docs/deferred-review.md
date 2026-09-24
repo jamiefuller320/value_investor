@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-24T08:26:36+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-24T09:13:48+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -527,6 +527,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L453 | **Regime snapshot week-over-week delta highlighting** | Sunday review regime table columns (step, +α rate, pairs, shadow ready, flags) are often static for weeks while only primary excess moves. Highlight week-over-week deltas or collapse unchanged filter/gate columns so the table does not read as undifferentiated worsening. | Another Analysis-tab Sunday review UX pass, or when exclusion week-pairs grow past the regime_slices gate and filter columns start moving again |
 | L457 | **Same-session research for new buy-tier after filings** | Do not build a net-new same-day ingest→memo pipeline on hold→buy flips. Filings already rank via weekday ingest-loop unmeasured priority + eng-idle intensive pins; first-time memos stay Sunday (N114). Same-day fully usable is blocked by memo policy, not missing plumbing. Prefer an observe-only lag pin; only later consider a narrow new-flip unmeasured priority bump inside the existing loop. | Observe pin shows >=2 FTSE buy-tier flips in a fortnight staying unmeasured across >1 full weekday ingest day AND the following Sunday first-memo pass still hits thin/zero-body on those names (bodies would have helped) — or N114 is deliberately revisited. |
 | L459 | **Show realized % on paper trade rows** | Paper tradesTableHtml shows net_cash only; tiny ~£8 sleeves make sell round-trips look flat £0 without a realized_pct column (avg_cost_at_exit vs price already on PaperTrade). | Next paper-sims / lifecycle UX pass or when humans keep misreading shard sell P&L |
+| L460 | **Commit observe-instrument JSON stores from ops-monitor** | Add buy_tier_flip_lag.json and decision_input_inventory.json to GHA_COMMIT_OPTIONAL (or OWNED) in gha_commit_ops_monitor.sh so daily ops-monitor persists cohort history in git, not only ops_status finding text. | After #835 merges, or when day-over-day cohort history from committed stores is needed for audits / dashboards |
+| L461 | **Instrument-specific dashboard for observe utilization warns** | Surface flip-lag and decision-input finding titles / cohort counts on Queue & hunter or Analysis beyond ops overall status. Ops email + ops_status findings already meet the full-wiring minimal bar. | Ops email alone is repeatedly missed for P1 utilization gaps, or Analysis tab gains a utilization strip |
 
 ---
 
