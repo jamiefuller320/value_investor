@@ -35,14 +35,17 @@ lane change and readiness gate (see N152 / P1 pin rules).
 
 ### Optional (not ship-blocking — park with `ftse-defer`)
 
-- Commit of **raw** instrument store JSON from ops-monitor (`buy_tier_flip_lag.json`,
-  `decision_input_inventory.json` via `GHA_COMMIT_OPTIONAL` /
-  `GHA_COMMIT_OWNED`) for day-over-day cohort history in git (**L460** — still open).
 - A dedicated workflow beyond the shared ops-monitor cron.
 
-**Shipped above the bar (L461):** instrument-specific **Observe utilization**
-dashboard on Queue & hunter + Analysis (`docs/data/observe_utilization.json`),
-with freshness / staleness banners and trajectory deltas vs last cycle.
+**Shipped above the bar:**
+
+- **L461** — instrument-specific **Observe utilization** dashboard on Queue &
+  hunter + Analysis (`docs/data/observe_utilization.json`), with freshness /
+  staleness banners and trajectory deltas vs last cycle.
+- **L460** — raw instrument stores (`buy_tier_flip_lag.json`,
+  `decision_input_inventory.json`) in ops-monitor `GHA_COMMIT_OPTIONAL` so
+  daily cohort history persists in git (email-report excludes them so a broad
+  `docs/data` overlay cannot rewind fresher ops commits).
 
 Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-required).
 
@@ -293,13 +296,15 @@ They do **not** deepen ingest or rememo.
 | `check_decision_input_inventory` | **FTSE decision-input utilization gap** | Dominant bind gap count ≥3 on FTSE holdings ∪ buy-tier (else quiet / `P1 green-enough`) | `docs/data/decision_input_inventory.json` | Live on main |
 
 Called from `collect_ops_findings` on the daily ops-monitor schedule. Raw
-instrument store JSON is **not** yet in `GHA_COMMIT_OPTIONAL` (L460 — day-over-day
-of the full stores). The **instrument dashboard** rollup
-`docs/data/observe_utilization.json` **is** committed with queue-health refresh
-(ops-monitor / dashboard-bridge): Queue & hunter + Analysis show warn state,
-**freshness / staleness**, and **trajectory** (delta vs last cycle; lower
-warn/gap = better). Prefer those trajectory indicators over non-contextual
-absolute counts.
+instrument store JSON **is** in `GHA_COMMIT_OPTIONAL` (**L460**) so day-over-day
+cohort history lands in git with ops-monitor. The **instrument dashboard**
+rollup `docs/data/observe_utilization.json` is also committed with queue-health
+refresh (ops-monitor / dashboard-bridge): Queue & hunter + Analysis show warn
+state, **freshness / staleness**, and **trajectory** (delta vs last cycle;
+lower warn/gap = better). Prefer those trajectory indicators over
+non-contextual absolute counts. A `lagging` freshness badge now means a
+commit-path anomaly (stores should co-commit with `ops_status`); it is no
+longer an intentional gap.
 
 ## CLI
 

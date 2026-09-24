@@ -182,3 +182,22 @@ def test_ops_monitor_workflow_commits_after_monitor_exit() -> None:
     assert monitor_idx < commit_idx < fail_idx
     assert "tee /tmp/ops_monitor.json" in text
     assert "monitor_rc" in text
+
+
+def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> None:
+    """L460: raw flip-lag + decision-input stores persist with ops-monitor."""
+    text = SCRIPT.read_text(encoding="utf-8")
+    assert "docs/data/buy_tier_flip_lag.json" in text
+    assert "docs/data/decision_input_inventory.json" in text
+    assert "docs/data/observe_utilization.json" in text
+    # Optional (not OWNED) — same race-safe lane as queue_health / observe rollup.
+    optional_line = next(
+        line for line in text.splitlines() if "GHA_COMMIT_OPTIONAL" in line and ":-" in line
+    )
+    assert "buy_tier_flip_lag.json" in optional_line
+    assert "decision_input_inventory.json" in optional_line
+    owned_line = next(
+        line for line in text.splitlines() if "GHA_COMMIT_OWNED" in line and ":-" in line
+    )
+    assert "buy_tier_flip_lag.json" not in owned_line
+    assert "decision_input_inventory.json" not in owned_line
