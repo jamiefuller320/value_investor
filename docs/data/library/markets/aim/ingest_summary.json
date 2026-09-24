@@ -1,19 +1,10 @@
 {
-  "run_at": "2026-09-24T17:23:39.720047+00:00",
+  "run_at": "2026-09-24T17:31:08.601609+00:00",
   "market_id": "aim",
   "targets": [
-    "IGR.L",
     "YNGN.L"
   ],
   "target_details": [
-    {
-      "ticker": "IGR.L",
-      "priority_score": 14.646799999999999,
-      "filings_total": 50,
-      "filings_with_body": 49,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
-    },
     {
       "ticker": "YNGN.L",
       "priority_score": 3.3438,
@@ -25,68 +16,6 @@
   ],
   "results": [
     {
-      "ticker": "IGR.L",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 50,
-        "filings_with_body": 49,
-        "indexed_without_body": 1
-      },
-      "after": {
-        "filings_total": 52,
-        "filings_with_body": 52,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "uk_rns",
-      "filings_summary": {
-        "total": 52,
-        "annual": 2,
-        "interim": 0,
-        "trading_update": 2,
-        "other": 48,
-        "with_body": 52,
-        "period_coverage": {
-          "annual": {
-            "total": 2,
-            "with_body": 2
-          },
-          "interim": {
-            "total": 0,
-            "with_body": 0
-          },
-          "trading_update": {
-            "total": 2,
-            "with_body": 2
-          },
-          "other": {
-            "total": 24,
-            "with_body": 24
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 52,
-        "with_body_after": 52,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    },
-    {
       "ticker": "YNGN.L",
       "reason": "thin_bodies",
       "before": {
@@ -96,8 +25,8 @@
       },
       "after": {
         "filings_total": 51,
-        "filings_with_body": 21,
-        "indexed_without_body": 30
+        "filings_with_body": 31,
+        "indexed_without_body": 20
       },
       "improved": true,
       "regime": "uk_rns",
@@ -133,8 +62,8 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 21,
-        "with_body_after": 21,
+        "with_body_before": 31,
+        "with_body_after": 31,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
         "deadline_hit": false,
@@ -150,14 +79,13 @@
     }
   ],
   "improved": [
-    "IGR.L",
     "YNGN.L"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-24T17:19:04.092213+00:00",
+    "snapshot_at": "2026-09-24T17:27:54.114098+00:00",
     "market_id": "aim",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
@@ -193,45 +121,44 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-24T17:23:35.493952+00:00",
+    "snapshot_at": "2026-09-24T17:31:08.585617+00:00",
     "market_id": "aim",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 1,
-    "indexed_without_body": 30,
+    "thin_body_buy_tier": 0,
+    "indexed_without_body": 21,
     "bodies_min": 7,
     "bodies_median": 50,
-    "bodies_max": 52,
+    "bodies_max": 51,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "YNGN.L"
-    ],
+    "thin_body_tickers": [],
     "indexed_without_body_tickers": [
-      "YNGN.L"
+      "YNGN.L",
+      "IGR.L"
     ],
     "indexed_without_body_by_ticker": {
-      "YNGN.L": 30
+      "YNGN.L": 20,
+      "IGR.L": 1
     },
     "parked_tickers": [],
     "parked_count": 0,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "YNGN.L"
-    ],
-    "effective_indexed_without_body": 30,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 21,
     "effective_indexed_without_body_tickers": [
-      "YNGN.L"
+      "YNGN.L",
+      "IGR.L"
     ],
     "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": false,
+  "recorded_gap_closure": true,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
@@ -240,7 +167,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "aim",
-    "assessed_at": "2026-09-24T17:19:05.608775+00:00",
+    "assessed_at": "2026-09-24T17:27:55.619541+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -274,17 +201,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 268.386377492,
-  "budget_seconds": 525.0,
-  "leftover_seconds": 256.613622508,
+  "used_seconds": 191.43814511600002,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 1908.561854884,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": 320.0,
-  "pin_tickers": [],
+  "per_ticker_max_seconds": null,
+  "pin_tickers": [
+    "YNGN.L"
+  ],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aim",
-    "updated_at": "2026-09-24T17:23:35.496274+00:00",
+    "updated_at": "2026-09-24T17:31:08.587947+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
@@ -292,9 +221,11 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
     "had_complete_targets": false,
     "leftover_tickers": [
+      "IGR.L",
       "YNGN.L"
     ],
     "unparked_leftover": [
+      "IGR.L",
       "YNGN.L"
     ],
     "path": "docs/data/library/markets/aim/ingest_exhaustion.json"
@@ -306,10 +237,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "task_ids": [],
-    "task_count": 111,
-    "market_id": "nasdaq100",
-    "hunter_ticker": "PDD",
-    "priority_score": 12.0
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20260924-02"
   }
 }
