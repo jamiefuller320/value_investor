@@ -10616,6 +10616,34 @@ def test_refetch_ir_allowlist_migrates_eg7_ir_dead_cairnhomes_url(tmp_path: Path
     assert row["has_body"] is True
 
 
+def test_fetch_filings_ir_allowlist_euro_stoxx50_adyen_as_builtins(tmp_path: Path):
+    """eng-20260924-02: ADYEN.AS awaiting_periodic_report — investors.adyen.com FY + H1 PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("ADYEN.AS", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all("brand.adyen.com/api/asset" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_adyen_as_euro_stoxx50_has_fetchable_ir():
+    """eng-20260924-02: ADYEN.AS has live brand.adyen.com FY2025 annual report PDF."""
+    assert "ADYEN.AS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ADYEN.AS")
+    annual_2025 = next(
+        row
+        for row in rows
+        if row["period"] == "annual" and "DEcCEo4XPo3eDfzj-fjMZ366g2pQkuoZMPARCHC5BoE" in row["url"]
+    )
+    body = fetch_filing_body(annual_2025["url"])
+    assert body and len(body) > 5000
+    assert "Annual Report" in body
+
+
 def test_fetch_filings_ir_allowlist_euro_stoxx50_san_pa_builtins(tmp_path: Path):
     """Regression: SAN.PA parked IWB — sanofi.com FY2025 20-F + HY2025 statutory PDFs."""
     allowlist_path = tmp_path / "ir.json"
