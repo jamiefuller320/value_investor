@@ -11,6 +11,7 @@ snapshot plus the commands to re-run the same checks — not a new human cadence
 
 ```bash
 ftse-ingest-audit --no-write
+ftse-ingest-audit --decision-inputs --no-write
 ftse-analysis-review system-gaps
 ftse-progress-report build
 ftse-defer list

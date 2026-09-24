@@ -1,4 +1,8 @@
-"""CLI for buy-tier ingest fragment utilization audit (+ flip→usable lag pin)."""
+"""CLI for buy-tier ingest fragment utilization audit (+ flip→usable lag pin).
+
+Also hosts the observe-only FTSE holdings ∪ buy-tier decision-input inventory
+(``--decision-inputs``) — steady-state P1 utilization, not flip-lag.
+"""
 
 from __future__ import annotations
 
@@ -16,6 +20,16 @@ from value_investor.buy_tier_flip_lag import (
     DEFAULT_WARN_AFTER_HOURS,
     format_flip_lag_summary,
     update_buy_tier_flip_lag,
+)
+from value_investor.decision_input_inventory import (
+    DEFAULT_GREEN_ENOUGH_MAX_GAPS,
+    DEFAULT_MEMO_MAX_AGE_DAYS,
+    DEFAULT_PAPER_FUND_PATH,
+    format_decision_input_summary,
+    run_decision_input_inventory,
+)
+from value_investor.decision_input_inventory import (
+    DEFAULT_STORE_PATH as DEFAULT_DECISION_INPUT_STORE,
 )
 from value_investor.ingest_utilization_audit import (
     DEFAULT_LATEST_PATH,
@@ -94,6 +108,45 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Restrict flip-lag refresh to the FTSE live path only",
     )
+    parser.add_argument(
+        "--decision-inputs",
+        action="store_true",
+        help=(
+            "Observe-only: refresh docs/data/decision_input_inventory.json for "
+            "FTSE AI-judgment holdings ∪ buy-tier (key bodies, FCF basis bind, "
+            "overlay bind, memo recency) — not flip-lag"
+        ),
+    )
+    parser.add_argument(
+        "--decision-inputs-store",
+        type=Path,
+        default=DEFAULT_DECISION_INPUT_STORE,
+        help=(
+            "Decision-input inventory store path "
+            f"(default: {DEFAULT_DECISION_INPUT_STORE})"
+        ),
+    )
+    parser.add_argument(
+        "--paper-fund",
+        type=Path,
+        default=DEFAULT_PAPER_FUND_PATH,
+        help=f"AI-judgment paper fund path (default: {DEFAULT_PAPER_FUND_PATH})",
+    )
+    parser.add_argument(
+        "--memo-max-age-days",
+        type=float,
+        default=DEFAULT_MEMO_MAX_AGE_DAYS,
+        help=f"Memo considered recent within N days (default: {DEFAULT_MEMO_MAX_AGE_DAYS})",
+    )
+    parser.add_argument(
+        "--green-enough-max-gaps",
+        type=int,
+        default=DEFAULT_GREEN_ENOUGH_MAX_GAPS,
+        help=(
+            "Max dominant-field gaps still called P1 green-enough "
+            f"(default: {DEFAULT_GREEN_ENOUGH_MAX_GAPS})"
+        ),
+    )
     parser.add_argument("--json", action="store_true", help="Print full JSON to stdout")
     parser.add_argument("--no-write", action="store_true", help="Skip writing output file")
     parser.add_argument("-v", "--verbose", action="store_true")
@@ -103,6 +156,9 @@ def main(argv: list[str] | None = None) -> int:
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(levelname)s %(message)s",
     )
+
+    if args.flip_lag and args.decision_inputs:
+        parser.error("Use only one of --flip-lag or --decision-inputs")
 
     if args.flip_lag:
         market_ids = [m.strip() for m in str(args.markets or "").split(",") if m.strip()]
@@ -126,6 +182,25 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(payload, indent=2))
         else:
             print(format_flip_lag_summary(payload))
+        return 0
+
+    if args.decision_inputs:
+        payload = run_decision_input_inventory(
+            latest_path=args.latest_path,
+            research_root=args.research_root,
+            memo_dir=args.memo_dir,
+            paper_fund_path=args.paper_fund,
+            store_path=args.decision_inputs_store,
+            memo_max_age_days=float(args.memo_max_age_days),
+            green_enough_max_gaps=int(args.green_enough_max_gaps),
+            persist=not args.no_write,
+        )
+        if not args.no_write:
+            logger.info("Wrote %s", args.decision_inputs_store)
+        if args.json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(format_decision_input_summary(payload))
         return 0
 
     payload = run_ingest_utilization_audit(
