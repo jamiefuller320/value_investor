@@ -3,21 +3,29 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "momentum_grace",
-  "generated_at": "2026-09-23T08:28:03.320559+00:00",
+  "generated_at": "2026-09-24T08:27:49.461427+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 5,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 5,
+    "open_with_thesis": 0,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 5,
+        "recovery_rate": 0.4,
+        "sold_underwater_rate": 0.6,
+        "mean_peak_unrealized_pct": 0.0216,
+        "mean_trough_unrealized_pct": -0.0319,
+        "outcome_labels": {
+          "sold_underwater": 3,
+          "recovered": 2
+        }
       },
       "broken": {
         "closed_count": 0
@@ -48,10 +56,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 5,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=5 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -66,7 +74,7 @@
       "ticker": "FGP.L",
       "name": "FirstGroup plc",
       "started_at": "2026-09-04T09:27:27.029945+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -108,9 +116,9 @@
       "peak_unrealized_pct": -0.0305,
       "trough_unrealized_pct": -0.085,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-24T09:27:33.183912+01:00",
+      "linked_sell_trade_id": "2854231a-930b-4008-a4e1-c3a1664b695e"
     },
     {
       "episode_id": "momentum_grace:HIK.L:2026-09-04T09:27:27.029945+01:00",
@@ -118,7 +126,7 @@
       "ticker": "HIK.L",
       "name": "Hikma Pharmaceuticals PLC",
       "started_at": "2026-09-04T09:27:27.029945+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -160,9 +168,9 @@
       "peak_unrealized_pct": -0.0361,
       "trough_unrealized_pct": -0.1105,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-24T09:27:33.183912+01:00",
+      "linked_sell_trade_id": "36fe0d7d-0acd-4546-b529-8c517294fbc2"
     },
     {
       "episode_id": "momentum_grace:ITV.L:2026-09-04T09:27:27.029945+01:00",
@@ -170,7 +178,7 @@
       "ticker": "ITV.L",
       "name": "ITV plc",
       "started_at": "2026-09-04T09:27:27.029945+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -210,11 +218,11 @@
         }
       ],
       "peak_unrealized_pct": -0.0335,
-      "trough_unrealized_pct": -0.0615,
+      "trough_unrealized_pct": -0.0635,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-24T09:27:33.183912+01:00",
+      "linked_sell_trade_id": "33258570-e43c-421f-a2e0-20082a777daf"
     },
     {
       "episode_id": "momentum_grace:JUP.L:2026-09-04T09:27:27.029945+01:00",
@@ -222,7 +230,7 @@
       "ticker": "JUP.L",
       "name": "Jupiter Fund Management Plc",
       "started_at": "2026-09-04T09:27:27.029945+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -264,9 +272,9 @@
       "peak_unrealized_pct": 0.0459,
       "trough_unrealized_pct": -0.0184,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-24T09:27:33.183912+01:00",
+      "linked_sell_trade_id": "0f10c4b0-b23c-4dc8-a007-dd6f7e1c18f7"
     },
     {
       "episode_id": "momentum_grace:AEP.L:2026-09-23T09:27:48.369608+01:00",
@@ -274,7 +282,7 @@
       "ticker": "AEP.L",
       "name": "AEP Plantations Plc",
       "started_at": "2026-09-23T09:27:48.369608+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -305,13 +313,190 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": 0.1179,
+      "peak_unrealized_pct": 0.1624,
       "trough_unrealized_pct": 0.1179,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-24T09:27:33.183912+01:00",
+      "linked_sell_trade_id": "d42f3295-9ec1-4d7a-affc-1b1c75b7b73f"
     }
   ],
-  "swap_rotations": []
+  "swap_rotations": [
+    {
+      "rotation_id": "momentum_grace:2026-09-24T09:27:33.183912+01:00",
+      "track_id": "momentum_grace",
+      "logged_at": "2026-09-24T09:27:33.183912+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.03,
+      "sells": [
+        {
+          "ticker": "FGP.L",
+          "price": 171.9,
+          "shares": 1.05875,
+          "gross": 182.0,
+          "cost": 5.46,
+          "avg_cost_at_exit": 183.4,
+          "realized_pct": -0.0627,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0627
+        },
+        {
+          "ticker": "HIK.L",
+          "price": 1598.0,
+          "shares": 0.11476,
+          "gross": 183.39,
+          "cost": 5.5,
+          "avg_cost_at_exit": 1692.0,
+          "realized_pct": -0.0556,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "conviction 24% below intact floor",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0556
+        },
+        {
+          "ticker": "ITV.L",
+          "price": 68.55,
+          "shares": 2.652661,
+          "gross": 181.84,
+          "cost": 5.46,
+          "avg_cost_at_exit": 73.2,
+          "realized_pct": -0.0635,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "conviction 8% below intact floor",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0635
+        },
+        {
+          "ticker": "AEP.L",
+          "price": 209.0,
+          "shares": 1.079949,
+          "gross": 225.71,
+          "cost": 6.77,
+          "avg_cost_at_exit": 179.8,
+          "realized_pct": 0.1624,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "conviction 31% below intact floor",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.1624
+        },
+        {
+          "ticker": "JUP.L",
+          "price": 165.2,
+          "shares": 1.206054,
+          "gross": 199.24,
+          "cost": 5.98,
+          "avg_cost_at_exit": 161.0,
+          "realized_pct": 0.0261,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "conviction 31% below intact floor",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0261
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "KLR.L",
+          "price": 3262.0,
+          "shares": 0.093556,
+          "gross": 305.18,
+          "cost": 9.16
+        },
+        {
+          "ticker": "PPH.L",
+          "price": 1528.0,
+          "shares": 0.199726,
+          "gross": 305.18,
+          "cost": 9.16
+        },
+        {
+          "ticker": "BP.L",
+          "price": 567.0,
+          "shares": 0.538238,
+          "gross": 305.18,
+          "cost": 9.16
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "FGP.L": -0.0,
+        "HIK.L": 0.0,
+        "ITV.L": 0.0,
+        "AEP.L": 0.0,
+        "JUP.L": -0.0
+      },
+      "buy_returns_since_rotation": {
+        "KLR.L": 0.0,
+        "PPH.L": 0.0,
+        "BP.L": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    }
+  ]
 }
