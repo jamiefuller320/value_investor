@@ -345,6 +345,40 @@ def cost_fields_for_config(market_id: str | None) -> dict[str, float]:
     }
 
 
+def costs_for_native_book(market_id: str | None) -> MarketTradingCosts:
+    """Fair costs for a book that trades and marks in the market's local currency.
+
+    Same venue half-spread / stamp shape as ``costs_for_market``, but
+    ``fx_applies=False`` — no T212 FX conversion leg when cash and marks share
+    the venue currency (N153 native-currency capital epoch).
+    """
+    base = costs_for_market(market_id)
+    if not base.fx_applies:
+        return base
+    return _build(
+        base.market_id,
+        label=f"{base.label} (native book)",
+        currency=base.currency,
+        fx_applies=False,
+        stamp_duty_on_buy=base.stamp_duty_on_buy,
+        half_spread=base.half_spread,
+        notes=(
+            f"{base.notes} Native-currency book: no FX conversion friction "
+            "(cash and marks in venue currency)."
+        ),
+    )
+
+
+def cost_fields_for_native_book(market_id: str | None) -> dict[str, float]:
+    """Config cost fields for a native-currency (no FX friction) book."""
+    model = costs_for_native_book(market_id)
+    return {
+        "trade_cost_pct": model.symmetric_proxy_pct,
+        "buy_cost_pct": model.buy_pct,
+        "sell_cost_pct": model.sell_pct,
+    }
+
+
 def list_market_costs() -> list[dict[str, Any]]:
     return [MARKET_TRADING_COSTS[k].to_dict() for k in sorted(MARKET_TRADING_COSTS)]
 

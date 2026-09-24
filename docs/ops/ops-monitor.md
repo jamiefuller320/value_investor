@@ -294,6 +294,7 @@ They do **not** deepen ingest or rememo.
 |-------|---------------|---------------|----------------|--------|
 | `check_buy_tier_flip_lag` | **New buy-tier not yet usable** | Path-incomplete ≥24h cohort non-empty (FTSE live ∪ admitted; schema v2) | `docs/data/buy_tier_flip_lag.json` | Live on main |
 | `check_decision_input_inventory` | **FTSE decision-input utilization gap** | Dominant bind gap count ≥3 on FTSE holdings ∪ buy-tier (else quiet / `P1 green-enough`) | `docs/data/decision_input_inventory.json` | Live on main |
+| `check_shard_nav_fx_warp` | **Shard NAV FX unit mismatch** | Non-GBP shard GBP book shows day-0 NAV≈FX and `buy_tier_level_native` is not yet active (N153) | `docs/data/shard_nav_fx_warp.json` | Live with N153 |
 
 Called from `collect_ops_findings` on the daily ops-monitor schedule. Raw
 instrument store JSON **is** in `GHA_COMMIT_OPTIONAL` (**L460**) so day-over-day
