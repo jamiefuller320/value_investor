@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-24T10:51:34+00:00",
+  "updated_at": "2026-09-24T13:18:59+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10404,6 +10404,25 @@
       "source": "https://cursor.com/agents/bc-710d6dc7-48cb-5f61-9619-83534519a9fa",
       "added_at": "2026-09-24T09:13:48+00:00",
       "updated_at": "2026-09-24T09:48:41+00:00"
+    },
+    {
+      "id": "N154",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not ship rolling sleeve-exit realized P&L series",
+      "summary": "Per-exit realized_return_pct already lives on exit_shadow (and swap sell legs). No sliding/decay window of recent exit P&Ls exists or should be built now \u2014 overlaps L459 trade-row %, lifetime shadow cohort, just_sold cards, and must not be confused with L462 NAV WoW or N153 FX. If anything later, prefer lifetime mean/median realized_at_exit inside existing exit_shadow_review before inventing last-N/decay.",
+      "revisit_when": "L459 landed (or humans still cannot read sleeve outcomes after it) AND primary-track exit_shadow closed_count >=15 by exit_kind of interest AND a documented need for trajectory of exit quality (not fund beat_market).",
+      "tags": [
+        "sleeve-exit",
+        "realized-pnl",
+        "rolling",
+        "exit-shadow",
+        "observe-only",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-56fd1bcf-57b7-5990-ba34-9ab968c54a6f",
+      "added_at": "2026-09-24T13:18:59+00:00"
     }
   ],
   "fragments": [
