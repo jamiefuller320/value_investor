@@ -1309,6 +1309,61 @@ def check_thin_memo_learning_gap() -> list[OpsFinding]:
     ]
 
 
+def check_buy_tier_flip_lag(
+    *,
+    latest_path: Path = DEFAULT_LATEST_PATH,
+    research_root: Path | None = None,
+    memo_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only: warn when recent buy-tier flips are not yet AI-usable.
+
+    Refreshes ``docs/data/buy_tier_flip_lag.json`` (surfacing + stage lag clocks).
+    Does not deepen ingest or rememo.
+    """
+    from value_investor.buy_tier_flip_lag import (
+        DEFAULT_MEMO_DIR,
+        DEFAULT_RESEARCH_ROOT,
+        DEFAULT_STORE_PATH,
+        ops_finding_from_flip_lag,
+        update_buy_tier_flip_lag,
+    )
+
+    path = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+    try:
+        payload = update_buy_tier_flip_lag(
+            latest_path=Path(latest_path),
+            research_root=Path(research_root)
+            if research_root is not None
+            else DEFAULT_RESEARCH_ROOT,
+            memo_dir=Path(memo_dir) if memo_dir is not None else DEFAULT_MEMO_DIR,
+            store_path=path,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="ingest",
+                title="Buy-tier flip lag observe failed",
+                summary=str(exc),
+            )
+        ]
+    finding = ops_finding_from_flip_lag(payload)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "warn"),
+            category=str(finding.get("category") or "ingest"),
+            title=str(finding.get("title") or "New buy-tier not yet usable"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+    ]
+
+
 def check_memo_rememo_backlog() -> list[OpsFinding]:
     """Flag when body-lag rememo backlog exceeds in-week maintenance capacity."""
     from value_investor.research.weekday_rememo import assess_rememo_backlog
@@ -1947,6 +2002,7 @@ def collect_ops_findings(
     findings.extend(check_latest_bundle(latest_path))
     findings.extend(check_ops_budget())
     findings.extend(check_memo_rememo_backlog())
+    findings.extend(check_buy_tier_flip_lag(latest_path=latest_path))
     findings.extend(check_thin_memo_learning_gap())
     findings.extend(check_phase_b_producer_progress())
     findings.extend(check_indicator_integrity())

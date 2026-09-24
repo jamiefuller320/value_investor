@@ -1,4 +1,4 @@
-"""CLI for buy-tier ingest fragment utilization audit."""
+"""CLI for buy-tier ingest fragment utilization audit (+ flip→usable lag pin)."""
 
 from __future__ import annotations
 
@@ -8,6 +8,13 @@ import logging
 import sys
 from pathlib import Path
 
+from value_investor.buy_tier_flip_lag import (
+    DEFAULT_FLIP_LOOKBACK_DAYS,
+    DEFAULT_STORE_PATH,
+    DEFAULT_WARN_AFTER_HOURS,
+    format_flip_lag_summary,
+    update_buy_tier_flip_lag,
+)
 from value_investor.ingest_utilization_audit import (
     DEFAULT_LATEST_PATH,
     DEFAULT_MEMO_DIR,
@@ -36,6 +43,32 @@ def main(argv: list[str] | None = None) -> int:
         default=DEFAULT_OUTPUT_PATH,
         help="Write full JSON audit (default: output/ingest_utilization_audit.json)",
     )
+    parser.add_argument(
+        "--flip-lag",
+        action="store_true",
+        help=(
+            "Observe-only: refresh docs/data/buy_tier_flip_lag.json for recent "
+            "buy-tier flips (index → key bodies → memo → ai_track_buy_eligible)"
+        ),
+    )
+    parser.add_argument(
+        "--flip-lag-store",
+        type=Path,
+        default=DEFAULT_STORE_PATH,
+        help="Flip-lag observe store path (default: docs/data/buy_tier_flip_lag.json)",
+    )
+    parser.add_argument(
+        "--flip-lookback-days",
+        type=int,
+        default=DEFAULT_FLIP_LOOKBACK_DAYS,
+        help=f"Cohort window for signal_since (default: {DEFAULT_FLIP_LOOKBACK_DAYS})",
+    )
+    parser.add_argument(
+        "--flip-warn-after-hours",
+        type=float,
+        default=DEFAULT_WARN_AFTER_HOURS,
+        help=f"Hours after flip before ops warn (default: {DEFAULT_WARN_AFTER_HOURS})",
+    )
     parser.add_argument("--json", action="store_true", help="Print full JSON to stdout")
     parser.add_argument("--no-write", action="store_true", help="Skip writing output file")
     parser.add_argument("-v", "--verbose", action="store_true")
@@ -45,6 +78,24 @@ def main(argv: list[str] | None = None) -> int:
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(levelname)s %(message)s",
     )
+
+    if args.flip_lag:
+        payload = update_buy_tier_flip_lag(
+            latest_path=args.latest_path,
+            research_root=args.research_root,
+            memo_dir=args.memo_dir,
+            store_path=args.flip_lag_store,
+            lookback_days=int(args.flip_lookback_days),
+            warn_after_hours=float(args.flip_warn_after_hours),
+            persist=not args.no_write,
+        )
+        if not args.no_write:
+            logger.info("Wrote %s", args.flip_lag_store)
+        if args.json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(format_flip_lag_summary(payload))
+        return 0
 
     payload = run_ingest_utilization_audit(
         latest_path=args.latest_path,
