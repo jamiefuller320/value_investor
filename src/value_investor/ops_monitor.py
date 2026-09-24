@@ -1334,7 +1334,9 @@ def check_buy_tier_flip_lag(
     try:
         payload = update_buy_tier_flip_lag(
             latest_path=Path(latest_path),
-            research_root=Path(research_root) if research_root is not None else DEFAULT_RESEARCH_ROOT,
+            research_root=Path(research_root)
+            if research_root is not None
+            else DEFAULT_RESEARCH_ROOT,
             memo_dir=Path(memo_dir) if memo_dir is not None else DEFAULT_MEMO_DIR,
             store_path=path,
             persist=persist,

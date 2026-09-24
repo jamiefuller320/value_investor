@@ -488,8 +488,10 @@ def update_buy_tier_flip_lag(
         usable_at = _parse_dt(row.get("usable_at"))
         if status == "usable" and usable_at is not None and usable_at < keep_cutoff:
             continue
-        if status == "open" and flip_at is not None and flip_at < keep_cutoff - timedelta(
-            days=lookback_days
+        if (
+            status == "open"
+            and flip_at is not None
+            and flip_at < keep_cutoff - timedelta(days=lookback_days)
         ):
             # Drop stale open rows that left buy-tier long ago.
             if ticker not in {s.ticker for s in snapshots}:
@@ -499,9 +501,9 @@ def update_buy_tier_flip_lag(
     for snap in snapshots:
         pruned[snap.ticker] = {**pruned.get(snap.ticker, {}), **snap.to_dict()}
         if snap.key_bodies:
-            pruned[snap.ticker]["key_bodies_at"] = pruned[snap.ticker].get(
-                "key_bodies_at"
-            ) or (snap.index_at or now.isoformat())
+            pruned[snap.ticker]["key_bodies_at"] = pruned[snap.ticker].get("key_bodies_at") or (
+                snap.index_at or now.isoformat()
+            )
 
     open_rows = [
         pruned[s.ticker]
@@ -509,9 +511,7 @@ def update_buy_tier_flip_lag(
         if not s.usable
     ]
     recently_usable = [
-        pruned[s.ticker]
-        for s in sorted(snapshots, key=lambda r: r.ticker)
-        if s.usable
+        pruned[s.ticker] for s in sorted(snapshots, key=lambda r: r.ticker) if s.usable
     ]
 
     warn_open = [
@@ -575,8 +575,7 @@ def format_flip_lag_summary(payload: dict[str, Any]) -> str:
         bits = []
         for row in warn_open[:12]:
             bits.append(
-                f"{row.get('ticker')} ({row.get('blocking_stage')}, "
-                f"{row.get('hours_since_flip')}h)"
+                f"{row.get('ticker')} ({row.get('blocking_stage')}, {row.get('hours_since_flip')}h)"
             )
         lines.append("  Not yet usable: " + ", ".join(bits))
         if len(warn_open) > 12:
@@ -615,8 +614,7 @@ def ops_finding_from_flip_lag(
     extra = len(warn_open) - 10
     summary = (
         f"{len(warn_open)} recent buy-tier flip(s) still missing index / key bodies / "
-        f"first memo after ≥{int(threshold)}h (AI-usable path incomplete): "
-        + ", ".join(bits)
+        f"first memo after ≥{int(threshold)}h (AI-usable path incomplete): " + ", ".join(bits)
     )
     if extra > 0:
         summary += f" (+{extra} more)"

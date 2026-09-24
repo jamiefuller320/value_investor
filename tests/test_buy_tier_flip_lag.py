@@ -219,8 +219,7 @@ def test_update_flip_lag_tracks_stages_and_surface_events(tmp_path: Path):
     assert payload2["summary"]["open_not_usable"] == 1
     assert payload2["names"]["NEW.A"]["first_surfaced_at"] == first_a
     assert any(
-        e["event"] == "became_usable" and e["ticker"] == "NEW.B"
-        for e in payload2["surface_events"]
+        e["event"] == "became_usable" and e["ticker"] == "NEW.B" for e in payload2["surface_events"]
     )
 
     finding = ops_finding_from_flip_lag(payload2)
