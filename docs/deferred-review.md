@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-24T13:18:59+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-24T14:34:53+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -276,6 +276,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L442 | **Opportunity-cost rotation instead of always exiting demoted buy-tier** | Softer than always exit_confirm on off-target buy-tier: only free capital when higher-conviction buys are skipped for cash. Preserves long holds for lifecycle experiments when the buy pipeline is idle; still unblocks sleeves when targets need funding. Ranked books vs buy_tier_level remain the dual instrument. | After momentum_grace rank-rotation fix merges and Sunday review shows exit cohorts thickening or over-churn on demoted buy-tier names |
 | L445 | **Cash buffer sleeve after rank-rotation works** | Prefer fixing blocked exits (done L440) so fully-invested books recycle into better sleeves. A 5-10% dry-powder buffer remains optional capital-allocation v2 — do not use idle cash as a substitute for broken rotation. | capital_rotation_coordinator / cash buffer target phase activates and rank rotation is healthy on momentum_grace |
 | L446 | **Nested counterfactual best-policy scoring inside sleeve episodes** | Wide earliest/latest episodes are recording. Next: score tighter entry/exit policies as nested counterfactuals inside closed episodes once readiness.ready_for_sleeve_timing_analysis is true. | learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true on primary or fair tracks |
+| L462 | **Observe-only recent week-pair excess twin beside cumulative beat_market** | Do not replace epoch beat_market / excess_after_costs with decay-weighted or equal WoW excess. Optionally publish an observe-only recent-relative-edge twin (mean or mild decay of week-pair book−bench deltas + positive-week rate) beside cumulative once a fair-cost primary has a thick clean window. Cumulative wealth vs market stays adoption truth; WoW answers edge lately, not did the epoch beat. | Fair-cost primary (post-N153-clean epoch on any shard under review) has ≥8 weekday week-pairs of usable NAV marks AND humans repeatedly misread cumulative excess after a documented early drawdown as policy is currently failing. |
 
 ### Universe & data
 
