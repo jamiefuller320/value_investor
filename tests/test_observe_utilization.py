@@ -157,11 +157,12 @@ def test_observe_utilization_stale_and_missing(tmp_path: Path):
 
 
 def test_observe_utilization_store_lag_vs_ops(tmp_path: Path):
+    """Lagging is a commit-path anomaly after L460 (stores should co-commit)."""
     now = datetime(2026, 9, 24, 12, 0, tzinfo=UTC)
     flip_path = tmp_path / "flip.json"
     decision_path = tmp_path / "decision.json"
     ops_path = tmp_path / "ops.json"
-    # Store from yesterday; ops ran an hour ago (L460 gap).
+    # Store from yesterday; ops ran an hour ago (simulates missed store commit).
     _write(
         flip_path,
         {
@@ -196,3 +197,55 @@ def test_observe_utilization_store_lag_vs_ops(tmp_path: Path):
     )
     assert snap["surface_freshness"] == "lagging"
     assert all(row["freshness"]["state"] == "lagging" for row in snap["instruments"])
+    detail = snap["instruments"][0]["freshness"]["detail"]
+    assert "commit" in detail.lower()
+    assert "L460" not in detail
+    assert "commit-path anomaly" in snap["headline"]
+    assert "uncommitted" not in snap["headline"]
+    assert "optional (L460)" not in snap["trajectory_summary"]["note"]
+    assert "commit with ops-monitor" in snap["trajectory_summary"]["note"]
+
+
+def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
+    """Happy path after L460: stores refreshed in the same ops cycle → fresh."""
+    now = datetime(2026, 9, 24, 12, 0, tzinfo=UTC)
+    flip_path = tmp_path / "flip.json"
+    decision_path = tmp_path / "decision.json"
+    ops_path = tmp_path / "ops.json"
+    as_of = now - timedelta(minutes=5)
+    _write(
+        flip_path,
+        {
+            "updated_at": as_of.isoformat(),
+            "summary": {"warn_not_usable": 0, "open_not_usable": 0, "cohort_count": 1},
+        },
+    )
+    _write(
+        decision_path,
+        {
+            "generated_at": as_of.isoformat(),
+            "summary": {
+                "inventory_count": 10,
+                "fully_ready_count": 10,
+                "names_with_any_gap": 0,
+                "gap_counts": {},
+                "verdict": "P1 green-enough",
+            },
+            "rollup": {"verdict": "P1 green-enough", "dominant_gap_field": "P1 green-enough"},
+        },
+    )
+    # ops_status run_at a few minutes after store refresh (same job) — not lagging.
+    _write(ops_path, {"run_at": (now - timedelta(minutes=2)).isoformat(), "findings": []})
+
+    snap = build_observe_utilization_snapshot(
+        flip_lag_path=flip_path,
+        decision_input_path=decision_path,
+        ops_status_path=ops_path,
+        prior_path=tmp_path / "prior.json",
+        now=now,
+        stale_after_hours=30.0,
+        store_lag_warn_hours=2.0,
+    )
+    assert snap["surface_freshness"] == "fresh"
+    assert all(row["freshness"]["state"] == "fresh" for row in snap["instruments"])
+    assert "lag" not in snap["headline"].lower()

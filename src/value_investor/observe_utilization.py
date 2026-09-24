@@ -6,8 +6,9 @@ deltas vs the prior cycle.
 
 Observe-only — does not rememo, deepen ingest, or dispatch engineering.
 Persists a slim history series in ``docs/data/observe_utilization.json``
-(committed via ops-monitor / queue-health refresh). Full day-over-day of the
-raw instrument stores remains optional (L460).
+(committed via ops-monitor / queue-health refresh). Raw instrument stores
+(``buy_tier_flip_lag.json``, ``decision_input_inventory.json``) are also
+committed from ops-monitor (L460).
 """
 
 from __future__ import annotations
@@ -27,7 +28,7 @@ DEFAULT_DECISION_INPUT_PATH = Path("docs/data/decision_input_inventory.json")
 SCHEMA_VERSION = 1
 # Ops-monitor runs ~2×/day; past this the surface is obviously stale.
 DEFAULT_STALE_AFTER_HOURS = 30.0
-# Store lag vs ops run_at (L460 gap: runner refresh not committed).
+# Store lag vs ops run_at — anomaly after L460 (raw stores commit with ops).
 DEFAULT_STORE_LAG_WARN_HOURS = 2.0
 HISTORY_KEEP = 28
 # Min gap between history points when metrics are unchanged.
@@ -116,7 +117,7 @@ def _freshness_block(
         label = "Lagging ops"
         detail = (
             f"Store trails ops_status by {store_lag_h:.1f}h "
-            f"(ops-monitor may not commit instrument JSON — L460)."
+            f"(raw stores should commit with ops-monitor — check commit path)."
         )
     else:
         state = "fresh"
@@ -406,8 +407,8 @@ def build_observe_utilization_snapshot(
         headline = "Observe utilization surface is stale/incomplete — do not trust absolute counts."
     elif surface_freshness == "lagging":
         headline = (
-            "Instrument stores lag ops_status (likely uncommitted runner JSON) — "
-            "trajectory uses this dashboard series."
+            "Instrument stores lag ops_status (commit-path anomaly) — "
+            "prefer trajectory only if history looks continuous."
         )
     elif warn_count and worsening:
         headline = f"{warn_count} warn instrument(s); trajectory worsening on {worsening}."
@@ -444,7 +445,7 @@ def build_observe_utilization_snapshot(
             "history_points": len(history),
             "note": (
                 "Deltas vs prior dashboard cycle (warn/gap counts; lower is better). "
-                "Full instrument-store git history is optional (L460)."
+                "Raw instrument stores commit with ops-monitor (L460)."
             ),
         },
         "instruments": instruments,

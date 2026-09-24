@@ -3414,7 +3414,7 @@ function renderObserveUtilizationSection(data, { compact = false } = {}) {
     payload.surface_freshness === "stale" || payload.surface_freshness === "degraded"
       ? `<div class="observe-stale-banner" role="status">Surface ${esc(payload.surface_freshness)} — treat absolute counts as outdated; prefer trajectory only when history points look continuous.</div>`
       : payload.surface_freshness === "lagging"
-        ? `<div class="observe-lag-banner" role="status">Instrument JSON lags ops_status (runner refresh may not be committed — L460). Trajectory uses this dashboard series.</div>`
+        ? `<div class="observe-lag-banner" role="status">Instrument JSON lags ops_status (commit-path anomaly — raw stores should land with ops-monitor). Prefer trajectory only if history looks continuous.</div>`
         : "";
   const cards = instruments.map((inst) => renderObserveInstrumentCard(inst, history)).join("");
   const compactNote = compact
