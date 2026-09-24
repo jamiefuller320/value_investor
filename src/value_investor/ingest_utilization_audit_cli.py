@@ -10,6 +10,8 @@ from pathlib import Path
 
 from value_investor.buy_tier_flip_lag import (
     DEFAULT_FLIP_LOOKBACK_DAYS,
+    DEFAULT_LIBRARY_ROOT,
+    DEFAULT_POLICY_PATH,
     DEFAULT_STORE_PATH,
     DEFAULT_WARN_AFTER_HOURS,
     format_flip_lag_summary,
@@ -48,7 +50,8 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help=(
             "Observe-only: refresh docs/data/buy_tier_flip_lag.json for recent "
-            "buy-tier flips (index → key bodies → memo → ai_track_buy_eligible)"
+            "buy-tier flips across FTSE live + admitted learning markets "
+            "(index → key bodies → memo; FTSE also tracks ai_track_buy_eligible)"
         ),
     )
     parser.add_argument(
@@ -69,6 +72,28 @@ def main(argv: list[str] | None = None) -> int:
         default=DEFAULT_WARN_AFTER_HOURS,
         help=f"Hours after flip before ops warn (default: {DEFAULT_WARN_AFTER_HOURS})",
     )
+    parser.add_argument(
+        "--library-root",
+        type=Path,
+        default=DEFAULT_LIBRARY_ROOT,
+        help="Library root for admitted-market screens/research",
+    )
+    parser.add_argument(
+        "--policy-path",
+        type=Path,
+        default=DEFAULT_POLICY_PATH,
+        help="Library policy.json (admitted_learning_markets roster)",
+    )
+    parser.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (default: FTSE live + admitted set)",
+    )
+    parser.add_argument(
+        "--ftse-only",
+        action="store_true",
+        help="Restrict flip-lag refresh to the FTSE live path only",
+    )
     parser.add_argument("--json", action="store_true", help="Print full JSON to stdout")
     parser.add_argument("--no-write", action="store_true", help="Skip writing output file")
     parser.add_argument("-v", "--verbose", action="store_true")
@@ -80,11 +105,17 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     if args.flip_lag:
+        market_ids = [m.strip() for m in str(args.markets or "").split(",") if m.strip()]
         payload = update_buy_tier_flip_lag(
             latest_path=args.latest_path,
             research_root=args.research_root,
             memo_dir=args.memo_dir,
             store_path=args.flip_lag_store,
+            library_root=args.library_root,
+            policy_path=args.policy_path,
+            include_admitted=not args.ftse_only,
+            markets=market_ids or None,
+            include_ftse=True,
             lookback_days=int(args.flip_lookback_days),
             warn_after_hours=float(args.flip_warn_after_hours),
             persist=not args.no_write,

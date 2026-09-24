@@ -7,7 +7,10 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from value_investor.buy_tier_flip_lag import (
+    FTSE_MARKET_ID,
+    FlipMarketSource,
     format_flip_lag_summary,
+    name_key,
     ops_finding_from_flip_lag,
     select_flip_cohort,
     update_buy_tier_flip_lag,
@@ -171,24 +174,29 @@ def test_update_flip_lag_tracks_stages_and_surface_events(tmp_path: Path):
         research_root=research,
         memo_dir=memo_dir,
         store_path=store,
+        include_admitted=False,
         now=now,
         persist=True,
     )
     assert store.is_file()
+    assert payload["schema_version"] == 2
     assert payload["summary"]["cohort_count"] == 3
     assert payload["summary"]["open_not_usable"] == 2
     assert payload["summary"]["usable_in_window"] == 1
     assert payload["summary"]["blocking_stage_counts"]["no_index"] == 1
     assert payload["summary"]["blocking_stage_counts"]["no_memo"] == 1
+    assert FTSE_MARKET_ID in payload["summary"]["by_market"]
 
     by_ticker = {row["ticker"]: row for row in payload["open"] + payload["recently_usable"]}
     assert by_ticker["NEW.A"]["blocking_stage"] == "no_index"
+    assert by_ticker["NEW.A"]["market_id"] == FTSE_MARKET_ID
     assert by_ticker["NEW.B"]["blocking_stage"] == "no_memo"
     assert by_ticker["NEW.B"]["has_index"] is True
     assert by_ticker["NEW.B"]["key_bodies"] is True
     assert by_ticker["NEW.C"]["usable"] is True
     assert by_ticker["NEW.C"]["hours_to_usable"] is not None
     assert by_ticker["NEW.C"]["hours_to_usable"] >= 24.0
+    assert name_key(FTSE_MARKET_ID, "NEW.A") in payload["names"]
 
     events = payload["surface_events"]
     assert any(e["event"] == "flip_surfaced" and e["ticker"] == "NEW.A" for e in events)
@@ -213,11 +221,12 @@ def test_update_flip_lag_tracks_stages_and_surface_events(tmp_path: Path):
         research_root=research,
         memo_dir=memo_dir,
         store_path=store,
+        include_admitted=False,
         now=later,
         persist=True,
     )
     assert payload2["summary"]["open_not_usable"] == 1
-    assert payload2["names"]["NEW.A"]["first_surfaced_at"] == first_a
+    assert payload2["names"][name_key(FTSE_MARKET_ID, "NEW.A")]["first_surfaced_at"] == first_a
     assert any(
         e["event"] == "became_usable" and e["ticker"] == "NEW.B" for e in payload2["surface_events"]
     )
@@ -231,6 +240,129 @@ def test_update_flip_lag_tracks_stages_and_surface_events(tmp_path: Path):
 
     text = format_flip_lag_summary(payload2)
     assert "not yet usable" in text.lower() or "Open not yet usable" in text
+
+
+def test_admitted_market_factory_path_usable_without_accumulate(tmp_path: Path):
+    """Shards: index + key bodies + memo = usable; accumulate gate is FTSE-only."""
+    store = tmp_path / "flip_lag.json"
+    research = tmp_path / "lib" / "markets" / "sp500" / "screen" / "research"
+    flip_day = "2026-09-20"
+    now = datetime(2026, 9, 24, 12, 0, tzinfo=UTC)
+    _write_index(
+        research,
+        "AAA",
+        fetched_at="2026-09-21T10:00:00+00:00",
+        annual_bodies=1,
+        interim_bodies=1,
+    )
+    _write_research_json(
+        research,
+        "AAA",
+        created_at="2026-09-22T08:00:00+00:00",
+        verdict="hold",
+    )
+    sources = [
+        FlipMarketSource(
+            market_id="sp500",
+            reports=[
+                {
+                    "ticker": "AAA",
+                    "name": "Shard Hold Co",
+                    "signal": "buy",
+                    "signal_since": flip_day,
+                    "research_verdict": "hold",
+                }
+            ],
+            research_root=research,
+            memo_dir=research,
+            usable_mode="factory_path",
+            screen_source="test://sp500",
+        )
+    ]
+    payload = update_buy_tier_flip_lag(
+        sources=sources,
+        store_path=store,
+        now=now,
+        persist=True,
+    )
+    assert payload["summary"]["cohort_count"] == 1
+    assert payload["summary"]["usable_in_window"] == 1
+    assert payload["summary"]["open_not_usable"] == 0
+    row = payload["recently_usable"][0]
+    assert row["market_id"] == "sp500"
+    assert row["usable_mode"] == "factory_path"
+    assert row["usable"] is True
+    assert row["ai_track_buy_eligible"] is None
+    assert row["blocking_stage"] is None
+    assert name_key("sp500", "AAA") in payload["names"]
+    assert ops_finding_from_flip_lag(payload) is None
+
+
+def test_admitted_market_path_incomplete_ops_warn(tmp_path: Path):
+    store = tmp_path / "flip_lag.json"
+    research = tmp_path / "research"
+    research.mkdir()
+    flip_day = (datetime.now(UTC) - timedelta(days=3)).date().isoformat()
+    sources = [
+        FlipMarketSource(
+            market_id="asx200",
+            reports=[
+                {
+                    "ticker": "BBB.AX",
+                    "name": "Lag Co",
+                    "signal": "buy",
+                    "signal_since": flip_day,
+                }
+            ],
+            research_root=research,
+            memo_dir=research,
+            usable_mode="factory_path",
+            screen_source="test://asx200",
+        )
+    ]
+    payload = update_buy_tier_flip_lag(sources=sources, store_path=store, persist=True)
+    assert payload["summary"]["warn_not_usable"] == 1
+    assert payload["warn_open"][0]["market_id"] == "asx200"
+    finding = ops_finding_from_flip_lag(payload)
+    assert finding is not None
+    assert finding["title"] == "New buy-tier not yet usable"
+    assert "asx200/BBB.AX" in finding["summary"]
+
+
+def test_multi_market_cohort_keys_do_not_collide(tmp_path: Path):
+    store = tmp_path / "flip_lag.json"
+    ftse_research = tmp_path / "ftse_research"
+    shard_research = tmp_path / "shard_research"
+    flip_day = "2026-09-21"
+    now = datetime(2026, 9, 24, 12, 0, tzinfo=UTC)
+    sources = [
+        FlipMarketSource(
+            market_id=FTSE_MARKET_ID,
+            reports=[
+                {"ticker": "SAME", "name": "FTSE", "signal": "buy", "signal_since": flip_day}
+            ],
+            research_root=ftse_research,
+            memo_dir=tmp_path / "memos",
+            usable_mode="ai_eligible",
+            screen_source="test://ftse",
+        ),
+        FlipMarketSource(
+            market_id="nasdaq100",
+            reports=[
+                {"ticker": "SAME", "name": "NDX", "signal": "buy", "signal_since": flip_day}
+            ],
+            research_root=shard_research,
+            memo_dir=shard_research,
+            usable_mode="factory_path",
+            screen_source="test://nasdaq100",
+        ),
+    ]
+    payload = update_buy_tier_flip_lag(sources=sources, store_path=store, now=now, persist=True)
+    assert payload["summary"]["cohort_count"] == 2
+    assert name_key(FTSE_MARKET_ID, "SAME") in payload["names"]
+    assert name_key("nasdaq100", "SAME") in payload["names"]
+    assert payload["names"][name_key(FTSE_MARKET_ID, "SAME")]["market_id"] == FTSE_MARKET_ID
+    assert payload["names"][name_key("nasdaq100", "SAME")]["market_id"] == "nasdaq100"
 
 
 def test_check_buy_tier_flip_lag_ops_finding(tmp_path: Path):
@@ -260,6 +392,7 @@ def test_check_buy_tier_flip_lag_ops_finding(tmp_path: Path):
         research_root=research,
         memo_dir=memo_dir,
         store_path=store,
+        include_admitted=False,
         persist=True,
     )
     assert len(findings) == 1
@@ -298,6 +431,7 @@ def test_check_buy_tier_flip_lag_quiet_when_fresh_or_usable(tmp_path: Path):
         research_root=research,
         memo_dir=memo_dir,
         store_path=store,
+        include_admitted=False,
         persist=True,
     )
     assert findings == []
@@ -345,6 +479,7 @@ def test_ops_warn_skips_non_accumulate_when_memo_exists(tmp_path: Path):
         research_root=research,
         memo_dir=memo_dir,
         store_path=store,
+        include_admitted=False,
         persist=True,
     )
     assert payload["summary"]["open_not_usable"] == 1
@@ -357,7 +492,50 @@ def test_ops_warn_skips_non_accumulate_when_memo_exists(tmp_path: Path):
             research_root=research,
             memo_dir=memo_dir,
             store_path=store,
+            include_admitted=False,
             persist=True,
         )
         == []
     )
+
+
+def test_legacy_store_migrates_ticker_keys(tmp_path: Path):
+    store = tmp_path / "flip_lag.json"
+    store.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "names": {
+                    "OLD.L": {
+                        "ticker": "OLD.L",
+                        "signal": "buy",
+                        "signal_since": "2026-09-01",
+                        "status": "open",
+                        "hours_since_flip": 100,
+                        "blocking_stage": "no_memo",
+                    }
+                },
+                "open": [],
+                "recently_usable": [],
+                "surface_events": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    latest = tmp_path / "latest.json"
+    latest.write_text(json.dumps({"reports": []}), encoding="utf-8")
+    research = tmp_path / "research"
+    research.mkdir()
+    memo_dir = tmp_path / "memos"
+    memo_dir.mkdir()
+    payload = update_buy_tier_flip_lag(
+        latest_path=latest,
+        research_root=research,
+        memo_dir=memo_dir,
+        store_path=store,
+        include_admitted=False,
+        persist=True,
+    )
+    assert payload["schema_version"] == 2
+    assert name_key(FTSE_MARKET_ID, "OLD.L") in payload["names"]
+    assert payload["names"][name_key(FTSE_MARKET_ID, "OLD.L")]["market_id"] == FTSE_MARKET_ID

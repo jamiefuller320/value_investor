@@ -1315,15 +1315,21 @@ def check_buy_tier_flip_lag(
     research_root: Path | None = None,
     memo_dir: Path | None = None,
     store_path: Path | None = None,
+    library_root: Path | None = None,
+    policy_path: Path | None = None,
+    include_admitted: bool = True,
     persist: bool = True,
 ) -> list[OpsFinding]:
-    """Observe-only: warn when recent buy-tier flips are not yet AI-usable.
+    """Observe-only: warn when recent buy-tier flips are not yet usable.
 
-    Refreshes ``docs/data/buy_tier_flip_lag.json`` (surfacing + stage lag clocks).
-    Does not deepen ingest or rememo.
+    Refreshes ``docs/data/buy_tier_flip_lag.json`` across FTSE live + admitted
+    learning markets (surfacing + stage lag clocks). Does not deepen ingest or
+    rememo. Ops warn stays path-incomplete ≥24h only (not accumulate miss).
     """
     from value_investor.buy_tier_flip_lag import (
+        DEFAULT_LIBRARY_ROOT,
         DEFAULT_MEMO_DIR,
+        DEFAULT_POLICY_PATH,
         DEFAULT_RESEARCH_ROOT,
         DEFAULT_STORE_PATH,
         ops_finding_from_flip_lag,
@@ -1339,6 +1345,11 @@ def check_buy_tier_flip_lag(
             else DEFAULT_RESEARCH_ROOT,
             memo_dir=Path(memo_dir) if memo_dir is not None else DEFAULT_MEMO_DIR,
             store_path=path,
+            library_root=Path(library_root)
+            if library_root is not None
+            else DEFAULT_LIBRARY_ROOT,
+            policy_path=Path(policy_path) if policy_path is not None else DEFAULT_POLICY_PATH,
+            include_admitted=include_admitted,
             persist=persist,
         )
     except (OSError, ValueError, TypeError) as exc:
