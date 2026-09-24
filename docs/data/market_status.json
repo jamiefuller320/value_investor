@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-24T13:43:12.896666+00:00",
+  "generated_at": "2026-09-24T13:45:18.972781+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -1045,7 +1045,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=4, indexed_without_body=53)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=5, indexed_without_body=93)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 9,
@@ -1099,9 +1099,9 @@
         "buy_tier_count": 17,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 4,
-        "indexed_without_body": 53,
-        "bodies_median": 40.0,
+        "thin_body_buy_tier": 5,
+        "indexed_without_body": 93,
+        "bodies_median": 33.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
@@ -1110,6 +1110,7 @@
         "thin_body_tickers": [
           "YNGN.L",
           "CAM.L",
+          "WJG.L",
           "BREE.L",
           "PMI.L"
         ],
@@ -1125,9 +1126,9 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 7,
-        "targets": 32,
-        "improved": 14,
+        "run_count": 6,
+        "targets": 26,
+        "improved": 11,
         "improved_tickers": [
           "KGH.L",
           "CREO.L",
@@ -1138,13 +1139,11 @@
           "IGR.L",
           "IPX.L",
           "DOTD.L",
-          "RWS.L",
-          "TFW.L",
-          "JHD.L"
+          "RWS.L"
         ],
-        "last_run_at": "2026-09-24T13:42:12.746594+00:00",
-        "runtime_cutoff_runs": 5,
-        "error_runs": 1,
+        "last_run_at": "2026-09-24T11:26:51.752572+00:00",
+        "runtime_cutoff_runs": 4,
+        "error_runs": 0,
         "gaps_before": {
           "unmeasured": 5,
           "zero_body": 10,
@@ -1155,22 +1154,22 @@
         "gaps_after": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 4,
-          "indexed_without_body": 53,
+          "thin": 5,
+          "indexed_without_body": 93,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": -5,
           "zero_body": -10,
-          "thin": 3,
-          "indexed_without_body": -37,
+          "thin": 4,
+          "indexed_without_body": 3,
           "filing_gaps": -15
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 4,
-          "indexed_without_body": 53,
+          "thin": 5,
+          "indexed_without_body": 93,
           "filing_gaps": 0
         },
         "admission_ready": false,
@@ -1179,12 +1178,7 @@
           {
             "id": "runtime_cutoff",
             "severity": "high",
-            "summary": "5 ingest run(s) hit the runtime cutoff"
-          },
-          {
-            "id": "ingest_errors",
-            "severity": "warn",
-            "summary": "1 ingest run(s) recorded errors: MPE.L: Failed to perform, curl: (16) . See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
+            "summary": "4 ingest run(s) hit the runtime cutoff"
           },
           {
             "id": "no_observe_benchmark",
