@@ -289,6 +289,16 @@ def _job_specs() -> list[CronJobSpec]:
             minutes=[15],
             wdays=[1, 2, 3, 4, 5],
         ),
+        # Dashboard bridge: GitHub */10 schedule drifts 2–5h; external cron is primary.
+        CronJobSpec(
+            key="dashboard-bridge",
+            title="FTSE dashboard bridge (weekday every 10m)",
+            workflow="dashboard-bridge.yml",
+            body={"ref": REF},
+            hours=list(range(24)),
+            minutes=[0, 10, 20, 30, 40, 50],
+            wdays=[1, 2, 3, 4, 5],
+        ),
         CronJobSpec(
             key="euro-ingest-loop-morning",
             title="Euro ingest loop (Mon-Sat morning)",
