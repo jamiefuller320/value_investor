@@ -1,44 +1,49 @@
 {
   "market_id": "dax",
-  "assessed_at": "2026-09-24T18:02:56.472101+00:00",
-  "unmeasured": [],
+  "assessed_at": "2026-09-25T07:48:01.544581+00:00",
+  "unmeasured": [
+    "G1A.DE"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
       "ticker": "FME.DE",
-      "indexed_without_body": 17,
-      "filings_total": 88,
-      "filings_with_body": 71
+      "indexed_without_body": 11,
+      "filings_total": 50,
+      "filings_with_body": 39
     }
   ],
   "thin_need_discovery": [
+    "DHL.DE",
     "HEI.DE",
-    "MUV2.DE",
     "DTG.DE",
     "DTE.DE",
     "BAS.DE",
-    "HNR1.DE",
     "FRE.DE",
+    "HNR1.DE",
     "HEN3.DE",
-    "VOW3.DE"
+    "VOW3.DE",
+    "MUV2.DE"
   ],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
+  "primary_blocker": "unmeasured",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
+    "G1A.DE",
     "FME.DE"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (1 tickers, top: FME.DE(17))",
-    "Discovery/IR seed for 9 thin ticker(s) that already have bodies for every indexed filing",
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (1 tickers, top: FME.DE(11))",
+    "Discovery/IR seed for 10 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
     "indexed_without_body_tickers": 1,
-    "indexed_without_body_rows": 17,
-    "thin_need_discovery": 9,
+    "indexed_without_body_rows": 11,
+    "thin_need_discovery": 10,
     "thin_need_bodies": 0
   }
 }
