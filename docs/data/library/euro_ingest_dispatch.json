@@ -25,7 +25,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-24T20:40:35.505800+00:00",
+    "snapshot_at": "2026-09-25T07:30:14.745261+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 52,
     "unmeasured_buy_tier": 1,
@@ -51,11 +51,11 @@
       "SKA-B.ST",
       "UCB.BR",
       "APAM.AS",
+      "MC.PA",
       "BAS.DE",
       "DQ7A.IR",
-      "MC.PA",
-      "NBA.LS",
       "BN.PA",
+      "NBA.LS",
       "ADYEN.AS"
     ],
     "indexed_without_body_tickers": [
@@ -93,10 +93,10 @@
     "effective_thin_body_tickers": [
       "ACKB.BR",
       "DTE.DE",
-      "DQ7A.IR",
       "MC.PA",
-      "NBA.LS",
+      "DQ7A.IR",
       "BN.PA",
+      "NBA.LS",
       "ADYEN.AS"
     ],
     "effective_indexed_without_body": 1,
@@ -117,7 +117,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-24T20:40:35.507715+00:00",
+  "evaluated_at": "2026-09-25T07:30:14.747339+00:00",
   "maintenance_markets": [
     "aim",
     "asx200",
@@ -148,7 +148,7 @@
       "market_id": "dax",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=10, indexed_without_body=11)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=10, indexed_without_body=11)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
@@ -170,10 +170,10 @@
         "dax not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-24T20:40:50.944197+00:00",
+        "snapshot_at": "2026-09-25T07:30:38.699069+00:00",
         "market_id": "dax",
-        "buy_tier_count": 11,
-        "unmeasured_buy_tier": 0,
+        "buy_tier_count": 12,
+        "unmeasured_buy_tier": 1,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 10,
         "indexed_without_body": 11,
@@ -182,19 +182,21 @@
         "bodies_max": 39,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
-        "unmeasured_tickers": [],
+        "unmeasured_tickers": [
+          "G1A.DE"
+        ],
         "zero_body_tickers": [],
         "thin_body_tickers": [
           "DHL.DE",
           "HEI.DE",
-          "MUV2.DE",
           "DTG.DE",
           "DTE.DE",
           "BAS.DE",
-          "HNR1.DE",
           "FRE.DE",
+          "HNR1.DE",
           "HEN3.DE",
-          "VOW3.DE"
+          "VOW3.DE",
+          "MUV2.DE"
         ],
         "indexed_without_body_tickers": [
           "FME.DE"
@@ -224,7 +226,7 @@
         ],
         "ingest_exhausted": false
       },
-      "filing_gaps": 0,
+      "filing_gaps": 1,
       "max_daily_successes": 4,
       "max_targets": 24,
       "cron_morning": true,
@@ -236,7 +238,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-24T20:40:50.944729+00:00",
+      "evaluated_at": "2026-09-25T07:30:38.699706+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -248,7 +250,7 @@
       "market_id": "ftse_smallcap",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=38)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=33)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
@@ -264,15 +266,15 @@
         "ftse_smallcap not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-24T20:40:51.720367+00:00",
+        "snapshot_at": "2026-09-25T07:30:39.998465+00:00",
         "market_id": "ftse_smallcap",
-        "buy_tier_count": 9,
+        "buy_tier_count": 8,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 38,
+        "indexed_without_body": 33,
         "bodies_min": 49,
-        "bodies_median": 56,
+        "bodies_median": 55.0,
         "bodies_max": 85,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
@@ -281,21 +283,19 @@
         "thin_body_tickers": [],
         "indexed_without_body_tickers": [
           "ULTP.L",
-          "TPT.L",
           "DFS.L",
+          "TPT.L",
           "APTD.L",
           "MER.L",
-          "FOXT.L",
-          "REC.L"
+          "FOXT.L"
         ],
         "indexed_without_body_by_ticker": {
           "ULTP.L": 5,
-          "TPT.L": 8,
           "DFS.L": 5,
+          "TPT.L": 8,
           "APTD.L": 5,
           "MER.L": 5,
-          "FOXT.L": 5,
-          "REC.L": 5
+          "FOXT.L": 5
         },
         "parked_tickers": [
           "MER.L",
@@ -305,12 +305,11 @@
         "parked_count": 3,
         "effective_thin_body_buy_tier": 0,
         "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 20,
+        "effective_indexed_without_body": 15,
         "effective_indexed_without_body_tickers": [
           "DFS.L",
           "APTD.L",
-          "FOXT.L",
-          "REC.L"
+          "FOXT.L"
         ],
         "ingest_exhausted": false
       },
@@ -326,7 +325,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-24T20:40:51.720799+00:00",
+      "evaluated_at": "2026-09-25T07:30:39.998928+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -351,7 +350,7 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 20,
+    "hour_utc": 7,
     "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",

@@ -1,0 +1,3339 @@
+{
+  "schema_version": 1,
+  "scope": "exclusion_universe_archive",
+  "track_id": "exclusion_universe_archive",
+  "framework": {
+    "scope": "exclusion_universe_archive",
+    "observe_only": true,
+    "comparison": "equal_weight_universe vs equal_weight_universe_minus_exclusions",
+    "pit_exclusions": true,
+    "hindsight_quartiles": "evaluation_only",
+    "costs_included": false,
+    "note": "Archive exclusion-universe lab \u2014 graduated tightening ladders on weekly screen snapshots. Pair with rebalance_log replay before live knob promotion."
+  },
+  "generated_at": "2026-09-25T07:28:18.201745+00:00",
+  "snapshot_count": 14,
+  "universe_mode": "buy_tier_only",
+  "config": {
+    "use_adjusted_signal": false,
+    "resolve_research_pit": true,
+    "max_positions": 5,
+    "min_filtered_pool": 15,
+    "min_week_pairs": 4
+  },
+  "ladder": [
+    {
+      "step_id": "u0",
+      "label": "Baseline universe",
+      "exclude_signals": [],
+      "exclude_timing_wait": false,
+      "min_conviction": 0.0,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u1",
+      "label": "Exclude avoid",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": false,
+      "min_conviction": 0.0,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u2",
+      "label": "Exclude avoid + timing wait",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.0,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u3",
+      "label": "\u2026 + conviction >= 0.25",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.25,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u4",
+      "label": "\u2026 + conviction >= 0.35",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.35,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u5",
+      "label": "\u2026 + conviction >= 0.45",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.45,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    }
+  ],
+  "ladder_results": [
+    {
+      "step_id": "u0",
+      "label": "Baseline universe",
+      "step": {
+        "step_id": "u0",
+        "label": "Baseline universe",
+        "exclude_signals": [],
+        "exclude_timing_wait": false,
+        "min_conviction": 0.0,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 13,
+        "mean_weekly_exclusion_alpha": 0.0,
+        "cumulative_exclusion_alpha": 0.0,
+        "positive_alpha_weeks": 0,
+        "positive_alpha_rate": 0.0,
+        "median_weekly_alpha": 0.0,
+        "avg_baseline_pool_size": 13.0,
+        "avg_filtered_pool_size": 13.0,
+        "min_filtered_pool_size": 11,
+        "pool_reduction_pct": 0.0
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 13,
+        "mean_bottom_quartile_exclude_rate": 0.0,
+        "mean_top_quartile_retain_rate": 1.0,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-07-18T18:11:15+00:00",
+          "exit_run_at": "2026-07-19T15:34:29+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 11,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-19T15:34:29+00:00",
+          "exit_run_at": "2026-07-20T20:06:59+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 11,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": -0.009105,
+          "filtered_ew_return": -0.009105,
+          "book_top_n_return": -0.00519,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.003915,
+          "book_alpha_vs_filtered_ew": 0.003915,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "top_quartile": [
+              "CAML.L",
+              "BREE.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-20T20:06:59+00:00",
+          "exit_run_at": "2026-07-25T09:57:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T09:57:16+00:00",
+          "exit_run_at": "2026-07-25T10:00:51+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:00:51+00:00",
+          "exit_run_at": "2026-07-25T10:11:13+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:11:13+00:00",
+          "exit_run_at": "2026-07-25T13:14:47+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T13:14:47+00:00",
+          "exit_run_at": "2026-07-25T15:05:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T15:05:16+00:00",
+          "exit_run_at": "2026-07-26T16:52:52+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.013394,
+          "filtered_ew_return": 0.013394,
+          "book_top_n_return": -0.006109,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.019502,
+          "book_alpha_vs_filtered_ew": -0.019502,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "JHD.L",
+              "HCM.L",
+              "IPX.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "CAML.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "JHD.L",
+              "HCM.L",
+              "IPX.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-26T16:52:52+00:00",
+          "exit_run_at": "2026-08-02T11:04:38+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 14,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.034923,
+          "filtered_ew_return": 0.034923,
+          "book_top_n_return": 0.002209,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.032714,
+          "book_alpha_vs_filtered_ew": -0.032714,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "WJG.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "RWS.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "MPE.L",
+              "PAF.L",
+              "WJG.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-02T11:04:38+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 13,
+          "filtered_pool_size": 13,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.05917,
+          "filtered_ew_return": 0.05917,
+          "book_top_n_return": 0.057985,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.001185,
+          "book_alpha_vs_filtered_ew": -0.001185,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 13,
+            "bottom_quartile": [
+              "CAML.L",
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "PAF.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "CAML.L",
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-09-23T11:26:50+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 14,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.010118,
+          "filtered_ew_return": 0.010118,
+          "book_top_n_return": 0.085388,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.075269,
+          "book_alpha_vs_filtered_ew": 0.075269,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "WJG.L",
+              "ASY.L",
+              "IGR.L"
+            ],
+            "top_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "WJG.L",
+              "ASY.L",
+              "IGR.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T11:26:50+00:00",
+          "exit_run_at": "2026-09-23T13:46:48+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 17,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T13:46:48+00:00",
+          "exit_run_at": "2026-09-25T06:52:33+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 17,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": -0.011429,
+          "filtered_ew_return": -0.011429,
+          "book_top_n_return": -0.02664,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.015212,
+          "book_alpha_vs_filtered_ew": -0.015212,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "CAML.L",
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "ASY.L",
+              "RWS.L",
+              "WJG.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "CAML.L",
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    },
+    {
+      "step_id": "u1",
+      "label": "Exclude avoid",
+      "step": {
+        "step_id": "u1",
+        "label": "Exclude avoid",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": false,
+        "min_conviction": 0.0,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 13,
+        "mean_weekly_exclusion_alpha": 0.0,
+        "cumulative_exclusion_alpha": 0.0,
+        "positive_alpha_weeks": 0,
+        "positive_alpha_rate": 0.0,
+        "median_weekly_alpha": 0.0,
+        "avg_baseline_pool_size": 13.0,
+        "avg_filtered_pool_size": 13.0,
+        "min_filtered_pool_size": 11,
+        "pool_reduction_pct": 0.0
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 13,
+        "mean_bottom_quartile_exclude_rate": 0.0,
+        "mean_top_quartile_retain_rate": 1.0,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-07-18T18:11:15+00:00",
+          "exit_run_at": "2026-07-19T15:34:29+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 11,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-19T15:34:29+00:00",
+          "exit_run_at": "2026-07-20T20:06:59+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 11,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": -0.009105,
+          "filtered_ew_return": -0.009105,
+          "book_top_n_return": -0.00519,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.003915,
+          "book_alpha_vs_filtered_ew": 0.003915,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "top_quartile": [
+              "CAML.L",
+              "BREE.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-20T20:06:59+00:00",
+          "exit_run_at": "2026-07-25T09:57:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T09:57:16+00:00",
+          "exit_run_at": "2026-07-25T10:00:51+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:00:51+00:00",
+          "exit_run_at": "2026-07-25T10:11:13+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:11:13+00:00",
+          "exit_run_at": "2026-07-25T13:14:47+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T13:14:47+00:00",
+          "exit_run_at": "2026-07-25T15:05:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T15:05:16+00:00",
+          "exit_run_at": "2026-07-26T16:52:52+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.013394,
+          "filtered_ew_return": 0.013394,
+          "book_top_n_return": -0.006109,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.019502,
+          "book_alpha_vs_filtered_ew": -0.019502,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "JHD.L",
+              "HCM.L",
+              "IPX.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "CAML.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "JHD.L",
+              "HCM.L",
+              "IPX.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-26T16:52:52+00:00",
+          "exit_run_at": "2026-08-02T11:04:38+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 14,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.034923,
+          "filtered_ew_return": 0.034923,
+          "book_top_n_return": 0.002209,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.032714,
+          "book_alpha_vs_filtered_ew": -0.032714,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "WJG.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "RWS.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "MPE.L",
+              "PAF.L",
+              "WJG.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-02T11:04:38+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 13,
+          "filtered_pool_size": 13,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.05917,
+          "filtered_ew_return": 0.05917,
+          "book_top_n_return": 0.057985,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.001185,
+          "book_alpha_vs_filtered_ew": -0.001185,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 13,
+            "bottom_quartile": [
+              "CAML.L",
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "PAF.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "CAML.L",
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-09-23T11:26:50+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 14,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.010118,
+          "filtered_ew_return": 0.010118,
+          "book_top_n_return": 0.085388,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.075269,
+          "book_alpha_vs_filtered_ew": 0.075269,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "WJG.L",
+              "ASY.L",
+              "IGR.L"
+            ],
+            "top_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "WJG.L",
+              "ASY.L",
+              "IGR.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T11:26:50+00:00",
+          "exit_run_at": "2026-09-23T13:46:48+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 17,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T13:46:48+00:00",
+          "exit_run_at": "2026-09-25T06:52:33+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 17,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": -0.011429,
+          "filtered_ew_return": -0.011429,
+          "book_top_n_return": -0.02664,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.015212,
+          "book_alpha_vs_filtered_ew": -0.015212,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "CAML.L",
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "ASY.L",
+              "RWS.L",
+              "WJG.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "CAML.L",
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    },
+    {
+      "step_id": "u2",
+      "label": "Exclude avoid + timing wait",
+      "step": {
+        "step_id": "u2",
+        "label": "Exclude avoid + timing wait",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.0,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 13,
+        "mean_weekly_exclusion_alpha": 0.000261,
+        "cumulative_exclusion_alpha": 0.00339,
+        "positive_alpha_weeks": 1,
+        "positive_alpha_rate": 0.0769,
+        "median_weekly_alpha": 0.0,
+        "avg_baseline_pool_size": 13.0,
+        "avg_filtered_pool_size": 12.46,
+        "min_filtered_pool_size": 10,
+        "pool_reduction_pct": 0.0414
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 13,
+        "mean_bottom_quartile_exclude_rate": 0.0449,
+        "mean_top_quartile_retain_rate": 0.9808,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-07-18T18:11:15+00:00",
+          "exit_run_at": "2026-07-19T15:34:29+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 10,
+          "book_pool_size": 5,
+          "excluded_count": 1,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-19T15:34:29+00:00",
+          "exit_run_at": "2026-07-20T20:06:59+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 10,
+          "book_pool_size": 5,
+          "excluded_count": 1,
+          "baseline_ew_return": -0.009105,
+          "filtered_ew_return": -0.010015,
+          "book_top_n_return": -0.008862,
+          "exclusion_alpha": -0.00091,
+          "book_alpha_vs_baseline": 0.000243,
+          "book_alpha_vs_filtered_ew": 0.001153,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "top_quartile": [
+              "CAML.L",
+              "BREE.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-20T20:06:59+00:00",
+          "exit_run_at": "2026-07-25T09:57:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 11,
+          "book_pool_size": 5,
+          "excluded_count": 1,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T09:57:16+00:00",
+          "exit_run_at": "2026-07-25T10:00:51+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:00:51+00:00",
+          "exit_run_at": "2026-07-25T10:11:13+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:11:13+00:00",
+          "exit_run_at": "2026-07-25T13:14:47+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T13:14:47+00:00",
+          "exit_run_at": "2026-07-25T15:05:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T15:05:16+00:00",
+          "exit_run_at": "2026-07-26T16:52:52+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.013394,
+          "filtered_ew_return": 0.013394,
+          "book_top_n_return": -0.006109,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.019502,
+          "book_alpha_vs_filtered_ew": -0.019502,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "JHD.L",
+              "HCM.L",
+              "IPX.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "CAML.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "JHD.L",
+              "HCM.L",
+              "IPX.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-26T16:52:52+00:00",
+          "exit_run_at": "2026-08-02T11:04:38+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 14,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.034923,
+          "filtered_ew_return": 0.034923,
+          "book_top_n_return": 0.002209,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.032714,
+          "book_alpha_vs_filtered_ew": -0.032714,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "WJG.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "RWS.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "MPE.L",
+              "PAF.L",
+              "WJG.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-02T11:04:38+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 13,
+          "filtered_pool_size": 13,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.05917,
+          "filtered_ew_return": 0.05917,
+          "book_top_n_return": 0.057985,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.001185,
+          "book_alpha_vs_filtered_ew": -0.001185,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 13,
+            "bottom_quartile": [
+              "CAML.L",
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "PAF.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "CAML.L",
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-09-23T11:26:50+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 12,
+          "book_pool_size": 5,
+          "excluded_count": 2,
+          "baseline_ew_return": 0.010118,
+          "filtered_ew_return": 0.014698,
+          "book_top_n_return": 0.085388,
+          "exclusion_alpha": 0.00458,
+          "book_alpha_vs_baseline": 0.075269,
+          "book_alpha_vs_filtered_ew": 0.07069,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "WJG.L",
+              "ASY.L",
+              "IGR.L"
+            ],
+            "top_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "ASY.L"
+            ],
+            "bottom_quartile_retained": [
+              "WJG.L",
+              "IGR.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.3333,
+            "bottom_quartile_retained_rate": 0.6667,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T11:26:50+00:00",
+          "exit_run_at": "2026-09-23T13:46:48+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 16,
+          "book_pool_size": 5,
+          "excluded_count": 1,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "MPE.L"
+            ],
+            "bottom_quartile_retained": [
+              "KGH.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.25,
+            "bottom_quartile_retained_rate": 0.75,
+            "top_quartile_retain_rate": 0.75,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T13:46:48+00:00",
+          "exit_run_at": "2026-09-25T06:52:33+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 16,
+          "book_pool_size": 5,
+          "excluded_count": 1,
+          "baseline_ew_return": -0.011429,
+          "filtered_ew_return": -0.011709,
+          "book_top_n_return": -0.02664,
+          "exclusion_alpha": -0.00028,
+          "book_alpha_vs_baseline": -0.015212,
+          "book_alpha_vs_filtered_ew": -0.014931,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "CAML.L",
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "ASY.L",
+              "RWS.L",
+              "WJG.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "CAML.L",
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    },
+    {
+      "step_id": "u3",
+      "label": "\u2026 + conviction >= 0.25",
+      "step": {
+        "step_id": "u3",
+        "label": "\u2026 + conviction >= 0.25",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.25,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 12,
+        "mean_weekly_exclusion_alpha": 0.00125,
+        "cumulative_exclusion_alpha": 0.015002,
+        "positive_alpha_weeks": 2,
+        "positive_alpha_rate": 0.1667,
+        "median_weekly_alpha": 0.0,
+        "avg_baseline_pool_size": 13.17,
+        "avg_filtered_pool_size": 11.58,
+        "min_filtered_pool_size": 7,
+        "pool_reduction_pct": 0.1203
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 13,
+        "mean_bottom_quartile_exclude_rate": 0.25,
+        "mean_top_quartile_retain_rate": 0.8397,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-07-18T18:11:15+00:00",
+          "exit_run_at": "2026-07-19T15:34:29+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 0,
+          "book_pool_size": 0,
+          "excluded_count": 11,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": null,
+          "book_top_n_return": null,
+          "exclusion_alpha": null,
+          "book_alpha_vs_baseline": null,
+          "book_alpha_vs_filtered_ew": null,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-19T15:34:29+00:00",
+          "exit_run_at": "2026-07-20T20:06:59+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 7,
+          "book_pool_size": 5,
+          "excluded_count": 4,
+          "baseline_ew_return": -0.009105,
+          "filtered_ew_return": -0.006699,
+          "book_top_n_return": -0.008862,
+          "exclusion_alpha": 0.002406,
+          "book_alpha_vs_baseline": 0.000243,
+          "book_alpha_vs_filtered_ew": -0.002163,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "top_quartile": [
+              "CAML.L",
+              "BREE.L"
+            ],
+            "bottom_quartile_excluded": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.5,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-20T20:06:59+00:00",
+          "exit_run_at": "2026-07-25T09:57:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 9,
+          "book_pool_size": 5,
+          "excluded_count": 3,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.3333,
+            "bottom_quartile_retained_rate": 0.6667,
+            "top_quartile_retain_rate": 0.6667,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T09:57:16+00:00",
+          "exit_run_at": "2026-07-25T10:00:51+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 11,
+          "book_pool_size": 5,
+          "excluded_count": 1,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:00:51+00:00",
+          "exit_run_at": "2026-07-25T10:11:13+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 11,
+          "book_pool_size": 5,
+          "excluded_count": 1,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:11:13+00:00",
+          "exit_run_at": "2026-07-25T13:14:47+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 11,
+          "book_pool_size": 5,
+          "excluded_count": 1,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T13:14:47+00:00",
+          "exit_run_at": "2026-07-25T15:05:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 11,
+          "book_pool_size": 5,
+          "excluded_count": 1,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T15:05:16+00:00",
+          "exit_run_at": "2026-07-26T16:52:52+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 11,
+          "book_pool_size": 5,
+          "excluded_count": 1,
+          "baseline_ew_return": 0.013394,
+          "filtered_ew_return": 0.011967,
+          "book_top_n_return": -0.006109,
+          "exclusion_alpha": -0.001426,
+          "book_alpha_vs_baseline": -0.019502,
+          "book_alpha_vs_filtered_ew": -0.018076,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "JHD.L",
+              "HCM.L",
+              "IPX.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "CAML.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "JHD.L",
+              "HCM.L",
+              "IPX.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-26T16:52:52+00:00",
+          "exit_run_at": "2026-08-02T11:04:38+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 14,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.034923,
+          "filtered_ew_return": 0.034923,
+          "book_top_n_return": 0.002209,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.032714,
+          "book_alpha_vs_filtered_ew": -0.032714,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "WJG.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "RWS.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "MPE.L",
+              "PAF.L",
+              "WJG.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-02T11:04:38+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 13,
+          "filtered_pool_size": 13,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.05917,
+          "filtered_ew_return": 0.05917,
+          "book_top_n_return": 0.057985,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": -0.001185,
+          "book_alpha_vs_filtered_ew": -0.001185,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 13,
+            "bottom_quartile": [
+              "CAML.L",
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "PAF.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "CAML.L",
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-09-23T11:26:50+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 11,
+          "book_pool_size": 5,
+          "excluded_count": 3,
+          "baseline_ew_return": 0.010118,
+          "filtered_ew_return": 0.024739,
+          "book_top_n_return": 0.085388,
+          "exclusion_alpha": 0.01462,
+          "book_alpha_vs_baseline": 0.075269,
+          "book_alpha_vs_filtered_ew": 0.060649,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "WJG.L",
+              "ASY.L",
+              "IGR.L"
+            ],
+            "top_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "ASY.L",
+              "IGR.L"
+            ],
+            "bottom_quartile_retained": [
+              "WJG.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.6667,
+            "bottom_quartile_retained_rate": 0.3333,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T11:26:50+00:00",
+          "exit_run_at": "2026-09-23T13:46:48+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 15,
+          "book_pool_size": 5,
+          "excluded_count": 2,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "MPE.L"
+            ],
+            "bottom_quartile_retained": [
+              "KGH.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.25,
+            "bottom_quartile_retained_rate": 0.75,
+            "top_quartile_retain_rate": 0.75,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T13:46:48+00:00",
+          "exit_run_at": "2026-09-25T06:52:33+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 15,
+          "book_pool_size": 5,
+          "excluded_count": 2,
+          "baseline_ew_return": -0.011429,
+          "filtered_ew_return": -0.012027,
+          "book_top_n_return": -0.02664,
+          "exclusion_alpha": -0.000598,
+          "book_alpha_vs_baseline": -0.015212,
+          "book_alpha_vs_filtered_ew": -0.014614,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "CAML.L",
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "ASY.L",
+              "RWS.L",
+              "WJG.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "CAML.L",
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    },
+    {
+      "step_id": "u4",
+      "label": "\u2026 + conviction >= 0.35",
+      "step": {
+        "step_id": "u4",
+        "label": "\u2026 + conviction >= 0.35",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.35,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 12,
+        "mean_weekly_exclusion_alpha": -0.00108,
+        "cumulative_exclusion_alpha": -0.012959,
+        "positive_alpha_weeks": 1,
+        "positive_alpha_rate": 0.0833,
+        "median_weekly_alpha": 0.0,
+        "avg_baseline_pool_size": 13.17,
+        "avg_filtered_pool_size": 8.17,
+        "min_filtered_pool_size": 3,
+        "pool_reduction_pct": 0.3797
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 13,
+        "mean_bottom_quartile_exclude_rate": 0.5769,
+        "mean_top_quartile_retain_rate": 0.391,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-07-18T18:11:15+00:00",
+          "exit_run_at": "2026-07-19T15:34:29+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 0,
+          "book_pool_size": 0,
+          "excluded_count": 11,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": null,
+          "book_top_n_return": null,
+          "exclusion_alpha": null,
+          "book_alpha_vs_baseline": null,
+          "book_alpha_vs_filtered_ew": null,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-19T15:34:29+00:00",
+          "exit_run_at": "2026-07-20T20:06:59+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 3,
+          "book_pool_size": 3,
+          "excluded_count": 8,
+          "baseline_ew_return": -0.009105,
+          "filtered_ew_return": -0.012087,
+          "book_top_n_return": -0.012087,
+          "exclusion_alpha": -0.002982,
+          "book_alpha_vs_baseline": -0.002982,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "top_quartile": [
+              "CAML.L",
+              "BREE.L"
+            ],
+            "bottom_quartile_excluded": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-20T20:06:59+00:00",
+          "exit_run_at": "2026-07-25T09:57:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 6,
+          "book_pool_size": 5,
+          "excluded_count": 6,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [
+              "HCM.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.6667,
+            "bottom_quartile_retained_rate": 0.3333,
+            "top_quartile_retain_rate": 0.3333,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T09:57:16+00:00",
+          "exit_run_at": "2026-07-25T10:00:51+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 9,
+          "book_pool_size": 5,
+          "excluded_count": 3,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [
+              "HCM.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.6667,
+            "bottom_quartile_retained_rate": 0.3333,
+            "top_quartile_retain_rate": 0.3333,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:00:51+00:00",
+          "exit_run_at": "2026-07-25T10:11:13+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 9,
+          "book_pool_size": 5,
+          "excluded_count": 3,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [
+              "HCM.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.6667,
+            "bottom_quartile_retained_rate": 0.3333,
+            "top_quartile_retain_rate": 0.3333,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:11:13+00:00",
+          "exit_run_at": "2026-07-25T13:14:47+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 9,
+          "book_pool_size": 5,
+          "excluded_count": 3,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [
+              "HCM.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.6667,
+            "bottom_quartile_retained_rate": 0.3333,
+            "top_quartile_retain_rate": 0.3333,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T13:14:47+00:00",
+          "exit_run_at": "2026-07-25T15:05:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 9,
+          "book_pool_size": 5,
+          "excluded_count": 3,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [
+              "HCM.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.6667,
+            "bottom_quartile_retained_rate": 0.3333,
+            "top_quartile_retain_rate": 0.3333,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T15:05:16+00:00",
+          "exit_run_at": "2026-07-26T16:52:52+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 9,
+          "book_pool_size": 5,
+          "excluded_count": 3,
+          "baseline_ew_return": 0.013394,
+          "filtered_ew_return": 0.006498,
+          "book_top_n_return": -0.006109,
+          "exclusion_alpha": -0.006895,
+          "book_alpha_vs_baseline": -0.019502,
+          "book_alpha_vs_filtered_ew": -0.012607,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "JHD.L",
+              "HCM.L",
+              "IPX.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "CAML.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "JHD.L",
+              "HCM.L",
+              "IPX.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 0.6667,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-26T16:52:52+00:00",
+          "exit_run_at": "2026-08-02T11:04:38+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 9,
+          "book_pool_size": 5,
+          "excluded_count": 5,
+          "baseline_ew_return": 0.034923,
+          "filtered_ew_return": 0.03412,
+          "book_top_n_return": 0.002209,
+          "exclusion_alpha": -0.000804,
+          "book_alpha_vs_baseline": -0.032714,
+          "book_alpha_vs_filtered_ew": -0.031911,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "WJG.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "RWS.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [
+              "WJG.L"
+            ],
+            "bottom_quartile_retained": [
+              "MPE.L",
+              "PAF.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.3333,
+            "bottom_quartile_retained_rate": 0.6667,
+            "top_quartile_retain_rate": 0.6667,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-02T11:04:38+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 13,
+          "filtered_pool_size": 10,
+          "book_pool_size": 5,
+          "excluded_count": 3,
+          "baseline_ew_return": 0.05917,
+          "filtered_ew_return": 0.053001,
+          "book_top_n_return": 0.057985,
+          "exclusion_alpha": -0.006169,
+          "book_alpha_vs_baseline": -0.001185,
+          "book_alpha_vs_filtered_ew": 0.004984,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 13,
+            "bottom_quartile": [
+              "CAML.L",
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "PAF.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_excluded": [
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.3333,
+            "bottom_quartile_retained_rate": 0.6667,
+            "top_quartile_retain_rate": 0.6667,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-09-23T11:26:50+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 9,
+          "book_pool_size": 5,
+          "excluded_count": 5,
+          "baseline_ew_return": 0.010118,
+          "filtered_ew_return": 0.028755,
+          "book_top_n_return": 0.085388,
+          "exclusion_alpha": 0.018636,
+          "book_alpha_vs_baseline": 0.075269,
+          "book_alpha_vs_filtered_ew": 0.056633,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "WJG.L",
+              "ASY.L",
+              "IGR.L"
+            ],
+            "top_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "WJG.L",
+              "ASY.L",
+              "IGR.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.6667,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T11:26:50+00:00",
+          "exit_run_at": "2026-09-23T13:46:48+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 8,
+          "book_pool_size": 5,
+          "excluded_count": 9,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "MPE.L",
+              "RWS.L"
+            ],
+            "bottom_quartile_retained": [
+              "KGH.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.5,
+            "bottom_quartile_retained_rate": 0.5,
+            "top_quartile_retain_rate": 0.5,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T13:46:48+00:00",
+          "exit_run_at": "2026-09-25T06:52:33+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 8,
+          "book_pool_size": 5,
+          "excluded_count": 9,
+          "baseline_ew_return": -0.011429,
+          "filtered_ew_return": -0.026174,
+          "book_top_n_return": -0.02664,
+          "exclusion_alpha": -0.014745,
+          "book_alpha_vs_baseline": -0.015212,
+          "book_alpha_vs_filtered_ew": -0.000466,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "CAML.L",
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "ASY.L",
+              "RWS.L",
+              "WJG.L"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "CAML.L",
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 0.25,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    },
+    {
+      "step_id": "u5",
+      "label": "\u2026 + conviction >= 0.45",
+      "step": {
+        "step_id": "u5",
+        "label": "\u2026 + conviction >= 0.45",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.45,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 12,
+        "mean_weekly_exclusion_alpha": -0.001137,
+        "cumulative_exclusion_alpha": -0.013649,
+        "positive_alpha_weeks": 1,
+        "positive_alpha_rate": 0.0833,
+        "median_weekly_alpha": 0.0,
+        "avg_baseline_pool_size": 13.17,
+        "avg_filtered_pool_size": 4.75,
+        "min_filtered_pool_size": 1,
+        "pool_reduction_pct": 0.6392
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 13,
+        "mean_bottom_quartile_exclude_rate": 0.8462,
+        "mean_top_quartile_retain_rate": 0.141,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-07-18T18:11:15+00:00",
+          "exit_run_at": "2026-07-19T15:34:29+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 0,
+          "book_pool_size": 0,
+          "excluded_count": 11,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": null,
+          "book_top_n_return": null,
+          "exclusion_alpha": null,
+          "book_alpha_vs_baseline": null,
+          "book_alpha_vs_filtered_ew": null,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "HCM.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-19T15:34:29+00:00",
+          "exit_run_at": "2026-07-20T20:06:59+00:00",
+          "baseline_pool_size": 11,
+          "filtered_pool_size": 1,
+          "book_pool_size": 1,
+          "excluded_count": 10,
+          "baseline_ew_return": -0.009105,
+          "filtered_ew_return": -0.016043,
+          "book_top_n_return": -0.016043,
+          "exclusion_alpha": -0.006938,
+          "book_alpha_vs_baseline": -0.006938,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 11,
+            "bottom_quartile": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "top_quartile": [
+              "CAML.L",
+              "BREE.L"
+            ],
+            "bottom_quartile_excluded": [
+              "WJG.L",
+              "RWS.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-20T20:06:59+00:00",
+          "exit_run_at": "2026-07-25T09:57:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 3,
+          "book_pool_size": 3,
+          "excluded_count": 9,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T09:57:16+00:00",
+          "exit_run_at": "2026-07-25T10:00:51+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 4,
+          "book_pool_size": 4,
+          "excluded_count": 8,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:00:51+00:00",
+          "exit_run_at": "2026-07-25T10:11:13+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 4,
+          "book_pool_size": 4,
+          "excluded_count": 8,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T10:11:13+00:00",
+          "exit_run_at": "2026-07-25T13:14:47+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 5,
+          "book_pool_size": 5,
+          "excluded_count": 7,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T13:14:47+00:00",
+          "exit_run_at": "2026-07-25T15:05:16+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 5,
+          "book_pool_size": 5,
+          "excluded_count": 7,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "RWS.L",
+              "HCM.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-25T15:05:16+00:00",
+          "exit_run_at": "2026-07-26T16:52:52+00:00",
+          "baseline_pool_size": 12,
+          "filtered_pool_size": 5,
+          "book_pool_size": 5,
+          "excluded_count": 7,
+          "baseline_ew_return": 0.013394,
+          "filtered_ew_return": -0.006109,
+          "book_top_n_return": -0.006109,
+          "exclusion_alpha": -0.019502,
+          "book_alpha_vs_baseline": -0.019502,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 12,
+            "bottom_quartile": [
+              "JHD.L",
+              "HCM.L",
+              "IPX.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "CAML.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [
+              "HCM.L"
+            ],
+            "bottom_quartile_retained": [
+              "JHD.L",
+              "IPX.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.3333,
+            "bottom_quartile_retained_rate": 0.6667,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-07-26T16:52:52+00:00",
+          "exit_run_at": "2026-08-02T11:04:38+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 6,
+          "book_pool_size": 5,
+          "excluded_count": 8,
+          "baseline_ew_return": 0.034923,
+          "filtered_ew_return": 0.018083,
+          "book_top_n_return": 0.002209,
+          "exclusion_alpha": -0.01684,
+          "book_alpha_vs_baseline": -0.032714,
+          "book_alpha_vs_filtered_ew": -0.015875,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "WJG.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "RWS.L",
+              "DOTD.L"
+            ],
+            "bottom_quartile_excluded": [
+              "PAF.L",
+              "WJG.L"
+            ],
+            "bottom_quartile_retained": [
+              "MPE.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.6667,
+            "bottom_quartile_retained_rate": 0.3333,
+            "top_quartile_retain_rate": 0.3333,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-02T11:04:38+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 13,
+          "filtered_pool_size": 6,
+          "book_pool_size": 5,
+          "excluded_count": 7,
+          "baseline_ew_return": 0.05917,
+          "filtered_ew_return": 0.050103,
+          "book_top_n_return": 0.057985,
+          "exclusion_alpha": -0.009067,
+          "book_alpha_vs_baseline": -0.001185,
+          "book_alpha_vs_filtered_ew": 0.007882,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 13,
+            "bottom_quartile": [
+              "CAML.L",
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "top_quartile": [
+              "RWS.L",
+              "PAF.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_excluded": [
+              "CAML.L",
+              "DOTD.L",
+              "KGH.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.3333,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-09-23T11:26:50+00:00",
+          "baseline_pool_size": 14,
+          "filtered_pool_size": 6,
+          "book_pool_size": 5,
+          "excluded_count": 8,
+          "baseline_ew_return": 0.010118,
+          "filtered_ew_return": 0.060575,
+          "book_top_n_return": 0.085388,
+          "exclusion_alpha": 0.050456,
+          "book_alpha_vs_baseline": 0.075269,
+          "book_alpha_vs_filtered_ew": 0.024813,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 14,
+            "bottom_quartile": [
+              "WJG.L",
+              "ASY.L",
+              "IGR.L"
+            ],
+            "top_quartile": [
+              "MPE.L",
+              "PAF.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "WJG.L",
+              "ASY.L",
+              "IGR.L"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.6667,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T11:26:50+00:00",
+          "exit_run_at": "2026-09-23T13:46:48+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 6,
+          "book_pool_size": 5,
+          "excluded_count": 11,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "top_quartile": [
+              "KGH.L",
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_excluded": [
+              "MPE.L",
+              "RWS.L",
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [
+              "KGH.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.75,
+            "bottom_quartile_retained_rate": 0.25,
+            "top_quartile_retain_rate": 0.25,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-09-23T13:46:48+00:00",
+          "exit_run_at": "2026-09-25T06:52:33+00:00",
+          "baseline_pool_size": 17,
+          "filtered_pool_size": 6,
+          "book_pool_size": 5,
+          "excluded_count": 11,
+          "baseline_ew_return": -0.011429,
+          "filtered_ew_return": -0.023186,
+          "book_top_n_return": -0.02664,
+          "exclusion_alpha": -0.011758,
+          "book_alpha_vs_baseline": -0.015212,
+          "book_alpha_vs_filtered_ew": -0.003454,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 17,
+            "bottom_quartile": [
+              "CAML.L",
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "top_quartile": [
+              "IGR.L",
+              "ASY.L",
+              "RWS.L",
+              "WJG.L"
+            ],
+            "bottom_quartile_excluded": [
+              "CAML.L"
+            ],
+            "bottom_quartile_retained": [
+              "PAF.L",
+              "IPX.L",
+              "JHD.L"
+            ],
+            "bottom_quartile_exclude_rate": 0.25,
+            "bottom_quartile_retained_rate": 0.75,
+            "top_quartile_retain_rate": 0.25,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    }
+  ],
+  "recommended_step": null,
+  "updated_at": "2026-09-25T07:28:18.201769+00:00",
+  "readiness": {
+    "ready_for_priors": false,
+    "week_pairs": 13,
+    "min_week_pairs": 4,
+    "min_filtered_pool": 15,
+    "recommended_step": null
+  },
+  "note": "Exclusion-universe archive sim (observe-only). Positive exclusion_alpha means the filtered equal-weight universe beat the baseline universe gross of costs. Use recommended_step as a prior for offline_sim / paper_knobs \u2014 not auto-apply."
+}

@@ -1,44 +1,61 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-24T19:25:30.441595+01:00",
+    "local_time": "2026-09-25T08:28:45.459840+01:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-09-24T08:00:00+01:00",
-    "settle_at": "2026-09-24T09:15:00+01:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-09-25T08:00:00+01:00",
+    "settle_at": "2026-09-25T09:15:00+01:00",
+    "can_act": false,
+    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [
     {
-      "id": "9c0a6d97-3a51-4658-9c07-516d1c6619ec",
+      "id": "9a27ee42-5638-40f3-89ed-ce13280909fe",
       "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
-      "acted_at": "2026-09-24T19:25:30.441595+01:00",
+      "acted_at": "2026-09-25T08:28:45.459840+01:00",
       "ticker": "FME.DE",
-      "side": "buy",
+      "side": "sell",
       "sizing_mode": "cash",
-      "shares": 12.645719,
-      "price": 39.47,
-      "gross": 499.13,
-      "cost": 0.87,
-      "net_cash": -500.0,
-      "note": "Automated buy",
-      "name": "Fresenius Medical Care AG"
+      "shares": 4.293551,
+      "price": 39.35,
+      "gross": 168.95,
+      "cost": 0.3,
+      "net_cash": 168.66,
+      "note": "Automated trim",
+      "name": "Fresenius Medical Care AG",
+      "avg_cost_at_exit": 39.47
     },
     {
-      "id": "9590dcd1-da76-4325-baf3-56b935272ca0",
+      "id": "4395722b-385a-40c9-a561-88cf96840bc8",
       "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
-      "acted_at": "2026-09-24T19:25:30.441595+01:00",
+      "acted_at": "2026-09-25T08:28:45.459840+01:00",
       "ticker": "DHL.DE",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 2.843111,
+      "price": 56.48,
+      "gross": 160.58,
+      "cost": 0.28,
+      "net_cash": 160.3,
+      "note": "Automated trim",
+      "name": "DHL AG",
+      "avg_cost_at_exit": 57.62
+    },
+    {
+      "id": "f98295e5-3d05-4400-b6a6-0194c039ede1",
+      "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+      "acted_at": "2026-09-25T08:28:45.459840+01:00",
+      "ticker": "G1A.DE",
       "side": "buy",
       "sizing_mode": "cash",
-      "shares": 8.662383,
-      "price": 57.62,
-      "gross": 499.13,
-      "cost": 0.87,
-      "net_cash": -500.0,
+      "shares": 4.97167,
+      "price": 66.05,
+      "gross": 328.38,
+      "cost": 0.57,
+      "net_cash": -328.95,
       "note": "Automated buy",
-      "name": "DHL AG"
+      "name": "GEA Group Aktiengesellschaft"
     }
   ],
   "plan": {
@@ -54,7 +71,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 998.25,
+    "nav": 985.71,
     "cash": -0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -64,21 +81,28 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 499.13,
+    "target_sleeve_value": 328.57,
     "targets": [
       {
         "ticker": "FME.DE",
         "name": "Fresenius Medical Care AG",
         "signal": "strong_buy",
         "conviction_score": 0.9625,
-        "price": 39.47
+        "price": 39.35
       },
       {
         "ticker": "DHL.DE",
         "name": "DHL AG",
         "signal": "strong_buy",
         "conviction_score": 0.8938,
-        "price": 57.62
+        "price": 56.48
+      },
+      {
+        "ticker": "G1A.DE",
+        "name": "GEA Group Aktiengesellschaft",
+        "signal": "buy",
+        "conviction_score": 0.4074,
+        "price": 66.05
       }
     ],
     "anticipated_exits": [],
@@ -91,8 +115,8 @@
         "ticker": "FME.DE",
         "name": "Fresenius Medical Care AG",
         "reason": "Already near equal-weight target",
-        "value": 499.13,
-        "target_value": 499.13,
+        "value": 328.66,
+        "target_value": 328.57,
         "conviction_score": 0.9625,
         "signal": "strong_buy"
       },
@@ -101,15 +125,25 @@
         "ticker": "DHL.DE",
         "name": "DHL AG",
         "reason": "Already near equal-weight target",
-        "value": 499.13,
-        "target_value": 499.13,
+        "value": 328.67,
+        "target_value": 328.57,
         "conviction_score": 0.8938,
         "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "G1A.DE",
+        "name": "GEA Group Aktiengesellschaft",
+        "reason": "Already near equal-weight target",
+        "value": 328.38,
+        "target_value": 328.57,
+        "conviction_score": 0.4074,
+        "signal": "buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -118,7 +152,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 39.47,
+      "mark": 39.35,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -129,7 +163,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 57.62,
+      "mark": 56.48,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "G1A.DE",
+      "name": "GEA Group Aktiengesellschaft",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 66.05,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -156,7 +201,7 @@
     "holdings": {
       "FME.DE": {
         "ticker": "FME.DE",
-        "shares": 12.645719,
+        "shares": 8.352168,
         "avg_cost": 39.47,
         "name": "Fresenius Medical Care AG",
         "sector": "Healthcare",
@@ -167,7 +212,7 @@
       },
       "DHL.DE": {
         "ticker": "DHL.DE",
-        "shares": 8.662383,
+        "shares": 5.819272,
         "avg_cost": 57.62,
         "name": "DHL AG",
         "sector": "Industrials",
@@ -175,6 +220,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-09-24T19:25:30.441595+01:00"
+      },
+      "G1A.DE": {
+        "ticker": "G1A.DE",
+        "shares": 4.97167,
+        "avg_cost": 66.05,
+        "name": "GEA Group Aktiengesellschaft",
+        "sector": "Industrials",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-25T08:28:45.459840+01:00"
       }
     },
     "trades": [
@@ -207,6 +263,53 @@
         "net_cash": -500.0,
         "note": "Automated buy",
         "name": "DHL AG"
+      },
+      {
+        "id": "9a27ee42-5638-40f3-89ed-ce13280909fe",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-09-25T08:28:45.459840+01:00",
+        "ticker": "FME.DE",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 4.293551,
+        "price": 39.35,
+        "gross": 168.95,
+        "cost": 0.3,
+        "net_cash": 168.66,
+        "note": "Automated trim",
+        "name": "Fresenius Medical Care AG",
+        "avg_cost_at_exit": 39.47
+      },
+      {
+        "id": "4395722b-385a-40c9-a561-88cf96840bc8",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-09-25T08:28:45.459840+01:00",
+        "ticker": "DHL.DE",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 2.843111,
+        "price": 56.48,
+        "gross": 160.58,
+        "cost": 0.28,
+        "net_cash": 160.3,
+        "note": "Automated trim",
+        "name": "DHL AG",
+        "avg_cost_at_exit": 57.62
+      },
+      {
+        "id": "f98295e5-3d05-4400-b6a6-0194c039ede1",
+        "fund_id": "fcd539c9-28ad-4d96-8490-06270b109456",
+        "acted_at": "2026-09-25T08:28:45.459840+01:00",
+        "ticker": "G1A.DE",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 4.97167,
+        "price": 66.05,
+        "gross": 328.38,
+        "cost": 0.57,
+        "net_cash": -328.95,
+        "note": "Automated buy",
+        "name": "GEA Group Aktiengesellschaft"
       }
     ],
     "equity_curve": [
@@ -250,19 +353,36 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-25T08:28:45.459840+01:00",
+        "portfolio_value": 848.45,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.86075
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-24T19:25:30.441595+01:00",
+    "last_mark_at": "2026-09-25T08:28:45.459840+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (2 trade(s)).",
+  "note": "Rebalanced after open settle (3 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-24T18:25:31.533876+00:00",
+    "generated_at": "2026-09-25T07:28:45.478391+00:00",
     "open_count": 0,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -281,7 +401,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-24T18:25:31.534074+00:00",
+    "generated_at": "2026-09-25T07:28:45.479092+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -337,17 +457,20 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 0,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 0,
+      "hold_with_data_quality_count": 1,
       "gaps": [
         "hold_recovery closed episodes=0 (target >=15)",
-        "swap_rotation closed rotations=0 (target >=10)",
-        "no hold episodes with data_quality_score yet (needs screen marks on pass)"
+        "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 0
+        "count": 1,
+        "recovered_to_breakeven": 0,
+        "close_reasons": {
+          "open": 1
+        }
       },
       "closed": {
         "count": 0
@@ -355,7 +478,10 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 0
+        "count": 1,
+        "verdicts": {
+          "open": 1
+        }
       },
       "closed": {
         "count": 0
@@ -363,8 +489,8 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 0
+      "hold_episodes": 1,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -376,8 +502,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-24T18:25:31.534296+00:00",
-    "as_of": "2026-09-24T19:25:30.441595+01:00",
+    "updated_at": "2026-09-25T07:28:45.479956+00:00",
+    "as_of": "2026-09-25T08:28:45.459840+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -389,16 +515,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 2,
+    "holding_count": 3,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 2,
+      "intact": 3,
       "weakening": 0,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 2,
+      "holding_count": 3,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -428,14 +554,54 @@
     },
     "holdings": [
       {
+        "ticker": "DHL.DE",
+        "name": "DHL AG",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0198,
+        "mark": 56.48,
+        "avg_cost": 57.62,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.8938,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 89%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 89%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "FME.DE",
         "name": "Fresenius Medical Care AG",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 39.47,
+        "unrealized_pct": -0.003,
+        "mark": 39.35,
         "avg_cost": 39.47,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -468,18 +634,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "DHL.DE",
-        "name": "DHL AG",
+        "ticker": "G1A.DE",
+        "name": "GEA Group Aktiengesellschaft",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
         "unrealized_pct": 0.0,
-        "mark": 57.62,
-        "avg_cost": 57.62,
-        "signal": "strong_buy",
+        "mark": 66.05,
+        "avg_cost": 66.05,
+        "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.8938,
+        "conviction_score": 0.4074,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -491,18 +657,18 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 89%"
+          "conviction 41%"
         ],
         "intact_reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 89%"
+          "conviction 41%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -515,7 +681,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-24T18:25:31.534650+00:00",
+    "generated_at": "2026-09-25T07:28:45.481197+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -523,7 +689,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 0,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 0,
+      "open_with_thesis": 1,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -575,8 +741,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-24T18:25:31.535033+00:00",
-    "open_count": 2,
+    "generated_at": "2026-09-25T07:28:45.482455+00:00",
+    "open_count": 3,
     "closed_count": 0,
     "scored_count": 0,
     "scored_count_all": 0,
@@ -632,14 +798,14 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 2,
-    "marked_this_pass": 0,
+    "ingested_this_pass": 1,
+    "marked_this_pass": 2,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-24T19:25:30.441595+01:00",
+    "generated_at": "2026-09-25T08:28:45.459840+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -663,10 +829,10 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 2,
+    "open_count": 3,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 2,
+      "on_book": 3,
       "off_book": 0,
       "never_funded": 0
     },
@@ -687,13 +853,13 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 2,
+      "opened": 1,
       "closed": 0,
-      "tagged_on_book": 2,
+      "tagged_on_book": 1,
       "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-24T18:25:31.535439+00:00",
+  "generated_at": "2026-09-25T07:28:45.483508+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
