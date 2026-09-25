@@ -1,18 +1,18 @@
 {
   "ticker": "BREE.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-21T06:21:41.631661+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-09-23T17:08:53.543887+00:00",
+  "attached_at": "2026-09-25T08:52:51.808712+00:00",
+  "history_run_path": "docs/data/history/run_20260923_170853.json.gz",
+  "history_models_path": "docs/data/history/models_20260923_170853.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
+      "strong_buy": 11,
       "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "hold": 138,
+      "avoid": 54
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 11,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 17,
+      "buy": 31,
+      "hold": 41,
+      "avoid": 13
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -29,46 +32,69 @@
   },
   "ticker_signal": {
     "ticker": "BREE.L",
-    "signal": "strong_buy",
-    "conviction_score": 0.46435075,
+    "signal": "buy",
+    "conviction_score": 0.2281655,
     "data_quality_score": 1.0,
     "name": "Breedon Group plc",
     "sector": "Basic Materials",
     "timing_signal": "neutral",
-    "timing_score": 0.5,
-    "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £105.8M | screen TTM (unverified) £107.8M | company-adj £133.2M | Earnings growth basis divergence >300 bps: statutory -13.9% vs filing core -18.7%",
-    "models_passed": 9.0,
-    "weighted_model_score": 0.6097,
+    "timing_score": 0.625,
+    "action_note": "Buy — neutral timing | FCF basis mismatch: filing £105.8M | screen TTM £107.8M | company-adj £133.2M | FCF definition divergence",
+    "models_passed": 6.0,
+    "weighted_model_score": 0.6120772727272727,
     "research_verdict": null,
-    "adjusted_signal": "buy",
+    "adjusted_signal": "hold",
     "research_as_of": null,
     "research_confidence": null,
     "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": -0.1874920959413989,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": -0.1874920959413989,
     "signal_trend": "stable",
-    "weeks_at_signal": 17,
-    "passed_families": "cheapness,dividend,garp,risk",
-    "price_vs_sma200_pct": -0.033770226949818336,
+    "weeks_at_signal": 4,
+    "passed_families": "cheapness,risk",
+    "price_vs_sma200_pct": -0.028232290738181228,
     "core_order": "limit",
-    "core_limit": 308.48,
+    "core_limit": 309.87,
     "core_allocation_pct": 0.6,
-    "tactical_limit": 296.02,
+    "tactical_limit": 297.35,
     "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 278.07,
-    "tactical_take_profit": 330.91,
-    "trade_plan_summary": "Trade plan: core 60% limit £308.48; tactical 40% limit £296.02; tactical stop £278.07, target £330.91.",
-    "atr_14": 10.799,
-    "volume_ratio_20": 0.1177,
+    "tactical_stop_loss": 279.32,
+    "tactical_take_profit": 338.04,
+    "trade_plan_summary": "Trade plan: core 60% limit £309.87; tactical 40% limit £297.35; tactical stop £279.32, target £338.04.",
+    "atr_14": 9.7401,
+    "volume_ratio_20": 0.4811,
     "operating_cashflow": 225900000.0,
     "operating_cashflow_gross": null,
     "fcf_dividend_coverage_gross": null,
     "fcf_dividend_coverage_net": 2.0704500978473583,
-    "fcf_definition_divergence": false,
+    "fcf_definition_divergence": true,
     "fcf_divergence_flagged": true,
-    "fcf_dividend_coverage": null
+    "fcf_dividend_coverage": {
+      "statutory_ocf_minus_capex": {
+        "label": "Statutory OCF−CapEx",
+        "ratio": 2.0704500978473583
+      },
+      "management_cash_generated_minus_capex": {
+        "label": "Management cash-generated−CapEx",
+        "ratio": null
+      }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 2.07×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -105,7 +131,7 @@
       "ticker": "BREE.L",
       "model_id": "earnings_yield",
       "passed": false,
-      "score": 0.6421
+      "score": 0.639
     },
     {
       "ticker": "BREE.L",
@@ -128,8 +154,8 @@
     {
       "ticker": "BREE.L",
       "model_id": "neff_pegy",
-      "passed": true,
-      "score": 0.971
+      "passed": false,
+      "score": 0.9723
     },
     {
       "ticker": "BREE.L",
@@ -152,32 +178,32 @@
     {
       "ticker": "BREE.L",
       "model_id": "high_dividend",
-      "passed": true,
-      "score": 0.787
+      "passed": false,
+      "score": 0.8056
     },
     {
       "ticker": "BREE.L",
       "model_id": "dividend_growth",
-      "passed": true,
+      "passed": false,
       "score": 0.6667
     },
     {
       "ticker": "BREE.L",
       "model_id": "magic_formula",
       "passed": false,
-      "score": 0.349
+      "score": 0.359
     },
     {
       "ticker": "BREE.L",
       "model_id": "acquirers_multiple",
       "passed": false,
-      "score": 0.4346
+      "score": 0.4651
     },
     {
       "ticker": "BREE.L",
       "model_id": "dreman_contrarian",
       "passed": true,
-      "score": 0.7803
+      "score": 0.7868
     },
     {
       "ticker": "BREE.L",
@@ -189,7 +215,7 @@
       "ticker": "BREE.L",
       "model_id": "composite_value",
       "passed": true,
-      "score": 0.8271
+      "score": 0.8156
     },
     {
       "ticker": "BREE.L",
@@ -204,6 +230,6 @@
       "score": 1.0
     }
   ],
-  "models_passed": 9,
+  "models_passed": 6,
   "models_total": 22
 }
