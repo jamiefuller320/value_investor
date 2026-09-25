@@ -153,8 +153,9 @@ state machine.
 | Post sale monitor | Cooldown or sold within 84 days | recommit |
 
 Switch market (and paper track) rather than stacking every universe on one
-page. Payload: `docs/data/lifecycle_board.json` (also rebuilt by local
-`POST /api/refresh`).
+page. Payload: `docs/data/lifecycle_board.json` (rebuilt by email-report
+publish, weekday ops-monitor light refresh **L468**, local `POST /api/refresh`,
+and lifecycle experiment start/ack).
 
 **FTSE marks (L464):** live `latest.json` reports often omit `last_price`, so
 held cards would lack `unrealized_pnl_pct` and L463 UW-by-stage would show

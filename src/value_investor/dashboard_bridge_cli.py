@@ -66,6 +66,31 @@ def _cmd_refresh_lifecycle_maturity(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_refresh_lifecycle_board(args: argparse.Namespace) -> int:
+    """Ad-hoc L468 light board refresh — production path is ops-monitor collect."""
+    from value_investor.lifecycle_board import maybe_refresh_lifecycle_board
+
+    result = maybe_refresh_lifecycle_board(force=bool(args.force))
+    if args.json:
+        # Avoid dumping the full board payload on CLI stdout.
+        slim = {k: v for k, v in result.items() if k != "payload"}
+        market_count = 0
+        payload = result.get("payload")
+        if isinstance(payload, dict):
+            markets = payload.get("markets")
+            if isinstance(markets, list):
+                market_count = len(markets)
+        slim["market_count"] = market_count
+        _print_json(slim)
+    else:
+        print(
+            f"lifecycle_board refreshed={result.get('refreshed')} "
+            f"age_h={result.get('age_hours')} "
+            f"generated_at={result.get('generated_at')}"
+        )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="FTSE dashboard Supabase bridge")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -87,6 +112,18 @@ def main(argv: list[str] | None = None) -> int:
     )
     maturity_p.add_argument("--json", action="store_true")
     maturity_p.set_defaults(func=_cmd_refresh_lifecycle_maturity)
+
+    board_p = sub.add_parser(
+        "refresh-lifecycle-board",
+        help="Light-rebuild docs/data/lifecycle_board.json when stale (L468)",
+    )
+    board_p.add_argument(
+        "--force",
+        action="store_true",
+        help="Rebuild even when board age is under the light-refresh window",
+    )
+    board_p.add_argument("--json", action="store_true")
+    board_p.set_defaults(func=_cmd_refresh_lifecycle_board)
 
     args = parser.parse_args(argv)
     return int(args.func(args))

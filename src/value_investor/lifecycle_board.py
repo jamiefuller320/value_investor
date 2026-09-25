@@ -45,6 +45,8 @@ DEFAULT_LIFECYCLE_BOARD_PATH = Path("docs/data/lifecycle_board.json")
 DEFAULT_PAPER_ROOT = Path("docs/data/paper_automation")
 DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 DEFAULT_EXPERIMENT_ASSESSMENT_PATH = Path("docs/data/experiment_assessment.json")
+# L468: ops-monitor light refresh before Maturity mix 30h stale window.
+DEFAULT_BOARD_LIGHT_REFRESH_AFTER_HOURS = 18.0
 
 JUST_BOUGHT_DAYS = 14
 JUST_SOLD_DAYS = 14
@@ -1134,6 +1136,118 @@ def write_lifecycle_board(
     return target
 
 
+def _parse_board_generated_at(payload: dict[str, Any] | None) -> datetime | None:
+    if not isinstance(payload, dict):
+        return None
+    raw = payload.get("generated_at")
+    if raw is None:
+        return None
+    text = str(raw).strip()
+    if not text:
+        return None
+    try:
+        dt = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=UTC)
+    return dt.astimezone(UTC)
+
+
+def lifecycle_board_age_hours(
+    path: Path | None = None,
+    *,
+    now: datetime | None = None,
+    board: dict[str, Any] | None = None,
+) -> float | None:
+    """Hours since ``lifecycle_board.generated_at``, or None when unknown."""
+    as_of = now or datetime.now(UTC)
+    if as_of.tzinfo is None:
+        as_of = as_of.replace(tzinfo=UTC)
+    payload = board
+    if payload is None:
+        target = Path(path or DEFAULT_LIFECYCLE_BOARD_PATH)
+        if not target.exists():
+            return None
+        try:
+            loaded = read_json(target)
+        except (OSError, ValueError, TypeError):
+            return None
+        payload = loaded if isinstance(loaded, dict) else None
+    generated = _parse_board_generated_at(payload)
+    if generated is None:
+        return None
+    return round((as_of - generated).total_seconds() / 3600.0, 2)
+
+
+def maybe_refresh_lifecycle_board(
+    *,
+    path: Path | None = None,
+    max_age_hours: float = DEFAULT_BOARD_LIGHT_REFRESH_AFTER_HOURS,
+    force: bool = False,
+    now: datetime | None = None,
+    library_root: Path | None = None,
+    paper_root: Path | None = None,
+    shard_root: Path | None = None,
+    latest_path: Path | None = None,
+    assessment_path: Path | None = None,
+    policy_path: Path | None = None,
+) -> dict[str, Any]:
+    """Light weekday refresh of ``lifecycle_board.json`` (L468).
+
+    Rebuilds via ``write_lifecycle_board`` (no full email-report publish) when
+    the board is missing, unreadable, or older than ``max_age_hours``. Keeps
+    L463 Maturity mix ``surface_freshness`` from going stale between Sunday
+    publishes. Does not touch beat_market / other analysis measures.
+    """
+    as_of = now or datetime.now(UTC)
+    if as_of.tzinfo is None:
+        as_of = as_of.replace(tzinfo=UTC)
+    target = Path(path or DEFAULT_LIFECYCLE_BOARD_PATH)
+    existing: dict[str, Any] | None = None
+    if target.exists():
+        try:
+            loaded = read_json(target)
+            existing = loaded if isinstance(loaded, dict) else None
+        except (OSError, ValueError, TypeError):
+            existing = None
+    age_h = lifecycle_board_age_hours(board=existing, now=as_of)
+    needs_refresh = force or existing is None or age_h is None or age_h >= float(max_age_hours)
+    if not needs_refresh:
+        return {
+            "refreshed": False,
+            "path": str(target),
+            "age_hours": age_h,
+            "max_age_hours": float(max_age_hours),
+            "generated_at": existing.get("generated_at") if existing else None,
+            "payload": existing,
+        }
+    written = write_lifecycle_board(
+        library_root=library_root,
+        paper_root=paper_root,
+        shard_root=shard_root,
+        latest_path=latest_path,
+        assessment_path=assessment_path,
+        policy_path=policy_path,
+        path=target,
+        now=as_of,
+    )
+    try:
+        payload = read_json(written)
+    except (OSError, ValueError, TypeError):
+        payload = None
+    if not isinstance(payload, dict):
+        payload = None
+    return {
+        "refreshed": True,
+        "path": str(written),
+        "age_hours": 0.0,
+        "max_age_hours": float(max_age_hours),
+        "generated_at": (payload or {}).get("generated_at"),
+        "payload": payload,
+    }
+
+
 def tickers_on_lifecycle_board(
     board: dict[str, Any] | None,
     *,
@@ -1251,6 +1365,7 @@ def lifecycle_chart_reports_by_market(
 
 __all__ = [
     "COLUMN_SHOW_CAPS",
+    "DEFAULT_BOARD_LIGHT_REFRESH_AFTER_HOURS",
     "DEFAULT_LIFECYCLE_BOARD_PATH",
     "JUST_BOUGHT_DAYS",
     "JUST_SOLD_DAYS",
@@ -1261,7 +1376,9 @@ __all__ = [
     "TENURE_LONG_DAYS",
     "build_lifecycle_board",
     "classify_board_column",
+    "lifecycle_board_age_hours",
     "merge_track_columns",
+    "maybe_refresh_lifecycle_board",
     "tenure_band_for_days",
     "tenure_scale",
     "tickers_on_lifecycle_board",

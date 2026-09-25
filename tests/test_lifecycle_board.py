@@ -291,6 +291,61 @@ def test_write_lifecycle_board_roundtrip(tmp_path: Path):
     assert dest.exists()
 
 
+def test_maybe_refresh_lifecycle_board_skips_when_fresh(tmp_path: Path):
+    from value_investor.lifecycle_board import maybe_refresh_lifecycle_board
+
+    dest = tmp_path / "lifecycle_board.json"
+    write_lifecycle_board(
+        library_root=tmp_path / "library",
+        paper_root=tmp_path / "paper",
+        shard_root=tmp_path / "shards",
+        live_reports=[{"ticker": "AAA.L", "signal": "hold", "conviction_score": 0.5}],
+        path=dest,
+        now=NOW,
+    )
+    later = NOW + timedelta(hours=6)
+    result = maybe_refresh_lifecycle_board(
+        path=dest,
+        max_age_hours=18.0,
+        now=later,
+        library_root=tmp_path / "library",
+        paper_root=tmp_path / "paper",
+        shard_root=tmp_path / "shards",
+        latest_path=tmp_path / "missing-latest.json",
+    )
+    assert result["refreshed"] is False
+    assert result["age_hours"] == 6.0
+    assert result["generated_at"] == NOW.isoformat()
+
+
+def test_maybe_refresh_lifecycle_board_rebuilds_when_stale(tmp_path: Path):
+    from value_investor.lifecycle_board import maybe_refresh_lifecycle_board
+
+    dest = tmp_path / "lifecycle_board.json"
+    write_lifecycle_board(
+        library_root=tmp_path / "library",
+        paper_root=tmp_path / "paper",
+        shard_root=tmp_path / "shards",
+        live_reports=[{"ticker": "AAA.L", "signal": "hold", "conviction_score": 0.5}],
+        path=dest,
+        now=NOW,
+    )
+    later = NOW + timedelta(hours=20)
+    result = maybe_refresh_lifecycle_board(
+        path=dest,
+        max_age_hours=18.0,
+        now=later,
+        library_root=tmp_path / "library",
+        paper_root=tmp_path / "paper",
+        shard_root=tmp_path / "shards",
+        latest_path=tmp_path / "missing-latest.json",
+    )
+    assert result["refreshed"] is True
+    assert result["age_hours"] == 0.0
+    assert result["generated_at"] == later.isoformat()
+    assert dest.exists()
+
+
 def test_full_sleeve_uses_opened_at_heatmap(tmp_path: Path):
     live_reports = [
         {

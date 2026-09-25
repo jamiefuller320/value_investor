@@ -1496,12 +1496,18 @@ def check_lifecycle_maturity_trajectory(
     store_path: Path | None = None,
     ops_status_path: Path | None = None,
     persist: bool = True,
+    refresh_board: bool = True,
 ) -> list[OpsFinding]:
     """Observe-only L463: refresh maturity mix history; warn if stalled/missing.
+
+    When ``persist`` and ``refresh_board`` are true, runs L468 light
+    ``lifecycle_board`` refresh first (under the 30h Maturity mix window) so
+    weekday ops does not leave the surface stale until the next email-report.
 
     Does **not** touch beat_market, exit_shadow, L462 WoW, N153 FX, or
     decision-review. ``auto_fixable=False``.
     """
+    from value_investor.lifecycle_board import maybe_refresh_lifecycle_board
     from value_investor.lifecycle_maturity_trajectory import (
         DEFAULT_BOARD_PATH,
         DEFAULT_OPS_STATUS_PATH,
@@ -1516,6 +1522,8 @@ def check_lifecycle_maturity_trajectory(
     store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
     ops_path = Path(ops_status_path) if ops_status_path is not None else DEFAULT_OPS_STATUS_PATH
     try:
+        if persist and refresh_board:
+            maybe_refresh_lifecycle_board(path=board)
         if persist:
             payload = refresh_lifecycle_maturity_trajectory(
                 store_path=store,
