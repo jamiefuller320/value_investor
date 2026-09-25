@@ -1,18 +1,18 @@
 {
   "ticker": "GFTU.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-21T04:21:53.733145+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-09-23T17:08:53.543887+00:00",
+  "attached_at": "2026-09-25T07:25:38.049289+00:00",
+  "history_run_path": "docs/data/history/run_20260923_170853.json.gz",
+  "history_models_path": "docs/data/history/models_20260923_170853.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
+      "strong_buy": 11,
       "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "hold": 138,
+      "avoid": 54
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 11,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 17,
+      "buy": 31,
+      "hold": 41,
+      "avoid": 13
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -30,38 +33,45 @@
   "ticker_signal": {
     "ticker": "GFTU.L",
     "signal": "strong_buy",
-    "conviction_score": 0.632485,
+    "conviction_score": 0.411995,
     "data_quality_score": 1.0,
     "name": "Grafton Group plc",
     "sector": "Industrials",
     "timing_signal": "neutral",
-    "timing_score": 0.625,
-    "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £205.6M | screen TTM (unverified) £148.6M | company-adj £168.3M | FCF definition divergence: statutory 2.83× vs management 3.64× dividend coverage",
-    "models_passed": 9.0,
-    "weighted_model_score": 0.5963227272727273,
+    "timing_score": 0.5,
+    "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £205.6M | screen TTM £148.6M | company-adj £168.3M | FCF definition divergence: statutory 2.83× vs management 3.64× dividend coverage",
+    "models_passed": 7.0,
+    "weighted_model_score": 0.6524954545454545,
     "research_verdict": null,
     "adjusted_signal": "buy",
     "research_as_of": null,
     "research_confidence": null,
     "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
     "adjusted_eps_growth_pct": 0.051,
+    "yahoo_normalized_income_growth_pct": 0.03935969378630143,
     "signal_trend": "stable",
-    "weeks_at_signal": 17,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": 0.023493922247779946,
+    "weeks_at_signal": 21,
+    "passed_families": "cheapness,quality,risk",
+    "price_vs_sma200_pct": 0.05216222213852635,
     "core_order": "limit",
-    "core_limit": 939.95,
+    "core_limit": 967.73,
     "core_allocation_pct": 0.6,
-    "tactical_limit": 901.97,
+    "tactical_limit": 928.62,
     "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 847.29,
-    "tactical_take_profit": 979.2,
-    "trade_plan_summary": "Trade plan: core 60% limit £939.95; tactical 40% limit £901.97; tactical stop £847.29, target £979.20.",
-    "atr_14": 27.8373,
-    "volume_ratio_20": 0.0132,
+    "tactical_stop_loss": 872.32,
+    "tactical_take_profit": 1055.7,
+    "trade_plan_summary": "Trade plan: core 60% limit £967.73; tactical 40% limit £928.62; tactical stop £872.32, target £1055.70.",
+    "atr_14": 28.2541,
+    "volume_ratio_20": 0.3657,
     "operating_cashflow": 251827000.0,
     "operating_cashflow_gross": 310304000.0,
     "fcf_dividend_coverage_gross": 3.6380003857068077,
@@ -77,7 +87,14 @@
         "label": "Management cash-generated−CapEx",
         "ratio": 3.6380003857068077
       }
-    }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Prefer ir_presentation_metrics.json reconciliation bridges as primary evidence. Screen baseline: statutory 2.83× vs management 3.64×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -114,13 +131,13 @@
       "ticker": "GFTU.L",
       "model_id": "earnings_yield",
       "passed": false,
-      "score": 0.6657
+      "score": 0.665
     },
     {
       "ticker": "GFTU.L",
       "model_id": "fcf_yield",
       "passed": false,
-      "score": 0.0092
+      "score": 0.9237
     },
     {
       "ticker": "GFTU.L",
@@ -137,14 +154,14 @@
     {
       "ticker": "GFTU.L",
       "model_id": "neff_pegy",
-      "passed": true,
-      "score": 0.9689
+      "passed": false,
+      "score": 0.968
     },
     {
       "ticker": "GFTU.L",
       "model_id": "quality_value",
       "passed": false,
-      "score": 0.6
+      "score": 0.8
     },
     {
       "ticker": "GFTU.L",
@@ -162,31 +179,31 @@
       "ticker": "GFTU.L",
       "model_id": "high_dividend",
       "passed": false,
-      "score": 0.6759
+      "score": 0.6944
     },
     {
       "ticker": "GFTU.L",
       "model_id": "dividend_growth",
-      "passed": true,
+      "passed": false,
       "score": 1.0
     },
     {
       "ticker": "GFTU.L",
       "model_id": "magic_formula",
       "passed": false,
-      "score": 0.4043
+      "score": 0.3931
     },
     {
       "ticker": "GFTU.L",
       "model_id": "acquirers_multiple",
       "passed": false,
-      "score": 0.4907
+      "score": 0.4791
     },
     {
       "ticker": "GFTU.L",
       "model_id": "dreman_contrarian",
       "passed": true,
-      "score": 0.7274
+      "score": 0.7278
     },
     {
       "ticker": "GFTU.L",
@@ -198,7 +215,7 @@
       "ticker": "GFTU.L",
       "model_id": "composite_value",
       "passed": true,
-      "score": 0.6881
+      "score": 0.8149
     },
     {
       "ticker": "GFTU.L",
@@ -213,6 +230,6 @@
       "score": 1.0
     }
   ],
-  "models_passed": 9,
+  "models_passed": 7,
   "models_total": 22
 }

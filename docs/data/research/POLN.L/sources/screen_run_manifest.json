@@ -1,18 +1,18 @@
 {
   "ticker": "POLN.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-15T13:24:26.058218+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-09-23T17:08:53.543887+00:00",
+  "attached_at": "2026-09-25T07:52:59.050074+00:00",
+  "history_run_path": "docs/data/history/run_20260923_170853.json.gz",
+  "history_models_path": "docs/data/history/models_20260923_170853.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
+      "strong_buy": 11,
       "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "hold": 138,
+      "avoid": 54
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 11,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 17,
+      "buy": 31,
+      "hold": 41,
+      "avoid": 13
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -29,46 +32,69 @@
   },
   "ticker_signal": {
     "ticker": "POLN.L",
-    "signal": "strong_buy",
-    "conviction_score": 0.5649,
+    "signal": "buy",
+    "conviction_score": 0.168198,
     "data_quality_score": 0.9,
     "name": "Pollen Street Group Limited",
     "sector": "Financial Services",
     "timing_signal": "neutral",
     "timing_score": 0.5,
-    "action_note": "Strong Buy — neutral timing",
-    "models_passed": 12.0,
-    "weighted_model_score": 0.7055590909090909,
+    "action_note": "Buy — neutral timing | FCF basis mismatch: filing £46.7M | screen TTM £36.0M | FCF definition divergence",
+    "models_passed": 6.0,
+    "weighted_model_score": 0.6451409090909092,
     "research_verdict": null,
-    "adjusted_signal": "strong_buy",
+    "adjusted_signal": "hold",
     "research_as_of": null,
     "research_confidence": null,
-    "fcf_basis_overlay": false,
+    "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": 0.14048953586838178,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": 0.14048953586838178,
     "signal_trend": "stable",
-    "weeks_at_signal": 17,
-    "passed_families": "cheapness,dividend,garp,risk",
-    "price_vs_sma200_pct": -0.09374963880258613,
+    "weeks_at_signal": 4,
+    "passed_families": "cheapness,risk",
+    "price_vs_sma200_pct": 0.07042178830344914,
     "core_order": "limit",
-    "core_limit": 772.2,
+    "core_limit": 848.08,
     "core_allocation_pct": 0.6,
-    "tactical_limit": 741.0,
+    "tactical_limit": 814.0,
     "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 696.07,
-    "tactical_take_profit": 850.1,
-    "trade_plan_summary": "Trade plan: core 60% limit £772.20; tactical 40% limit £741.00; tactical stop £696.07, target £850.10.",
-    "atr_14": 32.1948,
-    "volume_ratio_20": 0.2687,
+    "tactical_stop_loss": 789.58,
+    "tactical_take_profit": 990.36,
+    "trade_plan_summary": "Trade plan: core 60% limit £848.08; tactical 40% limit £814.00; tactical stop £789.58, target £990.36.",
+    "atr_14": 35.9926,
+    "volume_ratio_20": 4.3653,
     "operating_cashflow": 47225000.0,
     "operating_cashflow_gross": null,
     "fcf_dividend_coverage_gross": null,
     "fcf_dividend_coverage_net": 1.4235157727744219,
-    "fcf_definition_divergence": false,
-    "fcf_divergence_flagged": false,
-    "fcf_dividend_coverage": null
+    "fcf_definition_divergence": true,
+    "fcf_divergence_flagged": true,
+    "fcf_dividend_coverage": {
+      "statutory_ocf_minus_capex": {
+        "label": "Statutory OCF−CapEx",
+        "ratio": 1.4235157727744219
+      },
+      "management_cash_generated_minus_capex": {
+        "label": "Management cash-generated−CapEx",
+        "ratio": null
+      }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 1.42×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -81,7 +107,7 @@
       "ticker": "POLN.L",
       "model_id": "graham_enterprising",
       "passed": true,
-      "score": 1.0
+      "score": 0.8
     },
     {
       "ticker": "POLN.L",
@@ -105,13 +131,13 @@
       "ticker": "POLN.L",
       "model_id": "earnings_yield",
       "passed": true,
-      "score": 1.0
+      "score": 0.7361
     },
     {
       "ticker": "POLN.L",
       "model_id": "fcf_yield",
-      "passed": true,
-      "score": 1.0
+      "passed": false,
+      "score": 0.8621
     },
     {
       "ticker": "POLN.L",
@@ -122,14 +148,14 @@
     {
       "ticker": "POLN.L",
       "model_id": "lynch_peg",
-      "passed": true,
-      "score": 0.4094
+      "passed": false,
+      "score": 0.2
     },
     {
       "ticker": "POLN.L",
       "model_id": "neff_pegy",
-      "passed": true,
-      "score": 0.9883
+      "passed": false,
+      "score": 0.9839
     },
     {
       "ticker": "POLN.L",
@@ -152,14 +178,14 @@
     {
       "ticker": "POLN.L",
       "model_id": "high_dividend",
-      "passed": true,
-      "score": 0.9676
+      "passed": false,
+      "score": 0.9769
     },
     {
       "ticker": "POLN.L",
       "model_id": "dividend_growth",
-      "passed": true,
-      "score": 1.0
+      "passed": false,
+      "score": 0.6667
     },
     {
       "ticker": "POLN.L",
@@ -177,7 +203,7 @@
       "ticker": "POLN.L",
       "model_id": "dreman_contrarian",
       "passed": true,
-      "score": 0.9326
+      "score": 0.8725
     },
     {
       "ticker": "POLN.L",
@@ -188,8 +214,8 @@
     {
       "ticker": "POLN.L",
       "model_id": "composite_value",
-      "passed": true,
-      "score": 0.7688
+      "passed": false,
+      "score": 0.6393
     },
     {
       "ticker": "POLN.L",
@@ -204,6 +230,6 @@
       "score": 0.6
     }
   ],
-  "models_passed": 12,
+  "models_passed": 6,
   "models_total": 22
 }
