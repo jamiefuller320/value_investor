@@ -255,10 +255,23 @@ tr:hover td { background: #fafbfc; }
   font: inherit;
 }
 
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.35);
+  box-shadow: none;
+}
+
 .btn-primary {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
+}
+
+.btn-primary:disabled {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--muted, #64748b);
 }
 
 .btn-warn {
@@ -2132,6 +2145,8 @@ tr.selected td {
   margin-right: 0.5rem;
 }
 
+/* Keep lifecycle Start/Acknowledge disabled styling even if .btn:disabled changes. */
+.lifecycle-ack-btn:disabled,
 .lifecycle-start-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;

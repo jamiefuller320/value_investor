@@ -746,14 +746,29 @@ def _with_initiation_card_fields(
     ack_enabled = ready and kind == "human_ack"
     ack_disabled_reason = None
     if not ack_enabled:
-        if acked:
-            ack_disabled_reason = "Already acknowledged (observe-only)"
+        # Prefer catalog / adoption gate copy over shared-experiment ack state so
+        # planned factors (e.g. prior_cycle_outcome) do not look "already done".
+        if kind in {"planned", "deferred"}:
+            ack_disabled_reason = str(
+                payload.get("waiting_for") or payload.get("label") or "Ack not available"
+            )
         elif kind == "optional_execute":
-            ack_disabled_reason = "Ack already satisfied — use Start to begin graduated execute"
+            ack_disabled_reason = (
+                "Already acknowledged — use Start to begin graduated execute"
+                if acked
+                else "Ack already satisfied — use Start to begin graduated execute"
+            )
+        elif acked:
+            ack_disabled_reason = "Already acknowledged (observe-only)"
         else:
             ack_disabled_reason = str(
                 payload.get("waiting_for") or payload.get("label") or "Ack not available"
             )
+    ack_label = (
+        "Acknowledged"
+        if acked and not ack_enabled and kind not in {"planned", "deferred"}
+        else "Acknowledge"
+    )
 
     start_enabled = ready and kind == "optional_execute" and not already_started
     start_disabled_reason = None
@@ -778,7 +793,7 @@ def _with_initiation_card_fields(
     payload["acknowledge"] = {
         "action": "lifecycle-experiment-ack",
         "enabled": ack_enabled,
-        "label": "Acknowledge",
+        "label": ack_label,
         "disabled_reason": ack_disabled_reason,
         "payload": {
             "experiment_id": experiment_id,
