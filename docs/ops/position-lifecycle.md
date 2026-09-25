@@ -214,6 +214,18 @@ Do **not** execute DCA or change starter fraction from Acknowledge.
 When adoption reaches `paper_execute_graduated` ready, use **Start** to authorize
 and enable 4× weekly entry DCA on `graduated_allocation` only.
 
+### Factor chips vs shared experiment (Start)
+
+Lifecycle **catalog factors** (`add_cadence`, `entry_kind_tag`, …) are separate
+questions in the stage inventory. Several map to the **same** experiment id
+(`entry_dca_overlay`). Start always authorizes that shared experiment (graduated
+4× weekly execute) — not a factor-specific book. Clicking Start on two chips that
+share an experiment therefore queues two Supabase rows with the same
+`experiment_id`; the dashboard bridge **dedupes by experiment** (first dispatches,
+later marked done as duplicate). UI may keep one Start per chip for catalog
+clarity, or later collapse sibling chips to a single Start — bridge dedupe is the
+safety net either way. See [`dashboard-bridge.md`](dashboard-bridge.md#lifecycle-start--acknowledge-dedupe).
+
 See also [`capital-allocation.md`](capital-allocation.md),
 [`hypothesis-integrity.md`](hypothesis-integrity.md),
 [`exit-timing-cohorts.md`](exit-timing-cohorts.md),

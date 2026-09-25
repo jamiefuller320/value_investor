@@ -76,6 +76,18 @@ WORKFLOW_SCHEDULES = {
         ),
         "workflow": "engineering-queue.yml",
     },
+    "dashboard_bridge": {
+        "name": "Dashboard bridge worker",
+        "cron": "*/10 * * * 1-5",
+        "cadence": (
+            "Weekday every 10m UTC — **primary: cron-job.org** "
+            "(import_cron_jobs.py --job dashboard-bridge). "
+            "GitHub schedule */10 is backup only and often drifts hours. "
+            "Polls Supabase dashboard_commands and repository_dispatches target workflows. "
+            "docs/ops/dashboard-bridge.md."
+        ),
+        "workflow": "dashboard-bridge.yml",
+    },
     "ingest_loop": {
         "name": "FTSE Ingest Loop",
         "cron": "5 7,10 * * 1-5; 5 20,23 * * 6",

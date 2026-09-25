@@ -66,7 +66,24 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
     assert not [row for row in findings if "Engineering Queue" in row.title]
 
 
-def test_filter_unresolved_workflow_failures_ignores_pre_success_failures():
+def test_check_workflow_freshness_dashboard_bridge_one_hour_weekday():
+    """External every-10m primary; 1h without success is stale on weekdays."""
+    two_hours_ago = (weekday_noon_utc() - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch(
+            "value_investor.ops_monitor.latest_workflow_run",
+            return_value={"id": 9, "created_at": two_hours_ago},
+        ),
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
+    ):
+        findings, checks = check_workflow_freshness(now=weekday_noon_utc())
+    bridge = [row for row in checks if row["workflow"] == "dashboard-bridge.yml"]
+    assert bridge and bridge[0]["max_age_hours"] == 1
+    assert bridge[0]["stale"] is True
+    assert any("Dashboard bridge" in row.title for row in findings)
     success_at = weekday_noon_utc()
     older = (success_at - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
     newer = (success_at + timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ")

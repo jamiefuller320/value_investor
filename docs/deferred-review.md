@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-25T15:55:41+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-25T16:27:43+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -413,6 +413,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L415 | **Client-side SMA series fallback for old chart JSON** | Charts without sma50_series/sma200_series still fall back to flat point-in-time SMA lines until republish. A client-side rolling estimate on downsampled closes would be misleading; prefer ensuring publish always writes series. | If many stale chart JSON files remain after several publishes, or offline viewers need overlays without republish |
 | L450 | **Screening model×input coverage matrix (criteria inventory)** | Tabulate each of the 22 screening models' criteria/fields, mark absolute vs universe-relative, map overlaps (esp. quality/moat ROE-margin-leverage cluster), and reconcile KEY_SCREENING_METRICS vs fetch fields so missing inputs (earnings_growth, interest cover, Piotroski YoY deltas) are visible. Do not expand Economic Moat into qualitative peer analysis without a separate design — screen moat is a numerical proxy; true comparative moat lives in research/filings + peer_model_pass_table. | After P1 FTSE buy-tier body/FCF/overlay bind work is idle, or when post-run themes repeatedly cite unsupported moat/quality claims |
 | L467 | **IR/ESEF seed for euro zero-body leftovers OIZ REN SIE** | After thin-memo factory heal, OIZ.IR REN.AS SIE.DE remain 0 filing bodies. Next sprint heals will retry; if still 0-improve, seed IR allowlist or parked-hunter rather than hand pins. | euro_depth ingest exhaustion approaches 3/3 zero-improve or next thin_memo sample rises because these names re-enter thin grades |
+| L469 | **Collapse shared-experiment Lifecycle Start chips in UI** | add_cadence and entry_kind_tag (and siblings) share entry_dca_overlay Start; bridge now dedupes by experiment. Optional UX: show one Start control per experiment instead of one per catalog chip to reduce duplicate clicks. | After Start dedupe + every-10m bridge cron are live and humans still double-click sibling chips, or Lifecycle UI redesign pass |
 
 ### Ops / reliability
 

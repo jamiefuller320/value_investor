@@ -5,7 +5,9 @@ name: Dashboard bridge worker
 # storing an Actions PAT in the browser. See docs/ops/dashboard-bridge.md.
 on:
   schedule:
-    # Weekdays — best-effort pickup within ~10 minutes of a dashboard command.
+    # Backup only — GitHub often drifts this */10 to multi-hour gaps.
+    # Primary: cron-job.org every 10m weekdays (import_cron_jobs.py --job dashboard-bridge).
+    # See docs/ops/dashboard-bridge.md and docs/ops/orchestrator-cron.md.
     - cron: "*/10 * * * 1-5"
   workflow_dispatch:
   repository_dispatch:

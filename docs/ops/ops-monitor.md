@@ -413,9 +413,11 @@ morning run that reports orchestrator staleness before catch-up still commits
 | **Data backup** | Sunday | No success within 36h (12:30 UTC slot) |
 | **Paper automation** | Weekdays | No success within 28h |
 | **Ops monitor** | Daily | No success within 28h (self-check) |
+| **Dashboard bridge** | Weekdays | No success within **1h** (external every-10m primary; see [`dashboard-bridge.md`](dashboard-bridge.md#schedule-primary-vs-backup)) |
 
 Engineering queue reliability depends on external cron (`engineering-queue` job in
-`import_cron_jobs.py`); GitHub `schedule` is backup only.
+`import_cron_jobs.py`); GitHub `schedule` is backup only. Dashboard bridge uses the
+same pattern (`dashboard-bridge` job — weekday every 10 minutes).
 
 ## Workflow failure recovery
 

@@ -416,6 +416,14 @@
           "doc_anchor": "automated-daily-check"
         },
         {
+          "id": "adhoc-dashboard-bridge-cron-register",
+          "title": "Register dashboard-bridge weekday every-10m cron on cron-job.org",
+          "summary": "After Start/ack experiment dedupe is on main: import_cron_jobs.py --job dashboard-bridge (title FTSE dashboard bridge weekday every 10m). GitHub */10 schedule is backup and often drifts hours. Verify with gh run list --workflow=dashboard-bridge.yml. Do not enable frequent drain while two same-experiment Starts are pending without dedupe.",
+          "automated": false,
+          "doc_path": "docs/ops/dashboard-bridge.md",
+          "doc_anchor": "schedule-primary-vs-backup"
+        },
+        {
           "id": "adhoc-sync-cursor-api-key-v2-github",
           "title": "Sync valid Cursor API key into GitHub Actions secrets",
           "summary": "When ftse-verify-key --key-source legacy fails but --key-source v2 succeeds (or GHA agent jobs 401): copy the valid User API key into GitHub Actions secrets CURSOR_API_KEY_V2 and CURSOR_API_KEY. Workflows prefer V2 via secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY. Cloud secrets alone do not feed Actions.",

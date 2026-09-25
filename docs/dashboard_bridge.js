@@ -165,7 +165,9 @@
       });
     }
     if (onStatus) {
-      onStatus("Queued — waiting for GitHub worker (weekday poll; can take 10–60+ min)…");
+      onStatus(
+        "Queued — waiting for GitHub worker (weekday ~10m via external cron; Run workflow to drain now)…"
+      );
     }
     return waitForCommandRow(commandId, onStatus);
   }

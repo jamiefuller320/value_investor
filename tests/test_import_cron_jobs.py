@@ -61,6 +61,23 @@ def test_import_cron_jobs_dry_run_engineering_queue():
     assert "engineering-queue.yml" in payload["url"]
 
 
+def test_import_cron_jobs_dry_run_dashboard_bridge():
+    script = Path("scripts/import_cron_jobs.py")
+    proc = subprocess.run(
+        [sys.executable, str(script), "--job", "dashboard-bridge", "--dry-run", "--json"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = json.loads(proc.stdout)
+    assert len(rows) == 1
+    payload = rows[0]["payload"]["job"]
+    assert payload["title"] == "FTSE dashboard bridge (weekday every 10m)"
+    assert payload["schedule"]["hours"] == list(range(24))
+    assert payload["schedule"]["minutes"] == [0, 10, 20, 30, 40, 50]
+    assert payload["schedule"]["wdays"] == [1, 2, 3, 4, 5]
+    assert "dashboard-bridge.yml" in payload["url"]
+
 def test_import_cron_jobs_dry_run_ingest_loop_morning():
     script = Path("scripts/import_cron_jobs.py")
     proc = subprocess.run(
