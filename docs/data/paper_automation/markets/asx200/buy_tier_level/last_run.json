@@ -1,15 +1,33 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-24T17:45:11.851391+10:00",
+    "local_time": "2026-09-25T10:47:05.496621+10:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-24T10:00:00+10:00",
-    "settle_at": "2026-09-24T10:30:00+10:00",
+    "market_open_at": "2026-09-25T10:00:00+10:00",
+    "settle_at": "2026-09-25T10:30:00+10:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "26ecb72f-8e33-4c4a-a27a-0c0edb522c8e",
+      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+      "acted_at": "2026-09-25T10:47:05.496621+10:00",
+      "ticker": "MND.AX",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 1.187393,
+      "price": 31.79,
+      "gross": 37.75,
+      "cost": 0.07,
+      "net_cash": 37.68,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Monadelphous Group Limited",
+      "avg_cost_at_exit": 28.99,
+      "position_closed": true
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +41,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 956.88,
-    "cash": 63.48,
+    "nav": 956.82,
+    "cash": 101.16,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -190,18 +208,18 @@
         "price": 4.04
       },
       {
+        "ticker": "BWP.AX",
+        "name": "BWP Trust",
+        "signal": "buy",
+        "conviction_score": 0.4474,
+        "price": 3.57
+      },
+      {
         "ticker": "BPT.AX",
         "name": "Beach Energy Limited",
         "signal": "buy",
         "conviction_score": 0.4264,
         "price": 0.845
-      },
-      {
-        "ticker": "BWP.AX",
-        "name": "BWP Trust",
-        "signal": "buy",
-        "conviction_score": 0.3835,
-        "price": 3.57
       },
       {
         "ticker": "BSL.AX",
@@ -218,17 +236,7 @@
         "price": 6.79
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "MND.AX",
-        "name": "Monadelphous Group Limited",
-        "reason": "No longer in the top conviction target set",
-        "shares": 1.187393,
-        "price": 31.79,
-        "value": 37.75
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
@@ -445,22 +453,22 @@
       },
       {
         "action": "hold",
+        "ticker": "BWP.AX",
+        "name": "BWP Trust",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 35.19,
+        "target_value": 36.8,
+        "conviction_score": 0.4474,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
         "ticker": "BPT.AX",
         "name": "Beach Energy Limited",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 34.42,
         "target_value": 36.8,
         "conviction_score": 0.4264,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "BWP.AX",
-        "name": "BWP Trust",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 35.19,
-        "target_value": 36.8,
-        "conviction_score": 0.3835,
         "signal": "buy"
       },
       {
@@ -494,7 +502,7 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 26 equal-weight sleeve(s); sell 1 name(s) that left the set; leave 25 near-target holding(s)."
+    "summary": "Next rebalance would target 26 equal-weight sleeve(s); leave 25 near-target holding(s)."
   },
   "alerts": [
     {
@@ -506,7 +514,7 @@
       "mark": 16.75,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "PMV.AX",
@@ -608,17 +616,6 @@
       "timing_signal": "neutral"
     },
     {
-      "ticker": "MND.AX",
-      "name": "Monadelphous Group Limited",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 31.79,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "neutral"
-    },
-    {
       "ticker": "RMD.AX",
       "name": "ResMed Inc.",
       "source": "paper",
@@ -660,7 +657,7 @@
       "mark": 60.87,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "DNL.AX",
@@ -704,7 +701,7 @@
       "mark": 3.33,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "BSL.AX",
@@ -810,7 +807,7 @@
       "id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
       "created_at": "2026-09-07T10:31:58.323814+00:00"
     },
-    "cash": 63.48,
+    "cash": 101.16,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -919,17 +916,6 @@
         "avg_cost": 32.33,
         "name": "Woodside Energy Group Ltd",
         "sector": "Energy",
-        "currency": "AUD",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-09-07T20:31:58.323684+10:00"
-      },
-      "MND.AX": {
-        "ticker": "MND.AX",
-        "shares": 1.187393,
-        "avg_cost": 28.99,
-        "name": "Monadelphous Group Limited",
-        "sector": "Industrials",
         "currency": "AUD",
         "stop_loss": null,
         "take_profit": null,
@@ -1837,6 +1823,23 @@
         "net_cash": -35.45,
         "note": "Automated buy",
         "name": "BWP Trust"
+      },
+      {
+        "id": "26ecb72f-8e33-4c4a-a27a-0c0edb522c8e",
+        "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+        "acted_at": "2026-09-25T10:47:05.496621+10:00",
+        "ticker": "MND.AX",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 1.187393,
+        "price": 31.79,
+        "gross": 37.75,
+        "cost": 0.07,
+        "net_cash": 37.68,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Monadelphous Group Limited",
+        "avg_cost_at_exit": 28.99,
+        "position_closed": true
       }
     ],
     "equity_curve": [
@@ -2305,22 +2308,39 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-25T10:47:05.496621+10:00",
+        "portfolio_value": 554.57,
+        "cash": 101.16,
+        "contributed_capital": 1000.0,
+        "positions": 26,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "AUD": 0.5299
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-24T17:45:11.851391+10:00",
+    "last_mark_at": "2026-09-25T10:47:05.496621+10:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "MND.AX": 1
-      },
-      "reentry_cooldown": {}
+      }
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-24T07:45:11.920032+00:00",
-    "open_count": 10,
+    "generated_at": "2026-09-25T00:47:05.670409+00:00",
+    "open_count": 11,
     "closed_count": 0,
     "by_exit_kind": {},
     "grace_vs_rotation": {
@@ -2332,13 +2352,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-24T07:45:11.921602+00:00",
+    "generated_at": "2026-09-25T00:47:05.671868+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2392,28 +2412,28 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 9,
+      "hold_closed_count": 10,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 35,
       "gaps": [
-        "hold_recovery closed episodes=9 (target >=15)",
+        "hold_recovery closed episodes=10 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 27,
-        "recovered_to_breakeven": 13,
+        "count": 26,
+        "recovered_to_breakeven": 12,
         "close_reasons": {
-          "open": 27
+          "open": 26
         }
       },
       "closed": {
-        "count": 9,
-        "recovered_to_breakeven": 6,
+        "count": 10,
+        "recovered_to_breakeven": 7,
         "close_reasons": {
-          "sold_while_recovered": 6,
+          "sold_while_recovered": 7,
           "sold_while_underwater": 3
         }
       }
@@ -2444,8 +2464,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-24T07:45:11.924293+00:00",
-    "as_of": "2026-09-24T17:45:11.851391+10:00",
+    "updated_at": "2026-09-25T00:47:05.673932+00:00",
+    "as_of": "2026-09-25T10:47:05.496621+10:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2457,19 +2477,19 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 27,
+    "holding_count": 26,
     "underwater_count": 12,
     "thesis_status_counts": {
       "intact": 24,
-      "weakening": 3,
+      "weakening": 2,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 27,
+      "holding_count": 26,
       "loser_count": 12,
-      "loser_share": 0.4444,
-      "loser_nav_share": 0.4205,
+      "loser_share": 0.4615,
+      "loser_nav_share": 0.439,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": false,
@@ -2485,9 +2505,9 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.3333,
-        "dividend": 0.1333,
-        "garp": 0.1333,
+        "quality": 0.2857,
+        "dividend": 0.1429,
+        "garp": 0.1429,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -2878,7 +2898,7 @@
         "mark": 16.75,
         "avg_cost": 17.77,
         "signal": "strong_buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.7699,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2961,7 +2981,7 @@
         "mark": 3.33,
         "avg_cost": 3.51,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.5002,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -3082,7 +3102,7 @@
         "mark": 60.87,
         "avg_cost": 63.04,
         "signal": "buy",
-        "timing_signal": "neutral",
+        "timing_signal": "accumulate",
         "conviction_score": 0.5388,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3287,7 +3307,7 @@
         "avg_cost": 3.59,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.3835,
+        "conviction_score": 0.4474,
         "data_quality_score": 0.9,
         "passed_families": [
           "cheapness",
@@ -3302,13 +3322,13 @@
           "still buy",
           "cheapness family still passes",
           "data_quality 0.90",
-          "conviction 38%"
+          "conviction 45%"
         ],
         "intact_reasons": [
           "still buy",
           "cheapness family still passes",
           "data_quality 0.90",
-          "conviction 38%"
+          "conviction 45%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3553,47 +3573,6 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
-      },
-      {
-        "ticker": "MND.AX",
-        "name": "Monadelphous Group Limited",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0966,
-        "mark": 31.79,
-        "avg_cost": 28.99,
-        "signal": "hold",
-        "timing_signal": "neutral",
-        "conviction_score": 0.3056,
-        "data_quality_score": 0.95,
-        "passed_families": [
-          "cheapness",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "quality"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "left buy tier (hold)",
-          "conviction 31% below intact floor",
-          "research accumulate",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.95"
-        ],
-        "weaken_reasons": [
-          "left buy tier (hold)",
-          "conviction 31% below intact floor"
-        ],
-        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -3603,27 +3582,27 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-24T07:45:11.927650+00:00",
+    "generated_at": "2026-09-25T00:47:05.676749+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 9,
+      "closed_total": 10,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 27,
+      "open_with_thesis": 26,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 8,
-          "recovery_rate": 0.625,
-          "sold_underwater_rate": 0.375,
-          "mean_peak_unrealized_pct": -0.0117,
-          "mean_trough_unrealized_pct": -0.0166,
+          "closed_count": 9,
+          "recovery_rate": 0.6667,
+          "sold_underwater_rate": 0.3333,
+          "mean_peak_unrealized_pct": 0.0003,
+          "mean_trough_unrealized_pct": -0.0188,
           "outcome_labels": {
-            "recovered": 5,
+            "recovered": 6,
             "sold_underwater": 3
           }
         },
@@ -3663,7 +3642,7 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 9,
+      "hold_closed_with_thesis": 10,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
         "hold thesis buckets thin (broken=1; target >=3 each)",
@@ -3678,7 +3657,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-24T07:45:11.931452+00:00",
+    "generated_at": "2026-09-25T00:47:05.679819+00:00",
     "open_count": 6,
     "closed_count": 2,
     "scored_count": 1,
@@ -3744,7 +3723,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-24T17:45:11.851391+10:00",
+    "generated_at": "2026-09-25T10:47:05.496621+10:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -3771,8 +3750,8 @@
     "open_count": 28,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 27,
-      "off_book": 0,
+      "on_book": 26,
+      "off_book": 1,
       "never_funded": 1
     },
     "closed_by_capital_status": {
@@ -3795,10 +3774,10 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_off_book": 1
     }
   },
-  "generated_at": "2026-09-24T07:45:11.933707+00:00",
+  "generated_at": "2026-09-25T00:47:05.681698+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

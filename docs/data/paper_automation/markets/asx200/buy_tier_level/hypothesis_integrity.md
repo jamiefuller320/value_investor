@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-24T07:45:11.924293+00:00
+Track: `buy_tier_level` · updated 2026-09-25T00:47:05.673932+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **12** / 27 (44% count, 42% NAV)
+- Losers: **12** / 26 (46% count, 44% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -152,7 +152,7 @@ Track: `buy_tier_level` · updated 2026-09-24T07:45:11.924293+00:00
 - still buy
 - cheapness family still passes
 - data_quality 0.90
-- conviction 38%
+- conviction 45%
 
 ### RRL.AX — intact / hold_tolerate (+0.1%)
 - still strong_buy
@@ -195,9 +195,3 @@ Track: `buy_tier_level` · updated 2026-09-24T07:45:11.924293+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 68%
-
-### MND.AX — weakening / watch_review (+9.7%)
-- left buy tier (hold)
-- conviction 31% below intact floor
-- research accumulate
-- cheapness family still passes
