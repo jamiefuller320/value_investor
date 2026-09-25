@@ -24,7 +24,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-25T13:52:49.997698+00:00",
+    "snapshot_at": "2026-09-25T14:21:05.303803+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 52,
     "unmeasured_buy_tier": 1,
@@ -117,7 +117,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-25T13:52:49.999573+00:00",
+  "evaluated_at": "2026-09-25T14:21:05.305644+00:00",
   "maintenance_markets": [
     "aim",
     "asx200",
@@ -170,7 +170,7 @@
         "dax not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-25T13:53:10.055096+00:00",
+        "snapshot_at": "2026-09-25T14:21:27.772943+00:00",
         "market_id": "dax",
         "buy_tier_count": 12,
         "unmeasured_buy_tier": 1,
@@ -238,62 +238,72 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-25T13:53:10.055681+00:00",
+      "evaluated_at": "2026-09-25T14:21:27.773531+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "asx200"
+    "ibex35"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "asx200",
+      "market_id": "ibex35",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=1)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=3, thin=0, indexed_without_body=4)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
       "parked_tickers": [],
       "phase3_ready": false,
-      "current_phase": 1,
+      "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "asx200 not in ladder.weekly_paper_shard_markets"
+        "no benchmark configured for ibex35"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-25T13:53:12.472273+00:00",
-        "market_id": "asx200",
-        "buy_tier_count": 28,
+        "snapshot_at": "2026-09-25T14:21:28.228618+00:00",
+        "market_id": "ibex35",
+        "buy_tier_count": 4,
         "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
+        "zero_body_buy_tier": 3,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 1,
-        "bodies_min": 4,
-        "bodies_median": 25.0,
-        "bodies_max": 139,
+        "indexed_without_body": 4,
+        "bodies_min": 5,
+        "bodies_median": 5,
+        "bodies_max": 5,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
-        "zero_body_tickers": [],
+        "zero_body_tickers": [
+          "NTGY.MC",
+          "SCYR.MC",
+          "REP.MC"
+        ],
         "thin_body_tickers": [],
         "indexed_without_body_tickers": [
-          "TUA.AX"
+          "NTGY.MC",
+          "SCYR.MC",
+          "REP.MC"
         ],
         "indexed_without_body_by_ticker": {
-          "TUA.AX": 1
+          "NTGY.MC": 1,
+          "SCYR.MC": 1,
+          "REP.MC": 2
         },
         "parked_tickers": [],
         "parked_count": 0,
         "effective_thin_body_buy_tier": 0,
         "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 1,
+        "effective_indexed_without_body": 4,
         "effective_indexed_without_body_tickers": [
-          "TUA.AX"
+          "NTGY.MC",
+          "SCYR.MC",
+          "REP.MC"
         ],
         "ingest_exhausted": false
       },
-      "filing_gaps": 0,
+      "filing_gaps": 3,
       "max_daily_successes": 4,
       "max_targets": 24,
       "cron_morning": true,
@@ -305,14 +315,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-25T13:53:12.473199+00:00",
+      "evaluated_at": "2026-09-25T14:21:28.228848+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "dax",
-    "asx200"
+    "ibex35"
   ],
   "market_queue": [
     "sp500",
@@ -323,14 +333,15 @@
     "nasdaq100",
     "dax",
     "cac40",
-    "aim"
+    "aim",
+    "ibex35"
   ],
   "ingest_cascade": {
     "enabled": true,
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 13,
+    "hour_utc": 14,
     "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
@@ -356,7 +367,7 @@
     "dax"
   ],
   "scheduler_stream_2_markets": [
-    "asx200"
+    "ibex35"
   ],
   "should_run_library_maintenance": true
 }
