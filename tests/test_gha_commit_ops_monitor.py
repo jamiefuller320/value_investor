@@ -178,8 +178,10 @@ def test_ops_monitor_workflow_commits_after_monitor_exit() -> None:
     assert "stefanzweifel/git-auto-commit-action@v6" not in text
     monitor_idx = text.index("Run ops monitor")
     commit_idx = text.index("Commit ops monitor artifacts")
+    pages_idx = text.index("Deploy dashboard after ops artifacts")
     fail_idx = text.index("Fail job if ops monitor exited non-zero")
-    assert monitor_idx < commit_idx < fail_idx
+    assert monitor_idx < commit_idx < pages_idx < fail_idx
+    assert "scripts/dispatch_pages.sh" in text
     assert "tee /tmp/ops_monitor.json" in text
     assert "monitor_rc" in text
 
@@ -191,6 +193,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "docs/data/decision_input_inventory.json" in text
     assert "docs/data/observe_utilization.json" in text
     assert "docs/data/lifecycle_maturity_trajectory.json" in text
+    assert "docs/data/lifecycle_board.json" in text
     assert "docs/data/shard_nav_fx_warp.json" in text
     # Optional (not OWNED) — same race-safe lane as queue_health / observe rollup.
     optional_line = next(
@@ -199,6 +202,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "buy_tier_flip_lag.json" in optional_line
     assert "decision_input_inventory.json" in optional_line
     assert "lifecycle_maturity_trajectory.json" in optional_line
+    assert "lifecycle_board.json" in optional_line
     assert "shard_nav_fx_warp.json" in optional_line
     owned_line = next(
         line for line in text.splitlines() if "GHA_COMMIT_OWNED" in line and ":-" in line
@@ -206,4 +210,5 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "buy_tier_flip_lag.json" not in owned_line
     assert "decision_input_inventory.json" not in owned_line
     assert "lifecycle_maturity_trajectory.json" not in owned_line
+    assert "lifecycle_board.json" not in owned_line
     assert "shard_nav_fx_warp.json" not in owned_line

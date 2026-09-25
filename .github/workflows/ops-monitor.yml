@@ -187,7 +187,15 @@ jobs:
           PY
 
       - name: Commit ops monitor artifacts
+        id: commit_artifacts
         run: bash scripts/gha_commit_ops_monitor.sh
+
+      - name: Deploy dashboard after ops artifacts
+        if: steps.commit_artifacts.outputs.changes_detected == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_ACTIONS: "true"
+        run: bash scripts/dispatch_pages.sh
 
       - name: Dispatch engineering queue when ready
         if: steps.monitor.outputs.should_dispatch == 'true'

@@ -52,6 +52,12 @@ lane change and readiness gate (see N152 / P1 pin rules).
   Observe-only; **separated** from cumulative `beat_market`, exit_shadow,
   L462 WoW NAV, N153 FX, and decision-review. Ops finding only when the
   series is missing/stale (`auto_fixable=False`).
+- **L468** — weekday **light** `lifecycle_board.json` refresh inside
+  `check_lifecycle_maturity_trajectory` (via existing `write_lifecycle_board`,
+  not a full email-report publish) so Maturity mix `surface_freshness` stays
+  inside the ~30h content window between Sunday publishes. Board is in
+  ops-monitor `GHA_COMMIT_OPTIONAL`; Pages deploys after a successful ops
+  artifact push.
 
 Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-required).
 
@@ -338,12 +344,31 @@ L462 WoW NAV twin, N153 FX bookkeeping, or decision-review knob apply.
 | Surface | Detail |
 |---------|--------|
 | Store | `docs/data/lifecycle_maturity_trajectory.json` (ops-monitor optional commit + dashboard-bridge; email-report excludes) |
-| Trigger | `collect_ops_findings` → `check_lifecycle_maturity_trajectory`; also queue-health / board refresh |
+| Board | `docs/data/lifecycle_board.json` — light weekday refresh (**L468**) before maturity collect when age ≥18h; also email-report / local `/api/refresh` / lifecycle experiment start\|ack |
+| Trigger | `collect_ops_findings` → `check_lifecycle_maturity_trajectory` (board light-refresh then twin); also queue-health |
 | Dashboard | Lifecycle → **Maturity mix** (`#lifecycle/maturity`) — trajectory badges + freshness (prefer over raw counts); Positions board stays on `#lifecycle` / `#lifecycle/{market}` |
 | Finding | **Lifecycle maturity mix trajectory stalled** when missing/stale (`auto_fixable=False`) |
-| CLI (optional) | `ftse-dashboard-bridge refresh-lifecycle-maturity` |
+| CLI (optional) | `ftse-dashboard-bridge refresh-lifecycle-maturity`; `ftse-dashboard-bridge refresh-lifecycle-board` |
 
 Young / focus books looking early-heavy is expected — headline context, not a heal cue.
+
+### Weekday light lifecycle_board refresh (L468)
+
+Maturity mix `surface_freshness` follows **board content age**
+(`lifecycle_board.generated_at`), not the maturity twin store age. Before L468,
+ops-monitor refreshed only the twin, so mid-week gaps after a sparse
+email-report correctly showed **Surface stale** until the next Sunday publish.
+
+| Layer | Behavior |
+|-------|----------|
+| Helper | `maybe_refresh_lifecycle_board` → existing `write_lifecycle_board` (all admitted markets / board surfaces; no screen rewrite) |
+| When | Board missing/unreadable **or** age ≥ `DEFAULT_BOARD_LIGHT_REFRESH_AFTER_HOURS` (18h, under the 30h stale banner) |
+| Trigger | Daily ops-monitor `collect_ops_findings` → `check_lifecycle_maturity_trajectory` |
+| Commit | `docs/data/lifecycle_board.json` in `GHA_COMMIT_OPTIONAL` (race-safe with email-report / experiment workflows) |
+| Pages | `ops-monitor.yml` dispatches `pages.yml` after a successful artifact push so the live dashboard clears the banner |
+
+Still does **not** contaminate `beat_market` or other analysis measures — board
+rebuild is observe composition only.
 
 ## CLI
 
