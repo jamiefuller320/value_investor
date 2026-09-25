@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-24T20:39:14.970213+00:00`
+Generated: `2026-09-25T07:47:21.653112+00:00`
 Trajectory: **blocked_by_pr_queue**
 Dispatch pause: **active** (stuck PRs: 0)
 
@@ -30,10 +30,10 @@ Dispatch pause: **active** (stuck PRs: 0)
 - [ok] Traffic pause_active=True; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `stop_automation_waste` — signals=1; parked=eng-20260924-03; pause=True (applied)
+- `stop_automation_waste` — cleared automation-waste hold — no remediable signal (applied)
 
 ## Merges today (monitor independent verify)
-- `human`/human PR #840 `eng-20260924-01` — Close library ingest gaps for cac40 / SGO.PA (chain 1/3: 0/0 improved, run igc-20260921-04)
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 55
@@ -45,6 +45,16 @@ Dispatch pause: **active** (stuck PRs: 0)
 - `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
 - `pytest test_summary: WIX/BT action notes lost screen TTM after overly broad eng-20260919-14 suppress` — 1×
 - `engineering_tasks.json queue_clearing + automation.json queue snapshots vs main (#757 ledger)` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — FAIL`
+- Findings: 6 (open=6, resolved=0)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Lifecycle maturity mix trajectory stalled — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] FAIL So-what learning gap active (thin_memo_counted_as_coverage) — planned: `draft_ops_engineering_task` (Draft supervised ops engineering task (ops-monitor draft path))
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Project traffic pause active — planned: `request_unstick_stuck_prs` (PM v1: traffic pause/unstick path (CI comment / conflict-resolve))
 
 ## Merge authority
 - Status: **scoped_auto_merge**

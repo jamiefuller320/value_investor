@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-24T17:53:11.146434+00:00",
+  "generated_at": "2026-09-25T07:47:21.079559+00:00",
   "observe_only": true,
-  "headline": "2 warn instrument(s); improving vs last cycle on 1.",
+  "headline": "2 warn instrument(s); trajectory worsening on 2.",
   "surface_freshness": "fresh",
-  "ops_run_at": "2026-09-24T17:51:52.496282+00:00",
+  "ops_run_at": "2026-09-25T07:46:36.339614+00:00",
   "warn_instrument_count": 2,
   "trajectory_summary": {
-    "improving": 1,
-    "worsening": 0,
-    "flat": 1,
-    "unknown": 0,
-    "history_points": 2,
+    "improving": 0,
+    "worsening": 2,
+    "flat": 0,
+    "unknown": 1,
+    "history_points": 3,
     "note": "Deltas vs prior dashboard cycle (warn/gap counts; lower is better). Raw instrument stores commit with ops-monitor (L460)."
   },
   "instruments": [
@@ -22,37 +22,37 @@
       "observe_only": true,
       "warn_active": true,
       "severity": "warn",
-      "finding_summary": "25 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across asx200, cac40, euro_depth, ftse350, nasdaq100, sp500 (+1 more): sp500/NXPI (no_memo, 497.86h since flip), asx200/CLW.AX (no_memo, 449.86h since flip), euro_depth/NVG.LS (no_memo, 449.86h since flip), euro_depth/OMV.VI (no_memo, 377.86h since flip), sp500/BKNG (no_memo, 377.86h since flip), tsx60/TECK-B.TO (no_key_bodies, 377.86h since flip), EWG.L (no_memo, 305.86h since flip), GNS.L (no_memo, 305.86h since flip), sp500/PEP (no_memo, 281.86h since flip), euro_depth/RAND.AS (no_memo, 209.86h since flip) (+15 more). Blocking: no_key_bodies=5, no_memo=20.",
+      "finding_summary": "29 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, cac40, euro_depth, ftse350, nasdaq100 (+2 more): sp500/NXPI (no_memo, 511.78h since flip), asx200/CLW.AX (no_memo, 463.78h since flip), euro_depth/NVG.LS (no_memo, 463.78h since flip), euro_depth/OMV.VI (no_memo, 391.78h since flip), sp500/BKNG (no_memo, 391.78h since flip), EWG.L (no_memo, 319.78h since flip), GNS.L (no_memo, 319.78h since flip), sp500/PEP (no_memo, 295.78h since flip), euro_depth/RAND.AS (no_memo, 223.78h since flip), sp500/ADSK (no_memo, 223.78h since flip) (+19 more). Blocking: no_key_bodies=7, no_memo=22.",
       "metrics": {
-        "warn_not_usable": 25,
-        "open_not_usable": 45,
-        "cohort_count": 116,
-        "usable_in_window": 71,
-        "market_count": 10,
+        "warn_not_usable": 29,
+        "open_not_usable": 47,
+        "cohort_count": 122,
+        "usable_in_window": 75,
+        "market_count": 11,
         "blocking_stage_counts": {
           "no_memo": 23,
           "no_accumulate_verdict": 15,
-          "no_key_bodies": 7
+          "no_key_bodies": 9
         }
       },
       "primary_metric": "warn_not_usable",
-      "primary_value": 25,
+      "primary_value": 29,
       "primary_label": "Warn cohort (≥24h path-incomplete)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-09-24T17:51:53.794538+00:00",
-        "age_hours": 0.02,
+        "as_of": "2026-09-25T07:46:37.785695+00:00",
+        "age_hours": 0.01,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": -1,
-        "direction": "improving",
-        "label": "Better since last cycle",
-        "prior_value": 26,
-        "prior_at": "2026-09-24T09:48:26.211141+00:00"
+        "delta": 4,
+        "direction": "worsening",
+        "label": "Worse since last cycle",
+        "prior_value": 25,
+        "prior_at": "2026-09-24T12:55:21.054597+00:00"
       }
     },
     {
@@ -62,39 +62,75 @@
       "observe_only": true,
       "warn_active": true,
       "severity": "warn",
-      "finding_summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 42/56 names (e.g. BYIT.L, EWG.L, GNS.L, PINE.L, TRST.L, KLR.L, PAF.L, ABDN.L, ABF.L, ALFA.L +32 more). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
+      "finding_summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 44/56 names (e.g. BYIT.L, EWG.L, GNS.L, PINE.L, TRST.L, KLR.L, PAF.L, PPH.L, ABDN.L, ABF.L +34 more). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
       "metrics": {
         "inventory_count": 56,
-        "fully_ready_count": 14,
-        "names_with_any_gap": 42,
+        "fully_ready_count": 12,
+        "names_with_any_gap": 44,
         "dominant_gap_field": "memo_recent",
-        "dominant_gap_count": 42,
+        "dominant_gap_count": 44,
         "gap_counts": {
           "key_filing_bodies": 1,
           "fcf_basis_bound": 0,
           "overlay_bound": 4,
-          "memo_recent": 42
+          "memo_recent": 44
         },
         "verdict": "memo_recent"
       },
       "primary_metric": "dominant_gap_count",
-      "primary_value": 42,
+      "primary_value": 44,
       "primary_label": "Dominant gap (memo_recent)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-09-24T17:52:15.597766+00:00",
-        "age_hours": 0.02,
+        "as_of": "2026-09-25T07:46:54.100085+00:00",
+        "age_hours": 0.01,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 0,
-        "direction": "flat",
-        "label": "Unchanged vs last cycle",
+        "delta": 2,
+        "direction": "worsening",
+        "label": "Worse since last cycle",
         "prior_value": 42,
-        "prior_at": "2026-09-24T09:48:26.211141+00:00"
+        "prior_at": "2026-09-24T12:55:21.054597+00:00"
+      }
+    },
+    {
+      "id": "shard_nav_fx_warp",
+      "title": "Shard NAV FX unit mismatch",
+      "finding_title": "Shard NAV FX unit mismatch",
+      "observe_only": true,
+      "warn_active": false,
+      "severity": "ok",
+      "finding_summary": null,
+      "metrics": {
+        "warn_count": 0,
+        "gbp_warp_count": 8,
+        "native_twin_active": 8,
+        "native_twin_pending": 0,
+        "market_count": 8,
+        "warn_markets": []
+      },
+      "primary_metric": "warn_count",
+      "primary_value": 0,
+      "primary_label": "Markets with GBP warp and no active native twin",
+      "freshness": {
+        "state": "fresh",
+        "label": "Fresh",
+        "detail": "Last refresh 0.0h ago.",
+        "as_of": "2026-09-25T07:46:54.245003+00:00",
+        "age_hours": 0.01,
+        "store_lag_hours": null,
+        "stale_after_hours": 30.0
+      },
+      "trajectory": {
+        "delta": null,
+        "direction": "unknown",
+        "label": "No prior cycle",
+        "prior_value": null,
+        "prior_at": "2026-09-24T12:55:21.054597+00:00"
       }
     }
   ],
@@ -122,6 +158,24 @@
       "decision_input_inventory": {
         "primary_value": 42,
         "warn_active": true,
+        "freshness_state": "fresh"
+      }
+    },
+    {
+      "at": "2026-09-25T07:47:21.079559+00:00",
+      "buy_tier_flip_lag": {
+        "primary_value": 29,
+        "warn_active": true,
+        "freshness_state": "fresh"
+      },
+      "decision_input_inventory": {
+        "primary_value": 44,
+        "warn_active": true,
+        "freshness_state": "fresh"
+      },
+      "shard_nav_fx_warp": {
+        "primary_value": 0,
+        "warn_active": false,
         "freshness_state": "fresh"
       }
     }

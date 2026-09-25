@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-09-24T17:51:52.496282+00:00",
+  "run_at": "2026-09-25T07:46:36.339614+00:00",
   "overall": "fail",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "25 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across asx200, cac40, euro_depth, ftse350, nasdaq100, sp500 (+1 more): sp500/NXPI (no_memo, 497.86h since flip), asx200/CLW.AX (no_memo, 449.86h since flip), euro_depth/NVG.LS (no_memo, 449.86h since flip), euro_depth/OMV.VI (no_memo, 377.86h since flip), sp500/BKNG (no_memo, 377.86h since flip), tsx60/TECK-B.TO (no_key_bodies, 377.86h since flip), EWG.L (no_memo, 305.86h since flip), GNS.L (no_memo, 305.86h since flip), sp500/PEP (no_memo, 281.86h since flip), euro_depth/RAND.AS (no_memo, 209.86h since flip) (+15 more). Blocking: no_key_bodies=5, no_memo=20.",
+      "summary": "29 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, cac40, euro_depth, ftse350, nasdaq100 (+2 more): sp500/NXPI (no_memo, 511.78h since flip), asx200/CLW.AX (no_memo, 463.78h since flip), euro_depth/NVG.LS (no_memo, 463.78h since flip), euro_depth/OMV.VI (no_memo, 391.78h since flip), sp500/BKNG (no_memo, 391.78h since flip), EWG.L (no_memo, 319.78h since flip), GNS.L (no_memo, 319.78h since flip), sp500/PEP (no_memo, 295.78h since flip), euro_depth/RAND.AS (no_memo, 223.78h since flip), sp500/ADSK (no_memo, 223.78h since flip) (+19 more). Blocking: no_key_bodies=7, no_memo=22.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -15,7 +15,16 @@
       "severity": "warn",
       "category": "ingest",
       "title": "FTSE decision-input utilization gap",
-      "summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 42/56 names (e.g. BYIT.L, EWG.L, GNS.L, PINE.L, TRST.L, KLR.L, PAF.L, ABDN.L, ABF.L, ALFA.L +32 more). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
+      "summary": "Steady-state P1 decision-input gap on holdings ∪ buy-tier: `memo_recent` missing on 44/56 names (e.g. BYIT.L, EWG.L, GNS.L, PINE.L, TRST.L, KLR.L, PAF.L, PPH.L, ABDN.L, ABF.L +34 more). Observe-only — do not rememo/ingest burst from this alert; see docs/data/decision_input_inventory.json.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "observe",
+      "title": "Lifecycle maturity mix trajectory stalled",
+      "summary": "Lifecycle board / maturity history is stale (2026-09-23T18:05:59.926928+00:00).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -30,13 +39,13 @@
       "action_taken": null
     },
     {
-      "severity": "warn",
+      "severity": "fail",
       "category": "workflows",
-      "title": "Recent workflow failure: FTSE Ops Monitor",
-      "summary": "3 unresolved failure(s) since last success (runs: 36004418783, 36001920432, 35971378704).",
+      "title": "Workflow overdue: FTSE Ops Monitor",
+      "summary": "No successful run within 28h (last: 2026-09-23T17:50:37+00:00).",
       "auto_fixable": false,
       "fixed": true,
-      "action_taken": "Recovery run in flight (#36037152152); suppressed from alert"
+      "action_taken": "Current ops monitor run in progress; self-check suppressed"
     },
     {
       "severity": "warn",
@@ -51,7 +60,7 @@
       "severity": "warn",
       "category": "engineering",
       "title": "Project traffic pause active",
-      "summary": "Dispatch pause still active (reasons=['automation_waste']) but no stuck monitored PRs on this run — project-traffic should resume on the next controller pass unless automation-waste hold applies.",
+      "summary": "Dispatch pause still active (reasons=['traffic_hold']) but no stuck monitored PRs on this run — project-traffic should resume on the next controller pass unless automation-waste hold applies.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -60,17 +69,13 @@
   "auto_fixes": [
     {
       "action": "traffic_stop_automation_waste",
-      "detail": "signals=1; parked=eng-20260924-02; pause=True"
+      "detail": "cleared automation-waste hold — no remediable signal"
     },
     {
       "action": "traffic_stop_automation_waste",
-      "detail": "signals=1; parked=eng-20260924-02; pause=True",
+      "detail": "cleared automation-waste hold — no remediable signal",
       "pr_number": null,
       "branch": null
-    },
-    {
-      "action": "market_eng_gap_burndown",
-      "detail": "gap_closure_compile for cac40 → "
     }
   ],
   "drafted_task_ids": [],
@@ -78,11 +83,11 @@
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 30,
       "last_success_at": "2026-09-24T15:26:21+00:00",
       "last_success_run_id": 36020182137,
-      "age_hours": 2.4,
+      "age_hours": 16.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -92,9 +97,9 @@
       "name": "Automation Orchestrator",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-24T15:51:42+00:00",
-      "last_success_run_id": 36023264998,
-      "age_hours": 2.0,
+      "last_success_at": "2026-09-25T06:50:44+00:00",
+      "last_success_run_id": 36104724691,
+      "age_hours": 0.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -103,10 +108,10 @@
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
       "expected_today": true,
-      "max_age_hours": 26,
-      "last_success_at": "2026-09-24T17:15:29+00:00",
-      "last_success_run_id": 36033030659,
-      "age_hours": 0.6,
+      "max_age_hours": 3,
+      "last_success_at": "2026-09-25T07:41:03+00:00",
+      "last_success_run_id": 36108892804,
+      "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -118,9 +123,9 @@
       "max_age_hours": 28,
       "last_success_at": "2026-09-24T12:47:44+00:00",
       "last_success_run_id": 36001334441,
-      "age_hours": 5.1,
+      "age_hours": 19.0,
       "stale": false,
-      "recent_failures_24h": 1,
+      "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     },
     {
@@ -130,7 +135,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-20T13:06:34+00:00",
       "last_success_run_id": 35512538706,
-      "age_hours": 100.8,
+      "age_hours": 114.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -140,9 +145,9 @@
       "name": "FTSE Library Ladder",
       "expected_today": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-09-24T06:51:47+00:00",
-      "last_success_run_id": 35966573537,
-      "age_hours": 11.0,
+      "last_success_at": "2026-09-25T06:51:44+00:00",
+      "last_success_run_id": 36104800669,
+      "age_hours": 0.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -154,7 +159,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-21T01:48:21+00:00",
       "last_success_run_id": 35552088105,
-      "age_hours": 88.1,
+      "age_hours": 102.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -166,7 +171,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-23T17:07:54+00:00",
       "last_success_run_id": 35893506768,
-      "age_hours": 24.7,
+      "age_hours": 38.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -178,7 +183,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-20T16:18:13+00:00",
       "last_success_run_id": 35522285545,
-      "age_hours": 97.6,
+      "age_hours": 111.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -190,7 +195,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-09-24T08:26:20+00:00",
       "last_success_run_id": 35975238849,
-      "age_hours": 9.4,
+      "age_hours": 23.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -202,26 +207,26 @@
       "max_age_hours": 28,
       "last_success_at": "2026-09-23T17:50:37+00:00",
       "last_success_run_id": 35898383208,
-      "age_hours": 24.0,
-      "stale": false,
-      "recent_failures_24h": 3,
-      "unresolved_failures_12h": 3
+      "age_hours": 37.9,
+      "stale": true,
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
     }
   ],
   "queue_status": {
-    "open_count": 0,
+    "open_count": 1,
     "pr_open_count": 0,
     "parked_count": 1,
     "merged_count": 86,
     "failed_count": 0,
-    "next_task_id": null,
+    "next_task_id": "eng-20260924-03",
     "in_flight_branch": null,
     "in_flight_pr": null,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": true,
+  "should_dispatch_engineering": false,
   "email_deferred": false,
   "email_defer_reasons": []
 }
