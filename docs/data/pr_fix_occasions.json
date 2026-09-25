@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-25T11:52:32.223256+00:00",
-  "occasion_count": 66,
+  "updated_at": "2026-09-25T13:17:39.211524+00:00",
+  "occasion_count": 69,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -1165,6 +1165,59 @@
       "failed_check_names": [],
       "notes": "Kept L465=done from main; added L466 open from PR; regenerated deferred-review.md",
       "details": {}
+    },
+    {
+      "id": "prf-20260925-012",
+      "recorded_at": "2026-09-25T12:12:40.247612+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "rebase after main advanced (root ingest_critical_path asx200 vs euro; L466 ID collision with #851)",
+      "pr_number": 852,
+      "branch": "cursor/euro-deepen-thin-da77",
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Kept main asx200 root critical path; euro under markets/euro_depth. Renumbered IR/ESEF defer L466->L467; retained #851 L466 thin_memo autofixable label.",
+      "details": {}
+    },
+    {
+      "id": "prf-20260925-013",
+      "recorded_at": "2026-09-25T12:15:25.893014+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "validate ruff_format on research/filings.py urlunsplit",
+      "pr_number": 852,
+      "branch": "cursor/euro-deepen-thin-da77",
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "job 108066561124; format filings.py around urlunsplit ~3009",
+      "details": {}
+    },
+    {
+      "id": "prf-20260925-014",
+      "recorded_at": "2026-09-25T13:17:39.211524+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "rebase after #851 merged (issuer_identifiers + L466 already on main vs L467 IR/ESEF)",
+      "pr_number": 852,
+      "branch": "cursor/euro-deepen-thin-da77",
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Kept main ABI.BR issuer; L466 from #851; L467 IR/ESEF; occasions kept 011 added 012+",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -1382,17 +1435,17 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 46
+        "count": 48
       },
       {
         "kind": "ci_check",
-        "count": 20
+        "count": 21
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 66
+        "count": 69
       }
     ]
   }

@@ -34,6 +34,7 @@ Phase 3 is **complete** when `ftse-library shard-status --markets euro_depth` re
 |-------|-------------------|---------|
 | Metrics grow (full ~194) | `ftse-library grow --market euro_depth` | Day 1 burst (`focus_grow_cap: 200`) |
 | Filing deepen (buy-tier) | `ftse-library ingest-loop --market euro_depth` | **7-day:** Mon–Sat peak + daily off-peak — **euro-ingest-loop.yml** on focus; **library-ingest-sprint.yml** on `ingest_parallel_sprint` (sp500); **library-ingest-sprint-2.yml** on `ingest_parallel_sprint_2` (asx200); **library-ingest-maintenance.yml** at FTSE volume once the quality bar is met |
+| Thin-memo factory heal | `ftse-progress-report thin-memo-clearance --run-heal` | After each euro sprint ingest + daily ops-monitor `--apply` — deepen zero-body memos then body-lag rememo (clears `thin_memo_counted_as_coverage`; not pin spray) |
 | Screen + observe + weekly shard | `ftse-library ladder` | Daily `ladder_only` when eng idle + Sundays |
 | Phase 3 weekday shard | `ftse-library shard-weekday --markets euro_depth` | Weekdays after Phase 2 gate |
 

@@ -2,24 +2,24 @@
   "ticker": "SIE.DE",
   "company_name": "SIEMENS AG                    N",
   "market": "euro_depth",
-  "built_at": "2026-08-21T21:44:29.061798+00:00",
+  "built_at": "2026-09-25T10:54:10.405641+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
       "filings_bodies": false,
       "yahoo_financials": true,
       "yahoo_quarterly_cashflow": true,
+      "yahoo_quarterly_income": true,
       "news_manifest": true,
       "screening_snapshot": true,
       "screen_run_manifest": false,
       "ir_presentation_metrics": true,
-      "macro_context": false,
+      "macro_context": true,
       "alternate_news": true
     },
     "thin": [
       "filings_bodies",
-      "screen_run_manifest",
-      "macro_context"
+      "screen_run_manifest"
     ],
     "filings_body_files": 0,
     "filings_indexed_bodies": 0,
@@ -67,7 +67,7 @@
         "with_body": 0
       }
     },
-    "news_article_count": 29,
+    "news_article_count": 34,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
@@ -103,6 +103,17 @@
     "mandatory": false,
     "path": "docs/data/library/markets/euro_depth/screen/research/SIE.DE/sources/ir_presentation_metrics.json"
   },
+  "filing_interim_financials": {
+    "has_interim_highlights": false,
+    "has_trading_advertising": false,
+    "corporate_action_count": 0,
+    "path": "docs/data/library/markets/euro_depth/screen/research/SIE.DE/sources/filing_interim_financials.json"
+  },
+  "ch_annual_year_in_numbers": {
+    "year_count": 0,
+    "latest_secured_workload_to_revenue_ratio": null,
+    "path": "docs/data/library/markets/euro_depth/screen/research/SIE.DE/sources/ch_annual_year_in_numbers.json"
+  },
   "alternate_news_added": 0,
   "alternate_news_path": "docs/data/library/markets/euro_depth/screen/research/SIE.DE/sources/alternate_news.json",
   "planned_alternate_sources": [
@@ -137,5 +148,5 @@
     "ir_presentation_metrics",
     "macro_context"
   ],
-  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. Use screen_run_manifest.json for universe-level signal counts and ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, segment revenue splits, and IFRS 16 lease maturity tables. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
+  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. Use screen_run_manifest.json for universe-level signal counts and ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, segment revenue splits, and IFRS 16 lease maturity tables. Use ch_annual_year_in_numbers.json for CH annual revenue, adjusted operating profit, secured workload, and margin/backlog ratios when present. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
 }

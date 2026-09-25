@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-25T07:40:08.834009+00:00",
+  "run_at": "2026-09-25T10:49:32.154703+00:00",
   "market_id": "euro_depth",
   "targets": [
     "OIZ.IR"
@@ -83,16 +83,16 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-25T07:39:36.216699+00:00",
+    "snapshot_at": "2026-09-25T10:49:13.124656+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 52,
     "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 15,
-    "indexed_without_body": 18,
+    "indexed_without_body": 19,
     "bodies_min": 1,
     "bodies_median": 3,
-    "bodies_max": 103,
+    "bodies_max": 106,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
@@ -126,7 +126,7 @@
       "MC.PA"
     ],
     "indexed_without_body_by_ticker": {
-      "SGO.PA": 1,
+      "SGO.PA": 2,
       "EVN.VI": 1,
       "WIE.VI": 1,
       "ABI.BR": 12,
@@ -164,16 +164,16 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-25T07:40:03.704309+00:00",
+    "snapshot_at": "2026-09-25T10:49:29.374496+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 52,
     "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 15,
-    "indexed_without_body": 18,
+    "indexed_without_body": 19,
     "bodies_min": 1,
     "bodies_median": 3,
-    "bodies_max": 103,
+    "bodies_max": 106,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
@@ -207,7 +207,7 @@
       "MC.PA"
     ],
     "indexed_without_body_by_ticker": {
-      "SGO.PA": 1,
+      "SGO.PA": 2,
       "EVN.VI": 1,
       "WIE.VI": 1,
       "ABI.BR": 12,
@@ -222,14 +222,14 @@
       "EVN.VI",
       "MUV2.DE",
       "SAP.DE",
-      "SGO.PA",
       "SKA-B.ST",
       "UCB.BR",
       "WIE.VI"
     ],
-    "parked_count": 10,
-    "effective_thin_body_buy_tier": 7,
+    "parked_count": 9,
+    "effective_thin_body_buy_tier": 8,
     "effective_thin_body_tickers": [
+      "SGO.PA",
       "ACKB.BR",
       "DTE.DE",
       "MC.PA",
@@ -238,8 +238,9 @@
       "NBA.LS",
       "ADYEN.AS"
     ],
-    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body": 3,
     "effective_indexed_without_body_tickers": [
+      "SGO.PA",
       "MC.PA"
     ],
     "ingest_exhausted": false
@@ -247,7 +248,7 @@
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
@@ -256,7 +257,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-09-25T07:39:39.077228+00:00",
+    "assessed_at": "2026-09-25T10:49:14.891537+00:00",
     "unmeasured": [
       "OIZ.IR"
     ],
@@ -267,6 +268,12 @@
         "indexed_without_body": 12,
         "filings_total": 37,
         "filings_with_body": 25
+      },
+      {
+        "ticker": "SGO.PA",
+        "indexed_without_body": 2,
+        "filings_total": 3,
+        "filings_with_body": 1
       },
       {
         "ticker": "EVN.VI",
@@ -287,12 +294,6 @@
         "filings_with_body": 16
       },
       {
-        "ticker": "SGO.PA",
-        "indexed_without_body": 1,
-        "filings_total": 2,
-        "filings_with_body": 1
-      },
-      {
         "ticker": "UCB.BR",
         "indexed_without_body": 1,
         "filings_total": 2,
@@ -306,7 +307,6 @@
       }
     ],
     "thin_need_discovery": [
-      "SGO.PA",
       "ACKB.BR",
       "DTE.DE",
       "MUV2.DE",
@@ -331,31 +331,31 @@
     "auto_pin_tickers": [
       "OIZ.IR",
       "ABI.BR",
+      "SGO.PA",
       "EVN.VI",
       "MC.PA",
       "SAP.DE",
-      "SGO.PA",
       "UCB.BR",
       "WIE.VI"
     ],
     "recommended_actions": [
       "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
-      "Prefer indexed-without-body body refetch (7 tickers, top: ABI.BR(12), EVN.VI(1), MC.PA(1), SAP.DE(1), SGO.PA(1))",
-      "Discovery/IR seed for 12 thin ticker(s) that already have bodies for every indexed filing",
+      "Prefer indexed-without-body body refetch (7 tickers, top: ABI.BR(12), SGO.PA(2), EVN.VI(1), MC.PA(1), SAP.DE(1))",
+      "Discovery/IR seed for 11 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 1,
       "zero_body": 0,
       "indexed_without_body_tickers": 7,
-      "indexed_without_body_rows": 18,
-      "thin_need_discovery": 12,
+      "indexed_without_body_rows": 19,
+      "thin_need_discovery": 11,
       "thin_need_bodies": 5
     }
   },
-  "used_seconds": 21.712625751999894,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2078.287374248,
+  "used_seconds": 12.735869527000034,
+  "budget_seconds": 480.0,
+  "leftover_seconds": 467.26413047299997,
   "blocker_ticker": null,
   "per_ticker_max_seconds": null,
   "pin_tickers": [
@@ -365,9 +365,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-09-25T07:40:03.713650+00:00",
+    "updated_at": "2026-09-25T10:49:29.381829+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -431,16 +431,6 @@
         "thin": false
       },
       {
-        "ticker": "SGO.PA",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-09-08T07:18:08.214616+00:00",
-        "filings_total": 2,
-        "filings_with_body": 1,
-        "indexed_without_body": 1,
-        "thin": true
-      },
-      {
         "ticker": "SKA-B.ST",
         "reason": "awaiting_periodic_report",
         "revisit_when": "Next statutory annual or interim report is issued and indexed",
@@ -499,7 +489,8 @@
       "DQ7A.IR",
       "DTE.DE",
       "MC.PA",
-      "NBA.LS"
+      "NBA.LS",
+      "SGO.PA"
     ],
     "path": "docs/data/library/markets/euro_depth/ingest_exhaustion.json"
   },

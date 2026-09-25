@@ -2998,7 +2998,19 @@ def _parse_rss_date(value: str | None) -> str | None:
         return value
 
 
+def _sanitize_http_url(url: str) -> str:
+    """Quote unsafe path/query bytes (e.g. spaces in ESEF package paths)."""
+    text = str(url or "").strip()
+    if not text.startswith("http"):
+        return text
+    parsed = urllib.parse.urlsplit(text)
+    path = urllib.parse.quote(parsed.path, safe="/%")
+    query = urllib.parse.quote(parsed.query, safe="=&%/")
+    return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, path, query, parsed.fragment))
+
+
 def _http_get(url: str, *, headers: dict[str, str] | None = None, timeout: int = 30) -> bytes:
+    url = _sanitize_http_url(url)
     request_headers = {
         "User-Agent": USER_AGENT,
         "Accept-Encoding": "gzip, deflate",
@@ -4573,6 +4585,7 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
     """Download and extract plain text from a direct announcement URL."""
     if not url or not url.startswith("http"):
         return None
+    url = _sanitize_http_url(url)
     url = _resolve_ir_allowlist_fetch_url(url)
     if _is_ch_document_url(url):
         return _fetch_companies_house_body(
