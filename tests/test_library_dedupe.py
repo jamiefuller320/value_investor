@@ -8,6 +8,7 @@ from types import SimpleNamespace
 from value_investor.library_dedupe import (
     canonical_library_ticker,
     existing_library_research_tickers,
+    prefer_first_time_reports,
     prefer_first_time_research_queues,
     select_deduped_research_targets,
     summarize_ticker_overlaps,
@@ -97,6 +98,15 @@ def test_select_allows_stale_memo_when_not_in_already_researched():
     )
     assert [r.ticker for _, r in selected] == ["ERIC-B.ST"]
     assert skipped == []
+
+
+def test_prefer_first_time_reports_puts_no_memo_first():
+    reports = [
+        SimpleNamespace(ticker="AAPL", name="Apple", signal="strong_buy"),
+        SimpleNamespace(ticker="HPE", name="HPE", signal="buy"),
+    ]
+    ordered = prefer_first_time_reports(reports, {"AAPL"})
+    assert [r.ticker for r in ordered] == ["HPE", "AAPL"]
 
 
 def test_prefer_first_time_research_queues_puts_no_memo_first():

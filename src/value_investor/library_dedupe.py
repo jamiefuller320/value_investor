@@ -114,6 +114,28 @@ def select_deduped_research_targets(
     return selected, skipped
 
 
+def prefer_first_time_reports(
+    reports: list[Any] | None,
+    already_researched: set[str] | None,
+) -> list[Any]:
+    """Put names with no memo ahead of rememo/refresh, preserving relative order.
+
+    Shared by library Sunday Layer C (N114) and FTSE ``--research-docs`` /
+    ``eligible_research_targets`` so first-time buy-tier fills the weekly cap
+    before high-conviction rememo of already-memo'd names.
+    """
+    already = {canonical_library_ticker(t) for t in (already_researched or set())}
+    first: list[Any] = []
+    rest: list[Any] = []
+    for report in reports or []:
+        key = canonical_library_ticker(getattr(report, "ticker", ""))
+        if key and key not in already:
+            first.append(report)
+        else:
+            rest.append(report)
+    return first + rest
+
+
 def prefer_first_time_research_queues(
     per_market_queues: dict[str, list[Any]],
     already_researched: set[str] | None,
@@ -123,19 +145,10 @@ def prefer_first_time_research_queues(
     Sunday round-robin still starts at focus. This only stops a high-conviction
     rememo from crowding out a first-time admitted buy-tier name (N114).
     """
-    already = {canonical_library_ticker(t) for t in (already_researched or set())}
-    ordered: dict[str, list[Any]] = {}
-    for mid, queue in per_market_queues.items():
-        first: list[Any] = []
-        rest: list[Any] = []
-        for report in queue or []:
-            key = canonical_library_ticker(getattr(report, "ticker", ""))
-            if key and key not in already:
-                first.append(report)
-            else:
-                rest.append(report)
-        ordered[mid] = first + rest
-    return ordered
+    return {
+        mid: prefer_first_time_reports(queue, already_researched)
+        for mid, queue in per_market_queues.items()
+    }
 
 
 def summarize_ticker_overlaps(

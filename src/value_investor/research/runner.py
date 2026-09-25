@@ -80,12 +80,18 @@ def eligible_research_targets(
     reports: list[CompanyReport],
     *,
     weekly_cap: int = DEFAULT_RESEARCH_WEEKLY_CAP,
+    already_researched: set[str] | None = None,
+    prefer_first_time: bool = False,
 ) -> list[CompanyReport]:
     """
     Select active buy-tier names for deep research memos.
 
     Priority: quality strong buys (all, ranked), then top quality buys to fill
     remaining slots up to weekly_cap.
+
+    When ``prefer_first_time`` is True, names with no research memo are ordered
+    ahead of rememo/refresh candidates before the cap is applied (N114 parity
+    with library ``prefer_first_time_research_queues``). Cap size is unchanged.
     """
     if weekly_cap <= 0:
         return []
@@ -106,12 +112,12 @@ def eligible_research_targets(
     ]
     strong.sort(key=_rank_key, reverse=True)
     buys.sort(key=_rank_key, reverse=True)
+    pool = strong + buys
+    if prefer_first_time:
+        from value_investor.library_dedupe import prefer_first_time_reports
 
-    selected = strong[:weekly_cap]
-    remaining = weekly_cap - len(selected)
-    if remaining > 0:
-        selected.extend(buys[:remaining])
-    return selected
+        pool = prefer_first_time_reports(pool, already_researched)
+    return pool[:weekly_cap]
 
 
 def eligible_alumni_research_targets(
@@ -157,14 +163,27 @@ def select_research_targets(
     weekly_cap: int = DEFAULT_RESEARCH_WEEKLY_CAP,
     continue_alumni: bool = True,
     alumni_cap: int = DEFAULT_RESEARCH_ALUMNI_CAP,
+    prefer_first_time: bool = True,
 ) -> tuple[list[CompanyReport], list[CompanyReport]]:
     """
     Active buy-tier targets plus optional alumni weekly updates.
 
     Returns ``(active_targets, alumni_targets)``. Combined list preserves active
     first so new initials and current picks are never starved by alumni refreshes.
+
+    By default (``prefer_first_time=True``), active selection puts no-memo
+    buy-tier names ahead of rememo of already-memo'd names inside the weekly
+    cap — same structural rule as library Sunday N114. Alumni path is unchanged
+    (already-memo'd drop-offs only). Weekday rememo still cannot create first
+    memos; this only reorders Sunday ``--research-docs`` spend.
     """
-    active = eligible_research_targets(reports, weekly_cap=weekly_cap)
+    already = {doc.ticker for doc in store.list_documents()}
+    active = eligible_research_targets(
+        reports,
+        weekly_cap=weekly_cap,
+        already_researched=already,
+        prefer_first_time=prefer_first_time,
+    )
     if not continue_alumni:
         return active, []
     alumni = eligible_alumni_research_targets(
@@ -195,6 +214,8 @@ def run_research_for_strong_buys(
     Create or update per-ticker research memos.
 
     Active path: quality strong buys first, then top quality buys until weekly_cap.
+    Within that pool, no-memo names are preferred ahead of rememo (N114 parity)
+    so first-time buy-tier fills the cap before refreshing already-memo'd picks.
     Alumni path: continue weekly updates for names that dropped off the buy list
     but still have a memo and remain in the screen (up to alumni_cap, oldest first).
 

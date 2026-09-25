@@ -36,7 +36,7 @@ L366 work).
 
 | Path | Today | Phase B lock |
 |------|-------|--------------|
-| Sunday `--research-docs` | Full initial essay + weekly essay update (`runner.py` caps 12+12) | **Keep schedule + caps**; prompts become structured-verdict slim. **Must** seed committed `research.json` into `output/research` before the agent pass and persist touched trees back to `docs/data/research` afterward — sources-only seed left the store empty and Phase B modes never landed. |
+| Sunday `--research-docs` | Full initial essay + weekly essay update (`runner.py` caps 12+12) | **Keep schedule + caps**; prompts become structured-verdict slim. Active selection **prefers no-memo / first-time** buy-tier ahead of rememo inside the cap (N114 parity with library; `prefer_first_time` in `select_research_targets`). **Must** seed committed `research.json` into `output/research` before the agent pass and persist touched trees back to `docs/data/research` afterward — sources-only seed left the store empty and Phase B modes never landed. |
 | Weekday FTSE rememo (`ftse-research --weekday-rememo`, cap 3 / catch-up 5) | Force-initial **full** memo when body-lag / ingest improves | **Keep schedule + caps**; rememo becomes force slim initial / slim refresh. Do **not** widen `rememo_reason` just to flip essay → structured modes. |
 | Admitted-market weekday rememo (`ftse-library rememo`) | Same 3/day equal-support package | **Same** slim behaviour as FTSE rememo |
 | Overlay refresh before paper-auto | Binds doc → `research_verdict` / `adjusted_signal` on reports | **Unchanged** (no gate change) |
