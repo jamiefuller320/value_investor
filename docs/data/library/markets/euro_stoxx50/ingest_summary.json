@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-24T20:08:30.772376+00:00",
+  "run_at": "2026-09-25T12:55:20.538030+00:00",
   "market_id": "euro_stoxx50",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-24T20:07:39.785393+00:00",
+    "snapshot_at": "2026-09-25T12:54:39.045694+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 16,
     "unmeasured_buy_tier": 0,
@@ -25,9 +25,9 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "SGO.PA",
-      "MUV2.DE",
       "DTE.DE",
       "BAS.DE",
+      "MUV2.DE",
       "ADYEN.AS"
     ],
     "indexed_without_body_tickers": [
@@ -60,13 +60,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-24T20:08:25.979235+00:00",
+    "snapshot_at": "2026-09-25T12:55:15.806500+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 16,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 5,
-    "indexed_without_body": 6,
+    "indexed_without_body": 7,
     "bodies_min": 1,
     "bodies_median": 3.0,
     "bodies_max": 100,
@@ -76,9 +76,9 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "SGO.PA",
-      "MUV2.DE",
       "DTE.DE",
       "BAS.DE",
+      "MUV2.DE",
       "ADYEN.AS"
     ],
     "indexed_without_body_tickers": [
@@ -89,7 +89,7 @@
     ],
     "indexed_without_body_by_ticker": {
       "SAN.PA": 1,
-      "TTE.PA": 2,
+      "TTE.PA": 3,
       "SGO.PA": 2,
       "SAP.DE": 1
     },
@@ -119,7 +119,7 @@
   "discovery_scan": {
     "scanned": 16,
     "hits": 14,
-    "new_rows_total": 0,
+    "new_rows_total": 1,
     "curiosity_total": 16,
     "errors": 0,
     "prioritization_weights": {
@@ -132,9 +132,9 @@
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
-      "MUV2.DE",
       "DTE.DE",
       "BAS.DE",
+      "MUV2.DE",
       "ADYEN.AS",
       "SGO.PA",
       "TTE.PA",
@@ -152,7 +152,7 @@
   },
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-09-24T20:07:40.670242+00:00",
+    "assessed_at": "2026-09-25T12:54:39.695304+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -182,9 +182,9 @@
       }
     ],
     "thin_need_discovery": [
-      "MUV2.DE",
       "DTE.DE",
       "BAS.DE",
+      "MUV2.DE",
       "ADYEN.AS"
     ],
     "thin_need_bodies": [
@@ -212,9 +212,9 @@
       "thin_need_bodies": 1
     }
   },
-  "used_seconds": 44.44229706200001,
+  "used_seconds": 35.452646786,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3555.557702938,
+  "leftover_seconds": 3564.547353214,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -222,9 +222,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-09-24T20:08:25.982509+00:00",
+    "updated_at": "2026-09-25T12:55:15.809827+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 5,
+    "complete_zero_improve_runs": 6,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -278,16 +278,6 @@
         "thin": false
       },
       {
-        "ticker": "TTE.PA",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-09-23T19:49:15.999439+00:00",
-        "filings_total": 103,
-        "filings_with_body": 100,
-        "indexed_without_body": 2,
-        "thin": false
-      },
-      {
         "ticker": "ADYEN.AS",
         "reason": "awaiting_periodic_report",
         "revisit_when": "Next statutory annual or interim report is issued and indexed",
@@ -306,6 +296,16 @@
         "filings_with_body": 1,
         "indexed_without_body": 2,
         "thin": true
+      },
+      {
+        "ticker": "TTE.PA",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-25T12:55:15.809827+00:00",
+        "filings_total": 104,
+        "filings_with_body": 100,
+        "indexed_without_body": 3,
+        "thin": false
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
