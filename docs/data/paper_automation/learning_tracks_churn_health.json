@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-24T08:30:25.696216+00:00",
+  "generated_at": "2026-09-25T08:30:43.540216+00:00",
   "lookback_days": 7,
   "primary_learning_track": "ai_judgment",
   "control_track": "rules",
@@ -16,13 +16,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:20.966022+00:00",
+        "reviewed_at": "2026-09-25T08:30:38.788619+00:00",
         "applied": false,
         "enough_history": true,
-        "cost_drag": 0.4417,
-        "total_costs": 441.68,
-        "trade_count": 74,
-        "excess_after_costs": -0.4126,
+        "cost_drag": 0.4539,
+        "total_costs": 453.87,
+        "trade_count": 77,
+        "excess_after_costs": -0.4295,
         "knobs_after": {
           "max_positions": 3,
           "skip_timing_wait": true,
@@ -35,29 +35,36 @@
         ]
       },
       "rebalance_state": {
-        "exit_streak": {
+        "exit_streak": {},
+        "reentry_cooldown": {
           "PAF.L": 1
         },
-        "reentry_cooldown": {},
-        "buffered_holdings": 1
+        "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
-        "trade_count": 0,
+        "note": "Rebalanced after open settle (3 trade(s)).",
+        "trade_count": 3,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 5,
-        "buys": 2,
-        "sells": 2,
-        "trims": 1,
-        "full_exits": 2,
-        "adjacent_side_flips": [],
-        "adjacent_flip_count": 0
+        "total": 8,
+        "buys": 3,
+        "sells": 3,
+        "trims": 2,
+        "full_exits": 3,
+        "adjacent_side_flips": [
+          {
+            "ticker": "PAF.L",
+            "from_side": "buy",
+            "to_side": "sell",
+            "acted_at": "2026-09-25T09:27:08.411869+01:00"
+          }
+        ],
+        "adjacent_flip_count": 1
       }
     },
     "ai_judgment": {
@@ -70,13 +77,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:21.047210+00:00",
+        "reviewed_at": "2026-09-25T08:30:38.877147+00:00",
         "applied": false,
         "enough_history": true,
-        "cost_drag": 0.3806,
-        "total_costs": 380.57,
-        "trade_count": 56,
-        "excess_after_costs": -0.3368,
+        "cost_drag": 0.3941,
+        "total_costs": 394.05,
+        "trade_count": 59,
+        "excess_after_costs": -0.3561,
         "knobs_after": {
           "max_positions": 3,
           "skip_timing_wait": true,
@@ -89,29 +96,36 @@
         ]
       },
       "rebalance_state": {
-        "exit_streak": {
+        "exit_streak": {},
+        "reentry_cooldown": {
           "PAF.L": 1
         },
-        "reentry_cooldown": {},
-        "buffered_holdings": 1
+        "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
-        "trade_count": 0,
+        "note": "Rebalanced after open settle (3 trade(s)).",
+        "trade_count": 3,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 5,
-        "buys": 2,
-        "sells": 2,
-        "trims": 1,
-        "full_exits": 2,
-        "adjacent_side_flips": [],
-        "adjacent_flip_count": 0
+        "total": 8,
+        "buys": 3,
+        "sells": 3,
+        "trims": 2,
+        "full_exits": 3,
+        "adjacent_side_flips": [
+          {
+            "ticker": "PAF.L",
+            "from_side": "buy",
+            "to_side": "sell",
+            "acted_at": "2026-09-25T09:27:28.347154+01:00"
+          }
+        ],
+        "adjacent_flip_count": 1
       }
     },
     "momentum_grace": {
@@ -124,43 +138,37 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:21.101782+00:00",
+        "reviewed_at": "2026-09-25T08:30:38.924415+00:00",
         "applied": true,
         "enough_history": true,
         "cost_drag": 0.0858,
         "total_costs": 85.8,
         "trade_count": 13,
-        "excess_after_costs": -0.0693,
+        "excess_after_costs": -0.0669,
         "knobs_after": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.05,
-          "sector_cap": 0.25
+          "min_conviction": 0.1,
+          "sector_cap": 0.2
         },
         "proposed_changes": {
-          "min_conviction": 0.05,
-          "sector_cap": 0.25
+          "min_conviction": 0.1,
+          "sector_cap": 0.2
         },
         "reasons": [
-          "High cost drag (5.8%) — raise min_conviction.",
+          "High cost drag (8.6%) — raise min_conviction.",
           "Holdings concentrated in Consumer Cyclical (33%) — tighten sector_cap."
         ]
       },
       "rebalance_state": {
         "exit_streak": {},
-        "reentry_cooldown": {
-          "FGP.L": 1,
-          "HIK.L": 1,
-          "ITV.L": 1,
-          "AEP.L": 1,
-          "JUP.L": 1
-        },
+        "reentry_cooldown": {},
         "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (8 trade(s)).",
-        "trade_count": 8,
+        "note": "Rebalanced after open settle (0 trade(s)).",
+        "trade_count": 0,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
@@ -186,13 +194,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:21.569511+00:00",
+        "reviewed_at": "2026-09-25T08:30:39.407833+00:00",
         "applied": true,
         "enough_history": true,
-        "cost_drag": 0.095,
-        "total_costs": 94.99,
-        "trade_count": 27,
-        "excess_after_costs": -0.0931,
+        "cost_drag": 0.1043,
+        "total_costs": 104.28,
+        "trade_count": 31,
+        "excess_after_costs": -0.1004,
         "knobs_after": {
           "max_positions": 3,
           "skip_timing_wait": true,
@@ -203,32 +211,31 @@
           "max_positions": 3
         },
         "reasons": [
-          "Weak excess after costs (-9.3%) — reduce max_positions."
+          "Weak excess after costs (-10.0%) — reduce max_positions."
         ]
       },
       "rebalance_state": {
-        "exit_streak": {
-          "PAF.L": 1,
-          "BP.L": 1
+        "exit_streak": {},
+        "reentry_cooldown": {
+          "PAF.L": 1
         },
-        "reentry_cooldown": {},
-        "buffered_holdings": 2
+        "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (2 trade(s)).",
-        "trade_count": 2,
+        "note": "Rebalanced after open settle (4 trade(s)).",
+        "trade_count": 4,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 10,
-        "buys": 6,
-        "sells": 3,
-        "trims": 1,
-        "full_exits": 3,
+        "total": 14,
+        "buys": 7,
+        "sells": 4,
+        "trims": 3,
+        "full_exits": 4,
         "adjacent_side_flips": [],
         "adjacent_flip_count": 0
       }
@@ -243,21 +250,21 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:21.963739+00:00",
+        "reviewed_at": "2026-09-25T08:30:39.782580+00:00",
         "applied": true,
         "enough_history": true,
         "cost_drag": 0.0087,
         "total_costs": 8.71,
         "trade_count": 3,
-        "excess_after_costs": 0.0021,
+        "excess_after_costs": 0.0044,
         "knobs_after": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.3,
+          "min_conviction": 0.25,
           "sector_cap": 0.2
         },
         "proposed_changes": {
-          "min_conviction": 0.3
+          "min_conviction": 0.25
         },
         "reasons": [
           "Large idle cash with low cost drag — ease min_conviction."
@@ -297,13 +304,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:22.319978+00:00",
+        "reviewed_at": "2026-09-25T08:30:40.154074+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.0063,
         "total_costs": 6.35,
-        "trade_count": 84,
-        "excess_after_costs": 0.0063,
+        "trade_count": 88,
+        "excess_after_costs": 0.0093,
         "knobs_after": {
           "max_positions": 120,
           "skip_timing_wait": true,
@@ -316,30 +323,30 @@
         ]
       },
       "rebalance_state": {
-        "exit_streak": {
+        "exit_streak": {},
+        "reentry_cooldown": {
           "FOUR.L": 1,
           "KGF.L": 1,
           "RTO.L": 1,
           "RAT.L": 1
         },
-        "reentry_cooldown": {},
-        "buffered_holdings": 4
+        "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (1 trade(s)).",
-        "trade_count": 1,
+        "note": "Rebalanced after open settle (4 trade(s)).",
+        "trade_count": 4,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 18,
-        "buys": 9,
-        "sells": 9,
+        "total": 19,
+        "buys": 7,
+        "sells": 12,
         "trims": 0,
-        "full_exits": 9,
+        "full_exits": 12,
         "adjacent_side_flips": [],
         "adjacent_flip_count": 0
       }
@@ -354,7 +361,7 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:22.321492+00:00",
+        "reviewed_at": "2026-09-25T08:30:40.198931+00:00",
         "applied": false,
         "enough_history": false,
         "cost_drag": 0.005,
@@ -369,7 +376,7 @@
         },
         "proposed_changes": {},
         "reasons": [
-          "Need ≥2 epoch marks and ≥1 epoch trades since last knob apply (or ≥4 lifetime marks and ≥2 trades when no epoch yet) — epoch marks=None, epoch trades=None, lifetime marks=2, lifetime trades=56.",
+          "Need ≥2 epoch marks and ≥1 epoch trades since last knob apply (or ≥4 lifetime marks and ≥2 trades when no epoch yet) — epoch marks=None, epoch trades=None, lifetime marks=3, lifetime trades=56.",
           "No knob change warranted from current reviewed outcomes."
         ]
       },
@@ -380,8 +387,8 @@
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (56 trade(s)).",
-        "trade_count": 56,
+        "note": "Rebalanced after open settle (0 trade(s)).",
+        "trade_count": 0,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
@@ -407,13 +414,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:22.363770+00:00",
+        "reviewed_at": "2026-09-25T08:30:40.243447+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.2343,
         "total_costs": 234.34,
         "trade_count": 49,
-        "excess_after_costs": -0.2407,
+        "excess_after_costs": -0.2383,
         "knobs_after": {
           "max_positions": 5,
           "skip_timing_wait": true,
@@ -426,7 +433,7 @@
         },
         "reasons": [
           "High cost drag (23.4%) — raise min_conviction.",
-          "Weak excess after costs (-24.1%) — reduce max_positions."
+          "Weak excess after costs (-23.8%) — reduce max_positions."
         ]
       },
       "rebalance_state": {
@@ -436,8 +443,8 @@
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (1 trade(s)).",
-        "trade_count": 1,
+        "note": "Rebalanced after open settle (0 trade(s)).",
+        "trade_count": 0,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
@@ -463,13 +470,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:23.286224+00:00",
+        "reviewed_at": "2026-09-25T08:30:41.158613+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.1969,
         "total_costs": 196.88,
         "trade_count": 44,
-        "excess_after_costs": -0.2062,
+        "excess_after_costs": -0.2038,
         "knobs_after": {
           "max_positions": 5,
           "skip_timing_wait": true,
@@ -482,7 +489,7 @@
         },
         "reasons": [
           "High cost drag (19.7%) — raise min_conviction.",
-          "Weak excess after costs (-20.6%) — reduce max_positions."
+          "Weak excess after costs (-20.4%) — reduce max_positions."
         ]
       },
       "rebalance_state": {
@@ -492,8 +499,8 @@
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (1 trade(s)).",
-        "trade_count": 1,
+        "note": "Rebalanced after open settle (0 trade(s)).",
+        "trade_count": 0,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
@@ -519,13 +526,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:24.100967+00:00",
+        "reviewed_at": "2026-09-25T08:30:41.965265+00:00",
         "applied": false,
         "enough_history": true,
         "cost_drag": 0.1972,
         "total_costs": 197.22,
         "trade_count": 45,
-        "excess_after_costs": -0.2067,
+        "excess_after_costs": -0.2043,
         "knobs_after": {
           "max_positions": 5,
           "skip_timing_wait": true,
@@ -538,7 +545,7 @@
         },
         "reasons": [
           "High cost drag (19.7%) — raise min_conviction.",
-          "Weak excess after costs (-20.7%) — reduce max_positions."
+          "Weak excess after costs (-20.4%) — reduce max_positions."
         ]
       },
       "rebalance_state": {
@@ -548,8 +555,8 @@
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (2 trade(s)).",
-        "trade_count": 2,
+        "note": "Rebalanced after open settle (0 trade(s)).",
+        "trade_count": 0,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
@@ -575,13 +582,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:24.962785+00:00",
+        "reviewed_at": "2026-09-25T08:30:42.831846+00:00",
         "applied": false,
         "enough_history": true,
-        "cost_drag": 0.2375,
-        "total_costs": 237.5,
-        "trade_count": 33,
-        "excess_after_costs": -0.237,
+        "cost_drag": 0.2527,
+        "total_costs": 252.74,
+        "trade_count": 36,
+        "excess_after_costs": -0.2587,
         "knobs_after": {
           "max_positions": 3,
           "skip_timing_wait": true,
@@ -592,33 +599,40 @@
           "min_conviction": 0.4
         },
         "reasons": [
-          "High cost drag (15.0%) — raise min_conviction."
+          "High cost drag (16.8%) — raise min_conviction."
         ]
       },
       "rebalance_state": {
-        "exit_streak": {
+        "exit_streak": {},
+        "reentry_cooldown": {
           "PAF.L": 1
         },
-        "reentry_cooldown": {},
-        "buffered_holdings": 1
+        "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
-        "trade_count": 0,
+        "note": "Rebalanced after open settle (3 trade(s)).",
+        "trade_count": 3,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 5,
-        "buys": 2,
-        "sells": 2,
-        "trims": 1,
-        "full_exits": 2,
-        "adjacent_side_flips": [],
-        "adjacent_flip_count": 0
+        "total": 8,
+        "buys": 3,
+        "sells": 3,
+        "trims": 2,
+        "full_exits": 3,
+        "adjacent_side_flips": [
+          {
+            "ticker": "PAF.L",
+            "from_side": "buy",
+            "to_side": "sell",
+            "acted_at": "2026-09-25T09:29:27.307261+01:00"
+          }
+        ],
+        "adjacent_flip_count": 1
       }
     },
     "ai_judgment_fair": {
@@ -631,13 +645,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:25.676537+00:00",
+        "reviewed_at": "2026-09-25T08:30:43.519788+00:00",
         "applied": false,
         "enough_history": true,
-        "cost_drag": 0.1338,
-        "total_costs": 133.77,
-        "trade_count": 27,
-        "excess_after_costs": -0.1452,
+        "cost_drag": 0.1353,
+        "total_costs": 135.35,
+        "trade_count": 30,
+        "excess_after_costs": -0.1539,
         "knobs_after": {
           "max_positions": 3,
           "skip_timing_wait": true,
@@ -650,29 +664,36 @@
         ]
       },
       "rebalance_state": {
-        "exit_streak": {
+        "exit_streak": {},
+        "reentry_cooldown": {
           "PAF.L": 1
         },
-        "reentry_cooldown": {},
-        "buffered_holdings": 1
+        "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
-        "trade_count": 0,
+        "note": "Rebalanced after open settle (3 trade(s)).",
+        "trade_count": 3,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 4,
-        "buys": 2,
-        "sells": 2,
-        "trims": 0,
-        "full_exits": 2,
-        "adjacent_side_flips": [],
-        "adjacent_flip_count": 0
+        "total": 7,
+        "buys": 3,
+        "sells": 3,
+        "trims": 1,
+        "full_exits": 3,
+        "adjacent_side_flips": [
+          {
+            "ticker": "PAF.L",
+            "from_side": "buy",
+            "to_side": "sell",
+            "acted_at": "2026-09-25T09:29:40.571454+01:00"
+          }
+        ],
+        "adjacent_flip_count": 1
       }
     },
     "rules_fair": {
@@ -685,13 +706,13 @@
         "min_rebalance_notional_gbp": 10.0
       },
       "decision_review": {
-        "reviewed_at": "2026-09-24T08:30:25.691551+00:00",
+        "reviewed_at": "2026-09-25T08:30:43.535507+00:00",
         "applied": false,
         "enough_history": true,
-        "cost_drag": 0.0808,
-        "total_costs": 80.8,
-        "trade_count": 27,
-        "excess_after_costs": -0.118,
+        "cost_drag": 0.0825,
+        "total_costs": 82.47,
+        "trade_count": 30,
+        "excess_after_costs": -0.1268,
         "knobs_after": {
           "max_positions": 3,
           "skip_timing_wait": true,
@@ -704,29 +725,36 @@
         ]
       },
       "rebalance_state": {
-        "exit_streak": {
+        "exit_streak": {},
+        "reentry_cooldown": {
           "PAF.L": 1
         },
-        "reentry_cooldown": {},
-        "buffered_holdings": 1
+        "buffered_holdings": 0
       },
       "last_run": {
         "acted": true,
-        "note": "Rebalanced after open settle (0 trade(s)).",
-        "trade_count": 0,
+        "note": "Rebalanced after open settle (3 trade(s)).",
+        "trade_count": 3,
         "duplicate_day_skip": false,
         "buffer_holds_planned": 0,
         "reentry_skips_planned": 0,
         "same_trading_day_as_as_of": true
       },
       "trades_last_7d": {
-        "total": 4,
-        "buys": 2,
-        "sells": 2,
-        "trims": 0,
-        "full_exits": 2,
-        "adjacent_side_flips": [],
-        "adjacent_flip_count": 0
+        "total": 7,
+        "buys": 3,
+        "sells": 3,
+        "trims": 1,
+        "full_exits": 3,
+        "adjacent_side_flips": [
+          {
+            "ticker": "PAF.L",
+            "from_side": "buy",
+            "to_side": "sell",
+            "acted_at": "2026-09-25T09:29:54.886722+01:00"
+          }
+        ],
+        "adjacent_flip_count": 1
       }
     }
   },
@@ -735,13 +763,43 @@
       "severity": "watch",
       "track": "rules",
       "title": "Elevated rules-track cost drag",
-      "summary": "cost_drag=44.2% — review churn guards and conviction floor."
+      "summary": "cost_drag=45.4% — review churn guards and conviction floor."
     },
     {
       "severity": "watch",
       "track": "ai_judgment",
       "title": "Elevated AI-judgment cost drag",
-      "summary": "cost_drag=38.1% — review churn guards and selectivity."
+      "summary": "cost_drag=39.4% — review churn guards and selectivity."
+    },
+    {
+      "severity": "info",
+      "track": "rules",
+      "title": "Adjacent buy/sell flips in lookback window",
+      "summary": "1 adjacent side flip(s) in last 7d."
+    },
+    {
+      "severity": "info",
+      "track": "ai_judgment",
+      "title": "Adjacent buy/sell flips in lookback window",
+      "summary": "1 adjacent side flip(s) in last 7d."
+    },
+    {
+      "severity": "info",
+      "track": "ai_judgment_exclusion_u4",
+      "title": "Adjacent buy/sell flips in lookback window",
+      "summary": "1 adjacent side flip(s) in last 7d."
+    },
+    {
+      "severity": "info",
+      "track": "ai_judgment_fair",
+      "title": "Adjacent buy/sell flips in lookback window",
+      "summary": "1 adjacent side flip(s) in last 7d."
+    },
+    {
+      "severity": "info",
+      "track": "rules_fair",
+      "title": "Adjacent buy/sell flips in lookback window",
+      "summary": "1 adjacent side flip(s) in last 7d."
     }
   ]
 }
