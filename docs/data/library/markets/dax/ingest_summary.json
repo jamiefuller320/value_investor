@@ -1,9 +1,8 @@
 {
-  "run_at": "2026-09-25T16:51:26.611635+00:00",
+  "run_at": "2026-09-25T18:08:29.439058+00:00",
   "market_id": "dax",
   "targets": [
     "G1A.DE",
-    "FME.DE",
     "DHL.DE"
   ],
   "target_details": [
@@ -14,14 +13,6 @@
       "filings_with_body": 0,
       "indexed_without_body": 0,
       "reason": "unmeasured"
-    },
-    {
-      "ticker": "FME.DE",
-      "priority_score": 19.012500000000003,
-      "filings_total": 88,
-      "filings_with_body": 82,
-      "indexed_without_body": 6,
-      "reason": "indexed_without_body"
     },
     {
       "ticker": "DHL.DE",
@@ -82,68 +73,6 @@
         "failed": 0,
         "with_body_before": 0,
         "with_body_after": 0,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    },
-    {
-      "ticker": "FME.DE",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 88,
-        "filings_with_body": 82,
-        "indexed_without_body": 6
-      },
-      "after": {
-        "filings_total": 88,
-        "filings_with_body": 88,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 74,
-        "annual": 4,
-        "interim": 3,
-        "trading_update": 0,
-        "other": 67,
-        "with_body": 74,
-        "period_coverage": {
-          "annual": {
-            "total": 4,
-            "with_body": 4
-          },
-          "interim": {
-            "total": 3,
-            "with_body": 3
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 67,
-            "with_body": 67
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 88,
-        "with_body_after": 88,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
         "deadline_hit": false,
@@ -220,23 +149,21 @@
       }
     }
   ],
-  "improved": [
-    "FME.DE"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-25T16:48:10.679262+00:00",
+    "snapshot_at": "2026-09-25T18:07:55.528656+00:00",
     "market_id": "dax",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 10,
-    "indexed_without_body": 6,
+    "indexed_without_body": 0,
     "bodies_min": 1,
     "bodies_median": 1,
-    "bodies_max": 82,
+    "bodies_max": 88,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
@@ -255,12 +182,8 @@
       "VOW3.DE",
       "MUV2.DE"
     ],
-    "indexed_without_body_tickers": [
-      "FME.DE"
-    ],
-    "indexed_without_body_by_ticker": {
-      "FME.DE": 6
-    },
+    "indexed_without_body_tickers": [],
+    "indexed_without_body_by_ticker": {},
     "parked_tickers": [
       "BAS.DE",
       "DTE.DE",
@@ -277,14 +200,12 @@
     "effective_thin_body_tickers": [
       "DHL.DE"
     ],
-    "effective_indexed_without_body": 6,
-    "effective_indexed_without_body_tickers": [
-      "FME.DE"
-    ],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-25T16:51:23.295836+00:00",
+    "snapshot_at": "2026-09-25T18:08:23.916499+00:00",
     "market_id": "dax",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 1,
@@ -346,19 +267,12 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "dax",
-    "assessed_at": "2026-09-25T16:48:10.999812+00:00",
+    "assessed_at": "2026-09-25T18:07:56.117003+00:00",
     "unmeasured": [
       "G1A.DE"
     ],
     "zero_body": [],
-    "indexed_without_body": [
-      {
-        "ticker": "FME.DE",
-        "indexed_without_body": 6,
-        "filings_total": 88,
-        "filings_with_body": 82
-      }
-    ],
+    "indexed_without_body": [],
     "thin_need_discovery": [
       "DHL.DE",
       "HEI.DE",
@@ -375,27 +289,25 @@
     "primary_blocker": "unmeasured",
     "force_discovery_scan": true,
     "auto_pin_tickers": [
-      "G1A.DE",
-      "FME.DE"
+      "G1A.DE"
     ],
     "recommended_actions": [
       "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
-      "Prefer indexed-without-body body refetch (1 tickers, top: FME.DE(6))",
       "Discovery/IR seed for 10 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 1,
       "zero_body": 0,
-      "indexed_without_body_tickers": 1,
-      "indexed_without_body_rows": 6,
+      "indexed_without_body_tickers": 0,
+      "indexed_without_body_rows": 0,
       "thin_need_discovery": 10,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 191.961819278,
+  "used_seconds": 27.20855055899999,
   "budget_seconds": 1050.0,
-  "leftover_seconds": 858.038180722,
+  "leftover_seconds": 1022.791449441,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -403,9 +315,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "dax",
-    "updated_at": "2026-09-25T16:51:23.299158+00:00",
+    "updated_at": "2026-09-25T18:08:23.921825+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -500,7 +412,7 @@
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "BAS.DE",
       "DHL.DE",
