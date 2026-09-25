@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-25T13:17:17.824876+00:00`
+Generated: `2026-09-25T17:27:51.733386+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -26,7 +26,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Progress report present (generated_at=2026-09-22T08:34:03+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
 - [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=fail at 2026-09-25T12:58:07.403639+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Ops monitor overall=fail at 2026-09-25T13:16:33.228942+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
@@ -36,7 +36,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 66
+- Occasion count: 69
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `Merge conflicts in deferred-ideas.json with main` — 2×
@@ -45,16 +45,6 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
 - `pytest test_summary: WIX/BT action notes lost screen TTM after overly broad eng-20260919-14 suppress` — 1×
 - `engineering_tasks.json queue_clearing + automation.json queue snapshots vs main (#757 ledger)` — 1×
-
-## Ops-monitor email handoff
-- Email subject: `FTSE Ops Monitor — FAIL`
-- Findings: 6 (open=6, resolved=0)
-- [open] WARN Ingest loop hit runtime cutoff — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Lifecycle maturity mix trajectory stalled — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] FAIL So-what learning gap active (thin_memo_counted_as_coverage) — planned: `draft_ops_engineering_task` (Draft supervised ops engineering task (ops-monitor draft path))
-- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
