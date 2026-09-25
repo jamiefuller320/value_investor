@@ -52,6 +52,26 @@ Manual rememo of an adequate set (after bodies already exist):
 python3 scripts/rememo_adequate_tickers.py
 ```
 
+## First memo for buy-tier names with bodies (FTSE)
+
+Scheduled path is **Sunday** `email-report` → `--research-docs` (cap 12 active +
+12 alumni). Selection uses `effective_screen_signal` (FCF-/research-adjusted), so
+raw `signal=buy` with `adjusted_signal=hold` is **not** researched. FTSE Sunday
+does **not** prefer no-memo names (library `_research_markets` does via N114).
+
+Weekday `--weekday-rememo` only rewrites **existing** memos (body-lag). It never
+creates a first memo.
+
+Escape hatch (manual / dispatch, not cron): `ftse-research-backfill` /
+`.github/workflows/memo-backfill.yml`. Uses **raw** buy-tier signal, so it can
+create first memos for FCF-adjusted holds. Pin a narrow set:
+
+```bash
+ftse-research-backfill --status --tickers EWG.L,GNS.L,PINE.L,TRST.L
+ftse-research-backfill --dry-run --batch-size 4 --tickers EWG.L,GNS.L,PINE.L,TRST.L
+ftse-research-backfill --batch-size 4 --tickers EWG.L,GNS.L,PINE.L,TRST.L
+```
+
 ## Weekday rememo (after ingest-loop)
 
 Mon–Fri `ingest-loop` thickens filing bodies offline. After a non-chaining pass,

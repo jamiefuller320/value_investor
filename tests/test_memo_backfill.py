@@ -298,6 +298,38 @@ def test_run_missing_memo_backfill_dry_run(mock_process: object, tmp_path: Path)
     mock_process.assert_not_called()
 
 
+@patch("value_investor.research.memo_backfill._process_ticker")
+def test_run_missing_memo_backfill_tickers_pin(mock_process: object, tmp_path: Path):
+    latest = tmp_path / "latest.json"
+    latest.write_text(
+        json.dumps(
+            {
+                "reports": [
+                    _report("AAA.L", signal="strong_buy", conviction=0.9).to_dict(),
+                    _report("BBB.L", conviction=0.8).to_dict(),
+                    _report("CCC.L", conviction=0.7).to_dict(),
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    summary = run_missing_memo_backfill(
+        latest_path=latest,
+        output_dir=tmp_path / "output",
+        memo_dir=tmp_path / "memos",
+        committed_dir=tmp_path / "committed",
+        state_path=tmp_path / "state.json",
+        batch_size=4,
+        api_key="key",
+        dry_run=True,
+        dest_dir=tmp_path / "docs",
+        tickers=["CCC.L", "AAA.L"],
+    )
+    assert summary.selected == ["CCC.L", "AAA.L"]
+    assert summary.remaining == []
+    mock_process.assert_not_called()
+
+
 def test_list_legacy_rememo_reports_prioritizes_strong_buy(tmp_path: Path):
     from value_investor.research.memo_backfill import list_legacy_rememo_reports
 
