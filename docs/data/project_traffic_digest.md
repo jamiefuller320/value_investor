@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-25T17:58:46.315676+00:00`
+Generated: `2026-09-25T20:38:14.959302+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -26,17 +26,17 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Progress report present (generated_at=2026-09-22T08:34:03+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
 - [ok] Queue health overall=blocked; headline=Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=fail at 2026-09-25T13:16:33.228942+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Ops monitor overall=warn at 2026-09-25T17:57:16.178687+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `human`/human PR #857 `eng-20260924-03` — Close library ingest gaps for cac40 / SGO.PA (chain 2/3: 0/0 improved, run igc-20260921-04)
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 69
+- Occasion count: 70
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `Merge conflicts in deferred-ideas.json with main` — 2×
@@ -45,14 +45,6 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
 - `pytest test_summary: WIX/BT action notes lost screen TTM after overly broad eng-20260919-14 suppress` — 1×
 - `engineering_tasks.json queue_clearing + automation.json queue snapshots vs main (#757 ledger)` — 1×
-
-## Ops-monitor email handoff
-- Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 4 (open=3, resolved=1)
-- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [resolved] WARN Orphaned pr_open engineering tasks — planned: `remediate_queue_merge_sync` (PM v1: recover/mark-merged engineering queue reconciliation; cleared lag=['none'])
-- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
