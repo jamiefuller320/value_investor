@@ -194,16 +194,42 @@ def execute_dashboard_command(
     return {"action": action, "event_type": event_type, "command_id": command_id}
 
 
-def _lifecycle_ack_dedupe_key(row: dict[str, Any]) -> str | None:
-    """Collapse catalog aliases (``*_track``) so parallel factor acks dispatch once."""
+_LIFECYCLE_EXPERIMENT_ACTIONS = frozenset(
+    {
+        "lifecycle-experiment-ack",
+        "lifecycle-experiment-start",
+    }
+)
+
+
+def _lifecycle_experiment_dedupe_key(row: dict[str, Any]) -> str | None:
+    """Collapse catalog factor chips that share one experiment id.
+
+    Acknowledge and Start both authorize by ``experiment_id`` (not ``factor_id``).
+    Parallel clicks on ``add_cadence`` + ``entry_kind_tag`` both carry
+    ``entry_dca_overlay`` — dispatch once per action+experiment in a poll batch.
+    """
     action = str(row.get("action") or "").strip()
-    if action != "lifecycle-experiment-ack":
+    if action not in _LIFECYCLE_EXPERIMENT_ACTIONS:
         return None
     payload = row.get("payload") if isinstance(row.get("payload"), dict) else {}
     experiment_id = canonical_experiment_id(str(payload.get("experiment_id") or ""))
     if not experiment_id:
         return None
     return f"{action}:{experiment_id}"
+
+
+def _duplicate_lifecycle_skip_meta(action: str) -> tuple[str, str]:
+    """Return ``(skipped_code, status_message)`` for a same-experiment duplicate."""
+    if action == "lifecycle-experiment-start":
+        return (
+            "duplicate_lifecycle_start",
+            "Skipped duplicate lifecycle-experiment-start (same experiment)",
+        )
+    return (
+        "duplicate_lifecycle_ack",
+        "Skipped duplicate lifecycle-experiment-ack (same experiment)",
+    )
 
 
 def process_pending_dashboard_commands(
@@ -219,20 +245,22 @@ def process_pending_dashboard_commands(
 
     pending = fetch_pending_commands(cfg, limit=limit)
     processed: list[dict[str, Any]] = []
-    seen_lifecycle_acks: set[str] = set()
+    seen_lifecycle_experiments: set[str] = set()
     for row in pending:
         command_id = str(row.get("id") or "")
         if not command_id:
             continue
-        dedupe_key = _lifecycle_ack_dedupe_key(row)
-        if dedupe_key and dedupe_key in seen_lifecycle_acks:
+        action = str(row.get("action") or "").strip()
+        dedupe_key = _lifecycle_experiment_dedupe_key(row)
+        if dedupe_key and dedupe_key in seen_lifecycle_experiments:
+            skipped_code, skip_message = _duplicate_lifecycle_skip_meta(action)
             if dry_run:
                 processed.append(
                     {
                         "id": command_id,
-                        "action": row.get("action"),
+                        "action": action or row.get("action"),
                         "dry_run": True,
-                        "skipped": "duplicate_lifecycle_ack",
+                        "skipped": skipped_code,
                     }
                 )
                 continue
@@ -240,19 +268,19 @@ def process_pending_dashboard_commands(
                 cfg,
                 command_id,
                 status="done",
-                message="Skipped duplicate lifecycle-experiment-ack (same experiment)",
+                message=skip_message,
             )
             processed.append(
                 {
                     "id": command_id,
-                    "action": row.get("action"),
+                    "action": action or row.get("action"),
                     "status": "done",
-                    "skipped": "duplicate_lifecycle_ack",
+                    "skipped": skipped_code,
                 }
             )
             continue
         if dedupe_key:
-            seen_lifecycle_acks.add(dedupe_key)
+            seen_lifecycle_experiments.add(dedupe_key)
         if dry_run:
             processed.append({"id": command_id, "action": row.get("action"), "dry_run": True})
             continue
