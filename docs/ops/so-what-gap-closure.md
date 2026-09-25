@@ -37,16 +37,28 @@ runbook actions (ingest → body-lag rememo; `ftse-analysis-review promote`).
 so-what): sample must drop below 5 thin/zero-body focus memos after Lane A — not
 rememo widening.
 
+**Factory path (preferred — no hand pins):**
+
+| Trigger | Behaviour |
+|---------|-----------|
+| Daily **ops-monitor** `--apply` | `thin_memo_factory_heal`: deepen zero-body memos → body-lag rememo pending (API key) → refresh `system_gaps.json` |
+| **euro-ingest-loop** (each sprint slot) | Same heal after buy-tier ingest-loop; commits with library artifacts |
+
+Drill-down CLI (optional):
+
 ```bash
 ftse-progress-report thin-memo-clearance              # status + commands
-ftse-progress-report thin-memo-clearance --run-deepen --refresh-gaps
+ftse-progress-report thin-memo-clearance --run-heal --refresh-gaps
+ftse-progress-report thin-memo-clearance --run-deepen --refresh-gaps   # deepen only
 ftse-library deepen-thin --markets euro_depth --rememo   # when bodies land (API key)
 ftse-analysis-review system-gaps --write
 ftse-progress-report so-what
 ```
 
-Daily **ops monitor** surfaces an open gap; progress report includes a **Thin-memo
-clearance** section when the flag is live.
+Daily **ops monitor** surfaces an open gap and **heals** when zero-body or
+body-lag rememo pending; progress report includes a **Thin-memo clearance**
+section when the flag is live. Do **not** rely on one-off `--pin-ticker`
+backfills to clear the sample — pin only as a bridge while factory heal lands.
 
 Structured `fcf.filing_aligned` / `screen_ttm` are recovered from persisted mismatch action notes when the `fcf` blob was dropped on overlay/export refresh, so auto policy can resolve without hand-writing bridges.
 

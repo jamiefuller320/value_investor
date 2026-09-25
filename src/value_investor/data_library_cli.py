@@ -1085,6 +1085,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     reingest_p = sub.add_parser(
         "reingest-filings",
+        parents=[common],
         help="Re-ingest primary filings for existing research memos (backfill regimes)",
     )
     reingest_p.add_argument(
@@ -1107,6 +1108,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     repair_p = sub.add_parser(
         "repair-research",
+        parents=[common],
         help="Re-ingest filings and re-memo library research tickers (e.g. batch 1 repair)",
     )
     repair_p.add_argument(
@@ -1134,6 +1136,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     deepen_p = sub.add_parser(
         "deepen-thin",
+        parents=[common],
         help="Re-ingest filings and gap-fill source deepen for thin library memos (0 bodies)",
     )
     deepen_p.add_argument(
@@ -1167,6 +1170,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     retry_p = sub.add_parser(
         "retry-failed",
+        parents=[common],
         help="Re-fetch library metrics rows that currently have errors",
     )
     retry_p.add_argument(

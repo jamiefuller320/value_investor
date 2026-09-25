@@ -16,6 +16,8 @@ from value_investor.system_gap_analysis import (
 )
 
 THIN_MEMO_FLAG_ID = "thin_memo_counted_as_coverage"
+# Cap body-lag rememo per factory heal so ops-monitor / euro sprint stay bounded.
+DEFAULT_BODY_LAG_REMEMO_CAP = 5
 
 
 def _library_root(data_dir: Path) -> Path:
@@ -203,3 +205,141 @@ def _rememo_pending_after_ingest(library_root: Path, market_id: str) -> list[str
         if grade in THIN_GRADES and memo_bodies <= 0:
             pending.append(str(meta.get("ticker") or entry.name))
     return pending
+
+
+def _targets_for_tickers(
+    library_root: Path,
+    market_id: str,
+    tickers: list[str],
+) -> list[dict[str, Any]]:
+    """Build deepen/rememo targets for an explicit ticker list on one market."""
+    from value_investor.library_maintenance import (
+        _company_name_for_memo,
+        _filings_body_count,
+        market_dir,
+    )
+
+    research_root = market_dir(library_root, market_id) / "screen" / "research"
+    screen_dir = market_dir(library_root, market_id) / "screen"
+    targets: list[dict[str, Any]] = []
+    for ticker in tickers:
+        ticker_dir = research_root / ticker
+        if not ticker_dir.is_dir():
+            continue
+        sources_dir = ticker_dir / "sources"
+        targets.append(
+            {
+                "market": market_id,
+                "ticker": ticker,
+                "company_name": _company_name_for_memo(ticker_dir, ticker),
+                "sources_dir": sources_dir,
+                "screen_dir": screen_dir,
+                "bodies_before": _filings_body_count(sources_dir),
+                "reasons": ["thin_memo_factory_heal"],
+            }
+        )
+    return targets
+
+
+def run_thin_memo_factory_heal(
+    *,
+    data_dir: Path | None = None,
+    library_root: Path | None = None,
+    apply_deepen: bool = True,
+    apply_rememo: bool = False,
+    api_key: str | None = None,
+    rememo_cap: int = DEFAULT_BODY_LAG_REMEMO_CAP,
+    refresh_system_gaps: bool = False,
+) -> dict[str, Any]:
+    """
+    Enduring Lane A heal for ``thin_memo_counted_as_coverage``.
+
+    1. Deepen zero-body focus memos (``deepen-thin`` path, no rememo spray).
+    2. Optionally body-lag rememo only rememo-pending names (disk bodies already up).
+    3. Optionally refresh committed ``system_gaps.json``.
+
+    Used by ops-monitor ``apply_auto_fixes`` and euro-ingest-loop — not a pin-only
+    backfill. Does not widen ``rememo_reason`` or touch FTSE live rememo spray.
+    """
+    from value_investor.library_maintenance import (
+        deepen_library_research_memos,
+        list_thin_library_memos,
+    )
+
+    data_dir = Path(data_dir or Path("docs/data"))
+    library_root = Path(library_root or _library_root(data_dir))
+    before = build_thin_memo_clearance_status(data_dir=data_dir, library_root=library_root)
+    market = str(before.get("market_id") or "euro_depth")
+    deepen_payload: dict[str, Any] | None = None
+    rememo_payload: dict[str, Any] | None = None
+
+    if apply_deepen:
+        zero_targets = list_thin_library_memos(
+            library_root,
+            markets=[market],
+            max_with_body=0,
+        )
+        if zero_targets:
+            deepen_payload = deepen_library_research_memos(
+                library_root,
+                zero_targets,
+                api_key=None,
+                rememo_when_improved=False,
+                rememo_all=False,
+            )
+
+    if apply_rememo:
+        pending = list(before.get("rememo_pending_tickers") or [])
+        if deepen_payload is not None:
+            # Recompute pending after deepen so same-pass body gains rememo.
+            pending = _rememo_pending_after_ingest(library_root, market)
+        pending = pending[: max(0, int(rememo_cap))]
+        if pending:
+            if not (api_key or "").strip():
+                rememo_payload = {
+                    "skipped": True,
+                    "reason": "missing_api_key",
+                    "pending": pending,
+                }
+            else:
+                rememo_targets = _targets_for_tickers(library_root, market, pending)
+                rememo_payload = deepen_library_research_memos(
+                    library_root,
+                    rememo_targets,
+                    api_key=api_key,
+                    rememo_when_improved=False,
+                    rememo_all=True,
+                )
+
+    if refresh_system_gaps:
+        from value_investor.system_gap_analysis import (
+            COMMITTED_GAPS_PATH,
+            build_system_gap_snapshot,
+            write_system_gap_snapshot,
+        )
+
+        snapshot = build_system_gap_snapshot(
+            data_dir=data_dir,
+            library_root=library_root,
+        )
+        write_system_gap_snapshot(
+            snapshot,
+            path=data_dir / COMMITTED_GAPS_PATH.name,
+        )
+
+    after = build_thin_memo_clearance_status(data_dir=data_dir, library_root=library_root)
+    return {
+        "market_id": market,
+        "before": before,
+        "after": after,
+        "deepen": deepen_payload,
+        "rememo": rememo_payload,
+        "cleared": bool(after.get("cleared")),
+        "progressed": (
+            int(after.get("thin_sample_count") or 0) < int(before.get("thin_sample_count") or 0)
+            or int(after.get("zero_body_target_count") or 0)
+            < int(before.get("zero_body_target_count") or 0)
+            or int(after.get("rememo_pending_count") or 0)
+            < int(before.get("rememo_pending_count") or 0)
+        ),
+    }

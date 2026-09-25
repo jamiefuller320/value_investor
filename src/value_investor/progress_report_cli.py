@@ -77,12 +77,20 @@ def main(argv: list[str] | None = None) -> int:
     tmc_p.add_argument(
         "--run-deepen",
         action="store_true",
-        help="Run ftse-library deepen-thin on the focus market (ingest bodies, no rememo)",
+        help="Run factory deepen on zero-body focus memos (ingest bodies, no rememo)",
+    )
+    tmc_p.add_argument(
+        "--run-heal",
+        action="store_true",
+        help=(
+            "Run enduring thin_memo factory heal: deepen zero-body memos, then "
+            "body-lag rememo pending names when CURSOR_API_KEY is set, refresh system_gaps"
+        ),
     )
     tmc_p.add_argument(
         "--refresh-gaps",
         action="store_true",
-        help="After deepen, refresh docs/data/system_gaps.json",
+        help="After deepen/heal, refresh docs/data/system_gaps.json",
     )
     tmc_p.set_defaults(func=_cmd_thin_memo_clearance)
 
@@ -157,14 +165,28 @@ def _cmd_thin_memo_clearance(args: argparse.Namespace) -> int:
     from pathlib import Path
 
     from value_investor.analysis_review_cli import _cmd_system_gaps
+    from value_investor.cursor_api_key import resolve_cursor_api_key
     from value_investor.data_library_cli import cmd_deepen_thin
     from value_investor.thin_memo_clearance import (
         build_thin_memo_clearance_status,
         render_thin_memo_clearance_markdown,
+        run_thin_memo_factory_heal,
     )
 
     status = build_thin_memo_clearance_status()
-    if args.run_deepen:
+    if args.run_heal:
+        api_key = resolve_cursor_api_key()[0] or None
+        heal = run_thin_memo_factory_heal(
+            apply_deepen=True,
+            apply_rememo=bool(api_key),
+            api_key=api_key,
+            refresh_system_gaps=bool(args.refresh_gaps),
+        )
+        status = heal.get("after") or build_thin_memo_clearance_status()
+        if args.json:
+            print(json.dumps({"heal": heal, "status": status}, indent=2))
+            return 0 if status.get("cleared") else 1
+    elif args.run_deepen:
         market = str(status.get("market_id") or "euro_depth")
         deepen_args = argparse.Namespace(
             root=Path("docs/data/library"),
@@ -179,7 +201,7 @@ def _cmd_thin_memo_clearance(args: argparse.Namespace) -> int:
         if code != 0:
             return code
         status = build_thin_memo_clearance_status()
-    if args.refresh_gaps:
+    if args.refresh_gaps and not args.run_heal:
         gap_args = argparse.Namespace(
             data_dir=Path("docs/data"),
             output_dir=Path("output"),

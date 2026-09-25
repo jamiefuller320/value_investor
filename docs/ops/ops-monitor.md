@@ -73,6 +73,10 @@ Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-require
 - Restamp `open` → `pr_open` when a live engineering PR already exists (stamp lag after orphan-reconcile races; unblocks scoped auto-merge)
 - Normalize corrupt `ingest_health_log.json` (with sibling backup)
 - Micro-compile ingest engineering tasks when buy-tier filing ingest is stalled
+- **Thin-memo factory heal** when `thin_memo_counted_as_coverage` is open: deepen
+  zero-body focus library memos, body-lag rememo pending names (when Cursor API
+  key present), refresh `system_gaps.json` — same Lane A path as euro-ingest-loop
+  (see [so-what-gap-closure.md](so-what-gap-closure.md#thin_memo_counted_as_coverage))
 - Market-rotating library eng gap burn-down when the ingest eng slot is free ([`market-eng-gap-burndown.md`](market-eng-gap-burndown.md))
 - Grade parked engineering tasks and auto-cancel duplicates of merged work
 - Quarantine corrupt or duplicate backtest history snapshots (see [backtest-health.md](backtest-health.md))

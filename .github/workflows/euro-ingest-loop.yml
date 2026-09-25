@@ -269,6 +269,47 @@ jobs:
           )
           PY
 
+      - name: Thin-memo factory heal (Lane A deepen + body-lag rememo)
+        id: thin_memo_heal
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+        run: |
+          set -euo pipefail
+          # Enduring clearance for so-what thin_memo_counted_as_coverage — not pin spray.
+          # Deepens zero-body focus memos; rememos body-lag pending when API key present.
+          ftse-progress-report thin-memo-clearance --run-heal --refresh-gaps --json \
+            | tee /tmp/thin_memo_heal.json \
+            || true
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          path = Path("/tmp/thin_memo_heal.json")
+          cleared = "false"
+          progressed = "false"
+          if path.exists():
+              try:
+                  raw = path.read_text(encoding="utf-8").strip()
+                  # CLI may print heal wrapper or status-only JSON.
+                  data = json.loads(raw)
+                  heal = data.get("heal") if isinstance(data, dict) and "heal" in data else data
+                  status = data.get("status") if isinstance(data, dict) else heal
+                  if isinstance(heal, dict) and heal.get("cleared"):
+                      cleared = "true"
+                  if isinstance(heal, dict) and heal.get("progressed"):
+                      progressed = "true"
+                  if isinstance(status, dict) and status.get("cleared"):
+                      cleared = "true"
+              except json.JSONDecodeError:
+                  pass
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"cleared={cleared}\nprogressed={progressed}\n",
+              encoding="utf-8",
+          )
+          PY
+
       - name: Evaluate library gap-closure follow-up
         id: gap_followup
         if: steps.loop.outputs.recorded_gap_closure != 'true'

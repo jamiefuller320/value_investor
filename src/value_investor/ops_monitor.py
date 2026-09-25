@@ -1291,20 +1291,23 @@ def check_thin_memo_learning_gap() -> list[OpsFinding]:
     threshold = int(status.get("thin_sample_threshold") or 5)
     market = str(status.get("market_id") or "euro_depth")
     zero_n = int(status.get("zero_body_target_count") or 0)
+    rememo_n = int(status.get("rememo_pending_count") or 0)
     summary = (
         f"{status.get('summary')} "
-        f"Run: `ftse-library deepen-thin --markets {market}` then body-lag rememo; "
-        f"refresh with `ftse-analysis-review system-gaps --write` and "
-        f"`ftse-progress-report so-what`."
+        f"Factory heal: ops-monitor / euro-ingest-loop run "
+        f"`thin_memo_factory_heal` (deepen-thin then body-lag rememo); "
+        f"manual drill-down: `ftse-library deepen-thin --markets {market}` then "
+        f"`ftse-analysis-review system-gaps --write` / `ftse-progress-report so-what`."
     )
     severity = "warn" if thin <= threshold + 2 else "fail"
+    # Healable when deepen and/or body-lag rememo can progress the sample.
     return [
         OpsFinding(
             severity=severity,
             category="research",
             title=f"So-what learning gap active ({THIN_MEMO_FLAG_ID})",
             summary=summary,
-            auto_fixable=zero_n > 0,
+            auto_fixable=zero_n > 0 or rememo_n > 0,
         )
     ]
 
@@ -1914,6 +1917,42 @@ def apply_auto_fixes(
                 if finding.category == "backtest" and finding.auto_fixable:
                     finding.fixed = True
                     finding.action_taken = "; ".join(row.detail for row in repairs[:3])
+
+    thin_memo_open = any(
+        "thin_memo_counted_as_coverage" in row.title and row.auto_fixable and not row.fixed
+        for row in findings
+    )
+    if thin_memo_open and apply:
+        from value_investor.cursor_api_key import resolve_cursor_api_key
+        from value_investor.thin_memo_clearance import run_thin_memo_factory_heal
+
+        api_key = resolve_cursor_api_key()[0] or None
+        heal = run_thin_memo_factory_heal(
+            apply_deepen=True,
+            apply_rememo=bool(api_key),
+            api_key=api_key,
+            refresh_system_gaps=True,
+        )
+        before = heal.get("before") or {}
+        after = heal.get("after") or {}
+        detail = (
+            f"thin_memo factory heal on {heal.get('market_id')}: "
+            f"thin {before.get('thin_sample_count')}→{after.get('thin_sample_count')}, "
+            f"zero_body {before.get('zero_body_target_count')}→"
+            f"{after.get('zero_body_target_count')}, "
+            f"rememo_pending {before.get('rememo_pending_count')}→"
+            f"{after.get('rememo_pending_count')}"
+        )
+        results.append({"action": "thin_memo_factory_heal", "detail": detail})
+        for finding in findings:
+            if "thin_memo_counted_as_coverage" not in finding.title:
+                continue
+            finding.action_taken = detail
+            if heal.get("cleared"):
+                finding.fixed = True
+            elif heal.get("progressed"):
+                # Heal ran; leave fail/warn until sample clears (re-verify may soften).
+                finding.action_taken = detail + " (progressed; sample not yet clear)"
 
     phase_b_stalled = any(
         row.title == "Phase B structured-verdict producer stalled" and not row.fixed
