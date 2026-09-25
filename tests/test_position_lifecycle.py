@@ -109,7 +109,9 @@ def test_board_columns_cover_every_catalog_factor():
     assert planned["initiation"]["ready_to_initiate"] is False
     assert planned["initiation"]["acknowledge"]["enabled"] is False
     # Shared experiment may already be acked; planned factors still cite the catalog gate.
-    assert "Already acknowledged" not in str(planned["initiation"]["acknowledge"]["disabled_reason"] or "")
+    assert "Already acknowledged" not in str(
+        planned["initiation"]["acknowledge"]["disabled_reason"] or ""
+    )
     assert planned["initiation"]["acknowledge"]["label"] in {"Acknowledge", "Acknowledged"}
 
 
