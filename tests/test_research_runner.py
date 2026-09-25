@@ -222,9 +222,7 @@ def test_select_research_targets_prefers_no_memo_from_store(tmp_path):
             conviction_score=0.70,
         ),
     ]
-    active, alumni = select_research_targets(
-        reports, store, weekly_cap=2, continue_alumni=False
-    )
+    active, alumni = select_research_targets(reports, store, weekly_cap=2, continue_alumni=False)
     assert [r.ticker for r in active] == ["TRST.L", "MEGP.L"]
     assert alumni == []
 
@@ -267,9 +265,7 @@ def test_select_research_targets_no_memo_strong_beats_memo_buy(tmp_path):
             conviction_score=0.6,
         ),
     ]
-    active, _ = select_research_targets(
-        reports, store, weekly_cap=2, continue_alumni=False
-    )
+    active, _ = select_research_targets(reports, store, weekly_cap=2, continue_alumni=False)
     assert [r.ticker for r in active] == ["NEWS.L", "NEWB.L"]
 
 
