@@ -1,74 +1,99 @@
 {
-  "market_id": "ftse_smallcap",
-  "assessed_at": "2026-09-24T20:32:24.232070+00:00",
-  "unmeasured": [],
+  "market_id": "euro_depth",
+  "assessed_at": "2026-09-25T07:18:09.371577+00:00",
+  "unmeasured": [
+    "OIZ.IR"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "TPT.L",
-      "indexed_without_body": 8,
-      "filings_total": 57,
-      "filings_with_body": 49
+      "ticker": "ABI.BR",
+      "indexed_without_body": 12,
+      "filings_total": 37,
+      "filings_with_body": 25
     },
     {
-      "ticker": "APTD.L",
-      "indexed_without_body": 5,
-      "filings_total": 90,
-      "filings_with_body": 85
+      "ticker": "EVN.VI",
+      "indexed_without_body": 1,
+      "filings_total": 3,
+      "filings_with_body": 2
     },
     {
-      "ticker": "DFS.L",
-      "indexed_without_body": 5,
-      "filings_total": 67,
-      "filings_with_body": 62
+      "ticker": "MC.PA",
+      "indexed_without_body": 1,
+      "filings_total": 3,
+      "filings_with_body": 2
     },
     {
-      "ticker": "FOXT.L",
-      "indexed_without_body": 5,
-      "filings_total": 59,
-      "filings_with_body": 54
+      "ticker": "SAP.DE",
+      "indexed_without_body": 1,
+      "filings_total": 17,
+      "filings_with_body": 16
     },
     {
-      "ticker": "MER.L",
-      "indexed_without_body": 5,
-      "filings_total": 57,
-      "filings_with_body": 52
+      "ticker": "SGO.PA",
+      "indexed_without_body": 1,
+      "filings_total": 2,
+      "filings_with_body": 1
     },
     {
-      "ticker": "REC.L",
-      "indexed_without_body": 5,
-      "filings_total": 66,
-      "filings_with_body": 61
+      "ticker": "UCB.BR",
+      "indexed_without_body": 1,
+      "filings_total": 2,
+      "filings_with_body": 1
     },
     {
-      "ticker": "ULTP.L",
-      "indexed_without_body": 5,
-      "filings_total": 57,
-      "filings_with_body": 52
+      "ticker": "WIE.VI",
+      "indexed_without_body": 1,
+      "filings_total": 3,
+      "filings_with_body": 2
     }
   ],
-  "thin_need_discovery": [],
-  "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "thin_need_discovery": [
+    "SGO.PA",
+    "ACKB.BR",
+    "DTE.DE",
+    "MUV2.DE",
+    "SKA-B.ST",
+    "UCB.BR",
+    "APAM.AS",
+    "BAS.DE",
+    "DQ7A.IR",
+    "NBA.LS",
+    "BN.PA",
+    "ADYEN.AS"
+  ],
+  "thin_need_bodies": [
+    "SGO.PA",
+    "EVN.VI",
+    "WIE.VI",
+    "UCB.BR",
+    "MC.PA"
+  ],
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "TPT.L",
-    "APTD.L",
-    "DFS.L",
-    "FOXT.L",
-    "MER.L",
-    "REC.L",
-    "ULTP.L"
+    "OIZ.IR",
+    "ABI.BR",
+    "EVN.VI",
+    "MC.PA",
+    "SAP.DE",
+    "SGO.PA",
+    "UCB.BR",
+    "WIE.VI"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (7 tickers, top: TPT.L(8), APTD.L(5), DFS.L(5), FOXT.L(5), MER.L(5))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (7 tickers, top: ABI.BR(12), EVN.VI(1), MC.PA(1), SAP.DE(1), SGO.PA(1))",
+    "Discovery/IR seed for 12 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
     "indexed_without_body_tickers": 7,
-    "indexed_without_body_rows": 38,
-    "thin_need_discovery": 0,
-    "thin_need_bodies": 0
+    "indexed_without_body_rows": 18,
+    "thin_need_discovery": 12,
+    "thin_need_bodies": 5
   }
 }
