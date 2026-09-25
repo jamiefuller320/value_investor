@@ -42,6 +42,14 @@ def main(argv: list[str] | None = None) -> int:
         help=f"Max memos per invocation (default: {DEFAULT_BATCH_SIZE})",
     )
     parser.add_argument(
+        "--tickers",
+        default="",
+        help=(
+            "Comma-separated buy-tier tickers to pin (first-memo path only). "
+            "When set, only these missing-memo names are selected — no backlog spray."
+        ),
+    )
+    parser.add_argument(
         "--api-key",
         default=(resolve_cursor_api_key()[0] or None),
         help="Cursor API key (default: CURSOR_API_KEY_V2 then CURSOR_API_KEY)",
@@ -75,6 +83,11 @@ def main(argv: list[str] | None = None) -> int:
 
     committed = Path("docs/data/research")
     memo_dir = args.dest_dir / "research"
+    ticker_pins = [
+        part.strip().upper()
+        for part in str(args.tickers or "").split(",")
+        if part.strip()
+    ]
     reports = load_buy_tier_reports(args.latest_path)
     missing = list_missing_memo_reports(
         reports,
@@ -82,6 +95,11 @@ def main(argv: list[str] | None = None) -> int:
         committed_dir=committed,
         output_dir=args.output_dir,
     )
+    if ticker_pins and not args.rememo_legacy:
+        pin_set = set(ticker_pins)
+        missing = [report for report in missing if report.ticker.strip().upper() in pin_set]
+        by_ticker = {report.ticker.strip().upper(): report for report in missing}
+        missing = [by_ticker[t] for t in ticker_pins if t in by_ticker]
     legacy = list_legacy_rememo_reports(
         reports,
         memo_dir=memo_dir,
@@ -100,6 +118,7 @@ def main(argv: list[str] | None = None) -> int:
             "legacy_rememo": len(legacy),
             "missing_tickers": [report.ticker for report in missing],
             "legacy_tickers": [report.ticker for report in legacy],
+            "ticker_pins": ticker_pins,
             "state": load_backfill_state(state_path),
         }
         if args.json:
@@ -134,6 +153,7 @@ def main(argv: list[str] | None = None) -> int:
                 api_key=args.api_key or "",
                 dry_run=True,
                 dest_dir=args.dest_dir,
+                tickers=ticker_pins or None,
             )
         if args.json:
             print(json.dumps(summary.to_dict(), indent=2))
@@ -166,6 +186,8 @@ def main(argv: list[str] | None = None) -> int:
         created_label = "Re-memoed"
     else:
         print(f"Missing memos before batch: {len(missing)}")
+        if ticker_pins:
+            print(f"Ticker pins: {', '.join(ticker_pins)}")
         summary = run_missing_memo_backfill(
             latest_path=args.latest_path,
             output_dir=args.output_dir,
@@ -175,6 +197,7 @@ def main(argv: list[str] | None = None) -> int:
             model=model,
             publish=not args.no_publish,
             dest_dir=args.dest_dir,
+            tickers=ticker_pins or None,
         )
         created_label = "Created"
 
