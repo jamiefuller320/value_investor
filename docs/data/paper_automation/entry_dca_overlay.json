@@ -715,6 +715,10 @@
         {
           "as_of": "2026-09-24T09:27:06.191117+01:00",
           "price": 3264.0
+        },
+        {
+          "as_of": "2026-09-25T09:27:08.411869+01:00",
+          "price": 3318.0
         }
       ]
     },
@@ -1313,6 +1317,10 @@
         {
           "as_of": "2026-09-24T09:27:06.191117+01:00",
           "price": 1528.0
+        },
+        {
+          "as_of": "2026-09-25T09:27:08.411869+01:00",
+          "price": 1546.0
         }
       ]
     },
@@ -1321,7 +1329,7 @@
       "track_id": "rules",
       "ticker": "PAF.L",
       "started_at": "2026-09-23T09:27:09.382220+01:00",
-      "status": "open",
+      "status": "closed",
       "lifecycle_stage": "starter",
       "entry_kind": "first_entry",
       "entry_price": 128.8,
@@ -1340,6 +1348,165 @@
         {
           "as_of": "2026-09-24T09:27:06.191117+01:00",
           "price": 126.1
+        },
+        {
+          "as_of": "2026-09-25T09:27:08.411869+01:00",
+          "price": 123.6
+        }
+      ],
+      "cadence_scores": [
+        {
+          "id": "lump_sum",
+          "label": "100% at decision",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 1,
+          "avg_fill": 128.8,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -8.29,
+          "peak_deployed_return": -0.0404,
+          "end_value": 196.99,
+          "end_value_delta": 0.0,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-09-23T09:27:09.382220+01:00",
+              "price": 128.8
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_2x_weekly",
+          "label": "50/50 over 1 week",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 128.8,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 102.64,
+          "peak_loss_gbp": -4.14,
+          "peak_deployed_return": -0.0404,
+          "end_value": 201.14,
+          "end_value_delta": 4.14,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-09-23T09:27:09.382220+01:00",
+              "price": 128.8
+            }
+          ],
+          "de_risk_gbp": 4.15
+        },
+        {
+          "id": "dca_4x_weekly",
+          "label": "25% weekly \u00d7 4",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 4,
+          "avg_fill": 128.8,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 153.96,
+          "peak_loss_gbp": -2.07,
+          "peak_deployed_return": -0.0404,
+          "end_value": 203.21,
+          "end_value_delta": 6.22,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-09-23T09:27:09.382220+01:00",
+              "price": 128.8
+            }
+          ],
+          "de_risk_gbp": 6.22
+        },
+        {
+          "id": "dca_2x_biweekly",
+          "label": "50/50 over 2 weeks",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 128.8,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 102.64,
+          "peak_loss_gbp": -4.14,
+          "peak_deployed_return": -0.0404,
+          "end_value": 201.14,
+          "end_value_delta": 4.14,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-09-23T09:27:09.382220+01:00",
+              "price": 128.8
+            }
+          ],
+          "de_risk_gbp": 4.15
+        },
+        {
+          "id": "dca_5x_weekday",
+          "label": "20% over 5 weekday marks",
+          "scored": true,
+          "tranches_filled": 3,
+          "tranches_target": 5,
+          "avg_fill": 126.131,
+          "fill_advantage_pct": 0.0207,
+          "extra_cost": 2.46,
+          "leftover_cash": 82.11,
+          "peak_loss_gbp": -2.47,
+          "peak_deployed_return": -0.0201,
+          "end_value": 200.35,
+          "end_value_delta": 3.35,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-09-23T09:27:09.382220+01:00",
+              "price": 128.8
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-09-24T09:27:06.191117+01:00",
+              "price": 126.1
+            },
+            {
+              "tranche": 3,
+              "as_of": "2026-09-25T09:27:08.411869+01:00",
+              "price": 123.6
+            }
+          ],
+          "de_risk_gbp": 5.82
+        }
+      ],
+      "winning_cadence": "dca_4x_weekly",
+      "winning_end_value_delta": 6.22,
+      "any_de_risk": true,
+      "closed_at": "2026-09-25T09:27:08.411869+01:00",
+      "close_reason": "sold_before_window"
+    },
+    {
+      "id": "rules:BP.L:2026-09-25T09:27:08.411869+01:00",
+      "track_id": "rules",
+      "ticker": "BP.L",
+      "started_at": "2026-09-25T09:27:08.411869+01:00",
+      "status": "open",
+      "lifecycle_stage": "starter",
+      "entry_kind": "first_entry",
+      "entry_price": 559.2,
+      "notional": 197.15,
+      "shares": 0.352559,
+      "buy_cost_pct": 0.03,
+      "screen_signal": "buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 0.6024000000000002,
+      "data_quality_score": 1.0,
+      "marks": [
+        {
+          "as_of": "2026-09-25T09:27:08.411869+01:00",
+          "price": 559.2
         }
       ]
     }

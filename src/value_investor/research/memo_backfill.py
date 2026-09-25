@@ -412,6 +412,21 @@ def publish_memo_backfill_batch(
     }
 
 
+def _normalize_ticker_pins(tickers: list[str] | None) -> list[str]:
+    """Deduped upper-case ticker pins preserving caller order."""
+    if not tickers:
+        return []
+    seen: set[str] = set()
+    out: list[str] = []
+    for raw in tickers:
+        ticker = str(raw or "").strip().upper()
+        if not ticker or ticker in seen:
+            continue
+        seen.add(ticker)
+        out.append(ticker)
+    return out
+
+
 def run_missing_memo_backfill(
     *,
     latest_path: Path = DEFAULT_LATEST_PATH,
@@ -427,6 +442,7 @@ def run_missing_memo_backfill(
     publish: bool = True,
     dest_dir: Path = Path("docs"),
     dry_run: bool = False,
+    tickers: list[str] | None = None,
 ) -> MemoBackfillSummary:
     """Create initial memos for buy-tier names that lack a published memo."""
     reports = load_buy_tier_reports(latest_path)
@@ -436,6 +452,13 @@ def run_missing_memo_backfill(
         committed_dir=committed_dir,
         output_dir=output_dir,
     )
+    pins = _normalize_ticker_pins(tickers)
+    if pins:
+        pin_set = set(pins)
+        missing = [report for report in missing if report.ticker.strip().upper() in pin_set]
+        # Preserve operator pin order for the selected batch.
+        by_ticker = {report.ticker.strip().upper(): report for report in missing}
+        missing = [by_ticker[t] for t in pins if t in by_ticker]
     batch_size = max(1, int(batch_size))
     selected_reports = missing[:batch_size]
     summary = MemoBackfillSummary(

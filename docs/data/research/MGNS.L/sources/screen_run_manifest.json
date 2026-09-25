@@ -1,18 +1,18 @@
 {
   "ticker": "MGNS.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-15T15:55:59.626672+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-09-23T17:08:53.543887+00:00",
+  "attached_at": "2026-09-25T09:33:22.939073+00:00",
+  "history_run_path": "docs/data/history/run_20260923_170853.json.gz",
+  "history_models_path": "docs/data/history/models_20260923_170853.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
+      "strong_buy": 11,
       "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "hold": 138,
+      "avoid": 54
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 11,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 17,
+      "buy": 31,
+      "hold": 41,
+      "avoid": 13
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -30,45 +33,68 @@
   "ticker_signal": {
     "ticker": "MGNS.L",
     "signal": "strong_buy",
-    "conviction_score": 0.5885484999999999,
+    "conviction_score": 0.47367099999999995,
     "data_quality_score": 1.0,
     "name": "Morgan Sindall Group plc",
     "sector": "Industrials",
     "timing_signal": "neutral",
     "timing_score": 0.625,
-    "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £170.7M | screen TTM (unverified) £141.5M",
-    "models_passed": 16.0,
-    "weighted_model_score": 0.7483681818181815,
+    "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £170.7M | screen TTM £141.5M | FCF definition divergence: statutory 2.59× dividend coverage",
+    "models_passed": 14.0,
+    "weighted_model_score": 0.7417045454545454,
     "research_verdict": null,
     "adjusted_signal": "buy",
     "research_as_of": null,
     "research_confidence": null,
     "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": 0.19620755370652984,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": 0.19620755370652984,
     "signal_trend": "stable",
-    "weeks_at_signal": 17,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": -0.14100758232831498,
+    "weeks_at_signal": 21,
+    "passed_families": "cheapness,quality,garp,risk",
+    "price_vs_sma200_pct": -0.09980638631336915,
     "core_order": "limit",
-    "core_limit": 3958.02,
+    "core_limit": 4130.28,
     "core_allocation_pct": 0.6,
-    "tactical_limit": 3798.1,
+    "tactical_limit": 3958.0,
     "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 3567.82,
-    "tactical_take_profit": 4481.4,
-    "trade_plan_summary": "Trade plan: core 60% limit £3958.02; tactical 40% limit £3798.10; tactical stop £3567.82, target £4481.40.",
-    "atr_14": 181.8161,
-    "volume_ratio_20": 0.0225,
+    "tactical_stop_loss": 3723.09,
+    "tactical_take_profit": 4505.76,
+    "trade_plan_summary": "Trade plan: core 60% limit £4130.28; tactical 40% limit £3958.00; tactical stop £3723.09, target £4505.76.",
+    "atr_14": 156.7796,
+    "volume_ratio_20": 0.6944,
     "operating_cashflow": 187300000.0,
     "operating_cashflow_gross": null,
-    "fcf_dividend_coverage_gross": null,
+    "fcf_dividend_coverage_gross": 2.454407294832827,
     "fcf_dividend_coverage_net": 2.594224924012158,
-    "fcf_definition_divergence": false,
+    "fcf_definition_divergence": true,
     "fcf_divergence_flagged": true,
-    "fcf_dividend_coverage": null
+    "fcf_dividend_coverage": {
+      "statutory_ocf_minus_capex": {
+        "label": "Statutory OCF−CapEx",
+        "ratio": 2.594224924012158
+      },
+      "management_cash_generated_minus_capex": {
+        "label": "Management cash-generated−CapEx",
+        "ratio": null
+      }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Prefer ir_presentation_metrics.json reconciliation bridges as primary evidence. Screen baseline: statutory 2.59× vs management 2.45×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -105,13 +131,13 @@
       "ticker": "MGNS.L",
       "model_id": "earnings_yield",
       "passed": true,
-      "score": 0.7983
+      "score": 0.765
     },
     {
       "ticker": "MGNS.L",
       "model_id": "fcf_yield",
-      "passed": true,
-      "score": 0.9013
+      "passed": false,
+      "score": 0.8637
     },
     {
       "ticker": "MGNS.L",
@@ -123,13 +149,13 @@
       "ticker": "MGNS.L",
       "model_id": "lynch_peg",
       "passed": true,
-      "score": 0.468
+      "score": 0.4206
     },
     {
       "ticker": "MGNS.L",
       "model_id": "neff_pegy",
       "passed": true,
-      "score": 0.9754
+      "score": 0.9731
     },
     {
       "ticker": "MGNS.L",
@@ -158,26 +184,26 @@
     {
       "ticker": "MGNS.L",
       "model_id": "dividend_growth",
-      "passed": true,
+      "passed": false,
       "score": 1.0
     },
     {
       "ticker": "MGNS.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.8891
+      "score": 0.8778
     },
     {
       "ticker": "MGNS.L",
       "model_id": "acquirers_multiple",
       "passed": true,
-      "score": 0.8364
+      "score": 0.8279
     },
     {
       "ticker": "MGNS.L",
       "model_id": "dreman_contrarian",
       "passed": true,
-      "score": 0.6558
+      "score": 0.6501
     },
     {
       "ticker": "MGNS.L",
@@ -189,7 +215,7 @@
       "ticker": "MGNS.L",
       "model_id": "composite_value",
       "passed": true,
-      "score": 0.8111
+      "score": 0.8106
     },
     {
       "ticker": "MGNS.L",
@@ -204,6 +230,6 @@
       "score": 1.0
     }
   ],
-  "models_passed": 16,
+  "models_passed": 14,
   "models_total": 22
 }

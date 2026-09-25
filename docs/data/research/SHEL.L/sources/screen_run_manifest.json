@@ -1,18 +1,18 @@
 {
   "ticker": "SHEL.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-15T13:31:05.282947+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-09-23T17:08:53.543887+00:00",
+  "attached_at": "2026-09-25T09:57:30.549251+00:00",
+  "history_run_path": "docs/data/history/run_20260923_170853.json.gz",
+  "history_models_path": "docs/data/history/models_20260923_170853.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
+      "strong_buy": 11,
       "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "hold": 138,
+      "avoid": 54
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 11,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 17,
+      "buy": 31,
+      "hold": 41,
+      "avoid": 13
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -30,45 +33,68 @@
   "ticker_signal": {
     "ticker": "SHEL.L",
     "signal": "buy",
-    "conviction_score": 0.4618942499999999,
+    "conviction_score": 0.21734499999999998,
     "data_quality_score": 1.0,
     "name": "Shell plc",
     "sector": "Energy",
     "timing_signal": "neutral",
-    "timing_score": 0.375,
-    "action_note": "Buy — neutral timing",
-    "models_passed": 11.0,
-    "weighted_model_score": 0.6765545454545454,
+    "timing_score": 0.5,
+    "action_note": "Buy — neutral timing | FCF basis mismatch: filing £23916M | screen TTM £21458.4M | company-adj £17.5M | FCF definition divergence",
+    "models_passed": 8.0,
+    "weighted_model_score": 0.7132318181818181,
     "research_verdict": null,
     "adjusted_signal": "hold",
     "research_as_of": null,
     "research_confidence": null,
     "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
-    "earnings_basis_overlay": true,
+    "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": -0.02511879680747997,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": -0.02511879680747997,
     "signal_trend": "stable",
-    "weeks_at_signal": 11,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": 0.1522714144590326,
+    "weeks_at_signal": 15,
+    "passed_families": "cheapness,risk",
+    "price_vs_sma200_pct": 0.14258430093348556,
     "core_order": "limit",
-    "core_limit": 3313.7,
+    "core_limit": 3385.38,
     "core_allocation_pct": 0.6,
-    "tactical_limit": 3106.04,
+    "tactical_limit": 3133.25,
     "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 3012.86,
-    "tactical_take_profit": 3757.95,
-    "trade_plan_summary": "Trade plan: core 60% limit £3313.70; tactical 40% limit £3106.04; tactical stop £3012.86, target £3757.95.",
-    "atr_14": 61.808,
-    "volume_ratio_20": 0.0195,
+    "tactical_stop_loss": 3039.25,
+    "tactical_take_profit": 3866.4,
+    "trade_plan_summary": "Trade plan: core 60% limit £3385.38; tactical 40% limit £3133.25; tactical stop £3039.25, target £3866.40.",
+    "atr_14": 66.0619,
+    "volume_ratio_20": 0.7563,
     "operating_cashflow": 42863000000.0,
     "operating_cashflow_gross": null,
     "fcf_dividend_coverage_gross": null,
     "fcf_dividend_coverage_net": 2.822946175637394,
-    "fcf_definition_divergence": false,
+    "fcf_definition_divergence": true,
     "fcf_divergence_flagged": true,
-    "fcf_dividend_coverage": null
+    "fcf_dividend_coverage": {
+      "statutory_ocf_minus_capex": {
+        "label": "Statutory OCF−CapEx",
+        "ratio": 2.822946175637394
+      },
+      "management_cash_generated_minus_capex": {
+        "label": "Management cash-generated−CapEx",
+        "ratio": null
+      }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 2.82×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -81,7 +107,7 @@
       "ticker": "SHEL.L",
       "model_id": "graham_enterprising",
       "passed": true,
-      "score": 0.8
+      "score": 1.0
     },
     {
       "ticker": "SHEL.L",
@@ -105,7 +131,7 @@
       "ticker": "SHEL.L",
       "model_id": "earnings_yield",
       "passed": true,
-      "score": 0.7791
+      "score": 0.7868
     },
     {
       "ticker": "SHEL.L",
@@ -123,18 +149,18 @@
       "ticker": "SHEL.L",
       "model_id": "lynch_peg",
       "passed": false,
-      "score": 0.2
+      "score": 0.4373
     },
     {
       "ticker": "SHEL.L",
       "model_id": "neff_pegy",
-      "passed": true,
-      "score": 0.9669
+      "passed": false,
+      "score": 0.9696
     },
     {
       "ticker": "SHEL.L",
       "model_id": "quality_value",
-      "passed": true,
+      "passed": false,
       "score": 1.0
     },
     {
@@ -158,26 +184,26 @@
     {
       "ticker": "SHEL.L",
       "model_id": "dividend_growth",
-      "passed": true,
-      "score": 0.6667
+      "passed": false,
+      "score": 1.0
     },
     {
       "ticker": "SHEL.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.6094
+      "score": 0.6135
     },
     {
       "ticker": "SHEL.L",
       "model_id": "acquirers_multiple",
       "passed": true,
-      "score": 0.7523
+      "score": 0.7721
     },
     {
       "ticker": "SHEL.L",
       "model_id": "dreman_contrarian",
       "passed": true,
-      "score": 0.6843
+      "score": 0.6863
     },
     {
       "ticker": "SHEL.L",
@@ -204,6 +230,6 @@
       "score": 1.0
     }
   ],
-  "models_passed": 11,
+  "models_passed": 8,
   "models_total": 22
 }

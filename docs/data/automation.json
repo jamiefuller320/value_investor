@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-25T07:57:15.044616+00:00",
+  "generated_at": "2026-09-25T10:22:33.260558+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -38,6 +38,7 @@
       "is_fair_cost_lab": false,
       "fair_cost_parent_track": null,
       "is_cohort_lab": false,
+      "reporting_currency": "GBP",
       "exit_confirm_screens": 2,
       "reentry_cooldown_screens": 1,
       "min_rebalance_notional_gbp": 10.0
@@ -202,15 +203,15 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 29.7,
+        "remaining_weekly_ops_usd": 26.9,
         "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) — warning only, not a hard cap.",
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 98.0,
-        "estimated_spend_weekly_ops_usd_this_week": 54.8,
-        "estimated_spend_usd_this_cycle": 784.9,
+        "estimated_spend_usd_this_week": 100.8,
+        "estimated_spend_weekly_ops_usd_this_week": 57.6,
+        "estimated_spend_usd_this_cycle": 787.7,
         "week_id": "2026-W39",
         "cycle_id": "2026-09-d8"
       },
@@ -238,7 +239,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-09-25T07:31:13.178602+00:00"
+      "updated_at": "2026-09-25T08:22:15.770461+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -339,16 +340,16 @@
   "achievements": {
     "timeline": [
       {
+        "at": "2026-09-25T08:27:28.292429+00:00",
+        "kind": "paper_run",
+        "title": "Paper automation acted",
+        "detail": "Rebalanced after open settle (3 trade(s))."
+      },
+      {
         "at": "2026-09-25T06:52:33.035234+00:00",
         "kind": "ladder_run",
         "title": "Library ladder run (focus euro_depth)",
         "detail": "shortlist=52 research created=3 updated=0 spend≈1.2"
-      },
-      {
-        "at": "2026-09-24T08:27:18.597397+00:00",
-        "kind": "paper_run",
-        "title": "Paper automation acted",
-        "detail": "Rebalanced after open settle (0 trade(s))."
       },
       {
         "at": "2026-09-20T06:54:20.282932+00:00",
@@ -925,20 +926,42 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-09-24T08:27:18.597397+00:00",
+      "generated_at": "2026-09-25T08:27:28.292429+00:00",
       "acted": true,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "note": "Rebalanced after open settle (3 trade(s)).",
       "gate": {
-        "local_time": "2026-09-24T09:27:06.191117+01:00",
+        "local_time": "2026-09-25T09:27:08.411869+01:00",
         "trading_day": true,
         "after_settle": true,
-        "market_open_at": "2026-09-24T08:00:00+01:00",
-        "settle_at": "2026-09-24T09:15:00+01:00",
+        "market_open_at": "2026-09-25T08:00:00+01:00",
+        "settle_at": "2026-09-25T09:15:00+01:00",
         "can_act": true,
         "reason": "ok"
       },
-      "trade_count": 0,
-      "trades_sample": [],
+      "trade_count": 3,
+      "trades_sample": [
+        {
+          "acted_at": "2026-09-25T09:27:08.411869+01:00",
+          "ticker": "PAF.L",
+          "side": "sell",
+          "name": "Pan African Resources PLC",
+          "net_cash": 191.08
+        },
+        {
+          "acted_at": "2026-09-25T09:27:08.411869+01:00",
+          "ticker": "KLR.L",
+          "side": "sell",
+          "name": "Keller Group plc",
+          "net_cash": 11.99
+        },
+        {
+          "acted_at": "2026-09-25T09:27:08.411869+01:00",
+          "ticker": "BP.L",
+          "side": "buy",
+          "name": "BP p.l.c.",
+          "net_cash": -203.07
+        }
+      ],
       "fund": {
         "cash": 0.0,
         "nav": null,
@@ -1169,8 +1192,8 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-25T07:50:31.366295+00:00",
-    "queue_ui_updated_at": "2026-09-25T07:57:14.880361+00:00",
+    "compiled_at": "2026-09-25T08:23:23.236817+00:00",
+    "queue_ui_updated_at": "2026-09-25T10:22:33.058517+00:00",
     "task_count": 112,
     "status": {
       "open_count": 1,
@@ -1225,7 +1248,7 @@
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-25T07:31:20.139025+00:00",
+    "generated_at": "2026-09-25T08:30:45.080572+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1237,13 +1260,13 @@
         "applied": false,
         "epoch_started_at": "2026-08-26T08:28:55.552465+00:00",
         "baseline_nav": 821.98,
-        "epoch_nav": 669.38,
-        "epoch_return": -0.1856,
-        "post_apply_trade_count": 22,
-        "equity_marks": 18,
+        "epoch_nav": 647.73,
+        "epoch_return": -0.212,
+        "post_apply_trade_count": 25,
+        "equity_marks": 19,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0159,
-        "excess_after_costs": -0.1698,
+        "benchmark_return": -0.0182,
+        "excess_after_costs": -0.1938,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1314,13 +1337,13 @@
         "applied": false,
         "epoch_started_at": "2026-08-21T09:27:13.383131+01:00",
         "baseline_nav": 891.39,
-        "epoch_nav": 755.85,
-        "epoch_return": -0.1521,
-        "post_apply_trade_count": 19,
-        "equity_marks": 12,
+        "epoch_nav": 731.93,
+        "epoch_return": -0.1789,
+        "post_apply_trade_count": 22,
+        "equity_marks": 13,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0103,
-        "excess_after_costs": -0.1418,
+        "benchmark_return": -0.0126,
+        "excess_after_costs": -0.1663,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1337,13 +1360,13 @@
         "applied": false,
         "epoch_started_at": "2026-09-01T09:27:42.628249+01:00",
         "baseline_nav": 878.94,
-        "epoch_nav": 847.71,
-        "epoch_return": -0.0355,
-        "post_apply_trade_count": 17,
-        "equity_marks": 12,
+        "epoch_nav": 836.74,
+        "epoch_return": -0.048,
+        "post_apply_trade_count": 20,
+        "equity_marks": 13,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0078,
-        "excess_after_costs": -0.0277,
+        "benchmark_return": -0.0101,
+        "excess_after_costs": -0.0379,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1394,9 +1417,9 @@
         "track_label": "Screen rules + graduated allocation",
         "is_primary_learning_track": false,
         "applied": true,
-        "epoch_started_at": "2026-09-24T08:30:21.569511+00:00",
-        "baseline_nav": 896.13,
-        "epoch_nav": 896.13,
+        "epoch_started_at": "2026-09-25T08:30:39.407833+00:00",
+        "baseline_nav": 886.45,
+        "epoch_nav": 886.45,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
         "equity_marks": 0,
@@ -1417,7 +1440,7 @@
         "track_label": "Screen rules + momentum grace",
         "is_primary_learning_track": false,
         "applied": true,
-        "epoch_started_at": "2026-09-24T08:30:21.101782+00:00",
+        "epoch_started_at": "2026-09-25T08:30:38.924415+00:00",
         "baseline_nav": 915.54,
         "epoch_nav": 915.54,
         "epoch_return": 0.0,
@@ -1431,8 +1454,8 @@
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.05,
-          "sector_cap": 0.25
+          "min_conviction": 0.1,
+          "sector_cap": 0.2
         }
       },
       "rules": {
@@ -1442,13 +1465,13 @@
         "applied": false,
         "epoch_started_at": "2026-08-12T09:36:42.012926+00:00",
         "baseline_nav": 862.27,
-        "epoch_nav": 604.45,
-        "epoch_return": -0.299,
-        "post_apply_trade_count": 39,
-        "equity_marks": 28,
+        "epoch_nav": 585.23,
+        "epoch_return": -0.3213,
+        "post_apply_trade_count": 42,
+        "equity_marks": 29,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0118,
-        "excess_after_costs": -0.2872,
+        "benchmark_return": -0.0141,
+        "excess_after_costs": -0.3071,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1465,13 +1488,13 @@
         "applied": false,
         "epoch_started_at": "2026-09-01T09:27:27.726879+01:00",
         "baseline_nav": 932.39,
-        "epoch_nav": 899.06,
-        "epoch_return": -0.0357,
-        "post_apply_trade_count": 18,
-        "equity_marks": 12,
+        "epoch_nav": 887.88,
+        "epoch_return": -0.0477,
+        "post_apply_trade_count": 21,
+        "equity_marks": 13,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0078,
-        "excess_after_costs": -0.028,
+        "benchmark_return": -0.0101,
+        "excess_after_costs": -0.0376,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1486,7 +1509,7 @@
         "track_label": "Technical levels (stops / trade_plan)",
         "is_primary_learning_track": false,
         "applied": true,
-        "epoch_started_at": "2026-09-24T08:30:21.963739+00:00",
+        "epoch_started_at": "2026-09-25T08:30:39.782580+00:00",
         "baseline_nav": 991.28,
         "epoch_nav": 991.28,
         "epoch_return": 0.0,
@@ -1500,7 +1523,7 @@
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.3,
+          "min_conviction": 0.25,
           "sector_cap": 0.2
         }
       }
@@ -1516,7 +1539,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-25T07:57:15.044616+00:00",
+    "generated_at": "2026-09-25T10:22:33.260558+00:00",
     "overall": "blocked",
     "headline": "Traffic pause — 0 stuck PR(s). project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
     "merge_lane": {
@@ -1549,7 +1572,7 @@
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 1,
-      "evaluated_at": "2026-09-25T07:57:14.169632+00:00"
+      "evaluated_at": "2026-09-25T10:22:32.129675+00:00"
     },
     "traffic_control": {
       "pause_active": true,
@@ -1575,9 +1598,9 @@
         "merged_auto": 0,
         "merged_manual": 0,
         "verified": 0,
-        "fix_interventions": 0,
+        "fix_interventions": 8,
         "fix_ci_check": 0,
-        "fix_merge_conflict": 0,
+        "fix_merge_conflict": 8,
         "fix_ci_and_merge": 0
       },
       "yesterday": {
@@ -1741,9 +1764,9 @@
           "merged_auto": 0,
           "merged_manual": 0,
           "verified": 0,
-          "fix_interventions": 0,
+          "fix_interventions": 8,
           "fix_ci_check": 0,
-          "fix_merge_conflict": 0,
+          "fix_merge_conflict": 8,
           "fix_ci_and_merge": 0
         }
       ],
@@ -1765,7 +1788,7 @@
     "library_stall_parks": [],
     "observe_utilization": {
       "schema_version": 1,
-      "generated_at": "2026-09-25T07:57:15.013665+00:00",
+      "generated_at": "2026-09-25T10:22:33.219102+00:00",
       "observe_only": true,
       "headline": "2 warn instrument(s); trajectory worsening on 2.",
       "surface_freshness": "fresh",
@@ -1806,9 +1829,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 0.2h ago.",
+            "detail": "Last refresh 2.6h ago.",
             "as_of": "2026-09-25T07:46:37.785695+00:00",
-            "age_hours": 0.18,
+            "age_hours": 2.6,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1848,9 +1871,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 0.2h ago.",
+            "detail": "Last refresh 2.6h ago.",
             "as_of": "2026-09-25T07:46:54.100085+00:00",
-            "age_hours": 0.17,
+            "age_hours": 2.59,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1884,9 +1907,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 0.2h ago.",
+            "detail": "Last refresh 2.6h ago.",
             "as_of": "2026-09-25T07:46:54.245003+00:00",
-            "age_hours": 0.17,
+            "age_hours": 2.59,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1948,7 +1971,7 @@
     },
     "lifecycle_maturity_trajectory": {
       "schema_version": 1,
-      "generated_at": "2026-09-25T07:57:15.016402+00:00",
+      "generated_at": "2026-09-25T10:22:33.222526+00:00",
       "observe_only": true,
       "instrument_id": "lifecycle_maturity_trajectory",
       "separation": {
@@ -2060,10 +2083,10 @@
           "freshness": {
             "state": "stale",
             "label": "Stale",
-            "detail": "Board last refresh 37.9h ago (limit 30h).",
+            "detail": "Board last refresh 40.3h ago (limit 30h).",
             "as_of": "2026-09-23T18:05:59.926928+00:00",
-            "store_as_of": "2026-09-25T07:57:15.016402+00:00",
-            "age_hours": 37.85,
+            "store_as_of": "2026-09-25T10:22:33.222526+00:00",
+            "age_hours": 40.28,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2163,10 +2186,10 @@
           "freshness": {
             "state": "stale",
             "label": "Stale",
-            "detail": "Board last refresh 37.9h ago (limit 30h).",
+            "detail": "Board last refresh 40.3h ago (limit 30h).",
             "as_of": "2026-09-23T18:05:59.926928+00:00",
-            "store_as_of": "2026-09-25T07:57:15.016402+00:00",
-            "age_hours": 37.85,
+            "store_as_of": "2026-09-25T10:22:33.222526+00:00",
+            "age_hours": 40.28,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2266,10 +2289,10 @@
           "freshness": {
             "state": "stale",
             "label": "Stale",
-            "detail": "Board last refresh 37.9h ago (limit 30h).",
+            "detail": "Board last refresh 40.3h ago (limit 30h).",
             "as_of": "2026-09-23T18:05:59.926928+00:00",
-            "store_as_of": "2026-09-25T07:57:15.016402+00:00",
-            "age_hours": 37.85,
+            "store_as_of": "2026-09-25T10:22:33.222526+00:00",
+            "age_hours": 40.28,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2369,10 +2392,10 @@
           "freshness": {
             "state": "stale",
             "label": "Stale",
-            "detail": "Board last refresh 37.9h ago (limit 30h).",
+            "detail": "Board last refresh 40.3h ago (limit 30h).",
             "as_of": "2026-09-23T18:05:59.926928+00:00",
-            "store_as_of": "2026-09-25T07:57:15.016402+00:00",
-            "age_hours": 37.85,
+            "store_as_of": "2026-09-25T10:22:33.222526+00:00",
+            "age_hours": 40.28,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2472,10 +2495,10 @@
           "freshness": {
             "state": "stale",
             "label": "Stale",
-            "detail": "Board last refresh 37.9h ago (limit 30h).",
+            "detail": "Board last refresh 40.3h ago (limit 30h).",
             "as_of": "2026-09-23T18:05:59.926928+00:00",
-            "store_as_of": "2026-09-25T07:57:15.016402+00:00",
-            "age_hours": 37.85,
+            "store_as_of": "2026-09-25T10:22:33.222526+00:00",
+            "age_hours": 40.28,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2575,10 +2598,10 @@
           "freshness": {
             "state": "stale",
             "label": "Stale",
-            "detail": "Board last refresh 37.9h ago (limit 30h).",
+            "detail": "Board last refresh 40.3h ago (limit 30h).",
             "as_of": "2026-09-23T18:05:59.926928+00:00",
-            "store_as_of": "2026-09-25T07:57:15.016402+00:00",
-            "age_hours": 37.85,
+            "store_as_of": "2026-09-25T10:22:33.222526+00:00",
+            "age_hours": 40.28,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2678,10 +2701,10 @@
           "freshness": {
             "state": "stale",
             "label": "Stale",
-            "detail": "Board last refresh 37.9h ago (limit 30h).",
+            "detail": "Board last refresh 40.3h ago (limit 30h).",
             "as_of": "2026-09-23T18:05:59.926928+00:00",
-            "store_as_of": "2026-09-25T07:57:15.016402+00:00",
-            "age_hours": 37.85,
+            "store_as_of": "2026-09-25T10:22:33.222526+00:00",
+            "age_hours": 40.28,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2781,10 +2804,10 @@
           "freshness": {
             "state": "stale",
             "label": "Stale",
-            "detail": "Board last refresh 37.9h ago (limit 30h).",
+            "detail": "Board last refresh 40.3h ago (limit 30h).",
             "as_of": "2026-09-23T18:05:59.926928+00:00",
-            "store_as_of": "2026-09-25T07:57:15.016402+00:00",
-            "age_hours": 37.85,
+            "store_as_of": "2026-09-25T10:22:33.222526+00:00",
+            "age_hours": 40.28,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2884,10 +2907,10 @@
           "freshness": {
             "state": "stale",
             "label": "Stale",
-            "detail": "Board last refresh 37.9h ago (limit 30h).",
+            "detail": "Board last refresh 40.3h ago (limit 30h).",
             "as_of": "2026-09-23T18:05:59.926928+00:00",
-            "store_as_of": "2026-09-25T07:57:15.016402+00:00",
-            "age_hours": 37.85,
+            "store_as_of": "2026-09-25T10:22:33.222526+00:00",
+            "age_hours": 40.28,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },

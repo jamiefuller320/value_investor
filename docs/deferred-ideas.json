@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-24T15:25:36+00:00",
+  "updated_at": "2026-09-25T10:25:24+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10483,6 +10483,45 @@
       "added_at": "2026-09-24T15:59:23+00:00",
       "updated_at": "2026-09-24T16:06:11+00:00",
       "resolution_note": "Shipped: FTSE lifecycle board enriches last_price from library signals / HI marks (same paper-auto price path). Supersedes defer-only #846."
+    },
+    {
+      "id": "N155",
+      "category": "not_now",
+      "section": "ops",
+      "title": "On-demand first-memo when index+bodies ready",
+      "summary": "Do not move FTSE/admitted first-memo off Sunday --research-docs onto event-driven weekday creates (flip\u2192bodies\u2192memo). Slim/no-prose memos lower per-name cost, but the live miss is selection/cadence (cap race + effective_screen_signal hold), not LLM volume. Prefer FTSE Sunday no_memo-first (library N114 parity) before any on-demand pin; weekday rememo stays body-lag-only (N114).",
+      "revisit_when": "After FTSE Sunday prefer-first-time/no_memo preference ships AND >=2 subsequent Sunday research-docs receipts still leave FTSE flip-lag warn_open with blocking_stage=no_memo on buy-effective names that already had index+key bodies \u2014 or admitted-market factory-path no_memo warn share rises for two live Sundays after N114-style ordering is live on all research paths.",
+      "tags": [
+        "first-memo",
+        "P1",
+        "N114",
+        "L457",
+        "flip-lag",
+        "sunday",
+        "selection"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-46dfc27b-3b35-5448-b62d-145eb017618c",
+      "added_at": "2026-09-25T08:03:02+00:00"
+    },
+    {
+      "id": "L465",
+      "category": "later",
+      "section": "research",
+      "title": "FTSE Sunday research-docs prefer no-memo buy-tier (like library N114)",
+      "summary": "FTSE --research-docs ranks by conviction only via effective_screen_signal; unlike library prefer_first_time_research_queues, already-memo'd names fill the cap 12 and starve first memos (TRST/PINE lost the race Sep 21-23). FCF-adjusted holds are a separate gate.",
+      "revisit_when": "FTSE flip-lag warn_open shows >=2 no_memo names with key_bodies that were raw-buy but outside Sunday cap for two consecutive Sundays",
+      "tags": [
+        "first-memo",
+        "sunday",
+        "research-docs",
+        "N114",
+        "flip-lag"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-94a4350e-55e2-5e2f-8bbb-1ed18852c3f0",
+      "added_at": "2026-09-25T07:51:39+00:00",
+      "updated_at": "2026-09-25T10:25:24+00:00"
     }
   ],
   "fragments": [
