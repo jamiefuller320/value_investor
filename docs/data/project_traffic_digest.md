@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-25T17:31:46.475971+00:00`
+Generated: `2026-09-25T17:58:46.315676+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -25,7 +25,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Progress report present (generated_at=2026-09-22T08:34:03+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
+- [ok] Queue health overall=blocked; headline=Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged. _(source: docs/data/queue_health.json)_
 - [ok] Ops monitor overall=fail at 2026-09-25T13:16:33.228942+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
@@ -45,6 +45,14 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
 - `pytest test_summary: WIX/BT action notes lost screen TTM after overly broad eng-20260919-14 suppress` — 1×
 - `engineering_tasks.json queue_clearing + automation.json queue snapshots vs main (#757 ledger)` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 4 (open=3, resolved=1)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [resolved] WARN Orphaned pr_open engineering tasks — planned: `remediate_queue_merge_sync` (PM v1: recover/mark-merged engineering queue reconciliation; cleared lag=['none'])
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
