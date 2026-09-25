@@ -12,8 +12,8 @@ from pathlib import Path
 from value_investor.cursor_api_key import resolve_cursor_api_key
 from value_investor.research.memo_backfill import (
     DEFAULT_BATCH_SIZE,
-    DEFAULT_LEGACY_REMEMO_STATE_PATH,
     DEFAULT_LATEST_PATH,
+    DEFAULT_LEGACY_REMEMO_STATE_PATH,
     DEFAULT_STATE_PATH,
     list_legacy_rememo_reports,
     list_missing_memo_reports,
@@ -59,7 +59,9 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Cursor model (default: CURSOR_RESEARCH_MODEL or composer-2.5)",
     )
-    parser.add_argument("--rememo-legacy", action="store_true", help="Re-memo markdown-only legacy names")
+    parser.add_argument(
+        "--rememo-legacy", action="store_true", help="Re-memo markdown-only legacy names"
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--status", action="store_true", help="Show backlog counts")
     parser.add_argument("--json", action="store_true")
@@ -84,9 +86,7 @@ def main(argv: list[str] | None = None) -> int:
     committed = Path("docs/data/research")
     memo_dir = args.dest_dir / "research"
     ticker_pins = [
-        part.strip().upper()
-        for part in str(args.tickers or "").split(",")
-        if part.strip()
+        part.strip().upper() for part in str(args.tickers or "").split(",") if part.strip()
     ]
     reports = load_buy_tier_reports(args.latest_path)
     missing = list_missing_memo_reports(
