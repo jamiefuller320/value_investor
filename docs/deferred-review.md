@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-25T10:59:06+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-25T15:48:45+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -531,6 +531,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L457 | **Same-session research for new buy-tier after filings** | Do not build a net-new same-day ingest→memo pipeline on hold→buy flips. Filings already rank via weekday ingest-loop unmeasured priority + eng-idle intensive pins; first-time memos stay Sunday (N114). Same-day fully usable is blocked by memo policy, not missing plumbing. Prefer an observe-only lag pin; only later consider a narrow new-flip unmeasured priority bump inside the existing loop. | Observe pin shows >=2 FTSE buy-tier flips in a fortnight staying unmeasured across >1 full weekday ingest day AND the following Sunday first-memo pass still hits thin/zero-body on those names (bodies would have helped) — or N114 is deliberately revisited. |
 | L459 | **Show realized % on paper trade rows** | Paper tradesTableHtml shows net_cash only; tiny ~£8 sleeves make sell round-trips look flat £0 without a realized_pct column (avg_cost_at_exit vs price already on PaperTrade). | Next paper-sims / lifecycle UX pass or when humans keep misreading shard sell P&L |
 | L466 | **Ops thin_memo auto_fixable without deepen-thin heal** | check_thin_memo_learning_gap sets auto_fixable=True when zero-body memos exist so ops skips eng draft spray, but ops-monitor has no deepen-thin heal path. Label matches anti-spray intent, not the documented auto-heal lane. | Next intentional touch of check_thin_memo_learning_gap or ops-monitor auto_fixable lane docs; or when wiring supervised deepen-thin as a safe heal. |
+| L468 | **Weekday light lifecycle_board refresh for L463 freshness** | Maturity mix surface_freshness uses 30h board content age, but lifecycle_board.json is only rewritten by email-report publish (and local/experiment paths), not ops-monitor. Mid-week gaps after a Wed publish correctly show Surface stale until the next email-report. | Users complain about chronic mid-week Maturity mix stale banners, or email-report cadence stays sparse while L463 is a daily ops finding |
 
 ---
 
