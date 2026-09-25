@@ -1,100 +1,13 @@
-# WHSP Holdings Limited (SOL.AX) — Research memo
+# Washington H. Soul Pattinson and Company Limited (SOL.AX) — Research memo
 
-_Version 1 · Updated 2026-09-10T07:44:13.806905+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-25T07:54:07.658626+00:00 · Mode: structured_verdict_
 
-## EXECUTIVE SUMMARY
-WHSP Holdings Limited (formerly Washington H. Soul Pattinson and Company Limited, “Soul Patts”) is a long-established Australian diversified investment company with a multi-decade dividend growth record and a portfolio spanning listed equities, private businesses, and property-linked assets. The quantitative screen currently rates the name **buy**, but the live `screening_snapshot.json` carries **no populated metrics** (`data_quality_score` 0.0, `models_passed` 0), so the signal is directional rather than evidence-backed in this pack. The value hook is a quality compounder trading on modest book multiples with income characteristics (prior screening runs in this folder cited P/E ~7.2, P/B ~1.3, yield ~2.1%, ROE ~20.7%). The key debate is whether portfolio-driven earnings volatility, rising net debt, and a persistent gap between look-through value and the listed price justify accumulation—or whether headline “profit surges” in 1H26 mask a softer second half.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
-## INVESTMENT THESIS
-For a value investor, Soul Patts offers a rare ASX combination: patient capital allocation, franked dividend compounding, and exposure to a curated portfolio (resources, telecommunications, building products, financial services, and newer growth stakes) without single-asset binary risk. Business quality rests on a century-plus operating history, insider alignment (material director buying reported in 2025–2026), and capital discipline—portfolio recycling (e.g. Brickworks merger dynamics, TPG stake reduction) rather than empire-building at any price.
-
-The screen’s **buy** label aligns qualitatively with a cheapness/quality/dividend profile when metrics are populated (historical snapshots in `sources/snapshots/` show 13/22 models passed across cheapness, quality, dividend, GARP, and risk families). Yahoo-backed fundamentals support that framing: FY2025 shareholders’ equity of **A$9.41bn** on total assets of **A$11.18bn**, with **A$7.56bn** in investments and advances (including **A$2.80bn** long-term equity investments and **A$3.67bn** trading securities). Reported ROE remains attractive on book equity despite lower headline earnings.
-
-However, the **current** screening snapshot cannot mechanically confirm the buy: zero models, zero key metrics, and `timing_signal: insufficient_data`. Deep research therefore treats the buy as **plausible on business quality and historical screen behaviour**, not as a fully verified quantitative pass in this ingest. Verify-before-trade is essential given filing contamination (see Financial Review and Risks).
-
-## FINANCIAL REVIEW
-**Primary filing coverage and critical gaps**
-
-The `filings_index.json` catalogues 51 items (14 tagged annual, 3 interim, 1 trading update). **This index is unreliable for financial analysis:**
-
-1. **Wrong-entity contamination:** Most “annual” and “interim” bodies indexed via `investegate_direct` are **Supernova Digital Assets PLC** (AQSE: SOL), a UK cryptocurrency vehicle—not WHSP Holdings. Example: the indexed “Interim Results” body (`7e676fcc517261fe.txt`) reports an operating loss of **£1.23m** on crypto holdings; the indexed “Annual Results” bodies report Supernova net assets of **£5.9m**. **These figures must be disregarded for SOL.AX.**
-
-2. **ASX announcement bodies without numbers:** Genuine WHSP ASX items exist (e.g. “1H26 ASX Results Release”, 26 March 2026; “Pre-Quotation Disclosure”, 15 September 2025; substantial-holder notices for TPG, GEM, IMU), but extracted bodies contain **only Market Index wrapper pages—no P&L, balance sheet, or dividend tables.** The 1H26 results release body confirms the announcement title and issuer but provides **no interim figures.**
-
-3. **No usable half-year filing body** with line items is present for WHSP. Interim analysis below is therefore **unverified at the filing level**; directional commentary draws on news headlines only where noted.
-
-**Annual trend (Yahoo fallback — `financials_annual.json`, fetched 10 September 2026; A$m, July year-end per Yahoo series labels)**
-
-| | FY2022 | FY2023 | FY2024 | FY2025 |
-|---|---:|---:|---:|---:|
-| Total revenue | 2,555 | 361 | 590 | 613 |
-| Reported net income | (13) | 691 | 499 | 364 |
-| Basic EPS (A$) | (0.04) | 2.16 | 1.38 | 1.12 |
-| EBITDA | 1,450 | 778 | 568 | 574 |
-| Total assets | 15,463 | 11,039 | 10,398 | 11,181 |
-| Shareholders’ equity | 8,448 | 8,722 | 8,989 | 9,406 |
-| Total debt | 855 | 784 | 766 | 1,010 |
-| Net debt | 306 | 383 | 409 | 668 |
-| Free cash flow | 865 | 586 | 256 | 206 |
-| Cash dividends paid | 420 | 339 | 329 | 355 |
-| Dividends received (operating, direct) | 192 | 558 | 371 | 373 |
-
-*Note: FY2022 net income is distorted by large impairments (**A$999m** unusual items per Yahoo) and discontinued operations; FY2023 benefited from elevated equity-account earnings (**A$531m** earnings from equity interests).*
-
-**FY2025 (most recent full year in Yahoo)**
-
-Reported net income fell **27%** to **A$364m** (EPS **A$1.12**) from **A$499m** (EPS **A$1.38**) in FY2024, with **A$46m** asset impairments flagged as unusual items. Statutory operating income remains **negative** (**–A$270m**), which is structurally normal for an investment company where value flows through associate earnings, fair-value movements, and dividend income rather than consolidated operating revenue. EBITDA of **A$574m** and net interest income of **A$110m** reflect the treasury/investment nature of the group.
-
-The balance sheet expanded: total assets **A$11.18bn** (+7.5% vs FY2024), equity **A$9.41bn**, and investment assets remain the core (**A$7.56bn** investments and advances). **Net debt rose to A$668m** from **A$409m**, driven by higher current borrowings (**A$890m** current debt vs **A$150m** prior year per Yahoo)—a trend worth monitoring alongside **A$355m** dividends paid vs **A$206m** free cash flow.
-
-**FY2024 and FY2023**
-
-FY2024 net income **A$499m** normalised down from FY2023’s **A$691m** peak; FY2023 included **A$9m** loss from discontinued operations. FCF remained solid at **A$256m** (FY2024) and **A$586m** (FY2023). Dividends paid have been consistently **A$329–355m** annually across FY2024–25.
-
-**Interim / half-year (filing gap)**
-
-News coverage points to a strong **1H26** result released **26 March 2026** (“Washington H. Soul Pattinson (ASX:SOL) shares in focus on 604% profit growth in HY26 result”, Rask Media, 26 March 2026; “ASX Preview… Posts Higher Fiscal H1 Earnings, Revenue”, Yahoo Finance Australia, 25 March 2026). **No interim figures from primary filings are available in this pack** to confirm magnitude or composition of that growth. Separately, “WHSP Holdings (ASX:SOL) H2 EPS Collapse Tests Bullish High‑Margin Narrative” (simplywall.st, 27 March 2026) flags second-half normalisation risk—also **unverified against filing bodies here**.
-
-**Annual report gap**
-
-There is **no clean WHSP annual report or Appendix 4E body extract** in `filings/bodies/` with audited line items. FY2025 analysis above relies entirely on the Yahoo fallback. Quarterly income and quarterly cashflow in Yahoo are **empty** (`ttm_cashflow_suppressed: true`).
-
-## RISKS AND RED FLAGS
-**Data integrity / wrong-entity filings:** The ingest pipeline has conflated ASX:SOL (WHSP) with AQSE:SOL (Supernova Digital Assets). Any research or model input drawn uncritically from `filings_index.json` annual/interim bodies would analyse the wrong company. This is a **verify-before-trade** blocker for filing-based workflows.
-
-**Earnings volatility and accounting:** Reported net income swung from **A$691m** (FY2023) to **A$364m** (FY2025), driven by associate earnings, fair-value movements, and impairments (**A$46m** in FY2025). Investment-company accounting makes statutory operating profit a poor quality metric; NAV and look-through earnings matter more—and **NAV per share is not available from filing bodies in this pack** (news cites net assets of **A$13.8bn**, Kalkine, 31 August 2026, **unverified here**).
-
-**Cyclical portfolio exposure:** WHSP’s value is levered to underlying holdings (resources, telco, building products, etc.). Commodity cycles, property markets, and listed-market sentiment flow through to earnings and dividends.
-
-**Leverage and dividend funding:** Net debt increased **63%** year-on-year to **A$668m** (Yahoo FY2025). Cash dividends (**A$355m**) exceeded free cash flow (**A$206m**); sustainability depends on portfolio realisations, borrowings, and dividend receipts from investees—not visible in suppressed quarterly cashflow data.
-
-**Governance and related-party dynamics:** Long-term family-associated control is a feature of Soul Patts’ history; portfolio transactions (Brickworks merger, related-party structures) require scrutiny in full annual report text—not ingested here. Insider buying (simplywall.st, 14 January 2026: “Insider Stock Buying Reaches AU$3.55m On WHSP Holdings”) is a positive alignment signal but does not offset governance complexity.
-
-**M&A and strategy execution risk:** Cancelled Monash IVF acquisition (marketscreener.com, 20 April 2026) and active portfolio repositioning (TPG stake reduction per ASX substantial-holder notice metadata, 10 April 2026; new IMU stake notices, 27 August 2026) introduce deployment and timing risk.
-
-**Liquidity and conglomerate discount:** Listed price may persistently trade below sum-of-parts; catalysts (asset sales, buybacks) are uncertain. No going-concern, covenant, or contingency language from WHSP annual reports is available in extracted bodies.
-
-RiskTags: accounting, cyclical, governance, liquidity, leverage, other
-RiskTags: accounting, cyclical, governance, liquidity, leverage, other
-
-## NEWS HIGHLIGHTS
-Coverage is ** voluminous but repetitive** (heavy Kalkine syndication, Motley Fool/Rask dividend pieces); material corporate themes include:
-
-- **31 August 2026:** “Soul Patts (ASX:SOL) Raises Dividend for 28th Straight Year as Net Assets Climb to $13.8 Billion” (Kalkine)—dividend continuity and NAV narrative.
-- **26–27 March 2026:** 1H26 results cycle—“604% profit growth in HY26 result” (Rask Media, 26 March 2026) vs “H2 EPS Collapse Tests Bullish High‑Margin Narrative” (simplywall.st, 27 March 2026).
-- **31 March 2026:** Morningstar “Fair value upgrade for this ASX income player.”
-- **27 August 2026:** Brickworks merger/dividend legacy commentary (Kalkine); initial substantial holding in IMU (ASX announcement metadata).
-- **10 April 2026:** Ceasing to be a substantial holder in TPG (ASX announcement metadata).
-- **20 April 2026:** “WHSP Holdings Limited and Genesis Capital cancelled the acquisition of 80.4% stake in Monash IVF Group Limited” (marketscreener.com).
-- **18 June 2026:** “$1.89b Brickworks Exit Could Unlock Its Next Big Investment Move” (Kalkine)—portfolio recycling theme.
-- **19 May 2026:** “Soul Patts shares rise after taking stake in struggling ASX stock” (Motley Fool Australia).
-- **September 2025:** Insider buying activity (Yahoo Finance, 22 September 2025; simplywall.st, 14 January 2026).
-- **October 2025:** “ASX’s only dividend aristocrat reports” (Morningstar Australia, 6 October 2025).
-
-Syndicated bullish income/compounder articles dominate; **hard news density is moderate**, with the most actionable items being results releases, dividend decisions, portfolio transactions, and the failed Monash IVF deal.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.58
-Rationale: Business quality and dividend record support the quantitative buy signal in principle, but this pack’s contaminated filings, empty live screen metrics, and missing ASX results extracts prevent full confirmation and cap conviction until primary ASX annual/interim PDFs are reconciled.
+Confidence: 0.68
+Rationale: FY26 ASX filings show NCFI up 11.5% to $572m, 111cps total dividends at ~73% of NCFI, and 28 years of dividend growth—supporting the screen buy; screen metrics are empty/unverified (TTM FCF suppressed) and Yahoo FY25 FCF (~$206m) vs cash...
+RiskTags: cyclical, accounting, governance

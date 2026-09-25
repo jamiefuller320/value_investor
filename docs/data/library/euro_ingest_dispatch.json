@@ -25,7 +25,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-25T08:00:19.674296+00:00",
+    "snapshot_at": "2026-09-25T07:52:35.406041+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 52,
     "unmeasured_buy_tier": 1,
@@ -117,7 +117,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-25T08:00:19.675907+00:00",
+  "evaluated_at": "2026-09-25T07:52:35.407906+00:00",
   "maintenance_markets": [
     "aim",
     "asx200",
@@ -148,7 +148,7 @@
       "market_id": "dax",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=10, indexed_without_body=16)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=10, indexed_without_body=11)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
@@ -170,16 +170,16 @@
         "dax not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-25T08:00:34.985204+00:00",
+        "snapshot_at": "2026-09-25T07:52:52.390264+00:00",
         "market_id": "dax",
         "buy_tier_count": 12,
         "unmeasured_buy_tier": 1,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 10,
-        "indexed_without_body": 16,
+        "indexed_without_body": 11,
         "bodies_min": 1,
         "bodies_median": 1,
-        "bodies_max": 72,
+        "bodies_max": 39,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [
@@ -202,7 +202,7 @@
           "FME.DE"
         ],
         "indexed_without_body_by_ticker": {
-          "FME.DE": 16
+          "FME.DE": 11
         },
         "parked_tickers": [
           "BAS.DE",
@@ -220,7 +220,7 @@
         "effective_thin_body_tickers": [
           "DHL.DE"
         ],
-        "effective_indexed_without_body": 16,
+        "effective_indexed_without_body": 11,
         "effective_indexed_without_body_tickers": [
           "FME.DE"
         ],
@@ -238,7 +238,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-25T08:00:34.985700+00:00",
+      "evaluated_at": "2026-09-25T07:52:52.390820+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -266,7 +266,7 @@
         "ftse_smallcap not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-25T08:00:35.751835+00:00",
+        "snapshot_at": "2026-09-25T07:52:53.259999+00:00",
         "market_id": "ftse_smallcap",
         "buy_tier_count": 8,
         "unmeasured_buy_tier": 0,
@@ -325,7 +325,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-25T08:00:35.752177+00:00",
+      "evaluated_at": "2026-09-25T07:52:53.260388+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -350,11 +350,11 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 8,
-    "skip_stream_2_now": true,
+    "hour_utc": 7,
+    "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
-    "reason": "Head euro_depth still has filing gaps; stream 2 yields hour 08:00 UTC to the fat slot.",
+    "reason": "Head euro_depth still has filing gaps; stream 1/2 run spare fractions (0.50/0.25).",
     "config": {
       "enabled": true,
       "stream_1_target_fraction": 0.5,
