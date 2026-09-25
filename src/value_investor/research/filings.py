@@ -3006,9 +3006,7 @@ def _sanitize_http_url(url: str) -> str:
     parsed = urllib.parse.urlsplit(text)
     path = urllib.parse.quote(parsed.path, safe="/%")
     query = urllib.parse.quote(parsed.query, safe="=&%/")
-    return urllib.parse.urlunsplit(
-        (parsed.scheme, parsed.netloc, path, query, parsed.fragment)
-    )
+    return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, path, query, parsed.fragment))
 
 
 def _http_get(url: str, *, headers: dict[str, str] | None = None, timeout: int = 30) -> bytes:
