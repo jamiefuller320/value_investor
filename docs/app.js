@@ -411,11 +411,12 @@ function renderProgressReport(data) {
             <div class="so-what-gate-group-head">
               <strong>${esc(row.experiment_id || "—")}</strong>
               <span class="muted so-what-gate-kind">${esc(row.kind || "experiment")}</span>
-              <button type="button" class="btn btn-primary"
+              <button type="button" class="btn lifecycle-ack-btn${enabled ? " btn-primary" : ""}"
                 data-progress-ack="${esc(payload)}"
                 ${enabled ? "" : "disabled"}
+                aria-disabled="${enabled ? "false" : "true"}"
                 title="${esc(enabled ? "Record observe-only ack via Supabase" : "Already acknowledged")}">
-                Acknowledge
+                ${enabled ? "Acknowledge" : "Acknowledged"}
               </button>
             </div>
             <span class="so-what-gate-action">${esc(row.title || "")}</span>
@@ -4586,16 +4587,23 @@ function renderLifecycleExperimentCard(factorId) {
   const start = initiation.start || {};
   const startEnabled = Boolean(start.enabled);
   const startPayload = JSON.stringify(start.payload || {});
-  const actionBtns = recommend
+  // Planned/deferred factors can inherit assessment_status=recommend from a shared
+  // experiment (e.g. prior_cycle_outcome → entry_dca_overlay). Hide Acknowledge/Start
+  // there — those actions belong to human_ack / optional_execute / waiting cards only.
+  const initKind = String(initiation.kind || "");
+  const showActionBtns =
+    recommend && ["human_ack", "optional_execute", "waiting"].includes(initKind);
+  const ackLabel = acknowledge.label || "Acknowledge";
+  const actionBtns = showActionBtns
     ? `<p class="lifecycle-start-row">
-        <button type="button" class="btn lifecycle-ack-btn" data-lifecycle-ack="${esc(
+        <button type="button" class="btn lifecycle-ack-btn${ackEnabled ? " btn-primary" : ""}" data-lifecycle-ack="${esc(
           ackPayload
-        )}" ${ackEnabled ? "" : "disabled"} title="${esc(
+        )}" ${ackEnabled ? "" : "disabled"} aria-disabled="${ackEnabled ? "false" : "true"}" title="${esc(
           ackEnabled ? "Record observe-only ack via Supabase" : acknowledge.disabled_reason || "Ack not available"
-        )}">${esc(acknowledge.label || "Acknowledge")}</button>
+        )}">${esc(ackLabel)}</button>
         <button type="button" class="btn btn-primary lifecycle-start-btn" data-lifecycle-start="${esc(
           startPayload
-        )}" ${startEnabled ? "" : "disabled"} title="${esc(
+        )}" ${startEnabled ? "" : "disabled"} aria-disabled="${startEnabled ? "false" : "true"}" title="${esc(
           startEnabled
             ? "Start graduated entry DCA execute via Supabase"
             : start.disabled_reason || "Not ready"
@@ -4609,7 +4617,11 @@ function renderLifecycleExperimentCard(factorId) {
               start.disabled_reason || acknowledge.disabled_reason || "Actions blocked until gates clear"
             )}</p>`
       }`
-    : "";
+    : recommend && (initKind === "planned" || initKind === "deferred")
+      ? `<p class="small muted">Acknowledge / Start stay on collecting factors — this chip is ${esc(
+          initKind
+        )}${initiation.waiting_for ? `: ${esc(String(initiation.waiting_for))}` : ""}.</p>`
+      : "";
   const recommendBlock = recommend
     ? `<div class="lifecycle-init-box ${ready ? "ready" : "waiting"}">
         <p class="small" style="margin-top:0"><strong>${ready ? "Ready for next human step" : "Not ready to initiate"}</strong></p>

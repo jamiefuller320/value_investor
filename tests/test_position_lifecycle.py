@@ -107,3 +107,65 @@ def test_board_columns_cover_every_catalog_factor():
     )
     assert planned["initiation"]["kind"] == "planned"
     assert planned["initiation"]["ready_to_initiate"] is False
+    assert planned["initiation"]["acknowledge"]["enabled"] is False
+    # Shared experiment may already be acked; planned factors still cite the catalog gate.
+    assert "Already acknowledged" not in str(
+        planned["initiation"]["acknowledge"]["disabled_reason"] or ""
+    )
+    assert planned["initiation"]["acknowledge"]["label"] in {"Acknowledge", "Acknowledged"}
+
+
+def test_prior_cycle_outcome_planned_ack_cites_catalog_gate_not_shared_ack():
+    from value_investor.position_lifecycle import board_column_defs, factors_for_stage
+
+    recommit = {row["id"]: row for row in factors_for_stage("recommit")}
+    assert recommit["prior_cycle_outcome"]["status"] == "planned"
+    columns = board_column_defs(
+        assessment={
+            "experiments": [
+                {
+                    "experiment_id": "entry_dca_overlay",
+                    "title": "DCA overlay",
+                    "status": "recommend",
+                    "kind": "lifecycle_overlay",
+                    "human_ack_required": False,
+                    "human_acked": True,
+                    "forward_evidence": {
+                        "leading_cadence": "dca_4x_weekly",
+                        "ready_for_cadence_analysis": True,
+                    },
+                }
+            ],
+            "entry_dca_adoption": {
+                "current_stage": "paper_execute_graduated",
+                "acked": True,
+                "execute_started": False,
+                "stages": [
+                    {
+                        "id": "paper_execute_graduated",
+                        "status": "open",
+                        "ready": True,
+                        "revisit_when": None,
+                        "do_not": "Do not change starter fraction",
+                    }
+                ],
+            },
+        }
+    )
+    post_sale = next(col for col in columns if col["id"] == "post_sale")
+    prior = next(
+        row for row in post_sale["experiments"] if row["factor_id"] == "prior_cycle_outcome"
+    )
+    assert prior["assessment_status"] == "recommend"
+    assert prior["initiation"]["kind"] == "planned"
+    assert prior["initiation"]["acknowledge"]["enabled"] is False
+    reason = str(prior["initiation"]["acknowledge"]["disabled_reason"] or "")
+    assert "recommit" in reason.lower() or ">=8" in reason
+    assert "Already acknowledged" not in reason
+    # Observing sibling on same experiment: Acknowledge done, Start live.
+    growth = next(col for col in columns if col["id"] == "growth")
+    add_cadence = next(row for row in growth["experiments"] if row["factor_id"] == "add_cadence")
+    assert add_cadence["initiation"]["kind"] == "optional_execute"
+    assert add_cadence["initiation"]["acknowledge"]["enabled"] is False
+    assert add_cadence["initiation"]["acknowledge"]["label"] == "Acknowledged"
+    assert add_cadence["initiation"]["start"]["enabled"] is True
