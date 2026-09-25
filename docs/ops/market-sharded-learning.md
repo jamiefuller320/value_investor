@@ -154,7 +154,7 @@ Do **not** hand-fill parallel stream lists except incident recovery; do **not** 
 | Layer B screen clock | `observe_sim_include_admitted` | Focus-only Sunday screens |
 | Paper instrument | Frozen `buy_tier_level`, equal-support timing stamp **then** Sunday epoch-0 plus weekday local-open marks (`library-epoch0-weekday.yml`). Wait names stay out of new buys. | Shard AI / knob apply / FTSE `paper-auto.yml` at 08:25 UTC |
 | Buy-tier rememo | Same `rememo_body_lag_threshold` + weekday 3/day execution (`ftse-library rememo`). Sunday Layer C rememos the **focus** book only | `research_all_graduated` / 21-market spray (N96) |
-| First-time memos | Sunday queue puts no-memo buy-tier ahead of rememo inside each market (N114) | Weekday first-memo burst |
+| First-time memos | Sunday queue puts no-memo buy-tier ahead of rememo inside each market (N114). **FTSE live** Sunday `--research-docs` uses the same rule via `select_research_targets` / `prefer_first_time_reports` (cap 12 unchanged). | Weekday first-memo burst (N155 parked) |
 | Buy-not-now | `timing_signal=wait` on buy-tier (Yahoo via market mapper, PIT on dated archives) | LSE `.L` rewrite |
 | Not-buy-tier | Current below-buy-tier + `never_buy_tier` from dated archives; exit-timing archive on `screen/history/` | FTSE-only `docs/data/history` |
 

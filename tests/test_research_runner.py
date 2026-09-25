@@ -140,6 +140,139 @@ def test_eligible_research_targets_filters_low_quality_buys():
     assert [r.ticker for r in eligible] == ["BBB.L"]
 
 
+def test_eligible_research_targets_prefers_no_memo_before_cap():
+    """N114 parity: no-memo buy-tier fills the cap ahead of rememo (TRST-class)."""
+    memo_high = _report(
+        ticker="MEGP.L",
+        name="Memo High",
+        signal="buy",
+        data_quality_score=0.8,
+        conviction_score=0.95,
+        composite_score=0.9,
+    )
+    memo_mid = _report(
+        ticker="IMB.L",
+        name="Memo Mid",
+        signal="buy",
+        data_quality_score=0.8,
+        conviction_score=0.85,
+        composite_score=0.8,
+    )
+    no_memo = _report(
+        ticker="TRST.L",
+        name="No Memo",
+        signal="buy",
+        data_quality_score=0.8,
+        conviction_score=0.70,
+        composite_score=0.7,
+    )
+    # Without prefer: conviction order takes the two memo'd names.
+    without = eligible_research_targets(
+        [memo_high, memo_mid, no_memo],
+        weekly_cap=2,
+        prefer_first_time=False,
+    )
+    assert [r.ticker for r in without] == ["MEGP.L", "IMB.L"]
+
+    # With prefer: no_memo wins a slot despite lower conviction.
+    with_prefer = eligible_research_targets(
+        [memo_high, memo_mid, no_memo],
+        weekly_cap=2,
+        already_researched={"MEGP.L", "IMB.L"},
+        prefer_first_time=True,
+    )
+    assert [r.ticker for r in with_prefer] == ["TRST.L", "MEGP.L"]
+
+
+def test_select_research_targets_prefers_no_memo_from_store(tmp_path):
+    store = ResearchStore(tmp_path)
+    for ticker, name in (("MEGP.L", "Memo High"), ("IMB.L", "Memo Mid")):
+        store.save(
+            ResearchDocument(
+                ticker=ticker,
+                name=name,
+                signal="buy",
+                version=1,
+                created_at="2026-01-01T00:00:00+00:00",
+                updated_at="2026-01-01T00:00:00+00:00",
+                mode="initial",
+                executive_summary=f"Memo for {ticker}",
+            )
+        )
+    reports = [
+        _report(
+            ticker="MEGP.L",
+            name="Memo High",
+            signal="buy",
+            data_quality_score=0.8,
+            conviction_score=0.95,
+        ),
+        _report(
+            ticker="IMB.L",
+            name="Memo Mid",
+            signal="buy",
+            data_quality_score=0.8,
+            conviction_score=0.85,
+        ),
+        _report(
+            ticker="TRST.L",
+            name="No Memo",
+            signal="buy",
+            data_quality_score=0.8,
+            conviction_score=0.70,
+        ),
+    ]
+    active, alumni = select_research_targets(
+        reports, store, weekly_cap=2, continue_alumni=False
+    )
+    assert [r.ticker for r in active] == ["TRST.L", "MEGP.L"]
+    assert alumni == []
+
+
+def test_select_research_targets_no_memo_strong_beats_memo_buy(tmp_path):
+    """First-time strong_buy still ranks ahead of first-time buy within no-memo band."""
+    store = ResearchStore(tmp_path)
+    store.save(
+        ResearchDocument(
+            ticker="OLD.L",
+            name="Old Buy",
+            signal="buy",
+            version=1,
+            created_at="2026-01-01T00:00:00+00:00",
+            updated_at="2026-01-01T00:00:00+00:00",
+            mode="initial",
+            executive_summary="Old",
+        )
+    )
+    reports = [
+        _report(
+            ticker="OLD.L",
+            name="Old Buy",
+            signal="buy",
+            data_quality_score=0.9,
+            conviction_score=0.99,
+        ),
+        _report(
+            ticker="NEWB.L",
+            name="New Buy",
+            signal="buy",
+            data_quality_score=0.8,
+            conviction_score=0.5,
+        ),
+        _report(
+            ticker="NEWS.L",
+            name="New Strong",
+            signal="strong_buy",
+            data_quality_score=0.85,
+            conviction_score=0.6,
+        ),
+    ]
+    active, _ = select_research_targets(
+        reports, store, weekly_cap=2, continue_alumni=False
+    )
+    assert [r.ticker for r in active] == ["NEWS.L", "NEWB.L"]
+
+
 @patch("value_investor.research.runner.run_initial_research_agent")
 @patch("value_investor.research.runner.ingest_research_sources")
 def test_run_research_for_strong_buys_creates_initial_memo(mock_ingest, mock_initial, tmp_path):
