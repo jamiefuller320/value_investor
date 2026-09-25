@@ -78,6 +78,7 @@ def test_import_cron_jobs_dry_run_dashboard_bridge():
     assert payload["schedule"]["wdays"] == [1, 2, 3, 4, 5]
     assert "dashboard-bridge.yml" in payload["url"]
 
+
 def test_import_cron_jobs_dry_run_ingest_loop_morning():
     script = Path("scripts/import_cron_jobs.py")
     proc = subprocess.run(
