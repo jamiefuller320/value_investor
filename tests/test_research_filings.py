@@ -10739,6 +10739,85 @@ def test_parked_source_hunter_sgo_pa_fy2025_results_pdf_fetches():
     assert body and len(body) > 5000
 
 
+def test_refetch_ir_allowlist_dedupes_sgo_pa_hub_migration_against_pdf_row(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20260924-03: migrated regulated-information hub must not duplicate FY2025 PDF row."""
+    dead = "https://www.saint-gobain.com/en/finance/regulated-information"
+    live = _BUILTIN_IR_URLS["SGO.PA"][1]
+    letter = _BUILTIN_IR_URLS["SGO.PA"][0]
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_c7c3863fa89dcf46",
+                        "source": "ir_allowlist",
+                        "headline": "letter",
+                        "url": letter,
+                        "period": "other",
+                        "has_body": True,
+                    },
+                    {
+                        "id": "ir_0cfd9d28fbf83154",
+                        "source": "ir_allowlist",
+                        "headline": "hub",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "ir_allowlist_fetch_failed",
+                    },
+                    {
+                        "id": "ir_ebe46a703b6e426a",
+                        "source": "ir_allowlist",
+                        "headline": "pdf",
+                        "url": live,
+                        "period": "annual",
+                        "has_body": False,
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(row, *, ticker, company_name="", investegate_cache=None):
+        return (
+            "Saint-Gobain Compagnie de Saint-Gobain consolidated financial statements "
+            "2025 results operating income free cash flow " * 20,
+            "pdf",
+        )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "SGO.PA",
+        company_name="Compagnie de Saint-Gobain S.A.",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["attempted"] >= 1
+    assert result["fetched"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    pdf_urls = [
+        str(item.get("url") or "")
+        for item in saved["filings"]
+        if live in str(item.get("url") or "")
+    ]
+    assert len(pdf_urls) == 1
+    assert saved["summary"]["total"] == 2
+    assert saved["summary"]["with_body"] == 2
+    assert not any(dead in str(item.get("url") or "") for item in saved["filings"])
+
+
 def test_parked_source_hunter_skip_san_pa_euro_stoxx50():
     """eng-20260916-02: leftover IWB is WAF-gated Euronext product press release."""
     assert "SAN.PA" in PARKED_SOURCE_HUNTER_SKIP

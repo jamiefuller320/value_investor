@@ -4725,6 +4725,9 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     "https://www.saint-gobain.com/en/finance/regulated-information": (
         "https://files.webdisclosure.com/1391369/CP_Resultats_2025_VA_t.pdf"
     ),
+    "https://www.saint-gobain.com/en/finance/regulated-information/": (
+        "https://files.webdisclosure.com/1391369/CP_Resultats_2025_VA_t.pdf"
+    ),
 }
 
 # Per-ticker dead URL overrides when a global canonical target would hit the wrong issuer.
@@ -4798,6 +4801,54 @@ def _migrate_ir_allowlist_row_url(
     ):
         item.pop(key, None)
     return item, True
+
+
+_IR_ALLOWLIST_PERIOD_DEDUPE_RANK = {
+    "annual": 3,
+    "interim": 2,
+    "trading_update": 1,
+    "other": 0,
+}
+
+
+def _ir_allowlist_row_dedupe_score(row: dict[str, Any]) -> tuple[int, int, int, int]:
+    url = str(row.get("url") or "")
+    url_digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
+    id_matches = 1 if str(row.get("id") or "") == f"ir_{url_digest}" else 0
+    period_rank = _IR_ALLOWLIST_PERIOD_DEDUPE_RANK.get(str(row.get("period") or ""), 0)
+    has_body = 1 if row.get("has_body") and row.get("body_path") else int(row.get("has_body") or 0)
+    unfetchable = 0 if row.get("unfetchable") else 1
+    return (has_body, id_matches, period_rank, unfetchable)
+
+
+def _dedupe_ir_allowlist_rows_by_url(
+    filings: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], int]:
+    """Drop redundant IR allowlist rows that index the same document URL."""
+    best_by_url: dict[str, tuple[tuple[int, int, int, int], dict[str, Any], int]] = {}
+    passthrough: list[tuple[int, dict[str, Any]]] = []
+    pruned = 0
+    for idx, row in enumerate(filings):
+        if not _is_ir_allowlist_row(row):
+            passthrough.append((idx, row))
+            continue
+        url_key = _normalize_rns_document_url(str(row.get("url") or ""))
+        if not url_key:
+            passthrough.append((idx, row))
+            continue
+        score = _ir_allowlist_row_dedupe_score(row)
+        prev = best_by_url.get(url_key)
+        if prev is None:
+            best_by_url[url_key] = (score, dict(row), idx)
+            continue
+        pruned += 1
+        if score > prev[0]:
+            best_by_url[url_key] = (score, dict(row), idx)
+    if pruned <= 0:
+        return filings, 0
+    merged = passthrough + [(idx, row) for _, row, idx in best_by_url.values()]
+    merged.sort(key=lambda item: item[0])
+    return [row for _, row in merged], pruned
 
 
 def _merge_ir_url_lists(*groups: dict[str, list[str]]) -> dict[str, list[str]]:
@@ -5547,7 +5598,8 @@ def refetch_ir_allowlist_filing_bodies(
                 if migrated:
                     pre_merge_migrated += 1
                 refreshed_pre.append(item)
-            if pre_merge_migrated:
+            refreshed_pre, pre_deduped = _dedupe_ir_allowlist_rows_by_url(refreshed_pre)
+            if pre_merge_migrated or pre_deduped:
                 pre_payload["filings"] = refreshed_pre
                 pre_payload["summary"] = summarize_filings(refreshed_pre)
                 index_path.write_text(
@@ -5587,6 +5639,11 @@ def refetch_ir_allowlist_filing_bodies(
     from value_investor.library_ingest_budget import deadline_reached
 
     filings = list(payload.get("filings") or [])
+    filings, ir_url_deduped = _dedupe_ir_allowlist_rows_by_url(filings)
+    if ir_url_deduped:
+        payload["filings"] = filings
+        payload["summary"] = summarize_filings(filings)
+        index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     allowlist_rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
     allowlist_urls = {
         str(row.get("url") or "").strip()
@@ -5613,7 +5670,12 @@ def refetch_ir_allowlist_filing_bodies(
         filings,
         bodies_dir=bodies_dir,
     )
-    metadata_synced = stale_marked > 0 or shared_body_propagated > 0 or ir_metadata_reconciled > 0
+    metadata_synced = (
+        stale_marked > 0
+        or shared_body_propagated > 0
+        or ir_metadata_reconciled > 0
+        or ir_url_deduped > 0
+    )
     if metadata_synced:
         payload["filings"] = filings
         payload["summary"] = summarize_filings(filings)
