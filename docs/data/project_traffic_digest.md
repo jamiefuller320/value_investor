@@ -1,8 +1,8 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-25T12:31:45.392735+00:00`
-Trajectory: **blocked_by_pr_queue**
-Dispatch pause: **active** (stuck PRs: 0)
+Generated: `2026-09-25T12:59:00.172781+00:00`
+Trajectory: **on_track**
+Dispatch pause: **inactive** (stuck PRs: 0)
 
 ## Achieved (grounded)
 - Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
@@ -27,10 +27,10 @@ Dispatch pause: **active** (stuck PRs: 0)
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
 - [ok] Queue health overall=blocked; headline=Traffic pause — 0 stuck PR(s). project traffic pause (0 stuck PR(s); stuck_prs) — clear CI failures / merge conflicts before new PR generation _(source: docs/data/queue_health.json)_
 - [ok] Ops monitor overall=fail at 2026-09-25T07:46:36.339614+00:00 _(source: docs/data/ops_status.json)_
-- [ok] Traffic pause_active=True; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
+- [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `stop_automation_waste` — cleared automation-waste hold — no remediable signal (applied)
+- `resume_dispatch` — resumed — no stuck monitored PRs and idle window elapsed (applied)
 
 ## Merges today (monitor independent verify)
 - _(none merged today)_
@@ -45,6 +45,16 @@ Dispatch pause: **active** (stuck PRs: 0)
 - `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
 - `pytest test_summary: WIX/BT action notes lost screen TTM after overly broad eng-20260919-14 suppress` — 1×
 - `engineering_tasks.json queue_clearing + automation.json queue snapshots vs main (#757 ledger)` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — FAIL`
+- Findings: 6 (open=6, resolved=0)
+- [open] WARN Ingest loop hit runtime cutoff — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Lifecycle maturity mix trajectory stalled — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] FAIL So-what learning gap active (thin_memo_counted_as_coverage) — planned: `draft_ops_engineering_task` (Draft supervised ops engineering task (ops-monitor draft path))
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
