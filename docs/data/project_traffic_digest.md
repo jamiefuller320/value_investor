@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-25T17:27:51.733386+00:00`
+Generated: `2026-09-25T17:31:46.475971+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -30,7 +30,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `resume_dispatch` — resumed — no stuck monitored PRs and idle window elapsed (applied)
+- _(none)_
 
 ## Merges today (monitor independent verify)
 - _(none merged today)_
