@@ -1,18 +1,18 @@
 {
   "ticker": "SGE.L",
-  "run_at": "2026-09-06T06:47:53.947778+00:00",
-  "attached_at": "2026-09-11T15:46:43.811857+00:00",
-  "history_run_path": "docs/data/history/run_20260906_064753.json.gz",
-  "history_models_path": "docs/data/history/models_20260906_064753.json.gz",
+  "run_at": "2026-09-23T17:08:53.543887+00:00",
+  "attached_at": "2026-09-25T11:57:04.468161+00:00",
+  "history_run_path": "docs/data/history/run_20260923_170853.json.gz",
+  "history_models_path": "docs/data/history/models_20260923_170853.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 20,
-      "buy": 41,
-      "hold": 144,
-      "avoid": 43
+      "strong_buy": 11,
+      "buy": 45,
+      "hold": 138,
+      "avoid": 54
     },
-    "strong_buy_count": 20,
+    "strong_buy_count": 11,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -21,9 +21,9 @@
     "trust_count": 102,
     "trust_signal_counts": {
       "strong_buy": 17,
-      "buy": 26,
-      "hold": 42,
-      "avoid": 17
+      "buy": 31,
+      "hold": 41,
+      "avoid": 13
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -33,32 +33,68 @@
   "ticker_signal": {
     "ticker": "SGE.L",
     "signal": "buy",
-    "conviction_score": 0.29579999999999995,
+    "conviction_score": 0.20287799999999998,
     "data_quality_score": 1.0,
     "name": "The Sage Group plc",
     "sector": "Technology",
     "timing_signal": "neutral",
-    "timing_score": 0.5,
-    "action_note": "Buy — neutral timing",
-    "models_passed": 5.0,
-    "weighted_model_score": 0.42642727272727277,
+    "timing_score": 0.625,
+    "action_note": "Buy — neutral timing | FCF basis mismatch: filing £469M | screen TTM £632.2M | FCF definition divergence",
+    "models_passed": 4.0,
+    "weighted_model_score": 0.43321363636363625,
     "research_verdict": null,
     "adjusted_signal": "hold",
     "research_as_of": null,
+    "research_confidence": null,
+    "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
+    "interim_quality_overlay": false,
+    "earnings_basis_overlay": false,
+    "interim_eps_decline_pct": null,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": 0.14477522196351392,
     "signal_trend": "improving",
     "weeks_at_signal": 1,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": 0.13185312215155884,
+    "passed_families": "cheapness,quality,garp,risk",
+    "price_vs_sma200_pct": 0.08175546266296706,
     "core_order": "limit",
-    "core_limit": 954.72,
+    "core_limit": 990.0,
     "core_allocation_pct": 0.6,
-    "tactical_limit": 929.01,
+    "tactical_limit": 924.42,
     "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 901.14,
-    "tactical_take_profit": 1104.08,
-    "trade_plan_summary": "Trade plan: core 60% limit £954.72; tactical 40% limit £929.01; tactical stop £901.14, target £1104.08.",
-    "atr_14": 32.0996,
-    "volume_ratio_20": 0.8414
+    "tactical_stop_loss": 892.4,
+    "tactical_take_profit": 1080.0,
+    "trade_plan_summary": "Trade plan: core 60% limit £990.00; tactical 40% limit £924.42; tactical stop £892.40, target £1080.00.",
+    "atr_14": 30.2372,
+    "volume_ratio_20": 0.4299,
+    "operating_cashflow": 528000000.0,
+    "operating_cashflow_gross": null,
+    "fcf_dividend_coverage_gross": null,
+    "fcf_dividend_coverage_net": 2.2657004830917873,
+    "fcf_definition_divergence": true,
+    "fcf_divergence_flagged": true,
+    "fcf_dividend_coverage": {
+      "statutory_ocf_minus_capex": {
+        "label": "Statutory OCF−CapEx",
+        "ratio": 2.2657004830917873
+      },
+      "management_cash_generated_minus_capex": {
+        "label": "Management cash-generated−CapEx",
+        "ratio": null
+      }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 2.27×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -95,13 +131,13 @@
       "ticker": "SGE.L",
       "model_id": "earnings_yield",
       "passed": false,
-      "score": 0.317
+      "score": 0.3333
     },
     {
       "ticker": "SGE.L",
       "model_id": "fcf_yield",
       "passed": false,
-      "score": 0.4969
+      "score": 0.5225
     },
     {
       "ticker": "SGE.L",
@@ -119,7 +155,7 @@
       "ticker": "SGE.L",
       "model_id": "neff_pegy",
       "passed": true,
-      "score": 0.8849
+      "score": 0.8978
     },
     {
       "ticker": "SGE.L",
@@ -143,31 +179,31 @@
       "ticker": "SGE.L",
       "model_id": "high_dividend",
       "passed": false,
-      "score": 0.3102
+      "score": 0.3519
     },
     {
       "ticker": "SGE.L",
       "model_id": "dividend_growth",
-      "passed": true,
+      "passed": false,
       "score": 0.6667
     },
     {
       "ticker": "SGE.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.5276
+      "score": 0.5346
     },
     {
       "ticker": "SGE.L",
       "model_id": "acquirers_multiple",
       "passed": false,
-      "score": 0.1721
+      "score": 0.1907
     },
     {
       "ticker": "SGE.L",
       "model_id": "dreman_contrarian",
       "passed": false,
-      "score": 0.1933
+      "score": 0.2054
     },
     {
       "ticker": "SGE.L",
@@ -179,7 +215,7 @@
       "ticker": "SGE.L",
       "model_id": "composite_value",
       "passed": false,
-      "score": 0.546
+      "score": 0.5611
     },
     {
       "ticker": "SGE.L",
@@ -194,6 +230,6 @@
       "score": 0.6
     }
   ],
-  "models_passed": 5,
+  "models_passed": 4,
   "models_total": 22
 }
