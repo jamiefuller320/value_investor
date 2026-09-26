@@ -84,7 +84,10 @@ def test_approval_gates_cover_promotion_ids():
 def test_run_human_task_ack_writes_store(tmp_path: Path):
     data_dir = tmp_path / "data"
     data_dir.mkdir()
-    write_json(data_dir / "analysis_review.json", {"generated_at": "2026-09-26T10:00:00+00:00", "summary": "ok"})
+    write_json(
+        data_dir / "analysis_review.json",
+        {"generated_at": "2026-09-26T10:00:00+00:00", "summary": "ok"},
+    )
     result = run_human_task_ack(
         data_dir,
         task_id="sunday-read-analysis-review",

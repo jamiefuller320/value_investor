@@ -110,13 +110,12 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
         chart = _read(data_dir, "chart_outcome_review.json")
         bullets = []
         if review.get("summary"):
-            bullets.append(_bullet(str(review.get("summary"))[:280]) )
+            bullets.append(_bullet(str(review.get("summary"))[:280]))
         mix = _as_dict(chart.get("mix") or chart.get("outcome_mix"))
         if mix:
             bullets.append(
                 _bullet(
-                    "Chart-outcome mix: "
-                    + ", ".join(f"{k}={v}" for k, v in list(mix.items())[:6])
+                    "Chart-outcome mix: " + ", ".join(f"{k}={v}" for k, v in list(mix.items())[:6])
                 )
             )
         fp = _fingerprint(
@@ -190,7 +189,9 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
                     f"marks={row.get('mark_count') or row.get('marks') or '—'}"
                 )
             )
-        fp = _fingerprint({"at": status.get("generated_at") or status.get("updated_at"), "n": len(markets)})
+        fp = _fingerprint(
+            {"at": status.get("generated_at") or status.get("updated_at"), "n": len(markets)}
+        )
         return {
             "headline": "Admitted shard epoch-0 watch",
             "updated_at": status.get("generated_at") or status.get("updated_at"),
@@ -251,16 +252,19 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
 
     if tid in {"sunday-fair-cost-promotion-gate", "sunday-suite-b-fair-lab"}:
         assessment = _read(data_dir, "experiment_assessment.json")
-        bullets = [_bullet("Require fair-cost view before treating 3% stress excess as deployable.")]
+        bullets = [
+            _bullet("Require fair-cost view before treating 3% stress excess as deployable.")
+        ]
         fair = [
             row
             for row in (assessment.get("experiments") or [])
-            if isinstance(row, dict)
-            and "fair" in str(row.get("experiment_id") or "").lower()
+            if isinstance(row, dict) and "fair" in str(row.get("experiment_id") or "").lower()
         ]
         for row in fair[:5]:
             bullets.append(
-                _bullet(f"{row.get('experiment_id')}: {row.get('status')} excess={row.get('excess_vs_ftse')}")
+                _bullet(
+                    f"{row.get('experiment_id')}: {row.get('status')} excess={row.get('excess_vs_ftse')}"
+                )
             )
         fp = _fingerprint(
             {
@@ -297,14 +301,17 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
     if tid == "sunday-sleeve-episodes-readiness":
         # Prefer learning_tracks_review sidecar fields if present under data
         review = _read(data_dir, "paper_learning_review.json")
-        sleeve = _as_dict(review.get("sleeve_episodes") or review.get("learning_tracks_sleeve_episodes"))
+        sleeve = _as_dict(
+            review.get("sleeve_episodes") or review.get("learning_tracks_sleeve_episodes")
+        )
         ready = _as_dict(sleeve.get("readiness"))
         bullets = [
             _bullet(
-                f"ready_for_sleeve_timing_analysis="
-                f"{ready.get('ready_for_sleeve_timing_analysis')}"
+                f"ready_for_sleeve_timing_analysis={ready.get('ready_for_sleeve_timing_analysis')}"
             ),
-            _bullet(f"closed cohorts: {sleeve.get('closed_counts') or sleeve.get('counts') or '—'}"),
+            _bullet(
+                f"closed cohorts: {sleeve.get('closed_counts') or sleeve.get('counts') or '—'}"
+            ),
         ]
         fp = _fingerprint({"ready": ready, "at": review.get("generated_at")})
         return {
@@ -318,7 +325,9 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
     if tid == "sunday-hypothesis-integrity":
         # Look for per-track hypothesis under paper automation is heavy; use review summary
         review = _read(data_dir, "paper_learning_review.json")
-        hi = _as_dict(review.get("hypothesis_integrity") or review.get("learning_tracks_hypothesis_integrity"))
+        hi = _as_dict(
+            review.get("hypothesis_integrity") or review.get("learning_tracks_hypothesis_integrity")
+        )
         bullets = [
             _bullet(f"within_tolerance={hi.get('within_tolerance')}"),
             _bullet(f"broken_loser_count={hi.get('broken_loser_count')}"),
@@ -334,9 +343,13 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
         }
 
     if tid in {"sunday-analysis-tasks", "sunday-triage-plr-director-tasks"}:
-        path = "analysis_tasks.json" if tid == "sunday-analysis-tasks" else "paper_learning_tasks.json"
+        path = (
+            "analysis_tasks.json" if tid == "sunday-analysis-tasks" else "paper_learning_tasks.json"
+        )
         payload = _read(data_dir, path)
-        tasks = [t for t in (payload.get("tasks") or payload.get("items") or []) if isinstance(t, dict)]
+        tasks = [
+            t for t in (payload.get("tasks") or payload.get("items") or []) if isinstance(t, dict)
+        ]
         open_tasks = [
             t
             for t in tasks
@@ -364,7 +377,9 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
     if tid == "monthly-horizon-scan":
         scan = _read(data_dir, "horizon_scan.json")
         bullets = [
-            _bullet(f"Open fragments: {scan.get('open_fragment_count') or scan.get('open_count') or '—'}"),
+            _bullet(
+                f"Open fragments: {scan.get('open_fragment_count') or scan.get('open_count') or '—'}"
+            ),
             _bullet(f"Suggested promotes: {scan.get('promote_count') or '—'}"),
         ]
         if scan.get("summary"):
