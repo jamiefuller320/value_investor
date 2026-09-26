@@ -599,6 +599,8 @@ const DASHBOARD_SIDECARS = [
   ["engineering_tasks", "data/engineering_tasks.json"],
   ["ingest_deviations", "data/ingest_deviations.json"],
   ["human_tasks_checklist", "human_tasks_checklist.json"],
+  ["human_tasks_board", "data/human_tasks_board.json"],
+  ["human_task_acks", "data/human_task_acks.json"],
   ["lifecycle_board", "data/lifecycle_board.json"],
 ];
 
@@ -3232,7 +3234,57 @@ function renderIngestDeviationsSection(payload) {
     </section>`;
 }
 
-function renderHumanTasksChecklistSection(checklist) {
+function renderHumanTasksChecklistSection(checklist, board) {
+  const runbookUrl = humanTaskDocUrl(checklist || board || {}, {
+    doc_path: (checklist && checklist.runbook_path) || (board && board.runbook_path) || "docs/ops/human-tasks-checklist.md",
+  });
+  const updated =
+    (board && board.generated_at) ||
+    (checklist && checklist.updated_at) ||
+    (board && board.checklist_updated_at);
+
+  if (board && Array.isArray(board.tasks)) {
+    const counts = board.counts || {};
+    const tasks = board.tasks || [];
+    const automated = board.automated_tasks || [];
+    const cardsHtml = tasks.length
+      ? `<ul class="human-tasks-list human-tasks-cards">${tasks
+          .map((task) => renderHumanTaskCard(task))
+          .join("")}</ul>`
+      : '<p class="muted">No open human gates in the checklist.</p>';
+    const autoHtml = automated.length
+      ? `<details class="human-tasks-automated"><summary class="small">Automated CI (${automated.length})</summary>
+          <ul class="human-tasks-list">${automated
+            .map((task) => {
+              const docUrl = task.doc_url || humanTaskDocUrl(board, task);
+              const docLink = docUrl
+                ? ` <a href="${esc(docUrl)}" target="_blank" rel="noopener" class="small">runbook</a>`
+                : "";
+              return `<li class="human-task-item human-task-auto">
+                <strong>${esc(task.title || task.id || "Task")}</strong>
+                <span class="badge badge-neutral">automated</span>${docLink}
+                <div class="small muted">${esc(task.summary || "")}</div>
+              </li>`;
+            })
+            .join("")}</ul></details>`
+      : "";
+    return `
+      <section class="automation-section automation-section-full human-tasks-section">
+        <h2>Human tasks</h2>
+        <p class="small muted" style="margin-top:0">
+          Click a row for analysis, Acknowledge, and Approve on promotion gates.
+          New / changed analysis rises to the top; acknowledged tasks fall to the bottom.
+          ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Full checklist</a>` : ""}
+          ${updated ? ` · updated ${esc(fmtDate(updated))}` : ""}
+          · <span class="badge badge-watch">${esc(String(counts.new_info || 0))} new</span>
+          <span class="badge badge-neutral">${esc(String(counts.unacked || 0))} open</span>
+          <span class="badge badge-neutral">${esc(String(counts.acked || 0))} acked</span>
+        </p>
+        ${cardsHtml}
+        ${autoHtml}
+      </section>`;
+  }
+
   if (!checklist || !Array.isArray(checklist.sections) || !checklist.sections.length) {
     return `
       <section class="automation-section automation-section-full human-tasks-section">
@@ -3240,10 +3292,6 @@ function renderHumanTasksChecklistSection(checklist) {
         <p class="muted">Checklist not published yet.</p>
       </section>`;
   }
-
-  const runbookUrl = humanTaskDocUrl(checklist, {
-    doc_path: checklist.runbook_path || "docs/ops/human-tasks-checklist.md",
-  });
 
   const sectionsHtml = checklist.sections
     .map((section) => {
@@ -3279,6 +3327,161 @@ function renderHumanTasksChecklistSection(checklist) {
       </p>
       ${sectionsHtml}
     </section>`;
+}
+
+function humanTaskBucketBadge(bucket, ack) {
+  if (bucket === "new_info" || (ack && ack.stale)) {
+    return '<span class="badge badge-buy" title="Analysis changed since last ack">new info</span>';
+  }
+  if (bucket === "acked" || (ack && ack.acked && !ack.stale)) {
+    return '<span class="badge badge-neutral">acked</span>';
+  }
+  return '<span class="badge badge-watch">open</span>';
+}
+
+function renderHumanTaskCard(task) {
+  const ack = task.ack || {};
+  const analysis = task.analysis || {};
+  const bucket = task.sort_bucket || (ack.stale ? "new_info" : ack.acked ? "acked" : "unacked");
+  const docUrl = task.doc_url;
+  const docLink = docUrl
+    ? `<a href="${esc(docUrl)}" target="_blank" rel="noopener" class="small" onclick="event.stopPropagation()">runbook</a>`
+    : "";
+  const bullets = Array.isArray(analysis.bullets) ? analysis.bullets : [];
+  const bulletsHtml = bullets.length
+    ? `<ul class="human-task-analysis-list">${bullets
+        .map((b) => `<li>${esc(b)}</li>`)
+        .join("")}</ul>`
+    : '<p class="small muted">No published analysis snippet yet — open the runbook.</p>';
+  const ackEnabled = !(ack.acked && !ack.stale);
+  const ackLabel = ack.acked && !ack.stale ? "Acknowledged" : "Acknowledge";
+  const payload = JSON.stringify({
+    task_id: task.id,
+    decision: "ack_observe",
+    finding_fingerprint: analysis.fingerprint || "",
+  });
+  const approvePayload = JSON.stringify({
+    task_id: task.id,
+    decision: "approve",
+    finding_fingerprint: analysis.fingerprint || "",
+  });
+  const approveBtn = task.approval_gate
+    ? `<button type="button" class="btn btn-primary human-task-approve-btn" data-human-task-ack="${esc(
+        approvePayload
+      )}" title="Record observe-only approval (does not auto-apply)">${esc(
+        task.approval_label || "Approve"
+      )}</button>`
+    : "";
+  return `<li class="human-task-card human-task-item sort-${esc(bucket)}" data-task-id="${esc(
+    task.id || ""
+  )}">
+    <button type="button" class="human-task-card-toggle" aria-expanded="false">
+      <span class="human-task-card-head">
+        <strong>${esc(task.title || task.id || "Task")}</strong>
+        ${humanTaskBucketBadge(bucket, ack)}
+        <span class="badge badge-neutral">${esc(task.cadence || task.section_id || "")}</span>
+        ${
+          analysis.updated_at
+            ? `<span class="small muted">${esc(fmtDate(analysis.updated_at))}</span>`
+            : ""
+        }
+      </span>
+      <span class="small muted human-task-card-headline">${esc(
+        analysis.headline || task.summary || ""
+      )}</span>
+    </button>
+    <div class="human-task-card-panel" hidden>
+      <p class="small">${esc(task.summary || "")}</p>
+      <h4 class="small" style="margin:0.5rem 0 0.25rem">Analysis</h4>
+      ${
+        analysis.headline
+          ? `<p class="small"><strong>${esc(analysis.headline)}</strong></p>`
+          : ""
+      }
+      ${bulletsHtml}
+      <p class="small muted" style="margin-top:0.5rem">${docLink}</p>
+      <p class="human-task-actions">
+        <button type="button" class="btn human-task-ack-btn${ackEnabled ? " btn-primary" : ""}" data-human-task-ack="${esc(
+          payload
+        )}" ${ackEnabled ? "" : "disabled"} aria-disabled="${ackEnabled ? "false" : "true"}" title="${esc(
+          ackEnabled
+            ? "Record observe-only ack via Supabase"
+            : "Already acknowledged for this analysis"
+        )}">${esc(ackLabel)}</button>
+        ${approveBtn}
+        <span class="small muted human-task-ack-status" aria-live="polite"></span>
+      </p>
+      <p class="small muted">Ack / Approve are observe-only records — they never auto-apply knobs, crons, or capital.</p>
+    </div>
+  </li>`;
+}
+
+function bindHumanTasksSection() {
+  const panel = document.getElementById("panel-automation");
+  if (!panel || panel.dataset.boundHumanTasks === "1") return;
+  panel.dataset.boundHumanTasks = "1";
+  panel.addEventListener("click", (event) => {
+    const toggle = event.target.closest(".human-task-card-toggle");
+    if (toggle && panel.contains(toggle)) {
+      const card = toggle.closest(".human-task-card");
+      if (!card) return;
+      const panelEl = card.querySelector(".human-task-card-panel");
+      if (!panelEl) return;
+      const open = panelEl.hidden;
+      panelEl.hidden = !open;
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      card.classList.toggle("is-open", open);
+      return;
+    }
+    const btn = event.target.closest("[data-human-task-ack]");
+    if (btn && panel.contains(btn)) {
+      void acknowledgeHumanTaskFromCard(btn);
+    }
+  });
+}
+
+async function acknowledgeHumanTaskFromCard(button) {
+  if (!button || button.disabled) return;
+  const statusEl =
+    button.parentElement && button.parentElement.querySelector(".human-task-ack-status");
+  let payload = {};
+  try {
+    payload = JSON.parse(button.getAttribute("data-human-task-ack") || "{}");
+  } catch {
+    payload = {};
+  }
+  if (!payload.task_id) {
+    if (statusEl) statusEl.textContent = "Missing task id";
+    return;
+  }
+  button.disabled = true;
+  if (statusEl) statusEl.textContent = "Submitting…";
+  try {
+    if (isLocalDashboardServe()) {
+      const response = await fetch("/api/human-task-ack", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok || body.ok === false) {
+        throw new Error(body.error || `HTTP ${response.status}`);
+      }
+      if (statusEl) statusEl.textContent = "Recorded locally";
+      await reloadDashboard({ silent: true });
+      return;
+    }
+    if (!window.DashboardBridge) {
+      throw new Error("Dashboard bridge unavailable");
+    }
+    const bridgeReady = await window.DashboardBridge.init();
+    if (!bridgeReady) throw new Error("Dashboard bridge not configured");
+    await window.DashboardBridge.submitCommand("human-task-ack", payload);
+    if (statusEl) statusEl.textContent = "Queued — waiting for bridge…";
+  } catch (err) {
+    button.disabled = false;
+    if (statusEl) statusEl.textContent = err && err.message ? err.message : String(err);
+  }
 }
 
 function resolveObserveUtilization(data) {
@@ -4197,6 +4400,7 @@ function renderLearningTracksPanel(data) {
 function renderAutomation(data) {
   const panel = document.getElementById("panel-automation");
   if (!panel) return;
+  bindHumanTasksSection();
   const auto = data.automation;
   if (!auto) {
     panel.innerHTML =
@@ -4266,7 +4470,7 @@ function renderAutomation(data) {
     ${renderKnobBootstrapPanel(data)}
     ${renderChurnCounterfactualPanel(data)}
     ${renderIngestDeviationsSection(data.ingest_deviations)}
-    ${renderHumanTasksChecklistSection(data.human_tasks_checklist)}
+    ${renderHumanTasksChecklistSection(data.human_tasks_checklist, data.human_tasks_board)}
     <p class="small muted" style="margin-top:0">${esc(auto.note || "Current automation settings and dated achievements.")} Updated ${esc(fmtDate(auto.generated_at))}.</p>
 
     <div class="automation-grid">

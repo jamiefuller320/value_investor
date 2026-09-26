@@ -218,6 +218,54 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                 status, out, ctype = _json_bytes({"ok": True, **result})
                 self._send(status, out, ctype)
                 return
+            if parsed.path == "/api/human-task-ack":
+                try:
+                    length = int(self.headers.get("Content-Length") or "0")
+                except ValueError:
+                    length = 0
+                raw = self.rfile.read(length) if length > 0 else b"{}"
+                try:
+                    body = json.loads(raw.decode("utf-8") or "{}")
+                except json.JSONDecodeError:
+                    status, out, ctype = _json_bytes(
+                        {"ok": False, "error": "invalid JSON body"},
+                        status=400,
+                    )
+                    self._send(status, out, ctype)
+                    return
+                if not isinstance(body, dict):
+                    status, out, ctype = _json_bytes(
+                        {"ok": False, "error": "body must be a JSON object"},
+                        status=400,
+                    )
+                    self._send(status, out, ctype)
+                    return
+                try:
+                    from value_investor.human_task_ack import run_human_task_ack
+
+                    result = run_human_task_ack(
+                        repo_root / "docs" / "data",
+                        task_id=str(body.get("task_id") or ""),
+                        decision=str(body.get("decision") or "ack_observe"),
+                        note=str(body.get("note") or ""),
+                        finding_fingerprint=str(body.get("finding_fingerprint") or ""),
+                        source="dashboard_local",
+                        acked_by="dashboard",
+                    )
+                except Exception as exc:  # noqa: BLE001 — surface to UI
+                    status, out, ctype = _json_bytes(
+                        {
+                            "ok": False,
+                            "error": str(exc),
+                            "traceback": traceback.format_exc(),
+                        },
+                        status=400,
+                    )
+                    self._send(status, out, ctype)
+                    return
+                status, out, ctype = _json_bytes({"ok": True, **result})
+                self._send(status, out, ctype)
+                return
             if parsed.path == "/api/lifecycle-experiment-start":
                 try:
                     length = int(self.headers.get("Content-Length") or "0")
@@ -340,6 +388,7 @@ def main(argv: list[str] | None = None) -> int:
     print("POST /api/refresh          →  rebuild market_status.json + lifecycle_board.json")
     print("POST /api/lifecycle-experiment-ack → observe-ack recommend experiment")
     print("POST /api/lifecycle-experiment-start → start graduated entry DCA execute")
+    print("POST /api/human-task-ack → observe-ack / approve human checklist task")
     print("Ctrl+C to stop")
     try:
         server.serve_forever()

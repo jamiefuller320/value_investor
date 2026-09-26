@@ -523,10 +523,16 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     except Exception:  # noqa: BLE001
         unavailable_watch = {"items": []}
 
+    human_tasks_board = None
     try:
+        from value_investor.human_task_cards import write_human_tasks_board
         from value_investor.human_tasks_checklist import load_human_tasks_checklist
 
         human_tasks_checklist = load_human_tasks_checklist()
+        try:
+            human_tasks_board = write_human_tasks_board(data_dir=Path("docs/data"))
+        except Exception as board_exc:  # noqa: BLE001
+            logger.warning("Human tasks board skipped: %s", board_exc)
     except Exception as exc:  # noqa: BLE001
         logger.warning("Human tasks checklist skipped: %s", exc)
         human_tasks_checklist = None
@@ -664,6 +670,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "automation": automation,
         "project_progress": project_progress,
         "human_tasks_checklist": human_tasks_checklist,
+        "human_tasks_board": human_tasks_board,
         "market_status": market_status,
         "system_gaps": system_gaps,
         "learning_data_completeness": learning_data_completeness,
@@ -811,6 +818,9 @@ def publish_dashboard(
 
     if bundle.get("lifecycle_board"):
         write_json(data_dir / "lifecycle_board.json", bundle["lifecycle_board"], compact=False)
+
+    if bundle.get("human_tasks_board"):
+        write_json(data_dir / "human_tasks_board.json", bundle["human_tasks_board"], compact=False)
 
     if run_at := bundle.get("run_at"):
         stamp = str(run_at)[:10]

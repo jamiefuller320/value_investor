@@ -1,0 +1,1638 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-26T13:35:48.622444+00:00",
+  "title": "Human tasks checklist",
+  "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
+  "runbook_path": "docs/ops/human-tasks-checklist.md",
+  "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
+  "checklist_updated_at": "2026-09-26",
+  "counts": {
+    "new_info": 0,
+    "unacked": 32,
+    "acked": 0,
+    "automated": 19,
+    "human": 32
+  },
+  "tasks": [
+    {
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Admitted shard epoch-0 watch",
+        "updated_at": "2026-09-26T13:22:37.885704+00:00",
+        "fingerprint": "890ccdae79ab6d8a",
+        "bullets": [],
+        "source_keys": [
+          "market_status"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "adhoc-review-ingest-deviations",
+      "title": "Review open ingest deviations and reprocess if needed",
+      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/ingest-deviations.md",
+      "doc_anchor": "what-needs-a-human",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Ingest deviations · 1 open",
+        "updated_at": "2026-09-26T13:21:01.484970+00:00",
+        "fingerprint": "42d47f5b3c76372e",
+        "bullets": [
+          "Open deviations: 1",
+          "MC.PA: blocker_no_improve — MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources."
+        ],
+        "source_keys": [
+          "ingest_deviations"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "monthly-pr-fix-common-issues",
+      "title": "Review common PR check / merge fix-request reasons",
+      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/project-traffic.md",
+      "doc_anchor": "pr-fix-occasion-log",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "PR fix common issues",
+        "updated_at": "2026-09-25T16:31:05.182540+00:00",
+        "fingerprint": "6c291374105f877a",
+        "bullets": [
+          "Occasions logged: 70",
+          "None: 7",
+          "None: 5",
+          "None: 2",
+          "None: 1",
+          "None: 1"
+        ],
+        "source_keys": [
+          "pr_fix_occasions",
+          "project_traffic_digest"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-knob-calibration-priors",
+      "title": "Review knob calibration priors",
+      "summary": "Inspect knob_calibration_priors.json: ranking_mode, ready_for_shadow_bootstrap, bootstrap_priors, confidence, score_gap_vs_runner_up, and winner/loser catch rates.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/knob-calibration.md",
+      "doc_anchor": "promoting-a-prior-human-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#promoting-a-prior-human-gate",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Experiment assessment · 4 recommend",
+        "updated_at": "2026-09-25T08:30:45.957675+00:00",
+        "fingerprint": "3c72fe9d3c3e7cfb",
+        "bullets": [
+          "Recommend rows: 4 / 15 experiments",
+          "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
+          "graduated_allocation: recommend conf=None",
+          "entry_dca_overlay: recommend conf=None",
+          "ana-20260921-02: recommend conf=None",
+          "ana-20260921-04: recommend conf=None"
+        ],
+        "source_keys": [
+          "experiment_assessment",
+          "knob_calibration_priors"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-shadow-endurance",
+      "title": "Review unified experiment assessment",
+      "summary": "Read experiment_assessment.json for continue/fail/recommend rows. After the 2026-09-03 human pass, task recommends should be empty: u4 and exit-shadow are watch, buffered-hold and IMB.L are done, scoring is on the engineering queue. Do not reopen cancelled N58/N59 knob rows. Drill into calibration_shadow_endurance.json for shadow detail.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/experiment-assessment.md",
+      "doc_anchor": "human-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/experiment-assessment.md#human-gate",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Experiment assessment · 4 recommend",
+        "updated_at": "2026-09-25T08:30:45.957675+00:00",
+        "fingerprint": "3c72fe9d3c3e7cfb",
+        "bullets": [
+          "Recommend rows: 4 / 15 experiments",
+          "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
+          "graduated_allocation: recommend conf=None",
+          "entry_dca_overlay: recommend conf=None",
+          "ana-20260921-02: recommend conf=None",
+          "ana-20260921-04: recommend conf=None"
+        ],
+        "source_keys": [
+          "experiment_assessment",
+          "knob_calibration_priors"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-shadow-vs-primary",
+      "title": "Compare calibrated shadows vs primary AI judgment",
+      "summary": "On Automation tab, compare forward marks for ai_judgment vs competing calibrated shadows before promoting any prior.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/knob-calibration.md",
+      "doc_anchor": "competing-calibrated-shadows",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#competing-calibrated-shadows",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Experiment assessment · 4 recommend",
+        "updated_at": "2026-09-25T08:30:45.957675+00:00",
+        "fingerprint": "3c72fe9d3c3e7cfb",
+        "bullets": [
+          "Recommend rows: 4 / 15 experiments",
+          "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
+          "graduated_allocation: recommend conf=None",
+          "entry_dca_overlay: recommend conf=None",
+          "ana-20260921-02: recommend conf=None",
+          "ana-20260921-04: recommend conf=None"
+        ],
+        "source_keys": [
+          "experiment_assessment",
+          "knob_calibration_priors"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-promote-knobs-gate",
+      "title": "Promote knob priors only when gates pass",
+      "summary": "Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, and confidence is acceptable. Survivors are starting priors for refinement — never auto-apply. Stress-book (3%) excess vs ^FTSE alone is not sufficient — see fair-cost gate.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/knob-calibration.md",
+      "doc_anchor": "promoting-a-prior-human-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#promoting-a-prior-human-gate",
+      "approval_gate": true,
+      "approval_label": "Approve knob promote",
+      "analysis": {
+        "headline": "Experiment assessment · 4 recommend",
+        "updated_at": "2026-09-25T08:30:45.957675+00:00",
+        "fingerprint": "3c72fe9d3c3e7cfb",
+        "bullets": [
+          "Recommend rows: 4 / 15 experiments",
+          "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
+          "graduated_allocation: recommend conf=None",
+          "entry_dca_overlay: recommend conf=None",
+          "ana-20260921-02: recommend conf=None",
+          "ana-20260921-04: recommend conf=None"
+        ],
+        "source_keys": [
+          "experiment_assessment",
+          "knob_calibration_priors"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-fair-cost-promotion-gate",
+      "title": "Require fair-cost view before treating excess as deployable",
+      "summary": "Keep 3% stress books as the defensive/churn lab. Before promoting knobs or calling primary 'beating the market', check ftse-trading-costs assess and/or fair-cost warm-start shadows. Promote only when fair excess beats ^FTSE and the fair rules control (or explicitly accept stress-only churn wins).",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-trading-costs.md",
+      "doc_anchor": "test-and-adoption-strategy-dual-suite",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-trading-costs.md#test-and-adoption-strategy-dual-suite",
+      "approval_gate": true,
+      "approval_label": "Approve fair-cost view",
+      "analysis": {
+        "headline": "Fair-cost Suite B lab",
+        "updated_at": "2026-09-25T08:30:45.957675+00:00",
+        "fingerprint": "62c3b2e04cdbc548",
+        "bullets": [
+          "Require fair-cost view before treating 3% stress excess as deployable."
+        ],
+        "source_keys": [
+          "experiment_assessment"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-suite-b-fair-lab",
+      "title": "Review Suite B fair-cost lab vs stress Suite A",
+      "summary": "Confirm ai_judgment_fair / rules_fair are marking under T212-shaped costs, endurance_zero_datum is set, and decision-review --suite B applies stay suite-local. Do not flip primary off 3% (N48) until B excess beats ^FTSE and fair rules control with a thick forward window.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-trading-costs.md",
+      "doc_anchor": "near-term-actions",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-trading-costs.md#near-term-actions",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Fair-cost Suite B lab",
+        "updated_at": "2026-09-25T08:30:45.957675+00:00",
+        "fingerprint": "62c3b2e04cdbc548",
+        "bullets": [
+          "Require fair-cost view before treating 3% stress excess as deployable."
+        ],
+        "source_keys": [
+          "experiment_assessment"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-spawn-fair-twins",
+      "title": "Spawn Suite B twins only for recommend experiments",
+      "summary": "If experiment_assessment has recommend calibration/exclusion/experimental tracks, dry-run then optionally apply ftse-trading-costs spawn-fair-twins (max 2). Never auto-fork every shadow (N53). Zero recommend rows is a no-op.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-trading-costs.md",
+      "doc_anchor": "selective-a-to-b-fair-cost-twins",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-trading-costs.md#selective-a-to-b-fair-cost-twins",
+      "approval_gate": true,
+      "approval_label": "Approve spawn fair twins",
+      "analysis": {
+        "headline": "Experiment assessment · 4 recommend",
+        "updated_at": "2026-09-25T08:30:45.957675+00:00",
+        "fingerprint": "3c72fe9d3c3e7cfb",
+        "bullets": [
+          "Recommend rows: 4 / 15 experiments",
+          "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
+          "graduated_allocation: recommend conf=None",
+          "entry_dca_overlay: recommend conf=None",
+          "ana-20260921-02: recommend conf=None",
+          "ana-20260921-04: recommend conf=None"
+        ],
+        "source_keys": [
+          "experiment_assessment",
+          "knob_calibration_priors"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-entry-dca-cadence",
+      "title": "Review entry DCA cadence when overlay readiness fires",
+      "summary": "Ack via CLI or Lifecycle Acknowledge (observe-only — Do not execute DCA from ack). Review docs/data/entry_dca_adoption_plan.json. When paper_execute_graduated is ready, Lifecycle Start enables 4× weekly entry DCA on graduated_allocation only. Do not change starter fraction or apply to primary/live while beat_market is false.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/position-lifecycle.md",
+      "doc_anchor": "entry-dca-adoption-plan",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/position-lifecycle.md#entry-dca-adoption-plan",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Entry DCA adoption · —",
+        "updated_at": "2026-09-25T08:30:45.956300+00:00",
+        "fingerprint": "4b4334bc9df93e7f",
+        "bullets": [
+          "Adoption stage: —",
+          "paper_execute_graduated ready: None",
+          "Acknowledge is observe-only — use Lifecycle Start to execute."
+        ],
+        "source_keys": [
+          "entry_dca_adoption_plan"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-read-analysis-review",
+      "title": "Read analysis review synthesis",
+      "summary": "After analysis-review (~10:35 UTC), read analysis_review.md for backward metrics, proposed experiments, ingest trials, and the observe-only buy-tier chart-outcome mix (well timed / giveback / no terrible).",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/analysis-review.md",
+      "doc_anchor": "artifacts",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/analysis-review.md#artifacts",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Sunday analysis review synthesis",
+        "updated_at": "2026-09-23T18:10:46.526961+00:00",
+        "fingerprint": "83392f2ea8ba5cf0",
+        "bullets": [],
+        "source_keys": [
+          "analysis_review",
+          "chart_outcome_review"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-buy-cross-archive",
+      "title": "Read buy-cross archive review",
+      "summary": "After analysis-review, read buy_cross_archive_review.json: cross-book vs level comparison, week-0 cash, names that never entered because they stayed buy-tier. Observe-only — do not spawn a live cross book from sparse historic crossings.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/buy-tier-cohort-labs.md",
+      "doc_anchor": "cross-book-archive-only",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/buy-tier-cohort-labs.md#cross-book-archive-only",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Buy-cross archive review",
+        "updated_at": "2026-09-06T20:12:22.657688+00:00",
+        "fingerprint": "3b2978ff073990e5",
+        "bullets": [],
+        "source_keys": [
+          "buy_cross_archive_review"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "adhoc-decision-recording-plan",
+      "title": "Lock recording plan before new learning strands",
+      "summary": "Before opening a new analysis, counterfactual, or model-dev strand, answer the four freeze questions (unit, freeze-at-t, join-later, never-backfill) and validate with ftse-decision-recording. Use preview-freeze for coverage gaps. Do not enable the Phase C freeze writer until readiness is READY.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/decision-recording-checklist.md",
+      "doc_anchor": "the-four-questions",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/decision-recording-checklist.md#the-four-questions",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "93b1efb80701c7fe",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "adhoc-epoch0-cron-unmapped-timezone",
+      "title": "Extend epoch-0 cron timezone map for new session",
+      "summary": "When admitting a market with no MARKET_SESSION_DEFAULTS entry (or a timezone not in EPOCH0_WEEKDAY_SLOTS), add an explicit session + bucket mapping (e.g. tsx60\to America/Toronto\to US EDT/EST). Do not rely on the London DEFAULT_SESSION fallback. Then re-run euro-ingest-dispatch --sync-cron or import_cron_jobs for that key.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "weekday-epoch-0-local-open",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#weekday-epoch-0-local-open",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "b2cfdab6103bd7f7",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "adhoc-live-capital-pack",
+      "title": "Verify decision packs before live capital",
+      "summary": "For real-money trades, use decision-pack verify checklist and primary sources — separate from the automated learning loop.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/primary-learning-track.md",
+      "doc_anchor": "success-datums",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/primary-learning-track.md#success-datums",
+      "approval_gate": true,
+      "approval_label": "Approve live capital",
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "ebcb833139cc8f44",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "adhoc-paper-learning-review",
+      "title": "Paper-learning review experiments",
+      "summary": "When churn or exit-timing cohorts mature, run paper-learning review probes manually; do not auto-apply from shadow cohorts yet.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/paper-learning-review.md",
+      "doc_anchor": null,
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/paper-learning-review.md",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "a5c39ab7c365ab62",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "adhoc-review-fcf-basis-bridges",
+      "title": "Override FCF auto policy only when majority/filing is wrong",
+      "summary": "Ordinary buy-tier FCF mismatches auto-resolve (majority among screen/filing/company-adjusted, else filing-aligned OCF−CapEx). Write docs/data/research/<TICKER>/sources/fcf_bridge.json only as a residual override when that auto pick is wrong, or when so-what flags fcf_bridge_needed because no filing/company figure exists. Never leave divergent Yahoo TTM as policy.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/fcf-basis-bridges.md",
+      "doc_anchor": "when-to-review-residual",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/fcf-basis-bridges.md#when-to-review-residual",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "8965e12748feca3a",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "adhoc-rotate-cursor-api-key",
+      "title": "Rotate CURSOR_API_KEY after suspected exposure",
+      "summary": "If Cursor API misuse or GitHub secret exposure is suspected: revoke the key in the Cursor dashboard, set a new GitHub Actions secret (and any Cloud/cron copies), review odd workflow_run jobs, and confirm main workflow files were not planted. Prefer main branch protection so a stolen GITHUB_TOKEN cannot push exfil workflows.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/gha-secret-hygiene.md",
+      "doc_anchor": "if-cursor_api_key-may-already-be-compromised",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#if-cursor_api_key-may-already-be-compromised",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "d5ceb09fa62df0a6",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "adhoc-sync-cursor-api-key-v2-github",
+      "title": "Sync valid Cursor API key into GitHub Actions secrets",
+      "summary": "When ftse-verify-key --key-source legacy fails but --key-source v2 succeeds (or GHA agent jobs 401): copy the valid User API key into GitHub Actions secrets CURSOR_API_KEY_V2 and CURSOR_API_KEY. Workflows prefer V2 via secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY. Cloud secrets alone do not feed Actions.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/gha-secret-hygiene.md",
+      "doc_anchor": "which-secret-workflows-use",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#which-secret-workflows-use",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "0f3c630041c5abc1",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "monthly-cycle-budget-surplus",
+      "title": "Review cycle-end Cursor surplus and provisional weekly-ops bump",
+      "summary": "Near plan refresh day: ftse-library cycle-surplus assess with declared unused Ultra fraction, apply a 25% transfer into weekly_ops_cap only, then next cycle run review and --keep or --revert. 15% of listed plan credit / week is a warning on estimated weekly_ops USD, not a hard cap. Do not raise rememo daily caps, research_all_graduated, or offline memo density from leftover credit.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/cycle-budget-surplus.md",
+      "doc_anchor": "human-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/cycle-budget-surplus.md#human-gate",
+      "approval_gate": true,
+      "approval_label": "Approve surplus bump",
+      "analysis": {
+        "headline": "Cycle-end Cursor surplus",
+        "updated_at": null,
+        "fingerprint": "6212284469490cb7",
+        "bullets": [
+          "Decision: —",
+          "Unused Ultra fraction: —"
+        ],
+        "source_keys": [
+          "cycle_budget_surplus"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "monthly-euro-depth-parity",
+      "title": "Review euro_depth filing/memo parity vs FTSE",
+      "summary": "Check whether euro_depth buy-tier has usable euro_filings bodies and memo quality approaching FTSE; only then flip phase1_require_ai_beat_rules back on or promote to weekday Phase 3.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "depth-first-eu-pilot-aug-2026",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#depth-first-eu-pilot-aug-2026",
+      "approval_gate": true,
+      "approval_label": "Approve Phase 3 / AI gate",
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "5bc116633bde2052",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "monthly-horizon-scan",
+      "title": "Horizon scan + deferred fragments",
+      "summary": "First Sunday 11:00 UTC: weeder applies deterministic near-dup / already-an-idea DROPs; read horizon scan; triage remaining open fragments and deferred ideas. apply_fragments stays off unless you reviewed the markdown.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/horizon-scan.md",
+      "doc_anchor": "when-it-runs",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/horizon-scan.md#when-it-runs",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Horizon scan + deferred fragments",
+        "updated_at": null,
+        "fingerprint": "6edae61b0a2e7086",
+        "bullets": [
+          "Open fragments: —",
+          "Suggested promotes: —"
+        ],
+        "source_keys": [
+          "horizon_scan"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "monthly-ops-review-cadence",
+      "title": "Follow unified ops review cadence",
+      "summary": "Use the weekly → monthly → quarterly sequence in ops-review-cadence.md (analysis review, horizon scan, deferred ideas) rather than ad-hoc review order.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/ops-review-cadence.md",
+      "doc_anchor": "sequence",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-review-cadence.md#sequence",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "e070ec37819ededb",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "quarterly-deferred-review",
+      "title": "Deferred ideas review pass",
+      "summary": "Review deferred-review.md; move items via ftse-defer status (done / drop / promote).",
+      "automated": false,
+      "cadence": "quarterly",
+      "section_id": "quarterly",
+      "section_title": "Quarterly",
+      "doc_path": "docs/deferred-review.md",
+      "doc_anchor": null,
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/deferred-review.md",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Deferred ideas review",
+        "updated_at": null,
+        "fingerprint": "60dad664d5c7f608",
+        "bullets": [
+          "Horizon/deferred triage items: 5",
+          "hor-20260811-01: Archive rebalance replay for rules knob set (min_conviction 0.55, sector_cap 0.2) from first logged pass — full P&L path vs 5-entry preview; validates whether +5.98% return delta vs actual holds on lo",
+          "hor-20260811-02: Hold ai_judgment and rules knobs fixed for one epoch — accumulate ≥2 epoch marks and ≥1 epoch trade before any human decision-review apply; isolates cost/concentration effects of 2026-08-11 knob chang",
+          "hor-20260811-03: Buffered-hold counterfactual on rules/ai_judgment — replay last 7d exits (3 full_exits each track, exit_streak=1 on HIK.L/ITV.L/FGP.L) with exit_confirm_screens 1 vs 2; quantifies churn-guard sensitiv",
+          "hor-20260811-04: Extend archive near-miss to held-ticker episodes — rerun hold_recovery/swap_rotation on names that appeared in rebalance_log with buy-tier history (not only below-buy-tier gate); closes gap that 7/7 s",
+          "hor-20260811-05: Epoch-zero datum dashboard slice — surface per-track epoch NAV, post-apply trade count, and benchmark span availability (all tracks currently \"Insufficient epoch marks\"); makes stage 2b underperforman"
+        ],
+        "source_keys": [
+          "horizon_tasks"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-analysis-tasks",
+      "title": "Triage analysis_tasks experiments",
+      "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim — do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/analysis-review.md",
+      "doc_anchor": "manual-promotion-to-engineering",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/analysis-review.md#manual-promotion-to-engineering",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Triage queue · 6 open",
+        "updated_at": null,
+        "fingerprint": "e6c34b2d05d875b1",
+        "bullets": [
+          "Open/proposed: 6 / 6",
+          "ana-20260728-04: Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
+          "ana-20260921-01: Exclusion-universe step u3 (conviction ≥ 0.25, cumulative_exclusion_alpha +0.00261) replay on ai_judgment candidate pool vs baseline — expected learning value: quantify whether priors improve filtered",
+          "ana-20260921-02: Offline family-weight stress test for quality/dividend failures on avoid cohort (pattern AAL.L / AML.L opinion-flip triggers) — expected learning value: test whether tightening quality+dividend gates",
+          "ana-20260921-03: Conviction/timing delay model for transition_key hold→buy and realization_lag (1w hit 0.406 vs within_4w_rate 0.9448) — expected learning value: separate assessment lag from signal direction for overl",
+          "ana-20260921-04: Hold-vs-swap probability strand using exit_timing_near_miss (hold_closed 202, swap_closed 209, ready_for_probability_analysis true) — expected learning value: estimate whether early swap beats hold re"
+        ],
+        "source_keys": [
+          "analysis_tasks"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-exclusion-shadow-spawn",
+      "title": "Exclusion ladder shadow spawn gate",
+      "summary": "If exclusion_ladder_replay readiness.ready_for_shadow_spawn is true, run ftse-exclusion-ladder-replay spawn-shadow manually. Never auto-spawn.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/exclusion-ladder-replay.md",
+      "doc_anchor": "promotion-workflow-human-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/exclusion-ladder-replay.md#promotion-workflow-human-gate",
+      "approval_gate": true,
+      "approval_label": "Approve spawn shadow",
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "73505a4f7cc79858",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-hypothesis-integrity",
+      "title": "Review in-portfolio hypothesis integrity when losers breach tolerance",
+      "summary": "If learning_tracks_hypothesis_integrity shows within_tolerance=false, broken_loser_count>0, or selection_feedback_flags, read track hypothesis_integrity.md. Prefer thesis-broken rotation over crude stops; do not auto-apply exit knobs.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/hypothesis-integrity.md",
+      "doc_anchor": "human-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/hypothesis-integrity.md#human-gate",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Hypothesis integrity",
+        "updated_at": null,
+        "fingerprint": "4a4430f30d5b0504",
+        "bullets": [
+          "within_tolerance=None",
+          "broken_loser_count=None",
+          "flags=—"
+        ],
+        "source_keys": [
+          "paper_learning_review"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-phase-c-readiness-gate",
+      "title": "Start Phase C freeze writer only when readiness is READY",
+      "summary": "Before building or enabling the PIT autopsy freeze writer, confirm phase_c_readiness.json (or ftse-phase-c-readiness exit 0) is READY. Do not start Phase C on vibes or with --force-phase-b-done alone — that override does not invent rebalance history or feature coverage.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/pit-decision-autopsy.md",
+      "doc_anchor": "automated-readiness-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/pit-decision-autopsy.md#automated-readiness-gate",
+      "approval_gate": true,
+      "approval_label": "Approve Phase C start",
+      "analysis": {
+        "headline": "Phase C readiness: unknown",
+        "updated_at": null,
+        "fingerprint": "485339f83437645f",
+        "bullets": [
+          "Status: unknown"
+        ],
+        "source_keys": [
+          "phase_c_readiness"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-sleeve-episodes-readiness",
+      "title": "Review dual-path sleeve episodes when tag cohorts mature",
+      "summary": "When learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true (≥15 closed per on_book/off_book/never_funded), review stratified sleeve timing. Do not mix never_funded marks into NAV vs ^FTSE. Do not back-label historical NAV as sleeve evidence.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/dual-path-sleeve-lab.md",
+      "doc_anchor": "evidence-gathered-to-date--validity",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/dual-path-sleeve-lab.md#evidence-gathered-to-date--validity",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Dual-path sleeve episodes readiness",
+        "updated_at": null,
+        "fingerprint": "3e77e5d4b78594fa",
+        "bullets": [
+          "ready_for_sleeve_timing_analysis=None",
+          "closed cohorts: —"
+        ],
+        "source_keys": [
+          "paper_learning_review"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-triage-plr-director-tasks",
+      "title": "Triage paper-learning and learning-director tasks",
+      "summary": "These queues have no promote CLI. Remaining: watch u4 (ldr-20260823-02) and exit-shadow (ana-20260728-04); leave L111 replay as continue. Buffered-hold and IMB.L audits are done. Do not reopen duplicate human-ack wrappers. Prefer the engineering queue for the two scoring tasks.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/paper-learning-review.md",
+      "doc_anchor": "enacting-proposed-experiments",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/paper-learning-review.md#enacting-proposed-experiments",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Triage queue · 0 open",
+        "updated_at": null,
+        "fingerprint": "3fbd4b87b7c20e44",
+        "bullets": [
+          "Open/proposed: 0 / 3"
+        ],
+        "source_keys": [
+          "paper_learning_tasks"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "weekday-engineering-parked-backlog-clear",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When the warning still fires, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+      "automated": false,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "engineering-parked-backlog-clearing",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "1 attention-parked eng tasks",
+        "updated_at": null,
+        "fingerprint": "9fc44a095c2ab772",
+        "bullets": [
+          "Parked tasks: 1 (attention ~1)",
+          "Traffic pause active: False",
+          "eng-20260924-02: Hunt fetchable IR source for parked euro_stoxx50 leftover ADYEN.AS"
+        ],
+        "source_keys": [
+          "engineering_tasks"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    }
+  ],
+  "automated_tasks": [
+    {
+      "id": "weekday-verify-paper-auto",
+      "title": "Spot-check learning tracks after paper-auto",
+      "summary": "ops-monitor (13:15 catch-up) checks post-settle last_run, decision-review coverage of AI judgment vs rules, competing calibrated shadows, and Suite B buy_tier_level. Workflow freshness covers CI acted. Excess vs ^FTSE comparison stays Sunday — do not promote on weekday marks.",
+      "automated": true,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "paper-learning-tracks",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#paper-learning-tracks",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "7156baf1c4afd6e5",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "weekday-paper-auto-runs",
+      "title": "Paper-auto + decision-review apply",
+      "summary": "Runs all learning tracks (including competing calibrated shadows and the Suite B buy_tier_level cohort), refreshes overlay, appends rebalance_log, applies clamped knobs when history is thick. Shadows and the cohort lab are observe-only (no --apply); endurance ledger refreshes after review.",
+      "automated": true,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/decision-review.md",
+      "doc_anchor": "commands",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/decision-review.md#commands",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "da9e90e44bba8397",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "weekday-gha-secret-hygiene",
+      "title": "GHA secret hygiene scan",
+      "summary": "Daily Actions scan for public-repo workflow_run secret-exposure patterns. Skips when no main merges / workflow touches in the last 36h; always runs on PRs that change workflows. Failures open a supervised engineering task.",
+      "automated": true,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/gha-secret-hygiene.md",
+      "doc_anchor": "automated-daily-check",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#automated-daily-check",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "9e3902fc887a3c6f",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "weekday-epoch0-local-open",
+      "title": "Admitted epoch-0 local-open marks",
+      "summary": "library-epoch0-weekday.yml marks admitted buy_tier_level books after ASX / EU / US open+settle. Session gate skips pre-settle and already-marked local days. No AI track, no knob apply, not FTSE paper-auto at 08:25 UTC. Census refresh writes equal_support_status.json.",
+      "automated": true,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "weekday-epoch-0-local-open",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#weekday-epoch-0-local-open",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "b52e7c829386beb9",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "adhoc-epoch0-weekday-cron-register",
+      "title": "Epoch-0 weekday local-open crons (admit + sync)",
+      "summary": "On learning admit and on euro-ingest-dispatch --sync-cron, upsert timezone-bucket cron-job.org jobs (asx/euro/us-edt/us-est) for admitted markets. Ingest/sprint/maintenance workflows pass CRONJOB_API_KEY + WORKFLOW_DISPATCH_PAT. Soft-skips when secrets are missing. Do not attach these to FTSE weekday_paper at 08:25 UTC.",
+      "automated": true,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "weekday-epoch-0-local-open",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#weekday-epoch-0-local-open",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "7dd0bd7ee006d1ca",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "weekday-admitted-rememo",
+      "title": "Admitted-market weekday rememo",
+      "summary": "After library ingest maintenance, rememo up to 3 body-lag buy-tier names per admitted/epoch-0 market (same cap as FTSE). Catch-up to 5 when that market's backlog exceeds 15. Once per weekday. No AI / no Sunday dump / no 21-market spray.",
+      "automated": true,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "6c8f658d84c0ef13",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "weekday-project-traffic-runs",
+      "title": "Project traffic pause / unstick / EOD digest",
+      "summary": "Weekday project-traffic (and ops-monitor) classifies stuck cursor/* PRs, pauses new engineering-agent dispatch, comments for CI/conflict fixes (appending pr_fix_occasions.json with failure reasons), may dispatch conflict-resolve for eng branches, stops Composer reburn / Cursor fail-loop automation waste (park burning tasks + pause), and writes a grounded EOD digest that lists today's eng merges (including independently verified ingest_narrow / scoring_narrow / compile_cap_drain auto-merges) plus common PR-fix failure reasons. Automation → Queue & hunter monitor shows today/yesterday merge counts, a 14-day auto vs manual merge bar chart, and PR-fix intervention tallies. Spot-check digest trajectory and the merges-today list when pause is active, auto-merges land, or a cohesion_bypass task still needed human merge because the actual diff stayed over the path cap.",
+      "automated": true,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/project-traffic.md",
+      "doc_anchor": "authority-v1",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#authority-v1",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "619c47d64832b846",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "weekday-buy-tier-level-first-fill",
+      "title": "Confirm buy-tier level cohort first fill",
+      "summary": "ops-monitor fails when buy_tier_level acted with an empty book. Knobs stay frozen. Do not treat first-fill NAV as promotion truth (Sunday gates).",
+      "automated": true,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/buy-tier-cohort-labs.md",
+      "doc_anchor": "level-book-live-monday",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/buy-tier-cohort-labs.md#level-book-live-monday",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "7194140ccdf60812",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "weekday-buy-tier-level-dca",
+      "title": "FTSE buy-tier level DCA realism (£500/mo)",
+      "summary": "Paper-auto runs buy_tier_level_dca (same level-book policy, monthly_deposit=500, cold-start capital epoch). Overlays FTSE Overview held-vs-market as branch series with deposit-matched ^FTSE. Not a promotion gate; recycling buy_tier_level stays the primary held line.",
+      "automated": true,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/buy-tier-cohort-labs.md",
+      "doc_anchor": "ftse-dca-realism-twin-buy_tier_level_dca",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/buy-tier-cohort-labs.md#ftse-dca-realism-twin-buy_tier_level_dca",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "a0abe1698c41271a",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "weekday-sleeve-episodes-pass",
+      "title": "Dual-path sleeve episodes (observe-only)",
+      "summary": "Paper-auto opens/updates widest sleeve episodes (near-buy hold@≥0.28 or buy-tier → grace-end+~1m / fallback leave-wide×confirms+~1m) with capital_status tags (on_book / off_book / never_funded). Does not change allocation or NAV scoreboard. Manual: ftse-sleeve-episodes.",
+      "automated": true,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/dual-path-sleeve-lab.md",
+      "doc_anchor": "artifacts",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/dual-path-sleeve-lab.md#artifacts",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "4d361cf0eeee10a7",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "sunday-phase-c-readiness-runs",
+      "title": "Phase C readiness assessment (observe-only)",
+      "summary": "Sunday analysis-review runs ftse-phase-c-readiness and writes docs/data/phase_c_readiness.json. Checks Phase B slim evidence, ≥8 weeks AI-judgment rebalance_log with buy-tier/candidates, and non-trivial feature coverage. Does not fail the Sunday job on NOT READY.",
+      "automated": true,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/pit-decision-autopsy.md",
+      "doc_anchor": "automated-readiness-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/pit-decision-autopsy.md#automated-readiness-gate",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "2dac3cb56cbbd6ab",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "sunday-ingest-capacity-watch",
+      "title": "Watch ingest capacity as more markets come on stream",
+      "summary": "Spare sprint auto-advance down the queue is correct. Crowded maintenance defaults to 2 markets/slot (L454); ftse-library maintenance-capacity-review steps width or proposes matrix from samples. Confirm library-ingest-maintenance still finishes inside 120 minutes; the 62-name deepen cap is usually not binding.",
+      "automated": true,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "c41ae6dc748edeb4",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "sunday-shard-epoch0-runs",
+      "title": "Admitted-market epoch-0 shard (buy-tier-level + near-miss)",
+      "summary": "Ladder stamps equal-support timing (and near-miss / exclusion archives) before ftse-library shard-epoch0 so skip_timing_wait can drop timing_signal=wait from new buys. Wait names stay on the observe-only near_miss_watch.json sample. Sunday prefers first-time memos and rememos the focus book only; admitted body-lag rememo and local-open marks are weekday jobs. No AI-judgment track and no knob apply.",
+      "automated": true,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "ac50b945c6155f19",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "sunday-knob-calibrate-runs",
+      "title": "Full-period knob calibrate + shadow bootstrap",
+      "summary": "analysis-review.yml runs ftse-knob-calibrate with full_period_retrospective, writes bootstrap_priors, spawns competing shadows, PIT warm-starts them from parent rebalance_log (forward-only endurance zero datum), and refreshes endurance.",
+      "automated": true,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/knob-calibration.md",
+      "doc_anchor": "warm-start-zero-datum-forward-only-endurance",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#warm-start-zero-datum-forward-only-endurance",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "802709a87a42619a",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "adhoc-euro-ingest-cron-reimport",
+      "title": "Re-import euro ingest cron slots after cadence change",
+      "summary": "On main merge of import_cron_jobs.py / epoch0 slots / euro+library ingest workflow schedules, import-ingest-crons.yml re-imports Mon–Sat peak + daily off-peak slots (and epoch-0 buckets) on cron-job.org. Soft-skips when CRONJOB_API_KEY or WORKFLOW_DISPATCH_PAT is missing. Manual re-import only if the workflow was deleted or secrets were absent.",
+      "automated": true,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/euro-depth-sprint.md",
+      "doc_anchor": "register-euro-ingest-crons-after-cadence-changes",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/euro-depth-sprint.md#register-euro-ingest-crons-after-cadence-changes",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "f4df29658eda3ef4",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "adhoc-ops-monitor-catchup-cron",
+      "title": "Register ops-monitor 13:15 UTC catch-up on cron-job.org",
+      "summary": "Already live on cron-job.org (title FTSE ops monitor catch-up). Re-import only if deleted: import_cron_jobs.py --job ops-monitor-catchup. GitHub schedule is backup. Verify with gh run list --workflow=ops-monitor.yml.",
+      "automated": true,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "email-deferral-day-complete-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#email-deferral-day-complete-gate",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "fb57f018fd0d138c",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "adhoc-project-traffic-cron-register",
+      "title": "Register project-traffic weekday crons",
+      "summary": "Already live on cron-job.org (midday 12:30 + EOD 17:30 UTC weekdays). Re-import only if deleted: import_cron_jobs.py --job project-traffic-midday --job project-traffic-eod. GitHub schedule is backup only.",
+      "automated": true,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/project-traffic.md",
+      "doc_anchor": "schedule",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#schedule",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "250dfa2070afc1ce",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "adhoc-gha-secret-hygiene-cron",
+      "title": "Register daily GHA secret-hygiene cron on cron-job.org",
+      "summary": "Already live on cron-job.org (title GHA secret hygiene). Re-import only if deleted: import_cron_jobs.py --job gha-secret-hygiene. GitHub schedule is backup. Verify with gh run list --workflow=gha-secret-hygiene.yml.",
+      "automated": true,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/gha-secret-hygiene.md",
+      "doc_anchor": "automated-daily-check",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#automated-daily-check",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "f5ea85e85729a152",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    },
+    {
+      "id": "adhoc-dashboard-bridge-cron-register",
+      "title": "Register dashboard-bridge weekday every-10m cron on cron-job.org",
+      "summary": "Already live on cron-job.org (title FTSE dashboard bridge weekday every 10m, jobId 8513740). Re-import only if deleted: import_cron_jobs.py --job dashboard-bridge. GitHub */10 schedule is backup and often drifts hours. Verify with gh run list --workflow=dashboard-bridge.yml.",
+      "automated": true,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/dashboard-bridge.md",
+      "doc_anchor": "schedule-primary-vs-backup",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/dashboard-bridge.md#schedule-primary-vs-backup",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "182f311d77b96e3b",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "automated"
+    }
+  ]
+}
