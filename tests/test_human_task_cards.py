@@ -12,7 +12,6 @@ from value_investor.storage import write_json
 
 
 def test_board_sorts_new_info_before_acked(tmp_path: Path):
-    checklist = load_human_tasks_checklist()
     data_dir = tmp_path / "data"
     data_dir.mkdir()
     # Minimal analysis artifacts so fingerprints differ
