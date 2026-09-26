@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-09-26T19:28:32.150301+00:00",
+  "compiled_at": "2026-09-26T19:52:05.227556+00:00",
   "run_at": null,
   "task_count": 113,
   "tasks": [
@@ -2179,7 +2179,36 @@
         ],
         "sample_zero_body": [],
         "rerun_library_ingest_loop": true,
-        "doc": "docs/ops/library-ingest-escalation.md"
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "stall_triage": {
+          "analyzed_at": "2026-09-26T19:51:56.650009+00:00",
+          "market_id": "ftse_mib",
+          "task_id": "eng-20260926-01",
+          "status": "open",
+          "filing_gaps": 2,
+          "lanes": {
+            "unmeasured": 2,
+            "zero_body": 0,
+            "indexed_without_body": 0,
+            "thin_bodies": 6
+          },
+          "active_lanes": [
+            "unmeasured",
+            "thin_bodies"
+          ],
+          "bundled": true,
+          "focus_ticker": "BZU.MI",
+          "focus_lane": "unmeasured",
+          "reburn_loop": false,
+          "reburn_investigation": null,
+          "recommendations": [
+            "narrow_reframe:BZU.MI:unmeasured",
+            "intensive_pin_or_allowlist_batch",
+            "split_by_ticker_not_broad_market_task"
+          ],
+          "filing_health_snapshot_at": "2026-09-26T19:51:56.645614+00:00",
+          "doc": "docs/ops/library-ingest-escalation.md#library-stall-task-triage"
+        }
       },
       "acceptance_criteria": [
         "Representative ftse_mib buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
@@ -7026,7 +7055,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 1,
-    "evaluated_at": "2026-09-26T14:55:48.383364+00:00",
+    "evaluated_at": "2026-09-26T19:52:08.179075+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
