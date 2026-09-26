@@ -94,7 +94,7 @@ Survivors are **starting priors for learning-loop refinement** — never auto-ap
 | **ops-monitor 13:15 catch-up** on cron-job.org (live; re-import only if deleted) | CI | [ops-monitor.md](ops-monitor.md#email-deferral-day-complete-gate) |
 | **project-traffic weekday crons** (12:30 + 17:30 UTC) on cron-job.org (live; re-import only if deleted) | CI | [project-traffic.md](project-traffic.md#schedule) |
 | **GHA secret-hygiene daily cron** on cron-job.org (live; re-import only if deleted) | CI | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
-| **dashboard-bridge weekday every-10m cron** on cron-job.org (register after bridge dedupe merge; re-import if deleted) | Human (first) / CI | [dashboard-bridge.md](dashboard-bridge.md#schedule-primary-vs-backup) |
+| **dashboard-bridge weekday every-10m cron** on cron-job.org (live; re-import only if deleted) | CI | [dashboard-bridge.md](dashboard-bridge.md#schedule-primary-vs-backup) |
 | **Rotate `CURSOR_API_KEY`** (and review Actions) if Cursor API misuse or secret exposure is suspected | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#if-cursor_api_key-may-already-be-compromised) |
 | **Sync valid Cursor key into GitHub Actions** (`CURSOR_API_KEY_V2` + `CURSOR_API_KEY`) when legacy secret is dead/missing | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#which-secret-workflows-use) |
 | **Override FCF auto policy** only when majority/filing fallback is wrong (or so-what `fcf_bridge_needed` with no filing/company figure) | Human (residual) | [fcf-basis-bridges.md](fcf-basis-bridges.md#when-to-review-residual) |

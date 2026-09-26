@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-25T16:27:43+00:00",
+  "updated_at": "2026-09-26T07:42:17+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10592,6 +10592,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-3ae8920c-092d-5598-bfff-7dc38dd28f0f",
       "added_at": "2026-09-25T16:27:43+00:00"
+    },
+    {
+      "id": "L470",
+      "category": "later",
+      "section": "ops",
+      "title": "Harden import_cron_jobs.py against sustained cron-job.org 429 thrash",
+      "summary": "Bare 429 (no Retry-After) plus 10\u00d7 GET /jobs backoff (60s\u2192900s) burned the account for hours when registering dashboard-bridge after #856. Overnight cool-off + one-shot list/PUT succeeded (jobId 8513740). Abort after 2\u20133 consecutive 429s with a cool-off message; avoid parallel agent retries; optional create-only path for known-new titles.",
+      "revisit_when": "Next cron-job.org register/re-import, or any agent/session hits sustained 429 on import_cron_jobs.py",
+      "tags": [
+        "cron-job.org",
+        "rate-limit",
+        "import_cron_jobs",
+        "ops",
+        "agent"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fdf49632-a9e4-5ab7-af00-0aa6cfc5c080 dashboard-bridge cron 429 thrash",
+      "added_at": "2026-09-26T07:42:17+00:00"
+    },
+    {
+      "id": "N156",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Cache cron-job.org jobId map to skip GET /jobs on every import",
+      "summary": "Idempotent upsert currently requires listing all jobs by title before PATCH/PUT. Under rate limits that list call is the blast radius. A committed or local jobId map (title\u2192id) would let re-imports PATCH without GET. Not needed while account is healthy.",
+      "revisit_when": "cron-job.org 429 recurs on routine --all/--job imports after early-abort hardening lands",
+      "tags": [
+        "cron-job.org",
+        "rate-limit",
+        "import_cron_jobs"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fdf49632-a9e4-5ab7-af00-0aa6cfc5c080 dashboard-bridge cron 429 thrash",
+      "added_at": "2026-09-26T07:42:17+00:00"
     }
   ],
   "fragments": [
