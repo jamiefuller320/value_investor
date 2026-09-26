@@ -49,7 +49,8 @@ jobs:
             echo "Soft-skip: CRONJOB_API_KEY or WORKFLOW_DISPATCH_PAT missing"
             exit 0
           fi
-          ./scripts/import_cron_jobs.py \
+          # File is tracked as 100644 (not +x); invoke via python3 like other GHA scripts.
+          python3 scripts/import_cron_jobs.py \
             --job euro-ingest-loop-morning \
             --job euro-ingest-loop-afternoon \
             --job euro-ingest-loop-midafternoon \
