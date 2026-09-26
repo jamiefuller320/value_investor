@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-26T07:40:02.045002+00:00",
+  "run_at": "2026-09-26T14:40:35.476110+00:00",
   "market_id": "ibex35",
   "targets": [],
   "target_details": [],
@@ -9,16 +9,16 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-26T07:39:57.206527+00:00",
+    "snapshot_at": "2026-09-26T14:40:20.204122+00:00",
     "market_id": "ibex35",
     "buy_tier_count": 4,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 3,
-    "indexed_without_body": 0,
+    "indexed_without_body": 1,
     "bodies_min": 2,
     "bodies_median": 2.0,
-    "bodies_max": 5,
+    "bodies_max": 7,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -28,8 +28,12 @@
       "SCYR.MC",
       "REP.MC"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "SCYR.MC"
+    ],
+    "indexed_without_body_by_ticker": {
+      "SCYR.MC": 1
+    },
     "parked_tickers": [
       "NTGY.MC",
       "REP.MC",
@@ -43,16 +47,16 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-26T07:39:57.954584+00:00",
+    "snapshot_at": "2026-09-26T14:40:30.911139+00:00",
     "market_id": "ibex35",
     "buy_tier_count": 4,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 3,
-    "indexed_without_body": 0,
+    "indexed_without_body": 1,
     "bodies_min": 2,
     "bodies_median": 2.0,
-    "bodies_max": 5,
+    "bodies_max": 7,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -62,8 +66,12 @@
       "SCYR.MC",
       "REP.MC"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "SCYR.MC"
+    ],
+    "indexed_without_body_by_ticker": {
+      "SCYR.MC": 1
+    },
     "parked_tickers": [
       "NTGY.MC",
       "REP.MC",
@@ -79,11 +87,32 @@
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 4,
+    "hits": 0,
+    "new_rows_total": 0,
+    "curiosity_total": 0,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "NTGY.MC",
+      "REP.MC",
+      "SCYR.MC"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
     "skipped": true,
@@ -92,47 +121,56 @@
   },
   "critical_path": {
     "market_id": "ibex35",
-    "assessed_at": "2026-09-26T07:39:57.569388+00:00",
+    "assessed_at": "2026-09-26T14:40:20.549021+00:00",
     "unmeasured": [],
     "zero_body": [],
-    "indexed_without_body": [],
+    "indexed_without_body": [
+      {
+        "ticker": "SCYR.MC",
+        "indexed_without_body": 1,
+        "filings_total": 3,
+        "filings_with_body": 2
+      }
+    ],
     "thin_need_discovery": [
       "NTGY.MC",
-      "SCYR.MC",
       "REP.MC"
     ],
-    "thin_need_bodies": [],
-    "primary_blocker": "thin_need_discovery",
+    "thin_need_bodies": [
+      "SCYR.MC"
+    ],
+    "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
-    "auto_pin_tickers": [],
+    "auto_pin_tickers": [
+      "SCYR.MC"
+    ],
     "recommended_actions": [
-      "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
+      "Prefer indexed-without-body body refetch (1 tickers, top: SCYR.MC(1))",
+      "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 0,
-      "indexed_without_body_rows": 0,
-      "thin_need_discovery": 3,
-      "thin_need_bodies": 0
+      "indexed_without_body_tickers": 1,
+      "indexed_without_body_rows": 1,
+      "thin_need_discovery": 2,
+      "thin_need_bodies": 1
     }
   },
-  "used_seconds": 0.0011236689999805094,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2099.9988763310002,
+  "used_seconds": 10.04639455600001,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3589.953605444,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "SCYR.MC"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ibex35",
-    "updated_at": "2026-09-26T07:39:57.955424+00:00",
+    "updated_at": "2026-09-26T14:40:30.912290+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 4,
+    "complete_zero_improve_runs": 5,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -157,12 +195,12 @@
       },
       {
         "ticker": "SCYR.MC",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-25T20:32:38.061856+00:00",
-        "filings_total": 2,
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-26T14:40:30.912290+00:00",
+        "filings_total": 3,
         "filings_with_body": 2,
-        "indexed_without_body": 0,
+        "indexed_without_body": 1,
         "thin": true
       }
     ],
