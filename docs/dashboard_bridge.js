@@ -166,7 +166,7 @@
     }
     if (onStatus) {
       onStatus(
-        "Queued — waiting for GitHub worker (weekday ~10m via external cron; Run workflow to drain now)…"
+        "Queued — waiting for GitHub worker (~10m via external cron; Run workflow to drain now)…"
       );
     }
     return waitForCommandRow(commandId, onStatus);

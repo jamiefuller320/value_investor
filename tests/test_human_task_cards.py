@@ -81,7 +81,8 @@ def test_approval_gates_cover_promotion_ids():
     assert promote["approval_gate"] is True
 
 
-def test_run_human_task_ack_writes_store(tmp_path: Path):
+def test_run_human_task_ack_rebinds_stale_ui_fingerprint(tmp_path: Path):
+    """UI may send a lagging board fingerprint; rebind to live analysis so board is acked."""
     data_dir = tmp_path / "data"
     data_dir.mkdir()
     write_json(
@@ -92,12 +93,18 @@ def test_run_human_task_ack_writes_store(tmp_path: Path):
         data_dir,
         task_id="sunday-read-analysis-review",
         decision="ack_observe",
+        finding_fingerprint="ui-lagging-fingerprint",
         source="test",
     )
     assert result["ok"] is True
     store = load_human_task_acks(data_dir)
-    assert any(row.get("task_id") == "sunday-read-analysis-review" for row in store["acks"])
-    assert (data_dir / "human_tasks_board.json").is_file()
+    row = next(r for r in store["acks"] if r["task_id"] == "sunday-read-analysis-review")
+    assert row["finding_fingerprint"] != "ui-lagging-fingerprint"
+    board = build_human_tasks_board(data_dir=data_dir)
+    hit = next(r for r in board["tasks"] if r["id"] == "sunday-read-analysis-review")
+    assert hit["sort_bucket"] == "acked"
+    assert hit["ack"]["stale"] is False
+    assert result["counts"]["acked"] >= 1
 
 
 def test_euro_ingest_cron_reimport_is_automated():

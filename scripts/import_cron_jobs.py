@@ -290,14 +290,15 @@ def _job_specs() -> list[CronJobSpec]:
             wdays=[1, 2, 3, 4, 5],
         ),
         # Dashboard bridge: GitHub */10 schedule drifts 2–5h; external cron is primary.
+        # All days — Sunday human-task / lifecycle acks must not sit pending until Monday.
         CronJobSpec(
             key="dashboard-bridge",
-            title="FTSE dashboard bridge (weekday every 10m)",
+            title="FTSE dashboard bridge (every 10m)",
             workflow="dashboard-bridge.yml",
             body={"ref": REF},
             hours=list(range(24)),
             minutes=[0, 10, 20, 30, 40, 50],
-            wdays=[1, 2, 3, 4, 5],
+            wdays=[-1],
         ),
         CronJobSpec(
             key="euro-ingest-loop-morning",

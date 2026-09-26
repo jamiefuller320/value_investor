@@ -6,9 +6,10 @@ name: Dashboard bridge worker
 on:
   schedule:
     # Backup only — GitHub often drifts this */10 to multi-hour gaps.
-    # Primary: cron-job.org every 10m weekdays (import_cron_jobs.py --job dashboard-bridge).
+    # Primary: cron-job.org every 10m all days (import_cron_jobs.py --job dashboard-bridge).
+    # Weekend coverage matters: Sunday human-task Acknowledge must drain same day.
     # See docs/ops/dashboard-bridge.md and docs/ops/orchestrator-cron.md.
-    - cron: "*/10 * * * 1-5"
+    - cron: "*/10 * * * *"
   workflow_dispatch:
   repository_dispatch:
     types: [refresh-queue-ui]

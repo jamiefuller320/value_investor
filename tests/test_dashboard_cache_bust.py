@@ -22,6 +22,8 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     assert '["human_tasks_checklist", "human_tasks_checklist.json"]' in text
     assert '["human_tasks_board", "data/human_tasks_board.json"]' in text
     assert '["human_task_acks", "data/human_task_acks.json"]' in text
+    assert "function mergeHumanTaskAcksIntoBoard(board, acksStore)" in text
+    assert "mergeHumanTaskAcksIntoBoard(" in text
     assert '["lifecycle_board", "data/lifecycle_board.json"]' in text
     assert "async function applyDashboardSidecars(data)" in text
     assert "DASHBOARD_SIDECARS" in text
@@ -37,6 +39,13 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     )[0]
     assert "applyDashboardSidecars(data)" in reload_fn
     assert 'fetch("data/progress_report.json")' not in reload_fn
+    # Human-task ack path must reload after bridge completes (not only local serve).
+    ack_fn = text.split("async function acknowledgeHumanTaskFromCard(", 1)[1].split(
+        "\nfunction resolveObserveUtilization(", 1
+    )[0]
+    assert 'submitCommand("human-task-ack"' in ack_fn
+    assert "reloadDashboard({ silent: true, rebuild: true })" in ack_fn
+    assert "Queued — waiting for bridge" not in ack_fn
     load_fn = text.split("async function loadDashboard()", 1)[1].split("\ninitTabs()", 1)[0]
     assert "reloadDashboard()" in load_fn
     assert 'fetch("data/progress_report.json")' not in load_fn
