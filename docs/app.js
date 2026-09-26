@@ -2556,6 +2556,122 @@ function memoQualityBadge(item) {
   return `<span class="badge badge-${esc(grade)}">${esc(label)}</span>`;
 }
 
+/** Format a fractional return as ±X.X% (or "—" when missing). */
+function fmtSignedPct(value, digits = 1) {
+  if (value == null || Number.isNaN(Number(value))) return "—";
+  const n = Number(value) * 100;
+  const sign = n > 0 ? "+" : "";
+  return `${sign}${n.toFixed(digits)}%`;
+}
+
+/**
+ * Deterministic one-line “story” for a paper track from its week rows
+ * (oldest→newest). Uses excess, trajectory, cost drag, marks, and epoch —
+ * no LLM.
+ */
+function paperTrackStory(weeks) {
+  const rows = Array.isArray(weeks) ? weeks : [];
+  if (!rows.length) return "No weekly marks yet.";
+
+  const latest = rows[rows.length - 1] || {};
+  const excesses = rows
+    .map((row) => row.excess_after_costs)
+    .filter((v) => v != null && !Number.isNaN(Number(v)))
+    .map(Number);
+  const latestExcess =
+    latest.excess_after_costs != null && !Number.isNaN(Number(latest.excess_after_costs))
+      ? Number(latest.excess_after_costs)
+      : excesses.length
+        ? excesses[excesses.length - 1]
+        : null;
+
+  const parts = [];
+  if (rows.length < 2 || excesses.length < 2) {
+    if (latestExcess == null) {
+      parts.push("Too early to call — waiting on excess marks.");
+    } else if (latestExcess >= 0.005) {
+      parts.push(`Beating ^FTSE (${fmtSignedPct(latestExcess)}) on thin history.`);
+    } else if (latestExcess <= -0.005) {
+      parts.push(`Lagging ^FTSE (${fmtSignedPct(latestExcess)}) on thin history.`);
+    } else {
+      parts.push(`Near flat vs ^FTSE (${fmtSignedPct(latestExcess)}); thin history.`);
+    }
+  } else {
+    const first = excesses[0];
+    const last = excesses[excesses.length - 1];
+    const delta = last - first;
+    let level;
+    if (last >= 0.005) level = `Beating ^FTSE (${fmtSignedPct(last)})`;
+    else if (last <= -0.005) level = `Lagging ^FTSE (${fmtSignedPct(last)})`;
+    else level = `Near flat vs ^FTSE (${fmtSignedPct(last)})`;
+
+    let traj;
+    if (delta >= 0.005) traj = "excess improving across weeks";
+    else if (delta <= -0.005) traj = "excess softening across weeks";
+    else traj = "excess roughly stable";
+    parts.push(`${level}; ${traj}.`);
+  }
+
+  const cost = latest.cost_drag != null ? Number(latest.cost_drag) : null;
+  if (cost != null && !Number.isNaN(cost) && cost >= 0.005) {
+    parts.push(`Cost drag ${fmtSignedPct(cost).replace("+", "")} is material.`);
+  }
+
+  const epoch =
+    latest.epoch_excess_after_costs != null &&
+    !Number.isNaN(Number(latest.epoch_excess_after_costs))
+      ? Number(latest.epoch_excess_after_costs)
+      : null;
+  if (
+    epoch != null &&
+    latestExcess != null &&
+    Math.abs(epoch - latestExcess) >= 0.01
+  ) {
+    parts.push(`Epoch excess ${fmtSignedPct(epoch)} diverges from book total.`);
+  }
+
+  const marks = latest.equity_marks;
+  if (marks != null && Number(marks) > 0 && Number(marks) < 4) {
+    parts.push(`Only ${marks} equity mark(s) — sample still thin.`);
+  }
+
+  const trades = rows
+    .map((row) => row.trade_count)
+    .filter((v) => v != null && !Number.isNaN(Number(v)))
+    .map(Number);
+  if (trades.length >= 2) {
+    const tradeDelta = trades[trades.length - 1] - trades[0];
+    if (tradeDelta >= 8) parts.push("Trade count rising — watch churn.");
+    else if (tradeDelta === 0 && trades[trades.length - 1] === 0) {
+      parts.push("No trades logged across the window.");
+    }
+  }
+
+  return parts.join(" ");
+}
+
+/** Group flattened track-week rows into { trackKey, label, id, isPrimary, weeks }[]. */
+function groupPaperTracksById(trackWeekRows) {
+  const byId = new Map();
+  for (const row of trackWeekRows) {
+    const key = String(row.track_id || row.track_label || "unknown");
+    if (!byId.has(key)) {
+      byId.set(key, {
+        trackKey: key,
+        track_id: row.track_id || key,
+        track_label: row.track_label || row.track_id || key,
+        is_primary: Boolean(row.is_primary),
+        weeks: [],
+      });
+    }
+    const group = byId.get(key);
+    if (row.is_primary) group.is_primary = true;
+    if (row.track_label) group.track_label = row.track_label;
+    group.weeks.push(row);
+  }
+  return Array.from(byId.values());
+}
+
 function renderSundayReview(data) {
   const review = data.sunday_review;
   if (!review) {
@@ -2673,40 +2789,68 @@ function renderSundayReview(data) {
     return String(a.week_ending || "").localeCompare(String(b.week_ending || ""));
   });
 
-  const paperTrackTableRows = trackWeekRows
-    .map(
-      (row) => `<tr>
-        <td><strong>${esc(row.track_label || row.track_id)}</strong><br><span class="small muted">${esc(row.track_id || "")}</span></td>
-        <td>${esc(row.week_ending || "—")}</td>
-        <td class="${alphaClass(row.excess_after_costs)}">${pctOrDash(row.excess_after_costs)}</td>
-        <td>${pctOrDash(row.benchmark_return)}</td>
-        <td>${pctOrDash(row.cost_drag)}</td>
-        <td>${row.trade_count ?? "—"}</td>
-        <td>${row.equity_marks ?? "—"}</td>
-        <td>${row.min_conviction != null ? Number(row.min_conviction).toFixed(2) : "—"}</td>
-        <td class="${alphaClass(row.epoch_excess_after_costs)}">${pctOrDash(row.epoch_excess_after_costs)}</td>
-      </tr>`
-    )
-    .join("");
-
-  const paperTrackTable = trackWeekRows.length
-    ? `<div class="table-wrap">
-        <table class="eng-queue-table sunday-review-table">
-          <thead>
-            <tr>
-              <th>Track</th>
-              <th>Week</th>
-              <th>Excess vs ^FTSE</th>
-              <th>Benchmark</th>
-              <th>Cost drag</th>
-              <th>Trades</th>
-              <th>Marks</th>
-              <th>min_conv</th>
-              <th>Epoch excess</th>
-            </tr>
-          </thead>
-          <tbody>${paperTrackTableRows}</tbody>
-        </table>
+  const paperTrackGroups = groupPaperTracksById(trackWeekRows);
+  const paperTrackTable = paperTrackGroups.length
+    ? `<div class="paper-tracks-by-week" role="list">
+        ${paperTrackGroups
+          .map((group) => {
+            const latest = group.weeks[group.weeks.length - 1] || {};
+            const story = paperTrackStory(group.weeks);
+            const weekCount = group.weeks.length;
+            const primaryBadge = group.is_primary
+              ? `<span class="badge badge-info">primary</span>`
+              : "";
+            const excessCls = alphaClass(latest.excess_after_costs);
+            const weekRows = group.weeks
+              .map(
+                (row) => `<tr>
+                  <td>${esc(row.week_ending || "—")}</td>
+                  <td class="${alphaClass(row.excess_after_costs)}">${pctOrDash(row.excess_after_costs)}</td>
+                  <td>${pctOrDash(row.benchmark_return)}</td>
+                  <td>${pctOrDash(row.cost_drag)}</td>
+                  <td>${row.trade_count ?? "—"}</td>
+                  <td>${row.equity_marks ?? "—"}</td>
+                  <td>${row.min_conviction != null ? Number(row.min_conviction).toFixed(2) : "—"}</td>
+                  <td class="${alphaClass(row.epoch_excess_after_costs)}">${pctOrDash(row.epoch_excess_after_costs)}</td>
+                </tr>`
+              )
+              .join("");
+            return `<details class="paper-track-details overview-secondary" role="listitem">
+              <summary class="paper-track-summary">
+                <span class="paper-track-summary-inner">
+                  <span class="paper-track-summary-main">
+                    <strong>${esc(group.track_label)}</strong>
+                    ${primaryBadge}
+                    <span class="small muted">${esc(group.track_id)}</span>
+                  </span>
+                  <span class="paper-track-summary-metrics">
+                    <span class="${excessCls}">${fmtSignedPct(latest.excess_after_costs)} excess</span>
+                    <span class="small muted">· ${weekCount} week${weekCount === 1 ? "" : "s"}</span>
+                    <span class="small muted">· thru ${esc(latest.week_ending || "—")}</span>
+                  </span>
+                  <span class="paper-track-story small">${esc(story)}</span>
+                </span>
+              </summary>
+              <div class="table-wrap paper-track-week-table">
+                <table class="eng-queue-table sunday-review-table">
+                  <thead>
+                    <tr>
+                      <th>Week</th>
+                      <th>Excess vs ^FTSE</th>
+                      <th>Benchmark</th>
+                      <th>Cost drag</th>
+                      <th>Trades</th>
+                      <th>Marks</th>
+                      <th>min_conv</th>
+                      <th>Epoch excess</th>
+                    </tr>
+                  </thead>
+                  <tbody>${weekRows}</tbody>
+                </table>
+              </div>
+            </details>`;
+          })
+          .join("")}
       </div>`
     : `<p class="muted">Paper track weekly snapshots appear after publish archives learning marks.</p>`;
 
@@ -2785,7 +2929,7 @@ function renderSundayReview(data) {
       ${regimeTable}
 
       <h3>Paper tracks by week</h3>
-      <p class="small muted">Learning-track excess vs ^FTSE and cost drag — grouped by track, weeks oldest→newest within each track.</p>
+      <p class="small muted">One summary row per track (story from excess trajectory / cost / marks). Expand a track for week-by-week detail — weeks oldest→newest.</p>
       ${paperTrackTable}
 
       <h3>Experiments</h3>
