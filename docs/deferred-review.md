@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-26`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-26T16:23:04+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -213,6 +213,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N158 | **Do not rememo/ingest burst from FTSE decision-input memo_recent gap alert** | Observe-only utilization finding; Sunday bind / idle-queue rememo owns refresh. | Decision-input observe invents an auto_fixable heal with explicit rememo policy |
 | N159 | **Do not eng-spray cross-market buy-tier flip-lag not-yet-usable warns** | Factory/deepen path for euro_depth and admitted markets; not one eng task per ticker. | Flip-lag compile path gains a batched factory pin policy |
 | N160 | **Human-task Approve buttons stay observe-only — never auto-apply** | Approve on checklist cards records observe-only intent today. Do not wire Approve to knob promote, fair-twin spawn, Phase C freeze writer, or live capital without an explicit readiness gate per action. | A promotion gate has a documented supervised execute path and thick evidence like lifecycle Start |
+| N161 | **Do not eng-spray MC.PA IWB from blocker_no_improve before dismiss** | Open deviation dev-euro_depth-MC.PA-blocker_no_improve is plain buy → dismiss; intensive pin / per-ticker eng would steal euro_depth fat-slot capacity. | MC.PA flips strong_buy or IR exhausted with clear allowlist bug |
 
 ---
 
@@ -539,6 +540,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L466 | **Ops thin_memo auto_fixable without deepen-thin heal** | check_thin_memo_learning_gap sets auto_fixable=True when zero-body memos exist so ops skips eng draft spray, but ops-monitor has no deepen-thin heal path. Label matches anti-spray intent, not the documented auto-heal lane. | Next intentional touch of check_thin_memo_learning_gap or ops-monitor auto_fixable lane docs; or when wiring supervised deepen-thin as a safe heal. |
 | L470 | **Harden import_cron_jobs.py against sustained cron-job.org 429 thrash** | Bare 429 (no Retry-After) plus 10× GET /jobs backoff (60s→900s) burned the account for hours when registering dashboard-bridge after #856. Overnight cool-off + one-shot list/PUT succeeded (jobId 8513740). Abort after 2–3 consecutive 429s with a cool-off message; avoid parallel agent retries; optional create-only path for known-new titles. | Next cron-job.org register/re-import, or any agent/session hits sustained 429 on import_cron_jobs.py |
 | L471 | **Dashboard surface for PR fix common issues on human-task card** | monthly-pr-fix-common-issues card already pulls pr_fix_occasions / traffic digest snippets. Further charting of common-issues trajectory can wait until occasion volume is thick. | pr_fix_occasions has ≥20 occasions or monthly review still feels CLI-heavy |
+| L472 | **Optional ops-monitor finding for open ingest deviations count** | ops_status has no dedicated open-deviation finding; human task + ingest_deviations.json already cover triage. Optional observe warn when open_count>0. | Operators miss open deviations without checking Automation tab |
 
 ---
 
