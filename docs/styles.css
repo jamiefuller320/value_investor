@@ -1470,6 +1470,14 @@ tr.selected td {
   margin-bottom: 0.5rem;
 }
 
+.human-task-card > summary {
+  list-style: none;
+}
+
+.human-task-card > summary::-webkit-details-marker {
+  display: none;
+}
+
 .human-task-card.sort-new_info {
   border-left-color: var(--buy, #2f855a);
 }
@@ -1500,6 +1508,10 @@ tr.selected td {
   background: rgba(0, 0, 0, 0.03);
 }
 
+.human-task-card[open] {
+  background: rgba(0, 0, 0, 0.015);
+}
+
 .human-task-card-head {
   display: flex;
   flex-wrap: wrap;
@@ -1515,10 +1527,6 @@ tr.selected td {
 .human-task-card-panel {
   padding: 0 0.75rem 0.65rem 0.75rem;
   border-top: 1px solid var(--border);
-}
-
-.human-task-card.is-open {
-  background: rgba(0, 0, 0, 0.015);
 }
 
 .human-task-analysis-list {

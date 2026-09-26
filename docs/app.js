@@ -3248,9 +3248,9 @@ function renderHumanTasksChecklistSection(checklist, board) {
     const tasks = board.tasks || [];
     const automated = board.automated_tasks || [];
     const cardsHtml = tasks.length
-      ? `<ul class="human-tasks-list human-tasks-cards">${tasks
+      ? `<div class="human-tasks-list human-tasks-cards">${tasks
           .map((task) => renderHumanTaskCard(task))
-          .join("")}</ul>`
+          .join("")}</div>`
       : '<p class="muted">No open human gates in the checklist.</p>';
     const autoHtml = automated.length
       ? `<details class="human-tasks-automated"><summary class="small">Automated CI (${automated.length})</summary>
@@ -3345,7 +3345,7 @@ function renderHumanTaskCard(task) {
   const bucket = task.sort_bucket || (ack.stale ? "new_info" : ack.acked ? "acked" : "unacked");
   const docUrl = task.doc_url;
   const docLink = docUrl
-    ? `<a href="${esc(docUrl)}" target="_blank" rel="noopener" class="small" onclick="event.stopPropagation()">runbook</a>`
+    ? `<a href="${esc(docUrl)}" target="_blank" rel="noopener" class="small">runbook</a>`
     : "";
   const bullets = Array.isArray(analysis.bullets) ? analysis.bullets : [];
   const bulletsHtml = bullets.length
@@ -3372,10 +3372,10 @@ function renderHumanTaskCard(task) {
         task.approval_label || "Approve"
       )}</button>`
     : "";
-  return `<li class="human-task-card human-task-item sort-${esc(bucket)}" data-task-id="${esc(
+  return `<details class="human-task-card human-task-item sort-${esc(bucket)}" data-task-id="${esc(
     task.id || ""
   )}">
-    <button type="button" class="human-task-card-toggle" aria-expanded="false">
+    <summary class="human-task-card-toggle">
       <span class="human-task-card-head">
         <strong>${esc(task.title || task.id || "Task")}</strong>
         ${humanTaskBucketBadge(bucket, ack)}
@@ -3389,8 +3389,8 @@ function renderHumanTaskCard(task) {
       <span class="small muted human-task-card-headline">${esc(
         analysis.headline || task.summary || ""
       )}</span>
-    </button>
-    <div class="human-task-card-panel" hidden>
+    </summary>
+    <div class="human-task-card-panel">
       <p class="small">${esc(task.summary || "")}</p>
       <h4 class="small" style="margin:0.5rem 0 0.25rem">Analysis</h4>
       ${
@@ -3413,7 +3413,7 @@ function renderHumanTaskCard(task) {
       </p>
       <p class="small muted">Ack / Approve are observe-only records — they never auto-apply knobs, crons, or capital.</p>
     </div>
-  </li>`;
+  </details>`;
 }
 
 function bindHumanTasksSection() {
@@ -3421,20 +3421,9 @@ function bindHumanTasksSection() {
   if (!panel || panel.dataset.boundHumanTasks === "1") return;
   panel.dataset.boundHumanTasks = "1";
   panel.addEventListener("click", (event) => {
-    const toggle = event.target.closest(".human-task-card-toggle");
-    if (toggle && panel.contains(toggle)) {
-      const card = toggle.closest(".human-task-card");
-      if (!card) return;
-      const panelEl = card.querySelector(".human-task-card-panel");
-      if (!panelEl) return;
-      const open = panelEl.hidden;
-      panelEl.hidden = !open;
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      card.classList.toggle("is-open", open);
-      return;
-    }
     const btn = event.target.closest("[data-human-task-ack]");
     if (btn && panel.contains(btn)) {
+      event.preventDefault();
       void acknowledgeHumanTaskFromCard(btn);
     }
   });
