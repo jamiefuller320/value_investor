@@ -7,7 +7,7 @@ GitHub Pages cannot run Python or hold repo secrets. This bridge uses a **single
 ```mermaid
 flowchart LR
   A[Static dashboard] -->|insert command row + broadcast ping| B[Supabase ftse-dashboard]
-  B -->|poll every 10m weekdays via cron-job.org| C[dashboard-bridge.yml]
+  B -->|poll every 10m via cron-job.org| C[dashboard-bridge.yml]
   C -->|repository_dispatch| D[Target workflows]
   D -->|commit JSON + broadcast artifact-updated| B
   B -->|realtime| A
@@ -20,7 +20,7 @@ flowchart LR
 | `dashboard_commands` table | Durable queue of page → git requests |
 | Realtime channel `ftse-dashboard` | Fast ping (`command`) + completion notify (`artifact-updated`) |
 | `ftse-dashboard-bridge process-pending` | Worker — polls table, dispatches GitHub `repository_dispatch` |
-| Target workflows | `progress-report.yml`, `engineering-queue.yml`, `ops-monitor.yml`, `dashboard-bridge.yml` (`refresh-queue-ui`), `lifecycle-experiment-ack.yml`, `lifecycle-experiment-start.yml` |
+| Target workflows | `progress-report.yml`, `engineering-queue.yml`, `ops-monitor.yml`, `dashboard-bridge.yml` (`refresh-queue-ui`), `lifecycle-experiment-ack.yml`, `lifecycle-experiment-start.yml`, `human-task-ack.yml` |
 
 **Yes — one Supabase channel/table can cover all page→git actions.** Add new actions by extending `SUPPORTED_ACTIONS` in `dashboard_bridge.py` and wiring a workflow handler.
 
@@ -28,8 +28,8 @@ flowchart LR
 
 | Trigger | Role | Cadence |
 |---------|------|---------|
-| **cron-job.org** (`dashboard-bridge`) | **Primary** | Weekdays every 10 minutes (`minutes` 0/10/20/30/40/50 UTC) |
-| GitHub `schedule` `*/10 * * * 1-5` | Backup only | Same expression, but Actions often drifts **hours** (observed 2–5h) |
+| **cron-job.org** (`dashboard-bridge`) | **Primary** | Every day, every 10 minutes (`minutes` 0/10/20/30/40/50 UTC; `wdays` `[-1]`) |
+| GitHub `schedule` `*/10 * * * *` | Backup only | Same cadence; Actions often drifts **hours** (observed 2–5h) |
 | `workflow_dispatch` | On-demand drain | Actions → **Dashboard bridge worker** → Run workflow |
 
 Register / re-import:
@@ -38,7 +38,7 @@ Register / re-import:
 WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --job dashboard-bridge
 ```
 
-`process-pending` is safe to double-fire (empty queue → no-op). Ops-monitor flags the workflow stale if no successful weekday run within **1 hour** (`MONITORED_WORKFLOWS.dashboard_bridge`).
+`process-pending` is safe to double-fire (empty queue → no-op). Ops-monitor flags the workflow stale if no successful run within **1 hour** on any day (`MONITORED_WORKFLOWS.dashboard_bridge`).
 
 The Acknowledge / Start UI waits up to ~12 minutes for the command row to leave `pending`. Use **Run workflow** to drain immediately when needed.
 

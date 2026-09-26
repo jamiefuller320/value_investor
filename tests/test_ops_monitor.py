@@ -67,7 +67,7 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
 
 
 def test_check_workflow_freshness_dashboard_bridge_one_hour_weekday():
-    """External every-10m primary; 1h without success is stale on weekdays."""
+    """External every-10m primary; 1h without success is stale any day."""
     two_hours_ago = (weekday_noon_utc() - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%SZ")
     with (
         patch("value_investor.ops_monitor._github_token", return_value="test-token"),

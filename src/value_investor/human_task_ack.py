@@ -49,6 +49,27 @@ def run_human_task_ack(
         source=source,
         acked_by=acked_by,
     )
+    # Rebind fingerprint to live analysis before board write so the committed
+    # board marks the task acked (not immediately stale) when the UI sent a
+    # fingerprint from a lagging published board slice.
+    live_board = build_human_tasks_board(data_dir=data_dir)
+    live_fp = ""
+    for row in live_board.get("tasks") or []:
+        if str(row.get("id") or "") != task_id:
+            continue
+        analysis = row.get("analysis") if isinstance(row.get("analysis"), dict) else {}
+        live_fp = str(analysis.get("fingerprint") or "").strip()
+        break
+    if live_fp and live_fp != str(ack.get("finding_fingerprint") or "").strip():
+        ack = record_human_task_ack(
+            data_dir,
+            task_id=task_id,
+            decision=decision,
+            note=note,
+            finding_fingerprint=live_fp,
+            source=source,
+            acked_by=acked_by,
+        )
     board = write_human_tasks_board(data_dir=data_dir)
     return {
         "ok": True,

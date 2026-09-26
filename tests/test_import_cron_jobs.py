@@ -72,10 +72,10 @@ def test_import_cron_jobs_dry_run_dashboard_bridge():
     rows = json.loads(proc.stdout)
     assert len(rows) == 1
     payload = rows[0]["payload"]["job"]
-    assert payload["title"] == "FTSE dashboard bridge (weekday every 10m)"
+    assert payload["title"] == "FTSE dashboard bridge (every 10m)"
     assert payload["schedule"]["hours"] == list(range(24))
     assert payload["schedule"]["minutes"] == [0, 10, 20, 30, 40, 50]
-    assert payload["schedule"]["wdays"] == [1, 2, 3, 4, 5]
+    assert payload["schedule"]["wdays"] == [-1]
     assert "dashboard-bridge.yml" in payload["url"]
 
 

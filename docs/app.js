@@ -608,12 +608,76 @@ let dashboardRefreshInFlight = null;
 let dashboardLastLoadedAt = 0;
 const DASHBOARD_VISIBLE_RELOAD_MS = 45 * 1000;
 
+function mergeHumanTaskAcksIntoBoard(board, acksStore) {
+  if (!board || !Array.isArray(board.tasks)) return board;
+  const openAcks = {};
+  for (const row of (acksStore && acksStore.acks) || []) {
+    if (!row || typeof row !== "object") continue;
+    if (String(row.status || "open") !== "open") continue;
+    const id = String(row.task_id || "").trim();
+    if (id) openAcks[id] = row;
+  }
+  if (!Object.keys(openAcks).length) return board;
+
+  const tasks = board.tasks.map((task) => {
+    const hit = openAcks[String(task.id || "").trim()];
+    if (!hit) return task;
+    const analysisFp = String((task.analysis && task.analysis.fingerprint) || "");
+    const ackFp = String(hit.finding_fingerprint || "");
+    const stale = Boolean(analysisFp && ackFp && analysisFp !== ackFp);
+    const ack = {
+      acked: true,
+      stale,
+      acked_at: hit.acked_at || null,
+      decision: hit.decision || null,
+      finding_fingerprint: ackFp || null,
+    };
+    return {
+      ...task,
+      ack,
+      sort_bucket: stale ? "new_info" : "acked",
+    };
+  });
+
+  const openRows = tasks.filter((row) => row.sort_bucket === "new_info" || row.sort_bucket === "unacked");
+  const ackedRows = tasks.filter((row) => row.sort_bucket === "acked");
+  openRows.sort((a, b) => {
+    const rank = { new_info: 0, unacked: 1 };
+    const ra = rank[a.sort_bucket] ?? 9;
+    const rb = rank[b.sort_bucket] ?? 9;
+    if (ra !== rb) return ra - rb;
+    const ta = String((a.analysis && a.analysis.updated_at) || "");
+    const tb = String((b.analysis && b.analysis.updated_at) || "");
+    return tb.localeCompare(ta);
+  });
+  ackedRows.sort((a, b) =>
+    String((b.ack && b.ack.acked_at) || "").localeCompare(String((a.ack && a.ack.acked_at) || ""))
+  );
+  const ordered = openRows.concat(ackedRows);
+  const counts = {
+    ...(board.counts || {}),
+    new_info: ordered.filter((row) => row.sort_bucket === "new_info").length,
+    unacked: ordered.filter((row) => row.sort_bucket === "unacked").length,
+    acked: ordered.filter((row) => row.sort_bucket === "acked").length,
+    human: ordered.length,
+  };
+  return { ...board, tasks: ordered, counts };
+}
+
 async function applyDashboardSidecars(data) {
   const rows = await Promise.all(
     DASHBOARD_SIDECARS.map(async ([key, path]) => [key, await loadOptionalDashboardJson(path)])
   );
   for (const [key, payload] of rows) {
     if (payload) data[key] = payload;
+  }
+  // Acks sidecar is source of truth; board JSON can lag when the ack workflow
+  // only committed human_task_acks.json (weekend drain / commit race).
+  if (data.human_tasks_board && data.human_task_acks) {
+    data.human_tasks_board = mergeHumanTaskAcksIntoBoard(
+      data.human_tasks_board,
+      data.human_task_acks
+    );
   }
   return data;
 }
@@ -3610,7 +3674,8 @@ async function acknowledgeHumanTaskFromCard(button) {
     const bridgeReady = await window.DashboardBridge.init();
     if (!bridgeReady) throw new Error("Dashboard bridge not configured");
     await window.DashboardBridge.submitCommand("human-task-ack", payload);
-    if (statusEl) statusEl.textContent = "Queued — waiting for bridge…";
+    if (statusEl) statusEl.textContent = "Recorded";
+    await reloadDashboard({ silent: true, rebuild: true });
   } catch (err) {
     button.disabled = false;
     if (statusEl) statusEl.textContent = err && err.message ? err.message : String(err);

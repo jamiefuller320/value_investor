@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-26T14:09:26.803903+00:00",
+  "generated_at": "2026-09-26T17:42:20.506849+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,77 +8,12 @@
   "checklist_updated_at": "2026-09-26",
   "counts": {
     "new_info": 0,
-    "unacked": 32,
-    "acked": 0,
+    "unacked": 30,
+    "acked": 2,
     "automated": 19,
     "human": 32
   },
   "tasks": [
-    {
-      "id": "sunday-shard-epoch0-watch",
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "what-enter-learning-means",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Admitted shard epoch-0 watch",
-        "updated_at": "2026-09-26T14:05:30.114221+00:00",
-        "fingerprint": "ebb7915e06986176",
-        "bullets": [],
-        "source_keys": [
-          "market_status"
-        ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked"
-    },
-    {
-      "id": "adhoc-review-ingest-deviations",
-      "title": "Review open ingest deviations and reprocess if needed",
-      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/ingest-deviations.md",
-      "doc_anchor": "what-needs-a-human",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-09-26T13:21:01.484970+00:00",
-        "fingerprint": "42d47f5b3c76372e",
-        "bullets": [
-          "Open deviations: 1",
-          "MC.PA: blocker_no_improve — MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources."
-        ],
-        "source_keys": [
-          "ingest_deviations"
-        ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked"
-    },
     {
       "id": "monthly-pr-fix-common-issues",
       "title": "Review common PR check / merge fix-request reasons",
@@ -94,10 +29,10 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-09-25T16:31:05.182540+00:00",
-        "fingerprint": "6c291374105f877a",
+        "updated_at": "2026-09-26T14:30:27.879706+00:00",
+        "fingerprint": "8a19c515715ef900",
         "bullets": [
-          "Occasions logged: 70",
+          "Occasions logged: 71",
           "None: 7",
           "None: 5",
           "None: 2",
@@ -1080,6 +1015,71 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked"
+    },
+    {
+      "id": "adhoc-review-ingest-deviations",
+      "title": "Review open ingest deviations and reprocess if needed",
+      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/ingest-deviations.md",
+      "doc_anchor": "what-needs-a-human",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Ingest deviations · 1 open",
+        "updated_at": "2026-09-26T17:29:06.280088+00:00",
+        "fingerprint": "b4729e90d058fde1",
+        "bullets": [
+          "Open deviations: 1",
+          "MC.PA: blocker_no_improve — MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources."
+        ],
+        "source_keys": [
+          "ingest_deviations"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-26T17:42:20.495685+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "b4729e90d058fde1"
+      },
+      "sort_bucket": "acked"
+    },
+    {
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Admitted shard epoch-0 watch",
+        "updated_at": "2026-09-26T17:29:52.638101+00:00",
+        "fingerprint": "ceb741762edb4c48",
+        "bullets": [],
+        "source_keys": [
+          "market_status"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-26T17:42:20.472052+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "ceb741762edb4c48"
+      },
+      "sort_bucket": "acked"
     }
   ],
   "automated_tasks": [

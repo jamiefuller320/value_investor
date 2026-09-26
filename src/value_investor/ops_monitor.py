@@ -92,8 +92,8 @@ MONITORED_WORKFLOWS: tuple[dict[str, Any], ...] = (
     {
         "key": "dashboard_bridge",
         "workflow": "dashboard-bridge.yml",
-        "weekdays": {0, 1, 2, 3, 4},
-        # External cron every 10m; 1h lag means cron-job.org or dispatch is broken.
+        "weekdays": set(range(7)),
+        # External cron every 10m (all days); 1h lag means cron-job.org or dispatch is broken.
         "max_age_hours": 1,
     },
     {
@@ -172,7 +172,7 @@ WORKFLOW_EMAIL_READY_UTC: dict[str, tuple[int, int]] = {
     "ingest_loop": (8, 0),
     "orchestrator": (7, 30),
     "engineering_queue": (8, 0),
-    "dashboard_bridge": (0, 30),  # weekday every 10m; ready early morning
+    "dashboard_bridge": (0, 30),  # every 10m all days; ready early morning
     "ci_main_nightly": (8, 30),
     "analysis_review": (11, 0),  # external primary ~10:35
     "library_ladder": (8, 0),
