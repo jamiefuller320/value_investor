@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-26T07:42:17+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-26T08:30:34+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -209,6 +209,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N154 | **Do not ship rolling sleeve-exit realized P&L series** | Per-exit realized_return_pct already lives on exit_shadow (and swap sell legs). No sliding/decay window of recent exit P&Ls exists or should be built now — overlaps L459 trade-row %, lifetime shadow cohort, just_sold cards, and must not be confused with L462 NAV WoW or N153 FX. If anything later, prefer lifetime mean/median realized_at_exit inside existing exit_shadow_review before inventing last-N/decay. | L459 landed (or humans still cannot read sleeve outcomes after it) AND primary-track exit_shadow closed_count >=15 by exit_kind of interest AND a documented need for trajectory of exit quality (not fund beat_market). |
 | N155 | **On-demand first-memo when index+bodies ready** | Do not move FTSE/admitted first-memo off Sunday --research-docs onto event-driven weekday creates (flip→bodies→memo). Slim/no-prose memos lower per-name cost, but the live miss is selection/cadence (cap race + effective_screen_signal hold), not LLM volume. Prefer FTSE Sunday no_memo-first (library N114 parity) before any on-demand pin; weekday rememo stays body-lag-only (N114). | After FTSE Sunday prefer-first-time/no_memo preference ships AND >=2 subsequent Sunday research-docs receipts still leave FTSE flip-lag warn_open with blocking_stage=no_memo on buy-effective names that already had index+key bodies — or admitted-market factory-path no_memo warn share rises for two live Sundays after N114-style ordering is live on all research paths. |
 | N156 | **Cache cron-job.org jobId map to skip GET /jobs on every import** | Idempotent upsert currently requires listing all jobs by title before PATCH/PUT. Under rate limits that list call is the blast radius. A committed or local jobId map (title→id) would let re-imports PATCH without GET. Not needed while account is healthy. | cron-job.org 429 recurs on routine --all/--job imports after early-abort hardening lands |
+| N157 | **Keep eng-20260924-02 ADYEN.AS parked_source_hunter until statutory report indexed** | Unparking reburns (6 failures/6h). Revisit when next Adyen annual/interim is indexed, or deliberate PARKED_SOURCE_HUNTER_SKIP under idle capacity. | Next ADYEN.AS statutory report indexed in library leftover evidence |
+| N158 | **Do not rememo/ingest burst from FTSE decision-input memo_recent gap alert** | Observe-only utilization finding; Sunday bind / idle-queue rememo owns refresh. | Decision-input observe invents an auto_fixable heal with explicit rememo policy |
+| N159 | **Do not eng-spray cross-market buy-tier flip-lag not-yet-usable warns** | Factory/deepen path for euro_depth and admitted markets; not one eng task per ticker. | Flip-lag compile path gains a batched factory pin policy |
 
 ---
 
