@@ -6545,6 +6545,49 @@ def test_fetch_filings_ir_allowlist_euro_depth_apam_as_builtins(tmp_path: Path):
     assert "AnnualReport_2025" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_ftse_mib_unmeasured_builtins_eng_20260926_01(
+    tmp_path: Path,
+):
+    """eng-20260926-01: ftse_mib buy-tier unmeasured — IR allowlist when ESEF index is empty."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    bzu = fetch_filings_ir_allowlist("BZU.MI", path=allowlist_path)
+    assert len(bzu) == 2
+    assert all(row["source"] == "ir_allowlist" for row in bzu)
+    assert {row["period"] for row in bzu} == {"annual", "interim"}
+    assert any("buzzi.com" in row["url"] and "Annual%20Report" in row["url"] for row in bzu)
+    assert any(row["period"] == "interim" and "Half%20Year" in row["url"] for row in bzu)
+
+    pst = fetch_filings_ir_allowlist("PST.MI", path=allowlist_path)
+    assert len(pst) == 2
+    assert all(row["source"] == "ir_allowlist" for row in pst)
+    assert {row["period"] for row in pst} == {"annual", "interim"}
+    assert any(
+        "posteitaliane.it" in row["url"] and "Annual-Report-2025" in row["url"] for row in pst
+    )
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_bzu_mi_index(tmp_path: Path):
+    """Empty BZU.MI filings_index.json must gain IR rows for library ftse_mib measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("BZU.MI", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] >= 2
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 2
+    assert "ir_allowlist" in payload["sources_used"]
+
+
 def test_fetch_filings_ir_allowlist_dax_unmeasured_builtins_eng_20260922_05(tmp_path: Path):
     """eng-20260922-05: dax buy-tier unmeasured — IR allowlist when ESEF index is empty."""
     allowlist_path = tmp_path / "ir.json"

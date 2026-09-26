@@ -316,6 +316,15 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "HEN3.DE": [
         "https://ir-api.eqs.com/storage/ir/deb4b5/documents/34b94849-45e1-46c9-88f4-15e01195eafc/DE0006048432-JA-2025-EQ-E-00.pdf",
     ],
+    # ftse_mib buy-tier deepen — eng-20260926-01: ESEF index empty; IR PDF seeds unmeasured names.
+    "BZU.MI": [
+        "https://www.buzzi.com/documents/20143/276716/Annual%20Report%20Buzzi%20SpA%20-%202025.pdf/f0a2ac3f-5cf7-42db-225b-0d1fc45c27e0",
+        "https://www.buzzi.com/documents/20143/3983778/2026%20Half%20Year%20results.pdf/ce754f87-b94f-8f2b-30ff-83455cbf2f76",
+    ],
+    "PST.MI": [
+        "https://www.posteitaliane.it/files/1476646637138/Annual-Report-2025.pdf",
+        "https://www.posteitaliane.it/files/1476642553365/Interim-Report-at-30-June-2025.pdf",
+    ],
     "TTE.PA": [
         "https://totalenergies.com/system/files/documents/totalenergies_universal-registration-document-2025_2026_en.pdf",
     ],
@@ -651,6 +660,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "FRE": ("Fresenius", "Fresenius SE & Co. KGaA"),
     "HNR1": ("Hannover Re", "Hannover Rück SE", "Hannover Rueck SE"),
     "HEN3": ("Henkel", "Henkel AG & Co. KGaA"),
+    "BZU": ("Buzzi", "Buzzi SpA", "Buzzi S.p.A."),
+    "PST": ("Poste Italiane", "Poste Italiane SpA", "Poste Italiane S.p.A."),
 }
 
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
