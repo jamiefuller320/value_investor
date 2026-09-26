@@ -1439,12 +1439,18 @@ tr.selected td {
 }
 
 .paper-track-summary {
+  cursor: pointer;
+  font-weight: 500;
+  /* Keep list-item so Chromium toggles <details>; flex lives on the inner wrap. */
+  display: list-item;
+  list-style-position: outside;
+}
+
+.paper-track-summary-inner {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  cursor: pointer;
-  font-weight: 500;
-  list-style-position: outside;
+  padding-left: 0.15rem;
 }
 
 .paper-track-summary-main {
@@ -1466,6 +1472,13 @@ tr.selected td {
   color: var(--muted, #666);
   font-weight: 400;
   max-width: 72rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.paper-track-details[open] .paper-track-story {
+  white-space: normal;
 }
 
 .paper-track-week-table {

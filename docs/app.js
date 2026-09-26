@@ -2817,17 +2817,19 @@ function renderSundayReview(data) {
               .join("");
             return `<details class="paper-track-details overview-secondary" role="listitem">
               <summary class="paper-track-summary">
-                <span class="paper-track-summary-main">
-                  <strong>${esc(group.track_label)}</strong>
-                  ${primaryBadge}
-                  <span class="small muted">${esc(group.track_id)}</span>
+                <span class="paper-track-summary-inner">
+                  <span class="paper-track-summary-main">
+                    <strong>${esc(group.track_label)}</strong>
+                    ${primaryBadge}
+                    <span class="small muted">${esc(group.track_id)}</span>
+                  </span>
+                  <span class="paper-track-summary-metrics">
+                    <span class="${excessCls}">${fmtSignedPct(latest.excess_after_costs)} excess</span>
+                    <span class="small muted">· ${weekCount} week${weekCount === 1 ? "" : "s"}</span>
+                    <span class="small muted">· thru ${esc(latest.week_ending || "—")}</span>
+                  </span>
+                  <span class="paper-track-story small">${esc(story)}</span>
                 </span>
-                <span class="paper-track-summary-metrics">
-                  <span class="${excessCls}">${fmtSignedPct(latest.excess_after_costs)} excess</span>
-                  <span class="small muted">· ${weekCount} week${weekCount === 1 ? "" : "s"}</span>
-                  <span class="small muted">· thru ${esc(latest.week_ending || "—")}</span>
-                </span>
-                <span class="paper-track-story small">${esc(story)}</span>
               </summary>
               <div class="table-wrap paper-track-week-table">
                 <table class="eng-queue-table sunday-review-table">
