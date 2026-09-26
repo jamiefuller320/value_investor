@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-16",
+  "updated_at": "2026-09-26",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -378,8 +378,8 @@
         {
           "id": "adhoc-euro-ingest-cron-reimport",
           "title": "Re-import euro ingest cron slots after cadence change",
-          "summary": "After merging library ingest cadence changes, run import_cron_jobs --all (or euro/sprint/maintenance job keys) so cron-job.org gets Mon–Sat peak + daily off-peak slots and disables old weekday-only titles. Sprint ≤4×/day × 24; maintenance ≤4×/day × 62. GitHub schedule alone is best-effort.",
-          "automated": false,
+          "summary": "On main merge of import_cron_jobs.py / epoch0 slots / euro+library ingest workflow schedules, import-ingest-crons.yml re-imports Mon–Sat peak + daily off-peak slots (and epoch-0 buckets) on cron-job.org. Soft-skips when CRONJOB_API_KEY or WORKFLOW_DISPATCH_PAT is missing. Manual re-import only if the workflow was deleted or secrets were absent.",
+          "automated": true,
           "doc_path": "docs/ops/euro-depth-sprint.md",
           "doc_anchor": "register-euro-ingest-crons-after-cadence-changes"
         },

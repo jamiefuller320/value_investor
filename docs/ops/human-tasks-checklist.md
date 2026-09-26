@@ -4,7 +4,10 @@ Manual gates for the **primary learning loop**, **knob calibration**, and
 **promotion decisions**. Weekday paper-auto and Sunday analysis-review handle
 most automation — this list is what still needs a human.
 
-**Dashboard:** Automation tab → **Human tasks** (links below mirror this doc).
+**Dashboard:** Automation tab → **Human tasks** — human gates as click-to-view cards
+(analysis snippets from existing ops artifacts, Acknowledge, Approve on promotion
+gates). New / changed analysis rises to the top; acknowledged tasks fall to the
+bottom. Automated weekday/Sunday CI rows stay in a collapsed list.
 
 **Cadence map:** [`ops-review-cadence.md`](ops-review-cadence.md) — weekly analysis → monthly horizon → quarterly deferred.
 
@@ -90,7 +93,7 @@ Survivors are **starting priors for learning-loop refinement** — never auto-ap
 | **Decision packs** before live capital (verify checklist) | Human | [primary-learning-track.md](primary-learning-track.md#success-datums) |
 | **Paper-learning review** when churn / exit-timing cohorts mature | Human | [paper-learning-review.md](paper-learning-review.md) |
 | **Extend epoch-0 cron timezone map** when admitting a market whose session TZ has no ASX/EU/US bucket (`EPOCH0_WEEKDAY_SLOTS`) | Human (residual) | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
-| **Re-import library ingest crons** after cadence changes (Mon–Sat peak + daily off-peak; sprint ≤4×/day × 24; maintenance ≤4×/day × 62) | Human | [euro-depth-sprint.md](euro-depth-sprint.md#register-euro-ingest-crons-after-cadence-changes) |
+| **Re-import library ingest crons** after cadence changes — `import-ingest-crons.yml` on main path changes (soft-skip if secrets missing; manual only if deleted) | CI | [euro-depth-sprint.md](euro-depth-sprint.md#register-euro-ingest-crons-after-cadence-changes) |
 | **ops-monitor 13:15 catch-up** on cron-job.org (live; re-import only if deleted) | CI | [ops-monitor.md](ops-monitor.md#email-deferral-day-complete-gate) |
 | **project-traffic weekday crons** (12:30 + 17:30 UTC) on cron-job.org (live; re-import only if deleted) | CI | [project-traffic.md](project-traffic.md#schedule) |
 | **GHA secret-hygiene daily cron** on cron-job.org (live; re-import only if deleted) | CI | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |

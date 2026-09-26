@@ -1,0 +1,73 @@
+name: Import ingest crons on cadence change
+
+# After merge of schedule / import definitions, re-import euro + library ingest
+# cron-job.org slots so Mon–Sat peak + daily off-peak stay live. Soft-skips when
+# CRONJOB_API_KEY or WORKFLOW_DISPATCH_PAT is missing.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/import_cron_jobs.py"
+      - "src/value_investor/epoch0_weekday_cron.py"
+      - "src/value_investor/euro_ingest_cron_sync.py"
+      - "src/value_investor/euro_depth_ingest_dispatch.py"
+      - "src/value_investor/paper_auto_scheduling.py"
+      - ".github/workflows/euro-ingest-loop.yml"
+      - ".github/workflows/library-ingest-sprint.yml"
+      - ".github/workflows/library-ingest-sprint-2.yml"
+      - ".github/workflows/library-ingest-maintenance.yml"
+      - ".github/workflows/import-ingest-crons.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: import-ingest-crons
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Re-import library ingest + epoch-0 cron slots
+        env:
+          CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
+          WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
+        run: |
+          if [ -z "${CRONJOB_API_KEY:-}" ] || [ -z "${WORKFLOW_DISPATCH_PAT:-}" ]; then
+            echo "Soft-skip: CRONJOB_API_KEY or WORKFLOW_DISPATCH_PAT missing"
+            exit 0
+          fi
+          ./scripts/import_cron_jobs.py \
+            --job euro-ingest-loop-morning \
+            --job euro-ingest-loop-afternoon \
+            --job euro-ingest-loop-midafternoon \
+            --job euro-ingest-loop-evening \
+            --job library-ingest-sprint-morning \
+            --job library-ingest-sprint-afternoon \
+            --job library-ingest-sprint-midafternoon \
+            --job library-ingest-sprint-evening \
+            --job library-ingest-sprint-2-morning \
+            --job library-ingest-sprint-2-afternoon \
+            --job library-ingest-sprint-2-midafternoon \
+            --job library-ingest-sprint-2-evening \
+            --job library-ingest-maintenance \
+            --job library-ingest-maintenance-afternoon \
+            --job library-ingest-maintenance-midafternoon \
+            --job library-ingest-maintenance-evening \
+            --job library-epoch0-weekday-asx \
+            --job library-epoch0-weekday-euro \
+            --job library-epoch0-weekday-us-edt \
+            --job library-epoch0-weekday-us-est \
+            --disable-legacy-ingest
