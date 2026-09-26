@@ -1,40 +1,44 @@
 {
-  "market_id": "dax",
-  "assessed_at": "2026-09-26T12:29:20.992897+00:00",
-  "unmeasured": [
-    "G1A.DE"
-  ],
+  "market_id": "cac40",
+  "assessed_at": "2026-09-26T12:32:00.629393+00:00",
+  "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
-  "thin_need_discovery": [
-    "DHL.DE",
-    "HEI.DE",
-    "DTG.DE",
-    "DTE.DE",
-    "BAS.DE",
-    "FRE.DE",
-    "HNR1.DE",
-    "HEN3.DE",
-    "VOW3.DE",
-    "MUV2.DE"
+  "indexed_without_body": [
+    {
+      "ticker": "MC.PA",
+      "indexed_without_body": 1,
+      "filings_total": 3,
+      "filings_with_body": 2
+    }
   ],
-  "thin_need_bodies": [],
-  "primary_blocker": "unmeasured",
+  "thin_need_discovery": [
+    "CAP.PA",
+    "EN.PA",
+    "RI.PA",
+    "CA.PA",
+    "URW.PA",
+    "SGO.PA",
+    "VIE.PA"
+  ],
+  "thin_need_bodies": [
+    "MC.PA"
+  ],
+  "primary_blocker": "indexed_without_body",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "G1A.DE"
+    "MC.PA"
   ],
   "recommended_actions": [
-    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
-    "Discovery/IR seed for 10 thin ticker(s) that already have bodies for every indexed filing",
+    "Prefer indexed-without-body body refetch (1 tickers, top: MC.PA(1))",
+    "Discovery/IR seed for 7 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 1,
+    "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
-    "thin_need_discovery": 10,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 1,
+    "indexed_without_body_rows": 1,
+    "thin_need_discovery": 7,
+    "thin_need_bodies": 1
   }
 }
