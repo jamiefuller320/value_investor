@@ -29,6 +29,7 @@ token instead of your user PAT.
 - `scripts/dispatch_orchestrator.sh` — Sunday / weekday paper / surplus suites
 - `scripts/dispatch_github_workflow.sh` — any single workflow file
 - `scripts/import_cron_jobs.py` — bulk import/update cron-job.org jobs via API
+  (fail-fast on sustained 429; see [dashboard-bridge.md § cool-off](dashboard-bridge.md#cron-joborg-429-cool-off))
 - `scripts/sync_euro_ingest_cron.py` — toggle euro_depth ingest + weekday ladder crons from completion gate
 
 ## Coverage matrix
@@ -150,6 +151,9 @@ Schedule fields: `wdays` `0`=Sunday … `6`=Saturday, `[-1]`=every day; `hours`/
 ```bash
 CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py --all
 ```
+
+On sustained HTTP 429, the script aborts after ≤2 attempts (exit 3) — cool off hours;
+do not parallel-retry ([dashboard-bridge.md](dashboard-bridge.md#cron-joborg-429-cool-off)).
 
 Job keys: `orchestrator-sunday`, `orchestrator-weekday-paper`, `ingest-loop-morning`,
 `ingest-loop-afternoon`, `ingest-loop-saturday-evening`, `ingest-loop-saturday-late`,

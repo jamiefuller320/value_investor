@@ -326,17 +326,18 @@ def _load_import_cron_jobs_module(name: str):
     return mod
 
 
-def test_cronjob_429_wait_seconds_exponential_and_retry_after():
+def test_cronjob_429_wait_seconds_retry_after_and_bare():
     mod = _load_import_cron_jobs_module("import_cron_jobs_wait_test")
 
-    assert mod._cronjob_429_wait_seconds(1) == 60.0
-    assert mod._cronjob_429_wait_seconds(2) == 120.0
-    assert mod._cronjob_429_wait_seconds(5) == 900.0  # capped
-    assert mod._cronjob_429_wait_seconds(1, retry_after="42") == 42.0
-    assert mod._cronjob_429_wait_seconds(1, retry_after="nope") == 60.0
+    assert mod._cronjob_429_wait_seconds(retry_after="42") == 42.0
+    assert mod._cronjob_429_wait_seconds(retry_after="999") == 120.0  # capped
+    assert mod._cronjob_429_wait_seconds(retry_after="nope") == 2.0
+    assert mod._cronjob_429_wait_seconds(bare=True) == 2.0
+    assert mod._is_bare_429(detail="", retry_after=None) is True
+    assert mod._is_bare_429(detail="", retry_after="5") is False
 
 
-def test_cronjob_request_retries_429_then_succeeds(monkeypatch):
+def test_cronjob_request_retries_once_with_retry_after_then_succeeds(monkeypatch):
     import io
     import urllib.error
     import urllib.request
@@ -358,7 +359,7 @@ def test_cronjob_request_retries_429_then_succeeds(monkeypatch):
 
     def fake_urlopen(request, timeout=60):  # noqa: ARG001
         calls["n"] += 1
-        if calls["n"] < 3:
+        if calls["n"] < 2:
             raise urllib.error.HTTPError(
                 url=request.full_url,
                 code=429,
@@ -372,5 +373,129 @@ def test_cronjob_request_retries_429_then_succeeds(monkeypatch):
     monkeypatch.setattr(mod.time, "sleep", lambda s: sleeps.append(s))
     out = mod._cronjob_request("GET", "/jobs", api_key="k")
     assert out == {"jobs": []}
-    assert calls["n"] == 3
-    assert sleeps == [1.0, 1.0]
+    assert calls["n"] == 2
+    assert sleeps == [1.0]
+
+
+def test_cronjob_request_aborts_after_two_bare_429s(monkeypatch):
+    import io
+    import urllib.error
+    import urllib.request
+
+    mod = _load_import_cron_jobs_module("import_cron_jobs_abort_test")
+
+    calls = {"n": 0}
+    sleeps: list[float] = []
+
+    def fake_urlopen(request, timeout=60):  # noqa: ARG001
+        calls["n"] += 1
+        raise urllib.error.HTTPError(
+            url=request.full_url,
+            code=429,
+            msg="Too Many Requests",
+            hdrs={},
+            fp=io.BytesIO(b""),
+        )
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(mod.time, "sleep", lambda s: sleeps.append(s))
+    try:
+        mod._cronjob_request("GET", "/jobs", api_key="k")
+        raise AssertionError("expected CronJobRateLimitedError")
+    except mod.CronJobRateLimitedError as exc:
+        msg = str(exc)
+        assert "cool off" in msg.lower() or "Cool off" in msg
+        assert "do not parallel-retry" in msg
+    assert calls["n"] == 2
+    assert sleeps == [2.0]  # one short wait, then abort on second 429
+
+
+def test_cronjob_request_non_429_still_raises_runtime(monkeypatch):
+    import io
+    import urllib.error
+    import urllib.request
+
+    mod = _load_import_cron_jobs_module("import_cron_jobs_500_test")
+
+    def fake_urlopen(request, timeout=60):  # noqa: ARG001
+        raise urllib.error.HTTPError(
+            url=request.full_url,
+            code=500,
+            msg="Server Error",
+            hdrs={},
+            fp=io.BytesIO(b"boom"),
+        )
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    try:
+        mod._cronjob_request("GET", "/jobs", api_key="k")
+        raise AssertionError("expected RuntimeError")
+    except RuntimeError as exc:
+        assert "500" in str(exc)
+        assert not isinstance(exc, mod.CronJobRateLimitedError)
+
+
+def test_import_job_uses_known_job_id_without_list(monkeypatch):
+    mod = _load_import_cron_jobs_module("import_cron_jobs_known_id_test")
+
+    patched: list[str] = []
+
+    def fake_request(method, path, *, api_key, payload=None):  # noqa: ARG001
+        patched.append(f"{method} {path}")
+        return {}
+
+    def boom_list(api_key):  # noqa: ARG001
+        raise AssertionError("GET /jobs must be skipped when known jobId is seeded")
+
+    monkeypatch.setattr(mod, "_cronjob_request", fake_request)
+    monkeypatch.setattr(mod, "_list_jobs", boom_list)
+    specs = {s.key: s for s in mod._job_specs()}
+    spec = specs["dashboard-bridge"]
+    assert mod.KNOWN_JOB_IDS["dashboard-bridge"] == 8513740
+    existing = mod._seed_known_jobs([spec])
+    result = mod.import_job(
+        spec,
+        api_key="k",
+        gh_pat="p",
+        existing_by_title=existing,
+    )
+    assert result["action"] == "updated"
+    assert result["jobId"] == 8513740
+    assert patched == ["PATCH /jobs/8513740"]
+
+
+def test_main_skips_list_for_dashboard_bridge_only(monkeypatch):
+    mod = _load_import_cron_jobs_module("import_cron_jobs_main_skip_list_test")
+
+    monkeypatch.setenv("CRONJOB_API_KEY", "cron-key")
+    monkeypatch.setenv("WORKFLOW_DISPATCH_PAT", "github_pat_test")
+    list_calls = {"n": 0}
+
+    def boom_list(api_key):  # noqa: ARG001
+        list_calls["n"] += 1
+        raise AssertionError("list should be skipped")
+
+    def fake_request(method, path, *, api_key, payload=None):  # noqa: ARG001
+        assert method == "PATCH"
+        assert path == "/jobs/8513740"
+        return {}
+
+    monkeypatch.setattr(mod, "_list_jobs", boom_list)
+    monkeypatch.setattr(mod, "_cronjob_request", fake_request)
+    rc = mod.main(["--job", "dashboard-bridge"])
+    assert rc == 0
+    assert list_calls["n"] == 0
+
+
+def test_main_exits_3_on_rate_limited_list(monkeypatch):
+    mod = _load_import_cron_jobs_module("import_cron_jobs_main_429_test")
+
+    monkeypatch.setenv("CRONJOB_API_KEY", "cron-key")
+    monkeypatch.setenv("WORKFLOW_DISPATCH_PAT", "github_pat_test")
+
+    def boom_list(api_key):  # noqa: ARG001
+        raise mod.CronJobRateLimitedError("GET", "/jobs", detail="")
+
+    monkeypatch.setattr(mod, "_list_jobs", boom_list)
+    rc = mod.main(["--job", "ops-monitor"])
+    assert rc == mod.EXIT_RATE_LIMITED

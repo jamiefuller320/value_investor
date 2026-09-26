@@ -12,6 +12,11 @@ Examples:
   WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --all
   WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --job data-backup
   ./scripts/import_cron_jobs.py --all --dry-run
+
+Rate limits: on sustained HTTP 429 (especially bare/empty-body), this script aborts
+after at most two attempts (exit code 3) and prints a cool-off message. Do not
+parallel-retry. Jobs in ``KNOWN_JOB_IDS`` (e.g. dashboard-bridge) PATCH by id and
+skip ``GET /jobs`` when every selected key is known.
 """
 
 from __future__ import annotations
@@ -457,21 +462,58 @@ def _job_specs() -> list[CronJobSpec]:
     ]
 
 
-# cron-job.org returns bare 429 with no Retry-After during account bursts.
-_CRONJOB_429_ATTEMPTS = 10
-_CRONJOB_429_BASE_SECONDS = 60.0
-_CRONJOB_429_MAX_SECONDS = 900.0
+# cron-job.org often returns bare 429 (empty body, no Retry-After) during account
+# bursts. Long exponential backoff + repeated GET /jobs burned the account for
+# hours (L470). Fail fast: at most two attempts, then cool-off abort.
+_CRONJOB_429_MAX_ATTEMPTS = 2
+_CRONJOB_429_RETRY_AFTER_CAP_SECONDS = 120.0
+_CRONJOB_429_BARE_RETRY_SECONDS = 2.0
+EXIT_RATE_LIMITED = 3
+
+_COOLOFF_MESSAGE = (
+    "cron-job.org rate limit (HTTP 429). Cool off for hours (or overnight); "
+    "do not parallel-retry, re-dispatch import-ingest-crons, or re-run "
+    "import_cron_jobs.py until the account recovers. Prefer one-shot PATCH by "
+    "known jobId when available (see KNOWN_JOB_IDS). "
+    "Docs: docs/ops/dashboard-bridge.md#cron-joborg-429-cool-off"
+)
+
+# Stable production jobIds — skip GET /jobs when every selected key is listed.
+# Update if a job is deleted/recreated on cron-job.org. Full title→id cache is N156.
+KNOWN_JOB_IDS: dict[str, int] = {
+    "dashboard-bridge": 8513740,
+}
 
 
-def _cronjob_429_wait_seconds(attempt: int, *, retry_after: str | None = None) -> float:
-    """Seconds to sleep after a 429 before the next attempt (1-based attempt index)."""
+class CronJobRateLimitedError(RuntimeError):
+    """Sustained cron-job.org 429 — cool off; do not thrash."""
+
+    def __init__(self, method: str, path: str, *, detail: str = "") -> None:
+        self.method = method
+        self.path = path
+        self.detail = detail
+        suffix = f" Detail: {detail}" if (detail or "").strip() else ""
+        super().__init__(
+            f"{method} {path} aborted after {_CRONJOB_429_MAX_ATTEMPTS}× HTTP 429. "
+            f"{_COOLOFF_MESSAGE}{suffix}"
+        )
+
+
+def _is_bare_429(*, detail: str, retry_after: str | None) -> bool:
+    """True when the 429 has no usable Retry-After (thrash-prone account lockout)."""
+    return not (retry_after or "").strip()
+
+
+def _cronjob_429_wait_seconds(*, retry_after: str | None = None, bare: bool = False) -> float:
+    """Seconds to sleep once before a final retry (never multi-minute thrash)."""
     if retry_after:
         try:
-            return max(1.0, float(retry_after))
+            return max(1.0, min(_CRONJOB_429_RETRY_AFTER_CAP_SECONDS, float(retry_after)))
         except ValueError:
             pass
-    # attempt 1 → 60s, 2 → 120s, … capped at 15 minutes
-    return min(_CRONJOB_429_MAX_SECONDS, _CRONJOB_429_BASE_SECONDS * (2 ** (attempt - 1)))
+    if bare:
+        return _CRONJOB_429_BARE_RETRY_SECONDS
+    return _CRONJOB_429_BARE_RETRY_SECONDS
 
 
 def _cronjob_request(
@@ -490,7 +532,7 @@ def _cronjob_request(
     if payload is not None:
         data = json.dumps(payload).encode("utf-8")
     last_detail = ""
-    for attempt in range(1, _CRONJOB_429_ATTEMPTS + 1):
+    for attempt in range(1, _CRONJOB_429_MAX_ATTEMPTS + 1):
         request = urllib.request.Request(
             f"{CRONJOB_ENDPOINT}{path}",
             data=data,
@@ -504,24 +546,41 @@ def _cronjob_request(
         except urllib.error.HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="replace")
             last_detail = detail
-            if exc.code != 429 or attempt >= _CRONJOB_429_ATTEMPTS:
+            if exc.code != 429:
                 raise RuntimeError(f"{method} {path} failed ({exc.code}): {detail}") from exc
-            wait = _cronjob_429_wait_seconds(
-                attempt, retry_after=exc.headers.get("Retry-After")
-            )
+            retry_after = exc.headers.get("Retry-After") if exc.headers else None
+            bare = _is_bare_429(detail=detail, retry_after=retry_after)
+            if attempt >= _CRONJOB_429_MAX_ATTEMPTS:
+                raise CronJobRateLimitedError(method, path, detail=detail) from exc
+            wait = _cronjob_429_wait_seconds(retry_after=retry_after, bare=bare)
+            kind = "bare 429" if bare else "429 (Retry-After)"
             print(
-                f"cron-job.org 429 on {method} {path}; "
-                f"sleeping {wait:.0f}s (attempt {attempt}/{_CRONJOB_429_ATTEMPTS})",
+                f"cron-job.org {kind} on {method} {path}; "
+                f"one short retry in {wait:.0f}s "
+                f"(attempt {attempt}/{_CRONJOB_429_MAX_ATTEMPTS}), then abort if still 429",
                 file=sys.stderr,
             )
             time.sleep(wait)
-    raise RuntimeError(f"{method} {path} failed (429): {last_detail}")
+    raise CronJobRateLimitedError(method, path, detail=last_detail)
 
 
 def _list_jobs(api_key: str) -> list[dict[str, Any]]:
     payload = _cronjob_request("GET", "/jobs", api_key=api_key)
     return list(payload.get("jobs") or [])
 
+
+def _seed_known_jobs(specs: list[CronJobSpec]) -> dict[str, dict[str, Any]]:
+    """Build title→job stubs from KNOWN_JOB_IDS for selected specs."""
+    out: dict[str, dict[str, Any]] = {}
+    for spec in specs:
+        job_id = KNOWN_JOB_IDS.get(spec.key)
+        if job_id is not None:
+            out[spec.title] = {"title": spec.title, "jobId": job_id}
+    return out
+
+
+def _all_selected_have_known_ids(specs: list[CronJobSpec]) -> bool:
+    return bool(specs) and all(spec.key in KNOWN_JOB_IDS for spec in specs)
 
 def _parallel_sprint_dispatch_enabled(*, parallel_stream: int = 1) -> bool:
     """True when any parallel sprint market in ``parallel_stream`` still needs ingest."""
@@ -614,7 +673,15 @@ def import_job(
     existing = existing_by_title
     if existing is None:
         existing = {job.get("title"): job for job in _list_jobs(api_key)}
+        # Prefer live list; fill gaps from known ids so PATCH can skip a second list.
+        for title, stub in _seed_known_jobs([spec]).items():
+            existing.setdefault(title, stub)
     current = existing.get(spec.title)
+    if not current or not current.get("jobId"):
+        known_id = KNOWN_JOB_IDS.get(spec.key)
+        if known_id is not None:
+            current = {"title": spec.title, "jobId": known_id}
+            existing[spec.title] = current
     if current and current.get("jobId"):
         _cronjob_request(
             "PATCH",
@@ -728,22 +795,48 @@ def main(argv: list[str] | None = None) -> int:
 
     existing_by_title: dict[str, dict[str, Any]] | None = None
     if selected and not args.dry_run:
-        # One list call for the whole batch — cron-job.org rate-limits hard.
-        existing_by_title = {job.get("title"): job for job in _list_jobs(api_key)}
-    results: list[dict[str, Any]] = [
-        import_job(
-            spec,
-            api_key=api_key,
-            gh_pat=gh_pat,
-            dry_run=args.dry_run,
-            existing_by_title=existing_by_title,
+        known = _seed_known_jobs(selected)
+        # Skip GET /jobs when every selected key has a documented known jobId and
+        # we are not also disabling legacy titles (those still need a list).
+        skip_list = _all_selected_have_known_ids(selected) and not (
+            args.all or args.disable_legacy_ingest
         )
-        for spec in selected
-    ]
-    if args.all or args.disable_legacy_ingest:
-        results.extend(
-            disable_legacy_ingest_jobs(api_key=api_key, dry_run=args.dry_run)
-        )
+        try:
+            if skip_list:
+                print(
+                    "Skipping GET /jobs — using KNOWN_JOB_IDS for: "
+                    + ", ".join(f"{s.key}={KNOWN_JOB_IDS[s.key]}" for s in selected),
+                    file=sys.stderr,
+                )
+                existing_by_title = known
+            else:
+                # One list call for the whole batch — cron-job.org rate-limits hard.
+                existing_by_title = {job.get("title"): job for job in _list_jobs(api_key)}
+                for title, stub in known.items():
+                    existing_by_title.setdefault(title, stub)
+        except CronJobRateLimitedError as exc:
+            print(str(exc), file=sys.stderr)
+            return EXIT_RATE_LIMITED
+
+    try:
+        results: list[dict[str, Any]] = [
+            import_job(
+                spec,
+                api_key=api_key,
+                gh_pat=gh_pat,
+                dry_run=args.dry_run,
+                existing_by_title=existing_by_title,
+            )
+            for spec in selected
+        ]
+        if args.all or args.disable_legacy_ingest:
+            results.extend(
+                disable_legacy_ingest_jobs(api_key=api_key, dry_run=args.dry_run)
+            )
+    except CronJobRateLimitedError as exc:
+        print(str(exc), file=sys.stderr)
+        return EXIT_RATE_LIMITED
+
     if args.json or args.dry_run:
         print(json.dumps(results, indent=2))
     else:

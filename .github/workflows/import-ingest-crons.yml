@@ -3,6 +3,11 @@ name: Import ingest crons on cadence change
 # After merge of schedule / import definitions, re-import euro + library ingest
 # cron-job.org slots so Mon–Sat peak + daily off-peak stay live. Soft-skips when
 # CRONJOB_API_KEY or WORKFLOW_DISPATCH_PAT is missing.
+#
+# cron-job.org 429 cool-off: import_cron_jobs.py fail-fasts after ≤2× 429 (exit 3).
+# Do NOT re-run this workflow, stack workflow_dispatch, or spawn sibling imports
+# while rate-limited — cool off hours/overnight, then one shot.
+# See docs/ops/dashboard-bridge.md#cron-joborg-429-cool-off
 on:
   push:
     branches: [main]
@@ -45,11 +50,14 @@ jobs:
           CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
           WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
         run: |
+          set -euo pipefail
           if [ -z "${CRONJOB_API_KEY:-}" ] || [ -z "${WORKFLOW_DISPATCH_PAT:-}" ]; then
             echo "Soft-skip: CRONJOB_API_KEY or WORKFLOW_DISPATCH_PAT missing"
             exit 0
           fi
           # File is tracked as 100644 (not +x); invoke via python3 like other GHA scripts.
+          # Fail-fast on 429 (script exit 3): no GHA retry loops; cool off hours.
+          set +e
           python3 scripts/import_cron_jobs.py \
             --job euro-ingest-loop-morning \
             --job euro-ingest-loop-afternoon \
@@ -72,3 +80,10 @@ jobs:
             --job library-epoch0-weekday-us-edt \
             --job library-epoch0-weekday-us-est \
             --disable-legacy-ingest
+          rc=$?
+          set -e
+          if [ "$rc" -eq 3 ]; then
+            echo "::error::cron-job.org rate limit (429). Cool off hours/overnight; do not re-run this workflow or parallel-retry. See docs/ops/dashboard-bridge.md#cron-joborg-429-cool-off"
+            exit 3
+          fi
+          exit "$rc"
