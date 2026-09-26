@@ -1,17 +1,16 @@
 {
-  "run_at": "2026-09-26T07:30:10.870372+00:00",
+  "run_at": "2026-09-26T10:29:06.420747+00:00",
   "market_id": "euro_depth",
   "targets": [
     "OIZ.IR",
     "SGO.PA",
-    "MC.PA",
-    "BOL.ST",
     "ACKB.BR",
     "DTE.DE",
     "DQ7A.IR",
     "BN.PA",
     "NBA.LS",
-    "ADYEN.AS"
+    "ADYEN.AS",
+    "MC.PA"
   ],
   "target_details": [
     {
@@ -24,27 +23,11 @@
     },
     {
       "ticker": "SGO.PA",
-      "priority_score": 21.5427,
-      "filings_total": 3,
-      "filings_with_body": 1,
-      "indexed_without_body": 2,
-      "reason": "indexed_without_body"
-    },
-    {
-      "ticker": "MC.PA",
-      "priority_score": 18.8429,
-      "filings_total": 3,
+      "priority_score": 9.8427,
+      "filings_total": 2,
       "filings_with_body": 2,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
-    },
-    {
-      "ticker": "BOL.ST",
-      "priority_score": 14.9218,
-      "filings_total": 17,
-      "filings_with_body": 16,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
+      "indexed_without_body": 0,
+      "reason": "thin_bodies"
     },
     {
       "ticker": "ACKB.BR",
@@ -93,6 +76,14 @@
       "filings_with_body": 2,
       "indexed_without_body": 0,
       "reason": "thin_bodies"
+    },
+    {
+      "ticker": "MC.PA",
+      "priority_score": 18.8429,
+      "filings_total": 3,
+      "filings_with_body": 2,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
     }
   ],
   "results": [
@@ -160,25 +151,25 @@
     },
     {
       "ticker": "SGO.PA",
-      "reason": "indexed_without_body",
+      "reason": "thin_bodies",
       "before": {
-        "filings_total": 3,
-        "filings_with_body": 1,
-        "indexed_without_body": 2
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0
       },
       "after": {
         "filings_total": 2,
         "filings_with_body": 2,
         "indexed_without_body": 0
       },
-      "improved": true,
+      "improved": false,
       "regime": "euro_filings",
       "filings_summary": {
-        "total": 3,
+        "total": 2,
         "annual": 2,
         "interim": 0,
         "trading_update": 0,
-        "other": 1,
+        "other": 0,
         "with_body": 2,
         "period_coverage": {
           "annual": {
@@ -194,7 +185,7 @@
             "with_body": 0
           },
           "other": {
-            "total": 1,
+            "total": 0,
             "with_body": 0
           }
         }
@@ -214,113 +205,6 @@
           "added": 0,
           "total_allowlist": 2,
           "note": "merge_ir_allowlist_filings"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    },
-    {
-      "ticker": "MC.PA",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 3,
-        "filings_with_body": 2,
-        "indexed_without_body": 1
-      },
-      "after": {
-        "filings_total": 3,
-        "filings_with_body": 2,
-        "indexed_without_body": 1
-      },
-      "improved": false,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 3,
-        "annual": 0,
-        "interim": 0,
-        "trading_update": 1,
-        "other": 2,
-        "with_body": 2,
-        "period_coverage": {
-          "annual": {
-            "total": 0,
-            "with_body": 0
-          },
-          "interim": {
-            "total": 0,
-            "with_body": 0
-          },
-          "trading_update": {
-            "total": 1,
-            "with_body": 1
-          },
-          "other": {
-            "total": 2,
-            "with_body": 1
-          }
-        }
-      },
-      "ticker_budget_hit": true,
-      "ir_exhausted": false,
-      "ir_refetch": null
-    },
-    {
-      "ticker": "BOL.ST",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 17,
-        "filings_with_body": 16,
-        "indexed_without_body": 1
-      },
-      "after": {
-        "filings_total": 16,
-        "filings_with_body": 16,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 16,
-        "annual": 13,
-        "interim": 1,
-        "trading_update": 0,
-        "other": 2,
-        "with_body": 16,
-        "period_coverage": {
-          "annual": {
-            "total": 13,
-            "with_body": 13
-          },
-          "interim": {
-            "total": 1,
-            "with_body": 1
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 2,
-            "with_body": 2
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 16,
-        "with_body_after": 16,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
         },
         "shared_body_propagated": 0,
         "ir_metadata_reconciled": 0,
@@ -707,26 +591,68 @@
         "ir_metadata_reconciled": 0,
         "note": "no missing IR allowlist bodies"
       }
+    },
+    {
+      "ticker": "MC.PA",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 3,
+        "filings_with_body": 2,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 3,
+        "filings_with_body": 2,
+        "indexed_without_body": 1
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 3,
+        "annual": 0,
+        "interim": 0,
+        "trading_update": 1,
+        "other": 2,
+        "with_body": 2,
+        "period_coverage": {
+          "annual": {
+            "total": 0,
+            "with_body": 0
+          },
+          "interim": {
+            "total": 0,
+            "with_body": 0
+          },
+          "trading_update": {
+            "total": 1,
+            "with_body": 1
+          },
+          "other": {
+            "total": 2,
+            "with_body": 1
+          }
+        }
+      },
+      "ticker_budget_hit": true,
+      "ir_exhausted": false,
+      "ir_refetch": null
     }
   ],
-  "improved": [
-    "SGO.PA",
-    "BOL.ST"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-26T07:18:08.838408+00:00",
+    "snapshot_at": "2026-09-26T10:17:52.898222+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 52,
     "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 15,
-    "indexed_without_body": 19,
+    "indexed_without_body": 17,
     "bodies_min": 1,
     "bodies_median": 3,
-    "bodies_max": 106,
+    "bodies_max": 104,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
@@ -751,7 +677,6 @@
       "ADYEN.AS"
     ],
     "indexed_without_body_tickers": [
-      "SGO.PA",
       "EVN.VI",
       "WIE.VI",
       "ABI.BR",
@@ -760,7 +685,6 @@
       "MC.PA"
     ],
     "indexed_without_body_by_ticker": {
-      "SGO.PA": 2,
       "EVN.VI": 1,
       "WIE.VI": 1,
       "ABI.BR": 12,
@@ -791,15 +715,14 @@
       "NBA.LS",
       "ADYEN.AS"
     ],
-    "effective_indexed_without_body": 3,
+    "effective_indexed_without_body": 1,
     "effective_indexed_without_body_tickers": [
-      "SGO.PA",
       "MC.PA"
     ],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-26T07:30:06.062491+00:00",
+    "snapshot_at": "2026-09-26T10:29:01.715567+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 52,
     "unmeasured_buy_tier": 1,
@@ -900,6 +823,7 @@
     "max_runtime_seconds": 675.0,
     "prefer_tickers": [
       "OIZ.IR",
+      "SGO.PA",
       "ACKB.BR",
       "DTE.DE",
       "MUV2.DE",
@@ -912,7 +836,6 @@
       "NBA.LS",
       "ADYEN.AS",
       "ABI.BR",
-      "SGO.PA",
       "EVN.VI",
       "MC.PA",
       "SAP.DE",
@@ -925,7 +848,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-09-26T07:18:11.961270+00:00",
+    "assessed_at": "2026-09-26T10:17:56.077068+00:00",
     "unmeasured": [
       "OIZ.IR"
     ],
@@ -936,12 +859,6 @@
         "indexed_without_body": 12,
         "filings_total": 37,
         "filings_with_body": 25
-      },
-      {
-        "ticker": "SGO.PA",
-        "indexed_without_body": 2,
-        "filings_total": 3,
-        "filings_with_body": 1
       },
       {
         "ticker": "EVN.VI",
@@ -975,6 +892,7 @@
       }
     ],
     "thin_need_discovery": [
+      "SGO.PA",
       "ACKB.BR",
       "DTE.DE",
       "MUV2.DE",
@@ -988,7 +906,6 @@
       "ADYEN.AS"
     ],
     "thin_need_bodies": [
-      "SGO.PA",
       "EVN.VI",
       "WIE.VI",
       "UCB.BR",
@@ -999,7 +916,6 @@
     "auto_pin_tickers": [
       "OIZ.IR",
       "ABI.BR",
-      "SGO.PA",
       "EVN.VI",
       "MC.PA",
       "SAP.DE",
@@ -1008,22 +924,22 @@
     ],
     "recommended_actions": [
       "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
-      "Prefer indexed-without-body body refetch (7 tickers, top: ABI.BR(12), SGO.PA(2), EVN.VI(1), MC.PA(1), SAP.DE(1))",
-      "Discovery/IR seed for 11 thin ticker(s) that already have bodies for every indexed filing",
+      "Prefer indexed-without-body body refetch (6 tickers, top: ABI.BR(12), EVN.VI(1), MC.PA(1), SAP.DE(1), UCB.BR(1))",
+      "Discovery/IR seed for 12 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 1,
       "zero_body": 0,
-      "indexed_without_body_tickers": 7,
-      "indexed_without_body_rows": 19,
-      "thin_need_discovery": 11,
-      "thin_need_bodies": 5
+      "indexed_without_body_tickers": 6,
+      "indexed_without_body_rows": 17,
+      "thin_need_discovery": 12,
+      "thin_need_bodies": 4
     }
   },
-  "used_seconds": 710.794969862,
+  "used_seconds": 662.5562270089999,
   "budget_seconds": 2700.0,
-  "leftover_seconds": 1989.205030138,
+  "leftover_seconds": 2037.443772991,
   "blocker_ticker": "MC.PA",
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -1031,9 +947,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-09-26T07:30:06.072223+00:00",
+    "updated_at": "2026-09-26T10:29:01.724819+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -1128,7 +1044,7 @@
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "ABI.BR",
       "ACKB.BR",
