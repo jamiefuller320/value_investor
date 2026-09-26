@@ -1,0 +1,102 @@
+name: Human task ack
+
+# Observe-only human ack / approval from the Automation → Human tasks card.
+# Dispatched by dashboard-bridge after a Supabase dashboard_commands insert.
+# Never applies promotion, cron import, or live capital — durable record only.
+on:
+  repository_dispatch:
+    types: [human-task-ack]
+  workflow_dispatch:
+    inputs:
+      task_id:
+        description: Human checklist task id
+        required: true
+        type: string
+      decision:
+        description: ack_observe | approve | defer
+        required: false
+        default: ack_observe
+        type: string
+      finding_fingerprint:
+        description: Analysis fingerprint at ack time (optional)
+        required: false
+        type: string
+      note:
+        description: Optional note
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: human-task-ack
+  cancel-in-progress: false
+
+jobs:
+  ack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Record human-task ack + refresh board
+        env:
+          TASK_ID: ${{ github.event.client_payload.task_id || github.event.inputs.task_id }}
+          DECISION: ${{ github.event.client_payload.decision || github.event.inputs.decision || 'ack_observe' }}
+          FINGERPRINT: ${{ github.event.client_payload.finding_fingerprint || github.event.inputs.finding_fingerprint || '' }}
+          NOTE: ${{ github.event.client_payload.note || github.event.inputs.note || '' }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from value_investor.human_task_ack import run_human_task_ack
+
+          result = run_human_task_ack(
+              Path("docs/data"),
+              task_id=os.environ.get("TASK_ID") or "",
+              decision=os.environ.get("DECISION") or "ack_observe",
+              note=os.environ.get("NOTE") or "",
+              finding_fingerprint=os.environ.get("FINGERPRINT") or "",
+              source="dashboard_bridge",
+              acked_by="dashboard",
+          )
+          print(json.dumps(result, indent=2, sort_keys=True, default=str))
+          PY
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit dashboard slices
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: human task observe-ack from dashboard [skip ci]"
+          file_pattern: |
+            docs/data/human_task_acks.json
+            docs/data/human_tasks_board.json
+          skip_fetch: false
+
+      - name: Notify dashboard channel
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python3 - <<'PY'
+          from value_investor.dashboard_bridge import broadcast_dashboard_update
+          broadcast_dashboard_update(
+              event="artifact-updated",
+              payload={"artifact": "human_tasks_board", "source": "human-task-ack"},
+          )
+          PY

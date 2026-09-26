@@ -182,8 +182,12 @@ Job keys: `euro-ingest-loop-morning|afternoon|midafternoon|evening`,
 `library-ingest-maintenance-afternoon|midafternoon|evening`,
 `orchestrator-ladder-weekday`.
 
-After merge of a cadence change, re-import so cron-job.org picks up Mon–Sat peak + daily
-off-peak schedules and disables old weekday-only titles. GitHub `schedule` alone is best-effort.
+After merge of a cadence change, **`import-ingest-crons.yml`** re-imports the euro /
+library ingest + epoch-0 slots on cron-job.org (path filter on
+`scripts/import_cron_jobs.py`, epoch0 slots, and the ingest workflow YAMLs). Soft-skips
+when `CRONJOB_API_KEY` / `WORKFLOW_DISPATCH_PAT` are missing. Manual
+`import_cron_jobs.py` remains for recovery if the workflow or secrets were absent.
+GitHub `schedule` alone is best-effort.
 
 ### Filing sources (euro_filings)
 

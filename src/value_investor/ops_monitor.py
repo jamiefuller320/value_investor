@@ -2620,6 +2620,13 @@ def run_ops_monitor(
     except Exception:  # noqa: BLE001 — dashboard slice must not fail ops monitor
         pass
 
+    try:
+        from value_investor.human_task_cards import write_human_tasks_board
+
+        write_human_tasks_board(data_dir=Path("docs/data"))
+    except Exception:  # noqa: BLE001 — dashboard slice must not fail ops monitor
+        pass
+
     return report
 
 

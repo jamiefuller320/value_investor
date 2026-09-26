@@ -58,6 +58,12 @@ lane change and readiness gate (see N152 / P1 pin rules).
   inside the ~30h content window between Sunday publishes. Board is in
   ops-monitor `GHA_COMMIT_OPTIONAL`; Pages deploys after a successful ops
   artifact push.
+- **Human tasks board** — `docs/data/human_tasks_board.json` (+ durable
+  `human_task_acks.json`) rebuilt at the end of each ops-monitor run from the
+  checklist + existing analysis artifacts. Automation tab click-to-view cards
+  sort new/changed analysis first; Acknowledge / Approve via dashboard-bridge
+  (`human-task-ack`) are observe-only. Both JSON files are in
+  `GHA_COMMIT_OPTIONAL`.
 
 Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-required).
 

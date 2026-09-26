@@ -12,6 +12,7 @@ from value_investor.dashboard_bridge import (
 
 def test_supported_actions_map_to_repository_dispatch() -> None:
     assert "progress-report" in SUPPORTED_ACTIONS
+    assert "human-task-ack" in SUPPORTED_ACTIONS
     for action in SUPPORTED_ACTIONS:
         assert action in ACTION_REPOSITORY_DISPATCH
 
