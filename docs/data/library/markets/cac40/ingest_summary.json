@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-25T20:13:06.144478+00:00",
+  "run_at": "2026-09-26T08:20:11.868528+00:00",
   "market_id": "cac40",
   "targets": [
     "SGO.PA"
@@ -7,7 +7,7 @@
   "target_details": [
     {
       "ticker": "SGO.PA",
-      "priority_score": 7.6329,
+      "priority_score": 3.6329000000000002,
       "filings_total": 2,
       "filings_with_body": 2,
       "indexed_without_body": 0,
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-25T20:12:18.177493+00:00",
+    "snapshot_at": "2026-09-26T08:18:40.870237+00:00",
     "market_id": "cac40",
     "buy_tier_count": 13,
     "unmeasured_buy_tier": 0,
@@ -132,7 +132,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-25T20:13:00.618868+00:00",
+    "snapshot_at": "2026-09-26T08:18:50.858408+00:00",
     "market_id": "cac40",
     "buy_tier_count": 13,
     "unmeasured_buy_tier": 0,
@@ -168,17 +168,16 @@
       "EN.PA",
       "MC.PA",
       "RI.PA",
+      "SGO.PA",
       "URW.PA",
       "VIE.PA"
     ],
-    "parked_count": 7,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "SGO.PA"
-    ],
+    "parked_count": 8,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -186,39 +185,52 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 13,
-    "hits": 5,
-    "new_rows_total": 0,
-    "curiosity_total": 7,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "CAP.PA",
-      "EN.PA",
-      "RI.PA",
-      "CA.PA",
-      "URW.PA",
-      "SGO.PA",
-      "VIE.PA",
-      "MC.PA"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "cac40",
+    "to_market": "ftse_mib",
+    "stream_markets_after": [
+      "ftse_mib"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "cac40",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "CA.PA",
+        "CAP.PA",
+        "EN.PA",
+        "MC.PA",
+        "RI.PA",
+        "SGO.PA",
+        "URW.PA",
+        "VIE.PA"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "ftse_mib",
+      "forced": true,
+      "prior_screen_at": "2026-08-16T11:58:34.144147+00:00",
+      "prior_age_days": 41,
+      "run_at": "2026-09-26T08:20:06.700222+00:00",
+      "shortlist_count": 11,
+      "ticker_count": 40
+    },
+    "at": "2026-09-26T08:19:09.909203+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "cac40",
-    "assessed_at": "2026-09-25T20:12:18.833677+00:00",
+    "assessed_at": "2026-09-26T08:18:41.579572+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -260,9 +272,9 @@
       "thin_need_bodies": 1
     }
   },
-  "used_seconds": 41.05704074099998,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3558.942959259,
+  "used_seconds": 8.610353317000005,
+  "budget_seconds": 525.0,
+  "leftover_seconds": 516.389646683,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -270,9 +282,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "cac40",
-    "updated_at": "2026-09-25T20:13:00.622562+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-09-26T08:18:50.861698+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -344,6 +356,16 @@
         "filings_with_body": 2,
         "indexed_without_body": 1,
         "thin": true
+      },
+      {
+        "ticker": "SGO.PA",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-26T08:18:50.861698+00:00",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
@@ -358,15 +380,27 @@
       "URW.PA",
       "VIE.PA"
     ],
-    "unparked_leftover": [
-      "SGO.PA"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/cac40/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "cac40"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "cac40",
+    "ingest_exhausted_markets": [
+      "asx200",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_smallcap",
+      "ibex35",
+      "nasdaq100",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
