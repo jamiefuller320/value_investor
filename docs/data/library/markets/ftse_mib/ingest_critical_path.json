@@ -1,12 +1,8 @@
 {
   "market_id": "ftse_mib",
-  "assessed_at": "2026-09-26T11:18:10.222747+00:00",
+  "assessed_at": "2026-09-26T13:05:05.340187+00:00",
   "unmeasured": [
-    "MONC.MI",
     "BZU.MI",
-    "FCT.MI",
-    "INW.MI",
-    "UNI.MI",
     "PST.MI",
     "BC.MI",
     "IVG.MI"
@@ -26,7 +22,12 @@
       "filings_with_body": 10
     }
   ],
-  "thin_need_discovery": [],
+  "thin_need_discovery": [
+    "MONC.MI",
+    "FCT.MI",
+    "INW.MI",
+    "UNI.MI"
+  ],
   "thin_need_bodies": [
     "REC.MI",
     "AMP.MI"
@@ -34,26 +35,25 @@
   "primary_blocker": "unmeasured",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "MONC.MI",
     "BZU.MI",
-    "FCT.MI",
-    "INW.MI",
-    "UNI.MI",
     "PST.MI",
     "BC.MI",
-    "IVG.MI"
+    "IVG.MI",
+    "AMP.MI",
+    "REC.MI"
   ],
   "recommended_actions": [
-    "Bootstrap 8 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Bootstrap 4 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
     "Prefer indexed-without-body body refetch (2 tickers, top: AMP.MI(36), REC.MI(11))",
+    "Discovery/IR seed for 4 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 8,
+    "unmeasured": 4,
     "zero_body": 0,
     "indexed_without_body_tickers": 2,
     "indexed_without_body_rows": 47,
-    "thin_need_discovery": 0,
+    "thin_need_discovery": 4,
     "thin_need_bodies": 2
   }
 }
