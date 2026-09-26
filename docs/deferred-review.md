@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-26T16:23:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-26T20:00:20+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -541,6 +541,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L470 | **Harden import_cron_jobs.py against sustained cron-job.org 429 thrash** | Bare 429 (no Retry-After) plus 10× GET /jobs backoff (60s→900s) burned the account for hours when registering dashboard-bridge after #856. Overnight cool-off + one-shot list/PUT succeeded (jobId 8513740). Abort after 2–3 consecutive 429s with a cool-off message; avoid parallel agent retries; optional create-only path for known-new titles. | Next cron-job.org register/re-import, or any agent/session hits sustained 429 on import_cron_jobs.py |
 | L471 | **Dashboard surface for PR fix common issues on human-task card** | monthly-pr-fix-common-issues card already pulls pr_fix_occasions / traffic digest snippets. Further charting of common-issues trajectory can wait until occasion volume is thick. | pr_fix_occasions has ≥20 occasions or monthly review still feels CLI-heavy |
 | L472 | **Optional ops-monitor finding for open ingest deviations count** | ops_status has no dedicated open-deviation finding; human task + ingest_deviations.json already cover triage. Optional observe warn when open_count>0. | Operators miss open deviations without checking Automation tab |
+| L473 | **Watch import-ingest-crons in ops-monitor workflow_checks** | Afternoon main failures of Import ingest crons (Permission denied) were invisible in ops_status workflow_checks because that workflow is not on the watched list. | After import-cron invoke fix merges, if similar main-only GHA failures keep surprising humans |
 
 ---
 
