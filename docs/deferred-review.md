@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-27T08:23:50+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-27T11:58:47+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -215,6 +215,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N160 | **Human-task Approve buttons stay observe-only — never auto-apply** | Approve on checklist cards records observe-only intent today. Do not wire Approve to knob promote, fair-twin spawn, Phase C freeze writer, or live capital without an explicit readiness gate per action. | A promotion gate has a documented supervised execute path and thick evidence like lifecycle Start |
 | N161 | **Do not eng-spray MC.PA IWB from blocker_no_improve before dismiss** | Open deviation dev-euro_depth-MC.PA-blocker_no_improve is plain buy → dismiss; intensive pin / per-ticker eng would steal euro_depth fat-slot capacity. | MC.PA flips strong_buy or IR exhausted with clear allowlist bug |
 | N162 | **Widen ops-monitor workflow max_age for Sunday weekly jobs** | Do not bump analysis-review / email-report / data-backup max_age_hours (e.g. toward ~168h). On Sunday morning age since last success is always ~7d; longer counters would hide real same-day misses after EMAIL_READY. Prefer schedule-aware stale (past email-ready) which is now implemented. | Only if schedule-aware past_email_ready gate is reverted or proven insufficient after several Sunday morning ops passes |
+| N163 | **MACD golden-cross hard gate on FTSE new buys** | Classic MACD line/signal golden cross as a live entry requirement. Held-book PIT counterfactual (2026-09-27, n=5 AI-judgment+technical) showed 0 GC at entry and mean next-GC fill ~1.3% worse; live stack already uses MACD histogram slope inside timing_signal plus skip_timing_wait. | Observe-only MACD-cross/accumulate twin has ≥15 closed first-entry episodes on AI-judgment+rules with signed edge after counting missed winners |
+| N164 | **Require timing_signal=accumulate for all new FTSE buys** | Tighten beyond skip_timing_wait so only accumulate (not neutral) may open sleeves. Latest buy-tier mix was ~9 accumulate / 45 neutral / 3 wait — miss-cost vs eventual winners unscored; held set all entered neutral. | Same observe twin as MACD-cross gate reports accumulate-only miss-cost and net sleeve edge after costs |
 
 ---
 
@@ -421,6 +423,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L450 | **Screening model×input coverage matrix (criteria inventory)** | Tabulate each of the 22 screening models' criteria/fields, mark absolute vs universe-relative, map overlaps (esp. quality/moat ROE-margin-leverage cluster), and reconcile KEY_SCREENING_METRICS vs fetch fields so missing inputs (earnings_growth, interest cover, Piotroski YoY deltas) are visible. Do not expand Economic Moat into qualitative peer analysis without a separate design — screen moat is a numerical proxy; true comparative moat lives in research/filings + peer_model_pass_table. | After P1 FTSE buy-tier body/FCF/overlay bind work is idle, or when post-run themes repeatedly cite unsupported moat/quality claims |
 | L467 | **IR/ESEF seed for euro zero-body leftovers OIZ REN SIE** | After thin-memo factory heal, OIZ.IR REN.AS SIE.DE remain 0 filing bodies. Next sprint heals will retry; if still 0-improve, seed IR allowlist or parked-hunter rather than hand pins. | euro_depth ingest exhaustion approaches 3/3 zero-improve or next thin_memo sample rises because these names re-enter thin grades |
 | L469 | **Collapse shared-experiment Lifecycle Start chips in UI** | add_cadence and entry_kind_tag (and siblings) share entry_dca_overlay Start; bridge now dedupes by experiment. Optional UX: show one Start control per experiment instead of one per catalog chip to reduce duplicate clicks. | After Start dedupe + every-10m bridge cron are live and humans still double-click sibling chips, or Lifecycle UI redesign pass |
+| L474 | **Bollinger/stochastic/Ichimoku entry toolkit beyond RSI-MA-MACD** | Expand technical entry toolkit past the existing RSI-14 + SMA50/200 + MACD histogram composite. No held-book or chart evidence that another oscillator family is the binding gap versus DCA patience and P1 utilization. | MACD/accumulate observe twin concludes and component attribution shows the current composite is the bottleneck |
 
 ### Ops / reliability
 

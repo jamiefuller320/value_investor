@@ -741,7 +741,7 @@
       "failed_check_names": [
         "CI / validate"
       ],
-      "notes": "ruff format only; ci-pr-autofix in progress — waiting for new head",
+      "notes": "ruff format only; ci-pr-autofix in progress \u2014 waiting for new head",
       "details": {}
     },
     {
@@ -1259,11 +1259,11 @@
     },
     {
       "id": "prf-20260927-001",
-      "recorded_at": "2026-09-27T08:49:18.081526+00:00",
+      "recorded_at": "2026-09-27T11:50:33.823043+00:00",
       "source": "human_request",
       "kind": "ci_check",
-      "failure_reason": "test (3): MEGP suggestion fixture recorded_at aged past 14d lookback",
-      "pr_number": 868,
+      "failure_reason": "pytest failed on deferred-ideas ID clash (suspected N162 collision with #868)",
+      "pr_number": 871,
       "branch": null,
       "title": null,
       "url": null,
@@ -1271,9 +1271,28 @@
       "head_sha": null,
       "mergeable_state": null,
       "failed_check_names": [
-        "CI / test (3)"
+        "CI / test"
       ],
-      "notes": "Unrelated to schedule-aware staleness; absolute 2026-09-13 stamp expired ~2026-09-27",
+      "notes": null,
+      "details": {}
+    },
+    {
+      "id": "prf-20260927-002",
+      "recorded_at": "2026-09-27T11:50:43.295623+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "pytest: test_engineering_compile_skips_memo_status_suggestions hard-coded recorded_at aged past 14d lookback (same #868 flake)",
+      "pr_number": 871,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test"
+      ],
+      "notes": "fix via cherry-pick/copy 22d43de43",
       "details": {}
     }
   ],

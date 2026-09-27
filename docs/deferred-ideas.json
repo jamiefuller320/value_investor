@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T08:23:50+00:00",
+  "updated_at": "2026-09-27T11:58:47+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10776,6 +10776,56 @@
       "status": "open",
       "source": "ops-staleness-sunday-warnings assessment 2026-09-27",
       "added_at": "2026-09-27T08:23:50+00:00"
+    },
+    {
+      "id": "N163",
+      "category": "not_now",
+      "section": "learning",
+      "title": "MACD golden-cross hard gate on FTSE new buys",
+      "summary": "Classic MACD line/signal golden cross as a live entry requirement. Held-book PIT counterfactual (2026-09-27, n=5 AI-judgment+technical) showed 0 GC at entry and mean next-GC fill ~1.3% worse; live stack already uses MACD histogram slope inside timing_signal plus skip_timing_wait.",
+      "revisit_when": "Observe-only MACD-cross/accumulate twin has \u226515 closed first-entry episodes on AI-judgment+rules with signed edge after counting missed winners",
+      "tags": [
+        "timing",
+        "macd",
+        "entry",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-1ea469f3-6255-5cf7-809c-49cfb467cea1",
+      "added_at": "2026-09-27T11:58:47+00:00"
+    },
+    {
+      "id": "N164",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Require timing_signal=accumulate for all new FTSE buys",
+      "summary": "Tighten beyond skip_timing_wait so only accumulate (not neutral) may open sleeves. Latest buy-tier mix was ~9 accumulate / 45 neutral / 3 wait \u2014 miss-cost vs eventual winners unscored; held set all entered neutral.",
+      "revisit_when": "Same observe twin as MACD-cross gate reports accumulate-only miss-cost and net sleeve edge after costs",
+      "tags": [
+        "timing",
+        "accumulate",
+        "entry",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-1ea469f3-6255-5cf7-809c-49cfb467cea1",
+      "added_at": "2026-09-27T11:58:47+00:00"
+    },
+    {
+      "id": "L474",
+      "category": "later",
+      "section": "research",
+      "title": "Bollinger/stochastic/Ichimoku entry toolkit beyond RSI-MA-MACD",
+      "summary": "Expand technical entry toolkit past the existing RSI-14 + SMA50/200 + MACD histogram composite. No held-book or chart evidence that another oscillator family is the binding gap versus DCA patience and P1 utilization.",
+      "revisit_when": "MACD/accumulate observe twin concludes and component attribution shows the current composite is the bottleneck",
+      "tags": [
+        "timing",
+        "indicators",
+        "later"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-1ea469f3-6255-5cf7-809c-49cfb467cea1",
+      "added_at": "2026-09-27T11:58:47+00:00"
     }
   ],
   "fragments": [
