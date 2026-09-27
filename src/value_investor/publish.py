@@ -432,20 +432,42 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     )
     learning_track_funds: dict[str, Any] = {}
     learning_track_configs: dict[str, Any] = {}
+    paper_root_for_dual: Path | None = None
     try:
+        from value_investor.fair_cost_lab import (
+            is_cohort_lab_track_id,
+            is_fair_cost_lab_track_id,
+            is_suite_b_track_id,
+        )
         from value_investor.knob_calibration import load_calibration_provenance
         from value_investor.paper_automation import learning_track_dirs
 
         paper_root = _resolve_paper_automation_dir(output_dir)
+        paper_root_for_dual = paper_root
         for track_id, track_dir in learning_track_dirs(paper_root).items():
             cfg_payload = _read_json(track_dir / "config.json")
             if cfg_payload:
                 provenance = load_calibration_provenance(track_dir)
+                is_fair = bool(cfg_payload.get("is_fair_cost_lab")) or is_fair_cost_lab_track_id(
+                    track_id
+                )
+                is_cohort = bool(cfg_payload.get("is_cohort_lab")) or is_cohort_lab_track_id(
+                    track_id
+                )
                 learning_track_configs[track_id] = {
                     "track_label": cfg_payload.get("track_label"),
                     "is_primary_learning_track": bool(cfg_payload.get("is_primary_learning_track")),
                     "is_calibration_shadow": bool(cfg_payload.get("is_calibration_shadow")),
                     "calibration_parent_track": cfg_payload.get("calibration_parent_track"),
+                    "is_fair_cost_lab": is_fair,
+                    "is_cohort_lab": is_cohort,
+                    "is_suite_b": is_suite_b_track_id(track_id) or is_fair or is_cohort,
+                    "fair_cost_parent_track": cfg_payload.get("fair_cost_parent_track"),
+                    "cost_basis": {
+                        "trade_cost_pct": cfg_payload.get("trade_cost_pct"),
+                        "buy_cost_pct": cfg_payload.get("buy_cost_pct"),
+                        "sell_cost_pct": cfg_payload.get("sell_cost_pct"),
+                    },
                     "selection": {
                         "max_positions": cfg_payload.get("max_positions"),
                         "min_conviction": cfg_payload.get("min_conviction"),
@@ -471,6 +493,19 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
                 }
     except Exception as exc:  # noqa: BLE001
         logger.warning("Learning track fund snapshot skipped: %s", exc)
+
+    learning_tracks_dual_suite = None
+    try:
+        from value_investor.learning_tracks_dual_suite import build_learning_tracks_dual_suite
+
+        learning_tracks_dual_suite = build_learning_tracks_dual_suite(
+            learning_tracks_review if isinstance(learning_tracks_review, dict) else None,
+            track_configs=learning_track_configs,
+            paper_root=paper_root_for_dual,
+            include_fair_assess=True,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Learning tracks dual-suite scoreboard skipped: %s", exc)
 
     trust_reports = _load_trust_reports(output_dir)
     signal_counts = _signal_counts(reports)
@@ -659,6 +694,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "paper_automation": paper_automation,
         "learning_tracks_review": learning_tracks_review,
         "learning_tracks_summary": learning_tracks_summary,
+        "learning_tracks_dual_suite": learning_tracks_dual_suite,
         "learning_track_funds": learning_track_funds,
         "learning_track_configs": learning_track_configs,
         "learning_track_epoch_datum": learning_track_epoch_datum,

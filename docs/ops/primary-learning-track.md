@@ -27,6 +27,11 @@ defensive / low-churn lab). Fair T212-shaped performance truth is Suite B /
 [`market-trading-costs.md`](market-trading-costs.md#test-and-adoption-strategy-dual-suite).
 Do **not** promote knobs on stress excess vs ^FTSE alone.
 
+The dashboard **Automation → Learning tracks** panel publishes a dual-suite
+scoreboard (`learning_tracks_dual_suite` in the dashboard bundle): Suite B fair
+excess is the adoption headline; Suite A remains the primary-flag churn lab.
+Presentation only — does not flip `is_primary_learning_track` (**N145**).
+
 ## Post-exit shadow learning (observe-only)
 
 On every paper-auto run, each track records **full position sells** into a shadow cohort and
