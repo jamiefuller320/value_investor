@@ -54,7 +54,9 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
 def test_sunday_review_paper_tracks_sorted_by_track_then_week() -> None:
     """Analysis → Sunday review paper table groups by track, weeks ascending within track."""
     text = APP_JS.read_text(encoding="utf-8")
-    fn = text.split("function renderSundayReview(", 1)[1].split("\nconst ANALYSIS_SECTION_IDS", 1)[0]
+    fn = text.split("function renderSundayReview(", 1)[1].split("\nconst ANALYSIS_SECTION_IDS", 1)[
+        0
+    ]
     if "function renderAnalysis(" in fn:
         fn = fn.split("\nfunction renderAnalysis(", 1)[0]
     assert "trackA.localeCompare(trackB)" in fn
@@ -73,7 +75,7 @@ def test_sunday_review_paper_tracks_sorted_by_track_then_week() -> None:
     assert 'class="analysis-block overview-secondary"' in fn
     assert "<strong>Exclusion ladder</strong>" in fn
     assert "<strong>Regime snapshots</strong>" in fn
-    assert 'open>' not in fn  # no always-open details for these blocks
+    assert "open>" not in fn  # no always-open details for these blocks
 
 
 def test_analysis_tab_ia_contract() -> None:
@@ -115,8 +117,8 @@ def test_market_role_badge_taxonomy_helpers() -> None:
     start = text.index("const MARKET_INGEST_LABELS =")
     end = text.index("function learningBookLine(")
     chunk = text[start:end]
-    from subprocess import check_output
     import json
+    from subprocess import check_output
 
     script = (
         "function esc(t){return String(t??'');}\n"
@@ -151,7 +153,9 @@ console.log(JSON.stringify({
     assert "mrole-admitted" not in payload["graduatedOnly"]
     assert "mrole-queue" in payload["queue"]
     assert "mrole-live" in payload["live"]
-    assert "mrole-focus" in payload["focusAdmitted"] and "mrole-admitted" in payload["focusAdmitted"]
+    assert (
+        "mrole-focus" in payload["focusAdmitted"] and "mrole-admitted" in payload["focusAdmitted"]
+    )
     assert "mingest-live" in payload["ingestLive"]
     assert "mingest-maintenance" in payload["ingestMaint"]
     assert "stage-complete" not in payload["ingestLive"]
