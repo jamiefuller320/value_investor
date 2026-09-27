@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-27T14:36:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-27T19:04:48+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -547,6 +547,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L471 | **Dashboard surface for PR fix common issues on human-task card** | monthly-pr-fix-common-issues card already pulls pr_fix_occasions / traffic digest snippets. Further charting of common-issues trajectory can wait until occasion volume is thick. | pr_fix_occasions has ≥20 occasions or monthly review still feels CLI-heavy |
 | L472 | **Optional ops-monitor finding for open ingest deviations count** | ops_status has no dedicated open-deviation finding; human task + ingest_deviations.json already cover triage. Optional observe warn when open_count>0. | Operators miss open deviations without checking Automation tab |
 | L473 | **Watch import-ingest-crons in ops-monitor workflow_checks** | Afternoon main failures of Import ingest crons (Permission denied) were invisible in ops_status workflow_checks because that workflow is not on the watched list. | After import-cron invoke fix merges, if similar main-only GHA failures keep surprising humans |
+| L479 | **Clash-aware: treat deferred-ideas store as shared mutable** | PR fix occasions show ~13 deferred-store merge conflicts; add deferred-ideas.json/deferred-review.md to clash-aware shared mutables (or serialize ftse-defer onto main) so parallel agents stop dirtying each other. | Engineering queue idle and merge_conflict occasions still cite deferred-ideas after next weekly common-issues review |
+| L480 | **Normalize PR-fix failure reasons (paths + ruff/validate)** | 67 unique failure_reason strings across 79 occasions; generic CONFLICTING labels dominate common-issues. Extend normalize_failure_reason to attach conflicted paths and map bare validate failures to ruff/JSON causes. | Next monthly-pr-fix-common-issues human task or when occasion_count grows another ~25 |
+| L481 | **Mock flaky live network in CI unit tests (DAX stall / Investegate)** | Seven ci_check fix occasions from live DAX library_stall auto-cancel, Investegate None, and unmocked ops-monitor helpers. Keep live checks in a marked integration job; unit CI should mock. | Same flake hits two PRs in one week again (see pr_fix_occasions H theme) |
 
 ---
 
