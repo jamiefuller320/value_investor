@@ -609,6 +609,14 @@ let dashboardRefreshInFlight = null;
 let dashboardLastLoadedAt = 0;
 const DASHBOARD_VISIBLE_RELOAD_MS = 45 * 1000;
 
+/** Last network-fetched human-tasks board (pre client ack merge). */
+let humanTasksBoardBase = null;
+/**
+ * Session overlay for acks queued from this page before git sidecar catches up.
+ * Keys are task_id; values match human_task_acks.json row shape.
+ */
+const pendingHumanTaskAcks = Object.create(null);
+
 function mergeHumanTaskAcksIntoBoard(board, acksStore) {
   if (!board || !Array.isArray(board.tasks)) return board;
   const openAcks = {};
@@ -665,6 +673,84 @@ function mergeHumanTaskAcksIntoBoard(board, acksStore) {
   return { ...board, tasks: ordered, counts };
 }
 
+function rememberPendingHumanTaskAck(payload) {
+  const taskId = String((payload && payload.task_id) || "").trim();
+  if (!taskId) return;
+  pendingHumanTaskAcks[taskId] = {
+    task_id: taskId,
+    decision: String((payload && payload.decision) || "ack_observe"),
+    status: "open",
+    acked_at: new Date().toISOString(),
+    finding_fingerprint: String((payload && payload.finding_fingerprint) || ""),
+    source: "dashboard_optimistic",
+    acked_by: "dashboard",
+  };
+}
+
+function clearPendingHumanTaskAck(taskId) {
+  delete pendingHumanTaskAcks[String(taskId || "").trim()];
+}
+
+function prunePendingHumanTaskAcksAgainstDurable(acksStore) {
+  for (const row of (acksStore && acksStore.acks) || []) {
+    if (!row || typeof row !== "object") continue;
+    if (String(row.status || "open") !== "open") continue;
+    const id = String(row.task_id || "").trim();
+    if (id && pendingHumanTaskAcks[id]) delete pendingHumanTaskAcks[id];
+  }
+}
+
+/** Durable sidecar rows plus any session-pending acks not yet in git. */
+function overlayPendingHumanTaskAcks(acksStore) {
+  const byId = Object.create(null);
+  for (const row of (acksStore && acksStore.acks) || []) {
+    if (!row || typeof row !== "object") continue;
+    const id = String(row.task_id || "").trim();
+    if (id) byId[id] = row;
+  }
+  for (const id of Object.keys(pendingHumanTaskAcks)) {
+    if (byId[id] && String(byId[id].status || "open") === "open") continue;
+    byId[id] = pendingHumanTaskAcks[id];
+  }
+  return {
+    schema_version: 1,
+    updated_at: (acksStore && acksStore.updated_at) || null,
+    acks: Object.keys(byId).map((id) => byId[id]),
+  };
+}
+
+function refreshHumanTasksBoardView() {
+  if (!dashboardData || !humanTasksBoardBase) return;
+  const acksForBoard = overlayPendingHumanTaskAcks(dashboardData.human_task_acks);
+  dashboardData.human_tasks_board = (acksForBoard.acks || []).length
+    ? mergeHumanTaskAcksIntoBoard(humanTasksBoardBase, acksForBoard)
+    : humanTasksBoardBase;
+  renderAutomation(dashboardData);
+}
+
+function applyOptimisticHumanTaskAck(payload) {
+  rememberPendingHumanTaskAck(payload);
+  refreshHumanTasksBoardView();
+}
+
+function revertOptimisticHumanTaskAck(taskId) {
+  clearPendingHumanTaskAck(taskId);
+  refreshHumanTasksBoardView();
+}
+
+function setHumanTaskAckStatus(taskId, text) {
+  const id = String(taskId || "").trim();
+  if (!id) return;
+  const panel = document.getElementById("panel-automation");
+  if (!panel) return;
+  const escape =
+    (window.CSS && typeof window.CSS.escape === "function" && window.CSS.escape.bind(window.CSS)) ||
+    ((value) => String(value).replace(/\\/g, "\\\\").replace(/"/g, '\\"'));
+  const card = panel.querySelector(`.human-task-card[data-task-id="${escape(id)}"]`);
+  const el = card && card.querySelector(".human-task-ack-status");
+  if (el) el.textContent = text || "";
+}
+
 async function applyDashboardSidecars(data) {
   const rows = await Promise.all(
     DASHBOARD_SIDECARS.map(async ([key, path]) => [key, await loadOptionalDashboardJson(path)])
@@ -674,11 +760,14 @@ async function applyDashboardSidecars(data) {
   }
   // Acks sidecar is source of truth; board JSON can lag when the ack workflow
   // only committed human_task_acks.json (weekend drain / commit race).
-  if (data.human_tasks_board && data.human_task_acks) {
-    data.human_tasks_board = mergeHumanTaskAcksIntoBoard(
-      data.human_tasks_board,
-      data.human_task_acks
-    );
+  // Session pending overlay covers the gap between Supabase queue and Pages git.
+  if (data.human_tasks_board) {
+    humanTasksBoardBase = data.human_tasks_board;
+    prunePendingHumanTaskAcksAgainstDurable(data.human_task_acks);
+    const acksForBoard = overlayPendingHumanTaskAcks(data.human_task_acks);
+    if ((acksForBoard.acks || []).length) {
+      data.human_tasks_board = mergeHumanTaskAcksIntoBoard(humanTasksBoardBase, acksForBoard);
+    }
   }
   return data;
 }
@@ -4213,6 +4302,7 @@ async function acknowledgeHumanTaskFromCard(button) {
     if (statusEl) statusEl.textContent = "Missing task id";
     return;
   }
+  const taskId = String(payload.task_id).trim();
   button.disabled = true;
   if (statusEl) statusEl.textContent = "Submitting…";
   try {
@@ -4226,7 +4316,8 @@ async function acknowledgeHumanTaskFromCard(button) {
       if (!response.ok || body.ok === false) {
         throw new Error(body.error || `HTTP ${response.status}`);
       }
-      if (statusEl) statusEl.textContent = "Recorded locally";
+      applyOptimisticHumanTaskAck(payload);
+      setHumanTaskAckStatus(taskId, "Recorded locally");
       await reloadDashboard({ silent: true });
       return;
     }
@@ -4235,12 +4326,68 @@ async function acknowledgeHumanTaskFromCard(button) {
     }
     const bridgeReady = await window.DashboardBridge.init();
     if (!bridgeReady) throw new Error("Dashboard bridge not configured");
-    await window.DashboardBridge.submitCommand("human-task-ack", payload);
-    if (statusEl) statusEl.textContent = "Recorded";
-    await reloadDashboard({ silent: true, rebuild: true });
+    const queueFn =
+      typeof window.DashboardBridge.queueCommand === "function"
+        ? window.DashboardBridge.queueCommand.bind(window.DashboardBridge)
+        : null;
+    const queued = queueFn
+      ? await queueFn("human-task-ack", payload, (msg) => setHumanTaskAckStatus(taskId, msg))
+      : await window.DashboardBridge.submitCommand(
+          "human-task-ack",
+          payload,
+          (msg) => setHumanTaskAckStatus(taskId, msg),
+          { wait: false }
+        );
+    // Move card to acked/bottom as soon as Supabase accepts the command —
+    // do not wait for Actions drain or Pages sidecar refresh.
+    applyOptimisticHumanTaskAck(payload);
+    setHumanTaskAckStatus(taskId, "Acknowledged — syncing to git…");
+    const commandId = queued && queued.id;
+    const waitFn =
+      commandId && typeof window.DashboardBridge.waitForCommand === "function"
+        ? window.DashboardBridge.waitForCommand.bind(window.DashboardBridge)
+        : null;
+    if (!waitFn) {
+      await reloadDashboard({ silent: true, rebuild: true });
+      return;
+    }
+    try {
+      await waitFn(commandId, (msg) => setHumanTaskAckStatus(taskId, msg));
+      setHumanTaskAckStatus(taskId, "Recorded");
+      await reloadDashboard({ silent: true, rebuild: true });
+    } catch (waitErr) {
+      const msg = waitErr && waitErr.message ? waitErr.message : String(waitErr);
+      if (/timed out/i.test(msg)) {
+        // Command still pending — keep optimistic bottom sort.
+        setHumanTaskAckStatus(
+          taskId,
+          "Queued — card moved; git sync still pending (Run workflow to drain)"
+        );
+        return;
+      }
+      revertOptimisticHumanTaskAck(taskId);
+      setHumanTaskAckStatus(taskId, msg);
+      const card = document.querySelector(
+        `#panel-automation .human-task-card[data-task-id="${
+          (window.CSS && CSS.escape && CSS.escape(taskId)) || taskId
+        }"]`
+      );
+      const btn = card && card.querySelector(`[data-human-task-ack]`);
+      if (btn) btn.disabled = false;
+    }
   } catch (err) {
+    revertOptimisticHumanTaskAck(taskId);
+    const msg = err && err.message ? err.message : String(err);
+    setHumanTaskAckStatus(taskId, msg);
+    if (statusEl && statusEl.isConnected) statusEl.textContent = msg;
     button.disabled = false;
-    if (statusEl) statusEl.textContent = err && err.message ? err.message : String(err);
+    const card = document.querySelector(
+      `#panel-automation .human-task-card[data-task-id="${
+        (window.CSS && CSS.escape && CSS.escape(taskId)) || taskId
+      }"]`
+    );
+    const btn = card && card.querySelector(`[data-human-task-ack]`);
+    if (btn) btn.disabled = false;
   }
 }
 

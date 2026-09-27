@@ -39,16 +39,80 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     )[0]
     assert "applyDashboardSidecars(data)" in reload_fn
     assert 'fetch("data/progress_report.json")' not in reload_fn
-    # Human-task ack path must reload after bridge completes (not only local serve).
+    # Human-task ack: optimistic bottom-sort on queue, then wait/reload for git.
+    assert "const pendingHumanTaskAcks" in text
+    assert "function applyOptimisticHumanTaskAck(" in text
+    assert "function overlayPendingHumanTaskAcks(" in text
+    assert "function refreshHumanTasksBoardView(" in text
+    assert "prunePendingHumanTaskAcksAgainstDurable(" in text
     ack_fn = text.split("async function acknowledgeHumanTaskFromCard(", 1)[1].split(
         "\nfunction resolveObserveUtilization(", 1
     )[0]
-    assert 'submitCommand("human-task-ack"' in ack_fn
+    assert "applyOptimisticHumanTaskAck(payload)" in ack_fn
+    assert "queueCommand" in ack_fn
+    assert "waitForCommand" in ack_fn
     assert "reloadDashboard({ silent: true, rebuild: true })" in ack_fn
     assert "Queued — waiting for bridge" not in ack_fn
+    bridge_js = Path("docs/dashboard_bridge.js").read_text(encoding="utf-8")
+    assert "async function queueCommand(" in bridge_js
+    assert "function waitForCommand(" in bridge_js
+    assert "options.wait === false" in bridge_js
     load_fn = text.split("async function loadDashboard()", 1)[1].split("\ninitTabs()", 1)[0]
     assert "reloadDashboard()" in load_fn
     assert 'fetch("data/progress_report.json")' not in load_fn
+
+
+def test_human_task_ack_optimistic_overlay_sorts_acked_to_bottom() -> None:
+    """Session pending ack moves a card to acked/bottom via the same merge helper."""
+    import json
+    from subprocess import check_output
+
+    text = APP_JS.read_text(encoding="utf-8")
+    start = text.index("function mergeHumanTaskAcksIntoBoard(board, acksStore)")
+    end = text.index("async function applyDashboardSidecars(data)")
+    chunk = text[start:end]
+    # Standalone harness: pending map + helpers extracted from app.js
+    script = (
+        "const pendingHumanTaskAcks = Object.create(null);\n"
+        + chunk
+        + """
+const board = {
+  counts: { new_info: 0, unacked: 2, acked: 0, human: 2 },
+  tasks: [
+    {
+      id: "task-a",
+      sort_bucket: "unacked",
+      ack: { acked: false, stale: false },
+      analysis: { fingerprint: "fp-a", updated_at: "2026-09-27T12:00:00Z" },
+    },
+    {
+      id: "task-b",
+      sort_bucket: "unacked",
+      ack: { acked: false, stale: false },
+      analysis: { fingerprint: "fp-b", updated_at: "2026-09-27T11:00:00Z" },
+    },
+  ],
+};
+rememberPendingHumanTaskAck({
+  task_id: "task-a",
+  decision: "ack_observe",
+  finding_fingerprint: "fp-a",
+});
+const merged = mergeHumanTaskAcksIntoBoard(board, overlayPendingHumanTaskAcks(null));
+console.log(JSON.stringify({
+  ids: merged.tasks.map((t) => t.id),
+  buckets: merged.tasks.map((t) => t.sort_bucket),
+  counts: merged.counts,
+  pendingKeys: Object.keys(pendingHumanTaskAcks),
+}));
+"""
+    )
+    payload = json.loads(check_output(["node", "-e", script], text=True))
+    assert payload["ids"] == ["task-b", "task-a"]
+    assert payload["buckets"] == ["unacked", "acked"]
+    assert payload["counts"]["acked"] == 1
+    assert payload["counts"]["unacked"] == 1
+    assert payload["pendingKeys"] == ["task-a"]
 
 
 def test_sunday_review_paper_tracks_sorted_by_track_then_week() -> None:
