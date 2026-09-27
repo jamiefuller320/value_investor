@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from value_investor.deep_analysis import DeepAnalysis, _parse_deep_analysis
@@ -275,27 +276,41 @@ def test_is_actionable_research_model_suggestion_rejects_memo_status():
 
 def test_engineering_compile_skips_memo_status_suggestions(tmp_path: Path):
     from value_investor.engineering_tasks import build_compiled_task_candidates
+    from value_investor.research.gap_fill import apply_engineering_tasks_suggestion_filter_patch
 
+    # Compile-time filter is installed via this patch (also applied when
+    # is_actionable_research_model_suggestion runs in live research flows).
+    assert apply_engineering_tasks_suggestion_filter_patch()
+    # Relative stamp stays inside lookback_days=14 regardless of wall clock
+    # (absolute 2026-09-13 fixtures expired ~2026-09-27 and broke CI shard 3).
+    stamp = (datetime.now(UTC) - timedelta(days=1)).isoformat()
     suggestions_path = tmp_path / "research_model_suggestions.json"
     suggestions_path.write_text(
-        """{
-  "suggestions": [
-    {
-      "ticker": "ITV.L",
-      "area": "research",
-      "priority": "medium",
-      "suggestion": "`output/research/ITV.L/research.md` is updated with these sections.",
-      "recorded_at": "2026-09-13T08:06:10.268038+00:00"
-    },
-    {
-      "ticker": "MEGP.L",
-      "area": "ingest",
-      "priority": "high",
-      "suggestion": "Index trading-update RNS for MEGP.L when filings_index trading_update count is zero",
-      "recorded_at": "2026-09-13T08:06:10.268038+00:00"
-    }
-  ]
-}""",
+        json.dumps(
+            {
+                "suggestions": [
+                    {
+                        "ticker": "ITV.L",
+                        "area": "research",
+                        "priority": "medium",
+                        "suggestion": (
+                            "`output/research/ITV.L/research.md` is updated with these sections."
+                        ),
+                        "recorded_at": stamp,
+                    },
+                    {
+                        "ticker": "MEGP.L",
+                        "area": "ingest",
+                        "priority": "high",
+                        "suggestion": (
+                            "Index trading-update RNS for MEGP.L when filings_index "
+                            "trading_update count is zero"
+                        ),
+                        "recorded_at": stamp,
+                    },
+                ]
+            }
+        ),
         encoding="utf-8",
     )
     candidates = build_compiled_task_candidates(
