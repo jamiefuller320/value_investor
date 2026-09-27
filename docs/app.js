@@ -166,6 +166,7 @@ function activateTab(tabId, { updateHash = false } = {}) {
   });
   if (updateHash) {
     if (tabId === "lifecycle") syncLifecycleHash();
+    else if (tabId === "analysis") syncAnalysisHash();
     else if (location.hash && location.hash !== `#${tabId}`) {
       history.replaceState(null, "", `#${tabId}`);
     }
@@ -1165,11 +1166,58 @@ function renderIngestHealth(data) {
 }
 
 const MARKET_INGEST_LABELS = {
-  live: "live",
+  live: "live ingest",
   sprint: "sprint",
   maintenance: "maintenance",
   queued: "queued",
   idle: "idle",
+};
+
+/** Learning-path roles (ops taxonomy) — distinct from ingest capacity chips. */
+const MARKET_ROLE_META = {
+  live: {
+    label: "live screen",
+    cls: "mrole-live",
+    title: "FTSE live screener / P1 paper path — not library maintenance success",
+  },
+  focus: {
+    label: "focus",
+    cls: "mrole-focus",
+    title: "Ladder focus — research target + weekly-paper slot (N94 capacity-1)",
+  },
+  admitted: {
+    label: "admitted",
+    cls: "mrole-admitted",
+    title: "L322 equal-resource package (epoch-0) — not AI judgment; not a graduated synonym",
+  },
+  queue: {
+    label: "queue",
+    cls: "mrole-queue",
+    title: "On market_queue — eligible for parallel sprint; not yet admitted",
+  },
+  graduated: {
+    label: "graduated",
+    cls: "mrole-graduated",
+    title: "Sprint complete / Layer A — breadth ≠ admission (may still be not admitted)",
+  },
+  ftse_equivalent: {
+    label: "FTSE-eq",
+    cls: "mrole-ftse-eq",
+    title: "FTSE-equivalent depth measurement — parallel ingest, not live expansion",
+  },
+  sprint: {
+    label: "sprint role",
+    cls: "mrole-sprint",
+    title: "Active deepen sprint (fat or spare stream)",
+  },
+};
+
+const MARKET_INGEST_TITLES = {
+  live: "Live FTSE ingest capacity (P1) — distinct from learning-role chips",
+  sprint: "Active deepen sprint stream",
+  maintenance: "Steady-state FTSE-volume maintenance — not admission / not live-screen success",
+  queued: "Waiting on market_queue for a sprint slot",
+  idle: "No active ingest stream",
 };
 
 function spareSprintLabel(spare) {
@@ -1184,17 +1232,68 @@ function spareSprintLabel(spare) {
 function marketIngestBadge(ingest, stream) {
   const key = String(ingest || "idle");
   const cls = {
-    live: "stage-complete",
-    sprint: "stage-active",
-    maintenance: "stage-complete",
-    queued: "stage-pending",
-    idle: "stage-pending",
+    live: "mingest-live",
+    sprint: "mingest-sprint",
+    maintenance: "mingest-maintenance",
+    queued: "mingest-queued",
+    idle: "mingest-idle",
   };
   let label = MARKET_INGEST_LABELS[key] || key;
   if (key === "sprint" && stream) {
     label = `sprint ${stream}`;
   }
-  return `<span class="stage-badge ${cls[key] || "stage-active"}">${esc(label)}</span>`;
+  const title = MARKET_INGEST_TITLES[key] || key;
+  return `<span class="stage-badge market-ingest-badge ${cls[key] || "mingest-idle"}" title="${esc(title)}">${esc(label)}</span>`;
+}
+
+function marketRoleBadge(roleKey) {
+  const meta = MARKET_ROLE_META[roleKey];
+  if (!meta) return "";
+  return `<span class="stage-badge market-role-badge ${meta.cls}" title="${esc(meta.title)}">${esc(meta.label)}</span>`;
+}
+
+/**
+ * Learning-role chips for a market row.
+ * Axes are independent: ingest capacity ≠ learning admission ≠ live screen.
+ * Show primary published `role` plus modifiers that add information.
+ */
+function marketLearningRoleChips(row) {
+  if (!row) return "";
+  const chips = [];
+  const role = String(row.role || "");
+  const seen = new Set();
+  const push = (key) => {
+    if (!key || seen.has(key) || !MARKET_ROLE_META[key]) return;
+    seen.add(key);
+    chips.push(marketRoleBadge(key));
+  };
+  if (role && role !== "other") push(role);
+  else if (row.is_live) push("live");
+  if (row.is_focus) push("focus");
+  if (row.is_admitted) push("admitted");
+  // Graduated without admission is the conflation operators mis-read — surface it.
+  if (row.is_graduated && !row.is_admitted) push("graduated");
+  if (row.is_queue && !row.is_admitted && role !== "sprint") push("queue");
+  if (row.is_ftse_equivalent) push("ftse_equivalent");
+  return chips.join("");
+}
+
+function marketStatusBadgeLegend() {
+  return `<p class="small muted market-status-legend">
+    <span class="market-status-legend-axis"><strong>Ingest</strong> (capacity)
+      ${marketIngestBadge("live")}
+      ${marketIngestBadge("sprint")}
+      ${marketIngestBadge("maintenance")}
+      ${marketIngestBadge("queued")}</span>
+    <span class="market-status-legend-axis"><strong>Learning role</strong> (path)
+      ${marketRoleBadge("live")}
+      ${marketRoleBadge("focus")}
+      ${marketRoleBadge("admitted")}
+      ${marketRoleBadge("queue")}
+      ${marketRoleBadge("graduated")}
+      ${marketRoleBadge("ftse_equivalent")}</span>
+    <span class="market-status-legend-note">graduated ≠ admitted · maintenance ≠ live screen</span>
+  </p>`;
 }
 
 function learningBookLine(row) {
@@ -1528,15 +1627,7 @@ function renderMarketStatusCard(row) {
   const segments = Object.entries(counts).sort((a, b) => b[1] - a[1]);
   const filing = row.filing_health || {};
   const blockers = row.phase_blockers || [];
-  const tags = [
-    row.is_live ? "live screen" : "",
-    row.is_focus ? "focus" : "",
-    row.is_graduated ? "graduated" : "",
-    row.is_queue ? "queue" : "",
-    row.is_admitted ? "admitted" : "",
-    row.is_ftse_equivalent ? "FTSE-equivalent" : "",
-    row.ingest_exhausted ? "exhausted leftovers" : "",
-  ].filter(Boolean);
+  const roleChips = marketLearningRoleChips(row);
   const filingRows = [];
   if (row.filing_health) {
     filingRows.push(settingRow("Buy-tier measured", esc(String(filing.buy_tier_count ?? "—"))));
@@ -1571,8 +1662,10 @@ function renderMarketStatusCard(row) {
       ${marketIngestBadge(row.ingest, row.ingest_stream)}
       ${marketHealthBadge(row.health)}
       <span class="stage-badge stage-active">${esc(learningBookLine(row))}</span>
-      ${tags.map((tag) => `<span class="badge badge-ii-ok">${esc(tag)}</span>`).join("")}
+      ${roleChips}
+      ${row.ingest_exhausted ? '<span class="stage-badge mingest-queued" title="Sprint leftovers parked after exhaustion">exhausted leftovers</span>' : ""}
     </div>
+    <p class="small muted" style="margin:0 0 0.75rem">Ingest = capacity · Learning role = path. Graduated ≠ admitted; maintenance ≠ live screen.</p>
     ${typeof renderHeldVsMarketChart === "function" ? renderHeldVsMarketChart(row.held_vs_market) : ""}
     ${row.ingest_reason ? `<p class="small">${esc(row.ingest_reason)}</p>` : ""}
     ${settingRow("Role", esc(row.role || "—"))}
@@ -1580,7 +1673,7 @@ function renderMarketStatusCard(row) {
       row.is_admitted
         ? settingRow(
             "Admitted learning",
-            '<span class="badge badge-ii-ok">epoch-0 package</span> · no AI / no knob apply'
+            `${marketRoleBadge("admitted")} · epoch-0 package · no AI / no knob apply`
           )
         : ""
     }
@@ -1625,7 +1718,10 @@ function renderMarketStatusCard(row) {
     }
     ${
       row.shared_maintenance
-        ? settingRow("Shared maintenance cron", '<span class="badge badge-ii-ok">on</span>')
+        ? settingRow(
+            "Shared maintenance cron",
+            '<span class="stage-badge mingest-maintenance" title="On shared FTSE-volume maintenance cron">maint on</span>'
+          )
         : ""
     }
     ${settingRow("Coverage", `${esc(coverageLabel(row.coverage_pct))} · ${esc(String(row.ticker_count ?? "—"))} names`)}
@@ -1682,10 +1778,10 @@ function renderMarketStatusGrid(data) {
           <strong>${esc(row.label)}</strong>
           <span class="market-tile-chips">
             ${marketIngestBadge(row.ingest, row.ingest_stream)}
-            ${row.is_admitted ? '<span class="stage-badge stage-complete">admitted</span>' : ""}
+            ${marketLearningRoleChips(row)}
           </span>
         </div>
-        <div class="small muted market-tile-phase">${esc(learningBookLine(row))}${row.is_focus ? " · focus" : ""}${row.is_live ? " · live" : ""}${row.shared_maintenance ? " · maint cron" : ""}</div>
+        <div class="small muted market-tile-phase">${esc(learningBookLine(row))}${row.shared_maintenance ? " · maint cron" : ""}</div>
         <div class="market-tile-body">
         ${marketSignalBar(row.signal_counts)}
         <div class="small market-tile-signals">${marketSignalSummary(row)}</div>
@@ -1725,6 +1821,7 @@ function renderMarketStatusGrid(data) {
           · click a market for the detail card
         </p>
       </div>
+      ${marketStatusBadgeLegend()}
       <div class="market-status-grid">${tiles}</div>
     </section>`;
 }
@@ -3059,7 +3156,7 @@ function renderSundayReview(data) {
   const review = data.sunday_review;
   if (!review) {
     return `
-      <section class="automation-section automation-section-full sunday-review-section">
+      <section class="automation-section automation-section-full sunday-review-section analysis-section" id="analysis-sunday">
         <h2>Sunday review</h2>
         <p class="muted">No Sunday review tables published yet — run <code>ftse-publish</code> after analysis-review.</p>
       </section>`;
@@ -3285,7 +3382,7 @@ function renderSundayReview(data) {
     : "";
 
   return `
-    <section class="automation-section automation-section-full sunday-review-section">
+    <section class="automation-section automation-section-full sunday-review-section analysis-section" id="analysis-sunday">
       <h2>Sunday review</h2>
       <p class="small muted" style="margin-top:0">
         Week-by-week tables from analysis-review JSON — exclusion ladder, paper tracks, regime flags, and experiments.
@@ -3299,26 +3396,118 @@ function renderSundayReview(data) {
       </div>
       ${headline}
 
-      <h3>Exclusion ladder — week pairs (${esc(exclusion.recommended_step_id || review.recommended_exclusion_step || "u4")})</h3>
-      <p class="small muted">Forward equal-weight returns per archived week pair (gross of costs).</p>
-      ${exclusionTable}
+      <details class="analysis-block overview-secondary">
+        <summary>
+          <strong>Exclusion ladder</strong>
+          <span class="small muted">— ${esc(String(weekly.length))} week pair${weekly.length === 1 ? "" : "s"} · step ${esc(exclusion.recommended_step_id || review.recommended_exclusion_step || "u4")} · expand for table</span>
+        </summary>
+        <p class="small muted">Forward equal-weight returns per archived week pair (gross of costs).</p>
+        ${exclusionTable}
+      </details>
 
-      <h3>Regime snapshots by week</h3>
-      <p class="small muted">
-        One row per publish week. Filter health: step, cumul. excl. α, +α rate, pairs.
-        Book health: primary excess + beat mkt. Ops gates: shadow ready + flags.
-        Flat filter/gate columns with only primary excess moving means the live book is slipping while the exclusion case is unchanged.
-      </p>
-      ${regimeTable}
+      <details class="analysis-block overview-secondary">
+        <summary>
+          <strong>Regime snapshots</strong>
+          <span class="small muted">— ${esc(String(history.length))} week${history.length === 1 ? "" : "s"} · expand for filter / book / ops columns</span>
+        </summary>
+        <p class="small muted">
+          One row per publish week. Filter health: step, cumul. excl. α, +α rate, pairs.
+          Book health: primary excess + beat mkt. Ops gates: shadow ready + flags.
+          Flat filter/gate columns with only primary excess moving means the live book is slipping while the exclusion case is unchanged.
+        </p>
+        ${regimeTable}
+      </details>
 
       <h3>Paper tracks by week</h3>
-      <p class="small muted">One summary row per track (story from excess trajectory / cost / marks). Expand a track for week-by-week detail — weeks oldest→newest.</p>
+      <p class="small muted">One summary row per track (story from excess trajectory / cost / marks). Expand a track for week-by-week detail — weeks oldest→newest. Canonical learning scoreboard stays on Automation (dual-suite).</p>
       ${paperTrackTable}
 
-      <h3>Experiments</h3>
-      <p class="small muted">Unified assessment ledger — new shadows and tracks appear automatically when spawned.</p>
-      ${experimentTable}
+      <details class="analysis-block overview-secondary">
+        <summary>
+          <strong>Experiments</strong>
+          <span class="small muted">— ${esc(String(experiments.length))} in ledger · expand for gate table</span>
+        </summary>
+        <p class="small muted">Unified assessment ledger — new shadows and tracks appear automatically when spawned.</p>
+        ${experimentTable}
+      </details>
     </section>`;
+}
+
+const ANALYSIS_SECTION_IDS = ["observe", "sunday", "charts", "deep", "postrun", "memos"];
+let analysisSectionId = "observe";
+
+function normalizeAnalysisSection(value) {
+  const key = String(value || "").toLowerCase();
+  if (key === "chart" || key === "chart-outcomes" || key === "charts") return "charts";
+  if (key === "post-run" || key === "postrun" || key === "post_run") return "postrun";
+  if (key === "memo" || key === "memos" || key === "research") return "memos";
+  if (ANALYSIS_SECTION_IDS.includes(key)) return key;
+  return "observe";
+}
+
+function renderAnalysisSubnav(activeId) {
+  const active = normalizeAnalysisSection(activeId);
+  const labels = {
+    observe: "Observe",
+    sunday: "Sunday",
+    charts: "Charts",
+    deep: "Deep",
+    postrun: "Post-run",
+    memos: "Memos",
+  };
+  return `<nav class="paper-subnav analysis-subnav" aria-label="Analysis sections">
+    ${ANALYSIS_SECTION_IDS.map(
+      (id) =>
+        `<button type="button" class="paper-subtab${
+          id === active ? " active" : ""
+        }" data-analysis-section="${id}">${esc(labels[id])}</button>`
+    ).join("")}
+  </nav>
+  <p class="small muted analysis-ia-contract" style="margin:0.35rem 0 0.75rem">
+    Analysis is a review surface — dense Sunday tables default-collapsed; observe instruments live on Automation;
+    dual-suite learning scoreboard stays on Automation (not duplicated here).
+  </p>`;
+}
+
+function syncAnalysisHash() {
+  const section = normalizeAnalysisSection(analysisSectionId);
+  if (section === "observe") {
+    history.replaceState(null, "", "#analysis");
+    return;
+  }
+  history.replaceState(null, "", `#analysis/${section}`);
+}
+
+function jumpToAnalysisSection(sectionId, { updateHash = true } = {}) {
+  analysisSectionId = normalizeAnalysisSection(sectionId);
+  const panel = document.getElementById("panel-analysis");
+  if (!panel) return;
+  panel.querySelectorAll(".analysis-subnav .paper-subtab").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.analysisSection === analysisSectionId);
+  });
+  const target = panel.querySelector(`#analysis-${analysisSectionId}`);
+  if (target) {
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  if (updateHash) syncAnalysisHash();
+}
+
+function bindAnalysisPanel(panel) {
+  if (!panel || panel.dataset.analysisBound === "1") return;
+  panel.dataset.analysisBound = "1";
+  panel.addEventListener("click", (event) => {
+    const sub = event.target.closest("[data-analysis-section]");
+    if (sub) {
+      event.preventDefault();
+      jumpToAnalysisSection(sub.dataset.analysisSection);
+      return;
+    }
+    const tabJump = event.target.closest("[data-tab-jump]");
+    if (tabJump) {
+      event.preventDefault();
+      activateTab(tabJump.dataset.tabJump, { updateHash: true });
+    }
+  });
 }
 
 function renderAnalysis(data) {
@@ -3370,7 +3559,8 @@ function renderAnalysis(data) {
       Actionable tickets live on <strong>Automation → Engineering queue</strong>.
     </p>`;
     postRunHtml = `
-      <h2 style="margin-top:1.5rem">Post-run improvement review</h2>
+      <section class="analysis-section" id="analysis-postrun">
+      <h2 style="margin-top:0">Post-run improvement review</h2>
       <p class="small muted" style="margin-top:0">
         Structured snapshot from the last Sunday email / deep-analysis pass — presentation for humans.
         Does not rewrite learning books or auto-dispatch from this panel alone.
@@ -3390,7 +3580,10 @@ function renderAnalysis(data) {
           <p>${esc(postRun.full_text).replace(/\n/g, "<br>")}</p>
         </details>`
           : ""
-      }`;
+      }
+      </section>`;
+  } else {
+    postRunHtml = `<section class="analysis-section" id="analysis-postrun"><h2>Post-run improvement review</h2><div class="empty-state">No post-run review published yet.</div></section>`;
   }
 
   let researchHtml = '<div class="empty-state">No per-ticker research memos published yet.</div>';
@@ -3418,16 +3611,27 @@ function renderAnalysis(data) {
       </div>`;
   }
 
+  const chartBlock =
+    renderChartOutcomeReview(data, { compact: true }) ||
+    '<div class="empty-state">Chart outcome review not published yet. Run <code>ftse-chart-outcomes</code> after buy-tier charts exist.</div>';
+
   panel.innerHTML = `
+    ${renderAnalysisSubnav(analysisSectionId)}
     ${renderObserveUtilizationSection(data, { compact: true })}
     ${renderSundayReview(data)}
-    <h2 class="small muted" style="margin-top:1.5rem">Buy-tier chart outcomes</h2>
-    ${renderChartOutcomeReview(data, { compact: true }) || '<div class="empty-state">Chart outcome review not published yet. Run <code>ftse-chart-outcomes</code> after buy-tier charts exist.</div>'}
-    <h2 class="small muted" style="margin-top:1.5rem">Portfolio deep analysis</h2>
-    ${deepHtml}
+    <section class="analysis-section" id="analysis-charts">
+      <h2>Buy-tier chart outcomes</h2>
+      ${chartBlock}
+    </section>
+    <section class="analysis-section" id="analysis-deep">
+      <h2>Portfolio deep analysis</h2>
+      ${deepHtml}
+    </section>
     ${postRunHtml}
-    <h2 style="margin-top:1.5rem">Strong buy research memos</h2>
-    ${researchHtml}
+    <section class="analysis-section" id="analysis-memos">
+      <h2>Strong buy research memos</h2>
+      ${researchHtml}
+    </section>
   `;
 
   panel.querySelectorAll("[data-memo-index]").forEach((button) => {
@@ -3437,6 +3641,11 @@ function renderAnalysis(data) {
     });
   });
   bindChartButtons(panel, new Map((data.reports || []).map((r) => [r.ticker, r])));
+  bindAnalysisPanel(panel);
+  // Re-apply section highlight after re-render (hash may already target a section).
+  panel.querySelectorAll(".analysis-subnav .paper-subtab").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.analysisSection === analysisSectionId);
+  });
 }
 
 function settingRow(label, value) {
@@ -4162,9 +4371,12 @@ function renderObserveInstrumentCard(inst, history) {
 function renderObserveUtilizationSection(data, { compact = false } = {}) {
   const payload = resolveObserveUtilization(data);
   const runbookUrl = githubOpsDocUrl("docs/ops/ops-monitor.md");
+  const sectionAttrs = compact
+    ? ' class="automation-section automation-section-full observe-utilization-section analysis-section analysis-observe-compact" id="analysis-observe"'
+    : ' class="automation-section automation-section-full observe-utilization-section"';
   if (!payload) {
     return `
-      <section class="automation-section automation-section-full observe-utilization-section">
+      <section${sectionAttrs}>
         <h2>Observe utilization</h2>
         <p class="muted small">Flip-lag / decision-input dashboard not published yet. Refreshes with ops monitor / queue health.</p>
       </section>`;
@@ -4178,21 +4390,34 @@ function renderObserveUtilizationSection(data, { compact = false } = {}) {
       : payload.surface_freshness === "lagging"
         ? `<div class="observe-lag-banner" role="status">Instrument JSON lags ops_status (commit-path anomaly — raw stores should land with ops-monitor). Prefer trajectory only if history looks continuous.</div>`
         : "";
-  const cards = instruments.map((inst) => renderObserveInstrumentCard(inst, history)).join("");
-  const compactNote = compact
-    ? `<p class="small muted">Same instruments as Automation → Queue &amp; hunter. Observe-only — no auto rememo / eng spray.</p>`
-    : `<p class="small muted">Observe-only P1 instruments (flip-lag + decision-input). Trajectory = delta vs last dashboard cycle (lower warn/gap is better). ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>`;
-  return `
-    <section class="automation-section automation-section-full observe-utilization-section">
-      <h2>Observe utilization ${observeFreshnessBadge(payload.surface_freshness)}</h2>
-      <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
-      <p class="small muted">Updated ${esc(fmtDate(payload.generated_at))}
+  const metaLine = `<p class="small muted">Updated ${esc(fmtDate(payload.generated_at))}
         · ops ${esc(fmtDate(payload.ops_run_at))}
         · history ${esc(String(traj.history_points ?? history.length))} pts
         · traj ↑${esc(String(traj.improving ?? 0))} / ↓${esc(String(traj.worsening ?? 0))} / →${esc(String(traj.flat ?? 0))}
-      </p>
+      </p>`;
+  // Analysis tab: compact strip only — full instrument cards stay on Automation (no duplicate wall).
+  if (compact) {
+    return `
+      <section${sectionAttrs}>
+        <h2>Observe utilization ${observeFreshnessBadge(payload.surface_freshness)}</h2>
+        <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
+        ${metaLine}
+        ${staleBanner}
+        <p class="small muted" style="margin-bottom:0">
+          Compact strip — full instrument cards on
+          <button type="button" class="link-btn" data-tab-jump="automation">Automation → Queue &amp; hunter</button>.
+          Observe-only — no auto rememo / eng spray.
+        </p>
+      </section>`;
+  }
+  const cards = instruments.map((inst) => renderObserveInstrumentCard(inst, history)).join("");
+  return `
+    <section${sectionAttrs}>
+      <h2>Observe utilization ${observeFreshnessBadge(payload.surface_freshness)}</h2>
+      <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
+      ${metaLine}
       ${staleBanner}
-      ${compactNote}
+      <p class="small muted">Observe-only P1 instruments (flip-lag + decision-input). Trajectory = delta vs last dashboard cycle (lower warn/gap is better). ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>
       <div class="grid observe-instrument-grid" style="margin-top:0.75rem">
         ${cards || '<p class="muted">No instruments in snapshot.</p>'}
       </div>
@@ -4243,9 +4468,9 @@ function renderLifecycleMaturityMarketCard(row, history) {
   const uw = metrics.uw_rate_by_column || {};
   const med = metrics.median_days_by_column || {};
   const focusBit = row.is_focus
-    ? `<span class="badge badge-ii-ok">focus</span>`
+    ? marketRoleBadge("focus")
     : row.is_live
-      ? `<span class="badge badge-ii-ok">live</span>`
+      ? marketRoleBadge("live")
       : "";
   const truncBit = metrics.shown_truncated
     ? `<p class="small muted">UW / median age use shown cards (board cap); shares use full column counts.</p>`
@@ -5352,6 +5577,14 @@ function parseDashboardHash() {
   if (!raw) return null;
   const parts = raw.split("/").filter(Boolean);
   const tab = parts[0] || null;
+  if (tab === "analysis") {
+    return {
+      tab: "analysis",
+      subpage: normalizeAnalysisSection(parts[1] || "observe"),
+      market: null,
+      track: null,
+    };
+  }
   if (tab !== "lifecycle") {
     return { tab, subpage: null, market: parts[1] || null, track: parts[2] || null };
   }
@@ -5397,7 +5630,14 @@ function applyDashboardHash() {
     if (parsed.market) lifecycleMarketId = parsed.market;
     if (parsed.track) lifecycleTrackId = parsed.track;
   }
+  if (parsed.tab === "analysis" && parsed.subpage) {
+    analysisSectionId = normalizeAnalysisSection(parsed.subpage);
+  }
   activateTab(parsed.tab);
+  if (parsed.tab === "analysis" && dashboardData) {
+    // Defer scroll until panel is visible / laid out.
+    window.requestAnimationFrame(() => jumpToAnalysisSection(analysisSectionId, { updateHash: false }));
+  }
 }
 
 function openLifecycleBoard(marketId) {
@@ -6375,6 +6615,9 @@ function renderDashboard(data) {
     if (parsed.market) lifecycleMarketId = parsed.market;
     if (parsed.track) lifecycleTrackId = parsed.track;
   }
+  if (parsed && parsed.tab === "analysis" && parsed.subpage) {
+    analysisSectionId = normalizeAnalysisSection(parsed.subpage);
+  }
 
   renderOverview(data);
   renderLifecycle(data);
@@ -6387,6 +6630,9 @@ function renderDashboard(data) {
   renderAnalysis(data);
   equalizeMarketTileHeights();
   if (parsed && parsed.tab) activateTab(parsed.tab);
+  if (parsed && parsed.tab === "analysis" && parsed.subpage && parsed.subpage !== "observe") {
+    window.requestAnimationFrame(() => jumpToAnalysisSection(analysisSectionId, { updateHash: false }));
+  }
 }
 
 async function loadOptionalDashboardJson(path) {

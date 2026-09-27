@@ -54,7 +54,11 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
 def test_sunday_review_paper_tracks_sorted_by_track_then_week() -> None:
     """Analysis → Sunday review paper table groups by track, weeks ascending within track."""
     text = APP_JS.read_text(encoding="utf-8")
-    fn = text.split("function renderSundayReview(", 1)[1].split("\nfunction renderAnalysis(", 1)[0]
+    fn = text.split("function renderSundayReview(", 1)[1].split("\nconst ANALYSIS_SECTION_IDS", 1)[
+        0
+    ]
+    if "function renderAnalysis(" in fn:
+        fn = fn.split("\nfunction renderAnalysis(", 1)[0]
     assert "trackA.localeCompare(trackB)" in fn
     assert 'String(a.week_ending || "").localeCompare(String(b.week_ending || ""))' in fn
     # Collapsed-by-track disclosure: summary line + expand for week detail.
@@ -67,6 +71,95 @@ def test_sunday_review_paper_tracks_sorted_by_track_then_week() -> None:
     assert "String(b.week_ending).localeCompare(String(a.week_ending))" not in fn
     # Flat all-tracks mega-table with Track column must not return.
     assert "<th>Track</th>" not in fn
+    # Exclusion / regime / experiments default-collapsed (Analysis IA).
+    assert 'class="analysis-block overview-secondary"' in fn
+    assert "<strong>Exclusion ladder</strong>" in fn
+    assert "<strong>Regime snapshots</strong>" in fn
+    assert "open>" not in fn  # no always-open details for these blocks
+
+
+def test_analysis_tab_ia_contract() -> None:
+    """Analysis tab: subnav + compact observe strip + section anchors (L477)."""
+    text = APP_JS.read_text(encoding="utf-8")
+    css = Path("docs/styles.css").read_text(encoding="utf-8")
+    assert "function renderAnalysisSubnav(activeId)" in text
+    assert "function jumpToAnalysisSection(sectionId" in text
+    assert "function bindAnalysisPanel(panel)" in text
+    assert 'id="analysis-observe"' in text
+    assert 'id="analysis-sunday"' in text
+    assert 'id="analysis-charts"' in text
+    assert 'id="analysis-postrun"' in text
+    assert 'id="analysis-memos"' in text
+    assert "analysis-observe-compact" in text
+    assert 'data-tab-jump="automation"' in text
+    assert "Compact strip" in text
+    # Compact path must not render the full instrument grid.
+    observe = text.split("function renderObserveUtilizationSection(", 1)[1].split(
+        "\nfunction renderLifecycleMaturityHistorySparkline(", 1
+    )[0]
+    compact_branch = observe.split("if (compact)", 1)[1].split("const cards =", 1)[0]
+    assert "observe-instrument-grid" not in compact_branch
+    assert "observe-instrument-grid" in observe
+    assert ".analysis-subnav" in css
+    assert ".analysis-section" in css
+    assert ".analysis-block" in css
+    # Hash routing for Analysis sections.
+    parse = text.split("function parseDashboardHash()", 1)[1].split(
+        "\nfunction syncLifecycleHash()", 1
+    )[0]
+    assert 'tab === "analysis"' in parse
+    assert "normalizeAnalysisSection" in parse
+
+
+def test_market_role_badge_taxonomy_helpers() -> None:
+    """Market role chips disambiguate admitted / graduated / queue / live (L478)."""
+    text = APP_JS.read_text(encoding="utf-8")
+    start = text.index("const MARKET_INGEST_LABELS =")
+    end = text.index("function learningBookLine(")
+    chunk = text[start:end]
+    import json
+    from subprocess import check_output
+
+    script = (
+        "function esc(t){return String(t??'');}\n"
+        + chunk
+        + """
+const admitted = marketLearningRoleChips({
+  role: 'admitted', is_admitted: true, is_graduated: true, is_queue: false
+});
+const graduatedOnly = marketLearningRoleChips({
+  role: 'graduated', is_graduated: true, is_admitted: false, is_queue: false
+});
+const queue = marketLearningRoleChips({
+  role: 'queue', is_queue: true, is_admitted: false, is_graduated: false
+});
+const live = marketLearningRoleChips({
+  role: 'live', is_live: true, is_admitted: false
+});
+const focusAdmitted = marketLearningRoleChips({
+  role: 'focus', is_focus: true, is_admitted: true, is_graduated: true
+});
+console.log(JSON.stringify({
+  admitted, graduatedOnly, queue, live, focusAdmitted,
+  ingestLive: marketIngestBadge('live'),
+  ingestMaint: marketIngestBadge('maintenance'),
+}));
+"""
+    )
+    payload = json.loads(check_output(["node", "-e", script], text=True))
+    assert "mrole-admitted" in payload["admitted"]
+    assert "mrole-graduated" not in payload["admitted"]  # admitted ⇒ skip graduated synonym chip
+    assert "mrole-graduated" in payload["graduatedOnly"]
+    assert "mrole-admitted" not in payload["graduatedOnly"]
+    assert "mrole-queue" in payload["queue"]
+    assert "mrole-live" in payload["live"]
+    assert (
+        "mrole-focus" in payload["focusAdmitted"] and "mrole-admitted" in payload["focusAdmitted"]
+    )
+    assert "mingest-live" in payload["ingestLive"]
+    assert "mingest-maintenance" in payload["ingestMaint"]
+    assert "stage-complete" not in payload["ingestLive"]
+    assert "stage-complete" not in payload["ingestMaint"]
 
 
 def test_model_attribution_panel_prefers_primary_horizon() -> None:
