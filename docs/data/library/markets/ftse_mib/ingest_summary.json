@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-27T18:27:02.031698+00:00",
+  "run_at": "2026-09-27T20:14:19.474323+00:00",
   "market_id": "ftse_mib",
   "targets": [
     "MONC.MI",
@@ -438,7 +438,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-27T18:26:10.832572+00:00",
+    "snapshot_at": "2026-09-27T20:11:55.391528+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -482,7 +482,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-27T18:26:57.724701+00:00",
+    "snapshot_at": "2026-09-27T20:12:58.749372+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -508,22 +508,22 @@
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 8,
-    "effective_thin_body_tickers": [
-      "MONC.MI",
+    "parked_tickers": [
+      "BC.MI",
       "BZU.MI",
       "FCT.MI",
       "INW.MI",
-      "UNI.MI",
+      "IVG.MI",
+      "MONC.MI",
       "PST.MI",
-      "BC.MI",
-      "IVG.MI"
+      "UNI.MI"
     ],
+    "parked_count": 8,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -534,10 +534,49 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "ftse_mib",
+    "to_market": "asx200",
+    "stream_markets_after": [
+      "asx200"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "ftse_mib",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "BC.MI",
+        "BZU.MI",
+        "FCT.MI",
+        "INW.MI",
+        "IVG.MI",
+        "MONC.MI",
+        "PST.MI",
+        "UNI.MI"
+      ],
+      "learning_admitted_changed": true,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "asx200",
+      "forced": true,
+      "prior_screen_at": "2026-09-27T06:22:31.514590+00:00",
+      "prior_age_days": 0,
+      "run_at": "2026-09-27T20:14:11.897450+00:00",
+      "shortlist_count": 27,
+      "ticker_count": 196
+    },
+    "at": "2026-09-27T20:13:10.435886+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-09-27T18:26:11.656736+00:00",
+    "assessed_at": "2026-09-27T20:11:56.210739+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -568,9 +607,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 45.280674867000016,
+  "used_seconds": 61.743323012000005,
   "budget_seconds": 525.0,
-  "leftover_seconds": 479.719325133,
+  "leftover_seconds": 463.256676988,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -578,11 +617,92 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-09-27T18:26:57.726464+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-09-27T20:12:58.751368+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "BC.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-27T20:12:58.751368+00:00",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "BZU.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-27T20:12:58.751368+00:00",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "FCT.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-27T20:12:58.751368+00:00",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "INW.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-27T20:12:58.751368+00:00",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "IVG.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-27T20:12:58.751368+00:00",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "MONC.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-27T20:12:58.751368+00:00",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "PST.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-27T20:12:58.751368+00:00",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "UNI.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-27T20:12:58.751368+00:00",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
     "had_complete_targets": true,
     "leftover_tickers": [
@@ -595,22 +715,28 @@
       "PST.MI",
       "UNI.MI"
     ],
-    "unparked_leftover": [
-      "BC.MI",
-      "BZU.MI",
-      "FCT.MI",
-      "INW.MI",
-      "IVG.MI",
-      "MONC.MI",
-      "PST.MI",
-      "UNI.MI"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/ftse_mib/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "ftse_mib"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "ftse_mib",
+    "ingest_exhausted_markets": [
+      "asx200",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "ibex35",
+      "nasdaq100",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
