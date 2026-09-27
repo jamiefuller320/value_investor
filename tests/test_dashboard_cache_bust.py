@@ -157,9 +157,10 @@ def test_historical_siblings_prefer_28d_primary() -> None:
     )[0]
     assert "Strategy horizons — primary" in hist
     assert "Noise check" in hist
-    assert "a.horizon_days - b.horizon_days || a.strategy.localeCompare" not in hist.split(
-        "strategyNoise", 1
-    )[0]
+    assert (
+        "a.horizon_days - b.horizon_days || a.strategy.localeCompare"
+        not in hist.split("strategyNoise", 1)[0]
+    )
     # Attribution remains separate and untouched by sibling tables.
     assert "renderModelAttributionPanel(historical)" in hist
     perf = text.split("function renderPerformance(data)", 1)[1].split(
@@ -173,11 +174,14 @@ def test_historical_siblings_prefer_28d_primary() -> None:
 def test_post_run_and_chart_outcome_presentation_contracts() -> None:
     """Post-run uses structured sections; chart outcomes restore samples + success copy."""
     text = APP_JS.read_text(encoding="utf-8")
-    analysis = text.split("function renderAnalysis(data)", 1)[1].split(
-        "\nfunction settingRow(", 1
-    )[0]
+    analysis = text.split("function renderAnalysis(data)", 1)[1].split("\nfunction settingRow(", 1)[
+        0
+    ]
     assert "Persistent weaknesses" in analysis
-    assert "not</strong> an engineering backlog" in analysis or "not an engineering backlog" in analysis
+    assert (
+        "not</strong> an engineering backlog" in analysis
+        or "not an engineering backlog" in analysis
+    )
     assert "post-run-improvement-clearance.md" in analysis
     assert "full_text || postRun.executive_summary" not in analysis
     assert "Full text (archive)" in analysis
@@ -199,8 +203,6 @@ def test_held_vs_market_caption_not_fair_excess() -> None:
     """Overview held-vs-market caption (L341): sleeve vs price index, not fair book excess."""
     charts = Path("docs/charts.js").read_text(encoding="utf-8")
     assert "Sleeve vs price index (not fair book excess)" in charts
-    fn = charts.split("function heldVsMarketLastCaption(", 1)[1].split(
-        "\n/** Short epoch-0", 1
-    )[0]
+    fn = charts.split("function heldVsMarketLastCaption(", 1)[1].split("\n/** Short epoch-0", 1)[0]
     assert "not fair book excess" in fn
     assert "beat_market" in fn
