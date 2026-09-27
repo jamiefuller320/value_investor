@@ -1,52 +1,19 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-27T20:02:52.327058+00:00",
+  "generated_at": "2026-09-27T20:03:44.660754+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-09-26",
   "counts": {
-    "new_info": 1,
+    "new_info": 0,
     "unacked": 29,
-    "acked": 2,
+    "acked": 3,
     "automated": 19,
     "human": 32
   },
   "tasks": [
-    {
-      "id": "adhoc-review-ingest-deviations",
-      "title": "Review open ingest deviations and reprocess if needed",
-      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/ingest-deviations.md",
-      "doc_anchor": "what-needs-a-human",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-09-27T19:56:42.947691+00:00",
-        "fingerprint": "0bae9d556328c450",
-        "bullets": [
-          "Open deviations: 0"
-        ],
-        "source_keys": [
-          "ingest_deviations"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-09-27T17:53:24.718361+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "98ad0fa8cd558461"
-      },
-      "sort_bucket": "new_info"
-    },
     {
       "id": "sunday-read-analysis-review",
       "title": "Read analysis review synthesis",
@@ -1009,6 +976,39 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked"
+    },
+    {
+      "id": "adhoc-review-ingest-deviations",
+      "title": "Review open ingest deviations and reprocess if needed",
+      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/ingest-deviations.md",
+      "doc_anchor": "what-needs-a-human",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Ingest deviations · 0 open",
+        "updated_at": "2026-09-27T19:56:42.947691+00:00",
+        "fingerprint": "0bae9d556328c450",
+        "bullets": [
+          "Open deviations: 0"
+        ],
+        "source_keys": [
+          "ingest_deviations"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-27T20:03:44.648200+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "0bae9d556328c450"
+      },
+      "sort_bucket": "acked"
     },
     {
       "id": "sunday-shard-epoch0-watch",
