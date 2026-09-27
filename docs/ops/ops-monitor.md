@@ -96,7 +96,7 @@ Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-require
 - Detect **queue merge-sync lag** (`pr_open`/`open` after GitHub merge) and hand it to the project-traffic PM controller; **email only if PM remediation cannot clear it**
 - Detect **automation waste** (engineering-agent Composer reburn; Cursor workflow fail loops) and hand remediable signals to project-traffic (`stop_automation_waste` parks + pause)
 - Suppress “recent workflow failure” alerts while a recovery run for that workflow is already in flight
-- Suppress workflow-overdue findings while a run is in flight, or before that workflow’s `WORKFLOW_EMAIL_READY_UTC` slot (Monday morning cliff / pending primary cron)
+- Suppress workflow-overdue findings while a run is in flight, or before that workflow’s `WORKFLOW_EMAIL_READY_UTC` slot (Monday morning cliff / pending primary cron). Freshness itself is schedule-aware: `stale` is false until that wall-clock slot, so Sunday weekly jobs (~7d since last success) and weekday post-weekend ages do not create overdue rows or STALE colours before the first expected fire
 - `workflow_dispatch` overdue **ingest-loop** / **paper-auto** after email-ready when no run is active
 
 **Supervised follow-ons** (not automatic code changes):
@@ -412,11 +412,11 @@ morning run that reports orchestrator staleness before catch-up still commits
 `ops_status.json` and sends email without failing the job.
 
 | Engineering queue | Weekdays | **3h** when open/pr_open tasks exist; **26h** when the queue is fully idle |
-| Analysis review | Sunday | No success within 36h |
-| **Library ladder** | Sunday | No success within 36h |
-| **Library model review** | Sunday | No success within 36h |
-| **Email report** | Sunday | No success within 36h |
-| **Data backup** | Sunday | No success within 36h (12:30 UTC slot) |
+| Analysis review | Sunday | After email-ready **11:00 UTC**, no success within 36h (primary ~10:35) |
+| **Library ladder** | Sunday | After email-ready **08:00 UTC**, no success within 36h |
+| **Library model review** | Sunday | After email-ready **08:00 UTC**, no success within 36h |
+| **Email report** | Sunday | After email-ready **09:00 UTC**, no success within 36h |
+| **Data backup** | Sunday | After email-ready **13:00 UTC**, no success within 36h (primary ~12:30) |
 | **Paper automation** | Weekdays | No success within 28h |
 | **Ops monitor** | Daily | No success within 28h (self-check) |
 | **Dashboard bridge** | Weekdays | No success within **1h** (external every-10m primary; see [`dashboard-bridge.md`](dashboard-bridge.md#schedule-primary-vs-backup)) |

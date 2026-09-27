@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-26T23:02:06+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-27T08:23:50+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -214,6 +214,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N159 | **Do not eng-spray cross-market buy-tier flip-lag not-yet-usable warns** | Factory/deepen path for euro_depth and admitted markets; not one eng task per ticker. | Flip-lag compile path gains a batched factory pin policy |
 | N160 | **Human-task Approve buttons stay observe-only — never auto-apply** | Approve on checklist cards records observe-only intent today. Do not wire Approve to knob promote, fair-twin spawn, Phase C freeze writer, or live capital without an explicit readiness gate per action. | A promotion gate has a documented supervised execute path and thick evidence like lifecycle Start |
 | N161 | **Do not eng-spray MC.PA IWB from blocker_no_improve before dismiss** | Open deviation dev-euro_depth-MC.PA-blocker_no_improve is plain buy → dismiss; intensive pin / per-ticker eng would steal euro_depth fat-slot capacity. | MC.PA flips strong_buy or IR exhausted with clear allowlist bug |
+| N162 | **Widen ops-monitor workflow max_age for Sunday weekly jobs** | Do not bump analysis-review / email-report / data-backup max_age_hours (e.g. toward ~168h). On Sunday morning age since last success is always ~7d; longer counters would hide real same-day misses after EMAIL_READY. Prefer schedule-aware stale (past email-ready) which is now implemented. | Only if schedule-aware past_email_ready gate is reverted or proven insufficient after several Sunday morning ops passes |
 
 ---
 
