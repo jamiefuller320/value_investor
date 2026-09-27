@@ -2,7 +2,7 @@
   "market_id": "euro_depth",
   "focus_market": "euro_depth",
   "mode": "sprint",
-  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=2, zero_body=0, thin=14, indexed_without_body=16)",
+  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=1, thin=14, indexed_without_body=17)",
   "ingest_parity_met": false,
   "ingest_exhausted": false,
   "ingest_sprint_complete": false,
@@ -14,7 +14,6 @@
     "MUV2.DE",
     "SAP.DE",
     "SKA-B.ST",
-    "UCB.BR",
     "WIE.VI"
   ],
   "phase3_ready": false,
@@ -24,23 +23,24 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-27T07:05:37.144229+00:00",
+    "snapshot_at": "2026-09-27T13:32:10.965933+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 51,
-    "unmeasured_buy_tier": 2,
-    "zero_body_buy_tier": 0,
+    "unmeasured_buy_tier": 1,
+    "zero_body_buy_tier": 1,
     "thin_body_buy_tier": 14,
-    "indexed_without_body": 16,
+    "indexed_without_body": 17,
     "bodies_min": 1,
     "bodies_median": 3,
     "bodies_max": 104,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
-      "OIZ.IR",
+      "OIZ.IR"
+    ],
+    "zero_body_tickers": [
       "HM-B.ST"
     ],
-    "zero_body_tickers": [],
     "thin_body_tickers": [
       "SGO.PA",
       "ACKB.BR",
@@ -62,14 +62,16 @@
       "WIE.VI",
       "ABI.BR",
       "SAP.DE",
-      "MC.PA"
+      "MC.PA",
+      "HM-B.ST"
     ],
     "indexed_without_body_by_ticker": {
       "EVN.VI": 1,
       "WIE.VI": 1,
       "ABI.BR": 12,
       "SAP.DE": 1,
-      "MC.PA": 1
+      "MC.PA": 1,
+      "HM-B.ST": 1
     },
     "parked_tickers": [
       "ABI.BR",
@@ -79,10 +81,9 @@
       "MUV2.DE",
       "SAP.DE",
       "SKA-B.ST",
-      "UCB.BR",
       "WIE.VI"
     ],
-    "parked_count": 9,
+    "parked_count": 8,
     "effective_thin_body_buy_tier": 8,
     "effective_thin_body_tickers": [
       "SGO.PA",
@@ -94,9 +95,10 @@
       "NBA.LS",
       "ADYEN.AS"
     ],
-    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body": 2,
     "effective_indexed_without_body_tickers": [
-      "MC.PA"
+      "MC.PA",
+      "HM-B.ST"
     ],
     "ingest_exhausted": false
   },
@@ -112,7 +114,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-27T07:05:37.146272+00:00",
+  "evaluated_at": "2026-09-27T13:32:10.967374+00:00",
   "maintenance_markets": [
     "aim",
     "asx200",
@@ -167,7 +169,7 @@
         "dax not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-27T07:06:01.036882+00:00",
+        "snapshot_at": "2026-09-27T13:32:26.880903+00:00",
         "market_id": "dax",
         "buy_tier_count": 12,
         "unmeasured_buy_tier": 1,
@@ -229,7 +231,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-27T07:06:01.037529+00:00",
+      "evaluated_at": "2026-09-27T13:32:26.881394+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -253,7 +255,7 @@
         "no benchmark configured for ftse_mib"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-27T07:06:01.838742+00:00",
+        "snapshot_at": "2026-09-27T13:32:27.444732+00:00",
         "market_id": "ftse_mib",
         "buy_tier_count": 11,
         "unmeasured_buy_tier": 2,
@@ -307,7 +309,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-27T07:06:01.839341+00:00",
+      "evaluated_at": "2026-09-27T13:32:27.445264+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -334,7 +336,7 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 7,
+    "hour_utc": 13,
     "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
