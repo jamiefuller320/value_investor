@@ -1,6 +1,6 @@
 # PPHE Hotel Group Limited (PPH.L) — Research memo
 
-_Version 6 · Updated 2026-09-23T17:28:39.869107+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-09-27T07:31:42.040905+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: With no fresh disclosures, research still supports the buy screen on EPRA asset backing and H1 momentum, but blockholder governance, leverage, liquidity and statutory EPS weakness keep conviction moderated.
+Rationale: With no fresh disclosures, research still supports the buy screen on cheapness and H1 momentum, but blockholder governance, leverage, liquidity and statutory EPS weakness keep conviction moderated.
 RiskTags: governance, leverage, cyclical, regulatory, accounting, competitive, liquidity, key_person
 
 ## Weekly updates
@@ -37,4 +37,9 @@ No change to the H1 2026 interim anchor or prior governance, leverage, liquidity
 ### 2026-09-23T17:28:39.869107+00:00
 No new RNS or press in the 23 September afternoon news batch since the morning refresh.  
 The buy screen is now eleven weeks persistent (9/22 models, neutral timing); headline metrics are unchanged versus last week.  
+No change to the H1 2026 interim anchor or prior governance, leverage, liquidity and earnings-basis concerns.
+
+### 2026-09-27T07:31:42.040905+00:00
+No new RNS or company-specific press since the 23 September refresh; the 27 September news batch is only third-party market data noise.  
+The buy screen is now twelve weeks persistent (9/22 models, neutral timing, stable); headline metrics are unchanged versus last week.  
 No change to the H1 2026 interim anchor or prior governance, leverage, liquidity and earnings-basis concerns.

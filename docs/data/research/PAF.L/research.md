@@ -1,6 +1,6 @@
 # Pan African Resources PLC (PAF.L) — Research memo
 
-_Version 5 · Updated 2026-09-23T11:29:54.373560+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-09-27T07:24:09.876621+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -32,4 +32,9 @@ FY27 AISC guidance, gold cyclicality and Oct/Nov chair succession are unchanged 
 ### 2026-09-23T11:29:54.373560+00:00
 No company RNS or incremental news since the 21 Sep refresh; the news batch since then is empty.  
 Strong buy screen unchanged (15/22 models, two weeks stable); filing-aligned FCF (~£341m) still supports the metrics.  
+FY27 AISC guidance, gold cyclicality and Oct/Nov chair succession are unchanged overlay context.
+
+### 2026-09-27T07:24:09.876621+00:00
+No company RNS or incremental news since the 23 Sep refresh; the news batch since then is empty.  
+Strong buy screen unchanged (15/22 models, filing-aligned FCF ~£341m); timing remains neutral.  
 FY27 AISC guidance, gold cyclicality and Oct/Nov chair succession are unchanged overlay context.

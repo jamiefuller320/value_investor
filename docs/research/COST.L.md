@@ -1,6 +1,6 @@
 # Costain Group PLC (COST.L) — Research memo
 
-_Version 6 · Updated 2026-09-23T17:27:49.760387+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-09-27T07:35:43.640943+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: H1 filing evidence still supports the buy case; no new disclosures today, with a nine-week stable screen and RSI ~70 favouring limit-based accumulation over chasing.
+Rationale: Research confirms the buy screen on unchanged H1 filing evidence; no new RNS since 23 September, while RSI ~72 and wait timing favour limit orders over chasing.
 RiskTags: cyclical, regulatory, pension, competitive, customer_concentration, other
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Buy signal stable at eight weeks (10/22 models); H1 thesis unchanged; RSI ~70 st
 No material change in company disclosures since the morning refresh (23 September holdings and buyback RNS unchanged).  
 Afternoon news batch since 11:40 UTC is empty; no new Costain-specific items.  
 Buy signal is stable at nine weeks (10/22 models); screen timing eased to neutral from wait; H1 filing thesis unchanged; RSI ~70 still elevated.
+
+### 2026-09-27T07:35:43.640943+00:00
+No material change in company disclosures since 23 September (holdings and share buyback RNS).
+News batch since the last refresh is empty; no Costain-specific items.
+Buy signal is stable at ten weeks (10/22 models); timing is back to wait with RSI ~72; H1 filing thesis unchanged.

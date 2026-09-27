@@ -1,6 +1,6 @@
 # Galliford Try Holdings plc (GFRD.L) — Research memo
 
-_Version 6 · Updated 2026-09-23T17:24:14.715283+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-09-27T07:30:56.143818+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.77
-Rationale: FY26 audited results still confirm the buy screen on net cash, margins and backlog; no post-results RNS or filings change the thesis; rectification and fire-safety contingencies keep risk medium.
+Rationale: FY26 audited results still confirm the buy screen; no RNS, filings or news since 23 Sep alters the thesis; rectification and fire-safety contingencies keep risk medium.
 RiskTags: cyclical, regulatory, litigation, accounting, competitive
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Quantitative **buy** unchanged (10/22 models, stable); screen timing still **wai
 No new RNS or filings since 17 Sep FY2026 results and the £15m buyback launch.  
 Afternoon news is Kalkine road-building commentary only; no new operational or accounting disclosure.  
 Quantitative **buy** unchanged (10/22, stable); timing **neutral** (RSI ~74, extended vs 200-day MA).
+
+### 2026-09-27T07:30:56.143818+00:00
+News pull since 23 Sep is empty; no RNS or regulatory filings after 17 Sep FY2026 results and the £15m buyback launch.  
+Quantitative **buy** unchanged (10/22 models, stable); timing **wait** (RSI ~71, extended vs 200-day MA).  
+Thesis unchanged: net cash, backlog and capital returns vs rectification provisions and fire-safety contingencies.

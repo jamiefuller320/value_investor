@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-25T08:30:45.957675+00:00",
+  "updated_at": "2026-09-27T08:24:34.582060+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -18,7 +18,7 @@
     "promotion": "recommend rows are human-gate only — never auto-apply knobs, config, or engineering tasks"
   },
   "context": {
-    "history_run_count": 21,
+    "history_run_count": 22,
     "backtest_run_count": 21,
     "trajectory_labeled_events": 336,
     "exit_shadow_closed_total": 0,
@@ -27,11 +27,11 @@
     "entry_dca_ready": true
   },
   "summary": {
+    "observing": 0,
+    "proposed": 1,
     "continue": 5,
     "fail": 5,
     "recommend": 4,
-    "proposed": 1,
-    "observing": 0,
     "human_ack_pending": 2,
     "total": 15
   },
@@ -142,9 +142,9 @@
       "source_status": "surviving",
       "human_ack_required": false,
       "track_id": "graduated_allocation",
-      "gate_marks": 17,
-      "gate_excess_after_costs": 0.0067,
-      "excess_vs_primary": 0.3628,
+      "gate_marks": 19,
+      "gate_excess_after_costs": 0.0019,
+      "excess_vs_primary": 0.358,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": false,
@@ -278,7 +278,7 @@
           ]
         },
         "archive": {
-          "history_run_count": 21,
+          "history_run_count": 22,
           "backtest_run_count": 21,
           "simulation_ready": true
         },
@@ -439,7 +439,7 @@
           ]
         },
         "archive": {
-          "history_run_count": 21,
+          "history_run_count": 22,
           "backtest_run_count": 21,
           "simulation_ready": true
         },
@@ -585,7 +585,7 @@
           ]
         },
         "archive": {
-          "history_run_count": 21,
+          "history_run_count": 22,
           "backtest_run_count": 21,
           "simulation_ready": true
         },
@@ -636,12 +636,12 @@
     }
   ],
   "entry_dca_adoption": {
-    "observe_only": true,
+    "observe_only": false,
     "acked": true,
-    "execute_started": false,
-    "execute_started_at": null,
-    "execute_track_id": null,
-    "execute_cadence": null,
+    "execute_started": true,
+    "execute_started_at": "2026-09-25T17:56:08.074645+00:00",
+    "execute_track_id": "graduated_allocation",
+    "execute_cadence": "dca_4x_weekly",
     "current_stage": "paper_execute_graduated",
     "target_cadence": "dca_4x_weekly",
     "do_not": [
@@ -682,20 +682,7 @@
     ],
     "note": "Human review/implementation plan for the 2026-09-13 overlay recommend. Never auto-apply. Revisit on Sunday or when first-entry windows close."
   },
-  "task_sync": {
-    "updated": [
-      "ana-20260728-04",
-      "ana-20260921-01",
-      "ana-20260921-03",
-      "ana-20260921-05",
-      "ldr-20260823-02",
-      "ldr-20260823-03"
-    ],
-    "skipped": [
-      "ana-20260921-02",
-      "ana-20260921-04"
-    ]
-  },
+  "task_sync": null,
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
     "analysis_tasks": "docs/data/analysis_tasks.json",

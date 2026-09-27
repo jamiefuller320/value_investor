@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-27T07:06:42.086599+00:00",
+  "generated_at": "2026-09-27T08:23:38.789624+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -82,15 +82,16 @@
       "failed_fetch_count": 0,
       "last_metrics_refresh": null,
       "last_constituents_refresh": null,
-      "last_screen_at": "2026-09-23T17:08:53.543887+00:00",
+      "last_screen_at": "2026-09-27T07:15:34.843280+00:00",
       "signal_counts": {
-        "strong_buy": 11,
+        "strong_buy": 12,
         "buy": 45,
         "hold": 138,
-        "avoid": 54
+        "avoid": 52,
+        "insufficient_data": 1
       },
-      "shortlist_count": 56,
-      "strong_buy": 11,
+      "shortlist_count": 57,
+      "strong_buy": 12,
       "buy": 45,
       "learning_phase": 4,
       "learning_phase_label": "Live screen",
@@ -471,8 +472,8 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 4,
-        "targets": 13,
+        "run_count": 3,
+        "targets": 12,
         "improved": 2,
         "improved_tickers": [
           "SGO.PA",
@@ -485,7 +486,7 @@
           "unmeasured": 1,
           "zero_body": 0,
           "thin": 15,
-          "indexed_without_body": 18,
+          "indexed_without_body": 19,
           "filing_gaps": 1
         },
         "gaps_after": {
@@ -499,7 +500,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": -1,
+          "indexed_without_body": -2,
           "filing_gaps": 0
         },
         "remaining": {
@@ -767,8 +768,8 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 18,
-        "targets": 36,
+        "run_count": 17,
+        "targets": 35,
         "improved": 2,
         "improved_tickers": [
           "FME.DE"
@@ -780,7 +781,7 @@
           "unmeasured": 1,
           "zero_body": 0,
           "thin": 10,
-          "indexed_without_body": 11,
+          "indexed_without_body": 15,
           "filing_gaps": 1
         },
         "gaps_after": {
@@ -794,7 +795,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": -11,
+          "indexed_without_body": -15,
           "filing_gaps": 0
         },
         "remaining": {

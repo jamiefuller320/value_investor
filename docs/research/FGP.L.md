@@ -1,6 +1,6 @@
 # FirstGroup plc (FGP.L) — Research memo
 
-_Version 5 · Updated 2026-09-23T17:29:44.015384+00:00 · Mode: structured_verdict_update_
+_Version 6 · Updated 2026-09-27T07:37:24.527668+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Screen cheapness holds (P/E 8.6, ~£138m adj. net debt), but unresolved FCF bases (£73.8m company-adj vs £362.6m statutory) and DfT/rail exposure keep research below a full strong-buy endorsement.
+Rationale: Screen cheapness holds (P/E 8.9, ~£138m adj. net debt), but unresolved FCF bases (£73.8m company-adj vs £362.6m filing) and DfT/rail exposure keep research below a full strong-buy endorsement.
 RiskTags: regulatory, cyclical, leverage, pension
 
 ## Weekly updates
@@ -33,3 +33,6 @@ Strong buy screen unchanged (20 weeks, stable); neutral timing, RSI ~44.
 No material change.  
 Empty news batch since the morning refresh; no new filings or headlines.  
 Strong buy screen unchanged (21 weeks, stable); neutral timing, RSI ~45.
+
+### 2026-09-27T07:37:24.527668+00:00
+No material change. Empty news batch since 23 Sep; no new filings or headlines. Strong buy screen unchanged (22 weeks, stable); neutral timing, RSI ~56.

@@ -1,6 +1,6 @@
 # Endeavour Mining plc (EDV.L) — Research memo
 
-_Version 3 · Updated 2026-09-21T08:19:32.580407+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-09-27T08:19:32.928498+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.65
-Rationale: Research confirms the hold case on thin news: no new RNS, unchanged FCF and earnings-basis gaps, and macro Assafou/gold commentary adds no filing-backed resolution of Mana or H2 production risks.
+Rationale: Research confirms the hold case: no post-H1 operational RNS, TR-1 holder notices only, media dividend chatter unverified; FCF/cover and H2/Mana production risks remain filing-unresolved.
 RiskTags: regulatory, cyclical, governance, competitive, accounting, other
 
 ## Weekly updates
@@ -22,4 +22,9 @@ Early-Sep gold softness hit the share with peers; filing-backed cash, FCF-basis,
 ### 2026-09-21T08:19:32.580407+00:00
 No new operational RNS or results since H1-2026; regulatory items in the pack pre-date mid-September.  
 16–18 Sep coverage is media-only (London gold session, Assafou narrative, miners vs rising yields)—no company disclosures.  
+Hold screen drivers unchanged: FCF basis mismatch, H2-weighted output, and Mana/production risks.
+
+### 2026-09-27T08:19:32.928498+00:00
+No operational RNS or results since H1-2026; 22–25 Sep filings are TR-1 holder notices only (BlackRock above 13%).  
+23–25 Sep coverage is third-party dividend/gold commentary—no company disclosures.  
 Hold screen drivers unchanged: FCF basis mismatch, H2-weighted output, and Mana/production risks.

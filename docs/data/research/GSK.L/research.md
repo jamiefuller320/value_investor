@@ -1,6 +1,6 @@
 # GSK plc (GSK.L) — Research memo
 
-_Version 3 · Updated 2026-09-21T08:22:43.723171+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-09-27T08:22:33.221008+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Filing-backed core growth and oncology optionality still support the buy screen; post-rally valuation chatter and unresolved FCF or dividend definitions modestly cap upside conviction.
+Rationale: Oncology deal flow and Berenberg’s upgrade align with the buy screen; without new filings, FCF and earnings-basis gaps still cap conviction.
 RiskTags: regulatory, competitive, litigation, leverage, pension, accounting, key_person
 
 ## Weekly updates
@@ -23,3 +23,8 @@ No material change to H1 guidance, leverage, or the dolutegravir cliff debate si
 This week’s headlines mostly repeat the Chimagen myeloma deal and Dresden flu-vaccine site closure already noted on 15 September; oncology pipeline messaging is unchanged.
 Commentary questions whether the recent multi-year rally leaves valuation stretched; there is no new company guidance or filing.
 No material change to H1 outlook, leverage, litigation, or patent-cliff risks.
+
+### 2026-09-27T08:22:33.221008+00:00
+Headlines mostly recap Chimagen, HUTCHMED oncology deals and capital-markets-day themes (£40bn sales ambition, £1.9bn savings); Berenberg’s Hold-to-Buy upgrade (2,200p target) adds sell-side support but is not a filing event.
+Commentary on respiratory biologics and AI is pipeline messaging only; no new company guidance or regulatory disclosures this week.
+No material change to H1 outlook, leverage, litigation, or patent-cliff risks since 21 September.

@@ -1,6 +1,6 @@
 {
   "schema_version": "so_what_closure.v1",
-  "generated_at": "2026-09-23T18:10:47Z",
+  "generated_at": "2026-09-27T08:29:14Z",
   "dry_run": false,
   "counts": {
     "findings": 1,
@@ -12,21 +12,21 @@
   },
   "findings": [
     {
-      "finding_id": "system_gap:thin_memo_counted_as_coverage",
-      "kind": "system_gap_thin_memo_counted_as_coverage",
-      "ticker": "thin_memo_counted_as_coverage",
+      "finding_id": "system_gap:filing_ready_learning_stale",
+      "kind": "system_gap_filing_ready_learning_stale",
+      "ticker": "filing_ready_learning_stale",
       "severity": "medium",
-      "so_what": "7 sampled euro_depth memos are thin or have 0 filing bodies (2 memo(s) executed this pass). Observe-sim / AI-judgment that gates on accumulate still consumes those weak labels. Do not widen rememo_reason; thicken filings then body-lag rememo (Phase B slim verdicts).",
+      "so_what": "sp500 look filing-ready but are not learning_ready (observe-sim / archive span still short). That is a 12-week replay gate, not a reason to withhold epoch-0 or admitted rememo.",
       "recommended_closure": "observe",
       "evidence": {
-        "system_gap_flag": "thin_memo_counted_as_coverage",
-        "layer": "produce",
-        "title": "First-pass / zero-body memos are counted as research done"
+        "system_gap_flag": "filing_ready_learning_stale",
+        "layer": "learning_clock",
+        "title": "Filing parity is not the same as a learning clock"
       },
       "engineering_area": null,
       "engineering_title": null,
       "engineering_summary": null,
-      "human_action": "Lane A: ingest filing bodies for named tickers, then body-lag rememo only. Do not widen rememo eligibility for thin/zero-body memos (system_gaps policy).",
+      "human_action": "Learning clock vs filing parity — review market-sharded-learning; do not block admitted rememo on clock alone.",
       "human_doc_path": "docs/ops/analysis-review.md"
     }
   ],
