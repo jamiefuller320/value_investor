@@ -1,50 +1,19 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-27T19:12:25.299895+00:00",
+  "generated_at": "2026-09-27T20:02:52.327058+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-09-26",
   "counts": {
-    "new_info": 2,
+    "new_info": 1,
     "unacked": 29,
-    "acked": 1,
+    "acked": 2,
     "automated": 19,
     "human": 32
   },
   "tasks": [
-    {
-      "id": "sunday-shard-epoch0-watch",
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "what-enter-learning-means",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Admitted shard epoch-0 watch",
-        "updated_at": "2026-09-27T18:28:53.153651+00:00",
-        "fingerprint": "8d90b76c8263f5f1",
-        "bullets": [],
-        "source_keys": [
-          "market_status"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-09-27T17:33:34.049391+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "b434fa1eff5393fe"
-      },
-      "sort_bucket": "new_info"
-    },
     {
       "id": "adhoc-review-ingest-deviations",
       "title": "Review open ingest deviations and reprocess if needed",
@@ -60,8 +29,8 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-09-27T18:27:56.579382+00:00",
-        "fingerprint": "78d353b388b1248a",
+        "updated_at": "2026-09-27T19:56:42.947691+00:00",
+        "fingerprint": "0bae9d556328c450",
         "bullets": [
           "Open deviations: 0"
         ],
@@ -1040,6 +1009,37 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Admitted shard epoch-0 watch",
+        "updated_at": "2026-09-27T19:57:22.700785+00:00",
+        "fingerprint": "1c775e33bf8dd3cd",
+        "bullets": [],
+        "source_keys": [
+          "market_status"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-27T20:02:52.306418+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "1c775e33bf8dd3cd"
+      },
+      "sort_bucket": "acked"
     },
     {
       "id": "monthly-pr-fix-common-issues",
