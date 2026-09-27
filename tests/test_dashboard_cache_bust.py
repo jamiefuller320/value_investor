@@ -39,16 +39,26 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     )[0]
     assert "applyDashboardSidecars(data)" in reload_fn
     assert 'fetch("data/progress_report.json")' not in reload_fn
-    # Human-task ack: optimistic bottom-sort on queue, then wait/reload for git.
+    # Human-task ack: optimistic bottom-sort on click (before bridge), then wait/reload.
     assert "const pendingHumanTaskAcks" in text
     assert "function applyOptimisticHumanTaskAck(" in text
     assert "function overlayPendingHumanTaskAcks(" in text
+    assert "function syncHumanTasksBoardOverlay(" in text
     assert "function refreshHumanTasksBoardView(" in text
     assert "prunePendingHumanTaskAcksAgainstDurable(" in text
+    render_fn = text.split("function renderDashboard(data)", 1)[1].split(
+        "\nasync function loadOptionalDashboardJson", 1
+    )[0]
+    assert "syncHumanTasksBoardOverlay(data)" in render_fn
     ack_fn = text.split("async function acknowledgeHumanTaskFromCard(", 1)[1].split(
         "\nfunction resolveObserveUtilization(", 1
     )[0]
     assert "applyOptimisticHumanTaskAck(payload)" in ack_fn
+    # Must paint disabled/bottom *before* any bridge await (latency was the bug).
+    assert ack_fn.index("applyOptimisticHumanTaskAck(payload)") < ack_fn.index("queueCommand")
+    assert ack_fn.index("applyOptimisticHumanTaskAck(payload)") < ack_fn.index(
+        "DashboardBridge.init()"
+    )
     assert "queueCommand" in ack_fn
     assert "waitForCommand" in ack_fn
     assert "reloadDashboard({ silent: true, rebuild: true })" in ack_fn
@@ -74,6 +84,7 @@ def test_human_task_ack_optimistic_overlay_sorts_acked_to_bottom() -> None:
     # Standalone harness: pending map + helpers extracted from app.js
     script = (
         "const pendingHumanTaskAcks = Object.create(null);\n"
+        + "let humanTasksBoardBase = null;\n"
         + chunk
         + """
 const board = {
@@ -93,17 +104,47 @@ const board = {
     },
   ],
 };
+humanTasksBoardBase = board;
 rememberPendingHumanTaskAck({
   task_id: "task-a",
   decision: "ack_observe",
   finding_fingerprint: "fp-a",
 });
 const merged = mergeHumanTaskAcksIntoBoard(board, overlayPendingHumanTaskAcks(null));
+// Pending must override a durable open row with a different fingerprint.
+const durableStale = {
+  acks: [{
+    task_id: "task-a",
+    status: "open",
+    finding_fingerprint: "fp-old",
+    decision: "ack_observe",
+    acked_at: "2026-09-01T00:00:00Z",
+  }],
+};
+const overridden = mergeHumanTaskAcksIntoBoard(
+  board,
+  overlayPendingHumanTaskAcks(durableStale)
+);
+// Soft-reload simulation: merge without pending first, then sync with pending.
+const data = {
+  human_task_acks: { acks: [] },
+  human_tasks_board: board,
+};
+const clobbered = mergeHumanTaskAcksIntoBoard(board, { acks: [] });
+data.human_tasks_board = clobbered;
+syncHumanTasksBoardOverlay(data);
+const taskA = overridden.tasks.find((t) => t.id === "task-a");
+const syncedA = data.human_tasks_board.tasks.find((t) => t.id === "task-a");
 console.log(JSON.stringify({
   ids: merged.tasks.map((t) => t.id),
   buckets: merged.tasks.map((t) => t.sort_bucket),
   counts: merged.counts,
   pendingKeys: Object.keys(pendingHumanTaskAcks),
+  overrideBucket: taskA && taskA.sort_bucket,
+  overrideStale: taskA && taskA.ack && taskA.ack.stale,
+  syncedBucket: syncedA && syncedA.sort_bucket,
+  syncedAcked: syncedA && syncedA.ack && syncedA.ack.acked,
+  syncedDisabled: syncedA && syncedA.ack && syncedA.ack.acked && !syncedA.ack.stale,
 }));
 """
     )
@@ -113,6 +154,11 @@ console.log(JSON.stringify({
     assert payload["counts"]["acked"] == 1
     assert payload["counts"]["unacked"] == 1
     assert payload["pendingKeys"] == ["task-a"]
+    assert payload["overrideBucket"] == "acked"
+    assert payload["overrideStale"] is False
+    assert payload["syncedBucket"] == "acked"
+    assert payload["syncedAcked"] is True
+    assert payload["syncedDisabled"] is True
 
 
 def test_sunday_review_paper_tracks_sorted_by_track_then_week() -> None:
