@@ -5873,6 +5873,9 @@ function renderLifecycleExperimentCard(factorId) {
   const showActionBtns =
     recommend && ["human_ack", "optional_execute", "waiting"].includes(initKind);
   const ackLabel = acknowledge.label || "Acknowledge";
+  const startLabel = start.label || "Start";
+  const startAlready =
+    !startEnabled && /already started/i.test(String(start.disabled_reason || initiation.label || ""));
   const actionBtns = showActionBtns
     ? `<p class="lifecycle-start-row">
         <button type="button" class="btn lifecycle-ack-btn${ackEnabled ? " btn-primary" : ""}" data-lifecycle-ack="${esc(
@@ -5880,17 +5883,21 @@ function renderLifecycleExperimentCard(factorId) {
         )}" ${ackEnabled ? "" : "disabled"} aria-disabled="${ackEnabled ? "false" : "true"}" title="${esc(
           ackEnabled ? "Record observe-only ack via Supabase" : acknowledge.disabled_reason || "Ack not available"
         )}">${esc(ackLabel)}</button>
-        <button type="button" class="btn btn-primary lifecycle-start-btn" data-lifecycle-start="${esc(
+        <button type="button" class="btn lifecycle-start-btn${startEnabled ? " btn-primary" : ""}${
+          startAlready ? " lifecycle-start-done" : ""
+        }" data-lifecycle-start="${esc(
           startPayload
         )}" ${startEnabled ? "" : "disabled"} aria-disabled="${startEnabled ? "false" : "true"}" title="${esc(
           startEnabled
             ? "Start graduated entry DCA execute via Supabase"
             : start.disabled_reason || "Not ready"
-        )}">${esc(start.label || "Start")}</button>
-        <span class="small muted lifecycle-start-status" aria-live="polite"></span>
+        )}">${esc(startLabel)}</button>
+        <span class="small muted lifecycle-start-status" aria-live="polite">${
+          startAlready ? esc(start.disabled_reason || "Already started") : ""
+        }</span>
       </p>
       ${
-        ackEnabled || startEnabled
+        ackEnabled || startEnabled || startAlready
           ? ""
           : `<p class="small muted">${esc(
               start.disabled_reason || acknowledge.disabled_reason || "Actions blocked until gates clear"
@@ -5901,11 +5908,21 @@ function renderLifecycleExperimentCard(factorId) {
           initKind
         )}${initiation.waiting_for ? `: ${esc(String(initiation.waiting_for))}` : ""}.</p>`
       : "";
+  const recommendHeading = startAlready
+    ? "Execute already started"
+    : ready
+      ? "Ready for next human step"
+      : "Not ready to initiate";
   const recommendBlock = recommend
-    ? `<div class="lifecycle-init-box ${ready ? "ready" : "waiting"}">
-        <p class="small" style="margin-top:0"><strong>${ready ? "Ready for next human step" : "Not ready to initiate"}</strong></p>
+    ? `<div class="lifecycle-init-box ${ready || startAlready ? "ready" : "waiting"}">
+        <p class="small" style="margin-top:0"><strong>${esc(recommendHeading)}</strong></p>
         <p>${esc(initiation.label || (ready ? "Ready" : "Waiting"))}</p>
         ${waiting}
+        ${
+          startAlready
+            ? `<p class="small muted">Sibling factors (entry_dca_cadence, add_cadence, entry_kind_tag) share one Start — no need to click again.</p>`
+            : ""
+        }
         ${
           initiation.recommendation
             ? `<p class="lifecycle-recommendation"><strong>Recommendation:</strong> ${esc(
@@ -6187,6 +6204,13 @@ async function startLifecycleExperimentFromCard(button) {
     statusEl.textContent = msg || "";
     statusEl.classList.toggle("error", Boolean(isError));
   };
+  const alreadyStartedMessage = (raw) => {
+    const text = String(raw || "");
+    const match = text.match(/already started[^(]*(\([^)]*\))?/i);
+    if (!match && !/already_started/i.test(text)) return null;
+    const when = match && match[1] ? ` ${match[1]}` : "";
+    return `Already started${when} — shared across entry_dca_cadence / add_cadence / entry_kind_tag. No re-start needed.`;
+  };
   let payload = {};
   try {
     payload = JSON.parse(button.getAttribute("data-lifecycle-start") || "{}");
@@ -6198,8 +6222,27 @@ async function startLifecycleExperimentFromCard(button) {
     setStatus("Missing experiment id", true);
     return;
   }
+  if (button.disabled || button.getAttribute("aria-disabled") === "true") {
+    const reason = button.getAttribute("title") || "Start not available";
+    const friendly = alreadyStartedMessage(reason) || reason;
+    setStatus(friendly, !alreadyStartedMessage(reason));
+    return;
+  }
   button.disabled = true;
+  button.setAttribute("aria-disabled", "true");
   setStatus("Starting execute…");
+  const finishAlreadyStarted = async (detail) => {
+    const friendly = alreadyStartedMessage(detail) || String(detail || "Already started");
+    setStatus(friendly, false);
+    button.textContent = "Started";
+    button.title = friendly;
+    try {
+      await reloadDashboard({ silent: true, rebuild: true });
+      openLifecycleExperimentCard(payload.factor_id || "");
+    } catch {
+      /* board refresh optional */
+    }
+  };
   try {
     const local = await fetch("/api/lifecycle-experiment-start", {
       method: "POST",
@@ -6209,10 +6252,15 @@ async function startLifecycleExperimentFromCard(button) {
     if (local.ok) {
       const body = await local.json();
       if (!body.ok) throw new Error(body.error || "Start API failed");
+      if (body.already_started) {
+        await finishAlreadyStarted(body.message || body.started_at);
+        return;
+      }
       setStatus("Execute started — refreshing…");
       await reloadDashboard({ silent: true, rebuild: true });
       openLifecycleExperimentCard(payload.factor_id || "");
       setStatus("Graduated entry DCA execute started");
+      button.textContent = "Started";
       return;
     }
     if (local.status !== 404 && local.status !== 405) {
@@ -6223,38 +6271,69 @@ async function startLifecycleExperimentFromCard(button) {
       } catch {
         /* ignore */
       }
+      const friendly = alreadyStartedMessage(detail);
+      if (friendly) {
+        await finishAlreadyStarted(detail);
+        return;
+      }
       throw new Error(detail);
     }
   } catch (err) {
     if (!(err instanceof TypeError) && String(err.message) !== "API_UNAVAILABLE") {
       // fall through to bridge only on missing local API
       if (!String(err.message).includes("Failed to fetch")) {
+        const friendly = alreadyStartedMessage(err.message);
+        if (friendly) {
+          await finishAlreadyStarted(err.message);
+          return;
+        }
         setStatus(`Start execute failed: ${err.message}`, true);
         button.disabled = false;
+        button.setAttribute("aria-disabled", "false");
         return;
       }
     }
   }
   if (!window.DashboardBridge) {
-    setStatus("Supabase bridge unavailable", true);
+    setStatus("Supabase bridge unavailable — open local dashboard or check Pages bridge config", true);
     button.disabled = false;
+    button.setAttribute("aria-disabled", "false");
     return;
   }
   try {
     const bridgeReady = await window.DashboardBridge.init();
     if (!bridgeReady) throw new Error("BRIDGE_DISABLED");
-    await window.DashboardBridge.submitCommand(
+    const result = await window.DashboardBridge.submitCommand(
       "lifecycle-experiment-start",
       payload,
       (msg) => setStatus(msg || "Queued via Supabase…")
     );
+    const resultMsg = (result && (result.message || result.status_message)) || "";
+    if (alreadyStartedMessage(resultMsg)) {
+      await finishAlreadyStarted(resultMsg);
+      return;
+    }
     setStatus("Bridge finished — refreshing…");
     await reloadDashboard({ silent: true, rebuild: true });
     openLifecycleExperimentCard(payload.factor_id || "");
     setStatus("Graduated entry DCA execute started via Supabase");
+    button.textContent = "Started";
   } catch (err) {
-    setStatus(`Bridge start execute failed: ${err.message}`, true);
+    const friendly = alreadyStartedMessage(err && err.message);
+    if (friendly) {
+      await finishAlreadyStarted(err.message);
+      return;
+    }
+    const raw = String((err && err.message) || "unknown error");
+    let hint = raw;
+    if (raw === "BRIDGE_DISABLED") {
+      hint = "Bridge disabled in this browser — check dashboard_bridge_config.js";
+    } else if (/timed out/i.test(raw)) {
+      hint = "Timed out waiting for GitHub worker — try Actions → lifecycle-experiment-start, or wait for the ~10m bridge cron";
+    }
+    setStatus(`Could not start execute: ${hint}`, true);
     button.disabled = false;
+    button.setAttribute("aria-disabled", "false");
   }
 }
 
