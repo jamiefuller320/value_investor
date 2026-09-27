@@ -1,14 +1,15 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-27T17:19:59.740688+00:00",
-  "open_count": 1,
-  "open_items": [
+  "updated_at": "2026-09-27T17:34:25.997833+00:00",
+  "open_count": 0,
+  "open_items": [],
+  "recent_reviewed": [
     {
       "id": "dev-euro_depth-MC.PA-blocker_no_improve",
       "market_id": "euro_depth",
       "ticker": "MC.PA",
       "kind": "blocker_no_improve",
-      "status": "open",
+      "status": "dismissed",
       "recommended_action": "pin_intensive",
       "summary": "MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.",
       "human_required": true,
@@ -39,10 +40,11 @@
         "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
         "conviction_score": 0.5633,
         "screen_found": true
-      }
-    }
-  ],
-  "recent_reviewed": [
+      },
+      "reviewed_at": "2026-09-27T17:34:25.997833+00:00",
+      "review_action": "dismiss",
+      "review_note": "User-approved dismiss: buy_patchy_leftover / plain buy; do not intensive-pin (P2 fat-slot)."
+    },
     {
       "id": "dev-aim-RWS.L-blocker_no_improve",
       "market_id": "aim",
@@ -307,36 +309,6 @@
       "run_at": "2026-09-20T17:43:40.282501+00:00",
       "resolved_at": "2026-09-20T19:39:16.836523+00:00",
       "resolved_reason": "ticker_improved_on_later_ingest"
-    },
-    {
-      "id": "dev-asx200-DNL.AX-ir_exhausted",
-      "market_id": "asx200",
-      "ticker": "DNL.AX",
-      "kind": "ir_exhausted",
-      "status": "resolved",
-      "recommended_action": "replace_allowlist_or_pin",
-      "summary": "DNL.AX IR allowlist refetch failed with 0 bodies fetched. Failed rows are marked unfetchable; replace the URL or pin intensive.",
-      "human_required": true,
-      "auto_actions": [
-        "ir_rows_marked_unfetchable"
-      ],
-      "evidence": {
-        "improved": false,
-        "ticker_budget_hit": false,
-        "ir_exhausted": true,
-        "indexed_without_body": 0,
-        "filings_with_body": 6,
-        "filings_total": 6
-      },
-      "reprocess": {
-        "approve": "ftse-library ingest-deviations approve dev-asx200-DNL.AX-ir_exhausted",
-        "dismiss": "ftse-library ingest-deviations dismiss dev-asx200-DNL.AX-ir_exhausted"
-      },
-      "first_seen_at": "2026-09-12T18:47:36.024253+00:00",
-      "last_seen_at": "2026-09-12T18:47:36.024253+00:00",
-      "run_at": "2026-09-12T18:47:36.024253+00:00",
-      "resolved_at": "2026-09-13T18:57:26.948937+00:00",
-      "resolved_reason": "ticker_improved_on_later_ingest"
     }
   ],
   "signal_triage_policy": "observe_only: leftover/dismiss, buy/park_hunter, strong_buy/pin_intensive",
@@ -346,7 +318,7 @@
       "market_id": "euro_depth",
       "ticker": "MC.PA",
       "kind": "blocker_no_improve",
-      "status": "open",
+      "status": "dismissed",
       "recommended_action": "pin_intensive",
       "summary": "MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.",
       "human_required": true,
@@ -377,7 +349,10 @@
         "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
         "conviction_score": 0.5633,
         "screen_found": true
-      }
+      },
+      "reviewed_at": "2026-09-27T17:34:25.997833+00:00",
+      "review_action": "dismiss",
+      "review_note": "User-approved dismiss: buy_patchy_leftover / plain buy; do not intensive-pin (P2 fat-slot)."
     },
     {
       "id": "dev-aim-RWS.L-blocker_no_improve",
