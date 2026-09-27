@@ -109,6 +109,8 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     ],
     "FGP.L": [
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/260618-firstgroup-plc-fy-2026-results-presentation.pdf",
+        # FY2026 statutory annual report — APM glossary + note reconciliations (eng-20260927-03).
+        "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/annual-report/260701-firstgroup-plc-annual-report-and-accounts-2026.pdf",
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/firstgroup-plc-fy-2025-results-presentation.pdf",
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/251118-firstgroup-plc-h1-2026-results-presentation.pdf",
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/press-release/firstgroup-plc-h1-2026-results.pdf",
@@ -6725,17 +6727,58 @@ _MGNS_CASH_FLOW_ROW_LABELS: tuple[tuple[str, str], ...] = (
     (r"Net interest received", "net_interest_received"),
     (r"Free cash flow", "free_cash_flow"),
 )
+_IR_METRIC_DEFINITION_NAMES = (
+    r"Free cash flow|Adjusted operating profit|Adjusted earnings|Adjusted EPS|"
+    r"Adjusted net debt(?:/\(cash\))?|Adjusted revenue|Rail adjusted EBITDA|"
+    r"Return on Capital Employed|Return on Invested Capital"
+)
 _MANAGEMENT_FCF_DEFINITION_RE = re.compile(
-    r"['\u2018\u2019]?"
-    r"(Free cash flow|Adjusted operating profit|Adjusted earnings|Adjusted EPS|"
-    r"Adjusted net debt(?:/\(cash\))?|Rail adjusted EBITDA|Return on Capital Employed)"
-    r"['\u2018\u2019]?\s+is\s+([^\n•]+)",
+    rf"['\u2018\u2019]?({_IR_METRIC_DEFINITION_NAMES})"
+    rf"['\u2018\u2019]?\s+is\s+"
+    rf"(.+?)"
+    rf"(?=\n\s*•|\n\s*['\u2018\u2019]?(?:Adjusted|Free |Commercial |Employee |Net |The Group|Return on |\Z))",
+    re.IGNORECASE | re.DOTALL,
+)
+_APM_DASH_DEFINITION_RE = re.compile(
+    rf"(?:^\s*•\s*)?['\u2018\u2019]?({_IR_METRIC_DEFINITION_NAMES})"
+    rf"['\u2018\u2019]?\s+[–\-]\s+"
+    rf"(.+?)"
+    rf"(?=\n\s*(?:•\s*)?['\u2018\u2019]?(?:Adjusted|Free |Commercial |Employee |Net |The Group|Return on )|\Z)",
+    re.IGNORECASE | re.DOTALL | re.MULTILINE,
+)
+_APM_GLOSSARY_SECTION_RE = re.compile(
+    r"(?:alternative performance measures|glossary of alternative performance measures|"
+    r"note\s+\d+\s+[–-]\s+alternative performance measures)",
     re.IGNORECASE,
 )
 _GRAFTON_FCF_DEFINITION_RE = re.compile(
-    r"Free cash flow is\s+([^\n•]+)",
-    re.IGNORECASE,
+    r"Free cash flow is\s+(.+?)(?=\n\s*•|\Z)",
+    re.IGNORECASE | re.DOTALL,
 )
+
+
+def _normalize_ir_metric_definition(raw: str) -> str:
+    return re.sub(r"\s+", " ", str(raw or "").strip())
+
+
+def _metric_slug(raw: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", raw.lower()).strip("_")
+
+
+def _merge_ir_metric_definitions(*groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Keep the longest definition per metric slug when multiple IR parsers overlap."""
+    by_metric: dict[str, dict[str, Any]] = {}
+    for group in groups:
+        for item in group:
+            metric = str(item.get("metric") or "")
+            if not metric:
+                continue
+            existing = by_metric.get(metric)
+            if existing is None or len(str(item.get("definition") or "")) > len(
+                str(existing.get("definition") or "")
+            ):
+                by_metric[metric] = item
+    return list(by_metric.values())
 
 
 def _parse_ir_labeled_amount_pair_line(
@@ -6859,8 +6902,8 @@ def parse_ir_management_fcf_definitions(body_text: str) -> list[dict[str, Any]]:
     seen: set[str] = set()
     for match in _MANAGEMENT_FCF_DEFINITION_RE.finditer(body_text):
         metric_raw = match.group(1).strip()
-        metric = re.sub(r"[^a-z0-9]+", "_", metric_raw.lower()).strip("_")
-        definition = re.sub(r"\s+", " ", match.group(2).strip())
+        metric = _metric_slug(metric_raw)
+        definition = _normalize_ir_metric_definition(match.group(2))
         if not metric or not definition or metric in seen:
             continue
         seen.add(metric)
@@ -6873,12 +6916,40 @@ def parse_ir_management_fcf_definitions(body_text: str) -> list[dict[str, Any]]:
         )
     grafton = _GRAFTON_FCF_DEFINITION_RE.search(body_text)
     if grafton and "free_cash_flow" not in seen:
-        definition = re.sub(r"\s+", " ", grafton.group(1).strip())
+        definition = _normalize_ir_metric_definition(grafton.group(1))
         definitions.append(
             {
                 "metric": "free_cash_flow",
                 "definition": definition,
                 "parse_confidence": "high",
+            }
+        )
+    return definitions
+
+
+def parse_ir_apm_glossary_definitions(body_text: str) -> list[dict[str, Any]]:
+    """Extract alternative performance measure glossary lines from annual reports and decks."""
+    if not body_text or not body_text.strip():
+        return []
+    section = body_text
+    anchor = _APM_GLOSSARY_SECTION_RE.search(body_text)
+    if anchor is not None:
+        section = body_text[anchor.start() : anchor.start() + 14000]
+    definitions: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for match in _APM_DASH_DEFINITION_RE.finditer(section):
+        metric_raw = match.group(1).strip()
+        metric = _metric_slug(metric_raw)
+        definition = _normalize_ir_metric_definition(match.group(2))
+        if not metric or not definition or metric in seen:
+            continue
+        seen.add(metric)
+        definitions.append(
+            {
+                "metric": metric,
+                "definition": definition,
+                "parse_confidence": "high",
+                "definition_source": "apm_glossary",
             }
         )
     return definitions
@@ -8070,7 +8141,11 @@ def extract_ir_presentation_metrics(
         mgns_cash_flow = parse_ir_mgns_cash_flow_bridge(body_text)
         if mgns_cash_flow:
             payload["bridges"].append({**source_meta, **mgns_cash_flow})
-        for definition in parse_ir_management_fcf_definitions(body_text):
+        metric_definitions = _merge_ir_metric_definitions(
+            parse_ir_management_fcf_definitions(body_text),
+            parse_ir_apm_glossary_definitions(body_text),
+        )
+        for definition in metric_definitions:
             payload["management_fcf_definitions"].append({**source_meta, **definition})
         segment_split = parse_ir_segment_revenue_splits(body_text)
         if segment_split:
@@ -8101,6 +8176,74 @@ def extract_ir_presentation_metrics(
 
     _write_ir_presentation_metrics_payload(payload, sources_dir=sources_dir)
     return payload
+
+
+def _ir_presentation_metrics_summary(payload: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "bridge_count": int(payload.get("bridge_count") or 0),
+        "segment_split_count": int(payload.get("segment_split_count") or 0),
+        "lease_maturity_count": int(payload.get("lease_maturity_count") or 0),
+        "dividend_policy_count": int(payload.get("dividend_policy_count") or 0),
+        "management_fcf_definition_count": int(payload.get("management_fcf_definition_count") or 0),
+        "mandatory": bool(payload.get("mandatory")),
+    }
+
+
+def refetch_ir_presentation_sources(
+    filings_dir: Path,
+    ticker: str,
+    *,
+    company_name: str = "",
+    sources_dir: Path | None = None,
+    max_bodies: int = 20,
+    allowlist_path: Path | None = None,
+    deadline_monotonic: float | None = None,
+    **refetch_kwargs: Any,
+) -> dict[str, Any]:
+    """
+    Standard IR pipeline: merge/refetch allowlist PDF bodies, then extract presentation metrics.
+
+    Writes ``ir_presentation_metrics.json`` when ``sources_dir`` is provided. Returns refetch
+    stats plus an ``ir_presentation_metrics`` summary block for ingest telemetry.
+    """
+    filings_dir = Path(filings_dir)
+    allowlist_rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
+    if not allowlist_rows:
+        metrics_payload = extract_ir_presentation_metrics(
+            filings_dir,
+            ticker,
+            sources_dir=sources_dir,
+        )
+        return {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "mandatory": False,
+            "allowlist_count": 0,
+            "ir_presentation_metrics": _ir_presentation_metrics_summary(metrics_payload),
+            "note": "refetch_ir_presentation_sources",
+        }
+
+    refetch = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        ticker,
+        company_name=company_name,
+        max_bodies=max_bodies,
+        allowlist_path=allowlist_path,
+        deadline_monotonic=deadline_monotonic,
+        **refetch_kwargs,
+    )
+    metrics_payload = extract_ir_presentation_metrics(
+        filings_dir,
+        ticker,
+        sources_dir=sources_dir,
+    )
+    refetch["mandatory"] = True
+    refetch["allowlist_count"] = len(allowlist_rows)
+    refetch["ir_presentation_metrics"] = _ir_presentation_metrics_summary(metrics_payload)
+    refetch["note"] = "refetch_ir_presentation_sources"
+    return refetch
 
 
 def _merge_filings_row_key(row: dict[str, Any]) -> tuple:
