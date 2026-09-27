@@ -2326,19 +2326,6 @@ function renderHistoricalAnalysis(historical) {
     )
     .join("");
 
-  const modelRows = (historical.model_attribution || [])
-    .slice(0, 8)
-    .map((row) => {
-      const corr = row.smoothed_correlation != null ? row.smoothed_correlation : row.raw_correlation;
-      return `<tr>
-        <td>${esc(row.model_id)}</td>
-        <td>${row.horizon_days}d</td>
-        <td>${corr != null ? corr.toFixed(2) : "—"}</td>
-        <td>${row.sample_count}</td>
-      </tr>`;
-    })
-    .join("");
-
   return `
     <p class="small muted">
       ${esc(historical.note || "")}
@@ -2364,17 +2351,164 @@ function renderHistoricalAnalysis(historical) {
       </div>`
         : ""
     }
-    ${
-      modelRows
-        ? `<h4 style="margin-top:1rem">Model attribution (score→return correlation)</h4>
+    ${renderModelAttributionPanel(historical)}`;
+}
+
+/** Model attribution: primary = score → FTSE-excess on overlay buy-tier at 28d (weight-learning horizon). */
+function modelAttributionMeta(historical) {
+  const meta = historical?.model_attribution_meta || {};
+  return {
+    primary_horizon_days: meta.primary_horizon_days ?? 28,
+    secondary_horizon_days: Array.isArray(meta.secondary_horizon_days)
+      ? meta.secondary_horizon_days
+      : [84],
+    noise_horizon_days: Array.isArray(meta.noise_horizon_days) ? meta.noise_horizon_days : [7],
+    success_definition:
+      meta.success_definition || "higher_model_score_higher_ftse_excess_on_buy_tier",
+    cohort: meta.cohort || "overlay_buy_tier",
+    return_basis: meta.return_basis || "excess_vs_ftse",
+    statistic: meta.statistic || "pearson",
+    aligned_with_weight_learning_horizon: meta.aligned_with_weight_learning_horizon !== false,
+    exit_join: meta.exit_join || { status: "not_computed" },
+  };
+}
+
+function modelAttributionCorrCell(row) {
+  const corr = row.smoothed_correlation != null ? row.smoothed_correlation : row.raw_correlation;
+  return corr != null ? corr.toFixed(2) : "—";
+}
+
+function modelAttributionTableRows(rows) {
+  return rows
+    .map(
+      (row) => `<tr>
+        <td>${esc(row.model_id)}</td>
+        <td>${modelAttributionCorrCell(row)}</td>
+        <td>${row.sample_count}</td>
+        <td>${row.observation_weeks != null ? row.observation_weeks : "—"}</td>
+      </tr>`
+    )
+    .join("");
+}
+
+function renderModelAttributionHorizonTable(title, blurb, rows) {
+  if (!rows.length) return "";
+  return `<h4 style="margin-top:1rem">${esc(title)}</h4>
+      <p class="small muted" style="margin-top:0">${esc(blurb)}</p>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Model</th><th>Horizon</th><th>Correlation</th><th>N</th></tr></thead>
-          <tbody>${modelRows}</tbody>
+          <thead><tr><th>Model</th><th>Correlation</th><th>N</th><th>Weeks</th></tr></thead>
+          <tbody>${modelAttributionTableRows(rows)}</tbody>
         </table>
-      </div>`
-        : ""
-    }`;
+      </div>`;
+}
+
+function renderModelAttributionPanel(historical) {
+  const rows = historical.model_attribution || [];
+  if (!rows.length) return "";
+
+  const meta = modelAttributionMeta(historical);
+  const primaryH = meta.primary_horizon_days;
+  const secondarySet = new Set(meta.secondary_horizon_days.map(Number));
+  const noiseSet = new Set(meta.noise_horizon_days.map(Number));
+
+  const primaryRows = rows.filter((r) => Number(r.horizon_days) === primaryH);
+  const secondaryRows = rows.filter((r) => secondarySet.has(Number(r.horizon_days)));
+  const noiseRows = rows.filter((r) => noiseSet.has(Number(r.horizon_days)));
+  // Any horizon not classified (future horizons) — show after primary, before noise.
+  const otherRows = rows.filter((r) => {
+    const h = Number(r.horizon_days);
+    return h !== primaryH && !secondarySet.has(h) && !noiseSet.has(h);
+  });
+
+  const successLabel =
+    "Success: higher model score → higher FTSE-excess forward return on overlay buy-tier (buy ∪ strong_buy).";
+  const horizonNote = meta.aligned_with_weight_learning_horizon
+    ? `Primary horizon ${primaryH}d matches weight-learning DEFAULT_HORIZON_DAYS.`
+    : `Primary horizon ${primaryH}d.`;
+  const cohortLabel = `Cohort: ${meta.cohort.replace(/_/g, " ")} · Return: ${meta.return_basis.replace(
+    /_/g,
+    " "
+  )} · Statistic: ${meta.statistic}`;
+
+  const noiseBlock = noiseRows.length
+    ? `<details class="overview-secondary" style="margin-top:1rem">
+        <summary>Noise check — ${[...noiseSet].join("/")}d score→return (demoted)</summary>
+        <p class="small muted">${esc(
+          "Short mark-to-mark correlations are shown for diagnostics only; they are not the success metric."
+        )}</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Model</th><th>Horizon</th><th>Correlation</th><th>N</th><th>Weeks</th></tr></thead>
+            <tbody>${noiseRows
+              .map(
+                (row) => `<tr>
+              <td>${esc(row.model_id)}</td>
+              <td>${row.horizon_days}d</td>
+              <td>${modelAttributionCorrCell(row)}</td>
+              <td>${row.sample_count}</td>
+              <td>${row.observation_weeks != null ? row.observation_weeks : "—"}</td>
+            </tr>`
+              )
+              .join("")}</tbody>
+          </table>
+        </div>
+      </details>`
+    : "";
+
+  let mainBlocks = "";
+  if (primaryRows.length) {
+    mainBlocks += renderModelAttributionHorizonTable(
+      `Model attribution — primary ${primaryH}d (score → FTSE excess, buy-tier)`,
+      `${successLabel} ${horizonNote} Correlation is not paper P&L.`,
+      primaryRows
+    );
+    mainBlocks += meta.secondary_horizon_days
+      .map((h) => {
+        const subset = secondaryRows.filter((r) => Number(r.horizon_days) === Number(h));
+        if (!subset.length) {
+          return `<p class="small muted" style="margin-top:0.75rem">${Number(
+            h
+          )}d secondary horizon: not enough archive depth yet for buy-tier excess pairs.</p>`;
+        }
+        return renderModelAttributionHorizonTable(
+          `Model attribution — secondary ${Number(h)}d`,
+          "Same success definition when forward exit snapshots exist.",
+          subset
+        );
+      })
+      .join("");
+    if (otherRows.length) {
+      mainBlocks += renderModelAttributionHorizonTable(
+        "Model attribution — other horizons",
+        cohortLabel,
+        otherRows
+      );
+    }
+  } else {
+    // Thin archive: state the preferred primary horizon, then show non-noise rows without burying them in slice(0,8).
+    const available = rows.filter((r) => !noiseSet.has(Number(r.horizon_days)));
+    mainBlocks += `<p class="small muted" style="margin-top:1rem">No ${primaryH}d buy-tier excess pairs yet (${esc(
+      horizonNote
+    )}). Showing available non-noise horizons.</p>`;
+    if (available.length) {
+      mainBlocks += renderModelAttributionHorizonTable(
+        "Model attribution — available horizons",
+        successLabel,
+        available
+      );
+    }
+  }
+
+  const exitStatus = meta.exit_join?.status || "not_computed";
+  const exitNote =
+    exitStatus === "not_computed"
+      ? `<p class="small muted" style="margin-top:0.75rem">Paper-exit score-quintile attribution: reserved join hook (<code>model_attribution_meta.exit_join</code>) — not computed until closed cohort readiness.</p>`
+      : "";
+
+  return `${mainBlocks}${noiseBlock}
+      <p class="small muted" style="margin-top:0.5rem">${esc(cohortLabel)}</p>
+      ${exitNote}`;
 }
 
 const PERF_SIM_TRACK_KEY = "ftseValueInvestor.perfSimTrack.v1";

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -17,7 +17,7 @@ from value_investor.backtest import (
     _parse_run_at,
     load_run_snapshots,
 )
-from value_investor.model_weights import load_model_snapshot_for_run
+from value_investor.model_weights import DEFAULT_HORIZON_DAYS, load_model_snapshot_for_run
 from value_investor.research.timeline import get_research_as_of
 from value_investor.research.verdict import compute_adjusted_signal
 
@@ -26,6 +26,44 @@ logger = logging.getLogger(__name__)
 MAX_HISTORY_YEARS = 3
 DEFAULT_SMOOTHING_WEEKS = 4
 BUY_SIGNALS = frozenset({"strong_buy", "buy"})
+
+# Model attribution success definition (dashboard primary path).
+# Aligns with weight learning DEFAULT_HORIZON_DAYS; 7d is noise-only.
+PRIMARY_ATTRIBUTION_HORIZON_DAYS = DEFAULT_HORIZON_DAYS  # 28
+SECONDARY_ATTRIBUTION_HORIZON_DAYS = (84,)
+NOISE_ATTRIBUTION_HORIZON_DAYS = (7,)
+
+COHORT_OVERLAY_BUY_TIER = "overlay_buy_tier"
+COHORT_SCREEN_BUY_TIER = "screen_buy_tier"
+COHORT_FULL_UNIVERSE = "full_universe"
+
+RETURN_BASIS_EXCESS_VS_FTSE = "excess_vs_ftse"
+RETURN_BASIS_RAW = "raw"
+
+SUCCESS_DEFINITION_BUY_TIER_EXCESS = (
+    "higher_model_score_higher_ftse_excess_on_buy_tier"
+)
+STATISTIC_PEARSON = "pearson"
+
+# Reserved shape for paper-exit score-quintile observe (L475). Populate later
+# without rewriting the primary screen-archive attribution path.
+EXIT_JOIN_HOOK_DEFAULT: dict[str, Any] = {
+    "status": "not_computed",
+    "planned_metric": "entry_score_quintile_vs_realized_return",
+    "join_keys": [
+        "ticker",
+        "acted_at_nearest_screen_run",
+        "model_id",
+        "entry_score",
+    ],
+    "readiness_gate_closed_n": 30,
+    "notes": (
+        "Join closed position_closed / exit_shadow sells → entry buy → nearest "
+        "models_*.json snapshot. Optional rebalance_log model_id stamps are "
+        "hardening only — not required for first observe rollup."
+    ),
+    "rows": [],
+}
 
 
 @dataclass
@@ -93,11 +131,21 @@ class StrategyHorizonResult:
 
 @dataclass
 class ModelAttributionResult:
+    """Score→forward-return correlation for one model × horizon × cohort × basis.
+
+    Primary dashboard path uses ``cohort=overlay_buy_tier`` and
+    ``return_basis=excess_vs_ftse``. Comparison rows may use full-universe raw.
+    """
+
     model_id: str
     horizon_days: int
     raw_correlation: float | None
     smoothed_correlation: float | None
     sample_count: int
+    return_basis: str = RETURN_BASIS_EXCESS_VS_FTSE
+    cohort: str = COHORT_OVERLAY_BUY_TIER
+    observation_weeks: int = 0
+    statistic: str = STATISTIC_PEARSON
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -112,7 +160,83 @@ class ModelAttributionResult:
                 else None
             ),
             "sample_count": self.sample_count,
+            "return_basis": self.return_basis,
+            "cohort": self.cohort,
+            "observation_weeks": self.observation_weeks,
+            "statistic": self.statistic,
         }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> ModelAttributionResult:
+        known = {f.name for f in fields(cls)}
+        kwargs = {k: v for k, v in data.items() if k in known}
+        return cls(**kwargs)
+
+
+@dataclass
+class ModelAttributionMeta:
+    """Dashboard / learning contract for model attribution payloads.
+
+    ``exit_join`` is a reserved observe hook for position-exit quintile
+    attribution; leave ``status=not_computed`` until readiness (closed n ≥ 30).
+    """
+
+    primary_horizon_days: int = PRIMARY_ATTRIBUTION_HORIZON_DAYS
+    secondary_horizon_days: tuple[int, ...] = SECONDARY_ATTRIBUTION_HORIZON_DAYS
+    noise_horizon_days: tuple[int, ...] = NOISE_ATTRIBUTION_HORIZON_DAYS
+    success_definition: str = SUCCESS_DEFINITION_BUY_TIER_EXCESS
+    cohort: str = COHORT_OVERLAY_BUY_TIER
+    return_basis: str = RETURN_BASIS_EXCESS_VS_FTSE
+    statistic: str = STATISTIC_PEARSON
+    aligned_with_weight_learning_horizon: bool = True
+    exit_join: dict[str, Any] = field(
+        default_factory=lambda: dict(EXIT_JOIN_HOOK_DEFAULT)
+    )
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "primary_horizon_days": self.primary_horizon_days,
+            "secondary_horizon_days": list(self.secondary_horizon_days),
+            "noise_horizon_days": list(self.noise_horizon_days),
+            "success_definition": self.success_definition,
+            "cohort": self.cohort,
+            "return_basis": self.return_basis,
+            "statistic": self.statistic,
+            "aligned_with_weight_learning_horizon": self.aligned_with_weight_learning_horizon,
+            "exit_join": self.exit_join,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any] | None) -> ModelAttributionMeta:
+        if not data:
+            return cls()
+        secondary = data.get("secondary_horizon_days", SECONDARY_ATTRIBUTION_HORIZON_DAYS)
+        noise = data.get("noise_horizon_days", NOISE_ATTRIBUTION_HORIZON_DAYS)
+        exit_join = data.get("exit_join")
+        if not isinstance(exit_join, dict):
+            exit_join = dict(EXIT_JOIN_HOOK_DEFAULT)
+        else:
+            # Preserve unknown future keys; fill defaults for required contract fields.
+            merged = dict(EXIT_JOIN_HOOK_DEFAULT)
+            merged.update(exit_join)
+            exit_join = merged
+        return cls(
+            primary_horizon_days=int(
+                data.get("primary_horizon_days", PRIMARY_ATTRIBUTION_HORIZON_DAYS)
+            ),
+            secondary_horizon_days=tuple(int(x) for x in secondary),
+            noise_horizon_days=tuple(int(x) for x in noise),
+            success_definition=str(
+                data.get("success_definition", SUCCESS_DEFINITION_BUY_TIER_EXCESS)
+            ),
+            cohort=str(data.get("cohort", COHORT_OVERLAY_BUY_TIER)),
+            return_basis=str(data.get("return_basis", RETURN_BASIS_EXCESS_VS_FTSE)),
+            statistic=str(data.get("statistic", STATISTIC_PEARSON)),
+            aligned_with_weight_learning_horizon=bool(
+                data.get("aligned_with_weight_learning_horizon", True)
+            ),
+            exit_join=exit_join,
+        )
 
 
 @dataclass
@@ -145,7 +269,11 @@ class HistoricalAnalysisSummary:
     max_years: int
     smoothing_weeks: int
     strategy_horizons: list[StrategyHorizonResult] = field(default_factory=list)
+    # Primary path: overlay buy-tier × FTSE-excess score→return correlations.
     model_attribution: list[ModelAttributionResult] = field(default_factory=list)
+    model_attribution_meta: ModelAttributionMeta = field(default_factory=ModelAttributionMeta)
+    # Optional comparison: full scored universe × raw forward return (legacy shape).
+    model_attribution_comparison: list[ModelAttributionResult] = field(default_factory=list)
     overlay_comparison: list[OverlayComparison] = field(default_factory=list)
     weekly_series: list[dict[str, Any]] = field(default_factory=list)
     note: str = ""
@@ -159,6 +287,10 @@ class HistoricalAnalysisSummary:
             "smoothing_weeks": self.smoothing_weeks,
             "strategy_horizons": [item.to_dict() for item in self.strategy_horizons],
             "model_attribution": [item.to_dict() for item in self.model_attribution],
+            "model_attribution_meta": self.model_attribution_meta.to_dict(),
+            "model_attribution_comparison": [
+                item.to_dict() for item in self.model_attribution_comparison
+            ],
             "overlay_comparison": [item.to_dict() for item in self.overlay_comparison],
             "weekly_series": self.weekly_series,
             "note": self.note,
@@ -179,7 +311,19 @@ def historical_analysis_summary_from_dict(data: dict[str, Any]) -> HistoricalAna
             StrategyHorizonResult(**item) for item in data.get("strategy_horizons", [])
         ],
         model_attribution=[
-            ModelAttributionResult(**item) for item in data.get("model_attribution", [])
+            ModelAttributionResult.from_dict(item)
+            for item in data.get("model_attribution", [])
+            if isinstance(item, dict)
+        ],
+        model_attribution_meta=ModelAttributionMeta.from_dict(
+            data.get("model_attribution_meta")
+            if isinstance(data.get("model_attribution_meta"), dict)
+            else None
+        ),
+        model_attribution_comparison=[
+            ModelAttributionResult.from_dict(item)
+            for item in data.get("model_attribution_comparison", [])
+            if isinstance(item, dict)
         ],
         overlay_comparison=[
             OverlayComparison(**item) for item in data.get("overlay_comparison", [])
@@ -465,43 +609,66 @@ def _overlay_comparisons(
     ]
 
 
+def _filter_observations_for_cohort(
+    observations: list[HistoricalObservation],
+    cohort: str,
+) -> list[HistoricalObservation]:
+    if cohort == COHORT_FULL_UNIVERSE:
+        return list(observations)
+    if cohort == COHORT_SCREEN_BUY_TIER:
+        return [obs for obs in observations if obs.screen_signal in BUY_SIGNALS]
+    # Default / primary: overlay-adjusted buy-tier (buy ∪ strong_buy after research).
+    return [obs for obs in observations if obs.adjusted_signal in BUY_SIGNALS]
+
+
+def _observation_return(obs: HistoricalObservation, return_basis: str) -> float:
+    if return_basis == RETURN_BASIS_RAW:
+        return obs.forward_return
+    return obs.excess_return
+
+
 def _model_attribution(
     *,
     output_dir: Path,
-    snapshots: list[RunSnapshot],
+    observations: list[HistoricalObservation],
     horizon_days: int,
     smoothing_weeks: int,
+    cohort: str = COHORT_OVERLAY_BUY_TIER,
+    return_basis: str = RETURN_BASIS_EXCESS_VS_FTSE,
 ) -> list[ModelAttributionResult]:
+    """Pearson correlation of model score vs forward return for a cohort/basis.
+
+    Uses the same observation set as strategy / overlay tables so buy-tier and
+    FTSE-excess definitions stay consistent. Structure is cohort/basis-parameterized
+    so exit-quintile observe can land later without rewriting this path.
+    """
+    cohort_obs = _filter_observations_for_cohort(observations, cohort)
+    if not cohort_obs:
+        return []
+
+    returns_by_run_ticker: dict[tuple[str, str], float] = {}
+    week_by_run: dict[str, str] = {}
+    for obs in cohort_obs:
+        returns_by_run_ticker[(obs.run_at, obs.ticker)] = _observation_return(
+            obs, return_basis
+        )
+        week_by_run[obs.run_at] = obs.week_key
+
     scores_by_model_week: dict[str, dict[str, list[tuple[float, float]]]] = {}
-
-    for entry in snapshots[:-1]:
-        exit_snap = _find_exit_snapshot(entry, snapshots, horizon_days)
-        if exit_snap is None:
-            continue
-
-        entry_at = _parse_run_at(entry.run_at)
-        week = _week_key(entry_at)
-        model_rows = load_model_snapshot_for_run(output_dir, entry.run_at)
+    for run_at in sorted(week_by_run.keys()):
+        model_rows = load_model_snapshot_for_run(output_dir, run_at)
         if not model_rows:
             continue
-
-        returns_by_ticker: dict[str, float] = {}
-        for row in entry.signals:
-            ticker = str(row["ticker"])
-            p0 = entry.prices.get(ticker)
-            p1 = exit_snap.prices.get(ticker)
-            if p0 is None or p1 is None or p0 <= 0:
-                continue
-            returns_by_ticker[ticker] = (p1 - p0) / p0
-
+        week = week_by_run[run_at]
         for model_row in model_rows:
             ticker = str(model_row["ticker"])
-            if ticker not in returns_by_ticker:
+            key = (run_at, ticker)
+            if key not in returns_by_run_ticker:
                 continue
             model_id = str(model_row["model_id"])
             score = float(model_row.get("score") or 0)
             scores_by_model_week.setdefault(model_id, {}).setdefault(week, []).append(
-                (score, returns_by_ticker[ticker])
+                (score, returns_by_run_ticker[key])
             )
 
     results: list[ModelAttributionResult] = []
@@ -530,6 +697,10 @@ def _model_attribution(
                 raw_correlation=raw_corr,
                 smoothed_correlation=smoothed[-1] if smoothed else raw_corr,
                 sample_count=len(all_scores),
+                return_basis=return_basis,
+                cohort=cohort,
+                observation_weeks=len(ordered_weeks),
+                statistic=STATISTIC_PEARSON,
             )
         )
 
@@ -570,8 +741,10 @@ def run_historical_analysis(
 
     strategy_horizons: list[StrategyHorizonResult] = []
     model_attribution: list[ModelAttributionResult] = []
+    model_attribution_comparison: list[ModelAttributionResult] = []
     overlay_comparison: list[OverlayComparison] = []
     weekly_rows: list[dict[str, Any]] = []
+    attribution_meta = ModelAttributionMeta()
 
     for horizon in config.horizon_days:
         observations = _build_observations(
@@ -590,12 +763,26 @@ def run_historical_analysis(
                 min_observations=config.min_observations,
             )
         )
+        # Primary panel path: buy-tier (overlay-adjusted) × FTSE excess.
         model_attribution.extend(
             _model_attribution(
                 output_dir=output_dir,
-                snapshots=filtered,
+                observations=observations,
                 horizon_days=horizon,
                 smoothing_weeks=config.smoothing_weeks,
+                cohort=attribution_meta.cohort,
+                return_basis=attribution_meta.return_basis,
+            )
+        )
+        # Comparison / learning: full scored universe × raw forward return.
+        model_attribution_comparison.extend(
+            _model_attribution(
+                output_dir=output_dir,
+                observations=observations,
+                horizon_days=horizon,
+                smoothing_weeks=config.smoothing_weeks,
+                cohort=COHORT_FULL_UNIVERSE,
+                return_basis=RETURN_BASIS_RAW,
             )
         )
         overlay_comparison.extend(
@@ -634,6 +821,8 @@ def run_historical_analysis(
         smoothing_weeks=config.smoothing_weeks,
         strategy_horizons=strategy_horizons,
         model_attribution=model_attribution,
+        model_attribution_meta=attribution_meta,
+        model_attribution_comparison=model_attribution_comparison,
         overlay_comparison=overlay_comparison,
         weekly_series=weekly_rows,
         note=note,
@@ -699,8 +888,22 @@ def format_historical_analysis_text(summary: HistoricalAnalysisSummary) -> str:
             )
 
     if summary.model_attribution:
-        lines.extend(["", "Top model attribution (smoothed score→return correlation):"])
-        for row in summary.model_attribution[:5]:
+        meta = summary.model_attribution_meta
+        primary_h = meta.primary_horizon_days
+        lines.extend(
+            [
+                "",
+                (
+                    f"Model attribution (score → {meta.return_basis} on "
+                    f"{meta.cohort}; primary {primary_h}d):"
+                ),
+            ]
+        )
+        primary_rows = [
+            row for row in summary.model_attribution if row.horizon_days == primary_h
+        ]
+        display_rows = primary_rows or list(summary.model_attribution)
+        for row in display_rows[:5]:
             corr = (
                 row.smoothed_correlation
                 if row.smoothed_correlation is not None
@@ -709,7 +912,8 @@ def format_historical_analysis_text(summary: HistoricalAnalysisSummary) -> str:
             if corr is None:
                 continue
             lines.append(
-                f"  {row.model_id} (~{row.horizon_days // 7}w): {corr:+.2f} (n={row.sample_count})"
+                f"  {row.model_id} (~{row.horizon_days // 7}w): {corr:+.2f} "
+                f"(n={row.sample_count}, weeks={row.observation_weeks})"
             )
 
     return "\n".join(lines)
