@@ -38,6 +38,16 @@ Register / re-import:
 WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --job dashboard-bridge
 ```
 
+Known `jobId` **8513740** is in `KNOWN_JOB_IDS` inside `scripts/import_cron_jobs.py`, so a single-job re-import PATCHes by id and **skips** `GET /jobs`. If the cron-job.org job is deleted/recreated, update that map.
+
+### cron-job.org 429 cool-off
+
+cron-job.org often returns a **bare 429** (empty body, no `Retry-After`) under account burst. The old import path retried `GET /jobs` up to 10× with 60s→900s backoff and burned the account for hours; sibling GHA / agent retries compounded it.
+
+**Rule:** if you see HTTP 429 from cron-job.org — **stop**. Cool off for hours (or overnight). One shot afterward. Do **not** re-dispatch `import-ingest-crons.yml`, parallel-retry `import_cron_jobs.py`, or stack sibling agents against the API.
+
+`import_cron_jobs.py` now aborts after at most **two** consecutive 429s (exit code **3**) with an operator cool-off message. `import-ingest-crons.yml` surfaces that as a workflow error and does not loop.
+
 `process-pending` is safe to double-fire (empty queue → no-op). Ops-monitor flags the workflow stale if no successful run within **1 hour** on any day (`MONITORED_WORKFLOWS.dashboard_bridge`).
 
 The Acknowledge / Start UI waits up to ~12 minutes for the command row to leave `pending`. Use **Run workflow** to drain immediately when needed.
