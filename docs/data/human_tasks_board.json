@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-27T08:23:38.711835+00:00",
+  "generated_at": "2026-09-27T17:32:44.154209+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-09-26",
   "counts": {
-    "new_info": 2,
+    "new_info": 1,
     "unacked": 30,
-    "acked": 0,
+    "acked": 1,
     "automated": 19,
     "human": 32
   },
@@ -29,8 +29,8 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch",
-        "updated_at": "2026-09-27T07:06:42.086599+00:00",
-        "fingerprint": "7cf79fce74677e14",
+        "updated_at": "2026-09-27T17:20:38.837426+00:00",
+        "fingerprint": "b434fa1eff5393fe",
         "bullets": [],
         "source_keys": [
           "market_status"
@@ -42,40 +42,6 @@
         "acked_at": "2026-09-26T17:42:20.472052+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "ceb741762edb4c48"
-      },
-      "sort_bucket": "new_info"
-    },
-    {
-      "id": "adhoc-review-ingest-deviations",
-      "title": "Review open ingest deviations and reprocess if needed",
-      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/ingest-deviations.md",
-      "doc_anchor": "what-needs-a-human",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-09-26T19:57:29.289023+00:00",
-        "fingerprint": "713049ca3d4e965a",
-        "bullets": [
-          "Open deviations: 1",
-          "MC.PA: blocker_no_improve — MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources."
-        ],
-        "source_keys": [
-          "ingest_deviations"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-09-26T17:42:20.495685+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "b4729e90d058fde1"
       },
       "sort_bucket": "new_info"
     },
@@ -94,19 +60,51 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-09-26T14:30:27.879706+00:00",
-        "fingerprint": "8a19c515715ef900",
+        "updated_at": "2026-09-27T14:39:32.836784+00:00",
+        "fingerprint": "14fae5d6fd39a39a",
         "bullets": [
-          "Occasions logged: 71",
+          "Occasions logged: 79",
           "None: 7",
           "None: 5",
           "None: 2",
-          "None: 1",
+          "None: 2",
           "None: 1"
         ],
         "source_keys": [
           "pr_fix_occasions",
           "project_traffic_digest"
+        ]
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked"
+    },
+    {
+      "id": "sunday-read-analysis-review",
+      "title": "Read analysis review synthesis",
+      "summary": "After analysis-review (~10:35 UTC), read analysis_review.md for backward metrics, proposed experiments, ingest trials, and the observe-only buy-tier chart-outcome mix (well timed / giveback / no terrible).",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/analysis-review.md",
+      "doc_anchor": "artifacts",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/analysis-review.md#artifacts",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Sunday analysis review synthesis",
+        "updated_at": "2026-09-27T08:29:13.890913+00:00",
+        "fingerprint": "09b797765d6193cd",
+        "bullets": [],
+        "source_keys": [
+          "analysis_review",
+          "chart_outcome_review"
         ]
       },
       "ack": {
@@ -133,8 +131,8 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · 4 recommend",
-        "updated_at": "2026-09-25T08:30:45.957675+00:00",
-        "fingerprint": "3c72fe9d3c3e7cfb",
+        "updated_at": "2026-09-27T08:24:34.582060+00:00",
+        "fingerprint": "58b9152b139747b4",
         "bullets": [
           "Recommend rows: 4 / 15 experiments",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
@@ -172,8 +170,8 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · 4 recommend",
-        "updated_at": "2026-09-25T08:30:45.957675+00:00",
-        "fingerprint": "3c72fe9d3c3e7cfb",
+        "updated_at": "2026-09-27T08:24:34.582060+00:00",
+        "fingerprint": "58b9152b139747b4",
         "bullets": [
           "Recommend rows: 4 / 15 experiments",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
@@ -211,8 +209,8 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · 4 recommend",
-        "updated_at": "2026-09-25T08:30:45.957675+00:00",
-        "fingerprint": "3c72fe9d3c3e7cfb",
+        "updated_at": "2026-09-27T08:24:34.582060+00:00",
+        "fingerprint": "58b9152b139747b4",
         "bullets": [
           "Recommend rows: 4 / 15 experiments",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
@@ -250,8 +248,8 @@
       "approval_label": "Approve knob promote",
       "analysis": {
         "headline": "Experiment assessment · 4 recommend",
-        "updated_at": "2026-09-25T08:30:45.957675+00:00",
-        "fingerprint": "3c72fe9d3c3e7cfb",
+        "updated_at": "2026-09-27T08:24:34.582060+00:00",
+        "fingerprint": "58b9152b139747b4",
         "bullets": [
           "Recommend rows: 4 / 15 experiments",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
@@ -289,7 +287,7 @@
       "approval_label": "Approve fair-cost view",
       "analysis": {
         "headline": "Fair-cost Suite B lab",
-        "updated_at": "2026-09-25T08:30:45.957675+00:00",
+        "updated_at": "2026-09-27T08:24:34.582060+00:00",
         "fingerprint": "62c3b2e04cdbc548",
         "bullets": [
           "Require fair-cost view before treating 3% stress excess as deployable."
@@ -322,7 +320,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Fair-cost Suite B lab",
-        "updated_at": "2026-09-25T08:30:45.957675+00:00",
+        "updated_at": "2026-09-27T08:24:34.582060+00:00",
         "fingerprint": "62c3b2e04cdbc548",
         "bullets": [
           "Require fair-cost view before treating 3% stress excess as deployable."
@@ -355,8 +353,8 @@
       "approval_label": "Approve spawn fair twins",
       "analysis": {
         "headline": "Experiment assessment · 4 recommend",
-        "updated_at": "2026-09-25T08:30:45.957675+00:00",
-        "fingerprint": "3c72fe9d3c3e7cfb",
+        "updated_at": "2026-09-27T08:24:34.582060+00:00",
+        "fingerprint": "58b9152b139747b4",
         "bullets": [
           "Recommend rows: 4 / 15 experiments",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
@@ -394,8 +392,8 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-09-25T08:30:45.956300+00:00",
-        "fingerprint": "4b4334bc9df93e7f",
+        "updated_at": "2026-09-27T08:24:34.581521+00:00",
+        "fingerprint": "d8120e59fe202121",
         "bullets": [
           "Adoption stage: —",
           "paper_execute_graduated ready: None",
@@ -403,38 +401,6 @@
         ],
         "source_keys": [
           "entry_dca_adoption_plan"
-        ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked"
-    },
-    {
-      "id": "sunday-read-analysis-review",
-      "title": "Read analysis review synthesis",
-      "summary": "After analysis-review (~10:35 UTC), read analysis_review.md for backward metrics, proposed experiments, ingest trials, and the observe-only buy-tier chart-outcome mix (well timed / giveback / no terrible).",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/analysis-review.md",
-      "doc_anchor": "artifacts",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/analysis-review.md#artifacts",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Sunday analysis review synthesis",
-        "updated_at": "2026-09-23T18:10:46.526961+00:00",
-        "fingerprint": "83392f2ea8ba5cf0",
-        "bullets": [],
-        "source_keys": [
-          "analysis_review",
-          "chart_outcome_review"
         ]
       },
       "ack": {
@@ -1080,6 +1046,40 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked"
+    },
+    {
+      "id": "adhoc-review-ingest-deviations",
+      "title": "Review open ingest deviations and reprocess if needed",
+      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/ingest-deviations.md",
+      "doc_anchor": "what-needs-a-human",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Ingest deviations · 1 open",
+        "updated_at": "2026-09-27T17:19:59.740688+00:00",
+        "fingerprint": "825e47077aa96721",
+        "bullets": [
+          "Open deviations: 1",
+          "MC.PA: blocker_no_improve — MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources."
+        ],
+        "source_keys": [
+          "ingest_deviations"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-27T17:32:44.133113+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "825e47077aa96721"
+      },
+      "sort_bucket": "acked"
     }
   ],
   "automated_tasks": [
@@ -1634,6 +1634,5 @@
       },
       "sort_bucket": "automated"
     }
-  ],
-  "path": "docs/data/human_tasks_board.json"
+  ]
 }
