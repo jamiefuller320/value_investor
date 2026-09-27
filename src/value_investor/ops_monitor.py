@@ -957,11 +957,7 @@ def check_workflow_freshness(
         age = (now - last_run_at) if last_run_at else None
         past_ready = _workflow_past_email_ready(key, now)
         # Age alone is not overdue until the day's first expected fire window.
-        stale = (
-            expected_today
-            and past_ready
-            and (last_run_at is None or age > max_age)
-        )
+        stale = expected_today and past_ready and (last_run_at is None or age > max_age)
         failures = recent_workflow_failures(workflow, repo=repo, token=token, within_hours=12)
         unresolved = filter_unresolved_workflow_failures(failures, last_run_at)
 

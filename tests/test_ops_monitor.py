@@ -373,13 +373,9 @@ def test_check_workflow_freshness_sunday_morning_weekly_jobs_not_stale_pre_slot(
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
         patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
-        findings, checks = check_workflow_freshness(
-            queue_status=idle_queue, now=sunday_morning
-        )
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=sunday_morning)
 
-    overdue_titles = {
-        row.title for row in findings if row.title.startswith("Workflow overdue:")
-    }
+    overdue_titles = {row.title for row in findings if row.title.startswith("Workflow overdue:")}
     assert "Workflow overdue: Modelling analysis review" not in overdue_titles
     assert "Workflow overdue: FTSE Data Backup" not in overdue_titles
     assert "Workflow overdue: Email report" not in overdue_titles
@@ -391,7 +387,9 @@ def test_check_workflow_freshness_sunday_morning_weekly_jobs_not_stale_pre_slot(
         assert by_workflow[wf]["age_hours"] > 36
     from value_investor.ops_monitor import _workflow_freshness_notes
 
-    assert "awaiting scheduled slot" in _workflow_freshness_notes(by_workflow["analysis-review.yml"])
+    assert "awaiting scheduled slot" in _workflow_freshness_notes(
+        by_workflow["analysis-review.yml"]
+    )
 
 
 def test_check_workflow_freshness_sunday_after_ready_flags_missed_weekly():
@@ -420,9 +418,7 @@ def test_check_workflow_freshness_sunday_after_ready_flags_missed_weekly():
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
         patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
-        findings, checks = check_workflow_freshness(
-            queue_status=idle_queue, now=sunday_afternoon
-        )
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=sunday_afternoon)
 
     overdue = [row for row in findings if row.title == "Workflow overdue: FTSE Data Backup"]
     assert len(overdue) == 1
