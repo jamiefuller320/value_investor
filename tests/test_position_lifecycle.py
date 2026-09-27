@@ -211,7 +211,10 @@ def test_entry_dca_start_disabled_when_execute_already_started():
     add_cadence = next(row for row in growth["experiments"] if row["factor_id"] == "add_cadence")
     assert add_cadence["initiation"]["start"]["enabled"] is False
     assert add_cadence["initiation"]["start"]["label"] == "Started"
-    assert "already started" in str(add_cadence["initiation"]["start"]["disabled_reason"] or "").lower()
+    assert (
+        "already started"
+        in str(add_cadence["initiation"]["start"]["disabled_reason"] or "").lower()
+    )
     post_sale = next(col for col in columns if col["id"] == "post_sale")
     kind_tag = next(row for row in post_sale["experiments"] if row["factor_id"] == "entry_kind_tag")
     assert kind_tag["initiation"]["start"]["enabled"] is False
