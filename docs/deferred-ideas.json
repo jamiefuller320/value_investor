@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T11:58:47+00:00",
+  "updated_at": "2026-09-27T12:27:58+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10826,6 +10826,55 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-1ea469f3-6255-5cf7-809c-49cfb467cea1",
       "added_at": "2026-09-27T11:58:47+00:00"
+    },
+    {
+      "id": "L475",
+      "category": "later",
+      "section": "learning",
+      "title": "Paper-exit model-score quintile attribution (observe)",
+      "summary": "Observe-only rollup: join closed position_closed/exit_shadow sells to entry buy and nearest models_*.json scores; report Q5 vs Q1 realized return, hit rate, and FTSE excess when ready. Do not auto-tune weights until n\u226530 joined closes on primary track.",
+      "revisit_when": "\u226530 closed paper exits on ai_judgment with joinable entry scores after buy-tier FTSE-excess panel ships",
+      "tags": [
+        "model-attribution",
+        "exit-quintile",
+        "observe",
+        "paper"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-dd55d010-e06a-5951-baf3-c36422034abd",
+      "added_at": "2026-09-27T12:27:58+00:00"
+    },
+    {
+      "id": "N165",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Rebuild model attribution as multi-track live instrument",
+      "summary": "Do not open a new live paper track or factory rebuild for model attribution. Dashboard observe + archive metric is enough; multi-track live instrumentation would divert from P1 live-path utilization.",
+      "revisit_when": "Never as a live track unless stage-4 multi-market paper books need factor-level capital attribution",
+      "tags": [
+        "model-attribution",
+        "live-track",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-dd55d010-e06a-5951-baf3-c36422034abd",
+      "added_at": "2026-09-27T12:27:58+00:00"
+    },
+    {
+      "id": "L476",
+      "category": "later",
+      "section": "learning",
+      "title": "Stamp per-model scores on rebalance_log buys for exit attribution",
+      "summary": "Optional hardening: persist top model_id scores on rebalance_log buy rows to simplify exit-quintile joins. Not required for first observe rollup that joins nearest models_*.json at acted_at.",
+      "revisit_when": "When implementing paper-exit score-quintile observe and day-level nearest-screen join proves brittle",
+      "tags": [
+        "model-attribution",
+        "rebalance-log",
+        "exit-join"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-dd55d010-e06a-5951-baf3-c36422034abd",
+      "added_at": "2026-09-27T12:27:58+00:00"
     }
   ],
   "fragments": [

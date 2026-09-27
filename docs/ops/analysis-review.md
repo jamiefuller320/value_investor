@@ -52,6 +52,22 @@ If history is still seeding, the workflow logs `payload` readiness and skips the
 | `docs/data/trajectory_evidence_review.json` | PIT transition outcomes + `model_focus_candidates` (payload input) |
 | `docs/data/chart_outcome_review.json` | Buy-tier chart timing vs frozen initial levels (observe-only) |
 | `docs/data/ingest_trials.json` | Ingest experiments with `review_trigger: analysis_review` or `both` |
+| `docs/data/historical_analysis_summary.json` | Screen archive replay; published as `latest.json` → `historical_analysis` |
+
+### Model attribution metric (dashboard)
+
+Performance → Historical analysis → **Model attribution** reads
+`historical_analysis.model_attribution` with contract in
+`model_attribution_meta`:
+
+- **Success:** higher model score → higher **FTSE-excess** forward return
+- **Cohort:** overlay buy-tier (`adjusted_signal` ∈ buy ∪ strong_buy)
+- **Primary horizon:** **28d** (aligned with weight-learning `DEFAULT_HORIZON_DAYS`); **84d** secondary when archive depth allows; **7d** is noise-only
+- **Comparison rows:** `model_attribution_comparison` keeps full-universe × raw return for learning contrast
+- **Reserved:** `model_attribution_meta.exit_join` for future paper-exit score-quintile observe (do not treat empty `rows` as a failure)
+
+Cite 28d buy-tier excess when discussing factor usefulness; do not treat 7d
+full-universe raw correlation as the success story.
 
 ## Trajectory evidence → scoring experiments
 

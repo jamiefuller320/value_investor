@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-27T08:49:18.081526+00:00",
-  "occasion_count": 72,
+  "updated_at": "2026-09-27T12:33:56.467862+00:00",
+  "occasion_count": 77,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -741,7 +741,7 @@
       "failed_check_names": [
         "CI / validate"
       ],
-      "notes": "ruff format only; ci-pr-autofix in progress \u2014 waiting for new head",
+      "notes": "ruff format only; ci-pr-autofix in progress — waiting for new head",
       "details": {}
     },
     {
@@ -1294,6 +1294,82 @@
       ],
       "notes": "fix via cherry-pick/copy 22d43de43",
       "details": {}
+    },
+    {
+      "id": "prf-20260927-003",
+      "recorded_at": "2026-09-27T12:30:08.561185+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "validate check failed",
+      "pr_number": 873,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "Investigating validate job failure on model attribution PR",
+      "details": {}
+    },
+    {
+      "id": "prf-20260927-004",
+      "recorded_at": "2026-09-27T12:30:23.348850+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "Ruff I001 unsorted imports in test_historical_analysis.py",
+      "pr_number": 873,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "Merged DEFAULT_HORIZON_DAYS + save_model_snapshot import",
+      "details": {}
+    },
+    {
+      "id": "prf-20260927-005",
+      "recorded_at": "2026-09-27T12:32:14.749615+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ruff format: historical_analysis.py + test_historical_analysis.py would be reformatted",
+      "pr_number": 873,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "Applied ruff format locally; check already passed on prior push",
+      "details": {}
+    },
+    {
+      "id": "prf-20260927-006",
+      "recorded_at": "2026-09-27T12:33:56.467862+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ruff_format on run 36319214099 was pre-format-fix commit 14696421; head a91ce9f07 validate already green",
+      "pr_number": 873,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "Re-verified with pip install -e .[dev] ruff 0.16.9 + check_changed_python vs origin/main; no further format drift; awaiting test shards on run 36319320910",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -1335,6 +1411,17 @@
         "recent_prs": [
           794,
           795
+        ]
+      },
+      {
+        "failure_reason": "validate check failed",
+        "count": 2,
+        "sources": {
+          "human_request": 2
+        },
+        "recent_prs": [
+          831,
+          873
         ]
       },
       {
@@ -1496,16 +1583,6 @@
         "recent_prs": [
           799
         ]
-      },
-      {
-        "failure_reason": "Merge conflicts in deferred store with main (L437/L438 ID clash)",
-        "count": 1,
-        "sources": {
-          "human_request": 1
-        },
-        "recent_prs": [
-          800
-        ]
       }
     ],
     "by_kind": [
@@ -1515,13 +1592,13 @@
       },
       {
         "kind": "ci_check",
-        "count": 24
+        "count": 29
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 72
+        "count": 77
       }
     ]
   }

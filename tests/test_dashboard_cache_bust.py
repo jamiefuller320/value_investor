@@ -69,6 +69,24 @@ def test_sunday_review_paper_tracks_sorted_by_track_then_week() -> None:
     assert "<th>Track</th>" not in fn
 
 
+def test_model_attribution_panel_prefers_primary_horizon() -> None:
+    """Performance historical panel: 28d buy-tier excess primary; 7d demoted."""
+    text = APP_JS.read_text(encoding="utf-8")
+    assert "function renderModelAttributionPanel(historical)" in text
+    assert "function modelAttributionMeta(historical)" in text
+    fn = text.split("function renderHistoricalAnalysis(historical)", 1)[1].split(
+        "\nconst PERF_SIM_TRACK_KEY", 1
+    )[0]
+    assert "renderModelAttributionPanel(historical)" in fn
+    assert ".slice(0, 8)" not in fn
+    assert "primary_horizon_days" in text
+    assert "score → FTSE excess, buy-tier" in text
+    assert "Noise check" in text
+    assert "model_attribution_meta.exit_join" in text
+    # Must not present an unsorted top-8 that buries 28d behind 7d.
+    assert "Model attribution (score→return correlation)" not in text
+
+
 def test_paper_track_story_helper_deterministic() -> None:
     """paperTrackStory is a pure helper from excess / cost / marks (no LLM)."""
     text = APP_JS.read_text(encoding="utf-8")
