@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-27T12:32:14.749615+00:00",
-  "occasion_count": 76,
+  "updated_at": "2026-09-27T12:33:56.467862+00:00",
+  "occasion_count": 77,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -1351,6 +1351,25 @@
       ],
       "notes": "Applied ruff format locally; check already passed on prior push",
       "details": {}
+    },
+    {
+      "id": "prf-20260927-006",
+      "recorded_at": "2026-09-27T12:33:56.467862+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ruff_format on run 36319214099 was pre-format-fix commit 14696421; head a91ce9f07 validate already green",
+      "pr_number": 873,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "Re-verified with pip install -e .[dev] ruff 0.16.9 + check_changed_python vs origin/main; no further format drift; awaiting test shards on run 36319320910",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -1573,13 +1592,13 @@
       },
       {
         "kind": "ci_check",
-        "count": 28
+        "count": 29
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 76
+        "count": 77
       }
     ]
   }
