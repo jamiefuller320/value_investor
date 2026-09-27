@@ -144,10 +144,40 @@ def run_lifecycle_experiment_start(
 
     existing = matching_start(load_starts(data_dir), experiment_id=experiment_id, finding=finding)
     if existing:
-        raise ValueError(
-            "Graduated entry DCA execute already started for this finding "
-            f"(started_at={existing.get('started_at')})"
-        )
+        # Idempotent: sibling factor chips share entry_dca_overlay. A second Start
+        # must refresh the board and succeed — not red-fail the bridge UI.
+        board_path = None
+        if refresh_board:
+            board_path = write_lifecycle_board(
+                latest_path=data_dir / Path(DEFAULT_LATEST_PATH).name,
+                assessment_path=data_dir / ASSESSMENT_FILENAME,
+                path=data_dir / Path(DEFAULT_LIFECYCLE_BOARD_PATH).name,
+            )
+        adoption = evaluate_entry_dca_adoption_plan(data_dir=data_dir, paper_root=paper_root)
+        return {
+            "ok": True,
+            "already_started": True,
+            "start": existing,
+            "enabled": {
+                "track_id": existing.get("track_id") or track_key,
+                "cadence": existing.get("cadence") or cadence_key,
+            },
+            "assessment_summary": None,
+            "adoption_stage": adoption.get("current_stage"),
+            "lifecycle_board_path": None if board_path is None else str(board_path),
+            "factor_id": factor_id,
+            "experiment_id": experiment_id,
+            "kind": kind_key,
+            "decision": decision_key,
+            "observe_only": False,
+            "track_id": existing.get("track_id") or track_key,
+            "cadence": existing.get("cadence") or cadence_key,
+            "started_at": existing.get("started_at"),
+            "message": (
+                "Graduated entry DCA execute already started "
+                f"(started_at={existing.get('started_at')})"
+            ),
+        }
 
     adoption = evaluate_entry_dca_adoption_plan(data_dir=data_dir, paper_root=paper_root)
     _require_execute_ready(adoption)
@@ -182,6 +212,7 @@ def run_lifecycle_experiment_start(
         )
     return {
         "ok": True,
+        "already_started": False,
         "start": start,
         "enabled": enabled,
         "assessment_summary": assessment.get("summary"),
@@ -194,6 +225,8 @@ def run_lifecycle_experiment_start(
         "observe_only": False,
         "track_id": track_key,
         "cadence": cadence_key,
+        "started_at": start.get("started_at"),
+        "message": "Graduated entry DCA execute started",
     }
 
 

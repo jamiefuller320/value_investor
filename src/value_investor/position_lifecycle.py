@@ -742,6 +742,12 @@ def _with_initiation_card_fields(
         fwd = hit.get("forward_evidence") if isinstance(hit.get("forward_evidence"), dict) else {}
         leading = fwd.get("leading_cadence")
     already_started = bool(payload.get("execute_started"))
+    if not already_started and isinstance(adoption, dict):
+        already_started = bool(adoption.get("execute_started"))
+        if already_started:
+            payload["execute_started"] = True
+            if adoption.get("execute_started_at") and not payload.get("execute_started_at"):
+                payload["execute_started_at"] = adoption.get("execute_started_at")
 
     ack_enabled = ready and kind == "human_ack"
     ack_disabled_reason = None
@@ -755,8 +761,12 @@ def _with_initiation_card_fields(
         elif kind == "optional_execute":
             ack_disabled_reason = (
                 "Already acknowledged — use Start to begin graduated execute"
-                if acked
-                else "Ack already satisfied — use Start to begin graduated execute"
+                if acked and not already_started
+                else (
+                    "Execute already started — Start is complete for this overlay"
+                    if already_started
+                    else "Ack already satisfied — use Start to begin graduated execute"
+                )
             )
         elif acked:
             ack_disabled_reason = "Already acknowledged (observe-only)"
@@ -772,9 +782,13 @@ def _with_initiation_card_fields(
 
     start_enabled = ready and kind == "optional_execute" and not already_started
     start_disabled_reason = None
+    started_at = payload.get("execute_started_at") or (
+        adoption.get("execute_started_at") if isinstance(adoption, dict) else None
+    )
     if not start_enabled:
         if already_started:
-            start_disabled_reason = "Graduated entry DCA execute already started"
+            when = f" ({started_at})" if started_at else ""
+            start_disabled_reason = f"Graduated entry DCA execute already started{when}"
         elif kind == "human_ack":
             start_disabled_reason = (
                 "Acknowledge first; Start enables only when paper_execute_graduated is ready"
@@ -788,8 +802,19 @@ def _with_initiation_card_fields(
                 payload.get("waiting_for") or payload.get("label") or "Not ready to start"
             )
 
+    if already_started and kind == "optional_execute":
+        payload["label"] = "Execute already started on graduated_allocation"
+        payload["ready_to_initiate"] = False
+        payload["waiting_for"] = start_disabled_reason
+
     payload["evidence"] = evidence
     payload["recommendation"] = recommendation
+    if already_started and kind == "optional_execute":
+        payload["recommendation"] = (
+            "Recommendation: execute is already authorized for graduated_allocation "
+            f"({started_at or 'see experiment_starts.json'}). No further Start click needed "
+            "on sibling factors (add_cadence / entry_kind_tag share this experiment)."
+        )
     payload["acknowledge"] = {
         "action": "lifecycle-experiment-ack",
         "enabled": ack_enabled,
@@ -805,7 +830,7 @@ def _with_initiation_card_fields(
     payload["start"] = {
         "action": "lifecycle-experiment-start",
         "enabled": start_enabled,
-        "label": "Start",
+        "label": "Started" if already_started else "Start",
         "disabled_reason": start_disabled_reason,
         "payload": {
             "experiment_id": experiment_id,
@@ -876,6 +901,7 @@ def experiment_initiation(
                     "do_not": str(do_not),
                     "adoption_stage": current,
                     "execute_started": bool(adoption.get("execute_started")),
+                    "execute_started_at": adoption.get("execute_started_at"),
                 }
                 return _with_initiation_card_fields(
                     payload, factor=factor, hit=hit, adoption=adoption

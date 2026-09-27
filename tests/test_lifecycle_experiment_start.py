@@ -124,6 +124,32 @@ def test_start_enables_graduated_execute(tmp_path: Path):
     assert Path(result["lifecycle_board_path"]).exists()
 
 
+def test_start_idempotent_when_already_started(tmp_path: Path):
+    _seed_ready(tmp_path)
+    first = run_lifecycle_experiment_start(
+        tmp_path,
+        experiment_id="entry_dca_overlay",
+        factor_id="entry_dca_cadence",
+        kind="optional_execute",
+        decision=START_DECISION,
+        cadence="dca_4x_weekly",
+    )
+    assert first["ok"] is True
+    assert first.get("already_started") is False
+    second = run_lifecycle_experiment_start(
+        tmp_path,
+        experiment_id="entry_dca_overlay",
+        factor_id="entry_kind_tag",
+        kind="optional_execute",
+        decision=START_DECISION,
+        cadence="dca_4x_weekly",
+    )
+    assert second["ok"] is True
+    assert second.get("already_started") is True
+    assert second.get("started_at") == first.get("started_at") or second.get("started_at")
+    assert "already started" in str(second.get("message") or "").lower()
+
+
 def test_start_rejects_human_ack_kind(tmp_path: Path):
     _seed_ready(tmp_path)
     with pytest.raises(ValueError, match="optional_execute"):

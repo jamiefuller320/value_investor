@@ -222,9 +222,11 @@ questions in the stage inventory. Several map to the **same** experiment id
 4× weekly execute) — not a factor-specific book. Clicking Start on two chips that
 share an experiment therefore queues two Supabase rows with the same
 `experiment_id`; the dashboard bridge **dedupes by experiment** (first dispatches,
-later marked done as duplicate). UI may keep one Start per chip for catalog
-clarity, or later collapse sibling chips to a single Start — bridge dedupe is the
-safety net either way. See [`dashboard-bridge.md`](dashboard-bridge.md#lifecycle-start--acknowledge-dedupe).
+later marked done as duplicate). The start workflow itself is **idempotent** when
+execute is already recorded — sibling chips show **Started** (disabled) instead of
+a red “bridge start execute failed”. UI may keep one Start per chip for catalog
+clarity, or later collapse sibling chips to a single Start — bridge dedupe +
+idempotent start are the safety net either way. See [`dashboard-bridge.md`](dashboard-bridge.md#lifecycle-start--acknowledge-dedupe).
 
 See also [`capital-allocation.md`](capital-allocation.md),
 [`hypothesis-integrity.md`](hypothesis-integrity.md),

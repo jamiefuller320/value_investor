@@ -169,3 +169,50 @@ def test_prior_cycle_outcome_planned_ack_cites_catalog_gate_not_shared_ack():
     assert add_cadence["initiation"]["acknowledge"]["enabled"] is False
     assert add_cadence["initiation"]["acknowledge"]["label"] == "Acknowledged"
     assert add_cadence["initiation"]["start"]["enabled"] is True
+
+
+def test_entry_dca_start_disabled_when_execute_already_started():
+    from value_investor.position_lifecycle import board_column_defs
+
+    columns = board_column_defs(
+        assessment={
+            "experiments": [
+                {
+                    "experiment_id": "entry_dca_overlay",
+                    "title": "DCA overlay",
+                    "status": "recommend",
+                    "kind": "lifecycle_overlay",
+                    "human_ack_required": False,
+                    "human_acked": True,
+                    "forward_evidence": {
+                        "leading_cadence": "dca_4x_weekly",
+                        "ready_for_cadence_analysis": True,
+                    },
+                }
+            ],
+            "entry_dca_adoption": {
+                "current_stage": "paper_execute_graduated",
+                "acked": True,
+                "execute_started": True,
+                "execute_started_at": "2026-09-25T17:56:08+00:00",
+                "stages": [
+                    {
+                        "id": "paper_execute_graduated",
+                        "status": "open",
+                        "ready": True,
+                        "revisit_when": None,
+                        "do_not": "Do not change starter fraction",
+                    }
+                ],
+            },
+        }
+    )
+    growth = next(col for col in columns if col["id"] == "growth")
+    add_cadence = next(row for row in growth["experiments"] if row["factor_id"] == "add_cadence")
+    assert add_cadence["initiation"]["start"]["enabled"] is False
+    assert add_cadence["initiation"]["start"]["label"] == "Started"
+    assert "already started" in str(add_cadence["initiation"]["start"]["disabled_reason"] or "").lower()
+    post_sale = next(col for col in columns if col["id"] == "post_sale")
+    kind_tag = next(row for row in post_sale["experiments"] if row["factor_id"] == "entry_kind_tag")
+    assert kind_tag["initiation"]["start"]["enabled"] is False
+    assert kind_tag["initiation"]["start"]["label"] == "Started"

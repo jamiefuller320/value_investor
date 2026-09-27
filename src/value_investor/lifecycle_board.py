@@ -939,6 +939,49 @@ def _policy_sets(policy_path: Path | None) -> tuple[set[str], str]:
     return admitted, focus
 
 
+def _merge_entry_dca_adoption_execute_state(
+    assessment: dict[str, Any] | None,
+    *,
+    assessment_path: Path | None = None,
+    paper_root: Path | None = None,
+) -> dict[str, Any] | None:
+    """Ensure board initiation sees durable execute_started even if slim lag.
+
+    Sunday publish can write the lifecycle board moments before assessment slim
+    refreshes ``entry_dca_adoption.execute_started``. Prefer the committed plan /
+    starts ledger when the slim blob says not started.
+    """
+    if not isinstance(assessment, dict):
+        return assessment
+    adoption = assessment.get("entry_dca_adoption")
+    if not isinstance(adoption, dict):
+        adoption = {}
+    if bool(adoption.get("execute_started")):
+        return assessment
+    data_dir = Path(assessment_path or DEFAULT_EXPERIMENT_ASSESSMENT_PATH).parent
+    paper_root = Path(paper_root or DEFAULT_PAPER_ROOT)
+    try:
+        from value_investor.entry_dca_adoption import evaluate_entry_dca_adoption_plan
+
+        plan = evaluate_entry_dca_adoption_plan(data_dir=data_dir, paper_root=paper_root)
+    except Exception:  # noqa: BLE001 — board must still assemble
+        return assessment
+    if not bool(plan.get("execute_started")):
+        return assessment
+    merged = dict(assessment)
+    slim = dict(adoption)
+    slim["execute_started"] = True
+    slim["execute_started_at"] = plan.get("execute_started_at")
+    slim["execute_track_id"] = plan.get("execute_track_id")
+    slim["execute_cadence"] = plan.get("execute_cadence")
+    if plan.get("current_stage"):
+        slim["current_stage"] = plan.get("current_stage")
+    if plan.get("stages"):
+        slim["stages"] = plan.get("stages")
+    merged["entry_dca_adoption"] = slim
+    return merged
+
+
 def build_lifecycle_board(
     *,
     library_root: Path | None = None,
@@ -965,6 +1008,11 @@ def build_lifecycle_board(
         live_run_at = live_run_at or latest_run
     if experiment_assessment is None:
         experiment_assessment = _load_assessment(assessment_path)
+    experiment_assessment = _merge_entry_dca_adoption_execute_state(
+        experiment_assessment,
+        assessment_path=assessment_path,
+        paper_root=paper_root,
+    )
 
     columns = board_column_defs(assessment=experiment_assessment)
     admitted, focus = _policy_sets(policy_path)

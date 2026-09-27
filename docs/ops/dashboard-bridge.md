@@ -68,7 +68,7 @@ Within one `process-pending` batch the bridge:
 1. Dispatches the first `lifecycle-experiment-ack` / `lifecycle-experiment-start` per `action:experiment_id`.
 2. Marks later same-experiment rows `done` with `Skipped duplicate … (same experiment)` — no second `repository_dispatch`.
 
-Without Start dedupe, two pending Starts for the same overlay would both dispatch; the second `lifecycle-experiment-start` run fails with “already started for this finding”.
+Without Start dedupe, two pending Starts for the same overlay would both dispatch; the second `lifecycle-experiment-start` run used to fail with “already started for this finding”. The start helper is now **idempotent**: a second Start returns `ok` + `already_started` and refreshes the board, so the dashboard shows a calm “Already started …” status instead of a red bridge failure. The Lifecycle card also labels the button **Started** (disabled) when `execute_started` is true.
 
 Ack and Start remain independent actions (both may dispatch for the same experiment).
 
