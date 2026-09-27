@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-27T16:48:18.843625+00:00",
+  "generated_at": "2026-09-27T16:52:31.423968+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -825,20 +825,18 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 13,
-        "targets": 23,
-        "improved": 1,
-        "improved_tickers": [
-          "FME.DE"
-        ],
-        "last_run_at": "2026-09-27T13:53:16.966213+00:00",
+        "run_count": 14,
+        "targets": 24,
+        "improved": 0,
+        "improved_tickers": [],
+        "last_run_at": "2026-09-27T16:50:25.778772+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 1,
           "zero_body": 0,
           "thin": 10,
-          "indexed_without_body": 6,
+          "indexed_without_body": 0,
           "filing_gaps": 1
         },
         "gaps_after": {
@@ -852,7 +850,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": -6,
+          "indexed_without_body": 0,
           "filing_gaps": 0
         },
         "remaining": {
@@ -865,6 +863,11 @@
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
         "admission_warnings": [
+          {
+            "id": "zero_improve_stall",
+            "severity": "high",
+            "summary": "Last 2 days improved nobody while filing gaps remain"
+          },
           {
             "id": "unmeasured_stuck",
             "severity": "high",
