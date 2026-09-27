@@ -395,6 +395,17 @@ def test_dashboard_assets_include_market_status_grid():
     assert "Near-miss watch" in app
     assert "function bindDashboardAutoRefresh()" in app
     assert "async function applyDashboardSidecars(data)" in app
+    assert "function marketIngestBadge(ingest, stream)" in app
+    assert "function marketRoleBadge(roleKey)" in app
+    assert "function marketLearningRoleChips(row)" in app
+    assert "function marketStatusBadgeLegend()" in app
+    assert "MARKET_ROLE_META" in app
+    assert "mrole-admitted" in app
+    assert "mingest-maintenance" in app
+    assert "graduated ≠ admitted" in app
+    assert "marketLearningRoleChips(row)" in app
+    assert 'stage-complete">admitted' not in app
+    assert "tags.map((tag)" not in app
     assert "function spareSprintLabel(spare)" in app
     assert "function learningBookLine(row)" in app
     assert "Learning ·" in app
@@ -404,6 +415,9 @@ def test_dashboard_assets_include_market_status_grid():
     assert ".market-status-grid" in css
     assert ".market-tile" in css
     assert ".market-tile-chips" in css
+    assert ".mrole-admitted" in css
+    assert ".mingest-maintenance" in css
+    assert ".market-status-legend" in css
     assert "grid-auto-rows: 1fr" in css
     assert 'class="market-tile-chips"' in app
     assert "function sprintProgressLine(progress)" in app

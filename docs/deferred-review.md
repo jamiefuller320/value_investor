@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-27T13:08:44+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-27T14:36:15+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -307,7 +307,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L311 | **ASX announcement history beyond Markit latest-five** | Markit Digital returns at most five rows per symbol with no public pagination, so thin names (JBH.AX, DNL.AX) index dividend/news instead of statutory reports. IR allowlists are the current workaround. A historical announcements.asx.com.au or AFR company-announcements listing would remove the need to hand-seed each thin ticker. | More than two asx200 buy-tier names are thin_need_discovery after IR seeds, or Markit exposes a paginated feed |
 | L312 | **Add observe-sim benchmark if a sprint stream stays on a market without one** | Sprint-2 currently holds ftse_smallcap, which has no MARKET_BENCHMARKS entry, so Sunday observe-sim does not write a dated screen archive. Gap analysis correctly ignores it. If a no-benchmark market stays on a sprint stream for more than a couple of weeks, add a local index ticker so the archive clock can follow ingest effort. | A parallel sprint stream has held a market missing MARKET_BENCHMARKS for two Sunday ladders |
 | L346 | **Bootstrap CCL-B.TO zero-body leftover on TSX 60** | After GIB-A.TO left unmeasured, S&P/TSX 60 still has one zero-body buy-tier name (CCL Industries Class B). Same class-share discovery issues may apply; it cannot be parked and still blocks sprint_ingest_complete. | TSX 60 spare sprint is otherwise at leftover thin/IWB only, or the next ingest loop still reports zero_body_stuck on CCL-B.TO |
-| L478 | **Market status badge taxonomy for graduated vs queue vs admitted** | Parked from dashboard UI gaps survey priority 7 — Overview market cards conflate ingest role vs learning admission vs live screen as similar green badges. Distinct styles + one-line legend when P2 clarity capacity allows. | P2 ingest cascade quieter or operators mis-read graduated/queue/admitted badges on Overview |
 
 ### Research & portfolio product
 
@@ -548,7 +547,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L471 | **Dashboard surface for PR fix common issues on human-task card** | monthly-pr-fix-common-issues card already pulls pr_fix_occasions / traffic digest snippets. Further charting of common-issues trajectory can wait until occasion volume is thick. | pr_fix_occasions has ≥20 occasions or monthly review still feels CLI-heavy |
 | L472 | **Optional ops-monitor finding for open ingest deviations count** | ops_status has no dedicated open-deviation finding; human task + ingest_deviations.json already cover triage. Optional observe warn when open_count>0. | Operators miss open deviations without checking Automation tab |
 | L473 | **Watch import-ingest-crons in ops-monitor workflow_checks** | Afternoon main failures of Import ingest crons (Permission denied) were invisible in ops_status workflow_checks because that workflow is not on the watched list. | After import-cron invoke fix merges, if similar main-only GHA failures keep surprising humans |
-| L477 | **Analysis tab IA: subnav and default-collapse for Sunday blocks** | Parked from dashboard UI gaps survey priority 8 — Sunday exclusion/regime always expanded; observe util duplicated Analysis vs Automation. Prefer subnav or default-collapse once P1 utilization quieter. | P1 live-path utilization quieter and Analysis tab still feels dense after dual-suite/post-run clarity lands |
 
 ---
 
