@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-09-25T07:28:41.251914+00:00
+Track: `buy_tier_level_native` · updated 2026-09-27T07:04:15.859333+00:00
 
 ## Portfolio loser feedback
 
@@ -10,58 +10,58 @@ Track: `buy_tier_level_native` · updated 2026-09-25T07:28:41.251914+00:00
 
 ## Holding reviews
 
-### DG.PA — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 92%
-
-### AD.AS — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 88%
-
-### WKL.AS — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 73%
-
-### VOW.DE — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 68%
-
-### MC.PA — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 67%
-
-### ENI.MI — intact / hold_tolerate (+0.0%)
+### ENI.MI — intact / hold_tolerate (-1.2%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 65%
 
-### ABI.BR — intact / hold_tolerate (+0.0%)
+### ABI.BR — intact / hold_tolerate (-0.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 63%
 
-### DHL.DE — intact / hold_tolerate (+0.0%)
+### WKL.AS — intact / hold_tolerate (-0.2%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 73%
+
+### MC.PA — intact / hold_tolerate (-0.1%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 67%
+
+### AD.AS — intact / hold_tolerate (+0.5%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 58%
+- conviction 88%
+
+### DG.PA — intact / hold_tolerate (+0.7%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 92%
+
+### DHL.DE — intact / hold_tolerate (+1.3%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 66%
+
+### VOW.DE — intact / hold_tolerate (+1.3%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 68%

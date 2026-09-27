@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-09-25T07:28:32.413775+00:00",
+  "generated_at": "2026-09-27T07:04:07.974586+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 17,
     "by_thesis_status": {
@@ -20,7 +20,14 @@
         "closed_count": 0
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 0.0,
+        "sold_underwater_rate": 1.0,
+        "mean_peak_unrealized_pct": -0.0056,
+        "mean_trough_unrealized_pct": -0.0056,
+        "outcome_labels": {
+          "sold_underwater": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -671,7 +679,7 @@
       "ticker": "BWP.AX",
       "name": "BWP Trust",
       "started_at": "2026-09-25T17:28:32.386221+10:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -703,9 +711,9 @@
       "peak_unrealized_pct": -0.0056,
       "trough_unrealized_pct": -0.0056,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-27T17:04:07.947552+10:00",
+      "linked_sell_trade_id": "4f1cf9b6-7a25-4fc9-a62c-b79a60177457"
     },
     {
       "episode_id": "buy_tier_level_native:BSL.AX:2026-09-25T17:28:32.386221+10:00",
@@ -793,7 +801,110 @@
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level_native:TUA.AX:2026-09-27T17:04:07.947552+10:00",
+      "track_id": "buy_tier_level_native",
+      "ticker": "TUA.AX",
+      "name": "Tuas Limited",
+      "started_at": "2026-09-27T17:04:07.947552+10:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 1.78,
+      "avg_cost": 1.78,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "research verdict caution",
+        "cheapness family no longer passes",
+        "conviction 26% below intact floor",
+        "still buy"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "caution",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.260185,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
     }
   ],
-  "swap_rotations": []
+  "swap_rotations": [
+    {
+      "rotation_id": "buy_tier_level_native:2026-09-27T17:04:07.947552+10:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-09-27T17:04:07.947552+10:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "BWP.AX",
+          "price": 3.55,
+          "shares": 10.770847,
+          "gross": 38.24,
+          "cost": 0.01,
+          "avg_cost_at_exit": 3.57,
+          "realized_pct": -0.0056,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": -0.0056
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "MND.AX",
+          "price": 30.97,
+          "shares": 1.223342,
+          "gross": 37.89,
+          "cost": 0.01
+        },
+        {
+          "ticker": "TUA.AX",
+          "price": 1.78,
+          "shares": 0.185676,
+          "gross": 0.33,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "BWP.AX": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "MND.AX": 0.0,
+        "TUA.AX": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    }
+  ]
 }

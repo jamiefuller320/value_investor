@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-09-25T07:28:38.182685+00:00",
-  "as_of": "2026-09-25T08:28:38.170004+01:00",
+  "updated_at": "2026-09-27T07:04:13.449312+00:00",
+  "as_of": "2026-09-27T08:04:13.437702+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,16 +16,16 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 5,
+  "holding_count": 4,
   "underwater_count": 0,
   "thesis_status_counts": {
-    "intact": 3,
-    "weakening": 2,
-    "broken": 0,
+    "intact": 2,
+    "weakening": 0,
+    "broken": 2,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 5,
+    "holding_count": 4,
     "loser_count": 0,
     "loser_share": 0.0,
     "loser_nav_share": 0.0,
@@ -43,11 +43,11 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
-      "quality": 0.2,
-      "dividend": 0.0,
-      "garp": 0.0,
-      "risk": 0.0
+      "cheapness": 0.5,
+      "quality": 0.75,
+      "dividend": 0.5,
+      "garp": 0.5,
+      "risk": 0.5
     },
     "selection_feedback_flags": [],
     "balancing_hint": "maintain",
@@ -55,163 +55,68 @@
   },
   "holdings": [
     {
+      "ticker": "FOXT.L",
+      "name": "FOXT.L",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 36.5,
+      "avg_cost": 36.5,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
+    {
       "ticker": "DFS.L",
-      "name": "DFS Furniture plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "name": "DFS.L",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
       "underwater": false,
       "deep_underwater": false,
       "unrealized_pct": 0.0,
       "mark": 143.0,
       "avg_cost": 143.0,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6331,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 63%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 63%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "REC.L",
-      "name": "Record plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0071,
-      "mark": 42.4,
-      "avg_cost": 42.1,
-      "signal": "hold",
-      "timing_signal": "neutral",
-      "conviction_score": 0.3834,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "left buy tier (hold)",
-        "research accumulate",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 38%"
-      ],
-      "weaken_reasons": [
-        "left buy tier (hold)"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "FOXT.L",
-      "name": "Foxtons Group plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0219,
-      "mark": 37.3,
-      "avg_cost": 36.5,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4376,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 44%"
-      ],
-      "weaken_reasons": [
-        "research verdict caution"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CARD.L",
-      "name": "Card Factory plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0439,
-      "mark": 71.2,
-      "avg_cost": 68.2043,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6979,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
       "failed_families": [
-        "quality"
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
       ],
-      "research_verdict": "accumulate",
+      "research_verdict": null,
       "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 70%"
+        "cheapness lost and not in buy tier"
       ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 70%"
-      ],
+      "intact_reasons": [],
       "weaken_reasons": [],
-      "broken_reasons": []
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
     },
     {
       "ticker": "CAPD.L",
@@ -220,9 +125,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0549,
+      "unrealized_pct": 0.0216,
       "mark": 120.0,
-      "avg_cost": 113.7561,
+      "avg_cost": 117.4584,
       "signal": "buy",
       "timing_signal": "neutral",
       "conviction_score": 0.7125,
@@ -245,6 +150,47 @@
       ],
       "intact_reasons": [
         "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 71%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CARD.L",
+      "name": "Card Factory plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0498,
+      "mark": 71.6,
+      "avg_cost": 68.2043,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7079,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 71%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",

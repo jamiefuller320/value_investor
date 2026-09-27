@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-09-25T07:28:44.529239+00:00
+Track: `buy_tier_level_native` · updated 2026-09-27T07:04:18.939663+00:00
 
 ## Portfolio loser feedback
 
@@ -10,42 +10,38 @@ Track: `buy_tier_level_native` · updated 2026-09-25T07:28:44.529239+00:00
 
 ## Holding reviews
 
-### SAN.PA — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 88%
+### SGO.PA — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
-### TEP.PA — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 76%
-
-### DG.PA — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 76%
-
-### TTE.PA — intact / hold_tolerate (+0.0%)
+### TTE.PA — intact / hold_tolerate (-1.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 72%
 
-### SGO.PA — intact / hold_tolerate (+0.0%)
-- still buy
+### SAN.PA — intact / hold_tolerate (-0.4%)
+- still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 68%
+- conviction 88%
 
-### ORA.PA — weakening / watch_review (+0.0%)
+### DG.PA — intact / hold_tolerate (+0.7%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 76%
+
+### ORA.PA — weakening / watch_review (+1.0%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
+
+### TEP.PA — intact / hold_tolerate (+1.1%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 76%

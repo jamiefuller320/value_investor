@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-09-25T07:28:32.295350+00:00",
+  "generated_at": "2026-09-27T07:04:07.864868+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 10,
+    "closed_total": 11,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 27,
+    "open_with_thesis": 26,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 9,
-        "recovery_rate": 0.6667,
-        "sold_underwater_rate": 0.3333,
-        "mean_peak_unrealized_pct": 0.0003,
-        "mean_trough_unrealized_pct": -0.0188,
+        "closed_count": 10,
+        "recovery_rate": 0.7,
+        "sold_underwater_rate": 0.3,
+        "mean_peak_unrealized_pct": -0.0002,
+        "mean_trough_unrealized_pct": -0.018,
         "outcome_labels": {
-          "recovered": 6,
+          "recovered": 7,
           "sold_underwater": 3
         }
       },
@@ -63,7 +63,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 10,
+    "hold_closed_with_thesis": 11,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "hold thesis buckets thin (broken=1; target >=3 each)",
@@ -1812,7 +1812,7 @@
       "ticker": "BWP.AX",
       "name": "BWP Trust",
       "started_at": "2026-09-24T10:46:30.972277+10:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -1846,9 +1846,9 @@
       "peak_unrealized_pct": -0.0056,
       "trough_unrealized_pct": -0.0111,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-27T17:04:07.742135+10:00",
+      "linked_sell_trade_id": "653caf9d-461e-484c-9a79-86a15a994042"
     },
     {
       "episode_id": "buy_tier_level:TUA.AX:2026-09-25T17:28:32.151520+10:00",
@@ -1950,6 +1950,56 @@
       },
       "buy_returns_since_rotation": {
         "PRN.AX": -0.0265
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-09-27T17:04:07.742135+10:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-09-27T17:04:07.742135+10:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "BWP.AX",
+          "price": 3.55,
+          "shares": 9.856338,
+          "gross": 34.99,
+          "cost": 0.06,
+          "avg_cost_at_exit": 3.59,
+          "realized_pct": -0.0111,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": -0.0111
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "MND.AX",
+          "price": 30.97,
+          "shares": 1.170568,
+          "gross": 36.25,
+          "cost": 0.06
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "BWP.AX": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "MND.AX": 0.0
       },
       "verdict": null,
       "closed_at": null

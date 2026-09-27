@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `graduated_allocation` · updated 2026-09-25T07:29:47.338702+00:00
+Track: `graduated_allocation` · updated 2026-09-27T07:05:10.953363+00:00
 
 ## Portfolio loser feedback
 
@@ -10,37 +10,37 @@ Track: `graduated_allocation` · updated 2026-09-25T07:29:47.338702+00:00
 
 ## Holding reviews
 
-### SAN.PA — intact / hold_tolerate (-3.0%)
+### SAN.PA — intact / hold_tolerate (-2.9%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 87%
 
-### ERIC-B.ST — intact / hold_tolerate (-2.5%)
+### ERIC-B.ST — intact / hold_tolerate (-2.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 93%
 
-### EG7.IR — intact / hold_tolerate (-1.6%)
+### EG7.IR — intact / hold_tolerate (-0.5%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 77%
+- conviction 76%
 
-### DG.PA — intact / hold_tolerate (-0.5%)
+### DG.PA — intact / hold_tolerate (-0.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 93%
 
-### AD.AS — intact / hold_tolerate (+1.2%)
+### AD.AS — intact / hold_tolerate (+2.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 91%
+- conviction 90%

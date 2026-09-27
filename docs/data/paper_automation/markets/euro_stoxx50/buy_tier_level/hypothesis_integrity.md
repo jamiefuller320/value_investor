@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-25T07:28:41.057283+00:00
+Track: `buy_tier_level` · updated 2026-09-27T07:04:15.826393+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 8 (12% count, 12% NAV)
+- Losers: **1** / 8 (12% count, 13% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
@@ -12,7 +12,7 @@ Track: `buy_tier_level` · updated 2026-09-25T07:28:41.057283+00:00
 
 ## Holding reviews
 
-### VOW.DE — intact / hold_tolerate (-9.8%)
+### VOW.DE — intact / hold_tolerate (-8.6%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
@@ -20,51 +20,51 @@ Track: `buy_tier_level` · updated 2026-09-25T07:28:41.057283+00:00
 - data_quality 1.00
 - conviction 68%
 
-### MC.PA — intact / hold_tolerate (-2.0%)
+### MC.PA — intact / hold_tolerate (-2.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 67%
 
-### AD.AS — intact / hold_tolerate (-1.1%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 88%
-
-### ABI.BR — intact / hold_tolerate (-0.5%)
+### ABI.BR — intact / hold_tolerate (-1.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 63%
 
-### DG.PA — intact / hold_tolerate (-0.3%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 92%
-
-### ENI.MI — intact / hold_tolerate (+0.4%)
+### ENI.MI — intact / hold_tolerate (-0.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 65%
 
-### WKL.AS — intact / hold_tolerate (+0.6%)
+### AD.AS — intact / hold_tolerate (-0.5%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 88%
+
+### WKL.AS — intact / hold_tolerate (+0.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
 
-### DHL.DE — intact / hold_tolerate (+1.0%)
+### DG.PA — intact / hold_tolerate (+0.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 58%
+- conviction 92%
+
+### DHL.DE — intact / hold_tolerate (+2.3%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 66%
