@@ -876,6 +876,80 @@ def test_eng_20260923_03_fetch_backfills_ocf_from_annual_rows_without_cashflow_m
     assert metrics.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
 
 
+def test_eng_20260927_01_fetch_backfills_ocf_when_output_cache_lacks_operating_cashflow(
+    tmp_path: Path, monkeypatch
+):
+    """Regression: prefer committed financials when output mirror has cash_flow but no OCF."""
+    from types import SimpleNamespace
+
+    from value_investor import fetch as fetch_mod
+
+    monkeypatch.chdir(tmp_path)
+    output_sources = tmp_path / "output" / "research" / "MEGP.L" / "sources"
+    output_sources.mkdir(parents=True)
+    stale_financials = {
+        "ticker": "MEGP.L",
+        "cash_flow": {"2025": {"Free Cash Flow": 25_153_000.0}},
+        "cashflow_metrics": {},
+    }
+    (output_sources / "financials_annual.json").write_text(
+        json.dumps(stale_financials), encoding="utf-8"
+    )
+
+    committed_sources = tmp_path / "docs" / "data" / "research" / "MEGP.L" / "sources"
+    committed_sources.mkdir(parents=True)
+    committed_financials = {
+        "ticker": "MEGP.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 90_762_000.0,
+                "Free Cash Flow": 25_153_000.0,
+            },
+        },
+        "cashflow_metrics": {
+            "operating_cashflow": 90_762_000.0,
+            "free_cashflow": 25_153_000.0,
+        },
+    }
+    (committed_sources / "financials_annual.json").write_text(
+        json.dumps(committed_financials), encoding="utf-8"
+    )
+
+    class DummyTicker:
+        @property
+        def info(self):
+            return {"longName": "ME Group International plc", "marketCap": 2_000_000}
+
+        @property
+        def fast_info(self):
+            return SimpleNamespace(market_cap=2_000_000)
+
+        @property
+        def balance_sheet(self):
+            return None
+
+        @property
+        def income_stmt(self):
+            return None
+
+        @property
+        def cashflow(self):
+            return None
+
+        financials = pd.DataFrame()
+        quarterly_financials = None
+
+    fetch_mod.fetch_company_metrics._cashflow_fallback_installed = False  # type: ignore[attr-defined]
+    install_fetch_cashflow_fallback()
+
+    with patch.object(fetch_mod.yf, "Ticker", lambda _sym: DummyTicker()):
+        metrics = fetch_mod.fetch_company_metrics("MEGP.L")
+
+    assert metrics.operating_cashflow == pytest.approx(90_762_000.0)
+    assert metrics.free_cashflow == pytest.approx(25_153_000.0)
+    assert metrics.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
+
+
 def test_fetch_annual_financials_includes_cashflow_metrics(monkeypatch):
     cashflow_df = pd.DataFrame(
         {"2024": [90_800_000.0, 55_000_000.0]},

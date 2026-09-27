@@ -10166,6 +10166,110 @@ def _financials_with_merged_yahoo_cashflow(
     return updated
 
 
+def _iter_financials_annual_payloads(
+    ticker: str,
+    *,
+    output_dir: Path | None,
+    sources_dir: Path | None,
+) -> list[dict[str, Any]]:
+    """Collect distinct ``financials_annual.json`` payloads from output and committed stores."""
+    from value_investor.research.ingest import _resolve_cached_annual_financials
+    from value_investor.scoring.fcf import _financials_candidates
+    from value_investor.storage import read_json, resolve_json_path
+
+    payloads: list[dict[str, Any]] = []
+    seen_paths: set[str] = set()
+
+    def add_path(path: Path) -> None:
+        resolved = resolve_json_path(path)
+        if resolved is None:
+            return
+        key = str(resolved)
+        if key in seen_paths:
+            return
+        seen_paths.add(key)
+        try:
+            payload = read_json(resolved)
+        except (OSError, ValueError, TypeError):
+            return
+        if isinstance(payload, dict):
+            payloads.append(payload)
+
+    if sources_dir is not None:
+        add_path(sources_dir / "financials_annual.json")
+
+    primary = _resolve_cached_annual_financials(
+        ticker,
+        output_dir=output_dir,
+        sources_dir=sources_dir,
+    )
+    if isinstance(primary, dict):
+        payloads.append(primary)
+
+    for path in _financials_candidates(ticker, output_dir):
+        add_path(path)
+
+    return payloads
+
+
+def _pick_financials_for_cashflow_backfill(
+    metrics: Any,
+    *,
+    financials: dict[str, Any] | None,
+    ticker: str | None,
+    output_dir: Path | None,
+    sources_dir: Path | None,
+) -> dict[str, Any] | None:
+    """
+    Prefer a cached annual financials payload that can fill missing OCF/FCF.
+
+    A stale ``output/research`` mirror may include ``cash_flow`` rows without
+    operating cash-flow lines while ``docs/data/research`` already holds OCF in
+    ``cashflow_metrics``; ingest resolution stops at the first ``cash_flow`` block.
+    """
+    from value_investor.research.ingest import (
+        CASHFLOW_METRIC_KEYS,
+        apply_cashflow_metrics_fallback,
+    )
+
+    if financials is not None:
+        return _financials_with_merged_yahoo_cashflow(financials)
+
+    resolved_ticker = ticker or getattr(metrics, "ticker", None)
+    if not resolved_ticker:
+        return None
+
+    needed = [key for key in CASHFLOW_METRIC_KEYS if getattr(metrics, key, None) is None]
+    if not needed:
+        return None
+
+    best: dict[str, Any] | None = None
+    best_score = -1
+    seen_payloads: set[int] = set()
+
+    for raw in _iter_financials_annual_payloads(
+        str(resolved_ticker),
+        output_dir=output_dir,
+        sources_dir=sources_dir,
+    ):
+        payload_id = id(raw)
+        if payload_id in seen_payloads:
+            continue
+        seen_payloads.add(payload_id)
+
+        merged = _financials_with_merged_yahoo_cashflow(raw)
+        probe = dict.fromkeys(CASHFLOW_METRIC_KEYS)
+        apply_cashflow_metrics_fallback(probe, merged)
+        score = sum(1 for key in needed if probe.get(key) is not None)
+        if score > best_score:
+            best_score = score
+            best = merged
+        if score >= len(needed):
+            break
+
+    return best
+
+
 def supplement_company_metrics_cashflow(
     metrics: Any,
     *,
@@ -10177,22 +10281,16 @@ def supplement_company_metrics_cashflow(
 ) -> list[str]:
     """Backfill ``CompanyMetrics`` cash-flow fields from cached ``financials_annual.json``."""
     from value_investor.research.ingest import (
-        _resolve_cached_annual_financials,
-    )
-    from value_investor.research.ingest import (
         supplement_company_metrics_cashflow as _supplement,
     )
 
-    resolved_ticker = ticker or getattr(metrics, "ticker", None)
-    payload = financials
-    if payload is None and resolved_ticker:
-        payload = _resolve_cached_annual_financials(
-            str(resolved_ticker),
-            output_dir=output_dir,
-            sources_dir=sources_dir,
-        )
-    if payload is not None:
-        payload = _financials_with_merged_yahoo_cashflow(payload)
+    payload = _pick_financials_for_cashflow_backfill(
+        metrics,
+        financials=financials,
+        ticker=ticker,
+        output_dir=output_dir,
+        sources_dir=sources_dir,
+    )
 
     return _supplement(
         metrics,
