@@ -20,11 +20,13 @@ from value_investor.ingest_backlog import (
 )
 from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
+    memo_quality_body_fields,
     period_body_coverage,
+    refetch_euro_filings_primary_bodies,
     refetch_ir_allowlist_filing_bodies,
-    refetch_residual_filing_bodies,
     refetch_uk_primary_filing_bodies,
     sanitize_filings_index,
+    thin_zero_body_memo_needs_ingest,
 )
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.gap_fill_sources import (
@@ -79,6 +81,7 @@ LOW_PENETRATION_BATCH_TICKERS = frozenset(
     {"MEGP.L", "GFTU.L", "GSK.L", "JSG.L", "MGNS.L", "AEP.L", "IMB.L", "KLR.L", "TRST.L"}
 )
 LOW_PENETRATION_BATCH_PRIORITY_BONUS = 12.0
+THIN_ZERO_BODY_MEMO_PRIORITY_BONUS = 14.0
 KNOWN_SOURCE_IDS = frozenset(
     {
         "companies_house_accounts",
@@ -306,6 +309,46 @@ def _filing_coverage(store: ResearchStore, ticker: str, output_dir: Path) -> dic
     return coverage
 
 
+def _research_json_for_filing_index(index_path: Path) -> Path | None:
+    """``.../TICKER/sources/filings/filings_index.json`` → ``research.json``."""
+    try:
+        candidate = index_path.parent.parent.parent / "research.json"
+    except (IndexError, AttributeError):
+        return None
+    return candidate if candidate.is_file() else None
+
+
+def _thin_zero_body_memo_ingest_gap(
+    *,
+    ticker: str,
+    company_name: str,
+    output_dir: Path,
+    coverage: dict[str, int],
+) -> bool:
+    """Thin focus-library memos with memo_bodies=0 still need ingest before rememo."""
+    index_path = prefer_filing_index_path(ticker, output_dir=output_dir)
+    if index_path is None:
+        return False
+    research_json = _research_json_for_filing_index(index_path)
+    if research_json is None:
+        return False
+    try:
+        meta = read_json(research_json)
+    except (OSError, ValueError, TypeError):
+        return False
+    if not isinstance(meta, dict):
+        return False
+    grade, memo_bodies = memo_quality_body_fields(meta)
+    return thin_zero_body_memo_needs_ingest(
+        grade=grade,
+        memo_bodies=memo_bodies,
+        filings_dir=index_path.parent,
+        company_name=company_name,
+        ticker=ticker,
+        indexed_without_body=int(coverage.get("indexed_without_body") or 0),
+    )
+
+
 def _penetration_index_counts(coverage: dict[str, int]) -> tuple[int, int]:
     """(indexed_total, with_body) for penetration — prefer material-only when measured."""
     material_total = int(coverage.get("material_filings_total") or 0)
@@ -445,6 +488,33 @@ def _priority_score(
     return score
 
 
+def _priority_score_for_report(
+    report: CompanyReport,
+    coverage: dict[str, int],
+    suggestions: list[dict[str, Any]],
+    *,
+    market: str | None,
+    discovery_bonus: float,
+    output_dir: Path,
+) -> float:
+    score = _priority_score(
+        coverage,
+        suggestions,
+        signal=report.signal,
+        market=market,
+        ticker=report.ticker,
+        discovery_bonus=discovery_bonus,
+    )
+    if _thin_zero_body_memo_ingest_gap(
+        ticker=report.ticker,
+        company_name=report.name,
+        output_dir=output_dir,
+        coverage=coverage,
+    ):
+        score += THIN_ZERO_BODY_MEMO_PRIORITY_BONUS
+    return score
+
+
 def select_ingest_improvement_targets(
     reports: list[CompanyReport],
     *,
@@ -471,23 +541,30 @@ def select_ingest_improvement_targets(
         coverage = _filing_coverage(store, report.ticker, output_dir)
         suggestions = suggestions_by_ticker.get(report.ticker.upper(), [])
         discovery_bonus = float(discovery_bonus_by_ticker.get(report.ticker.upper()) or 0.0)
-        score = _priority_score(
+        market = "ftse350" if report.ticker.upper().endswith(".L") else None
+        score = _priority_score_for_report(
+            report,
             coverage,
             suggestions,
-            signal=report.signal,
-            market="ftse350" if report.ticker.upper().endswith(".L") else None,
-            ticker=report.ticker,
+            market=market,
             discovery_bonus=discovery_bonus,
+            output_dir=output_dir,
         )
         if score <= 0:
             continue
+        thin_memo_gap = _thin_zero_body_memo_ingest_gap(
+            ticker=report.ticker,
+            company_name=report.name,
+            output_dir=output_dir,
+            coverage=coverage,
+        )
         if require_outstanding_gaps and not _has_outstanding_ingest_gap(
             coverage,
             ticker=report.ticker,
         ):
             # Discovery hits still qualify — new index rows need deepen even without
             # prior outstanding gaps.
-            if discovery_bonus <= 0:
+            if discovery_bonus <= 0 and not thin_memo_gap:
                 continue
         candidates.append(
             IngestImprovementTarget(
@@ -1057,6 +1134,13 @@ def _execute_ingest_improvement_pass(
                 company_name=target.name,
                 ticker=target.ticker,
             )
+            from value_investor.research.filings import reconcile_filings_index_body_flags
+
+            reconcile_filings_index_body_flags(
+                sources_dir / "filings",
+                company_name=target.name,
+                ticker=target.ticker,
+            )
             source_meta = ingest_research_sources(
                 ticker=target.ticker,
                 company_name=target.name,
@@ -1079,6 +1163,7 @@ def _execute_ingest_improvement_pass(
             ticker_rns_refetch: dict[str, Any] = {}
             indexed_refetch: dict[str, Any] = {}
             residual_refetch: dict[str, Any] = {}
+            euro_primary: dict[str, Any] = {}
             if _is_uk_listed(market=market, ticker=target.ticker):
                 primary_refetch = _invoke_with_transient_fetch_retry(
                     refetch_uk_primary_filing_bodies,
@@ -1128,15 +1213,16 @@ def _execute_ingest_improvement_pass(
                     except (OSError, ValueError, TypeError):
                         pass
             else:
-                residual_refetch = _invoke_with_transient_fetch_retry(
-                    refetch_residual_filing_bodies,
+                euro_primary = _invoke_with_transient_fetch_retry(
+                    refetch_euro_filings_primary_bodies,
                     sources_dir / "filings",
                     ticker=target.ticker,
                     company_name=target.name,
                     max_bodies=target_max_bodies,
                     prune_unfetchable_after_attempt=prune_failed_residual_fetches,
                 )
-                if int(residual_refetch.get("fetched") or 0) > 0:
+                residual_refetch = dict(euro_primary.get("residual") or {})
+                if int(euro_primary.get("fetched") or 0) > 0:
                     inventory = inspect_local_sources(sources_dir)
                     before = int(
                         (inventory.get("filings_summary") or {}).get("with_body")
@@ -1154,13 +1240,24 @@ def _execute_ingest_improvement_pass(
             ir_presentation_metrics: dict[str, Any] = {}
             ir_allowlist_rows = fetch_filings_ir_allowlist(target.ticker)
             if ir_allowlist_rows:
-                ir_refetch = _invoke_with_transient_fetch_retry(
-                    refetch_ir_allowlist_filing_bodies,
-                    sources_dir / "filings",
-                    target.ticker,
-                    company_name=target.name,
-                    max_bodies=target_max_bodies,
-                )
+                if _is_uk_listed(market=market, ticker=target.ticker):
+                    ir_refetch = _invoke_with_transient_fetch_retry(
+                        refetch_ir_allowlist_filing_bodies,
+                        sources_dir / "filings",
+                        target.ticker,
+                        company_name=target.name,
+                        max_bodies=target_max_bodies,
+                    )
+                else:
+                    ir_refetch = dict(euro_primary.get("ir_allowlist") or {})
+                    if int(ir_refetch.get("fetched") or 0) <= 0:
+                        ir_refetch = _invoke_with_transient_fetch_retry(
+                            refetch_ir_allowlist_filing_bodies,
+                            sources_dir / "filings",
+                            target.ticker,
+                            company_name=target.name,
+                            max_bodies=target_max_bodies,
+                        )
                 ir_refetch["mandatory"] = True
                 ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
                 from value_investor.research.filings import extract_ir_presentation_metrics

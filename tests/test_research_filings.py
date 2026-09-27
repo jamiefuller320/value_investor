@@ -11952,6 +11952,54 @@ def test_body_lag_rememo_gate_zero_body_catchup_after_ingest(tmp_path: Path):
     assert gate["reason"] == "stale_adequate_grade_zero_body_catchup_1"
 
 
+def test_count_filings_with_body_reconciles_stale_index_from_disk(tmp_path: Path):
+    """eng-20260927-04: rememo gate sees on-disk bodies when summary.with_body is 0."""
+    from value_investor.research.filings import body_lag_rememo_gate, count_filings_with_body
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    row_id = "ifx_fy25"
+    (bodies_dir / f"{row_id}.txt").write_text(
+        "Infineon Technologies AG consolidated revenue operating result cash flow " * 30,
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": row_id,
+                        "source": "ir_allowlist",
+                        "period": "annual",
+                        "has_body": False,
+                    }
+                ],
+                "summary": {"with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert count_filings_with_body(filings_dir) == 0
+    assert (
+        count_filings_with_body(
+            filings_dir,
+            company_name="Infineon Technologies AG",
+            ticker="IFX.DE",
+        )
+        == 1
+    )
+    gate = body_lag_rememo_gate(
+        grade="adequate",
+        memo_bodies=0,
+        filings_dir=filings_dir,
+        company_name="Infineon Technologies AG",
+        ticker="IFX.DE",
+    )
+    assert gate["eligible"] is True
+    assert gate["reason"] == "stale_adequate_grade_zero_body_catchup_1"
+
+
 def test_refetch_residual_reconciles_orphan_bodies_before_count(tmp_path: Path):
     """eng-20260923-05: residual refetch counts on-disk bodies for ingest-improved signal."""
     from value_investor.research.filings import refetch_residual_filing_bodies

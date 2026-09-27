@@ -755,6 +755,65 @@ def test_select_ingest_improvement_targets_require_gaps_skips_suggestion_rich_fu
     assert gap_targets[0].ticker == "VCT.L"
 
 
+def test_select_ingest_improvement_targets_keeps_thin_zero_body_memo_with_require_gaps(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20260927-04: gap-closure trials still deepen thin shells with memo_bodies=0."""
+    output_dir = tmp_path / "output"
+    library_root = tmp_path / "docs/data/library/markets/euro_depth/screen/research/AGS.BR"
+    filings_dir = library_root / "sources/filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 2, "with_body": 0},
+                "filings": [
+                    {"period": "annual", "has_body": False},
+                    {"period": "interim", "has_body": False},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (library_root / "research.json").write_text(
+        json.dumps(
+            {
+                "ticker": "AGS.BR",
+                "memo_quality": {"grade": "adequate", "filings_with_body": 0},
+                "source_counts": {"filings_with_body": 0},
+                "research_verdict": "accumulate",
+            }
+        ),
+        encoding="utf-8",
+    )
+    full_coverage = output_dir / "research" / "MEGP.L" / "sources" / "filings"
+    full_coverage.mkdir(parents=True)
+    (full_coverage / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 4, "annual": 2, "interim": 2, "with_body": 4},
+                "filings": [
+                    {"period": "annual", "has_body": True},
+                    {"period": "annual", "has_body": True},
+                    {"period": "interim", "has_body": True},
+                    {"period": "interim", "has_body": True},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.chdir(tmp_path)
+    gap_targets = select_ingest_improvement_targets(
+        [_report("AGS.BR", "Ageas"), _report("MEGP.L", "ME Group")],
+        output_dir=output_dir,
+        suggestions_path=tmp_path / "missing.json",
+        max_targets=1,
+        require_outstanding_gaps=True,
+    )
+    assert len(gap_targets) == 1
+    assert gap_targets[0].ticker == "AGS.BR"
+
+
 def test_select_ingest_improvement_targets_prioritises_unmeasured_over_thin_indexed(
     tmp_path: Path,
 ):

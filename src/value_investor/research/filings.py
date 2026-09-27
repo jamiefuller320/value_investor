@@ -9760,11 +9760,30 @@ def refetch_missing_filing_bodies(
     }
 
 
-def count_filings_with_body(filings_dir: Path) -> int:
-    """Indexed ``summary.with_body`` for ladder/rememo body-lag comparisons."""
-    index_path = Path(filings_dir) / "filings_index.json"
+def count_filings_with_body(
+    filings_dir: Path,
+    *,
+    company_name: str | None = None,
+    ticker: str | None = None,
+    persist_reconcile: bool = False,
+) -> int:
+    """Indexed body count for ladder/rememo body-lag comparisons.
+
+    When ``summary.with_body`` lags on-disk ``bodies/*.txt`` (index rewrite cleared
+    ``has_body``), optionally reconcile from disk so zero-body catchup rememo and
+    ingest-improved signals are not stuck at ``rememo_eligible_count`` 0.
+    """
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
     if not index_path.exists():
         return 0
+    if persist_reconcile and company_name and ticker:
+        reconciled = reconcile_filings_index_body_flags(
+            filings_dir,
+            company_name=str(company_name),
+            ticker=str(ticker),
+        )
+        return int(reconciled.get("with_body_after") or 0)
     try:
         payload = json.loads(index_path.read_text(encoding="utf-8"))
     except (OSError, ValueError, TypeError):
@@ -9772,11 +9791,19 @@ def count_filings_with_body(filings_dir: Path) -> int:
     if not isinstance(payload, dict):
         return 0
     summary = payload.get("summary") or {}
+    filings = list(payload.get("filings") or [])
     indexed = int(summary.get("with_body") or 0)
-    if indexed:
-        return indexed
-    filings = payload.get("filings") or []
-    return sum(1 for row in filings if isinstance(row, dict) and row.get("has_body"))
+    row_count = sum(1 for row in filings if isinstance(row, dict) and row.get("has_body"))
+    base = max(indexed, row_count)
+    if base > 0 or not filings or not (company_name and ticker):
+        return base
+    reconciled_rows = reconcile_filing_body_flags(
+        filings,
+        filings_dir / "bodies",
+        company_name=str(company_name),
+        ticker=str(ticker),
+    )
+    return sum(1 for row in reconciled_rows if isinstance(row, dict) and row.get("has_body"))
 
 
 def body_lag_rememo_gate(
@@ -9787,6 +9814,8 @@ def body_lag_rememo_gate(
     body_lag_threshold: int = 10,
     has_verdict: bool = True,
     ingest_improved: bool = False,
+    company_name: str | None = None,
+    ticker: str | None = None,
 ) -> dict[str, Any]:
     """
     Whether a thin/zero-body memo should rememo after filing bodies land.
@@ -9796,7 +9825,11 @@ def body_lag_rememo_gate(
     """
     from value_investor.research.market_store import rememo_reason
 
-    disk_bodies = count_filings_with_body(filings_dir)
+    disk_bodies = count_filings_with_body(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
     reason = rememo_reason(
         grade=grade,
         memo_bodies=int(memo_bodies),
@@ -9813,6 +9846,61 @@ def body_lag_rememo_gate(
         "body_lag": max(0, disk_bodies - int(memo_bodies)),
         "ingest_improved": bool(ingest_improved),
     }
+
+
+THIN_MEMO_GRADES = frozenset({"thin", "poor", "adequate", ""})
+
+
+def memo_quality_body_fields(meta: dict[str, Any]) -> tuple[str | None, int]:
+    """Grade and filings-with-body snapshot from committed ``research.json``."""
+    mq = meta.get("memo_quality") or {}
+    if not isinstance(mq, dict):
+        mq = {}
+    grade = str(mq.get("grade") or "").strip().lower() or None
+    bodies = int(
+        mq.get("filings_with_body")
+        or (meta.get("source_counts") or {}).get("filings_with_body")
+        or 0
+    )
+    return grade, bodies
+
+
+def thin_zero_body_memo_needs_ingest(
+    *,
+    grade: str | None,
+    memo_bodies: int,
+    filings_dir: Path,
+    company_name: str,
+    ticker: str,
+    indexed_without_body: int = 0,
+) -> bool:
+    """
+    True when a thin first-pass memo still needs ingest before body-lag rememo.
+
+    Covers focus-library ``thin_or_zero_body`` shells: memo metadata records 0
+    bodies while the filing index still has gaps or no reconciled disk bodies.
+    Does not widen ``rememo_reason`` — ingest must land bodies first.
+    """
+    grade_key = str(grade or "").strip().lower()
+    if grade_key not in THIN_MEMO_GRADES or int(memo_bodies) > 0:
+        return False
+    if int(indexed_without_body) > 0:
+        return True
+    disk = count_filings_with_body(
+        filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
+    if disk <= 0:
+        return True
+    gate = body_lag_rememo_gate(
+        grade=grade,
+        memo_bodies=int(memo_bodies),
+        filings_dir=filings_dir,
+        company_name=company_name,
+        ticker=ticker,
+    )
+    return not gate["eligible"]
 
 
 def _row_counts_toward_period_coverage(row: dict[str, Any]) -> bool:
