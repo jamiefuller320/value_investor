@@ -15481,8 +15481,45 @@
       },
       "trigger": "stall_slowdown",
       "engineering_task_id": "eng-20260927-05"
+    },
+    {
+      "id": "igc-20260927-03",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "CQR.AX",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "CQR.AX"
+        ],
+        "market_id": "asx200",
+        "universe": "library",
+        "critical_path_blocker": "none"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260927-03",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-27T16:45:11.957854+00:00",
+      "completed_at": "2026-09-27T16:45:57.248700+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [],
+        "results": [],
+        "per_ticker": []
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-27T13:54:00.032203+00:00",
+  "updated_at": "2026-09-27T16:45:57.248710+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
