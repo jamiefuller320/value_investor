@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-27T13:32:54.681089+00:00",
+  "generated_at": "2026-09-27T13:39:44.023129+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -377,7 +377,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=1, thin=14, indexed_without_body=17)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=2, zero_body=0, thin=14, indexed_without_body=16)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
@@ -429,18 +429,16 @@
       },
       "filing_health": {
         "buy_tier_count": 51,
-        "unmeasured_buy_tier": 1,
-        "zero_body_buy_tier": 1,
+        "unmeasured_buy_tier": 2,
+        "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 14,
-        "indexed_without_body": 17,
+        "indexed_without_body": 16,
         "bodies_median": 3.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
         "parked_count": 8,
-        "zero_body_tickers": [
-          "HM-B.ST"
-        ],
+        "zero_body_tickers": [],
         "thin_body_tickers": [
           "SGO.PA",
           "ACKB.BR",
@@ -452,7 +450,8 @@
           "MC.PA"
         ],
         "unmeasured_tickers": [
-          "OIZ.IR"
+          "OIZ.IR",
+          "HM-B.ST"
         ],
         "parked_tickers": [
           "ABI.BR",
@@ -524,14 +523,13 @@
       "sprint_progress": {
         "window_days": 2,
         "run_count": 3,
-        "targets": 21,
-        "improved": 3,
+        "targets": 12,
+        "improved": 2,
         "improved_tickers": [
           "SGO.PA",
-          "BOL.ST",
-          "DTE.DE"
+          "BOL.ST"
         ],
-        "last_run_at": "2026-09-27T13:29:57.895601+00:00",
+        "last_run_at": "2026-09-27T13:36:55.296292+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -542,24 +540,24 @@
           "filing_gaps": 1
         },
         "gaps_after": {
-          "unmeasured": 1,
-          "zero_body": 1,
+          "unmeasured": 2,
+          "zero_body": 0,
           "thin": 14,
-          "indexed_without_body": 17,
+          "indexed_without_body": 16,
           "filing_gaps": 2
         },
         "gap_delta": {
-          "unmeasured": 0,
-          "zero_body": 1,
+          "unmeasured": 1,
+          "zero_body": 0,
           "thin": -1,
-          "indexed_without_body": -2,
+          "indexed_without_body": -3,
           "filing_gaps": 1
         },
         "remaining": {
-          "unmeasured": 1,
-          "zero_body": 1,
+          "unmeasured": 2,
+          "zero_body": 0,
           "thin": 14,
-          "indexed_without_body": 17,
+          "indexed_without_body": 16,
           "filing_gaps": 2
         },
         "admission_ready": true,
@@ -568,12 +566,7 @@
           {
             "id": "unmeasured_stuck",
             "severity": "high",
-            "summary": "1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
-          },
-          {
-            "id": "zero_body_stuck",
-            "severity": "high",
-            "summary": "1 zero-body buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
+            "summary": "2 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
           }
         ],
         "sprint_entered_at": null
