@@ -22,8 +22,7 @@ from value_investor.historical_analysis import (
     historical_analysis_summary_from_dict,
     run_historical_analysis,
 )
-from value_investor.model_weights import DEFAULT_HORIZON_DAYS
-from value_investor.model_weights import save_model_snapshot
+from value_investor.model_weights import DEFAULT_HORIZON_DAYS, save_model_snapshot
 from value_investor.research.document import ResearchDocument
 from value_investor.research.store import ResearchStore
 from value_investor.research.timeline import archive_revision
