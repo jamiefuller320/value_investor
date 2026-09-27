@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T14:36:15+00:00",
+  "updated_at": "2026-09-27T19:04:48+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10910,6 +10910,56 @@
       "source": "https://cursor.com/agents/bc-196a81f2-9e8d-5d70-88ae-3c3cdd72beaf",
       "added_at": "2026-09-27T13:08:29+00:00",
       "updated_at": "2026-09-27T14:36:15+00:00"
+    },
+    {
+      "id": "L479",
+      "category": "later",
+      "section": "ops",
+      "title": "Clash-aware: treat deferred-ideas store as shared mutable",
+      "summary": "PR fix occasions show ~13 deferred-store merge conflicts; add deferred-ideas.json/deferred-review.md to clash-aware shared mutables (or serialize ftse-defer onto main) so parallel agents stop dirtying each other.",
+      "revisit_when": "Engineering queue idle and merge_conflict occasions still cite deferred-ideas after next weekly common-issues review",
+      "tags": [
+        "pr-fix",
+        "clash",
+        "deferred",
+        "ci"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-1f102bf3-5eb7-5113-b780-29956091c91a",
+      "added_at": "2026-09-27T19:04:48+00:00"
+    },
+    {
+      "id": "L480",
+      "category": "later",
+      "section": "ops",
+      "title": "Normalize PR-fix failure reasons (paths + ruff/validate)",
+      "summary": "67 unique failure_reason strings across 79 occasions; generic CONFLICTING labels dominate common-issues. Extend normalize_failure_reason to attach conflicted paths and map bare validate failures to ruff/JSON causes.",
+      "revisit_when": "Next monthly-pr-fix-common-issues human task or when occasion_count grows another ~25",
+      "tags": [
+        "pr-fix",
+        "common-issues",
+        "ops"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-1f102bf3-5eb7-5113-b780-29956091c91a",
+      "added_at": "2026-09-27T19:04:48+00:00"
+    },
+    {
+      "id": "L481",
+      "category": "later",
+      "section": "ops",
+      "title": "Mock flaky live network in CI unit tests (DAX stall / Investegate)",
+      "summary": "Seven ci_check fix occasions from live DAX library_stall auto-cancel, Investegate None, and unmocked ops-monitor helpers. Keep live checks in a marked integration job; unit CI should mock.",
+      "revisit_when": "Same flake hits two PRs in one week again (see pr_fix_occasions H theme)",
+      "tags": [
+        "pr-fix",
+        "pytest",
+        "flake",
+        "ci"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-1f102bf3-5eb7-5113-b780-29956091c91a",
+      "added_at": "2026-09-27T19:04:48+00:00"
     }
   ],
   "fragments": [
