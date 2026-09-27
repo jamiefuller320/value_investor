@@ -1847,151 +1847,6 @@ def bind_overlay_fcf_to_filing_year_company_adjusted(
     return bundle
 
 
-def apply_screen_ttm_stale_year_flag(bundle: dict[str, Any]) -> dict[str, Any]:
-    """Flag Yahoo screen TTM when it still reflects a prior fiscal-year FCF numerator."""
-    screen_ttm = _float_or_none(bundle.get("screen_ttm"))
-    if screen_ttm is None:
-        return bundle
-
-    currency = str(bundle.get("currency") or "GBP")
-    company_currency = bundle.get("company_adjusted_currency")
-    filing_aligned = _float_or_none(bundle.get("filing_aligned"))
-    company_adjusted = _float_or_none(bundle.get("company_adjusted"))
-    company_snapshot = _float_or_none(bundle.get("company_adjusted_snapshot"))
-    metrics = bundle.get("cashflow_metrics")
-    free_cashflow_prev = (
-        _float_or_none(metrics.get("free_cashflow_prev")) if isinstance(metrics, dict) else None
-    )
-
-    stale = False
-    if (
-        company_snapshot is not None
-        and company_adjusted is not None
-        and fcf_within_company_tolerance(
-            screen_ttm,
-            company_snapshot,
-            filing_currency=currency,
-            company_adjusted_currency=company_currency or currency,
-        )
-        and not fcf_within_company_tolerance(
-            screen_ttm,
-            company_adjusted,
-            filing_currency=currency,
-            company_adjusted_currency=company_currency,
-        )
-    ):
-        stale = True
-    elif (
-        free_cashflow_prev is not None
-        and filing_aligned is not None
-        and fcf_within_company_tolerance(
-            screen_ttm,
-            free_cashflow_prev,
-            filing_currency=currency,
-            company_adjusted_currency=currency,
-        )
-        and not fcf_within_company_tolerance(
-            screen_ttm,
-            filing_aligned,
-            filing_currency=currency,
-            company_adjusted_currency=currency,
-        )
-    ):
-        stale = True
-
-    if stale:
-        bundle["screen_ttm_stale_year"] = True
-    return bundle
-
-
-def refresh_fcf_divergence_flags_after_binding(bundle: dict[str, Any]) -> dict[str, Any]:
-    """Recompute divergence flags and canonical FCF after filing-year rebinding."""
-    filing_aligned = _float_or_none(bundle.get("filing_aligned"))
-    screen_ttm = _float_or_none(bundle.get("screen_ttm"))
-    company_adjusted = _float_or_none(bundle.get("company_adjusted"))
-    currency = str(bundle.get("currency") or "USD")
-    company_currency = bundle.get("company_adjusted_currency")
-    screen_ttm_unverified = bool(bundle.get("screen_ttm_unverified"))
-
-    policy_fcf = bundle.get("policy_fcf")
-    policy_basis = str(bundle.get("policy_basis") or "")
-    if (
-        isinstance(policy_fcf, (int, float))
-        and policy_basis != "screen_ttm"
-        and bool(bundle.get("company_adjusted_stale_year"))
-    ):
-        bundle["canonical"] = float(policy_fcf)
-        source = str(bundle.get("source") or "")
-        if source.startswith("policy_"):
-            bundle["source"] = f"policy_{policy_basis or 'fcf_bridge'}"
-
-    metrics = bundle.get("cashflow_metrics")
-    operating_cashflow = (
-        _float_or_none(metrics.get("operating_cashflow")) if isinstance(metrics, dict) else None
-    )
-
-    divergence_flagged = fcf_basis_divergence_flagged(
-        filing_aligned=filing_aligned,
-        screen_ttm=screen_ttm,
-        company_adjusted=company_adjusted,
-        filing_currency=currency,
-        company_adjusted_currency=company_currency,
-    )
-    fcf_divergence_flagged = fcf_universe_divergence_flagged(
-        filing_aligned=filing_aligned,
-        screen_ttm=screen_ttm,
-        company_adjusted=company_adjusted,
-        filing_currency=currency,
-        company_adjusted_currency=company_currency,
-    )
-    ttm_suppressed_mismatch = fcf_ttm_suppressed_screen_filing_mismatch_flagged(
-        screen_ttm_unverified=screen_ttm_unverified,
-        filing_aligned=filing_aligned,
-        screen_ttm=screen_ttm,
-        company_adjusted=company_adjusted,
-        filing_currency=currency,
-        company_adjusted_currency=company_currency,
-    )
-    if ttm_suppressed_mismatch:
-        fcf_divergence_flagged = True
-
-    filing_screen_mismatch = (
-        fcf_filing_screen_mismatch(
-            filing_aligned=filing_aligned
-            if filing_aligned is not None
-            else bundle.get("canonical"),
-            screen_ttm=screen_ttm,
-            divergence_flagged=divergence_flagged,
-        )
-        or ttm_suppressed_mismatch
-    )
-
-    fcf_definition_divergence = fcf_basis_definition_divergence(
-        operating_cashflow=operating_cashflow,
-        operating_cashflow_gross=None,
-        filing_aligned=filing_aligned,
-        screen_ttm=screen_ttm,
-        company_adjusted=company_adjusted,
-        filing_currency=currency,
-        company_adjusted_currency=company_currency,
-    )
-    if (
-        ttm_suppressed_mismatch
-        or filing_screen_mismatch
-        or fcf_divergence_flagged
-        or bool(bundle.get("screen_ttm_stale_year"))
-        or bool(bundle.get("company_adjusted_stale_year"))
-    ):
-        fcf_definition_divergence = True
-
-    bundle["divergence_flagged"] = divergence_flagged
-    bundle["fcf_divergence_flagged"] = fcf_divergence_flagged
-    bundle["fcf_definition_divergence"] = fcf_definition_divergence
-    bundle["filing_screen_mismatch"] = filing_screen_mismatch
-    bundle["ttm_suppressed_screen_filing_mismatch"] = ttm_suppressed_mismatch
-    return bundle
-
-
 def fcf_basis_values_diverge(
     left: float | None,
     right: float | None,
@@ -2861,14 +2716,12 @@ def reconcile_fcf_for_ticker(
         bundle["filing_aligned"] = filing_aligned_preview
     if fiscal_year is not None and bundle.get("fiscal_year") is None:
         bundle["fiscal_year"] = fiscal_year
-    bundle = bind_overlay_fcf_to_filing_year_company_adjusted(
+    return bind_overlay_fcf_to_filing_year_company_adjusted(
         bundle,
         ticker=ticker,
         fiscal_year=fiscal_year,
         output_dir=output_dir,
     )
-    bundle = apply_screen_ttm_stale_year_flag(bundle)
-    return refresh_fcf_divergence_flags_after_binding(bundle)
 
 
 def _float_or_none(value: Any) -> float | None:
@@ -3198,7 +3051,6 @@ def format_fcf_basis_action_note(
     filing_currency: str = "USD",
     company_adjusted_currency: str | None = None,
     screen_ttm_unverified: bool = False,
-    screen_ttm_stale_year: bool = False,
     policy_basis: str | None = None,
 ) -> str:
     """Surface filing-aligned, screen TTM, and company-adjusted FCF side-by-side."""
@@ -3218,12 +3070,7 @@ def format_fcf_basis_action_note(
     ):
         include_screen_ttm = False
     if include_screen_ttm:
-        if screen_ttm_stale_year:
-            screen_label = "screen TTM (stale year)"
-        elif screen_ttm_unverified:
-            screen_label = "screen TTM (unverified)"
-        else:
-            screen_label = "screen TTM"
+        screen_label = "screen TTM (unverified)" if screen_ttm_unverified else "screen TTM"
         parts.append(f"{screen_label} {_format_fcf_compact(screen_ttm, currency=filing_currency)}")
     if company_adjusted is not None:
         parts.append(
@@ -3365,7 +3212,6 @@ def append_fcf_divergence_to_action_note(
                     filing_currency=filing_currency,
                     company_adjusted_currency=company_adjusted_currency,
                     screen_ttm_unverified=bool(bundle.get("screen_ttm_unverified")),
-                    screen_ttm_stale_year=bool(bundle.get("screen_ttm_stale_year")),
                     policy_basis=str(bundle.get("policy_basis") or "") or None,
                 )
             )

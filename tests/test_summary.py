@@ -1339,67 +1339,6 @@ def test_reconcile_fcf_binds_filing_year_company_adjusted_over_stale_bridge(tmp_
         pd.Series({"free_cashflow": 362_600_000.0}),
         bundle,
     ) == pytest.approx(73_800_000.0)
-    assert bundle["canonical"] == pytest.approx(73_800_000.0)
-
-
-def test_reconcile_fcf_flags_stale_screen_numerator_after_filing_year_bind(tmp_path: Path):
-    """Yahoo screen still on prior-year £113.5m while filing-year company-adj is £73.8m."""
-    sources = tmp_path / "research" / "FGP.L" / "sources"
-    filings = sources / "filings" / "bodies"
-    filings.mkdir(parents=True)
-    (sources / "financials_annual.json").write_text(json.dumps(_fgp_financials()), encoding="utf-8")
-    (sources / "fcf_bridge.json").write_text(
-        json.dumps(
-            {
-                "ticker": "FGP.L",
-                "fiscal_year": "2026",
-                "period": "annual",
-                "currency": "GBP",
-                "resolved": True,
-                "policy_basis": "company_adjusted",
-                "policy_fcf": 113_500_000.0,
-                "company_adjusted": 113_500_000.0,
-            }
-        ),
-        encoding="utf-8",
-    )
-    rns_body = filings / "fy2026_results.txt"
-    rns_body.write_text(
-        "Free cash flow of £73.8m before acquisitions and returns",
-        encoding="utf-8",
-    )
-    (sources / "filings" / "filings_index.json").write_text(
-        json.dumps(
-            {
-                "filings": [
-                    {
-                        "period": "annual",
-                        "published_at": "2026-06-18T08:00:00Z",
-                        "has_body": True,
-                        "body_path": str(rns_body),
-                    }
-                ]
-            }
-        ),
-        encoding="utf-8",
-    )
-
-    bundle = reconcile_fcf_for_ticker(
-        "FGP.L",
-        screen_ttm=113_500_000.0,
-        output_dir=tmp_path,
-    )
-
-    assert bundle["screen_ttm_stale_year"] is True
-    assert bundle["fcf_definition_divergence"] is True
-    note = append_fcf_divergence_to_action_note(
-        "",
-        canonical=bundle.get("canonical"),
-        screen_ttm=113_500_000.0,
-        fcf_bundle=bundle,
-        fcf_definition_divergence=True,
-    )
-    assert "screen TTM (stale year)" in note
 
 
 def test_reconcile_fcf_binds_divisional_bridge_when_filing_prose_missing(tmp_path: Path):
