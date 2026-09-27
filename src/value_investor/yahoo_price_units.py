@@ -219,7 +219,9 @@ def normalize_price_series(
     )
 
 
-def normalize_close_series(series: pd.Series, *, anchor: str = "last") -> tuple[pd.Series, PriceUnitNormalization]:
+def normalize_close_series(
+    series: pd.Series, *, anchor: str = "last"
+) -> tuple[pd.Series, PriceUnitNormalization]:
     """Normalize a pandas close series; returns (series, meta)."""
     if series is None or series.empty:
         empty = PriceUnitNormalization(values=[], flip_count=0, scales=[], applied=False)
@@ -231,7 +233,9 @@ def normalize_close_series(series: pd.Series, *, anchor: str = "last") -> tuple[
     return normalized, result
 
 
-def normalize_ohlcv_frame(frame: pd.DataFrame, *, anchor: str = "last") -> tuple[pd.DataFrame, PriceUnitNormalization]:
+def normalize_ohlcv_frame(
+    frame: pd.DataFrame, *, anchor: str = "last"
+) -> tuple[pd.DataFrame, PriceUnitNormalization]:
     """Apply close-derived unit scales to OHLC columns when flips are detected."""
     if frame is None or frame.empty or "Close" not in frame.columns:
         empty = PriceUnitNormalization(values=[], flip_count=0, scales=[], applied=False)

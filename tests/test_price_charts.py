@@ -209,7 +209,6 @@ def test_ensure_price_charts_refreshes_stale_schema(tmp_path: Path):
     assert "sma50_series" not in __import__("json").loads(stale.read_text(encoding="utf-8"))
 
 
-
 def test_write_price_charts_from_history_includes_non_buy_when_unfiltered(tmp_path: Path):
     signals = pd.DataFrame(
         [
