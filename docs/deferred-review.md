@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-27T19:04:48+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-27T21:26:52+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -426,6 +426,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L467 | **IR/ESEF seed for euro zero-body leftovers OIZ REN SIE** | After thin-memo factory heal, OIZ.IR REN.AS SIE.DE remain 0 filing bodies. Next sprint heals will retry; if still 0-improve, seed IR allowlist or parked-hunter rather than hand pins. | euro_depth ingest exhaustion approaches 3/3 zero-improve or next thin_memo sample rises because these names re-enter thin grades |
 | L469 | **Collapse shared-experiment Lifecycle Start chips in UI** | add_cadence and entry_kind_tag (and siblings) share entry_dca_overlay Start; bridge now dedupes by experiment. Optional UX: show one Start control per experiment instead of one per catalog chip to reduce duplicate clicks. | After Start dedupe + every-10m bridge cron are live and humans still double-click sibling chips, or Lifecycle UI redesign pass |
 | L474 | **Bollinger/stochastic/Ichimoku entry toolkit beyond RSI-MA-MACD** | Expand technical entry toolkit past the existing RSI-14 + SMA50/200 + MACD histogram composite. No held-book or chart evidence that another oscillator family is the binding gap versus DCA patience and P1 utilization. | MACD/accumulate observe twin concludes and component attribution shows the current composite is the bottleneck |
+| L482 | **Normalize Yahoo LSE GBp/GBP chart series before chart-outcome scoring** | BCG.L and HEAD.L false terrible (~−99%) paths are Yahoo mid-series pence↔pounds jumps ingested into docs/data/charts. Detect ~100× discontinuities (or scale via mcap/shares) and exclude/relabel in chart_outcome_review so has_terrible/weakest is not driven by unit bugs. Also affects MEGP.L/ROSE.L historically. | Next pass that touches price_charts.py or chart_outcome_review, or when has_terrible weakest is again dominated by ~100× one-day jumps |
 
 ### Ops / reliability
 
