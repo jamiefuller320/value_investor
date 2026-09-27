@@ -907,6 +907,20 @@ def _workflow_max_age_hours(spec: dict[str, Any], *, queue_status: dict[str, Any
     return default
 
 
+def _workflow_past_email_ready(key: str, now: datetime) -> bool:
+    """True when wall-clock is at/after that workflow's email-ready UTC slot.
+
+    Before the first expected fire window, age since last success is not yet
+    actionable (Sunday weekly jobs are ~7d old every Sunday morning; weekday
+    jobs look stale after a weekend). Ops-monitor morning pass must not mark
+    those rows stale until ``WORKFLOW_EMAIL_READY_UTC``.
+    """
+    ready = WORKFLOW_EMAIL_READY_UTC.get(key)
+    if ready is None:
+        return True
+    return (now.hour, now.minute) >= ready
+
+
 def check_workflow_freshness(
     *,
     repo: str | None = None,
@@ -941,7 +955,9 @@ def check_workflow_freshness(
         last_success = latest_workflow_run(workflow, repo=repo, token=token, status="success")
         last_run_at = _parse_github_time(str((last_success or {}).get("created_at") or ""))
         age = (now - last_run_at) if last_run_at else None
-        stale = expected_today and (last_run_at is None or age > max_age)
+        past_ready = _workflow_past_email_ready(key, now)
+        # Age alone is not overdue until the day's first expected fire window.
+        stale = expected_today and past_ready and (last_run_at is None or age > max_age)
         failures = recent_workflow_failures(workflow, repo=repo, token=token, within_hours=12)
         unresolved = filter_unresolved_workflow_failures(failures, last_run_at)
 
@@ -949,6 +965,7 @@ def check_workflow_freshness(
             "workflow": workflow,
             "name": schedule.get("name") or workflow,
             "expected_today": expected_today,
+            "past_email_ready": past_ready,
             "max_age_hours": max_age_hours,
             "last_success_at": last_run_at.isoformat() if last_run_at else None,
             "last_success_run_id": (last_success or {}).get("id"),
@@ -2685,6 +2702,14 @@ def _workflow_freshness_notes(row: dict[str, Any]) -> str:
     parts: list[str] = []
     if row.get("stale"):
         parts.append("overdue")
+    elif (
+        row.get("expected_today")
+        and row.get("past_email_ready") is False
+        and row.get("age_hours") is not None
+        and row.get("max_age_hours") is not None
+        and float(row["age_hours"]) > float(row["max_age_hours"])
+    ):
+        parts.append("awaiting scheduled slot")
     unresolved = int(row.get("unresolved_failures_12h") or 0)
     if unresolved:
         parts.append(f"{unresolved} unresolved failure(s)")

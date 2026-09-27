@@ -293,7 +293,11 @@ def test_check_workflow_freshness_suppresses_ingest_overdue_when_run_in_flight()
 
 
 def test_check_workflow_freshness_suppresses_overdue_before_email_ready_slot():
-    """Monday morning cliff: weekend age exceeds max_age before primary cron finishes."""
+    """Monday morning cliff: weekend age exceeds max_age before primary cron finishes.
+
+    Schedule-aware freshness must not mark stale (or emit overdue findings) until
+    WORKFLOW_EMAIL_READY_UTC — soften alone is not enough for the freshness table.
+    """
     monday_morning = datetime(2026, 9, 14, 7, 46, tzinfo=UTC)
     friday_success = datetime(2026, 9, 11, 8, 26, tzinfo=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     idle_queue = {
@@ -318,7 +322,7 @@ def test_check_workflow_freshness_suppresses_overdue_before_email_ready_slot():
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
         patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
-        findings, _checks = check_workflow_freshness(queue_status=idle_queue, now=monday_morning)
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=monday_morning)
 
     overdue = [
         row
@@ -329,10 +333,100 @@ def test_check_workflow_freshness_suppresses_overdue_before_email_ready_slot():
             "Workflow overdue: FTSE Paper Automation",
         }
     ]
-    assert len(overdue) == 2
-    assert all(row.fixed for row in overdue)
-    assert all("Scheduled slot not reached yet" in (row.action_taken or "") for row in overdue)
+    assert overdue == []
+    by_workflow = {row["workflow"]: row for row in checks}
+    assert by_workflow["ingest-loop.yml"]["stale"] is False
+    assert by_workflow["ingest-loop.yml"]["past_email_ready"] is False
+    assert by_workflow["paper-auto.yml"]["stale"] is False
+    assert by_workflow["paper-auto.yml"]["past_email_ready"] is False
     assert _overall_status(findings) != "fail"
+
+
+def test_check_workflow_freshness_sunday_morning_weekly_jobs_not_stale_pre_slot():
+    """Sunday ~07:46: weekly jobs are ~7d since last success but not yet due."""
+    sunday_morning = datetime(2026, 9, 27, 7, 46, tzinfo=UTC)
+    last_sunday = datetime(2026, 9, 20, 13, 6, tzinfo=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    midweek_email = datetime(2026, 9, 23, 17, 7, tzinfo=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    recent = sunday_morning.strftime("%Y-%m-%dT%H:%M:%SZ")
+    idle_queue = {
+        "open_count": 0,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
+
+    def fake_latest(workflow_file, **kwargs):
+        if kwargs.get("status") != "success":
+            return None
+        if workflow_file == "analysis-review.yml":
+            return {"id": 1, "created_at": last_sunday}
+        if workflow_file == "data-backup.yml":
+            return {"id": 2, "created_at": last_sunday}
+        if workflow_file == "email-report.yml":
+            return {"id": 3, "created_at": midweek_email}
+        return {"id": 9, "created_at": recent}
+
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch("value_investor.ops_monitor.latest_workflow_run", side_effect=fake_latest),
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
+    ):
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=sunday_morning)
+
+    overdue_titles = {row.title for row in findings if row.title.startswith("Workflow overdue:")}
+    assert "Workflow overdue: Modelling analysis review" not in overdue_titles
+    assert "Workflow overdue: FTSE Data Backup" not in overdue_titles
+    assert "Workflow overdue: Email report" not in overdue_titles
+    by_workflow = {row["workflow"]: row for row in checks}
+    for wf in ("analysis-review.yml", "data-backup.yml", "email-report.yml"):
+        assert by_workflow[wf]["expected_today"] is True
+        assert by_workflow[wf]["past_email_ready"] is False
+        assert by_workflow[wf]["stale"] is False
+        assert by_workflow[wf]["age_hours"] > 36
+    from value_investor.ops_monitor import _workflow_freshness_notes
+
+    assert "awaiting scheduled slot" in _workflow_freshness_notes(
+        by_workflow["analysis-review.yml"]
+    )
+
+
+def test_check_workflow_freshness_sunday_after_ready_flags_missed_weekly():
+    """Past email-ready with last-week success → real overdue (do not widen max_age)."""
+    sunday_afternoon = datetime(2026, 9, 27, 13, 30, tzinfo=UTC)
+    last_sunday = datetime(2026, 9, 20, 16, 18, tzinfo=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    recent = sunday_afternoon.strftime("%Y-%m-%dT%H:%M:%SZ")
+    idle_queue = {
+        "open_count": 0,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
+
+    def fake_latest(workflow_file, **kwargs):
+        if kwargs.get("status") != "success":
+            return None
+        if workflow_file == "data-backup.yml":
+            return {"id": 1, "created_at": last_sunday}
+        return {"id": 9, "created_at": recent}
+
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch("value_investor.ops_monitor.latest_workflow_run", side_effect=fake_latest),
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
+    ):
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=sunday_afternoon)
+
+    overdue = [row for row in findings if row.title == "Workflow overdue: FTSE Data Backup"]
+    assert len(overdue) == 1
+    assert overdue[0].fixed is False
+    backup = next(row for row in checks if row["workflow"] == "data-backup.yml")
+    assert backup["past_email_ready"] is True
+    assert backup["stale"] is True
+    assert _overall_status(findings) == "fail"
 
 
 def test_check_workflow_freshness_marks_ingest_paper_overdue_auto_fixable_past_ready():

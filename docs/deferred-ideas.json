@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T11:32:48+00:00",
+  "updated_at": "2026-09-27T11:58:47+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10763,6 +10763,23 @@
     {
       "id": "N162",
       "category": "not_now",
+      "section": "ops",
+      "title": "Widen ops-monitor workflow max_age for Sunday weekly jobs",
+      "summary": "Do not bump analysis-review / email-report / data-backup max_age_hours (e.g. toward ~168h). On Sunday morning age since last success is always ~7d; longer counters would hide real same-day misses after EMAIL_READY. Prefer schedule-aware stale (past email-ready) which is now implemented.",
+      "revisit_when": "Only if schedule-aware past_email_ready gate is reverted or proven insufficient after several Sunday morning ops passes",
+      "tags": [
+        "ops-monitor",
+        "staleness",
+        "sunday",
+        "freshness"
+      ],
+      "status": "open",
+      "source": "ops-staleness-sunday-warnings assessment 2026-09-27",
+      "added_at": "2026-09-27T08:23:50+00:00"
+    },
+    {
+      "id": "N163",
+      "category": "not_now",
       "section": "learning",
       "title": "MACD golden-cross hard gate on FTSE new buys",
       "summary": "Classic MACD line/signal golden cross as a live entry requirement. Held-book PIT counterfactual (2026-09-27, n=5 AI-judgment+technical) showed 0 GC at entry and mean next-GC fill ~1.3% worse; live stack already uses MACD histogram slope inside timing_signal plus skip_timing_wait.",
@@ -10775,10 +10792,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-1ea469f3-6255-5cf7-809c-49cfb467cea1",
-      "added_at": "2026-09-27T11:32:48+00:00"
+      "added_at": "2026-09-27T11:58:47+00:00"
     },
     {
-      "id": "N163",
+      "id": "N164",
       "category": "not_now",
       "section": "learning",
       "title": "Require timing_signal=accumulate for all new FTSE buys",
@@ -10792,7 +10809,7 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-1ea469f3-6255-5cf7-809c-49cfb467cea1",
-      "added_at": "2026-09-27T11:32:48+00:00"
+      "added_at": "2026-09-27T11:58:47+00:00"
     },
     {
       "id": "L474",
@@ -10808,7 +10825,7 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-1ea469f3-6255-5cf7-809c-49cfb467cea1",
-      "added_at": "2026-09-27T11:32:48+00:00"
+      "added_at": "2026-09-27T11:58:47+00:00"
     }
   ],
   "fragments": [
