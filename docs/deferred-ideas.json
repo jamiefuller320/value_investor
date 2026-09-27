@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-27T19:04:48+00:00",
+  "updated_at": "2026-09-27T21:46:52+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -10960,6 +10960,27 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-1f102bf3-5eb7-5113-b780-29956091c91a",
       "added_at": "2026-09-27T19:04:48+00:00"
+    },
+    {
+      "id": "L482",
+      "category": "later",
+      "section": "research",
+      "title": "Normalize Yahoo LSE GBp/GBP chart series before chart-outcome scoring",
+      "summary": "BCG.L and HEAD.L false terrible (~\u221299%) paths are Yahoo mid-series pence\u2194pounds jumps ingested into docs/data/charts. Detect ~100\u00d7 discontinuities (or scale via mcap/shares) and exclude/relabel in chart_outcome_review so has_terrible/weakest is not driven by unit bugs. Also affects MEGP.L/ROSE.L historically.",
+      "revisit_when": "Next pass that touches price_charts.py or chart_outcome_review, or when has_terrible weakest is again dominated by ~100\u00d7 one-day jumps",
+      "tags": [
+        "charts",
+        "yahoo",
+        "gbp",
+        "pence",
+        "chart_outcome_review",
+        "BCG.L",
+        "HEAD.L"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-e9d3fdf7-f6e2-5128-a48c-8b4a951c21c0",
+      "added_at": "2026-09-27T21:26:52+00:00",
+      "updated_at": "2026-09-27T21:46:52+00:00"
     }
   ],
   "fragments": [

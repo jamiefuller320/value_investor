@@ -186,3 +186,61 @@ def test_empty_chart_dir(tmp_path: Path):
     payload = build_chart_outcome_review(chart_dir=tmp_path / "missing")
     assert payload["verdict"] == "empty"
     assert payload["counts"]["chart_count"] == 0
+
+
+def test_score_normalizes_bcg_like_gbp_unit_flip():
+    """False −99% wipeout from Yahoo pence→pounds mid-series jump."""
+    payload = _chart(
+        ticker="BCG.L",
+        since="2026-08-02",
+        entry=208.17,
+        dates=["2026-08-03", "2026-08-21", "2026-08-24", "2026-09-25"],
+        closes=[208.17, 200.86, 2.02, 2.05],
+    )
+    row = score_chart_payload(payload)
+    assert row["price_unit_normalization"]["kind"] == "yahoo_gbp_unit_flip"
+    assert row["last"] == 2.05
+    assert abs(row["entry"] - 2.08) <= 0.01
+    assert row["return_since"] is not None
+    assert -0.03 < row["return_since"] < 0.0
+    assert row["outcome"] != "terrible"
+
+
+def test_score_normalizes_head_like_oscillating_unit_flips():
+    """HEAD-style bidirectional flips: recovery, not −98% wipeout."""
+    payload = _chart(
+        ticker="HEAD.L",
+        since="2026-07-18",
+        entry=5.0,
+        dates=[
+            "2026-07-18",
+            "2026-08-28",
+            "2026-09-01",
+            "2026-09-07",
+            "2026-09-08",
+            "2026-09-25",
+        ],
+        closes=[5.0, 10.5, 0.1, 10.5, 0.1, 0.1],
+    )
+    row = score_chart_payload(payload)
+    assert row["price_unit_normalization"]["flip_count"] >= 2
+    assert row["last"] == 0.1
+    assert abs(row["entry"] - 0.05) <= 0.001
+    assert row["return_since"] is not None
+    assert row["return_since"] > 0.9
+    assert row["outcome"] != "terrible"
+
+
+def test_score_preserves_real_distress_without_unit_flip():
+    """Multi-month decline without a ~100× session jump stays terrible."""
+    payload = _chart(
+        ticker="DIST.L",
+        since="2026-01-02",
+        entry=55.0,
+        dates=["2026-01-02", "2026-03-01", "2026-06-01", "2026-09-01"],
+        closes=[55.0, 30.0, 15.0, 10.0],
+    )
+    row = score_chart_payload(payload)
+    assert "price_unit_normalization" not in row
+    assert row["return_since"] == -0.8182
+    assert row["outcome"] == "terrible"
