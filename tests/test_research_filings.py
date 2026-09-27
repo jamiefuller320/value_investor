@@ -73,6 +73,7 @@ from value_investor.research.filings import (
     refetch_indexed_without_body_filing_bodies,
     refetch_investegate_filing_bodies,
     refetch_ir_allowlist_filing_bodies,
+    refetch_ir_presentation_sources,
     refetch_missing_filing_bodies,
     refetch_residual_filing_bodies,
     refetch_ticker_rns_api_filing_bodies,
@@ -12020,3 +12021,91 @@ def test_refetch_euro_filings_primary_bodies_merges_allowlist(mock_fetch, tmp_pa
     assert result["ir_allowlist"].get("allowlist_count", 0) >= 1
     payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert any(row.get("has_body") for row in payload.get("filings") or [])
+
+
+def test_eng_20260927_03_fetch_filings_ir_allowlist_fgp_includes_fy2026_annual_report():
+    """FGP IR allowlist seeds FY2026 statutory annual report for APM glossary fetch."""
+    urls = _BUILTIN_IR_URLS["FGP.L"]
+    assert any("260701-firstgroup-plc-annual-report-and-accounts-2026.pdf" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("FGP.L", path=Path("/dev/null/empty_ir.json"))
+    annual = next(
+        row for row in rows if "annual-report-and-accounts-2026.pdf" in str(row.get("url") or "")
+    )
+    assert annual["period"] == "annual"
+
+
+def test_eng_20260927_03_parse_ir_management_fcf_definitions_multiline_fgp_in_memory():
+    from value_investor.research.filings import parse_ir_management_fcf_definitions
+
+    body = (
+        "• 'Adjusted operating profit' is operating profit before net\n"
+        "adjusting items\n"
+        "• 'Free cash flow' is the movement in adjusted net debt excluding\n"
+        "proceeds from business disposals and cash outflows from dividends, "
+        "share buybacks and business acquisitions.\n"
+    )
+    by_metric = {
+        row["metric"]: row["definition"] for row in parse_ir_management_fcf_definitions(body)
+    }
+    assert "adjusting items" in by_metric["adjusted_operating_profit"]
+    assert "share buybacks" in by_metric["free_cash_flow"]
+
+
+def test_eng_20260927_03_parse_ir_apm_glossary_definitions_in_memory():
+    from value_investor.research.filings import parse_ir_apm_glossary_definitions
+
+    body = (
+        "Note 4 – Alternative performance measures\n"
+        "• 'Adjusted EPS' – adjusted earnings divided by the weighted average "
+        "number of shares in the period.\n"
+        "• 'Free cash flow' – the movement in adjusted net debt excluding dividends.\n"
+    )
+    by_metric = {row["metric"]: row for row in parse_ir_apm_glossary_definitions(body)}
+    assert by_metric["free_cash_flow"]["definition_source"] == "apm_glossary"
+    assert "weighted average" in by_metric["adjusted_eps"]["definition"]
+
+
+def test_eng_20260927_03_refetch_ir_presentation_sources_pipeline(tmp_path: Path, monkeypatch):
+    """Standard IR pipeline refetches allowlist bodies then writes ir_presentation_metrics.json."""
+
+    fy2026_url = (
+        "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/"
+        "reports-and-presentations/presentation/"
+        "260618-firstgroup-plc-fy-2026-results-presentation.pdf"
+    )
+    sample_body = (
+        "FirstGroup plc FY 2026 Full Year Results 18 June 2026\n"
+        "Statutory Ring fenced cash movements IFRS 16 Other movements Adjusted\n"
+        "Cash flow from operations 756.2 8.0 (459.5) (38.5) 266.2\n"
+        "Free cash flow 391.6 46.6 (364.4) - 73.8\n"
+        "• 'Free cash flow' is the movement in adjusted net debt excluding dividends.\n"
+        + ("detail " * 400)
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    sources_dir = tmp_path / "sources"
+    sources_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {}}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: sample_body if url == fy2026_url else None,
+    )
+    result = refetch_ir_presentation_sources(
+        filings_dir,
+        ticker="FGP.L",
+        company_name="FirstGroup plc",
+        sources_dir=sources_dir,
+        max_bodies=3,
+    )
+    assert result["note"] == "refetch_ir_presentation_sources"
+    assert result["mandatory"] is True
+    assert result["fetched"] >= 1
+    summary = result["ir_presentation_metrics"]
+    assert summary["mandatory"] is True
+    assert summary["bridge_count"] >= 1
+    assert summary["management_fcf_definition_count"] >= 1
+    saved = json.loads((sources_dir / "ir_presentation_metrics.json").read_text(encoding="utf-8"))
+    assert saved["bridge_count"] == summary["bridge_count"]
