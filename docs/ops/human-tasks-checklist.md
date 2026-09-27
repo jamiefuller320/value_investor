@@ -7,7 +7,9 @@ most automation — this list is what still needs a human.
 **Dashboard:** Automation tab → **Human tasks** — human gates as click-to-view cards
 (analysis snippets from existing ops artifacts, Acknowledge, Approve on promotion
 gates). New / changed analysis rises to the top; acknowledged tasks fall to the
-bottom. Automated weekday/Sunday CI rows stay in a collapsed list.
+bottom (Acknowledge / Approve re-sort immediately on successful queue — session
+overlay until git sidecar catches up). Automated weekday/Sunday CI rows stay in a
+collapsed list.
 
 **Cadence map:** [`ops-review-cadence.md`](ops-review-cadence.md) — weekly analysis → monthly horizon → quarterly deferred.
 

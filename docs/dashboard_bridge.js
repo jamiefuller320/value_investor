@@ -140,7 +140,11 @@
     });
   }
 
-  async function submitCommand(action, payload, onStatus) {
+  /**
+   * Insert a command row and broadcast. Resolves as soon as the row is queued
+   * (does not wait for the GitHub worker). Use waitForCommand for drain.
+   */
+  async function queueCommand(action, payload, onStatus) {
     const ready = await init();
     if (!ready) {
       throw new Error("BRIDGE_DISABLED");
@@ -151,30 +155,46 @@
       payload: payload || {},
       status: "pending",
     };
-    if (onStatus) onStatus("Submitting dashboard command…");
+    if (onStatus) onStatus("Submitting dashboard command…", { phase: "submitting" });
     const { data, error } = await client.from(table).insert(body).select("*").single();
     if (error) {
       throw new Error(error.message || "Could not insert dashboard command");
     }
-    const commandId = data.id;
     if (broadcastChannel) {
       await broadcastChannel.send({
         type: "broadcast",
         event: "command",
-        payload: { v: 1, id: commandId, action, payload: body.payload },
+        payload: { v: 1, id: data.id, action, payload: body.payload },
       });
     }
     if (onStatus) {
       onStatus(
-        "Queued — waiting for GitHub worker (~10m via external cron; Run workflow to drain now)…"
+        "Queued — waiting for GitHub worker (~10m via external cron; Run workflow to drain now)…",
+        { phase: "queued", command: data }
       );
     }
-    return waitForCommandRow(commandId, onStatus);
+    return data;
+  }
+
+  function waitForCommand(commandId, onStatus, timeoutMs) {
+    return waitForCommandRow(commandId, onStatus, timeoutMs);
+  }
+
+  /**
+   * Queue a command, then wait for done/failed (default).
+   * Pass { wait: false } to resolve immediately after insert (optimistic UIs).
+   */
+  async function submitCommand(action, payload, onStatus, options) {
+    const queued = await queueCommand(action, payload, onStatus);
+    if (options && options.wait === false) return queued;
+    return waitForCommandRow(queued.id, onStatus);
   }
 
   global.DashboardBridge = {
     init,
     isEnabled,
+    queueCommand,
+    waitForCommand,
     submitCommand,
     onArtifactUpdated,
   };

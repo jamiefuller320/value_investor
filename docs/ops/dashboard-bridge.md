@@ -52,6 +52,13 @@ cron-job.org often returns a **bare 429** (empty body, no `Retry-After`) under a
 
 The Acknowledge / Start UI waits up to ~12 minutes for the command row to leave `pending`. Use **Run workflow** to drain immediately when needed.
 
+**Human-task Acknowledge** is optimistic in the dashboard: as soon as
+`queueCommand` inserts the Supabase row, the card moves to the acked/bottom
+bucket via a session overlay on `mergeHumanTaskAcksIntoBoard` (durable ack
+still lands in `human_task_acks.json` through the worker). Lifecycle
+Acknowledge / Start still wait on `done` before treating the action as
+recorded.
+
 ## Lifecycle Start / Acknowledge dedupe
 
 Catalog **factor chips** (e.g. `add_cadence`, `entry_kind_tag`) are separate learning questions that can share one **experiment id** (`entry_dca_overlay`). Start and Acknowledge authorize by experiment, not factor.
