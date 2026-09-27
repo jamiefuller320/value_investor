@@ -177,6 +177,16 @@ For each ticker × horizon it records:
 - `source_quality_score` and `research_confidence` from the point-in-time memo
 - Forward excess return vs ^FTSE
 
+**Model attribution** (Performance → Historical analysis) uses the same archive:
+
+| Field | Primary path |
+|-------|----------------|
+| Success | Higher model score → higher **FTSE-excess** forward return |
+| Cohort | **Overlay buy-tier** (`adjusted_signal` ∈ buy ∪ strong_buy) |
+| Horizon | **28d** primary (matches `DEFAULT_HORIZON_DAYS` / weight learning); **84d** secondary when archive depth allows; **7d** noise-only |
+| Persist | `historical_analysis_summary.json` → `latest.json.historical_analysis` |
+| Shape | `model_attribution` (primary rows) + `model_attribution_meta` (contract + reserved `exit_join` for paper-exit quintiles) + `model_attribution_comparison` (full-universe raw, optional) |
+
 Needs **≥2 archived weekly runs** within the analysis window before strategy
 results populate.
 
