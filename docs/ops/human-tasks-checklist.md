@@ -7,7 +7,7 @@ most automation — this list is what still needs a human.
 **Dashboard:** Automation tab → **Human tasks** — human gates as click-to-view cards
 (analysis snippets from existing ops artifacts, Acknowledge, Approve on promotion
 gates). New / changed analysis rises to the top; acknowledged tasks fall to the
-bottom (Acknowledge / Approve re-sort immediately on successful queue — session
+bottom (Acknowledge / Approve re-sort and disable the button on click — session
 overlay until git sidecar catches up). Automated weekday/Sunday CI rows stay in a
 collapsed list.
 

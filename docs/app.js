@@ -692,11 +692,20 @@ function clearPendingHumanTaskAck(taskId) {
 }
 
 function prunePendingHumanTaskAcksAgainstDurable(acksStore) {
+  // Only drop session pending once git reflects *this* ack fingerprint.
+  // A durable open row with a different fp is a stale prior ack — keep pending
+  // so re-ack / new analysis stays bottom-sorted and the button stays disabled.
   for (const row of (acksStore && acksStore.acks) || []) {
     if (!row || typeof row !== "object") continue;
     if (String(row.status || "open") !== "open") continue;
     const id = String(row.task_id || "").trim();
-    if (id && pendingHumanTaskAcks[id]) delete pendingHumanTaskAcks[id];
+    const pending = id ? pendingHumanTaskAcks[id] : null;
+    if (!pending) continue;
+    const durableFp = String(row.finding_fingerprint || "").trim();
+    const pendingFp = String(pending.finding_fingerprint || "").trim();
+    if (!pendingFp || !durableFp || durableFp === pendingFp) {
+      delete pendingHumanTaskAcks[id];
+    }
   }
 }
 
@@ -708,8 +717,10 @@ function overlayPendingHumanTaskAcks(acksStore) {
     const id = String(row.task_id || "").trim();
     if (id) byId[id] = row;
   }
+  // Session pending always wins until prune confirms durable catch-up.
+  // (Previously we skipped when durable already had status=open, which left
+  // stale-fingerprint rows on top with Acknowledge still enabled.)
   for (const id of Object.keys(pendingHumanTaskAcks)) {
-    if (byId[id] && String(byId[id].status || "open") === "open") continue;
     byId[id] = pendingHumanTaskAcks[id];
   }
   return {
@@ -719,12 +730,32 @@ function overlayPendingHumanTaskAcks(acksStore) {
   };
 }
 
+/**
+ * Re-merge pristine board + durable sidecar + session pending into data.
+ * Safe to call from sidecars, optimistic clicks, and renderDashboard so an
+ * in-flight reload cannot clobber a just-queued ack.
+ */
+function syncHumanTasksBoardOverlay(data) {
+  if (!data) return data;
+  const base = humanTasksBoardBase || data.human_tasks_board;
+  if (!base || !Array.isArray(base.tasks)) return data;
+  prunePendingHumanTaskAcksAgainstDurable(data.human_task_acks);
+  const acksForBoard = overlayPendingHumanTaskAcks(data.human_task_acks);
+  data.human_tasks_board = (acksForBoard.acks || []).length
+    ? mergeHumanTaskAcksIntoBoard(base, acksForBoard)
+    : base;
+  return data;
+}
+
 function refreshHumanTasksBoardView() {
-  if (!dashboardData || !humanTasksBoardBase) return;
-  const acksForBoard = overlayPendingHumanTaskAcks(dashboardData.human_task_acks);
-  dashboardData.human_tasks_board = (acksForBoard.acks || []).length
-    ? mergeHumanTaskAcksIntoBoard(humanTasksBoardBase, acksForBoard)
-    : humanTasksBoardBase;
+  if (!dashboardData) return;
+  // Never no-op the optimistic re-render: if sidecars have not stamped a base
+  // yet, use the in-memory board so Acknowledge still moves the card now.
+  if (!humanTasksBoardBase && dashboardData.human_tasks_board) {
+    humanTasksBoardBase = dashboardData.human_tasks_board;
+  }
+  if (!humanTasksBoardBase) return;
+  syncHumanTasksBoardOverlay(dashboardData);
   renderAutomation(dashboardData);
 }
 
@@ -762,12 +793,9 @@ async function applyDashboardSidecars(data) {
   // only committed human_task_acks.json (weekend drain / commit race).
   // Session pending overlay covers the gap between Supabase queue and Pages git.
   if (data.human_tasks_board) {
+    // Keep the network board pristine so later sync/re-render can re-merge.
     humanTasksBoardBase = data.human_tasks_board;
-    prunePendingHumanTaskAcksAgainstDurable(data.human_task_acks);
-    const acksForBoard = overlayPendingHumanTaskAcks(data.human_task_acks);
-    if ((acksForBoard.acks || []).length) {
-      data.human_tasks_board = mergeHumanTaskAcksIntoBoard(humanTasksBoardBase, acksForBoard);
-    }
+    syncHumanTasksBoardOverlay(data);
   }
   return data;
 }
@@ -4303,8 +4331,12 @@ async function acknowledgeHumanTaskFromCard(button) {
     return;
   }
   const taskId = String(payload.task_id).trim();
+  // Optimistic first: disable + bottom-sort before any await so in-flight
+  // dashboard reloads / bridge latency cannot leave the card looking open.
   button.disabled = true;
-  if (statusEl) statusEl.textContent = "Submitting…";
+  button.setAttribute("aria-disabled", "true");
+  applyOptimisticHumanTaskAck(payload);
+  setHumanTaskAckStatus(taskId, "Submitting…");
   try {
     if (isLocalDashboardServe()) {
       const response = await fetch("/api/human-task-ack", {
@@ -4316,7 +4348,6 @@ async function acknowledgeHumanTaskFromCard(button) {
       if (!response.ok || body.ok === false) {
         throw new Error(body.error || `HTTP ${response.status}`);
       }
-      applyOptimisticHumanTaskAck(payload);
       setHumanTaskAckStatus(taskId, "Recorded locally");
       await reloadDashboard({ silent: true });
       return;
@@ -4338,10 +4369,9 @@ async function acknowledgeHumanTaskFromCard(button) {
           (msg) => setHumanTaskAckStatus(taskId, msg),
           { wait: false }
         );
-    // Move card to acked/bottom as soon as Supabase accepts the command —
-    // do not wait for Actions drain or Pages sidecar refresh.
-    applyOptimisticHumanTaskAck(payload);
     setHumanTaskAckStatus(taskId, "Acknowledged — syncing to git…");
+    // Soft refresh must keep session overlay until git sidecar catch-up.
+    syncHumanTasksBoardOverlay(dashboardData);
     const commandId = queued && queued.id;
     const waitFn =
       commandId && typeof window.DashboardBridge.waitForCommand === "function"
@@ -4359,6 +4389,8 @@ async function acknowledgeHumanTaskFromCard(button) {
       const msg = waitErr && waitErr.message ? waitErr.message : String(waitErr);
       if (/timed out/i.test(msg)) {
         // Command still pending — keep optimistic bottom sort.
+        syncHumanTasksBoardOverlay(dashboardData);
+        if (dashboardData) renderAutomation(dashboardData);
         setHumanTaskAckStatus(
           taskId,
           "Queued — card moved; git sync still pending (Run workflow to drain)"
@@ -4372,7 +4404,11 @@ async function acknowledgeHumanTaskFromCard(button) {
           (window.CSS && CSS.escape && CSS.escape(taskId)) || taskId
         }"]`
       );
-      const btn = card && card.querySelector(`[data-human-task-ack]`);
+      const btn =
+        card &&
+        card.querySelector(
+          `.human-task-ack-btn[data-human-task-ack], .human-task-approve-btn[data-human-task-ack]`
+        );
       if (btn) btn.disabled = false;
     }
   } catch (err) {
@@ -4386,7 +4422,11 @@ async function acknowledgeHumanTaskFromCard(button) {
         (window.CSS && CSS.escape && CSS.escape(taskId)) || taskId
       }"]`
     );
-    const btn = card && card.querySelector(`[data-human-task-ack]`);
+    const btn =
+      card &&
+      card.querySelector(
+        `.human-task-ack-btn[data-human-task-ack], .human-task-approve-btn[data-human-task-ack]`
+      );
     if (btn) btn.disabled = false;
   }
 }
@@ -6829,6 +6869,10 @@ function bindLifecyclePanel() {
 
 function renderDashboard(data) {
   dashboardData = data;
+  // Re-apply session pending over whatever merge the in-flight reload built.
+  // Without this, a fetch that started before Acknowledge can clobber the
+  // optimistic bottom-sort and re-enable the button on render.
+  if (humanTasksBoardBase) syncHumanTasksBoardOverlay(data);
   const meta = data.meta || {};
   const trustCount = meta.trust_count || (data.trust_reports || []).length || 0;
   document.getElementById("run-meta").textContent = data.run_at
