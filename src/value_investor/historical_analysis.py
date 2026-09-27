@@ -40,9 +40,7 @@ COHORT_FULL_UNIVERSE = "full_universe"
 RETURN_BASIS_EXCESS_VS_FTSE = "excess_vs_ftse"
 RETURN_BASIS_RAW = "raw"
 
-SUCCESS_DEFINITION_BUY_TIER_EXCESS = (
-    "higher_model_score_higher_ftse_excess_on_buy_tier"
-)
+SUCCESS_DEFINITION_BUY_TIER_EXCESS = "higher_model_score_higher_ftse_excess_on_buy_tier"
 STATISTIC_PEARSON = "pearson"
 
 # Reserved shape for paper-exit score-quintile observe (L475). Populate later
@@ -189,9 +187,7 @@ class ModelAttributionMeta:
     return_basis: str = RETURN_BASIS_EXCESS_VS_FTSE
     statistic: str = STATISTIC_PEARSON
     aligned_with_weight_learning_horizon: bool = True
-    exit_join: dict[str, Any] = field(
-        default_factory=lambda: dict(EXIT_JOIN_HOOK_DEFAULT)
-    )
+    exit_join: dict[str, Any] = field(default_factory=lambda: dict(EXIT_JOIN_HOOK_DEFAULT))
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -649,9 +645,7 @@ def _model_attribution(
     returns_by_run_ticker: dict[tuple[str, str], float] = {}
     week_by_run: dict[str, str] = {}
     for obs in cohort_obs:
-        returns_by_run_ticker[(obs.run_at, obs.ticker)] = _observation_return(
-            obs, return_basis
-        )
+        returns_by_run_ticker[(obs.run_at, obs.ticker)] = _observation_return(obs, return_basis)
         week_by_run[obs.run_at] = obs.week_key
 
     scores_by_model_week: dict[str, dict[str, list[tuple[float, float]]]] = {}
@@ -899,9 +893,7 @@ def format_historical_analysis_text(summary: HistoricalAnalysisSummary) -> str:
                 ),
             ]
         )
-        primary_rows = [
-            row for row in summary.model_attribution if row.horizon_days == primary_h
-        ]
+        primary_rows = [row for row in summary.model_attribution if row.horizon_days == primary_h]
         display_rows = primary_rows or list(summary.model_attribution)
         for row in display_rows[:5]:
             corr = (

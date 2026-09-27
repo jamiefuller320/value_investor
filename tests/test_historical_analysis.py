@@ -309,9 +309,7 @@ def test_model_attribution_buy_tier_excess_primary_path(tmp_path: Path):
     assert summary.model_attribution_meta.primary_horizon_days == 28
     assert summary.model_attribution_meta.aligned_with_weight_learning_horizon is True
 
-    primary_28 = [
-        row for row in summary.model_attribution if row.horizon_days == 28
-    ]
+    primary_28 = [row for row in summary.model_attribution if row.horizon_days == 28]
     assert primary_28, "28d buy-tier excess attribution should populate"
     assert all(row.cohort == COHORT_OVERLAY_BUY_TIER for row in primary_28)
     assert all(row.return_basis == RETURN_BASIS_EXCESS_VS_FTSE for row in primary_28)
