@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-27T17:33:34.064844+00:00",
+  "generated_at": "2026-09-27T17:53:24.740120+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -1017,6 +1017,39 @@
       "sort_bucket": "unacked"
     },
     {
+      "id": "adhoc-review-ingest-deviations",
+      "title": "Review open ingest deviations and reprocess if needed",
+      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/ingest-deviations.md",
+      "doc_anchor": "what-needs-a-human",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Ingest deviations · 0 open",
+        "updated_at": "2026-09-27T17:34:25.997833+00:00",
+        "fingerprint": "98ad0fa8cd558461",
+        "bullets": [
+          "Open deviations: 0"
+        ],
+        "source_keys": [
+          "ingest_deviations"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-27T17:53:24.718361+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "98ad0fa8cd558461"
+      },
+      "sort_bucket": "acked"
+    },
+    {
       "id": "sunday-shard-epoch0-watch",
       "title": "Watch shard epoch-0 and near-miss before forking AI",
       "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
@@ -1044,40 +1077,6 @@
         "acked_at": "2026-09-27T17:33:34.049391+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "b434fa1eff5393fe"
-      },
-      "sort_bucket": "acked"
-    },
-    {
-      "id": "adhoc-review-ingest-deviations",
-      "title": "Review open ingest deviations and reprocess if needed",
-      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/ingest-deviations.md",
-      "doc_anchor": "what-needs-a-human",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-09-27T17:19:59.740688+00:00",
-        "fingerprint": "825e47077aa96721",
-        "bullets": [
-          "Open deviations: 1",
-          "MC.PA: blocker_no_improve — MC.PA hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources."
-        ],
-        "source_keys": [
-          "ingest_deviations"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-09-27T17:32:44.133113+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "825e47077aa96721"
       },
       "sort_bucket": "acked"
     }
