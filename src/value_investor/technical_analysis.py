@@ -649,6 +649,8 @@ def fetch_price_history(
     if not tickers:
         return {}
 
+    from value_investor.yahoo_price_units import normalize_ohlcv_frame
+
     unique = list(dict.fromkeys(str(t).strip() for t in tickers if str(t).strip()))
     symbol_by_ticker = yahoo_symbols_for_tickers(unique, market=market)
     symbols = list(dict.fromkeys(symbol_by_ticker.values()))
@@ -661,6 +663,7 @@ def fetch_price_history(
             frame = _extract_ohlcv_frame(data, symbol)
             if frame is None:
                 return {}
+            frame, _meta = normalize_ohlcv_frame(frame)
             return {
                 ticker: frame for ticker, mapped in symbol_by_ticker.items() if mapped == symbol
             }
@@ -676,6 +679,7 @@ def fetch_price_history(
         for ticker, symbol in symbol_by_ticker.items():
             frame = _extract_ohlcv_frame(data, symbol)
             if frame is not None and not frame.empty:
+                frame, _meta = normalize_ohlcv_frame(frame)
                 out[ticker] = frame
         return out
     except Exception as exc:  # noqa: BLE001

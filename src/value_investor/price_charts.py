@@ -407,6 +407,16 @@ def build_price_chart_payload(
     if clean.empty:
         return None
 
+    from value_investor.yahoo_price_units import (
+        align_price_to_reference,
+        normalize_close_series,
+    )
+
+    clean, unit_norm = normalize_close_series(clean)
+    clean = clean.dropna()
+    if clean.empty:
+        return None
+
     sampled = _downsample(clean)
     dates = [pd.Timestamp(index).strftime("%Y-%m-%d") for index in sampled.index]
     closes = [_round_price(float(value)) for value in sampled.to_numpy()]
@@ -464,6 +474,19 @@ def build_price_chart_payload(
             snapshot_dirs=snapshot_dirs,
         )
 
+    if isinstance(resolved_initial, dict) and closes:
+        # Frozen levels may have been captured in the other Yahoo unit.
+        ref = next((value for value in closes if value is not None), None)
+        aligned_initial = dict(resolved_initial)
+        changed = False
+        for key, value in list(aligned_initial.items()):
+            aligned = align_price_to_reference(_round_price(value), ref)
+            if aligned is not None and _round_price(value) != _round_price(aligned):
+                aligned_initial[key] = _round_price(aligned)
+                changed = True
+        if changed:
+            resolved_initial = aligned_initial
+
     crossings = first_level_crossings(
         dates,
         closes,
@@ -475,7 +498,7 @@ def build_price_chart_payload(
 
     currency = currency_for_ticker(ticker, market=market)
 
-    return {
+    payload = {
         "ticker": ticker,
         "name": name or ticker,
         "signal": signal,
@@ -495,6 +518,10 @@ def build_price_chart_payload(
         "initial_levels_as_of": resolved_initial_as_of,
         "level_crossings": crossings,
     }
+    meta = unit_norm.as_meta()
+    if meta is not None:
+        payload["price_unit_normalization"] = meta
+    return payload
 
 
 def write_price_chart(chart_dir: Path, payload: dict[str, Any]) -> Path:

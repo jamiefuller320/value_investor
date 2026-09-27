@@ -97,10 +97,17 @@ def _days_between(start: str | None, end: str | None) -> int | None:
 
 def score_chart_payload(payload: dict[str, Any]) -> dict[str, Any]:
     """Score one buy-tier chart against frozen recommendation levels."""
+    from value_investor.yahoo_price_units import (
+        align_price_to_reference,
+        normalize_price_series,
+    )
+
     dates = [str(d)[:10] for d in (payload.get("dates") or [])]
     closes_raw = payload.get("closes") or []
+    # Defensive: committed chart JSON may still carry Yahoo GBp↔GBP flips.
+    unit_norm = normalize_price_series(closes_raw, anchor="last")
     closes: list[float] = []
-    for value in closes_raw:
+    for value in unit_norm.values:
         price = _round_price(value)
         if price is None:
             closes.append(float("nan"))
@@ -115,9 +122,16 @@ def score_chart_payload(payload: dict[str, Any]) -> dict[str, Any]:
     )
     entry = _round_price((initial or {}).get("last"))
     after = [(date, close) for date, close in pairs if not since or date >= since]
+    ref_close = after[0][1] if after else (pairs[-1][1] if pairs else None)
+    entry = _round_price(align_price_to_reference(entry, ref_close))
     if entry is None and after:
         entry = after[0][1]
     last = pairs[-1][1] if pairs else None
+    # Final safety: entry vs last still ~100× apart (no mid-series flip detected).
+    if entry is not None and last is not None:
+        aligned_entry = _round_price(align_price_to_reference(entry, last))
+        if aligned_entry is not None:
+            entry = aligned_entry
     min_close = min((close for _, close in after), default=None)
     max_close = max((close for _, close in after), default=None)
     return_since = ((last / entry) - 1.0) if entry and last else None
@@ -136,7 +150,7 @@ def score_chart_payload(payload: dict[str, Any]) -> dict[str, Any]:
         target_hit=target_hit,
         has_entry=entry is not None,
     )
-    return {
+    row = {
         "ticker": payload.get("ticker"),
         "name": payload.get("name") or payload.get("ticker"),
         "signal": payload.get("signal"),
@@ -158,6 +172,11 @@ def score_chart_payload(payload: dict[str, Any]) -> dict[str, Any]:
         "has_initial_levels": bool(initial),
         "outcome": outcome,
     }
+    if unit_norm.applied:
+        row["price_unit_normalization"] = unit_norm.as_meta()
+    elif isinstance(payload.get("price_unit_normalization"), dict):
+        row["price_unit_normalization"] = payload.get("price_unit_normalization")
+    return row
 
 
 def classify_chart_outcome(
@@ -300,7 +319,12 @@ def build_chart_outcome_review(
             "Observe-only rollup of buy-tier chart JSON. Entry is the frozen initial last "
             "(recommendation-week close), not the first bar after signal_since. Short-term "
             "underwater is expected while the hypothesis stands — the test is the longer path. "
-            "Do not apply decision-review knobs or entry-timing overlays from this file."
+            "Do not apply decision-review knobs or entry-timing overlays from this file. "
+            "Yahoo LSE GBp↔GBP ~100× mid-series flips are normalized before scoring "
+            "(see price_unit_normalization on affected rows)."
+        ),
+        "price_unit_flips": sum(
+            1 for row in rows if isinstance(row.get("price_unit_normalization"), dict)
         ),
     }
 
@@ -426,7 +450,7 @@ def slim_chart_outcome_review(payload: dict[str, Any] | None) -> dict[str, Any] 
             "days_to_target": row.get("days_to_target"),
         }
 
-    return {
+    slim = {
         "purpose": (
             "Buy-tier chart timing vs frozen initial levels — observe-only context. "
             "Do not propose knob applies or scoring experiments from this alone."
@@ -441,6 +465,9 @@ def slim_chart_outcome_review(payload: dict[str, Any] | None) -> dict[str, Any] 
         "weakest": [_slim_row(row) for row in (payload.get("weakest") or [])[:6]],
         "note": payload.get("note"),
     }
+    if payload.get("price_unit_flips") is not None:
+        slim["price_unit_flips"] = payload.get("price_unit_flips")
+    return slim
 
 
 def run_chart_outcome_review(

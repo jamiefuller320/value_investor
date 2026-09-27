@@ -27,6 +27,29 @@ def _series(start: float = 100.0, days: int = 220) -> pd.Series:
     return pd.Series(values, index=index)
 
 
+def test_build_price_chart_payload_normalizes_gbp_unit_flip():
+    index = pd.date_range("2026-08-01", periods=8, freq="B")
+    # BCG-like: pence then pounds mid-series.
+    values = [210.0, 208.0, 200.0, 2.0, 2.02, 2.05, 2.04, 2.05]
+    series = pd.Series(values, index=index)
+    payload = build_price_chart_payload(
+        ticker="BCG.L",
+        name="Baltic",
+        series=series,
+        signal="buy",
+        signal_since="2026-08-02",
+        as_of=datetime(2026, 8, 12, tzinfo=UTC),
+        snapshot_dirs=[],
+        initial_levels={"last": 208.0, "stop_loss": 180.0, "take_profit": 240.0},
+        initial_levels_as_of="2026-08-02",
+    )
+    assert payload is not None
+    assert payload["price_unit_normalization"]["kind"] == "yahoo_gbp_unit_flip"
+    assert payload["closes"][-1] == 2.05
+    assert payload["closes"][0] == 2.1
+    assert payload["initial_levels"]["last"] == 2.08
+
+
 def test_build_price_chart_payload_includes_levels():
     series = _series()
     payload = build_price_chart_payload(

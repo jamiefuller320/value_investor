@@ -80,6 +80,41 @@ both exist, and `terrible` is zero.
 | Sunday `analysis-review.yml` | After trajectory evidence (soft-fail) |
 | Manual | `ftse-chart-outcomes` |
 
+## Yahoo GBp↔GBP unit flips (L482)
+
+Yahoo LSE history sometimes mixes **pence (GBp)** and **pounds (GBP)** in one
+close series. A single ~100× session jump then scores as a −99% “terrible”
+path (seen on BCG.L / HEAD.L; historically MEGP.L / ROSE.L).
+
+**Mitigation (shared helper `yahoo_price_units`):**
+
+1. `fetch_price_history` / chart build — normalize OHLC/close series when
+   consecutive prints sit in the ~100× band (factor 100, ratio band 80–125).
+2. `score_chart_payload` — defensive re-normalize of committed chart JSON and
+   align frozen `initial_levels.last` to the series unit before returns.
+3. Affected rows carry `price_unit_normalization`; rollups expose
+   `price_unit_flips`.
+
+Real multi-month distress without a ~100× discontinuity is left unchanged.
+
+### Refresh so the dashboard shows fixed numbers
+
+After this code lands (or after charts are rebuilt):
+
+```bash
+# Re-score committed chart JSON (no Yahoo re-fetch) → updates
+# docs/data/chart_outcome_review.json|.md used by the Analysis panel.
+ftse-chart-outcomes --data-dir docs/data
+
+# Full rebuild of chart payloads + slim embed in latest.json:
+# runs inside ftse-publish / Sunday analysis-review after charts copy.
+ftse-publish
+```
+
+The dashboard loads `data/chart_outcome_review.json` directly (see `docs/app.js`),
+so a `ftse-chart-outcomes` commit is enough for the panel; `latest.json` picks
+up the slim copy on the next publish.
+
 ## Guardrails
 
 - Observe-only — **not** a paper/learning outcome label yet
