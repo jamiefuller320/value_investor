@@ -129,3 +129,80 @@ console.log(JSON.stringify({ improving, lagging, thin, empty }));
     assert "Trade count rising" in payload["lagging"]
     assert "thin" in payload["thin"].lower()
     assert payload["empty"] == "No weekly marks yet."
+
+
+def test_learning_tracks_panel_dual_suite_contract() -> None:
+    """Automation learning tracks: Suite B fair adoption truth; Suite A stress lab."""
+    text = APP_JS.read_text(encoding="utf-8")
+    assert "function renderLearningTracksPanel(data)" in text
+    assert "function learningTrackIsSuiteB(trackId, trackConfigs)" in text
+    fn = text.split("function renderLearningTracksPanel(data)", 1)[1].split(
+        "\nfunction renderAutomation(", 1
+    )[0]
+    assert "Adoption truth (Suite B fair)" in fn
+    assert "Churn lab (Suite A stress)" in fn
+    assert "do not promote on stress excess alone" in fn
+    assert "Primary success = AI judgment excess vs ^FTSE after costs" not in fn
+    assert "learning_tracks_dual_suite" in fn
+    assert "N145" in fn
+
+
+def test_historical_siblings_prefer_28d_primary() -> None:
+    """Strategy / overlay / signal backtest: 28d primary, 7d demoted (not attribution)."""
+    text = APP_JS.read_text(encoding="utf-8")
+    assert "function historicalHorizonMeta(source)" in text
+    assert "function partitionByHorizon(rows, meta)" in text
+    hist = text.split("function renderHistoricalAnalysis(historical)", 1)[1].split(
+        "\n/** Model attribution:", 1
+    )[0]
+    assert "Strategy horizons — primary" in hist
+    assert "Noise check" in hist
+    assert (
+        "a.horizon_days - b.horizon_days || a.strategy.localeCompare"
+        not in hist.split("strategyNoise", 1)[0]
+    )
+    # Attribution remains separate and untouched by sibling tables.
+    assert "renderModelAttributionPanel(historical)" in hist
+    perf = text.split("function renderPerformance(data)", 1)[1].split(
+        "\nfunction renderAnalysis(", 1
+    )[0]
+    assert "Primary" in perf and "d — excess vs ^FTSE" in perf
+    assert "Noise check —" in perf
+    assert "Cohort: universe signal buckets" in perf
+
+
+def test_post_run_and_chart_outcome_presentation_contracts() -> None:
+    """Post-run uses structured sections; chart outcomes restore samples + success copy."""
+    text = APP_JS.read_text(encoding="utf-8")
+    analysis = text.split("function renderAnalysis(data)", 1)[1].split("\nfunction settingRow(", 1)[
+        0
+    ]
+    assert "Persistent weaknesses" in analysis
+    assert (
+        "not</strong> an engineering backlog" in analysis
+        or "not an engineering backlog" in analysis
+    )
+    assert "post-run-improvement-clearance.md" in analysis
+    assert "full_text || postRun.executive_summary" not in analysis
+    assert "Full text (archive)" in analysis
+    chart = text.split("function renderChartOutcomeReview(data", 1)[1].split(
+        "\nfunction renderStrongBuys(", 1
+    )[0]
+    assert "not</strong> paper-book excess" in chart or "not paper-book excess" in chart
+    assert "chart-outcome-samples" in chart
+    assert "N58" in chart
+    assert 'samples = compact\n    ? ""' not in chart
+    churn = text.split("function renderChurnCounterfactualPanel(data)", 1)[1].split(
+        "\nfunction renderIngestDeviationsSection(", 1
+    )[0]
+    assert "Churn ops window" in churn
+    assert "not an investment thesis horizon" in churn
+
+
+def test_held_vs_market_caption_not_fair_excess() -> None:
+    """Overview held-vs-market caption (L341): sleeve vs price index, not fair book excess."""
+    charts = Path("docs/charts.js").read_text(encoding="utf-8")
+    assert "Sleeve vs price index (not fair book excess)" in charts
+    fn = charts.split("function heldVsMarketLastCaption(", 1)[1].split("\n/** Short epoch-0", 1)[0]
+    assert "not fair book excess" in fn
+    assert "beat_market" in fn

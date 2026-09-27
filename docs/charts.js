@@ -571,9 +571,10 @@ function heldVsMarketLastCaption(payload, { showExcess = true } = {}) {
       : "";
   const marketHtml =
     last.market != null ? ` · mkt ${esc(formatHeldMoney(last.market, currency))}` : "";
-  return `<div class="small held-vs-market-spark-caption">Held ${esc(
-    formatHeldMoney(last.held, currency)
-  )}${marketHtml}${excessHtml}</div>`;
+  return `<div class="small held-vs-market-spark-caption">
+    <div>Held ${esc(formatHeldMoney(last.held, currency))}${marketHtml}${excessHtml}</div>
+    <div class="muted" title="Sleeve MTM vs frictionless local price index from the same start — not fair book excess after costs or Learning-tracks beat_market">Sleeve vs price index (not fair book excess)</div>
+  </div>`;
 }
 
 /** Short epoch-0 books label every day; longer densified series keep a sparse axis. */

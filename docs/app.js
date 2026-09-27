@@ -2038,10 +2038,8 @@ function renderChartOutcomeReview(data, { compact = false } = {}) {
             `<li>${nameBtn(row)} ${chartOutcomePct(row.return_since)} ${chartOutcomeBadge(row.outcome)}</li>`
         )
         .join("")
-    : "";
-  const samples = compact
-    ? ""
-    : `<div class="chart-outcome-columns">
+    : "<li class='muted'>None this pass.</li>";
+  const samplesInner = `<div class="chart-outcome-columns">
         <div>
           <h4>Well timed</h4>
           <ul class="chart-outcome-list">${wellTimedList}</ul>
@@ -2051,9 +2049,30 @@ function renderChartOutcomeReview(data, { compact = false } = {}) {
           <ul class="chart-outcome-list">${weakestList}</ul>
         </div>
       </div>`;
+  const samples = compact
+    ? `<details class="overview-secondary chart-outcome-samples" style="margin-top:0.75rem">
+        <summary>Sample names (observe path — not a paper/epoch grade)</summary>
+        ${samplesInner}
+      </details>`
+    : samplesInner;
+  const asOf = review.as_of || review.generated_at || review.reviewed_at;
+  const daysNote =
+    stats.median_days_since != null
+      ? `Median days since recommendation: ${esc(String(stats.median_days_since))}.`
+      : stats.days_since_median != null
+        ? `Median days since recommendation: ${esc(String(stats.days_since_median))}.`
+        : "";
+  const docUrl = githubOpsDocUrl("docs/ops/chart-outcome-review.md");
   return `
     <div class="card chart-outcome-card">
       <h3>Chart outcomes since recommendation</h3>
+      <p class="small muted" style="margin-top:0">
+        Observe-only path labels on frozen buy-tier entry levels — <strong>not</strong> paper-book excess,
+        epoch <code>beat_market</code>, or fair Suite B adoption truth.
+        ${asOf ? `As of ${esc(fmtDate(asOf))}.` : ""}
+        ${daysNote}
+        ${docUrl ? `<a href="${esc(docUrl)}" target="_blank" rel="noopener">Chart outcome review</a>` : ""}
+      </p>
       <p class="${verdictClass}">${esc(review.verdict_label || review.verdict)}</p>
       <p class="small">${esc(review.headline || "")}</p>
       <div class="chart-outcome-stats">
@@ -2062,12 +2081,12 @@ function renderChartOutcomeReview(data, { compact = false } = {}) {
         <div><span class="stat-value">${counts.underwater ?? 0}</span><span class="small muted">Underwater</span></div>
         <div><span class="stat-value">${counts.stop_hit ?? 0}</span><span class="small muted">Stop hits</span></div>
         <div><span class="stat-value">${counts.terrible ?? 0}</span><span class="small muted">Terrible</span></div>
-        <div><span class="stat-value">${chartOutcomePct(stats.median_return)}</span><span class="small muted">Median return</span></div>
+        <div><span class="stat-value">${chartOutcomePct(stats.median_return)}</span><span class="small muted">Median open return <span title="Not the success grade — longer path + paper excess matter">(path)</span></span></div>
       </div>
       ${samples}
       <p class="small muted" style="margin-bottom:0">
-        Short-term underwater is expected while the hypothesis stands. The test is the longer path, not this first month.
-        Frozen initial levels from the first week of the current signal — observe-only, not a paper-book score.
+        Success contract: intact thesis over the longer path — not this first open-return mix (N58: do not retune timing from a mixed pass).
+        Short-term underwater is expected while the hypothesis stands.
         ${compact ? "Open a name on Strong buys for the price chart." : "Click a ticker to open its price chart."}
       </p>
     </div>`;
@@ -2280,6 +2299,40 @@ function renderWeeklySeriesChart(weeklySeries, horizonDays = 28) {
     </div>`;
 }
 
+/** Shared horizon presentation for historical siblings (strategy / overlay / signal backtest).
+ * Same spirit as model attribution (#873) — do not re-touch attribution meta. */
+function historicalHorizonMeta(source) {
+  const meta = (source && source.horizon_presentation_meta) || {};
+  return {
+    primary_horizon_days: meta.primary_horizon_days ?? 28,
+    secondary_horizon_days: Array.isArray(meta.secondary_horizon_days)
+      ? meta.secondary_horizon_days
+      : [84],
+    noise_horizon_days: Array.isArray(meta.noise_horizon_days) ? meta.noise_horizon_days : [7],
+    cohort: meta.cohort || "screen_and_overlay_signals",
+    return_basis: meta.return_basis || "excess_vs_ftse",
+  };
+}
+
+function partitionByHorizon(rows, meta) {
+  const primaryH = Number(meta.primary_horizon_days);
+  const secondarySet = new Set((meta.secondary_horizon_days || []).map(Number));
+  const noiseSet = new Set((meta.noise_horizon_days || []).map(Number));
+  const list = Array.isArray(rows) ? rows : [];
+  return {
+    primary: list.filter((r) => Number(r.horizon_days) === primaryH),
+    secondary: list.filter((r) => secondarySet.has(Number(r.horizon_days))),
+    noise: list.filter((r) => noiseSet.has(Number(r.horizon_days))),
+    other: list.filter((r) => {
+      const h = Number(r.horizon_days);
+      return h !== primaryH && !secondarySet.has(h) && !noiseSet.has(h);
+    }),
+    primaryH,
+    secondarySet,
+    noiseSet,
+  };
+}
+
 function renderHistoricalAnalysis(historical) {
   if (!historical || !historical.strategy_horizons || !historical.strategy_horizons.length) {
     return `<div class="empty-state">${esc(historical?.note || "Historical analysis needs at least two archived weekly runs within the 3-year window.")}</div>`;
@@ -2299,32 +2352,132 @@ function renderHistoricalAnalysis(historical) {
     "research:downgraded",
   ]);
 
-  const strategyRows = historical.strategy_horizons
-    .filter((row) => keyStrategies.has(row.strategy))
-    .sort((a, b) => a.horizon_days - b.horizon_days || a.strategy.localeCompare(b.strategy))
-    .map(
-      (row) => `<tr>
-        <td>${row.horizon_days}d</td>
+  const meta = historicalHorizonMeta(historical);
+  const strategyAll = historical.strategy_horizons.filter((row) => keyStrategies.has(row.strategy));
+  const strategyParts = partitionByHorizon(strategyAll, meta);
+  const strategyRowHtml = (row) => `<tr>
         <td>${signalBadge(row.strategy.replace(/^[^:]+:/, ""))}<br><span class="small muted">${esc(row.strategy)}</span></td>
         <td>${pct(row.smoothed_excess_return)}</td>
         <td>${pct(row.raw_excess_return)}</td>
         <td>${row.count}</td>
         <td>${row.observation_weeks}</td>
-      </tr>`
-    )
+      </tr>`;
+
+  const strategyPrimaryTable = strategyParts.primary.length
+    ? `<h4 style="margin-top:1rem">Strategy horizons — primary ${strategyParts.primaryH}d (FTSE excess)</h4>
+      <p class="small muted" style="margin-top:0">
+        Cohort: screen/overlay/research key signals · Return: excess vs ^FTSE (smoothed).
+        Primary ${strategyParts.primaryH}d matches weight-learning / attribution spirit; not paper P&amp;L.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Strategy</th><th>Smoothed excess</th><th>Raw excess</th><th>N</th><th>Weeks</th></tr></thead>
+          <tbody>${strategyParts.primary
+            .slice()
+            .sort((a, b) => a.strategy.localeCompare(b.strategy))
+            .map(strategyRowHtml)
+            .join("")}</tbody>
+        </table>
+      </div>`
+    : "";
+
+  const strategySecondary = (meta.secondary_horizon_days || [])
+    .map((h) => {
+      const subset = strategyParts.secondary.filter((r) => Number(r.horizon_days) === Number(h));
+      if (!subset.length) return "";
+      return `<h4 style="margin-top:1rem">Strategy horizons — secondary ${Number(h)}d</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Strategy</th><th>Smoothed excess</th><th>Raw excess</th><th>N</th><th>Weeks</th></tr></thead>
+          <tbody>${subset
+            .slice()
+            .sort((a, b) => a.strategy.localeCompare(b.strategy))
+            .map(strategyRowHtml)
+            .join("")}</tbody>
+        </table>
+      </div>`;
+    })
     .join("");
 
-  const overlayRows = (historical.overlay_comparison || [])
-    .map(
-      (row) => `<tr>
-        <td>${row.horizon_days}d</td>
+  const strategyNoise = strategyParts.noise.length
+    ? `<details class="overview-secondary" style="margin-top:1rem">
+        <summary>Noise check — ${[...strategyParts.noiseSet].join("/")}d strategy excess (demoted)</summary>
+        <p class="small muted">Short mark-to-mark horizons are diagnostics only; they are not the success metric.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Horizon</th><th>Strategy</th><th>Smoothed excess</th><th>Raw excess</th><th>N</th><th>Weeks</th></tr></thead>
+            <tbody>${strategyParts.noise
+              .slice()
+              .sort((a, b) => a.horizon_days - b.horizon_days || a.strategy.localeCompare(b.strategy))
+              .map(
+                (row) => `<tr>
+              <td>${row.horizon_days}d</td>
+              <td>${signalBadge(row.strategy.replace(/^[^:]+:/, ""))}<br><span class="small muted">${esc(row.strategy)}</span></td>
+              <td>${pct(row.smoothed_excess_return)}</td>
+              <td>${pct(row.raw_excess_return)}</td>
+              <td>${row.count}</td>
+              <td>${row.observation_weeks}</td>
+            </tr>`
+              )
+              .join("")}</tbody>
+          </table>
+        </div>
+      </details>`
+    : "";
+
+  const overlayParts = partitionByHorizon(historical.overlay_comparison || [], meta);
+  const overlayRowHtml = (row) => `<tr>
         <td>${pct(row.smoothed_screen_excess)}</td>
         <td>${pct(row.smoothed_overlay_excess)}</td>
         <td>${row.downgrade_count}</td>
         <td>${row.sample_count}</td>
-      </tr>`
-    )
+      </tr>`;
+  const overlayPrimary = overlayParts.primary.length
+    ? `<h4 style="margin-top:1rem">Screen vs research overlay — primary ${overlayParts.primaryH}d</h4>
+      <p class="small muted" style="margin-top:0">
+        Cohort: buy-tier (buy ∪ strong_buy) · Return: smoothed excess vs ^FTSE · investment-horizon framing (not a 7d grade).
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Screen (smoothed)</th><th>Overlay (smoothed)</th><th>Downgrades</th><th>N</th></tr></thead>
+          <tbody>${overlayParts.primary.map(overlayRowHtml).join("")}</tbody>
+        </table>
+      </div>`
+    : "";
+  const overlaySecondary = (meta.secondary_horizon_days || [])
+    .map((h) => {
+      const subset = overlayParts.secondary.filter((r) => Number(r.horizon_days) === Number(h));
+      if (!subset.length) return "";
+      return `<h4 style="margin-top:1rem">Screen vs overlay — secondary ${Number(h)}d</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Screen (smoothed)</th><th>Overlay (smoothed)</th><th>Downgrades</th><th>N</th></tr></thead>
+          <tbody>${subset.map(overlayRowHtml).join("")}</tbody>
+        </table>
+      </div>`;
+    })
     .join("");
+  const overlayNoise = overlayParts.noise.length
+    ? `<details class="overview-secondary" style="margin-top:1rem">
+        <summary>Noise check — ${[...overlayParts.noiseSet].join("/")}d overlay comparison (demoted)</summary>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Horizon</th><th>Screen</th><th>Overlay</th><th>Downgrades</th><th>N</th></tr></thead>
+            <tbody>${overlayParts.noise
+              .map(
+                (row) => `<tr>
+              <td>${row.horizon_days}d</td>
+              <td>${pct(row.smoothed_screen_excess)}</td>
+              <td>${pct(row.smoothed_overlay_excess)}</td>
+              <td>${row.downgrade_count}</td>
+              <td>${row.sample_count}</td>
+            </tr>`
+              )
+              .join("")}</tbody>
+          </table>
+        </div>
+      </details>`
+    : "";
 
   return `
     <p class="small muted">
@@ -2334,23 +2487,12 @@ function renderHistoricalAnalysis(historical) {
     <p class="small">Window: ${windowLabel}</p>
     ${renderWeeklySeriesChart(historical.weekly_series, 28)}
     ${renderWeeklySeriesChart(historical.weekly_series, 84)}
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Horizon</th><th>Strategy</th><th>Smoothed excess</th><th>Raw excess</th><th>N</th><th>Weeks</th></tr></thead>
-        <tbody>${strategyRows}</tbody>
-      </table>
-    </div>
-    ${
-      overlayRows
-        ? `<h4 style="margin-top:1rem">Screen vs research overlay (buy cohort)</h4>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Horizon</th><th>Screen (smoothed)</th><th>Overlay (smoothed)</th><th>Downgrades</th><th>N</th></tr></thead>
-          <tbody>${overlayRows}</tbody>
-        </table>
-      </div>`
-        : ""
-    }
+    ${strategyPrimaryTable}
+    ${strategySecondary}
+    ${strategyNoise}
+    ${overlayPrimary}
+    ${overlaySecondary}
+    ${overlayNoise}
     ${renderModelAttributionPanel(historical)}`;
 }
 
@@ -2618,13 +2760,48 @@ function renderPerformance(data) {
 
   let backtestHtml = '<div class="empty-state">Backtest needs at least two archived weekly runs.</div>';
   if (backtest && backtest.horizons && backtest.horizons.length) {
-    backtestHtml = `
-      <p class="small muted">${esc(backtest.note || "")} · ${backtest.run_count} archived runs</p>
+    const btMeta = historicalHorizonMeta(backtest);
+    const btParts = partitionByHorizon(backtest.horizons, btMeta);
+    const btRow = (h) => `<tr>
+              <td>${signalBadge(h.signal)}</td>
+              <td>${pct(h.avg_return)}</td>
+              <td>${pct(h.benchmark_return)}</td>
+              <td>${pct(h.excess_return)}</td>
+              <td>${h.count}</td>
+            </tr>`;
+    const btPrimary = btParts.primary.length
+      ? `<h4 style="margin-top:0.75rem">Primary ${btParts.primaryH}d — excess vs ^FTSE</h4>
+      <p class="small muted" style="margin-top:0">
+        Cohort: universe signal buckets (not buy-tier-only) · Return: average excess vs ^FTSE.
+        Primary ${btParts.primaryH}d; 7d is demoted below.
+      </p>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Horizon</th><th>Signal</th><th>Avg return</th><th>Benchmark</th><th>Excess</th><th>N</th></tr></thead>
-          <tbody>
-            ${backtest.horizons
+          <thead><tr><th>Signal</th><th>Avg return</th><th>Benchmark</th><th>Excess</th><th>N</th></tr></thead>
+          <tbody>${btParts.primary.map(btRow).join("")}</tbody>
+        </table>
+      </div>`
+      : "";
+    const btSecondary = (btMeta.secondary_horizon_days || [])
+      .map((days) => {
+        const subset = btParts.secondary.filter((r) => Number(r.horizon_days) === Number(days));
+        if (!subset.length) return "";
+        return `<h4 style="margin-top:0.75rem">Secondary ${Number(days)}d</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Signal</th><th>Avg return</th><th>Benchmark</th><th>Excess</th><th>N</th></tr></thead>
+          <tbody>${subset.map(btRow).join("")}</tbody>
+        </table>
+      </div>`;
+      })
+      .join("");
+    const btNoise = btParts.noise.length
+      ? `<details class="overview-secondary" style="margin-top:0.75rem">
+        <summary>Noise check — ${[...btParts.noiseSet].join("/")}d signal backtest (demoted)</summary>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Horizon</th><th>Signal</th><th>Avg return</th><th>Benchmark</th><th>Excess</th><th>N</th></tr></thead>
+            <tbody>${btParts.noise
               .map(
                 (h) => `<tr>
               <td>${h.horizon_days}d</td>
@@ -2635,10 +2812,16 @@ function renderPerformance(data) {
               <td>${h.count}</td>
             </tr>`
               )
-              .join("")}
-          </tbody>
-        </table>
-      </div>`;
+              .join("")}</tbody>
+          </table>
+        </div>
+      </details>`
+      : "";
+    backtestHtml = `
+      <p class="small muted">${esc(backtest.note || "")} · ${backtest.run_count} archived runs</p>
+      ${btPrimary}
+      ${btSecondary}
+      ${btNoise}`;
   }
 
   let simHtml = '<div class="empty-state">Simulation needs at least two archived weekly runs.</div>';
@@ -3162,18 +3345,52 @@ function renderAnalysis(data) {
   }
 
   let postRunHtml = "";
-  if (postRun && (postRun.full_text || postRun.executive_summary)) {
-    const body = esc(postRun.full_text || postRun.executive_summary || "").replace(/\n/g, "<br>");
+  if (postRun && (postRun.executive_summary || postRun.full_text || postRun.persistent_weaknesses)) {
+    const clearanceUrl = githubOpsDocUrl("docs/ops/post-run-improvement-clearance.md");
+    const sectionCard = (title, body, { noteHtml = "", collapsed = false } = {}) => {
+      if (!body) return "";
+      const content = `<p>${esc(body).replace(/\n/g, "<br>")}</p>`;
+      if (collapsed) {
+        return `<details class="overview-secondary post-run-section" style="margin-top:0.75rem">
+          <summary><strong>${esc(title)}</strong></summary>
+          ${noteHtml}
+          ${content}
+        </details>`;
+      }
+      return `<div class="card post-run-section" style="margin-top:0.75rem">
+        <h3 style="margin-top:0">${esc(title)}</h3>
+        ${noteHtml}
+        ${content}
+      </div>`;
+    };
+    const weaknessesNote = `<p class="small muted" style="margin-top:0">
+      Theme rollup across accumulated gap-fill / model suggestions — <strong>not</strong> an engineering backlog.
+      Do not “fix every bullet.” Clearance uses ingest factory → eng queue → narrative refresh
+      (${clearanceUrl ? `<a href="${esc(clearanceUrl)}" target="_blank" rel="noopener">post-run clearance policy</a>` : "ops clearance policy"}).
+      Actionable tickets live on <strong>Automation → Engineering queue</strong>.
+    </p>`;
     postRunHtml = `
       <h2 style="margin-top:1.5rem">Post-run improvement review</h2>
       <p class="small muted" style="margin-top:0">
-        Snapshot from the last Sunday email / deep-analysis pass — narrative weaknesses and plan items,
-        not live engineering tickets. Actionable work lives on the
-        <strong>Automation</strong> tab → Engineering queue (compile may be idle until the next review).
+        Structured snapshot from the last Sunday email / deep-analysis pass — presentation for humans.
+        Does not rewrite learning books or auto-dispatch from this panel alone.
       </p>
-      <div class="card">
-        <p>${body}</p>
-      </div>`;
+      ${sectionCard("Executive summary", postRun.executive_summary)}
+      ${sectionCard("Persistent weaknesses", postRun.persistent_weaknesses, {
+        noteHtml: weaknessesNote,
+      })}
+      ${sectionCard("This week’s findings", postRun.this_week_findings)}
+      ${sectionCard("Improvement plan", postRun.improvement_plan)}
+      ${sectionCard("Defer", postRun.defer, { collapsed: true })}
+      ${
+        postRun.full_text
+          ? `<details class="overview-secondary" style="margin-top:0.75rem">
+          <summary>Full text (archive)</summary>
+          <p class="small muted">Raw narrative kept for search; structured sections above are primary.</p>
+          <p>${esc(postRun.full_text).replace(/\n/g, "<br>")}</p>
+        </details>`
+          : ""
+      }`;
   }
 
   let researchHtml = '<div class="empty-state">No per-ticker research memos published yet.</div>';
@@ -3455,7 +3672,9 @@ function renderChurnCounterfactualPanel(data) {
     <section class="automation-section automation-section-full churn-counterfactual-section">
       <h2>Churn &amp; counterfactual</h2>
       <p class="small muted" style="margin-top:0">
-        Observe-only rollups from weekday decision-review (${lookback}-day lookback).
+        <strong>Churn ops window</strong> (${lookback}d) — not an investment thesis horizon.
+        Cost-drag tint uses Suite A stress-native thresholds (~6% round-trip); fair Suite B adoption truth lives on Learning tracks.
+        Observe-only rollups from weekday decision-review.
         ${asOf ? `Updated ${esc(fmtDate(asOf))}.` : ""}
         ${docChurn ? `<a href="${esc(docChurn)}" target="_blank" rel="noopener">Paper learning review</a>` : ""}
         ${docCf ? ` · <a href="${esc(docCf)}" target="_blank" rel="noopener">Rebalance log replay</a>` : ""}
@@ -4416,10 +4635,14 @@ function learningTrackLabel(trackId, trackConfigs) {
   if (cfg.track_label) return cfg.track_label;
   const defaults = {
     rules: "Rules (control)",
-    ai_judgment: "AI judgment (primary)",
+    ai_judgment: "AI judgment (primary · stress)",
+    ai_judgment_fair: "AI judgment (fair · Suite B)",
+    rules_fair: "Rules (fair · Suite B)",
     ai_judgment_calibrated: "AI judgment calibrated (shadow)",
     momentum_grace: "Momentum grace",
     technical: "Technical (levels baseline)",
+    buy_tier_level: "Buy-tier level (Suite B cohort)",
+    buy_tier_level_dca: "Buy-tier level DCA (Suite B)",
   };
   if (defaults[trackId]) return defaults[trackId];
   const rankMatch = /^ai_judgment_calibrated_r(\d+)$/.exec(trackId || "");
@@ -4579,22 +4802,32 @@ function renderKnobBootstrapPanel(data) {
     </section>`;
 }
 
-function renderLearningTracksPanel(data) {
-  const review =
-    data.learning_tracks_review ||
-    (data.paper_automation || {}).learning_tracks_review;
-  if (!review || !review.reviews) {
-    return `<section class="automation-section learning-tracks-section">
-      <h2>Learning tracks (server)</h2>
-      <p class="muted">No learning-track review published yet — runs after weekday paper-auto + decision-review.</p>
-    </section>`;
+/** Dual-suite scoreboard: Suite B fair = adoption truth; Suite A stress = churn lab (N145). */
+function learningTrackIsSuiteB(trackId, trackConfigs) {
+  const cfg = (trackConfigs || {})[trackId] || {};
+  if (cfg.is_suite_b || cfg.is_fair_cost_lab || cfg.is_cohort_lab) return true;
+  const id = String(trackId || "");
+  if (id.endsWith("_fair")) return true;
+  if (id === "buy_tier_level" || id === "buy_tier_level_dca" || id === "buy_tier_level_native") {
+    return true;
   }
+  return false;
+}
 
-  const funds = data.learning_track_funds || {};
-  const trackConfigs = data.learning_track_configs || {};
-  const technicalMissing = !review.reviews.technical;
-  const baseOrder = ["technical", "rules", "ai_judgment", "momentum_grace"];
-  const shadowIds = Object.keys(review.reviews)
+function learningTrackSuiteOrder(suite, trackConfigs, reviewIds) {
+  const preferredA = ["technical", "rules", "ai_judgment", "momentum_grace", "graduated_allocation"];
+  const preferredB = [
+    "ai_judgment_fair",
+    "rules_fair",
+    "buy_tier_level",
+    "buy_tier_level_dca",
+    "buy_tier_level_native",
+  ];
+  const preferred = suite === "B" ? preferredB : preferredA;
+  const ids = reviewIds.filter((id) =>
+    suite === "B" ? learningTrackIsSuiteB(id, trackConfigs) : !learningTrackIsSuiteB(id, trackConfigs)
+  );
+  const shadowIds = ids
     .filter(
       (id) =>
         id === "ai_judgment_calibrated" ||
@@ -4609,18 +4842,24 @@ function renderLearningTracksPanel(data) {
       };
       return rank(a) - rank(b);
     });
-  const trackOrder = [];
-  for (const id of baseOrder) {
-    trackOrder.push(id);
-    if (id === "ai_judgment") {
-      for (const shadowId of shadowIds) trackOrder.push(shadowId);
+  const ordered = [];
+  for (const id of preferred) {
+    if (!ids.includes(id) || ordered.includes(id)) continue;
+    ordered.push(id);
+    if (suite === "A" && id === "ai_judgment") {
+      for (const shadowId of shadowIds) {
+        if (!ordered.includes(shadowId)) ordered.push(shadowId);
+      }
     }
   }
-  for (const id of Object.keys(review.reviews)) {
-    if (!trackOrder.includes(id)) trackOrder.push(id);
+  for (const id of ids) {
+    if (!ordered.includes(id)) ordered.push(id);
   }
+  return ordered;
+}
 
-  const rows = trackOrder
+function renderLearningTrackRows(trackOrder, review, funds, trackConfigs) {
+  return trackOrder
     .map((id) => {
       const row = review.reviews[id];
       if (!row) return "";
@@ -4628,7 +4867,12 @@ function renderLearningTracksPanel(data) {
       const m = row.metrics || {};
       const fund = funds[id] || {};
       const cfg = trackConfigs[id] || {};
-      const primary = row.is_primary_learning_track ? ' <span class="badge badge-buy">primary</span>' : "";
+      const primary = row.is_primary_learning_track
+        ? ' <span class="badge badge-buy" title="Primary learning track flag (Suite A stress) — not flipped by Suite B scoreboard (N145)">primary</span>'
+        : "";
+      const suiteBadge = learningTrackIsSuiteB(id, trackConfigs)
+        ? ' <span class="badge badge-info" title="Suite B fair / cohort lab">Suite B</span>'
+        : ' <span class="badge badge-neutral" title="Suite A 3% stress lab">Suite A</span>';
       const shadowBadge = cfg.is_calibration_shadow
         ? ` <span class="badge badge-hold" title="Frozen calibration priors — decision-review apply disabled">calibrated shadow</span>`
         : "";
@@ -4670,7 +4914,7 @@ function renderLearningTracksPanel(data) {
               .join(" → ")}</span>`
           : '<span class="small muted">—</span>';
       return `<tr>
-        <td><strong>${esc(label)}</strong>${primary}${shadowBadge}${confBadge}<br><span class="small muted">${esc(id)}</span>${
+        <td><strong>${esc(label)}</strong>${primary}${suiteBadge}${shadowBadge}${confBadge}<br><span class="small muted">${esc(id)}</span>${
           knobsHtml ? `<br><span class="small muted">${esc(knobsHtml)}</span>` : ""
         }</td>
         <td>${m.portfolio_value != null ? `£${Number(m.portfolio_value).toFixed(2)}` : "—"}</td>
@@ -4684,30 +4928,13 @@ function renderLearningTracksPanel(data) {
       </tr>`;
     })
     .join("");
+}
 
-  const verdict = review.verdict || "—";
-  const beatMarket = review.beat_market ? "Yes" : "No";
-  const beatControl = review.beat_control ? "Yes" : "No";
-  const primaryExcess = review.primary_excess_after_costs;
-
-  return `<section class="automation-section learning-tracks-section">
-    <h2>Learning tracks (server)</h2>
-    <p class="small muted" style="margin-top:0">
-      Weekday paper-auto books published from CI — not the browser local sandbox.
-      Primary success = AI judgment excess vs ^FTSE after costs; rules is control; technical is timing/levels baseline.
-      Competing calibrated shadows run frozen knob priors alongside primary AI judgment (no auto-promotion).
-    </p>
-    ${
-      technicalMissing
-        ? `<p class="small muted">Technical server track not published yet (L108) — use <strong>Performance → Static/Trailing</strong> for archived level sims, or <strong>Portfolio → Technical</strong> for the browser sandbox.</p>`
-        : ""
-    }
-    <div class="learning-tracks-headline">
-      <span>Verdict: <strong>${esc(verdict)}</strong></span>
-      <span>AI excess vs ^FTSE: <strong>${primaryExcess != null ? pct(primaryExcess) : "—"}</strong></span>
-      <span>Beat market: ${esc(beatMarket)}</span>
-      <span>Beat rules control: ${esc(beatControl)}</span>
-    </div>
+function renderLearningTracksSuiteTable(title, blurb, headlineHtml, rowsHtml) {
+  return `
+    <h3 style="margin-top:1rem">${esc(title)}</h3>
+    <p class="small muted" style="margin-top:0">${esc(blurb)}</p>
+    ${headlineHtml || ""}
     <div class="table-wrap">
       <table class="learning-tracks-table">
         <thead>
@@ -4723,9 +4950,138 @@ function renderLearningTracksPanel(data) {
             <th>Recent marks</th>
           </tr>
         </thead>
-        <tbody>${rows || '<tr><td colspan="9" class="muted">No track reviews in bundle.</td></tr>'}</tbody>
+        <tbody>${rowsHtml || '<tr><td colspan="9" class="muted">No tracks in this suite.</td></tr>'}</tbody>
       </table>
-    </div>
+    </div>`;
+}
+
+function renderLearningTracksPanel(data) {
+  const review =
+    data.learning_tracks_review ||
+    (data.paper_automation || {}).learning_tracks_review;
+  if (!review || !review.reviews) {
+    return `<section class="automation-section learning-tracks-section">
+      <h2>Learning tracks (server)</h2>
+      <p class="muted">No learning-track review published yet — runs after weekday paper-auto + decision-review.</p>
+    </section>`;
+  }
+
+  const funds = data.learning_track_funds || {};
+  const trackConfigs = data.learning_track_configs || {};
+  const dual = data.learning_tracks_dual_suite || {};
+  const suiteAMeta = dual.suite_a || {};
+  const suiteBMeta = dual.suite_b || {};
+  const technicalMissing = !review.reviews.technical;
+  const reviewIds = Object.keys(review.reviews);
+  const orderA = learningTrackSuiteOrder("A", trackConfigs, reviewIds);
+  const orderB = learningTrackSuiteOrder("B", trackConfigs, reviewIds);
+  const rowsA = renderLearningTrackRows(orderA, review, funds, trackConfigs);
+  const rowsB = renderLearningTrackRows(orderB, review, funds, trackConfigs);
+
+  const fairExcess =
+    suiteBMeta.ai_excess_after_costs != null
+      ? suiteBMeta.ai_excess_after_costs
+      : (review.reviews.ai_judgment_fair || {}).metrics?.excess_after_costs;
+  const fairBeatMarket =
+    suiteBMeta.beat_market != null
+      ? suiteBMeta.beat_market
+      : fairExcess != null
+        ? Number(fairExcess) > 0
+        : null;
+  const fairBeatControl =
+    suiteBMeta.beat_control != null
+      ? suiteBMeta.beat_control
+      : (() => {
+          const rulesEx = (review.reviews.rules_fair || {}).metrics?.excess_after_costs;
+          if (fairExcess == null || rulesEx == null) return null;
+          return Number(fairExcess) > Number(rulesEx);
+        })();
+  const yesNo = (v) => (v == null ? "—" : v ? "Yes" : "No");
+
+  const suiteBHeadline = `
+    <div class="learning-tracks-headline">
+      <span><strong>Adoption truth (Suite B fair)</strong></span>
+      <span>AI fair excess vs ^FTSE: <strong>${fairExcess != null ? pct(fairExcess) : "—"}</strong></span>
+      <span>Beat market: ${esc(yesNo(fairBeatMarket))}</span>
+      <span>Beat fair rules: ${esc(yesNo(fairBeatControl))}</span>
+    </div>`;
+
+  const stressExcess =
+    suiteAMeta.primary_excess_after_costs != null
+      ? suiteAMeta.primary_excess_after_costs
+      : review.primary_excess_after_costs;
+  const suiteAHeadline = `
+    <div class="learning-tracks-headline">
+      <span><strong>Churn lab (Suite A stress)</strong> — not promotion truth</span>
+      <span>Primary AI excess (3%): <strong>${stressExcess != null ? pct(stressExcess) : "—"}</strong></span>
+      <span>Stress beat market: ${esc(yesNo(review.beat_market))}</span>
+      <span>Stress beat rules: ${esc(yesNo(review.beat_control))}</span>
+      <span>Verdict: <strong>${esc(review.verdict || "—")}</strong></span>
+    </div>`;
+
+  const assess = dual.fair_assess_suite_a;
+  const assessTracks = (assess && assess.tracks) || {};
+  const assessRows = Object.entries(assessTracks)
+    .map(([tid, row]) => {
+      const relief = row.cost_drag_relief;
+      return `<tr>
+        <td><code>${esc(tid)}</code></td>
+        <td>${pctOrDash(row.recorded_cost_drag)}</td>
+        <td>${pctOrDash(row.fair_cost_drag)}</td>
+        <td>${relief == null ? "—" : pctOrDash(relief)}</td>
+        <td>${row.trade_count ?? "—"}</td>
+      </tr>`;
+    })
+    .join("");
+  const assessBlock = assessRows
+    ? `<details class="overview-secondary" style="margin-top:1rem">
+        <summary>Suite A friction under fair T212 rates (observe — does not rebuild excess)</summary>
+        <p class="small muted">First-order cost_drag relief only. Adoption excess stays on Suite B fair twin books.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Track</th><th>Recorded drag</th><th>Fair drag</th><th>Relief</th><th>Trades</th></tr></thead>
+            <tbody>${assessRows}</tbody>
+          </table>
+        </div>
+      </details>`
+    : "";
+
+  const docDual = githubOpsDocUrl(
+    "docs/ops/market-trading-costs.md",
+    "test-and-adoption-strategy-dual-suite"
+  );
+  const docPrimary = githubOpsDocUrl("docs/ops/primary-learning-track.md");
+
+  return `<section class="automation-section learning-tracks-section">
+    <h2>Learning tracks (server)</h2>
+    <p class="small muted" style="margin-top:0">
+      Weekday paper-auto books from CI — not the browser local sandbox.
+      <strong>Adoption success</strong> = Suite B fair AI excess vs ^FTSE and vs fair rules control.
+      Suite A keeps the primary learning-track flag and 3% stress churn lab — do not promote on stress excess alone (N145).
+      ${docDual ? `<a href="${esc(docDual)}" target="_blank" rel="noopener">Dual-suite costs</a>` : ""}
+      ${docPrimary ? ` · <a href="${esc(docPrimary)}" target="_blank" rel="noopener">Primary learning track</a>` : ""}
+    </p>
+    ${
+      technicalMissing
+        ? `<p class="small muted">Technical server track not published yet (L108) — use <strong>Performance → Static/Trailing</strong> for archived level sims, or <strong>Portfolio → Technical</strong> for the browser sandbox.</p>`
+        : ""
+    }
+    ${renderLearningTracksSuiteTable(
+      suiteBMeta.label || "Suite B — fair adoption scoreboard",
+      suiteBMeta.blurb ||
+        "Fair T212-shaped twins and cohort labs. This is the promotion / adoption scoreboard.",
+      suiteBHeadline,
+      rowsB ||
+        '<tr><td colspan="9" class="muted">No Suite B fair / cohort tracks published yet.</td></tr>'
+    )}
+    ${renderLearningTracksSuiteTable(
+      suiteAMeta.label || "Suite A — stress / churn lab",
+      suiteAMeta.blurb ||
+        "Live FTSE books at 3% per-side stress. Use for cost drag / trade count / hold stability — not absolute beat-^FTSE promotion.",
+      suiteAHeadline,
+      rowsA
+    )}
+    ${assessBlock}
   </section>`;
 }
 

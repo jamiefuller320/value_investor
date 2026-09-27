@@ -118,6 +118,7 @@ Learning-director vision caps open experiments (~5). Fair lab should start as **
 | Now | Suite B books live: `ai_judgment_fair` + `rules_fair` under `docs/data/paper_automation/` (fair T212 costs; warm-started). Suite A stays on 3% stress. |
 | Now | Weekday paper-auto includes Suite B when present; decision-review `--suite B --apply` tunes fair-lab knobs only. |
 | Now | Sunday: `ftse-trading-costs assess` + compare Suite B excess vs ^FTSE / fair rules control before any promotion talk |
+| Now | Dashboard **Automation → Learning tracks** dual-suite scoreboard (`learning_tracks_dual_suite` in publish JSON): Suite B fair = adoption headline; Suite A stress = churn lab. Does **not** flip `is_primary_learning_track` (**N145**) |
 | Now | If `experiment_assessment` has **recommend** calibration / exclusion / experimental rows, dry-run then optionally apply `ftse-trading-costs spawn-fair-twins` (max 2; human only — **N53**) |
 | Later | Flip primary off 3% only after B has a thick forward window (**N48**) |
 
