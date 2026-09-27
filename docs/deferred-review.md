@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-27T08:23:50+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-27T12:16:33+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -215,6 +215,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N160 | **Human-task Approve buttons stay observe-only — never auto-apply** | Approve on checklist cards records observe-only intent today. Do not wire Approve to knob promote, fair-twin spawn, Phase C freeze writer, or live capital without an explicit readiness gate per action. | A promotion gate has a documented supervised execute path and thick evidence like lifecycle Start |
 | N161 | **Do not eng-spray MC.PA IWB from blocker_no_improve before dismiss** | Open deviation dev-euro_depth-MC.PA-blocker_no_improve is plain buy → dismiss; intensive pin / per-ticker eng would steal euro_depth fat-slot capacity. | MC.PA flips strong_buy or IR exhausted with clear allowlist bug |
 | N162 | **Widen ops-monitor workflow max_age for Sunday weekly jobs** | Do not bump analysis-review / email-report / data-backup max_age_hours (e.g. toward ~168h). On Sunday morning age since last success is always ~7d; longer counters would hide real same-day misses after EMAIL_READY. Prefer schedule-aware stale (past email-ready) which is now implemented. | Only if schedule-aware past_email_ready gate is reverted or proven insufficient after several Sunday morning ops passes |
+| N163 | **Rebuild model attribution as multi-track live instrument** | Do not open a new live paper track or factory rebuild for factor attribution. Keep dashboard/historical-analysis observe path; P1 remains FTSE decision-input utilization (filings, FCF, overlay bind, memo recency). | P1 FTSE buy-tier bodies/overlays/memo freshness are green and Metric A 28d panel has been live long enough to show whether factor readout still blocks learning questions |
 
 ---
 
@@ -284,6 +285,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L445 | **Cash buffer sleeve after rank-rotation works** | Prefer fixing blocked exits (done L440) so fully-invested books recycle into better sleeves. A 5-10% dry-powder buffer remains optional capital-allocation v2 — do not use idle cash as a substitute for broken rotation. | capital_rotation_coordinator / cash buffer target phase activates and rank rotation is healthy on momentum_grace |
 | L446 | **Nested counterfactual best-policy scoring inside sleeve episodes** | Wide earliest/latest episodes are recording. Next: score tighter entry/exit policies as nested counterfactuals inside closed episodes once readiness.ready_for_sleeve_timing_analysis is true. | learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true on primary or fair tracks |
 | L462 | **Observe-only recent week-pair excess twin beside cumulative beat_market** | Do not replace epoch beat_market / excess_after_costs with decay-weighted or equal WoW excess. Optionally publish an observe-only recent-relative-edge twin (mean or mild decay of week-pair book−bench deltas + positive-week rate) beside cumulative once a fair-cost primary has a thick clean window. Cumulative wealth vs market stays adoption truth; WoW answers edge lately, not did the epoch beat. | Fair-cost primary (post-N153-clean epoch on any shard under review) has ≥8 weekday week-pairs of usable NAV marks AND humans repeatedly misread cumulative excess after a documented early drawdown as policy is currently failing. |
+| L474 | **Paper-exit model-score quintile attribution (observe)** | Join closed paper sells (exit_shadow / position_closed) to entry-date per-model scores from history/models_*.json; report hit rate and mean realized (optional FTSE excess) by score quintile. Observe-only; do not drive weights until n>=30 joined closes on primary track. | Primary ai_judgment book has >=30 position_closed exits with joinable Sunday model snapshots, and Metric A (28d buy-tier excess correlation) is already the dashboard primary |
+| L475 | **Stamp per-model scores on rebalance_log buys for exit attribution** | Optional hardening: persist top model scores (or full model_id→score map) on buy candidates/trades so exit attribution does not rely on nearest models_*.json join. Only needed if observe exit-quintile work graduates past ad-hoc joins. | Paper-exit model-score quintile attribution observe rollup is in flight and nearest-snapshot joins prove brittle (timezone/missed Sunday) |
 
 ### Universe & data
 
