@@ -24,6 +24,8 @@ SUPPORTED_ACTIONS = frozenset(
         "lifecycle-experiment-ack",
         "lifecycle-experiment-start",
         "human-task-ack",
+        "daily-focus-ack",
+        "daily-discuss",
     }
 )
 
@@ -35,6 +37,8 @@ ACTION_REPOSITORY_DISPATCH: dict[str, str] = {
     "lifecycle-experiment-ack": "lifecycle-experiment-ack",
     "lifecycle-experiment-start": "lifecycle-experiment-start",
     "human-task-ack": "human-task-ack",
+    "daily-focus-ack": "daily-focus-ack",
+    "daily-discuss": "daily-discuss",
 }
 
 

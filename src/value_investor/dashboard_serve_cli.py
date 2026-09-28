@@ -271,6 +271,71 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                 status, out, ctype = _json_bytes({"ok": True, **result})
                 self._send(status, out, ctype)
                 return
+            if parsed.path == "/api/daily-focus-ack":
+                body, err = self._read_json_object_body()
+                if err is not None:
+                    self._send(*err)
+                    return
+                assert body is not None
+                try:
+                    from value_investor.daily_hub_actions import run_daily_focus_ack
+
+                    result = run_daily_focus_ack(
+                        repo_root / "docs" / "data",
+                        task_ref=str(body.get("task_ref") or ""),
+                        focus_id=str(body.get("focus_id") or ""),
+                        recommendation_id=str(body.get("recommendation_id") or ""),
+                        decision=str(body.get("decision") or "ack"),
+                        local_date=str(body.get("local_date") or ""),
+                        note=str(body.get("note") or ""),
+                        source="dashboard_local",
+                        acked_by="dashboard",
+                    )
+                except Exception as exc:  # noqa: BLE001 — surface to UI
+                    status, out, ctype = _json_bytes(
+                        {
+                            "ok": False,
+                            "error": str(exc),
+                            "traceback": traceback.format_exc(),
+                        },
+                        status=400,
+                    )
+                    self._send(status, out, ctype)
+                    return
+                status, out, ctype = _json_bytes({"ok": True, **result})
+                self._send(status, out, ctype)
+                return
+            if parsed.path == "/api/daily-discuss":
+                body, err = self._read_json_object_body()
+                if err is not None:
+                    self._send(*err)
+                    return
+                assert body is not None
+                try:
+                    from value_investor.daily_hub_actions import run_daily_discuss
+
+                    rec = body.get("recommendation")
+                    result = run_daily_discuss(
+                        repo_root / "docs" / "data",
+                        recommendation_id=str(body.get("recommendation_id") or ""),
+                        recommendation=rec if isinstance(rec, dict) else None,
+                        local_date=str(body.get("local_date") or ""),
+                        source="dashboard_local",
+                    )
+                except Exception as exc:  # noqa: BLE001 — surface to UI
+                    status, out, ctype = _json_bytes(
+                        {
+                            "ok": False,
+                            "error": str(exc),
+                            "traceback": traceback.format_exc(),
+                        },
+                        status=400,
+                    )
+                    self._send(status, out, ctype)
+                    return
+                status, out, ctype = _json_bytes({"ok": True, **result})
+                self._send(status, out, ctype)
+                return
             if parsed.path == "/api/lifecycle-experiment-start":
                 body, err = self._read_json_object_body()
                 if err is not None:
@@ -380,6 +445,8 @@ def main(argv: list[str] | None = None) -> int:
     print("POST /api/lifecycle-experiment-ack → observe-ack recommend experiment")
     print("POST /api/lifecycle-experiment-start → start graduated entry DCA execute")
     print("POST /api/human-task-ack → observe-ack / approve human checklist task")
+    print("POST /api/daily-focus-ack → ack Daily hub focus line for local_date")
+    print("POST /api/daily-discuss → queue recommendation into daily_discuss_inbox")
     print("Ctrl+C to stop")
     try:
         server.serve_forever()
