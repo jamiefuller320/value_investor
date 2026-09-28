@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-28T07:47:26.610198+00:00`
+Generated: `2026-09-28T12:31:48.834278+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -9,11 +9,11 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - FTSE 350 live screen and published dashboard are operational.
 - Offline library: 21 graduated markets (focus: euro_depth).
 - Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.
-- Engineering queue: 4 open, 88 merged supervised tasks.
+- Engineering queue: 0 open, 93 merged supervised tasks.
 
 ## Gaps / watch
-- Primary AI track still below ^FTSE after costs (-35.6% excess; history still thin).
-- Published screen bundle dated 2026-09-23 — confirm Sunday refresh.
+- Primary AI track still below ^FTSE after costs (-35.8% excess; history still thin).
+- Buy-tier filing bodies are green; 49 holdings∪buy-tier names fail memo_recent (bind field: memo_recent).
 
 ## Checkpoint probe
 - Grounded rows: 11; ungrounded: 0
@@ -23,10 +23,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 3 (Library-ready global data): complete _(source: docs/data/project_progress.json)_
 - [ok] Stage 4 (Controlled universe expansion): not_started _(source: docs/data/project_progress.json)_
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
-- [ok] Progress report present (generated_at=2026-09-22T08:34:03+00:00) _(source: docs/data/progress_report.json)_
+- [ok] Progress report present (generated_at=2026-09-28T08:53:07+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
 - [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-09-27T07:46:37.531553+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Ops monitor overall=warn at 2026-09-28T07:46:41.842554+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
@@ -36,22 +36,15 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `human`/human PR #888 `eng-20260927-05` — Clash-aware: treat deferred-ideas store as shared mutable
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 81
+- Occasion count: 89
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
+- `validate check failed` — 3×
 - `Merge conflicts in deferred-ideas.json with main` — 2×
-- `validate check failed` — 2×
 - `ruff_format` — 1×
 - `dirty merge: deferred-ideas.json / deferred-review.md vs main after L424-L426 landings` — 1×
 - `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
 - `pytest test_summary: WIX/BT action notes lost screen TTM after overly broad eng-20260919-14 suppress` — 1×
-
-## Ops-monitor email handoff
-- Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 3 (open=3, resolved=0)
-- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN FTSE decision-input utilization gap — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
