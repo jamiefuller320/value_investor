@@ -57,7 +57,12 @@ python3 scripts/rememo_adequate_tickers.py
 Scheduled path is **Sunday** `email-report` → `--research-docs` (cap 12 active +
 12 alumni). Selection uses `effective_screen_signal` (FCF-/research-adjusted), so
 raw `signal=buy` with `adjusted_signal=hold` is **not** researched. FTSE Sunday
-does **not** prefer no-memo names (library `_research_markets` does via N114).
+**prefers no-memo / first-time** buy-tier ahead of rememo inside the cap (N114
+parity with library). Among already-memo'd actives, rememo order is **current
+holdings → oldest memo activity (`updated_at`) → conviction** — P1 live-path
+freshness on the human decision pack without widening the Sunday cap or a
+rememo burst. Decision-input `memo_recent` uses the same `updated_at` clock so a
+holdings rememo can clear the utilization gap.
 
 Weekday `--weekday-rememo` only rewrites **existing** memos (body-lag). It never
 creates a first memo.

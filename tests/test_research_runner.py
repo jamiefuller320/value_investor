@@ -184,6 +184,131 @@ def test_eligible_research_targets_prefers_no_memo_before_cap():
     assert [r.ticker for r in with_prefer] == ["TRST.L", "MEGP.L"]
 
 
+def test_eligible_research_targets_rememo_holdings_then_oldest_memo():
+    """After prefer-first-time, rememo band: holdings → oldest memo_at → conviction."""
+    held_stale = _report(
+        ticker="BP.L",
+        name="Held Stale",
+        signal="buy",
+        data_quality_score=0.8,
+        conviction_score=0.55,
+        composite_score=0.5,
+    )
+    held_newer = _report(
+        ticker="KLR.L",
+        name="Held Newer",
+        signal="buy",
+        data_quality_score=0.8,
+        conviction_score=0.60,
+        composite_score=0.55,
+    )
+    unheld_oldest = _report(
+        ticker="MEGP.L",
+        name="Unheld Oldest",
+        signal="buy",
+        data_quality_score=0.8,
+        conviction_score=0.99,
+        composite_score=0.95,
+    )
+    unheld_mid = _report(
+        ticker="IMB.L",
+        name="Unheld Mid",
+        signal="buy",
+        data_quality_score=0.8,
+        conviction_score=0.90,
+        composite_score=0.85,
+    )
+    no_memo = _report(
+        ticker="RAT.L",
+        name="No Memo",
+        signal="buy",
+        data_quality_score=0.8,
+        conviction_score=0.40,
+        composite_score=0.4,
+    )
+    already = {"BP.L", "KLR.L", "MEGP.L", "IMB.L"}
+    memo_at = {
+        "BP.L": "2026-08-01T00:00:00+00:00",
+        "KLR.L": "2026-08-20T00:00:00+00:00",
+        "MEGP.L": "2026-07-01T00:00:00+00:00",
+        "IMB.L": "2026-08-10T00:00:00+00:00",
+    }
+    # Cap 4: first-time + 3 rememo slots. Holdings beat older unheld + higher conviction.
+    ordered = eligible_research_targets(
+        [unheld_oldest, unheld_mid, held_newer, held_stale, no_memo],
+        weekly_cap=4,
+        already_researched=already,
+        prefer_first_time=True,
+        holdings={"BP.L", "KLR.L"},
+        memo_at_by_ticker=memo_at,
+    )
+    assert [r.ticker for r in ordered] == ["RAT.L", "BP.L", "KLR.L", "MEGP.L"]
+
+    # Without holdings hint: oldest memo_at then conviction (MEGP oldest, then BP, IMB, KLR).
+    by_age = eligible_research_targets(
+        [unheld_oldest, unheld_mid, held_newer, held_stale, no_memo],
+        weekly_cap=4,
+        already_researched=already,
+        prefer_first_time=True,
+        holdings=set(),
+        memo_at_by_ticker=memo_at,
+    )
+    assert [r.ticker for r in by_age] == ["RAT.L", "MEGP.L", "BP.L", "IMB.L"]
+
+
+def test_select_research_targets_holdings_first_from_store(tmp_path):
+    store = ResearchStore(tmp_path)
+    for ticker, name, updated in (
+        ("MEGP.L", "Unheld Hot", "2026-07-01T00:00:00+00:00"),
+        ("BP.L", "Held Stale", "2026-08-01T00:00:00+00:00"),
+        ("IMB.L", "Unheld Mid", "2026-08-15T00:00:00+00:00"),
+    ):
+        store.save(
+            ResearchDocument(
+                ticker=ticker,
+                name=name,
+                signal="buy",
+                version=1,
+                created_at="2026-01-01T00:00:00+00:00",
+                updated_at=updated,
+                mode="initial",
+                executive_summary=f"Memo for {ticker}",
+            )
+        )
+    reports = [
+        _report(
+            ticker="MEGP.L",
+            name="Unheld Hot",
+            signal="buy",
+            data_quality_score=0.8,
+            conviction_score=0.99,
+        ),
+        _report(
+            ticker="BP.L",
+            name="Held Stale",
+            signal="buy",
+            data_quality_score=0.8,
+            conviction_score=0.50,
+        ),
+        _report(
+            ticker="IMB.L",
+            name="Unheld Mid",
+            signal="buy",
+            data_quality_score=0.8,
+            conviction_score=0.80,
+        ),
+    ]
+    active, alumni = select_research_targets(
+        reports,
+        store,
+        weekly_cap=2,
+        continue_alumni=False,
+        holdings={"BP.L"},
+    )
+    assert [r.ticker for r in active] == ["BP.L", "MEGP.L"]
+    assert alumni == []
+
+
 def test_select_research_targets_prefers_no_memo_from_store(tmp_path):
     store = ResearchStore(tmp_path)
     for ticker, name in (("MEGP.L", "Memo High"), ("IMB.L", "Memo Mid")):
@@ -222,7 +347,9 @@ def test_select_research_targets_prefers_no_memo_from_store(tmp_path):
             conviction_score=0.70,
         ),
     ]
-    active, alumni = select_research_targets(reports, store, weekly_cap=2, continue_alumni=False)
+    active, alumni = select_research_targets(
+        reports, store, weekly_cap=2, continue_alumni=False, holdings=set()
+    )
     assert [r.ticker for r in active] == ["TRST.L", "MEGP.L"]
     assert alumni == []
 
@@ -265,7 +392,9 @@ def test_select_research_targets_no_memo_strong_beats_memo_buy(tmp_path):
             conviction_score=0.6,
         ),
     ]
-    active, _ = select_research_targets(reports, store, weekly_cap=2, continue_alumni=False)
+    active, _ = select_research_targets(
+        reports, store, weekly_cap=2, continue_alumni=False, holdings=set()
+    )
     assert [r.ticker for r in active] == ["NEWS.L", "NEWB.L"]
 
 
@@ -401,7 +530,12 @@ def test_eligible_alumni_prefers_oldest_and_skips_active_buys(tmp_path):
     assert [r.ticker for r in alumni] == ["OLD.L", "NEW.L"]
 
     active, alumni_sel = select_research_targets(
-        reports, store, weekly_cap=8, continue_alumni=True, alumni_cap=8
+        reports,
+        store,
+        weekly_cap=8,
+        continue_alumni=True,
+        alumni_cap=8,
+        holdings=set(),
     )
     assert [r.ticker for r in active] == ["FRESH.L", "BUY.L"]
     assert [r.ticker for r in alumni_sel] == ["OLD.L", "NEW.L"]

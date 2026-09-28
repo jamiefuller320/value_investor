@@ -37,6 +37,64 @@ def _rank_key(report: CompanyReport) -> tuple[float, float]:
     return (report.conviction_score, composite)
 
 
+def _normalize_ticker_set(tickers: set[str] | None) -> set[str]:
+    return {str(t).strip().upper() for t in (tickers or set()) if str(t).strip()}
+
+
+def _memo_at_map(memo_at_by_ticker: dict[str, str] | None) -> dict[str, str]:
+    out: dict[str, str] = {}
+    for key, value in (memo_at_by_ticker or {}).items():
+        ticker = str(key or "").strip().upper()
+        token = str(value or "").strip()
+        if ticker and token:
+            out[ticker] = token
+    return out
+
+
+def _rememo_rank_key(
+    report: CompanyReport,
+    *,
+    holdings: set[str],
+    memo_at_by_ticker: dict[str, str],
+) -> tuple[int, str, float, float]:
+    """Holdings first, then oldest memo activity, then conviction (desc)."""
+    ticker = str(report.ticker or "").strip().upper()
+    held_rank = 0 if ticker in holdings else 1
+    memo_at = memo_at_by_ticker.get(ticker) or ""
+    composite = report.composite_score if report.composite_score is not None else -1.0
+    conviction = report.conviction_score if report.conviction_score is not None else 0.0
+    return (held_rank, memo_at, -conviction, -composite)
+
+
+def _order_rememo_band(
+    pool: list[CompanyReport],
+    *,
+    already_researched: set[str] | None,
+    holdings: set[str] | None,
+    memo_at_by_ticker: dict[str, str] | None,
+) -> list[CompanyReport]:
+    """Reorder already-memo'd actives: holdings → oldest memo_at → conviction.
+
+    First-time (no memo) names keep their relative order and stay ahead of the
+    rememo band when present. Cap size is unchanged — this only reorders spend.
+    """
+    if holdings is None and memo_at_by_ticker is None:
+        return pool
+    already = _normalize_ticker_set(already_researched)
+    held = _normalize_ticker_set(holdings)
+    memo_map = _memo_at_map(memo_at_by_ticker)
+    first: list[CompanyReport] = []
+    rememo: list[CompanyReport] = []
+    for report in pool:
+        ticker = str(report.ticker or "").strip().upper()
+        if ticker and ticker not in already:
+            first.append(report)
+        else:
+            rememo.append(report)
+    rememo.sort(key=lambda r: _rememo_rank_key(r, holdings=held, memo_at_by_ticker=memo_map))
+    return first + rememo
+
+
 def _buy_tier_signal(report: CompanyReport) -> str:
     """Screen signal after FCF/research caps for research spend gating."""
     return effective_screen_signal(report.signal, report.adjusted_signal)
@@ -82,6 +140,8 @@ def eligible_research_targets(
     weekly_cap: int = DEFAULT_RESEARCH_WEEKLY_CAP,
     already_researched: set[str] | None = None,
     prefer_first_time: bool = False,
+    holdings: set[str] | None = None,
+    memo_at_by_ticker: dict[str, str] | None = None,
 ) -> list[CompanyReport]:
     """
     Select active buy-tier names for deep research memos.
@@ -92,6 +152,11 @@ def eligible_research_targets(
     When ``prefer_first_time`` is True, names with no research memo are ordered
     ahead of rememo/refresh candidates before the cap is applied (N114 parity
     with library ``prefer_first_time_research_queues``). Cap size is unchanged.
+
+    After first-time preference, already-memo'd refresh candidates can be reordered
+    as holdings first, then oldest ``memo_at`` (typically ``updated_at``), then
+    conviction — P1 live-path memo freshness on FTSE holdings ∪ buy-tier without
+    widening the Sunday cap or spraying rememo without bodies.
     """
     if weekly_cap <= 0:
         return []
@@ -117,6 +182,12 @@ def eligible_research_targets(
         from value_investor.library_dedupe import prefer_first_time_reports
 
         pool = prefer_first_time_reports(pool, already_researched)
+    pool = _order_rememo_band(
+        pool,
+        already_researched=already_researched,
+        holdings=holdings,
+        memo_at_by_ticker=memo_at_by_ticker,
+    )
     return pool[:weekly_cap]
 
 
@@ -156,6 +227,31 @@ def eligible_alumni_research_targets(
     return [report for _, report in candidates[:alumni_cap]]
 
 
+def _memo_at_by_ticker_from_docs(docs: list) -> dict[str, str]:
+    """Last memo activity per ticker (``updated_at``, else ``created_at``)."""
+    out: dict[str, str] = {}
+    for doc in docs:
+        ticker = str(getattr(doc, "ticker", "") or "").strip().upper()
+        if not ticker:
+            continue
+        token = str(
+            getattr(doc, "updated_at", None) or getattr(doc, "created_at", None) or ""
+        ).strip()
+        if token:
+            out[ticker] = token
+    return out
+
+
+def _default_paper_holdings() -> set[str]:
+    """AI-judgment paper holdings for Sunday rememo ranking (empty if unavailable)."""
+    try:
+        from value_investor.decision_input_inventory import load_paper_holdings
+
+        return load_paper_holdings()
+    except Exception:  # noqa: BLE001
+        return set()
+
+
 def select_research_targets(
     reports: list[CompanyReport],
     store: ResearchStore,
@@ -164,6 +260,7 @@ def select_research_targets(
     continue_alumni: bool = True,
     alumni_cap: int = DEFAULT_RESEARCH_ALUMNI_CAP,
     prefer_first_time: bool = True,
+    holdings: set[str] | None = None,
 ) -> tuple[list[CompanyReport], list[CompanyReport]]:
     """
     Active buy-tier targets plus optional alumni weekly updates.
@@ -173,16 +270,23 @@ def select_research_targets(
 
     By default (``prefer_first_time=True``), active selection puts no-memo
     buy-tier names ahead of rememo of already-memo'd names inside the weekly
-    cap — same structural rule as library Sunday N114. Alumni path is unchanged
+    cap — same structural rule as library Sunday N114. Among already-memo'd
+    actives, rememo order is holdings → oldest memo activity → conviction
+    (P1 memo freshness on the live decision pack). Alumni path is unchanged
     (already-memo'd drop-offs only). Weekday rememo still cannot create first
-    memos; this only reorders Sunday ``--research-docs`` spend.
+    memos; this only reorders Sunday ``--research-docs`` spend. Cap unchanged.
     """
-    already = {doc.ticker for doc in store.list_documents()}
+    docs = store.list_documents()
+    already = {doc.ticker for doc in docs}
+    memo_at_by_ticker = _memo_at_by_ticker_from_docs(docs)
+    held = holdings if holdings is not None else _default_paper_holdings()
     active = eligible_research_targets(
         reports,
         weekly_cap=weekly_cap,
         already_researched=already,
         prefer_first_time=prefer_first_time,
+        holdings=held,
+        memo_at_by_ticker=memo_at_by_ticker,
     )
     if not continue_alumni:
         return active, []
@@ -216,6 +320,8 @@ def run_research_for_strong_buys(
     Active path: quality strong buys first, then top quality buys until weekly_cap.
     Within that pool, no-memo names are preferred ahead of rememo (N114 parity)
     so first-time buy-tier fills the cap before refreshing already-memo'd picks.
+    Already-memo'd actives then rank holdings → oldest memo activity → conviction
+    (Sunday cap unchanged; no rememo burst / no widen without filing bodies).
     Alumni path: continue weekly updates for names that dropped off the buy list
     but still have a memo and remain in the screen (up to alumni_cap, oldest first).
 

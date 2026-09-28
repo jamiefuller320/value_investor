@@ -5,6 +5,10 @@ which FTSE held and buy-tier names still lack bound FCF basis, overlay bind,
 or a sufficiently recent memo — is P1 still the bottleneck vs judgment on
 rich inputs?
 
+``memo_recent`` / ``memo_at`` use last memo activity (``updated_at``), so a
+Sunday holdings-first rememo can clear the utilization clock without rewriting
+first-memo ``created_at``.
+
 Steady-state utilization (not flip→usable lag). Does not rememo, deepen
 ingest, or dispatch engineering. Persists
 ``docs/data/decision_input_inventory.json``.
@@ -177,12 +181,13 @@ def snapshot_decision_input(
     key_bodies = bool(index_meta.get("key_bodies"))
     fcf_bound = _fcf_basis_bound(report)
 
-    has_disk_memo, memo_created, disk_verdict = _research_doc_times(
+    has_disk_memo, memo_created, memo_updated, disk_verdict = _research_doc_times(
         ticker, research_root=research_root
     )
     memo_md = (Path(memo_dir) / f"{ticker}.md").is_file()
     has_memo = has_disk_memo or memo_md
-    memo_at = memo_created
+    # P1 freshness uses last memo activity (updated_at). Rememo preserves created_at.
+    memo_at = memo_updated or memo_created
     age = _memo_age_days(memo_at, now=now)
     memo_recent = bool(has_memo and age is not None and age <= float(memo_max_age_days))
 
