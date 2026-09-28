@@ -181,7 +181,7 @@
         {
           "id": "sunday-shadow-endurance",
           "title": "Review unified experiment assessment",
-          "summary": "Read experiment_assessment.json for continue/fail/recommend rows. After the 2026-09-03 human pass, task recommends should be empty: u4 and exit-shadow are watch, buffered-hold and IMB.L are done, scoring is on the engineering queue. Do not reopen cancelled N58/N59 knob rows. Drill into calibration_shadow_endurance.json for shadow detail.",
+          "summary": "Read fail/continue/recommend only — recommend ≠ do-now. Failed calibration/exclusion shadows close the promote path. Already-acked recommends (e.g. entry_dca_overlay) do not inflate urgency. Remaining ana-* recommends are eng/manual capacity, not this Sunday gate. Acknowledge when blocking unacked promote/overlay recommends are empty; never auto-promote. Do not reopen N58/N59. Verify live board; 2026-09-03 emptied then-open task recommends.",
           "automated": false,
           "doc_path": "docs/ops/experiment-assessment.md",
           "doc_anchor": "human-gate"
