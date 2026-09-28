@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-28T22:52:28.753043+00:00",
+  "generated_at": "2026-09-28T22:53:23.374821+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,8 +8,8 @@
   "checklist_updated_at": "2026-09-28",
   "counts": {
     "new_info": 1,
-    "unacked": 26,
-    "acked": 6,
+    "unacked": 25,
+    "acked": 7,
     "automated": 19,
     "human": 33
   },
@@ -816,42 +816,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "monthly-horizon-scan",
-      "title": "Horizon scan + deferred fragments",
-      "summary": "First Sunday 11:00 UTC: weeder applies deterministic near-dup / already-an-idea DROPs; read horizon scan; triage remaining open fragments and deferred ideas. apply_fragments stays off unless you reviewed the markdown.",
-      "automated": false,
-      "cadence": "monthly",
-      "section_id": "monthly",
-      "section_title": "Monthly",
-      "doc_path": "docs/ops/horizon-scan.md",
-      "doc_anchor": "when-it-runs",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/horizon-scan.md#when-it-runs",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Horizon scan + deferred fragments",
-        "updated_at": null,
-        "fingerprint": "ca9f46e01370fc99",
-        "bullets": [
-          "Open fragments: —",
-          "Suggested promotes: —"
-        ],
-        "source_keys": [
-          "horizon_scan"
-        ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "monthly-ops-review-cadence",
       "title": "Follow unified ops review cadence",
       "summary": "Use the weekly → monthly → quarterly sequence in ops-review-cadence.md (analysis review, horizon scan, deferred ideas) rather than ad-hoc review order.",
@@ -1201,6 +1165,42 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "monthly-horizon-scan",
+      "title": "Horizon scan + deferred fragments",
+      "summary": "First Sunday 11:00 UTC: weeder applies deterministic near-dup / already-an-idea DROPs; read horizon scan; triage remaining open fragments and deferred ideas. apply_fragments stays off unless you reviewed the markdown.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/horizon-scan.md",
+      "doc_anchor": "when-it-runs",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/horizon-scan.md#when-it-runs",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Horizon scan + deferred fragments",
+        "updated_at": null,
+        "fingerprint": "ca9f46e01370fc99",
+        "bullets": [
+          "Open fragments: —",
+          "Suggested promotes: —"
+        ],
+        "source_keys": [
+          "horizon_scan"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-28T22:53:23.330573+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "ca9f46e01370fc99"
+      },
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
