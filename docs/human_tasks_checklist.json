@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-26",
+  "updated_at": "2026-09-28",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -173,7 +173,7 @@
         {
           "id": "sunday-knob-calibration-priors",
           "title": "Review knob calibration priors",
-          "summary": "Inspect knob_calibration_priors.json: ranking_mode, ready_for_shadow_bootstrap, bootstrap_priors, confidence, score_gap_vs_runner_up, and winner/loser catch rates.",
+          "summary": "Confirm readiness signals in knob_calibration_priors.json (confidence, score_gap_vs_runner_up, ready_for_*). If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop — do not promote. Promotion is a separate gate (sunday-promote-knobs-gate).",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "promoting-a-prior-human-gate"

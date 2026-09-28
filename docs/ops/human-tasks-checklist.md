@@ -46,7 +46,7 @@ ack stale. Automated weekday/Sunday CI rows stay in a collapsed list.
 | **Watch ingest capacity** — spare sprint auto-advance is correct; crowded maintenance defaults to **2 markets/slot** (L454); capacity review auto step-down/up or proposes matrix; confirm jobs still finish | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | Admitted-market equal-support then epoch-0 (`buy_tier_level` after timing stamp so wait stays out of new buys; near-miss watch; exclusion/exit-timing archives; Sunday first-time then focus rememo; admitted rememo and local-open marks are weekday; no AI / no apply) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | Read **buy-cross archive** review (`buy_cross_archive_review.json`) — cross vs level comparison; do not spawn a live cross book | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#cross-book-archive-only) |
-| Review **knob calibration priors** (`ranking_mode`, `ready_for_shadow_bootstrap`, `bootstrap_priors`) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
+| Review **knob calibration priors** — confirm readiness signals; if confidence low and score gap ~0 (no discrimination), **Acknowledge and stop** (do not promote) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | Review **unified experiment assessment** (`experiment_assessment.json`) — after the 2026-09-03 human pass, task recommends should be empty (u4/exit-shadow watch; scoring on engineering queue) | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
 | Compare **calibrated shadows vs primary** AI judgment on Automation tab | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
 | **Promote knob priors** only when a survivor passes gates (do not edit `ai_judgment/config.json` early) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
@@ -63,7 +63,13 @@ ack stale. Automated weekday/Sunday CI rows stay in a collapsed list.
 
 ### Promotion gate (AI judgment knobs)
 
-Do **not** promote calibration priors to `ai_judgment/config.json` until:
+The Sunday **review** card (`sunday-knob-calibration-priors`) only confirms
+readiness signals. When confidence is low/insufficient and
+`score_gap_vs_runner_up < 0.005` on every track, **Acknowledge** satisfies that
+review — board rebuild may auto-ack observe-only. That is **not** promotion.
+
+Do **not** promote calibration priors to `ai_judgment/config.json` until
+(`sunday-promote-knobs-gate`):
 
 1. A shadow has status **recommend** in `experiment_assessment.json` (or **surviving** in `calibration_shadow_endurance.json`)
 2. `ready_for_priors: true` / `ready_for_shadow_bootstrap` look sound in `knob_calibration_priors.json`

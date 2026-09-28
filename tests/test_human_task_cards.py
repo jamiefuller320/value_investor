@@ -6,9 +6,152 @@ from pathlib import Path
 
 from value_investor.human_task_ack import run_human_task_ack
 from value_investor.human_task_acks import load_human_task_acks, record_human_task_ack
-from value_investor.human_task_cards import APPROVAL_GATE_IDS, build_human_tasks_board
+from value_investor.human_task_cards import (
+    APPROVAL_GATE_IDS,
+    KNOB_PRIORS_REVIEW_TASK_ID,
+    apply_knob_priors_observe_auto_ack,
+    build_human_tasks_board,
+    knob_priors_ack_sufficient,
+    write_human_tasks_board,
+)
 from value_investor.human_tasks_checklist import load_human_tasks_checklist
 from value_investor.storage import write_json
+
+
+def _write_low_conf_zero_gap_priors(data_dir: Path) -> None:
+    paper = data_dir / "paper_automation"
+    paper.mkdir(parents=True, exist_ok=True)
+    write_json(
+        paper / "knob_calibration_priors.json",
+        {
+            "scope": "knob_calibration_multi",
+            "calibrated_at": "2026-09-28T10:00:00+00:00",
+            "tracks": {
+                "rules": {
+                    "track_id": "rules",
+                    "readiness": {
+                        "ready_for_priors": False,
+                        "ready_for_shadow_bootstrap": False,
+                        "score_gap_vs_runner_up": 0.0,
+                    },
+                    "recommended_prior": {"confidence": "low", "knobs": {"max_positions": 3}},
+                },
+                "ai_judgment": {
+                    "track_id": "ai_judgment",
+                    "readiness": {
+                        "ready_for_priors": False,
+                        "ready_for_shadow_bootstrap": False,
+                        "score_gap_vs_runner_up": 0.0,
+                    },
+                    "recommended_prior": {
+                        "confidence": "insufficient",
+                        "knobs": {"max_positions": 4},
+                    },
+                },
+            },
+        },
+    )
+
+
+def test_knob_priors_ack_sufficient_when_low_conf_and_zero_gap():
+    status = knob_priors_ack_sufficient(
+        {
+            "tracks": {
+                "rules": {
+                    "readiness": {"score_gap_vs_runner_up": 0.0},
+                    "recommended_prior": {"confidence": "low"},
+                },
+                "ai_judgment": {
+                    "readiness": {"score_gap_vs_runner_up": 0.001},
+                    "recommended_prior": {"confidence": "insufficient"},
+                },
+            }
+        }
+    )
+    assert status["ack_sufficient"] is True
+    assert status["reason"] == "low_confidence_and_no_discrimination"
+    assert len(status["tracks"]) == 2
+
+
+def test_knob_priors_ack_not_sufficient_when_gap_or_confidence_rises():
+    high_gap = knob_priors_ack_sufficient(
+        {
+            "tracks": {
+                "rules": {
+                    "readiness": {"score_gap_vs_runner_up": 0.02},
+                    "recommended_prior": {"confidence": "low"},
+                }
+            }
+        }
+    )
+    assert high_gap["ack_sufficient"] is False
+    medium = knob_priors_ack_sufficient(
+        {
+            "tracks": {
+                "rules": {
+                    "readiness": {"score_gap_vs_runner_up": 0.0},
+                    "recommended_prior": {"confidence": "medium"},
+                }
+            }
+        }
+    )
+    assert medium["ack_sufficient"] is False
+
+
+def test_board_marks_knob_priors_auto_ackable(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    _write_low_conf_zero_gap_priors(data_dir)
+    board = build_human_tasks_board(data_dir=data_dir)
+    hit = next(row for row in board["tasks"] if row["id"] == KNOB_PRIORS_REVIEW_TASK_ID)
+    assert hit["auto_ackable"] is True
+    assert hit["ack_sufficient"] is True
+    assert hit["analysis"]["ack_sufficient"] is True
+    assert hit["analysis"]["headline"].startswith("Knob priors · ack sufficient")
+
+
+def test_write_board_auto_acks_knob_priors_observe_only(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    _write_low_conf_zero_gap_priors(data_dir)
+    # Promote gate must remain unacked even when review auto-acks.
+    board = write_human_tasks_board(data_dir=data_dir)
+    review = next(row for row in board["tasks"] if row["id"] == KNOB_PRIORS_REVIEW_TASK_ID)
+    promote = next(row for row in board["tasks"] if row["id"] == "sunday-promote-knobs-gate")
+    assert review["sort_bucket"] == "acked"
+    assert review["ack"]["decision"] == "ack_observe"
+    assert review["ack"]["stale"] is False
+    assert promote["sort_bucket"] == "unacked"
+    store = load_human_task_acks(data_dir)
+    row = next(r for r in store["acks"] if r["task_id"] == KNOB_PRIORS_REVIEW_TASK_ID)
+    assert row["decision"] == "ack_observe"
+    assert row["source"] == "board_auto_no_discrimination"
+    assert row["acked_by"] == "system"
+    # Idempotent second write
+    assert apply_knob_priors_observe_auto_ack(data_dir) is None
+
+
+def test_knob_priors_auto_ack_skips_when_not_sufficient(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    paper = data_dir / "paper_automation"
+    paper.mkdir(parents=True, exist_ok=True)
+    write_json(
+        paper / "knob_calibration_priors.json",
+        {
+            "tracks": {
+                "rules": {
+                    "readiness": {"score_gap_vs_runner_up": 0.05},
+                    "recommended_prior": {"confidence": "medium"},
+                }
+            }
+        },
+    )
+    assert apply_knob_priors_observe_auto_ack(data_dir) is None
+    board = write_human_tasks_board(data_dir=data_dir)
+    review = next(row for row in board["tasks"] if row["id"] == KNOB_PRIORS_REVIEW_TASK_ID)
+    assert review["auto_ackable"] is False
+    assert review["sort_bucket"] == "unacked"
 
 
 def test_timestamp_only_republish_does_not_stale_ack(tmp_path: Path):
@@ -268,3 +411,11 @@ def test_checklist_human_count_matches_board():
     board = build_human_tasks_board(data_dir=Path("docs/data"))
     board_ids = {row["id"] for row in board["tasks"]}
     assert board_ids == human_ids
+
+
+def test_checklist_knob_priors_review_summary_mentions_ack_stop():
+    payload = load_human_tasks_checklist()
+    tasks = [task for section in payload["sections"] for task in section["tasks"]]
+    row = next(task for task in tasks if task["id"] == KNOB_PRIORS_REVIEW_TASK_ID)
+    assert "Acknowledge" in row["summary"] or "ack" in row["summary"].lower()
+    assert "do not promote" in row["summary"].lower() or "Promotion is a separate" in row["summary"]
