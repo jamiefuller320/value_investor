@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-28T11:50:55.416869+00:00",
+  "generated_at": "2026-09-28T12:44:25.073533+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
-  "checklist_updated_at": "2026-09-26",
+  "checklist_updated_at": "2026-09-28",
   "counts": {
     "new_info": 1,
     "unacked": 27,
@@ -29,10 +29,10 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-09-28T11:42:01.383262+00:00",
-        "fingerprint": "54769d3c653fe502",
+        "updated_at": "2026-09-28T12:41:57.889500+00:00",
+        "fingerprint": "a6a6eea6499faf69",
         "bullets": [
-          "Occasions logged: 89",
+          "Occasions logged: 92",
           "PR mergeable=CONFLICTING against main: 7",
           "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
           "validate check failed: 3",
@@ -52,47 +52,6 @@
         "finding_fingerprint": "b4aeea20b497d854"
       },
       "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "sunday-shadow-endurance",
-      "title": "Review unified experiment assessment",
-      "summary": "Read experiment_assessment.json for continue/fail/recommend rows. After the 2026-09-03 human pass, task recommends should be empty: u4 and exit-shadow are watch, buffered-hold and IMB.L are done, scoring is on the engineering queue. Do not reopen cancelled N58/N59 knob rows. Drill into calibration_shadow_endurance.json for shadow detail.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/experiment-assessment.md",
-      "doc_anchor": "human-gate",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/experiment-assessment.md#human-gate",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Experiment assessment · 4 recommend",
-        "updated_at": "2026-09-28T08:29:53.442905+00:00",
-        "fingerprint": "276ed49a700597b4",
-        "bullets": [
-          "Recommend rows: 4 / 15 experiments",
-          "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
-          "graduated_allocation: recommend conf=None",
-          "entry_dca_overlay: recommend conf=None",
-          "ana-20260921-02: recommend conf=None",
-          "ana-20260921-04: recommend conf=None"
-        ],
-        "source_keys": [
-          "experiment_assessment",
-          "knob_calibration_priors"
-        ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -1033,6 +992,47 @@
       "ack_sufficient": false
     },
     {
+      "id": "sunday-shadow-endurance",
+      "title": "Review unified experiment assessment",
+      "summary": "Read experiment_assessment.json for continue/fail/recommend rows. After the 2026-09-03 human pass, task recommends should be empty: u4 and exit-shadow are watch, buffered-hold and IMB.L are done, scoring is on the engineering queue. Do not reopen cancelled N58/N59 knob rows. Drill into calibration_shadow_endurance.json for shadow detail.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/experiment-assessment.md",
+      "doc_anchor": "human-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/experiment-assessment.md#human-gate",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Experiment assessment · 4 recommend",
+        "updated_at": "2026-09-28T08:29:53.442905+00:00",
+        "fingerprint": "276ed49a700597b4",
+        "bullets": [
+          "Recommend rows: 4 / 15 experiments",
+          "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
+          "graduated_allocation: recommend conf=None",
+          "entry_dca_overlay: recommend conf=None",
+          "ana-20260921-02: recommend conf=None",
+          "ana-20260921-04: recommend conf=None"
+        ],
+        "source_keys": [
+          "experiment_assessment",
+          "knob_calibration_priors"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-28T12:33:40.424827+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "276ed49a700597b4"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
       "id": "sunday-knob-calibration-priors",
       "title": "Review knob calibration priors",
       "summary": "Confirm readiness signals in knob_calibration_priors.json (confidence, score_gap_vs_runner_up, ready_for_*). If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop — do not promote. Promotion is a separate gate (sunday-promote-knobs-gate).",
@@ -1098,84 +1098,6 @@
       "sort_bucket": "acked",
       "auto_ackable": true,
       "ack_sufficient": true
-    },
-    {
-      "id": "sunday-shadow-endurance",
-      "title": "Review unified experiment assessment",
-      "summary": "Read experiment_assessment.json for continue/fail/recommend rows. After the 2026-09-03 human pass, task recommends should be empty: u4 and exit-shadow are watch, buffered-hold and IMB.L are done, scoring is on the engineering queue. Do not reopen cancelled N58/N59 knob rows. Drill into calibration_shadow_endurance.json for shadow detail.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/experiment-assessment.md",
-      "doc_anchor": "human-gate",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/experiment-assessment.md#human-gate",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Experiment assessment · 4 recommend",
-        "updated_at": "2026-09-28T08:29:53.442905+00:00",
-        "fingerprint": "276ed49a700597b4",
-        "bullets": [
-          "Recommend rows: 4 / 15 experiments",
-          "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
-          "graduated_allocation: recommend conf=None",
-          "entry_dca_overlay: recommend conf=None",
-          "ana-20260921-02: recommend conf=None",
-          "ana-20260921-04: recommend conf=None"
-        ],
-        "source_keys": [
-          "experiment_assessment",
-          "knob_calibration_priors"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-09-28T12:33:40.424827+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "276ed49a700597b4"
-      },
-      "sort_bucket": "acked"
-    },
-    {
-      "id": "sunday-knob-calibration-priors",
-      "title": "Review knob calibration priors",
-      "summary": "Inspect knob_calibration_priors.json: ranking_mode, ready_for_shadow_bootstrap, bootstrap_priors, confidence, score_gap_vs_runner_up, and winner/loser catch rates.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/knob-calibration.md",
-      "doc_anchor": "promoting-a-prior-human-gate",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#promoting-a-prior-human-gate",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Experiment assessment · 4 recommend",
-        "updated_at": "2026-09-28T08:29:53.442905+00:00",
-        "fingerprint": "276ed49a700597b4",
-        "bullets": [
-          "Recommend rows: 4 / 15 experiments",
-          "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
-          "graduated_allocation: recommend conf=None",
-          "entry_dca_overlay: recommend conf=None",
-          "ana-20260921-02: recommend conf=None",
-          "ana-20260921-04: recommend conf=None"
-        ],
-        "source_keys": [
-          "experiment_assessment",
-          "knob_calibration_priors"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-09-28T12:32:46.272118+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "276ed49a700597b4"
-      },
-      "sort_bucket": "acked"
     },
     {
       "id": "sunday-read-analysis-review",
