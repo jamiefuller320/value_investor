@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-28T08:10:40+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-28T08:55:55+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -552,6 +552,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L481 | **Mock flaky live network in CI unit tests (DAX stall / Investegate)** | Seven ci_check fix occasions from live DAX library_stall auto-cancel, Investegate None, and unmocked ops-monitor helpers. Keep live checks in a marked integration job; unit CI should mock. | Same flake hits two PRs in one week again (see pr_fix_occasions H theme) |
 | L483 | **project_progress appraisal: memo_recent over filing-depth when bodies green** | When zero_body_buy_tier=0, project_progress next_actions still say prioritise buy-tier filing depth. Prefer surfacing memo_recent / holdings freshness so policy-green bodies are not read as P1 done. | Next project_progress / progress-report builder pass after holdings-first rememo (#890) lands or progress-report clobber fix ships |
 | L484 | **email-report exclude progress_report artifacts from docs/data overlay** | email-report GHA_COMMIT_OWNED=docs/data clobbered a fresh Sep 23 progress-report rebuild back to Sep 22 (L121 resurrected). Exclude progress_report.json/md and project_progress.json like ops_status, or rebuild before commit. | After next force progress-report refresh, if a subsequent chore: update dashboard data recommits an older generated_at |
+| L485 | **Suite A/B badge on Sunday paper-track stories** | Analysis Sunday paperTrackStory labels Lagging/^FTSE softening on mixed stress+fair rows without naming suite, so humans read Suite A churn tax as adoption failure. Add stress/fair (or suite) badge on summary excess and story lines; keep Automation dual-suite as canonical. | Next Analysis-tab Sunday review UX pass, or when humans again misread stress excess softening as Suite B adoption failure |
 
 ---
 
