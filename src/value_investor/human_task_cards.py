@@ -81,9 +81,7 @@ def _market_rows(status: dict[str, Any]) -> list[dict[str, Any]]:
 
 def _admitted_market_rows(status: dict[str, Any]) -> list[dict[str, Any]]:
     admitted_ids = {
-        str(mid).strip()
-        for mid in (status.get("admitted_markets") or [])
-        if str(mid or "").strip()
+        str(mid).strip() for mid in (status.get("admitted_markets") or []) if str(mid or "").strip()
     }
     rows = _market_rows(status)
     if admitted_ids:
@@ -477,12 +475,7 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
         if isinstance(top, list):
             for row in top[:5]:
                 if isinstance(row, dict):
-                    reason = (
-                        row.get("failure_reason")
-                        or row.get("reason")
-                        or row.get("key")
-                        or "?"
-                    )
+                    reason = row.get("failure_reason") or row.get("reason") or row.get("key") or "?"
                     bullets.append(_bullet(f"{reason}: {row.get('count')}"))
                     top_snap.append({"r": reason, "c": row.get("count")})
                 else:
