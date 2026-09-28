@@ -5686,17 +5686,18 @@ function bindAutomationPanel(panel) {
     if (copyBtn && panel.contains(copyBtn)) {
       event.preventDefault();
       const text = copyBtn.getAttribute("data-copy-discuss-prompt") || "";
-      if (navigator.clipboard && text) {
-        void navigator.clipboard.writeText(text).then(
-          () => {
-            copyBtn.textContent = "Copied";
-            setTimeout(() => {
-              copyBtn.textContent = "Copy discuss prompt";
-            }, 1500);
-          },
-          () => {}
-        );
-      }
+      const labelDefault = copyBtn.getAttribute("data-copy-label") || "Copy";
+      void (async () => {
+        const ok = await copyTextToClipboard(text);
+        // Short paste phrases also surface the inline selectable panel.
+        if (/^discuss daily recommendation `/.test(text)) {
+          showDailyDiscussPastePhrase(copyBtn, text, { copied: ok, queued: false });
+        }
+        copyBtn.textContent = ok ? "Copied" : "Select below";
+        setTimeout(() => {
+          copyBtn.textContent = labelDefault;
+        }, 1500);
+      })();
     }
   });
 }
@@ -5796,6 +5797,7 @@ function renderDailyRecommendationBlock(rec, task) {
   const optionsHtml = options.length
     ? `<ul class="daily-rec-options">${options.map((o) => `<li>${esc(o)}</li>`).join("")}</ul>`
     : "";
+  const pastePhrase = dailyDiscussPastePhrase(rec.id || "");
   return `<div class="daily-rec-block" data-recommendation-id="${esc(rec.id || "")}">
     <h4 class="small" style="margin:0.6rem 0 0.25rem">Recommendation</h4>
     <p class="small"><strong>${esc(rec.summary || "")}</strong></p>
@@ -5803,15 +5805,23 @@ function renderDailyRecommendationBlock(rec, task) {
     ${optionsHtml}
     <p class="daily-rec-actions">
       <button type="button" class="btn btn-primary" data-daily-accept="${esc(acceptPayload)}">Accept</button>
-      <button type="button" class="btn" data-daily-discuss="${esc(discussPayload)}">Discuss</button>
+      <button type="button" class="btn" data-daily-discuss="${esc(discussPayload)}" title="Copy paste phrase and queue Project inbox">Discuss</button>
       <button type="button" class="btn link-btn" data-copy-discuss-prompt="${esc(
-        rec.discuss_prompt || ""
-      )}">Copy discuss prompt</button>
+        pastePhrase
+      )}" data-copy-label="Copy paste phrase" title="Copy short Project chat phrase">Copy paste phrase</button>
+      <button type="button" class="btn link-btn" data-copy-discuss-prompt="${esc(
+        rec.discuss_prompt || pastePhrase
+      )}" data-copy-label="Copy full prompt" title="Copy full discuss_prompt including rationale">Copy full prompt</button>
       <span class="small muted daily-rec-status" aria-live="polite"></span>
     </p>
-    <p class="small muted">Discuss pickup: say <code>discuss daily recommendation \`${esc(
-      rec.id || ""
-    )}\`</code> in Project chat — inbox <code>docs/data/daily_discuss_inbox.json</code>.</p>
+    <div class="daily-discuss-paste" hidden>
+      <p class="small" style="margin:0.35rem 0 0.15rem"><strong>Paste into Project chat:</strong></p>
+      <pre class="daily-discuss-paste-phrase" tabindex="0"></pre>
+      <p class="small muted daily-discuss-paste-hint" style="margin:0.25rem 0 0"></p>
+    </div>
+    <p class="small muted">Discuss: click Discuss to copy <code>${esc(
+      pastePhrase
+    )}</code> and queue the inbox — then paste that phrase in Project chat.</p>
   </div>`;
 }
 
@@ -5914,10 +5924,71 @@ function renderDailyHubPanel(data) {
   </section>`;
 }
 
+/** Canonical Project-chat pickup phrase — keep in sync with ops/design docs. */
+function dailyDiscussPastePhrase(recommendationId) {
+  const id = String(recommendationId || "").trim() || "rec-unknown";
+  return `discuss daily recommendation \`${id}\``;
+}
+
 function setDailyRecStatus(button, text) {
   const block = button && button.closest(".daily-rec-block");
   const el = block && block.querySelector(".daily-rec-status");
   if (el) el.textContent = text || "";
+}
+
+function showDailyDiscussPastePhrase(button, phrase, { copied = false, queued = false } = {}) {
+  const block = button && button.closest(".daily-rec-block");
+  if (!block) return;
+  const panel = block.querySelector(".daily-discuss-paste");
+  const phraseEl = block.querySelector(".daily-discuss-paste-phrase");
+  const hintEl = block.querySelector(".daily-discuss-paste-hint");
+  if (!panel || !phraseEl) return;
+  phraseEl.textContent = phrase;
+  panel.hidden = false;
+  const bits = [];
+  if (copied) bits.push("Copied to clipboard");
+  else bits.push("Select the phrase below and copy (clipboard unavailable)");
+  if (queued) bits.push("inbox queued");
+  bits.push("paste into Project chat");
+  if (hintEl) hintEl.textContent = bits.join(" · ");
+  try {
+    const range = document.createRange();
+    range.selectNodeContents(phraseEl);
+    const sel = window.getSelection();
+    if (sel) {
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  } catch {
+    /* selection is best-effort */
+  }
+}
+
+async function copyTextToClipboard(text) {
+  const value = String(text || "");
+  if (!value) return false;
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+    try {
+      await navigator.clipboard.writeText(value);
+      return true;
+    } catch {
+      /* fall through */
+    }
+  }
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = value;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return !!ok;
+  } catch {
+    return false;
+  }
 }
 
 async function queueDailyBridgeAction(action, payload, onStatus) {
@@ -6072,28 +6143,35 @@ async function discussDailyRecommendation(button) {
   } catch {
     payload = {};
   }
-  const prompt =
-    (payload.recommendation && payload.recommendation.discuss_prompt) ||
-    `Discuss daily recommendation \`${payload.recommendation_id || ""}\``;
+  const recId =
+    payload.recommendation_id ||
+    (payload.recommendation && payload.recommendation.id) ||
+    "";
+  // Short canonical phrase for Project chat (not the full discuss_prompt).
+  const pastePhrase = dailyDiscussPastePhrase(recId);
   button.disabled = true;
-  setDailyRecStatus(button, "Queuing Discuss…");
+  setDailyRecStatus(button, "Copying paste phrase…");
+  let copied = false;
   try {
-    if (navigator.clipboard && prompt) {
-      try {
-        await navigator.clipboard.writeText(prompt);
-      } catch {
-        /* ignore clipboard failures */
-      }
-    }
-    await queueDailyBridgeAction("daily-discuss", payload, (msg) => setDailyRecStatus(button, msg));
+    copied = await copyTextToClipboard(pastePhrase);
+    showDailyDiscussPastePhrase(button, pastePhrase, { copied, queued: false });
     setDailyRecStatus(
       button,
-      `Discuss queued — paste prompt in Project chat or say discuss daily recommendation \`${
-        payload.recommendation_id || ""
-      }\``
+      copied ? "Paste phrase copied — queuing inbox…" : "Paste phrase shown — queuing inbox…"
     );
+    await queueDailyBridgeAction("daily-discuss", payload, (msg) => setDailyRecStatus(button, msg));
+    showDailyDiscussPastePhrase(button, pastePhrase, { copied, queued: true });
+    setDailyRecStatus(
+      button,
+      copied
+        ? `Copied — paste into Project chat: ${pastePhrase}`
+        : `Select & paste into Project chat: ${pastePhrase}`
+    );
+    // Re-enable Discuss so the operator can copy again if needed.
+    button.disabled = false;
   } catch (err) {
     button.disabled = false;
+    showDailyDiscussPastePhrase(button, pastePhrase, { copied, queued: false });
     setDailyRecStatus(button, String(err && err.message ? err.message : err));
   }
 }

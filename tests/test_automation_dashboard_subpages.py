@@ -51,13 +51,24 @@ def test_daily_hub_accept_discuss_ux() -> None:
     assert "function renderDailyRecommendationBlock(" in text
     assert "function acceptDailyRecommendation(" in text
     assert "function discussDailyRecommendation(" in text
+    assert "function dailyDiscussPastePhrase(" in text
+    assert "function showDailyDiscussPastePhrase(" in text
+    assert "function copyTextToClipboard(" in text
     assert 'data-daily-accept="' in text
     assert 'data-daily-discuss="' in text
     assert "discuss daily recommendation" in text
-    assert "daily_discuss_inbox.json" in text
+    assert "daily-discuss-paste-phrase" in text
+    assert "Copy paste phrase" in text
+    assert "Paste into Project chat" in text
+    # Canonical short phrase (backticks around rec id).
+    assert "discuss daily recommendation \\`" in text or "discuss daily recommendation `" in text
+    assert "daily_discuss_inbox.json" in text or "daily-discuss" in text
     assert 'queueDailyBridgeAction("daily-discuss"' in text or '"daily-discuss"' in text
     assert "daily-focus-ack" in text
     assert "human-task-ack" in text
+    css = STYLES.read_text(encoding="utf-8")
+    assert ".daily-discuss-paste" in css
+    assert ".daily-discuss-paste-phrase" in css
 
 
 def test_illumination_chips_prefer_amber() -> None:

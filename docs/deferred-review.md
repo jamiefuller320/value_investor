@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-28T10:23:26+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-28T10:29:13+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -557,7 +557,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L488 | **Morning Cursor Automation for daily_focus notes sync** | Optional scheduled Cursor Automation that updates Project notes Today bullets and docs/data project daily seed before 04:00 Europe/London. Agents cannot push unprompted into chat. | daily_focus.json morning builder is on main and operators want notes auto-synced without opening a Project agent |
 | L489 | **Multi-operator timezone profiles for daily hub** | Freeze Europe/London as operator TZ for daily hub refresh-before-04:00. Multi-profile TZ support only if a second operator locale appears. | A second operator needs a non-London local deadline for the daily hub |
 | L490 | **Section-visit durable acks for illuminated subnav** | Durable per-section visit fingerprints so green illumination survives reload; extend human-task-ack / bridge pattern. Phase A2 after Automation subnav ships. | Automation section subnav and illumination v0 are on main and operators want green chips to persist across reloads |
-| L491 | **Daily hub C2 eng queue and ops finding collation** | Collate engineering queue head and ops findings warn/fail into Daily hub priority list beyond v0 reconcile ambers. | After Phase 1 Daily hub is live and operators want eng/ops rows in the morning board |
+| L492 | **Daily hub Phase-1 follow-on: eng queue and ops finding collation (C2)** | Collate engineering queue head and ops findings warn/fail into Daily hub priority list beyond v0 reconcile ambers. Retargeted off L491 to avoid collision with #897 post-close sleeve autopsy park. | After Phase 1 Daily hub is live and operators want eng/ops rows in the morning board |
 
 ---
 
