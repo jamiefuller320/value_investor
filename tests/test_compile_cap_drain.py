@@ -16,7 +16,7 @@ from value_investor.engineering_tasks import PARKED_SOURCE_HUNTER_SOURCE
 from value_investor.storage import read_json, write_json
 
 
-def _recent_iso(*, days_ago: int = 1) -> str:
+def _recent_recorded_at(*, days_ago: int = 2) -> str:
     """Stamp inside the default 14-day suggestions compile lookback."""
     return (datetime.now(UTC) - timedelta(days=days_ago)).isoformat()
 
@@ -36,7 +36,7 @@ def _suggestion(
         "area": area,
         "suggestion": text,
         "priority": priority,
-        "recorded_at": recorded_at or _recent_iso(),
+        "recorded_at": recorded_at or _recent_recorded_at(),
         "ticker": "",
     }
 
