@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-27T07:04:17.963787+00:00
+Track: `buy_tier_level` · updated 2026-09-28T07:31:02.474453+00:00
 
 ## Portfolio loser feedback
 
@@ -48,7 +48,7 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:17.963787+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 55%
+- conviction 63%
 
 ### ADBE — intact / hold_tolerate (-6.0%)
 - price drawdown alone does not invalidate value thesis
@@ -82,7 +82,7 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:17.963787+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 60%
+- conviction 61%
 
 ### PEP — intact / hold_tolerate (-4.2%)
 - still strong_buy
@@ -122,7 +122,7 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:17.963787+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 74%
+- conviction 73%
 
 ### KDP — intact / hold_tolerate (+0.5%)
 - still buy
@@ -164,7 +164,7 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:17.963787+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 40%
+- conviction 39%
 
 ### BKR — intact / hold_tolerate (+2.7%)
 - still strong_buy
@@ -190,7 +190,7 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:17.963787+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 78%
+- conviction 80%
 
 ### MSFT — intact / hold_tolerate (+5.3%)
 - still buy
@@ -223,10 +223,12 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:17.963787+00:00
 - still strong_buy
 - cheapness family still passes
 
-### WDC — weakening / watch_review (+9.6%)
-- left buy tier (hold)
+### WDC — intact / hold_tolerate (+9.6%)
+- still buy
 - research accumulate
 - cheapness family still passes
+- data_quality 0.90
+- conviction 37%
 
 ### WBD — intact / hold_tolerate (+9.9%)
 - still buy

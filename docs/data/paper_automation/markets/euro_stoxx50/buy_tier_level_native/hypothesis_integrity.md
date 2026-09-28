@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-09-27T07:04:15.859333+00:00
+Track: `buy_tier_level_native` · updated 2026-09-28T07:31:00.430952+00:00
 
 ## Portfolio loser feedback
 
@@ -57,7 +57,7 @@ Track: `buy_tier_level_native` · updated 2026-09-27T07:04:15.859333+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
+- conviction 75%
 
 ### VOW.DE — intact / hold_tolerate (+1.3%)
 - still strong_buy

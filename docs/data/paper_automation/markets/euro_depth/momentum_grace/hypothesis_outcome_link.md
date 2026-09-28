@@ -1,19 +1,18 @@
 # Hypothesis outcome link
 
-Track: `momentum_grace` · 2026-09-27T07:05:03.305764+00:00
+Track: `momentum_grace` · 2026-09-28T07:31:58.872720+00:00
 
 ## Readiness
 
 - Ready for thesis outcome analysis: **False**
-- Closed hold episodes with thesis: 2
+- Closed hold episodes with thesis: 3
 - Swap sell legs with thesis: 0
-- Gap: hold closed with thesis=2 (target >=8)
-- Gap: hold thesis buckets thin (weakening=2; target >=3 each)
+- Gap: hold closed with thesis=3 (target >=8)
 - Gap: swap sell legs with thesis=0 (target >=5)
 
 ## Hold recovery by thesis
 
-- **weakening** (n=2): recovery 100%, sold underwater 0%, mean peak +4.2%
+- **weakening** (n=3): recovery 67%, sold underwater 33%, mean peak +2.6%
 
 ## Swap rotation by sell thesis
 

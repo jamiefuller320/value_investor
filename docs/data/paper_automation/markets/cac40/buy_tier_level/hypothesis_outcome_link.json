@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-09-27T07:04:18.919037+00:00",
+  "generated_at": "2026-09-28T07:31:03.426966+00:00",
   "stamped_this_pass": {
-    "hold_episodes": 1,
+    "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 1,
+    "closed_total": 2,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 4,
+    "open_with_thesis": 3,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -20,13 +20,13 @@
         "closed_count": 0
       },
       "broken": {
-        "closed_count": 1,
+        "closed_count": 2,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
         "mean_peak_unrealized_pct": 0.0,
         "mean_trough_unrealized_pct": 0.0,
         "outcome_labels": {
-          "recovered": 1
+          "recovered": 2
         }
       },
       "insufficient_data": {
@@ -55,11 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 1,
+    "hold_closed_with_thesis": 2,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=1 (target >=8)",
-      "hold thesis buckets thin (broken=1; target >=3 each)",
+      "hold closed with thesis=2 (target >=8)",
+      "hold thesis buckets thin (broken=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -244,7 +244,7 @@
       "ticker": "SGO.PA",
       "name": "Compagnie de Saint-Gobain S.A.",
       "started_at": "2026-09-27T08:04:18.897399+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -261,9 +261,9 @@
       "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": 0.0,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-28T08:31:03.404080+01:00",
+      "linked_sell_trade_id": "defc2e92-cb12-46bf-b895-5af024746dce",
       "thesis_status_at_start": "broken",
       "recommended_action_at_start": "exit_candidate",
       "thesis_reasons_at_start": [
@@ -327,6 +327,88 @@
       },
       "buy_returns_since_rotation": {
         "SGO.PA": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-09-28T08:31:03.404080+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-09-28T08:31:03.404080+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "SGO.PA",
+          "price": 69.82,
+          "shares": 2.355155,
+          "gross": 164.44,
+          "cost": 0.29,
+          "avg_cost_at_exit": 69.82,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "SAN.PA",
+          "price": 71.79,
+          "shares": 0.506413,
+          "gross": 36.36,
+          "cost": 0.06
+        },
+        {
+          "ticker": "TEP.PA",
+          "price": 72.36,
+          "shares": 0.354896,
+          "gross": 25.68,
+          "cost": 0.04
+        },
+        {
+          "ticker": "DG.PA",
+          "price": 111.3,
+          "shares": 0.291468,
+          "gross": 32.44,
+          "cost": 0.06
+        },
+        {
+          "ticker": "TTE.PA",
+          "price": 79.99,
+          "shares": 0.355705,
+          "gross": 28.45,
+          "cost": 0.05
+        },
+        {
+          "ticker": "ORA.PA",
+          "price": 14.16,
+          "shares": 2.890782,
+          "gross": 40.93,
+          "cost": 0.07
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "SGO.PA": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "SAN.PA": 0.0,
+        "TEP.PA": 0.0,
+        "DG.PA": 0.0,
+        "TTE.PA": 0.0,
+        "ORA.PA": 0.0
       },
       "verdict": null,
       "closed_at": null

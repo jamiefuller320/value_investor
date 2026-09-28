@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-09-27T07:04:18.030036+00:00
+Track: `buy_tier_level_native` · updated 2026-09-28T07:31:02.540567+00:00
 
 ## Portfolio loser feedback
 
@@ -85,7 +85,7 @@ Track: `buy_tier_level_native` · updated 2026-09-27T07:04:18.030036+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 74%
+- conviction 73%
 
 ### PAYX — intact / hold_tolerate (-0.2%)
 - still strong_buy
@@ -106,7 +106,7 @@ Track: `buy_tier_level_native` · updated 2026-09-27T07:04:18.030036+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 55%
+- conviction 63%
 
 ### WBD — intact / hold_tolerate (+0.1%)
 - still buy
@@ -141,7 +141,7 @@ Track: `buy_tier_level_native` · updated 2026-09-27T07:04:18.030036+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 78%
+- conviction 80%
 
 ### PCAR — weakening / watch_review (+0.6%)
 - research verdict neutral
@@ -153,7 +153,7 @@ Track: `buy_tier_level_native` · updated 2026-09-27T07:04:18.030036+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 40%
+- conviction 39%
 
 ### BKR — intact / hold_tolerate (+0.9%)
 - still strong_buy
@@ -180,10 +180,12 @@ Track: `buy_tier_level_native` · updated 2026-09-27T07:04:18.030036+00:00
 - data_quality 1.00
 - conviction 71%
 
-### WDC — weakening / watch_review (+1.4%)
-- left buy tier (hold)
+### WDC — intact / hold_tolerate (+1.4%)
+- still buy
 - research accumulate
 - cheapness family still passes
+- data_quality 0.90
+- conviction 37%
 
 ### AMGN — intact / hold_tolerate (+2.1%)
 - still buy
@@ -235,7 +237,7 @@ Track: `buy_tier_level_native` · updated 2026-09-27T07:04:18.030036+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 60%
+- conviction 61%
 
 ### PYPL — weakening / watch_review (+4.6%)
 - research verdict neutral

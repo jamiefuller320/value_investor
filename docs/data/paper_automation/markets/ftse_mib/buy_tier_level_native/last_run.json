@@ -1,0 +1,823 @@
+{
+  "acted": true,
+  "gate": {
+    "local_time": "2026-09-28T08:31:07.939959+01:00",
+    "trading_day": true,
+    "after_settle": false,
+    "market_open_at": "2026-09-28T08:00:00+01:00",
+    "settle_at": "2026-09-28T09:15:00+01:00",
+    "can_act": false,
+    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+  },
+  "trades": [
+    {
+      "id": "bc0e717b-ff41-4587-9128-ab0e96085a42",
+      "fund_id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
+      "acted_at": "2026-09-28T08:31:07.939959+01:00",
+      "ticker": "ENI.MI",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 13.833542,
+      "price": 24.09,
+      "gross": 333.25,
+      "cost": 0.08,
+      "net_cash": -333.33,
+      "note": "Automated buy",
+      "name": "Eni S.p.A."
+    },
+    {
+      "id": "7cf62c10-322a-4a5a-89a2-1c571d1b95d4",
+      "fund_id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
+      "acted_at": "2026-09-28T08:31:07.939959+01:00",
+      "ticker": "REC.MI",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 6.28181,
+      "price": 53.05,
+      "gross": 333.25,
+      "cost": 0.08,
+      "net_cash": -333.33,
+      "note": "Automated buy",
+      "name": "Recordati Industria Chimica e Farmaceutica S.p.A."
+    },
+    {
+      "id": "ae468f2a-85d3-4ef1-a7c4-290b5e9e8437",
+      "fund_id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
+      "acted_at": "2026-09-28T08:31:07.939959+01:00",
+      "ticker": "AMP.MI",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 29.168492,
+      "price": 11.425,
+      "gross": 333.25,
+      "cost": 0.08,
+      "net_cash": -333.33,
+      "note": "Automated buy",
+      "name": "Amplifon S.p.A."
+    }
+  ],
+  "plan": {
+    "rules": [
+      "Universe: only strong_buy / buy names from the latest screen.",
+      "Timing filter: names with timing_signal=wait are excluded from new buys.",
+      "Conviction floor: min_conviction=0.00.",
+      "Sector cap: disabled.",
+      "Ranking: highest conviction_score first, keep at most 120 names.",
+      "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+      "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+      "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+      "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+      "Dust guard: skip trim/top-up adjustments below \u00a310."
+    ],
+    "nav": 999.75,
+    "cash": 0.0,
+    "max_positions": 120,
+    "min_conviction": 0.0,
+    "sector_cap": 1.0,
+    "skip_timing_wait": true,
+    "use_momentum_grace": false,
+    "exit_confirm_screens": 2,
+    "reentry_cooldown_screens": 1,
+    "min_rebalance_notional_gbp": 10.0,
+    "target_sleeve_value": 333.25,
+    "targets": [
+      {
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "signal": "strong_buy",
+        "conviction_score": 0.6698000000000001,
+        "price": 24.09
+      },
+      {
+        "ticker": "REC.MI",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "signal": "buy",
+        "conviction_score": 0.5896,
+        "price": 53.05
+      },
+      {
+        "ticker": "AMP.MI",
+        "name": "Amplifon S.p.A.",
+        "signal": "buy",
+        "conviction_score": 0.357,
+        "price": 11.425
+      }
+    ],
+    "anticipated_exits": [],
+    "anticipated_grace_holds": [],
+    "anticipated_trims": [],
+    "anticipated_buys": [],
+    "anticipated_holds": [
+      {
+        "action": "hold",
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "reason": "Already near equal-weight target",
+        "value": 333.25,
+        "target_value": 333.25,
+        "conviction_score": 0.6698000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "REC.MI",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "reason": "Already near equal-weight target",
+        "value": 333.25,
+        "target_value": 333.25,
+        "conviction_score": 0.5896,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "AMP.MI",
+        "name": "Amplifon S.p.A.",
+        "reason": "Already near equal-weight target",
+        "value": 333.25,
+        "target_value": 333.25,
+        "conviction_score": 0.357,
+        "signal": "buy"
+      }
+    ],
+    "skipped": [],
+    "waitlisted": [],
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+  },
+  "alerts": [
+    {
+      "ticker": "ENI.MI",
+      "name": "Eni S.p.A.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 24.09,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "REC.MI",
+      "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 53.05,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "AMP.MI",
+      "name": "Amplifon S.p.A.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 11.425,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    }
+  ],
+  "fund": {
+    "config": {
+      "name": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
+      "mode": "automated",
+      "initial_cash": 1000.0,
+      "monthly_deposit": 0.0,
+      "trade_cost_pct": 0.00025,
+      "buy_cost_pct": 0.00025,
+      "sell_cost_pct": 0.00025,
+      "max_positions": 120,
+      "reporting_currency": "EUR",
+      "hedge_assumption": "none",
+      "id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
+      "created_at": "2026-09-28T07:31:07.940049+00:00"
+    },
+    "cash": 0.0,
+    "contributed_capital": 1000.0,
+    "deposits_applied": 0,
+    "holdings": {
+      "ENI.MI": {
+        "ticker": "ENI.MI",
+        "shares": 13.833542,
+        "avg_cost": 24.09,
+        "name": "Eni S.p.A.",
+        "sector": "Energy",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-28T08:31:07.939959+01:00"
+      },
+      "REC.MI": {
+        "ticker": "REC.MI",
+        "shares": 6.28181,
+        "avg_cost": 53.05,
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "sector": "Healthcare",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-28T08:31:07.939959+01:00"
+      },
+      "AMP.MI": {
+        "ticker": "AMP.MI",
+        "shares": 29.168492,
+        "avg_cost": 11.425,
+        "name": "Amplifon S.p.A.",
+        "sector": "Healthcare",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-28T08:31:07.939959+01:00"
+      }
+    },
+    "trades": [
+      {
+        "id": "bc0e717b-ff41-4587-9128-ab0e96085a42",
+        "fund_id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
+        "acted_at": "2026-09-28T08:31:07.939959+01:00",
+        "ticker": "ENI.MI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 13.833542,
+        "price": 24.09,
+        "gross": 333.25,
+        "cost": 0.08,
+        "net_cash": -333.33,
+        "note": "Automated buy",
+        "name": "Eni S.p.A."
+      },
+      {
+        "id": "7cf62c10-322a-4a5a-89a2-1c571d1b95d4",
+        "fund_id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
+        "acted_at": "2026-09-28T08:31:07.939959+01:00",
+        "ticker": "REC.MI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 6.28181,
+        "price": 53.05,
+        "gross": 333.25,
+        "cost": 0.08,
+        "net_cash": -333.33,
+        "note": "Automated buy",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A."
+      },
+      {
+        "id": "ae468f2a-85d3-4ef1-a7c4-290b5e9e8437",
+        "fund_id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
+        "acted_at": "2026-09-28T08:31:07.939959+01:00",
+        "ticker": "AMP.MI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 29.168492,
+        "price": 11.425,
+        "gross": 333.25,
+        "cost": 0.08,
+        "net_cash": -333.33,
+        "note": "Automated buy",
+        "name": "Amplifon S.p.A."
+      }
+    ],
+    "equity_curve": [
+      {
+        "at": "2026-09-28T07:31:07.940049+00:00",
+        "portfolio_value": 1000.0,
+        "cash": 1000.0,
+        "contributed_capital": 1000.0,
+        "positions": 0,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0,
+            "GBP": 1.1642,
+            "USD": 0.8788,
+            "AUD": 0.616615,
+            "CAD": 0.620749,
+            "HKD": 0.112037,
+            "SGD": 0.687357,
+            "CHF": 1.0581,
+            "SEK": 0.0879
+          },
+          "issues": []
+        },
+        "note": "Fund opened"
+      },
+      {
+        "at": "2026-09-28T08:31:07.939959+01:00",
+        "portfolio_value": 999.75,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      }
+    ],
+    "last_mark_at": "2026-09-28T08:31:07.939959+01:00",
+    "rebalance_state": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    }
+  },
+  "note": "Rebalanced after open settle (3 trade(s)).",
+  "exit_shadow_review": {
+    "schema_version": 1,
+    "track_id": "buy_tier_level_native",
+    "generated_at": "2026-09-28T07:31:08.413750+00:00",
+    "open_count": 0,
+    "closed_count": 0,
+    "by_exit_kind": {},
+    "grace_vs_rotation": {
+      "grace_closed": {
+        "count": 0
+      },
+      "screen_rotation_closed": {
+        "count": 0
+      }
+    },
+    "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
+    "ingested_this_pass": 0,
+    "checkpoints_added_this_pass": 0
+  },
+  "exit_timing_cohorts_review": {
+    "schema_version": 1,
+    "track_id": "buy_tier_level_native",
+    "generated_at": "2026-09-28T07:31:08.414097+00:00",
+    "framework": {
+      "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+      "hold_recovery": {
+        "question": "When a position is stressed but still held, does it recover to breakeven?",
+        "episode_triggers": [
+          "unrealized below underwater_threshold",
+          "exit_streak >= 1 (hold buffer active)",
+          "momentum_grace on position",
+          "effective signal no longer buy-tier while still held"
+        ],
+        "outcomes": [
+          "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+          "sold_while_underwater",
+          "max_window_elapsed"
+        ],
+        "fields_for_later_analysis": [
+          "data_quality_score",
+          "conviction_score",
+          "screen_signal",
+          "effective_signal",
+          "exit_streak",
+          "stress_triggers",
+          "thesis_status_at_start",
+          "recommended_action_at_start",
+          "checkpoints"
+        ]
+      },
+      "swap_rotation": {
+        "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+        "pairing": "same rebalance pass sells vs buys on one track",
+        "outcomes": [
+          "replacement_outperformed",
+          "exit_outperformed",
+          "inconclusive"
+        ],
+        "fields_for_later_analysis": [
+          "sell_tickers",
+          "buy_tickers",
+          "sell_realized_pct",
+          "post_rotation_returns",
+          "trade_costs"
+        ]
+      },
+      "related_artifacts": [
+        "exit_shadow.json (post-exit path after sell)",
+        "rebalance_log.json (counterfactual replay)",
+        "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+        "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+        "learning_tracks_churn_health.json"
+      ]
+    },
+    "readiness": {
+      "ready_for_probability_analysis": false,
+      "hold_closed_count": 0,
+      "swap_closed_count": 0,
+      "hold_with_data_quality_count": 1,
+      "gaps": [
+        "hold_recovery closed episodes=0 (target >=15)",
+        "swap_rotation closed rotations=0 (target >=10)"
+      ],
+      "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
+    },
+    "hold_recovery": {
+      "open": {
+        "count": 1,
+        "recovered_to_breakeven": 1,
+        "close_reasons": {
+          "open": 1
+        }
+      },
+      "closed": {
+        "count": 0
+      }
+    },
+    "swap_rotation": {
+      "open": {
+        "count": 0
+      },
+      "closed": {
+        "count": 0
+      }
+    },
+    "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
+    "ingested_this_pass": {
+      "hold_episodes": 1,
+      "swap_rotations": 0
+    },
+    "checkpoints_added_this_pass": {
+      "hold_episodes": 0,
+      "swap_rotations": 0
+    }
+  },
+  "hypothesis_integrity": {
+    "schema_version": 1,
+    "scope": "hypothesis_integrity",
+    "observe_only": true,
+    "track_id": "buy_tier_level_native",
+    "updated_at": "2026-09-28T07:31:08.414589+00:00",
+    "as_of": "2026-09-28T08:31:07.939959+01:00",
+    "config": {
+      "underwater_pct": -0.05,
+      "deep_underwater_pct": -0.15,
+      "loser_share_tolerance": 0.4,
+      "loser_nav_tolerance": 0.35,
+      "min_data_quality": 0.55,
+      "min_conviction_for_intact": 0.35,
+      "intact_urgency_dampen": 0.18,
+      "broken_urgency_boost": 0.28,
+      "skip_underwater_urgency_when_intact": true
+    },
+    "holding_count": 3,
+    "underwater_count": 0,
+    "thesis_status_counts": {
+      "intact": 2,
+      "weakening": 1,
+      "broken": 0,
+      "insufficient_data": 0
+    },
+    "portfolio_feedback": {
+      "holding_count": 3,
+      "loser_count": 0,
+      "loser_share": 0.0,
+      "loser_nav_share": 0.0,
+      "loser_share_tolerance": 0.4,
+      "loser_nav_tolerance": 0.35,
+      "within_tolerance": true,
+      "intact_loser_count": 0,
+      "weakening_loser_count": 0,
+      "broken_loser_count": 0,
+      "family_fail_rate_losers": {
+        "cheapness": 0.0,
+        "quality": 0.0,
+        "dividend": 0.0,
+        "garp": 0.0,
+        "risk": 0.0
+      },
+      "family_fail_rate_non_losers": {
+        "cheapness": 0.0,
+        "quality": 0.3333,
+        "dividend": 0.0,
+        "garp": 0.0,
+        "risk": 0.0
+      },
+      "selection_feedback_flags": [],
+      "balancing_hint": "maintain",
+      "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
+    },
+    "holdings": [
+      {
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 24.09,
+        "avg_cost": 24.09,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6698,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 67%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 67%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "REC.MI",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 53.05,
+        "avg_cost": 53.05,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.5896,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 59%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 59%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "AMP.MI",
+        "name": "Amplifon S.p.A.",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 11.425,
+        "avg_cost": 11.425,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.357,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "quality"
+        ],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "still buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 36%"
+        ],
+        "weaken_reasons": [
+          "research verdict caution"
+        ],
+        "broken_reasons": []
+      }
+    ],
+    "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
+  },
+  "hypothesis_outcome_link": {
+    "schema_version": 1,
+    "scope": "hypothesis_outcome_link",
+    "observe_only": true,
+    "track_id": "buy_tier_level_native",
+    "generated_at": "2026-09-28T07:31:08.415257+00:00",
+    "stamped_this_pass": {
+      "hold_episodes": 0,
+      "swap_rotations": 0
+    },
+    "hold_recovery_by_thesis": {
+      "closed_total": 0,
+      "closed_unknown_thesis": 0,
+      "open_with_thesis": 1,
+      "by_thesis_status": {
+        "intact": {
+          "closed_count": 0
+        },
+        "weakening": {
+          "closed_count": 0
+        },
+        "broken": {
+          "closed_count": 0
+        },
+        "insufficient_data": {
+          "closed_count": 0
+        }
+      }
+    },
+    "swap_rotation_by_thesis": {
+      "closed_rotation_count": 0,
+      "sell_legs_total": 0,
+      "sell_legs_unknown_thesis": 0,
+      "by_thesis_status": {
+        "intact": {
+          "leg_count": 0
+        },
+        "weakening": {
+          "leg_count": 0
+        },
+        "broken": {
+          "leg_count": 0
+        },
+        "insufficient_data": {
+          "leg_count": 0
+        }
+      }
+    },
+    "readiness": {
+      "ready_for_thesis_outcome_analysis": false,
+      "hold_closed_with_thesis": 0,
+      "swap_sell_legs_with_thesis": 0,
+      "gaps": [
+        "hold closed with thesis=0 (target >=8)",
+        "swap sell legs with thesis=0 (target >=5)"
+      ],
+      "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
+    },
+    "learning_hints": [],
+    "note": "Links thesis_status_at_start on exit_timing cohorts to hold-recovery and swap-rotation outcomes. Does not auto-apply exit policy."
+  },
+  "entry_dca_overlay_review": {
+    "schema_version": 1,
+    "track_id": "buy_tier_level_native",
+    "observe_only": true,
+    "generated_at": "2026-09-28T07:31:08.415990+00:00",
+    "open_count": 3,
+    "closed_count": 0,
+    "scored_count": 0,
+    "scored_count_all": 0,
+    "recommit_scored_count": 0,
+    "entry_kind_counts": {
+      "first_entry": 0,
+      "recommit": 0
+    },
+    "any_de_risk_count": 0,
+    "winning_cadence_counts": {},
+    "cadence_stats": {
+      "dca_2x_weekly": {
+        "label": "50/50 over 1 week",
+        "scored_episodes": 0,
+        "mean_end_value_delta": null,
+        "mean_de_risk_gbp": null,
+        "de_risk_rate": null,
+        "win_count": 0
+      },
+      "dca_4x_weekly": {
+        "label": "25% weekly \u00d7 4",
+        "scored_episodes": 0,
+        "mean_end_value_delta": null,
+        "mean_de_risk_gbp": null,
+        "de_risk_rate": null,
+        "win_count": 0
+      },
+      "dca_2x_biweekly": {
+        "label": "50/50 over 2 weeks",
+        "scored_episodes": 0,
+        "mean_end_value_delta": null,
+        "mean_de_risk_gbp": null,
+        "de_risk_rate": null,
+        "win_count": 0
+      },
+      "dca_5x_weekday": {
+        "label": "20% over 5 weekday marks",
+        "scored_episodes": 0,
+        "mean_end_value_delta": null,
+        "mean_de_risk_gbp": null,
+        "de_risk_rate": null,
+        "win_count": 0
+      }
+    },
+    "readiness": {
+      "ready_for_cadence_analysis": false,
+      "closed_episodes": 0,
+      "closed_target": 12,
+      "tracks_with_closed": 0,
+      "tracks_target": 2,
+      "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+      "first_entry_scored": 0,
+      "recommit_scored": 0
+    },
+    "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+    "ingested_this_pass": 3,
+    "marked_this_pass": 0,
+    "closed_this_pass": 0
+  },
+  "sleeve_episodes_review": {
+    "schema_version": 2,
+    "track_id": "buy_tier_level_native",
+    "generated_at": "2026-09-28T08:31:07.939959+01:00",
+    "observe_only": true,
+    "framework": {
+      "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
+      "schema_version": 2,
+      "recording": {
+        "earliest_entry": "First pass on near-buy (hold + conviction >= pre_buy floor 0.28) or buy-tier \u2014 whichever comes first",
+        "latest_exit": "Momentum-grace end + post_grace_extra_days (~1 month); fallback if grace never arms: leave wide zone \u00d7 exit_confirm_screens + post_grace_extra_days; or hard avoid",
+        "sub_markers": [
+          "first_near_buy_at",
+          "first_buy_tier_at",
+          "grace_started_at",
+          "grace_ended_at",
+          "experimental_exit_due_at"
+        ],
+        "best_policy": "Nested counterfactual inside the wide episode \u2014 not the freeze gate"
+      },
+      "capital_status": {
+        "on_book": "Crossed threshold and currently (or once) held in the paper fund",
+        "off_book": "Capital sold while the experimental episode was still open",
+        "never_funded": "Crossed threshold but never received paper capital"
+      },
+      "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
+    },
+    "open_count": 3,
+    "closed_count": 0,
+    "open_by_capital_status": {
+      "on_book": 3,
+      "off_book": 0,
+      "never_funded": 0
+    },
+    "closed_by_capital_status": {
+      "on_book": 0,
+      "off_book": 0,
+      "never_funded": 0
+    },
+    "readiness": {
+      "ready_for_sleeve_timing_analysis": false,
+      "closed_per_tag_target": 15,
+      "gaps": [
+        "on_book closed=0 (target>=15)",
+        "off_book closed=0 (target>=15)",
+        "never_funded closed=0 (target>=15)"
+      ],
+      "note": "Probability / nested counterfactual promotion waits until each capital_status tag has a thick closed cohort."
+    },
+    "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
+    "ingested_this_pass": {
+      "opened": 3,
+      "closed": 0,
+      "tagged_on_book": 3,
+      "tagged_off_book": 0
+    }
+  },
+  "generated_at": "2026-09-28T07:31:08.416710+00:00",
+  "track_id": "buy_tier_level_native",
+  "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
+  "is_primary_learning_track": false,
+  "selection": {
+    "skip_timing_wait": true,
+    "min_conviction": 0.0,
+    "sector_cap": 1.0,
+    "use_adjusted_signal": false,
+    "require_research_accumulate": false,
+    "use_momentum_grace": false,
+    "use_graduated_allocation": false,
+    "exit_confirm_screens": 2,
+    "reentry_cooldown_screens": 1,
+    "min_rebalance_notional_gbp": 10.0
+  }
+}

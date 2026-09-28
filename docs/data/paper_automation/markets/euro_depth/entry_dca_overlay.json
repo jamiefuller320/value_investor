@@ -77,6 +77,14 @@
         {
           "as_of": "2026-09-27T09:04:34.041353+02:00",
           "price": 111.3
+        },
+        {
+          "as_of": "2026-09-28T09:24:58.231265+02:00",
+          "price": 111.75
+        },
+        {
+          "as_of": "2026-09-28T09:31:18.916087+02:00",
+          "price": 111.6
         }
       ]
     },
@@ -85,7 +93,7 @@
       "track_id": "rules",
       "ticker": "EG7.IR",
       "started_at": "2026-09-24T09:40:23.196827+02:00",
-      "status": "open",
+      "status": "closed",
       "lifecycle_stage": "starter",
       "entry_kind": "first_entry",
       "entry_price": 19.0,
@@ -120,6 +128,179 @@
         {
           "as_of": "2026-09-27T09:04:34.041353+02:00",
           "price": 18.9
+        },
+        {
+          "as_of": "2026-09-28T09:24:58.231265+02:00",
+          "price": 18.9
+        },
+        {
+          "as_of": "2026-09-28T09:31:18.916087+02:00",
+          "price": 18.9
+        }
+      ],
+      "cadence_scores": [
+        {
+          "id": "lump_sum",
+          "label": "100% at decision",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 1,
+          "avg_fill": 19.0,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -3.15,
+          "peak_deployed_return": -0.0158,
+          "end_value": 198.35,
+          "end_value_delta": 0.0,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-09-24T09:40:23.196827+02:00",
+              "price": 19.0
+            }
+          ],
+          "de_risk_gbp": 0.0
+        },
+        {
+          "id": "dca_2x_weekly",
+          "label": "50/50 over 1 week",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 19.0,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 99.7,
+          "peak_loss_gbp": -1.57,
+          "peak_deployed_return": -0.0158,
+          "end_value": 198.88,
+          "end_value_delta": 0.52,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-09-24T09:40:23.196827+02:00",
+              "price": 19.0
+            }
+          ],
+          "de_risk_gbp": 1.58
+        },
+        {
+          "id": "dca_4x_weekly",
+          "label": "25% weekly \u00d7 4",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 4,
+          "avg_fill": 19.0,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 149.55,
+          "peak_loss_gbp": -0.79,
+          "peak_deployed_return": -0.0158,
+          "end_value": 199.14,
+          "end_value_delta": 0.79,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-09-24T09:40:23.196827+02:00",
+              "price": 19.0
+            }
+          ],
+          "de_risk_gbp": 2.36
+        },
+        {
+          "id": "dca_2x_biweekly",
+          "label": "50/50 over 2 weeks",
+          "scored": true,
+          "tranches_filled": 1,
+          "tranches_target": 2,
+          "avg_fill": 19.0,
+          "fill_advantage_pct": 0.0,
+          "extra_cost": 0.0,
+          "leftover_cash": 99.7,
+          "peak_loss_gbp": -1.57,
+          "peak_deployed_return": -0.0158,
+          "end_value": 198.88,
+          "end_value_delta": 0.52,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-09-24T09:40:23.196827+02:00",
+              "price": 19.0
+            }
+          ],
+          "de_risk_gbp": 1.58
+        },
+        {
+          "id": "dca_5x_weekday",
+          "label": "20% over 5 weekday marks",
+          "scored": true,
+          "tranches_filled": 5,
+          "tranches_target": 5,
+          "avg_fill": 18.8795,
+          "fill_advantage_pct": 0.0063,
+          "extra_cost": 0.3,
+          "leftover_cash": 0.0,
+          "peak_loss_gbp": -1.9,
+          "peak_deployed_return": -0.0095,
+          "end_value": 199.32,
+          "end_value_delta": 0.97,
+          "fills": [
+            {
+              "tranche": 1,
+              "as_of": "2026-09-24T09:40:23.196827+02:00",
+              "price": 19.0
+            },
+            {
+              "tranche": 2,
+              "as_of": "2026-09-25T09:23:05.161232+02:00",
+              "price": 18.7
+            },
+            {
+              "tranche": 3,
+              "as_of": "2026-09-27T08:58:47.147628+02:00",
+              "price": 18.9
+            },
+            {
+              "tranche": 4,
+              "as_of": "2026-09-27T08:58:47.147628+02:00",
+              "price": 18.9
+            },
+            {
+              "tranche": 5,
+              "as_of": "2026-09-28T09:24:58.231265+02:00",
+              "price": 18.9
+            }
+          ],
+          "de_risk_gbp": 1.25
+        }
+      ],
+      "winning_cadence": "dca_5x_weekday",
+      "winning_end_value_delta": 0.97,
+      "any_de_risk": true,
+      "closed_at": "2026-09-28T09:31:18.916087+02:00",
+      "close_reason": "sold_before_window"
+    },
+    {
+      "id": "rules:SHELL.AS:2026-09-28T09:31:18.916087+02:00",
+      "track_id": "rules",
+      "ticker": "SHELL.AS",
+      "started_at": "2026-09-28T09:31:18.916087+02:00",
+      "status": "open",
+      "lifecycle_stage": "recommit",
+      "entry_kind": "recommit",
+      "entry_price": 42.57,
+      "notional": 198.55,
+      "shares": 4.664103,
+      "buy_cost_pct": 0.00185,
+      "screen_signal": "strong_buy",
+      "timing_signal": "insufficient_data",
+      "conviction_score": 0.775,
+      "data_quality_score": 1.0,
+      "marks": [
+        {
+          "as_of": "2026-09-28T09:31:18.916087+02:00",
+          "price": 42.57
         }
       ]
     }

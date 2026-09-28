@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-27T07:04:21.764712+00:00
+Track: `buy_tier_level` · updated 2026-09-28T07:31:06.147176+00:00
 
 ## Portfolio loser feedback
 
@@ -40,7 +40,7 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:21.764712+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 47%
+- conviction 54%
 
 ### JHD.L — intact / hold_tolerate (-3.1%)
 - still buy
@@ -56,18 +56,18 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:21.764712+00:00
 - conviction 62%
 
 ### BREE.L — weakening / watch_review (-1.8%)
-- conviction 29% below intact floor
+- conviction 33% below intact floor
 - still buy
 - research accumulate
 
 ### DOTD.L — weakening / watch_review (-1.6%)
-- conviction 26% below intact floor
+- conviction 31% below intact floor
 - still buy
 - cheapness family still passes
 
 ### PMI.L — weakening / watch_review (-0.7%)
 - research verdict caution
-- conviction 26% below intact floor
+- conviction 30% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -80,7 +80,6 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:21.764712+00:00
 
 ### CREO.L — weakening / watch_review (+0.0%)
 - research verdict caution
-- conviction 33% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -93,7 +92,7 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:21.764712+00:00
 - still buy
 - cheapness family still passes
 - data_quality 1.00
-- conviction 47%
+- conviction 54%
 
 ### ASY.L — intact / hold_tolerate (+1.8%)
 - still buy

@@ -3,28 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-09-27T07:04:04.236343+00:00",
+  "generated_at": "2026-09-28T07:30:48.842806+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 19,
+    "closed_total": 20,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 114,
+    "open_with_thesis": 113,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 15,
-        "recovery_rate": 0.6667,
-        "sold_underwater_rate": 0.3333,
-        "mean_peak_unrealized_pct": 0.032,
-        "mean_trough_unrealized_pct": -0.0365,
+        "closed_count": 16,
+        "recovery_rate": 0.625,
+        "sold_underwater_rate": 0.375,
+        "mean_peak_unrealized_pct": 0.0291,
+        "mean_trough_unrealized_pct": -0.0407,
         "outcome_labels": {
           "recovered": 10,
-          "sold_underwater": 5
+          "sold_underwater": 6
         }
       },
       "broken": {
@@ -64,7 +64,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 19,
+    "hold_closed_with_thesis": 20,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -5563,7 +5563,7 @@
       "ticker": "BKNG",
       "name": "Booking Holdings Inc.",
       "started_at": "2026-09-16T03:19:07.603788-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -5605,9 +5605,9 @@
       "peak_unrealized_pct": -0.0145,
       "trough_unrealized_pct": -0.1036,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-28T03:30:48.704000-04:00",
+      "linked_sell_trade_id": "90eb89cd-729b-41c1-ab80-dc62fa51d4cc"
     },
     {
       "episode_id": "buy_tier_level:INTU:2026-09-16T03:19:07.603788-04:00",
@@ -7542,7 +7542,15 @@
           "cost": 0.01
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-28T03:30:48.704000-04:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0232,
+          "avg_buy_return": -0.0177,
+          "replacement_delta": -0.041
+        }
+      ],
       "sell_returns_since_rotation": {
         "LULU": 0.033,
         "BSX": 0.0134
@@ -7860,6 +7868,58 @@
       },
       "buy_returns_since_rotation": {
         "LEN": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-09-28T03:30:48.704000-04:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-09-28T03:30:48.704000-04:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "BKNG",
+          "price": 163.95,
+          "shares": 0.046783,
+          "gross": 7.67,
+          "cost": 0.01,
+          "avg_cost_at_exit": 173.92,
+          "realized_pct": -0.0573,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0573
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "ZBH",
+          "price": 91.04,
+          "shares": 0.086359,
+          "gross": 7.86,
+          "cost": 0.01
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "BKNG": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "ZBH": 0.0
       },
       "verdict": null,
       "closed_at": null
