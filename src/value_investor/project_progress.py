@@ -217,9 +217,7 @@ def build_project_progress(
             "(bodies+FCF already green; rememo within existing caps)."
         )
     elif not bodies_green:
-        utilization_action = (
-            "Prioritise buy-tier filing depth (Companies House + RNS body fetch)."
-        )
+        utilization_action = "Prioritise buy-tier filing depth (Companies House + RNS body fetch)."
     else:
         utilization_action = (
             "Keep buy-tier filing bodies green; watch memo_recent on holdings∪buy-tier."

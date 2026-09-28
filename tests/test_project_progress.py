@@ -74,9 +74,7 @@ def test_build_project_progress_includes_stages_and_ingest(tmp_path: Path, monke
     assert payload["ingest_bottleneck"]["stalled"] is True
     assert payload["ingest_bottleneck"]["zero_body_buy_tier"] == 1
     assert any("AI-judgment" in row for row in payload["appraisal"]["strengths"])
-    assert any(
-        "buy-tier filing depth" in row for row in payload["appraisal"]["next_actions"]
-    )
+    assert any("buy-tier filing depth" in row for row in payload["appraisal"]["next_actions"])
 
 
 def test_build_project_progress_prefers_memo_recent_when_bodies_green(tmp_path: Path):
