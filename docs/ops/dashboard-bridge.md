@@ -20,7 +20,7 @@ flowchart LR
 | `dashboard_commands` table | Durable queue of page → git requests |
 | Realtime channel `ftse-dashboard` | Fast ping (`command`) + completion notify (`artifact-updated`) |
 | `ftse-dashboard-bridge process-pending` | Worker — polls table, dispatches GitHub `repository_dispatch` |
-| Target workflows | `progress-report.yml`, `engineering-queue.yml`, `ops-monitor.yml`, `dashboard-bridge.yml` (`refresh-queue-ui`), `lifecycle-experiment-ack.yml`, `lifecycle-experiment-start.yml`, `human-task-ack.yml` |
+| Target workflows | `progress-report.yml`, `engineering-queue.yml`, `ops-monitor.yml`, `dashboard-bridge.yml` (`refresh-queue-ui`), `lifecycle-experiment-ack.yml`, `lifecycle-experiment-start.yml`, `human-task-ack.yml`, `daily-focus-ack.yml`, `daily-discuss.yml` |
 
 **Yes — one Supabase channel/table can cover all page→git actions.** Add new actions by extending `SUPPORTED_ACTIONS` in `dashboard_bridge.py` and wiring a workflow handler.
 
@@ -145,6 +145,13 @@ Commit and wait for Pages deploy. **Generate fresh report** then uses the bridge
 | `lifecycle-experiment-ack` | `lifecycle-experiment-ack` | `lifecycle-experiment-ack.yml` |
 | `lifecycle-experiment-start` | `lifecycle-experiment-start` | `lifecycle-experiment-start.yml` |
 | `human-task-ack` | `human-task-ack` | `human-task-ack.yml` |
+| `daily-focus-ack` | `daily-focus-ack` | `daily-focus-ack.yml` |
+| `daily-discuss` | `daily-discuss` | `daily-discuss.yml` |
+
+Daily hub Accept on focus lines uses `daily-focus-ack`; Accept on human-task
+rows reuses `human-task-ack`. Discuss queues `docs/data/daily_discuss_inbox.json`
+for Project chat pickup (`discuss daily recommendation \`rec-…\``). See
+[`ops-monitor.md`](ops-monitor.md#daily-hub).
 
 ## Queue health monitor
 

@@ -30,6 +30,10 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     assert '["human_task_acks", "data/human_task_acks.json"]' in text
     assert "function mergeHumanTaskAcksIntoBoard(board, acksStore)" in text
     assert "mergeHumanTaskAcksIntoBoard(" in text
+    assert '["daily_focus", "data/daily_focus.json"]' in text
+    assert '["ui_state_reconciliation", "data/ui_state_reconciliation.json"]' in text
+    assert '["daily_focus_acks", "data/daily_focus_acks.json"]' in text
+    assert '["daily_discuss_inbox", "data/daily_discuss_inbox.json"]' in text
     assert '["lifecycle_board", "data/lifecycle_board.json"]' in text
     assert "async function applyDashboardSidecars(data)" in text
     assert "DASHBOARD_SIDECARS" in text

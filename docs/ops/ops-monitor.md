@@ -64,6 +64,13 @@ lane change and readiness gate (see N152 / P1 pin rules).
   sort new/changed analysis first; Acknowledge / Approve via dashboard-bridge
   (`human-task-ack`) are observe-only. Both JSON files are in
   `GHA_COMMIT_OPTIONAL`.
+- **Daily hub + UI reconciliation** — `docs/data/daily_focus.json` (Cap C morning
+  board) and `docs/data/ui_state_reconciliation.json` (Cap B dashboard health)
+  rebuilt at end of ops-monitor after the human-tasks board. Automation →
+  **Daily** (`#automation/daily`) is the collated cockpit; **Ops** shows the
+  reconcile table. Findings titled **UI state reconciliation drift** are
+  observe-only (`auto_fixable=False`). Accept / Discuss recommendations queue
+  via `daily-focus-ack` / `daily-discuss` (inbox: `daily_discuss_inbox.json`).
 
 Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-required).
 
@@ -379,6 +386,42 @@ email-report correctly showed **Surface stale** until the next Sunday publish.
 
 Still does **not** contaminate `beat_market` or other analysis measures — board
 rebuild is observe composition only.
+
+## UI state reconciliation {#ui-state-reconciliation}
+
+Observe-only **dashboard health** instrument (Cap B). Compares named UI artifacts
+so operators can tell when Pages is lying about the working set automation used.
+
+| Layer | Behavior |
+|-------|----------|
+| Store | `docs/data/ui_state_reconciliation.json` (ops-monitor optional commit; email-report excludes) |
+| Trigger | `collect_ops_findings` → `check_ui_state_reconciliation`; refreshed again after human-tasks board write |
+| Checks (v0) | Progress report present; dual-suite scoreboard present; human-task ack FP mass-stale heuristic; lifecycle board age ≤ ~30h |
+| Dashboard | Overview pulse strip + Automation → **Ops** (`#automation/ops`) full table; Daily hub badge |
+| Finding | **UI state reconciliation drift** when `overall` is warn/fail (`auto_fixable=False`, category `dashboard_health`) |
+| Non-goals | No eng spray, no auto-republish, no primary-track flip |
+
+Policy green ≠ utility: a Suite A stress book being “primary” does not clear reconcile ambers.
+
+## Daily hub {#daily-hub}
+
+Morning cockpit (Cap C). Operator TZ **Europe/London**; hub payload for “today”
+should be ready **before 04:00** local. Built from Project focus seed
+(`project_daily_seed.json` / notes Today bullets), human-tasks open buckets,
+progress `defer_now`, and reconcile ambers.
+
+| Layer | Behavior |
+|-------|----------|
+| Store | `docs/data/daily_focus.json` (+ `daily_focus_acks.json`, `daily_discuss_inbox.json`, `project_daily_seed.json`) |
+| Trigger | End of `run_ops_monitor` (after human-tasks board); optional commit via `GHA_COMMIT_OPTIONAL` |
+| Dashboard | Automation → **Daily** (`#automation/daily`, default Automation landing); Overview pulse embeds top focus lines |
+| Close | Focus lines → `daily-focus-ack`; human tasks → existing `human-task-ack` |
+| Recommendations | Per-task `recommendation` with **Accept** / **Discuss**; Discuss writes `daily_discuss_inbox.json` and copies a Project pickup prompt |
+| Aim filter | Suite A stress streaks / off-buy-tier zero-filing themes stay out unless already a checklist item or focus line |
+
+Project notes `Today —` bullets are the editorial surface; after the morning build,
+JSON wins for the UI. Agents do not push unprompted into chat — say
+`discuss daily recommendation \`rec-…\`` in the Project conversation.
 
 ## CLI
 
