@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-28T08:55:55+00:00",
+  "updated_at": "2026-09-28T09:41:57+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -11015,9 +11015,10 @@
         "p1",
         "memo_recent"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-03d402e5-879e-5c8d-a29c-040d188f9448",
-      "added_at": "2026-09-28T08:10:40+00:00"
+      "added_at": "2026-09-28T08:10:40+00:00",
+      "updated_at": "2026-09-28T08:53:12+00:00"
     },
     {
       "id": "L484",
@@ -11032,9 +11033,10 @@
         "clobber",
         "gha"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-03d402e5-879e-5c8d-a29c-040d188f9448",
-      "added_at": "2026-09-28T08:10:40+00:00"
+      "added_at": "2026-09-28T08:10:40+00:00",
+      "updated_at": "2026-09-28T08:53:12+00:00"
     },
     {
       "id": "L485",
@@ -11053,6 +11055,119 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-c3fd0260-e48e-5f38-b3db-b3cc542851c4",
       "added_at": "2026-09-28T08:55:55+00:00"
+    },
+    {
+      "id": "L486",
+      "category": "later",
+      "section": "ops",
+      "title": "Performance and Screener section sub-pages",
+      "summary": "Split Performance into signals/sim/historical subnav and optional Screener filter pills using the same paper-subnav + illumination chips as Automation/Analysis.",
+      "revisit_when": "Automation and Overview section subnav are shipped and Performance/Screener density is still a complaint",
+      "tags": [
+        "dashboard",
+        "subnav",
+        "performance"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6a823b72-2260-5c86-811f-36eb5b11decf",
+      "added_at": "2026-09-28T09:41:19+00:00"
+    },
+    {
+      "id": "L487",
+      "category": "later",
+      "section": "ops",
+      "title": "Bridge action to republish dual-suite scoreboard",
+      "summary": "Supervised dashboard-bridge action to force publish/rebuild learning_tracks_dual_suite when reconcile flags publish_lag. Observe-only until then.",
+      "revisit_when": "ui_state_reconciliation publish_lag warns fire after several Sundays and manual republish is the usual heal",
+      "tags": [
+        "dashboard",
+        "reconcile",
+        "dual-suite",
+        "bridge"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6a823b72-2260-5c86-811f-36eb5b11decf",
+      "added_at": "2026-09-28T09:41:19+00:00"
+    },
+    {
+      "id": "L488",
+      "category": "later",
+      "section": "ops",
+      "title": "Morning Cursor Automation for daily_focus notes sync",
+      "summary": "Optional scheduled Cursor Automation that updates Project notes Today bullets and docs/data project daily seed before 04:00 Europe/London. Agents cannot push unprompted into chat.",
+      "revisit_when": "daily_focus.json morning builder is on main and operators want notes auto-synced without opening a Project agent",
+      "tags": [
+        "daily-hub",
+        "automation",
+        "project-notes"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6a823b72-2260-5c86-811f-36eb5b11decf",
+      "added_at": "2026-09-28T09:41:19+00:00"
+    },
+    {
+      "id": "N167",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Daily hub as default main tab landing",
+      "summary": "Do not add a tenth main tab or make Daily the default landing until Automation subnav Daily hub proves useful. Keep hub under Automation.",
+      "revisit_when": "Daily hub has been the weekday morning entry for several weeks and Overview pulse feels redundant",
+      "tags": [
+        "dashboard",
+        "daily-hub",
+        "ia"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6a823b72-2260-5c86-811f-36eb5b11decf",
+      "added_at": "2026-09-28T09:41:19+00:00"
+    },
+    {
+      "id": "N168",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Supabase-backed daily todo table",
+      "summary": "Do not add a new SQL table for daily todos; reuse git JSON acks and existing dashboard_commands bridge. SQL only if command-queue pressure forces it.",
+      "revisit_when": "daily_focus_acks via git JSON prove too slow or conflict-prone after Phase C1",
+      "tags": [
+        "dashboard",
+        "bridge",
+        "sql"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6a823b72-2260-5c86-811f-36eb5b11decf",
+      "added_at": "2026-09-28T09:41:19+00:00"
+    },
+    {
+      "id": "L489",
+      "category": "later",
+      "section": "ops",
+      "title": "Multi-operator timezone profiles for daily hub",
+      "summary": "Freeze Europe/London as operator TZ for daily hub refresh-before-04:00. Multi-profile TZ support only if a second operator locale appears.",
+      "revisit_when": "A second operator needs a non-London local deadline for the daily hub",
+      "tags": [
+        "daily-hub",
+        "timezone"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6a823b72-2260-5c86-811f-36eb5b11decf",
+      "added_at": "2026-09-28T09:41:20+00:00"
+    },
+    {
+      "id": "L490",
+      "category": "later",
+      "section": "ops",
+      "title": "Section-visit durable acks for illuminated subnav",
+      "summary": "Durable per-section visit fingerprints so green illumination survives reload; extend human-task-ack / bridge pattern. Phase A2 after Automation subnav ships.",
+      "revisit_when": "Automation section subnav and illumination v0 are on main and operators want green chips to persist across reloads",
+      "tags": [
+        "dashboard",
+        "subnav",
+        "illumination",
+        "ack"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-6a823b72-2260-5c86-811f-36eb5b11decf",
+      "added_at": "2026-09-28T09:41:57+00:00"
     }
   ],
   "fragments": [

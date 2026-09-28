@@ -138,8 +138,12 @@ Artifact commit uses `scripts/gha_commit_ops_monitor.sh` → shared
 library-grow). Status files always overlay; `engineering_tasks.json` / health
 logs overlay only when `main` has not changed them since checkout. Email-report
 owns broad `docs/data` for dashboard publish but sets `GHA_COMMIT_EXCLUDE` for
-`ops_status.json` / `ops_monitor_log.json` so a long screen run cannot rewrite a
-fresher ops-monitor commit from its checkout snapshot. The workflow commits those
+`ops_status.json` / `ops_monitor_log.json` / progress-report artifacts
+(`progress_report.json` / `.md` / `project_progress.json`) so a long screen run
+cannot rewrite a fresher ops-monitor or progress-report commit from its checkout
+snapshot. Shared `gha_commit_artifacts.sh` also skips owned `*.json` overlay when
+`origin/<ref>` already has a newer top-level `generated_at` (defense in depth for
+foreign-owned dashboard JSON). The workflow commits those
 artifacts even when `ftse-ops-monitor` exits non-zero, then fails the job afterward
 so a red finding cannot leave `ops_status.json` stale.
 

@@ -15,6 +15,7 @@ DEFAULT_AUTOMATION_PATH = Path("docs/data/automation.json")
 DEFAULT_AI_REVIEW_PATH = Path("docs/data/paper_automation/ai_judgment/decision_review.json")
 DEFAULT_RULES_REVIEW_PATH = Path("docs/data/paper_automation/decision_review.json")
 DEFAULT_INGEST_LOG_PATH = Path("docs/data/ingest_health_log.json")
+DEFAULT_DECISION_INPUT_PATH = Path("docs/data/decision_input_inventory.json")
 
 STAGE_DEFINITIONS: tuple[dict[str, str], ...] = (
     {
@@ -90,6 +91,7 @@ def build_project_progress(
     ai_review_path: Path = DEFAULT_AI_REVIEW_PATH,
     rules_review_path: Path = DEFAULT_RULES_REVIEW_PATH,
     ingest_log_path: Path = DEFAULT_INGEST_LOG_PATH,
+    decision_input_path: Path = DEFAULT_DECISION_INPUT_PATH,
 ) -> dict[str, Any]:
     latest = _safe_read(latest_path) or {}
     automation = _safe_read(automation_path) or {}
@@ -97,6 +99,7 @@ def build_project_progress(
     ai_review = _safe_read(ai_review_path) or {}
     rules_review = _safe_read(rules_review_path) or {}
     ingest_log = _safe_read(ingest_log_path) or {}
+    decision_input = _safe_read(decision_input_path) or {}
 
     meta = latest.get("meta") or {}
     library = (automation.get("settings") or {}).get("library") or {}
@@ -111,6 +114,13 @@ def build_project_progress(
         from value_investor.engineering_queue import snapshot_ingest_health
 
         health_after = snapshot_ingest_health(latest_path=latest_path)
+
+    inventory_summary = decision_input.get("summary") or {}
+    gap_counts = inventory_summary.get("gap_counts") or {}
+    memo_recent_gaps = int(gap_counts.get("memo_recent") or 0)
+    body_gaps = int(gap_counts.get("key_filing_bodies") or 0)
+    zero_body = int(health_after.get("zero_body_buy_tier") or 0)
+    bodies_green = zero_body == 0 and body_gaps == 0
 
     evidence = {
         "screen_company_count": int(meta.get("company_count") or 0),
@@ -134,6 +144,10 @@ def build_project_progress(
             int(health_after.get("zero_body_buy_tier") or 0) > 0
             and int(latest_ingest.get("delta_zero_body") or 0) == 0
         ),
+        "memo_recent_gaps": memo_recent_gaps,
+        "key_filing_body_gaps": body_gaps,
+        "sunday_bind_field": inventory_summary.get("sunday_bind_field"),
+        "bodies_green": bodies_green,
     }
 
     stages = []
@@ -178,6 +192,11 @@ def build_project_progress(
         gaps.append(
             f"Ingest bottleneck: zero_body_buy_tier stuck at {evidence.get('zero_body_buy_tier')}."
         )
+    if bodies_green and memo_recent_gaps > 0:
+        gaps.append(
+            f"Buy-tier filing bodies are green; {memo_recent_gaps} holdings∪buy-tier names fail memo_recent "
+            f"(bind field: {inventory_summary.get('sunday_bind_field') or 'memo_recent'})."
+        )
     screen_run_at = evidence.get("screen_run_at")
     if screen_run_at:
         try:
@@ -192,10 +211,22 @@ def build_project_progress(
                 f"Published screen bundle dated {str(screen_run_at)[:10]} — confirm Sunday refresh."
             )
 
+    if bodies_green and memo_recent_gaps > 0:
+        utilization_action = (
+            "Prioritise memo_recent / holdings freshness on FTSE holdings∪buy-tier "
+            "(bodies+FCF already green; rememo within existing caps)."
+        )
+    elif not bodies_green:
+        utilization_action = "Prioritise buy-tier filing depth (Companies House + RNS body fetch)."
+    else:
+        utilization_action = (
+            "Keep buy-tier filing bodies green; watch memo_recent on holdings∪buy-tier."
+        )
+
     next_actions = [
         "Let the learning loop accumulate before adding tracks or knobs.",
         "Sunday chain: orchestrator → analysis-review → data-backup (cron now wired).",
-        "Prioritise buy-tier filing depth (Companies House + RNS body fetch).",
+        utilization_action,
         "Keep library growing offline; defer live universe expansion until stage 2b shows edge.",
     ]
 

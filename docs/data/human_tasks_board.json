@@ -1,122 +1,19 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-28T08:52:20.817272+00:00",
+  "generated_at": "2026-09-28T09:22:28.969547+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-09-26",
   "counts": {
-    "new_info": 3,
+    "new_info": 0,
     "unacked": 28,
-    "acked": 1,
+    "acked": 4,
     "automated": 19,
     "human": 32
   },
   "tasks": [
-    {
-      "id": "sunday-shard-epoch0-watch",
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "what-enter-learning-means",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Admitted shard epoch-0 watch",
-        "updated_at": "2026-09-28T08:24:07.162527+00:00",
-        "fingerprint": "910310f65712d00d",
-        "bullets": [],
-        "source_keys": [
-          "market_status"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-09-27T20:02:52.306418+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "1c775e33bf8dd3cd"
-      },
-      "sort_bucket": "new_info"
-    },
-    {
-      "id": "adhoc-review-ingest-deviations",
-      "title": "Review open ingest deviations and reprocess if needed",
-      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/ingest-deviations.md",
-      "doc_anchor": "what-needs-a-human",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-09-28T08:23:03.405622+00:00",
-        "fingerprint": "dfec26491fe39fbb",
-        "bullets": [
-          "Open deviations: 0"
-        ],
-        "source_keys": [
-          "ingest_deviations"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-09-27T20:03:44.648200+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "0bae9d556328c450"
-      },
-      "sort_bucket": "new_info"
-    },
-    {
-      "id": "monthly-pr-fix-common-issues",
-      "title": "Review common PR check / merge fix-request reasons",
-      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
-      "automated": false,
-      "cadence": "monthly",
-      "section_id": "monthly",
-      "section_title": "Monthly",
-      "doc_path": "docs/ops/project-traffic.md",
-      "doc_anchor": "pr-fix-occasion-log",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "PR fix common issues",
-        "updated_at": "2026-09-28T07:47:39.371674+00:00",
-        "fingerprint": "943c52b0007f0a44",
-        "bullets": [
-          "Occasions logged: 82",
-          "None: 7",
-          "None: 5",
-          "None: 2",
-          "None: 2",
-          "None: 1"
-        ],
-        "source_keys": [
-          "pr_fix_occasions",
-          "project_traffic_digest"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-09-27T19:12:25.259975+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "14fae5d6fd39a39a"
-      },
-      "sort_bucket": "new_info"
-    },
     {
       "id": "sunday-knob-calibration-priors",
       "title": "Review knob calibration priors",
@@ -133,7 +30,7 @@
       "analysis": {
         "headline": "Experiment assessment · 4 recommend",
         "updated_at": "2026-09-28T08:29:53.442905+00:00",
-        "fingerprint": "f07bd3b1e719d68a",
+        "fingerprint": "276ed49a700597b4",
         "bullets": [
           "Recommend rows: 4 / 15 experiments",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
@@ -172,7 +69,7 @@
       "analysis": {
         "headline": "Experiment assessment · 4 recommend",
         "updated_at": "2026-09-28T08:29:53.442905+00:00",
-        "fingerprint": "f07bd3b1e719d68a",
+        "fingerprint": "276ed49a700597b4",
         "bullets": [
           "Recommend rows: 4 / 15 experiments",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
@@ -211,7 +108,7 @@
       "analysis": {
         "headline": "Experiment assessment · 4 recommend",
         "updated_at": "2026-09-28T08:29:53.442905+00:00",
-        "fingerprint": "f07bd3b1e719d68a",
+        "fingerprint": "276ed49a700597b4",
         "bullets": [
           "Recommend rows: 4 / 15 experiments",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
@@ -250,7 +147,7 @@
       "analysis": {
         "headline": "Experiment assessment · 4 recommend",
         "updated_at": "2026-09-28T08:29:53.442905+00:00",
-        "fingerprint": "f07bd3b1e719d68a",
+        "fingerprint": "276ed49a700597b4",
         "bullets": [
           "Recommend rows: 4 / 15 experiments",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
@@ -289,7 +186,7 @@
       "analysis": {
         "headline": "Fair-cost Suite B lab",
         "updated_at": "2026-09-28T08:29:53.442905+00:00",
-        "fingerprint": "62c3b2e04cdbc548",
+        "fingerprint": "59730160636f429c",
         "bullets": [
           "Require fair-cost view before treating 3% stress excess as deployable."
         ],
@@ -322,7 +219,7 @@
       "analysis": {
         "headline": "Fair-cost Suite B lab",
         "updated_at": "2026-09-28T08:29:53.442905+00:00",
-        "fingerprint": "62c3b2e04cdbc548",
+        "fingerprint": "59730160636f429c",
         "bullets": [
           "Require fair-cost view before treating 3% stress excess as deployable."
         ],
@@ -355,7 +252,7 @@
       "analysis": {
         "headline": "Experiment assessment · 4 recommend",
         "updated_at": "2026-09-28T08:29:53.442905+00:00",
-        "fingerprint": "f07bd3b1e719d68a",
+        "fingerprint": "276ed49a700597b4",
         "bullets": [
           "Recommend rows: 4 / 15 experiments",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
@@ -394,7 +291,7 @@
       "analysis": {
         "headline": "Entry DCA adoption · —",
         "updated_at": "2026-09-28T08:29:53.440763+00:00",
-        "fingerprint": "7886c8e1e2e8c97b",
+        "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
           "paper_execute_graduated ready: None",
@@ -429,7 +326,7 @@
       "analysis": {
         "headline": "Buy-cross archive review",
         "updated_at": "2026-09-06T20:12:22.657688+00:00",
-        "fingerprint": "3b2978ff073990e5",
+        "fingerprint": "d4d0703511ed9b06",
         "bullets": [],
         "source_keys": [
           "buy_cross_archive_review"
@@ -663,7 +560,7 @@
       "analysis": {
         "headline": "Cycle-end Cursor surplus",
         "updated_at": null,
-        "fingerprint": "6212284469490cb7",
+        "fingerprint": "1ce42b6c68aa2f73",
         "bullets": [
           "Decision: —",
           "Unused Ultra fraction: —"
@@ -726,7 +623,7 @@
       "analysis": {
         "headline": "Horizon scan + deferred fragments",
         "updated_at": null,
-        "fingerprint": "6edae61b0a2e7086",
+        "fingerprint": "ca9f46e01370fc99",
         "bullets": [
           "Open fragments: —",
           "Suggested promotes: —"
@@ -789,7 +686,7 @@
       "analysis": {
         "headline": "Deferred ideas review",
         "updated_at": null,
-        "fingerprint": "60dad664d5c7f608",
+        "fingerprint": "bf7419cef040b84e",
         "bullets": [
           "Horizon/deferred triage items: 5",
           "hor-20260811-01: Archive rebalance replay for rules knob set (min_conviction 0.55, sector_cap 0.2) from first logged pass — full P&L path vs 5-entry preview; validates whether +5.98% return delta vs actual holds on lo",
@@ -827,7 +724,7 @@
       "analysis": {
         "headline": "Triage queue · 6 open",
         "updated_at": null,
-        "fingerprint": "e6c34b2d05d875b1",
+        "fingerprint": "eaa31c994c4a4a3a",
         "bullets": [
           "Open/proposed: 6 / 6",
           "ana-20260728-04: Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
@@ -894,7 +791,7 @@
       "analysis": {
         "headline": "Hypothesis integrity",
         "updated_at": null,
-        "fingerprint": "4a4430f30d5b0504",
+        "fingerprint": "e71f112bfafe4505",
         "bullets": [
           "within_tolerance=None",
           "broken_loser_count=None",
@@ -929,7 +826,7 @@
       "analysis": {
         "headline": "Phase C readiness: unknown",
         "updated_at": null,
-        "fingerprint": "485339f83437645f",
+        "fingerprint": "3b112219be642600",
         "bullets": [
           "Status: unknown"
         ],
@@ -962,7 +859,7 @@
       "analysis": {
         "headline": "Dual-path sleeve episodes readiness",
         "updated_at": null,
-        "fingerprint": "3e77e5d4b78594fa",
+        "fingerprint": "c222a40f9f198f55",
         "bullets": [
           "ready_for_sleeve_timing_analysis=None",
           "closed cohorts: —"
@@ -996,7 +893,7 @@
       "analysis": {
         "headline": "Triage queue · 0 open",
         "updated_at": null,
-        "fingerprint": "3fbd4b87b7c20e44",
+        "fingerprint": "a1a6621a17f9f062",
         "bullets": [
           "Open/proposed: 0 / 3"
         ],
@@ -1064,7 +961,7 @@
       "analysis": {
         "headline": "Sunday analysis review synthesis",
         "updated_at": "2026-09-27T21:46:28.982333+00:00",
-        "fingerprint": "9d6ec5f772dd308f",
+        "fingerprint": "489f92d878371fa0",
         "bullets": [],
         "source_keys": [
           "analysis_review",
@@ -1076,7 +973,119 @@
         "stale": false,
         "acked_at": "2026-09-28T08:52:20.774235+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "9d6ec5f772dd308f"
+        "finding_fingerprint": "489f92d878371fa0"
+      },
+      "sort_bucket": "acked"
+    },
+    {
+      "id": "adhoc-review-ingest-deviations",
+      "title": "Review open ingest deviations and reprocess if needed",
+      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/ingest-deviations.md",
+      "doc_anchor": "what-needs-a-human",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Ingest deviations · 0 open",
+        "updated_at": "2026-09-28T08:23:03.405622+00:00",
+        "fingerprint": "750849fd9e662f70",
+        "bullets": [
+          "Open deviations: 0"
+        ],
+        "source_keys": [
+          "ingest_deviations"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-27T20:03:44.648200+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "750849fd9e662f70"
+      },
+      "sort_bucket": "acked"
+    },
+    {
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Admitted shard epoch-0 watch · 12",
+        "updated_at": "2026-09-28T08:24:07.162527+00:00",
+        "fingerprint": "e626a71b3993dab4",
+        "bullets": [
+          "euro_depth: phase=3 ai=False knob=False holdings=36",
+          "dax: phase=1 ai=False knob=False holdings=3",
+          "asx200: phase=1 ai=False knob=False holdings=26",
+          "aim: phase=0 ai=False knob=False holdings=15",
+          "cac40: phase=1 ai=False knob=False holdings=5",
+          "euro_stoxx50: phase=1 ai=False knob=False holdings=8",
+          "ftse_mib: phase=0 ai=False knob=False holdings=3",
+          "ftse_smallcap: phase=1 ai=False knob=False holdings=2"
+        ],
+        "source_keys": [
+          "market_status"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-27T20:02:52.306418+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "e626a71b3993dab4"
+      },
+      "sort_bucket": "acked"
+    },
+    {
+      "id": "monthly-pr-fix-common-issues",
+      "title": "Review common PR check / merge fix-request reasons",
+      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/project-traffic.md",
+      "doc_anchor": "pr-fix-occasion-log",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "PR fix common issues",
+        "updated_at": "2026-09-28T09:22:28.919958+00:00",
+        "fingerprint": "b4aeea20b497d854",
+        "bullets": [
+          "Occasions logged: 85",
+          "PR mergeable=CONFLICTING against main: 7",
+          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
+          "validate check failed: 3",
+          "Merge conflicts in deferred-ideas.json with main: 2",
+          "ruff_format: 1"
+        ],
+        "source_keys": [
+          "pr_fix_occasions",
+          "project_traffic_digest"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-27T19:12:25.259975+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "b4aeea20b497d854"
       },
       "sort_bucket": "acked"
     }
