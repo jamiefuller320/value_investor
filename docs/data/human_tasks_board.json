@@ -1,57 +1,57 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-28T10:22:31.075092+00:00",
+  "generated_at": "2026-09-28T12:04:00.981142+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-09-26",
   "counts": {
-    "new_info": 0,
-    "unacked": 29,
+    "new_info": 1,
+    "unacked": 28,
     "acked": 4,
     "automated": 19,
     "human": 33
   },
   "tasks": [
     {
-      "id": "sunday-knob-calibration-priors",
-      "title": "Review knob calibration priors",
-      "summary": "Inspect knob_calibration_priors.json: ranking_mode, ready_for_shadow_bootstrap, bootstrap_priors, confidence, score_gap_vs_runner_up, and winner/loser catch rates.",
+      "id": "monthly-pr-fix-common-issues",
+      "title": "Review common PR check / merge fix-request reasons",
+      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
       "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/knob-calibration.md",
-      "doc_anchor": "promoting-a-prior-human-gate",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#promoting-a-prior-human-gate",
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/project-traffic.md",
+      "doc_anchor": "pr-fix-occasion-log",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "Experiment assessment · 4 recommend",
-        "updated_at": "2026-09-28T08:29:53.442905+00:00",
-        "fingerprint": "276ed49a700597b4",
+        "headline": "PR fix common issues",
+        "updated_at": "2026-09-28T11:42:01.383262+00:00",
+        "fingerprint": "54769d3c653fe502",
         "bullets": [
-          "Recommend rows: 4 / 15 experiments",
-          "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
-          "graduated_allocation: recommend conf=None",
-          "entry_dca_overlay: recommend conf=None",
-          "ana-20260921-02: recommend conf=None",
-          "ana-20260921-04: recommend conf=None"
+          "Occasions logged: 89",
+          "PR mergeable=CONFLICTING against main: 7",
+          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
+          "validate check failed: 3",
+          "Merge conflicts in deferred-ideas.json with main: 2",
+          "ruff_format: 1"
         ],
         "source_keys": [
-          "experiment_assessment",
-          "knob_calibration_priors"
+          "pr_fix_occasions",
+          "project_traffic_digest"
         ]
       },
       "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-09-27T19:12:25.259975+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "b4aeea20b497d854"
       },
-      "sort_bucket": "unacked"
+      "sort_bucket": "new_info"
     },
     {
       "id": "sunday-shadow-endurance",
@@ -975,6 +975,45 @@
       "sort_bucket": "unacked"
     },
     {
+      "id": "sunday-knob-calibration-priors",
+      "title": "Review knob calibration priors",
+      "summary": "Inspect knob_calibration_priors.json: ranking_mode, ready_for_shadow_bootstrap, bootstrap_priors, confidence, score_gap_vs_runner_up, and winner/loser catch rates.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/knob-calibration.md",
+      "doc_anchor": "promoting-a-prior-human-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#promoting-a-prior-human-gate",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Experiment assessment · 4 recommend",
+        "updated_at": "2026-09-28T08:29:53.442905+00:00",
+        "fingerprint": "276ed49a700597b4",
+        "bullets": [
+          "Recommend rows: 4 / 15 experiments",
+          "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
+          "graduated_allocation: recommend conf=None",
+          "entry_dca_overlay: recommend conf=None",
+          "ana-20260921-02: recommend conf=None",
+          "ana-20260921-04: recommend conf=None"
+        ],
+        "source_keys": [
+          "experiment_assessment",
+          "knob_calibration_priors"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-28T12:04:00.939451+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "276ed49a700597b4"
+      },
+      "sort_bucket": "acked"
+    },
+    {
       "id": "sunday-read-analysis-review",
       "title": "Read analysis review synthesis",
       "summary": "After analysis-review (~10:35 UTC), read analysis_review.md for backward metrics, proposed experiments, ingest trials, and the observe-only buy-tier chart-outcome mix (well timed / giveback / no terrible).",
@@ -1021,7 +1060,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-09-28T08:23:03.405622+00:00",
+        "updated_at": "2026-09-28T11:21:17.456964+00:00",
         "fingerprint": "750849fd9e662f70",
         "bullets": [
           "Open deviations: 0"
@@ -1054,7 +1093,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 12",
-        "updated_at": "2026-09-28T08:24:07.162527+00:00",
+        "updated_at": "2026-09-28T11:22:01.383022+00:00",
         "fingerprint": "e626a71b3993dab4",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=36",
@@ -1076,45 +1115,6 @@
         "acked_at": "2026-09-27T20:02:52.306418+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "e626a71b3993dab4"
-      },
-      "sort_bucket": "acked"
-    },
-    {
-      "id": "monthly-pr-fix-common-issues",
-      "title": "Review common PR check / merge fix-request reasons",
-      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
-      "automated": false,
-      "cadence": "monthly",
-      "section_id": "monthly",
-      "section_title": "Monthly",
-      "doc_path": "docs/ops/project-traffic.md",
-      "doc_anchor": "pr-fix-occasion-log",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "PR fix common issues",
-        "updated_at": "2026-09-28T09:22:28.919958+00:00",
-        "fingerprint": "b4aeea20b497d854",
-        "bullets": [
-          "Occasions logged: 85",
-          "PR mergeable=CONFLICTING against main: 7",
-          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
-          "validate check failed: 3",
-          "Merge conflicts in deferred-ideas.json with main: 2",
-          "ruff_format: 1"
-        ],
-        "source_keys": [
-          "pr_fix_occasions",
-          "project_traffic_digest"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-09-27T19:12:25.259975+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "b4aeea20b497d854"
       },
       "sort_bucket": "acked"
     }
