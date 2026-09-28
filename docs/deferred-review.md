@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-28T09:41:57+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-28T10:27:14+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -291,6 +291,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L462 | **Observe-only recent week-pair excess twin beside cumulative beat_market** | Do not replace epoch beat_market / excess_after_costs with decay-weighted or equal WoW excess. Optionally publish an observe-only recent-relative-edge twin (mean or mild decay of week-pair book−bench deltas + positive-week rate) beside cumulative once a fair-cost primary has a thick clean window. Cumulative wealth vs market stays adoption truth; WoW answers edge lately, not did the epoch beat. | Fair-cost primary (post-N153-clean epoch on any shard under review) has ≥8 weekday week-pairs of usable NAV marks AND humans repeatedly misread cumulative excess after a documented early drawdown as policy is currently failing. |
 | L475 | **Paper-exit model-score quintile attribution (observe)** | Observe-only rollup: join closed position_closed/exit_shadow sells to entry buy and nearest models_*.json scores; report Q5 vs Q1 realized return, hit rate, and FTSE excess when ready. Do not auto-tune weights until n≥30 joined closes on primary track. | ≥30 closed paper exits on ai_judgment with joinable entry scores after buy-tier FTSE-excess panel ships |
 | L476 | **Stamp per-model scores on rebalance_log buys for exit attribution** | Optional hardening: persist top model_id scores on rebalance_log buy rows to simplify exit-quintile joins. Not required for first observe rollup that joins nearest models_*.json at acted_at. | When implementing paper-exit score-quintile observe and day-level nearest-screen join proves brittle |
+| L491 | **Post-close sleeve autopsy archive (drawdown + missed-signal review)** | Observe-only post-close / material-drawdown reviews per sleeve: retrospect held data vs external news/evidence; tag missed_in_held vs absent_from_held to accumulate justification for new ingest sources. Not a live track or news pipeline. | Thick closed sleeve cohort available (or several material held drawdowns) and P1 FTSE decision-input freshness is stable; before proposing any new news/alt-data ingest. |
 
 ### Universe & data
 
