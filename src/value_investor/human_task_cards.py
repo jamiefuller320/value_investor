@@ -13,13 +13,23 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from value_investor.human_task_acks import annotate_task_ack, load_human_task_acks
+from value_investor.cohort_selection_fitness import MIN_SCORE_GAP_FOR_PRIOR
+from value_investor.human_task_acks import (
+    annotate_task_ack,
+    load_human_task_acks,
+    matching_ack,
+    record_human_task_ack,
+)
 from value_investor.human_tasks_checklist import doc_url_for_task, load_human_tasks_checklist
 from value_investor.storage import read_json, write_json
 
 BOARD_FILENAME = "human_tasks_board.json"
 DEFAULT_DATA_DIR = Path("docs/data")
 DEFAULT_CHECKLIST_PATH = Path("docs/human_tasks_checklist.json")
+
+# Observe-only review gate — never promote. Auto-ack when priors show no discrimination.
+KNOB_PRIORS_REVIEW_TASK_ID = "sunday-knob-calibration-priors"
+_LOW_PRIOR_CONFIDENCE = frozenset({"low", "insufficient"})
 
 # Task ids that are capital / promotion gates — show Approve (observe record only).
 APPROVAL_GATE_IDS: dict[str, str] = {
@@ -56,6 +66,116 @@ def _fingerprint(parts: dict[str, Any]) -> str:
     """
     blob = json.dumps(parts, sort_keys=True, default=str)
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
+
+
+def _load_knob_calibration_priors(data_dir: Path) -> dict[str, Any]:
+    priors = _read(data_dir, "paper_automation/knob_calibration_priors.json")
+    if not priors:
+        priors = _read(data_dir, "knob_calibration_priors.json")
+    return priors
+
+
+def _iter_knob_prior_tracks(priors: dict[str, Any]) -> list[tuple[str, dict[str, Any]]]:
+    """Yield (track_id, track_payload) for multi-track or single-track priors."""
+    tracks = priors.get("tracks")
+    if isinstance(tracks, dict) and tracks:
+        return [(str(tid), _as_dict(payload)) for tid, payload in tracks.items()]
+    if priors.get("readiness") or priors.get("recommended_prior"):
+        tid = str(priors.get("track_id") or "default")
+        return [(tid, priors)]
+    return []
+
+
+def knob_priors_ack_sufficient(priors: dict[str, Any] | None) -> dict[str, Any]:
+    """True when every track has low/insufficient confidence and no score gap.
+
+    Policy: Sunday "Review knob calibration priors" is satisfied by Acknowledge
+    (observe-only) when there is nothing to discriminate — never auto-promote.
+    """
+    priors = _as_dict(priors)
+    rows: list[dict[str, Any]] = []
+    for track_id, track in _iter_knob_prior_tracks(priors):
+        readiness = _as_dict(track.get("readiness"))
+        recommended = _as_dict(track.get("recommended_prior"))
+        confidence = str(recommended.get("confidence") or "").strip().lower()
+        raw_gap = readiness.get("score_gap_vs_runner_up")
+        try:
+            gap = float(raw_gap) if raw_gap is not None else None
+        except (TypeError, ValueError):
+            gap = None
+        low_conf = confidence in _LOW_PRIOR_CONFIDENCE
+        no_discrimination = gap is not None and gap < float(MIN_SCORE_GAP_FOR_PRIOR)
+        rows.append(
+            {
+                "track_id": track_id,
+                "confidence": confidence or None,
+                "score_gap_vs_runner_up": gap,
+                "low_confidence": low_conf,
+                "no_discrimination": no_discrimination,
+                "ready_for_priors": readiness.get("ready_for_priors"),
+                "ready_for_shadow_bootstrap": readiness.get("ready_for_shadow_bootstrap"),
+            }
+        )
+    if not rows:
+        return {
+            "ack_sufficient": False,
+            "reason": "no_tracks",
+            "tracks": [],
+            "min_score_gap_for_prior": float(MIN_SCORE_GAP_FOR_PRIOR),
+        }
+    ack_sufficient = all(
+        bool(row.get("low_confidence")) and bool(row.get("no_discrimination")) for row in rows
+    )
+    return {
+        "ack_sufficient": ack_sufficient,
+        "reason": (
+            "low_confidence_and_no_discrimination" if ack_sufficient else "needs_manual_review"
+        ),
+        "tracks": rows,
+        "min_score_gap_for_prior": float(MIN_SCORE_GAP_FOR_PRIOR),
+    }
+
+
+def apply_knob_priors_observe_auto_ack(data_dir: Path) -> dict[str, Any] | None:
+    """Record observe-only ack when priors show no discrimination.
+
+    Never records approve / never touches promotion gates or live knobs.
+    Idempotent when an open ack already matches the live fingerprint.
+    """
+    data_dir = Path(data_dir)
+    priors = _load_knob_calibration_priors(data_dir)
+    status = knob_priors_ack_sufficient(priors)
+    if not status.get("ack_sufficient"):
+        return None
+    analysis = _analysis_for_task(KNOB_PRIORS_REVIEW_TASK_ID, data_dir)
+    fingerprint = str(analysis.get("fingerprint") or "").strip()
+    if not fingerprint:
+        return None
+    store = load_human_task_acks(data_dir)
+    existing = matching_ack(store, task_id=KNOB_PRIORS_REVIEW_TASK_ID)
+    if existing:
+        decision = str(existing.get("decision") or "").strip()
+        if decision == "approve":
+            # Human already elevated — leave alone (still never auto-promote).
+            return None
+        if (
+            decision == "ack_observe"
+            and str(existing.get("finding_fingerprint") or "").strip() == fingerprint
+        ):
+            return None
+    return record_human_task_ack(
+        data_dir,
+        task_id=KNOB_PRIORS_REVIEW_TASK_ID,
+        decision="ack_observe",
+        note=(
+            "Auto-ack observe-only: knob priors low confidence and "
+            f"score_gap_vs_runner_up < {MIN_SCORE_GAP_FOR_PRIOR} (no discrimination). "
+            "Promotion remains a separate human gate."
+        ),
+        finding_fingerprint=fingerprint,
+        source="board_auto_no_discrimination",
+        acked_by="system",
+    )
 
 
 def _bullet(text: str) -> str:
@@ -247,17 +367,82 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             "source_keys": ["market_status"],
         }
 
+    if tid == KNOB_PRIORS_REVIEW_TASK_ID:
+        assessment = _read(data_dir, "experiment_assessment.json")
+        priors = _load_knob_calibration_priors(data_dir)
+        status = knob_priors_ack_sufficient(priors)
+        track_rows = list(status.get("tracks") or [])
+        bullets = [
+            _bullet(
+                "Review gate = confirm readiness signals; Acknowledge is enough when "
+                "confidence is low and score gap shows no discrimination."
+            ),
+            _bullet(
+                f"ack_sufficient={status.get('ack_sufficient')} "
+                f"reason={status.get('reason')} "
+                f"(gap floor {status.get('min_score_gap_for_prior')})"
+            ),
+        ]
+        for row in track_rows[:6]:
+            bullets.append(
+                _bullet(
+                    f"{row.get('track_id')}: conf={row.get('confidence')} "
+                    f"gap={row.get('score_gap_vs_runner_up')} "
+                    f"ready_priors={row.get('ready_for_priors')} "
+                    f"ready_shadow={row.get('ready_for_shadow_bootstrap')}"
+                )
+            )
+        if status.get("ack_sufficient"):
+            bullets.append(
+                _bullet(
+                    "No discrimination → Acknowledge (observe-only); do not promote. "
+                    "Promotion is sunday-promote-knobs-gate."
+                )
+            )
+        fp = _fingerprint(
+            {
+                "task": KNOB_PRIORS_REVIEW_TASK_ID,
+                "ack_sufficient": bool(status.get("ack_sufficient")),
+                "reason": status.get("reason"),
+                "tracks": [
+                    {
+                        "track_id": row.get("track_id"),
+                        "confidence": row.get("confidence"),
+                        "gap": row.get("score_gap_vs_runner_up"),
+                        "ready_priors": row.get("ready_for_priors"),
+                        "ready_shadow": row.get("ready_for_shadow_bootstrap"),
+                    }
+                    for row in track_rows
+                ],
+            }
+        )
+        headline = (
+            "Knob priors · ack sufficient (no discrimination)"
+            if status.get("ack_sufficient")
+            else "Knob priors · manual review"
+        )
+        return {
+            "headline": headline,
+            "updated_at": priors.get("calibrated_at")
+            or priors.get("generated_at")
+            or assessment.get("generated_at")
+            or assessment.get("updated_at"),
+            "fingerprint": fp,
+            "bullets": [b for b in bullets if b][:8],
+            "source_keys": ["knob_calibration_priors", "experiment_assessment"],
+            "ack_sufficient": bool(status.get("ack_sufficient")),
+            "auto_ackable": bool(status.get("ack_sufficient")),
+            "knob_priors_status": status,
+        }
+
     if tid in {
-        "sunday-knob-calibration-priors",
         "sunday-shadow-endurance",
         "sunday-shadow-vs-primary",
         "sunday-promote-knobs-gate",
         "sunday-spawn-fair-twins",
     }:
         assessment = _read(data_dir, "experiment_assessment.json")
-        priors = _read(data_dir, "paper_automation/knob_calibration_priors.json")
-        if not priors:
-            priors = _read(data_dir, "knob_calibration_priors.json")
+        priors = _load_knob_calibration_priors(data_dir)
         experiments = [
             row
             for row in (assessment.get("experiments") or assessment.get("rows") or [])
@@ -613,6 +798,8 @@ def build_human_tasks_board(
                 "analysis": analysis,
                 "ack": ack,
                 "sort_bucket": _sort_bucket(ack) if not task.get("automated") else "automated",
+                "auto_ackable": bool(analysis.get("auto_ackable")),
+                "ack_sufficient": bool(analysis.get("ack_sufficient")),
             }
             if row["automated"]:
                 automated_rows.append(row)
@@ -669,6 +856,10 @@ def write_human_tasks_board(
     checklist_path: Path | None = None,
 ) -> dict[str, Any]:
     data_dir = Path(data_dir or DEFAULT_DATA_DIR)
+    # Observe-safe: when priors show no discrimination, Satisfy the review gate
+    # with ack_observe so Daily hub / Human tasks do not demand a deep weekly
+    # review. Never auto-promotes knobs.
+    apply_knob_priors_observe_auto_ack(data_dir)
     board = build_human_tasks_board(data_dir=data_dir, checklist_path=checklist_path)
     dest = data_dir / BOARD_FILENAME
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -680,6 +871,9 @@ def write_human_tasks_board(
 __all__ = [
     "APPROVAL_GATE_IDS",
     "BOARD_FILENAME",
+    "KNOB_PRIORS_REVIEW_TASK_ID",
+    "apply_knob_priors_observe_auto_ack",
     "build_human_tasks_board",
+    "knob_priors_ack_sufficient",
     "write_human_tasks_board",
 ]

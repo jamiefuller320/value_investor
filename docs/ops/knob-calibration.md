@@ -192,13 +192,40 @@ Do **not** run warm-start on every weekday pass (would re-inject historical P&L)
 
 ## Promoting a prior (human gate)
 
+Two separate Sunday checklist items — do **not** collapse them:
+
+| Gate | Checklist id | What “done” means |
+|------|--------------|-------------------|
+| **Review** knob calibration priors | `sunday-knob-calibration-priors` | Confirm readiness signals (`confidence`, `score_gap_vs_runner_up`, `ready_for_*`). |
+| **Promote** knob priors | `sunday-promote-knobs-gate` | Only when a survivor clears the promotion checklist below — still observe-only record. |
+
+### Review gate (`sunday-knob-calibration-priors`)
+
+1. Inspect `knob_calibration_priors.json` tracks: `recommended_prior.confidence`,
+   `readiness.score_gap_vs_runner_up`, `ready_for_priors` / `ready_for_shadow_bootstrap`.
+2. If **every** track has **low or insufficient confidence** and
+   `score_gap_vs_runner_up < 0.005` (no discrimination / tied runners):
+   **Acknowledge** (`ack_observe`) and **stop**. The review gate is satisfied —
+   there is nothing to promote. Do **not** open a deep weekly promotion debate
+   from this card alone.
+3. Otherwise, note which tracks show medium/high confidence or a meaningful gap,
+   then continue to shadow comparison / the promote gate as needed.
+
+Board rebuild (`ftse-human-tasks refresh` / ops-monitor) auto-records
+`ack_observe` for this review task when the no-discrimination condition holds
+(`source=board_auto_no_discrimination`). That never writes knobs, never records
+`approve`, and never touches `sunday-promote-knobs-gate`.
+
+### Promote gate (`sunday-promote-knobs-gate`)
+
 1. Review `ready_for_shadow_bootstrap` / `ready_for_priors`, confidence, score gap
 2. Compare competing shadows in `calibration_shadow_endurance.json` (`surviving`)
 3. Only then seed `ai_judgment/config.json` (or a `paper_knobs` experiment) from a survivor
 4. Optionally reset the knob epoch after a live config edit
 
 Do **not** auto-apply from calibration or endurance — survivors are priors for
-refinement, not live writes.
+refinement, not live writes. Policy green on the **review** card ≠ permission to
+promote.
 
 ## Guardrails
 

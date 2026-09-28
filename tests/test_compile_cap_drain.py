@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from value_investor.compile_cap_drain import (
@@ -15,6 +16,11 @@ from value_investor.engineering_tasks import PARKED_SOURCE_HUNTER_SOURCE
 from value_investor.storage import read_json, write_json
 
 
+def _recent_recorded_at(*, days_ago: int = 2) -> str:
+    """Stamp inside the default 14-day suggestions compile lookback."""
+    return (datetime.now(UTC) - timedelta(days=days_ago)).isoformat()
+
+
 def _write_suggestions(path: Path, rows: list[dict]) -> None:
     write_json(path, {"suggestions": rows}, compact=False)
 
@@ -24,13 +30,13 @@ def _suggestion(
     area: str,
     text: str,
     priority: str = "medium",
-    recorded_at: str = "2026-09-14T12:00:00+00:00",
+    recorded_at: str | None = None,
 ) -> dict:
     return {
         "area": area,
         "suggestion": text,
         "priority": priority,
-        "recorded_at": recorded_at,
+        "recorded_at": recorded_at or _recent_recorded_at(),
         "ticker": "",
     }
 
