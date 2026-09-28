@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-28T00:44:35+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-28T07:29:01+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -218,6 +218,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N163 | **MACD golden-cross hard gate on FTSE new buys** | Classic MACD line/signal golden cross as a live entry requirement. Held-book PIT counterfactual (2026-09-27, n=5 AI-judgment+technical) showed 0 GC at entry and mean next-GC fill ~1.3% worse; live stack already uses MACD histogram slope inside timing_signal plus skip_timing_wait. | Observe-only MACD-cross/accumulate twin has ≥15 closed first-entry episodes on AI-judgment+rules with signed edge after counting missed winners |
 | N164 | **Require timing_signal=accumulate for all new FTSE buys** | Tighten beyond skip_timing_wait so only accumulate (not neutral) may open sleeves. Latest buy-tier mix was ~9 accumulate / 45 neutral / 3 wait — miss-cost vs eventual winners unscored; held set all entered neutral. | Same observe twin as MACD-cross gate reports accumulate-only miss-cost and net sleeve edge after costs |
 | N165 | **Rebuild model attribution as multi-track live instrument** | Do not open a new live paper track or factory rebuild for model attribution. Dashboard observe + archive metric is enough; multi-track live instrumentation would divert from P1 live-path utilization. | Never as a live track unless stage-4 multi-market paper books need factor-level capital attribution |
+| N166 | **Do not divert euro_depth fat slot or eng-spray DAX for zero_improve_stall yet** | DAX spare stream shows zero_improve_stall + G1A.DE unmeasured after prior merged gap-closure eng (#827/#818). Keep spare auto-advance; do not steal euro_depth fat slot or open a fresh DAX eng until more complete 0-improve runs toward leftover exhaustion or a clear allowlist bug. | DAX spare hits leftover exhaustion after min zero-improve runs, or G1A.DE still unmeasured with a concrete IR/ESEF allowlist bug after the next 1–2 complete 0-improve sprint windows. |
 
 ---
 
