@@ -14,6 +14,8 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.cohort_selection_fitness import MIN_SCORE_GAP_FOR_PRIOR
+from value_investor.experiment_acks import apply_ack_to_experiment
+from value_investor.experiment_acks import load_acks as load_experiment_acks
 from value_investor.human_task_acks import (
     annotate_task_ack,
     load_human_task_acks,
@@ -30,6 +32,30 @@ DEFAULT_CHECKLIST_PATH = Path("docs/human_tasks_checklist.json")
 # Observe-only review gate — never promote. Auto-ack when priors show no discrimination.
 KNOB_PRIORS_REVIEW_TASK_ID = "sunday-knob-calibration-priors"
 _LOW_PRIOR_CONFIDENCE = frozenset({"low", "insufficient"})
+
+SHADOW_ENDURANCE_TASK_ID = "sunday-shadow-endurance"
+
+# Fail closes the promote/knob path — never counts as Sunday "do now" urgency.
+_SHADOW_FAIL_KINDS = frozenset({"calibration_shadow", "exclusion_shadow"})
+# Recommend rows that can still mean a Sunday promote / overlay gate is open.
+_SUNDAY_BLOCKING_RECOMMEND_KINDS = frozenset(
+    {
+        "calibration_shadow",
+        "exclusion_shadow",
+        "experimental_paper_track",
+        "lifecycle_overlay",
+    }
+)
+# Recommend ≠ do-now spray: eng queue / manual capacity strands.
+_CAPACITY_RECOMMEND_KINDS = frozenset(
+    {
+        "analysis_task",
+        "paper_learning_task",
+        "learning_director_task",
+    }
+)
+
+# Task ids that are capital / promotion gates — show Approve (observe record only).
 
 # Task ids that are capital / promotion gates — show Approve (observe record only).
 APPROVAL_GATE_IDS: dict[str, str] = {
@@ -174,6 +200,147 @@ def apply_knob_priors_observe_auto_ack(data_dir: Path) -> dict[str, Any] | None:
         ),
         finding_fingerprint=fingerprint,
         source="board_auto_no_discrimination",
+        acked_by="system",
+    )
+
+
+def _experiment_rows(assessment: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        row
+        for row in (assessment.get("experiments") or assessment.get("rows") or [])
+        if isinstance(row, dict)
+    ]
+
+
+def experiment_assessment_gate_status(
+    assessment: dict[str, Any] | None,
+    *,
+    experiment_acks: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Classify ledger rows for the Sunday unified-assessment review gate.
+
+    Policy:
+    - ``fail`` calibration/exclusion shadows close the knob promote path — not urgency.
+    - Already human-acked recommend rows do not inflate "do now".
+    - ``analysis_task`` / learning-task recommends are capacity/eng or observe strands,
+      not this Sunday gate's blocking urgency.
+    - ``ack_sufficient`` when zero *blocking* unacked recommends remain.
+    - Never auto-promote.
+    """
+    assessment = _as_dict(assessment)
+    experiments = _experiment_rows(assessment)
+    annotated = [apply_ack_to_experiment(dict(row), experiment_acks) for row in experiments]
+
+    failed_shadows: list[dict[str, Any]] = []
+    recommend_raw: list[dict[str, Any]] = []
+    recommend_acked: list[dict[str, Any]] = []
+    recommend_blocking: list[dict[str, Any]] = []
+    recommend_capacity: list[dict[str, Any]] = []
+
+    for row in annotated:
+        eid = str(row.get("experiment_id") or "").strip()
+        kind = str(row.get("kind") or "").strip()
+        status = str(row.get("status") or "").strip()
+        slim = {
+            "experiment_id": eid,
+            "kind": kind,
+            "status": status,
+            "area": row.get("area"),
+            "human_acked": bool(row.get("human_acked")),
+            "acked_at": row.get("acked_at"),
+        }
+        if status == "fail" and kind in _SHADOW_FAIL_KINDS:
+            failed_shadows.append(slim)
+            continue
+        if status != "recommend":
+            continue
+        recommend_raw.append(slim)
+        if row.get("human_acked") or row.get("human_ack_required") is False:
+            recommend_acked.append(slim)
+            continue
+        if kind in _CAPACITY_RECOMMEND_KINDS:
+            recommend_capacity.append(slim)
+            continue
+        if kind in _SUNDAY_BLOCKING_RECOMMEND_KINDS or not kind:
+            recommend_blocking.append(slim)
+            continue
+        # Unknown kind — treat as capacity/observe, not promote urgency.
+        recommend_capacity.append(slim)
+
+    ack_sufficient = len(recommend_blocking) == 0
+    if ack_sufficient and not experiments:
+        reason = "no_experiments"
+        ack_sufficient = False
+    elif ack_sufficient and not recommend_raw and not failed_shadows:
+        reason = "empty_board_review_ok"
+    elif ack_sufficient and failed_shadows and not recommend_blocking:
+        reason = "failed_shadows_close_promote_no_blocking_recommend"
+    elif ack_sufficient and recommend_acked and not recommend_blocking:
+        reason = "acked_and_capacity_only"
+    elif ack_sufficient:
+        reason = "no_blocking_recommend"
+    else:
+        reason = "blocking_recommend_open"
+
+    summary = _as_dict(assessment.get("summary"))
+    return {
+        "ack_sufficient": ack_sufficient,
+        "reason": reason,
+        "failed_shadows": failed_shadows,
+        "recommend_raw_count": len(recommend_raw),
+        "recommend_acked": recommend_acked,
+        "recommend_blocking": recommend_blocking,
+        "recommend_capacity": recommend_capacity,
+        "human_ack_pending": int(summary.get("human_ack_pending") or 0),
+        "summary_recommend": int(summary.get("recommend") or len(recommend_raw)),
+        "summary_fail": int(summary.get("fail") or 0),
+        "total_experiments": len(experiments),
+    }
+
+
+def apply_experiment_assessment_observe_auto_ack(data_dir: Path) -> dict[str, Any] | None:
+    """Record observe-only ack when the Sunday assessment gate has no blocking recommends.
+
+    Never records approve / never touches promotion gates, knobs, or experiment promote.
+    Idempotent when an open ack already matches the live fingerprint.
+    """
+    data_dir = Path(data_dir)
+    assessment = _read(data_dir, "experiment_assessment.json")
+    if not assessment:
+        return None
+    status = experiment_assessment_gate_status(
+        assessment,
+        experiment_acks=load_experiment_acks(data_dir),
+    )
+    if not status.get("ack_sufficient"):
+        return None
+    analysis = _analysis_for_task(SHADOW_ENDURANCE_TASK_ID, data_dir)
+    fingerprint = str(analysis.get("fingerprint") or "").strip()
+    if not fingerprint:
+        return None
+    store = load_human_task_acks(data_dir)
+    existing = matching_ack(store, task_id=SHADOW_ENDURANCE_TASK_ID)
+    if existing:
+        decision = str(existing.get("decision") or "").strip()
+        if decision == "approve":
+            return None
+        if (
+            decision == "ack_observe"
+            and str(existing.get("finding_fingerprint") or "").strip() == fingerprint
+        ):
+            return None
+    return record_human_task_ack(
+        data_dir,
+        task_id=SHADOW_ENDURANCE_TASK_ID,
+        decision="ack_observe",
+        note=(
+            "Auto-ack observe-only: no blocking Sunday recommend "
+            f"({status.get('reason')}). Failed shadows close promote; "
+            "acked overlays / capacity ana-* strands are not do-now. "
+            "Never auto-promote."
+        ),
+        finding_fingerprint=fingerprint,
+        source="board_auto_assessment_gate",
         acked_by="system",
     )
 
@@ -435,50 +602,150 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             "knob_priors_status": status,
         }
 
+    if tid == SHADOW_ENDURANCE_TASK_ID:
+        assessment = _read(data_dir, "experiment_assessment.json")
+        status = experiment_assessment_gate_status(
+            assessment,
+            experiment_acks=load_experiment_acks(data_dir),
+        )
+        fail_ids = [str(r.get("experiment_id")) for r in (status.get("failed_shadows") or [])]
+        blocking = list(status.get("recommend_blocking") or [])
+        acked = list(status.get("recommend_acked") or [])
+        capacity = list(status.get("recommend_capacity") or [])
+        bullets = [
+            _bullet(
+                "Sunday gate = read fail / continue / recommend. "
+                "Recommend ≠ do-now spray; failed shadows close promote; "
+                "acked overlays do not inflate urgency."
+            ),
+            _bullet(
+                f"ack_sufficient={status.get('ack_sufficient')} reason={status.get('reason')} "
+                f"blocking={len(blocking)} acked_recommend={len(acked)} "
+                f"capacity={len(capacity)} fail_shadows={len(fail_ids)} "
+                f"raw_recommend={status.get('recommend_raw_count')}"
+            ),
+        ]
+        if fail_ids:
+            bullets.append(
+                _bullet("Failed shadows (close knob path, not promote): " + ", ".join(fail_ids[:6]))
+            )
+        for row in blocking[:3]:
+            bullets.append(_bullet(f"blocking: {row.get('experiment_id')} ({row.get('kind')})"))
+        for row in acked[:2]:
+            bullets.append(
+                _bullet(
+                    f"acked: {row.get('experiment_id')} "
+                    f"at={str(row.get('acked_at') or '')[:10] or '—'}"
+                )
+            )
+        for row in capacity[:3]:
+            bullets.append(
+                _bullet(
+                    f"capacity/eng|manual: {row.get('experiment_id')} area={row.get('area') or '—'}"
+                )
+            )
+        if status.get("ack_sufficient"):
+            bullets.append(
+                _bullet(
+                    "No blocking Sunday recommend → Acknowledge (observe-only). "
+                    "Never auto-promote. ana-* strands stay on eng/manual checklists."
+                )
+            )
+        fp = _fingerprint(
+            {
+                "task": SHADOW_ENDURANCE_TASK_ID,
+                "ack_sufficient": bool(status.get("ack_sufficient")),
+                "reason": status.get("reason"),
+                "blocking": [r.get("experiment_id") for r in blocking],
+                "acked": [r.get("experiment_id") for r in acked],
+                "capacity": [r.get("experiment_id") for r in capacity],
+                "fail_shadows": fail_ids,
+            }
+        )
+        n_block = len(blocking)
+        headline = (
+            "Experiment assessment · review ok (0 blocking)"
+            if status.get("ack_sufficient")
+            else f"Experiment assessment · {n_block} blocking recommend"
+        )
+        return {
+            "headline": headline,
+            "updated_at": assessment.get("generated_at") or assessment.get("updated_at"),
+            "fingerprint": fp,
+            "bullets": [b for b in bullets if b][:8],
+            "source_keys": ["experiment_assessment", "experiment_acks"],
+            "ack_sufficient": bool(status.get("ack_sufficient")),
+            "auto_ackable": bool(status.get("ack_sufficient")),
+            "experiment_assessment_gate": status,
+        }
+
     if tid in {
-        "sunday-shadow-endurance",
         "sunday-shadow-vs-primary",
         "sunday-promote-knobs-gate",
         "sunday-spawn-fair-twins",
     }:
         assessment = _read(data_dir, "experiment_assessment.json")
         priors = _load_knob_calibration_priors(data_dir)
-        experiments = [
-            row
-            for row in (assessment.get("experiments") or assessment.get("rows") or [])
-            if isinstance(row, dict)
-        ]
-        recommend = [row for row in experiments if str(row.get("status") or "") == "recommend"]
+        gate = experiment_assessment_gate_status(
+            assessment,
+            experiment_acks=load_experiment_acks(data_dir),
+        )
+        experiments = _experiment_rows(assessment)
+        blocking = list(gate.get("recommend_blocking") or [])
+        capacity = list(gate.get("recommend_capacity") or [])
+        acked = list(gate.get("recommend_acked") or [])
+        fail_n = len(gate.get("failed_shadows") or [])
         bullets = [
-            _bullet(f"Recommend rows: {len(recommend)} / {len(experiments)} experiments"),
+            _bullet(
+                f"Blocking recommend: {len(blocking)} · acked: {len(acked)} · "
+                f"capacity/eng: {len(capacity)} · fail shadows: {fail_n} · "
+                f"raw recommend: {gate.get('recommend_raw_count')} / {len(experiments)}"
+            ),
+            _bullet(
+                "Failed calibration/exclusion shadows close promote — not a do-now pile. "
+                "Already-acked overlays and ana-* capacity strands are not promote urgency."
+            ),
             _bullet(
                 f"Priors ready_for_shadow_bootstrap="
                 f"{priors.get('ready_for_shadow_bootstrap')} "
                 f"ranking_mode={priors.get('ranking_mode')}"
             ),
         ]
-        for row in recommend[:4]:
+        for row in blocking[:3]:
+            bullets.append(_bullet(f"blocking: {row.get('experiment_id')} ({row.get('kind')})"))
+        for row in capacity[:2]:
             bullets.append(
-                _bullet(
-                    f"{row.get('experiment_id')}: {row.get('status')} "
-                    f"conf={(_as_dict(row.get('recommended_prior')).get('confidence') if isinstance(row.get('recommended_prior'), dict) else row.get('confidence'))}"
-                )
+                _bullet(f"capacity: {row.get('experiment_id')} area={row.get('area') or '—'}")
             )
         fp = _fingerprint(
             {
-                "recommend_ids": [str(r.get("experiment_id")) for r in recommend],
+                "blocking": [r.get("experiment_id") for r in blocking],
+                "acked": [r.get("experiment_id") for r in acked],
+                "capacity": [r.get("experiment_id") for r in capacity],
+                "fail_shadows": [
+                    r.get("experiment_id") for r in (gate.get("failed_shadows") or [])
+                ],
                 "ready": priors.get("ready_for_shadow_bootstrap"),
                 "ranking_mode": priors.get("ranking_mode"),
             }
         )
+        n_block = len(blocking)
+        headline = (
+            f"Experiment assessment · {n_block} blocking recommend"
+            if n_block
+            else "Experiment assessment · 0 blocking (review/continue)"
+        )
         return {
-            "headline": f"Experiment assessment · {len(recommend)} recommend",
+            "headline": headline,
             "updated_at": assessment.get("generated_at")
             or assessment.get("updated_at")
             or priors.get("generated_at"),
             "fingerprint": fp,
             "bullets": [b for b in bullets if b][:8],
             "source_keys": ["experiment_assessment", "knob_calibration_priors"],
+            "ack_sufficient": bool(gate.get("ack_sufficient")),
+            "auto_ackable": False,
+            "experiment_assessment_gate": gate,
         }
 
     if tid in {"sunday-fair-cost-promotion-gate", "sunday-suite-b-fair-lab"}:
@@ -860,6 +1127,10 @@ def write_human_tasks_board(
     # with ack_observe so Daily hub / Human tasks do not demand a deep weekly
     # review. Never auto-promotes knobs.
     apply_knob_priors_observe_auto_ack(data_dir)
+    # Observe-safe: when Sunday assessment has no blocking recommends, ack_observe
+    # the review card (failed shadows / acked overlays / capacity ana-* ≠ do-now).
+    # Never auto-promotes experiments.
+    apply_experiment_assessment_observe_auto_ack(data_dir)
     board = build_human_tasks_board(data_dir=data_dir, checklist_path=checklist_path)
     dest = data_dir / BOARD_FILENAME
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -876,4 +1147,7 @@ __all__ = [
     "build_human_tasks_board",
     "knob_priors_ack_sufficient",
     "write_human_tasks_board",
+    "SHADOW_ENDURANCE_TASK_ID",
+    "apply_experiment_assessment_observe_auto_ack",
+    "experiment_assessment_gate_status",
 ]

@@ -47,7 +47,7 @@ ack stale. Automated weekday/Sunday CI rows stay in a collapsed list.
 | Admitted-market equal-support then epoch-0 (`buy_tier_level` after timing stamp so wait stays out of new buys; near-miss watch; exclusion/exit-timing archives; Sunday first-time then focus rememo; admitted rememo and local-open marks are weekday; no AI / no apply) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | Read **buy-cross archive** review (`buy_cross_archive_review.json`) — cross vs level comparison; do not spawn a live cross book | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#cross-book-archive-only) |
 | Review **knob calibration priors** — confirm readiness signals; if confidence low and score gap ~0 (no discrimination), **Acknowledge and stop** (do not promote) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
-| Review **unified experiment assessment** (`experiment_assessment.json`) — after the 2026-09-03 human pass, task recommends should be empty (u4/exit-shadow watch; scoring on engineering queue) | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
+| Review **unified experiment assessment** (`experiment_assessment.json`) — read fail/continue/recommend; failed shadows close promote; acked overlays + ana-* capacity are not do-now; Acknowledge when blocking recommends empty (never auto-promote). Refresh vs live board without reopening N58/N59 | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
 | Compare **calibrated shadows vs primary** AI judgment on Automation tab | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
 | **Promote knob priors** only when a survivor passes gates (do not edit `ai_judgment/config.json` early) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | **Fair-cost gate** — keep 3% books as churn lab; require `ftse-trading-costs assess` / fair shadows before calling excess deployable | Human | [market-trading-costs.md](market-trading-costs.md#test-and-adoption-strategy-dual-suite) |
@@ -71,13 +71,14 @@ review — board rebuild may auto-ack observe-only. That is **not** promotion.
 Do **not** promote calibration priors to `ai_judgment/config.json` until
 (`sunday-promote-knobs-gate`):
 
-1. A shadow has status **recommend** in `experiment_assessment.json` (or **surviving** in `calibration_shadow_endurance.json`)
+1. A shadow has status **recommend** in `experiment_assessment.json` (or **surviving** in `calibration_shadow_endurance.json`). Status **fail** closes this path — do not promote from failed shadows.
 2. `ready_for_priors: true` / `ready_for_shadow_bootstrap` look sound in `knob_calibration_priors.json`
 3. `score_gap_vs_runner_up ≥ 0.005`
 4. `recommended_prior.confidence` is acceptable (not `insufficient` / thin `low`)
 5. **Fair-cost view** supports treating excess as deployable (`ftse-trading-costs assess` and/or fair-cost shadows) — 3% stress excess vs ^FTSE alone is not the adoption datum
 
 Survivors are **starting priors for learning-loop refinement** — never auto-apply.
+Raw `summary.recommend` (including acked overlays and capacity `ana-*` rows) is **not** a promote signal; see [experiment-assessment.md](experiment-assessment.md#human-gate).
 
 ## Monthly
 

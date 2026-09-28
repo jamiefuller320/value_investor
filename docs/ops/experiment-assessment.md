@@ -145,18 +145,52 @@ Refreshed:
 
 ## Human gate
 
+Sunday **Review unified experiment assessment** (`sunday-shadow-endurance`) is a
+**read** gate: fail / continue / recommend. It is **not** a do-now action pile.
+
+| Signal | What it means for this gate |
+|--------|-----------------------------|
+| `fail` calibration / exclusion shadows | Closes the knob **promote** path — observe, do not promote |
+| `recommend` already in `experiment_acks.json` (e.g. `entry_dca_overlay` human_acked 2026-09-13) | Does **not** inflate urgency; Acknowledge is enough |
+| `recommend` `analysis_task` / learning-task (`ana-*`, …) | Capacity / eng queue or manual strands — triage via those checklists, not as Sunday promote urgency |
+| `recommend` unacked calibration / exclusion / experimental / lifecycle overlay | Blocking for this gate — read the row before ack |
+
 When `recommendations` is non-empty:
 
 1. Read the row in `experiment_assessment.json` (track, marks, excess, forward_evidence)
-2. For calibration shadows — follow [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate)
+2. For calibration shadows — follow [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate). **Failed** shadows are not promote candidates.
 3. For exclusion shadows — follow [exclusion-ladder-replay.md](exclusion-ladder-replay.md#promotion-workflow-human-gate)
-4. For scoring tasks with `assessment_recommend` — triage via `ftse-analysis-review promote` (human only)
-5. For lifecycle overlay `entry_dca_overlay` — `ftse-experiment-assess ack --experiment-id entry_dca_overlay` then follow [position-lifecycle.md](position-lifecycle.md#entry-dca-adoption-plan)
+4. For scoring / hold-vs-swap tasks with `assessment_recommend` — triage via eng queue or manual capacity (`ftse-analysis-review promote` human only); do not treat as urgent Sunday promote
+5. For lifecycle overlay `entry_dca_overlay` — if already human_acked, do not re-open urgency; otherwise `ftse-experiment-assess ack --experiment-id entry_dca_overlay` then follow [position-lifecycle.md](position-lifecycle.md#entry-dca-adoption-plan)
 6. Do **not** auto-apply — survivors are priors for refinement only
+
+Board / Daily hub urgency for `sunday-shadow-endurance` counts **blocking**
+unacked recommends only (not raw `summary.recommend`, not failed shadows, not
+already-acked overlays, not capacity `ana-*` strands). When blocking count is
+zero, Acknowledge (`ack_observe`) satisfies the gate; board rebuild may
+auto-record that observe ack (`source=board_auto_assessment_gate`). **Never**
+auto-promote.
 
 Ack is stored in `docs/data/experiment_acks.json`. Refresh reapplies it; a new
 leading cadence re-opens the gate. `human_ack_pending` counts only **unacked**
-recommend rows.
+recommend rows (ledger). Checklist / card urgency uses the stricter blocking
+split above.
+
+### Queue triage (current board expectation)
+
+Refresh expectation against the live `experiment_assessment.json` board — do
+**not** reopen cancelled N58/N59 knob rows. Historical 2026-09-03 pass emptied
+*then-open* task recommends; later `ana-*` recommend / proposed rows are
+capacity strands, not a reason to revive parked knob work.
+
+Canonical posture (as of 2026-09-23 assessment discuss; verify live ledger):
+
+| Status | Examples | Action |
+|--------|----------|--------|
+| `fail` | `ai_judgment_calibrated` (+r2/r3), exclusion u4, (deep negative excess after costs) | Close promote / knob path — watch only |
+| `recommend` acked | `entry_dca_overlay` (human_acked 2026-09-13), `graduated_allocation` | No Sunday urgency inflation |
+| `recommend` capacity | `ana-20260921-02` (scoring→eng), `ana-20260921-04` (hold-vs-swap→manual) | Eng / manual capacity — not this gate's do-now |
+| `proposed` | euro body-lag | Ingest / P2 — not Sunday promote |
 
 ### Queue triage (2026-09-03)
 

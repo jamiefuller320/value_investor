@@ -4,18 +4,23 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from value_investor.experiment_acks import load_acks as load_experiment_acks
+from value_investor.experiment_acks import record_ack
 from value_investor.human_task_ack import run_human_task_ack
 from value_investor.human_task_acks import load_human_task_acks, record_human_task_ack
 from value_investor.human_task_cards import (
     APPROVAL_GATE_IDS,
     KNOB_PRIORS_REVIEW_TASK_ID,
+    SHADOW_ENDURANCE_TASK_ID,
+    apply_experiment_assessment_observe_auto_ack,
     apply_knob_priors_observe_auto_ack,
     build_human_tasks_board,
+    experiment_assessment_gate_status,
     knob_priors_ack_sufficient,
     write_human_tasks_board,
 )
 from value_investor.human_tasks_checklist import load_human_tasks_checklist
-from value_investor.storage import write_json
+from value_investor.storage import read_json, write_json
 
 
 def _write_low_conf_zero_gap_priors(data_dir: Path) -> None:
@@ -419,3 +424,116 @@ def test_checklist_knob_priors_review_summary_mentions_ack_stop():
     row = next(task for task in tasks if task["id"] == KNOB_PRIORS_REVIEW_TASK_ID)
     assert "Acknowledge" in row["summary"] or "ack" in row["summary"].lower()
     assert "do not promote" in row["summary"].lower() or "Promotion is a separate" in row["summary"]
+
+
+def test_experiment_assessment_gate_excludes_failed_and_acked_noise(tmp_path: Path):
+    """Failed shadows + acked DCA + capacity ana-* are not blocking Sunday urgency."""
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    write_json(
+        data_dir / "experiment_assessment.json",
+        {
+            "generated_at": "2026-09-28T08:00:00+00:00",
+            "summary": {
+                "recommend": 3,
+                "fail": 2,
+                "human_ack_pending": 1,
+                "total": 5,
+            },
+            "experiments": [
+                {
+                    "experiment_id": "ai_judgment_calibrated",
+                    "kind": "calibration_shadow",
+                    "status": "fail",
+                },
+                {
+                    "experiment_id": "ai_judgment_exclusion_u4",
+                    "kind": "exclusion_shadow",
+                    "status": "fail",
+                },
+                {
+                    "experiment_id": "entry_dca_overlay",
+                    "kind": "lifecycle_overlay",
+                    "status": "recommend",
+                    "human_ack_required": True,
+                    "forward_evidence": {"leading_cadence": "dca_4x_weekly"},
+                },
+                {
+                    "experiment_id": "ana-20260921-02",
+                    "kind": "analysis_task",
+                    "status": "recommend",
+                    "area": "scoring",
+                    "human_ack_required": True,
+                },
+                {
+                    "experiment_id": "ana-20260921-04",
+                    "kind": "analysis_task",
+                    "status": "recommend",
+                    "area": "paper_churn",
+                    "human_ack_required": True,
+                },
+            ],
+        },
+    )
+    record_ack(
+        data_dir,
+        experiment_id="entry_dca_overlay",
+        decision="ack_observe",
+        finding={"leading_cadence": "dca_4x_weekly"},
+        note="already human_acked",
+        source="test",
+    )
+    assessment = read_json(data_dir / "experiment_assessment.json")
+    status = experiment_assessment_gate_status(
+        assessment,
+        experiment_acks=load_experiment_acks(data_dir),
+    )
+    assert status["ack_sufficient"] is True
+    assert status["recommend_raw_count"] == 3
+    assert len(status["recommend_blocking"]) == 0
+    assert len(status["failed_shadows"]) == 2
+    assert [r["experiment_id"] for r in status["recommend_acked"]] == ["entry_dca_overlay"]
+    assert {r["experiment_id"] for r in status["recommend_capacity"]} == {
+        "ana-20260921-02",
+        "ana-20260921-04",
+    }
+
+    board = write_human_tasks_board(data_dir=data_dir)
+    hit = next(row for row in board["tasks"] if row["id"] == SHADOW_ENDURANCE_TASK_ID)
+    assert hit["ack_sufficient"] is True
+    assert hit["auto_ackable"] is True
+    assert hit["sort_bucket"] == "acked"
+    assert hit["ack"]["acked"] is True
+    assert hit["ack"]["stale"] is False
+    assert "0 blocking" in hit["analysis"]["headline"]
+    assert "4 recommend" not in hit["analysis"]["headline"]
+    # Idempotent auto-ack
+    again = apply_experiment_assessment_observe_auto_ack(data_dir)
+    assert again is None
+
+
+def test_experiment_assessment_gate_blocking_recommend_stays_open(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    write_json(
+        data_dir / "experiment_assessment.json",
+        {
+            "generated_at": "2026-09-28T08:00:00+00:00",
+            "experiments": [
+                {
+                    "experiment_id": "graduated_allocation",
+                    "kind": "experimental_paper_track",
+                    "status": "recommend",
+                    "human_ack_required": True,
+                }
+            ],
+        },
+    )
+    status = experiment_assessment_gate_status(read_json(data_dir / "experiment_assessment.json"))
+    assert status["ack_sufficient"] is False
+    assert [r["experiment_id"] for r in status["recommend_blocking"]] == ["graduated_allocation"]
+    board = write_human_tasks_board(data_dir=data_dir)
+    hit = next(row for row in board["tasks"] if row["id"] == SHADOW_ENDURANCE_TASK_ID)
+    assert hit["sort_bucket"] == "unacked"
+    assert hit["ack_sufficient"] is False
+    assert "1 blocking" in hit["analysis"]["headline"]

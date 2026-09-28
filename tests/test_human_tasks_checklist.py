@@ -74,3 +74,16 @@ def test_sunday_entry_dca_follows_adoption_plan():
     assert "Do not execute DCA from ack" in row["summary"]
     assert "Lifecycle Start" in row["summary"]
     assert "graduated_allocation" in row["summary"]
+
+
+def test_sunday_shadow_endurance_urgency_policy():
+    payload = load_human_tasks_checklist()
+    tasks = [task for section in payload["sections"] for task in section["tasks"]]
+    row = next(task for task in tasks if task["id"] == "sunday-shadow-endurance")
+    summary = row["summary"]
+    assert "do-now" in summary
+    assert "Failed" in summary
+    assert "entry_dca_overlay" in summary
+    assert "ana-*" in summary
+    assert "auto-promote" in summary.lower()
+    assert "N58" in summary or "N59" in summary
