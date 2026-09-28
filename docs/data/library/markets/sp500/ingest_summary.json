@@ -1,15 +1,91 @@
 {
-  "run_at": "2026-09-27T19:53:35.019168+00:00",
+  "run_at": "2026-09-28T16:35:00.662943+00:00",
   "market_id": "sp500",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "CINF"
+  ],
+  "target_details": [
+    {
+      "ticker": "CINF",
+      "priority_score": 17.1083,
+      "filings_total": 23,
+      "filings_with_body": 22,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "CINF",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 23,
+        "filings_with_body": 22,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 23,
+        "filings_with_body": 23,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 23,
+        "annual": 2,
+        "interim": 7,
+        "trading_update": 0,
+        "other": 14,
+        "with_body": 23,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 7,
+            "with_body": 7
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 14,
+            "with_body": 14
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 23,
+        "with_body_after": 23,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "CINF"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-27T19:53:09.129162+00:00",
+    "snapshot_at": "2026-09-28T16:34:23.274628+00:00",
     "market_id": "sp500",
     "buy_tier_count": 142,
     "unmeasured_buy_tier": 0,
@@ -56,7 +132,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-27T19:53:31.358936+00:00",
+    "snapshot_at": "2026-09-28T16:34:54.614234+00:00",
     "market_id": "sp500",
     "buy_tier_count": 142,
     "unmeasured_buy_tier": 0,
@@ -142,7 +218,7 @@
   },
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-27T19:53:13.384971+00:00",
+    "assessed_at": "2026-09-28T16:34:32.554112+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -207,9 +283,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 13.486459430999986,
+  "used_seconds": 12.731884212000011,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3586.513540569,
+  "leftover_seconds": 3587.268115788,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -217,9 +293,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-09-27T19:53:31.368381+00:00",
+    "updated_at": "2026-09-28T16:34:54.624939+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 3,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -306,6 +382,7 @@
       "dax",
       "euro_depth",
       "euro_stoxx50",
+      "ftse_mib",
       "ftse_smallcap",
       "ibex35",
       "nasdaq100",
@@ -318,7 +395,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 117,
+    "task_count": 118,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
