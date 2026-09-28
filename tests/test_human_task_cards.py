@@ -11,6 +11,148 @@ from value_investor.human_tasks_checklist import load_human_tasks_checklist
 from value_investor.storage import write_json
 
 
+def test_timestamp_only_republish_does_not_stale_ack(tmp_path: Path):
+    """Ack stays bottom/disabled when artifacts only bump generated_at."""
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    write_json(
+        data_dir / "ingest_deviations.json",
+        {
+            "updated_at": "2026-09-27T12:00:00+00:00",
+            "open_items": [{"id": "x1", "ticker": "AAA", "kind": "leftover", "status": "open"}],
+        },
+    )
+    write_json(
+        data_dir / "market_status.json",
+        {
+            "generated_at": "2026-09-27T12:00:00+00:00",
+            "admitted_markets": ["sp500"],
+            "markets": [
+                {
+                    "market_id": "sp500",
+                    "is_admitted": True,
+                    "epoch0": {
+                        "ai_judgment": False,
+                        "knob_apply": False,
+                        "acted": True,
+                        "holdings": 10,
+                    },
+                    "learning": {"current_phase": 1, "blockers": ["need marks"]},
+                }
+            ],
+        },
+    )
+    write_json(
+        data_dir / "pr_fix_occasions.json",
+        {
+            "updated_at": "2026-09-27T12:00:00+00:00",
+            "occasions": [{"pr": 1}, {"pr": 2}],
+            "common_issues": {
+                "by_reason": [{"failure_reason": "merge conflict", "count": 2}],
+            },
+        },
+    )
+    board = build_human_tasks_board(data_dir=data_dir)
+    targets = {
+        "adhoc-review-ingest-deviations",
+        "sunday-shard-epoch0-watch",
+        "monthly-pr-fix-common-issues",
+    }
+    fps = {}
+    for row in board["tasks"]:
+        if row["id"] in targets:
+            fps[row["id"]] = row["analysis"]["fingerprint"]
+            record_human_task_ack(
+                data_dir,
+                task_id=row["id"],
+                decision="ack_observe",
+                finding_fingerprint=row["analysis"]["fingerprint"],
+            )
+    assert len(fps) == 3
+
+    # Republish with only timestamps changed — content identical
+    write_json(
+        data_dir / "ingest_deviations.json",
+        {
+            "updated_at": "2026-09-28T08:00:00+00:00",
+            "open_items": [{"id": "x1", "ticker": "AAA", "kind": "leftover", "status": "open"}],
+        },
+    )
+    write_json(
+        data_dir / "market_status.json",
+        {
+            "generated_at": "2026-09-28T08:00:00+00:00",
+            "admitted_markets": ["sp500"],
+            "markets": [
+                {
+                    "market_id": "sp500",
+                    "is_admitted": True,
+                    "epoch0": {
+                        "ai_judgment": False,
+                        "knob_apply": False,
+                        "acted": True,
+                        "holdings": 10,
+                        "last_run_at": "2026-09-28T07:30:00+00:00",
+                        "nav": 999.0,
+                    },
+                    "learning": {"current_phase": 1, "blockers": ["need marks"]},
+                }
+            ],
+        },
+    )
+    write_json(
+        data_dir / "pr_fix_occasions.json",
+        {
+            "updated_at": "2026-09-28T08:00:00+00:00",
+            "occasions": [{"pr": 1}, {"pr": 2}],
+            "common_issues": {
+                "by_reason": [{"failure_reason": "merge conflict", "count": 2}],
+            },
+        },
+    )
+    board2 = build_human_tasks_board(data_dir=data_dir)
+    for row in board2["tasks"]:
+        if row["id"] not in targets:
+            continue
+        assert row["analysis"]["fingerprint"] == fps[row["id"]]
+        assert row["sort_bucket"] == "acked"
+        assert row["ack"]["acked"] is True
+        assert row["ack"]["stale"] is False
+
+
+def test_content_change_marks_ack_stale(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    write_json(
+        data_dir / "ingest_deviations.json",
+        {
+            "updated_at": "2026-09-27T12:00:00+00:00",
+            "open_items": [],
+        },
+    )
+    board = build_human_tasks_board(data_dir=data_dir)
+    hit = next(row for row in board["tasks"] if row["id"] == "adhoc-review-ingest-deviations")
+    record_human_task_ack(
+        data_dir,
+        task_id="adhoc-review-ingest-deviations",
+        decision="ack_observe",
+        finding_fingerprint=hit["analysis"]["fingerprint"],
+    )
+    write_json(
+        data_dir / "ingest_deviations.json",
+        {
+            "updated_at": "2026-09-27T12:00:00+00:00",
+            "open_items": [
+                {"id": "y1", "ticker": "BBB", "kind": "buy", "status": "open", "summary": "pin"}
+            ],
+        },
+    )
+    board2 = build_human_tasks_board(data_dir=data_dir)
+    hit2 = next(row for row in board2["tasks"] if row["id"] == "adhoc-review-ingest-deviations")
+    assert hit2["sort_bucket"] == "new_info"
+    assert hit2["ack"]["stale"] is True
+
+
 def test_board_sorts_new_info_before_acked(tmp_path: Path):
     data_dir = tmp_path / "data"
     data_dir.mkdir()
