@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-27T07:04:07.861544+00:00
+Track: `buy_tier_level` · updated 2026-09-28T00:47:07.751891+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **14** / 27 (52% count, 49% NAV)
+- Losers: **14** / 26 (54% count, 52% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -170,7 +170,7 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:07.861544+00:00
 
 ### TUA.AX — weakening / watch_review (+0.0%)
 - research verdict caution
-- conviction 26% below intact floor
+- conviction 30% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -179,14 +179,14 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:07.861544+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 51%
+- conviction 58%
 
 ### PMV.AX — intact / hold_tolerate (+0.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 43%
+- conviction 51%
 
 ### RMD.AX — intact / hold_tolerate (+0.6%)
 - still buy
@@ -194,9 +194,3 @@ Track: `buy_tier_level` · updated 2026-09-27T07:04:07.861544+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 63%
-
-### SOL.AX — weakening / watch_review (+4.5%)
-- left buy tier (hold)
-- conviction 29% below intact floor
-- research accumulate
-- cheapness family still passes
