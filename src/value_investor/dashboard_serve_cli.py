@@ -94,6 +94,41 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
             self.end_headers()
             self.wfile.write(body)
 
+        def _read_request_body(self) -> bytes:
+            """Drain Content-Length bytes before responding.
+
+            HTTP/1.0 handlers close the socket after each response. Leaving an
+            unread POST body in the kernel buffer often triggers
+            ConnectionResetError on the client while it is still reading the
+            response (seen on POST /api/refresh after L463 grew the payload).
+            """
+            try:
+                length = int(self.headers.get("Content-Length") or "0")
+            except ValueError:
+                length = 0
+            if length <= 0:
+                return b""
+            return self.rfile.read(length)
+
+        def _read_json_object_body(
+            self,
+        ) -> tuple[dict[str, Any] | None, tuple[int, bytes, str] | None]:
+            """Parse a JSON object body, or return a ready-to-send error tuple."""
+            raw = self._read_request_body() or b"{}"
+            try:
+                body = json.loads(raw.decode("utf-8") or "{}")
+            except json.JSONDecodeError:
+                return None, _json_bytes(
+                    {"ok": False, "error": "invalid JSON body"},
+                    status=400,
+                )
+            if not isinstance(body, dict):
+                return None, _json_bytes(
+                    {"ok": False, "error": "body must be a JSON object"},
+                    status=400,
+                )
+            return body, None
+
         def do_OPTIONS(self) -> None:  # noqa: N802
             self.send_response(204)
             self.send_header("Access-Control-Allow-Origin", "*")
@@ -135,6 +170,8 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
         def do_POST(self) -> None:  # noqa: N802
             parsed = urlparse(self.path)
             if parsed.path == "/api/refresh":
+                # Body is unused but must be drained (see _read_request_body).
+                self._read_request_body()
                 try:
                     market = _refresh_market_status(repo_root)
                     lifecycle = None
@@ -167,27 +204,11 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                 self._send(status, body, ctype)
                 return
             if parsed.path == "/api/lifecycle-experiment-ack":
-                try:
-                    length = int(self.headers.get("Content-Length") or "0")
-                except ValueError:
-                    length = 0
-                raw = self.rfile.read(length) if length > 0 else b"{}"
-                try:
-                    body = json.loads(raw.decode("utf-8") or "{}")
-                except json.JSONDecodeError:
-                    status, out, ctype = _json_bytes(
-                        {"ok": False, "error": "invalid JSON body"},
-                        status=400,
-                    )
-                    self._send(status, out, ctype)
+                body, err = self._read_json_object_body()
+                if err is not None:
+                    self._send(*err)
                     return
-                if not isinstance(body, dict):
-                    status, out, ctype = _json_bytes(
-                        {"ok": False, "error": "body must be a JSON object"},
-                        status=400,
-                    )
-                    self._send(status, out, ctype)
-                    return
+                assert body is not None
                 try:
                     from value_investor.lifecycle_experiment_ack import (
                         run_lifecycle_experiment_ack,
@@ -219,27 +240,11 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                 self._send(status, out, ctype)
                 return
             if parsed.path == "/api/human-task-ack":
-                try:
-                    length = int(self.headers.get("Content-Length") or "0")
-                except ValueError:
-                    length = 0
-                raw = self.rfile.read(length) if length > 0 else b"{}"
-                try:
-                    body = json.loads(raw.decode("utf-8") or "{}")
-                except json.JSONDecodeError:
-                    status, out, ctype = _json_bytes(
-                        {"ok": False, "error": "invalid JSON body"},
-                        status=400,
-                    )
-                    self._send(status, out, ctype)
+                body, err = self._read_json_object_body()
+                if err is not None:
+                    self._send(*err)
                     return
-                if not isinstance(body, dict):
-                    status, out, ctype = _json_bytes(
-                        {"ok": False, "error": "body must be a JSON object"},
-                        status=400,
-                    )
-                    self._send(status, out, ctype)
-                    return
+                assert body is not None
                 try:
                     from value_investor.human_task_ack import run_human_task_ack
 
@@ -267,27 +272,11 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                 self._send(status, out, ctype)
                 return
             if parsed.path == "/api/lifecycle-experiment-start":
-                try:
-                    length = int(self.headers.get("Content-Length") or "0")
-                except ValueError:
-                    length = 0
-                raw = self.rfile.read(length) if length > 0 else b"{}"
-                try:
-                    body = json.loads(raw.decode("utf-8") or "{}")
-                except json.JSONDecodeError:
-                    status, out, ctype = _json_bytes(
-                        {"ok": False, "error": "invalid JSON body"},
-                        status=400,
-                    )
-                    self._send(status, out, ctype)
+                body, err = self._read_json_object_body()
+                if err is not None:
+                    self._send(*err)
                     return
-                if not isinstance(body, dict):
-                    status, out, ctype = _json_bytes(
-                        {"ok": False, "error": "body must be a JSON object"},
-                        status=400,
-                    )
-                    self._send(status, out, ctype)
-                    return
+                assert body is not None
                 try:
                     from value_investor.lifecycle_experiment_start import (
                         run_lifecycle_experiment_start,
@@ -323,6 +312,8 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
             if parsed.path != "/api/progress-report":
                 self._send(404, b"Not found\n", "text/plain; charset=utf-8")
                 return
+            # Body unused; drain so HTTP/1.0 close does not RST the client.
+            self._read_request_body()
             try:
                 payload = write_progress_report(
                     json_path=repo_root / DEFAULT_REPORT_PATH,
