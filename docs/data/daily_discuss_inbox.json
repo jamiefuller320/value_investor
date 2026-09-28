@@ -1,5 +1,32 @@
 {
   "schema_version": 1,
-  "updated_at": null,
-  "items": []
+  "updated_at": "2026-09-28T11:43:17.035580+00:00",
+  "items": [
+    {
+      "recommendation_id": "rec-6d2619c1c5ba",
+      "task_id": "human:sunday-knob-calibration-priors",
+      "local_date": "2026-09-28",
+      "status": "open",
+      "summary": "Open human gate “Review knob calibration priors” — ack when reviewed; Approve only on promotion gates.",
+      "rationale": "sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 4 recommend",
+      "discuss_prompt": "Discuss daily recommendation `rec-6d2619c1c5ba` (human task `sunday-knob-calibration-priors`):\nTitle: Review knob calibration priors\nSummary: Open human gate “Review knob calibration priors” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 4 recommend\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-6d2619c1c5ba` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "options": [
+        "Accept → Acknowledge (observe-only)",
+        "Open runbook / defer",
+        "Discuss in Project chat"
+      ],
+      "priority": 10,
+      "accept_action": {
+        "kind": "human-task-ack",
+        "payload": {
+          "decision": "ack_observe",
+          "finding_fingerprint": "276ed49a700597b4",
+          "task_id": "sunday-knob-calibration-priors"
+        }
+      },
+      "queued_at": "2026-09-28T11:43:17.035580+00:00",
+      "source": "dashboard_bridge",
+      "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-6d2619c1c5ba`"
+    }
+  ]
 }
