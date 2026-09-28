@@ -10,7 +10,13 @@
 # Owned pathspecs always overlay. Optional pathspecs overlay only when
 # origin/<ref> has not changed that exact file since START_SHA (ops-monitor
 # queue/health guard). Excluded pathspecs are never restored from a broad
-# owned dir (email-report must not clobber fresher ops_status.json).
+# owned dir (email-report must not clobber fresher ops_status.json /
+# progress_report.json).
+#
+# JSON freshness: when restoring an owned *.json file, if origin/<ref> already
+# has a strictly newer top-level `generated_at` than the job snapshot, skip the
+# overlay. That stops long dashboard jobs from resurrecting stale foreign-owned
+# artifacts (progress-report, ops-monitor, etc.) without listing every path.
 #
 # Usage:
 #   GHA_COMMIT_OWNED='docs/data/foo.json docs/data/bar' \
@@ -21,6 +27,9 @@
 #   GHA_COMMIT_OWNED       required — space/newline separated files, dirs, or globs
 #   GHA_COMMIT_OPTIONAL    optional exact file paths (conditional overlay)
 #   GHA_COMMIT_EXCLUDE     exact file paths skipped even when under an owned dir
+#   GHA_COMMIT_PRESERVE_NEWER_GENERATED_AT
+#                          default 1 — skip owned JSON overlay when remote
+#                          generated_at is newer than the job snapshot
 #   COMMIT_MESSAGE         commit message (required for a real commit)
 #   GHA_COMMIT_REF         default main
 #   GHA_COMMIT_REMOTE      default origin
@@ -37,6 +46,7 @@ MAX_ATTEMPTS="${GHA_COMMIT_ATTEMPTS:-5}"
 SLEEP_BASE="${GHA_COMMIT_SLEEP_BASE:-3}"
 LABEL="${GHA_COMMIT_LABEL:-artifacts}"
 COMMIT_MESSAGE="${COMMIT_MESSAGE:-}"
+PRESERVE_NEWER_GENERATED_AT="${GHA_COMMIT_PRESERVE_NEWER_GENERATED_AT:-1}"
 
 if [ -z "${GHA_COMMIT_OWNED:-}" ]; then
   echo "::error::GHA_COMMIT_OWNED must list at least one pathspec" >&2
@@ -74,6 +84,84 @@ blob_at() {
   local rev="$1"
   local path="$2"
   git rev-parse "${rev}:${path}" 2>/dev/null || true
+}
+
+# Extract top-level JSON generated_at (ISO-8601). Empty if missing/unparseable.
+json_generated_at() {
+  local path="$1"
+  if [ ! -f "$path" ]; then
+    return 0
+  fi
+  case "$path" in
+    *.json) ;;
+    *) return 0 ;;
+  esac
+  python3 - "$path" <<'PY' 2>/dev/null || true
+import json, sys
+from pathlib import Path
+try:
+    data = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+except Exception:
+    raise SystemExit(0)
+if isinstance(data, dict):
+    value = data.get("generated_at")
+    if isinstance(value, str) and value.strip():
+        print(value.strip())
+PY
+}
+
+# Return 0 when remote_iso is strictly newer than local_iso (both ISO-8601).
+remote_generated_at_is_newer() {
+  local local_iso="$1"
+  local remote_iso="$2"
+  if [ -z "$local_iso" ] || [ -z "$remote_iso" ]; then
+    return 1
+  fi
+  python3 - "$local_iso" "$remote_iso" <<'PY' 2>/dev/null
+import sys
+from datetime import datetime
+
+def parse(value: str):
+    text = value.strip().replace("Z", "+00:00")
+    try:
+        return datetime.fromisoformat(text)
+    except ValueError:
+        return None
+
+local = parse(sys.argv[1])
+remote = parse(sys.argv[2])
+if local is None or remote is None:
+    raise SystemExit(1)
+raise SystemExit(0 if remote > local else 1)
+PY
+}
+
+should_skip_stale_json_overlay() {
+  local path="$1"
+  local remote_rev="$2"
+  if [ "$PRESERVE_NEWER_GENERATED_AT" = "0" ]; then
+    return 1
+  fi
+  case "$path" in
+    *.json) ;;
+    *) return 1 ;;
+  esac
+  local local_iso remote_file remote_iso
+  local_iso="$(json_generated_at "$WORKDIR/$path")"
+  if [ -z "$local_iso" ]; then
+    return 1
+  fi
+  remote_file="$(mktemp "$WORKDIR/remote_json.XXXXXX.json")"
+  if ! git show "${remote_rev}:${path}" >"$remote_file" 2>/dev/null; then
+    rm -f "$remote_file"
+    return 1
+  fi
+  remote_iso="$(json_generated_at "$remote_file")"
+  rm -f "$remote_file"
+  if remote_generated_at_is_newer "$local_iso" "$remote_iso"; then
+    return 0
+  fi
+  return 1
 }
 
 emit_result() {
@@ -194,6 +282,10 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
   restored=()
   while IFS= read -r path; do
     [ -n "$path" ] || continue
+    if should_skip_stale_json_overlay "$path" "${REMOTE}/${REF}"; then
+      echo "Preserving newer ${REMOTE}/${REF} $path (generated_at ahead of ${LABEL} snapshot)" >&2
+      continue
+    fi
     restore_file "$path"
     if [ -e "$path" ]; then
       restored+=("$path")
