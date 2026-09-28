@@ -1,0 +1,117 @@
+name: Daily focus ack
+
+# Close / accept a Daily hub focus line for the local Europe/London date.
+# Observe-only — never auto-trades or invents capital actions.
+on:
+  repository_dispatch:
+    types: [daily-focus-ack]
+  workflow_dispatch:
+    inputs:
+      task_ref:
+        description: Daily hub task_ref (or focus id)
+        required: false
+        type: string
+      focus_id:
+        description: Focus line id
+        required: false
+        type: string
+      recommendation_id:
+        description: Recommendation id when Accept was used
+        required: false
+        type: string
+      decision:
+        description: ack | accept | dismiss
+        required: false
+        default: ack
+        type: string
+      local_date:
+        description: YYYY-MM-DD Europe/London (optional)
+        required: false
+        type: string
+      note:
+        description: Optional note
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: daily-focus-ack
+  cancel-in-progress: false
+
+jobs:
+  ack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Record daily-focus ack + refresh hub
+        env:
+          TASK_REF: ${{ github.event.client_payload.task_ref || github.event.inputs.task_ref || '' }}
+          FOCUS_ID: ${{ github.event.client_payload.focus_id || github.event.inputs.focus_id || '' }}
+          REC_ID: ${{ github.event.client_payload.recommendation_id || github.event.inputs.recommendation_id || '' }}
+          DECISION: ${{ github.event.client_payload.decision || github.event.inputs.decision || 'ack' }}
+          LOCAL_DATE: ${{ github.event.client_payload.local_date || github.event.inputs.local_date || '' }}
+          NOTE: ${{ github.event.client_payload.note || github.event.inputs.note || '' }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from value_investor.daily_hub_actions import run_daily_focus_ack
+
+          result = run_daily_focus_ack(
+              Path("docs/data"),
+              task_ref=os.environ.get("TASK_REF") or "",
+              focus_id=os.environ.get("FOCUS_ID") or "",
+              recommendation_id=os.environ.get("REC_ID") or "",
+              decision=os.environ.get("DECISION") or "ack",
+              local_date=os.environ.get("LOCAL_DATE") or "",
+              note=os.environ.get("NOTE") or "",
+              source="dashboard_bridge",
+              acked_by="dashboard",
+          )
+          print(json.dumps(result, indent=2, sort_keys=True, default=str))
+          PY
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Stage daily hub slices
+        run: |
+          git add -- docs/data/daily_focus_acks.json docs/data/daily_focus.json
+          git status --short -- docs/data/daily_focus_acks.json docs/data/daily_focus.json
+
+      - name: Commit dashboard slices
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: daily focus ack from dashboard [skip ci]"
+          file_pattern: docs/data/daily_focus_acks.json docs/data/daily_focus.json
+          skip_fetch: false
+          skip_dirty_check: false
+
+      - name: Notify dashboard channel
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python3 - <<'PY'
+          from value_investor.dashboard_bridge import broadcast_dashboard_update
+          broadcast_dashboard_update(
+              event="artifact-updated",
+              payload={"artifact": "daily_focus", "source": "daily-focus-ack"},
+          )
+          PY
