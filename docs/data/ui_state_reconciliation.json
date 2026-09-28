@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-28T10:22:31.076239Z",
+  "timezone": "Europe/London",
+  "overall": "ok",
+  "surface_freshness": "fresh",
+  "checks": [
+    {
+      "id": "progress_report_vs_email_overlay",
+      "title": "Progress report not clobbered",
+      "status": "ok",
+      "drift_class": null,
+      "ui_path": "docs/data/progress_report.json",
+      "ui_generated_at": "2026-09-28T08:53:07+00:00",
+      "authority_path": "docs/data/progress_report.json",
+      "authority_generated_at": "2026-09-28T08:53:07+00:00",
+      "detail": "ui matches authority (sidecar present with generated_at)",
+      "runbook": "docs/ops/progress-report.md"
+    },
+    {
+      "id": "learning_tracks_dual_suite_present",
+      "title": "Dual-suite scoreboard published",
+      "status": "ok",
+      "drift_class": null,
+      "ui_path": "latest.json#learning_tracks_dual_suite",
+      "ui_generated_at": null,
+      "authority_path": null,
+      "authority_generated_at": null,
+      "detail": "learning_tracks_dual_suite present in latest.json",
+      "runbook": "docs/ops/primary-learning-track.md"
+    },
+    {
+      "id": "human_task_ack_fp_stable",
+      "title": "Human-task ack fingerprints content-stable",
+      "status": "ok",
+      "drift_class": null,
+      "ui_path": null,
+      "ui_generated_at": null,
+      "authority_path": null,
+      "authority_generated_at": null,
+      "detail": "0/4 open acks stale (under mass-stale threshold)",
+      "runbook": "docs/ops/human-tasks-checklist.md"
+    },
+    {
+      "id": "lifecycle_board_age",
+      "title": "Lifecycle board within content window",
+      "status": "ok",
+      "drift_class": null,
+      "ui_path": "docs/data/lifecycle_board.json",
+      "ui_generated_at": "2026-09-27T19:49:50.926806+00:00",
+      "authority_path": null,
+      "authority_generated_at": null,
+      "detail": "board age 14.5h (limit 30h)",
+      "runbook": "docs/ops/position-lifecycle.md"
+    }
+  ],
+  "summary": {
+    "ok": 4,
+    "warn": 0,
+    "fail": 0
+  },
+  "observe_only": true,
+  "auto_fixable": false
+}

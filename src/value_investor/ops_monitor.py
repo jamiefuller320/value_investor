@@ -1585,6 +1585,51 @@ def check_lifecycle_maturity_trajectory(
     ]
 
 
+def check_ui_state_reconciliation(
+    *,
+    data_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only Cap B: UI ↔ system-state reconciliation drift.
+
+    Persists ``docs/data/ui_state_reconciliation.json``. ``auto_fixable=False``
+    — never eng-spray or auto-republish from a warn alone.
+    """
+    from value_investor import ui_state_reconciliation as ui_reconcile
+
+    try:
+        findings = ui_reconcile.check_ui_state_reconciliation(
+            data_dir=data_dir or Path("docs/data"),
+            store_path=store_path,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="dashboard_health",
+                title=ui_reconcile.FINDING_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    out: list[OpsFinding] = []
+    for row in findings:
+        if not isinstance(row, dict):
+            continue
+        out.append(
+            OpsFinding(
+                severity=str(row.get("severity") or "warn"),
+                category=str(row.get("category") or "dashboard_health"),
+                title=str(row.get("title") or ui_reconcile.FINDING_TITLE),
+                summary=str(row.get("summary") or ""),
+                auto_fixable=False,
+            )
+        )
+    return out
+
+
 def check_memo_rememo_backlog() -> list[OpsFinding]:
     """Flag when body-lag rememo backlog exceeds in-week maintenance capacity."""
     from value_investor.research.weekday_rememo import assess_rememo_backlog
@@ -2263,6 +2308,7 @@ def collect_ops_findings(
     findings.extend(check_decision_input_inventory(latest_path=latest_path))
     findings.extend(check_shard_nav_fx_warp())
     findings.extend(check_lifecycle_maturity_trajectory())
+    findings.extend(check_ui_state_reconciliation())
     findings.extend(check_thin_memo_learning_gap())
     findings.extend(check_phase_b_producer_progress())
     findings.extend(check_indicator_integrity())
@@ -2641,6 +2687,17 @@ def run_ops_monitor(
         from value_investor.human_task_cards import write_human_tasks_board
 
         write_human_tasks_board(data_dir=Path("docs/data"))
+    except Exception:  # noqa: BLE001 — dashboard slice must not fail ops monitor
+        pass
+
+    try:
+        from value_investor.daily_focus import write_daily_focus
+        from value_investor.ui_state_reconciliation import write_ui_state_reconciliation
+
+        # Cap B may already have written during collect; refresh once more after
+        # board rebuild so daily hub sees freshest human_tasks_board counts.
+        write_ui_state_reconciliation(data_dir=Path("docs/data"))
+        write_daily_focus(data_dir=Path("docs/data"))
     except Exception:  # noqa: BLE001 — dashboard slice must not fail ops monitor
         pass
 

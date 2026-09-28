@@ -1,0 +1,103 @@
+name: Daily discuss
+
+# Queue a Daily hub recommendation for Project agent Discuss pickup.
+# Writes docs/data/daily_discuss_inbox.json — no auto-trades.
+on:
+  repository_dispatch:
+    types: [daily-discuss]
+  workflow_dispatch:
+    inputs:
+      recommendation_id:
+        description: Recommendation id
+        required: true
+        type: string
+      local_date:
+        description: YYYY-MM-DD Europe/London (optional)
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: daily-discuss
+  cancel-in-progress: false
+
+jobs:
+  discuss:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Queue discuss inbox item
+        env:
+          REC_ID: ${{ github.event.client_payload.recommendation_id || github.event.inputs.recommendation_id }}
+          LOCAL_DATE: ${{ github.event.client_payload.local_date || github.event.inputs.local_date || '' }}
+          REC_JSON: ${{ toJson(github.event.client_payload.recommendation) }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from value_investor.daily_hub_actions import run_daily_discuss
+
+          rec_raw = os.environ.get("REC_JSON") or ""
+          recommendation = None
+          if rec_raw and rec_raw not in ("null", "None", ""):
+              try:
+                  parsed = json.loads(rec_raw)
+                  if isinstance(parsed, dict):
+                      recommendation = parsed
+              except json.JSONDecodeError:
+                  recommendation = None
+
+          result = run_daily_discuss(
+              Path("docs/data"),
+              recommendation_id=os.environ.get("REC_ID") or "",
+              recommendation=recommendation,
+              local_date=os.environ.get("LOCAL_DATE") or "",
+              source="dashboard_bridge",
+          )
+          print(json.dumps(result, indent=2, sort_keys=True, default=str))
+          PY
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Stage discuss inbox
+        run: |
+          git add -- docs/data/daily_discuss_inbox.json docs/data/daily_focus_acks.json docs/data/daily_focus.json
+          git status --short -- docs/data/daily_discuss_inbox.json docs/data/daily_focus_acks.json docs/data/daily_focus.json
+
+      - name: Commit dashboard slices
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: daily discuss inbox from dashboard [skip ci]"
+          file_pattern: docs/data/daily_discuss_inbox.json docs/data/daily_focus_acks.json docs/data/daily_focus.json
+          skip_fetch: false
+          skip_dirty_check: false
+
+      - name: Notify dashboard channel
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python3 - <<'PY'
+          from value_investor.dashboard_bridge import broadcast_dashboard_update
+          broadcast_dashboard_update(
+              event="artifact-updated",
+              payload={"artifact": "daily_discuss_inbox", "source": "daily-discuss"},
+          )
+          PY
