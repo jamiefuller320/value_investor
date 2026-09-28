@@ -622,6 +622,21 @@ let humanTasksBoardBase = null;
  */
 const pendingHumanTaskAcks = Object.create(null);
 
+/** Last network-fetched daily hub (pre client accept/discuss overlay). */
+let dailyFocusBase = null;
+/**
+ * Session overlay for Daily hub Accept before git sidecar / rebuild catch-up.
+ * Keys are recommendation_id (preferred) or task_ref.
+ */
+const pendingDailyAccepts = Object.create(null);
+/**
+ * Session overlay for Discuss in-flight / queued — blocks double inbox submit.
+ * Keys are recommendation_id.
+ */
+const pendingDailyDiscuss = Object.create(null);
+/** In-flight Accept/Discuss race guard (same recommendation, double-click). */
+const inflightDailyRecActions = Object.create(null);
+
 function mergeHumanTaskAcksIntoBoard(board, acksStore) {
   if (!board || !Array.isArray(board.tasks)) return board;
   const openAcks = {};
@@ -774,6 +789,215 @@ function revertOptimisticHumanTaskAck(taskId) {
   refreshHumanTasksBoardView();
 }
 
+function dailyRecOverlayKey(payload) {
+  const rid = String((payload && payload.recommendation_id) || "").trim();
+  if (rid) return rid;
+  return String((payload && (payload.task_ref || payload.focus_id)) || "").trim();
+}
+
+function rememberPendingDailyAccept(payload) {
+  const key = dailyRecOverlayKey(payload);
+  if (!key) return;
+  pendingDailyAccepts[key] = {
+    recommendation_id: String((payload && payload.recommendation_id) || "").trim() || key,
+    task_ref: String((payload && payload.task_ref) || "").trim(),
+    decision: "accept",
+    status: "open",
+    local_date: String((payload && payload.local_date) || "").trim(),
+    accepted_at: new Date().toISOString(),
+    source: "dashboard_optimistic",
+  };
+}
+
+function clearPendingDailyAccept(key) {
+  delete pendingDailyAccepts[String(key || "").trim()];
+}
+
+function rememberPendingDailyDiscuss(payload, status) {
+  const key = dailyRecOverlayKey(payload);
+  if (!key) return;
+  pendingDailyDiscuss[key] = {
+    recommendation_id: String((payload && payload.recommendation_id) || "").trim() || key,
+    status: status || "inflight",
+    local_date: String((payload && payload.local_date) || "").trim(),
+    queued_at: new Date().toISOString(),
+    source: "dashboard_optimistic",
+  };
+}
+
+function clearPendingDailyDiscuss(key) {
+  delete pendingDailyDiscuss[String(key || "").trim()];
+}
+
+function prunePendingDailyAcceptsAgainstDurable(data) {
+  const hub = dailyFocusBase || (data && data.daily_focus) || null;
+  const localDate = String((hub && hub.local_date) || "").trim();
+  const acks = (data && data.daily_focus_acks) || null;
+  const durableClosed = new Set(
+    ((hub && hub.closed_today) || []).map((x) => String(x || "").trim()).filter(Boolean)
+  );
+  for (const task of (hub && hub.tasks) || []) {
+    if (!task || typeof task !== "object") continue;
+    if (task.closed) {
+      const ref = String(task.task_ref || "").trim();
+      const rid = String(task.recommendation_id || "").trim();
+      if (ref) durableClosed.add(ref);
+      if (rid) durableClosed.add(rid);
+    }
+  }
+  for (const key of Object.keys(pendingDailyAccepts)) {
+    const pending = pendingDailyAccepts[key];
+    const taskRef = String((pending && pending.task_ref) || "").trim();
+    if (durableClosed.has(key) || (taskRef && durableClosed.has(taskRef))) {
+      delete pendingDailyAccepts[key];
+      continue;
+    }
+    let matched = false;
+    for (const row of (acks && acks.acks) || []) {
+      if (!row || typeof row !== "object") continue;
+      if (String(row.status || "open") !== "open") continue;
+      if (localDate && String(row.local_date || "") !== localDate) continue;
+      const decision = String(row.decision || "ack");
+      if (!["ack", "accept", "dismiss", "ack_observe"].includes(decision)) continue;
+      const ref = String(row.task_ref || row.focus_id || "").trim();
+      const rowRid = String(row.recommendation_id || "").trim();
+      if (rowRid === key || key === ref || (taskRef && ref === taskRef)) {
+        matched = true;
+        break;
+      }
+    }
+    if (matched) delete pendingDailyAccepts[key];
+  }
+}
+
+/** Mark accepted tasks closed via session pending until durable hub catch-up. */
+function applyPendingDailyOverlays(base) {
+  if (!base || !Array.isArray(base.tasks)) return base;
+  const pendingKeys = Object.keys(pendingDailyAccepts);
+  if (!pendingKeys.length) return base;
+  const tasks = base.tasks.map((task) => {
+    if (!task || typeof task !== "object") return task;
+    const rid = String(task.recommendation_id || (task.recommendation && task.recommendation.id) || "").trim();
+    const ref = String(task.task_ref || "").trim();
+    const hit =
+      (rid && pendingDailyAccepts[rid]) ||
+      (ref && pendingDailyAccepts[ref]) ||
+      null;
+    if (!hit) return task;
+    return { ...task, closed: true, closed_optimistic: true };
+  });
+  const closedToday = new Set(
+    (base.closed_today || []).map((x) => String(x || "").trim()).filter(Boolean)
+  );
+  for (const key of pendingKeys) {
+    closedToday.add(key);
+    const ref = String((pendingDailyAccepts[key] && pendingDailyAccepts[key].task_ref) || "").trim();
+    if (ref) closedToday.add(ref);
+  }
+  const openCount = tasks.filter((t) => t && !t.closed).length;
+  return {
+    ...base,
+    tasks,
+    open_task_count: openCount,
+    closed_today: Array.from(closedToday),
+  };
+}
+
+/**
+ * Re-merge pristine daily hub + session Accept/Discuss overlays into data.
+ * Soft reload / sidecar merge must not re-enable Accept after an optimistic click.
+ */
+function syncDailyFocusOverlay(data) {
+  if (!data) return data;
+  const base = dailyFocusBase || data.daily_focus;
+  if (!base || !Array.isArray(base.tasks)) return data;
+  prunePendingDailyAcceptsAgainstDurable(data);
+  data.daily_focus = applyPendingDailyOverlays(base);
+  return data;
+}
+
+function refreshDailyHubView() {
+  if (!dashboardData) return;
+  if (!dailyFocusBase && dashboardData.daily_focus) {
+    dailyFocusBase = dashboardData.daily_focus;
+  }
+  if (!dailyFocusBase) return;
+  syncDailyFocusOverlay(dashboardData);
+  renderAutomation(dashboardData);
+}
+
+function applyOptimisticDailyAccept(payload) {
+  rememberPendingDailyAccept(payload);
+  refreshDailyHubView();
+}
+
+function revertOptimisticDailyAccept(key) {
+  clearPendingDailyAccept(key);
+  refreshDailyHubView();
+}
+
+function dailyRecRowState(recId) {
+  const id = String(recId || "").trim();
+  const accepted = !!(id && pendingDailyAccepts[id]);
+  const discuss = id ? pendingDailyDiscuss[id] : null;
+  const discussInflight = !!(discuss && discuss.status === "inflight");
+  const discussQueued = !!(discuss && (discuss.status === "queued" || discuss.status === "inflight"));
+  return {
+    accepted,
+    discussLocked: discussQueued,
+    // Accept stays available after Discuss succeeds; only lock during Discuss in-flight.
+    acceptDisabled: accepted || discussInflight,
+    discussDisabled: accepted || discussQueued,
+  };
+}
+
+function disableDailyRecRowButtons(button, { accept = true, discuss = true } = {}) {
+  const block = button && button.closest && button.closest(".daily-rec-block");
+  if (!block) {
+    if (button && accept) {
+      button.disabled = true;
+      button.setAttribute("aria-disabled", "true");
+    }
+    return block;
+  }
+  if (accept) {
+    block.querySelectorAll("[data-daily-accept]").forEach((btn) => {
+      btn.disabled = true;
+      btn.setAttribute("aria-disabled", "true");
+    });
+  }
+  if (discuss) {
+    block.querySelectorAll("[data-daily-discuss]").forEach((btn) => {
+      btn.disabled = true;
+      btn.setAttribute("aria-disabled", "true");
+    });
+  }
+  return block;
+}
+
+function enableDailyRecRowButtons(button, { accept = true, discuss = true } = {}) {
+  const block = button && button.closest && button.closest(".daily-rec-block");
+  if (!block) {
+    if (button && accept) {
+      button.disabled = false;
+      button.setAttribute("aria-disabled", "false");
+    }
+    return;
+  }
+  if (accept) {
+    block.querySelectorAll("[data-daily-accept]").forEach((btn) => {
+      btn.disabled = false;
+      btn.setAttribute("aria-disabled", "false");
+    });
+  }
+  if (discuss) {
+    block.querySelectorAll("[data-daily-discuss]").forEach((btn) => {
+      btn.disabled = false;
+      btn.setAttribute("aria-disabled", "false");
+    });
+  }
+}
+
 function setHumanTaskAckStatus(taskId, text) {
   const id = String(taskId || "").trim();
   if (!id) return;
@@ -801,6 +1025,12 @@ async function applyDashboardSidecars(data) {
     // Keep the network board pristine so later sync/re-render can re-merge.
     humanTasksBoardBase = data.human_tasks_board;
     syncHumanTasksBoardOverlay(data);
+  }
+  // Daily hub Accept/Discuss: keep network daily_focus pristine; session overlay
+  // marks accepted rows closed so soft reload cannot re-enable the buttons.
+  if (data.daily_focus) {
+    dailyFocusBase = data.daily_focus;
+    syncDailyFocusOverlay(data);
   }
   return data;
 }
@@ -5798,21 +6028,37 @@ function renderDailyRecommendationBlock(rec, task) {
     ? `<ul class="daily-rec-options">${options.map((o) => `<li>${esc(o)}</li>`).join("")}</ul>`
     : "";
   const pastePhrase = dailyDiscussPastePhrase(rec.id || "");
+  const rowState = dailyRecRowState(rec.id || "");
+  const acceptDisabledAttr = rowState.acceptDisabled
+    ? ' disabled aria-disabled="true"'
+    : ' aria-disabled="false"';
+  const discussDisabledAttr = rowState.discussDisabled
+    ? ' disabled aria-disabled="true"'
+    : ' aria-disabled="false"';
+  const statusSeed = rowState.accepted
+    ? "Accepted"
+    : rowState.discussLocked
+      ? "Discuss queued — paste phrase above"
+      : "";
   return `<div class="daily-rec-block" data-recommendation-id="${esc(rec.id || "")}">
     <h4 class="small" style="margin:0.6rem 0 0.25rem">Recommendation</h4>
     <p class="small"><strong>${esc(rec.summary || "")}</strong></p>
     <p class="small muted">${esc(rec.rationale || "")}</p>
     ${optionsHtml}
     <p class="daily-rec-actions">
-      <button type="button" class="btn btn-primary" data-daily-accept="${esc(acceptPayload)}">Accept</button>
-      <button type="button" class="btn" data-daily-discuss="${esc(discussPayload)}" title="Copy paste phrase and queue Project inbox">Discuss</button>
+      <button type="button" class="btn btn-primary" data-daily-accept="${esc(
+        acceptPayload
+      )}"${acceptDisabledAttr}>Accept</button>
+      <button type="button" class="btn" data-daily-discuss="${esc(
+        discussPayload
+      )}" title="Copy paste phrase and queue Project inbox"${discussDisabledAttr}>Discuss</button>
       <button type="button" class="btn link-btn" data-copy-discuss-prompt="${esc(
         pastePhrase
       )}" data-copy-label="Copy paste phrase" title="Copy short Project chat phrase">Copy paste phrase</button>
       <button type="button" class="btn link-btn" data-copy-discuss-prompt="${esc(
         rec.discuss_prompt || pastePhrase
       )}" data-copy-label="Copy full prompt" title="Copy full discuss_prompt including rationale">Copy full prompt</button>
-      <span class="small muted daily-rec-status" aria-live="polite"></span>
+      <span class="small muted daily-rec-status" aria-live="polite">${esc(statusSeed)}</span>
     </p>
     <div class="daily-discuss-paste" hidden>
       <p class="small" style="margin:0.35rem 0 0.15rem"><strong>Paste into Project chat:</strong></p>
@@ -5931,9 +6177,40 @@ function dailyDiscussPastePhrase(recommendationId) {
 }
 
 function setDailyRecStatus(button, text) {
-  const block = button && button.closest(".daily-rec-block");
-  const el = block && block.querySelector(".daily-rec-status");
-  if (el) el.textContent = text || "";
+  const liveBlock =
+    button && button.isConnected && button.closest
+      ? button.closest(".daily-rec-block")
+      : null;
+  if (liveBlock) {
+    const el = liveBlock.querySelector(".daily-rec-status");
+    if (el) el.textContent = text || "";
+    return;
+  }
+  // Optimistic Accept re-render detaches the clicked button — recover via rec id.
+  if (!button || !button.getAttribute) return;
+  try {
+    const raw =
+      button.getAttribute("data-daily-accept") ||
+      button.getAttribute("data-daily-discuss") ||
+      "{}";
+    const payload = JSON.parse(raw);
+    const rid =
+      dailyRecOverlayKey(payload) ||
+      String((payload.recommendation && payload.recommendation.id) || "").trim();
+    if (!rid) return;
+    const panel = document.getElementById("panel-automation");
+    if (!panel) return;
+    const escape =
+      (window.CSS && typeof window.CSS.escape === "function" && window.CSS.escape.bind(window.CSS)) ||
+      ((value) => String(value).replace(/\\/g, "\\\\").replace(/"/g, '\\"'));
+    const block = panel.querySelector(
+      `.daily-rec-block[data-recommendation-id="${escape(rid)}"]`
+    );
+    const el = block && block.querySelector(".daily-rec-status");
+    if (el) el.textContent = text || "";
+  } catch {
+    /* ignore */
+  }
 }
 
 function showDailyDiscussPastePhrase(button, phrase, { copied = false, queued = false } = {}) {
@@ -6047,8 +6324,18 @@ async function acceptDailyRecommendation(button) {
   }
   const action = (payload.accept_action && payload.accept_action.kind) || "";
   const actionPayload = (payload.accept_action && payload.accept_action.payload) || {};
-  button.disabled = true;
+  const recKey = dailyRecOverlayKey(payload);
+  if (recKey && (inflightDailyRecActions[recKey] || pendingDailyAccepts[recKey])) return;
+  if (recKey) inflightDailyRecActions[recKey] = "accept";
+
+  // Optimistic first: disable Accept+Discuss and overlay-close before any await
+  // so soft reload / bridge latency cannot leave the row clickable.
+  disableDailyRecRowButtons(button, { accept: true, discuss: true });
   setDailyRecStatus(button, "Accepting…");
+  if (action !== "link_only") {
+    applyOptimisticDailyAccept(payload);
+  }
+
   try {
     if (action === "human-task-ack") {
       const htPayload = {
@@ -6056,6 +6343,8 @@ async function acceptDailyRecommendation(button) {
         decision: actionPayload.decision || "ack_observe",
         finding_fingerprint: actionPayload.finding_fingerprint || "",
       };
+      // Mirror human-task card: optimistic board sort before bridge await.
+      applyOptimisticHumanTaskAck(htPayload);
       if (isLocalDashboardServe()) {
         const response = await fetch("/api/human-task-ack", {
           method: "POST",
@@ -6085,7 +6374,6 @@ async function acceptDailyRecommendation(button) {
           );
         }
       }
-      applyOptimisticHumanTaskAck(htPayload);
       setDailyRecStatus(button, "Accepted → human-task-ack");
       await reloadDashboard({ silent: true });
     } else if (action === "focus-ack") {
@@ -6113,7 +6401,7 @@ async function acceptDailyRecommendation(button) {
         window.location.href = href;
       }
       setDailyRecStatus(button, "Opened link");
-      button.disabled = false;
+      enableDailyRecRowButtons(button, { accept: true, discuss: true });
       return;
     } else {
       await queueDailyBridgeAction(
@@ -6130,8 +6418,14 @@ async function acceptDailyRecommendation(button) {
       await reloadDashboard({ silent: true });
     }
   } catch (err) {
-    button.disabled = false;
+    if (action === "human-task-ack" && actionPayload.task_id) {
+      revertOptimisticHumanTaskAck(actionPayload.task_id);
+    }
+    if (recKey) revertOptimisticDailyAccept(recKey);
+    else enableDailyRecRowButtons(button, { accept: true, discuss: true });
     setDailyRecStatus(button, String(err && err.message ? err.message : err));
+  } finally {
+    if (recKey) delete inflightDailyRecActions[recKey];
   }
 }
 
@@ -6147,9 +6441,21 @@ async function discussDailyRecommendation(button) {
     payload.recommendation_id ||
     (payload.recommendation && payload.recommendation.id) ||
     "";
+  const recKey = dailyRecOverlayKey({
+    recommendation_id: recId,
+    local_date: payload.local_date || "",
+  });
+  if (recKey && (inflightDailyRecActions[recKey] || pendingDailyAccepts[recKey])) return;
+  if (recKey && pendingDailyDiscuss[recKey] && pendingDailyDiscuss[recKey].status !== "failed") {
+    return;
+  }
+  if (recKey) inflightDailyRecActions[recKey] = "discuss";
+
   // Short canonical phrase for Project chat (not the full discuss_prompt).
   const pastePhrase = dailyDiscussPastePhrase(recId);
-  button.disabled = true;
+  // Optimistic first: lock Accept+Discuss before clipboard / bridge await.
+  disableDailyRecRowButtons(button, { accept: true, discuss: true });
+  if (recKey) rememberPendingDailyDiscuss(payload, "inflight");
   setDailyRecStatus(button, "Copying paste phrase…");
   let copied = false;
   try {
@@ -6160,6 +6466,7 @@ async function discussDailyRecommendation(button) {
       copied ? "Paste phrase copied — queuing inbox…" : "Paste phrase shown — queuing inbox…"
     );
     await queueDailyBridgeAction("daily-discuss", payload, (msg) => setDailyRecStatus(button, msg));
+    if (recKey) rememberPendingDailyDiscuss(payload, "queued");
     showDailyDiscussPastePhrase(button, pastePhrase, { copied, queued: true });
     setDailyRecStatus(
       button,
@@ -6167,12 +6474,17 @@ async function discussDailyRecommendation(button) {
         ? `Copied — paste into Project chat: ${pastePhrase}`
         : `Select & paste into Project chat: ${pastePhrase}`
     );
-    // Re-enable Discuss so the operator can copy again if needed.
-    button.disabled = false;
+    // Keep Discuss locked for the session (prevents double inbox queue).
+    // Re-enable Accept so the operator can still accept after discussing.
+    enableDailyRecRowButtons(button, { accept: true, discuss: false });
+    disableDailyRecRowButtons(button, { accept: false, discuss: true });
   } catch (err) {
-    button.disabled = false;
+    if (recKey) clearPendingDailyDiscuss(recKey);
+    enableDailyRecRowButtons(button, { accept: true, discuss: true });
     showDailyDiscussPastePhrase(button, pastePhrase, { copied, queued: false });
     setDailyRecStatus(button, String(err && err.message ? err.message : err));
+  } finally {
+    if (recKey) delete inflightDailyRecActions[recKey];
   }
 }
 
@@ -7600,6 +7912,7 @@ function renderDashboard(data) {
   // Without this, a fetch that started before Acknowledge can clobber the
   // optimistic bottom-sort and re-enable the button on render.
   if (humanTasksBoardBase) syncHumanTasksBoardOverlay(data);
+  if (dailyFocusBase) syncDailyFocusOverlay(data);
   const meta = data.meta || {};
   const trustCount = meta.trust_count || (data.trust_reports || []).length || 0;
   document.getElementById("run-meta").textContent = data.run_at
