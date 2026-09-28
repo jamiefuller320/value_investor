@@ -1,8 +1,10 @@
 """Durable human acks / approvals for checklist tasks on the dashboard.
 
 Acks live in ``docs/data/human_task_acks.json`` so a read/ack survives
-checklist republish. Matching is by ``task_id``. A new analysis fingerprint
-marks the ack stale so the task rises to the top again.
+checklist republish. Matching is by ``task_id``. A new **content** analysis
+fingerprint marks the ack stale so the task rises to the top again.
+Republish-only timestamp churn must not change the fingerprint (see
+``human_task_cards._analysis_for_task``).
 """
 
 from __future__ import annotations

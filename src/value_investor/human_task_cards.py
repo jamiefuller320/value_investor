@@ -51,12 +51,44 @@ def _read(data_dir: Path, name: str) -> dict[str, Any]:
 
 
 def _fingerprint(parts: dict[str, Any]) -> str:
+    """Content hash for ack-staleness. Do not include republish timestamps —
+    those alone must not bounce an acked card back to new_info / live Acknowledge.
+    """
     blob = json.dumps(parts, sort_keys=True, default=str)
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
 
 
 def _bullet(text: str) -> str:
     return str(text or "").strip()
+
+
+def _market_rows(status: dict[str, Any]) -> list[dict[str, Any]]:
+    """Normalize market_status markets (list or id→row dict) for analysis cards."""
+    raw = status.get("markets")
+    if isinstance(raw, list):
+        return [row for row in raw if isinstance(row, dict)]
+    if isinstance(raw, dict):
+        rows: list[dict[str, Any]] = []
+        for mid, row in raw.items():
+            if not isinstance(row, dict):
+                continue
+            item = dict(row)
+            item.setdefault("market_id", mid)
+            rows.append(item)
+        return rows
+    return []
+
+
+def _admitted_market_rows(status: dict[str, Any]) -> list[dict[str, Any]]:
+    admitted_ids = {
+        str(mid).strip() for mid in (status.get("admitted_markets") or []) if str(mid or "").strip()
+    }
+    rows = _market_rows(status)
+    if admitted_ids:
+        hit = [row for row in rows if str(row.get("market_id") or "").strip() in admitted_ids]
+        if hit:
+            return hit
+    return [row for row in rows if bool(row.get("is_admitted"))]
 
 
 def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
@@ -118,13 +150,7 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
                     "Chart-outcome mix: " + ", ".join(f"{k}={v}" for k, v in list(mix.items())[:6])
                 )
             )
-        fp = _fingerprint(
-            {
-                "review_at": review.get("generated_at") or review.get("updated_at"),
-                "chart_at": chart.get("generated_at") or chart.get("updated_at"),
-                "mix": mix,
-            }
-        )
+        fp = _fingerprint({"summary": review.get("summary"), "mix": mix})
         return {
             "headline": "Sunday analysis review synthesis",
             "updated_at": review.get("generated_at")
@@ -145,7 +171,7 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
                 bullets.append(_bullet(str(item)))
         elif blockers:
             bullets.append(_bullet(str(blockers)))
-        fp = _fingerprint({"status": status, "blockers": blockers, "at": ready.get("generated_at")})
+        fp = _fingerprint({"status": status, "blockers": blockers})
         return {
             "headline": f"Phase C readiness: {status}",
             "updated_at": ready.get("generated_at") or ready.get("updated_at"),
@@ -165,8 +191,10 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
                     bullets.append(_bullet(f"{key}: {payload.get(key)}"))
             fp = _fingerprint(
                 {
-                    "at": payload.get("generated_at") or payload.get("updated_at"),
                     "summary": payload.get("summary"),
+                    "cross_vs_level": payload.get("cross_vs_level"),
+                    "week_0_cash": payload.get("week_0_cash"),
+                    "never_entered": payload.get("never_entered"),
                 }
             )
             return {
@@ -176,24 +204,43 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
                 "bullets": [b for b in bullets if b][:8],
                 "source_keys": ["buy_cross_archive_review"],
             }
-        # shard epoch-0 watch — market_status admitted books
+        # shard epoch-0 watch — market_status admitted books (markets is a list)
         status = _read(data_dir, "market_status.json")
-        markets = _as_dict(status.get("markets") or status.get("admitted") or {})
+        admitted = _admitted_market_rows(status)
         bullets = []
-        for mid, row in list(markets.items())[:8]:
-            if not isinstance(row, dict):
-                continue
+        snap: list[dict[str, Any]] = []
+        for row in admitted[:12]:
+            mid = str(row.get("market_id") or "?")
+            epoch0 = _as_dict(row.get("epoch0"))
+            learning = _as_dict(row.get("learning"))
+            ai = epoch0.get("ai_judgment")
+            knob = epoch0.get("knob_apply")
+            phase = learning.get("current_phase")
+            holdings = epoch0.get("holdings")
             bullets.append(
                 _bullet(
-                    f"{mid}: epoch0={row.get('epoch0') or row.get('buy_tier_level') or '—'} "
-                    f"marks={row.get('mark_count') or row.get('marks') or '—'}"
+                    f"{mid}: phase={phase if phase is not None else '—'} "
+                    f"ai={ai} knob={knob} holdings={holdings if holdings is not None else '—'}"
                 )
             )
+            snap.append(
+                {
+                    "id": mid,
+                    "ai": ai,
+                    "knob": knob,
+                    "acted": epoch0.get("acted"),
+                    "phase": phase,
+                    "blockers": learning.get("blockers"),
+                }
+            )
         fp = _fingerprint(
-            {"at": status.get("generated_at") or status.get("updated_at"), "n": len(markets)}
+            {
+                "admitted": sorted(str(x) for x in (status.get("admitted_markets") or [])),
+                "snap": snap,
+            }
         )
         return {
-            "headline": "Admitted shard epoch-0 watch",
+            "headline": f"Admitted shard epoch-0 watch · {len(admitted)}",
             "updated_at": status.get("generated_at") or status.get("updated_at"),
             "fingerprint": fp,
             "bullets": [b for b in bullets if b][:8],
@@ -234,10 +281,9 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             )
         fp = _fingerprint(
             {
-                "assess_at": assessment.get("generated_at") or assessment.get("updated_at"),
-                "priors_at": priors.get("generated_at") or priors.get("updated_at"),
                 "recommend_ids": [str(r.get("experiment_id")) for r in recommend],
                 "ready": priors.get("ready_for_shadow_bootstrap"),
+                "ranking_mode": priors.get("ranking_mode"),
             }
         )
         return {
@@ -268,8 +314,8 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             )
         fp = _fingerprint(
             {
-                "at": assessment.get("generated_at"),
                 "fair_ids": [str(r.get("experiment_id")) for r in fair],
+                "fair_status": [str(r.get("status")) for r in fair],
             }
         )
         return {
@@ -289,7 +335,7 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             _bullet(f"paper_execute_graduated ready: {ready.get('paper_execute_graduated')}"),
             _bullet("Acknowledge is observe-only — use Lifecycle Start to execute."),
         ]
-        fp = _fingerprint({"stage": stage, "ready": ready, "at": plan.get("updated_at")})
+        fp = _fingerprint({"stage": stage, "ready": ready})
         return {
             "headline": f"Entry DCA adoption · {stage}",
             "updated_at": plan.get("updated_at") or plan.get("generated_at"),
@@ -313,7 +359,12 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
                 f"closed cohorts: {sleeve.get('closed_counts') or sleeve.get('counts') or '—'}"
             ),
         ]
-        fp = _fingerprint({"ready": ready, "at": review.get("generated_at")})
+        fp = _fingerprint(
+            {
+                "ready": ready,
+                "closed": sleeve.get("closed_counts") or sleeve.get("counts"),
+            }
+        )
         return {
             "headline": "Dual-path sleeve episodes readiness",
             "updated_at": review.get("generated_at") or review.get("updated_at"),
@@ -333,7 +384,7 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             _bullet(f"broken_loser_count={hi.get('broken_loser_count')}"),
             _bullet(f"flags={hi.get('selection_feedback_flags') or hi.get('flags') or '—'}"),
         ]
-        fp = _fingerprint({"hi": hi, "at": review.get("generated_at")})
+        fp = _fingerprint({"hi": hi})
         return {
             "headline": "Hypothesis integrity",
             "updated_at": review.get("generated_at") or review.get("updated_at"),
@@ -360,12 +411,7 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             bullets.append(
                 _bullet(f"{row.get('id') or '?'}: {row.get('title') or row.get('status')}")
             )
-        fp = _fingerprint(
-            {
-                "at": payload.get("updated_at") or payload.get("generated_at"),
-                "ids": [str(t.get("id")) for t in open_tasks[:10]],
-            }
-        )
+        fp = _fingerprint({"ids": [str(t.get("id")) for t in open_tasks[:10]]})
         return {
             "headline": f"Triage queue · {len(open_tasks)} open",
             "updated_at": payload.get("updated_at") or payload.get("generated_at"),
@@ -384,7 +430,13 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
         ]
         if scan.get("summary"):
             bullets.append(_bullet(str(scan.get("summary"))[:280]))
-        fp = _fingerprint({"at": scan.get("generated_at"), "open": scan.get("open_fragment_count")})
+        fp = _fingerprint(
+            {
+                "open": scan.get("open_fragment_count") or scan.get("open_count"),
+                "promote": scan.get("promote_count"),
+                "summary": scan.get("summary"),
+            }
+        )
         return {
             "headline": "Horizon scan + deferred fragments",
             "updated_at": scan.get("generated_at") or scan.get("updated_at"),
@@ -399,7 +451,12 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             _bullet(f"Decision: {surplus.get('decision') or surplus.get('status') or '—'}"),
             _bullet(f"Unused Ultra fraction: {surplus.get('unused_ultra_fraction') or '—'}"),
         ]
-        fp = _fingerprint({"at": surplus.get("updated_at"), "decision": surplus.get("decision")})
+        fp = _fingerprint(
+            {
+                "decision": surplus.get("decision") or surplus.get("status"),
+                "unused": surplus.get("unused_ultra_fraction"),
+            }
+        )
         return {
             "headline": "Cycle-end Cursor surplus",
             "updated_at": surplus.get("updated_at") or surplus.get("generated_at"),
@@ -414,22 +471,24 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
         common = _as_dict(occasions.get("common_issues") or digest.get("pr_fix_common_issues"))
         top = common.get("by_reason") or common.get("reasons") or common.get("top") or []
         bullets = [_bullet(f"Occasions logged: {len(occasions.get('occasions') or [])}")]
+        top_snap: list[dict[str, Any]] = []
         if isinstance(top, list):
             for row in top[:5]:
                 if isinstance(row, dict):
-                    bullets.append(
-                        _bullet(f"{row.get('reason') or row.get('key')}: {row.get('count')}")
-                    )
+                    reason = row.get("failure_reason") or row.get("reason") or row.get("key") or "?"
+                    bullets.append(_bullet(f"{reason}: {row.get('count')}"))
+                    top_snap.append({"r": reason, "c": row.get("count")})
                 else:
                     bullets.append(_bullet(str(row)))
+                    top_snap.append({"r": str(row)})
         elif isinstance(top, dict):
             for key, val in list(top.items())[:5]:
                 bullets.append(_bullet(f"{key}: {val}"))
+                top_snap.append({"r": key, "c": val})
         fp = _fingerprint(
             {
                 "n": len(occasions.get("occasions") or []),
-                "at": occasions.get("updated_at") or digest.get("generated_at"),
-                "common": common,
+                "top": top_snap,
             }
         )
         return {
@@ -456,7 +515,6 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             {
                 "n": len(open_items),
                 "ids": [str(r.get("id") or r.get("ticker")) for r in open_items[:10]],
-                "at": payload.get("updated_at"),
             }
         )
         return {
@@ -474,7 +532,12 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
         bullets = [_bullet(f"Horizon/deferred triage items: {len(items)}")]
         for row in items[:5]:
             bullets.append(_bullet(f"{row.get('id')}: {row.get('title') or row.get('status')}"))
-        fp = _fingerprint({"n": len(items), "at": tasks.get("updated_at")})
+        fp = _fingerprint(
+            {
+                "n": len(items),
+                "ids": [str(t.get("id")) for t in items[:10]],
+            }
+        )
         return {
             "headline": "Deferred ideas review",
             "updated_at": tasks.get("updated_at") or tasks.get("generated_at"),

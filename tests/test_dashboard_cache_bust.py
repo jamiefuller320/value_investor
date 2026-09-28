@@ -7,6 +7,12 @@ from pathlib import Path
 APP_JS = Path("docs/app.js")
 
 
+def test_index_html_cache_busts_app_js() -> None:
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    assert 'src="app.js?v=' in html
+    assert 'src="dashboard_bridge.js?v=' in html
+
+
 def test_load_dashboard_cache_busts_progress_report() -> None:
     text = APP_JS.read_text(encoding="utf-8")
     assert "async function fetchDashboardJson(path)" in text
