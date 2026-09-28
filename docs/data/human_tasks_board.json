@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-28T22:54:20.494124+00:00",
+  "generated_at": "2026-09-28T23:02:52.440326+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,8 +8,8 @@
   "checklist_updated_at": "2026-09-28",
   "counts": {
     "new_info": 1,
-    "unacked": 24,
-    "acked": 8,
+    "unacked": 23,
+    "acked": 9,
     "automated": 19,
     "human": 33
   },
@@ -1066,41 +1066,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "sunday-triage-plr-director-tasks",
-      "title": "Triage paper-learning and learning-director tasks",
-      "summary": "These queues have no promote CLI. Remaining: watch u4 (ldr-20260823-02) and exit-shadow (ana-20260728-04); leave L111 replay as continue. Buffered-hold and IMB.L audits are done. Do not reopen duplicate human-ack wrappers. Prefer the engineering queue for the two scoring tasks.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/paper-learning-review.md",
-      "doc_anchor": "enacting-proposed-experiments",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/paper-learning-review.md#enacting-proposed-experiments",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Triage queue · 0 open",
-        "updated_at": null,
-        "fingerprint": "a1a6621a17f9f062",
-        "bullets": [
-          "Open/proposed: 0 / 3"
-        ],
-        "source_keys": [
-          "paper_learning_tasks"
-        ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "weekday-daily-hub-glance",
       "title": "Glance Daily hub before acting on chat todos",
       "summary": "Before acting on chat or Project notes todos, open Automation → Daily (#automation/daily). Prefer top focus lines + new_info human tasks. Hub should be fresh before 04:00 Europe/London. Do not treat Suite A stress green or graduated badges as adoption. Accept runs safe observe-acks only; Discuss queues Project pickup.",
@@ -1128,6 +1093,41 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-triage-plr-director-tasks",
+      "title": "Triage paper-learning and learning-director tasks",
+      "summary": "These queues have no promote CLI. Remaining: watch u4 (ldr-20260823-02) and exit-shadow (ana-20260728-04); leave L111 replay as continue. Buffered-hold and IMB.L audits are done. Do not reopen duplicate human-ack wrappers. Prefer the engineering queue for the two scoring tasks.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/paper-learning-review.md",
+      "doc_anchor": "enacting-proposed-experiments",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/paper-learning-review.md#enacting-proposed-experiments",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Triage queue · 0 open",
+        "updated_at": null,
+        "fingerprint": "a1a6621a17f9f062",
+        "bullets": [
+          "Open/proposed: 0 / 3"
+        ],
+        "source_keys": [
+          "paper_learning_tasks"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-28T23:02:52.393563+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "a1a6621a17f9f062"
+      },
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
