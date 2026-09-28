@@ -56,10 +56,14 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     assert "function syncHumanTasksBoardOverlay(" in text
     assert "function refreshHumanTasksBoardView(" in text
     assert "prunePendingHumanTaskAcksAgainstDurable(" in text
+    assert "const pendingDailyAccepts" in text
+    assert "function applyOptimisticDailyAccept(" in text
+    assert "function syncDailyFocusOverlay(" in text
     render_fn = text.split("function renderDashboard(data)", 1)[1].split(
         "\nasync function loadOptionalDashboardJson", 1
     )[0]
     assert "syncHumanTasksBoardOverlay(data)" in render_fn
+    assert "syncDailyFocusOverlay(data)" in render_fn
     ack_fn = text.split("async function acknowledgeHumanTaskFromCard(", 1)[1].split(
         "\nfunction resolveObserveUtilization(", 1
     )[0]

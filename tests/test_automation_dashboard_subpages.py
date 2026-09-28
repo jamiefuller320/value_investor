@@ -71,6 +71,169 @@ def test_daily_hub_accept_discuss_ux() -> None:
     assert ".daily-discuss-paste-phrase" in css
 
 
+def test_daily_hub_accept_discuss_optimistic_disable() -> None:
+    """Accept/Discuss must lock buttons before any bridge await; Accept persists via overlay."""
+    text = APP_JS.read_text(encoding="utf-8")
+    assert "const pendingDailyAccepts" in text
+    assert "const pendingDailyDiscuss" in text
+    assert "const inflightDailyRecActions" in text
+    assert "function applyOptimisticDailyAccept(" in text
+    assert "function syncDailyFocusOverlay(" in text
+    assert "function disableDailyRecRowButtons(" in text
+    assert "function dailyRecRowState(" in text
+    assert "let dailyFocusBase" in text
+
+    accept_fn = text.split("async function acceptDailyRecommendation(", 1)[1].split(
+        "\nasync function discussDailyRecommendation(", 1
+    )[0]
+    # Disable + overlay before any network / bridge await.
+    assert "disableDailyRecRowButtons(button" in accept_fn
+    assert "applyOptimisticDailyAccept(payload)" in accept_fn
+    assert accept_fn.index("disableDailyRecRowButtons(button") < accept_fn.index(
+        "queueDailyBridgeAction"
+    )
+    assert accept_fn.index("applyOptimisticDailyAccept(payload)") < accept_fn.index(
+        "queueDailyBridgeAction"
+    )
+    # Human-task Accept path: optimistic board ack before bridge await (same as card ack).
+    assert "applyOptimisticHumanTaskAck(htPayload)" in accept_fn
+    assert accept_fn.index("applyOptimisticHumanTaskAck(htPayload)") < accept_fn.index(
+        "DashboardBridge.init()"
+    )
+    assert "inflightDailyRecActions" in accept_fn
+
+    discuss_fn = text.split("async function discussDailyRecommendation(", 1)[1].split(
+        "\nfunction renderAutomationSettingsSection(", 1
+    )[0]
+    assert "disableDailyRecRowButtons(button" in discuss_fn
+    assert 'rememberPendingDailyDiscuss(payload, "inflight")' in discuss_fn
+    assert discuss_fn.index("disableDailyRecRowButtons(button") < discuss_fn.index(
+        "copyTextToClipboard"
+    )
+    assert discuss_fn.index('rememberPendingDailyDiscuss(payload, "inflight")') < discuss_fn.index(
+        "queueDailyBridgeAction"
+    )
+    # After success Discuss stays locked; Accept re-enabled (copy buttons still work).
+    assert 'rememberPendingDailyDiscuss(payload, "queued")' in discuss_fn
+    assert "enableDailyRecRowButtons(button, { accept: true, discuss: false })" in discuss_fn
+    # Must not re-enable Discuss after queue (old bug).
+    assert "button.disabled = false" not in discuss_fn.split("catch", 1)[0]
+
+    render_fn = text.split("function renderDashboard(data)", 1)[1].split(
+        "\nasync function loadOptionalDashboardJson", 1
+    )[0]
+    assert "syncDailyFocusOverlay(data)" in render_fn
+
+    sidecar_fn = text.split("async function applyDashboardSidecars(data)", 1)[1].split(
+        "\nfunction isLocalDashboardServe(", 1
+    )[0]
+    assert "dailyFocusBase = data.daily_focus" in sidecar_fn
+    assert "syncDailyFocusOverlay(data)" in sidecar_fn
+
+
+def test_daily_hub_accept_overlay_closes_task_until_durable() -> None:
+    """Session pending Accept marks the daily hub task closed across soft reloads."""
+    import json
+    from subprocess import check_output
+
+    text = APP_JS.read_text(encoding="utf-8")
+    # Extract only Daily-hub overlay helpers (not human-task board merge).
+    fn_start = text.index("function dailyRecOverlayKey(payload)")
+    fn_end = text.index("function setHumanTaskAckStatus(taskId, text)")
+    helpers = text[fn_start:fn_end]
+    script = (
+        "let dailyFocusBase = null;\n"
+        "const pendingDailyAccepts = Object.create(null);\n"
+        "const pendingDailyDiscuss = Object.create(null);\n"
+        "const inflightDailyRecActions = Object.create(null);\n"
+        # Stub view refresh — overlay tests only need remember/apply/prune/state.
+        "function refreshDailyHubView() {}\n"
+        "function renderAutomation() {}\n"
+        + helpers
+        + """
+const base = {
+  local_date: "2026-09-28",
+  closed_today: [],
+  tasks: [
+    {
+      task_ref: "focus-2",
+      recommendation_id: "rec-aaa",
+      closed: false,
+      title: "Focus 2",
+    },
+    {
+      task_ref: "human:task-x",
+      recommendation_id: "rec-bbb",
+      closed: false,
+      title: "Human X",
+    },
+  ],
+  open_task_count: 2,
+};
+dailyFocusBase = base;
+rememberPendingDailyAccept({
+  recommendation_id: "rec-aaa",
+  task_ref: "focus-2",
+  local_date: "2026-09-28",
+});
+const overlaid = applyPendingDailyOverlays(base);
+const open = overlaid.tasks.filter((t) => !t.closed);
+const data = {
+  daily_focus: base,
+  daily_focus_acks: { acks: [] },
+};
+syncDailyFocusOverlay(data);
+// Soft-reload clobber simulation: replace hub with pristine open tasks, re-sync.
+data.daily_focus = {
+  ...base,
+  tasks: base.tasks.map((t) => ({ ...t, closed: false })),
+};
+syncDailyFocusOverlay(data);
+const row = dailyRecRowState("rec-aaa");
+rememberPendingDailyDiscuss({ recommendation_id: "rec-bbb", local_date: "2026-09-28" }, "queued");
+const discussRow = dailyRecRowState("rec-bbb");
+// Durable catch-up prunes pending.
+data.daily_focus_acks = {
+  acks: [{
+    task_ref: "focus-2",
+    recommendation_id: "rec-aaa",
+    decision: "accept",
+    status: "open",
+    local_date: "2026-09-28",
+  }],
+};
+dailyFocusBase = {
+  ...base,
+  tasks: [
+    { task_ref: "focus-2", recommendation_id: "rec-aaa", closed: true },
+    { task_ref: "human:task-x", recommendation_id: "rec-bbb", closed: false },
+  ],
+  closed_today: ["focus-2"],
+};
+prunePendingDailyAcceptsAgainstDurable(data);
+console.log(JSON.stringify({
+  overlaidClosed: overlaid.tasks.map((t) => !!t.closed),
+  openRefs: open.map((t) => t.task_ref),
+  syncedClosed: data.daily_focus.tasks.map((t) => !!t.closed),
+  acceptDisabled: row.acceptDisabled,
+  discussDisabledAfterAccept: row.discussDisabled,
+  discussQueuedAcceptDisabled: discussRow.acceptDisabled,
+  discussQueuedDiscussDisabled: discussRow.discussDisabled,
+  pendingAfterPrune: Object.keys(pendingDailyAccepts),
+}));
+"""
+    )
+    payload = json.loads(check_output(["node", "-e", script], text=True))
+    assert payload["overlaidClosed"] == [True, False]
+    assert payload["openRefs"] == ["human:task-x"]
+    assert payload["syncedClosed"] == [True, False]
+    assert payload["acceptDisabled"] is True
+    assert payload["discussDisabledAfterAccept"] is True
+    assert payload["discussQueuedAcceptDisabled"] is False
+    assert payload["discussQueuedDiscussDisabled"] is True
+    assert payload["pendingAfterPrune"] == []
+
+
 def test_illumination_chips_prefer_amber() -> None:
     text = APP_JS.read_text(encoding="utf-8")
     assert "function renderIllumChips(" in text
