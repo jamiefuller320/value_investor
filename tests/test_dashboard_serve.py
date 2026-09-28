@@ -41,7 +41,9 @@ def test_dashboard_serve_get_and_generate(tmp_path: Path, monkeypatch):
     thread = Thread(target=server.serve_forever, daemon=True)
     thread.start()
     try:
-        conn = HTTPConnection("127.0.0.1", port, timeout=10)
+        # Refresh builds market_status + lifecycle board (~100KB+ JSON). Keep a
+        # comfortable timeout so slow CI shards do not truncate the body read.
+        conn = HTTPConnection("127.0.0.1", port, timeout=30)
         conn.request("GET", "/")
         resp = conn.getresponse()
         body = resp.read()
@@ -55,8 +57,13 @@ def test_dashboard_serve_get_and_generate(tmp_path: Path, monkeypatch):
         assert payload["ok"] is True
         assert payload["report"]["overall"] == "ok"
 
+        # Non-empty POST bodies must be drained by the handler; otherwise
+        # HTTP/1.0 close can RST the client mid-response (CI flake on refresh).
         conn.request(
-            "POST", "/api/progress-report", body=b"{}", headers={"Content-Type": "application/json"}
+            "POST",
+            "/api/progress-report",
+            body=b"{}",
+            headers={"Content-Type": "application/json"},
         )
         resp = conn.getresponse()
         payload = json.loads(resp.read().decode("utf-8"))
@@ -66,14 +73,30 @@ def test_dashboard_serve_get_and_generate(tmp_path: Path, monkeypatch):
         assert (tmp_path / "docs/data/progress_report.md").exists()
 
         conn.request(
-            "POST", "/api/refresh", body=b"{}", headers={"Content-Type": "application/json"}
+            "POST",
+            "/api/refresh",
+            body=b'{"reason":"test"}',
+            headers={"Content-Type": "application/json"},
         )
         resp = conn.getresponse()
-        refresh = json.loads(resp.read().decode("utf-8"))
+        raw = resp.read()
+        refresh = json.loads(raw.decode("utf-8"))
         assert resp.status == 200, refresh
         assert refresh["ok"] is True
         assert refresh["market_status"]["schema_version"] == 3
         assert (tmp_path / "docs/data/market_status.json").exists()
+        # Second POST on the same keep-alive-capable client must still work
+        # after bodies were drained (regression for ConnectionResetError).
+        conn.request(
+            "POST",
+            "/api/refresh",
+            body=b"{}",
+            headers={"Content-Type": "application/json"},
+        )
+        resp = conn.getresponse()
+        refresh2 = json.loads(resp.read().decode("utf-8"))
+        assert resp.status == 200, refresh2
+        assert refresh2["ok"] is True
     finally:
         server.shutdown()
         server.server_close()
