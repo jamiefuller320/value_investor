@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-27T17:58:06.693070+00:00",
+  "run_at": "2026-09-28T13:36:13.865894+00:00",
   "market_id": "euro_stoxx50",
   "targets": [],
   "target_details": [],
@@ -9,58 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-27T17:57:20.725156+00:00",
-    "market_id": "euro_stoxx50",
-    "buy_tier_count": 16,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 5,
-    "indexed_without_body": 7,
-    "bodies_min": 1,
-    "bodies_median": 3.0,
-    "bodies_max": 100,
-    "coverage_scope": "canonical_plus_shards",
-    "ftse_equivalent": false,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "SGO.PA",
-      "MUV2.DE",
-      "DTE.DE",
-      "BAS.DE",
-      "ADYEN.AS"
-    ],
-    "indexed_without_body_tickers": [
-      "SAN.PA",
-      "TTE.PA",
-      "SGO.PA",
-      "SAP.DE"
-    ],
-    "indexed_without_body_by_ticker": {
-      "SAN.PA": 1,
-      "TTE.PA": 3,
-      "SGO.PA": 2,
-      "SAP.DE": 1
-    },
-    "parked_tickers": [
-      "ADYEN.AS",
-      "BAS.DE",
-      "DTE.DE",
-      "MUV2.DE",
-      "SAN.PA",
-      "SAP.DE",
-      "SGO.PA",
-      "TTE.PA"
-    ],
-    "parked_count": 8,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
-  },
-  "health_after": {
-    "snapshot_at": "2026-09-27T17:58:01.930974+00:00",
+    "snapshot_at": "2026-09-28T13:35:32.108324+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 16,
     "unmeasured_buy_tier": 0,
@@ -112,6 +61,59 @@
     "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": true
   },
+  "health_after": {
+    "snapshot_at": "2026-09-28T13:36:10.821101+00:00",
+    "market_id": "euro_stoxx50",
+    "buy_tier_count": 16,
+    "unmeasured_buy_tier": 0,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 5,
+    "indexed_without_body": 10,
+    "bodies_min": 1,
+    "bodies_median": 3.0,
+    "bodies_max": 100,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [
+      "SGO.PA",
+      "MUV2.DE",
+      "DTE.DE",
+      "BAS.DE",
+      "ADYEN.AS"
+    ],
+    "indexed_without_body_tickers": [
+      "SAN.PA",
+      "TTE.PA",
+      "SGO.PA",
+      "DTE.DE",
+      "SAP.DE"
+    ],
+    "indexed_without_body_by_ticker": {
+      "SAN.PA": 1,
+      "TTE.PA": 5,
+      "SGO.PA": 2,
+      "DTE.DE": 1,
+      "SAP.DE": 1
+    },
+    "parked_tickers": [
+      "ADYEN.AS",
+      "BAS.DE",
+      "DTE.DE",
+      "MUV2.DE",
+      "SAN.PA",
+      "SAP.DE",
+      "SGO.PA",
+      "TTE.PA"
+    ],
+    "parked_count": 8,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
+  },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
@@ -121,7 +123,7 @@
   "discovery_scan": {
     "scanned": 16,
     "hits": 14,
-    "new_rows_total": 1,
+    "new_rows_total": 2,
     "curiosity_total": 16,
     "errors": 0,
     "prioritization_weights": {
@@ -154,7 +156,7 @@
   },
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-09-27T17:57:21.562964+00:00",
+    "assessed_at": "2026-09-28T13:35:32.546423+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -168,6 +170,12 @@
         "ticker": "SGO.PA",
         "indexed_without_body": 2,
         "filings_total": 3,
+        "filings_with_body": 1
+      },
+      {
+        "ticker": "DTE.DE",
+        "indexed_without_body": 1,
+        "filings_total": 2,
         "filings_with_body": 1
       },
       {
@@ -190,33 +198,35 @@
       "ADYEN.AS"
     ],
     "thin_need_bodies": [
-      "SGO.PA"
+      "SGO.PA",
+      "DTE.DE"
     ],
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
     "auto_pin_tickers": [
       "TTE.PA",
       "SGO.PA",
+      "DTE.DE",
       "SAN.PA",
       "SAP.DE"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (4 tickers, top: TTE.PA(3), SGO.PA(2), SAN.PA(1), SAP.DE(1))",
+      "Prefer indexed-without-body body refetch (5 tickers, top: TTE.PA(3), SGO.PA(2), DTE.DE(1), SAN.PA(1), SAP.DE(1))",
       "Discovery/IR seed for 4 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 4,
-      "indexed_without_body_rows": 7,
+      "indexed_without_body_tickers": 5,
+      "indexed_without_body_rows": 8,
       "thin_need_discovery": 4,
-      "thin_need_bodies": 1
+      "thin_need_bodies": 2
     }
   },
-  "used_seconds": 39.529536010000015,
+  "used_seconds": 37.84552545399998,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3560.47046399,
+  "leftover_seconds": 3562.154474546,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -224,9 +234,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-09-27T17:58:01.934600+00:00",
+    "updated_at": "2026-09-28T13:36:10.823835+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 11,
+    "complete_zero_improve_runs": 12,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -290,16 +300,6 @@
         "thin": true
       },
       {
-        "ticker": "TTE.PA",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-09-25T12:55:15.809827+00:00",
-        "filings_total": 104,
-        "filings_with_body": 100,
-        "indexed_without_body": 3,
-        "thin": false
-      },
-      {
         "ticker": "DTE.DE",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
@@ -308,6 +308,16 @@
         "filings_with_body": 1,
         "indexed_without_body": 1,
         "thin": true
+      },
+      {
+        "ticker": "TTE.PA",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-28T13:36:10.823835+00:00",
+        "filings_total": 106,
+        "filings_with_body": 100,
+        "indexed_without_body": 5,
+        "thin": false
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
@@ -335,6 +345,7 @@
       "dax",
       "euro_depth",
       "euro_stoxx50",
+      "ftse_mib",
       "ftse_smallcap",
       "ibex35",
       "nasdaq100",
@@ -347,7 +358,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 117,
+    "task_count": 118,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
