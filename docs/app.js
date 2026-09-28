@@ -167,6 +167,7 @@ function activateTab(tabId, { updateHash = false } = {}) {
   if (updateHash) {
     if (tabId === "lifecycle") syncLifecycleHash();
     else if (tabId === "analysis") syncAnalysisHash();
+    else if (tabId === "automation") syncAutomationHash();
     else if (location.hash && location.hash !== `#${tabId}`) {
       history.replaceState(null, "", `#${tabId}`);
     }
@@ -603,6 +604,10 @@ const DASHBOARD_SIDECARS = [
   ["human_tasks_board", "data/human_tasks_board.json"],
   ["human_task_acks", "data/human_task_acks.json"],
   ["lifecycle_board", "data/lifecycle_board.json"],
+  ["ui_state_reconciliation", "data/ui_state_reconciliation.json"],
+  ["daily_focus", "data/daily_focus.json"],
+  ["daily_focus_acks", "data/daily_focus_acks.json"],
+  ["daily_discuss_inbox", "data/daily_discuss_inbox.json"],
 ];
 
 let dashboardRefreshInFlight = null;
@@ -1970,6 +1975,44 @@ function bindMarketTileEqualize() {
   });
 }
 
+function renderDailyHubPulseStrip(data) {
+  const hub = (data && data.daily_focus) || null;
+  const recon = (data && data.ui_state_reconciliation) || null;
+  const focusLines = ((hub && hub.focus_lines) || []).slice(0, 3);
+  const focusHtml = focusLines.length
+    ? `<ul class="list-plain daily-pulse-focus">${focusLines
+        .map((l) => `<li>${esc(l.title || "")}</li>`)
+        .join("")}</ul>`
+    : '<p class="small muted">No focus lines yet.</p>';
+  const reconOverall = recon ? String(recon.overall || "ok") : "—";
+  const reconCls =
+    reconOverall === "fail"
+      ? "badge-ii-no"
+      : reconOverall === "warn"
+        ? "badge-watch"
+        : reconOverall === "ok"
+          ? "badge-buy"
+          : "badge-neutral";
+  const warnN = recon ? Number((recon.summary || {}).warn || 0) : 0;
+  return `<div class="card daily-hub-pulse">
+    <h3>Daily hub</h3>
+    <p class="small muted" style="margin-top:0">
+      Europe/London · refresh before 04:00 ·
+      <span class="badge ${reconCls}">reconcile ${esc(reconOverall)}${
+        warnN ? ` · ${warnN} drift` : ""
+      }</span>
+      ${
+        hub && hub.stale_for_local_date
+          ? ' · <span class="badge badge-watch">hub stale</span>'
+          : ""
+      }
+    </p>
+    ${focusHtml}
+    <p class="small"><a href="#automation/daily">Open daily hub</a>
+      · policy green ≠ utility</p>
+  </div>`;
+}
+
 function renderOverview(data) {
   const meta = data.meta || {};
   const counts = meta.signal_counts || {};
@@ -2012,6 +2055,7 @@ function renderOverview(data) {
 
   document.getElementById("panel-overview").innerHTML = `
     ${note}
+    ${renderDailyHubPulseStrip(data)}
     ${renderMarketStatusGrid(data)}
     ${renderLearningCompletenessCard(data)}
     ${renderSystemGapsCard(data)}
@@ -5497,17 +5541,564 @@ function renderLearningTracksPanel(data) {
   </section>`;
 }
 
-function renderAutomation(data) {
-  const panel = document.getElementById("panel-automation");
-  if (!panel) return;
-  bindHumanTasksSection();
-  const auto = data.automation;
-  if (!auto) {
-    panel.innerHTML =
-      '<div class="empty-state">Automation status not published yet. Run <code>ftse-library automation-status</code> or wait for the next ladder / publish.</div>';
+const AUTOMATION_SECTION_IDS = ["daily", "tracks", "human", "queue", "ops", "settings"];
+let automationSectionId = "daily";
+
+function normalizeAutomationSection(value) {
+  const key = String(value || "").toLowerCase();
+  if (key === "learning" || key === "learning-tracks") return "tracks";
+  if (key === "tasks" || key === "human-tasks") return "human";
+  if (key === "hunter" || key === "eng" || key === "engineering") return "queue";
+  if (key === "reconcile" || key === "health") return "ops";
+  if (key === "config" || key === "achievements") return "settings";
+  if (key === "hub" || key === "today") return "daily";
+  if (AUTOMATION_SECTION_IDS.includes(key)) return key;
+  return "daily";
+}
+
+function automationIlluminationFor(sectionId, data) {
+  const hub = data && data.daily_focus;
+  const hints = (hub && hub.illumination_hints) || {};
+  const key = `automation.${sectionId}`;
+  const hint = hints[key] || {};
+  if (sectionId === "human") {
+    const counts = ((data && data.human_tasks_board) || {}).counts || {};
+    const newInfo = Number(counts.new_info || 0) > 0 || !!hint.new_info;
+    const attn =
+      Number(counts.new_info || 0) + Number(counts.unacked || 0) > 0 || !!hint.attention;
+    return { new_info: newInfo, attention: attn };
+  }
+  if (sectionId === "tracks") {
+    const dual = data && data.learning_tracks_dual_suite;
+    const attn = !dual || !!hint.attention;
+    return { new_info: false, attention: attn };
+  }
+  if (sectionId === "queue") {
+    const obs = resolveObserveUtilization(data) || {};
+    const fresh = String(obs.surface_freshness || "");
+    const attn =
+      ["stale", "degraded", "missing", "lagging"].includes(fresh) || !!hint.attention;
+    return { new_info: false, attention: attn };
+  }
+  if (sectionId === "ops") {
+    const recon = (data && data.ui_state_reconciliation) || {};
+    const attn = String(recon.overall || "ok") !== "ok" || !!hint.attention;
+    return { new_info: false, attention: attn };
+  }
+  if (sectionId === "daily") {
+    const stale = !!(hub && hub.stale_for_local_date);
+    const openN = Number((hub && hub.open_task_count) || 0);
+    const newInfo = !!hint.new_info || openN > 0;
+    const attn = stale || !!hint.attention || openN > 0;
+    return { new_info: newInfo, attention: attn };
+  }
+  return { new_info: !!hint.new_info, attention: !!hint.attention };
+}
+
+function renderIllumChips(illum) {
+  if (!illum) return "";
+  // Amber wins when both fire so urgency is not soft-washed.
+  if (illum.attention) {
+    return '<span class="illum-chip illum-attn badge badge-watch" title="Attention needed">attn</span>';
+  }
+  if (illum.new_info) {
+    return '<span class="illum-chip illum-new badge badge-buy" title="New information">new</span>';
+  }
+  return "";
+}
+
+function renderAutomationSubnav(activeId, data) {
+  const active = normalizeAutomationSection(activeId);
+  const labels = {
+    daily: "Daily",
+    tracks: "Tracks",
+    human: "Human",
+    queue: "Queue",
+    ops: "Ops",
+    settings: "Settings",
+  };
+  return `<nav class="paper-subnav analysis-subnav automation-subnav" aria-label="Automation sections">
+    ${AUTOMATION_SECTION_IDS.map((id) => {
+      const illum = automationIlluminationFor(id, data);
+      return `<button type="button" class="paper-subtab${
+        id === active ? " active" : ""
+      }" data-automation-section="${id}">${renderIllumChips(illum)}${esc(labels[id])}</button>`;
+    }).join("")}
+  </nav>
+  <p class="small muted analysis-ia-contract" style="margin:0.35rem 0 0.75rem">
+    Daily hub is the morning cockpit (Europe/London, refresh before 04:00).
+    Green chip = unread delta (not “healthy”); amber = attention. Policy green ≠ utility.
+  </p>`;
+}
+
+function syncAutomationHash() {
+  const section = normalizeAutomationSection(automationSectionId);
+  if (section === "daily") {
+    history.replaceState(null, "", "#automation");
     return;
   }
+  history.replaceState(null, "", `#automation/${section}`);
+}
 
+function jumpToAutomationSection(sectionId, { updateHash = true } = {}) {
+  automationSectionId = normalizeAutomationSection(sectionId);
+  const panel = document.getElementById("panel-automation");
+  if (!panel) return;
+  panel.querySelectorAll(".automation-subnav .paper-subtab").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.automationSection === automationSectionId);
+  });
+  panel.querySelectorAll(".automation-section-pane").forEach((pane) => {
+    const id = pane.getAttribute("data-automation-pane");
+    pane.hidden = id !== automationSectionId;
+  });
+  if (updateHash) syncAutomationHash();
+}
+
+function bindAutomationPanel(panel) {
+  if (!panel || panel.dataset.automationBound === "1") return;
+  panel.dataset.automationBound = "1";
+  panel.addEventListener("click", (event) => {
+    const sub = event.target.closest("[data-automation-section]");
+    if (sub && panel.contains(sub)) {
+      event.preventDefault();
+      jumpToAutomationSection(sub.dataset.automationSection);
+      return;
+    }
+    const acceptBtn = event.target.closest("[data-daily-accept]");
+    if (acceptBtn && panel.contains(acceptBtn)) {
+      event.preventDefault();
+      void acceptDailyRecommendation(acceptBtn);
+      return;
+    }
+    const discussBtn = event.target.closest("[data-daily-discuss]");
+    if (discussBtn && panel.contains(discussBtn)) {
+      event.preventDefault();
+      void discussDailyRecommendation(discussBtn);
+      return;
+    }
+    const tickBtn = event.target.closest("[data-daily-focus-ack]");
+    if (tickBtn && panel.contains(tickBtn)) {
+      event.preventDefault();
+      void acknowledgeDailyFocusLine(tickBtn);
+      return;
+    }
+    const copyBtn = event.target.closest("[data-copy-discuss-prompt]");
+    if (copyBtn && panel.contains(copyBtn)) {
+      event.preventDefault();
+      const text = copyBtn.getAttribute("data-copy-discuss-prompt") || "";
+      if (navigator.clipboard && text) {
+        void navigator.clipboard.writeText(text).then(
+          () => {
+            copyBtn.textContent = "Copied";
+            setTimeout(() => {
+              copyBtn.textContent = "Copy discuss prompt";
+            }, 1500);
+          },
+          () => {}
+        );
+      }
+    }
+  });
+}
+
+function renderUiReconcileBadge(data) {
+  const recon = (data && data.ui_state_reconciliation) || null;
+  if (!recon) {
+    return `<span class="badge badge-neutral" title="Reconciliation not published yet">reconcile: —</span>`;
+  }
+  const overall = String(recon.overall || "ok");
+  const fresh = String(recon.surface_freshness || "unknown");
+  const warnN = Number((recon.summary || {}).warn || 0);
+  const failN = Number((recon.summary || {}).fail || 0);
+  const cls =
+    overall === "fail"
+      ? "badge-ii-no"
+      : overall === "warn"
+        ? "badge-watch"
+        : "badge-buy";
+  const label =
+    overall === "ok"
+      ? `reconcile ok · ${fresh}`
+      : `reconcile ${overall} · ${warnN} warn / ${failN} fail`;
+  return `<button type="button" class="link-btn" data-automation-section="ops" title="Open Automation → Ops">
+    <span class="badge ${cls}">${esc(label)}</span>
+  </button>`;
+}
+
+function renderUiReconcileTable(data) {
+  const recon = (data && data.ui_state_reconciliation) || null;
+  if (!recon) {
+    return `<section class="automation-section automation-section-full" id="automation-ops">
+      <h2>UI ↔ system reconciliation</h2>
+      <p class="muted">Not published yet — waits for next ops-monitor cycle.</p>
+    </section>`;
+  }
+  const rows = (recon.checks || [])
+    .map((c) => {
+      const st = String(c.status || "ok");
+      const badge =
+        st === "fail"
+          ? "badge-ii-no"
+          : st === "warn"
+            ? "badge-watch"
+            : "badge-buy";
+      return `<tr>
+        <td><code>${esc(c.id || "")}</code></td>
+        <td>${esc(c.title || "")}</td>
+        <td><span class="badge ${badge}">${esc(st)}</span></td>
+        <td class="small">${esc(c.drift_class || "—")}</td>
+        <td class="small">${esc(c.detail || "")}</td>
+        <td class="small">${c.runbook ? `<code>${esc(c.runbook)}</code>` : "—"}</td>
+      </tr>`;
+    })
+    .join("");
+  const banner =
+    String(recon.overall || "ok") !== "ok"
+      ? `<div class="observe-stale-banner" role="status">UI state reconciliation drift — observe-only; do not eng-spray from this banner alone.</div>`
+      : "";
+  return `<section class="automation-section automation-section-full" id="automation-ops">
+    <h2>UI ↔ system reconciliation</h2>
+    <p class="small muted" style="margin-top:0">
+      Dashboard health (Cap B). ${renderUiReconcileBadge(data)}
+      · generated ${esc(fmtDate(recon.generated_at))} · TZ ${esc(recon.timezone || "Europe/London")}
+    </p>
+    ${banner}
+    <div class="table-wrap"><table class="data-table">
+      <thead><tr><th>Id</th><th>Check</th><th>Status</th><th>Drift</th><th>Detail</th><th>Runbook</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="6" class="muted">No checks</td></tr>'}</tbody>
+    </table></div>
+  </section>`;
+}
+
+function renderDailyRecommendationBlock(rec, task) {
+  if (!rec || typeof rec !== "object") return "";
+  const acceptPayload = JSON.stringify({
+    recommendation_id: rec.id,
+    task_ref: (task && task.task_ref) || rec.task_id,
+    accept_action: rec.accept_action || {},
+    local_date: (dashboardData && dashboardData.daily_focus && dashboardData.daily_focus.local_date) || "",
+  });
+  const discussPayload = JSON.stringify({
+    recommendation_id: rec.id,
+    recommendation: {
+      id: rec.id,
+      task_id: rec.task_id,
+      summary: rec.summary,
+      rationale: rec.rationale,
+      accept_action: rec.accept_action,
+      discuss_prompt: rec.discuss_prompt,
+      priority: rec.priority,
+      options: rec.options || [],
+    },
+    local_date: (dashboardData && dashboardData.daily_focus && dashboardData.daily_focus.local_date) || "",
+  });
+  const options = Array.isArray(rec.options) ? rec.options : [];
+  const optionsHtml = options.length
+    ? `<ul class="daily-rec-options">${options.map((o) => `<li>${esc(o)}</li>`).join("")}</ul>`
+    : "";
+  return `<div class="daily-rec-block" data-recommendation-id="${esc(rec.id || "")}">
+    <h4 class="small" style="margin:0.6rem 0 0.25rem">Recommendation</h4>
+    <p class="small"><strong>${esc(rec.summary || "")}</strong></p>
+    <p class="small muted">${esc(rec.rationale || "")}</p>
+    ${optionsHtml}
+    <p class="daily-rec-actions">
+      <button type="button" class="btn btn-primary" data-daily-accept="${esc(acceptPayload)}">Accept</button>
+      <button type="button" class="btn" data-daily-discuss="${esc(discussPayload)}">Discuss</button>
+      <button type="button" class="btn link-btn" data-copy-discuss-prompt="${esc(
+        rec.discuss_prompt || ""
+      )}">Copy discuss prompt</button>
+      <span class="small muted daily-rec-status" aria-live="polite"></span>
+    </p>
+    <p class="small muted">Discuss pickup: say <code>discuss daily recommendation \`${esc(
+      rec.id || ""
+    )}\`</code> in Project chat — inbox <code>docs/data/daily_discuss_inbox.json</code>.</p>
+  </div>`;
+}
+
+function renderDailyHubTaskCard(task) {
+  const closed = !!task.closed;
+  const bucket = task.sort_bucket || task.source || "";
+  const rec = task.recommendation || null;
+  const tickPayload = JSON.stringify({
+    task_ref: task.task_ref,
+    focus_id: (task.close_payload && task.close_payload.focus_id) || task.task_ref,
+    decision: "ack",
+    local_date: (dashboardData && dashboardData.daily_focus && dashboardData.daily_focus.local_date) || "",
+  });
+  const closeBtn =
+    task.closeable && !closed
+      ? `<button type="button" class="btn" data-daily-focus-ack="${esc(
+          tickPayload
+        )}" title="Ack / close for local date">✓</button>`
+      : closed
+        ? '<span class="badge badge-neutral">closed</span>'
+        : "";
+  // Human tasks still use existing ack path via Accept → human-task-ack.
+  const humanHint =
+    task.close_action === "human-task-ack"
+      ? '<span class="badge badge-watch" title="Accept runs human-task-ack">human ack</span>'
+      : "";
+  return `<details class="human-task-card daily-hub-card sort-${esc(bucket)}" data-task-ref="${esc(
+    task.task_ref || ""
+  )}" ${closed ? "" : "open"}>
+    <summary class="human-task-card-toggle">
+      <span class="human-task-card-head">
+        <strong>${esc(task.title || task.task_ref || "Task")}</strong>
+        <span class="badge badge-neutral">${esc(task.source || "")}</span>
+        <span class="badge badge-neutral">P${esc(String(task.priority ?? ""))}</span>
+        ${humanHint}
+      </span>
+      ${closeBtn}
+    </summary>
+    <div class="human-task-card-panel">
+      <p class="small">${esc(task.summary || "")}</p>
+      ${
+        task.href
+          ? `<p class="small"><a href="${esc(task.href)}">${esc(task.href)}</a></p>`
+          : ""
+      }
+      ${renderDailyRecommendationBlock(rec, task)}
+    </div>
+  </details>`;
+}
+
+function renderDailyHubPanel(data) {
+  const hub = (data && data.daily_focus) || null;
+  if (!hub) {
+    return `<section class="automation-section automation-section-full daily-hub-section" id="automation-daily">
+      <h2>Daily hub</h2>
+      <p class="muted">daily_focus.json not published yet — next ops-monitor morning rebuild will seed it.</p>
+    </section>`;
+  }
+  const staleBanner = hub.stale_for_local_date
+    ? `<div class="observe-stale-banner" role="status">Daily hub stale for local date ${esc(
+        hub.local_date || ""
+      )} — refresh target is before ${esc(hub.refresh_deadline_local || "04:00")} ${esc(
+        hub.timezone || "Europe/London"
+      )}.</div>`
+    : "";
+  const focusHtml = (hub.focus_lines || [])
+    .map(
+      (line) => `<li><strong>${esc(line.title || "")}</strong>
+        <span class="badge badge-neutral">${esc(line.source || "focus")}</span>
+        <div class="small muted">${esc(line.summary || "")}</div></li>`
+    )
+    .join("");
+  const openTasks = (hub.tasks || []).filter((t) => !t.closed);
+  const cards = openTasks.map(renderDailyHubTaskCard).join("");
+  const counts = hub.counts || {};
+  return `<section class="automation-section automation-section-full daily-hub-section" id="automation-daily">
+    <h2>Daily hub</h2>
+    <p class="small muted" style="margin-top:0">
+      Collated morning board · local date <strong>${esc(hub.local_date || "")}</strong>
+      (${esc(hub.timezone || "Europe/London")}) · refresh before ${esc(
+        hub.refresh_deadline_local || "04:00"
+      )}
+      · ${renderUiReconcileBadge(data)}
+      · open ${esc(String(hub.open_task_count ?? openTasks.length))}
+      · focus ${esc(String(counts.focus || 0))} /
+        new ${esc(String(counts.human_new_info || 0))} /
+        unacked ${esc(String(counts.human_unacked || 0))}
+      · generated ${esc(fmtDate(hub.generated_at))}
+    </p>
+    ${staleBanner}
+    <div class="daily-hub-aim muted small">Aim: policy green ≠ utility — Suite A stress streaks and graduated badges are not the day’s north star.</div>
+    <h3>Today’s focus</h3>
+    ${
+      focusHtml
+        ? `<ul class="list-plain daily-focus-list">${focusHtml}</ul>`
+        : '<p class="muted">No focus lines — sync Project notes Today bullets into project_daily_seed.json.</p>'
+    }
+    <h3>Prioritized tasks</h3>
+    ${cards || '<p class="muted">No open daily tasks.</p>'}
+  </section>`;
+}
+
+function setDailyRecStatus(button, text) {
+  const block = button && button.closest(".daily-rec-block");
+  const el = block && block.querySelector(".daily-rec-status");
+  if (el) el.textContent = text || "";
+}
+
+async function queueDailyBridgeAction(action, payload, onStatus) {
+  if (isLocalDashboardServe()) {
+    const path =
+      action === "daily-discuss" ? "/api/daily-discuss" : "/api/daily-focus-ack";
+    const response = await fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok || body.ok === false) {
+      throw new Error(body.error || `HTTP ${response.status}`);
+    }
+    if (onStatus) onStatus("Recorded locally");
+    return body;
+  }
+  if (!window.DashboardBridge) throw new Error("Dashboard bridge unavailable");
+  const bridgeReady = await window.DashboardBridge.init();
+  if (!bridgeReady) throw new Error("Dashboard bridge not configured");
+  const queueFn =
+    typeof window.DashboardBridge.queueCommand === "function"
+      ? window.DashboardBridge.queueCommand.bind(window.DashboardBridge)
+      : null;
+  if (queueFn) return queueFn(action, payload, onStatus);
+  return window.DashboardBridge.submitCommand(action, payload, onStatus, { wait: false });
+}
+
+async function acknowledgeDailyFocusLine(button) {
+  if (!button || button.disabled) return;
+  let payload = {};
+  try {
+    payload = JSON.parse(button.getAttribute("data-daily-focus-ack") || "{}");
+  } catch {
+    payload = {};
+  }
+  button.disabled = true;
+  try {
+    await queueDailyBridgeAction("daily-focus-ack", payload, null);
+    button.textContent = "✓";
+    await reloadDashboard({ silent: true });
+  } catch (err) {
+    button.disabled = false;
+    button.title = String(err && err.message ? err.message : err);
+  }
+}
+
+async function acceptDailyRecommendation(button) {
+  if (!button || button.disabled) return;
+  let payload = {};
+  try {
+    payload = JSON.parse(button.getAttribute("data-daily-accept") || "{}");
+  } catch {
+    payload = {};
+  }
+  const action = (payload.accept_action && payload.accept_action.kind) || "";
+  const actionPayload = (payload.accept_action && payload.accept_action.payload) || {};
+  button.disabled = true;
+  setDailyRecStatus(button, "Accepting…");
+  try {
+    if (action === "human-task-ack") {
+      const htPayload = {
+        task_id: actionPayload.task_id,
+        decision: actionPayload.decision || "ack_observe",
+        finding_fingerprint: actionPayload.finding_fingerprint || "",
+      };
+      if (isLocalDashboardServe()) {
+        const response = await fetch("/api/human-task-ack", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(htPayload),
+        });
+        const body = await response.json().catch(() => ({}));
+        if (!response.ok || body.ok === false) {
+          throw new Error(body.error || `HTTP ${response.status}`);
+        }
+      } else {
+        if (!window.DashboardBridge) throw new Error("Dashboard bridge unavailable");
+        const bridgeReady = await window.DashboardBridge.init();
+        if (!bridgeReady) throw new Error("Dashboard bridge not configured");
+        const queueFn =
+          typeof window.DashboardBridge.queueCommand === "function"
+            ? window.DashboardBridge.queueCommand.bind(window.DashboardBridge)
+            : null;
+        if (queueFn) {
+          await queueFn("human-task-ack", htPayload, (msg) => setDailyRecStatus(button, msg));
+        } else {
+          await window.DashboardBridge.submitCommand(
+            "human-task-ack",
+            htPayload,
+            (msg) => setDailyRecStatus(button, msg),
+            { wait: false }
+          );
+        }
+      }
+      applyOptimisticHumanTaskAck(htPayload);
+      setDailyRecStatus(button, "Accepted → human-task-ack");
+      await reloadDashboard({ silent: true });
+    } else if (action === "focus-ack") {
+      await queueDailyBridgeAction(
+        "daily-focus-ack",
+        {
+          focus_id: actionPayload.focus_id || payload.task_ref,
+          task_ref: actionPayload.focus_id || payload.task_ref,
+          recommendation_id: payload.recommendation_id,
+          decision: "accept",
+          local_date: payload.local_date || "",
+        },
+        (msg) => setDailyRecStatus(button, msg)
+      );
+      setDailyRecStatus(button, "Accepted for today");
+      await reloadDashboard({ silent: true });
+    } else if (action === "link_only") {
+      const href = actionPayload.href || "#overview";
+      if (href.startsWith("#automation/")) {
+        const section = href.replace("#automation/", "") || "daily";
+        jumpToAutomationSection(section);
+      } else if (href.startsWith("#")) {
+        activateTab(href.replace("#", "").split("/")[0] || "overview", { updateHash: true });
+      } else {
+        window.location.href = href;
+      }
+      setDailyRecStatus(button, "Opened link");
+      button.disabled = false;
+      return;
+    } else {
+      await queueDailyBridgeAction(
+        "daily-focus-ack",
+        {
+          task_ref: payload.task_ref,
+          recommendation_id: payload.recommendation_id,
+          decision: "accept",
+          local_date: payload.local_date || "",
+        },
+        (msg) => setDailyRecStatus(button, msg)
+      );
+      setDailyRecStatus(button, "Accepted");
+      await reloadDashboard({ silent: true });
+    }
+  } catch (err) {
+    button.disabled = false;
+    setDailyRecStatus(button, String(err && err.message ? err.message : err));
+  }
+}
+
+async function discussDailyRecommendation(button) {
+  if (!button || button.disabled) return;
+  let payload = {};
+  try {
+    payload = JSON.parse(button.getAttribute("data-daily-discuss") || "{}");
+  } catch {
+    payload = {};
+  }
+  const prompt =
+    (payload.recommendation && payload.recommendation.discuss_prompt) ||
+    `Discuss daily recommendation \`${payload.recommendation_id || ""}\``;
+  button.disabled = true;
+  setDailyRecStatus(button, "Queuing Discuss…");
+  try {
+    if (navigator.clipboard && prompt) {
+      try {
+        await navigator.clipboard.writeText(prompt);
+      } catch {
+        /* ignore clipboard failures */
+      }
+    }
+    await queueDailyBridgeAction("daily-discuss", payload, (msg) => setDailyRecStatus(button, msg));
+    setDailyRecStatus(
+      button,
+      `Discuss queued — paste prompt in Project chat or say discuss daily recommendation \`${
+        payload.recommendation_id || ""
+      }\``
+    );
+  } catch (err) {
+    button.disabled = false;
+    setDailyRecStatus(button, String(err && err.message ? err.message : err));
+  }
+}
+
+function renderAutomationSettingsSection(data, auto) {
   const settings = auto.settings || {};
   const paper = settings.paper || {};
   const library = settings.library || {};
@@ -5520,7 +6111,6 @@ function renderAutomation(data) {
   const lastLadder = achievements.last_ladder || {};
   const paperLast = achievements.paper_last_run || {};
   const milestones = achievements.milestones || {};
-  const engineeringQueue = resolveEngineeringQueue(data);
 
   const graduated = (library.graduated_markets || [])
     .map((g) => esc(g.market))
@@ -5565,14 +6155,8 @@ function renderAutomation(data) {
     );
   }
 
-  panel.innerHTML = `
-    ${renderLearningTracksPanel(data)}
-    ${renderKnobBootstrapPanel(data)}
-    ${renderChurnCounterfactualPanel(data)}
-    ${renderIngestDeviationsSection(data.ingest_deviations)}
-    ${renderHumanTasksChecklistSection(data.human_tasks_checklist, data.human_tasks_board)}
+  return `
     <p class="small muted" style="margin-top:0">${esc(auto.note || "Current automation settings and dated achievements.")} Updated ${esc(fmtDate(auto.generated_at))}.</p>
-
     <div class="automation-grid">
       <section class="automation-section">
         <h2>Current settings</h2>
@@ -5654,9 +6238,60 @@ function renderAutomation(data) {
         <h3>Dated record</h3>
         ${timelineHtml}
       </section>
+    </div>`;
+}
+
+function renderAutomation(data) {
+  const panel = document.getElementById("panel-automation");
+  if (!panel) return;
+  bindHumanTasksSection();
+  bindAutomationPanel(panel);
+  const auto = data.automation;
+  if (!auto) {
+    panel.innerHTML =
+      '<div class="empty-state">Automation status not published yet. Run <code>ftse-library automation-status</code> or wait for the next ladder / publish.</div>';
+    return;
+  }
+
+  const engineeringQueue = resolveEngineeringQueue(data);
+  const section = normalizeAutomationSection(automationSectionId);
+
+  panel.innerHTML = `
+    ${renderAutomationSubnav(section, data)}
+    <div class="automation-section-pane" data-automation-pane="daily" ${
+      section === "daily" ? "" : "hidden"
+    }>
+      ${renderDailyHubPanel(data)}
     </div>
-    ${renderQueueHealthMonitor(data)}
-    ${renderEngineeringQueueSection(engineeringQueue)}
+    <div class="automation-section-pane" data-automation-pane="tracks" ${
+      section === "tracks" ? "" : "hidden"
+    }>
+      ${renderLearningTracksPanel(data)}
+      ${renderKnobBootstrapPanel(data)}
+      ${renderChurnCounterfactualPanel(data)}
+    </div>
+    <div class="automation-section-pane" data-automation-pane="human" ${
+      section === "human" ? "" : "hidden"
+    }>
+      ${renderIngestDeviationsSection(data.ingest_deviations)}
+      ${renderHumanTasksChecklistSection(data.human_tasks_checklist, data.human_tasks_board)}
+    </div>
+    <div class="automation-section-pane" data-automation-pane="queue" ${
+      section === "queue" ? "" : "hidden"
+    }>
+      ${renderQueueHealthMonitor(data)}
+      ${renderEngineeringQueueSection(engineeringQueue)}
+    </div>
+    <div class="automation-section-pane" data-automation-pane="ops" ${
+      section === "ops" ? "" : "hidden"
+    }>
+      ${renderUiReconcileTable(data)}
+    </div>
+    <div class="automation-section-pane" data-automation-pane="settings" ${
+      section === "settings" ? "" : "hidden"
+    }>
+      ${renderAutomationSettingsSection(data, auto)}
+    </div>
   `;
 }
 
@@ -5772,6 +6407,14 @@ function parseDashboardHash() {
       track: null,
     };
   }
+  if (tab === "automation") {
+    return {
+      tab: "automation",
+      subpage: normalizeAutomationSection(parts[1] || "daily"),
+      market: null,
+      track: null,
+    };
+  }
   if (tab !== "lifecycle") {
     return { tab, subpage: null, market: parts[1] || null, track: parts[2] || null };
   }
@@ -5820,10 +6463,16 @@ function applyDashboardHash() {
   if (parsed.tab === "analysis" && parsed.subpage) {
     analysisSectionId = normalizeAnalysisSection(parsed.subpage);
   }
+  if (parsed.tab === "automation" && parsed.subpage) {
+    automationSectionId = normalizeAutomationSection(parsed.subpage);
+  }
   activateTab(parsed.tab);
   if (parsed.tab === "analysis" && dashboardData) {
     // Defer scroll until panel is visible / laid out.
     window.requestAnimationFrame(() => jumpToAnalysisSection(analysisSectionId, { updateHash: false }));
+  }
+  if (parsed.tab === "automation" && dashboardData) {
+    window.requestAnimationFrame(() => jumpToAutomationSection(automationSectionId, { updateHash: false }));
   }
 }
 
