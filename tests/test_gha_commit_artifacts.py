@@ -362,10 +362,15 @@ def test_artifact_commit_exclude_skips_stale_progress_report(tmp_path: Path):
         (latest / "docs" / "data" / "progress_report.json").read_text(encoding="utf-8")
     )
     assert progress["defer"] == []
-    assert (latest / "docs" / "data" / "progress_report.md").read_text(encoding="utf-8") == "# fresh\n"
-    assert json.loads(
-        (latest / "docs" / "data" / "project_progress.json").read_text(encoding="utf-8")
-    )["generated_at"] == "2026-09-28T12:00:00+00:00"
+    assert (latest / "docs" / "data" / "progress_report.md").read_text(
+        encoding="utf-8"
+    ) == "# fresh\n"
+    assert (
+        json.loads(
+            (latest / "docs" / "data" / "project_progress.json").read_text(encoding="utf-8")
+        )["generated_at"]
+        == "2026-09-28T12:00:00+00:00"
+    )
 
 
 def test_email_report_skips_full_ingest_deepen() -> None:
