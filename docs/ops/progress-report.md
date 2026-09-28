@@ -106,6 +106,11 @@ classic PAT, and clear the token on shared browsers (Overview → Pages token �
 The workflow rebuilds `progress_report.json` / `.md`, syncs `project_progress.json`,
 commits with `[skip ci]`, then explicitly dispatches `pages.yml` so the site refreshes.
 
+**Publish ownership:** these three files are owned by this workflow (and local
+Generate). `email-report.yml` excludes them from its broad `docs/data` overlay and
+`gha_commit_artifacts.sh` preserves a newer remote `generated_at` — otherwise a
+long Sunday job checkout can resurrect stale `defer_now` rows (done L121 class).
+
 ## Artifacts
 
 | File | Role |
