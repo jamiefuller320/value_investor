@@ -79,6 +79,7 @@ def _write_research(
     ticker: str,
     *,
     updated_at: str,
+    created_at: str | None = None,
     verdict: str = "accumulate",
 ) -> None:
     path = research_root / ticker / "research.json"
@@ -87,7 +88,7 @@ def _write_research(
         json.dumps(
             {
                 "ticker": ticker,
-                "created_at": updated_at,
+                "created_at": created_at or updated_at,
                 "updated_at": updated_at,
                 "research_verdict": verdict,
             }
@@ -357,3 +358,57 @@ def test_check_decision_input_inventory_ops_hook(tmp_path: Path):
         "decision-input" in findings[0].title.lower() or "utilization" in findings[0].title.lower()
     )
     assert store.is_file()
+
+
+def test_memo_recent_uses_updated_at_after_rememo(tmp_path: Path):
+    """Sunday rememo preserves created_at; P1 memo_recent must follow updated_at."""
+    latest = tmp_path / "latest.json"
+    research = tmp_path / "research"
+    memo_dir = tmp_path / "memos"
+    memo_dir.mkdir()
+    fund = tmp_path / "automated_fund.json"
+    store = tmp_path / "decision_input_inventory.json"
+    now = datetime(2026, 9, 28, 12, 0, tzinfo=UTC)
+    created_old = (now - timedelta(days=45)).isoformat()
+    rememo_recent = (now - timedelta(days=2)).isoformat()
+
+    _write_index(research, "BP.L")
+    _write_research(
+        research,
+        "BP.L",
+        created_at=created_old,
+        updated_at=rememo_recent,
+    )
+    latest.write_text(
+        json.dumps(
+            {
+                "updated_at": now.isoformat(),
+                "reports": [
+                    {
+                        "ticker": "BP.L",
+                        "name": "BP",
+                        "signal": "buy",
+                        "adjusted_signal": "buy",
+                        "fcf_basis_overlay": True,
+                        "research_verdict": "accumulate",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    _write_fund(fund, ["BP.L"])
+
+    payload = run_decision_input_inventory(
+        latest_path=latest,
+        research_root=research,
+        memo_dir=memo_dir,
+        paper_fund_path=fund,
+        store_path=store,
+        now=now,
+        persist=True,
+    )
+    row = payload["rows"][0]
+    assert row["memo_recent"] is True
+    assert row["memo_at"] == rememo_recent
+    assert row["memo_age_days"] == 2.0

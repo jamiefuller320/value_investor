@@ -167,19 +167,24 @@ def _research_doc_times(
     ticker: str,
     *,
     research_root: Path,
-) -> tuple[bool, datetime | None, str | None]:
-    """Return (has_research_json, created_at, research_verdict_from_disk)."""
+) -> tuple[bool, datetime | None, datetime | None, str | None]:
+    """Return (has_research_json, created_at, updated_at, research_verdict_from_disk).
+
+    ``created_at`` is first-memo time (flip-lag). ``updated_at`` is last memo
+    activity for P1 freshness / ``memo_recent`` (Sunday rememo bumps this).
+    """
     path = resolve_json_path(research_root / ticker / "research.json")
     if path is None or not path.is_file():
-        return False, None, None
+        return False, None, None, None
     try:
         payload = read_json(path)
     except (OSError, ValueError, TypeError):
-        return True, None, None
+        return True, None, None, None
     created = _parse_dt(payload.get("created_at") or payload.get("updated_at"))
+    updated = _parse_dt(payload.get("updated_at") or payload.get("created_at"))
     verdict = payload.get("research_verdict")
     verdict_str = str(verdict) if verdict is not None else None
-    return True, created, verdict_str
+    return True, created, updated, verdict_str
 
 
 def _index_meta(
@@ -505,7 +510,7 @@ def snapshot_flip_name(
     key_bodies = bool(index_meta["key_bodies"])
     index_at = _parse_dt(index_meta.get("index_at"))
 
-    has_disk_memo, memo_created, disk_verdict = _research_doc_times(
+    has_disk_memo, memo_created, _memo_updated, disk_verdict = _research_doc_times(
         ticker, research_root=research_root
     )
     memo_md_flat = (Path(memo_dir) / f"{ticker}.md").is_file()
