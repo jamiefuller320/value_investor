@@ -23,7 +23,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-28T22:36:41.717930+00:00",
+    "snapshot_at": "2026-09-28T22:43:30.759664+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 51,
     "unmeasured_buy_tier": 1,
@@ -114,7 +114,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-28T22:36:41.719887+00:00",
+  "evaluated_at": "2026-09-28T22:43:30.761301+00:00",
   "maintenance_markets": [
     "aim",
     "asx200",
@@ -171,7 +171,7 @@
         "dax not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-28T22:36:58.139213+00:00",
+        "snapshot_at": "2026-09-28T22:43:54.683584+00:00",
         "market_id": "dax",
         "buy_tier_count": 12,
         "unmeasured_buy_tier": 1,
@@ -233,62 +233,71 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-28T22:36:58.139762+00:00",
+      "evaluated_at": "2026-09-28T22:43:54.684101+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "asx200"
+    "aex"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "asx200",
+      "market_id": "aex",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=1)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=1, indexed_without_body=16)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
       "parked_tickers": [],
       "phase3_ready": false,
-      "current_phase": 1,
+      "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "asx200 not in ladder.weekly_paper_shard_markets"
+        "no benchmark configured for aex"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-28T22:37:00.011051+00:00",
-        "market_id": "asx200",
-        "buy_tier_count": 27,
-        "unmeasured_buy_tier": 0,
+        "snapshot_at": "2026-09-28T22:43:55.428578+00:00",
+        "market_id": "aex",
+        "buy_tier_count": 8,
+        "unmeasured_buy_tier": 1,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 1,
-        "bodies_min": 7,
-        "bodies_median": 25,
-        "bodies_max": 135,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 16,
+        "bodies_min": 2,
+        "bodies_median": 4,
+        "bodies_max": 32,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
-        "unmeasured_tickers": [],
+        "unmeasured_tickers": [
+          "KPN.AS"
+        ],
         "zero_body_tickers": [],
-        "thin_body_tickers": [],
+        "thin_body_tickers": [
+          "ADYEN.AS"
+        ],
         "indexed_without_body_tickers": [
-          "TUA.AX"
+          "SHELL.AS",
+          "RAND.AS"
         ],
         "indexed_without_body_by_ticker": {
-          "TUA.AX": 1
+          "SHELL.AS": 6,
+          "RAND.AS": 10
         },
         "parked_tickers": [],
         "parked_count": 0,
-        "effective_thin_body_buy_tier": 0,
-        "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 1,
+        "effective_thin_body_buy_tier": 1,
+        "effective_thin_body_tickers": [
+          "ADYEN.AS"
+        ],
+        "effective_indexed_without_body": 16,
         "effective_indexed_without_body_tickers": [
-          "TUA.AX"
+          "SHELL.AS",
+          "RAND.AS"
         ],
         "ingest_exhausted": false
       },
-      "filing_gaps": 0,
+      "filing_gaps": 1,
       "max_daily_successes": 4,
       "max_targets": 24,
       "cron_morning": true,
@@ -300,14 +309,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-28T22:37:00.011990+00:00",
+      "evaluated_at": "2026-09-28T22:43:55.428928+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "dax",
-    "asx200"
+    "aex"
   ],
   "market_queue": [
     "sp500",
@@ -320,7 +329,8 @@
     "cac40",
     "aim",
     "ibex35",
-    "ftse_mib"
+    "ftse_mib",
+    "aex"
   ],
   "ingest_cascade": {
     "enabled": true,
@@ -353,7 +363,7 @@
     "dax"
   ],
   "scheduler_stream_2_markets": [
-    "asx200"
+    "aex"
   ],
   "should_run_library_maintenance": true
 }

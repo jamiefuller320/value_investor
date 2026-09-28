@@ -16257,8 +16257,117 @@
       },
       "trigger": "stall_slowdown",
       "engineering_task_id": "eng-20260928-01"
+    },
+    {
+      "id": "igc-20260928-08",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "TUA.AX",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "TUA.AX"
+        ],
+        "market_id": "asx200",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260928-08",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-28T22:40:00.092913+00:00",
+      "completed_at": "2026-09-28T22:42:29.730795+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 1,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "TUA.AX"
+        ],
+        "results": [
+          {
+            "ticker": "TUA.AX",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 15,
+              "filings_with_body": 14,
+              "indexed_without_body": 1
+            },
+            "after": {
+              "filings_total": 15,
+              "filings_with_body": 15,
+              "indexed_without_body": 0
+            },
+            "improved": true,
+            "regime": "asx_announcements",
+            "filings_summary": {
+              "total": 15,
+              "annual": 12,
+              "interim": 0,
+              "trading_update": 0,
+              "other": 3,
+              "with_body": 15,
+              "period_coverage": {
+                "annual": {
+                  "total": 12,
+                  "with_body": 12
+                },
+                "interim": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 3,
+                  "with_body": 3
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 15,
+              "with_body_after": 15,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "TUA.AX",
+            "with_body_before": 14,
+            "with_body_after": 15,
+            "improved": true
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-28T22:25:36.653754+00:00",
+  "updated_at": "2026-09-28T22:42:29.730805+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
