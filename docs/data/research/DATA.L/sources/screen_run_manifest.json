@@ -1,18 +1,19 @@
 {
   "ticker": "DATA.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-15T13:24:36.449475+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-09-27T07:15:34.843280+00:00",
+  "attached_at": "2026-09-28T08:03:44.003378+00:00",
+  "history_run_path": "docs/data/history/run_20260927_071534.json.gz",
+  "history_models_path": "docs/data/history/models_20260927_071534.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
+      "strong_buy": 12,
       "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "hold": 138,
+      "avoid": 52,
+      "insufficient_data": 1
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 12,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +21,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 15,
+      "buy": 31,
+      "hold": 45,
+      "avoid": 11
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -30,45 +34,68 @@
   "ticker_signal": {
     "ticker": "DATA.L",
     "signal": "strong_buy",
-    "conviction_score": 0.5394,
+    "conviction_score": 0.34499375,
     "data_quality_score": 1.0,
     "name": "GlobalData Plc",
     "sector": "Industrials",
-    "timing_signal": "neutral",
-    "timing_score": 0.625,
-    "action_note": "Strong Buy — neutral timing | Earnings growth basis divergence >300 bps: statutory 15.8% vs filing core 19.3%",
-    "models_passed": 11.0,
-    "weighted_model_score": 0.6357090909090909,
+    "timing_signal": "accumulate",
+    "timing_score": 0.75,
+    "action_note": "Strong Buy — favourable entry timing | FCF basis mismatch: filing £40M | screen TTM (unverified) £16.9M | FCF definition divergence: statutory 4.04× dividend coverage",
+    "models_passed": 9.0,
+    "weighted_model_score": 0.6694272727272726,
     "research_verdict": null,
-    "adjusted_signal": "strong_buy",
+    "adjusted_signal": "buy",
     "research_as_of": null,
     "research_confidence": null,
-    "fcf_basis_overlay": false,
+    "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": 0.1932901683696121,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": 0.1932901683696121,
     "signal_trend": "stable",
-    "weeks_at_signal": 2,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": -0.37449338564794615,
-    "core_order": "limit",
-    "core_limit": 56.63,
-    "core_allocation_pct": 0.6,
-    "tactical_limit": 54.34,
-    "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 48.33,
-    "tactical_take_profit": 78.56,
-    "trade_plan_summary": "Trade plan: core 60% limit £56.63; tactical 40% limit £54.34; tactical stop £48.33, target £78.56.",
-    "atr_14": 4.4334,
-    "volume_ratio_20": 0.2362,
+    "weeks_at_signal": 7,
+    "passed_families": "cheapness,quality,risk",
+    "price_vs_sma200_pct": -0.3488655062838839,
+    "core_order": "market",
+    "core_limit": NaN,
+    "core_allocation_pct": 0.75,
+    "tactical_limit": 55.1,
+    "tactical_allocation_pct": 0.25,
+    "tactical_stop_loss": 50.94,
+    "tactical_take_profit": 75.43,
+    "trade_plan_summary": "Trade plan: core 75% at market (~£58.00); tactical 25% limit £55.10; tactical stop £50.94, target £75.43.",
+    "atr_14": 3.5286,
+    "volume_ratio_20": 0.4286,
     "operating_cashflow": 47900000.0,
     "operating_cashflow_gross": null,
     "fcf_dividend_coverage_gross": null,
     "fcf_dividend_coverage_net": 4.040404040404041,
-    "fcf_definition_divergence": false,
-    "fcf_divergence_flagged": false,
-    "fcf_dividend_coverage": null
+    "fcf_definition_divergence": true,
+    "fcf_divergence_flagged": true,
+    "fcf_dividend_coverage": {
+      "statutory_ocf_minus_capex": {
+        "label": "Statutory OCF−CapEx",
+        "ratio": 4.040404040404041
+      },
+      "management_cash_generated_minus_capex": {
+        "label": "Management cash-generated−CapEx",
+        "ratio": null
+      }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 4.04×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -104,44 +131,44 @@
     {
       "ticker": "DATA.L",
       "model_id": "earnings_yield",
-      "passed": false,
-      "score": 0.5787
+      "passed": true,
+      "score": 0.7184
     },
     {
       "ticker": "DATA.L",
       "model_id": "fcf_yield",
-      "passed": true,
+      "passed": false,
       "score": 1.0
     },
     {
       "ticker": "DATA.L",
       "model_id": "low_pe_high_yield",
-      "passed": false,
-      "score": 0.5
+      "passed": true,
+      "score": 1.0
     },
     {
       "ticker": "DATA.L",
       "model_id": "lynch_peg",
-      "passed": true,
-      "score": 0.255
+      "passed": false,
+      "score": 0.2653
     },
     {
       "ticker": "DATA.L",
       "model_id": "neff_pegy",
-      "passed": true,
-      "score": 0.9369
+      "passed": false,
+      "score": 0.9578
     },
     {
       "ticker": "DATA.L",
       "model_id": "quality_value",
-      "passed": true,
+      "passed": false,
       "score": 1.0
     },
     {
       "ticker": "DATA.L",
       "model_id": "buffett_quality",
       "passed": false,
-      "score": 0.75
+      "score": 0.5
     },
     {
       "ticker": "DATA.L",
@@ -153,31 +180,31 @@
       "ticker": "DATA.L",
       "model_id": "high_dividend",
       "passed": false,
-      "score": 0.287
+      "score": 0.4326
     },
     {
       "ticker": "DATA.L",
       "model_id": "dividend_growth",
-      "passed": true,
+      "passed": false,
       "score": 1.0
     },
     {
       "ticker": "DATA.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.7586
+      "score": 0.7561
     },
     {
       "ticker": "DATA.L",
       "model_id": "acquirers_multiple",
       "passed": true,
-      "score": 0.8131
+      "score": 0.8178
     },
     {
       "ticker": "DATA.L",
       "model_id": "dreman_contrarian",
-      "passed": false,
-      "score": 0.5383
+      "passed": true,
+      "score": 0.6364
     },
     {
       "ticker": "DATA.L",
@@ -189,7 +216,7 @@
       "ticker": "DATA.L",
       "model_id": "composite_value",
       "passed": true,
-      "score": 0.7402
+      "score": 0.8152
     },
     {
       "ticker": "DATA.L",
@@ -204,6 +231,6 @@
       "score": 0.8
     }
   ],
-  "models_passed": 11,
+  "models_passed": 9,
   "models_total": 22
 }
