@@ -353,6 +353,7 @@ def test_select_research_targets_prefers_no_memo_from_store(tmp_path):
     assert [r.ticker for r in active] == ["TRST.L", "MEGP.L"]
     assert alumni == []
 
+
 def test_select_research_targets_no_memo_strong_beats_memo_buy(tmp_path):
     """First-time strong_buy still ranks ahead of first-time buy within no-memo band."""
     store = ResearchStore(tmp_path)
