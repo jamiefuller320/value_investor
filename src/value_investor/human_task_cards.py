@@ -129,9 +129,7 @@ def knob_priors_ack_sufficient(priors: dict[str, Any] | None) -> dict[str, Any]:
     return {
         "ack_sufficient": ack_sufficient,
         "reason": (
-            "low_confidence_and_no_discrimination"
-            if ack_sufficient
-            else "needs_manual_review"
+            "low_confidence_and_no_discrimination" if ack_sufficient else "needs_manual_review"
         ),
         "tracks": rows,
         "min_score_gap_for_prior": float(MIN_SCORE_GAP_FOR_PRIOR),
