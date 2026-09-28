@@ -1,21 +1,38 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-25T09:27:47.907595+01:00",
+    "local_time": "2026-09-28T09:27:41.571139+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-25T08:00:00+01:00",
-    "settle_at": "2026-09-25T09:15:00+01:00",
+    "market_open_at": "2026-09-28T08:00:00+01:00",
+    "settle_at": "2026-09-28T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "36284511-bc1f-4b6c-b004-09cabf22af45",
+      "fund_id": "e9fa6e19-8b8d-4c3e-83bc-b97c179ab590",
+      "acted_at": "2026-09-28T09:27:41.571139+01:00",
+      "ticker": "KLR.L",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.004503,
+      "price": 3480.0,
+      "gross": 15.67,
+      "cost": 0.47,
+      "net_cash": 15.2,
+      "note": "Automated trim",
+      "name": "Keller Group plc",
+      "avg_cost_at_exit": 3262.0
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
       "Timing filter: names with timing_signal=wait are excluded from new buys.",
-      "Conviction floor: min_conviction=0.05.",
-      "Sector cap: at most 1 name(s) per known sector (cap=25%).",
+      "Conviction floor: min_conviction=0.10.",
+      "Sector cap: at most 1 name(s) per known sector (cap=20%).",
       "Ranking: highest conviction_score first, keep at most 3 names.",
       "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
       "Costs: buy 3.00% / sell 3.00% (legacy symmetric slot 3.00%).",
@@ -24,68 +41,91 @@
       "Dust guard: skip trim/top-up adjustments below \u00a310.",
       "Momentum grace: holdings that leave buy-tier but still show strong price trend may be kept for up to 6 weeks with tightened trailing stops."
     ],
-    "nav": 920.18,
-    "cash": 0.0,
+    "nav": 930.65,
+    "cash": 15.2,
     "max_positions": 3,
-    "min_conviction": 0.05,
-    "sector_cap": 0.25,
+    "min_conviction": 0.1,
+    "sector_cap": 0.2,
     "skip_timing_wait": true,
     "use_momentum_grace": true,
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 306.73,
+    "target_sleeve_value": 307.18,
     "targets": [
       {
         "ticker": "KLR.L",
         "name": "Keller Group plc",
         "signal": "buy",
-        "conviction_score": 0.8817000000000002,
-        "price": 3318.0
+        "conviction_score": 0.8119000000000002,
+        "price": 3480.0
       },
       {
         "ticker": "PPH.L",
         "name": "PPHE Hotel Group Limited",
         "signal": "buy",
-        "conviction_score": 0.8177000000000002,
-        "price": 1546.0
+        "conviction_score": 0.7733000000000001,
+        "price": 1514.0
       },
       {
-        "ticker": "BP.L",
-        "name": "BP p.l.c.",
-        "signal": "buy",
-        "conviction_score": 0.6024000000000002,
-        "price": 559.2
+        "ticker": "PAF.L",
+        "name": "Pan African Resources PLC",
+        "signal": "strong_buy",
+        "conviction_score": 0.5949000000000001,
+        "price": 116.794
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "BP.L",
+        "name": "BP p.l.c.",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.538238,
+        "price": 563.244,
+        "value": 303.16
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "PAF.L",
+        "name": "Pan African Resources PLC",
+        "reason": "New sleeve",
+        "value": 307.18,
+        "price": 116.794,
+        "target_value": 307.18,
+        "conviction_score": 0.5949000000000001,
+        "signal": "strong_buy"
+      }
+    ],
     "anticipated_holds": [
+      {
+        "action": "hold",
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "reason": "Already near equal-weight target",
+        "value": 309.9,
+        "target_value": 307.18,
+        "conviction_score": 0.8119000000000002,
+        "signal": "buy"
+      },
       {
         "action": "hold",
         "ticker": "PPH.L",
         "name": "PPHE Hotel Group Limited",
-        "reason": "Already near equal-weight target",
-        "value": 308.78,
-        "target_value": 306.73,
-        "conviction_score": 0.8177000000000002,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 302.39,
+        "target_value": 307.18,
+        "conviction_score": 0.7733000000000001,
         "signal": "buy"
       }
     ],
-    "skipped": [
-      {
-        "ticker": "BP.L",
-        "name": "BP p.l.c.",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 306.73,
-        "conviction_score": 0.6024000000000002,
-        "signal": "buy"
-      }
-    ],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -94,7 +134,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3318.0,
+      "mark": 3480.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -105,7 +145,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 1546.0,
+      "mark": 1514.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -116,7 +156,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 559.2000122070312,
+      "mark": 563.2440185546875,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -137,13 +177,13 @@
       "id": "e9fa6e19-8b8d-4c3e-83bc-b97c179ab590",
       "created_at": "2026-07-28T07:22:15.651766+00:00"
     },
-    "cash": 0.0,
+    "cash": 15.2,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
       "KLR.L": {
         "ticker": "KLR.L",
-        "shares": 0.093556,
+        "shares": 0.089053,
         "avg_cost": 3262.0,
         "name": "Keller Group plc",
         "sector": "Industrials",
@@ -380,6 +420,22 @@
         "net_cash": -314.34,
         "note": "Automated buy",
         "name": "BP p.l.c."
+      },
+      {
+        "id": "36284511-bc1f-4b6c-b004-09cabf22af45",
+        "fund_id": "e9fa6e19-8b8d-4c3e-83bc-b97c179ab590",
+        "acted_at": "2026-09-28T09:27:41.571139+01:00",
+        "ticker": "KLR.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.004503,
+        "price": 3480.0,
+        "gross": 15.67,
+        "cost": 0.47,
+        "net_cash": 15.2,
+        "note": "Automated trim",
+        "name": "Keller Group plc",
+        "avg_cost_at_exit": 3262.0
       }
     ],
     "equity_curve": [
@@ -932,19 +988,37 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-28T09:27:41.571139+01:00",
+        "portfolio_value": 930.65,
+        "cash": 15.2,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-25T09:27:47.907595+01:00",
+    "last_mark_at": "2026-09-28T09:27:41.571139+01:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "BP.L": 1
+      },
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "momentum_grace",
-    "generated_at": "2026-09-25T08:28:07.275787+00:00",
+    "generated_at": "2026-09-28T08:27:52.031699+00:00",
     "open_count": 5,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -963,7 +1037,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "momentum_grace",
-    "generated_at": "2026-09-25T08:28:07.276640+00:00",
+    "generated_at": "2026-09-28T08:27:52.032573+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1056,7 +1130,7 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
@@ -1069,8 +1143,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "momentum_grace",
-    "updated_at": "2026-09-25T08:28:07.277602+00:00",
-    "as_of": "2026-09-25T09:27:47.907595+01:00",
+    "updated_at": "2026-09-28T08:27:52.033708+00:00",
+    "as_of": "2026-09-28T09:27:41.571139+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1121,18 +1195,58 @@
     },
     "holdings": [
       {
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0092,
+        "mark": 1514.0,
+        "avg_cost": 1528.0,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.7733,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 77%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 77%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "BP.L",
         "name": "BP p.l.c.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0138,
-        "mark": 559.2,
+        "unrealized_pct": -0.0066,
+        "mark": 563.244,
         "avg_cost": 567.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.6024,
+        "conviction_score": 0.5524,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1149,54 +1263,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 60%"
+          "conviction 55%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 60%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "PPH.L",
-        "name": "PPHE Hotel Group Limited",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0118,
-        "mark": 1546.0,
-        "avg_cost": 1528.0,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.8177,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 82%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 82%"
+          "conviction 55%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1208,12 +1282,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0172,
-        "mark": 3318.0,
+        "unrealized_pct": 0.0668,
+        "mark": 3480.0,
         "avg_cost": 3262.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8817,
+        "conviction_score": 0.8119,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1229,14 +1303,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 88%"
+          "conviction 81%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 88%"
+          "conviction 81%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1249,7 +1323,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "momentum_grace",
-    "generated_at": "2026-09-25T08:28:07.278677+00:00",
+    "generated_at": "2026-09-28T08:27:52.035092+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1317,7 +1391,7 @@
     "schema_version": 1,
     "track_id": "momentum_grace",
     "observe_only": true,
-    "generated_at": "2026-09-25T08:28:07.279919+00:00",
+    "generated_at": "2026-09-28T08:27:52.036680+00:00",
     "open_count": 3,
     "closed_count": 0,
     "scored_count": 0,
@@ -1381,7 +1455,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "momentum_grace",
-    "generated_at": "2026-09-25T09:27:47.907595+01:00",
+    "generated_at": "2026-09-28T09:27:41.571139+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1435,14 +1509,14 @@
       "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-25T08:28:07.281583+00:00",
+  "generated_at": "2026-09-28T08:27:52.039020+00:00",
   "track_id": "momentum_grace",
   "track_label": "Screen rules + momentum grace",
   "is_primary_learning_track": false,
   "selection": {
     "skip_timing_wait": true,
-    "min_conviction": 0.05,
-    "sector_cap": 0.25,
+    "min_conviction": 0.1,
+    "sector_cap": 0.2,
     "use_adjusted_signal": false,
     "require_research_accumulate": false,
     "use_momentum_grace": true,
