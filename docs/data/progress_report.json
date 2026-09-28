@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-22T08:34:03+00:00",
+  "generated_at": "2026-09-28T08:53:07+00:00",
   "overall": "warn",
   "progress": {
     "schema_version": 1,
-    "generated_at": "2026-09-22T08:34:02.952123+00:00",
+    "generated_at": "2026-09-28T08:53:07.288058+00:00",
     "current_focus": "stage_2b",
     "headline": "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "stages": [
@@ -47,38 +47,42 @@
     ],
     "evidence": {
       "screen_company_count": 248,
-      "strong_buy_count": 13,
-      "screen_run_at": "2026-09-21T16:54:50.935061+00:00",
+      "strong_buy_count": 12,
+      "screen_run_at": "2026-09-27T07:15:34.843280+00:00",
       "library_graduated_count": 21,
       "library_focus_market": "euro_depth",
       "decision_review_applied": false,
-      "ai_excess_after_costs": -0.3229,
-      "rules_excess_after_costs": -0.4005,
-      "ai_total_return": -0.3135,
-      "rules_total_return": -0.3801,
+      "ai_excess_after_costs": -0.3576,
+      "rules_excess_after_costs": -0.431,
+      "ai_total_return": -0.3523,
+      "rules_total_return": -0.4148,
       "ops_overall": "warn",
       "zero_body_buy_tier": 0,
-      "unmeasured_buy_tier": 4,
-      "measured_tickers": 55,
-      "buy_tier_count": 59,
-      "ingest_stalled": false
+      "unmeasured_buy_tier": 0,
+      "measured_tickers": 57,
+      "buy_tier_count": 57,
+      "ingest_stalled": false,
+      "memo_recent_gaps": 49,
+      "key_filing_body_gaps": 0,
+      "sunday_bind_field": "memo_recent",
+      "bodies_green": true
     },
     "appraisal": {
       "strengths": [
         "FTSE 350 live screen and published dashboard are operational.",
         "Offline library: 21 graduated markets (focus: euro_depth).",
         "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-        "Engineering queue: 0 open, 72 merged supervised tasks.",
-        "AI-judgment track beating rules control (-32.3% vs -40.1% excess)."
+        "Engineering queue: 0 open, 93 merged supervised tasks.",
+        "AI-judgment track beating rules control (-35.8% vs -43.1% excess)."
       ],
       "gaps": [
-        "Primary AI track still below ^FTSE after costs (-32.3% excess; history still thin).",
-        "Ingest coverage gap: 4 buy-tier tickers have no filings index yet."
+        "Primary AI track still below ^FTSE after costs (-35.8% excess; history still thin).",
+        "Buy-tier filing bodies are green; 49 holdings∪buy-tier names fail memo_recent (bind field: memo_recent)."
       ],
       "next_actions": [
         "Let the learning loop accumulate before adding tracks or knobs.",
         "Sunday chain: orchestrator → analysis-review → data-backup (cron now wired).",
-        "Prioritise buy-tier filing depth (Companies House + RNS body fetch).",
+        "Prioritise memo_recent / holdings freshness on FTSE holdings∪buy-tier (bodies+FCF already green; rememo within existing caps).",
         "Keep library growing offline; defer live universe expansion until stage 2b shows edge."
       ]
     },
@@ -86,20 +90,15 @@
       "stalled": false,
       "zero_body_buy_tier": 0,
       "health": {
-        "snapshot_at": "2026-09-22T08:23:43.604094+00:00",
-        "buy_tier_count": 59,
-        "measured_tickers": 55,
-        "unmeasured_buy_tier": 4,
-        "unmeasured_tickers": [
-          "TRST.L",
-          "PINE.L",
-          "RTO.L",
-          "RAT.L"
-        ],
+        "snapshot_at": "2026-09-28T08:03:52.408167+00:00",
+        "buy_tier_count": 57,
+        "measured_tickers": 57,
+        "unmeasured_buy_tier": 0,
+        "unmeasured_tickers": [],
         "zero_body_buy_tier": 0,
         "zero_body_tickers": [],
-        "indexed_without_body": 52,
-        "filings_with_body": 3833
+        "indexed_without_body": 4,
+        "filings_with_body": 3861
       },
       "summary": "Live buy-tier ingest now canonicalises under docs/data/research/, bootstraps missing indexes on Sunday/weekday passes, and sanitises mis-attributed RNS rows before refetching bodies.",
       "fixes": [
@@ -117,18 +116,7 @@
     }
   },
   "actionable": {
-    "defer_now": [
-      {
-        "id": "L121",
-        "title": "Reconcile live vs archive exit-timing denominators",
-        "summary": "Shared episode definitions before comparing hold→breakeven vs swap-success rates",
-        "category": "later",
-        "section": "learning",
-        "revisit_when": "`exit_timing_cohorts` artifact exists and `exit_timing_near_miss.readiness.hold_closed_count` ≥ 15.",
-        "tags": [],
-        "status": "now"
-      }
-    ],
+    "defer_now": [],
     "defer_not_now": [
       {
         "id": "N1",
@@ -2025,6 +2013,395 @@
           "ops-monitor"
         ],
         "status": "open"
+      },
+      {
+        "id": "N140",
+        "title": "Do not plot Suite B fair twins on Overview held_vs_market market cards",
+        "summary": "Fair-cost twins of Suite A experiments (e.g. graduated_allocation_fair) belong on Automation learning-track equity. Overview held_vs_market already shows buy_tier_level (Suite B costs) vs local index; branch overlays are for knob changes (N108/N99), not cost twins.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "A human asks to overlay graduated_allocation_fair or other *_fair tracks on market-status held_vs_market charts",
+        "tags": [
+          "fair-twins",
+          "held-vs-market",
+          "graduated-allocation",
+          "dashboard"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N141",
+        "title": "Raise max_parallel_engineering_agents above 2",
+        "summary": "Third concurrent eng agent would mostly serialize on the same hot allowlist (filings.py / companies_house / ingest.py) and increase merge clashes without lifting gap-closure rate. Clash-aware pairing of ingest_narrow + scoring_narrow is the better use of two slots.",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "Hot-path overlap among open ingest tasks drops (most open tasks no longer share filings.py/CH) and dispatch_eligible_count routinely exceeds 2 with complementary path sets",
+        "tags": [
+          "engineering",
+          "parallel",
+          "clash"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N142",
+        "title": "Add more paper tracks before Suite B edge",
+        "summary": "Extra tracks dilute marks and churn ops without fixing primary AI excess. Keep existing experiments observe-only until ai_judgment_fair clears ^FTSE after fair costs.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "ai_judgment_fair shows persistent excess vs ^FTSE on Suite B and decision-review has applied at least one primary epoch",
+        "tags": [
+          "paper",
+          "tracks",
+          "score-lift"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N143",
+        "title": "Live universe expansion before stage 2b edge",
+        "summary": "Stage 4 live non-UK screen should wait until primary learning track shows after-cost edge; offline library growth (P2) continues.",
+        "category": "not_now",
+        "section": "universe",
+        "revisit_when": "Stage 2b exit: AI judgment persistent excess after fair costs vs ^FTSE and vs rules",
+        "tags": [
+          "stage4",
+          "live-screen",
+          "score-lift"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N144",
+        "title": "Auto-apply decision-review knobs on thin primary history",
+        "summary": "Primary ai_judgment still deeply negative on stress book; auto --apply before thick Suite B marks risks locking in churn. Keep proposals observe-only until epoch gates pass.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Primary or fair AI book has thick marks, churn_health ok, and human Sunday prior review greenlights apply",
+        "tags": [
+          "decision-review",
+          "knobs",
+          "score-lift"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N145",
+        "title": "Make ai_judgment_fair the is_primary_learning_track flag",
+        "summary": "Day-to-day Suite B NAV stability is expected under T212 costs and is not the promotion gate. Keep is_primary on stress ai_judgment until fair AI clears ^FTSE and rules_fair with a thick forward window (N48 human flip). Until then Suite B remains the adoption scoreboard, not the primary flag.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "ai_judgment_fair beat_market and beat rules_fair on a thick forward window; Sunday fair-cost gate green; human accepts N48",
+        "tags": [
+          "suite-b",
+          "primary",
+          "N48",
+          "scoreboard"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N146",
+        "title": "Switch primary because Suite B NAV beats Suite A",
+        "summary": "B-vs-A absolute NAV is mostly cost drag (same picks, lower friction). Do not use it as the primary flip criterion. Short-term steer on within-suite relatives (AI vs rules on same costs) and A churn; flip primary only on thick Suite B absolute edge vs ^FTSE and fair rules (N48).",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Revisiting N48 primary flip criteria",
+        "tags": [
+          "suite-a",
+          "suite-b",
+          "primary",
+          "scoreboard"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N147",
+        "title": "Replace primary scoreboard with fixed-notional sleeve P&L",
+        "summary": "Fixed £/$ notional per buy is excellent for identification accuracy and lifecycle sleeve stats, but must not replace Suite B book excess vs ^FTSE as stage 2b / adoption truth. Capital path (sizing, deposits, rotation) is a separate question the NAV book answers.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Sleeve-level outcome linker is thick enough to sit beside (not instead of) primary excess gates",
+        "tags": [
+          "sleeves",
+          "scoreboard",
+          "experiment-design",
+          "notional"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N148",
+        "title": "Do not replace Economic Moat proxy with qualitative comparative scoring",
+        "summary": "Economic Moat today is absolute ROE/ROA/margin/leverage thresholds, not peer-relative or filing-based moat evidence. Building a true comparative moat scorer would mix research-layer judgment into the point-in-time screen and needs a separate design (peer cohorts, durable advantage evidence, PIT constraints).",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "Only if a dedicated quality/moat family redesign is explicitly prioritized with peer-relative and filing-backed features",
+        "tags": [
+          "screening",
+          "moat",
+          "not-now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N149",
+        "title": "Do not invent a proprietary screen to replace recognised models",
+        "summary": "Developing a bespoke formula from in-sample successful-sleeve traits without PIT guards would overfit thin paper history and blur the recognisable-screen interpretability the memos rely on. Prefer reweighting existing models and progressive exclusion filters first.",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "Only if dual_objective_calibration shows persistent lift that cannot be expressed as weights or exclusion rules on the existing 22 models",
+        "tags": [
+          "screening",
+          "overfitting",
+          "not-now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N150",
+        "title": "Do not spray monthly deposits across all epoch-0 markets yet",
+        "summary": "£100/mo per epoch-0 book invents a multi-market capital-allocation policy before stage 4 live breadth. Epoch-0 books are equal-support data marks. Prefer the FTSE buy_tier_level_dca twin only.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Live universe past FTSE-only (stage 4) or human chooses an explicit multi-market paper allocation policy with a fresh capital epoch",
+        "tags": [
+          "monthly_deposit",
+          "epoch-0",
+          "capital",
+          "not_now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N151",
+        "title": "Auto-triage ingest deviations by screen signal",
+        "summary": "Proposed policy: leftover/patchy dismiss, plain buy rely on park+hunter, strong_buy intensive pin. Do not wire auto-approve/dismiss yet — pins starve the weekday batch and IR URL replacement stays human judgment.",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "Observe-only shadow recommendations on open deviation rows have matched human dismiss/approve choices for several weeks, and intensive pin rate stays within weekday batch budget",
+        "tags": [
+          "ingest",
+          "deviations",
+          "automation",
+          "buy-tier"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N152",
+        "title": "Overnight idle eng agents targeting admitted-market gaps",
+        "summary": "Do not invent overnight engineering-agent work aimed at sp500/asx200/etc filing or score gaps when the eng queue is idle. Overnight body thicken already belongs to maintenance + spare sprint streams; eng-idle already prefers FTSE gap-closure then focus ladder_only. L448/L449 handle serial library eng compile under P1-first — not equal overnight eng capacity.",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "Weekday eng queue idle after ~15:00 UTC on >=2 consecutive days while maintenance-eligible admitted markets still show buy-tier IWB/thin AND FTSE eng-idle gap-closure has no candidate AND L449 has landed or been rejected after one measured try-market-gap-burndown trial on the eng-queue idle path",
+        "tags": [
+          "engineering-queue",
+          "admitted-markets",
+          "p2",
+          "ingest-cascade",
+          "overnight"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N154",
+        "title": "Do not ship rolling sleeve-exit realized P&L series",
+        "summary": "Per-exit realized_return_pct already lives on exit_shadow (and swap sell legs). No sliding/decay window of recent exit P&Ls exists or should be built now — overlaps L459 trade-row %, lifetime shadow cohort, just_sold cards, and must not be confused with L462 NAV WoW or N153 FX. If anything later, prefer lifetime mean/median realized_at_exit inside existing exit_shadow_review before inventing last-N/decay.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "L459 landed (or humans still cannot read sleeve outcomes after it) AND primary-track exit_shadow closed_count >=15 by exit_kind of interest AND a documented need for trajectory of exit quality (not fund beat_market).",
+        "tags": [
+          "sleeve-exit",
+          "realized-pnl",
+          "rolling",
+          "exit-shadow",
+          "observe-only",
+          "not-now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N155",
+        "title": "On-demand first-memo when index+bodies ready",
+        "summary": "Do not move FTSE/admitted first-memo off Sunday --research-docs onto event-driven weekday creates (flip→bodies→memo). Slim/no-prose memos lower per-name cost, but the live miss is selection/cadence (cap race + effective_screen_signal hold), not LLM volume. Prefer FTSE Sunday no_memo-first (library N114 parity) before any on-demand pin; weekday rememo stays body-lag-only (N114).",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "After FTSE Sunday prefer-first-time/no_memo preference ships AND >=2 subsequent Sunday research-docs receipts still leave FTSE flip-lag warn_open with blocking_stage=no_memo on buy-effective names that already had index+key bodies — or admitted-market factory-path no_memo warn share rises for two live Sundays after N114-style ordering is live on all research paths.",
+        "tags": [
+          "first-memo",
+          "P1",
+          "N114",
+          "L457",
+          "flip-lag",
+          "sunday",
+          "selection"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N156",
+        "title": "Cache cron-job.org jobId map to skip GET /jobs on every import",
+        "summary": "Idempotent upsert currently requires listing all jobs by title before PATCH/PUT. Under rate limits that list call is the blast radius. A committed or local jobId map (title→id) would let re-imports PATCH without GET. Not needed while account is healthy.",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "cron-job.org 429 recurs on routine --all/--job imports after early-abort hardening lands",
+        "tags": [
+          "cron-job.org",
+          "rate-limit",
+          "import_cron_jobs"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N157",
+        "title": "Keep eng-20260924-02 ADYEN.AS parked_source_hunter until statutory report indexed",
+        "summary": "Unparking reburns (6 failures/6h). Revisit when next Adyen annual/interim is indexed, or deliberate PARKED_SOURCE_HUNTER_SKIP under idle capacity.",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "Next ADYEN.AS statutory report indexed in library leftover evidence",
+        "tags": [
+          "eng",
+          "parked_source_hunter",
+          "adyen",
+          "euro_stoxx50"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N158",
+        "title": "Do not rememo/ingest burst from FTSE decision-input memo_recent gap alert",
+        "summary": "Observe-only utilization finding; Sunday bind / idle-queue rememo owns refresh.",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "Decision-input observe invents an auto_fixable heal with explicit rememo policy",
+        "tags": [
+          "P1",
+          "observe",
+          "memo_recent",
+          "decision-input"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N159",
+        "title": "Do not eng-spray cross-market buy-tier flip-lag not-yet-usable warns",
+        "summary": "Factory/deepen path for euro_depth and admitted markets; not one eng task per ticker.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Flip-lag compile path gains a batched factory pin policy",
+        "tags": [
+          "P2",
+          "flip-lag",
+          "observe",
+          "factory"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N160",
+        "title": "Human-task Approve buttons stay observe-only — never auto-apply",
+        "summary": "Approve on checklist cards records observe-only intent today. Do not wire Approve to knob promote, fair-twin spawn, Phase C freeze writer, or live capital without an explicit readiness gate per action.",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "A promotion gate has a documented supervised execute path and thick evidence like lifecycle Start",
+        "tags": [
+          "human-tasks",
+          "dashboard",
+          "approval"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N161",
+        "title": "Do not eng-spray MC.PA IWB from blocker_no_improve before dismiss",
+        "summary": "Open deviation dev-euro_depth-MC.PA-blocker_no_improve is plain buy → dismiss; intensive pin / per-ticker eng would steal euro_depth fat-slot capacity.",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "MC.PA flips strong_buy or IR exhausted with clear allowlist bug",
+        "tags": [
+          "ingest-deviations",
+          "euro_depth",
+          "MC.PA",
+          "P2"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N162",
+        "title": "Widen ops-monitor workflow max_age for Sunday weekly jobs",
+        "summary": "Do not bump analysis-review / email-report / data-backup max_age_hours (e.g. toward ~168h). On Sunday morning age since last success is always ~7d; longer counters would hide real same-day misses after EMAIL_READY. Prefer schedule-aware stale (past email-ready) which is now implemented.",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "Only if schedule-aware past_email_ready gate is reverted or proven insufficient after several Sunday morning ops passes",
+        "tags": [
+          "ops-monitor",
+          "staleness",
+          "sunday",
+          "freshness"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N163",
+        "title": "MACD golden-cross hard gate on FTSE new buys",
+        "summary": "Classic MACD line/signal golden cross as a live entry requirement. Held-book PIT counterfactual (2026-09-27, n=5 AI-judgment+technical) showed 0 GC at entry and mean next-GC fill ~1.3% worse; live stack already uses MACD histogram slope inside timing_signal plus skip_timing_wait.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Observe-only MACD-cross/accumulate twin has ≥15 closed first-entry episodes on AI-judgment+rules with signed edge after counting missed winners",
+        "tags": [
+          "timing",
+          "macd",
+          "entry",
+          "not_now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N164",
+        "title": "Require timing_signal=accumulate for all new FTSE buys",
+        "summary": "Tighten beyond skip_timing_wait so only accumulate (not neutral) may open sleeves. Latest buy-tier mix was ~9 accumulate / 45 neutral / 3 wait — miss-cost vs eventual winners unscored; held set all entered neutral.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "Same observe twin as MACD-cross gate reports accumulate-only miss-cost and net sleeve edge after costs",
+        "tags": [
+          "timing",
+          "accumulate",
+          "entry",
+          "not_now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N165",
+        "title": "Rebuild model attribution as multi-track live instrument",
+        "summary": "Do not open a new live paper track or factory rebuild for model attribution. Dashboard observe + archive metric is enough; multi-track live instrumentation would divert from P1 live-path utilization.",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "Never as a live track unless stage-4 multi-market paper books need factor-level capital attribution",
+        "tags": [
+          "model-attribution",
+          "live-track",
+          "not-now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N166",
+        "title": "Do not divert euro_depth fat slot or eng-spray DAX for zero_improve_stall yet",
+        "summary": "DAX spare stream shows zero_improve_stall + G1A.DE unmeasured after prior merged gap-closure eng (#827/#818). Keep spare auto-advance; do not steal euro_depth fat slot or open a fresh DAX eng until more complete 0-improve runs toward leftover exhaustion or a clear allowlist bug.",
+        "category": "not_now",
+        "section": "universe",
+        "revisit_when": "DAX spare hits leftover exhaustion after min zero-improve runs, or G1A.DE still unmeasured with a concrete IR/ESEF allowlist bug after the next 1–2 complete 0-improve sprint windows.",
+        "tags": [
+          "dax",
+          "euro_depth",
+          "p2",
+          "ingest",
+          "zero_improve_stall",
+          "g1a"
+        ],
+        "status": "open"
       }
     ],
     "defer_later": [
@@ -3018,16 +3395,6 @@
           "fragments"
         ],
         "status": "open"
-      },
-      {
-        "id": "L121",
-        "title": "Reconcile live vs archive exit-timing denominators",
-        "summary": "Shared episode definitions before comparing hold→breakeven vs swap-success rates",
-        "category": "later",
-        "section": "learning",
-        "revisit_when": "`exit_timing_cohorts` artifact exists and `exit_timing_near_miss.readiness.hold_closed_count` ≥ 15.",
-        "tags": [],
-        "status": "now"
       },
       {
         "id": "L125",
@@ -5143,20 +5510,6 @@
         "status": "open"
       },
       {
-        "id": "L341",
-        "title": "Caption market-card held vs market as sleeve vs price index",
-        "summary": "The chart is invested-sleeve MTM versus a frictionless local price index from the same starting held notional, not Sunday-review excess after costs (NAV vs contributed, Yahoo auto_adjust). A caption would stop the tile being read as a matched-cost or total-return hurdle.",
-        "category": "later",
-        "section": "learning",
-        "revisit_when": "Someone uses the market-card excess_pct to judge paper vs index, or it disagrees with Sunday-review excess_after_costs.",
-        "tags": [
-          "dashboard",
-          "held-vs-market",
-          "fairness"
-        ],
-        "status": "open"
-      },
-      {
         "id": "L342",
         "title": "Universe-matched index for held vs market charts",
         "summary": "FTSE 350 paper is scaled to ^FTSE (FTSE 100) and euro_depth observe-sim to ^STOXX50E. That is a useful alpha hurdle but not a matched-universe market equivalent.",
@@ -6196,6 +6549,419 @@
           "latency"
         ],
         "status": "open"
+      },
+      {
+        "id": "L434",
+        "title": "EngineeringTask dataclass should carry parked/cancelled lifecycle fields",
+        "summary": "Parked metadata can still be lost if any path round-trips queue rows through EngineeringTask.to_dict(). Consider first-class parked_*/cancelled_* fields on the dataclass so compile rematch cannot strip them.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Another parked_reason strip appears after the _merge_task_rows preserve fix, or EngineeringTask schema is next refactored",
+        "tags": [
+          "engineering",
+          "queue",
+          "parked"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L436",
+        "title": "Bundle multi-ticker IR allowlist fills into one eng task",
+        "summary": "Instead of N intensive pins or N hunter tasks that all touch research_ir_urls.json, coalesce stuck no-allowlist tickers in the same regime into one data PR editing the allowlist (plus seed fallback) so Lane B pays one clash cycle for many names.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Open no-allowlist blockers across one regime exceed ~5 concurrent names and hunter tasks are serializing on research_ir_urls.json",
+        "tags": [
+          "ingest",
+          "allowlist",
+          "batching"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L437",
+        "title": "Fund PIT decision-autopsy attribution loop (L368)",
+        "summary": "Automated data-vs-logic gap attribution from frozen decision packs would lift learning/alpha score by steering eng queue; design locked, implementation deferred behind Phase C.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "L367 Phase C readiness met and memo retarget funded",
+        "tags": [
+          "L368",
+          "autopsy",
+          "score-lift"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L438",
+        "title": "Evolutionary genomes after walk-forward thickness (L2)",
+        "summary": "Stage 5 evolution only after primary loop has thick cost-aware walk-forward history; premature evolution would inflate eng score without alpha.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "Stage 2b complete and decision-review epochs show stable positive Suite B excess",
+        "tags": [
+          "L2",
+          "evolution",
+          "stage5",
+          "score-lift"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L439",
+        "title": "Progress report dual-suite excess (stress + fair)",
+        "summary": "project_progress currently pulls ai_excess from stress ai_judgment decision_review, so stage 2b looks brutal. Later: surface ai_judgment_fair excess alongside stress without flipping is_primary — adoption scoreboard vs churn lab.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Human wants dashboard/progress narrative aligned with Suite B adoption truth while keeping Suite A primary flag",
+        "tags": [
+          "progress-report",
+          "suite-b",
+          "dashboard"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L441",
+        "title": "Fixed-notional sleeve cohort lab beside NAV books",
+        "summary": "Observe-only: each new buy gets a fixed notional (e.g. £100), capped open sleeves, optional monthly deposit into a cash queue for new sleeves only. Primary metrics: per-sleeve forward return, hit rate, hold/exit quality; NAV vs ^FTSE stays on existing equal-weight books. Aligns with buy_tier_level cohort spirit and entry-lifecycle experiments.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "Exit-timing / hypothesis outcome cohorts ready for probability analysis, or buy_tier_level has enough closed sleeves to compare designs",
+        "tags": [
+          "sleeves",
+          "cohort",
+          "notional",
+          "lifecycle",
+          "monthly-deposit"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L442",
+        "title": "Opportunity-cost rotation instead of always exiting demoted buy-tier",
+        "summary": "Softer than always exit_confirm on off-target buy-tier: only free capital when higher-conviction buys are skipped for cash. Preserves long holds for lifecycle experiments when the buy pipeline is idle; still unblocks sleeves when targets need funding. Ranked books vs buy_tier_level remain the dual instrument.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "After momentum_grace rank-rotation fix merges and Sunday review shows exit cohorts thickening or over-churn on demoted buy-tier names",
+        "tags": [
+          "rotation",
+          "lifecycle",
+          "experiments",
+          "momentum_grace"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L445",
+        "title": "Cash buffer sleeve after rank-rotation works",
+        "summary": "Prefer fixing blocked exits (done L440) so fully-invested books recycle into better sleeves. A 5-10% dry-powder buffer remains optional capital-allocation v2 — do not use idle cash as a substitute for broken rotation.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "capital_rotation_coordinator / cash buffer target phase activates and rank rotation is healthy on momentum_grace",
+        "tags": [
+          "cash-buffer",
+          "capital-allocation",
+          "buy-pipeline"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L446",
+        "title": "Nested counterfactual best-policy scoring inside sleeve episodes",
+        "summary": "Wide earliest/latest episodes are recording. Next: score tighter entry/exit policies as nested counterfactuals inside closed episodes once readiness.ready_for_sleeve_timing_analysis is true.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true on primary or fair tracks",
+        "tags": [
+          "sleeves",
+          "counterfactual",
+          "timing"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L449",
+        "title": "Invoke market eng gap burndown from eng-queue when idle",
+        "summary": "L448 burndown only runs inside ops-monitor apply_fixes, and ops-monitor skips after the first successful finalize of the day. After #805 landed mid-day, later scheduled/dispatch runs skipped monitor so burndown never applied until the next morning run (or force). Consider also calling try-market-gap-burndown from engineering-queue idle path beside compile-cap drain / parked hunter.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Next weekday where eng queue is idle after ~15:00 UTC with library IWB/thin remaining and ops-monitor already finalized that morning",
+        "tags": [
+          "L448",
+          "market-gap-burndown",
+          "ops-monitor",
+          "engineering-queue"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L450",
+        "title": "Screening model×input coverage matrix (criteria inventory)",
+        "summary": "Tabulate each of the 22 screening models' criteria/fields, mark absolute vs universe-relative, map overlaps (esp. quality/moat ROE-margin-leverage cluster), and reconcile KEY_SCREENING_METRICS vs fetch fields so missing inputs (earnings_growth, interest cover, Piotroski YoY deltas) are visible. Do not expand Economic Moat into qualitative peer analysis without a separate design — screen moat is a numerical proxy; true comparative moat lives in research/filings + peer_model_pass_table.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After P1 FTSE buy-tier body/FCF/overlay bind work is idle, or when post-run themes repeatedly cite unsupported moat/quality claims",
+        "tags": [
+          "screening",
+          "models",
+          "data-quality",
+          "moat",
+          "inputs"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L453",
+        "title": "Regime snapshot week-over-week delta highlighting",
+        "summary": "Sunday review regime table columns (step, +α rate, pairs, shadow ready, flags) are often static for weeks while only primary excess moves. Highlight week-over-week deltas or collapse unchanged filter/gate columns so the table does not read as undifferentiated worsening.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Another Analysis-tab Sunday review UX pass, or when exclusion week-pairs grow past the regime_slices gate and filter columns start moving again",
+        "tags": [
+          "dashboard",
+          "sunday-review",
+          "regime",
+          "ux"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L457",
+        "title": "Same-session research for new buy-tier after filings",
+        "summary": "Do not build a net-new same-day ingest→memo pipeline on hold→buy flips. Filings already rank via weekday ingest-loop unmeasured priority + eng-idle intensive pins; first-time memos stay Sunday (N114). Same-day fully usable is blocked by memo policy, not missing plumbing. Prefer an observe-only lag pin; only later consider a narrow new-flip unmeasured priority bump inside the existing loop.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Observe pin shows >=2 FTSE buy-tier flips in a fortnight staying unmeasured across >1 full weekday ingest day AND the following Sunday first-memo pass still hits thin/zero-body on those names (bodies would have helped) — or N114 is deliberately revisited.",
+        "tags": [
+          "ingest",
+          "buy-tier",
+          "rememo",
+          "P1",
+          "N114",
+          "N152"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L459",
+        "title": "Show realized % on paper trade rows",
+        "summary": "Paper tradesTableHtml shows net_cash only; tiny ~£8 sleeves make sell round-trips look flat £0 without a realized_pct column (avg_cost_at_exit vs price already on PaperTrade).",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Next paper-sims / lifecycle UX pass or when humans keep misreading shard sell P&L",
+        "tags": [
+          "paper",
+          "ux",
+          "realized",
+          "sp500"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L462",
+        "title": "Observe-only recent week-pair excess twin beside cumulative beat_market",
+        "summary": "Do not replace epoch beat_market / excess_after_costs with decay-weighted or equal WoW excess. Optionally publish an observe-only recent-relative-edge twin (mean or mild decay of week-pair book−bench deltas + positive-week rate) beside cumulative once a fair-cost primary has a thick clean window. Cumulative wealth vs market stays adoption truth; WoW answers edge lately, not did the epoch beat.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "Fair-cost primary (post-N153-clean epoch on any shard under review) has ≥8 weekday week-pairs of usable NAV marks AND humans repeatedly misread cumulative excess after a documented early drawdown as policy is currently failing.",
+        "tags": [
+          "beat-market",
+          "excess",
+          "rolling-wow",
+          "observe-only",
+          "decision-review"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L466",
+        "title": "Ops thin_memo auto_fixable without deepen-thin heal",
+        "summary": "check_thin_memo_learning_gap sets auto_fixable=True when zero-body memos exist so ops skips eng draft spray, but ops-monitor has no deepen-thin heal path. Label matches anti-spray intent, not the documented auto-heal lane.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Next intentional touch of check_thin_memo_learning_gap or ops-monitor auto_fixable lane docs; or when wiring supervised deepen-thin as a safe heal.",
+        "tags": [
+          "ops-monitor",
+          "thin_memo",
+          "auto_fixable",
+          "euro_depth"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L467",
+        "title": "IR/ESEF seed for euro zero-body leftovers OIZ REN SIE",
+        "summary": "After thin-memo factory heal, OIZ.IR REN.AS SIE.DE remain 0 filing bodies. Next sprint heals will retry; if still 0-improve, seed IR allowlist or parked-hunter rather than hand pins.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "euro_depth ingest exhaustion approaches 3/3 zero-improve or next thin_memo sample rises because these names re-enter thin grades",
+        "tags": [
+          "euro_depth",
+          "thin_memo",
+          "ingest",
+          "p2"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L469",
+        "title": "Collapse shared-experiment Lifecycle Start chips in UI",
+        "summary": "add_cadence and entry_kind_tag (and siblings) share entry_dca_overlay Start; bridge now dedupes by experiment. Optional UX: show one Start control per experiment instead of one per catalog chip to reduce duplicate clicks.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After Start dedupe + every-10m bridge cron are live and humans still double-click sibling chips, or Lifecycle UI redesign pass",
+        "tags": [
+          "lifecycle",
+          "dashboard",
+          "entry_dca",
+          "ux"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L471",
+        "title": "Dashboard surface for PR fix common issues on human-task card",
+        "summary": "monthly-pr-fix-common-issues card already pulls pr_fix_occasions / traffic digest snippets. Further charting of common-issues trajectory can wait until occasion volume is thick.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "pr_fix_occasions has ≥20 occasions or monthly review still feels CLI-heavy",
+        "tags": [
+          "human-tasks",
+          "pr-fix",
+          "dashboard"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L472",
+        "title": "Optional ops-monitor finding for open ingest deviations count",
+        "summary": "ops_status has no dedicated open-deviation finding; human task + ingest_deviations.json already cover triage. Optional observe warn when open_count>0.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Operators miss open deviations without checking Automation tab",
+        "tags": [
+          "ingest-deviations",
+          "ops-monitor",
+          "observe"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L473",
+        "title": "Watch import-ingest-crons in ops-monitor workflow_checks",
+        "summary": "Afternoon main failures of Import ingest crons (Permission denied) were invisible in ops_status workflow_checks because that workflow is not on the watched list.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "After import-cron invoke fix merges, if similar main-only GHA failures keep surprising humans",
+        "tags": [
+          "ops-monitor",
+          "gha",
+          "import-cron"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L474",
+        "title": "Bollinger/stochastic/Ichimoku entry toolkit beyond RSI-MA-MACD",
+        "summary": "Expand technical entry toolkit past the existing RSI-14 + SMA50/200 + MACD histogram composite. No held-book or chart evidence that another oscillator family is the binding gap versus DCA patience and P1 utilization.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "MACD/accumulate observe twin concludes and component attribution shows the current composite is the bottleneck",
+        "tags": [
+          "timing",
+          "indicators",
+          "later"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L475",
+        "title": "Paper-exit model-score quintile attribution (observe)",
+        "summary": "Observe-only rollup: join closed position_closed/exit_shadow sells to entry buy and nearest models_*.json scores; report Q5 vs Q1 realized return, hit rate, and FTSE excess when ready. Do not auto-tune weights until n≥30 joined closes on primary track.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "≥30 closed paper exits on ai_judgment with joinable entry scores after buy-tier FTSE-excess panel ships",
+        "tags": [
+          "model-attribution",
+          "exit-quintile",
+          "observe",
+          "paper"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L476",
+        "title": "Stamp per-model scores on rebalance_log buys for exit attribution",
+        "summary": "Optional hardening: persist top model_id scores on rebalance_log buy rows to simplify exit-quintile joins. Not required for first observe rollup that joins nearest models_*.json at acted_at.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "When implementing paper-exit score-quintile observe and day-level nearest-screen join proves brittle",
+        "tags": [
+          "model-attribution",
+          "rebalance-log",
+          "exit-join"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L480",
+        "title": "Normalize PR-fix failure reasons (paths + ruff/validate)",
+        "summary": "67 unique failure_reason strings across 79 occasions; generic CONFLICTING labels dominate common-issues. Extend normalize_failure_reason to attach conflicted paths and map bare validate failures to ruff/JSON causes.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Next monthly-pr-fix-common-issues human task or when occasion_count grows another ~25",
+        "tags": [
+          "pr-fix",
+          "common-issues",
+          "ops"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L481",
+        "title": "Mock flaky live network in CI unit tests (DAX stall / Investegate)",
+        "summary": "Seven ci_check fix occasions from live DAX library_stall auto-cancel, Investegate None, and unmocked ops-monitor helpers. Keep live checks in a marked integration job; unit CI should mock.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Same flake hits two PRs in one week again (see pr_fix_occasions H theme)",
+        "tags": [
+          "pr-fix",
+          "pytest",
+          "flake",
+          "ci"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L483",
+        "title": "project_progress appraisal: memo_recent over filing-depth when bodies green",
+        "summary": "When zero_body_buy_tier=0, project_progress next_actions still say prioritise buy-tier filing depth. Prefer surfacing memo_recent / holdings freshness so policy-green bodies are not read as P1 done.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Next project_progress / progress-report builder pass after holdings-first rememo (#890) lands or progress-report clobber fix ships",
+        "tags": [
+          "progress-report",
+          "project_progress",
+          "p1",
+          "memo_recent"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L484",
+        "title": "email-report exclude progress_report artifacts from docs/data overlay",
+        "summary": "email-report GHA_COMMIT_OWNED=docs/data clobbered a fresh Sep 23 progress-report rebuild back to Sep 22 (L121 resurrected). Exclude progress_report.json/md and project_progress.json like ops_status, or rebuild before commit.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "After next force progress-report refresh, if a subsequent chore: update dashboard data recommits an older generated_at",
+        "tags": [
+          "progress-report",
+          "email-report",
+          "clobber",
+          "gha"
+        ],
+        "status": "open"
       }
     ],
     "defer_security": [
@@ -6492,6 +7258,52 @@
           "merge_tree"
         ],
         "status": "open"
+      },
+      {
+        "id": "frag-20260922-01",
+        "text": "Absolute edge decomposes into (1) stock ID / research gate quality (mostly suite-shared inputs) and (2) lifecycle timing/sizing (suite-sensitive via cost interaction). Hold-set drift under different costs can still contaminate realized ID metrics on the book.",
+        "tags": [
+          "learning",
+          "suite-b",
+          "lifecycle",
+          "identification"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "frag-20260923-01",
+        "text": "Internal screening formula from successful-sleeve traits: only useful with a substantial evidence body; park as a thought until filtered_cohort / sleeve-episode thickness and loser-pattern validation exist. Not a near-term idea.",
+        "tags": [
+          "screening",
+          "sleeves",
+          "thought",
+          "learning"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "frag-20260923-02",
+        "text": "Library maintenance jobs under L323 (1 market/slot) finish in ~5–14 min wall vs 120 min timeout (2026-09-22/23 sample). Seven maintenance markets → ~1.75 day rotation. Headroom suggests MAX_MARKETS_WHEN_CROWDED=2 (sequential) or a 2-wide matrix is feasible before true N-wide parallel; watch artifact push races and ESEF/EDGAR/IR rate limits.",
+        "tags": [
+          "ingest",
+          "maintenance",
+          "L323",
+          "L454",
+          "capacity"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "frag-20260923-03",
+        "text": "Maintenance 62-name cap is NOT binding: latest maint runs used 0–8 targets of 62, runtime_cutoff=false, budget_hits≈0. Binding limit is L323 one-market-per-slot (7 books). Option1 (MAX_MARKETS_WHEN_CROWDED=2) is the high-ROI step; option2 matrix is an upgrade after an automated review of job minutes / cutoff / artifact races.",
+        "tags": [
+          "ingest",
+          "maintenance",
+          "L323",
+          "L454",
+          "max_targets"
+        ],
+        "status": "open"
       }
     ],
     "proposed_tasks": {
@@ -6556,11 +7368,11 @@
     },
     "engineering_open": [],
     "counts": {
-      "defer_now": 1,
-      "defer_not_now": 130,
-      "defer_later": 286,
+      "defer_now": 0,
+      "defer_not_now": 156,
+      "defer_later": 312,
       "defer_security": 5,
-      "open_fragments": 22,
+      "open_fragments": 26,
       "proposed_total": 6,
       "engineering_open": 0
     }
@@ -6569,18 +7381,25 @@
     "overall": "warn",
     "checks": [
       {
+        "id": "ingest_loop_hit_runtime_cutoff",
+        "severity": "warn",
+        "category": "ingest",
+        "title": "Ingest loop hit runtime cutoff",
+        "summary": "Last run deferred 44 ticker(s) after completing 12 (per_ticker_budget) — backlog resume or chained chunk should drain remainder."
+      },
+      {
         "id": "parked_engineering_tasks_need_manual_review",
         "severity": "warn",
         "category": "engineering",
         "title": "Parked engineering tasks need manual review",
-        "summary": "4 parked task(s): eng-20260922-01, eng-20260921-08, eng-20260921-06, eng-20260920-16"
+        "summary": "1 parked task(s): eng-20260924-02"
       }
     ],
     "queue_status": {
       "open_count": 0,
       "pr_open_count": 0,
-      "parked_count": 4,
-      "merged_count": 72,
+      "parked_count": 1,
+      "merged_count": 93,
       "failed_count": 0,
       "next_task_id": null,
       "in_flight_branch": null,
@@ -6598,7 +7417,7 @@
         "severity": "info",
         "category": "doctrine",
         "title": "Stage 2b focus aligned with primary learning gap",
-        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-32.3%). Breadth expansion and new tracks should stay deferred."
+        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-35.8%). Breadth expansion and new tracks should stay deferred."
       },
       {
         "id": "library_ahead_of_live",
@@ -6608,67 +7427,192 @@
         "summary": "21 graduated library markets vs stage 2b still in progress — library growth is correctly offline; live universe expansion remains gated."
       },
       {
-        "id": "defer_now_without_queue_link",
+        "id": "post_run_plan_without_queue_link",
         "severity": "warn",
         "category": "join_up",
-        "title": "Deferred now items without matching queue work",
-        "summary": "1 item(s) marked `now` have no obvious engineering or review-task counterpart (L121). Promote via ftse-defer status or draft a supervised task."
-      },
-      {
-        "id": "post_run_plan_without_queue_link",
-        "severity": "info",
-        "category": "join_up",
         "title": "Post-run plan items without matching open engineering task",
-        "summary": "5 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Harden Investegate/LSE direct fetch for indexed RNS items (FY/HY results, annual reports)—replace Google News wrapper URLs and empty Ticker RNS bodies—starting with buy-tier partial coverage (PAF.L 16 missing bodies) and backlog patterns (AEP.L-style zero-body indexes).; Fix Companies House PDF/iXBRL download and OCR quality gate (retry, iXBRL-first, reject garbled OCR)—target ITV.L/MGNS.L failure modes cited in recent suggestions.; Standardize IR results-presentation ingest: allowlist fetch, full-text extract, and populate `ir_presentation_metrics.json` FCF/dividend bridges (FGP.L FY2026 report + presentation; MEGP.L H1 FY2026; HIK.L hikma.com PDFs per backlog).). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. All match merged/parked tasks — schedule email_only for a fresh post-run; idle compile backstop will not reopen them."
-      },
-      {
-        "id": "compile_cap_truncated_candidates",
-        "severity": "info",
-        "category": "join_up",
-        "title": "Compile cap dropped lower-priority candidates",
-        "summary": "3 compiled candidate(s) omitted by max_tasks=8 (post-run plan items kept first). research_model_suggestions: dividend: Require explicit **dual FCF dividend cover** (stat; research_model_suggestions: fcf: Map email **watchlist** to overlay **caution** when `in; research_model_suggestions: dividend: Map email **watchlist** to overlay **caution** whe When the priority engineering queue is idle, `ftse-engineering try-compile-cap-drain --apply` queues up to 2 open backlog items (above parked hunter; near-dups coalesced)."
+        "summary": "5 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Backfill indexed-without-body for buy-tier FTSE names (Investegate/LSE/NSM direct fetch, reject Google News wrappers); Wire Yahoo/filing `operating_cashflow` into CompanyMetrics when `financials_annual.json` already has OCF; Standardize IR results-presentation PDF fetch + table extract into `ir_presentation_metrics.json` / filing bodies (FGP.L FY2026 annual report + APM glossary; MEGP.L segment/geo tables; HIK.L cash-flow bridges per backlog samples)). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. Queue is idle: run `ftse-engineering try-idle-compile-backstop --apply` when output/ or latest.json has the plan but compile was skipped."
       }
     ]
   },
   "so_what": {
-    "generated_at": "2026-09-22T08:34:03Z",
+    "generated_at": "2026-09-28T08:53:07Z",
     "counts": {
-      "findings": 1,
+      "findings": 2,
       "auto_queue": 0,
-      "human_gate": 0,
+      "human_gate": 1,
       "observe": 1,
-      "learning_path_gaps": 1,
+      "learning_path_gaps": 2,
       "tasks_created": 0
     },
     "learning_path_gap_groups": [
       {
-        "kind": "system_gap_thin_memo_counted_as_coverage",
-        "label": "system_gap_thin_memo_counted_as_coverage",
+        "kind": "system_gap_filing_ready_learning_stale",
+        "label": "system_gap_filing_ready_learning_stale",
         "recommended_closure": "observe",
         "severity": "medium",
-        "so_what": "7 sampled euro_depth memos are thin or have 0 filing bodies (2 memo(s) executed this pass). Observe-sim / AI-judgment that gates on accumulate still consumes those weak labels. Do not widen rememo_reason; thicken filings then body-lag rememo (Phase B slim verdicts).",
-        "human_action": "Lane A: ingest filing bodies for named tickers, then body-lag rememo only. Do not widen rememo eligibility for thin/zero-body memos (system_gaps policy).",
+        "so_what": "sp500 look filing-ready but are not learning_ready (observe-sim / archive span still short). That is a 12-week replay gate, not a reason to withhold epoch-0 or admitted rememo.",
+        "human_action": "Learning clock vs filing parity — review market-sharded-learning; do not block admitted rememo on clock alone.",
         "human_doc_path": "docs/ops/analysis-review.md",
         "count": 1,
         "tickers": [
-          "thin_memo_counted_as_coverage"
+          "filing_ready_learning_stale"
         ],
         "tickers_preview": [
-          "thin_memo_counted_as_coverage"
+          "filing_ready_learning_stale"
+        ]
+      },
+      {
+        "kind": "system_gap_research_skipped_already_done",
+        "label": "system_gap_research_skipped_already_done",
+        "recommended_closure": "human_gate",
+        "severity": "high",
+        "so_what": "Last ladder executed 0 memos and skipped 457 as already researched. That is not proof the overlay or rememo path is fed.",
+        "human_action": "Judgment call on produce-layer gap — promote via `ftse-analysis-review promote` when ready; prefer ingest/rememo over prompt churn.",
+        "human_doc_path": "docs/ops/analysis-review.md",
+        "count": 1,
+        "tickers": [
+          "research_skipped_already_done"
+        ],
+        "tickers_preview": [
+          "research_skipped_already_done"
         ]
       }
     ],
-    "high_severity": [],
-    "high_severity_groups": [],
-    "human_gates_preview": [],
-    "human_gate_groups": []
+    "high_severity": [
+      {
+        "finding_id": "system_gap:research_skipped_already_done",
+        "kind": "system_gap_research_skipped_already_done",
+        "ticker": "research_skipped_already_done",
+        "so_what": "Last ladder executed 0 memos and skipped 457 as already researched. That is not proof the overlay or rememo path is fed.",
+        "recommended_closure": "human_gate"
+      }
+    ],
+    "high_severity_groups": [
+      {
+        "kind": "system_gap_research_skipped_already_done",
+        "label": "system_gap_research_skipped_already_done",
+        "recommended_closure": "human_gate",
+        "severity": "high",
+        "so_what": "Last ladder executed 0 memos and skipped 457 as already researched. That is not proof the overlay or rememo path is fed.",
+        "human_action": "Judgment call on produce-layer gap — promote via `ftse-analysis-review promote` when ready; prefer ingest/rememo over prompt churn.",
+        "human_doc_path": "docs/ops/analysis-review.md",
+        "count": 1,
+        "tickers": [
+          "research_skipped_already_done"
+        ],
+        "tickers_preview": [
+          "research_skipped_already_done"
+        ]
+      }
+    ],
+    "human_gates_preview": [
+      {
+        "finding_id": "system_gap:research_skipped_already_done",
+        "kind": "system_gap_research_skipped_already_done",
+        "ticker": "research_skipped_already_done",
+        "severity": "high",
+        "so_what": "Last ladder executed 0 memos and skipped 457 as already researched. That is not proof the overlay or rememo path is fed.",
+        "recommended_closure": "human_gate",
+        "human_action": "Judgment call on produce-layer gap — promote via `ftse-analysis-review promote` when ready; prefer ingest/rememo over prompt churn.",
+        "human_doc_path": "docs/ops/analysis-review.md"
+      }
+    ],
+    "human_gate_groups": [
+      {
+        "kind": "system_gap_research_skipped_already_done",
+        "label": "system_gap_research_skipped_already_done",
+        "recommended_closure": "human_gate",
+        "severity": "high",
+        "so_what": "Last ladder executed 0 memos and skipped 457 as already researched. That is not proof the overlay or rememo path is fed.",
+        "human_action": "Judgment call on produce-layer gap — promote via `ftse-analysis-review promote` when ready; prefer ingest/rememo over prompt churn.",
+        "human_doc_path": "docs/ops/analysis-review.md",
+        "count": 1,
+        "tickers": [
+          "research_skipped_already_done"
+        ],
+        "tickers_preview": [
+          "research_skipped_already_done"
+        ]
+      }
+    ]
+  },
+  "thin_memo_clearance": {
+    "flag_id": "thin_memo_counted_as_coverage",
+    "market_id": "euro_depth",
+    "cleared": true,
+    "thin_sample_count": 3,
+    "thin_sample_threshold": 5,
+    "memos_sampled": 21,
+    "memo_count": 21,
+    "deficit_to_clear": 0,
+    "zero_body_target_count": 4,
+    "zero_body_tickers": [
+      "HM-B.ST",
+      "OIZ.IR",
+      "REN.AS",
+      "SIE.DE"
+    ],
+    "rememo_pending_count": 0,
+    "rememo_pending_tickers": [],
+    "committed_flag_present": false,
+    "live_flag_would_fire": false,
+    "committed_assessed_at": "2026-09-27T10:37:27.397054+00:00",
+    "live_assessed_at": "2026-09-28T08:53:07.766585+00:00",
+    "steps": [
+      {
+        "id": "ingest_deepen",
+        "title": "Ingest filing bodies (library thin memos)",
+        "command": "ftse-library deepen-thin --markets euro_depth",
+        "status": "done"
+      },
+      {
+        "id": "body_lag_rememo",
+        "title": "Body-lag rememo when disk bodies increase",
+        "command": "ftse-library deepen-thin --markets euro_depth --rememo (or ftse-library admitted-rememo when eligible)",
+        "status": "optional"
+      },
+      {
+        "id": "refresh_system_gaps",
+        "title": "Refresh system_gaps.json",
+        "command": "ftse-analysis-review system-gaps --write",
+        "status": "done"
+      },
+      {
+        "id": "verify_so_what",
+        "title": "Verify so-what learning-path row cleared",
+        "command": "ftse-progress-report so-what",
+        "status": "done"
+      }
+    ],
+    "summary": "euro_depth: 3/21 sampled memos thin/zero-body (need <5 to clear thin_memo_counted_as_coverage). 4 memo(s) with 0 filing bodies on disk; 0 pending body-lag rememo (disk has bodies, memo label stale)."
   },
   "lifecycle_acks": {
     "overall": "ok",
     "pending_count": 0,
-    "acked_count": 1,
+    "acked_count": 2,
     "pending": [],
     "acked": [
+      {
+        "experiment_id": "graduated_allocation",
+        "title": "Screen rules + graduated allocation",
+        "kind": "experimental_paper_track",
+        "pipeline": "paper_automation",
+        "human_acked": true,
+        "human_ack_required": false,
+        "acked_at": "2026-09-22T08:14:45.342024+00:00",
+        "ack_decision": "ack_observe",
+        "acknowledge": {
+          "action": "lifecycle-experiment-ack",
+          "enabled": false,
+          "payload": {
+            "experiment_id": "graduated_allocation",
+            "factor_id": "progress_report",
+            "kind": "human_ack",
+            "decision": "ack_observe"
+          }
+        }
+      },
       {
         "experiment_id": "entry_dca_overlay",
         "title": "Model-independent entry DCA / graduated-entry cadence",

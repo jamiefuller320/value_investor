@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-28T08:10:40+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-28T08:53:12+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -550,8 +550,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L473 | **Watch import-ingest-crons in ops-monitor workflow_checks** | Afternoon main failures of Import ingest crons (Permission denied) were invisible in ops_status workflow_checks because that workflow is not on the watched list. | After import-cron invoke fix merges, if similar main-only GHA failures keep surprising humans |
 | L480 | **Normalize PR-fix failure reasons (paths + ruff/validate)** | 67 unique failure_reason strings across 79 occasions; generic CONFLICTING labels dominate common-issues. Extend normalize_failure_reason to attach conflicted paths and map bare validate failures to ruff/JSON causes. | Next monthly-pr-fix-common-issues human task or when occasion_count grows another ~25 |
 | L481 | **Mock flaky live network in CI unit tests (DAX stall / Investegate)** | Seven ci_check fix occasions from live DAX library_stall auto-cancel, Investegate None, and unmocked ops-monitor helpers. Keep live checks in a marked integration job; unit CI should mock. | Same flake hits two PRs in one week again (see pr_fix_occasions H theme) |
-| L483 | **project_progress appraisal: memo_recent over filing-depth when bodies green** | When zero_body_buy_tier=0, project_progress next_actions still say prioritise buy-tier filing depth. Prefer surfacing memo_recent / holdings freshness so policy-green bodies are not read as P1 done. | Next project_progress / progress-report builder pass after holdings-first rememo (#890) lands or progress-report clobber fix ships |
-| L484 | **email-report exclude progress_report artifacts from docs/data overlay** | email-report GHA_COMMIT_OWNED=docs/data clobbered a fresh Sep 23 progress-report rebuild back to Sep 22 (L121 resurrected). Exclude progress_report.json/md and project_progress.json like ops_status, or rebuild before commit. | After next force progress-report refresh, if a subsequent chore: update dashboard data recommits an older generated_at |
 
 ---
 
