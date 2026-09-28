@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-28T07:29:01+00:00",
+  "updated_at": "2026-09-28T08:10:40+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -11001,6 +11001,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-67a4558c-6615-5ef1-ae70-1cd617281612",
       "added_at": "2026-09-28T07:29:01+00:00"
+    },
+    {
+      "id": "L483",
+      "category": "later",
+      "section": "ops",
+      "title": "project_progress appraisal: memo_recent over filing-depth when bodies green",
+      "summary": "When zero_body_buy_tier=0, project_progress next_actions still say prioritise buy-tier filing depth. Prefer surfacing memo_recent / holdings freshness so policy-green bodies are not read as P1 done.",
+      "revisit_when": "Next project_progress / progress-report builder pass after holdings-first rememo (#890) lands or progress-report clobber fix ships",
+      "tags": [
+        "progress-report",
+        "project_progress",
+        "p1",
+        "memo_recent"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-03d402e5-879e-5c8d-a29c-040d188f9448",
+      "added_at": "2026-09-28T08:10:40+00:00"
+    },
+    {
+      "id": "L484",
+      "category": "later",
+      "section": "ops",
+      "title": "email-report exclude progress_report artifacts from docs/data overlay",
+      "summary": "email-report GHA_COMMIT_OWNED=docs/data clobbered a fresh Sep 23 progress-report rebuild back to Sep 22 (L121 resurrected). Exclude progress_report.json/md and project_progress.json like ops_status, or rebuild before commit.",
+      "revisit_when": "After next force progress-report refresh, if a subsequent chore: update dashboard data recommits an older generated_at",
+      "tags": [
+        "progress-report",
+        "email-report",
+        "clobber",
+        "gha"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-03d402e5-879e-5c8d-a29c-040d188f9448",
+      "added_at": "2026-09-28T08:10:40+00:00"
     }
   ],
   "fragments": [
