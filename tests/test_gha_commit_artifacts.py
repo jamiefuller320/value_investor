@@ -190,6 +190,9 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "docs/data/decision_input_inventory.json" in email
     assert "docs/data/observe_utilization.json" in email
     assert "docs/data/lifecycle_maturity_trajectory.json" in email
+    assert "docs/data/progress_report.json" in email
+    assert "docs/data/progress_report.md" in email
+    assert "docs/data/project_progress.json" in email
     assert "docs/data/paper_automation/markets/**/buy_tier_level/**" in epoch0
     assert "docs/data/library/equal_support_status.json" in epoch0
 
@@ -239,6 +242,130 @@ def test_artifact_commit_exclude_skips_stale_ops_status(tmp_path: Path):
     assert json.loads(
         (latest / "docs" / "data" / "ops_monitor_log.json").read_text(encoding="utf-8")
     ) == {"entries": [1]}
+
+
+def test_artifact_commit_preserves_newer_generated_at(tmp_path: Path):
+    """Owned JSON overlay must not rewind a fresher remote generated_at (L484)."""
+    remote, work = _seed_repo(tmp_path)
+    _write(
+        work / "docs" / "data" / "progress_report.json",
+        json.dumps({"generated_at": "2026-09-22T08:34:03+00:00", "defer": ["L121"]}) + "\n",
+    )
+    _write(work / "docs" / "data" / "latest.json", '{"n":1}\n')
+    _git(work, "add", "docs/data")
+    _git(work, "commit", "-m", "seed progress")
+    _git(work, "push", "origin", "main")
+
+    other = tmp_path / "other"
+    _git(tmp_path, "clone", str(remote), str(other))
+    _git(other, "config", "user.email", "other@example.com")
+    _git(other, "config", "user.name", "other")
+    _write(
+        other / "docs" / "data" / "progress_report.json",
+        json.dumps({"generated_at": "2026-09-28T12:00:00+00:00", "defer": []}) + "\n",
+    )
+    _git(other, "add", "docs/data/progress_report.json")
+    _git(other, "commit", "-m", "progress refresh")
+    _git(other, "push", "origin", "main")
+
+    # Email job still has the stale Sep-22 snapshot under docs/data.
+    _write(work / "docs" / "data" / "latest.json", '{"n":2}\n')
+    _write(
+        work / "docs" / "data" / "progress_report.json",
+        json.dumps({"generated_at": "2026-09-22T08:34:03+00:00", "defer": ["L121"]}) + "\n",
+    )
+
+    result = _run_script(work, owned="docs/data")
+    assert result.returncode == 0, result.stderr
+    assert "Preserving newer origin/main docs/data/progress_report.json" in result.stderr
+
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    assert json.loads((latest / "docs" / "data" / "latest.json").read_text(encoding="utf-8")) == {
+        "n": 2
+    }
+    progress = json.loads(
+        (latest / "docs" / "data" / "progress_report.json").read_text(encoding="utf-8")
+    )
+    assert progress["generated_at"] == "2026-09-28T12:00:00+00:00"
+    assert progress["defer"] == []
+
+
+def test_artifact_commit_exclude_skips_stale_progress_report(tmp_path: Path):
+    """Explicit progress-report excludes match email-report GHA_COMMIT_EXCLUDE (L484)."""
+    remote, work = _seed_repo(tmp_path)
+    _write(
+        work / "docs" / "data" / "progress_report.json",
+        json.dumps({"generated_at": "2026-09-22T08:34:03+00:00", "defer": ["L121"]}) + "\n",
+    )
+    _write(work / "docs" / "data" / "progress_report.md", "# stale\n")
+    _write(
+        work / "docs" / "data" / "project_progress.json",
+        json.dumps({"generated_at": "2026-09-22T08:34:03+00:00"}) + "\n",
+    )
+    _write(work / "docs" / "data" / "latest.json", '{"n":1}\n')
+    _git(work, "add", "docs/data")
+    _git(work, "commit", "-m", "seed progress")
+    _git(work, "push", "origin", "main")
+
+    other = tmp_path / "other"
+    _git(tmp_path, "clone", str(remote), str(other))
+    _git(other, "config", "user.email", "other@example.com")
+    _git(other, "config", "user.name", "other")
+    _write(
+        other / "docs" / "data" / "progress_report.json",
+        json.dumps({"generated_at": "2026-09-28T12:00:00+00:00", "defer": []}) + "\n",
+    )
+    _write(other / "docs" / "data" / "progress_report.md", "# fresh\n")
+    _write(
+        other / "docs" / "data" / "project_progress.json",
+        json.dumps({"generated_at": "2026-09-28T12:00:00+00:00"}) + "\n",
+    )
+    _git(
+        other,
+        "add",
+        "docs/data/progress_report.json",
+        "docs/data/progress_report.md",
+        "docs/data/project_progress.json",
+    )
+    _git(other, "commit", "-m", "progress refresh")
+    _git(other, "push", "origin", "main")
+
+    _write(work / "docs" / "data" / "latest.json", '{"n":2}\n')
+    _write(
+        work / "docs" / "data" / "progress_report.json",
+        json.dumps({"generated_at": "2026-09-22T08:34:03+00:00", "defer": ["L121"]}) + "\n",
+    )
+    _write(work / "docs" / "data" / "progress_report.md", "# stale\n")
+    _write(
+        work / "docs" / "data" / "project_progress.json",
+        json.dumps({"generated_at": "2026-09-22T08:34:03+00:00"}) + "\n",
+    )
+
+    result = _run_script(
+        work,
+        owned="docs/data",
+        exclude=(
+            "docs/data/progress_report.json "
+            "docs/data/progress_report.md "
+            "docs/data/project_progress.json"
+        ),
+    )
+    assert result.returncode == 0, result.stderr
+    assert "Excluding docs/data/progress_report.json" in result.stderr
+    assert "Excluding docs/data/progress_report.md" in result.stderr
+    assert "Excluding docs/data/project_progress.json" in result.stderr
+
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    progress = json.loads(
+        (latest / "docs" / "data" / "progress_report.json").read_text(encoding="utf-8")
+    )
+    assert progress["defer"] == []
+    assert (latest / "docs" / "data" / "progress_report.md").read_text(encoding="utf-8") == "# fresh\n"
+    assert json.loads(
+        (latest / "docs" / "data" / "project_progress.json").read_text(encoding="utf-8")
+    )["generated_at"] == "2026-09-28T12:00:00+00:00"
 
 
 def test_email_report_skips_full_ingest_deepen() -> None:
