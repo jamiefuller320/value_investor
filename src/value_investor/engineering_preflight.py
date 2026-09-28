@@ -52,6 +52,8 @@ def engineering_branch_for_task_id(task_id: str) -> str | None:
 SHARED_MUTABLE_FILES: frozenset[str] = frozenset(
     {
         "docs/data/engineering_tasks.json",
+        "docs/data/deferred-ideas.json",
+        "docs/deferred-review.md",
         "docs/data/library/policy.json",
         "docs/data/automation.json",
         "docs/data/latest.json",
@@ -507,6 +509,7 @@ def select_clash_aware_dispatch_tasks(
     limit = max(0, int(max_tasks))
 
     while pending and len(selected) < limit:
+
         def _pick_key(item: tuple[int, EngineeringTask, list[str], TaskDispatchReport]) -> tuple:
             priority_index, task, _files, _report = item
             area = str(task.area or "").strip().lower()

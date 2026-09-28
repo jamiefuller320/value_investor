@@ -6,10 +6,13 @@ import json
 import subprocess
 from pathlib import Path
 
+import pytest
+
 from value_investor.engineering_preflight import (
     CLASH_KIND_ALLOWLIST,
     CLASH_KIND_FILE,
     CLASH_KIND_SHARED,
+    SHARED_MUTABLE_FILES,
     build_open_pr_file_index,
     estimated_task_files,
     file_overlap,
@@ -91,7 +94,15 @@ def test_predict_task_clashes_file_overlap_on_open_pr():
     assert report.blocked_by[0].pr_number == 42
 
 
-def test_predict_task_clashes_shared_mutable():
+@pytest.mark.parametrize(
+    "hot_path",
+    [
+        "docs/data/engineering_tasks.json",
+        "docs/data/deferred-ideas.json",
+        "docs/deferred-review.md",
+    ],
+)
+def test_predict_task_clashes_shared_mutable(hot_path: str):
     task = _task("eng-20260726-01")
     pr_index = [
         {
@@ -99,18 +110,23 @@ def test_predict_task_clashes_shared_mutable():
             "branch": "cursor/other-1de3",
             "title": "other",
             "task_id": None,
-            "changed_files": ["docs/data/engineering_tasks.json"],
+            "changed_files": [hot_path],
         }
     ]
     report = predict_task_clashes(
         task,
         occupied_paths=[],
         open_pr_index=pr_index,
-        candidate_files=["docs/data/engineering_tasks.json", "src/foo.py"],
+        candidate_files=[hot_path, "src/foo.py"],
         skip_merge_tree=True,
     )
     assert not report.dispatch_eligible
     assert report.blocked_by[0].kind == CLASH_KIND_SHARED
+
+
+def test_shared_mutable_includes_deferred_store():
+    assert "docs/data/deferred-ideas.json" in SHARED_MUTABLE_FILES
+    assert "docs/deferred-review.md" in SHARED_MUTABLE_FILES
 
 
 def test_select_clash_aware_prefers_complementary_area(monkeypatch):
@@ -324,7 +340,13 @@ def test_run_local_preflight_path_guard(tmp_path: Path):
 def test_estimated_task_files_include_shared_mutable():
     task = _task("eng-20260726-01", allowed_paths=["src/value_investor/research/ingest.py"])
     files = estimated_task_files(task)
-    assert "docs/data/engineering_tasks.json" in files
+    for path in (
+        "docs/data/engineering_tasks.json",
+        "docs/data/deferred-ideas.json",
+        "docs/deferred-review.md",
+    ):
+        assert path in files
+        assert path in SHARED_MUTABLE_FILES
 
 
 def test_git_merge_tree_conflicts_in_repo():

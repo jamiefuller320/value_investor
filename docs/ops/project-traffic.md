@@ -105,6 +105,11 @@ Each occasion stores: timestamp, PR, branch, kind (`ci_check` / `merge_conflict`
 `ci_and_merge`), normalized `failure_reason`, failed check names, and notes.
 `common-issues` (and the EOD digest section) aggregates by reason.
 
+**Merge-conflict hot files:** parallel `ftse-defer` / deferred-ideas tasks often collide on
+`docs/data/deferred-ideas.json` and `docs/deferred-review.md`. Engineering preflight treats
+those paths like `engineering_tasks.json` (`SHARED_MUTABLE_FILES`) so clash-aware dispatch
+does not start a second agent while an open PR already touches the deferred store.
+
 ## Policy
 
 `docs/data/library/policy.json` → `engineering.traffic_control` (defaults in
