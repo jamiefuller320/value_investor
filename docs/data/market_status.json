@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-28T16:51:16.042033+00:00",
+  "generated_at": "2026-09-28T17:23:03.783070+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -51,9 +51,9 @@
     ],
     "spare_sprint": {
       "1": "dax",
-      "2": "asx200"
+      "2": "ftse_mib"
     },
-    "equal_support_generated_at": "2026-09-28T15:16:43.422180+00:00"
+    "equal_support_generated_at": "2026-09-28T17:01:45.771056+00:00"
   },
   "markets": [
     {
@@ -988,10 +988,10 @@
       }
     },
     {
-      "market_id": "asx200",
-      "label": "S&P/ASX 200",
-      "exchange": "ASX",
-      "currency": "AUD",
+      "market_id": "ftse_mib",
+      "label": "FTSE MIB",
+      "exchange": "Borsa Italiana",
+      "currency": "EUR",
       "role": "sprint",
       "is_live": false,
       "is_focus": false,
@@ -1001,74 +1001,89 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=2)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=8, indexed_without_body=17)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
-      "queue_rank": 2,
+      "queue_rank": 11,
       "shared_maintenance": true,
-      "health": "ok",
-      "coverage_pct": 0.98,
-      "honest_coverage_pct": 0.98,
-      "ticker_count": 196,
+      "health": "warn",
+      "coverage_pct": 1.0,
+      "honest_coverage_pct": 1.0,
+      "ticker_count": 40,
       "stale": 0,
-      "fresh": 200,
-      "failed_fetch_count": 4,
-      "last_metrics_refresh": "2026-09-28T07:03:35.042999+00:00",
-      "last_constituents_refresh": "2026-09-28T07:01:08.372771+00:00",
-      "last_screen_at": "2026-09-28T06:52:40.068749+00:00",
+      "fresh": 40,
+      "failed_fetch_count": 0,
+      "last_metrics_refresh": "2026-09-28T07:14:11.714448+00:00",
+      "last_constituents_refresh": "2026-09-28T07:13:48.092999+00:00",
+      "last_screen_at": "2026-09-28T17:21:04.694342+00:00",
       "signal_counts": {
-        "hold": 118,
-        "avoid": 48,
-        "buy": 20,
-        "strong_buy": 7,
-        "insufficient_data": 3
+        "hold": 24,
+        "buy": 9,
+        "avoid": 5,
+        "strong_buy": 2
       },
-      "shortlist_count": 27,
-      "strong_buy": 7,
-      "buy": 20,
-      "learning_phase": 1,
+      "shortlist_count": 11,
+      "strong_buy": 2,
+      "buy": 9,
+      "learning_phase": 0,
       "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
-        "asx200 not in ladder.weekly_paper_shard_markets"
+        "no benchmark configured for ftse_mib"
       ],
-      "expected_epoch0_blockers": [
-        "asx200 not in ladder.weekly_paper_shard_markets"
-      ],
+      "expected_epoch0_blockers": [],
       "learning": {
-        "current_phase": 1,
+        "current_phase": 0,
         "next_phase": 1,
-        "phase1_ready": true,
+        "phase1_ready": false,
         "phase2_ready": false,
         "phase3_ready": false,
         "weekly_paper_enabled": false,
-        "weekday_paper_enabled": true,
+        "weekday_paper_enabled": false,
         "blockers": [
-          "asx200 not in ladder.weekly_paper_shard_markets"
+          "no benchmark configured for ftse_mib"
         ],
         "phase1": {
-          "screen_archives": 37,
-          "observe_snapshot_count": 37
+          "screen_archives": 0,
+          "observe_snapshot_count": 0
         },
         "phase2": {
           "weekly_batch_count": 0,
-          "min_weekly_batches": 4
+          "min_weekly_batches": 0
         }
       },
       "filing_health": {
-        "buy_tier_count": 27,
+        "buy_tier_count": 11,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 2,
-        "bodies_median": 24.0,
+        "thin_body_buy_tier": 8,
+        "indexed_without_body": 17,
+        "bodies_median": 2.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
-        "parked_count": 0,
+        "parked_count": 8,
         "zero_body_tickers": [],
-        "thin_body_tickers": [],
+        "thin_body_tickers": [
+          "MONC.MI",
+          "BZU.MI",
+          "PST.MI",
+          "INW.MI",
+          "UNI.MI",
+          "BC.MI",
+          "FCT.MI",
+          "IVG.MI"
+        ],
         "unmeasured_tickers": [],
-        "parked_tickers": []
+        "parked_tickers": [
+          "BC.MI",
+          "BZU.MI",
+          "FCT.MI",
+          "INW.MI",
+          "IVG.MI",
+          "MONC.MI",
+          "PST.MI",
+          "UNI.MI"
+        ]
       },
       "filing_gaps": 0,
       "paper_instrument": "buy_tier_level_native",
@@ -1080,13 +1095,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-09-28T07:30:52.822124+00:00",
-        "holdings": 26,
-        "nav": 543.42,
-        "cash": 100.71,
+        "last_run_at": "2026-09-28T07:31:08.445109+00:00",
+        "holdings": 3,
+        "nav": 857.02,
+        "cash": -0.0,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 31,
-        "epoch0_batch_count": 17
+        "weekday_batch_count": 1,
+        "epoch0_batch_count": 1
       },
       "equal_support": {
         "present": true,
@@ -1095,134 +1110,112 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 65,
-        "not_buy_tier_count": 169,
-        "never_buy_tier_count": 149,
-        "rememo_eligible_count": 1,
+        "hold_near_buy_count": 13,
+        "not_buy_tier_count": 29,
+        "never_buy_tier_count": 25,
+        "rememo_eligible_count": 6,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 65,
-        "not_buy_tier_count": 169,
-        "never_buy_tier_count": 149,
+        "hold_near_buy_count": 13,
+        "not_buy_tier_count": 29,
+        "never_buy_tier_count": 25,
         "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
         "buy_tier_not_now_sample": [
-          "ANN.AX"
+          "IVG.MI"
         ],
         "hold_near_buy_sample": [
-          "GQG.AX",
-          "LSF.AX",
-          "ARB.AX",
-          "QBE.AX",
-          "SPK.AX",
-          "IMD.AX",
-          "MTS.AX",
-          "DRR.AX"
+          "TEN.MI",
+          "IG.MI",
+          "BMPS.MI",
+          "LDO.MI",
+          "LTMC.MI",
+          "HER.MI",
+          "BPE.MI",
+          "A2A.MI"
         ]
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 4,
-        "targets": 10,
-        "improved": 4,
+        "run_count": 7,
+        "targets": 36,
+        "improved": 2,
         "improved_tickers": [
-          "CSC.AX",
-          "CQR.AX",
-          "EBO.AX",
-          "PXA.AX"
+          "BZU.MI",
+          "PST.MI"
         ],
-        "last_run_at": "2026-09-28T14:25:14.267850+00:00",
+        "last_run_at": "2026-09-28T13:45:48.482609+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
-          "unmeasured": 0,
+          "unmeasured": 2,
           "zero_body": 0,
-          "thin": 0,
+          "thin": 6,
           "indexed_without_body": 0,
-          "filing_gaps": 0
+          "filing_gaps": 2
         },
         "gaps_after": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 2,
+          "thin": 8,
+          "indexed_without_body": 0,
           "filing_gaps": 0
         },
         "gap_delta": {
-          "unmeasured": 0,
+          "unmeasured": -2,
           "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 2,
-          "filing_gaps": 0
+          "thin": 2,
+          "indexed_without_body": 0,
+          "filing_gaps": -2
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 2,
+          "thin": 8,
+          "indexed_without_body": 17,
           "filing_gaps": 0
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [],
-        "sprint_entered_at": "2026-09-27T20:13:10.435886+00:00"
+        "admission_warnings": [
+          {
+            "id": "no_observe_benchmark",
+            "severity": "warn",
+            "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
+          }
+        ],
+        "sprint_entered_at": "2026-09-28T17:20:07.348163+00:00"
       },
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
         "reason": null,
-        "market_id": "asx200",
+        "market_id": "ftse_mib",
         "source": "paper_fund",
         "paper_instrument": "buy_tier_level_native",
-        "currency": "AUD",
-        "benchmark_ticker": "^AXJO",
+        "currency": "EUR",
+        "benchmark_ticker": "^STOXX50E",
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
         "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
         "points": [
           {
-            "date": "2026-09-25",
-            "held": 985.31,
-            "nav": 985.31,
-            "held_stock": 985.31,
-            "cash": 0.0,
-            "positions": 26,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 465.92
-            },
-            "market": 985.31
-          },
-          {
-            "date": "2026-09-27",
-            "held": 985.3,
-            "nav": 985.3,
-            "held_stock": 985.3,
-            "cash": 0.0,
-            "positions": 27,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 465.62
-            },
-            "market": 985.31
-          },
-          {
             "date": "2026-09-28",
-            "held": 977.69,
-            "nav": 977.69,
-            "held_stock": 977.69,
+            "held": 999.75,
+            "nav": 999.75,
+            "held_stock": 999.75,
             "cash": 0.0,
-            "positions": 26,
+            "positions": 3,
             "contributed_capital": 1000.0,
             "branches": {
-              "buy_tier_level_gbp_fx_warped": 442.71
+              "buy_tier_level_gbp_fx_warped": 857.02
             },
-            "market": 986.98
+            "market": 999.75
           }
         ],
         "series": [
@@ -1234,7 +1227,7 @@
           },
           {
             "id": "market",
-            "label": "^AXJO equivalent",
+            "label": "^STOXX50E equivalent",
             "kind": "market",
             "color": "#64748b"
           },
@@ -1262,16 +1255,16 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 18
+            "point_count": 1
           }
         ],
         "last": {
           "date": "2026-09-28",
-          "held": 977.69,
-          "market": 986.98,
-          "nav": 977.69,
-          "positions": 26,
-          "excess_pct": -0.009413
+          "held": 999.75,
+          "market": 999.75,
+          "nav": 999.75,
+          "positions": 3,
+          "excess_pct": 0.0
         }
       }
     },
@@ -1927,204 +1920,6 @@
           "nav": 1001.59,
           "positions": 8,
           "excess_pct": 0.002262
-        }
-      }
-    },
-    {
-      "market_id": "ftse_mib",
-      "label": "FTSE MIB",
-      "exchange": "Borsa Italiana",
-      "currency": "EUR",
-      "role": "admitted",
-      "is_live": false,
-      "is_focus": false,
-      "is_graduated": true,
-      "is_queue": true,
-      "is_admitted": true,
-      "is_ftse_equivalent": false,
-      "ingest": "maintenance",
-      "ingest_stream": null,
-      "ingest_reason": null,
-      "ingest_parity_met": null,
-      "ingest_exhausted": true,
-      "queue_rank": 11,
-      "shared_maintenance": true,
-      "health": "warn",
-      "coverage_pct": 1.0,
-      "honest_coverage_pct": 1.0,
-      "ticker_count": 40,
-      "stale": 0,
-      "fresh": 40,
-      "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-28T07:14:11.714448+00:00",
-      "last_constituents_refresh": "2026-09-28T07:13:48.092999+00:00",
-      "last_screen_at": "2026-09-28T06:52:40.068749+00:00",
-      "signal_counts": {
-        "hold": 24,
-        "buy": 9,
-        "avoid": 5,
-        "strong_buy": 2
-      },
-      "shortlist_count": 11,
-      "strong_buy": 2,
-      "buy": 9,
-      "learning_phase": 0,
-      "learning_phase_label": "Epoch-0 level",
-      "phase_blockers": [
-        "no benchmark configured for ftse_mib"
-      ],
-      "expected_epoch0_blockers": [],
-      "learning": {
-        "current_phase": 0,
-        "next_phase": 1,
-        "phase1_ready": false,
-        "phase2_ready": false,
-        "phase3_ready": false,
-        "weekly_paper_enabled": false,
-        "weekday_paper_enabled": true,
-        "blockers": [
-          "no benchmark configured for ftse_mib"
-        ],
-        "phase1": {
-          "screen_archives": 13,
-          "observe_snapshot_count": 0
-        },
-        "phase2": {
-          "weekly_batch_count": 0,
-          "min_weekly_batches": 4
-        }
-      },
-      "filing_health": null,
-      "filing_gaps": null,
-      "paper_instrument": "buy_tier_level_native",
-      "ai_judgment": false,
-      "knob_apply": false,
-      "epoch0": {
-        "present": true,
-        "paper_instrument": "buy_tier_level",
-        "ai_judgment": false,
-        "knob_apply": false,
-        "acted": true,
-        "last_run_at": "2026-09-28T07:31:08.445109+00:00",
-        "holdings": 3,
-        "nav": 857.02,
-        "cash": -0.0,
-        "contributed_capital": 1000.0,
-        "weekday_batch_count": 1,
-        "epoch0_batch_count": 1
-      },
-      "equal_support": {
-        "present": true,
-        "ai_judgment": false,
-        "knob_apply": false,
-        "paper_instrument": "buy_tier_level",
-        "timing_signal_present": false,
-        "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 13,
-        "not_buy_tier_count": 29,
-        "never_buy_tier_count": 25,
-        "rememo_eligible_count": 6,
-        "exclusion_ready_for_priors": null
-      },
-      "near_miss": {
-        "buy_tier_not_now_count": 1,
-        "hold_near_buy_count": 13,
-        "not_buy_tier_count": 29,
-        "never_buy_tier_count": 25,
-        "timing_signal_present": true,
-        "observe_only": true,
-        "watch_cut": "buy_not_now + hold_near_buy",
-        "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "IVG.MI"
-        ],
-        "hold_near_buy_sample": [
-          "TEN.MI",
-          "IG.MI",
-          "BMPS.MI",
-          "LDO.MI",
-          "LTMC.MI",
-          "HER.MI",
-          "BPE.MI",
-          "A2A.MI"
-        ]
-      },
-      "sprint_progress": null,
-      "held_vs_market": {
-        "schema_version": 1,
-        "status": "ok",
-        "reason": null,
-        "market_id": "ftse_mib",
-        "source": "paper_fund",
-        "paper_instrument": "buy_tier_level_native",
-        "currency": "EUR",
-        "benchmark_ticker": "^STOXX50E",
-        "held_path": "equity_marks",
-        "market_path": "index_levels",
-        "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
-        "points": [
-          {
-            "date": "2026-09-28",
-            "held": 999.75,
-            "nav": 999.75,
-            "held_stock": 999.75,
-            "cash": 0.0,
-            "positions": 3,
-            "contributed_capital": 1000.0,
-            "branches": {
-              "buy_tier_level_gbp_fx_warped": 857.02
-            },
-            "market": 999.75
-          }
-        ],
-        "series": [
-          {
-            "id": "held",
-            "label": "Held book",
-            "kind": "held",
-            "color": "#2b6cb0"
-          },
-          {
-            "id": "market",
-            "label": "^STOXX50E equivalent",
-            "kind": "market",
-            "color": "#64748b"
-          },
-          {
-            "id": "branch:buy_tier_level_gbp_fx_warped",
-            "label": "GBP book (FX-warped archive)",
-            "kind": "branch",
-            "status": "active",
-            "color": "#7c3aed",
-            "knobs": {
-              "reporting_currency": "GBP",
-              "capital_epoch": "contaminated_gbp_unit_mismatch",
-              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
-            }
-          }
-        ],
-        "branches": [
-          {
-            "id": "buy_tier_level_gbp_fx_warped",
-            "label": "GBP book (FX-warped archive)",
-            "kind": "branch",
-            "status": "active",
-            "knobs": {
-              "reporting_currency": "GBP",
-              "capital_epoch": "contaminated_gbp_unit_mismatch",
-              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
-            },
-            "point_count": 1
-          }
-        ],
-        "last": {
-          "date": "2026-09-28",
-          "held": 999.75,
-          "market": 999.75,
-          "nav": 999.75,
-          "positions": 3,
-          "excess_pct": 0.0
         }
       }
     },
@@ -3130,6 +2925,233 @@
           "nav": 1003.39,
           "positions": 120,
           "excess_pct": 0.003331
+        }
+      }
+    },
+    {
+      "market_id": "asx200",
+      "label": "S&P/ASX 200",
+      "exchange": "ASX",
+      "currency": "AUD",
+      "role": "admitted",
+      "is_live": false,
+      "is_focus": false,
+      "is_graduated": true,
+      "is_queue": true,
+      "is_admitted": true,
+      "is_ftse_equivalent": false,
+      "ingest": "maintenance",
+      "ingest_stream": null,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
+      "ingest_exhausted": true,
+      "queue_rank": 2,
+      "shared_maintenance": true,
+      "health": "ok",
+      "coverage_pct": 0.98,
+      "honest_coverage_pct": 0.98,
+      "ticker_count": 196,
+      "stale": 0,
+      "fresh": 200,
+      "failed_fetch_count": 4,
+      "last_metrics_refresh": "2026-09-28T07:03:35.042999+00:00",
+      "last_constituents_refresh": "2026-09-28T07:01:08.372771+00:00",
+      "last_screen_at": "2026-09-28T06:52:40.068749+00:00",
+      "signal_counts": {
+        "hold": 118,
+        "avoid": 48,
+        "buy": 20,
+        "strong_buy": 7,
+        "insufficient_data": 3
+      },
+      "shortlist_count": 27,
+      "strong_buy": 7,
+      "buy": 20,
+      "learning_phase": 1,
+      "learning_phase_label": "Epoch-0 level",
+      "phase_blockers": [
+        "asx200 not in ladder.weekly_paper_shard_markets"
+      ],
+      "expected_epoch0_blockers": [
+        "asx200 not in ladder.weekly_paper_shard_markets"
+      ],
+      "learning": {
+        "current_phase": 1,
+        "next_phase": 1,
+        "phase1_ready": true,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": true,
+        "blockers": [
+          "asx200 not in ladder.weekly_paper_shard_markets"
+        ],
+        "phase1": {
+          "screen_archives": 37,
+          "observe_snapshot_count": 37
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 4
+        }
+      },
+      "filing_health": null,
+      "filing_gaps": null,
+      "paper_instrument": "buy_tier_level_native",
+      "ai_judgment": false,
+      "knob_apply": false,
+      "epoch0": {
+        "present": true,
+        "paper_instrument": "buy_tier_level",
+        "ai_judgment": false,
+        "knob_apply": false,
+        "acted": true,
+        "last_run_at": "2026-09-28T07:30:52.822124+00:00",
+        "holdings": 26,
+        "nav": 543.42,
+        "cash": 100.71,
+        "contributed_capital": 1000.0,
+        "weekday_batch_count": 31,
+        "epoch0_batch_count": 17
+      },
+      "equal_support": {
+        "present": true,
+        "ai_judgment": false,
+        "knob_apply": false,
+        "paper_instrument": "buy_tier_level",
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 1,
+        "hold_near_buy_count": 65,
+        "not_buy_tier_count": 169,
+        "never_buy_tier_count": 149,
+        "rememo_eligible_count": 1,
+        "exclusion_ready_for_priors": null
+      },
+      "near_miss": {
+        "buy_tier_not_now_count": 1,
+        "hold_near_buy_count": 65,
+        "not_buy_tier_count": 169,
+        "never_buy_tier_count": 149,
+        "timing_signal_present": true,
+        "observe_only": true,
+        "watch_cut": "buy_not_now + hold_near_buy",
+        "census_groups": "not_buy_tier + never_buy_tier",
+        "buy_tier_not_now_sample": [
+          "ANN.AX"
+        ],
+        "hold_near_buy_sample": [
+          "GQG.AX",
+          "LSF.AX",
+          "ARB.AX",
+          "QBE.AX",
+          "SPK.AX",
+          "IMD.AX",
+          "MTS.AX",
+          "DRR.AX"
+        ]
+      },
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "ok",
+        "reason": null,
+        "market_id": "asx200",
+        "source": "paper_fund",
+        "paper_instrument": "buy_tier_level_native",
+        "currency": "AUD",
+        "benchmark_ticker": "^AXJO",
+        "held_path": "equity_marks",
+        "market_path": "index_levels",
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [
+          {
+            "date": "2026-09-25",
+            "held": 985.31,
+            "nav": 985.31,
+            "held_stock": 985.31,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 465.92
+            },
+            "market": 985.31
+          },
+          {
+            "date": "2026-09-27",
+            "held": 985.3,
+            "nav": 985.3,
+            "held_stock": 985.3,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 465.62
+            },
+            "market": 985.31
+          },
+          {
+            "date": "2026-09-28",
+            "held": 977.69,
+            "nav": 977.69,
+            "held_stock": 977.69,
+            "cash": 0.0,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 442.71
+            },
+            "market": 986.98
+          }
+        ],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^AXJO equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          },
+          {
+            "id": "branch:buy_tier_level_gbp_fx_warped",
+            "label": "GBP book (FX-warped archive)",
+            "kind": "branch",
+            "status": "active",
+            "color": "#7c3aed",
+            "knobs": {
+              "reporting_currency": "GBP",
+              "capital_epoch": "contaminated_gbp_unit_mismatch",
+              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
+            }
+          }
+        ],
+        "branches": [
+          {
+            "id": "buy_tier_level_gbp_fx_warped",
+            "label": "GBP book (FX-warped archive)",
+            "kind": "branch",
+            "status": "active",
+            "knobs": {
+              "reporting_currency": "GBP",
+              "capital_epoch": "contaminated_gbp_unit_mismatch",
+              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
+            },
+            "point_count": 18
+          }
+        ],
+        "last": {
+          "date": "2026-09-28",
+          "held": 977.69,
+          "market": 986.98,
+          "nav": 977.69,
+          "positions": 26,
+          "excess_pct": -0.009413
         }
       }
     },

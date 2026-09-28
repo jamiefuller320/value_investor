@@ -23,7 +23,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-28T16:50:18.689270+00:00",
+    "snapshot_at": "2026-09-28T17:22:10.991060+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 51,
     "unmeasured_buy_tier": 1,
@@ -114,7 +114,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-28T16:50:18.691343+00:00",
+  "evaluated_at": "2026-09-28T17:22:10.992998+00:00",
   "maintenance_markets": [
     "aim",
     "asx200",
@@ -171,7 +171,7 @@
         "dax not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-28T16:50:43.521455+00:00",
+        "snapshot_at": "2026-09-28T17:22:34.848557+00:00",
         "market_id": "dax",
         "buy_tier_count": 12,
         "unmeasured_buy_tier": 1,
@@ -233,58 +233,85 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-28T16:50:43.522018+00:00",
+      "evaluated_at": "2026-09-28T17:22:34.849109+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "asx200"
+    "ftse_mib"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "asx200",
+      "market_id": "ftse_mib",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=2)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=8, indexed_without_body=17)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
-      "parked_tickers": [],
+      "parked_tickers": [
+        "BC.MI",
+        "BZU.MI",
+        "FCT.MI",
+        "INW.MI",
+        "IVG.MI",
+        "MONC.MI",
+        "PST.MI",
+        "UNI.MI"
+      ],
       "phase3_ready": false,
-      "current_phase": 1,
+      "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "asx200 not in ladder.weekly_paper_shard_markets"
+        "no benchmark configured for ftse_mib"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-28T16:50:46.381657+00:00",
-        "market_id": "asx200",
-        "buy_tier_count": 27,
+        "snapshot_at": "2026-09-28T17:22:35.516108+00:00",
+        "market_id": "ftse_mib",
+        "buy_tier_count": 11,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 2,
-        "bodies_min": 6,
-        "bodies_median": 24,
-        "bodies_max": 135,
+        "thin_body_buy_tier": 8,
+        "indexed_without_body": 17,
+        "bodies_min": 1,
+        "bodies_median": 2,
+        "bodies_max": 62,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
-        "thin_body_tickers": [],
+        "thin_body_tickers": [
+          "MONC.MI",
+          "BZU.MI",
+          "PST.MI",
+          "INW.MI",
+          "UNI.MI",
+          "BC.MI",
+          "FCT.MI",
+          "IVG.MI"
+        ],
         "indexed_without_body_tickers": [
-          "BPT.AX"
+          "ENI.MI"
         ],
         "indexed_without_body_by_ticker": {
-          "BPT.AX": 2
+          "ENI.MI": 17
         },
-        "parked_tickers": [],
-        "parked_count": 0,
+        "parked_tickers": [
+          "BC.MI",
+          "BZU.MI",
+          "FCT.MI",
+          "INW.MI",
+          "IVG.MI",
+          "MONC.MI",
+          "PST.MI",
+          "UNI.MI"
+        ],
+        "parked_count": 8,
         "effective_thin_body_buy_tier": 0,
         "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 2,
+        "effective_indexed_without_body": 17,
         "effective_indexed_without_body_tickers": [
-          "BPT.AX"
+          "ENI.MI"
         ],
         "ingest_exhausted": false
       },
@@ -300,14 +327,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-28T16:50:46.382700+00:00",
+      "evaluated_at": "2026-09-28T17:22:35.516665+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "dax",
-    "asx200"
+    "ftse_mib"
   ],
   "market_queue": [
     "sp500",
@@ -327,7 +354,7 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 16,
+    "hour_utc": 17,
     "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
@@ -353,7 +380,7 @@
     "dax"
   ],
   "scheduler_stream_2_markets": [
-    "asx200"
+    "ftse_mib"
   ],
   "should_run_library_maintenance": true
 }
