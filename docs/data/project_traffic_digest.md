@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-28T12:31:48.834278+00:00`
+Generated: `2026-09-28T17:31:52.258557+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -36,7 +36,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `human`/human PR #888 `eng-20260927-05` — Clash-aware: treat deferred-ideas store as shared mutable
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 89
+- Occasion count: 94
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 3×
