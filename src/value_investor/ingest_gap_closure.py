@@ -1446,6 +1446,130 @@ def evaluate_eng_idle_gap_closure_dispatch(
     }
 
 
+def _gap_closure_eng_compile_sort_key(run: dict[str, Any]) -> tuple[Any, ...]:
+    """Prefer current coverage-hole blockers with empty IR allowlists over stale IWB.
+
+    Without this, ``compile_pending_gap_closure_engineering(limit=1)`` can mint eng
+    tasks from months-old pending_review rows while today's unmeasured / 0-allowlist
+    intensive (e.g. OIZ.IR) never reaches the compile head.
+    """
+    params = run.get("params") or {}
+    ticker = str(run.get("ticker") or "").strip().upper()
+    blocker = str(params.get("critical_path_blocker") or "").strip().lower()
+    results = run.get("outcome") or {}
+    result_rows = list(results.get("results") or results.get("per_ticker") or [])
+    reason = ""
+    if result_rows and isinstance(result_rows[0], dict):
+        reason = str(result_rows[0].get("reason") or "").strip().lower()
+    allow = ticker_ir_allowlist_count(ticker) if ticker else 0
+    coverage_hole = (
+        0
+        if (blocker in {"unmeasured", "zero_body"} or reason in {"unmeasured", "zero_body"})
+        else 1
+    )
+    missing_ir = 0 if allow <= 0 else 1
+    zero_yield = 0 if intensive_run_was_zero_yield(run) else 1
+    # Newest first among equal priority.
+    stamp = str(run.get("completed_at") or run.get("recorded_at") or "")
+    return (coverage_hole, missing_ir, zero_yield, stamp == "", stamp)
+
+
+def count_zero_yield_intensives_for_ticker(
+    ticker: str,
+    *,
+    market_id: str | None = None,
+    runs_path: Path | None = None,
+    min_count: int = 2,
+) -> int:
+    """Count completed intensive zero-yield pins for a ticker (newest first, no age cap)."""
+    token = str(ticker or "").strip().upper()
+    if not token:
+        return 0
+    wanted_market = str(market_id or "").strip()
+    store = load_ingest_gap_closure_runs(runs_path)
+    count = 0
+    for row in reversed(store.get("runs") or []):
+        if str(row.get("ticker") or "").strip().upper() != token:
+            continue
+        params = row.get("params") or {}
+        if not params.get("intensive_gap_closure"):
+            continue
+        row_market = str(params.get("market_id") or "").strip()
+        if wanted_market and row_market != wanted_market:
+            continue
+        if not intensive_run_was_zero_yield(row):
+            # Non-zero yield breaks the consecutive stall chain for escalation.
+            break
+        count += 1
+        if count >= max(1, int(min_count)) * 3:
+            break
+    return count
+
+
+def stuck_coverage_tickers_missing_ir(
+    *,
+    market_status: dict[str, Any] | None = None,
+    runs_path: Path | None = None,
+    min_zero_yield: int = 2,
+) -> list[dict[str, Any]]:
+    """Focus/sprint unmeasured or zero-body tickers with 0 IR URLs after N zero-yields.
+
+    Used by ops-monitor / Daily hub to escalate IR-seed work instead of endless
+    empty deepen pins. Does **not** auto-park unmeasured names.
+    """
+    status = market_status if isinstance(market_status, dict) else {}
+    focus = str(status.get("focus_market") or "").strip()
+    out: list[dict[str, Any]] = []
+    for market in status.get("markets") or []:
+        if not isinstance(market, dict):
+            continue
+        market_id = str(market.get("market_id") or "").strip()
+        if not market_id:
+            continue
+        is_focus = bool(market.get("is_focus")) or market_id == focus
+        # Escalate for focus head; spare streams still surface but lower urgency.
+        health = market.get("filing_health") or {}
+        if not isinstance(health, dict):
+            continue
+        progress = market.get("sprint_progress") or {}
+        warnings = progress.get("admission_warnings") if isinstance(progress, dict) else []
+        warning_ids = {str(w.get("id") or "") for w in (warnings or []) if isinstance(w, dict)}
+        candidates: list[tuple[str, str]] = []
+        if "unmeasured_stuck" in warning_ids:
+            for token in health.get("unmeasured_tickers") or []:
+                text = str(token or "").strip().upper()
+                if text:
+                    candidates.append((text, "unmeasured"))
+        if "zero_body_stuck" in warning_ids:
+            for token in health.get("zero_body_tickers") or []:
+                text = str(token or "").strip().upper()
+                if text:
+                    candidates.append((text, "zero_body"))
+        for ticker, hole in candidates:
+            allow = ticker_ir_allowlist_count(ticker)
+            if allow > 0:
+                continue
+            zero_n = count_zero_yield_intensives_for_ticker(
+                ticker,
+                market_id=market_id,
+                runs_path=runs_path,
+                min_count=min_zero_yield,
+            )
+            if zero_n < max(1, int(min_zero_yield)):
+                continue
+            out.append(
+                {
+                    "market_id": market_id,
+                    "is_focus": is_focus,
+                    "ticker": ticker,
+                    "coverage_hole": hole,
+                    "ir_allowlist_count": allow,
+                    "zero_yield_intensives": zero_n,
+                }
+            )
+    return out
+
+
 def compile_pending_gap_closure_engineering(
     *,
     market_id: str | None = None,
@@ -1459,6 +1583,8 @@ def compile_pending_gap_closure_engineering(
 
     wanted = str(market_id or "").strip()
     pending = list_gap_closure_runs_pending_review(path=runs_path)
+    # Aim eng compile at today's coverage-hole / empty-allowlist blockers first.
+    pending = sorted(pending, key=_gap_closure_eng_compile_sort_key)
     compiled: list[dict[str, Any]] = []
     skipped: list[dict[str, str]] = []
     for run in pending:
@@ -1486,10 +1612,11 @@ def compile_pending_gap_closure_engineering(
             data_dir=data_dir,
         )
         if int(outcome.get("compiled_count") or 0) > 0:
+            task_ids = list(outcome.get("task_ids") or [])
             compiled.append(
                 {
                     "run_id": run.get("id"),
-                    "task_id": outcome.get("task_id"),
+                    "task_id": task_ids[0] if task_ids else outcome.get("task_id"),
                     "compile_reason": reason,
                 }
             )

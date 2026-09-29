@@ -1175,17 +1175,31 @@ def compile_ingest_engineering_task_from_trial(
             f"(chain {chain_round}/{MAX_GAP_CLOSURE_CHAIN_ROUNDS}: "
             f"{stats['fetched']}/{stats['attempted']} improved, run {run_id})"
         )[:160]
+    summary = (
+        f"Ingest gap-closure run {run_id} (chain root {chain_root}, round {chain_round}) targeted "
+        f"{ticker} with outstanding indexed gaps after refetch yield "
+        f"{stats['fetched']}/{stats['attempted']}. Investigate source mapping, URL "
+        "resolution, or parser gaps; add a focused fix and regression test so the "
+        "next pinned verification run closes the gap."
+    )
+    if compile_reason == "gaps_remain_without_allowlist":
+        title = (
+            f"Seed IR allowlist for unmeasured/zero-body {ticker}"
+            + (f" ({market_id})" if market_id else "")
+            + f" — empty allowlist after 0-improve pin ({run_id})"
+        )[:160]
+        summary = (
+            f"Gap-closure run {run_id} targeted {ticker} with outstanding coverage "
+            "holes but zero IR allowlist URLs (refetch never attempted). Seed "
+            "`_BUILTIN_IR_URLS` / issuer PDFs or fix discovery; do not keep "
+            "re-pinning empty intensify. Add a regression test; verify with a "
+            "pinned library ingest gap-closure / ingest-loop pass."
+        )
     task = EngineeringTask(
         id=f"eng-{run_stamp}-{seq:02d}",
         area="ingest",
         title=title,
-        summary=(
-            f"Ingest gap-closure run {run_id} (chain root {chain_root}, round {chain_round}) targeted "
-            f"{ticker} with outstanding indexed gaps after refetch yield "
-            f"{stats['fetched']}/{stats['attempted']}. Investigate source mapping, URL "
-            "resolution, or parser gaps; add a focused fix and regression test so the "
-            "next pinned verification run closes the gap."
-        ),
+        summary=summary,
         priority="high",
         priority_score=88.0,
         source="ingest_gap_closure",

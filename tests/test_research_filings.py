@@ -6209,6 +6209,32 @@ def test_builtin_ir_allowlist_includes_hm_b_st():
     assert any("Full-year-report" in url for url in urls)
 
 
+def test_builtin_ir_allowlist_includes_oiz_ir():
+    """euro_depth unmeasured OIZ.IR needs Origin Enterprises IR seeds (empty discovery)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("OIZ.IR") or []
+    assert any("Origin-Enterprises-Annual-Report-FY25" in url for url in urls)
+    assert any("Preliminary-Results-FY26.pdf" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("OIZ.IR")
+    assert len(rows) >= 4
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    # Base symbol key also resolves (euro_filings sometimes strips suffix).
+    assert len(fetch_filings_ir_allowlist("OIZ")) >= 4
+
+
+def test_esef_entity_aliases_include_oiz():
+    from value_investor.research.filings import (
+        _ESEF_ENTITY_SEARCH_ALIASES,
+        _esef_entity_name_variants,
+    )
+
+    aliases = _ESEF_ENTITY_SEARCH_ALIASES.get("OIZ") or ()
+    assert any("Origin Enterprises" in name for name in aliases)
+    variants = _esef_entity_name_variants("Origin Enterprises plc", ticker="OIZ.IR")
+    assert any("Origin Enterprises" in name for name in variants)
+
+
 def test_filter_misattributed_filings_drops_us_homonym_sec_rows():
     rows = [
         {

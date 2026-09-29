@@ -165,100 +165,11 @@
       }
     },
     {
-      "task_ref": "mwarn:euro_depth:zero_improve_stall",
-      "source": "market_warning_triage",
-      "work_class": "surface",
-      "task_family": "market-warning-triage",
-      "priority": 5,
-      "title": "Deepen · EU depth composite (STOXX50 + periphery) · zero_improve_stall",
-      "summary": "Last 2 days improved nobody while filing gaps remain",
-      "sort_bucket": "market_warn",
-      "closeable": true,
-      "close_action": "daily-focus-ack",
-      "close_payload": {
-        "focus_id": "mwarn:euro_depth:zero_improve_stall",
-        "decision": "accept",
-        "triage_action": "deepen"
-      },
-      "href": "#overview",
-      "recommendation_id": "rec-3d9c771c707c",
-      "status": {
-        "state": "waiting",
-        "label": "Discuss deepen (not dismissable)",
-        "next_steps": [
-          "Discuss in Project chat — fat-slot / rate-limit judgment"
-        ],
-        "waiting_on": [
-          {
-            "kind": "human",
-            "ref": "discuss",
-            "detail": "judgment call — Discuss before deepening fat slot"
-          },
-          {
-            "kind": "artifact",
-            "ref": "zero_improve_stall",
-            "detail": "cannot dismiss/park — blocks sprint_ingest_complete"
-          }
-        ],
-        "ready": false,
-        "ready_reason": null,
-        "blocked_reason": "judgment call — Discuss before deepening fat slot",
-        "updated_at": "2026-09-29T11:00:00Z",
-        "updated_by": "morning_builder"
-      },
-      "closed": false,
-      "triage_action": "deepen",
-      "prefer_discuss": true,
-      "dismissable": false,
-      "parkable": false,
-      "market_warning": {
-        "kind": "admission_warning",
-        "flag_id": "zero_improve_stall",
-        "market_id": "euro_depth",
-        "is_focus": true,
-        "is_spare": false,
-        "severity": "high",
-        "tickers": null,
-        "cli_hint": null,
-        "deviation_id": null
-      },
-      "recommendation": {
-        "id": "rec-3d9c771c707c",
-        "task_id": "mwarn:euro_depth:zero_improve_stall",
-        "summary": "Market warning triage → deepen: EU depth composite (STOXX50 + periphery) / zero_improve_stall.",
-        "rationale": "Focus-market zero_improve_stall on euro_depth — Discuss before changing fat-slot targeting or rate-limited sources.",
-        "accept_action": {
-          "kind": "focus-ack",
-          "payload": {
-            "focus_id": "mwarn:euro_depth:zero_improve_stall",
-            "decision": "accept",
-            "triage_action": "deepen"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-3d9c771c707c` (market warning `mwarn:euro_depth:zero_improve_stall`):\nProposed action: deepen\nMarket: euro_depth (focus=True spare=False)\nFlag: zero_improve_stall — Last 2 days improved nobody while filing gaps remain\nRationale: Focus-market zero_improve_stall on euro_depth — Discuss before changing fat-slot targeting or rate-limited sources.\nPolicy: dismissable=False parkable=False\nSuggested options:\n1) Discuss — judgment / fat-slot / rate-limit call\n2) Accept — observe-only record of deepen intent (does not dismiss or park)\n3) Do not ritual-clear the badge or divert euro capacity\nContext: docs/data/market_status.json + Daily hub market warning triage",
-        "priority": 5,
-        "options": [
-          "Discuss — judgment / fat-slot / rate-limit call",
-          "Accept — observe-only record of deepen intent (does not dismiss or park)",
-          "Do not ritual-clear the badge or divert euro capacity"
-        ],
-        "triage_action": "deepen",
-        "prefer_discuss": true,
-        "dismissable": false,
-        "parkable": false,
-        "market_id": "euro_depth",
-        "flag_id": "zero_improve_stall",
-        "cli_hint": null,
-        "work_class": "surface",
-        "task_family": "market-warning-triage"
-      }
-    },
-    {
       "task_ref": "mwarn:bel20:health_warn",
       "source": "market_warning_triage",
       "work_class": "surface",
       "task_family": "market-warning-triage",
-      "priority": 6,
+      "priority": 5,
       "title": "Park · BEL 20 · health_warn",
       "summary": "health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear",
       "sort_bucket": "market_warn",
@@ -314,7 +225,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-04e99b44fe2f` (market warning `mwarn:bel20:health_warn`):\nProposed action: park\nMarket: bel20 (focus=False spare=True)\nFlag: health_warn — health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear\nRationale: bel20: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-        "priority": 6,
+        "priority": 5,
         "options": [
           "Accept — park / observe-ack for today",
           "Discuss — only if this should become deepen",
@@ -336,7 +247,7 @@
       "source": "market_warning_triage",
       "work_class": "surface",
       "task_family": "market-warning-triage",
-      "priority": 7,
+      "priority": 6,
       "title": "Park · BEL 20 · no_observe_benchmark",
       "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock",
       "sort_bucket": "market_warn",
@@ -392,7 +303,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-0fac1ca77470` (market warning `mwarn:bel20:no_observe_benchmark`):\nProposed action: park\nMarket: bel20 (focus=False spare=True)\nFlag: no_observe_benchmark — No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock\nRationale: bel20: No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-        "priority": 7,
+        "priority": 6,
         "options": [
           "Accept — park / observe-ack for today",
           "Discuss — only if this should become deepen",
@@ -414,7 +325,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-shard-epoch0-watch",
-      "priority": 13,
+      "priority": 12,
       "title": "Watch shard epoch-0 and near-miss before forking AI",
       "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
       "sort_bucket": "new_info",
@@ -443,7 +354,7 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "Admitted shard epoch-0 watch · 13",
-          "updated_at": "2026-09-29T17:26:13.440665+00:00",
+          "updated_at": "2026-09-29T19:29:54.751308+00:00",
           "fingerprint": "0e7a62d585fe593e",
           "bullets": [
             "euro_depth: phase=3 ai=False knob=False holdings=37",
@@ -485,7 +396,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-7f12e1a3e601` (human task `sunday-shard-epoch0-watch`):\nTitle: Watch shard epoch-0 and near-miss before forking AI\nSummary: Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 13\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-7f12e1a3e601` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 13,
+        "priority": 12,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -498,7 +409,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "monthly-pr-fix-common-issues",
-      "priority": 14,
+      "priority": 13,
       "title": "Review common PR check / merge fix-request reasons",
       "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
       "sort_bucket": "new_info",
@@ -507,10 +418,10 @@
       "close_payload": {
         "task_id": "monthly-pr-fix-common-issues",
         "decision": "ack_observe",
-        "finding_fingerprint": "bd610b65087ce37e"
+        "finding_fingerprint": "9fef5d72f204f74e"
       },
       "href": "#automation/human",
-      "recommendation_id": "rec-970cfe96dc9a",
+      "recommendation_id": "rec-05095860fd94",
       "status": {
         "state": "ready",
         "label": "Proposed",
@@ -527,15 +438,15 @@
         "sort_bucket": "new_info",
         "analysis": {
           "headline": "PR fix common issues",
-          "updated_at": "2026-09-29T14:01:40.648020Z",
-          "fingerprint": "bd610b65087ce37e",
+          "updated_at": "2026-09-29T18:35:26.209011+00:00",
+          "fingerprint": "9fef5d72f204f74e",
           "bullets": [
-            "Occasions logged: 102",
+            "Occasions logged: 104",
             "PR mergeable=CONFLICTING against main: 7",
             "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
             "validate check failed: 3",
             "Merge conflicts in deferred-ideas.json with main: 2",
-            "ruff_format: 1"
+            "Ruff F841 unused dismissable in market_warning_triage.propose_triage: 2"
           ],
           "source_keys": [
             "pr_fix_occasions",
@@ -555,7 +466,7 @@
       },
       "closed": false,
       "recommendation": {
-        "id": "rec-970cfe96dc9a",
+        "id": "rec-05095860fd94",
         "task_id": "human:monthly-pr-fix-common-issues",
         "summary": "Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).",
         "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues",
@@ -564,11 +475,11 @@
           "payload": {
             "task_id": "monthly-pr-fix-common-issues",
             "decision": "ack_observe",
-            "finding_fingerprint": "bd610b65087ce37e"
+            "finding_fingerprint": "9fef5d72f204f74e"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-970cfe96dc9a` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-970cfe96dc9a` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 14,
+        "discuss_prompt": "Discuss daily recommendation `rec-05095860fd94` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-05095860fd94` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "priority": 13,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -581,7 +492,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-suite-b-fair-lab",
-      "priority": 15,
+      "priority": 14,
       "title": "Review Suite B fair-cost lab vs stress Suite A",
       "summary": "Confirm ai_judgment_fair / rules_fair are marking under T212-shaped costs, endurance_zero_datum is set, and decision-review --suite B applies stay suite-local. Do not flip primary off 3% (N48) until B excess beats ^FTSE and fair rules control with a thick forward window.",
       "sort_bucket": "unacked",
@@ -645,7 +556,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-ed071edb0500` (human task `sunday-suite-b-fair-lab`):\nTitle: Review Suite B fair-cost lab vs stress Suite A\nSummary: Open human gate “Review Suite B fair-cost lab vs stress Suite A” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Fair-cost Suite B lab\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-ed071edb0500` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 15,
+        "priority": 14,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -658,7 +569,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-spawn-fair-twins",
-      "priority": 16,
+      "priority": 15,
       "title": "Spawn Suite B twins only for recommend experiments",
       "summary": "If experiment_assessment has recommend calibration/exclusion/experimental tracks, dry-run then optionally apply ftse-trading-costs spawn-fair-twins (max 2). Never auto-fork every shadow (N53). Zero recommend rows is a no-op.",
       "sort_bucket": "unacked",
@@ -809,7 +720,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-e5af295cf197` (human task `sunday-spawn-fair-twins`):\nTitle: Spawn Suite B twins only for recommend experiments\nSummary: Open human gate “Spawn Suite B twins only for recommend experiments” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-e5af295cf197` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 16,
+        "priority": 15,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -822,7 +733,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-entry-dca-cadence",
-      "priority": 17,
+      "priority": 16,
       "title": "Review entry DCA cadence when overlay readiness fires",
       "summary": "Ack via CLI or Lifecycle Acknowledge (observe-only — Do not execute DCA from ack). Review docs/data/entry_dca_adoption_plan.json. When paper_execute_graduated is ready, Lifecycle Start enables 4× weekly entry DCA on graduated_allocation only. Do not change starter fraction or apply to primary/live while beat_market is false.",
       "sort_bucket": "unacked",
@@ -888,7 +799,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-16c5a3262446` (human task `sunday-entry-dca-cadence`):\nTitle: Review entry DCA cadence when overlay readiness fires\nSummary: Open human gate “Review entry DCA cadence when overlay readiness fires” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Entry DCA adoption · —\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-16c5a3262446` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 17,
+        "priority": 16,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -901,7 +812,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-buy-cross-archive",
-      "priority": 18,
+      "priority": 17,
       "title": "Read buy-cross archive review",
       "summary": "After analysis-review, read buy_cross_archive_review.json: cross-book vs level comparison, week-0 cash, names that never entered because they stayed buy-tier. Observe-only — do not spawn a live cross book from sparse historic crossings.",
       "sort_bucket": "unacked",
@@ -963,80 +874,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-b471c8eab343` (human task `sunday-buy-cross-archive`):\nTitle: Read buy-cross archive review\nSummary: Open human gate “Read buy-cross archive review” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Buy-cross archive review\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-b471c8eab343` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 18,
-        "options": [
-          "Accept → Acknowledge (observe-only)",
-          "Open runbook / defer",
-          "Discuss in Project chat"
-        ]
-      }
-    },
-    {
-      "task_ref": "human:adhoc-decision-recording-plan",
-      "source": "human_tasks",
-      "work_class": "ops_gate",
-      "task_family": "adhoc-decision-recording-plan",
-      "priority": 19,
-      "title": "Lock recording plan before new learning strands",
-      "summary": "Before opening a new analysis, counterfactual, or model-dev strand, answer the four freeze questions (unit, freeze-at-t, join-later, never-backfill) and validate with ftse-decision-recording. Use preview-freeze for coverage gaps. Do not enable the Phase C freeze writer until readiness is READY.",
-      "sort_bucket": "unacked",
-      "closeable": true,
-      "close_action": "human-task-ack",
-      "close_payload": {
-        "task_id": "adhoc-decision-recording-plan",
-        "decision": "ack_observe",
-        "finding_fingerprint": "93b1efb80701c7fe"
-      },
-      "href": "#automation/human",
-      "recommendation_id": "rec-fe88d9d254b5",
-      "status": {
-        "state": "ready",
-        "label": "Proposed",
-        "next_steps": [],
-        "waiting_on": [],
-        "ready": true,
-        "ready_reason": "proposal present · no blockers",
-        "blocked_reason": null,
-        "updated_at": "2026-09-29T11:00:00Z",
-        "updated_by": "morning_builder"
-      },
-      "human_task": {
-        "id": "adhoc-decision-recording-plan",
-        "sort_bucket": "unacked",
-        "analysis": {
-          "headline": "See runbook for analysis inputs",
-          "updated_at": null,
-          "fingerprint": "93b1efb80701c7fe",
-          "bullets": [],
-          "source_keys": []
-        },
-        "ack": {
-          "acked": false,
-          "stale": false,
-          "acked_at": null,
-          "decision": null,
-          "finding_fingerprint": null
-        },
-        "approval_gate": false,
-        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/decision-recording-checklist.md#the-four-questions",
-        "cadence": "ad_hoc"
-      },
-      "closed": false,
-      "recommendation": {
-        "id": "rec-fe88d9d254b5",
-        "task_id": "human:adhoc-decision-recording-plan",
-        "summary": "Open human gate “Lock recording plan before new learning strands” — ack when reviewed; Approve only on promotion gates.",
-        "rationale": "sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs",
-        "accept_action": {
-          "kind": "human-task-ack",
-          "payload": {
-            "task_id": "adhoc-decision-recording-plan",
-            "decision": "ack_observe",
-            "finding_fingerprint": "93b1efb80701c7fe"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-fe88d9d254b5` (human task `adhoc-decision-recording-plan`):\nTitle: Lock recording plan before new learning strands\nSummary: Open human gate “Lock recording plan before new learning strands” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-fe88d9d254b5` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 19,
+        "priority": 17,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1049,7 +887,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-epoch0-cron-unmapped-timezone",
-      "priority": 20,
+      "priority": 18,
       "title": "Extend epoch-0 cron timezone map for new session",
       "summary": "When admitting a market with no MARKET_SESSION_DEFAULTS entry (or a timezone not in EPOCH0_WEEKDAY_SLOTS), add an explicit session + bucket mapping (e.g. tsx60\to America/Toronto\to US EDT/EST). Do not rely on the London DEFAULT_SESSION fallback. Then re-run euro-ingest-dispatch --sync-cron or import_cron_jobs for that key.",
       "sort_bucket": "unacked",
@@ -1109,7 +947,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-2e44f4fa9022` (human task `adhoc-epoch0-cron-unmapped-timezone`):\nTitle: Extend epoch-0 cron timezone map for new session\nSummary: Open human gate “Extend epoch-0 cron timezone map for new session” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-2e44f4fa9022` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 20,
+        "priority": 18,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1122,7 +960,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-paper-learning-review",
-      "priority": 21,
+      "priority": 19,
       "title": "Paper-learning review experiments",
       "summary": "When churn or exit-timing cohorts mature, run paper-learning review probes manually; do not auto-apply from shadow cohorts yet.",
       "sort_bucket": "unacked",
@@ -1182,7 +1020,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-5e33d13f027a` (human task `adhoc-paper-learning-review`):\nTitle: Paper-learning review experiments\nSummary: Open human gate “Paper-learning review experiments” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-5e33d13f027a` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 21,
+        "priority": 19,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1195,7 +1033,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "adhoc-review-fcf-basis-bridges",
-      "priority": 22,
+      "priority": 20,
       "title": "Override FCF auto policy only when majority/filing is wrong",
       "summary": "Ordinary buy-tier FCF mismatches auto-resolve (majority among screen/filing/company-adjusted, else filing-aligned OCF−CapEx). Write docs/data/research/<TICKER>/sources/fcf_bridge.json only as a residual override when that auto pick is wrong, or when so-what flags fcf_bridge_needed because no filing/company figure exists. Never leave divergent Yahoo TTM as policy.",
       "sort_bucket": "unacked",
@@ -1255,7 +1093,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-c7b0341690ca` (human task `adhoc-review-fcf-basis-bridges`):\nTitle: Override FCF auto policy only when majority/filing is wrong\nSummary: Open human gate “Override FCF auto policy only when majority/filing is wrong” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-c7b0341690ca` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 22,
+        "priority": 20,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1268,7 +1106,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "monthly-cycle-budget-surplus",
-      "priority": 23,
+      "priority": 21,
       "title": "Review cycle-end Cursor surplus and provisional weekly-ops bump",
       "summary": "Near plan refresh day: ftse-library cycle-surplus assess with declared unused Ultra fraction, apply a 25% transfer into weekly_ops_cap only, then next cycle run review and --keep or --revert. 15% of listed plan credit / week is a warning on estimated weekly_ops USD, not a hard cap. Do not raise rememo daily caps, research_all_graduated, or offline memo density from leftover credit.",
       "sort_bucket": "unacked",
@@ -1333,7 +1171,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-5fed3b829a1d` (human task `monthly-cycle-budget-surplus`):\nTitle: Review cycle-end Cursor surplus and provisional weekly-ops bump\nSummary: Open human gate “Review cycle-end Cursor surplus and provisional weekly-ops bump” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Cycle-end Cursor surplus\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-5fed3b829a1d` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 23,
+        "priority": 21,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1346,7 +1184,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "monthly-ops-review-cadence",
-      "priority": 24,
+      "priority": 22,
       "title": "Follow unified ops review cadence",
       "summary": "Use the weekly → monthly → quarterly sequence in ops-review-cadence.md (analysis review, horizon scan, deferred ideas) rather than ad-hoc review order.",
       "sort_bucket": "unacked",
@@ -1406,7 +1244,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-1dee4d33772a` (human task `monthly-ops-review-cadence`):\nTitle: Follow unified ops review cadence\nSummary: Open human gate “Follow unified ops review cadence” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-1dee4d33772a` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 24,
+        "priority": 22,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1419,7 +1257,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "quarterly-deferred-review",
-      "priority": 25,
+      "priority": 23,
       "title": "Deferred ideas review pass",
       "summary": "Review deferred-review.md; move items via ftse-defer status (done / drop / promote).",
       "sort_bucket": "unacked",
@@ -1488,89 +1326,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-86fbc397728b` (human task `quarterly-deferred-review`):\nTitle: Deferred ideas review pass\nSummary: Open human gate “Deferred ideas review pass” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Deferred ideas review\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-86fbc397728b` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 25,
-        "options": [
-          "Accept → Acknowledge (observe-only)",
-          "Open runbook / defer",
-          "Discuss in Project chat"
-        ]
-      }
-    },
-    {
-      "task_ref": "human:sunday-analysis-tasks",
-      "source": "human_tasks",
-      "work_class": "ops_gate",
-      "task_family": "sunday-analysis-tasks",
-      "priority": 26,
-      "title": "Triage analysis_tasks experiments",
-      "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim — do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
-      "sort_bucket": "unacked",
-      "closeable": true,
-      "close_action": "human-task-ack",
-      "close_payload": {
-        "task_id": "sunday-analysis-tasks",
-        "decision": "ack_observe",
-        "finding_fingerprint": "eaa31c994c4a4a3a"
-      },
-      "href": "#automation/human",
-      "recommendation_id": "rec-665fefe6ff20",
-      "status": {
-        "state": "ready",
-        "label": "Proposed",
-        "next_steps": [],
-        "waiting_on": [],
-        "ready": true,
-        "ready_reason": "proposal present · no blockers",
-        "blocked_reason": null,
-        "updated_at": "2026-09-29T11:00:00Z",
-        "updated_by": "morning_builder"
-      },
-      "human_task": {
-        "id": "sunday-analysis-tasks",
-        "sort_bucket": "unacked",
-        "analysis": {
-          "headline": "Triage queue · 6 open",
-          "updated_at": null,
-          "fingerprint": "eaa31c994c4a4a3a",
-          "bullets": [
-            "Open/proposed: 6 / 6",
-            "ana-20260728-04: Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
-            "ana-20260921-01: Exclusion-universe step u3 (conviction ≥ 0.25, cumulative_exclusion_alpha +0.00261) replay on ai_judgment candidate pool vs baseline — expected learning value: quantify whether priors improve filtered",
-            "ana-20260921-02: Offline family-weight stress test for quality/dividend failures on avoid cohort (pattern AAL.L / AML.L opinion-flip triggers) — expected learning value: test whether tightening quality+dividend gates",
-            "ana-20260921-03: Conviction/timing delay model for transition_key hold→buy and realization_lag (1w hit 0.406 vs within_4w_rate 0.9448) — expected learning value: separate assessment lag from signal direction for overl",
-            "ana-20260921-04: Hold-vs-swap probability strand using exit_timing_near_miss (hold_closed 202, swap_closed 209, ready_for_probability_analysis true) — expected learning value: estimate whether early swap beats hold re"
-          ],
-          "source_keys": [
-            "analysis_tasks"
-          ]
-        },
-        "ack": {
-          "acked": false,
-          "stale": false,
-          "acked_at": null,
-          "decision": null,
-          "finding_fingerprint": null
-        },
-        "approval_gate": false,
-        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/analysis-review.md#manual-promotion-to-engineering",
-        "cadence": "sunday"
-      },
-      "closed": false,
-      "recommendation": {
-        "id": "rec-665fefe6ff20",
-        "task_id": "human:sunday-analysis-tasks",
-        "summary": "Open human gate “Triage analysis_tasks experiments” — ack when reviewed; Approve only on promotion gates.",
-        "rationale": "sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Triage queue · 6 open",
-        "accept_action": {
-          "kind": "human-task-ack",
-          "payload": {
-            "task_id": "sunday-analysis-tasks",
-            "decision": "ack_observe",
-            "finding_fingerprint": "eaa31c994c4a4a3a"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-665fefe6ff20` (human task `sunday-analysis-tasks`):\nTitle: Triage analysis_tasks experiments\nSummary: Open human gate “Triage analysis_tasks experiments” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Triage queue · 6 open\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-665fefe6ff20` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 26,
+        "priority": 23,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1583,7 +1339,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-exclusion-shadow-spawn",
-      "priority": 27,
+      "priority": 24,
       "title": "Exclusion ladder shadow spawn gate",
       "summary": "If exclusion_ladder_replay readiness.ready_for_shadow_spawn is true, run ftse-exclusion-ladder-replay spawn-shadow manually. Never auto-spawn.",
       "sort_bucket": "unacked",
@@ -1643,86 +1399,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-2afe7307d5d4` (human task `sunday-exclusion-shadow-spawn`):\nTitle: Exclusion ladder shadow spawn gate\nSummary: Open human gate “Exclusion ladder shadow spawn gate” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-2afe7307d5d4` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 27,
-        "options": [
-          "Accept → Acknowledge (observe-only)",
-          "Open runbook / defer",
-          "Discuss in Project chat"
-        ]
-      }
-    },
-    {
-      "task_ref": "human:sunday-hypothesis-integrity",
-      "source": "human_tasks",
-      "work_class": "ops_gate",
-      "task_family": "sunday-hypothesis-integrity",
-      "priority": 28,
-      "title": "Review in-portfolio hypothesis integrity when losers breach tolerance",
-      "summary": "If learning_tracks_hypothesis_integrity shows within_tolerance=false, broken_loser_count>0, or selection_feedback_flags, read track hypothesis_integrity.md. Prefer thesis-broken rotation over crude stops; do not auto-apply exit knobs.",
-      "sort_bucket": "unacked",
-      "closeable": true,
-      "close_action": "human-task-ack",
-      "close_payload": {
-        "task_id": "sunday-hypothesis-integrity",
-        "decision": "ack_observe",
-        "finding_fingerprint": "e71f112bfafe4505"
-      },
-      "href": "#automation/human",
-      "recommendation_id": "rec-7ee554d386b2",
-      "status": {
-        "state": "ready",
-        "label": "Proposed",
-        "next_steps": [],
-        "waiting_on": [],
-        "ready": true,
-        "ready_reason": "proposal present · no blockers",
-        "blocked_reason": null,
-        "updated_at": "2026-09-29T11:00:00Z",
-        "updated_by": "morning_builder"
-      },
-      "human_task": {
-        "id": "sunday-hypothesis-integrity",
-        "sort_bucket": "unacked",
-        "analysis": {
-          "headline": "Hypothesis integrity",
-          "updated_at": null,
-          "fingerprint": "e71f112bfafe4505",
-          "bullets": [
-            "within_tolerance=None",
-            "broken_loser_count=None",
-            "flags=—"
-          ],
-          "source_keys": [
-            "paper_learning_review"
-          ]
-        },
-        "ack": {
-          "acked": false,
-          "stale": false,
-          "acked_at": null,
-          "decision": null,
-          "finding_fingerprint": null
-        },
-        "approval_gate": false,
-        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/hypothesis-integrity.md#human-gate",
-        "cadence": "sunday"
-      },
-      "closed": false,
-      "recommendation": {
-        "id": "rec-7ee554d386b2",
-        "task_id": "human:sunday-hypothesis-integrity",
-        "summary": "Open human gate “Review in-portfolio hypothesis integrity when losers breach tolerance” — ack when reviewed; Approve only on promotion gates.",
-        "rationale": "sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Hypothesis integrity",
-        "accept_action": {
-          "kind": "human-task-ack",
-          "payload": {
-            "task_id": "sunday-hypothesis-integrity",
-            "decision": "ack_observe",
-            "finding_fingerprint": "e71f112bfafe4505"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-7ee554d386b2` (human task `sunday-hypothesis-integrity`):\nTitle: Review in-portfolio hypothesis integrity when losers breach tolerance\nSummary: Open human gate “Review in-portfolio hypothesis integrity when losers breach tolerance” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Hypothesis integrity\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-7ee554d386b2` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 28,
+        "priority": 24,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1735,7 +1412,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-phase-c-readiness-gate",
-      "priority": 29,
+      "priority": 25,
       "title": "Start Phase C freeze writer only when readiness is READY",
       "summary": "Before building or enabling the PIT autopsy freeze writer, confirm phase_c_readiness.json (or ftse-phase-c-readiness exit 0) is READY. Do not start Phase C on vibes or with --force-phase-b-done alone — that override does not invent rebalance history or feature coverage.",
       "sort_bucket": "unacked",
@@ -1799,7 +1476,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-bc3ceaa07dfd` (human task `sunday-phase-c-readiness-gate`):\nTitle: Start Phase C freeze writer only when readiness is READY\nSummary: Open human gate “Start Phase C freeze writer only when readiness is READY” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Phase C readiness: unknown\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-bc3ceaa07dfd` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 29,
+        "priority": 25,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1812,7 +1489,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "sunday-sleeve-episodes-readiness",
-      "priority": 30,
+      "priority": 26,
       "title": "Review dual-path sleeve episodes when tag cohorts mature",
       "summary": "When learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true (≥15 closed per on_book/off_book/never_funded), review stratified sleeve timing. Do not mix never_funded marks into NAV vs ^FTSE. Do not back-label historical NAV as sleeve evidence.",
       "sort_bucket": "unacked",
@@ -1877,7 +1554,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-a13f0beea51f` (human task `sunday-sleeve-episodes-readiness`):\nTitle: Review dual-path sleeve episodes when tag cohorts mature\nSummary: Open human gate “Review dual-path sleeve episodes when tag cohorts mature” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Dual-path sleeve episodes readiness\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-a13f0beea51f` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 30,
+        "priority": 26,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1886,7 +1563,7 @@
       }
     }
   ],
-  "open_task_count": 21,
+  "open_task_count": 17,
   "recommendations": [
     {
       "id": "rec-b877dd532f10",
@@ -1929,36 +1606,6 @@
       ]
     },
     {
-      "id": "rec-3d9c771c707c",
-      "task_id": "mwarn:euro_depth:zero_improve_stall",
-      "summary": "Market warning triage → deepen: EU depth composite (STOXX50 + periphery) / zero_improve_stall.",
-      "rationale": "Focus-market zero_improve_stall on euro_depth — Discuss before changing fat-slot targeting or rate-limited sources.",
-      "accept_action": {
-        "kind": "focus-ack",
-        "payload": {
-          "focus_id": "mwarn:euro_depth:zero_improve_stall",
-          "decision": "accept",
-          "triage_action": "deepen"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-3d9c771c707c` (market warning `mwarn:euro_depth:zero_improve_stall`):\nProposed action: deepen\nMarket: euro_depth (focus=True spare=False)\nFlag: zero_improve_stall — Last 2 days improved nobody while filing gaps remain\nRationale: Focus-market zero_improve_stall on euro_depth — Discuss before changing fat-slot targeting or rate-limited sources.\nPolicy: dismissable=False parkable=False\nSuggested options:\n1) Discuss — judgment / fat-slot / rate-limit call\n2) Accept — observe-only record of deepen intent (does not dismiss or park)\n3) Do not ritual-clear the badge or divert euro capacity\nContext: docs/data/market_status.json + Daily hub market warning triage",
-      "priority": 5,
-      "options": [
-        "Discuss — judgment / fat-slot / rate-limit call",
-        "Accept — observe-only record of deepen intent (does not dismiss or park)",
-        "Do not ritual-clear the badge or divert euro capacity"
-      ],
-      "triage_action": "deepen",
-      "prefer_discuss": true,
-      "dismissable": false,
-      "parkable": false,
-      "market_id": "euro_depth",
-      "flag_id": "zero_improve_stall",
-      "cli_hint": null,
-      "work_class": "surface",
-      "task_family": "market-warning-triage"
-    },
-    {
       "id": "rec-04e99b44fe2f",
       "task_id": "mwarn:bel20:health_warn",
       "summary": "Market warning triage → park: BEL 20 / health_warn.",
@@ -1972,7 +1619,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-04e99b44fe2f` (market warning `mwarn:bel20:health_warn`):\nProposed action: park\nMarket: bel20 (focus=False spare=True)\nFlag: health_warn — health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear\nRationale: bel20: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-      "priority": 6,
+      "priority": 5,
       "options": [
         "Accept — park / observe-ack for today",
         "Discuss — only if this should become deepen",
@@ -2002,7 +1649,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-0fac1ca77470` (market warning `mwarn:bel20:no_observe_benchmark`):\nProposed action: park\nMarket: bel20 (focus=False spare=True)\nFlag: no_observe_benchmark — No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock\nRationale: bel20: No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-      "priority": 7,
+      "priority": 6,
       "options": [
         "Accept — park / observe-ack for today",
         "Discuss — only if this should become deepen",
@@ -2032,7 +1679,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-7f12e1a3e601` (human task `sunday-shard-epoch0-watch`):\nTitle: Watch shard epoch-0 and near-miss before forking AI\nSummary: Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 13\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-7f12e1a3e601` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 13,
+      "priority": 12,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2040,7 +1687,7 @@
       ]
     },
     {
-      "id": "rec-970cfe96dc9a",
+      "id": "rec-05095860fd94",
       "task_id": "human:monthly-pr-fix-common-issues",
       "summary": "Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).",
       "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues",
@@ -2049,11 +1696,11 @@
         "payload": {
           "task_id": "monthly-pr-fix-common-issues",
           "decision": "ack_observe",
-          "finding_fingerprint": "bd610b65087ce37e"
+          "finding_fingerprint": "9fef5d72f204f74e"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-970cfe96dc9a` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-970cfe96dc9a` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 14,
+      "discuss_prompt": "Discuss daily recommendation `rec-05095860fd94` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-05095860fd94` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "priority": 13,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2074,7 +1721,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-ed071edb0500` (human task `sunday-suite-b-fair-lab`):\nTitle: Review Suite B fair-cost lab vs stress Suite A\nSummary: Open human gate “Review Suite B fair-cost lab vs stress Suite A” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Fair-cost Suite B lab\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-ed071edb0500` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 15,
+      "priority": 14,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2095,7 +1742,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-e5af295cf197` (human task `sunday-spawn-fair-twins`):\nTitle: Spawn Suite B twins only for recommend experiments\nSummary: Open human gate “Spawn Suite B twins only for recommend experiments” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-e5af295cf197` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 16,
+      "priority": 15,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2116,7 +1763,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-16c5a3262446` (human task `sunday-entry-dca-cadence`):\nTitle: Review entry DCA cadence when overlay readiness fires\nSummary: Open human gate “Review entry DCA cadence when overlay readiness fires” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Entry DCA adoption · —\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-16c5a3262446` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 17,
+      "priority": 16,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2137,28 +1784,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-b471c8eab343` (human task `sunday-buy-cross-archive`):\nTitle: Read buy-cross archive review\nSummary: Open human gate “Read buy-cross archive review” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Buy-cross archive review\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-b471c8eab343` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 18,
-      "options": [
-        "Accept → Acknowledge (observe-only)",
-        "Open runbook / defer",
-        "Discuss in Project chat"
-      ]
-    },
-    {
-      "id": "rec-fe88d9d254b5",
-      "task_id": "human:adhoc-decision-recording-plan",
-      "summary": "Open human gate “Lock recording plan before new learning strands” — ack when reviewed; Approve only on promotion gates.",
-      "rationale": "sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs",
-      "accept_action": {
-        "kind": "human-task-ack",
-        "payload": {
-          "task_id": "adhoc-decision-recording-plan",
-          "decision": "ack_observe",
-          "finding_fingerprint": "93b1efb80701c7fe"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-fe88d9d254b5` (human task `adhoc-decision-recording-plan`):\nTitle: Lock recording plan before new learning strands\nSummary: Open human gate “Lock recording plan before new learning strands” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-fe88d9d254b5` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 19,
+      "priority": 17,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2179,7 +1805,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-2e44f4fa9022` (human task `adhoc-epoch0-cron-unmapped-timezone`):\nTitle: Extend epoch-0 cron timezone map for new session\nSummary: Open human gate “Extend epoch-0 cron timezone map for new session” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-2e44f4fa9022` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 20,
+      "priority": 18,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2200,7 +1826,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-5e33d13f027a` (human task `adhoc-paper-learning-review`):\nTitle: Paper-learning review experiments\nSummary: Open human gate “Paper-learning review experiments” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-5e33d13f027a` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 21,
+      "priority": 19,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2221,7 +1847,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-c7b0341690ca` (human task `adhoc-review-fcf-basis-bridges`):\nTitle: Override FCF auto policy only when majority/filing is wrong\nSummary: Open human gate “Override FCF auto policy only when majority/filing is wrong” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-c7b0341690ca` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 22,
+      "priority": 20,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2242,7 +1868,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-5fed3b829a1d` (human task `monthly-cycle-budget-surplus`):\nTitle: Review cycle-end Cursor surplus and provisional weekly-ops bump\nSummary: Open human gate “Review cycle-end Cursor surplus and provisional weekly-ops bump” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Cycle-end Cursor surplus\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-5fed3b829a1d` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 23,
+      "priority": 21,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2263,7 +1889,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-1dee4d33772a` (human task `monthly-ops-review-cadence`):\nTitle: Follow unified ops review cadence\nSummary: Open human gate “Follow unified ops review cadence” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-1dee4d33772a` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 24,
+      "priority": 22,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2284,28 +1910,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-86fbc397728b` (human task `quarterly-deferred-review`):\nTitle: Deferred ideas review pass\nSummary: Open human gate “Deferred ideas review pass” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Deferred ideas review\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-86fbc397728b` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 25,
-      "options": [
-        "Accept → Acknowledge (observe-only)",
-        "Open runbook / defer",
-        "Discuss in Project chat"
-      ]
-    },
-    {
-      "id": "rec-665fefe6ff20",
-      "task_id": "human:sunday-analysis-tasks",
-      "summary": "Open human gate “Triage analysis_tasks experiments” — ack when reviewed; Approve only on promotion gates.",
-      "rationale": "sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Triage queue · 6 open",
-      "accept_action": {
-        "kind": "human-task-ack",
-        "payload": {
-          "task_id": "sunday-analysis-tasks",
-          "decision": "ack_observe",
-          "finding_fingerprint": "eaa31c994c4a4a3a"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-665fefe6ff20` (human task `sunday-analysis-tasks`):\nTitle: Triage analysis_tasks experiments\nSummary: Open human gate “Triage analysis_tasks experiments” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Triage queue · 6 open\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-665fefe6ff20` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 26,
+      "priority": 23,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2326,28 +1931,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-2afe7307d5d4` (human task `sunday-exclusion-shadow-spawn`):\nTitle: Exclusion ladder shadow spawn gate\nSummary: Open human gate “Exclusion ladder shadow spawn gate” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: See runbook for analysis inputs\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-2afe7307d5d4` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 27,
-      "options": [
-        "Accept → Acknowledge (observe-only)",
-        "Open runbook / defer",
-        "Discuss in Project chat"
-      ]
-    },
-    {
-      "id": "rec-7ee554d386b2",
-      "task_id": "human:sunday-hypothesis-integrity",
-      "summary": "Open human gate “Review in-portfolio hypothesis integrity when losers breach tolerance” — ack when reviewed; Approve only on promotion gates.",
-      "rationale": "sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Hypothesis integrity",
-      "accept_action": {
-        "kind": "human-task-ack",
-        "payload": {
-          "task_id": "sunday-hypothesis-integrity",
-          "decision": "ack_observe",
-          "finding_fingerprint": "e71f112bfafe4505"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-7ee554d386b2` (human task `sunday-hypothesis-integrity`):\nTitle: Review in-portfolio hypothesis integrity when losers breach tolerance\nSummary: Open human gate “Review in-portfolio hypothesis integrity when losers breach tolerance” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Hypothesis integrity\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-7ee554d386b2` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 28,
+      "priority": 24,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2368,7 +1952,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-bc3ceaa07dfd` (human task `sunday-phase-c-readiness-gate`):\nTitle: Start Phase C freeze writer only when readiness is READY\nSummary: Open human gate “Start Phase C freeze writer only when readiness is READY” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Phase C readiness: unknown\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-bc3ceaa07dfd` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 29,
+      "priority": 25,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2389,7 +1973,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-a13f0beea51f` (human task `sunday-sleeve-episodes-readiness`):\nTitle: Review dual-path sleeve episodes when tag cohorts mature\nSummary: Open human gate “Review dual-path sleeve episodes when tag cohorts mature” — ack when reviewed; Approve only on promotion gates.\nRationale: sort_bucket=unacked Ack / Approve never auto-apply knobs, crons, or capital. analysis: Dual-path sleeve episodes readiness\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-a13f0beea51f` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 30,
+      "priority": 26,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -2403,13 +1987,14 @@
     "mwarn:dax:unmeasured_stuck",
     "mwarn:dax:zero_improve_stall",
     "mwarn:euro_depth:unmeasured_stuck",
+    "mwarn:euro_depth:zero_improve_stall",
     "mwarn:multi:health_warn_rollup"
   ],
   "counts": {
     "focus": 0,
-    "market_warnings": 3,
+    "market_warnings": 2,
     "human_new_info": 2,
-    "human_unacked": 16,
+    "human_unacked": 13,
     "progress": 0,
     "reconcile": 0
   },
@@ -2423,7 +2008,7 @@
       "attention": true,
       "new_info": true,
       "reasons": [
-        "open_tasks=21"
+        "open_tasks=17"
       ]
     },
     "automation.human": {
@@ -2431,7 +2016,7 @@
       "new_info": true,
       "reasons": [
         "human_tasks.new_info=2",
-        "human_tasks.unacked=16"
+        "human_tasks.unacked=13"
       ]
     },
     "automation.tracks": {
