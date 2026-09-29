@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-29T15:12:40.002850+00:00",
+  "updated_at": "2026-09-29T18:23:26.220595+00:00",
   "items": [
     {
       "recommendation_id": "rec-6d2619c1c5ba",
@@ -110,6 +110,35 @@
       "queued_at": "2026-09-29T15:12:40.002850+00:00",
       "source": "dashboard_bridge",
       "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-13a58bf4fb4f`"
+    },
+    {
+      "recommendation_id": "rec-083479b7f4ee",
+      "task_id": "mwarn:euro_depth:unmeasured_stuck",
+      "local_date": "2026-09-29",
+      "status": "open",
+      "summary": "Market warning triage → deepen: EU depth composite (STOXX50 + periphery) / unmeasured_stuck · OIZ.IR.",
+      "title": "Deepen · EU depth composite (STOXX50 + periphery) · unmeasured_stuck",
+      "rationale": "unmeasured_stuck on euro_depth (OIZ.IR) blocks sprint_ingest_complete and cannot be dismissed or parked. This is the P2 fat-slot head — deepen on the existing euro sprint path; do not divert capacity to a spare stall. Discuss for source/IR judgment; Accept only observes the deepen intent.",
+      "discuss_prompt": "Discuss daily recommendation `rec-083479b7f4ee` (market warning `mwarn:euro_depth:unmeasured_stuck`):\nProposed action: deepen\nMarket: euro_depth (focus=True spare=False)\nFlag: unmeasured_stuck — 1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)\nRationale: unmeasured_stuck on euro_depth (OIZ.IR) blocks sprint_ingest_complete and cannot be dismissed or parked. This is the P2 fat-slot head — deepen on the existing euro sprint path; do not divert capacity to a spare stall. Discuss for source/IR judgment; Accept only observes the deepen intent.\nPolicy: dismissable=False parkable=False\nSuggested options:\n1) Discuss — judgment / fat-slot / rate-limit call\n2) Accept — observe-only record of deepen intent (does not dismiss or park)\n3) Do not ritual-clear the badge or divert euro capacity\nContext: docs/data/market_status.json + Daily hub market warning triage",
+      "options": [
+        "Discuss — judgment / fat-slot / rate-limit call",
+        "Accept — observe-only record of deepen intent (does not dismiss or park)",
+        "Do not ritual-clear the badge or divert euro capacity"
+      ],
+      "priority": 5,
+      "accept_action": {
+        "kind": "focus-ack",
+        "payload": {
+          "decision": "accept",
+          "focus_id": "mwarn:euro_depth:unmeasured_stuck",
+          "triage_action": "deepen"
+        }
+      },
+      "work_class": "surface",
+      "task_family": "market-warning-triage",
+      "queued_at": "2026-09-29T18:23:26.220595+00:00",
+      "source": "dashboard_bridge",
+      "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-083479b7f4ee`"
     }
   ]
 }
