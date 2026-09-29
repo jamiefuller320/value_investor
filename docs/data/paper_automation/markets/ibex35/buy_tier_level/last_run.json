@@ -1,15 +1,47 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-28T08:31:06.767717+01:00",
+    "local_time": "2026-09-29T08:24:21.696800+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-09-28T08:00:00+01:00",
-    "settle_at": "2026-09-28T09:15:00+01:00",
+    "market_open_at": "2026-09-29T08:00:00+01:00",
+    "settle_at": "2026-09-29T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "0adf7eea-b335-4f81-b678-81f6be5ce2ca",
+      "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+      "acted_at": "2026-09-29T08:24:21.696800+01:00",
+      "ticker": "GRF.MC",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 52.116066,
+      "price": 9.768,
+      "gross": 509.07,
+      "cost": 0.89,
+      "net_cash": 508.18,
+      "note": "Automated trim",
+      "name": "Grifols, S.A.",
+      "avg_cost_at_exit": 9.594
+    },
+    {
+      "id": "b8939ffc-c44c-4172-8e9e-89d480f57420",
+      "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+      "acted_at": "2026-09-29T08:24:21.696800+01:00",
+      "ticker": "SCYR.MC",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 125.567103,
+      "price": 4.04,
+      "gross": 507.29,
+      "cost": 0.89,
+      "net_cash": -508.18,
+      "note": "Automated buy",
+      "name": "Sacyr, S.A."
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +55,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 998.25,
-    "cash": 0.0,
+    "nav": 1014.58,
+    "cash": -0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -33,14 +65,21 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 998.25,
+    "target_sleeve_value": 507.29,
     "targets": [
       {
         "ticker": "GRF.MC",
         "name": "Grifols, S.A.",
         "signal": "buy",
-        "conviction_score": 0.5298,
-        "price": 9.594
+        "conviction_score": 0.5263,
+        "price": 9.768
+      },
+      {
+        "ticker": "SCYR.MC",
+        "name": "Sacyr, S.A.",
+        "signal": "buy",
+        "conviction_score": 0.46307999999999994,
+        "price": 4.04
       }
     ],
     "anticipated_exits": [],
@@ -53,15 +92,25 @@
         "ticker": "GRF.MC",
         "name": "Grifols, S.A.",
         "reason": "Already near equal-weight target",
-        "value": 998.25,
-        "target_value": 998.25,
-        "conviction_score": 0.5298,
+        "value": 507.29,
+        "target_value": 507.29,
+        "conviction_score": 0.5263,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "SCYR.MC",
+        "name": "Sacyr, S.A.",
+        "reason": "Already near equal-weight target",
+        "value": 507.29,
+        "target_value": 507.29,
+        "conviction_score": 0.46307999999999994,
         "signal": "buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 1 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -70,7 +119,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 9.594,
+      "mark": 9.768,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "SCYR.MC",
+      "name": "Sacyr, S.A.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 4.04,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -91,13 +151,13 @@
       "id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
       "created_at": "2026-09-27T07:04:22.383152+00:00"
     },
-    "cash": 0.0,
+    "cash": -0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
       "GRF.MC": {
         "ticker": "GRF.MC",
-        "shares": 104.049725,
+        "shares": 51.933659,
         "avg_cost": 9.594,
         "name": "Grifols, S.A.",
         "sector": "Healthcare",
@@ -105,6 +165,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-09-27T08:04:22.383041+01:00"
+      },
+      "SCYR.MC": {
+        "ticker": "SCYR.MC",
+        "shares": 125.567103,
+        "avg_cost": 4.04,
+        "name": "Sacyr, S.A.",
+        "sector": "Industrials",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-29T08:24:21.696800+01:00"
       }
     },
     "trades": [
@@ -122,6 +193,37 @@
         "net_cash": -1000.0,
         "note": "Automated buy",
         "name": "Grifols, S.A."
+      },
+      {
+        "id": "0adf7eea-b335-4f81-b678-81f6be5ce2ca",
+        "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+        "acted_at": "2026-09-29T08:24:21.696800+01:00",
+        "ticker": "GRF.MC",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 52.116066,
+        "price": 9.768,
+        "gross": 509.07,
+        "cost": 0.89,
+        "net_cash": 508.18,
+        "note": "Automated trim",
+        "name": "Grifols, S.A.",
+        "avg_cost_at_exit": 9.594
+      },
+      {
+        "id": "b8939ffc-c44c-4172-8e9e-89d480f57420",
+        "fund_id": "ae9ec920-35a5-430a-98f5-90f20fb135f2",
+        "acted_at": "2026-09-29T08:24:21.696800+01:00",
+        "ticker": "SCYR.MC",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 125.567103,
+        "price": 4.04,
+        "gross": 507.29,
+        "cost": 0.89,
+        "net_cash": -508.18,
+        "note": "Automated buy",
+        "name": "Sacyr, S.A."
       }
     ],
     "equity_curve": [
@@ -182,19 +284,36 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-29T08:24:21.696800+01:00",
+        "portfolio_value": 870.3,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.85779
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-28T08:31:06.767717+01:00",
+    "last_mark_at": "2026-09-29T08:24:21.696800+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T07:31:06.811731+00:00",
+    "generated_at": "2026-09-29T07:24:21.717551+00:00",
     "open_count": 0,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -213,7 +332,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T07:31:06.812351+00:00",
+    "generated_at": "2026-09-29T07:24:21.718745+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -269,17 +388,20 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 0,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 0,
+      "hold_with_data_quality_count": 1,
       "gaps": [
         "hold_recovery closed episodes=0 (target >=15)",
-        "swap_rotation closed rotations=0 (target >=10)",
-        "no hold episodes with data_quality_score yet (needs screen marks on pass)"
+        "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 0
+        "count": 1,
+        "recovered_to_breakeven": 1,
+        "close_reasons": {
+          "open": 1
+        }
       },
       "closed": {
         "count": 0
@@ -287,7 +409,10 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 0
+        "count": 1,
+        "verdicts": {
+          "open": 1
+        }
       },
       "closed": {
         "count": 0
@@ -295,8 +420,8 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 0
+      "hold_episodes": 1,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -308,8 +433,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-28T07:31:06.813044+00:00",
-    "as_of": "2026-09-28T08:31:06.767717+01:00",
+    "updated_at": "2026-09-29T07:24:21.719752+00:00",
+    "as_of": "2026-09-29T08:24:21.696800+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -321,16 +446,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 1,
+    "holding_count": 2,
     "underwater_count": 0,
     "thesis_status_counts": {
       "intact": 1,
-      "weakening": 0,
+      "weakening": 1,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 1,
+      "holding_count": 2,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -360,18 +485,58 @@
     },
     "holdings": [
       {
+        "ticker": "SCYR.MC",
+        "name": "Sacyr, S.A.",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 4.04,
+        "avg_cost": 4.04,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.4631,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "quality"
+        ],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "still buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 46%"
+        ],
+        "weaken_reasons": [
+          "research verdict caution"
+        ],
+        "broken_reasons": []
+      },
+      {
         "ticker": "GRF.MC",
         "name": "Grifols, S.A.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 9.594,
+        "unrealized_pct": 0.0181,
+        "mark": 9.768,
         "avg_cost": 9.594,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5298,
+        "conviction_score": 0.5263,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -408,7 +573,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T07:31:06.813912+00:00",
+    "generated_at": "2026-09-29T07:24:21.721178+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -416,7 +581,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 0,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 0,
+      "open_with_thesis": 1,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -468,8 +633,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-28T07:31:06.814988+00:00",
-    "open_count": 1,
+    "generated_at": "2026-09-29T07:24:21.723016+00:00",
+    "open_count": 2,
     "closed_count": 0,
     "scored_count": 0,
     "scored_count_all": 0,
@@ -525,14 +690,14 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 1,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T08:31:06.767717+01:00",
+    "generated_at": "2026-09-29T08:24:21.696800+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -556,10 +721,10 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 1,
+    "open_count": 2,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 1,
+      "on_book": 2,
       "off_book": 0,
       "never_funded": 0
     },
@@ -580,13 +745,13 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 0,
+      "opened": 1,
       "closed": 0,
-      "tagged_on_book": 0,
+      "tagged_on_book": 1,
       "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-28T07:31:06.815971+00:00",
+  "generated_at": "2026-09-29T07:24:21.724325+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

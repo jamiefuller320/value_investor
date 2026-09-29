@@ -1,65 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-28T08:30:57.952981+01:00",
+    "local_time": "2026-09-29T08:24:16.656708+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-09-28T08:00:00+01:00",
-    "settle_at": "2026-09-28T09:15:00+01:00",
+    "market_open_at": "2026-09-29T08:00:00+01:00",
+    "settle_at": "2026-09-29T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
-  "trades": [
-    {
-      "id": "0c6d921a-252f-4893-8d6b-fb808e3d6571",
-      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
-      "acted_at": "2026-09-28T08:30:57.952981+01:00",
-      "ticker": "FOXT.L",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 5.671853,
-      "price": 36.5,
-      "gross": 207.02,
-      "cost": 0.1,
-      "net_cash": 206.92,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Foxtons Group plc",
-      "avg_cost_at_exit": 36.5,
-      "position_closed": true
-    },
-    {
-      "id": "3a7aa55e-c3b8-4d4b-bde9-0cb0781b14b8",
-      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
-      "acted_at": "2026-09-28T08:30:57.952981+01:00",
-      "ticker": "DFS.L",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 0.769851,
-      "price": 143.0,
-      "gross": 110.09,
-      "cost": 0.06,
-      "net_cash": 110.03,
-      "note": "Automated exit \u2014 left target set",
-      "name": "DFS Furniture plc",
-      "avg_cost_at_exit": 143.0,
-      "position_closed": true
-    },
-    {
-      "id": "d044d1b3-81ab-4a1b-a1d3-bda0b897f5ea",
-      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
-      "acted_at": "2026-09-28T08:30:57.952981+01:00",
-      "ticker": "CARD.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 4.333199,
-      "price": 71.6,
-      "gross": 310.26,
-      "cost": 1.71,
-      "net_cash": -311.96,
-      "note": "Automated buy",
-      "name": "Card Factory plc"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -73,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1047.71,
+    "nav": 1053.58,
     "cash": 4.99,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -83,21 +33,21 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 523.86,
+    "target_sleeve_value": 526.79,
     "targets": [
       {
         "ticker": "CAPD.L",
         "name": "Capital Limited",
         "signal": "buy",
         "conviction_score": 0.7125,
-        "price": 120.0
+        "price": 119.5
       },
       {
         "ticker": "CARD.L",
         "name": "Card Factory plc",
         "signal": "strong_buy",
         "conviction_score": 0.7079000000000001,
-        "price": 71.6
+        "price": 72.7
       }
     ],
     "anticipated_exits": [],
@@ -109,9 +59,9 @@
         "action": "hold",
         "ticker": "CAPD.L",
         "name": "Capital Limited",
-        "reason": "Already near equal-weight target",
-        "value": 519.72,
-        "target_value": 523.86,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 517.55,
+        "target_value": 526.79,
         "conviction_score": 0.7125,
         "signal": "buy"
       },
@@ -120,8 +70,8 @@
         "ticker": "CARD.L",
         "name": "Card Factory plc",
         "reason": "Already near equal-weight target",
-        "value": 523.0,
-        "target_value": 523.86,
+        "value": 531.04,
+        "target_value": 526.79,
         "conviction_score": 0.7079000000000001,
         "signal": "strong_buy"
       }
@@ -137,7 +87,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 71.6,
+      "mark": 72.7,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -148,7 +98,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 120.0,
+      "mark": 119.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -1344,22 +1294,35 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-29T08:24:16.656708+01:00",
+        "portfolio_value": 1053.58,
+        "cash": 4.99,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-28T08:30:57.952981+01:00",
+    "last_mark_at": "2026-09-29T08:24:16.656708+01:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {
-        "FOXT.L": 1,
-        "DFS.L": 1
-      }
+      "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (3 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T07:30:57.961193+00:00",
+    "generated_at": "2026-09-29T07:24:16.662634+00:00",
     "open_count": 13,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -1372,13 +1335,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 2,
-    "checkpoints_added_this_pass": 2
+    "ingested_this_pass": 0,
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T07:30:57.962665+00:00",
+    "generated_at": "2026-09-29T07:24:16.664124+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1471,7 +1434,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -1483,8 +1446,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-28T07:30:57.964823+00:00",
-    "as_of": "2026-09-28T08:30:57.952981+01:00",
+    "updated_at": "2026-09-29T07:24:16.665970+00:00",
+    "as_of": "2026-09-29T08:24:16.656708+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1535,14 +1498,54 @@
     },
     "holdings": [
       {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0174,
+        "mark": 119.5,
+        "avg_cost": 117.4584,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 71%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 71%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "CARD.L",
         "name": "Card Factory plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0197,
-        "mark": 71.6,
+        "unrealized_pct": 0.0353,
+        "mark": 72.7,
         "avg_cost": 70.2187,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -1574,46 +1577,6 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
-      },
-      {
-        "ticker": "CAPD.L",
-        "name": "Capital Limited",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0216,
-        "mark": 120.0,
-        "avg_cost": 117.4584,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.7125,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 71%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 71%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -1623,7 +1586,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T07:30:57.967856+00:00",
+    "generated_at": "2026-09-29T07:24:16.668560+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1697,7 +1660,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-28T07:30:57.973081+00:00",
+    "generated_at": "2026-09-29T07:24:16.673049+00:00",
     "open_count": 0,
     "closed_count": 11,
     "scored_count": 7,
@@ -1757,13 +1720,13 @@
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
-    "marked_this_pass": 2,
-    "closed_this_pass": 2
+    "marked_this_pass": 0,
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T08:30:57.952981+01:00",
+    "generated_at": "2026-09-29T08:24:16.656708+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1814,10 +1777,10 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 2
+      "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-28T07:30:57.974586+00:00",
+  "generated_at": "2026-09-29T07:24:16.674461+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

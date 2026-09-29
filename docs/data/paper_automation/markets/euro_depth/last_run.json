@@ -1,48 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-28T09:31:18.916087+02:00",
+    "local_time": "2026-09-29T09:24:30.855796+02:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-09-28T09:00:00+02:00",
-    "settle_at": "2026-09-28T09:30:00+02:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-09-29T09:00:00+02:00",
+    "settle_at": "2026-09-29T09:30:00+02:00",
+    "can_act": false,
+    "reason": "waiting for open settle (30 min after 09:00 Europe/Paris)"
   },
-  "trades": [
-    {
-      "id": "2cb4f128-565f-47fd-9ceb-405d85c803f5",
-      "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
-      "acted_at": "2026-09-28T09:31:18.916087+02:00",
-      "ticker": "EG7.IR",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 10.494833,
-      "price": 18.9,
-      "gross": 198.35,
-      "cost": 0.37,
-      "net_cash": 197.99,
-      "note": "Automated exit \u2014 left target set",
-      "name": "FBD Holdings plc",
-      "avg_cost_at_exit": 19.0,
-      "position_closed": true
-    },
-    {
-      "id": "d2adb493-95ab-4a29-9def-ad7f8f234ad8",
-      "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
-      "acted_at": "2026-09-28T09:31:18.916087+02:00",
-      "ticker": "SHELL.AS",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 4.664103,
-      "price": 42.57,
-      "gross": 198.55,
-      "cost": 0.37,
-      "net_cash": -198.92,
-      "note": "Automated buy",
-      "name": "Shell plc"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -56,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 994.22,
+    "nav": 986.48,
     "cash": 2.17,
     "max_positions": 5,
     "min_conviction": 0.0,
@@ -66,42 +33,42 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 198.84,
+    "target_sleeve_value": 197.3,
     "targets": [
       {
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "signal": "strong_buy",
-        "conviction_score": 0.9317000000000001,
-        "price": 111.6
+        "conviction_score": 0.93,
+        "price": 108.2
       },
       {
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "signal": "strong_buy",
         "conviction_score": 0.9183,
-        "price": 93.9
+        "price": 93.84
       },
       {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "signal": "strong_buy",
         "conviction_score": 0.9,
-        "price": 32.1
+        "price": 32.07
       },
       {
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "signal": "strong_buy",
-        "conviction_score": 0.8661000000000001,
-        "price": 72.58
+        "conviction_score": 0.8851,
+        "price": 72.04
       },
       {
         "ticker": "SHELL.AS",
         "name": "Shell plc",
         "signal": "strong_buy",
         "conviction_score": 0.775,
-        "price": 42.57
+        "price": 42.595
       }
     ],
     "anticipated_exits": [],
@@ -113,10 +80,10 @@
         "action": "hold",
         "ticker": "DG.PA",
         "name": "Vinci SA",
-        "reason": "Already near equal-weight target",
-        "value": 199.74,
-        "target_value": 198.84,
-        "conviction_score": 0.9317000000000001,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 193.65,
+        "target_value": 197.3,
+        "conviction_score": 0.93,
         "signal": "strong_buy"
       },
       {
@@ -124,8 +91,8 @@
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 192.06,
-        "target_value": 198.84,
+        "value": 191.94,
+        "target_value": 197.3,
         "conviction_score": 0.9183,
         "signal": "strong_buy"
       },
@@ -134,9 +101,9 @@
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 195.99,
-        "target_value": 198.84,
-        "conviction_score": 0.8661000000000001,
+        "value": 194.53,
+        "target_value": 197.3,
+        "conviction_score": 0.8851,
         "signal": "strong_buy"
       },
       {
@@ -144,8 +111,8 @@
         "ticker": "SHELL.AS",
         "name": "Shell plc",
         "reason": "Already near equal-weight target",
-        "value": 198.55,
-        "target_value": 198.84,
+        "value": 198.67,
+        "target_value": 197.3,
         "conviction_score": 0.775,
         "signal": "strong_buy"
       }
@@ -161,7 +128,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 93.9000015258789,
+      "mark": 93.83999633789062,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -172,7 +139,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 32.099998474121094,
+      "mark": 32.06999969482422,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -183,7 +150,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 72.58000183105469,
+      "mark": 72.04000091552734,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -194,7 +161,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 111.5999984741211,
+      "mark": 108.19999694824219,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -205,7 +172,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 42.56999969482422,
+      "mark": 42.595001220703125,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -843,21 +810,55 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-29T09:19:30.025670+02:00",
+        "portfolio_value": 697.85,
+        "cash": 2.17,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.85787,
+            "SEK": 0.07549
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-29T09:24:30.855796+02:00",
+        "portfolio_value": 696.31,
+        "cash": 2.17,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.85774,
+            "SEK": 0.07547
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-28T09:31:18.916087+02:00",
+    "last_mark_at": "2026-09-29T09:24:30.855796+02:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {
-        "EG7.IR": 1
-      }
+      "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (2 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-09-28T07:31:28.886767+00:00",
+    "generated_at": "2026-09-29T07:24:36.923139+00:00",
     "open_count": 3,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -870,13 +871,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-09-28T07:31:28.887764+00:00",
+    "generated_at": "2026-09-29T07:24:36.924093+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -970,7 +971,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -982,8 +983,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "rules",
-    "updated_at": "2026-09-28T07:31:28.888933+00:00",
-    "as_of": "2026-09-28T09:31:18.916087+02:00",
+    "updated_at": "2026-09-29T07:24:36.925624+00:00",
+    "as_of": "2026-09-29T09:24:30.855796+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1040,8 +1041,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0379,
-        "mark": 93.9,
+        "unrealized_pct": -0.0385,
+        "mark": 93.84,
         "avg_cost": 97.6,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -1074,18 +1075,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "SAN.PA",
-        "name": "Sanofi",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0183,
-        "mark": 72.58,
-        "avg_cost": 73.93,
+        "unrealized_pct": -0.0292,
+        "mark": 108.2,
+        "avg_cost": 111.45,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8661,
+        "conviction_score": 0.93,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1101,14 +1102,54 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 87%"
+          "conviction 93%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 87%"
+          "conviction 93%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0256,
+        "mark": 72.04,
+        "avg_cost": 73.93,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.8851,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 89%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 89%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1120,8 +1161,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 42.57,
+        "unrealized_pct": 0.0006,
+        "mark": 42.595,
         "avg_cost": 42.57,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -1154,54 +1195,14 @@
         "broken_reasons": []
       },
       {
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0013,
-        "mark": 111.6,
-        "avg_cost": 111.45,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.9317,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 93%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 93%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0305,
-        "mark": 32.1,
+        "unrealized_pct": 0.0295,
+        "mark": 32.07,
         "avg_cost": 31.15,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -1241,7 +1242,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "rules",
-    "generated_at": "2026-09-28T07:31:28.890484+00:00",
+    "generated_at": "2026-09-29T07:24:36.927131+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1309,7 +1310,7 @@
     "schema_version": 1,
     "track_id": "rules",
     "observe_only": true,
-    "generated_at": "2026-09-28T07:31:28.892598+00:00",
+    "generated_at": "2026-09-29T07:24:36.929815+00:00",
     "open_count": 2,
     "closed_count": 1,
     "scored_count": 1,
@@ -1368,14 +1369,14 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "marked_this_pass": 2,
-    "closed_this_pass": 1
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "rules",
-    "generated_at": "2026-09-28T09:31:18.916087+02:00",
+    "generated_at": "2026-09-29T09:24:30.855796+02:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1399,12 +1400,12 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 44,
+    "open_count": 46,
     "closed_count": 0,
     "open_by_capital_status": {
       "on_book": 5,
       "off_book": 1,
-      "never_funded": 38
+      "never_funded": 40
     },
     "closed_by_capital_status": {
       "on_book": 0,
@@ -1425,11 +1426,11 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 1,
-      "tagged_off_book": 1
+      "tagged_on_book": 0,
+      "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-28T07:31:28.895274+00:00",
+  "generated_at": "2026-09-29T07:24:36.932513+00:00",
   "track_id": "rules",
   "track_label": "Screen rules (control)",
   "is_primary_learning_track": false,

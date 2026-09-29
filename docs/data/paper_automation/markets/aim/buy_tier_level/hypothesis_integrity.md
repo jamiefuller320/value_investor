@@ -1,19 +1,24 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-28T07:31:06.147176+00:00
+Track: `buy_tier_level` · updated 2026-09-29T07:24:21.364896+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 15 (7% count, 6% NAV)
+- Losers: **2** / 15 (13% count, 12% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
-- Selection feedback:
-  - quality fails more often among losers (100% vs 50%)
-  - garp fails more often among losers (100% vs 43%)
 
 ## Holding reviews
 
-### CAML.L — intact / hold_tolerate (-6.7%)
+### PAF.L — intact / hold_tolerate (-9.7%)
+- price drawdown alone does not invalidate value thesis
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 62%
+
+### CAML.L — intact / hold_tolerate (-9.3%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
@@ -21,49 +26,48 @@ Track: `buy_tier_level` · updated 2026-09-28T07:31:06.147176+00:00
 - data_quality 0.95
 - conviction 47%
 
-### PAF.L — intact / hold_tolerate (-4.9%)
+### DOTD.L — intact / hold_tolerate (-4.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 62%
+- data_quality 0.90
+- conviction 41%
 
-### IPX.L — intact / hold_tolerate (-3.5%)
+### YNGN.L — intact / hold_tolerate (-4.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 72%
+- conviction 61%
 
-### YNGN.L — intact / hold_tolerate (-3.4%)
-- still strong_buy
-- research accumulate
+### TFW.L — intact / hold_tolerate (-3.8%)
+- still buy
 - cheapness family still passes
-- data_quality 1.00
-- conviction 54%
+- data_quality 0.90
+- conviction 65%
 
-### JHD.L — intact / hold_tolerate (-3.1%)
+### CREO.L — weakening / watch_review (-3.1%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
+### IPX.L — weakening / watch_review (-2.5%)
+- research verdict caution
+- still strong_buy
+- cheapness family still passes
+
+### JHD.L — intact / hold_tolerate (-2.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
 - conviction 58%
 
-### TFW.L — intact / hold_tolerate (-3.0%)
+### CAM.L — intact / hold_tolerate (-0.9%)
 - still buy
 - cheapness family still passes
-- data_quality 0.90
-- conviction 62%
-
-### BREE.L — weakening / watch_review (-1.8%)
-- conviction 33% below intact floor
-- still buy
-- research accumulate
-
-### DOTD.L — weakening / watch_review (-1.6%)
-- conviction 31% below intact floor
-- still buy
-- cheapness family still passes
+- data_quality 1.00
+- conviction 54%
 
 ### PMI.L — weakening / watch_review (-0.7%)
 - research verdict caution
@@ -71,28 +75,12 @@ Track: `buy_tier_level` · updated 2026-09-28T07:31:06.147176+00:00
 - still buy
 - cheapness family still passes
 
-### KGH.L — intact / hold_tolerate (-0.3%)
+### KGH.L — intact / hold_tolerate (+0.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 56%
-
-### CREO.L — weakening / watch_review (+0.0%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
-### WJG.L — weakening / watch_review (+0.7%)
-- conviction 31% below intact floor
-- still buy
-- research accumulate
-
-### CAM.L — intact / hold_tolerate (+0.9%)
-- still buy
-- cheapness family still passes
-- data_quality 1.00
-- conviction 54%
 
 ### ASY.L — intact / hold_tolerate (+1.8%)
 - still buy
@@ -101,9 +89,18 @@ Track: `buy_tier_level` · updated 2026-09-28T07:31:06.147176+00:00
 - data_quality 1.00
 - conviction 62%
 
-### IGR.L — intact / hold_tolerate (+6.5%)
+### WJG.L — weakening / watch_review (+2.6%)
+- conviction 31% below intact floor
 - still buy
 - research accumulate
+
+### IGR.L — weakening / watch_review (+5.3%)
+- research verdict caution
+- conviction 31% below intact floor
+- still buy
 - cheapness family still passes
-- data_quality 1.00
-- conviction 42%
+
+### BREE.L — weakening / watch_review (+6.7%)
+- conviction 33% below intact floor
+- still buy
+- research accumulate

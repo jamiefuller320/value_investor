@@ -2,7 +2,7 @@
   "market_id": "euro_depth",
   "focus_market": "euro_depth",
   "mode": "sprint",
-  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=1, thin=14, indexed_without_body=18)",
+  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=1, thin=16, indexed_without_body=19)",
   "ingest_parity_met": false,
   "ingest_exhausted": false,
   "ingest_sprint_complete": false,
@@ -23,15 +23,15 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-28T22:43:30.759664+00:00",
+    "snapshot_at": "2026-09-29T07:25:28.449902+00:00",
     "market_id": "euro_depth",
-    "buy_tier_count": 51,
+    "buy_tier_count": 54,
     "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 1,
-    "thin_body_buy_tier": 14,
-    "indexed_without_body": 18,
+    "thin_body_buy_tier": 16,
+    "indexed_without_body": 19,
     "bodies_min": 1,
-    "bodies_median": 3,
+    "bodies_median": 3.0,
     "bodies_max": 108,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -44,7 +44,6 @@
     "thin_body_tickers": [
       "SGO.PA",
       "ACKB.BR",
-      "DTE.DE",
       "EVN.VI",
       "WIE.VI",
       "MUV2.DE",
@@ -55,7 +54,10 @@
       "BAS.DE",
       "NBA.LS",
       "DQ7A.IR",
-      "ADYEN.AS"
+      "DTE.DE",
+      "UCB.BR",
+      "ADYEN.AS",
+      "EL.PA"
     ],
     "indexed_without_body_tickers": [
       "EVN.VI",
@@ -63,7 +65,8 @@
       "ABI.BR",
       "SAP.DE",
       "MC.PA",
-      "HM-B.ST"
+      "HM-B.ST",
+      "UCB.BR"
     ],
     "indexed_without_body_by_ticker": {
       "EVN.VI": 1,
@@ -71,7 +74,8 @@
       "ABI.BR": 12,
       "SAP.DE": 1,
       "MC.PA": 1,
-      "HM-B.ST": 2
+      "HM-B.ST": 2,
+      "UCB.BR": 1
     },
     "parked_tickers": [
       "ABI.BR",
@@ -84,21 +88,24 @@
       "WIE.VI"
     ],
     "parked_count": 8,
-    "effective_thin_body_buy_tier": 8,
+    "effective_thin_body_buy_tier": 10,
     "effective_thin_body_tickers": [
       "SGO.PA",
       "ACKB.BR",
-      "DTE.DE",
       "MC.PA",
       "BN.PA",
       "NBA.LS",
       "DQ7A.IR",
-      "ADYEN.AS"
+      "DTE.DE",
+      "UCB.BR",
+      "ADYEN.AS",
+      "EL.PA"
     ],
-    "effective_indexed_without_body": 3,
+    "effective_indexed_without_body": 4,
     "effective_indexed_without_body_tickers": [
       "MC.PA",
-      "HM-B.ST"
+      "HM-B.ST",
+      "UCB.BR"
     ],
     "ingest_exhausted": false
   },
@@ -114,7 +121,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-28T22:43:30.761301+00:00",
+  "evaluated_at": "2026-09-29T07:25:28.452054+00:00",
   "maintenance_markets": [
     "aim",
     "asx200",
@@ -171,7 +178,7 @@
         "dax not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-28T22:43:54.683584+00:00",
+        "snapshot_at": "2026-09-29T07:25:42.266564+00:00",
         "market_id": "dax",
         "buy_tier_count": 12,
         "unmeasured_buy_tier": 1,
@@ -190,8 +197,8 @@
         "thin_body_tickers": [
           "DHL.DE",
           "HEI.DE",
-          "DTG.DE",
           "DTE.DE",
+          "DTG.DE",
           "MUV2.DE",
           "BAS.DE",
           "FRE.DE",
@@ -233,7 +240,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-28T22:43:54.684101+00:00",
+      "evaluated_at": "2026-09-29T07:25:42.267149+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -257,7 +264,7 @@
         "no benchmark configured for aex"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-28T22:43:55.428578+00:00",
+        "snapshot_at": "2026-09-29T07:25:42.640830+00:00",
         "market_id": "aex",
         "buy_tier_count": 8,
         "unmeasured_buy_tier": 1,
@@ -309,7 +316,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-28T22:43:55.428928+00:00",
+      "evaluated_at": "2026-09-29T07:25:42.641241+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -337,7 +344,7 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 22,
+    "hour_utc": 7,
     "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",

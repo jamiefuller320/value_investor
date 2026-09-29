@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "track_id": "archive_near_miss",
-  "generated_at": "2026-09-28T07:30:20.704213+00:00",
+  "generated_at": "2026-09-29T07:23:52.893514+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -69,13 +69,17 @@
     "ready_for_probability_analysis": true,
     "hold_closed_count": 230,
     "swap_closed_count": 230,
-    "hold_with_data_quality_count": 230,
+    "hold_with_data_quality_count": 243,
     "gaps": [],
     "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
   },
   "hold_recovery": {
     "open": {
-      "count": 0
+      "count": 13,
+      "recovered_to_breakeven": 0,
+      "close_reasons": {
+        "open": 13
+      }
     },
     "closed": {
       "count": 230,
@@ -88,26 +92,29 @@
   },
   "swap_rotation": {
     "open": {
-      "count": 0
+      "count": 13,
+      "verdicts": {
+        "open": 13
+      }
     },
     "closed": {
       "count": 230,
       "verdicts": {
-        "replacement_outperformed": 48,
-        "exit_outperformed": 103,
-        "inconclusive": 79
+        "replacement_outperformed": 59,
+        "exit_outperformed": 105,
+        "inconclusive": 66
       }
     }
   },
   "note": "Archive near-miss + held-book observe sim \u2014 priors only; pair with live learning_tracks_exit_timing.json for paper-track evidence. Wider gate: min_conviction=0.28, max_episodes_per_week=25.",
   "scope": "archive_near_miss",
-  "snapshot_count": 22,
+  "snapshot_count": 23,
   "episodes_opened": {
-    "hold_recovery": 230,
-    "hold_recovery_near_miss": 230,
+    "hold_recovery": 243,
+    "hold_recovery_near_miss": 243,
     "hold_recovery_held_book": 0,
-    "swap_rotation": 230,
-    "swap_rotation_near_miss": 230,
+    "swap_rotation": 243,
+    "swap_rotation_near_miss": 243,
     "swap_rotation_log_book": 0
   },
   "by_conviction_band": {

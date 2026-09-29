@@ -1,59 +1,30 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-28T08:31:07.603712+01:00",
+    "local_time": "2026-09-29T08:24:22.146159+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-09-28T08:00:00+01:00",
-    "settle_at": "2026-09-28T09:15:00+01:00",
+    "market_open_at": "2026-09-29T08:00:00+01:00",
+    "settle_at": "2026-09-29T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [
     {
-      "id": "3f71e00b-1bd1-46bf-b80d-dbc4a798a07c",
+      "id": "d98cd200-5600-4629-a35f-f8f426c3a92e",
       "fund_id": "a187fed1-ecd1-4d67-8b84-0a45ed945b56",
-      "acted_at": "2026-09-28T08:31:07.603712+01:00",
-      "ticker": "ENI.MI",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 13.812828,
-      "price": 24.09,
-      "gross": 332.75,
-      "cost": 0.58,
-      "net_cash": -333.33,
-      "note": "Automated buy",
-      "name": "Eni S.p.A."
-    },
-    {
-      "id": "7f981fef-98df-497b-bf8d-17578646121a",
-      "fund_id": "a187fed1-ecd1-4d67-8b84-0a45ed945b56",
-      "acted_at": "2026-09-28T08:31:07.603712+01:00",
-      "ticker": "REC.MI",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 6.272404,
-      "price": 53.05,
-      "gross": 332.75,
-      "cost": 0.58,
-      "net_cash": -333.33,
-      "note": "Automated buy",
-      "name": "Recordati Industria Chimica e Farmaceutica S.p.A."
-    },
-    {
-      "id": "85c1c21b-d772-4020-bd9b-2c3c7fd2d29b",
-      "fund_id": "a187fed1-ecd1-4d67-8b84-0a45ed945b56",
-      "acted_at": "2026-09-28T08:31:07.603712+01:00",
+      "acted_at": "2026-09-29T08:24:22.146159+01:00",
       "ticker": "AMP.MI",
-      "side": "buy",
+      "side": "sell",
       "sizing_mode": "cash",
-      "shares": 29.124816,
-      "price": 11.425,
-      "gross": 332.75,
-      "cost": 0.58,
-      "net_cash": -333.33,
-      "note": "Automated buy",
-      "name": "Amplifon S.p.A."
+      "shares": 0.911605,
+      "price": 12.12,
+      "gross": 11.05,
+      "cost": 0.02,
+      "net_cash": 11.03,
+      "note": "Automated trim",
+      "name": "Amplifon S.p.A.",
+      "avg_cost_at_exit": 11.425
     }
   ],
   "plan": {
@@ -69,8 +40,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 998.25,
-    "cash": -0.0,
+    "nav": 1025.87,
+    "cash": 11.03,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -79,28 +50,28 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 332.75,
+    "target_sleeve_value": 341.96,
     "targets": [
       {
         "ticker": "ENI.MI",
         "name": "Eni S.p.A.",
         "signal": "strong_buy",
-        "conviction_score": 0.6698000000000001,
-        "price": 24.09
+        "conviction_score": 0.7583000000000001,
+        "price": 24.58
       },
       {
         "ticker": "REC.MI",
         "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
         "signal": "buy",
-        "conviction_score": 0.5896,
-        "price": 53.05
+        "conviction_score": 0.6667000000000001,
+        "price": 53.15
       },
       {
         "ticker": "AMP.MI",
         "name": "Amplifon S.p.A.",
         "signal": "buy",
-        "conviction_score": 0.357,
-        "price": 11.425
+        "conviction_score": 0.408,
+        "price": 12.12
       }
     ],
     "anticipated_exits": [],
@@ -113,19 +84,19 @@
         "ticker": "ENI.MI",
         "name": "Eni S.p.A.",
         "reason": "Already near equal-weight target",
-        "value": 332.75,
-        "target_value": 332.75,
-        "conviction_score": 0.6698000000000001,
+        "value": 339.52,
+        "target_value": 341.96,
+        "conviction_score": 0.7583000000000001,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
         "ticker": "REC.MI",
         "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
-        "reason": "Already near equal-weight target",
-        "value": 332.75,
-        "target_value": 332.75,
-        "conviction_score": 0.5896,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 333.38,
+        "target_value": 341.96,
+        "conviction_score": 0.6667000000000001,
         "signal": "buy"
       },
       {
@@ -133,9 +104,9 @@
         "ticker": "AMP.MI",
         "name": "Amplifon S.p.A.",
         "reason": "Already near equal-weight target",
-        "value": 332.75,
-        "target_value": 332.75,
-        "conviction_score": 0.357,
+        "value": 341.94,
+        "target_value": 341.96,
+        "conviction_score": 0.408,
         "signal": "buy"
       }
     ],
@@ -150,7 +121,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 24.09,
+      "mark": 24.58,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -161,7 +132,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 53.05,
+      "mark": 53.15,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -172,7 +143,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 11.425,
+      "mark": 12.12,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -193,7 +164,7 @@
       "id": "a187fed1-ecd1-4d67-8b84-0a45ed945b56",
       "created_at": "2026-09-28T07:31:07.603820+00:00"
     },
-    "cash": -0.0,
+    "cash": 11.03,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -221,7 +192,7 @@
       },
       "AMP.MI": {
         "ticker": "AMP.MI",
-        "shares": 29.124816,
+        "shares": 28.213211,
         "avg_cost": 11.425,
         "name": "Amplifon S.p.A.",
         "sector": "Healthcare",
@@ -276,6 +247,22 @@
         "net_cash": -333.33,
         "note": "Automated buy",
         "name": "Amplifon S.p.A."
+      },
+      {
+        "id": "d98cd200-5600-4629-a35f-f8f426c3a92e",
+        "fund_id": "a187fed1-ecd1-4d67-8b84-0a45ed945b56",
+        "acted_at": "2026-09-29T08:24:22.146159+01:00",
+        "ticker": "AMP.MI",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.911605,
+        "price": 12.12,
+        "gross": 11.05,
+        "cost": 0.02,
+        "net_cash": 11.03,
+        "note": "Automated trim",
+        "name": "Amplifon S.p.A.",
+        "avg_cost_at_exit": 11.425
       }
     ],
     "equity_curve": [
@@ -319,19 +306,36 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-29T08:24:22.146159+01:00",
+        "portfolio_value": 881.55,
+        "cash": 11.03,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.85779
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-28T08:31:07.603712+01:00",
+    "last_mark_at": "2026-09-29T08:24:22.146159+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (3 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T07:31:07.931710+00:00",
+    "generated_at": "2026-09-29T07:24:22.167273+00:00",
     "open_count": 0,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -350,7 +354,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T07:31:07.932052+00:00",
+    "generated_at": "2026-09-29T07:24:22.168015+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -435,7 +439,7 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
@@ -448,8 +452,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-28T07:31:07.932553+00:00",
-    "as_of": "2026-09-28T08:31:07.603712+01:00",
+    "updated_at": "2026-09-29T07:24:22.168786+00:00",
+    "as_of": "2026-09-29T08:24:22.146159+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -500,18 +504,18 @@
     },
     "holdings": [
       {
-        "ticker": "ENI.MI",
-        "name": "Eni S.p.A.",
+        "ticker": "REC.MI",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 24.09,
-        "avg_cost": 24.09,
-        "signal": "strong_buy",
+        "unrealized_pct": 0.0019,
+        "mark": 53.15,
+        "avg_cost": 53.05,
+        "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6698,
+        "conviction_score": 0.6667,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -523,14 +527,14 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
           "conviction 67%"
         ],
         "intact_reasons": [
-          "still strong_buy",
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
@@ -540,18 +544,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "REC.MI",
-        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 53.05,
-        "avg_cost": 53.05,
-        "signal": "buy",
+        "unrealized_pct": 0.0203,
+        "mark": 24.58,
+        "avg_cost": 24.09,
+        "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5896,
+        "conviction_score": 0.7583,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -563,18 +567,18 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 59%"
+          "conviction 76%"
         ],
         "intact_reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 59%"
+          "conviction 76%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -586,12 +590,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 11.425,
+        "unrealized_pct": 0.0608,
+        "mark": 12.12,
         "avg_cost": 11.425,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.357,
+        "conviction_score": 0.408,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -612,7 +616,7 @@
           "still buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 36%"
+          "conviction 41%"
         ],
         "weaken_reasons": [
           "research verdict caution"
@@ -627,7 +631,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T07:31:07.933224+00:00",
+    "generated_at": "2026-09-29T07:24:22.169985+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -687,7 +691,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-28T07:31:07.933988+00:00",
+    "generated_at": "2026-09-29T07:24:22.171399+00:00",
     "open_count": 3,
     "closed_count": 0,
     "scored_count": 0,
@@ -744,14 +748,14 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 3,
-    "marked_this_pass": 0,
+    "ingested_this_pass": 0,
+    "marked_this_pass": 3,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-28T08:31:07.603712+01:00",
+    "generated_at": "2026-09-29T08:24:22.146159+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -799,13 +803,13 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 3,
+      "opened": 0,
       "closed": 0,
-      "tagged_on_book": 3,
+      "tagged_on_book": 0,
       "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-28T07:31:07.934714+00:00",
+  "generated_at": "2026-09-29T07:24:22.172708+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

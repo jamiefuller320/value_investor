@@ -293,5 +293,302 @@
       "exit_streak": {},
       "reentry_cooldown": {}
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-09-29T07:24:22.189119+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_mib/screen_latest.json",
+      "run_at": "2026-09-29T06:52:38.048455+00:00",
+      "generated_at": "2026-09-29T07:24:22.137100+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-09-29T08:24:22.178026+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-09-29T08:00:00+01:00",
+      "settle_at": "2026-09-29T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (1 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0003,
+    "candidates": [
+      {
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7583000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 24.58,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "AMP.MI",
+        "name": "Amplifon S.p.A.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.408,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 12.12,
+        "research_verdict": "caution"
+      },
+      {
+        "ticker": "REC.MI",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6667000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 53.15,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7583000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 24.58,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "AMP.MI",
+        "name": "Amplifon S.p.A.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.408,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 12.12,
+        "research_verdict": "caution"
+      },
+      {
+        "ticker": "REC.MI",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6667000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 53.15,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1027.43,
+      "cash": 11.05,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 342.48,
+      "targets": [
+        {
+          "ticker": "ENI.MI",
+          "name": "Eni S.p.A.",
+          "signal": "strong_buy",
+          "conviction_score": 0.7583000000000001,
+          "price": 24.58
+        },
+        {
+          "ticker": "REC.MI",
+          "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+          "signal": "buy",
+          "conviction_score": 0.6667000000000001,
+          "price": 53.15
+        },
+        {
+          "ticker": "AMP.MI",
+          "name": "Amplifon S.p.A.",
+          "signal": "buy",
+          "conviction_score": 0.408,
+          "price": 12.12
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "ENI.MI",
+          "name": "Eni S.p.A.",
+          "reason": "Already near equal-weight target",
+          "value": 340.03,
+          "target_value": 342.48,
+          "conviction_score": 0.7583000000000001,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "REC.MI",
+          "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+          "reason": "Top-up below min trade size (\u00a310)",
+          "value": 333.88,
+          "target_value": 342.48,
+          "conviction_score": 0.6667000000000001,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "AMP.MI",
+          "name": "Amplifon S.p.A.",
+          "reason": "Already near equal-weight target",
+          "value": 342.47,
+          "target_value": 342.48,
+          "conviction_score": 0.408,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "75e18b34-dfee-4a83-b360-7a79fd95720c",
+        "fund_id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
+        "acted_at": "2026-09-29T08:24:22.178026+01:00",
+        "ticker": "AMP.MI",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.911603,
+        "price": 12.12,
+        "gross": 11.05,
+        "cost": 0.0,
+        "net_cash": 11.05,
+        "note": "Automated trim",
+        "name": "Amplifon S.p.A.",
+        "avg_cost_at_exit": 11.425
+      }
+    ],
+    "nav_before": 1027.43,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "ENI.MI",
+        "shares": 13.833542,
+        "avg_cost": 24.09,
+        "sector": "Energy",
+        "name": "Eni S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "REC.MI",
+        "shares": 6.28181,
+        "avg_cost": 53.05,
+        "sector": "Healthcare",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AMP.MI",
+        "shares": 29.168492,
+        "avg_cost": 11.425,
+        "sector": "Healthcare",
+        "name": "Amplifon S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 1027.43,
+    "cash_after": 11.05,
+    "holdings_after": [
+      {
+        "ticker": "ENI.MI",
+        "shares": 13.833542,
+        "avg_cost": 24.09,
+        "sector": "Energy",
+        "name": "Eni S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "REC.MI",
+        "shares": 6.28181,
+        "avg_cost": 53.05,
+        "sector": "Healthcare",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AMP.MI",
+        "shares": 28.256889,
+        "avg_cost": 11.425,
+        "sector": "Healthcare",
+        "name": "Amplifon S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    }
   }
 ]

@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-28T09:31:00.423356+02:00",
+    "local_time": "2026-09-29T09:24:18.241445+02:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-09-28T09:00:00+02:00",
-    "settle_at": "2026-09-28T09:30:00+02:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-09-29T09:00:00+02:00",
+    "settle_at": "2026-09-29T09:30:00+02:00",
+    "can_act": false,
+    "reason": "waiting for open settle (30 min after 09:00 Europe/Paris)"
   },
   "trades": [],
   "plan": {
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1001.59,
+    "nav": 1002.89,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -33,63 +33,63 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 125.2,
+    "target_sleeve_value": 125.36,
     "targets": [
       {
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "signal": "strong_buy",
         "conviction_score": 0.915,
-        "price": 111.3
+        "price": 111.15
       },
       {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "signal": "strong_buy",
         "conviction_score": 0.8813000000000001,
-        "price": 31.76
+        "price": 32.35
       },
       {
         "ticker": "DHL.DE",
         "name": "DHL AG",
         "signal": "strong_buy",
         "conviction_score": 0.75,
-        "price": 57.2
+        "price": 56.98
       },
       {
         "ticker": "WKL.AS",
         "name": "Wolters Kluwer N.V.",
         "signal": "buy",
         "conviction_score": 0.7250000000000001,
-        "price": 68.66
+        "price": 67.48
       },
       {
         "ticker": "VOW.DE",
         "name": "Volkswagen AG",
         "signal": "strong_buy",
         "conviction_score": 0.6789000000000001,
-        "price": 71.75
+        "price": 71.1
       },
       {
         "ticker": "MC.PA",
         "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
         "signal": "buy",
         "conviction_score": 0.6666000000000001,
-        "price": 396.85
+        "price": 398.8
       },
       {
         "ticker": "ENI.MI",
         "name": "Eni S.p.A.",
         "signal": "buy",
         "conviction_score": 0.6544000000000001,
-        "price": 24.09
+        "price": 24.58
       },
       {
         "ticker": "ABI.BR",
         "name": "Anheuser-Busch InBev SA/NV",
         "signal": "buy",
         "conviction_score": 0.6313000000000001,
-        "price": 67.68
+        "price": 67.56
       }
     ],
     "anticipated_exits": [],
@@ -102,62 +102,72 @@
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "reason": "Already near equal-weight target",
-        "value": 125.87,
-        "target_value": 125.2,
+        "value": 125.7,
+        "target_value": 125.36,
         "conviction_score": 0.915,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
+        "ticker": "DHL.DE",
+        "name": "DHL AG",
         "reason": "Already near equal-weight target",
-        "value": 125.6,
-        "target_value": 125.2,
-        "conviction_score": 0.8813000000000001,
+        "value": 126.08,
+        "target_value": 125.36,
+        "conviction_score": 0.75,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "WKL.AS",
-        "name": "Wolters Kluwer N.V.",
+        "ticker": "VOW.DE",
+        "name": "Volkswagen AG",
         "reason": "Already near equal-weight target",
-        "value": 124.68,
-        "target_value": 125.2,
-        "conviction_score": 0.7250000000000001,
-        "signal": "buy"
+        "value": 125.5,
+        "target_value": 125.36,
+        "conviction_score": 0.6789000000000001,
+        "signal": "strong_buy"
       },
       {
         "action": "hold",
         "ticker": "MC.PA",
         "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
         "reason": "Already near equal-weight target",
-        "value": 124.89,
-        "target_value": 125.2,
+        "value": 125.5,
+        "target_value": 125.36,
         "conviction_score": 0.6666000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "reason": "Already near equal-weight target",
+        "value": 126.02,
+        "target_value": 125.36,
+        "conviction_score": 0.6544000000000001,
         "signal": "buy"
       }
     ],
     "skipped": [
       {
-        "ticker": "ENI.MI",
-        "name": "Eni S.p.A.",
+        "ticker": "WKL.AS",
+        "name": "Wolters Kluwer N.V.",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 125.2,
-        "conviction_score": 0.6544000000000001,
+        "target_value": 125.36,
+        "conviction_score": 0.7250000000000001,
         "signal": "buy"
       },
       {
         "ticker": "ABI.BR",
         "name": "Anheuser-Busch InBev SA/NV",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 125.2,
+        "target_value": 125.36,
         "conviction_score": 0.6313000000000001,
         "signal": "buy"
       }
     ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 8 equal-weight sleeve(s); leave 4 near-target holding(s)."
+    "summary": "Next rebalance would target 8 equal-weight sleeve(s); leave 5 near-target holding(s)."
   },
   "alerts": [
     {
@@ -166,10 +176,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 111.3,
+      "mark": 111.15,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "AD.AS",
@@ -177,7 +187,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 31.76,
+      "mark": 32.35,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -188,7 +198,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 68.66,
+      "mark": 67.48,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -199,7 +209,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 71.75,
+      "mark": 71.1,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -210,10 +220,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 396.85,
+      "mark": 398.8,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "ENI.MI",
@@ -221,7 +231,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 24.09,
+      "mark": 24.58,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -232,7 +242,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 67.68,
+      "mark": 67.56,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -243,7 +253,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 57.2,
+      "mark": 56.98,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -551,9 +561,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-29T09:24:18.241445+02:00",
+        "portfolio_value": 1002.89,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 8,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-28T09:31:00.423356+02:00",
+    "last_mark_at": "2026-09-29T09:24:18.241445+02:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -563,7 +589,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-09-28T07:31:00.429649+00:00",
+    "generated_at": "2026-09-29T07:24:18.246411+00:00",
     "open_count": 0,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -582,7 +608,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-09-28T07:31:00.430209+00:00",
+    "generated_at": "2026-09-29T07:24:18.247572+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -638,7 +664,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 0,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 1,
+      "hold_with_data_quality_count": 3,
       "gaps": [
         "hold_recovery closed episodes=0 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -647,10 +673,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 1,
-        "recovered_to_breakeven": 0,
+        "count": 3,
+        "recovered_to_breakeven": 1,
         "close_reasons": {
-          "open": 1
+          "open": 3
         }
       },
       "closed": {
@@ -667,7 +693,7 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 2,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
@@ -680,8 +706,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-09-28T07:31:00.430952+00:00",
-    "as_of": "2026-09-28T09:31:00.423356+02:00",
+    "updated_at": "2026-09-29T07:24:18.248373+00:00",
+    "as_of": "2026-09-29T09:24:18.241445+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -732,94 +758,14 @@
     },
     "holdings": [
       {
-        "ticker": "ENI.MI",
-        "name": "Eni S.p.A.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0117,
-        "mark": 24.09,
-        "avg_cost": 24.375,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.6544,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 65%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 65%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "ABI.BR",
-        "name": "Anheuser-Busch InBev SA/NV",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0091,
-        "mark": 67.68,
-        "avg_cost": 68.3,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.6313,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 63%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 63%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "WKL.AS",
         "name": "Wolters Kluwer N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0023,
-        "mark": 68.66,
+        "unrealized_pct": -0.0195,
+        "mark": 67.48,
         "avg_cost": 68.82,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -852,17 +798,98 @@
         "broken_reasons": []
       },
       {
+        "ticker": "ABI.BR",
+        "name": "Anheuser-Busch InBev SA/NV",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0108,
+        "mark": 67.56,
+        "avg_cost": 68.3,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6313,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 63%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 63%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "VOW.DE",
+        "name": "Volkswagen AG",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0042,
+        "mark": 71.1,
+        "avg_cost": 70.8,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6789,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "quality"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 68%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 68%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "MC.PA",
         "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0006,
-        "mark": 396.85,
+        "unrealized_pct": 0.0043,
+        "mark": 398.8,
         "avg_cost": 397.1,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.6666,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -892,57 +919,17 @@
         "broken_reasons": []
       },
       {
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0051,
-        "mark": 31.76,
-        "avg_cost": 31.6,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.8813,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 88%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 88%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0072,
-        "mark": 111.3,
+        "unrealized_pct": 0.0059,
+        "mark": 111.15,
         "avg_cost": 110.5,
         "signal": "strong_buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.915,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -972,14 +959,54 @@
         "broken_reasons": []
       },
       {
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0084,
+        "mark": 24.58,
+        "avg_cost": 24.375,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6544,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 65%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 65%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "DHL.DE",
         "name": "DHL AG",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0127,
-        "mark": 57.2,
+        "unrealized_pct": 0.0089,
+        "mark": 56.98,
         "avg_cost": 56.48,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -1012,42 +1039,41 @@
         "broken_reasons": []
       },
       {
-        "ticker": "VOW.DE",
-        "name": "Volkswagen AG",
+        "ticker": "AD.AS",
+        "name": "Koninklijke Ahold Delhaize N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0134,
-        "mark": 71.75,
-        "avg_cost": 70.8,
+        "unrealized_pct": 0.0237,
+        "mark": 32.35,
+        "avg_cost": 31.6,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6789,
+        "conviction_score": 0.8813,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
+          "quality",
           "dividend",
           "garp",
           "risk"
         ],
-        "failed_families": [
-          "quality"
-        ],
+        "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 68%"
+          "conviction 88%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 68%"
+          "conviction 88%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1060,7 +1086,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-09-28T07:31:00.432033+00:00",
+    "generated_at": "2026-09-29T07:24:18.249763+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1068,7 +1094,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 0,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 1,
+      "open_with_thesis": 3,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -1120,7 +1146,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-09-28T07:31:00.433441+00:00",
+    "generated_at": "2026-09-29T07:24:18.251697+00:00",
     "open_count": 8,
     "closed_count": 0,
     "scored_count": 0,
@@ -1184,7 +1210,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-09-28T09:31:00.423356+02:00",
+    "generated_at": "2026-09-29T09:24:18.241445+02:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1238,7 +1264,7 @@
       "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-28T07:31:00.434694+00:00",
+  "generated_at": "2026-09-29T07:24:18.253122+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,
