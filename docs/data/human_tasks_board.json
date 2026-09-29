@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T15:12:46.109676+00:00",
+  "generated_at": "2026-09-29T18:37:40.232129+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,8 +8,8 @@
   "checklist_updated_at": "2026-09-28",
   "counts": {
     "new_info": 2,
-    "unacked": 20,
-    "acked": 11,
+    "unacked": 19,
+    "acked": 12,
     "automated": 19,
     "human": 33
   },
@@ -29,17 +29,17 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 13",
-        "updated_at": "2026-09-29T14:56:32.324756+00:00",
-        "fingerprint": "9dd27534e7be8470",
+        "updated_at": "2026-09-29T17:26:13.440665+00:00",
+        "fingerprint": "0e7a62d585fe593e",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=37",
           "dax: phase=1 ai=False knob=False holdings=3",
-          "asx200: phase=1 ai=False knob=False holdings=26",
-          "aex: phase=0 ai=None knob=None holdings=—",
+          "aex: phase=0 ai=False knob=False holdings=6",
           "aim: phase=0 ai=False knob=False holdings=15",
           "cac40: phase=1 ai=False knob=False holdings=5",
           "euro_stoxx50: phase=1 ai=False knob=False holdings=8",
-          "ftse_mib: phase=0 ai=False knob=False holdings=3"
+          "ftse_mib: phase=0 ai=False knob=False holdings=3",
+          "ftse_smallcap: phase=1 ai=False knob=False holdings=2"
         ],
         "source_keys": [
           "market_status"
@@ -94,41 +94,6 @@
         "finding_fingerprint": "3db931b6aba425f5"
       },
       "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "sunday-fair-cost-promotion-gate",
-      "title": "Require fair-cost view before treating excess as deployable",
-      "summary": "Keep 3% stress books as the defensive/churn lab. Before promoting knobs or calling primary 'beating the market', check ftse-trading-costs assess and/or fair-cost warm-start shadows. Promote only when fair excess beats ^FTSE and the fair rules control (or explicitly accept stress-only churn wins).",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/market-trading-costs.md",
-      "doc_anchor": "test-and-adoption-strategy-dual-suite",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-trading-costs.md#test-and-adoption-strategy-dual-suite",
-      "approval_gate": true,
-      "approval_label": "Approve fair-cost view",
-      "analysis": {
-        "headline": "Fair-cost Suite B lab",
-        "updated_at": "2026-09-29T08:29:36.767831+00:00",
-        "fingerprint": "59730160636f429c",
-        "bullets": [
-          "Require fair-cost view before treating 3% stress excess as deployable."
-        ],
-        "source_keys": [
-          "experiment_assessment"
-        ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -863,6 +828,41 @@
       "ack_sufficient": false
     },
     {
+      "id": "sunday-fair-cost-promotion-gate",
+      "title": "Require fair-cost view before treating excess as deployable",
+      "summary": "Keep 3% stress books as the defensive/churn lab. Before promoting knobs or calling primary 'beating the market', check ftse-trading-costs assess and/or fair-cost warm-start shadows. Promote only when fair excess beats ^FTSE and the fair rules control (or explicitly accept stress-only churn wins).",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-trading-costs.md",
+      "doc_anchor": "test-and-adoption-strategy-dual-suite",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-trading-costs.md#test-and-adoption-strategy-dual-suite",
+      "approval_gate": true,
+      "approval_label": "Approve fair-cost view",
+      "analysis": {
+        "headline": "Fair-cost Suite B lab",
+        "updated_at": "2026-09-29T08:29:36.767831+00:00",
+        "fingerprint": "59730160636f429c",
+        "bullets": [
+          "Require fair-cost view before treating 3% stress excess as deployable."
+        ],
+        "source_keys": [
+          "experiment_assessment"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-29T18:37:40.187158+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "59730160636f429c"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
       "id": "sunday-promote-knobs-gate",
       "title": "Promote knob priors only when gates pass",
       "summary": "Stays CLOSED while calibrated shadows are fail / not adoptable (N171). Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, confidence is acceptable, and fair-cost Suite B supports adoption. Survivors are starting priors — never auto-apply. Suite A stress excess vs ^FTSE alone is not sufficient.",
@@ -1517,7 +1517,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-09-29T14:55:29.235629+00:00",
+        "updated_at": "2026-09-29T17:24:34.518698+00:00",
         "fingerprint": "750849fd9e662f70",
         "bullets": [
           "Open deviations: 0"
