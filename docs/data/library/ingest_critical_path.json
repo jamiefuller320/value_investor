@@ -1,40 +1,70 @@
 {
-  "market_id": "dax",
-  "assessed_at": "2026-09-29T16:48:50.632378+00:00",
-  "unmeasured": [
-    "G1A.DE"
-  ],
+  "market_id": "euro_stoxx50",
+  "assessed_at": "2026-09-29T16:56:02.944961+00:00",
+  "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
-  "thin_need_discovery": [
-    "DHL.DE",
-    "HEI.DE",
-    "DTE.DE",
-    "DTG.DE",
-    "MUV2.DE",
-    "BAS.DE",
-    "FRE.DE",
-    "HNR1.DE",
-    "HEN3.DE",
-    "VOW3.DE"
+  "indexed_without_body": [
+    {
+      "ticker": "TTE.PA",
+      "indexed_without_body": 6,
+      "filings_total": 107,
+      "filings_with_body": 100
+    },
+    {
+      "ticker": "SGO.PA",
+      "indexed_without_body": 2,
+      "filings_total": 3,
+      "filings_with_body": 1
+    },
+    {
+      "ticker": "DTE.DE",
+      "indexed_without_body": 1,
+      "filings_total": 2,
+      "filings_with_body": 1
+    },
+    {
+      "ticker": "SAN.PA",
+      "indexed_without_body": 1,
+      "filings_total": 6,
+      "filings_with_body": 5
+    },
+    {
+      "ticker": "SAP.DE",
+      "indexed_without_body": 1,
+      "filings_total": 18,
+      "filings_with_body": 17
+    }
   ],
-  "thin_need_bodies": [],
-  "primary_blocker": "unmeasured",
+  "thin_need_discovery": [
+    "MUV2.DE",
+    "DTE.DE",
+    "BAS.DE",
+    "ADYEN.AS"
+  ],
+  "thin_need_bodies": [
+    "SGO.PA",
+    "DTE.DE"
+  ],
+  "primary_blocker": "indexed_without_body",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "G1A.DE"
+    "TTE.PA",
+    "SGO.PA",
+    "DTE.DE",
+    "SAN.PA",
+    "SAP.DE"
   ],
   "recommended_actions": [
-    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
-    "Discovery/IR seed for 10 thin ticker(s) that already have bodies for every indexed filing",
+    "Prefer indexed-without-body body refetch (5 tickers, top: TTE.PA(6), SGO.PA(2), DTE.DE(1), SAN.PA(1), SAP.DE(1))",
+    "Discovery/IR seed for 4 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 1,
+    "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
-    "thin_need_discovery": 10,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 5,
+    "indexed_without_body_rows": 11,
+    "thin_need_discovery": 4,
+    "thin_need_bodies": 2
   }
 }
