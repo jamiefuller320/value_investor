@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-28T11:42:28+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-29T08:05:33+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -221,6 +221,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N166 | **Do not divert euro_depth fat slot or eng-spray DAX for zero_improve_stall yet** | DAX spare stream shows zero_improve_stall + G1A.DE unmeasured after prior merged gap-closure eng (#827/#818). Keep spare auto-advance; do not steal euro_depth fat slot or open a fresh DAX eng until more complete 0-improve runs toward leftover exhaustion or a clear allowlist bug. | DAX spare hits leftover exhaustion after min zero-improve runs, or G1A.DE still unmeasured with a concrete IR/ESEF allowlist bug after the next 1–2 complete 0-improve sprint windows. |
 | N167 | **Daily hub as default main tab landing** | Do not add a tenth main tab or make Daily the default landing until Automation subnav Daily hub proves useful. Keep hub under Automation. | Daily hub has been the weekday morning entry for several weeks and Overview pulse feels redundant |
 | N168 | **Supabase-backed daily todo table** | Do not add a new SQL table for daily todos; reuse git JSON acks and existing dashboard_commands bridge. SQL only if command-queue pressure forces it. | daily_focus_acks via git JSON prove too slow or conflict-prone after Phase C1 |
+| N169 | **Auto-flip human checklist `automated: true` from Accept streaks** | Never flip checklist automated:true from Accept streaks alone; streaks are observe-only automation candidates until an explicit human audit gate (N-style). | Never without explicit human audit gate (N-style) |
+| N170 | **Supabase-backed daily history table** | Keep daily hub history as git JSON plus bridge payloads; do not add a Supabase history table unless git JSON + bridge pressure forces it (align N168). | If git JSON + bridge pressure forces it (align N168) |
 
 ---
 
@@ -560,6 +562,12 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L489 | **Multi-operator timezone profiles for daily hub** | Freeze Europe/London as operator TZ for daily hub refresh-before-04:00. Multi-profile TZ support only if a second operator locale appears. | A second operator needs a non-London local deadline for the daily hub |
 | L490 | **Section-visit durable acks for illuminated subnav** | Durable per-section visit fingerprints so green illumination survives reload; extend human-task-ack / bridge pattern. Phase A2 after Automation subnav ships. | Automation section subnav and illumination v0 are on main and operators want green chips to persist across reloads |
 | L492 | **Daily hub Phase-1 follow-on: eng queue and ops finding collation (C2)** | Collate engineering queue head and ops findings warn/fail into Daily hub priority list beyond v0 reconcile ambers. Retargeted off L491 to avoid collision with #897 post-close sleeve autopsy park. | After Phase 1 Daily hub is live and operators want eng/ops rows in the morning board |
+| L493 | **Daily hub History session UI + `daily_hub_history.json` builder** | Read-only History session under Automation→Daily plus build_daily_hub_history writing committed docs/data/daily_hub_history.json so operators confirm Accept vs Discuss completions without chat. | After Phase A0 refresh-contract fix merges |
+| L494 | **Daily hub task status block (ready / next / waiting_on)** | Additive status block on daily_focus tasks (state/ready/next_steps/waiting_on) with Today-row chips; degrade gracefully when status is absent. | With or immediately after History A2 |
+| L495 | **Daily hub automation-candidate rollup + ops finding** | Phase B automation_candidates rollup plus warn-only ops-monitor finding when Accept streaks have zero Discuss; observe-only, never auto-flip checklist automated:true. | After ≥2 weeks of Accept/Discuss outcomes in history |
+| L496 | **Discuss-resolve bridge write-back to daily hub status** | Discuss resolve bridge action that writes resolution notes back into focus status next_steps and history discuss_resolved outcome after Project pickup. | After Discuss inbox sees regular Project pickup |
+| L497 | **Daily hub as default main-tab landing with History** | Do not make Daily (+ History) the default main-tab landing until the hub proves useful as morning entry; keep under Automation (align N167). | If Daily becomes default landing (align N167) |
+| L498 | **Include routine ops_gate rows in History by default** | History defaults to work_class=dev only; include routine ops_gate rows in History by default only if operators explicitly want gate memory. | Only if operators explicitly want gate memory; default stays off |
 
 ---
 

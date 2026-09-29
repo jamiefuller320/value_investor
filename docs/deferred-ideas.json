@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-28T11:42:28+00:00",
+  "updated_at": "2026-09-29T08:05:33+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -11202,6 +11202,150 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-d0a3d52e-2509-5709-9879-58b62cffbb97",
       "added_at": "2026-09-28T10:29:13+00:00"
+    },
+    {
+      "id": "L493",
+      "category": "later",
+      "section": "ops",
+      "title": "Daily hub History session UI + `daily_hub_history.json` builder",
+      "summary": "Read-only History session under Automation\u2192Daily plus build_daily_hub_history writing committed docs/data/daily_hub_history.json so operators confirm Accept vs Discuss completions without chat.",
+      "revisit_when": "After Phase A0 refresh-contract fix merges",
+      "tags": [
+        "daily-hub",
+        "history",
+        "status",
+        "deferred",
+        "phase-a"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "added_at": "2026-09-29T08:05:33+00:00"
+    },
+    {
+      "id": "L494",
+      "category": "later",
+      "section": "ops",
+      "title": "Daily hub task status block (ready / next / waiting_on)",
+      "summary": "Additive status block on daily_focus tasks (state/ready/next_steps/waiting_on) with Today-row chips; degrade gracefully when status is absent.",
+      "revisit_when": "With or immediately after History A2",
+      "tags": [
+        "daily-hub",
+        "history",
+        "status",
+        "deferred",
+        "phase-a"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "added_at": "2026-09-29T08:05:33+00:00"
+    },
+    {
+      "id": "L495",
+      "category": "later",
+      "section": "ops",
+      "title": "Daily hub automation-candidate rollup + ops finding",
+      "summary": "Phase B automation_candidates rollup plus warn-only ops-monitor finding when Accept streaks have zero Discuss; observe-only, never auto-flip checklist automated:true.",
+      "revisit_when": "After \u22652 weeks of Accept/Discuss outcomes in history",
+      "tags": [
+        "daily-hub",
+        "history",
+        "status",
+        "deferred",
+        "phase-b"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "added_at": "2026-09-29T08:05:33+00:00"
+    },
+    {
+      "id": "L496",
+      "category": "later",
+      "section": "ops",
+      "title": "Discuss-resolve bridge write-back to daily hub status",
+      "summary": "Discuss resolve bridge action that writes resolution notes back into focus status next_steps and history discuss_resolved outcome after Project pickup.",
+      "revisit_when": "After Discuss inbox sees regular Project pickup",
+      "tags": [
+        "daily-hub",
+        "history",
+        "status",
+        "deferred",
+        "phase-b"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "added_at": "2026-09-29T08:05:33+00:00"
+    },
+    {
+      "id": "N169",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Auto-flip human checklist `automated: true` from Accept streaks",
+      "summary": "Never flip checklist automated:true from Accept streaks alone; streaks are observe-only automation candidates until an explicit human audit gate (N-style).",
+      "revisit_when": "Never without explicit human audit gate (N-style)",
+      "tags": [
+        "daily-hub",
+        "history",
+        "status",
+        "deferred",
+        "automation"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "added_at": "2026-09-29T08:05:33+00:00"
+    },
+    {
+      "id": "N170",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Supabase-backed daily history table",
+      "summary": "Keep daily hub history as git JSON plus bridge payloads; do not add a Supabase history table unless git JSON + bridge pressure forces it (align N168).",
+      "revisit_when": "If git JSON + bridge pressure forces it (align N168)",
+      "tags": [
+        "daily-hub",
+        "history",
+        "status",
+        "deferred",
+        "supabase"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "added_at": "2026-09-29T08:05:33+00:00"
+    },
+    {
+      "id": "L497",
+      "category": "later",
+      "section": "ops",
+      "title": "Daily hub as default main-tab landing with History",
+      "summary": "Do not make Daily (+ History) the default main-tab landing until the hub proves useful as morning entry; keep under Automation (align N167).",
+      "revisit_when": "If Daily becomes default landing (align N167)",
+      "tags": [
+        "daily-hub",
+        "history",
+        "status",
+        "deferred",
+        "ia"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "added_at": "2026-09-29T08:05:33+00:00"
+    },
+    {
+      "id": "L498",
+      "category": "later",
+      "section": "ops",
+      "title": "Include routine ops_gate rows in History by default",
+      "summary": "History defaults to work_class=dev only; include routine ops_gate rows in History by default only if operators explicitly want gate memory.",
+      "revisit_when": "Only if operators explicitly want gate memory; default stays off",
+      "tags": [
+        "daily-hub",
+        "history",
+        "status",
+        "deferred",
+        "ops-gate"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "added_at": "2026-09-29T08:05:33+00:00"
     }
   ],
   "fragments": [
