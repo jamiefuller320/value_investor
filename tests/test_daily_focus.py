@@ -151,7 +151,11 @@ def test_build_daily_focus_collates_sources(tmp_path: Path) -> None:
         "priority",
     ):
         assert key in sample
-    assert sample["accept_action"]["kind"] in {"focus-ack", "human-task-ack", "link_only"}
+    assert sample["accept_action"]["kind"] in {
+        "focus-ack",
+        "human-task-ack",
+        "link_only",
+    }
     assert "Discuss daily recommendation" in sample["discuss_prompt"]
     # Tasks embed recommendation object
     focus_task = next(t for t in payload["tasks"] if t["task_ref"] == "focus-1")

@@ -75,6 +75,8 @@ lane change and readiness gate (see N152 / P1 pin rules).
   (`auto_fixable=False`). Accept / Discuss recommendations queue via
   `daily-focus-ack` / `daily-discuss` (inbox: `daily_discuss_inbox.json`).
   Accept-streak hints are observe-only — never auto-flip checklist `automated`.
+  Morning board also emits **market warning triage** rows (deepen / dismiss /
+  park) from open `market_status` admission flags and ingest deviations.
 
 Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-required).
 
@@ -417,9 +419,11 @@ Policy green ≠ utility: a Suite A stress book being “primary” does not cle
 Morning cockpit (Cap C). Operator TZ **Europe/London**; hub payload for “today”
 should be ready **before 04:00** local via the **02:30 UTC** early ops-monitor slot
 (not by redefining fresh as ~08:45). Built from Project focus seed
-(`project_daily_seed.json` / notes Today bullets), human-tasks open buckets,
-progress `defer_now`, and reconcile ambers. History session lists completed
-**development** tasks (`work_class=dev`) with **Accept followed** vs **Discuss resolved**.
+(`project_daily_seed.json` / notes Today bullets), **market warning triage**
+(open `market_status` admission flags + open ingest deviations → deepen /
+dismiss / park), human-tasks open buckets, progress `defer_now`, and reconcile
+ambers. History session lists completed **development** tasks (`work_class=dev`)
+with **Accept followed** vs **Discuss resolved**.
 
 | Layer | Behavior |
 |-------|----------|
@@ -429,6 +433,7 @@ progress `defer_now`, and reconcile ambers. History session lists completed
 | Dashboard | Automation → **Daily** (`#automation/daily`): **Today** session + **History** session; Overview pulse embeds top focus lines + history counts |
 | Close | Focus lines → `daily-focus-ack` (enriched title/work_class/outcome); human tasks → existing `human-task-ack` |
 | Recommendations | Per-task `recommendation` with **Accept** / **Discuss**; Discuss writes `daily_discuss_inbox.json` and copies a Project pickup prompt |
+| Market warning triage | Open admission flags (`zero_body_stuck`, `unmeasured_stuck`, `zero_improve_stall`, …) + open ingest deviations become Daily rows with structured `triage_action` ∈ {`deepen`,`dismiss`,`park`}. **Accept** = observe-safe `focus-ack` when park/dismiss is safe; **Discuss** preferred for fat-slot / rate-limit deepen (euro head). `zero_body_stuck` / `unmeasured_stuck` are **not** dismissable or parkable. Do not ritual-clear bare `health=warn`. Spare DAX stall → park (do not divert euro). Ingest-deviation dismiss CLI stays manual (Phase B automation parked). |
 | Status chips | `ready` / `next_steps` / `waiting_on` from seed + notes `Next:` / `Waiting on:` conventions |
 | Accept-streak hint | Observe-only footer when ≥5 Accepts / 30d with 0 Discuss on a family — never auto-flips `automated: true` (N169) |
 | Aim filter | Suite A stress streaks / off-buy-tier zero-filing themes stay out unless already a checklist item or focus line |
