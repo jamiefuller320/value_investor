@@ -254,7 +254,6 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
     tickers = str(flag.get("tickers") or "").strip()
     ticker_bit = f" ({tickers})" if tickers else ""
 
-    dismissable = flag_id not in NON_DISMISSABLE_FLAG_IDS and kind != "ingest_deviation"
     parkable = flag_id not in NON_PARKABLE_FLAG_IDS
 
     # --- Ingest deviations -------------------------------------------------
