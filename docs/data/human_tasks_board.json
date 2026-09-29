@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T18:38:34.985000+00:00",
+  "generated_at": "2026-09-29T18:42:29.801436+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,8 +8,8 @@
   "checklist_updated_at": "2026-09-28",
   "counts": {
     "new_info": 2,
-    "unacked": 18,
-    "acked": 13,
+    "unacked": 17,
+    "acked": 14,
     "automated": 19,
     "human": 33
   },
@@ -449,37 +449,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "adhoc-sync-cursor-api-key-v2-github",
-      "title": "Sync valid Cursor API key into GitHub Actions secrets",
-      "summary": "When ftse-verify-key --key-source legacy fails but --key-source v2 succeeds (or GHA agent jobs 401): copy the valid User API key into GitHub Actions secrets CURSOR_API_KEY_V2 and CURSOR_API_KEY. Workflows prefer V2 via secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY. Cloud secrets alone do not feed Actions.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/gha-secret-hygiene.md",
-      "doc_anchor": "which-secret-workflows-use",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#which-secret-workflows-use",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "0f3c630041c5abc1",
-        "bullets": [],
-        "source_keys": []
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "monthly-cycle-budget-surplus",
       "title": "Review cycle-end Cursor surplus and provisional weekly-ops bump",
       "summary": "Near plan refresh day: ftse-library cycle-surplus assess with declared unused Ultra fraction, apply a 25% transfer into weekly_ops_cap only, then next cycle run review and --keep or --revert. 15% of listed plan credit / week is a warning on estimated weekly_ops USD, not a hard cap. Do not raise rememo daily caps, research_all_graduated, or offline memo density from leftover credit.",
@@ -793,6 +762,37 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-sync-cursor-api-key-v2-github",
+      "title": "Sync valid Cursor API key into GitHub Actions secrets",
+      "summary": "When ftse-verify-key --key-source legacy fails but --key-source v2 succeeds (or GHA agent jobs 401): copy the valid User API key into GitHub Actions secrets CURSOR_API_KEY_V2 and CURSOR_API_KEY. Workflows prefer V2 via secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY. Cloud secrets alone do not feed Actions.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/gha-secret-hygiene.md",
+      "doc_anchor": "which-secret-workflows-use",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#which-secret-workflows-use",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "0f3c630041c5abc1",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-29T18:42:29.757568+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "0f3c630041c5abc1"
+      },
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
