@@ -13,7 +13,8 @@
     "aim",
     "ibex35",
     "ftse_mib",
-    "aex"
+    "aex",
+    "bel20"
   ],
   "ftse_equivalent_markets": [
     "sp500"
@@ -467,7 +468,7 @@
     "auto_tighten_max_reescalation_rate": 0.35,
     "auto_escalate_director": false,
     "surface_escalation_candidates_in_email": true,
-    "note": "Exploration phase allows more director–worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
+    "note": "Exploration phase allows more director\u2013worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
   },
   "engineering": {
     "auto_merge": {
@@ -488,7 +489,7 @@
           2.0
         ]
       },
-      "note": "parked_hunter: off | skip | allowlist — scoped auto-merge for parked_source_hunter PRs after the CI hunter-merge-gate job passes. parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. hunter_fix runs capped fix rounds when hunter-merge-gate fails on missing_test, short_skip, live_fetch_failed, too_many_urls, or unexpected_files; distinct failure kinds can each consume one round. ingest_narrow / scoring_narrow: off | observe | merge — independent deterministic verify for narrow ingest/scoring eng PRs (actual diff ≤8 safe paths including tests/), then scoped auto-merge when set to merge."
+      "note": "parked_hunter: off | skip | allowlist \u2014 scoped auto-merge for parked_source_hunter PRs after the CI hunter-merge-gate job passes. parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. hunter_fix runs capped fix rounds when hunter-merge-gate fails on missing_test, short_skip, live_fetch_failed, too_many_urls, or unexpected_files; distinct failure kinds can each consume one round. ingest_narrow / scoring_narrow: off | observe | merge \u2014 independent deterministic verify for narrow ingest/scoring eng PRs (actual diff \u22648 safe paths including tests/), then scoped auto-merge when set to merge."
     },
     "queue_recovery": {
       "immediate_park_unfixable_pr": true,
@@ -529,7 +530,7 @@
       "waste_threshold_note": "Three engineering-agent failures in six hours while an open task has no in-flight PR triggers automation-waste park (one more than no_diff_cap=2 on the task row). That spacing reduces false parks on flaky preflight while still stopping Composer reburn before a fourth full agent run.",
       "pause_on_automation_waste": true,
       "park_on_automation_waste": true,
-      "note": "Project traffic controller (ftse-project-traffic): pause new engineering-agent dispatch when monitored cursor/* PRs are CI-red or merge-conflicting; comment to request fixes; dispatch scoped conflict-resolve for eng branches; write grounded EOD digest. Does not merge PRs — merge stays human or scoped auto-merge."
+      "note": "Project traffic controller (ftse-project-traffic): pause new engineering-agent dispatch when monitored cursor/* PRs are CI-red or merge-conflicting; comment to request fixes; dispatch scoped conflict-resolve for eng branches; write grounded EOD digest. Does not merge PRs \u2014 merge stays human or scoped auto-merge."
     },
     "hunter_url_monitor": {
       "enabled": true,
@@ -540,7 +541,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-09-29T15:14:37.043043+00:00",
+  "updated_at": "2026-09-29T16:47:26.168813+00:00",
   "ingest_parity_markets": [
     "aim",
     "asx200",
@@ -550,7 +551,7 @@
     "dax"
   ],
   "ingest_parallel_sprint_2": [
-    "asx200"
+    "bel20"
   ],
   "ladder": {
     "enabled": true,
@@ -1246,6 +1247,16 @@
           "asx200"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-09-29T16:47:26.168805+00:00",
+        "parallel_stream": 2,
+        "from_market": "asx200",
+        "to_market": "bel20",
+        "stream_markets_after": [
+          "bel20"
+        ],
+        "ingest_parity_recorded": true
       }
     ]
   },

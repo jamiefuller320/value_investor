@@ -48,8 +48,8 @@ ack stale. Automated weekday/Sunday CI rows stay in a collapsed list.
 | Read **buy-cross archive** review (`buy_cross_archive_review.json`) — cross vs level comparison; do not spawn a live cross book | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#cross-book-archive-only) |
 | Review **knob calibration priors** — confirm readiness signals; if confidence low and score gap ~0 (no discrimination), **Acknowledge and stop** (do not promote) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | Review **unified experiment assessment** (`experiment_assessment.json`) — read fail/continue/recommend; failed shadows close promote; acked overlays + ana-* capacity are not do-now; Acknowledge when blocking recommends empty (never auto-promote). Refresh vs live board without reopening N58/N59 | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
-| Compare **calibrated shadows vs primary** AI judgment on Automation tab | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
-| **Promote knob priors** only when a survivor passes gates (do not edit `ai_judgment/config.json` early) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
+| Compare **calibrated shadows vs primary** AI judgment (observe-only; fail-closed as promotion path — N171; Acknowledge when reviewed) | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
+| **Promote knob priors** only when a survivor passes gates — stays **closed** while calibrated shadows are fail / not adoptable (do not edit `ai_judgment/config.json` from Suite A stress green) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | **Fair-cost gate** — keep 3% books as churn lab; require `ftse-trading-costs assess` / fair shadows before calling excess deployable | Human | [market-trading-costs.md](market-trading-costs.md#test-and-adoption-strategy-dual-suite) |
 | **Suite B fair-cost lab** — review `ai_judgment_fair` / `rules_fair` marks; keep `--suite B` applies suite-local; no primary flip until B clears gates | Human | [market-trading-costs.md](market-trading-costs.md#near-term-actions) |
 | **Selective A→B fair twins** — if assessment has recommend calibration/exclusion/experimental rows, dry-run then optionally apply `ftse-trading-costs spawn-fair-twins` (max 2; never auto-fork) | Human | [market-trading-costs.md](market-trading-costs.md#selective-a-to-b-fair-cost-twins) |
@@ -76,6 +76,14 @@ Do **not** promote calibration priors to `ai_judgment/config.json` until
 3. `score_gap_vs_runner_up ≥ 0.005`
 4. `recommended_prior.confidence` is acceptable (not `insufficient` / thin `low`)
 5. **Fair-cost view** supports treating excess as deployable (`ftse-trading-costs assess` and/or fair-cost shadows) — 3% stress excess vs ^FTSE alone is not the adoption datum
+
+**Fail-closed (2026-09-29, N171):** calibrated shadows are **not** a promotion
+path. While `ai_judgment_calibrated` (+r2/r3) are `experiment_assessment=fail`,
+Acknowledge the compare card (`sunday-shadow-vs-primary`) as observe-only and
+keep `sunday-promote-knobs-gate` closed. Do not spawn new calibrated ranks, do
+not reopen N58/N59, and do not disable shadow dirs mid-week (keep cheap marks;
+retirement stays L275/L502). Revisit only after fair-cost Suite B evidence or a
+new calibration method — not Suite A stress green.
 
 Survivors are **starting priors for learning-loop refinement** — never auto-apply.
 Raw `summary.recommend` (including acked overlays and capacity `ana-*` rows) is **not** a promote signal; see [experiment-assessment.md](experiment-assessment.md#human-gate).
