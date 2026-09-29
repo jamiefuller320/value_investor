@@ -1,47 +1,70 @@
 {
-  "market_id": "aex",
-  "assessed_at": "2026-09-29T08:18:17.740118+00:00",
-  "unmeasured": [
-    "KPN.AS"
-  ],
+  "market_id": "euro_stoxx50",
+  "assessed_at": "2026-09-29T10:39:13.260534+00:00",
+  "unmeasured": [],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "RAND.AS",
-      "indexed_without_body": 10,
-      "filings_total": 19,
-      "filings_with_body": 9
+      "ticker": "TTE.PA",
+      "indexed_without_body": 5,
+      "filings_total": 106,
+      "filings_with_body": 100
     },
     {
-      "ticker": "SHELL.AS",
-      "indexed_without_body": 6,
-      "filings_total": 38,
-      "filings_with_body": 32
+      "ticker": "SGO.PA",
+      "indexed_without_body": 2,
+      "filings_total": 3,
+      "filings_with_body": 1
+    },
+    {
+      "ticker": "DTE.DE",
+      "indexed_without_body": 1,
+      "filings_total": 2,
+      "filings_with_body": 1
+    },
+    {
+      "ticker": "SAN.PA",
+      "indexed_without_body": 1,
+      "filings_total": 6,
+      "filings_with_body": 5
+    },
+    {
+      "ticker": "SAP.DE",
+      "indexed_without_body": 1,
+      "filings_total": 18,
+      "filings_with_body": 17
     }
   ],
   "thin_need_discovery": [
+    "MUV2.DE",
+    "DTE.DE",
+    "BAS.DE",
     "ADYEN.AS"
   ],
-  "thin_need_bodies": [],
-  "primary_blocker": "unmeasured",
+  "thin_need_bodies": [
+    "SGO.PA",
+    "DTE.DE"
+  ],
+  "primary_blocker": "indexed_without_body",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "KPN.AS",
-    "RAND.AS",
-    "SHELL.AS"
+    "TTE.PA",
+    "SGO.PA",
+    "DTE.DE",
+    "SAN.PA",
+    "SAP.DE"
   ],
   "recommended_actions": [
-    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
-    "Prefer indexed-without-body body refetch (2 tickers, top: RAND.AS(10), SHELL.AS(6))",
-    "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
+    "Prefer indexed-without-body body refetch (5 tickers, top: TTE.PA(5), SGO.PA(2), DTE.DE(1), SAN.PA(1), SAP.DE(1))",
+    "Discovery/IR seed for 4 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 1,
+    "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 2,
-    "indexed_without_body_rows": 16,
-    "thin_need_discovery": 1,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 5,
+    "indexed_without_body_rows": 10,
+    "thin_need_discovery": 4,
+    "thin_need_bodies": 2
   }
 }
