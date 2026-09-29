@@ -6138,6 +6138,76 @@ def test_filter_misattributed_filings_drops_uk_rns_google_news_noise():
     assert [row["id"] for row in filtered] == ["good"]
 
 
+def test_headline_relevant_to_issuer_hm_b_rejects_prison_accepts_brand():
+    """HM-B.ST must not treat HM Prison / (publ)→public noise as issuer hits."""
+    company = "H & M Hennes & Mauritz AB (publ)"
+    reject = [
+        "Sentences of imprisonment for public protection: HM Prison and "
+        "Probation Service annual report - House of Lords Library",
+        "Royal Lodge lease arrangements: Public Accounts Committee to seek "
+        "further information - UK Parliament",
+    ]
+    accept = [
+        "H&M Group Year-End Report 2025",
+        "H & M Hennes & Mauritz AB Full-year report 2025",
+        "Hennes & Mauritz AB Nine-month report 2026",
+    ]
+    for headline in reject:
+        assert headline_relevant_to_issuer(headline, company, "HM-B.ST") is False
+    for headline in accept:
+        assert headline_relevant_to_issuer(headline, company, "HM-B.ST") is True
+
+
+def test_filter_misattributed_filings_drops_euro_hm_b_google_news_noise():
+    rows = [
+        {
+            "id": "prison",
+            "source": "google_news_euro",
+            "headline": (
+                "Sentences of imprisonment for public protection: HM Prison and "
+                "Probation Service annual report - House of Lords Library"
+            ),
+        },
+        {
+            "id": "good",
+            "source": "google_news_euro",
+            "headline": "H&M Group Annual and sustainability report 2025",
+        },
+        {
+            "id": "esef",
+            "source": "esef_direct",
+            "headline": "Something kept regardless of headline filter",
+        },
+    ]
+    filtered = filter_misattributed_filings(
+        rows,
+        company_name="H & M Hennes & Mauritz AB (publ)",
+        ticker="HM-B.ST",
+        regime="euro_filings",
+    )
+    assert [row["id"] for row in filtered] == ["good", "esef"]
+
+
+def test_google_news_symbol_clause_skips_two_letter_class_root():
+    """HM from HM-B is too ambiguous for Google News (HM Prison collisions)."""
+    clause = _google_news_symbol_clause("HM-B.ST")
+    assert '"HM-B.ST"' in clause
+    assert '"HM-B"' in clause
+    assert " OR HM" not in clause
+    assert not clause.endswith(" OR HM")
+    # 3+ letter class roots (GIB from GIB-A) remain.
+    gib = _google_news_symbol_clause("GIB-A.TO")
+    assert "GIB" in gib
+
+
+def test_builtin_ir_allowlist_includes_hm_b_st():
+    from value_investor.research.filings import _BUILTIN_IR_URLS
+
+    urls = _BUILTIN_IR_URLS.get("HM-B.ST") or []
+    assert any("hmgroup.com" in url and "Annual" in url for url in urls)
+    assert any("Full-year-report" in url for url in urls)
+
+
 def test_filter_misattributed_filings_drops_us_homonym_sec_rows():
     rows = [
         {
