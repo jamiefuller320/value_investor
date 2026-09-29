@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T15:12:46.109676+00:00",
+  "generated_at": "2026-09-29T18:43:26.957333+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,8 +8,8 @@
   "checklist_updated_at": "2026-09-28",
   "counts": {
     "new_info": 2,
-    "unacked": 20,
-    "acked": 11,
+    "unacked": 16,
+    "acked": 15,
     "automated": 19,
     "human": 33
   },
@@ -29,17 +29,17 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 13",
-        "updated_at": "2026-09-29T14:56:32.324756+00:00",
-        "fingerprint": "9dd27534e7be8470",
+        "updated_at": "2026-09-29T17:26:13.440665+00:00",
+        "fingerprint": "0e7a62d585fe593e",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=37",
           "dax: phase=1 ai=False knob=False holdings=3",
-          "asx200: phase=1 ai=False knob=False holdings=26",
-          "aex: phase=0 ai=None knob=None holdings=—",
+          "aex: phase=0 ai=False knob=False holdings=6",
           "aim: phase=0 ai=False knob=False holdings=15",
           "cac40: phase=1 ai=False knob=False holdings=5",
           "euro_stoxx50: phase=1 ai=False knob=False holdings=8",
-          "ftse_mib: phase=0 ai=False knob=False holdings=3"
+          "ftse_mib: phase=0 ai=False knob=False holdings=3",
+          "ftse_smallcap: phase=1 ai=False knob=False holdings=2"
         ],
         "source_keys": [
           "market_status"
@@ -94,41 +94,6 @@
         "finding_fingerprint": "3db931b6aba425f5"
       },
       "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "sunday-fair-cost-promotion-gate",
-      "title": "Require fair-cost view before treating excess as deployable",
-      "summary": "Keep 3% stress books as the defensive/churn lab. Before promoting knobs or calling primary 'beating the market', check ftse-trading-costs assess and/or fair-cost warm-start shadows. Promote only when fair excess beats ^FTSE and the fair rules control (or explicitly accept stress-only churn wins).",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/market-trading-costs.md",
-      "doc_anchor": "test-and-adoption-strategy-dual-suite",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-trading-costs.md#test-and-adoption-strategy-dual-suite",
-      "approval_gate": true,
-      "approval_label": "Approve fair-cost view",
-      "analysis": {
-        "headline": "Fair-cost Suite B lab",
-        "updated_at": "2026-09-29T08:29:36.767831+00:00",
-        "fingerprint": "59730160636f429c",
-        "bullets": [
-          "Require fair-cost view before treating 3% stress excess as deployable."
-        ],
-        "source_keys": [
-          "experiment_assessment"
-        ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -484,68 +449,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "adhoc-rotate-cursor-api-key",
-      "title": "Rotate CURSOR_API_KEY after suspected exposure",
-      "summary": "If Cursor API misuse or GitHub secret exposure is suspected: revoke the key in the Cursor dashboard, set a new GitHub Actions secret (and any Cloud/cron copies), review odd workflow_run jobs, and confirm main workflow files were not planted. Prefer main branch protection so a stolen GITHUB_TOKEN cannot push exfil workflows.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/gha-secret-hygiene.md",
-      "doc_anchor": "if-cursor_api_key-may-already-be-compromised",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#if-cursor_api_key-may-already-be-compromised",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "d5ceb09fa62df0a6",
-        "bullets": [],
-        "source_keys": []
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "adhoc-sync-cursor-api-key-v2-github",
-      "title": "Sync valid Cursor API key into GitHub Actions secrets",
-      "summary": "When ftse-verify-key --key-source legacy fails but --key-source v2 succeeds (or GHA agent jobs 401): copy the valid User API key into GitHub Actions secrets CURSOR_API_KEY_V2 and CURSOR_API_KEY. Workflows prefer V2 via secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY. Cloud secrets alone do not feed Actions.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/gha-secret-hygiene.md",
-      "doc_anchor": "which-secret-workflows-use",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#which-secret-workflows-use",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "0f3c630041c5abc1",
-        "bullets": [],
-        "source_keys": []
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "monthly-cycle-budget-surplus",
       "title": "Review cycle-end Cursor surplus and provisional weekly-ops bump",
       "summary": "Near plan refresh day: ftse-library cycle-surplus assess with declared unused Ultra fraction, apply a 25% transfer into weekly_ops_cap only, then next cycle run review and --keep or --revert. 15% of listed plan credit / week is a warning on estimated weekly_ops USD, not a hard cap. Do not raise rememo daily caps, research_all_graduated, or offline memo density from leftover credit.",
@@ -569,37 +472,6 @@
         "source_keys": [
           "cycle_budget_surplus"
         ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "monthly-euro-depth-parity",
-      "title": "Review euro_depth filing/memo parity vs FTSE",
-      "summary": "Check whether euro_depth buy-tier has usable euro_filings bodies and memo quality approaching FTSE; only then flip phase1_require_ai_beat_rules back on or promote to weekday Phase 3.",
-      "automated": false,
-      "cadence": "monthly",
-      "section_id": "monthly",
-      "section_title": "Monthly",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "depth-first-eu-pilot-aug-2026",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#depth-first-eu-pilot-aug-2026",
-      "approval_gate": true,
-      "approval_label": "Approve Phase 3 / AI gate",
-      "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "5bc116633bde2052",
-        "bullets": [],
-        "source_keys": []
       },
       "ack": {
         "acked": false,
@@ -859,6 +731,134 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "monthly-euro-depth-parity",
+      "title": "Review euro_depth filing/memo parity vs FTSE",
+      "summary": "Check whether euro_depth buy-tier has usable euro_filings bodies and memo quality approaching FTSE; only then flip phase1_require_ai_beat_rules back on or promote to weekday Phase 3.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "depth-first-eu-pilot-aug-2026",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#depth-first-eu-pilot-aug-2026",
+      "approval_gate": true,
+      "approval_label": "Approve Phase 3 / AI gate",
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "5bc116633bde2052",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-29T18:43:26.923828+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "5bc116633bde2052"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-sync-cursor-api-key-v2-github",
+      "title": "Sync valid Cursor API key into GitHub Actions secrets",
+      "summary": "When ftse-verify-key --key-source legacy fails but --key-source v2 succeeds (or GHA agent jobs 401): copy the valid User API key into GitHub Actions secrets CURSOR_API_KEY_V2 and CURSOR_API_KEY. Workflows prefer V2 via secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY. Cloud secrets alone do not feed Actions.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/gha-secret-hygiene.md",
+      "doc_anchor": "which-secret-workflows-use",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#which-secret-workflows-use",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "0f3c630041c5abc1",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-29T18:42:29.757568+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "0f3c630041c5abc1"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-rotate-cursor-api-key",
+      "title": "Rotate CURSOR_API_KEY after suspected exposure",
+      "summary": "If Cursor API misuse or GitHub secret exposure is suspected: revoke the key in the Cursor dashboard, set a new GitHub Actions secret (and any Cloud/cron copies), review odd workflow_run jobs, and confirm main workflow files were not planted. Prefer main branch protection so a stolen GITHUB_TOKEN cannot push exfil workflows.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/gha-secret-hygiene.md",
+      "doc_anchor": "if-cursor_api_key-may-already-be-compromised",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#if-cursor_api_key-may-already-be-compromised",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "d5ceb09fa62df0a6",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-29T18:38:34.942502+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "d5ceb09fa62df0a6"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-fair-cost-promotion-gate",
+      "title": "Require fair-cost view before treating excess as deployable",
+      "summary": "Keep 3% stress books as the defensive/churn lab. Before promoting knobs or calling primary 'beating the market', check ftse-trading-costs assess and/or fair-cost warm-start shadows. Promote only when fair excess beats ^FTSE and the fair rules control (or explicitly accept stress-only churn wins).",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-trading-costs.md",
+      "doc_anchor": "test-and-adoption-strategy-dual-suite",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-trading-costs.md#test-and-adoption-strategy-dual-suite",
+      "approval_gate": true,
+      "approval_label": "Approve fair-cost view",
+      "analysis": {
+        "headline": "Fair-cost Suite B lab",
+        "updated_at": "2026-09-29T08:29:36.767831+00:00",
+        "fingerprint": "59730160636f429c",
+        "bullets": [
+          "Require fair-cost view before treating 3% stress excess as deployable."
+        ],
+        "source_keys": [
+          "experiment_assessment"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-29T18:37:40.187158+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "59730160636f429c"
+      },
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -1517,7 +1517,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-09-29T14:55:29.235629+00:00",
+        "updated_at": "2026-09-29T17:24:34.518698+00:00",
         "fingerprint": "750849fd9e662f70",
         "bullets": [
           "Open deviations: 0"
