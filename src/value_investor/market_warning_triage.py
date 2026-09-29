@@ -118,14 +118,11 @@ def collect_open_market_flags(
         is_spare = market_id in spare
         health = str(market.get("health") or "").strip() or "ok"
         progress = _as_dict(market.get("sprint_progress"))
-        admission = [
-            w for w in _as_list(progress.get("admission_warnings")) if isinstance(w, dict)
-        ]
+        admission = [w for w in _as_list(progress.get("admission_warnings")) if isinstance(w, dict)]
         high_or_triage = [
             w
             for w in admission
-            if str(w.get("id") or "") in TRIAGE_FLAG_IDS
-            or str(w.get("severity") or "") == "high"
+            if str(w.get("id") or "") in TRIAGE_FLAG_IDS or str(w.get("severity") or "") == "high"
         ]
 
         for warning in admission:
@@ -229,9 +226,7 @@ def collect_open_market_flags(
                 "health": "warn",
                 "severity": "warn",
                 "summary": str(
-                    row.get("summary")
-                    or row.get("kind")
-                    or f"Open ingest deviation {dev_id}"
+                    row.get("summary") or row.get("kind") or f"Open ingest deviation {dev_id}"
                 ).strip(),
                 "tickers": ticker,
                 "filing_gaps": None,
@@ -294,9 +289,7 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
                 "Discuss before touching the fat slot or rate-limited sources. "
                 "Do not rubber-stamp Accept as an intensive pin."
             ),
-            "cli_hint": (
-                f"ftse-library ingest-deviations approve {dev_id}" if dev_id else None
-            ),
+            "cli_hint": (f"ftse-library ingest-deviations approve {dev_id}" if dev_id else None),
             "href": "#automation",
         }
 
@@ -323,8 +316,7 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
             "do not divert capacity to a spare stall."
             if is_focus
             else (
-                "Spare-stream factory path — leave on spare deepen; "
-                "do not steal the euro fat slot."
+                "Spare-stream factory path — leave on spare deepen; do not steal the euro fat slot."
                 if is_spare
                 else "Deepen via the market's normal ingest path."
             )
@@ -444,9 +436,7 @@ def _recommendation_for_flag(
     tickers = str(flag.get("tickers") or "").strip()
     ticker_bit = f" · {tickers}" if tickers else ""
     label = str(flag.get("market_label") or market_id)
-    summary = (
-        f"Market warning triage → **{action}**: {label} / {flag_id}{ticker_bit}."
-    )
+    summary = f"Market warning triage → **{action}**: {label} / {flag_id}{ticker_bit}."
     # Keep summary free of markdown bold for JSON consumers that echo raw text.
     summary = f"Market warning triage → {action}: {label} / {flag_id}{ticker_bit}."
     rationale = str(triage.get("rationale") or "")
@@ -487,9 +477,7 @@ def _recommendation_for_flag(
         discuss_lines.append(f"{i}) {opt}")
     if triage.get("cli_hint"):
         discuss_lines.append(f"CLI hint: {triage['cli_hint']}")
-    discuss_lines.append(
-        "Context: docs/data/market_status.json + Daily hub market warning triage"
-    )
+    discuss_lines.append("Context: docs/data/market_status.json + Daily hub market warning triage")
     discuss_prompt = "\n".join(discuss_lines)
 
     accept_kind = str(triage.get("accept_kind") or "focus-ack")
@@ -615,12 +603,8 @@ def build_market_warning_triage_items(
             "next_steps": next_steps,
             "waiting_on": waiting_on,
             "ready": not prefer_discuss,
-            "ready_reason": None
-            if prefer_discuss
-            else f"observe-safe Accept → {action}",
-            "blocked_reason": (
-                waiting_on[0]["detail"] if prefer_discuss and waiting_on else None
-            ),
+            "ready_reason": None if prefer_discuss else f"observe-safe Accept → {action}",
+            "blocked_reason": (waiting_on[0]["detail"] if prefer_discuss and waiting_on else None),
             "updated_at": generated_at,
             "updated_by": "morning_builder",
         }
