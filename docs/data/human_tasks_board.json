@@ -1,19 +1,60 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T07:47:38.955126+00:00",
+  "generated_at": "2026-09-29T09:42:54.650527+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-09-28",
   "counts": {
-    "new_info": 1,
-    "unacked": 23,
+    "new_info": 2,
+    "unacked": 22,
     "acked": 9,
     "automated": 19,
     "human": 33
   },
   "tasks": [
+    {
+      "id": "monthly-pr-fix-common-issues",
+      "title": "Review common PR check / merge fix-request reasons",
+      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/project-traffic.md",
+      "doc_anchor": "pr-fix-occasion-log",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "PR fix common issues",
+        "updated_at": "2026-09-29T08:26:01.752370+00:00",
+        "fingerprint": "7fa3a7222dd3bae0",
+        "bullets": [
+          "Occasions logged: 95",
+          "PR mergeable=CONFLICTING against main: 7",
+          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
+          "validate check failed: 3",
+          "Merge conflicts in deferred-ideas.json with main: 2",
+          "ruff_format: 1"
+        ],
+        "source_keys": [
+          "pr_fix_occasions",
+          "project_traffic_digest"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-09-28T22:52:28.707334+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "3db931b6aba425f5"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
     {
       "id": "sunday-shard-epoch0-watch",
       "title": "Watch shard epoch-0 and near-miss before forking AI",
@@ -29,7 +70,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 12",
-        "updated_at": "2026-09-29T07:44:17.169897+00:00",
+        "updated_at": "2026-09-29T08:20:24.933826+00:00",
         "fingerprint": "08961f3441bfcbb8",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=37",
@@ -71,7 +112,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · 0 blocking (review/continue)",
-        "updated_at": "2026-09-28T08:29:53.442905+00:00",
+        "updated_at": "2026-09-29T08:29:36.767831+00:00",
         "fingerprint": "77a2b495eeb70657",
         "bullets": [
           "Blocking recommend: 0 · acked: 2 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 4 / 15",
@@ -193,7 +234,7 @@
       "approval_label": "Approve knob promote",
       "analysis": {
         "headline": "Experiment assessment · 0 blocking (review/continue)",
-        "updated_at": "2026-09-28T08:29:53.442905+00:00",
+        "updated_at": "2026-09-29T08:29:36.767831+00:00",
         "fingerprint": "77a2b495eeb70657",
         "bullets": [
           "Blocking recommend: 0 · acked: 2 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 4 / 15",
@@ -315,7 +356,7 @@
       "approval_label": "Approve fair-cost view",
       "analysis": {
         "headline": "Fair-cost Suite B lab",
-        "updated_at": "2026-09-28T08:29:53.442905+00:00",
+        "updated_at": "2026-09-29T08:29:36.767831+00:00",
         "fingerprint": "59730160636f429c",
         "bullets": [
           "Require fair-cost view before treating 3% stress excess as deployable."
@@ -350,7 +391,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Fair-cost Suite B lab",
-        "updated_at": "2026-09-28T08:29:53.442905+00:00",
+        "updated_at": "2026-09-29T08:29:36.767831+00:00",
         "fingerprint": "59730160636f429c",
         "bullets": [
           "Require fair-cost view before treating 3% stress excess as deployable."
@@ -385,7 +426,7 @@
       "approval_label": "Approve spawn fair twins",
       "analysis": {
         "headline": "Experiment assessment · 0 blocking (review/continue)",
-        "updated_at": "2026-09-28T08:29:53.442905+00:00",
+        "updated_at": "2026-09-29T08:29:36.767831+00:00",
         "fingerprint": "77a2b495eeb70657",
         "bullets": [
           "Blocking recommend: 0 · acked: 2 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 4 / 15",
@@ -507,7 +548,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-09-28T08:29:53.440763+00:00",
+        "updated_at": "2026-09-29T08:29:36.762448+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
@@ -1086,13 +1127,13 @@
         "source_keys": []
       },
       "ack": {
-        "acked": false,
+        "acked": true,
         "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
+        "acked_at": "2026-09-29T09:42:54.605126+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "b247fdb603fffe91"
       },
-      "sort_bucket": "unacked",
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -1205,47 +1246,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "monthly-pr-fix-common-issues",
-      "title": "Review common PR check / merge fix-request reasons",
-      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
-      "automated": false,
-      "cadence": "monthly",
-      "section_id": "monthly",
-      "section_title": "Monthly",
-      "doc_path": "docs/ops/project-traffic.md",
-      "doc_anchor": "pr-fix-occasion-log",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "PR fix common issues",
-        "updated_at": "2026-09-28T13:10:03.419945+00:00",
-        "fingerprint": "3db931b6aba425f5",
-        "bullets": [
-          "Occasions logged: 94",
-          "PR mergeable=CONFLICTING against main: 7",
-          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
-          "validate check failed: 3",
-          "Merge conflicts in deferred-ideas.json with main: 2",
-          "ruff_format: 1"
-        ],
-        "source_keys": [
-          "pr_fix_occasions",
-          "project_traffic_digest"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-09-28T22:52:28.707334+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "3db931b6aba425f5"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "adhoc-live-capital-pack",
       "title": "Verify decision packs before live capital",
       "summary": "For real-money trades, use decision-pack verify checklist and primary sources — separate from the automated learning loop.",
@@ -1291,7 +1291,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-09-28T08:29:53.442905+00:00",
+        "updated_at": "2026-09-29T08:29:36.767831+00:00",
         "fingerprint": "96ba278f151caba7",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -1517,7 +1517,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-09-29T07:41:47.195683+00:00",
+        "updated_at": "2026-09-29T08:19:53.798407+00:00",
         "fingerprint": "750849fd9e662f70",
         "bullets": [
           "Open deviations: 0"
