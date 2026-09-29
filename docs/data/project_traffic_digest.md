@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-28T22:36:51.760627+00:00`
+Generated: `2026-09-29T07:47:39.031149+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,7 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `human`/human PR #888 `eng-20260927-05` — Clash-aware: treat deferred-ideas store as shared mutable
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 94
@@ -45,6 +45,12 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `dirty merge: deferred-ideas.json / deferred-review.md vs main after L424-L426 landings` — 1×
 - `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
 - `pytest test_summary: WIX/BT action notes lost screen TTM after overly broad eng-20260919-14 suppress` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 2 (open=2, resolved=0)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
