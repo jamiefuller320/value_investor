@@ -1,7 +1,8 @@
 """Daily focus hub builder — collated morning task board (Cap C).
 
-Composes Project focus lines, human-task open buckets, progress actionable
-items, and UI reconciliation ambers into ``docs/data/daily_focus.json``.
+Composes Project focus lines, market-warning triage (deepen/dismiss/park),
+human-task open buckets, progress actionable items, and UI reconciliation
+ambers into ``docs/data/daily_focus.json``.
 Operator timezone: Europe/London. Refresh target: before 04:00 local.
 """
 
@@ -225,7 +226,7 @@ def work_class_for_source(source: str, *, tags: list[str] | None = None) -> str:
         return "dev"
     if source == "human_tasks":
         return "ops_gate"
-    if source in {"progress_actionable", "ui_reconcile"}:
+    if source in {"progress_actionable", "ui_reconcile", "market_warning_triage"}:
         return "surface"
     return "routine_auto"
 
@@ -588,6 +589,8 @@ def build_daily_focus(
     board = _safe_read(data_dir / "human_tasks_board.json") or {}
     progress = _safe_read(data_dir / "progress_report.json") or {}
     reconcile = _safe_read(data_dir / "ui_state_reconciliation.json") or {}
+    market_status = _safe_read(data_dir / "market_status.json") or {}
+    ingest_deviations = _safe_read(data_dir / "ingest_deviations.json") or {}
     closed_ids = _closed_ids(acks, local_date=local_date)
     generated_at = now.astimezone(UTC).isoformat().replace("+00:00", "Z")
 
@@ -641,9 +644,35 @@ def build_daily_focus(
             }
         )
 
+    # 1b) Market warning triage (deepen / dismiss / park) — after focus, before gates
+    from value_investor.market_warning_triage import build_market_warning_triage_items
+
+    mwarn_tasks, mwarn_recs = build_market_warning_triage_items(
+        market_status=market_status,
+        ingest_deviations=ingest_deviations,
+        closed_ids=closed_ids,
+        priority_start=5,
+        generated_at=generated_at,
+    )
+    for task in mwarn_tasks:
+        status = derive_ready_status(
+            dict(task.get("status") or {}),
+            recommendation_present=True,
+            closed=False,
+        )
+        # Prefer-discuss deepen rows stay waiting even when recommendation present.
+        if task.get("prefer_discuss"):
+            status["ready"] = False
+            if status.get("state") in {"proposed", "ready"}:
+                status["state"] = "waiting"
+            status["label"] = status.get("label") or "Discuss preferred"
+        task["status"] = status
+        tasks.append(task)
+    recommendations.extend(mwarn_recs)
+
     # 2–3) Human tasks new_info then unacked
     human_tasks = [t for t in (board.get("tasks") or []) if isinstance(t, dict)]
-    priority = 10
+    priority = 10 + len(mwarn_tasks)
     for bucket in ("new_info", "unacked"):
         for task in human_tasks:
             if str(task.get("sort_bucket") or "") != bucket:
@@ -832,6 +861,9 @@ def build_daily_focus(
         "closed_today": sorted(closed_ids),
         "counts": {
             "focus": sum(1 for t in open_tasks if t.get("source") == "daily_focus"),
+            "market_warnings": sum(
+                1 for t in open_tasks if t.get("source") == "market_warning_triage"
+            ),
             "human_new_info": sum(1 for t in open_tasks if t.get("sort_bucket") == "new_info"),
             "human_unacked": sum(1 for t in open_tasks if t.get("sort_bucket") == "unacked"),
             "progress": sum(1 for t in open_tasks if t.get("source") == "progress_actionable"),

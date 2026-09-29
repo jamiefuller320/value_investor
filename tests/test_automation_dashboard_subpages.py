@@ -275,9 +275,26 @@ def test_daily_hub_history_session_and_status_chips() -> None:
     )[0]
     assert "renderDailyHubHistorySession(data)" in panel
     assert "isDailyHubStale(hub)" in panel
+    assert "counts.market_warnings" in panel
+    assert "Market warning triage" in panel
     css = STYLES.read_text(encoding="utf-8")
     assert ".daily-hub-history" in css
     assert ".daily-hub-accept-streak" in css
+
+
+def test_daily_hub_market_warning_triage_badges() -> None:
+    text = APP_JS.read_text(encoding="utf-8")
+    card = text.split("function renderDailyHubTaskCard(", 1)[1].split(
+        "\nfunction renderDailyHubPanel(", 1
+    )[0]
+    assert "triage_action" in card
+    assert "prefer_discuss" in card
+    assert "no dismiss" in card
+    assert "badge-sell" in card
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    assert "app.js?v=daily-hub-warning-triage1" in html
+    assert "Market warning triage" in OPS_MONITOR.read_text(encoding="utf-8")
+    assert "zero_body_stuck" in OPS_MONITOR.read_text(encoding="utf-8")
 
 
 def test_overview_pulse_links_daily_hub() -> None:

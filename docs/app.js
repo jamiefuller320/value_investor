@@ -6241,6 +6241,24 @@ function renderDailyHubTaskCard(task) {
     task.close_action === "human-task-ack"
       ? '<span class="badge badge-watch" title="Accept runs human-task-ack">human ack</span>'
       : "";
+  const triageAction = String(task.triage_action || (rec && rec.triage_action) || "").trim();
+  const triageHint = triageAction
+    ? `<span class="badge ${
+        triageAction === "deepen"
+          ? "badge-buy"
+          : triageAction === "dismiss"
+            ? "badge-neutral"
+            : "badge-watch"
+      }" title="Market warning triage action">${esc(triageAction)}</span>${
+        task.prefer_discuss || (rec && rec.prefer_discuss)
+          ? '<span class="badge badge-watch" title="Fat-slot / rate-limit judgment — Discuss preferred">Discuss</span>'
+          : ""
+      }${
+        task.dismissable === false
+          ? '<span class="badge badge-sell" title="Policy: cannot dismiss or park">no dismiss</span>'
+          : ""
+      }`
+    : "";
   const workClass =
     task.work_class
       ? `<span class="badge badge-neutral" title="work_class">${esc(task.work_class)}</span>`
@@ -6255,6 +6273,7 @@ function renderDailyHubTaskCard(task) {
         <span class="badge badge-neutral">P${esc(String(task.priority ?? ""))}</span>
         ${workClass}
         ${humanHint}
+        ${triageHint}
         ${renderDailyHubStatusChips(status)}
       </span>
       ${closeBtn}
@@ -6318,13 +6337,14 @@ function renderDailyHubPanel(data) {
       · ${renderUiReconcileBadge(data)}
       · open ${esc(String(hub.open_task_count ?? openTasks.length))}
       · focus ${esc(String(counts.focus || 0))} /
+        warn ${esc(String(counts.market_warnings || 0))} /
         new ${esc(String(counts.human_new_info || 0))} /
         unacked ${esc(String(counts.human_unacked || 0))}
       · generated ${esc(fmtDate(hub.generated_at))}
       ${wallStale ? ' · <span class="badge badge-watch">stale vs wall clock</span>' : ""}
     </p>
     ${staleBanner}
-    <div class="daily-hub-aim muted small">Aim: policy green ≠ utility — Suite A stress streaks and graduated badges are not the day’s north star.</div>
+    <div class="daily-hub-aim muted small">Aim: policy green ≠ utility — Suite A stress streaks and graduated badges are not the day’s north star. Market warning triage: deepen / dismiss / park — do not ritual-clear badges or starve the euro fat slot.</div>
     <div class="daily-hub-session daily-hub-today" id="daily-hub-today">
       <h3>Today</h3>
       <h4 class="small" style="margin:0.35rem 0">Focus</h4>
