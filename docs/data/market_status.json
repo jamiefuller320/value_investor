@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-29T14:56:32.324756+00:00",
+  "generated_at": "2026-09-29T16:45:17.833627+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -55,7 +55,7 @@
       "1": "dax",
       "2": "asx200"
     },
-    "equal_support_generated_at": "2026-09-29T14:16:41.005925+00:00"
+    "equal_support_generated_at": "2026-09-29T15:16:33.836055+00:00"
   },
   "markets": [
     {
@@ -525,12 +525,10 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 3,
-        "targets": 13,
-        "improved": 1,
-        "improved_tickers": [
-          "ESSITY-B.ST"
-        ],
+        "run_count": 2,
+        "targets": 2,
+        "improved": 0,
+        "improved_tickers": [],
         "last_run_at": "2026-09-29T07:40:40.394106+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
@@ -565,6 +563,11 @@
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
         "admission_warnings": [
+          {
+            "id": "zero_improve_stall",
+            "severity": "high",
+            "summary": "Last 2 days improved nobody while filing gaps remain"
+          },
           {
             "id": "unmeasured_stuck",
             "severity": "high",
@@ -850,7 +853,7 @@
         "targets": 29,
         "improved": 0,
         "improved_tickers": [],
-        "last_run_at": "2026-09-29T14:24:45.399278+00:00",
+        "last_run_at": "2026-09-29T16:43:23.324769+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -1121,7 +1124,7 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 65,
         "not_buy_tier_count": 169,
         "never_buy_tier_count": 149,
@@ -1129,17 +1132,15 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 65,
         "not_buy_tier_count": 169,
         "never_buy_tier_count": 149,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "ANN.AX"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "LSF.AX",
           "GQG.AX",
@@ -1153,7 +1154,7 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 10,
+        "run_count": 9,
         "targets": 27,
         "improved": 14,
         "improved_tickers": [
@@ -1175,7 +1176,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 0,
+          "indexed_without_body": 6,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -1189,7 +1190,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 1,
+          "indexed_without_body": -5,
           "filing_gaps": 0
         },
         "remaining": {
@@ -1360,7 +1361,7 @@
       "strong_buy": 4,
       "buy": 4,
       "learning_phase": 0,
-      "learning_phase_label": "Not started",
+      "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
         "no benchmark configured for aex"
       ],
@@ -1387,27 +1388,86 @@
       },
       "filing_health": null,
       "filing_gaps": null,
-      "paper_instrument": null,
+      "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
-      "epoch0": null,
-      "equal_support": null,
-      "near_miss": null,
+      "epoch0": {
+        "present": true,
+        "paper_instrument": "buy_tier_level",
+        "ai_judgment": false,
+        "knob_apply": false,
+        "acted": true,
+        "last_run_at": "2026-09-29T15:06:10.082446+00:00",
+        "holdings": 6,
+        "nav": 856.6,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "weekday_batch_count": 1,
+        "epoch0_batch_count": 0
+      },
+      "equal_support": {
+        "present": true,
+        "ai_judgment": false,
+        "knob_apply": false,
+        "paper_instrument": "buy_tier_level",
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 10,
+        "not_buy_tier_count": 17,
+        "never_buy_tier_count": 17,
+        "rememo_eligible_count": 1,
+        "exclusion_ready_for_priors": null
+      },
+      "near_miss": {
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 10,
+        "not_buy_tier_count": 17,
+        "never_buy_tier_count": 17,
+        "timing_signal_present": false,
+        "observe_only": true,
+        "watch_cut": "buy_not_now + hold_near_buy",
+        "census_groups": "not_buy_tier + never_buy_tier",
+        "buy_tier_not_now_sample": [],
+        "hold_near_buy_sample": [
+          "ASM.AS",
+          "ASML.AS",
+          "HEIA.AS",
+          "ASRNL.AS",
+          "PRX.AS",
+          "IMCD.AS",
+          "NN.AS",
+          "BESI.AS"
+        ]
+      },
       "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
-        "status": "empty",
-        "reason": "No paper book or observe-sim marks",
+        "status": "ok",
+        "reason": null,
         "market_id": "aex",
-        "source": null,
-        "paper_instrument": "buy_tier_level",
+        "source": "paper_fund",
+        "paper_instrument": "buy_tier_level_native",
         "currency": "EUR",
         "benchmark_ticker": "^STOXX50E",
-        "held_path": null,
-        "market_path": null,
+        "held_path": "equity_marks",
+        "market_path": "index_levels",
         "branch_ready": true,
         "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
-        "points": [],
+        "points": [
+          {
+            "date": "2026-09-29",
+            "held": 999.75,
+            "nav": 999.75,
+            "held_stock": 999.75,
+            "cash": 0.0,
+            "positions": 6,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 856.6
+            },
+            "market": 999.75
+          }
+        ],
         "series": [
           {
             "id": "held",
@@ -1420,10 +1480,42 @@
             "label": "^STOXX50E equivalent",
             "kind": "market",
             "color": "#64748b"
+          },
+          {
+            "id": "branch:buy_tier_level_gbp_fx_warped",
+            "label": "GBP book (FX-warped archive)",
+            "kind": "branch",
+            "status": "active",
+            "color": "#7c3aed",
+            "knobs": {
+              "reporting_currency": "GBP",
+              "capital_epoch": "contaminated_gbp_unit_mismatch",
+              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
+            }
           }
         ],
-        "branches": [],
-        "last": null
+        "branches": [
+          {
+            "id": "buy_tier_level_gbp_fx_warped",
+            "label": "GBP book (FX-warped archive)",
+            "kind": "branch",
+            "status": "active",
+            "knobs": {
+              "reporting_currency": "GBP",
+              "capital_epoch": "contaminated_gbp_unit_mismatch",
+              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
+            },
+            "point_count": 1
+          }
+        ],
+        "last": {
+          "date": "2026-09-29",
+          "held": 999.75,
+          "market": 999.75,
+          "nav": 999.75,
+          "positions": 6,
+          "excess_pct": 0.0
+        }
       }
     },
     {

@@ -1,27 +1,40 @@
 {
-  "market_id": "aex",
-  "assessed_at": "2026-09-29T14:52:47.995751+00:00",
-  "unmeasured": [],
+  "market_id": "dax",
+  "assessed_at": "2026-09-29T16:41:30.805358+00:00",
+  "unmeasured": [
+    "G1A.DE"
+  ],
   "zero_body": [],
   "indexed_without_body": [],
   "thin_need_discovery": [
-    "KPN.AS",
-    "ADYEN.AS"
+    "DHL.DE",
+    "HEI.DE",
+    "DTE.DE",
+    "DTG.DE",
+    "MUV2.DE",
+    "BAS.DE",
+    "FRE.DE",
+    "HNR1.DE",
+    "HEN3.DE",
+    "VOW3.DE"
   ],
   "thin_need_bodies": [],
-  "primary_blocker": "thin_need_discovery",
+  "primary_blocker": "unmeasured",
   "force_discovery_scan": true,
-  "auto_pin_tickers": [],
+  "auto_pin_tickers": [
+    "G1A.DE"
+  ],
   "recommended_actions": [
-    "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Discovery/IR seed for 10 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
     "indexed_without_body_tickers": 0,
     "indexed_without_body_rows": 0,
-    "thin_need_discovery": 2,
+    "thin_need_discovery": 10,
     "thin_need_bodies": 0
   }
 }
