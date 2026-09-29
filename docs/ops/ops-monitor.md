@@ -77,6 +77,12 @@ lane change and readiness gate (see N152 / P1 pin rules).
   Accept-streak hints are observe-only — never auto-flip checklist `automated`.
   Morning board also emits **market warning triage** rows (deepen / dismiss /
   park) from open `market_status` admission flags and ingest deviations.
+- **Missing-IR allowlist stall** — ops finding when focus/sprint
+  `unmeasured_stuck` / `zero_body_stuck` tickers still have empty IR allowlist
+  after ≥2 intensive 0-improve pins (`check_missing_ir_allowlist_stall`,
+  `auto_fixable=False`). Complements Daily deepen Discuss; aims at IR seed,
+  does not auto-park unmeasured. Gap-closure eng compile also prioritizes
+  coverage-hole + empty-allowlist pending runs over stale IWB rows.
 
 Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-required).
 
@@ -433,7 +439,7 @@ with **Accept followed** vs **Discuss resolved**.
 | Dashboard | Automation → **Daily** (`#automation/daily`): **Today** session + **History** session; Overview pulse embeds top focus lines + history counts |
 | Close | Focus lines → `daily-focus-ack` (enriched title/work_class/outcome); human tasks → existing `human-task-ack` |
 | Recommendations | Per-task `recommendation` with **Accept** / **Discuss**; Discuss writes `daily_discuss_inbox.json` and copies a Project pickup prompt |
-| Market warning triage | Open admission flags (`zero_body_stuck`, `unmeasured_stuck`, `zero_improve_stall`, …) + open ingest deviations become Daily rows with structured `triage_action` ∈ {`deepen`,`dismiss`,`park`}. **Accept** = observe-safe `focus-ack` when park/dismiss is safe; **Discuss** preferred for fat-slot / rate-limit deepen (euro head). `zero_body_stuck` / `unmeasured_stuck` are **not** dismissable or parkable. Do not ritual-clear bare `health=warn`. Spare DAX stall → park (do not divert euro). Ingest-deviation dismiss CLI stays manual (Phase B automation parked). |
+| Market warning triage | Open admission flags (`zero_body_stuck`, `unmeasured_stuck`, `zero_improve_stall`, …) + open ingest deviations become Daily rows with structured `triage_action` ∈ {`deepen`,`dismiss`,`park`}. **Accept** = observe-safe `focus-ack` when park/dismiss is safe; **Discuss** preferred for fat-slot / rate-limit deepen (euro head). `zero_body_stuck` / `unmeasured_stuck` are **not** dismissable or parkable. When those stuck tickers also have **empty IR allowlist**, triage rationale names IR-seed (deepen alone 0-yields) — still not auto-park. Do not ritual-clear bare `health=warn`. Spare DAX stall → park (do not divert euro). Ingest-deviation dismiss CLI stays manual (Phase B automation parked). |
 | Status chips | `ready` / `next_steps` / `waiting_on` from seed + notes `Next:` / `Waiting on:` conventions |
 | Accept-streak hint | Observe-only footer when ≥5 Accepts / 30d with 0 Discuss on a family — never auto-flips `automated: true` (N169) |
 | Aim filter | Suite A stress streaks / off-buy-tier zero-filing themes stay out unless already a checklist item or focus line |

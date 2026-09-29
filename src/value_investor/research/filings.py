@@ -257,6 +257,22 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "http://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
         "http://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
     ],
+    # euro_depth unmeasured stuck — OIZ.IR (Origin Enterprises): ESEF/news discovery
+    # repeatedly 0-improve with empty IR allowlist. Seed originenterprises.com IR PDFs.
+    "OIZ.IR": [
+        "https://wp-origin-resources-2024.s3.eu-west-2.amazonaws.com/media/2025/10/Origin-Enterprises-Annual-Report-FY25.pdf",
+        "https://wp-origin-resources-2024.s3.eu-west-2.amazonaws.com/media/2026/09/Origin-Enterprises-plc-Preliminary-Results-FY26.pdf",
+        "https://wp-origin-resources-2024.s3.eu-west-2.amazonaws.com/media/2026/03/Origin-Enterprises-plc-Interim-Results-FY26-Presentation.pdf",
+        "https://wp-origin-resources-2024.s3.eu-west-2.amazonaws.com/media/2026/06/Origin-Enterprises-plc-Q3-Trading-Update-11.06.26.pdf",
+        "https://wp-origin-resources-2024.s3.eu-west-2.amazonaws.com/media/2025/11/Q1-FY26-Trading-Update.pdf",
+    ],
+    "OIZ": [
+        "https://wp-origin-resources-2024.s3.eu-west-2.amazonaws.com/media/2025/10/Origin-Enterprises-Annual-Report-FY25.pdf",
+        "https://wp-origin-resources-2024.s3.eu-west-2.amazonaws.com/media/2026/09/Origin-Enterprises-plc-Preliminary-Results-FY26.pdf",
+        "https://wp-origin-resources-2024.s3.eu-west-2.amazonaws.com/media/2026/03/Origin-Enterprises-plc-Interim-Results-FY26-Presentation.pdf",
+        "https://wp-origin-resources-2024.s3.eu-west-2.amazonaws.com/media/2026/06/Origin-Enterprises-plc-Q3-Trading-Update-11.06.26.pdf",
+        "https://wp-origin-resources-2024.s3.eu-west-2.amazonaws.com/media/2025/11/Q1-FY26-Trading-Update.pdf",
+    ],
     # euro_depth IWB blocker — EG7.IR parked unfetchable_iwb; prior allowlist misattributed C5H.IR hub.
     "EG7.IR": [
         "https://www.fbdgroup.com/sites/default/files/migrated/media/fbdgroup/files/2025_FBD_HOLDINGS_ANNUAL_REPORT.pdf",
@@ -653,6 +669,11 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "WIE": ("Wienerberger", "Wienerberger AG"),
     "C5H": ("Cairn Homes", "Cairn Homes plc"),
     "DQ7A": ("Donegal Investment Group", "Donegal Investment"),
+    "OIZ": (
+        "Origin Enterprises",
+        "Origin Enterprises plc",
+        "Origin Enterprises Public Limited Company",
+    ),
     "AZE": ("Azelis", "Azelis Group"),
     "AGS": ("ageas", "Ageas SA/NV"),
     "UCB": ("UCB", "UCB SA"),

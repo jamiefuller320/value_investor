@@ -381,7 +381,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=16, indexed_without_body=17)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=16, indexed_without_body=17)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
@@ -433,7 +433,7 @@
       },
       "filing_health": {
         "buy_tier_count": 54,
-        "unmeasured_buy_tier": 1,
+        "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 16,
         "indexed_without_body": 17,
@@ -453,9 +453,7 @@
           "MC.PA",
           "BN.PA"
         ],
-        "unmeasured_tickers": [
-          "OIZ.IR"
-        ],
+        "unmeasured_tickers": [],
         "parked_tickers": [
           "ABI.BR",
           "APAM.AS",
@@ -467,7 +465,7 @@
           "WIE.VI"
         ]
       },
-      "filing_gaps": 1,
+      "filing_gaps": 0,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -540,25 +538,25 @@
           "filing_gaps": 2
         },
         "gaps_after": {
-          "unmeasured": 1,
-          "zero_body": 1,
-          "thin": 16,
-          "indexed_without_body": 19,
-          "filing_gaps": 2
-        },
-        "gap_delta": {
           "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 2,
-          "indexed_without_body": 2,
-          "filing_gaps": 0
-        },
-        "remaining": {
-          "unmeasured": 1,
           "zero_body": 0,
           "thin": 16,
           "indexed_without_body": 17,
-          "filing_gaps": 1
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": -1,
+          "zero_body": -1,
+          "thin": 2,
+          "indexed_without_body": 0,
+          "filing_gaps": -2
+        },
+        "remaining": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 16,
+          "indexed_without_body": 17,
+          "filing_gaps": 0
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
