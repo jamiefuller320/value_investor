@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-29T14:01:13.865652+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-29T15:11:58+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -223,6 +223,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N168 | **Supabase-backed daily todo table** | Do not add a new SQL table for daily todos; reuse git JSON acks and existing dashboard_commands bridge. SQL only if command-queue pressure forces it. | daily_focus_acks via git JSON prove too slow or conflict-prone after Phase C1 |
 | N169 | **Auto-flip human checklist `automated: true` from Accept streaks** | Never flip checklist automated:true from Accept streaks alone; streaks are observe-only automation candidates until an explicit human audit gate (N-style). | Never without explicit human audit gate (N-style) |
 | N170 | **Supabase-backed daily history table** | Keep daily hub history as git JSON plus bridge payloads; do not add a Supabase history table unless git JSON + bridge pressure forces it (align N168). | If git JSON + bridge pressure forces it (align N168) |
+| N171 | **Calibrated shadows are not a promotion path (fail-closed)** | User-approved 2026-09-29: competing calibrated shadows (ai_judgment_calibrated r1–r3) are observe-only and currently experiment_assessment=fail. Do not treat them as a knob/prior promotion path; do not spawn new calibrated ranks beyond the existing top-3 GC; do not reopen N58/N59 from this fail-close. sunday-promote-knobs-gate stays closed. | Fair-cost Suite B (ai_judgment_fair / rules_fair) shows thick forward excess vs ^FTSE and fair rules control, OR a new calibration method lands that is not Suite A stress-green alone |
 
 ---
 
@@ -294,6 +295,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L475 | **Paper-exit model-score quintile attribution (observe)** | Observe-only rollup: join closed position_closed/exit_shadow sells to entry buy and nearest models_*.json scores; report Q5 vs Q1 realized return, hit rate, and FTSE excess when ready. Do not auto-tune weights until n≥30 joined closes on primary track. | ≥30 closed paper exits on ai_judgment with joinable entry scores after buy-tier FTSE-excess panel ships |
 | L476 | **Stamp per-model scores on rebalance_log buys for exit attribution** | Optional hardening: persist top model_id scores on rebalance_log buy rows to simplify exit-quintile joins. Not required for first observe rollup that joins nearest models_*.json at acted_at. | When implementing paper-exit score-quintile observe and day-level nearest-screen join proves brittle |
 | L491 | **Post-close sleeve autopsy archive (drawdown + missed-signal review)** | Observe-only post-close / material-drawdown reviews per sleeve: retrospect held data vs external news/evidence; tag missed_in_held vs absent_from_held to accumulate justification for new ingest sources. Not a live track or news pipeline. | Thick closed sleeve cohort available (or several material held drawdowns) and P1 FTSE decision-input freshness is stable; before proposing any new news/alt-data ingest. |
+| L502 | **No new calibrated ranks until Suite B or new method** | Park further calibrated-shadow churn: weekday spawn-shadow --top-n 3 may keep existing fail books marking cheaply (L275), but do not add ranks, reopen cancelled N58/N59 knob rows, or invent a parallel promotion ladder from Suite A stress. Retire/disable dirs only after Sunday confirms durable fail with no forward differentiation. | Sunday experiment_assessment still marks calibrated r1-r3 fail with no new forward differentiation, and Suite B fair-cost evidence or a replacement calibration method exists to supersede this ladder |
 
 ### Universe & data
 
