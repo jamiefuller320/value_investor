@@ -189,7 +189,7 @@
         {
           "id": "sunday-shadow-vs-primary",
           "title": "Compare calibrated shadows vs primary AI judgment",
-          "summary": "On Automation tab, compare forward marks for ai_judgment vs competing calibrated shadows before promoting any prior.",
+          "summary": "Observe-only: compare forward marks for ai_judgment vs competing calibrated shadows. Fail-closed as a promotion path (N171) — status fail closes promote; do not spawn new calibrated ranks or reopen N58/N59. Acknowledge when reviewed; revisit only after fair-cost Suite B evidence or a new calibration method (not Suite A stress green).",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "competing-calibrated-shadows"
@@ -197,7 +197,7 @@
         {
           "id": "sunday-promote-knobs-gate",
           "title": "Promote knob priors only when gates pass",
-          "summary": "Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, and confidence is acceptable. Survivors are starting priors for refinement — never auto-apply. Stress-book (3%) excess vs ^FTSE alone is not sufficient — see fair-cost gate.",
+          "summary": "Stays CLOSED while calibrated shadows are fail / not adoptable (N171). Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, confidence is acceptable, and fair-cost Suite B supports adoption. Survivors are starting priors — never auto-apply. Suite A stress excess vs ^FTSE alone is not sufficient.",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "promoting-a-prior-human-gate"

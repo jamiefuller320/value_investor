@@ -155,6 +155,16 @@ The real question is whether they **endure forward** vs `^FTSE` and the rules
 control. Survivors become starting priors for learning-loop refinement — never
 auto-applied.
 
+**Fail-closed as a promotion path (N171, 2026-09-29).** Competing calibrated
+shadows currently mark `experiment_assessment=fail`. That closes
+`sunday-promote-knobs-gate` — they are **not** an adoption ladder from Suite A
+stress. Human compare (`sunday-shadow-vs-primary`) is observe-only Acknowledge
+when reviewed. Do **not** spawn new calibrated ranks beyond existing top-3 GC,
+do **not** reopen N58/N59, and do **not** flip `enabled=false` mid-week just to
+hide hub cards (acks + fail status already stop promote urgency; dir retirement
+stays L275/L502). Reopen the promotion question only after fair-cost Suite B
+evidence or a new calibration method — not Suite A stress green alone.
+
 | Step | Command / trigger |
 |------|-------------------|
 | **Retrospective + spawn** | Sunday `analysis-review.yml` (`full_period_retrospective`, `--spawn-shadow`) |
@@ -226,6 +236,11 @@ Board rebuild (`ftse-human-tasks refresh` / ops-monitor) auto-records
 Do **not** auto-apply from calibration or endurance — survivors are priors for
 refinement, not live writes. Policy green on the **review** card ≠ permission to
 promote.
+
+While calibrated shadows are `fail` / not adoptable (**N171**), keep this gate
+**closed**: Acknowledge as reviewed-not-adoptable (`ack_observe`), never
+`approve`, and do not edit live knobs. Revisit only after Suite B fair-cost
+evidence or a new calibration method.
 
 ## Guardrails
 

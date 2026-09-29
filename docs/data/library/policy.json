@@ -13,7 +13,8 @@
     "aim",
     "ibex35",
     "ftse_mib",
-    "aex"
+    "aex",
+    "bel20"
   ],
   "ftse_equivalent_markets": [
     "sp500"
@@ -540,7 +541,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-09-29T14:53:18.695911+00:00",
+  "updated_at": "2026-09-29T16:47:26.168813+00:00",
   "ingest_parity_markets": [
     "aim",
     "asx200",
@@ -550,7 +551,7 @@
     "dax"
   ],
   "ingest_parallel_sprint_2": [
-    "asx200"
+    "bel20"
   ],
   "ladder": {
     "enabled": true,
@@ -1246,6 +1247,16 @@
           "asx200"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-09-29T16:47:26.168805+00:00",
+        "parallel_stream": 2,
+        "from_market": "asx200",
+        "to_market": "bel20",
+        "stream_markets_after": [
+          "bel20"
+        ],
+        "ingest_parity_recorded": true
       }
     ]
   },
