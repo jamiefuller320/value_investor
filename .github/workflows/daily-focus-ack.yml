@@ -1,6 +1,8 @@
 name: Daily focus ack
 
 # Close / accept a Daily hub focus line for the local Europe/London date.
+# Bridge batches pending daily-focus-ack rows into one dispatch; commands stay
+# processing until this workflow marks them done after a successful push.
 # Observe-only — never auto-trades or invents capital actions.
 on:
   repository_dispatch:
@@ -56,7 +58,7 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Record daily-focus ack + refresh hub
+      - name: Record daily-focus ack batch + refresh hub
         env:
           TASK_REF: ${{ github.event.client_payload.task_ref || github.event.inputs.task_ref || '' }}
           FOCUS_ID: ${{ github.event.client_payload.focus_id || github.event.inputs.focus_id || '' }}
@@ -64,46 +66,142 @@ jobs:
           DECISION: ${{ github.event.client_payload.decision || github.event.inputs.decision || 'ack' }}
           LOCAL_DATE: ${{ github.event.client_payload.local_date || github.event.inputs.local_date || '' }}
           NOTE: ${{ github.event.client_payload.note || github.event.inputs.note || '' }}
+          COMMAND_ID: ${{ github.event.client_payload.command_id || '' }}
+          COMMANDS_JSON: ${{ toJson(github.event.client_payload.commands) }}
         run: |
           python3 - <<'PY'
           import json
           import os
           from pathlib import Path
           from value_investor.daily_hub_actions import run_daily_focus_ack
+          from value_investor.dashboard_bridge import commands_from_client_payload
 
-          result = run_daily_focus_ack(
-              Path("docs/data"),
-              task_ref=os.environ.get("TASK_REF") or "",
-              focus_id=os.environ.get("FOCUS_ID") or "",
-              recommendation_id=os.environ.get("REC_ID") or "",
-              decision=os.environ.get("DECISION") or "ack",
-              local_date=os.environ.get("LOCAL_DATE") or "",
-              note=os.environ.get("NOTE") or "",
-              source="dashboard_bridge",
-              acked_by="dashboard",
+          items = []
+          raw_batch = os.environ.get("COMMANDS_JSON") or ""
+          if raw_batch and raw_batch not in ("null", "None", ""):
+              try:
+                  parsed = json.loads(raw_batch)
+              except json.JSONDecodeError:
+                  parsed = None
+              if isinstance(parsed, list):
+                  items = [row for row in parsed if isinstance(row, dict)]
+          if not items:
+              items = commands_from_client_payload(
+                  {
+                      "task_ref": os.environ.get("TASK_REF") or "",
+                      "focus_id": os.environ.get("FOCUS_ID") or "",
+                      "recommendation_id": os.environ.get("REC_ID") or "",
+                      "decision": os.environ.get("DECISION") or "ack",
+                      "local_date": os.environ.get("LOCAL_DATE") or "",
+                      "note": os.environ.get("NOTE") or "",
+                      "command_id": os.environ.get("COMMAND_ID") or "",
+                  }
+              )
+          items = [
+              row
+              for row in items
+              if str(row.get("task_ref") or row.get("focus_id") or row.get("recommendation_id") or "").strip()
+          ]
+          if not items:
+              raise SystemExit("No daily-focus-ack items in payload")
+
+          results = []
+          command_ids = []
+          for row in items:
+              cid = str(row.get("command_id") or "").strip()
+              if cid:
+                  command_ids.append(cid)
+              result = run_daily_focus_ack(
+                  Path("docs/data"),
+                  task_ref=str(row.get("task_ref") or ""),
+                  focus_id=str(row.get("focus_id") or ""),
+                  recommendation_id=str(row.get("recommendation_id") or ""),
+                  decision=str(row.get("decision") or "ack"),
+                  local_date=str(row.get("local_date") or ""),
+                  note=str(row.get("note") or ""),
+                  source="dashboard_bridge",
+                  acked_by="dashboard",
+                  title=str(row.get("title") or ""),
+                  summary=str(row.get("summary") or ""),
+                  work_class=str(row.get("work_class") or ""),
+                  task_family=str(row.get("task_family") or ""),
+              )
+              results.append(result)
+          print(json.dumps({"ok": True, "acked": results}, indent=2, sort_keys=True, default=str))
+          Path("/tmp/daily_focus_ack_command_ids.json").write_text(
+              json.dumps(command_ids), encoding="utf-8"
           )
-          print(json.dumps(result, indent=2, sort_keys=True, default=str))
           PY
 
-      - name: Configure git author
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Commit dashboard slices (L348 retry)
+        env:
+          COMMIT_MESSAGE: "chore: daily focus ack from dashboard [skip ci]"
+          GHA_COMMIT_LABEL: daily-focus-ack
+          GHA_COMMIT_REF: main
+          GHA_COMMIT_OWNED: |
+            docs/data/daily_focus_acks.json
+            docs/data/daily_focus.json
+            docs/data/daily_hub_history.json
+          GHA_COMMIT_PRESERVE_NEWER_GENERATED_AT: "0"
+        run: bash scripts/gha_commit_artifacts.sh
 
-      - name: Stage daily hub slices
+      - name: Mark dashboard commands done
+        if: success()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          git add -- docs/data/daily_focus_acks.json docs/data/daily_focus.json
-          git status --short -- docs/data/daily_focus_acks.json docs/data/daily_focus.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from value_investor.dashboard_bridge import complete_dashboard_commands
 
-      - name: Commit dashboard slices
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: daily focus ack from dashboard [skip ci]"
-          file_pattern: docs/data/daily_focus_acks.json docs/data/daily_focus.json
-          skip_fetch: false
-          skip_dirty_check: false
+          ids = json.loads(Path("/tmp/daily_focus_ack_command_ids.json").read_text(encoding="utf-8"))
+          if ids:
+              print(json.dumps(
+                  complete_dashboard_commands(
+                      ids,
+                      status="done",
+                      message="daily-focus-ack committed",
+                      github_run_url=os.environ.get("GITHUB_RUN_URL"),
+                  ),
+                  indent=2,
+                  sort_keys=True,
+              ))
+          PY
+
+      - name: Mark dashboard commands failed
+        if: failure()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from value_investor.dashboard_bridge import complete_dashboard_commands
+
+          path = Path("/tmp/daily_focus_ack_command_ids.json")
+          ids = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else []
+          if ids:
+              print(json.dumps(
+                  complete_dashboard_commands(
+                      ids,
+                      status="failed",
+                      message="daily-focus-ack workflow failed",
+                      github_run_url=os.environ.get("GITHUB_RUN_URL"),
+                  ),
+                  indent=2,
+                  sort_keys=True,
+              ))
+          PY
 
       - name: Notify dashboard channel
+        if: success()
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

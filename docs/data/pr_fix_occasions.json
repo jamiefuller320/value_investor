@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-29T19:17:44.750025+00:00",
-  "occasion_count": 107,
+  "updated_at": "2026-09-29T19:53:34.329489+00:00",
+  "occasion_count": 109,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -1913,6 +1913,42 @@
       "failed_check_names": [],
       "notes": "Kept 5 IR-seed filings vs main empty index; L503 unchanged",
       "details": {}
+    },
+    {
+      "id": "prf-20260929-014",
+      "recorded_at": "2026-09-29T19:53:34.284186+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "validate failed on PR #909 (ruff format)",
+      "pr_number": 909,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "human-task-ack landing fix; reformatted and retried",
+      "details": {}
+    },
+    {
+      "id": "prf-20260929-015",
+      "recorded_at": "2026-09-29T19:53:34.329489+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "dirty merge: docs/data/pr_fix_occasions.json vs main",
+      "pr_number": 909,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "preserve ack-landing fix; take main for occasions then re-append #909 records",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -2132,17 +2168,17 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 62
+        "count": 63
       },
       {
         "kind": "ci_check",
-        "count": 45
+        "count": 46
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 107
+        "count": 109
       }
     ]
   }

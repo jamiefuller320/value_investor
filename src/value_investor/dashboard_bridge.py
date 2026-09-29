@@ -7,6 +7,7 @@ import os
 import urllib.error
 import urllib.request
 import uuid
+from collections import defaultdict
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any
@@ -40,6 +41,20 @@ ACTION_REPOSITORY_DISPATCH: dict[str, str] = {
     "daily-focus-ack": "daily-focus-ack",
     "daily-discuss": "daily-discuss",
 }
+
+# Git-writing ack/discuss actions: one repository_dispatch per poll batch.
+# GitHub concurrency cancels *pending* siblings even when cancel-in-progress is
+# false — burst-dispatching one event per click drops most acks. Batch + leave
+# status=processing until the workflow marks done after a successful push.
+BATCHABLE_ACK_ACTIONS = frozenset(
+    {
+        "human-task-ack",
+        "daily-focus-ack",
+        "daily-discuss",
+    }
+)
+
+DEFAULT_PROCESS_LIMIT = 40
 
 
 @dataclass(frozen=True)
@@ -104,7 +119,7 @@ def _http_json(
 def fetch_pending_commands(
     config: DashboardBridgeConfig,
     *,
-    limit: int = 10,
+    limit: int = DEFAULT_PROCESS_LIMIT,
 ) -> list[dict[str, Any]]:
     url = (
         f"{config.supabase_url}/rest/v1/{config.commands_table}"
@@ -150,6 +165,37 @@ def update_command_status(
     )
 
 
+def complete_dashboard_commands(
+    command_ids: list[str],
+    *,
+    status: str,
+    message: str | None = None,
+    github_run_url: str | None = None,
+    config: DashboardBridgeConfig | None = None,
+) -> dict[str, Any]:
+    """Mark one or more command rows done/failed after the git workflow finishes."""
+    status = str(status or "").strip()
+    if status not in {"done", "failed"}:
+        raise ValueError("status must be 'done' or 'failed'")
+    cfg = config or DashboardBridgeConfig.from_env()
+    if cfg is None:
+        return {"ok": False, "reason": "supabase_not_configured", "updated": []}
+    updated: list[str] = []
+    for raw_id in command_ids:
+        command_id = str(raw_id or "").strip()
+        if not command_id:
+            continue
+        update_command_status(
+            cfg,
+            command_id,
+            status=status,
+            message=message,
+            github_run_url=github_run_url,
+        )
+        updated.append(command_id)
+    return {"ok": True, "status": status, "updated": updated}
+
+
 def dispatch_repository_event(
     *,
     event_type: str,
@@ -171,6 +217,14 @@ def dispatch_repository_event(
         },
         body=body,
     )
+
+
+def _command_payload_item(row: dict[str, Any]) -> dict[str, Any]:
+    command_id = str(row.get("id") or "").strip()
+    payload = row.get("payload") if isinstance(row.get("payload"), dict) else {}
+    item = dict(payload)
+    item["command_id"] = command_id
+    return item
 
 
 def execute_dashboard_command(
@@ -198,6 +252,80 @@ def execute_dashboard_command(
         client_payload={"command_id": command_id, **payload},
     )
     return {"action": action, "event_type": event_type, "command_id": command_id}
+
+
+def execute_batched_ack_commands(
+    rows: list[dict[str, Any]],
+    *,
+    config: DashboardBridgeConfig,
+) -> dict[str, Any]:
+    """Dispatch one repository event carrying every pending ack in ``rows``."""
+    if not rows:
+        raise ValueError("rows required")
+    action = str(rows[0].get("action") or "").strip()
+    if action not in BATCHABLE_ACK_ACTIONS:
+        raise ValueError(f"Action {action!r} is not batchable")
+    for row in rows:
+        if str(row.get("action") or "").strip() != action:
+            raise ValueError("batched rows must share one action")
+
+    repo = config.github_repo
+    token = config.github_token
+    if not repo or not token:
+        raise RuntimeError("GITHUB_REPOSITORY and dispatch token required for dashboard bridge")
+
+    commands = [_command_payload_item(row) for row in rows]
+    command_ids = [str(item.get("command_id") or "") for item in commands if item.get("command_id")]
+    client_payload: dict[str, Any] = {
+        "commands": commands,
+        "command_ids": command_ids,
+        "batch": True,
+        "batch_size": len(commands),
+    }
+    # Keep legacy single-command fields for workflow_dispatch / older runners.
+    if len(commands) == 1:
+        for key, value in commands[0].items():
+            if key not in client_payload:
+                client_payload[key] = value
+
+    event_type = ACTION_REPOSITORY_DISPATCH[action]
+    dispatch_repository_event(
+        event_type=event_type,
+        repo=repo,
+        token=token,
+        client_payload=client_payload,
+    )
+    return {
+        "action": action,
+        "event_type": event_type,
+        "command_ids": command_ids,
+        "batch_size": len(commands),
+    }
+
+
+def commands_from_client_payload(payload: dict[str, Any] | None) -> list[dict[str, Any]]:
+    """Normalize repository_dispatch client_payload into per-command dicts."""
+    if not isinstance(payload, dict):
+        return []
+    commands = payload.get("commands")
+    if isinstance(commands, list):
+        out = [dict(item) for item in commands if isinstance(item, dict)]
+        if out:
+            return out
+    # Legacy single-command payload (pre-batch) or workflow_dispatch mirror.
+    single = {
+        key: value
+        for key, value in payload.items()
+        if key not in {"commands", "command_ids", "batch", "batch_size"}
+    }
+    if (
+        single.get("command_id")
+        or single.get("task_id")
+        or single.get("task_ref")
+        or single.get("recommendation_id")
+    ):
+        return [single]
+    return []
 
 
 _LIFECYCLE_EXPERIMENT_ACTIONS = frozenset(
@@ -238,10 +366,145 @@ def _duplicate_lifecycle_skip_meta(action: str) -> tuple[str, str]:
     )
 
 
+def _process_single_command(
+    row: dict[str, Any],
+    *,
+    cfg: DashboardBridgeConfig,
+    dry_run: bool,
+    processed: list[dict[str, Any]],
+    seen_lifecycle_experiments: set[str],
+) -> None:
+    command_id = str(row.get("id") or "")
+    if not command_id:
+        return
+    action = str(row.get("action") or "").strip()
+    dedupe_key = _lifecycle_experiment_dedupe_key(row)
+    if dedupe_key and dedupe_key in seen_lifecycle_experiments:
+        skipped_code, skip_message = _duplicate_lifecycle_skip_meta(action)
+        if dry_run:
+            processed.append(
+                {
+                    "id": command_id,
+                    "action": action or row.get("action"),
+                    "dry_run": True,
+                    "skipped": skipped_code,
+                }
+            )
+            return
+        update_command_status(
+            cfg,
+            command_id,
+            status="done",
+            message=skip_message,
+        )
+        processed.append(
+            {
+                "id": command_id,
+                "action": action or row.get("action"),
+                "status": "done",
+                "skipped": skipped_code,
+            }
+        )
+        return
+    if dedupe_key:
+        seen_lifecycle_experiments.add(dedupe_key)
+    if dry_run:
+        processed.append({"id": command_id, "action": row.get("action"), "dry_run": True})
+        return
+    update_command_status(cfg, command_id, status="processing", message="Dispatching GitHub event")
+    try:
+        result = execute_dashboard_command(row, config=cfg)
+        update_command_status(
+            cfg,
+            command_id,
+            status="done",
+            message=f"Dispatched {result['event_type']}",
+        )
+        processed.append({"id": command_id, **result, "status": "done"})
+    except Exception as exc:  # noqa: BLE001 — record per-command failure
+        update_command_status(cfg, command_id, status="failed", message=str(exc))
+        processed.append(
+            {
+                "id": command_id,
+                "action": row.get("action"),
+                "status": "failed",
+                "error": str(exc),
+            }
+        )
+
+
+def _process_ack_batch(
+    action: str,
+    rows: list[dict[str, Any]],
+    *,
+    cfg: DashboardBridgeConfig,
+    dry_run: bool,
+    processed: list[dict[str, Any]],
+) -> None:
+    if not rows:
+        return
+    command_ids = [str(row.get("id") or "") for row in rows if row.get("id")]
+    if dry_run:
+        for command_id in command_ids:
+            processed.append(
+                {
+                    "id": command_id,
+                    "action": action,
+                    "dry_run": True,
+                    "batched": True,
+                }
+            )
+        return
+
+    for command_id in command_ids:
+        update_command_status(
+            cfg,
+            command_id,
+            status="processing",
+            message=f"Batched {action} dispatch ({len(command_ids)} commands)",
+        )
+    try:
+        result = execute_batched_ack_commands(rows, config=cfg)
+        # Stay in processing until the workflow push succeeds and calls
+        # complete_dashboard_commands(..., status="done").
+        for command_id in command_ids:
+            update_command_status(
+                cfg,
+                command_id,
+                status="processing",
+                message=(
+                    f"Dispatched batched {result['event_type']} "
+                    f"({result['batch_size']} commands); awaiting workflow"
+                ),
+            )
+            processed.append(
+                {
+                    "id": command_id,
+                    "action": action,
+                    "event_type": result["event_type"],
+                    "status": "processing",
+                    "batched": True,
+                    "batch_size": result["batch_size"],
+                }
+            )
+    except Exception as exc:  # noqa: BLE001 — fail the whole batch
+        for command_id in command_ids:
+            update_command_status(cfg, command_id, status="failed", message=str(exc))
+            processed.append(
+                {
+                    "id": command_id,
+                    "action": action,
+                    "status": "failed",
+                    "error": str(exc),
+                    "batched": True,
+                }
+            )
+
+
 def process_pending_dashboard_commands(
     *,
     config: DashboardBridgeConfig | None = None,
-    limit: int = 10,
+    limit: int = DEFAULT_PROCESS_LIMIT,
     dry_run: bool = False,
 ) -> dict[str, Any]:
     """Poll Supabase for pending commands and dispatch GitHub repository events."""
@@ -252,66 +515,41 @@ def process_pending_dashboard_commands(
     pending = fetch_pending_commands(cfg, limit=limit)
     processed: list[dict[str, Any]] = []
     seen_lifecycle_experiments: set[str] = set()
+    batch_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    singles: list[dict[str, Any]] = []
+
     for row in pending:
-        command_id = str(row.get("id") or "")
-        if not command_id:
-            continue
         action = str(row.get("action") or "").strip()
-        dedupe_key = _lifecycle_experiment_dedupe_key(row)
-        if dedupe_key and dedupe_key in seen_lifecycle_experiments:
-            skipped_code, skip_message = _duplicate_lifecycle_skip_meta(action)
-            if dry_run:
-                processed.append(
-                    {
-                        "id": command_id,
-                        "action": action or row.get("action"),
-                        "dry_run": True,
-                        "skipped": skipped_code,
-                    }
-                )
+        if action in BATCHABLE_ACK_ACTIONS:
+            batch_groups[action].append(row)
+        else:
+            singles.append(row)
+
+    # Preserve roughly created_at order: emit batch groups in first-seen order,
+    # interleaved with singles by walking the original pending list.
+    emitted_batches: set[str] = set()
+    for row in pending:
+        action = str(row.get("action") or "").strip()
+        if action in BATCHABLE_ACK_ACTIONS:
+            if action in emitted_batches:
                 continue
-            update_command_status(
-                cfg,
-                command_id,
-                status="done",
-                message=skip_message,
+            emitted_batches.add(action)
+            _process_ack_batch(
+                action,
+                batch_groups[action],
+                cfg=cfg,
+                dry_run=dry_run,
+                processed=processed,
             )
-            processed.append(
-                {
-                    "id": command_id,
-                    "action": action or row.get("action"),
-                    "status": "done",
-                    "skipped": skipped_code,
-                }
+        else:
+            _process_single_command(
+                row,
+                cfg=cfg,
+                dry_run=dry_run,
+                processed=processed,
+                seen_lifecycle_experiments=seen_lifecycle_experiments,
             )
-            continue
-        if dedupe_key:
-            seen_lifecycle_experiments.add(dedupe_key)
-        if dry_run:
-            processed.append({"id": command_id, "action": row.get("action"), "dry_run": True})
-            continue
-        update_command_status(
-            cfg, command_id, status="processing", message="Dispatching GitHub event"
-        )
-        try:
-            result = execute_dashboard_command(row, config=cfg)
-            update_command_status(
-                cfg,
-                command_id,
-                status="done",
-                message=f"Dispatched {result['event_type']}",
-            )
-            processed.append({"id": command_id, **result, "status": "done"})
-        except Exception as exc:  # noqa: BLE001 — record per-command failure
-            update_command_status(cfg, command_id, status="failed", message=str(exc))
-            processed.append(
-                {
-                    "id": command_id,
-                    "action": row.get("action"),
-                    "status": "failed",
-                    "error": str(exc),
-                }
-            )
+
     return {"ok": True, "processed": processed, "pending_count": len(pending)}
 
 

@@ -6,7 +6,7 @@ from pathlib import Path
 
 from value_investor.experiment_acks import load_acks as load_experiment_acks
 from value_investor.experiment_acks import record_ack
-from value_investor.human_task_ack import run_human_task_ack
+from value_investor.human_task_ack import run_human_task_ack, run_human_task_ack_batch
 from value_investor.human_task_acks import load_human_task_acks, record_human_task_ack
 from value_investor.human_task_cards import (
     APPROVAL_GATE_IDS,
@@ -395,6 +395,51 @@ def test_run_human_task_ack_rebinds_stale_ui_fingerprint(tmp_path: Path):
     assert hit["sort_bucket"] == "acked"
     assert hit["ack"]["stale"] is False
     assert result["counts"]["acked"] >= 1
+
+
+def test_run_human_task_ack_batch_records_many_once(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    write_json(
+        data_dir / "analysis_review.json",
+        {"generated_at": "2026-09-26T10:00:00+00:00", "summary": "ok"},
+    )
+    write_json(
+        data_dir / "project_traffic.json",
+        {
+            "generated_at": "2026-09-26T10:00:00+00:00",
+            "common_issues": [{"failure_reason": "merge conflict", "count": 2}],
+        },
+    )
+    result = run_human_task_ack_batch(
+        data_dir,
+        [
+            {
+                "command_id": "c1",
+                "task_id": "sunday-read-analysis-review",
+                "decision": "ack_observe",
+            },
+            {
+                "command_id": "c2",
+                "task_id": "monthly-pr-fix-common-issues",
+                "decision": "ack_observe",
+            },
+            {"command_id": "c3", "task_id": "", "decision": "ack_observe"},
+        ],
+        source="test",
+    )
+    assert result["command_ids"] == ["c1", "c2"]
+    assert len(result["acked"]) == 2
+    assert result["errors"]
+    store = load_human_task_acks(data_dir)
+    ids = {row["task_id"] for row in store["acks"]}
+    assert "sunday-read-analysis-review" in ids
+    assert "monthly-pr-fix-common-issues" in ids
+    board = build_human_tasks_board(data_dir=data_dir)
+    for tid in ("sunday-read-analysis-review", "monthly-pr-fix-common-issues"):
+        hit = next(r for r in board["tasks"] if r["id"] == tid)
+        assert hit["ack"]["acked"] is True
+        assert hit["sort_bucket"] == "acked"
 
 
 def test_euro_ingest_cron_reimport_is_automated():

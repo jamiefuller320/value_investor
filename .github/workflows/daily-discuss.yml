@@ -1,6 +1,8 @@
 name: Daily discuss
 
 # Queue a Daily hub recommendation for Project agent Discuss pickup.
+# Bridge batches pending daily-discuss rows into one dispatch; commands stay
+# processing until this workflow marks them done after a successful push.
 # Writes docs/data/daily_discuss_inbox.json — no auto-trades.
 on:
   repository_dispatch:
@@ -9,7 +11,7 @@ on:
     inputs:
       recommendation_id:
         description: Recommendation id
-        required: true
+        required: false
         type: string
       local_date:
         description: YYYY-MM-DD Europe/London (optional)
@@ -39,10 +41,12 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Queue discuss inbox item
+      - name: Queue discuss inbox item(s)
         env:
           REC_ID: ${{ github.event.client_payload.recommendation_id || github.event.inputs.recommendation_id }}
           LOCAL_DATE: ${{ github.event.client_payload.local_date || github.event.inputs.local_date || '' }}
+          COMMAND_ID: ${{ github.event.client_payload.command_id || '' }}
+          COMMANDS_JSON: ${{ toJson(github.event.client_payload.commands) }}
           REC_JSON: ${{ toJson(github.event.client_payload.recommendation) }}
         run: |
           python3 - <<'PY'
@@ -50,46 +54,134 @@ jobs:
           import os
           from pathlib import Path
           from value_investor.daily_hub_actions import run_daily_discuss
+          from value_investor.dashboard_bridge import commands_from_client_payload
 
-          rec_raw = os.environ.get("REC_JSON") or ""
-          recommendation = None
-          if rec_raw and rec_raw not in ("null", "None", ""):
+          items = []
+          raw_batch = os.environ.get("COMMANDS_JSON") or ""
+          if raw_batch and raw_batch not in ("null", "None", ""):
               try:
-                  parsed = json.loads(rec_raw)
-                  if isinstance(parsed, dict):
-                      recommendation = parsed
+                  parsed = json.loads(raw_batch)
               except json.JSONDecodeError:
-                  recommendation = None
+                  parsed = None
+              if isinstance(parsed, list):
+                  items = [row for row in parsed if isinstance(row, dict)]
+          if not items:
+              rec_raw = os.environ.get("REC_JSON") or ""
+              recommendation = None
+              if rec_raw and rec_raw not in ("null", "None", ""):
+                  try:
+                      parsed = json.loads(rec_raw)
+                      if isinstance(parsed, dict):
+                          recommendation = parsed
+                  except json.JSONDecodeError:
+                      recommendation = None
+              items = commands_from_client_payload(
+                  {
+                      "recommendation_id": os.environ.get("REC_ID") or "",
+                      "local_date": os.environ.get("LOCAL_DATE") or "",
+                      "command_id": os.environ.get("COMMAND_ID") or "",
+                      "recommendation": recommendation,
+                  }
+              )
+          items = [
+              row
+              for row in items
+              if str(row.get("recommendation_id") or "").strip()
+              or isinstance(row.get("recommendation"), dict)
+          ]
+          if not items:
+              raise SystemExit("No daily-discuss items in payload")
 
-          result = run_daily_discuss(
-              Path("docs/data"),
-              recommendation_id=os.environ.get("REC_ID") or "",
-              recommendation=recommendation,
-              local_date=os.environ.get("LOCAL_DATE") or "",
-              source="dashboard_bridge",
+          results = []
+          command_ids = []
+          for row in items:
+              cid = str(row.get("command_id") or "").strip()
+              if cid:
+                  command_ids.append(cid)
+              rec = row.get("recommendation") if isinstance(row.get("recommendation"), dict) else None
+              result = run_daily_discuss(
+                  Path("docs/data"),
+                  recommendation_id=str(row.get("recommendation_id") or ""),
+                  recommendation=rec,
+                  local_date=str(row.get("local_date") or ""),
+                  source="dashboard_bridge",
+              )
+              results.append(result)
+          print(json.dumps({"ok": True, "queued": results}, indent=2, sort_keys=True, default=str))
+          Path("/tmp/daily_discuss_command_ids.json").write_text(
+              json.dumps(command_ids), encoding="utf-8"
           )
-          print(json.dumps(result, indent=2, sort_keys=True, default=str))
           PY
 
-      - name: Configure git author
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Commit dashboard slices (L348 retry)
+        env:
+          COMMIT_MESSAGE: "chore: daily discuss inbox from dashboard [skip ci]"
+          GHA_COMMIT_LABEL: daily-discuss
+          GHA_COMMIT_REF: main
+          GHA_COMMIT_OWNED: |
+            docs/data/daily_discuss_inbox.json
+            docs/data/daily_focus_acks.json
+            docs/data/daily_focus.json
+          GHA_COMMIT_PRESERVE_NEWER_GENERATED_AT: "0"
+        run: bash scripts/gha_commit_artifacts.sh
 
-      - name: Stage discuss inbox
+      - name: Mark dashboard commands done
+        if: success()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          git add -- docs/data/daily_discuss_inbox.json docs/data/daily_focus_acks.json docs/data/daily_focus.json
-          git status --short -- docs/data/daily_discuss_inbox.json docs/data/daily_focus_acks.json docs/data/daily_focus.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from value_investor.dashboard_bridge import complete_dashboard_commands
 
-      - name: Commit dashboard slices
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: daily discuss inbox from dashboard [skip ci]"
-          file_pattern: docs/data/daily_discuss_inbox.json docs/data/daily_focus_acks.json docs/data/daily_focus.json
-          skip_fetch: false
-          skip_dirty_check: false
+          ids = json.loads(Path("/tmp/daily_discuss_command_ids.json").read_text(encoding="utf-8"))
+          if ids:
+              print(json.dumps(
+                  complete_dashboard_commands(
+                      ids,
+                      status="done",
+                      message="daily-discuss committed",
+                      github_run_url=os.environ.get("GITHUB_RUN_URL"),
+                  ),
+                  indent=2,
+                  sort_keys=True,
+              ))
+          PY
+
+      - name: Mark dashboard commands failed
+        if: failure()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from value_investor.dashboard_bridge import complete_dashboard_commands
+
+          path = Path("/tmp/daily_discuss_command_ids.json")
+          ids = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else []
+          if ids:
+              print(json.dumps(
+                  complete_dashboard_commands(
+                      ids,
+                      status="failed",
+                      message="daily-discuss workflow failed",
+                      github_run_url=os.environ.get("GITHUB_RUN_URL"),
+                  ),
+                  indent=2,
+                  sort_keys=True,
+              ))
+          PY
 
       - name: Notify dashboard channel
+        if: success()
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
