@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-28T07:30:52.574193+00:00
+Track: `buy_tier_level` · updated 2026-09-29T00:47:12.498968+00:00
 
 ## Portfolio loser feedback
 
@@ -187,7 +187,7 @@ Track: `buy_tier_level` · updated 2026-09-28T07:30:52.574193+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 60%
+- conviction 67%
 
 ### RMD.AX — intact / hold_tolerate (+0.8%)
 - still buy
