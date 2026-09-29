@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T18:37:40.232129+00:00",
+  "generated_at": "2026-09-29T18:38:34.985000+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,8 +8,8 @@
   "checklist_updated_at": "2026-09-28",
   "counts": {
     "new_info": 2,
-    "unacked": 19,
-    "acked": 12,
+    "unacked": 18,
+    "acked": 13,
     "automated": 19,
     "human": 33
   },
@@ -449,37 +449,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "adhoc-rotate-cursor-api-key",
-      "title": "Rotate CURSOR_API_KEY after suspected exposure",
-      "summary": "If Cursor API misuse or GitHub secret exposure is suspected: revoke the key in the Cursor dashboard, set a new GitHub Actions secret (and any Cloud/cron copies), review odd workflow_run jobs, and confirm main workflow files were not planted. Prefer main branch protection so a stolen GITHUB_TOKEN cannot push exfil workflows.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/gha-secret-hygiene.md",
-      "doc_anchor": "if-cursor_api_key-may-already-be-compromised",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#if-cursor_api_key-may-already-be-compromised",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "d5ceb09fa62df0a6",
-        "bullets": [],
-        "source_keys": []
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "adhoc-sync-cursor-api-key-v2-github",
       "title": "Sync valid Cursor API key into GitHub Actions secrets",
       "summary": "When ftse-verify-key --key-source legacy fails but --key-source v2 succeeds (or GHA agent jobs 401): copy the valid User API key into GitHub Actions secrets CURSOR_API_KEY_V2 and CURSOR_API_KEY. Workflows prefer V2 via secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY. Cloud secrets alone do not feed Actions.",
@@ -824,6 +793,37 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-rotate-cursor-api-key",
+      "title": "Rotate CURSOR_API_KEY after suspected exposure",
+      "summary": "If Cursor API misuse or GitHub secret exposure is suspected: revoke the key in the Cursor dashboard, set a new GitHub Actions secret (and any Cloud/cron copies), review odd workflow_run jobs, and confirm main workflow files were not planted. Prefer main branch protection so a stolen GITHUB_TOKEN cannot push exfil workflows.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/gha-secret-hygiene.md",
+      "doc_anchor": "if-cursor_api_key-may-already-be-compromised",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/gha-secret-hygiene.md#if-cursor_api_key-may-already-be-compromised",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "d5ceb09fa62df0a6",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-29T18:38:34.942502+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "d5ceb09fa62df0a6"
+      },
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
