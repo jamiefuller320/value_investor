@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-29T13:50:11.951970+00:00",
+  "generated_at": "2026-09-29T14:20:27.891986+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -53,7 +53,7 @@
       "1": "dax",
       "2": "aex"
     },
-    "equal_support_generated_at": "2026-09-29T08:46:24.834104+00:00"
+    "equal_support_generated_at": "2026-09-29T14:16:41.005925+00:00"
   },
   "markets": [
     {
@@ -379,7 +379,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=1, thin=16, indexed_without_body=19)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=16, indexed_without_body=17)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
@@ -432,17 +432,15 @@
       "filing_health": {
         "buy_tier_count": 54,
         "unmeasured_buy_tier": 1,
-        "zero_body_buy_tier": 1,
+        "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 16,
-        "indexed_without_body": 19,
+        "indexed_without_body": 17,
         "bodies_median": 3.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
         "parked_count": 8,
-        "zero_body_tickers": [
-          "HM-B.ST"
-        ],
+        "zero_body_tickers": [],
         "thin_body_tickers": [
           "SGO.PA",
           "ACKB.BR",
@@ -467,7 +465,7 @@
           "WIE.VI"
         ]
       },
-      "filing_gaps": 2,
+      "filing_gaps": 1,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -495,7 +493,7 @@
         "hold_near_buy_count": 63,
         "not_buy_tier_count": 139,
         "never_buy_tier_count": 127,
-        "rememo_eligible_count": 0,
+        "rememo_eligible_count": 1,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
@@ -557,10 +555,10 @@
         },
         "remaining": {
           "unmeasured": 1,
-          "zero_body": 1,
+          "zero_body": 0,
           "thin": 16,
-          "indexed_without_body": 19,
-          "filing_gaps": 2
+          "indexed_without_body": 17,
+          "filing_gaps": 1
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
@@ -569,11 +567,6 @@
             "id": "unmeasured_stuck",
             "severity": "high",
             "summary": "1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
-          },
-          {
-            "id": "zero_body_stuck",
-            "severity": "high",
-            "summary": "1 zero-body buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
           }
         ],
         "sprint_entered_at": null
@@ -851,8 +844,8 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 18,
-        "targets": 28,
+        "run_count": 17,
+        "targets": 27,
         "improved": 0,
         "improved_tickers": [],
         "last_run_at": "2026-09-29T13:48:49.156876+00:00",
@@ -1111,15 +1104,15 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 2,
-        "targets": 6,
+        "run_count": 3,
+        "targets": 8,
         "improved": 3,
         "improved_tickers": [
           "KPN.AS",
           "RAND.AS",
           "SHELL.AS"
         ],
-        "last_run_at": "2026-09-29T11:18:58.924553+00:00",
+        "last_run_at": "2026-09-29T14:18:55.795818+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
