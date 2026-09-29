@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-29T09:19:17+00:00",
+  "updated_at": "2026-09-29T09:52:52+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -11348,6 +11348,42 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
       "added_at": "2026-09-29T08:05:33+00:00"
+    },
+    {
+      "id": "L499",
+      "category": "later",
+      "section": "universe",
+      "title": "Universe-wide filing archive / data-pack lane (cold store)",
+      "summary": "Observe-only archival collation of filings for full admitted universes (not buy-tier-only deepen), serving data packs when names rotate toward buy. Prefer offline non-interfering lane before a separate repo; store raw + zstd normalized text; proprietary compact format only after size/retrieval evidence. Do not compete with euro fat-slot / P2 focus head.",
+      "revisit_when": "Focus ingest head (euro_depth or successor) at maintenance threshold AND buy-tier first-memo/body-lag miss rate shows names entering buy without prior archive bodies; before proposing a second live crawler or separate archive repo.",
+      "tags": [
+        "universe",
+        "ingest",
+        "archive",
+        "filings",
+        "compression",
+        "not-live-path"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "added_at": "2026-09-29T09:23:09+00:00"
+    },
+    {
+      "id": "L500",
+      "category": "later",
+      "section": "ops",
+      "title": "Ingest-loop named pin starved by unmeasured prepend",
+      "summary": "ingest-loop --pin-ticker HM-B.ST with max-targets 1 only ran OIZ.IR because unmeasured names are auto-prepended. Named pins for zero-body clearance should guarantee a slot or bump target budget.",
+      "revisit_when": "Next time a named euro zero-body pin is skipped while unmeasured leftovers consume the ticker budget",
+      "tags": [
+        "euro_depth",
+        "ingest",
+        "pin",
+        "p2"
+      ],
+      "status": "open",
+      "source": "euro zero-body stuck HM-B.ST investigation / PR 904 L499 collision fix",
+      "added_at": "2026-09-29T09:52:52+00:00"
     }
   ],
   "fragments": [

@@ -211,6 +211,21 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "ESSITY-B.ST": [
         "https://assets.www.essity.com/essity/Annual-Report-2025-digital.pdf",
     ],
+    # euro_depth zero_body stuck — HM-B.ST indexed bogus google_news (HM Prison /
+    # Parliament) with 0 bodies; ESEF miss on Finance-AB LEI. Seed hmgroup.com
+    # statutory PDFs so the next euro pin clears zero_body without fat-slot divert.
+    "HM-B.ST": [
+        "https://hmgroup.com/wp-content/uploads/2026/03/HM-Group-Annual-and-sustainability-report-2025.pdf",
+        "https://hmgroup.com/wp-content/uploads/2026/01/H-M-Hennes-Mauritz-AB-Full-year-report-2025.pdf",
+        "https://hmgroup.com/wp-content/uploads/2026/09/H-M-Hennes-Mauritz-AB-Nine-month-report-2026.pdf",
+        "https://hmgroup.com/wp-content/uploads/2026/06/H-M-Hennes-Mauritz-AB-Six-month-report-2026.pdf",
+    ],
+    "HM-B": [
+        "https://hmgroup.com/wp-content/uploads/2026/03/HM-Group-Annual-and-sustainability-report-2025.pdf",
+        "https://hmgroup.com/wp-content/uploads/2026/01/H-M-Hennes-Mauritz-AB-Full-year-report-2025.pdf",
+        "https://hmgroup.com/wp-content/uploads/2026/09/H-M-Hennes-Mauritz-AB-Nine-month-report-2026.pdf",
+        "https://hmgroup.com/wp-content/uploads/2026/06/H-M-Hennes-Mauritz-AB-Six-month-report-2026.pdf",
+    ],
     # euro_depth IWB blocker — ASSA-B.ST parked awaiting_periodic_report; FY2025 English IR PDF.
     "ASSA-B.ST": [
         "https://www.assaabloy.com/group/en/documents/investors/annual-reports/2025/Annual%20Report%202025.pdf",
@@ -654,6 +669,12 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
+    "HM-B": (
+        "H & M Hennes & Mauritz",
+        "H&M Hennes & Mauritz",
+        "H & M Hennes & Mauritz AB",
+        "H&M Group",
+    ),
     "BN": ("Danone", "Danone SA"),
     "EL": ("EssilorLuxottica", "EssilorLuxottica SA"),
     "IFX": ("Infineon", "Infineon Technologies AG"),
@@ -2314,7 +2335,11 @@ def _google_news_symbol_clause(ticker: str) -> str:
     _add(epic)
     match = _CLASS_SHARE_EPIC.match(epic)
     if match:
-        _add(match.group(1))
+        # Bare 2-letter class roots (HM from HM-B) collide with unrelated acronyms
+        # (HM Prison) and drown real issuer hits — require at least 3 chars (GIB).
+        root = match.group(1)
+        if len(root) >= 3:
+            _add(root)
     return " OR ".join(terms)
 
 
@@ -2357,13 +2382,27 @@ _ISSUER_STOPWORDS = frozenset(
         "ag",
         "nv",
         "se",
+        # Swedish "(publ)" — bare token must not match English "public"/"publication".
+        "publ",
     }
 )
 
+# Headline brand aliases when Yahoo legal names omit the trading brand (e.g. H&M).
+_ISSUER_HEADLINE_BRAND_ALIASES: dict[str, tuple[str, ...]] = {
+    "HM-B": (
+        "h&m",
+        "h & m",
+        "hm group",
+        "hennes & mauritz",
+        "hennes and mauritz",
+    ),
+}
 
-def _issuer_name_phrases(company_name: str) -> list[str]:
-    """Leading multi-word brand phrases (e.g. ``me group`` from ME Group International)."""
+
+def _strip_legal_name_noise(company_name: str) -> str:
+    """Drop trailing legal forms / parentheticals before issuer token extraction."""
     lower = (company_name or "").lower()
+    lower = re.sub(r"\([^)]*publ[^)]*\)", " ", lower)
     for suf in (
         " plc",
         " limited",
@@ -2372,12 +2411,19 @@ def _issuer_name_phrases(company_name: str) -> list[str]:
         " se",
         " ag",
         " nv",
+        " ab",
         " inc",
         " corp",
         " corporation",
     ):
         if lower.endswith(suf):
             lower = lower[: -len(suf)].strip()
+    return re.sub(r"\s+", " ", lower).strip(" ,.-/")
+
+
+def _issuer_name_phrases(company_name: str) -> list[str]:
+    """Leading multi-word brand phrases (e.g. ``me group`` from ME Group International)."""
+    lower = _strip_legal_name_noise(company_name)
     words = [w for w in re.split(r"[^a-z0-9]+", lower) if w]
     phrases: list[str] = []
     if len(words) >= 2:
@@ -2397,9 +2443,10 @@ _VCT_TRUST_HEADLINE = re.compile(
 
 
 def _issuer_distinctive_tokens(company_name: str) -> list[str]:
+    cleaned = _strip_legal_name_noise(company_name)
     return [
         tok
-        for tok in re.split(r"[^a-z0-9]+", (company_name or "").lower())
+        for tok in re.split(r"[^a-z0-9]+", cleaned)
         if len(tok) >= 4 and tok not in _ISSUER_STOPWORDS
     ]
 
@@ -2460,15 +2507,17 @@ def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -
         # ASX Markit headlines often end with " - CSL" / " - WOR".
         if epic_l and re.search(rf"[-–]\s*{re.escape(epic_l)}\s*$", text, flags=re.IGNORECASE):
             return True
+    base = _base_symbol(ticker).upper()
+    for alias in _ISSUER_HEADLINE_BRAND_ALIASES.get(base, ()):
+        if alias and alias.lower() in text:
+            return True
     for phrase in _issuer_name_phrases(company_name):
         if phrase in text:
             return True
-    tokens = [
-        tok
-        for tok in re.split(r"[^a-z0-9]+", (company_name or "").lower())
-        if len(tok) >= 4 and tok not in _ISSUER_STOPWORDS
-    ]
-    return any(tok in text for tok in tokens[:4])
+    tokens = _issuer_distinctive_tokens(company_name)
+    # Prefer word-boundary hits so short legal scraps (e.g. ``publ``) cannot
+    # match unrelated English words like ``public``.
+    return any(re.search(rf"\b{re.escape(tok)}\b", text) for tok in tokens[:4])
 
 
 def _companies_house_ocr_enabled() -> bool:
@@ -3221,6 +3270,16 @@ def filter_misattributed_filings(
             or source == "investegate_resolved"
             or source.startswith("google_news")
         ):
+            if not headline_relevant_to_issuer(headline, company_name, ticker):
+                continue
+        # Euro (and peer) Google News discovery can latch onto acronym collisions
+        # (HM-B.ST → HM Prison annual report). Require issuer relevance.
+        if regime in {
+            "euro_filings",
+            "asx_announcements",
+            "tsx_announcements",
+            "asia_filings",
+        } and source.startswith("google_news"):
             if not headline_relevant_to_issuer(headline, company_name, ticker):
                 continue
         if source == "sec_edgar":

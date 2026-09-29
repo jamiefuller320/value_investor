@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-29T09:23:36.818129+00:00",
-  "occasion_count": 96,
+  "updated_at": "2026-09-29T13:40:07.705971+00:00",
+  "occasion_count": 100,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -741,7 +741,7 @@
       "failed_check_names": [
         "CI / validate"
       ],
-      "notes": "ruff format only; ci-pr-autofix in progress — waiting for new head",
+      "notes": "ruff format only; ci-pr-autofix in progress \u2014 waiting for new head",
       "details": {}
     },
     {
@@ -1572,7 +1572,7 @@
         "CI / test (1)",
         "CI / test (3)"
       ],
-      "notes": "Run 36411469225: identical flake to 36409830107 — Install package + test deps ReadTimeoutError on pypi.org /simple/python-dateutil/ then ResolutionImpossible. test (0)/(2) green. gh run rerun denied (integration); empty-commit retrigger = retry 2.",
+      "notes": "Run 36411469225: identical flake to 36409830107 \u2014 Install package + test deps ReadTimeoutError on pypi.org /simple/python-dateutil/ then ResolutionImpossible. test (0)/(2) green. gh run rerun denied (integration); empty-commit retrigger = retry 2.",
       "details": {}
     },
     {
@@ -1702,11 +1702,11 @@
     },
     {
       "id": "prf-20260929-002",
-      "recorded_at": "2026-09-29T09:23:36.818129+00:00",
+      "recorded_at": "2026-09-29T09:54:23.186075+00:00",
       "source": "human_request",
       "kind": "ci_check",
-      "failure_reason": "Ruff F401 unused json import in test_daily_hub_history.py",
-      "pr_number": 902,
+      "failure_reason": "validate: ruff format on filings.py headline_relevant return (CI autofix landed)",
+      "pr_number": 904,
       "branch": null,
       "title": null,
       "url": null,
@@ -1716,7 +1716,79 @@
       "failed_check_names": [
         "CI / validate"
       ],
-      "notes": null,
+      "notes": "Superseded head bf933a; autofix commit 223d6e then L500 collision fix 5d3411",
+      "details": {}
+    },
+    {
+      "id": "prf-20260929-003",
+      "recorded_at": "2026-09-29T10:12:20.891011+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test (0) failed on tip b67077e",
+      "pr_number": 904,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (0)"
+      ],
+      "notes": "Investigating failed shard; validate already green",
+      "details": {}
+    },
+    {
+      "id": "prf-20260929-004",
+      "recorded_at": "2026-09-29T10:14:27.340430+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test (0): test_ingest_filings_asx_regime — generic Example Full Year Results dropped by new ASX google_news issuer relevance filter",
+      "pr_number": 904,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (0)"
+      ],
+      "notes": "Fixed on tip 34c3e5 by renaming fixture headline to BHP Group Full Year Results; validate already green",
+      "details": {}
+    },
+    {
+      "id": "prf-20260929-005",
+      "recorded_at": "2026-09-29T13:40:07.659787+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "dirty vs main: deferred-ideas.json / deferred-review.md collide with newer main",
+      "pr_number": 903,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Also dirty with #904 which already carries L499+L500; rebase after #904",
+      "details": {}
+    },
+    {
+      "id": "prf-20260929-006",
+      "recorded_at": "2026-09-29T13:40:07.705971+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "dirty vs main: HM-B.ST filings_index.json and gap_fill_source_map.json (and deferred store)",
+      "pr_number": 904,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Rebase onto main; keep L499 universe archive + L500 pin-ticker defer",
       "details": {}
     }
   ],
@@ -1937,17 +2009,17 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 55
+        "count": 57
       },
       {
         "kind": "ci_check",
-        "count": 41
+        "count": 43
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 96
+        "count": 100
       }
     ]
   }
