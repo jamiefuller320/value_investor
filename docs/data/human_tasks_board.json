@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T18:43:26.957333+00:00",
+  "generated_at": "2026-09-29T19:23:17.470587+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,8 +8,8 @@
   "checklist_updated_at": "2026-09-28",
   "counts": {
     "new_info": 2,
-    "unacked": 16,
-    "acked": 15,
+    "unacked": 15,
+    "acked": 16,
     "automated": 19,
     "human": 33
   },
@@ -29,7 +29,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 13",
-        "updated_at": "2026-09-29T17:26:13.440665+00:00",
+        "updated_at": "2026-09-29T19:03:39.625942+00:00",
         "fingerprint": "0e7a62d585fe593e",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=37",
@@ -71,15 +71,15 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-09-29T14:01:40.648020Z",
-        "fingerprint": "bd610b65087ce37e",
+        "updated_at": "2026-09-29T18:35:26.209011+00:00",
+        "fingerprint": "9fef5d72f204f74e",
         "bullets": [
-          "Occasions logged: 102",
+          "Occasions logged: 104",
           "PR mergeable=CONFLICTING against main: 7",
           "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
           "validate check failed: 3",
           "Merge conflicts in deferred-ideas.json with main: 2",
-          "ruff_format: 1"
+          "Ruff F841 unused dismissable in market_warning_triage.propose_triage: 2"
         ],
         "source_keys": [
           "pr_fix_occasions",
@@ -312,37 +312,6 @@
         "source_keys": [
           "buy_cross_archive_review"
         ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "adhoc-decision-recording-plan",
-      "title": "Lock recording plan before new learning strands",
-      "summary": "Before opening a new analysis, counterfactual, or model-dev strand, answer the four freeze questions (unit, freeze-at-t, join-later, never-backfill) and validate with ftse-decision-recording. Use preview-freeze for coverage gaps. Do not enable the Phase C freeze writer until readiness is READY.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/decision-recording-checklist.md",
-      "doc_anchor": "the-four-questions",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/decision-recording-checklist.md#the-four-questions",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "93b1efb80701c7fe",
-        "bullets": [],
-        "source_keys": []
       },
       "ack": {
         "acked": false,
@@ -731,6 +700,37 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-decision-recording-plan",
+      "title": "Lock recording plan before new learning strands",
+      "summary": "Before opening a new analysis, counterfactual, or model-dev strand, answer the four freeze questions (unit, freeze-at-t, join-later, never-backfill) and validate with ftse-decision-recording. Use preview-freeze for coverage gaps. Do not enable the Phase C freeze writer until readiness is READY.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/decision-recording-checklist.md",
+      "doc_anchor": "the-four-questions",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/decision-recording-checklist.md#the-four-questions",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "93b1efb80701c7fe",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-29T19:23:17.416892+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "93b1efb80701c7fe"
+      },
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -1517,7 +1517,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-09-29T17:24:34.518698+00:00",
+        "updated_at": "2026-09-29T19:02:42.000341+00:00",
         "fingerprint": "750849fd9e662f70",
         "bullets": [
           "Open deviations: 0"
