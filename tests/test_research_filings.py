@@ -5910,7 +5910,8 @@ def test_ingest_filings_asx_regime(tmp_path: Path):
         {
             "id": "asxasxasxasxasxa",
             "source": "google_news_asx",
-            "headline": "Example Full Year Results",
+            # Must mention issuer — euro/asx google_news rows are filtered for relevance.
+            "headline": "BHP Group Full Year Results",
             "published_at": "2026-02-05T07:00:00+00:00",
             "url": "https://news.google.com/rss/articles/asx1",
             "period": "annual",
