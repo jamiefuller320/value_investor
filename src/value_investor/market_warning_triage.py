@@ -324,6 +324,31 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
         # Focus deepen is a judgment / rate-limit call → Discuss.
         # Spare deepen is observe-ackable ("leave factory path; don't divert euro").
         prefer_discuss = bool(is_focus) or not is_spare
+        missing_ir_note = ""
+        try:
+            from value_investor.ingest_gap_closure import ticker_ir_allowlist_count
+
+            raw_tickers = [
+                part.strip()
+                for part in tickers.replace("(+", " ").split(",")
+                if part.strip() and not part.strip().startswith("+")
+            ]
+            # _ticker_hint may append " (+N)" — strip that token.
+            cleaned: list[str] = []
+            for part in raw_tickers:
+                token = part.split()[0].strip().upper()
+                if token and not token.startswith("("):
+                    cleaned.append(token)
+            missing = [t for t in cleaned if ticker_ir_allowlist_count(t) <= 0]
+            if missing:
+                shown = ", ".join(missing[:3])
+                missing_ir_note = (
+                    f" IR allowlist is empty for {shown} — deepen alone will 0-yield; "
+                    "seed `_BUILTIN_IR_URLS` / issuer PDFs (or fix discovery) before "
+                    "another intensive pin. Do not auto-park unmeasured."
+                )
+        except (ImportError, OSError, TypeError, ValueError):
+            missing_ir_note = ""
         return {
             "action": "deepen",
             "dismissable": False,
@@ -338,9 +363,11 @@ def propose_triage(flag: dict[str, Any]) -> dict[str, Any]:
                     if prefer_discuss
                     else "Accept observes spare-factory deepen — do not divert euro capacity."
                 )
+                + missing_ir_note
             ),
             "cli_hint": None,
             "href": "#overview",
+            "missing_ir_allowlist": bool(missing_ir_note),
         }
 
     # --- Zero-improve stall ------------------------------------------------

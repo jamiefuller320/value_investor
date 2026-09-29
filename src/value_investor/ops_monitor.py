@@ -1290,6 +1290,70 @@ def check_ops_budget() -> list[OpsFinding]:
     return findings
 
 
+def check_missing_ir_allowlist_stall(
+    *,
+    market_status_path: Path = Path("docs/data/market_status.json"),
+    runs_path: Path | None = None,
+    min_zero_yield: int = 2,
+) -> list[OpsFinding]:
+    """Escalate when unmeasured/zero-body stays stuck with 0 IR URLs after N 0-improves.
+
+    Observe-only: do not auto-park unmeasured, rememo, or mint eng from this finding
+    alone. Daily hub already surfaces deepen Discuss; this finding names the real
+    blocker (empty IR allowlist) so PM/eng seed instead of endless empty pins.
+    """
+    from value_investor.ingest_gap_closure import stuck_coverage_tickers_missing_ir
+    from value_investor.storage import read_json
+
+    try:
+        status = read_json(market_status_path) if market_status_path.exists() else {}
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="ingest",
+                title="Missing-IR allowlist stall check failed",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    if not isinstance(status, dict) or not status:
+        return []
+
+    rows = stuck_coverage_tickers_missing_ir(
+        market_status=status,
+        runs_path=runs_path,
+        min_zero_yield=min_zero_yield,
+    )
+    if not rows:
+        return []
+
+    focus_rows = [r for r in rows if r.get("is_focus")]
+    primary = focus_rows or rows
+    samples = ", ".join(
+        f"{r['market_id']}/{r['ticker']} ({r['coverage_hole']}, "
+        f"{r['zero_yield_intensives']}×0-improve, ir_allowlist=0)"
+        for r in primary[:4]
+    )
+    extra = f" (+{len(primary) - 4} more)" if len(primary) > 4 else ""
+    return [
+        OpsFinding(
+            severity="high" if focus_rows else "warn",
+            category="ingest",
+            title="Unmeasured/zero-body stall needs IR allowlist seed",
+            summary=(
+                f"{len(rows)} coverage-hole ticker(s) still unmeasured/zero-body after "
+                f"≥{min_zero_yield} intensive 0-improve pins with empty IR allowlist: "
+                f"{samples}{extra}. Seed `_BUILTIN_IR_URLS` / issuer PDFs or fix "
+                "discovery — do not auto-park unmeasured and do not keep empty "
+                "intensify-only loops. Daily hub deepen Discuss remains; this finding "
+                "aims at the IR-seed blocker."
+            ),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_thin_memo_learning_gap() -> list[OpsFinding]:
     """Monitor so-what ``thin_memo_counted_as_coverage`` clearance on the focus library."""
     from value_investor.thin_memo_clearance import (
@@ -2310,6 +2374,7 @@ def collect_ops_findings(
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_ui_state_reconciliation())
     findings.extend(check_thin_memo_learning_gap())
+    findings.extend(check_missing_ir_allowlist_stall())
     findings.extend(check_phase_b_producer_progress())
     findings.extend(check_indicator_integrity())
     findings.extend(check_backtest_history())
