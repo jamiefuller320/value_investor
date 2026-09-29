@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-29T08:05:33+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-29T09:23:09+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -313,6 +313,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L311 | **ASX announcement history beyond Markit latest-five** | Markit Digital returns at most five rows per symbol with no public pagination, so thin names (JBH.AX, DNL.AX) index dividend/news instead of statutory reports. IR allowlists are the current workaround. A historical announcements.asx.com.au or AFR company-announcements listing would remove the need to hand-seed each thin ticker. | More than two asx200 buy-tier names are thin_need_discovery after IR seeds, or Markit exposes a paginated feed |
 | L312 | **Add observe-sim benchmark if a sprint stream stays on a market without one** | Sprint-2 currently holds ftse_smallcap, which has no MARKET_BENCHMARKS entry, so Sunday observe-sim does not write a dated screen archive. Gap analysis correctly ignores it. If a no-benchmark market stays on a sprint stream for more than a couple of weeks, add a local index ticker so the archive clock can follow ingest effort. | A parallel sprint stream has held a market missing MARKET_BENCHMARKS for two Sunday ladders |
 | L346 | **Bootstrap CCL-B.TO zero-body leftover on TSX 60** | After GIB-A.TO left unmeasured, S&P/TSX 60 still has one zero-body buy-tier name (CCL Industries Class B). Same class-share discovery issues may apply; it cannot be parked and still blocks sprint_ingest_complete. | TSX 60 spare sprint is otherwise at leftover thin/IWB only, or the next ingest loop still reports zero_body_stuck on CCL-B.TO |
+| L499 | **Universe-wide filing archive / data-pack lane (cold store)** | Observe-only archival collation of filings for full admitted universes (not buy-tier-only deepen), serving data packs when names rotate toward buy. Prefer offline non-interfering lane before a separate repo; store raw + zstd normalized text; proprietary compact format only after size/retrieval evidence. Do not compete with euro fat-slot / P2 focus head. | Focus ingest head (euro_depth or successor) at maintenance threshold AND buy-tier first-memo/body-lag miss rate shows names entering buy without prior archive bodies; before proposing a second live crawler or separate archive repo. |
 
 ### Research & portfolio product
 
