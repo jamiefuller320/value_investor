@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T18:42:29.801436+00:00",
+  "generated_at": "2026-09-29T18:43:26.957333+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,8 +8,8 @@
   "checklist_updated_at": "2026-09-28",
   "counts": {
     "new_info": 2,
-    "unacked": 17,
-    "acked": 14,
+    "unacked": 16,
+    "acked": 15,
     "automated": 19,
     "human": 33
   },
@@ -485,37 +485,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "monthly-euro-depth-parity",
-      "title": "Review euro_depth filing/memo parity vs FTSE",
-      "summary": "Check whether euro_depth buy-tier has usable euro_filings bodies and memo quality approaching FTSE; only then flip phase1_require_ai_beat_rules back on or promote to weekday Phase 3.",
-      "automated": false,
-      "cadence": "monthly",
-      "section_id": "monthly",
-      "section_title": "Monthly",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "depth-first-eu-pilot-aug-2026",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#depth-first-eu-pilot-aug-2026",
-      "approval_gate": true,
-      "approval_label": "Approve Phase 3 / AI gate",
-      "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "5bc116633bde2052",
-        "bullets": [],
-        "source_keys": []
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "monthly-ops-review-cadence",
       "title": "Follow unified ops review cadence",
       "summary": "Use the weekly → monthly → quarterly sequence in ops-review-cadence.md (analysis review, horizon scan, deferred ideas) rather than ad-hoc review order.",
@@ -762,6 +731,37 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "monthly-euro-depth-parity",
+      "title": "Review euro_depth filing/memo parity vs FTSE",
+      "summary": "Check whether euro_depth buy-tier has usable euro_filings bodies and memo quality approaching FTSE; only then flip phase1_require_ai_beat_rules back on or promote to weekday Phase 3.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "depth-first-eu-pilot-aug-2026",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#depth-first-eu-pilot-aug-2026",
+      "approval_gate": true,
+      "approval_label": "Approve Phase 3 / AI gate",
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "5bc116633bde2052",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-29T18:43:26.923828+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "5bc116633bde2052"
+      },
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
