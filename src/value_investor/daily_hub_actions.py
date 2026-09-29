@@ -2,15 +2,31 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
-from value_investor.daily_focus import write_daily_focus
+from value_investor.daily_focus import DEFAULT_TIMEZONE, write_daily_focus
 from value_investor.daily_focus_acks import (
     append_discuss_inbox,
     record_daily_focus_ack,
 )
 from value_investor.ui_state_reconciliation import local_date_for_timezone
+
+
+def _now_for_local_date(
+    local_date: str,
+    *,
+    timezone: str = DEFAULT_TIMEZONE,
+) -> datetime:
+    """UTC instant that falls on ``local_date`` in operator TZ (midday local)."""
+    year, month, day = (int(part) for part in str(local_date).split("-", 2))
+    try:
+        tz = ZoneInfo(timezone)
+    except Exception:  # noqa: BLE001
+        tz = ZoneInfo("UTC")
+    return datetime(year, month, day, 12, 0, tzinfo=tz).astimezone(UTC)
 
 
 def run_daily_focus_ack(
@@ -24,9 +40,10 @@ def run_daily_focus_ack(
     note: str = "",
     source: str = "dashboard_bridge",
     acked_by: str = "dashboard",
+    now: datetime | None = None,
 ) -> dict[str, Any]:
     data_dir = Path(data_dir)
-    local_date = str(local_date or "").strip() or local_date_for_timezone()
+    local_date = str(local_date or "").strip() or local_date_for_timezone(now=now)
     ack = record_daily_focus_ack(
         data_dir,
         task_ref=task_ref,
@@ -38,7 +55,10 @@ def run_daily_focus_ack(
         source=source,
         acked_by=acked_by,
     )
-    focus = write_daily_focus(data_dir=data_dir)
+    # Rebuild against the ack session day so ``closed`` matches the recorded
+    # local_date (wall-clock midnight rollover must not leave acked rows open).
+    focus_now = now if now is not None else _now_for_local_date(local_date)
+    focus = write_daily_focus(data_dir=data_dir, now=focus_now)
     return {
         "ok": True,
         "ack": ack,
