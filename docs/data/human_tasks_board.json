@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T19:24:14.477589+00:00",
+  "generated_at": "2026-09-29T19:32:51.952434+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,8 +8,8 @@
   "checklist_updated_at": "2026-09-28",
   "counts": {
     "new_info": 2,
-    "unacked": 14,
-    "acked": 17,
+    "unacked": 13,
+    "acked": 18,
     "automated": 19,
     "human": 33
   },
@@ -29,7 +29,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 13",
-        "updated_at": "2026-09-29T19:03:39.625942+00:00",
+        "updated_at": "2026-09-29T19:29:54.751308+00:00",
         "fingerprint": "0e7a62d585fe593e",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=37",
@@ -556,43 +556,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "sunday-hypothesis-integrity",
-      "title": "Review in-portfolio hypothesis integrity when losers breach tolerance",
-      "summary": "If learning_tracks_hypothesis_integrity shows within_tolerance=false, broken_loser_count>0, or selection_feedback_flags, read track hypothesis_integrity.md. Prefer thesis-broken rotation over crude stops; do not auto-apply exit knobs.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/hypothesis-integrity.md",
-      "doc_anchor": "human-gate",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/hypothesis-integrity.md#human-gate",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Hypothesis integrity",
-        "updated_at": null,
-        "fingerprint": "e71f112bfafe4505",
-        "bullets": [
-          "within_tolerance=None",
-          "broken_loser_count=None",
-          "flags=—"
-        ],
-        "source_keys": [
-          "paper_learning_review"
-        ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "sunday-phase-c-readiness-gate",
       "title": "Start Phase C freeze writer only when readiness is READY",
       "summary": "Before building or enabling the PIT autopsy freeze writer, confirm phase_c_readiness.json (or ftse-phase-c-readiness exit 0) is READY. Do not start Phase C on vibes or with --force-phase-b-done alone — that override does not invent rebalance history or feature coverage.",
@@ -660,6 +623,43 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-hypothesis-integrity",
+      "title": "Review in-portfolio hypothesis integrity when losers breach tolerance",
+      "summary": "If learning_tracks_hypothesis_integrity shows within_tolerance=false, broken_loser_count>0, or selection_feedback_flags, read track hypothesis_integrity.md. Prefer thesis-broken rotation over crude stops; do not auto-apply exit knobs.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/hypothesis-integrity.md",
+      "doc_anchor": "human-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/hypothesis-integrity.md#human-gate",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Hypothesis integrity",
+        "updated_at": null,
+        "fingerprint": "e71f112bfafe4505",
+        "bullets": [
+          "within_tolerance=None",
+          "broken_loser_count=None",
+          "flags=—"
+        ],
+        "source_keys": [
+          "paper_learning_review"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-29T19:32:51.906652+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "e71f112bfafe4505"
+      },
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -1517,7 +1517,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-09-29T19:02:42.000341+00:00",
+        "updated_at": "2026-09-29T19:29:14.634962+00:00",
         "fingerprint": "750849fd9e662f70",
         "bullets": [
           "Open deviations: 0"
