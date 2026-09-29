@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-29T09:19:17+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-29T09:50:11+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -566,6 +566,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L496 | **Discuss-resolve bridge write-back to daily hub status** | Discuss resolve bridge action that writes resolution notes back into focus status next_steps and history discuss_resolved outcome after Project pickup. | After Discuss inbox sees regular Project pickup |
 | L497 | **Daily hub as default main-tab landing with History** | Do not make Daily (+ History) the default main-tab landing until the hub proves useful as morning entry; keep under Automation (align N167). | If Daily becomes default landing (align N167) |
 | L498 | **Include routine ops_gate rows in History by default** | History defaults to work_class=dev only; include routine ops_gate rows in History by default only if operators explicitly want gate memory. | Only if operators explicitly want gate memory; default stays off |
+| L499 | **Pin-ticker should not be starved by unmeasured prepend** | ingest-loop --pin-ticker HM-B.ST with max-targets 1 only ran OIZ.IR because unmeasured names are auto-prepended. Named pins for zero-body clearance should guarantee a slot or bump target budget. | Next time a named euro zero-body pin is skipped while unmeasured leftovers consume the ticker budget |
 
 ---
 
