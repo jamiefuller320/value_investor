@@ -2517,9 +2517,7 @@ def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -
     tokens = _issuer_distinctive_tokens(company_name)
     # Prefer word-boundary hits so short legal scraps (e.g. ``publ``) cannot
     # match unrelated English words like ``public``.
-    return any(
-        re.search(rf"\b{re.escape(tok)}\b", text) for tok in tokens[:4]
-    )
+    return any(re.search(rf"\b{re.escape(tok)}\b", text) for tok in tokens[:4])
 
 
 def _companies_house_ocr_enabled() -> bool:
