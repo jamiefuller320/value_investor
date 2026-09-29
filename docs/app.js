@@ -608,6 +608,7 @@ const DASHBOARD_SIDECARS = [
   ["daily_focus", "data/daily_focus.json"],
   ["daily_focus_acks", "data/daily_focus_acks.json"],
   ["daily_discuss_inbox", "data/daily_discuss_inbox.json"],
+  ["daily_hub_history", "data/daily_hub_history.json"],
 ];
 
 let dashboardRefreshInFlight = null;
@@ -2224,6 +2225,9 @@ function renderDailyHubPulseStrip(data) {
           ? "badge-buy"
           : "badge-neutral";
   const warnN = recon ? Number((recon.summary || {}).warn || 0) : 0;
+  const hist = (data && data.daily_hub_history) || null;
+  const histSummary = (hist && hist.summary) || {};
+  const wallStale = isDailyHubStale(hub);
   return `<div class="card daily-hub-pulse">
     <h3>Daily hub</h3>
     <p class="small muted" style="margin-top:0">
@@ -2232,13 +2236,15 @@ function renderDailyHubPulseStrip(data) {
         warnN ? ` · ${warnN} drift` : ""
       }</span>
       ${
-        hub && hub.stale_for_local_date
+        wallStale
           ? ' · <span class="badge badge-watch">hub stale</span>'
           : ""
       }
     </p>
     ${focusHtml}
     <p class="small"><a href="#automation/daily">Open daily hub</a>
+      · History: ${esc(String(histSummary.dev_closed_7d ?? 0))} closes ·
+      ${esc(String(histSummary.candidate_count ?? 0))} candidates
       · policy green ≠ utility</p>
   </div>`;
 }
@@ -5816,7 +5822,7 @@ function automationIlluminationFor(sectionId, data) {
     return { new_info: false, attention: attn };
   }
   if (sectionId === "daily") {
-    const stale = !!(hub && hub.stale_for_local_date);
+    const stale = isDailyHubStale(hub);
     const openN = Number((hub && hub.open_task_count) || 0);
     const newInfo = !!hint.new_info || openN > 0;
     const attn = stale || !!hint.attention || openN > 0;
@@ -6071,10 +6077,151 @@ function renderDailyRecommendationBlock(rec, task) {
   </div>`;
 }
 
+function londonLocalDate(now = new Date()) {
+  // en-CA → YYYY-MM-DD in Europe/London.
+  try {
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Europe/London",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(now);
+  } catch {
+    return now.toISOString().slice(0, 10);
+  }
+}
+
+function isDailyHubStale(hub, now = new Date()) {
+  if (!hub) return false;
+  if (hub.stale_for_local_date) return true;
+  const artifactDate = String(hub.local_date || "").trim();
+  if (!artifactDate) return false;
+  return artifactDate !== londonLocalDate(now);
+}
+
+function renderDailyHubStatusChips(status) {
+  if (!status || typeof status !== "object") return "";
+  const ready = !!status.ready;
+  const state = String(status.state || "");
+  let chip = "";
+  if (ready || state === "ready") {
+    chip = `<span class="badge badge-buy daily-status-chip" title="Ready to progress">Ready</span>`;
+  } else if (state === "waiting" || (status.waiting_on && status.waiting_on.length)) {
+    chip = `<span class="badge badge-watch daily-status-chip" title="Waiting on blocker">Waiting</span>`;
+  } else if (state === "blocked") {
+    chip = `<span class="badge badge-ii-no daily-status-chip">Blocked</span>`;
+  } else if (state === "in_progress") {
+    chip = `<span class="badge badge-neutral daily-status-chip">In progress</span>`;
+  } else if (state) {
+    chip = `<span class="badge badge-neutral daily-status-chip">${esc(state.replace(/_/g, " "))}</span>`;
+  }
+  const next = Array.isArray(status.next_steps) && status.next_steps.length
+    ? `<div class="small daily-status-next"><span class="muted">Next:</span> ${esc(status.next_steps[0])}</div>`
+    : "";
+  const waitingBits = (Array.isArray(status.waiting_on) ? status.waiting_on : [])
+    .map((w) => (w && (w.detail || w.ref)) || "")
+    .filter(Boolean);
+  const waiting = waitingBits.length
+    ? `<div class="small muted daily-status-waiting">Waiting on: ${esc(waitingBits.join("; "))}</div>`
+    : "";
+  return `${chip}${next}${waiting}`;
+}
+
+function renderDailyHubHistorySession(data) {
+  const hist = (data && data.daily_hub_history) || null;
+  if (!hist) {
+    return `<div class="daily-hub-session daily-hub-history" id="daily-hub-history">
+      <h3>History</h3>
+      <p class="muted small">daily_hub_history.json not published yet — next early / morning ops-monitor rebuild will seed it.</p>
+    </div>`;
+  }
+  const sessions = Array.isArray(hist.sessions) ? hist.sessions : [];
+  const summary = hist.summary || {};
+  const candidates = Array.isArray(hist.automation_candidates)
+    ? hist.automation_candidates
+    : [];
+  const rows = [];
+  for (const session of sessions) {
+    const entries = Array.isArray(session.entries) ? session.entries : [];
+    for (const entry of entries) {
+      // Default filter: development only (hide routine ops_gate / surface / auto).
+      if (String(entry.work_class || "dev") !== "dev") continue;
+      const outcome = String(entry.outcome || "");
+      const outcomeLabel =
+        outcome === "accept_followed"
+          ? "Accept followed"
+          : outcome === "discuss_resolved"
+            ? "Discuss resolved"
+            : outcome === "dismissed"
+              ? "Dismissed"
+              : outcome || "closed";
+      const outcomeCls =
+        outcome === "accept_followed"
+          ? "badge-buy"
+          : outcome === "discuss_resolved"
+            ? "badge-watch"
+            : "badge-neutral";
+      const streak = Number((entry.automation_signal || {}).family_accept_streak || 0);
+      rows.push(`<tr>
+        <td class="small">${esc(entry.local_date || session.local_date || "")}</td>
+        <td>${esc(entry.title || entry.task_ref || "")}</td>
+        <td><span class="badge ${outcomeCls}">${esc(outcomeLabel)}</span>${
+          entry.had_discuss ? ' <span class="badge badge-neutral" title="Went through Discuss">had discuss</span>' : ""
+        }</td>
+        <td class="small muted">${esc(entry.task_family || "")}${
+          streak ? ` · streak ${esc(String(streak))}` : ""
+        }</td>
+      </tr>`);
+    }
+  }
+  const threshold = Number(summary.accept_streak_threshold || 5);
+  const windowDays = Number(summary.accept_streak_window_days || 30);
+  const candidateBar =
+    candidates.length > 0
+      ? `<div class="daily-hub-accept-streak" role="status">
+        <strong>Accept-streak hint</strong> (observe-only · never auto-flips checklist):
+        ${candidates
+          .map(
+            (c) =>
+              `<span class="badge badge-watch">${esc(c.task_family || "")}: ${esc(
+                String(c.accept_streak || 0)
+              )}/${esc(String(windowDays))}d Accept, 0 Discuss</span>`
+          )
+          .join(" ")}
+        — review for possible <code>automated: true</code> later (N169 not_now).
+      </div>`
+      : `<div class="daily-hub-accept-streak muted small" role="status">
+        Accept-streak hint: none yet (needs ≥${esc(String(threshold))} Accepts with 0 Discuss in ${esc(
+          String(windowDays)
+        )}d on a stable task family). Observe-only — does not auto-flip checklist.
+      </div>`;
+  return `<div class="daily-hub-session daily-hub-history" id="daily-hub-history">
+    <h3>History <span class="badge badge-neutral">dev completed</span></h3>
+    <p class="small muted" style="margin-top:0">
+      Operator memory of development closes ·
+      ${esc(String(summary.dev_closed_7d ?? 0))} closed / 7d ·
+      ${esc(String(summary.accept_followed_7d ?? 0))} Accept followed ·
+      ${esc(String(summary.discuss_resolved_7d ?? 0))} Discuss resolved ·
+      ${esc(String(summary.candidate_count ?? 0))} automation candidates
+      · generated ${esc(fmtDate(hist.generated_at))}
+    </p>
+    <div class="table-wrap"><table class="data-table daily-hub-history-table">
+      <thead><tr><th>Date</th><th>Title</th><th>Outcome</th><th>Family</th></tr></thead>
+      <tbody>${
+        rows.length
+          ? rows.join("")
+          : '<tr><td colspan="4" class="muted">No completed development tasks in retention window.</td></tr>'
+      }</tbody>
+    </table></div>
+    ${candidateBar}
+  </div>`;
+}
+
 function renderDailyHubTaskCard(task) {
   const closed = !!task.closed;
   const bucket = task.sort_bucket || task.source || "";
   const rec = task.recommendation || null;
+  const status = task.status || null;
   const tickPayload = JSON.stringify({
     task_ref: task.task_ref,
     focus_id: (task.close_payload && task.close_payload.focus_id) || task.task_ref,
@@ -6094,6 +6241,10 @@ function renderDailyHubTaskCard(task) {
     task.close_action === "human-task-ack"
       ? '<span class="badge badge-watch" title="Accept runs human-task-ack">human ack</span>'
       : "";
+  const workClass =
+    task.work_class
+      ? `<span class="badge badge-neutral" title="work_class">${esc(task.work_class)}</span>`
+      : "";
   return `<details class="human-task-card daily-hub-card sort-${esc(bucket)}" data-task-ref="${esc(
     task.task_ref || ""
   )}" ${closed ? "" : "open"}>
@@ -6102,12 +6253,19 @@ function renderDailyHubTaskCard(task) {
         <strong>${esc(task.title || task.task_ref || "Task")}</strong>
         <span class="badge badge-neutral">${esc(task.source || "")}</span>
         <span class="badge badge-neutral">P${esc(String(task.priority ?? ""))}</span>
+        ${workClass}
         ${humanHint}
+        ${renderDailyHubStatusChips(status)}
       </span>
       ${closeBtn}
     </summary>
     <div class="human-task-card-panel">
       <p class="small">${esc(task.summary || "")}</p>
+      ${
+        status
+          ? `<div class="daily-hub-status-detail">${renderDailyHubStatusChips(status)}</div>`
+          : ""
+      }
       ${
         task.href
           ? `<p class="small"><a href="${esc(task.href)}">${esc(task.href)}</a></p>`
@@ -6123,26 +6281,33 @@ function renderDailyHubPanel(data) {
   if (!hub) {
     return `<section class="automation-section automation-section-full daily-hub-section" id="automation-daily">
       <h2>Daily hub</h2>
-      <p class="muted">daily_focus.json not published yet — next ops-monitor morning rebuild will seed it.</p>
+      <p class="muted">daily_focus.json not published yet — next early ops-monitor (~02:30 UTC) or morning rebuild will seed it.</p>
     </section>`;
   }
-  const staleBanner = hub.stale_for_local_date
+  const wallStale = isDailyHubStale(hub);
+  const todayLondon = londonLocalDate();
+  const staleBanner = wallStale
     ? `<div class="observe-stale-banner" role="status">Daily hub stale for local date ${esc(
         hub.local_date || ""
-      )} — refresh target is before ${esc(hub.refresh_deadline_local || "04:00")} ${esc(
+      )} — wall clock is ${esc(todayLondon)} ${esc(
         hub.timezone || "Europe/London"
-      )}.</div>`
+      )}. Refresh target is before ${esc(hub.refresh_deadline_local || "04:00")} (early ops-monitor ~02:30 UTC).</div>`
     : "";
   const focusHtml = (hub.focus_lines || [])
-    .map(
-      (line) => `<li><strong>${esc(line.title || "")}</strong>
+    .map((line) => {
+      const task = (hub.tasks || []).find((t) => t.task_ref === line.id) || {};
+      const status = task.status || line.status || null;
+      return `<li><strong>${esc(line.title || "")}</strong>
         <span class="badge badge-neutral">${esc(line.source || "focus")}</span>
-        <div class="small muted">${esc(line.summary || "")}</div></li>`
-    )
+        ${renderDailyHubStatusChips(status)}
+        <div class="small muted">${esc(line.summary || "")}</div></li>`;
+    })
     .join("");
   const openTasks = (hub.tasks || []).filter((t) => !t.closed);
   const cards = openTasks.map(renderDailyHubTaskCard).join("");
   const counts = hub.counts || {};
+  const hist = (data && data.daily_hub_history) || null;
+  const histSummary = (hist && hist.summary) || {};
   return `<section class="automation-section automation-section-full daily-hub-section" id="automation-daily">
     <h2>Daily hub</h2>
     <p class="small muted" style="margin-top:0">
@@ -6156,17 +6321,25 @@ function renderDailyHubPanel(data) {
         new ${esc(String(counts.human_new_info || 0))} /
         unacked ${esc(String(counts.human_unacked || 0))}
       · generated ${esc(fmtDate(hub.generated_at))}
+      ${wallStale ? ' · <span class="badge badge-watch">stale vs wall clock</span>' : ""}
     </p>
     ${staleBanner}
     <div class="daily-hub-aim muted small">Aim: policy green ≠ utility — Suite A stress streaks and graduated badges are not the day’s north star.</div>
-    <h3>Today’s focus</h3>
-    ${
-      focusHtml
-        ? `<ul class="list-plain daily-focus-list">${focusHtml}</ul>`
-        : '<p class="muted">No focus lines — sync Project notes Today bullets into project_daily_seed.json.</p>'
-    }
-    <h3>Prioritized tasks</h3>
-    ${cards || '<p class="muted">No open daily tasks.</p>'}
+    <div class="daily-hub-session daily-hub-today" id="daily-hub-today">
+      <h3>Today</h3>
+      <h4 class="small" style="margin:0.35rem 0">Focus</h4>
+      ${
+        focusHtml
+          ? `<ul class="list-plain daily-focus-list">${focusHtml}</ul>`
+          : '<p class="muted">No focus lines — sync Project notes Today bullets into project_daily_seed.json.</p>'
+      }
+      <h4 class="small" style="margin:0.75rem 0 0.35rem">Prioritized tasks</h4>
+      ${cards || '<p class="muted">No open daily tasks.</p>'}
+    </div>
+    ${renderDailyHubHistorySession(data)}
+    <p class="small muted">History: ${esc(String(histSummary.dev_closed_7d ?? 0))} dev closes · ${esc(
+      String(histSummary.candidate_count ?? 0)
+    )} candidates (7d window in summary).</p>
   </section>`;
 }
 

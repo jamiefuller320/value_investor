@@ -223,6 +223,15 @@ def _job_specs() -> list[CronJobSpec]:
             wdays=[0],
         ),
         CronJobSpec(
+            key="ops-monitor-early",
+            title="FTSE ops monitor early hub (daily)",
+            workflow="ops-monitor.yml",
+            body={"ref": REF},
+            hours=[2],
+            minutes=[30],
+            wdays=[-1],
+        ),
+        CronJobSpec(
             key="ops-monitor",
             title="FTSE ops monitor (daily)",
             workflow="ops-monitor.yml",

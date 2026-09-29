@@ -255,6 +255,29 @@ def test_sidecars_include_daily_hub_artifacts() -> None:
     assert '["ui_state_reconciliation", "data/ui_state_reconciliation.json"]' in text
     assert '["daily_focus_acks", "data/daily_focus_acks.json"]' in text
     assert '["daily_discuss_inbox", "data/daily_discuss_inbox.json"]' in text
+    assert '["daily_hub_history", "data/daily_hub_history.json"]' in text
+
+
+def test_daily_hub_history_session_and_status_chips() -> None:
+    text = APP_JS.read_text(encoding="utf-8")
+    assert "function renderDailyHubHistorySession(" in text
+    assert "function renderDailyHubStatusChips(" in text
+    assert "function isDailyHubStale(" in text
+    assert "function londonLocalDate(" in text
+    assert "Accept followed" in text
+    assert "Discuss resolved" in text
+    assert "Accept-streak hint" in text
+    assert "Ready to progress" in text or ">Ready<" in text
+    assert "daily-hub-history" in text
+    assert "daily-hub-today" in text
+    panel = text.split("function renderDailyHubPanel(", 1)[1].split(
+        "\n/** Canonical Project-chat pickup phrase", 1
+    )[0]
+    assert "renderDailyHubHistorySession(data)" in panel
+    assert "isDailyHubStale(hub)" in panel
+    css = STYLES.read_text(encoding="utf-8")
+    assert ".daily-hub-history" in css
+    assert ".daily-hub-accept-streak" in css
 
 
 def test_overview_pulse_links_daily_hub() -> None:
@@ -265,6 +288,11 @@ def test_overview_pulse_links_daily_hub() -> None:
         "\nfunction renderLearningCompletenessCard", 1
     )[0]
     assert "renderDailyHubPulseStrip(data)" in overview
+    pulse = text.split("function renderDailyHubPulseStrip(", 1)[1].split(
+        "\nfunction renderOverview(", 1
+    )[0]
+    assert "isDailyHubStale(hub)" in pulse
+    assert "candidates" in pulse
 
 
 def test_css_automation_subnav_and_daily_rec() -> None:
@@ -281,8 +309,24 @@ def test_ops_runbook_documents_daily_hub() -> None:
     assert "#automation/daily" in ops
     assert "Europe/London" in ops
     assert "04:00" in ops
+    assert "02:30 UTC" in ops
+    assert "daily_hub_history.json" in ops
+    assert "daily_hub_local_date_matches_today" in ops
     assert "## UI state reconciliation" in ops
     assert "UI state reconciliation drift" in ops
     bridge = BRIDGE.read_text(encoding="utf-8")
     assert "daily-focus-ack" in bridge
     assert "daily-discuss" in bridge
+
+
+def test_ops_monitor_early_cron_and_gate() -> None:
+    wf = Path(".github/workflows/ops-monitor.yml").read_text(encoding="utf-8")
+    assert 'cron: "30 2 * * *"' in wf
+    assert 'cron: "45 7 * * *"' in wf
+    assert "hour >= 6" in wf
+    cron = Path("scripts/import_cron_jobs.py").read_text(encoding="utf-8")
+    assert 'key="ops-monitor-early"' in cron
+    assert "hours=[2]" in cron
+    assert "minutes=[30]" in cron
+    commit = Path("scripts/gha_commit_ops_monitor.sh").read_text(encoding="utf-8")
+    assert "docs/data/daily_hub_history.json" in commit

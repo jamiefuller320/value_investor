@@ -66,6 +66,16 @@ def _seed(data_dir: Path, *, dual: dict | None, board_age_hours: float = 1.0) ->
 def test_reconciliation_ok_when_artifacts_healthy(tmp_path: Path) -> None:
     _seed(tmp_path, dual={"suite_a": {}, "suite_b": {}})
     now = datetime(2026, 9, 28, 12, 0, tzinfo=UTC)
+    write_json(
+        tmp_path / "daily_focus.json",
+        {
+            "local_date": "2026-09-28",
+            "timezone": "Europe/London",
+            "generated_at": now.isoformat().replace("+00:00", "Z"),
+            "stale_for_local_date": False,
+        },
+        compact=False,
+    )
     payload = build_ui_state_reconciliation(data_dir=tmp_path, now=now)
     assert payload["overall"] == "ok"
     assert payload["surface_freshness"] == "fresh"
@@ -76,6 +86,28 @@ def test_reconciliation_ok_when_artifacts_healthy(tmp_path: Path) -> None:
     assert "learning_tracks_dual_suite_present" in ids
     assert "human_task_ack_fp_stable" in ids
     assert "lifecycle_board_age" in ids
+    assert "daily_hub_local_date_matches_today" in ids
+
+
+def test_daily_hub_local_date_warns_after_deadline(tmp_path: Path) -> None:
+    _seed(tmp_path, dual={"suite_a": {}})
+    # 05:00 UTC on 29 Sep ≈ 06:00 BST — past 04:00 London deadline.
+    now = datetime(2026, 9, 29, 5, 0, tzinfo=UTC)
+    write_json(
+        tmp_path / "daily_focus.json",
+        {
+            "local_date": "2026-09-28",
+            "timezone": "Europe/London",
+            "generated_at": "2026-09-28T22:32:36Z",
+            "stale_for_local_date": False,
+        },
+        compact=False,
+    )
+    payload = build_ui_state_reconciliation(data_dir=tmp_path, now=now)
+    check = next(c for c in payload["checks"] if c["id"] == "daily_hub_local_date_matches_today")
+    assert check["status"] == "warn"
+    assert check["drift_class"] == "stale_surface"
+    assert payload["overall"] == "warn"
 
 
 def test_dual_suite_publish_lag_warns(tmp_path: Path) -> None:

@@ -299,6 +299,77 @@ def _overall(checks: list[dict[str, Any]]) -> str:
     return "ok"
 
 
+def _check_daily_hub_local_date(
+    data_dir: Path,
+    *,
+    now: datetime,
+    timezone: str,
+    refresh_deadline_local: str = "04:00",
+) -> dict[str, Any]:
+    """After the London refresh deadline, hub local_date must match today."""
+    path = data_dir / "daily_focus.json"
+    payload = _safe_read(path)
+    today = local_date_for_timezone(now=now, timezone=timezone)
+    hours = hours_until_deadline(now=now, timezone=timezone, deadline_local=refresh_deadline_local)
+    past_deadline = hours is not None and hours <= 0
+    if payload is None:
+        return _check(
+            check_id="daily_hub_local_date_matches_today",
+            title="Daily hub local_date matches today",
+            status="warn" if past_deadline else "ok",
+            drift_class="missing_required" if past_deadline else None,
+            detail=(
+                "daily_focus.json missing after refresh deadline"
+                if past_deadline
+                else "daily_focus.json not published yet (before deadline)"
+            ),
+            ui_path="docs/data/daily_focus.json",
+            runbook="docs/ops/ops-monitor.md#daily-hub",
+        )
+    hub_date = str(payload.get("local_date") or "").strip()
+    generated = _parse_dt(payload.get("generated_at"))
+    if hub_date == today:
+        return _check(
+            check_id="daily_hub_local_date_matches_today",
+            title="Daily hub local_date matches today",
+            status="ok",
+            detail=f"hub local_date={hub_date} matches {timezone} today",
+            ui_path="docs/data/daily_focus.json",
+            ui_generated_at=payload.get("generated_at"),
+            runbook="docs/ops/ops-monitor.md#daily-hub",
+        )
+    if not past_deadline:
+        return _check(
+            check_id="daily_hub_local_date_matches_today",
+            title="Daily hub local_date matches today",
+            status="ok",
+            detail=(
+                f"hub local_date={hub_date or '—'} ≠ today {today}; "
+                f"before {refresh_deadline_local} {timezone} refresh deadline"
+            ),
+            ui_path="docs/data/daily_focus.json",
+            ui_generated_at=payload.get("generated_at"),
+            runbook="docs/ops/ops-monitor.md#daily-hub",
+        )
+    age = ""
+    if generated is not None:
+        age_h = (now - generated).total_seconds() / 3600.0
+        age = f"; artifact age {age_h:.1f}h"
+    return _check(
+        check_id="daily_hub_local_date_matches_today",
+        title="Daily hub local_date matches today",
+        status="warn",
+        drift_class="stale_surface",
+        detail=(
+            f"hub local_date={hub_date or '—'} ≠ today {today} after "
+            f"{refresh_deadline_local} {timezone}{age}"
+        ),
+        ui_path="docs/data/daily_focus.json",
+        ui_generated_at=payload.get("generated_at"),
+        runbook="docs/ops/ops-monitor.md#daily-hub",
+    )
+
+
 def build_ui_state_reconciliation(
     *,
     data_dir: Path | None = None,
@@ -319,6 +390,7 @@ def build_ui_state_reconciliation(
         _check_lifecycle_board_age(
             data_dir, now=now, stale_after_hours=float(lifecycle_stale_hours)
         ),
+        _check_daily_hub_local_date(data_dir, now=now, timezone=timezone),
     ]
     summary = {
         "ok": sum(1 for c in checks if c.get("status") == "ok"),

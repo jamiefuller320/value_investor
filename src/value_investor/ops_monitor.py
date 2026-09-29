@@ -2692,12 +2692,14 @@ def run_ops_monitor(
 
     try:
         from value_investor.daily_focus import write_daily_focus
+        from value_investor.daily_hub_history import write_daily_hub_history
         from value_investor.ui_state_reconciliation import write_ui_state_reconciliation
 
         # Cap B may already have written during collect; refresh once more after
         # board rebuild so daily hub sees freshest human_tasks_board counts.
         write_ui_state_reconciliation(data_dir=Path("docs/data"))
         write_daily_focus(data_dir=Path("docs/data"))
+        write_daily_hub_history(data_dir=Path("docs/data"))
     except Exception:  # noqa: BLE001 — dashboard slice must not fail ops monitor
         pass
 

@@ -34,6 +34,7 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     assert '["ui_state_reconciliation", "data/ui_state_reconciliation.json"]' in text
     assert '["daily_focus_acks", "data/daily_focus_acks.json"]' in text
     assert '["daily_discuss_inbox", "data/daily_discuss_inbox.json"]' in text
+    assert '["daily_hub_history", "data/daily_hub_history.json"]' in text
     assert '["lifecycle_board", "data/lifecycle_board.json"]' in text
     assert "async function applyDashboardSidecars(data)" in text
     assert "DASHBOARD_SIDECARS" in text

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-29T08:05:33+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-29T09:19:17+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -562,8 +562,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L489 | **Multi-operator timezone profiles for daily hub** | Freeze Europe/London as operator TZ for daily hub refresh-before-04:00. Multi-profile TZ support only if a second operator locale appears. | A second operator needs a non-London local deadline for the daily hub |
 | L490 | **Section-visit durable acks for illuminated subnav** | Durable per-section visit fingerprints so green illumination survives reload; extend human-task-ack / bridge pattern. Phase A2 after Automation subnav ships. | Automation section subnav and illumination v0 are on main and operators want green chips to persist across reloads |
 | L492 | **Daily hub Phase-1 follow-on: eng queue and ops finding collation (C2)** | Collate engineering queue head and ops findings warn/fail into Daily hub priority list beyond v0 reconcile ambers. Retargeted off L491 to avoid collision with #897 post-close sleeve autopsy park. | After Phase 1 Daily hub is live and operators want eng/ops rows in the morning board |
-| L493 | **Daily hub History session UI + `daily_hub_history.json` builder** | Read-only History session under Automation→Daily plus build_daily_hub_history writing committed docs/data/daily_hub_history.json so operators confirm Accept vs Discuss completions without chat. | After Phase A0 refresh-contract fix merges |
-| L494 | **Daily hub task status block (ready / next / waiting_on)** | Additive status block on daily_focus tasks (state/ready/next_steps/waiting_on) with Today-row chips; degrade gracefully when status is absent. | With or immediately after History A2 |
 | L495 | **Daily hub automation-candidate rollup + ops finding** | Phase B automation_candidates rollup plus warn-only ops-monitor finding when Accept streaks have zero Discuss; observe-only, never auto-flip checklist automated:true. | After ≥2 weeks of Accept/Discuss outcomes in history |
 | L496 | **Discuss-resolve bridge write-back to daily hub status** | Discuss resolve bridge action that writes resolution notes back into focus status next_steps and history discuss_resolved outcome after Project pickup. | After Discuss inbox sees regular Project pickup |
 | L497 | **Daily hub as default main-tab landing with History** | Do not make Daily (+ History) the default main-tab landing until the hub proves useful as morning entry; keep under Automation (align N167). | If Daily becomes default landing (align N167) |

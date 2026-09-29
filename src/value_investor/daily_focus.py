@@ -68,22 +68,232 @@ def _content_fingerprint(parts: dict[str, Any]) -> str:
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
 
 
+_NEXT_RE = re.compile(r"^\s*(?:-\s*)?(?:\*\*)?Next:\s*(?:\*\*)?\s*(.+?)\s*$", re.IGNORECASE)
+_WAITING_RE = re.compile(
+    r"^\s*(?:-\s*)?(?:\*\*)?Waiting on:\s*(?:\*\*)?\s*(.+?)\s*$",
+    re.IGNORECASE,
+)
+_TODAY_RE = re.compile(
+    r"^\s*(?:-\s*(?:\[[ xX]\]\s*)?)?(?:\*\*)?Today\s*[—–-]\s*(?:\*\*)?\s*(.+?)\s*$",
+    re.IGNORECASE,
+)
+
+
+def parse_status_conventions(
+    *,
+    title: str = "",
+    summary: str = "",
+    notes_block: str = "",
+    seed_row: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Parse ``Next:`` / ``Waiting on:`` conventions into a status block.
+
+    Seed structured fields win over prose. Empty input yields a soft proposed
+    status so Phase 1 clients ignore unknowns safely.
+    """
+    seed_row = seed_row or {}
+    next_steps: list[str] = []
+    waiting_on: list[dict[str, Any]] = []
+
+    seed_next = seed_row.get("next_steps")
+    if isinstance(seed_next, list):
+        next_steps.extend(str(x).strip() for x in seed_next if str(x).strip())
+    elif isinstance(seed_next, str) and seed_next.strip():
+        next_steps.append(seed_next.strip())
+
+    seed_waiting = seed_row.get("waiting_on")
+    if isinstance(seed_waiting, list):
+        for item in seed_waiting:
+            if isinstance(item, dict):
+                waiting_on.append(
+                    {
+                        "kind": str(item.get("kind") or "external"),
+                        "ref": item.get("ref"),
+                        "detail": str(item.get("detail") or item.get("text") or "").strip(),
+                    }
+                )
+            elif str(item).strip():
+                waiting_on.append({"kind": "external", "ref": None, "detail": str(item).strip()})
+    elif isinstance(seed_waiting, str) and seed_waiting.strip():
+        waiting_on.append({"kind": "external", "ref": None, "detail": seed_waiting.strip()})
+
+    prose_bits = [notes_block or "", summary or "", title or ""]
+    for block in prose_bits:
+        for raw in str(block).splitlines():
+            line = raw.strip()
+            m_next = _NEXT_RE.match(line)
+            if m_next:
+                text = m_next.group(1).strip()
+                if text and text not in next_steps:
+                    next_steps.append(text)
+                continue
+            m_wait = _WAITING_RE.match(line)
+            if m_wait:
+                text = m_wait.group(1).strip()
+                if text and not any(w.get("detail") == text for w in waiting_on):
+                    waiting_on.append({"kind": "external", "ref": None, "detail": text})
+
+    # Also split inline "Next:" / "Waiting on:" inside a single summary line.
+    for blob in (summary, title):
+        text = str(blob or "")
+        if "Next:" in text and not next_steps:
+            after = text.split("Next:", 1)[1]
+            cut = re.split(r"\s+Waiting on:", after, maxsplit=1, flags=re.IGNORECASE)[0]
+            bit = cut.strip(" .;")
+            if bit:
+                next_steps.append(bit)
+        if re.search(r"Waiting on:", text, re.IGNORECASE) and not waiting_on:
+            after = re.split(r"Waiting on:", text, maxsplit=1, flags=re.IGNORECASE)[1]
+            cut = re.split(r"\s+Next:", after, maxsplit=1, flags=re.IGNORECASE)[0]
+            bit = cut.strip(" .;")
+            if bit:
+                waiting_on.append({"kind": "external", "ref": None, "detail": bit})
+
+    seed_status = seed_row.get("status") if isinstance(seed_row.get("status"), dict) else {}
+    state = str(seed_status.get("state") or "").strip()
+    if not state:
+        if waiting_on:
+            state = "waiting"
+        elif next_steps:
+            state = "in_progress"
+        else:
+            state = "proposed"
+
+    ready = bool(seed_status.get("ready")) if "ready" in seed_status else False
+    # ready derivation applied by caller once recommendation presence is known.
+    label = str(seed_status.get("label") or "").strip()
+    if not label:
+        if state == "waiting" and waiting_on:
+            label = f"Waiting on {waiting_on[0].get('detail') or 'blocker'}"
+        elif state == "ready":
+            label = "Ready to progress"
+        elif next_steps:
+            label = next_steps[0]
+        else:
+            label = state.replace("_", " ").title()
+
+    return {
+        "state": state,
+        "label": label,
+        "next_steps": next_steps[:3],
+        "waiting_on": waiting_on[:5],
+        "ready": ready,
+        "ready_reason": seed_status.get("ready_reason"),
+        "blocked_reason": seed_status.get("blocked_reason")
+        or (waiting_on[0]["detail"] if waiting_on else None),
+        "updated_at": seed_status.get("updated_at"),
+        "updated_by": seed_status.get("updated_by") or "morning_builder",
+    }
+
+
+def derive_ready_status(
+    status: dict[str, Any],
+    *,
+    recommendation_present: bool,
+    closed: bool,
+) -> dict[str, Any]:
+    """Apply Phase A ready derivation onto a status block."""
+    out = dict(status)
+    waiting = out.get("waiting_on") or []
+    state = str(out.get("state") or "proposed")
+    ready = (
+        bool(recommendation_present)
+        and not waiting
+        and state in {"proposed", "ready"}
+        and not closed
+    )
+    out["ready"] = ready
+    if ready:
+        out["state"] = "ready"
+        out["label"] = out.get("label") or "Ready to progress"
+        out["ready_reason"] = out.get("ready_reason") or "proposal present · no blockers"
+        out["blocked_reason"] = None
+    elif waiting and state in {"proposed", "ready", "in_progress"}:
+        out["state"] = "waiting"
+    return out
+
+
+def work_class_for_source(source: str, *, tags: list[str] | None = None) -> str:
+    tags = [str(t) for t in (tags or [])]
+    for tag in tags:
+        if tag.startswith("work_class:"):
+            return tag.split(":", 1)[1] or "dev"
+    if "ops_gate" in tags:
+        return "ops_gate"
+    source = str(source or "")
+    if source in {"daily_focus", "project_notes", "project_notes_sync"}:
+        return "dev"
+    if source == "human_tasks":
+        return "ops_gate"
+    if source in {"progress_actionable", "ui_reconcile"}:
+        return "surface"
+    return "routine_auto"
+
+
+def task_family_for_row(row: dict[str, Any], *, fallback: str) -> str:
+    explicit = str(row.get("task_family") or "").strip()
+    if explicit:
+        return explicit
+    tags = [str(t) for t in (row.get("tags") or []) if str(t).strip()]
+    for tag in tags:
+        if tag.startswith("family:"):
+            return tag.split(":", 1)[1]
+    for tag in tags:
+        if tag not in {"project_notes", "work_class:dev", "work_class:ops_gate"}:
+            return tag
+    return fallback
+
+
+def compute_stale_for_local_date(
+    artifact_local_date: str,
+    *,
+    now: datetime | None = None,
+    timezone: str = DEFAULT_TIMEZONE,
+) -> bool:
+    """True when wall-clock operator date differs from the hub artifact date."""
+    now = now or _utcnow()
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=UTC)
+    today = local_date_for_timezone(now=now, timezone=timezone)
+    return str(artifact_local_date or "").strip() != today
+
+
 def parse_today_bullets_from_notes(notes_text: str) -> list[dict[str, Any]]:
-    """Extract ``Today — …`` / ``- [ ] Today — …`` bullets from Project notes."""
+    """Extract ``Today — …`` bullets plus following ``Next:`` / ``Waiting on:`` lines."""
     lines: list[dict[str, Any]] = []
     if not notes_text:
         return lines
-    pattern = re.compile(
-        r"^\s*(?:-\s*(?:\[[ xX]\]\s*)?)?(?:\*\*)?Today\s*[—–-]\s*(?:\*\*)?\s*(.+?)\s*$",
-        re.IGNORECASE,
-    )
-    for raw in notes_text.splitlines():
-        m = pattern.match(raw.strip())
+    raw_lines = notes_text.splitlines()
+    i = 0
+    while i < len(raw_lines):
+        m = _TODAY_RE.match(raw_lines[i].strip())
         if not m:
+            i += 1
             continue
         title = m.group(1).strip().rstrip(".")
+        i += 1
+        block_lines: list[str] = []
+        while i < len(raw_lines):
+            nxt = raw_lines[i]
+            if _TODAY_RE.match(nxt.strip()):
+                break
+            if _NEXT_RE.match(nxt.strip()) or _WAITING_RE.match(nxt.strip()):
+                block_lines.append(nxt)
+                i += 1
+                continue
+            # Stop at next top-level bullet that is not Next/Waiting.
+            if re.match(r"^\s*-\s+", nxt) and not (
+                _NEXT_RE.match(nxt.strip()) or _WAITING_RE.match(nxt.strip())
+            ):
+                break
+            if nxt.strip() == "":
+                i += 1
+                break
+            i += 1
         if not title:
             continue
+        notes_block = "\n".join(block_lines)
+        status = parse_status_conventions(title=title, summary=title, notes_block=notes_block)
         lines.append(
             {
                 "id": f"focus-{_stable_id('notes', title)}",
@@ -92,6 +302,9 @@ def parse_today_bullets_from_notes(notes_text: str) -> list[dict[str, Any]]:
                 "source": "project_notes",
                 "href": None,
                 "tags": ["project_notes"],
+                "next_steps": status.get("next_steps") or [],
+                "waiting_on": status.get("waiting_on") or [],
+                "status": status,
             }
         )
     return lines
@@ -101,9 +314,13 @@ def load_focus_seed(
     *,
     seed_path: Path | None = None,
     notes_text: str | None = None,
+    data_dir: Path | None = None,
 ) -> list[dict[str, Any]]:
     """Prefer seed JSON focus_lines; fall back to notes Today bullets."""
-    seed_path = Path(seed_path or DEFAULT_SEED_PATH)
+    if seed_path is None:
+        seed_path = Path(data_dir or DEFAULT_DATA_DIR) / "project_daily_seed.json"
+    else:
+        seed_path = Path(seed_path)
     seed = _safe_read(seed_path)
     if seed and isinstance(seed.get("focus_lines"), list) and seed["focus_lines"]:
         out: list[dict[str, Any]] = []
@@ -114,15 +331,31 @@ def load_focus_seed(
             if not title:
                 continue
             fid = str(row.get("id") or f"focus-{i}").strip()
+            summary = str(row.get("summary") or title).strip()
+            status = parse_status_conventions(
+                title=title,
+                summary=summary,
+                notes_block=str(row.get("notes_block") or ""),
+                seed_row=row,
+            )
             out.append(
                 {
                     "id": fid,
                     "priority": int(row.get("priority") or i),
                     "title": title,
-                    "summary": str(row.get("summary") or title).strip(),
+                    "summary": summary,
                     "source": str(row.get("source") or "project_notes_sync"),
                     "href": row.get("href"),
                     "tags": list(row.get("tags") or ["project_notes"]),
+                    "task_family": task_family_for_row(row, fallback=fid),
+                    "work_class": str(row.get("work_class") or "").strip()
+                    or work_class_for_source(
+                        str(row.get("source") or "project_notes_sync"),
+                        tags=list(row.get("tags") or []),
+                    ),
+                    "next_steps": status.get("next_steps") or [],
+                    "waiting_on": status.get("waiting_on") or [],
+                    "status": status,
                 }
             )
         if out:
@@ -348,14 +581,15 @@ def build_daily_focus(
     except ValueError:
         past_deadline = False
 
-    focus_lines = load_focus_seed(seed_path=seed_path, notes_text=notes_text)
+    focus_lines = load_focus_seed(seed_path=seed_path, notes_text=notes_text, data_dir=data_dir)
     # Cap to 3 pinned focus lines.
     focus_lines = focus_lines[:3]
 
     board = _safe_read(data_dir / "human_tasks_board.json") or {}
     progress = _safe_read(data_dir / "progress_report.json") or {}
     reconcile = _safe_read(data_dir / "ui_state_reconciliation.json") or {}
-    closed = _closed_ids(acks, local_date=local_date)
+    closed_ids = _closed_ids(acks, local_date=local_date)
+    generated_at = now.astimezone(UTC).isoformat().replace("+00:00", "Z")
 
     tasks: list[dict[str, Any]] = []
     recommendations: list[dict[str, Any]] = []
@@ -365,10 +599,34 @@ def build_daily_focus(
         task_ref = str(line.get("id") or "")
         rec = _recommendation_for_focus(line)
         recommendations.append(rec)
+        is_closed = task_ref in closed_ids
+        status = derive_ready_status(
+            dict(
+                line.get("status")
+                or parse_status_conventions(
+                    title=str(line.get("title") or ""),
+                    summary=str(line.get("summary") or ""),
+                    seed_row=line,
+                )
+            ),
+            recommendation_present=True,
+            closed=is_closed,
+        )
+        status["updated_at"] = status.get("updated_at") or generated_at
+        work_class = str(
+            line.get("work_class")
+            or work_class_for_source(
+                str(line.get("source") or "daily_focus"),
+                tags=list(line.get("tags") or []),
+            )
+        )
+        family = str(line.get("task_family") or task_family_for_row(line, fallback=task_ref))
         tasks.append(
             {
                 "task_ref": task_ref,
                 "source": "daily_focus",
+                "work_class": work_class,
+                "task_family": family,
                 "priority": int(line.get("priority") or 1),
                 "title": line.get("title"),
                 "summary": line.get("summary"),
@@ -378,7 +636,8 @@ def build_daily_focus(
                 "close_payload": {"focus_id": task_ref, "decision": "ack"},
                 "href": line.get("href"),
                 "recommendation_id": rec["id"],
-                "closed": task_ref in closed,
+                "status": status,
+                "closed": is_closed,
             }
         )
 
@@ -391,14 +650,26 @@ def build_daily_focus(
                 continue
             tid = str(task.get("id") or "")
             task_ref = f"human:{tid}"
-            if task_ref in closed or tid in closed:
+            if task_ref in closed_ids or tid in closed_ids:
                 continue
             rec = _recommendation_for_human_task(task, priority=priority)
             recommendations.append(rec)
+            status = derive_ready_status(
+                parse_status_conventions(
+                    title=str(task.get("title") or ""),
+                    summary=str(task.get("summary") or ""),
+                    seed_row=task,
+                ),
+                recommendation_present=True,
+                closed=False,
+            )
+            status["updated_at"] = status.get("updated_at") or generated_at
             tasks.append(
                 {
                     "task_ref": task_ref,
                     "source": "human_tasks",
+                    "work_class": "ops_gate",
+                    "task_family": tid or task_ref,
                     "priority": priority,
                     "title": task.get("title"),
                     "summary": task.get("summary"),
@@ -413,6 +684,7 @@ def build_daily_focus(
                     },
                     "href": "#automation/human",
                     "recommendation_id": rec["id"],
+                    "status": status,
                     "human_task": {
                         "id": tid,
                         "sort_bucket": bucket,
@@ -433,14 +705,26 @@ def build_daily_focus(
     for item in defer_now[:5]:
         iid = str(item.get("id") or _stable_id("progress", str(item.get("title") or "")))
         task_ref = f"progress:{iid}"
-        if task_ref in closed:
+        if task_ref in closed_ids:
             continue
         rec = _recommendation_for_progress_item(item, priority=priority)
         recommendations.append(rec)
+        status = derive_ready_status(
+            parse_status_conventions(
+                title=str(item.get("title") or ""),
+                summary=str(item.get("summary") or item.get("detail") or ""),
+                seed_row=item,
+            ),
+            recommendation_present=True,
+            closed=False,
+        )
+        status["updated_at"] = status.get("updated_at") or generated_at
         tasks.append(
             {
                 "task_ref": task_ref,
                 "source": "progress_actionable",
+                "work_class": "surface",
+                "task_family": iid,
                 "priority": priority,
                 "title": item.get("title") or iid,
                 "summary": item.get("summary") or item.get("detail") or "",
@@ -450,6 +734,7 @@ def build_daily_focus(
                 "close_payload": {"href": "#overview"},
                 "href": "#overview",
                 "recommendation_id": rec["id"],
+                "status": status,
                 "closed": False,
             }
         )
@@ -462,14 +747,37 @@ def build_daily_focus(
                 continue
             cid = str(check.get("id") or "")
             task_ref = f"reconcile:{cid}"
-            if task_ref in closed:
+            if task_ref in closed_ids:
                 continue
             rec = _recommendation_for_reconcile(check, priority=priority)
             recommendations.append(rec)
+            status = derive_ready_status(
+                {
+                    "state": "blocked",
+                    "label": "Reconcile amber",
+                    "next_steps": ["Open Automation → Ops"],
+                    "waiting_on": [
+                        {
+                            "kind": "artifact",
+                            "ref": cid,
+                            "detail": str(check.get("detail") or cid),
+                        }
+                    ],
+                    "ready": False,
+                    "ready_reason": None,
+                    "blocked_reason": str(check.get("detail") or "reconcile warn"),
+                    "updated_at": generated_at,
+                    "updated_by": "morning_builder",
+                },
+                recommendation_present=True,
+                closed=False,
+            )
             tasks.append(
                 {
                     "task_ref": task_ref,
                     "source": "ui_reconcile",
+                    "work_class": "surface",
+                    "task_family": cid,
                     "priority": priority,
                     "title": check.get("title") or cid,
                     "summary": check.get("detail") or "",
@@ -479,15 +787,15 @@ def build_daily_focus(
                     "close_payload": {"href": "#automation/ops"},
                     "href": "#automation/ops",
                     "recommendation_id": rec["id"],
+                    "status": status,
                     "closed": False,
                 }
             )
             priority += 1
 
-    generated_at = now.astimezone(UTC).isoformat().replace("+00:00", "Z")
-    gen_local_date = local_date_for_timezone(now=now, timezone=timezone)
-    # Stale when generated for a prior local date, or never refreshed past deadline today.
-    stale = gen_local_date != local_date
+    # Stale when wall-clock operator date ≠ artifact local_date (always false at
+    # a correct morning write; clients recompute against wall clock too).
+    stale = compute_stale_for_local_date(local_date, now=now, timezone=timezone)
     if past_deadline and not focus_lines and not tasks:
         stale = True
 
@@ -521,7 +829,7 @@ def build_daily_focus(
         "tasks": tasks,
         "open_task_count": len(open_tasks),
         "recommendations": recommendations,
-        "closed_today": sorted(closed),
+        "closed_today": sorted(closed_ids),
         "counts": {
             "focus": sum(1 for t in open_tasks if t.get("source") == "daily_focus"),
             "human_new_info": sum(1 for t in open_tasks if t.get("sort_bucket") == "new_info"),
