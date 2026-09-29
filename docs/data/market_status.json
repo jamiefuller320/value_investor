@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-29T21:08:24.448670+00:00",
+  "generated_at": "2026-09-29T21:30:32.247199+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -16,7 +16,8 @@
     "aim",
     "ibex35",
     "ftse_mib",
-    "aex"
+    "aex",
+    "bel20"
   ],
   "summary": {
     "market_count": 23,
@@ -29,18 +30,19 @@
       "live": 1,
       "focus": 1,
       "sprint": 2,
-      "admitted": 11,
-      "graduated": 8
+      "admitted": 12,
+      "graduated": 7
     },
     "sprint_count": 3,
     "maintenance_count": 19,
     "live_count": 1,
-    "admitted_count": 13,
+    "admitted_count": 14,
     "should_run_library_maintenance": true,
     "maintenance_markets": [
       "aex",
       "aim",
       "asx200",
+      "bel20",
       "cac40",
       "dax",
       "euro_stoxx50",
@@ -53,7 +55,7 @@
     ],
     "spare_sprint": {
       "1": "dax",
-      "2": "bel20"
+      "2": "hang_seng"
     },
     "equal_support_generated_at": "2026-09-29T20:01:42.464712+00:00"
   },
@@ -1011,10 +1013,10 @@
       }
     },
     {
-      "market_id": "bel20",
-      "label": "BEL 20",
-      "exchange": "Euronext Brussels",
-      "currency": "EUR",
+      "market_id": "hang_seng",
+      "label": "Hang Seng",
+      "exchange": "HKEX",
+      "currency": "HKD",
       "role": "sprint",
       "is_live": false,
       "is_focus": false,
@@ -1024,33 +1026,34 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=3, indexed_without_body=1)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=15, zero_body=10, thin=0, indexed_without_body=15)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
-      "queue_rank": 13,
+      "queue_rank": 14,
       "shared_maintenance": false,
       "health": "warn",
       "coverage_pct": 1.0,
       "honest_coverage_pct": 1.0,
-      "ticker_count": 20,
+      "ticker_count": 85,
       "stale": 0,
-      "fresh": 20,
+      "fresh": 85,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-29T07:10:34.914439+00:00",
-      "last_constituents_refresh": "2026-09-29T07:10:21.846113+00:00",
-      "last_screen_at": "2026-09-29T16:47:54.280181+00:00",
+      "last_metrics_refresh": "2026-09-29T07:11:30.736215+00:00",
+      "last_constituents_refresh": "2026-09-29T07:10:35.069057+00:00",
+      "last_screen_at": "2026-09-29T21:28:27.000060+00:00",
       "signal_counts": {
-        "hold": 11,
-        "buy": 6,
-        "avoid": 3
+        "hold": 49,
+        "buy": 16,
+        "avoid": 11,
+        "strong_buy": 9
       },
-      "shortlist_count": 6,
-      "strong_buy": 0,
-      "buy": 6,
+      "shortlist_count": 25,
+      "strong_buy": 9,
+      "buy": 16,
       "learning_phase": 0,
       "learning_phase_label": "Ingest only",
       "phase_blockers": [
-        "no benchmark configured for bel20"
+        "no benchmark configured for hang_seng"
       ],
       "expected_epoch0_blockers": [],
       "learning": {
@@ -1062,7 +1065,7 @@
         "weekly_paper_enabled": false,
         "weekday_paper_enabled": false,
         "blockers": [
-          "no benchmark configured for bel20"
+          "no benchmark configured for hang_seng"
         ],
         "phase1": {
           "screen_archives": 0,
@@ -1074,26 +1077,40 @@
         }
       },
       "filing_health": {
-        "buy_tier_count": 6,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 3,
-        "indexed_without_body": 1,
-        "bodies_median": 2.5,
+        "buy_tier_count": 25,
+        "unmeasured_buy_tier": 15,
+        "zero_body_buy_tier": 10,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 15,
+        "bodies_median": null,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
         "parked_count": 0,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "ACKB.BR",
-          "APAM.AS",
-          "SOLB.BR"
+        "zero_body_tickers": [
+          "1378.HK",
+          "2331.HK",
+          "0883.HK",
+          "9961.HK",
+          "2618.HK",
+          "2382.HK",
+          "0857.HK",
+          "0868.HK"
         ],
-        "unmeasured_tickers": [],
+        "thin_body_tickers": [],
+        "unmeasured_tickers": [
+          "1099.HK",
+          "0762.HK",
+          "1093.HK",
+          "2318.HK",
+          "0288.HK",
+          "6862.HK",
+          "0941.HK",
+          "1024.HK"
+        ],
         "parked_tickers": []
       },
-      "filing_gaps": 0,
+      "filing_gaps": 25,
       "paper_instrument": null,
       "ai_judgment": null,
       "knob_apply": null,
@@ -1102,63 +1119,66 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 3,
-        "targets": 8,
-        "improved": 1,
-        "improved_tickers": [
-          "AZE.BR"
-        ],
-        "last_run_at": "2026-09-29T19:28:32.028189+00:00",
+        "run_count": 0,
+        "targets": 0,
+        "improved": 0,
+        "improved_tickers": [],
+        "last_run_at": null,
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
-          "zero_body": 1,
-          "thin": 3,
-          "indexed_without_body": 2,
-          "filing_gaps": 1
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 15,
+          "filing_gaps": 0
         },
         "gaps_after": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 3,
-          "indexed_without_body": 1,
+          "thin": 0,
+          "indexed_without_body": 15,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
-          "zero_body": -1,
+          "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": -1,
-          "filing_gaps": -1
+          "indexed_without_body": 0,
+          "filing_gaps": 0
         },
         "remaining": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 3,
-          "indexed_without_body": 1,
-          "filing_gaps": 0
+          "unmeasured": 15,
+          "zero_body": 10,
+          "thin": 0,
+          "indexed_without_body": 15,
+          "filing_gaps": 25
         },
         "admission_ready": false,
         "admission_gate": "sprint_ingest_complete",
         "admission_warnings": [
+          {
+            "id": "awaiting_first_ingest",
+            "severity": "warn",
+            "summary": "Entered sprint on 2026-09-29; waiting on the first deepen slot"
+          },
           {
             "id": "no_observe_benchmark",
             "severity": "warn",
             "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
           }
         ],
-        "sprint_entered_at": "2026-09-29T16:47:26.168805+00:00"
+        "sprint_entered_at": "2026-09-29T21:27:28.733100+00:00"
       },
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
         "reason": "No paper book or observe-sim marks",
-        "market_id": "bel20",
+        "market_id": "hang_seng",
         "source": null,
         "paper_instrument": "buy_tier_level",
-        "currency": "EUR",
-        "benchmark_ticker": "^STOXX50E",
+        "currency": "HKD",
+        "benchmark_ticker": "^HSI",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -1173,7 +1193,7 @@
           },
           {
             "id": "market",
-            "label": "^STOXX50E equivalent",
+            "label": "^HSI equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -1591,6 +1611,110 @@
           "positions": 15,
           "excess_pct": -0.015619
         }
+      }
+    },
+    {
+      "market_id": "bel20",
+      "label": "BEL 20",
+      "exchange": "Euronext Brussels",
+      "currency": "EUR",
+      "role": "admitted",
+      "is_live": false,
+      "is_focus": false,
+      "is_graduated": true,
+      "is_queue": true,
+      "is_admitted": true,
+      "is_ftse_equivalent": false,
+      "ingest": "maintenance",
+      "ingest_stream": null,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
+      "ingest_exhausted": true,
+      "queue_rank": 13,
+      "shared_maintenance": true,
+      "health": "warn",
+      "coverage_pct": 1.0,
+      "honest_coverage_pct": 1.0,
+      "ticker_count": 20,
+      "stale": 0,
+      "fresh": 20,
+      "failed_fetch_count": 0,
+      "last_metrics_refresh": "2026-09-29T07:10:34.914439+00:00",
+      "last_constituents_refresh": "2026-09-29T07:10:21.846113+00:00",
+      "last_screen_at": "2026-09-29T16:47:54.280181+00:00",
+      "signal_counts": {
+        "hold": 11,
+        "buy": 6,
+        "avoid": 3
+      },
+      "shortlist_count": 6,
+      "strong_buy": 0,
+      "buy": 6,
+      "learning_phase": 0,
+      "learning_phase_label": "Not started",
+      "phase_blockers": [
+        "no benchmark configured for bel20"
+      ],
+      "expected_epoch0_blockers": [],
+      "learning": {
+        "current_phase": 0,
+        "next_phase": 1,
+        "phase1_ready": false,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": true,
+        "blockers": [
+          "no benchmark configured for bel20"
+        ],
+        "phase1": {
+          "screen_archives": 12,
+          "observe_snapshot_count": 0
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 4
+        }
+      },
+      "filing_health": null,
+      "filing_gaps": null,
+      "paper_instrument": null,
+      "ai_judgment": false,
+      "knob_apply": false,
+      "epoch0": null,
+      "equal_support": null,
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "bel20",
+        "source": null,
+        "paper_instrument": "buy_tier_level",
+        "currency": "EUR",
+        "benchmark_ticker": "^STOXX50E",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^STOXX50E equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
       }
     },
     {
@@ -3882,90 +4006,6 @@
           {
             "id": "market",
             "label": "^STOXX50E equivalent",
-            "kind": "market",
-            "color": "#64748b"
-          }
-        ],
-        "branches": [],
-        "last": null
-      }
-    },
-    {
-      "market_id": "hang_seng",
-      "label": "Hang Seng",
-      "exchange": "HKEX",
-      "currency": "HKD",
-      "role": "graduated",
-      "is_live": false,
-      "is_focus": false,
-      "is_graduated": true,
-      "is_queue": false,
-      "is_admitted": false,
-      "is_ftse_equivalent": false,
-      "ingest": "maintenance",
-      "ingest_stream": null,
-      "ingest_reason": null,
-      "ingest_parity_met": null,
-      "ingest_exhausted": false,
-      "queue_rank": null,
-      "shared_maintenance": false,
-      "health": "ok",
-      "coverage_pct": 1.0,
-      "honest_coverage_pct": 1.0,
-      "ticker_count": 85,
-      "stale": 0,
-      "fresh": 85,
-      "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-29T07:11:30.736215+00:00",
-      "last_constituents_refresh": "2026-09-29T07:10:35.069057+00:00",
-      "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
-      "signal_counts": {
-        "hold": 52,
-        "buy": 16,
-        "avoid": 10,
-        "strong_buy": 7
-      },
-      "shortlist_count": 23,
-      "strong_buy": 7,
-      "buy": 16,
-      "learning_phase": null,
-      "learning_phase_label": "Not started",
-      "phase_blockers": [],
-      "expected_epoch0_blockers": [],
-      "learning": null,
-      "filing_health": null,
-      "filing_gaps": null,
-      "paper_instrument": null,
-      "ai_judgment": null,
-      "knob_apply": null,
-      "epoch0": null,
-      "equal_support": null,
-      "near_miss": null,
-      "sprint_progress": null,
-      "held_vs_market": {
-        "schema_version": 1,
-        "status": "empty",
-        "reason": "No paper book or observe-sim marks",
-        "market_id": "hang_seng",
-        "source": null,
-        "paper_instrument": "buy_tier_level",
-        "currency": "HKD",
-        "benchmark_ticker": "^HSI",
-        "held_path": null,
-        "market_path": null,
-        "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
-        "points": [],
-        "series": [
-          {
-            "id": "held",
-            "label": "Held book",
-            "kind": "held",
-            "color": "#2b6cb0"
-          },
-          {
-            "id": "market",
-            "label": "^HSI equivalent",
             "kind": "market",
             "color": "#64748b"
           }
