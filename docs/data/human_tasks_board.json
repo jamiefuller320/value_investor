@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T19:23:17.470587+00:00",
+  "generated_at": "2026-09-29T19:24:14.477589+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,8 +8,8 @@
   "checklist_updated_at": "2026-09-28",
   "counts": {
     "new_info": 2,
-    "unacked": 15,
-    "acked": 16,
+    "unacked": 14,
+    "acked": 17,
     "automated": 19,
     "human": 33
   },
@@ -525,46 +525,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "sunday-analysis-tasks",
-      "title": "Triage analysis_tasks experiments",
-      "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim — do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/analysis-review.md",
-      "doc_anchor": "manual-promotion-to-engineering",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/analysis-review.md#manual-promotion-to-engineering",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Triage queue · 6 open",
-        "updated_at": null,
-        "fingerprint": "eaa31c994c4a4a3a",
-        "bullets": [
-          "Open/proposed: 6 / 6",
-          "ana-20260728-04: Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
-          "ana-20260921-01: Exclusion-universe step u3 (conviction ≥ 0.25, cumulative_exclusion_alpha +0.00261) replay on ai_judgment candidate pool vs baseline — expected learning value: quantify whether priors improve filtered",
-          "ana-20260921-02: Offline family-weight stress test for quality/dividend failures on avoid cohort (pattern AAL.L / AML.L opinion-flip triggers) — expected learning value: test whether tightening quality+dividend gates",
-          "ana-20260921-03: Conviction/timing delay model for transition_key hold→buy and realization_lag (1w hit 0.406 vs within_4w_rate 0.9448) — expected learning value: separate assessment lag from signal direction for overl",
-          "ana-20260921-04: Hold-vs-swap probability strand using exit_timing_near_miss (hold_closed 202, swap_closed 209, ready_for_probability_analysis true) — expected learning value: estimate whether early swap beats hold re"
-        ],
-        "source_keys": [
-          "analysis_tasks"
-        ]
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "sunday-exclusion-shadow-spawn",
       "title": "Exclusion ladder shadow spawn gate",
       "summary": "If exclusion_ladder_replay readiness.ready_for_shadow_spawn is true, run ftse-exclusion-ladder-replay spawn-shadow manually. Never auto-spawn.",
@@ -700,6 +660,46 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-analysis-tasks",
+      "title": "Triage analysis_tasks experiments",
+      "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim — do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/analysis-review.md",
+      "doc_anchor": "manual-promotion-to-engineering",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/analysis-review.md#manual-promotion-to-engineering",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Triage queue · 6 open",
+        "updated_at": null,
+        "fingerprint": "eaa31c994c4a4a3a",
+        "bullets": [
+          "Open/proposed: 6 / 6",
+          "ana-20260728-04: Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
+          "ana-20260921-01: Exclusion-universe step u3 (conviction ≥ 0.25, cumulative_exclusion_alpha +0.00261) replay on ai_judgment candidate pool vs baseline — expected learning value: quantify whether priors improve filtered",
+          "ana-20260921-02: Offline family-weight stress test for quality/dividend failures on avoid cohort (pattern AAL.L / AML.L opinion-flip triggers) — expected learning value: test whether tightening quality+dividend gates",
+          "ana-20260921-03: Conviction/timing delay model for transition_key hold→buy and realization_lag (1w hit 0.406 vs within_4w_rate 0.9448) — expected learning value: separate assessment lag from signal direction for overl",
+          "ana-20260921-04: Hold-vs-swap probability strand using exit_timing_near_miss (hold_closed 202, swap_closed 209, ready_for_probability_analysis true) — expected learning value: estimate whether early swap beats hold re"
+        ],
+        "source_keys": [
+          "analysis_tasks"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-09-29T19:24:14.435234+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "eaa31c994c4a4a3a"
+      },
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
