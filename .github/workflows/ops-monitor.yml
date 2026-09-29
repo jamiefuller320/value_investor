@@ -5,6 +5,10 @@ name: FTSE Ops Monitor
 # See docs/ops/ops-monitor.md.
 on:
   schedule:
+    # Early Daily hub refresh — always before 04:00 Europe/London year-round
+    # (02:30 UTC = 02:30 GMT / 03:30 BST). Does not suppress the 07:45 morning
+    # run (gate ignores pre-06:00 UTC successes).
+    - cron: "30 2 * * *"
     # Morning detect / heal; may defer email when Sunday slots still pending.
     - cron: "45 7 * * *"
     # Catch-up after data-backup (12:30) and other day slots — emails if still red.
@@ -70,11 +74,15 @@ jobs:
               workflow_id,
               per_page: 20,
             });
-            const prior = (data.workflow_runs || []).filter((r) =>
-              r.id !== runId
-              && r.created_at >= dayStart
-              && r.conclusion === 'success'
-            );
+            const prior = (data.workflow_runs || []).filter((r) => {
+              if (r.id === runId) return false;
+              if (r.created_at < dayStart) return false;
+              if (r.conclusion !== 'success') return false;
+              // Early (pre-06:00 UTC) hub refresh must not suppress the 07:45
+              // morning detect/heal — only count daytime successes as finalized.
+              const hour = new Date(r.created_at).getUTCHours();
+              return hour >= 6;
+            });
             if (!prior.length) {
               core.setOutput('should_run', 'true');
               return;

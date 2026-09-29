@@ -65,12 +65,16 @@ lane change and readiness gate (see N152 / P1 pin rules).
   (`human-task-ack`) are observe-only. Both JSON files are in
   `GHA_COMMIT_OPTIONAL`.
 - **Daily hub + UI reconciliation** — `docs/data/daily_focus.json` (Cap C morning
-  board) and `docs/data/ui_state_reconciliation.json` (Cap B dashboard health)
-  rebuilt at end of ops-monitor after the human-tasks board. Automation →
-  **Daily** (`#automation/daily`) is the collated cockpit; **Ops** shows the
-  reconcile table. Findings titled **UI state reconciliation drift** are
-  observe-only (`auto_fixable=False`). Accept / Discuss recommendations queue
-  via `daily-focus-ack` / `daily-discuss` (inbox: `daily_discuss_inbox.json`).
+  board), `docs/data/daily_hub_history.json` (History session), and
+  `docs/data/ui_state_reconciliation.json` (Cap B dashboard health) rebuilt at
+  end of ops-monitor after the human-tasks board — including the **02:30 UTC**
+  early slot so the hub is fresh before 04:00 Europe/London. Automation →
+  **Daily** (`#automation/daily`) is the collated cockpit (Today + History);
+  **Ops** shows the reconcile table (includes `daily_hub_local_date_matches_today`).
+  Findings titled **UI state reconciliation drift** are observe-only
+  (`auto_fixable=False`). Accept / Discuss recommendations queue via
+  `daily-focus-ack` / `daily-discuss` (inbox: `daily_discuss_inbox.json`).
+  Accept-streak hints are observe-only — never auto-flip checklist `automated`.
 
 Also pinned in root [`AGENTS.md`](../../AGENTS.md#full-automation-wiring-required).
 
@@ -122,9 +126,14 @@ fire-and-forget; the next ops-monitor pass confirms success.
 
 | Trigger | Schedule |
 |---------|----------|
-| **cron-job.org (primary)** | Daily **07:45 UTC** (`45 7 * * *`) morning + **13:15 UTC** (`15 13 * * *`) catch-up |
+| **cron-job.org (primary)** | Daily **02:30 UTC** early hub (`30 2 * * *`) + **07:45 UTC** morning (`45 7 * * *`) + **13:15 UTC** catch-up (`15 13 * * *`) |
 | GitHub cron (backup) | Same expressions |
 | Manual | Actions → **FTSE Ops Monitor** → Run workflow |
+
+**Early slot (Daily hub Phase A0):** `02:30 UTC` always lands **before 04:00 Europe/London**
+year-round (02:30 GMT / 03:30 BST). Rebuilds `daily_focus.json` + `daily_hub_history.json`.
+The skip-if-finalized gate **ignores successes before 06:00 UTC**, so the 07:45 morning
+detect/heal still runs after the early hub refresh.
 
 External dispatch:
 
@@ -406,17 +415,22 @@ Policy green ≠ utility: a Suite A stress book being “primary” does not cle
 ## Daily hub {#daily-hub}
 
 Morning cockpit (Cap C). Operator TZ **Europe/London**; hub payload for “today”
-should be ready **before 04:00** local. Built from Project focus seed
+should be ready **before 04:00** local via the **02:30 UTC** early ops-monitor slot
+(not by redefining fresh as ~08:45). Built from Project focus seed
 (`project_daily_seed.json` / notes Today bullets), human-tasks open buckets,
-progress `defer_now`, and reconcile ambers.
+progress `defer_now`, and reconcile ambers. History session lists completed
+**development** tasks (`work_class=dev`) with **Accept followed** vs **Discuss resolved**.
 
 | Layer | Behavior |
 |-------|----------|
-| Store | `docs/data/daily_focus.json` (+ `daily_focus_acks.json`, `daily_discuss_inbox.json`, `project_daily_seed.json`) |
-| Trigger | End of `run_ops_monitor` (after human-tasks board); optional commit via `GHA_COMMIT_OPTIONAL` |
-| Dashboard | Automation → **Daily** (`#automation/daily`, default Automation landing); Overview pulse embeds top focus lines |
-| Close | Focus lines → `daily-focus-ack`; human tasks → existing `human-task-ack` |
+| Store | `docs/data/daily_focus.json` (+ `daily_focus_acks.json`, `daily_discuss_inbox.json`, `daily_hub_history.json`, `project_daily_seed.json`) |
+| Trigger | End of `run_ops_monitor` (after human-tasks board); early **02:30 UTC** + morning **07:45 UTC**; optional commit via `GHA_COMMIT_OPTIONAL` |
+| Stale | Builder `stale_for_local_date` + client wall-clock (`Europe/London` date ≠ artifact `local_date`) amber banner; reconcile check `daily_hub_local_date_matches_today` after 04:00 |
+| Dashboard | Automation → **Daily** (`#automation/daily`): **Today** session + **History** session; Overview pulse embeds top focus lines + history counts |
+| Close | Focus lines → `daily-focus-ack` (enriched title/work_class/outcome); human tasks → existing `human-task-ack` |
 | Recommendations | Per-task `recommendation` with **Accept** / **Discuss**; Discuss writes `daily_discuss_inbox.json` and copies a Project pickup prompt |
+| Status chips | `ready` / `next_steps` / `waiting_on` from seed + notes `Next:` / `Waiting on:` conventions |
+| Accept-streak hint | Observe-only footer when ≥5 Accepts / 30d with 0 Discuss on a family — never auto-flips `automated: true` (N169) |
 | Aim filter | Suite A stress streaks / off-buy-tier zero-filing themes stay out unless already a checklist item or focus line |
 
 Project notes `Today —` bullets are the editorial surface; after the morning build,

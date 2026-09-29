@@ -11,7 +11,9 @@ from value_investor.daily_focus import DEFAULT_TIMEZONE, write_daily_focus
 from value_investor.daily_focus_acks import (
     append_discuss_inbox,
     record_daily_focus_ack,
+    resolve_discuss_inbox_item,
 )
+from value_investor.daily_hub_history import write_daily_hub_history
 from value_investor.ui_state_reconciliation import local_date_for_timezone
 
 
@@ -41,6 +43,10 @@ def run_daily_focus_ack(
     source: str = "dashboard_bridge",
     acked_by: str = "dashboard",
     now: datetime | None = None,
+    title: str = "",
+    summary: str = "",
+    work_class: str = "",
+    task_family: str = "",
 ) -> dict[str, Any]:
     data_dir = Path(data_dir)
     local_date = str(local_date or "").strip() or local_date_for_timezone(now=now)
@@ -54,11 +60,19 @@ def run_daily_focus_ack(
         note=note,
         source=source,
         acked_by=acked_by,
+        title=title,
+        summary=summary,
+        work_class=work_class,
+        task_family=task_family,
     )
     # Rebuild against the ack session day so ``closed`` matches the recorded
     # local_date (wall-clock midnight rollover must not leave acked rows open).
     focus_now = now if now is not None else _now_for_local_date(local_date)
     focus = write_daily_focus(data_dir=data_dir, now=focus_now)
+    try:
+        write_daily_hub_history(data_dir=data_dir, now=focus_now)
+    except Exception:  # noqa: BLE001 — history must not block ack
+        pass
     return {
         "ok": True,
         "ack": ack,
@@ -117,10 +131,49 @@ def run_daily_discuss(
         note="queued for Project discuss",
         source=source,
         acked_by="dashboard",
+        had_discuss=True,
+        outcome="discuss_open",
+        title=str(entry.get("title") or ""),
+        summary=str(entry.get("summary") or ""),
+        work_class=str(entry.get("work_class") or ""),
+        task_family=str(entry.get("task_family") or ""),
     )
     return {
         "ok": True,
         "item": entry,
         "inbox_path": str(data_dir / "daily_discuss_inbox.json"),
         "project_pickup": entry.get("project_pickup"),
+    }
+
+
+def run_daily_discuss_resolve(
+    data_dir: Path,
+    *,
+    recommendation_id: str = "",
+    task_id: str = "",
+    local_date: str = "",
+    resolution_summary: str = "",
+    resolved_by: str = "coordinator",
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Resolve a Discuss inbox item and refresh History."""
+    data_dir = Path(data_dir)
+    local_date = str(local_date or "").strip() or local_date_for_timezone(now=now)
+    item = resolve_discuss_inbox_item(
+        data_dir,
+        recommendation_id=recommendation_id,
+        task_id=task_id,
+        local_date=local_date,
+        resolution_summary=resolution_summary,
+        resolved_by=resolved_by,
+    )
+    focus_now = now if now is not None else _now_for_local_date(local_date)
+    try:
+        write_daily_hub_history(data_dir=data_dir, now=focus_now)
+    except Exception:  # noqa: BLE001
+        pass
+    return {
+        "ok": item is not None,
+        "item": item,
+        "inbox_path": str(data_dir / "daily_discuss_inbox.json"),
     }
