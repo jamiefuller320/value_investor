@@ -1,15 +1,79 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-28T09:29:08.621902+01:00",
+    "local_time": "2026-09-29T09:28:55.818673+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-28T08:00:00+01:00",
-    "settle_at": "2026-09-28T09:15:00+01:00",
+    "market_open_at": "2026-09-29T08:00:00+01:00",
+    "settle_at": "2026-09-29T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "16559ee9-f64a-48c3-886f-12d2c0bb4cd6",
+      "fund_id": "cd1a66e4-05b0-4d94-a832-b03bdda4eab0",
+      "acted_at": "2026-09-29T09:28:55.818673+01:00",
+      "ticker": "BP.L",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.544662,
+      "price": 557.2,
+      "gross": 303.49,
+      "cost": 0.08,
+      "net_cash": 303.41,
+      "note": "Automated exit \u2014 left target set",
+      "name": "BP p.l.c.",
+      "avg_cost_at_exit": 559.2,
+      "position_closed": true
+    },
+    {
+      "id": "3655f018-5a28-46a3-ae0b-490e63a8b3ee",
+      "fund_id": "cd1a66e4-05b0-4d94-a832-b03bdda4eab0",
+      "acted_at": "2026-09-29T09:28:55.818673+01:00",
+      "ticker": "KLR.L",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.003234,
+      "price": 3408.7739,
+      "gross": 11.02,
+      "cost": 0.0,
+      "net_cash": 11.02,
+      "note": "Automated trim",
+      "name": "Keller Group plc",
+      "avg_cost_at_exit": 2980.0
+    },
+    {
+      "id": "9b75cf1c-80b5-4d74-866f-3e6cc573c4e2",
+      "fund_id": "cd1a66e4-05b0-4d94-a832-b03bdda4eab0",
+      "acted_at": "2026-09-29T09:28:55.818673+01:00",
+      "ticker": "PPH.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.007116,
+      "price": 1476.0,
+      "gross": 10.5,
+      "cost": 0.06,
+      "net_cash": -10.56,
+      "note": "Automated buy",
+      "name": "PPHE Hotel Group Limited"
+    },
+    {
+      "id": "7753d020-07ec-4247-9fa1-d489863e68bd",
+      "fund_id": "cd1a66e4-05b0-4d94-a832-b03bdda4eab0",
+      "acted_at": "2026-09-29T09:28:55.818673+01:00",
+      "ticker": "PAF.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 2.554175,
+      "price": 118.35,
+      "gross": 302.29,
+      "cost": 1.59,
+      "net_cash": -303.87,
+      "note": "Automated buy",
+      "name": "Pan African Resources PLC"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,7 +87,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 929.15,
+    "nav": 909.98,
     "cash": 0.0,
     "max_positions": 3,
     "min_conviction": 0.6,
@@ -33,64 +97,69 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 464.54,
+    "target_sleeve_value": 303.33,
     "targets": [
       {
         "ticker": "KLR.L",
         "name": "Keller Group plc",
         "signal": "buy",
-        "conviction_score": 0.8119000000000002,
-        "price": 3480.0
+        "conviction_score": 0.8619000000000002,
+        "price": 3408.7739
       },
       {
         "ticker": "PPH.L",
         "name": "PPHE Hotel Group Limited",
         "signal": "buy",
-        "conviction_score": 0.7733000000000001,
-        "price": 1514.0
-      }
-    ],
-    "anticipated_exits": [
+        "conviction_score": 0.8233000000000001,
+        "price": 1476.0
+      },
       {
-        "action": "sell",
-        "ticker": "BP.L",
-        "name": "BP p.l.c.",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.544662,
-        "price": 563.3,
-        "value": 306.81
+        "ticker": "PAF.L",
+        "name": "Pan African Resources PLC",
+        "signal": "strong_buy",
+        "conviction_score": 0.6449000000000001,
+        "price": 118.35
       }
     ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
+    "anticipated_buys": [],
+    "anticipated_holds": [
       {
-        "action": "buy",
+        "action": "hold",
         "ticker": "KLR.L",
         "name": "Keller Group plc",
-        "reason": "Top-up to equal weight",
-        "value": 143.06,
-        "price": 3480.0,
-        "target_value": 464.54,
-        "conviction_score": 0.8119000000000002,
+        "reason": "Already near equal-weight target",
+        "value": 303.87,
+        "target_value": 303.33,
+        "conviction_score": 0.8619000000000002,
         "signal": "buy"
       },
       {
-        "action": "buy",
+        "action": "hold",
         "ticker": "PPH.L",
         "name": "PPHE Hotel Group Limited",
-        "reason": "Top-up to equal weight",
-        "value": 163.67,
-        "price": 1514.0,
-        "target_value": 464.54,
-        "conviction_score": 0.7733000000000001,
+        "reason": "Already near equal-weight target",
+        "value": 303.82,
+        "target_value": 303.33,
+        "conviction_score": 0.8233000000000001,
         "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "PAF.L",
+        "name": "Pan African Resources PLC",
+        "reason": "Already near equal-weight target",
+        "value": 302.29,
+        "target_value": 303.33,
+        "conviction_score": 0.6449000000000001,
+        "signal": "strong_buy"
       }
     ],
-    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -99,7 +168,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3480.0,
+      "mark": 3408.77392578125,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -110,18 +179,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 1514.0,
+      "mark": 1476.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
     },
     {
-      "ticker": "BP.L",
-      "name": "BP p.l.c.",
+      "ticker": "PAF.L",
+      "name": "Pan African Resources PLC",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 563.2999877929688,
+      "mark": 118.3499984741211,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -148,7 +217,7 @@
     "holdings": {
       "KLR.L": {
         "ticker": "KLR.L",
-        "shares": 0.092378,
+        "shares": 0.089144,
         "avg_cost": 2980.0,
         "name": "Keller Group plc",
         "sector": "Industrials",
@@ -159,8 +228,8 @@
       },
       "PPH.L": {
         "ticker": "PPH.L",
-        "shares": 0.198723,
-        "avg_cost": 1550.0,
+        "shares": 0.205839,
+        "avg_cost": 1547.4418,
         "name": "PPHE Hotel Group Limited",
         "sector": "Consumer Cyclical",
         "currency": "GBP",
@@ -168,16 +237,16 @@
         "take_profit": null,
         "opened_at": "2026-09-23T09:29:49.153326+01:00"
       },
-      "BP.L": {
-        "ticker": "BP.L",
-        "shares": 0.544662,
-        "avg_cost": 559.2,
-        "name": "BP p.l.c.",
-        "sector": "Energy",
+      "PAF.L": {
+        "ticker": "PAF.L",
+        "shares": 2.554175,
+        "avg_cost": 118.35,
+        "name": "Pan African Resources PLC",
+        "sector": "Basic Materials",
         "currency": "GBP",
         "stop_loss": null,
         "take_profit": null,
-        "opened_at": "2026-09-25T09:29:54.886722+01:00"
+        "opened_at": "2026-09-29T09:28:55.818673+01:00"
       }
     },
     "trades": [
@@ -656,6 +725,69 @@
         "net_cash": -306.17,
         "note": "Automated buy",
         "name": "BP p.l.c."
+      },
+      {
+        "id": "16559ee9-f64a-48c3-886f-12d2c0bb4cd6",
+        "fund_id": "cd1a66e4-05b0-4d94-a832-b03bdda4eab0",
+        "acted_at": "2026-09-29T09:28:55.818673+01:00",
+        "ticker": "BP.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.544662,
+        "price": 557.2,
+        "gross": 303.49,
+        "cost": 0.08,
+        "net_cash": 303.41,
+        "note": "Automated exit \u2014 left target set",
+        "name": "BP p.l.c.",
+        "avg_cost_at_exit": 559.2,
+        "position_closed": true
+      },
+      {
+        "id": "3655f018-5a28-46a3-ae0b-490e63a8b3ee",
+        "fund_id": "cd1a66e4-05b0-4d94-a832-b03bdda4eab0",
+        "acted_at": "2026-09-29T09:28:55.818673+01:00",
+        "ticker": "KLR.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.003234,
+        "price": 3408.7739,
+        "gross": 11.02,
+        "cost": 0.0,
+        "net_cash": 11.02,
+        "note": "Automated trim",
+        "name": "Keller Group plc",
+        "avg_cost_at_exit": 2980.0
+      },
+      {
+        "id": "9b75cf1c-80b5-4d74-866f-3e6cc573c4e2",
+        "fund_id": "cd1a66e4-05b0-4d94-a832-b03bdda4eab0",
+        "acted_at": "2026-09-29T09:28:55.818673+01:00",
+        "ticker": "PPH.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.007116,
+        "price": 1476.0,
+        "gross": 10.5,
+        "cost": 0.06,
+        "net_cash": -10.56,
+        "note": "Automated buy",
+        "name": "PPHE Hotel Group Limited"
+      },
+      {
+        "id": "7753d020-07ec-4247-9fa1-d489863e68bd",
+        "fund_id": "cd1a66e4-05b0-4d94-a832-b03bdda4eab0",
+        "acted_at": "2026-09-29T09:28:55.818673+01:00",
+        "ticker": "PAF.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.554175,
+        "price": 118.35,
+        "gross": 302.29,
+        "cost": 1.59,
+        "net_cash": -303.87,
+        "note": "Automated buy",
+        "name": "Pan African Resources PLC"
       }
     ],
     "equity_curve": [
@@ -1090,22 +1222,38 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-29T09:28:55.818673+01:00",
+        "portfolio_value": 909.98,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-28T09:29:08.621902+01:00",
+    "last_mark_at": "2026-09-29T09:28:55.818673+01:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "BP.L": 1
-      },
-      "reentry_cooldown": {}
+      }
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (4 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "rules_fair",
-    "generated_at": "2026-09-28T08:29:19.631241+00:00",
-    "open_count": 11,
+    "generated_at": "2026-09-29T08:29:05.145147+00:00",
+    "open_count": 12,
     "closed_count": 0,
     "by_exit_kind": {},
     "grace_vs_rotation": {
@@ -1117,13 +1265,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "rules_fair",
-    "generated_at": "2026-09-28T08:29:19.632478+00:00",
+    "generated_at": "2026-09-29T08:29:05.146638+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1177,37 +1325,37 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 9,
+      "hold_closed_count": 10,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 12,
       "gaps": [
-        "hold_recovery closed episodes=9 (target >=15)",
+        "hold_recovery closed episodes=10 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 3,
-        "recovered_to_breakeven": 2,
+        "count": 2,
+        "recovered_to_breakeven": 1,
         "close_reasons": {
-          "open": 3
+          "open": 2
         }
       },
       "closed": {
-        "count": 9,
-        "recovered_to_breakeven": 3,
+        "count": 10,
+        "recovered_to_breakeven": 4,
         "close_reasons": {
           "sold_while_underwater": 6,
-          "sold_while_recovered": 3
+          "sold_while_recovered": 4
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 5,
+        "count": 6,
         "verdicts": {
-          "open": 5
+          "open": 6
         }
       },
       "closed": {
@@ -1216,8 +1364,8 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -1229,8 +1377,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "rules_fair",
-    "updated_at": "2026-09-28T08:29:19.634105+00:00",
-    "as_of": "2026-09-28T09:29:08.621902+01:00",
+    "updated_at": "2026-09-29T08:29:05.148508+00:00",
+    "as_of": "2026-09-29T09:28:55.818673+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1272,7 +1420,7 @@
         "cheapness": 0.0,
         "quality": 0.0,
         "dividend": 0.0,
-        "garp": 0.3333,
+        "garp": 0.0,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -1287,12 +1435,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0232,
-        "mark": 1514.0,
-        "avg_cost": 1550.0,
+        "unrealized_pct": -0.0462,
+        "mark": 1476.0,
+        "avg_cost": 1547.4418,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7733,
+        "conviction_score": 0.8233,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1308,55 +1456,54 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 77%"
+          "conviction 82%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 77%"
+          "conviction 82%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
       },
       {
-        "ticker": "BP.L",
-        "name": "BP p.l.c.",
+        "ticker": "PAF.L",
+        "name": "Pan African Resources PLC",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0073,
-        "mark": 563.3,
-        "avg_cost": 559.2,
-        "signal": "buy",
+        "unrealized_pct": 0.0,
+        "mark": 118.35,
+        "avg_cost": 118.35,
+        "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.5524,
+        "conviction_score": 0.6449,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
           "quality",
           "dividend",
+          "garp",
           "risk"
         ],
-        "failed_families": [
-          "garp"
-        ],
+        "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 55%"
+          "conviction 64%"
         ],
         "intact_reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 55%"
+          "conviction 64%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1368,12 +1515,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.1678,
-        "mark": 3480.0,
+        "unrealized_pct": 0.1439,
+        "mark": 3408.7739,
         "avg_cost": 2980.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8119,
+        "conviction_score": 0.8619,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1389,14 +1536,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 81%"
+          "conviction 86%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 81%"
+          "conviction 86%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1409,28 +1556,28 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "rules_fair",
-    "generated_at": "2026-09-28T08:29:19.636039+00:00",
+    "generated_at": "2026-09-29T08:29:05.150649+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 9,
+      "closed_total": 10,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 3,
+      "open_with_thesis": 2,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 9,
-          "recovery_rate": 0.3333,
-          "sold_underwater_rate": 0.6667,
+          "closed_count": 10,
+          "recovery_rate": 0.4,
+          "sold_underwater_rate": 0.6,
           "mean_peak_unrealized_pct": 0.0067,
-          "mean_trough_unrealized_pct": -0.0187,
+          "mean_trough_unrealized_pct": -0.0172,
           "outcome_labels": {
             "sold_underwater": 6,
-            "recovered": 3
+            "recovered": 4
           }
         },
         "broken": {
@@ -1462,7 +1609,7 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 9,
+      "hold_closed_with_thesis": 10,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
         "swap sell legs with thesis=0 (target >=5)"
@@ -1476,74 +1623,74 @@
     "schema_version": 1,
     "track_id": "rules_fair",
     "observe_only": true,
-    "generated_at": "2026-09-28T08:29:19.639464+00:00",
+    "generated_at": "2026-09-29T08:29:05.155300+00:00",
     "open_count": 3,
-    "closed_count": 6,
-    "scored_count": 5,
-    "scored_count_all": 6,
+    "closed_count": 7,
+    "scored_count": 6,
+    "scored_count_all": 7,
     "recommit_scored_count": 1,
     "entry_kind_counts": {
-      "first_entry": 5,
+      "first_entry": 6,
       "recommit": 1
     },
-    "any_de_risk_count": 5,
+    "any_de_risk_count": 6,
     "winning_cadence_counts": {
-      "dca_4x_weekly": 4,
+      "dca_4x_weekly": 5,
       "dca_5x_weekday": 1
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 5,
-        "mean_end_value_delta": 4.232,
-        "mean_de_risk_gbp": 4.542,
+        "scored_episodes": 6,
+        "mean_end_value_delta": 3.6167,
+        "mean_de_risk_gbp": 3.8767,
         "de_risk_rate": 1.0,
         "win_count": 0
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 5,
-        "mean_end_value_delta": 4.856,
-        "mean_de_risk_gbp": 7.024,
+        "scored_episodes": 6,
+        "mean_end_value_delta": 4.1833,
+        "mean_de_risk_gbp": 5.99,
         "de_risk_rate": 1.0,
-        "win_count": 4
+        "win_count": 5
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 5,
-        "mean_end_value_delta": 2.738,
-        "mean_de_risk_gbp": 4.758,
+        "scored_episodes": 6,
+        "mean_end_value_delta": 2.3717,
+        "mean_de_risk_gbp": 4.0567,
         "de_risk_rate": 1.0,
         "win_count": 0
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 5,
-        "mean_end_value_delta": 3.908,
-        "mean_de_risk_gbp": 4.902,
-        "de_risk_rate": 1.0,
+        "scored_episodes": 6,
+        "mean_end_value_delta": 2.8583,
+        "mean_de_risk_gbp": 3.9,
+        "de_risk_rate": 0.8333,
         "win_count": 1
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 5,
+      "closed_episodes": 6,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 5,
+      "first_entry_scored": 6,
       "recommit_scored": 1
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 3,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "rules_fair",
-    "generated_at": "2026-09-28T09:29:08.621902+01:00",
+    "generated_at": "2026-09-29T09:28:55.818673+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1597,7 +1744,7 @@
       "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-28T08:29:19.641947+00:00",
+  "generated_at": "2026-09-29T08:29:05.157971+00:00",
   "track_id": "rules_fair",
   "track_label": "Screen rules fair-cost lab (Suite B)",
   "is_primary_learning_track": false,
