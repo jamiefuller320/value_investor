@@ -164,11 +164,7 @@ def run_human_task_ack_batch(
         "errors": errors,
         "counts": board.get("counts"),
         "board_path": board.get("path"),
-        "command_ids": [
-            str(row.get("command_id"))
-            for row in results
-            if row.get("command_id")
-        ],
+        "command_ids": [str(row.get("command_id")) for row in results if row.get("command_id")],
     }
 
 

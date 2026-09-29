@@ -318,8 +318,11 @@ def commands_from_client_payload(payload: dict[str, Any] | None) -> list[dict[st
         for key, value in payload.items()
         if key not in {"commands", "command_ids", "batch", "batch_size"}
     }
-    if single.get("command_id") or single.get("task_id") or single.get("task_ref") or single.get(
-        "recommendation_id"
+    if (
+        single.get("command_id")
+        or single.get("task_id")
+        or single.get("task_ref")
+        or single.get("recommendation_id")
     ):
         return [single]
     return []
@@ -408,9 +411,7 @@ def _process_single_command(
     if dry_run:
         processed.append({"id": command_id, "action": row.get("action"), "dry_run": True})
         return
-    update_command_status(
-        cfg, command_id, status="processing", message="Dispatching GitHub event"
-    )
+    update_command_status(cfg, command_id, status="processing", message="Dispatching GitHub event")
     try:
         result = execute_dashboard_command(row, config=cfg)
         update_command_status(

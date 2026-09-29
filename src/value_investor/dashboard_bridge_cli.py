@@ -144,7 +144,7 @@ def main(argv: list[str] | None = None) -> int:
     complete_p.add_argument(
         "--ids-json",
         default="",
-        help='JSON array of command UUIDs, e.g. \'["…"]\'',
+        help="JSON array of command UUIDs, e.g. '[\"…\"]'",
     )
     complete_p.add_argument(
         "--status",
