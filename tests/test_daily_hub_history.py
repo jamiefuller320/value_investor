@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -265,12 +264,8 @@ def test_had_discuss_true_when_inbox_queued_before_accept(tmp_path: Path) -> Non
     )
     assert row["had_discuss"] is True
     assert row["outcome"] == "accept_followed"
-    hist = build_daily_hub_history(
-        data_dir=tmp_path, now=datetime(2026, 9, 29, 12, 0, tzinfo=UTC)
-    )
-    entry = next(
-        e for s in hist["sessions"] for e in s["entries"] if e["task_ref"] == "focus-9"
-    )
+    hist = build_daily_hub_history(data_dir=tmp_path, now=datetime(2026, 9, 29, 12, 0, tzinfo=UTC))
+    entry = next(e for s in hist["sessions"] for e in s["entries"] if e["task_ref"] == "focus-9")
     assert entry["had_discuss"] is True
     # Streak candidacy requires had_discuss=false
     assert entry["automation_signal"]["eligible"] is False

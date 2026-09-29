@@ -180,7 +180,9 @@ def _entry_from_ack(
         "had_discuss": had_discuss,
         "closed_at": closed_at,
         "closed_by": str(row.get("acked_by") or row.get("closed_by") or "human"),
-        "accept_action_kind": "focus-ack" if not task_ref.startswith("human:") else "human-task-ack",
+        "accept_action_kind": "focus-ack"
+        if not task_ref.startswith("human:")
+        else "human-task-ack",
         "pr_urls": list(row.get("pr_urls") or []),
         "notes_archive_ref": row.get("notes_archive_ref"),
         "automation_signal": {
@@ -249,11 +251,11 @@ def _rollup_candidates(
     candidates: list[dict[str, Any]] = []
     for family, rows in sorted(by_family.items()):
         accepts = [
-            r
-            for r in rows
-            if r.get("outcome") == "accept_followed" and not r.get("had_discuss")
+            r for r in rows if r.get("outcome") == "accept_followed" and not r.get("had_discuss")
         ]
-        discusses = [r for r in rows if r.get("had_discuss") or r.get("outcome") == "discuss_resolved"]
+        discusses = [
+            r for r in rows if r.get("had_discuss") or r.get("outcome") == "discuss_resolved"
+        ]
         work_class = str(rows[0].get("work_class") or "dev")
         eligible_rows = [
             r
@@ -383,12 +385,8 @@ def build_daily_hub_history(
         "summary": {
             "sessions_retained": len(sessions),
             "dev_closed_7d": sum(1 for e in recent if e.get("work_class") == "dev"),
-            "accept_followed_7d": sum(
-                1 for e in recent if e.get("outcome") == "accept_followed"
-            ),
-            "discuss_resolved_7d": sum(
-                1 for e in recent if e.get("outcome") == "discuss_resolved"
-            ),
+            "accept_followed_7d": sum(1 for e in recent if e.get("outcome") == "accept_followed"),
+            "discuss_resolved_7d": sum(1 for e in recent if e.get("outcome") == "discuss_resolved"),
             "candidate_count": len(candidates),
             "accept_streak_threshold": ACCEPT_STREAK_THRESHOLD,
             "accept_streak_window_days": ACCEPT_STREAK_WINDOW_DAYS,

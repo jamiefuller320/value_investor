@@ -310,9 +310,7 @@ def _check_daily_hub_local_date(
     path = data_dir / "daily_focus.json"
     payload = _safe_read(path)
     today = local_date_for_timezone(now=now, timezone=timezone)
-    hours = hours_until_deadline(
-        now=now, timezone=timezone, deadline_local=refresh_deadline_local
-    )
+    hours = hours_until_deadline(now=now, timezone=timezone, deadline_local=refresh_deadline_local)
     past_deadline = hours is not None and hours <= 0
     if payload is None:
         return _check(

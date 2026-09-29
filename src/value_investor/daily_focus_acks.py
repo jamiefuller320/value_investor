@@ -166,7 +166,9 @@ def record_daily_focus_ack(
     title = str(title or enrichment.get("title") or task_ref).strip()
     summary = str(summary or enrichment.get("summary") or title).strip()
     work_class = str(
-        work_class or enrichment.get("work_class") or ("dev" if not task_ref.startswith("human:") else "ops_gate")
+        work_class
+        or enrichment.get("work_class")
+        or ("dev" if not task_ref.startswith("human:") else "ops_gate")
     ).strip()
     task_family = str(
         task_family
@@ -267,9 +269,7 @@ def append_discuss_inbox(
         local_date = local_date_for_timezone()
     rid = str(recommendation.get("id") or "").strip()
     task_id = str(recommendation.get("task_id") or "").strip()
-    enrichment = _lookup_task_enrichment(
-        data_dir, task_ref=task_id, recommendation_id=rid
-    )
+    enrichment = _lookup_task_enrichment(data_dir, task_ref=task_id, recommendation_id=rid)
     # Dedupe open items by recommendation id + local_date.
     items = [
         x
@@ -296,10 +296,7 @@ def append_discuss_inbox(
         "work_class": work_class
         or enrichment.get("work_class")
         or ("dev" if not str(task_id).startswith("human:") else "ops_gate"),
-        "task_family": task_family
-        or enrichment.get("task_family")
-        or task_id
-        or rid,
+        "task_family": task_family or enrichment.get("task_family") or task_id or rid,
         "queued_at": now,
         "source": source,
         "project_pickup": (

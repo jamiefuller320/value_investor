@@ -581,9 +581,7 @@ def build_daily_focus(
     except ValueError:
         past_deadline = False
 
-    focus_lines = load_focus_seed(
-        seed_path=seed_path, notes_text=notes_text, data_dir=data_dir
-    )
+    focus_lines = load_focus_seed(seed_path=seed_path, notes_text=notes_text, data_dir=data_dir)
     # Cap to 3 pinned focus lines.
     focus_lines = focus_lines[:3]
 
