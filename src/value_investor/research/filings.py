@@ -389,6 +389,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     # FY2025 results statutory PDF mirrors on webdisclosure (Euronext press release).
     "SGO.PA": [
         "https://media.saint-gobain.com/group/lettreauxactionnaires/letter-to-shareholders-n102/",
+        "https://media.saint-gobain.com/group/lettreauxactionnaires/letter-to-shareholders-n101/",
         "https://files.webdisclosure.com/1391369/CP_Resultats_2025_VA_t.pdf",
     ],
     # euro_stoxx50 IWB blocker — SAN.PA unfetchable_iwb; sanofi.com Form 20-F/HY PDFs fetch.
@@ -4864,6 +4865,23 @@ def _dedupe_ir_allowlist_rows_by_url(
     return [row for _, row in merged], pruned
 
 
+def _maintain_ir_allowlist_index_rows(
+    filings: list[dict[str, Any]],
+    *,
+    ticker: str,
+) -> tuple[list[dict[str, Any]], int, int]:
+    """Rewrite dead IR allowlist URLs and dedupe rows sharing the same canonical target."""
+    migrated = 0
+    refreshed: list[dict[str, Any]] = []
+    for row in filings:
+        item, did_migrate = _migrate_ir_allowlist_row_url(row, ticker)
+        if did_migrate:
+            migrated += 1
+        refreshed.append(item)
+    deduped, pruned = _dedupe_ir_allowlist_rows_by_url(refreshed)
+    return deduped, migrated, pruned
+
+
 def _merge_ir_url_lists(*groups: dict[str, list[str]]) -> dict[str, list[str]]:
     out: dict[str, list[str]] = {}
     for group in groups:
@@ -5605,13 +5623,10 @@ def refetch_ir_allowlist_filing_bodies(
             pre_payload = None
         if isinstance(pre_payload, dict):
             pre_filings = list(pre_payload.get("filings") or [])
-            refreshed_pre: list[dict[str, Any]] = []
-            for row in pre_filings:
-                item, migrated = _migrate_ir_allowlist_row_url(row, ticker)
-                if migrated:
-                    pre_merge_migrated += 1
-                refreshed_pre.append(item)
-            refreshed_pre, pre_deduped = _dedupe_ir_allowlist_rows_by_url(refreshed_pre)
+            refreshed_pre, pre_merge_migrated, pre_deduped = _maintain_ir_allowlist_index_rows(
+                pre_filings,
+                ticker=ticker,
+            )
             if pre_merge_migrated or pre_deduped:
                 pre_payload["filings"] = refreshed_pre
                 pre_payload["summary"] = summarize_filings(refreshed_pre)
@@ -9978,6 +9993,10 @@ def sanitize_filings_index(
         }
 
     filings = normalize_companies_house_index_rows(list(payload.get("filings") or []))
+    filings, ir_migrated, ir_deduped = _maintain_ir_allowlist_index_rows(
+        filings,
+        ticker=ticker,
+    )
     before = sum(1 for row in filings if row.get("has_body"))
     filtered = filter_misattributed_filings(
         filings,
@@ -10001,7 +10020,12 @@ def sanitize_filings_index(
     )
     pruned = len(filings) - len(reclassified)
     changed = (
-        pruned > 0 or reclassified != filings or rns_doc_deduped > 0 or shared_body_propagated > 0
+        pruned > 0
+        or reclassified != filings
+        or rns_doc_deduped > 0
+        or shared_body_propagated > 0
+        or ir_migrated > 0
+        or ir_deduped > 0
     )
     if changed:
         payload["filings"] = reclassified
@@ -10019,6 +10043,8 @@ def sanitize_filings_index(
     return {
         "pruned": pruned,
         "reclassified": len(reclassified),
+        "ir_allowlist_migrated": ir_migrated,
+        "ir_allowlist_deduped": ir_deduped,
         "with_body_before": before,
         "with_body_after": after,
         "note": "sanitize_filings_index",

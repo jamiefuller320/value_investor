@@ -10766,7 +10766,7 @@ def test_fetch_filings_ir_allowlist_cac40_sgo_pa_builtins(tmp_path: Path):
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
 
     rows = fetch_filings_ir_allowlist("SGO.PA", path=allowlist_path)
-    assert len(rows) == 2
+    assert len(rows) == 3
     assert all(row["source"] == "ir_allowlist" for row in rows)
     urls = [row["url"] for row in rows]
     assert any("letter-to-shareholders-n102" in url for url in urls)
@@ -10781,7 +10781,7 @@ def test_load_ir_url_allowlist_canonicalizes_sgo_pa_dead_regulated_information_h
 ):
     """Dead saint-gobain.com regulated-information hub maps to FY2025 results PDF."""
     dead = "https://www.saint-gobain.com/en/finance/regulated-information"
-    live = _BUILTIN_IR_URLS["SGO.PA"][1]
+    live = _BUILTIN_IR_URLS["SGO.PA"][2]
     path = tmp_path / "ir.json"
     path.write_text(json.dumps({"urls": {"SGO.PA": [dead]}}), encoding="utf-8")
     mapping = load_ir_url_allowlist(path)
@@ -10794,7 +10794,7 @@ def test_refetch_ir_allowlist_migrates_sgo_pa_regulated_information_hub(
 ):
     """Indexed unfetchable SGO.PA hub row is rewritten to FY2025 results PDF."""
     dead = "https://www.saint-gobain.com/en/finance/regulated-information"
-    live = _BUILTIN_IR_URLS["SGO.PA"][1]
+    live = _BUILTIN_IR_URLS["SGO.PA"][2]
     allowlist_path = tmp_path / "ir_urls.json"
     allowlist_path.write_text(
         json.dumps({"urls": {"SGO.PA": _BUILTIN_IR_URLS["SGO.PA"]}}), encoding="utf-8"
@@ -10862,7 +10862,7 @@ def test_refetch_ir_allowlist_dedupes_sgo_pa_hub_migration_against_pdf_row(
 ):
     """eng-20260924-03: migrated regulated-information hub must not duplicate FY2025 PDF row."""
     dead = "https://www.saint-gobain.com/en/finance/regulated-information"
-    live = _BUILTIN_IR_URLS["SGO.PA"][1]
+    live = _BUILTIN_IR_URLS["SGO.PA"][2]
     letter = _BUILTIN_IR_URLS["SGO.PA"][0]
     allowlist_path = tmp_path / "ir_urls.json"
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
@@ -10931,9 +10931,57 @@ def test_refetch_ir_allowlist_dedupes_sgo_pa_hub_migration_against_pdf_row(
         if live in str(item.get("url") or "")
     ]
     assert len(pdf_urls) == 1
-    assert saved["summary"]["total"] == 2
+    assert saved["summary"]["total"] == 3
     assert saved["summary"]["with_body"] == 2
     assert not any(dead in str(item.get("url") or "") for item in saved["filings"])
+
+
+def test_sanitize_filings_index_migrates_sgo_pa_unfetchable_regulated_information_hub(
+    tmp_path: Path,
+):
+    """eng-20260929-01: sanitize rewrites dead hub before ingest-improvement refetch sees IWB."""
+    dead = "https://www.saint-gobain.com/en/finance/regulated-information"
+    live = _BUILTIN_IR_URLS["SGO.PA"][2]
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_0cfd9d28fbf83154",
+                        "source": "ir_allowlist",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "ir_allowlist_fetch_failed",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = sanitize_filings_index(
+        filings_dir,
+        company_name="Compagnie de Saint-Gobain S.A.",
+        ticker="SGO.PA",
+        regime="euro_filings",
+    )
+    assert result["ir_allowlist_migrated"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert len(saved["filings"]) == 1
+    assert saved["filings"][0]["url"] == live
+    assert saved["filings"][0].get("unfetchable") is not True
+
+
+def test_sgo_pa_third_ir_allowlist_url_closes_library_body_depth_gap():
+    """eng-20260929-01: three IR URLs meet library deepen body-depth floor (max(3, total//2))."""
+    rows = fetch_filings_ir_allowlist("SGO.PA")
+    assert len(rows) == 3
+    total = len(rows)
+    with_body = total
+    assert with_body >= max(3, total // 2)
 
 
 def test_parked_source_hunter_skip_san_pa_euro_stoxx50():
