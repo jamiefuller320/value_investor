@@ -6224,7 +6224,10 @@ def test_builtin_ir_allowlist_includes_oiz_ir():
 
 
 def test_esef_entity_aliases_include_oiz():
-    from value_investor.research.filings import _ESEF_ENTITY_SEARCH_ALIASES, _esef_entity_name_variants
+    from value_investor.research.filings import (
+        _ESEF_ENTITY_SEARCH_ALIASES,
+        _esef_entity_name_variants,
+    )
 
     aliases = _ESEF_ENTITY_SEARCH_ALIASES.get("OIZ") or ()
     assert any("Origin Enterprises" in name for name in aliases)

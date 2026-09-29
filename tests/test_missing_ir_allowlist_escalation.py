@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 from value_investor.ingest_gap_closure import (
@@ -216,9 +215,7 @@ def test_propose_triage_names_empty_ir_allowlist(monkeypatch):
     assert "Do not auto-park" in proposal["rationale"]
 
 
-def test_compile_pending_prefers_fresh_unmeasured_over_stale(
-    tmp_path: Path, monkeypatch
-):
+def test_compile_pending_prefers_fresh_unmeasured_over_stale(tmp_path: Path, monkeypatch):
     data_dir = tmp_path / "docs" / "data"
     data_dir.mkdir(parents=True)
     runs_path = data_dir / "ingest_gap_closure_runs.json"

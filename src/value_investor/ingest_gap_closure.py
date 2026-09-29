@@ -1462,7 +1462,11 @@ def _gap_closure_eng_compile_sort_key(run: dict[str, Any]) -> tuple[Any, ...]:
     if result_rows and isinstance(result_rows[0], dict):
         reason = str(result_rows[0].get("reason") or "").strip().lower()
     allow = ticker_ir_allowlist_count(ticker) if ticker else 0
-    coverage_hole = 0 if (blocker in {"unmeasured", "zero_body"} or reason in {"unmeasured", "zero_body"}) else 1
+    coverage_hole = (
+        0
+        if (blocker in {"unmeasured", "zero_body"} or reason in {"unmeasured", "zero_body"})
+        else 1
+    )
     missing_ir = 0 if allow <= 0 else 1
     zero_yield = 0 if intensive_run_was_zero_yield(run) else 1
     # Newest first among equal priority.
@@ -1529,11 +1533,7 @@ def stuck_coverage_tickers_missing_ir(
             continue
         progress = market.get("sprint_progress") or {}
         warnings = progress.get("admission_warnings") if isinstance(progress, dict) else []
-        warning_ids = {
-            str(w.get("id") or "")
-            for w in (warnings or [])
-            if isinstance(w, dict)
-        }
+        warning_ids = {str(w.get("id") or "") for w in (warnings or []) if isinstance(w, dict)}
         candidates: list[tuple[str, str]] = []
         if "unmeasured_stuck" in warning_ids:
             for token in health.get("unmeasured_tickers") or []:
