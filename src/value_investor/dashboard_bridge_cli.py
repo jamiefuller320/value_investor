@@ -6,7 +6,11 @@ import argparse
 import json
 import sys
 
-from value_investor.dashboard_bridge import process_pending_dashboard_commands
+from value_investor.dashboard_bridge import (
+    DEFAULT_PROCESS_LIMIT,
+    complete_dashboard_commands,
+    process_pending_dashboard_commands,
+)
 from value_investor.queue_health import refresh_queue_health_ui
 
 
@@ -24,6 +28,32 @@ def _cmd_process_pending(args: argparse.Namespace) -> int:
         print(f"processed={len(processed)} ok={result.get('ok')} reason={result.get('reason', '')}")
         for row in processed:
             print(f"  {row}")
+    if not result.get("ok") and result.get("reason") == "supabase_not_configured":
+        return 0
+    return 0 if result.get("ok") else 1
+
+
+def _cmd_complete_commands(args: argparse.Namespace) -> int:
+    ids: list[str] = []
+    for chunk in args.ids or []:
+        ids.extend(part.strip() for part in str(chunk).split(",") if part.strip())
+    if args.ids_json:
+        parsed = json.loads(args.ids_json)
+        if isinstance(parsed, list):
+            ids.extend(str(item).strip() for item in parsed if str(item).strip())
+    result = complete_dashboard_commands(
+        ids,
+        status=args.status,
+        message=args.message,
+        github_run_url=args.github_run_url,
+    )
+    if args.json:
+        _print_json(result)
+    else:
+        print(
+            f"ok={result.get('ok')} status={result.get('status')} "
+            f"updated={len(result.get('updated') or [])} reason={result.get('reason', '')}"
+        )
     if not result.get("ok") and result.get("reason") == "supabase_not_configured":
         return 0
     return 0 if result.get("ok") else 1
@@ -96,10 +126,36 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="command", required=True)
 
     pending_p = sub.add_parser("process-pending", help="Poll Supabase and dispatch GitHub events")
-    pending_p.add_argument("--limit", type=int, default=10)
+    pending_p.add_argument("--limit", type=int, default=DEFAULT_PROCESS_LIMIT)
     pending_p.add_argument("--dry-run", action="store_true")
     pending_p.add_argument("--json", action="store_true")
     pending_p.set_defaults(func=_cmd_process_pending)
+
+    complete_p = sub.add_parser(
+        "complete-commands",
+        help="Mark dashboard_commands done/failed after a git workflow succeeds or fails",
+    )
+    complete_p.add_argument(
+        "--ids",
+        action="append",
+        default=[],
+        help="Command UUID(s); repeat or comma-separate",
+    )
+    complete_p.add_argument(
+        "--ids-json",
+        default="",
+        help='JSON array of command UUIDs, e.g. \'["…"]\'',
+    )
+    complete_p.add_argument(
+        "--status",
+        choices=("done", "failed"),
+        required=True,
+        help="Terminal status to write",
+    )
+    complete_p.add_argument("--message", default=None)
+    complete_p.add_argument("--github-run-url", default=None)
+    complete_p.add_argument("--json", action="store_true")
+    complete_p.set_defaults(func=_cmd_complete_commands)
 
     health_p = sub.add_parser("refresh-queue-health", help="Write docs/data/queue_health.json")
     health_p.add_argument("--open-prs-json")

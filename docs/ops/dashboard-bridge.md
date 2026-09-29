@@ -50,14 +50,35 @@ cron-job.org often returns a **bare 429** (empty body, no `Retry-After`) under a
 
 `process-pending` is safe to double-fire (empty queue → no-op). Ops-monitor flags the workflow stale if no successful run within **1 hour** on any day (`MONITORED_WORKFLOWS.dashboard_bridge`).
 
-The Acknowledge / Start UI waits up to ~12 minutes for the command row to leave `pending`. Use **Run workflow** to drain immediately when needed.
+The Acknowledge / Start UI waits up to ~12 minutes for the command row to reach
+terminal `done` / `failed` (including time spent in `processing`). Use **Run
+workflow** to drain immediately when needed.
+
+### Ack / discuss landing (batch + deferred done)
+
+GitHub concurrency **cancels previously pending** runs in a group even when
+`cancel-in-progress: false` (only the in-progress run is protected). Bursting one
+`repository_dispatch` per click therefore drops most acks.
+
+For `human-task-ack`, `daily-focus-ack`, and `daily-discuss`, `process-pending`:
+
+1. **Batches** all pending rows of that action into **one** dispatch
+   (`client_payload.commands[]`).
+2. Marks those rows `processing` (not `done`) after dispatch.
+3. The target workflow applies every item, commits with
+   `scripts/gha_commit_artifacts.sh` (L348 push retry), then
+   `ftse-dashboard-bridge complete-commands --status done|failed`.
+
+False-done (bridge marking success before git lands) is intentionally avoided for
+these three actions. Other actions still mark `done` on dispatch.
 
 **Human-task Acknowledge** is optimistic in the dashboard: on click (before
 the Supabase insert), the card moves to the acked/bottom bucket and the button
 disables via a session overlay on `mergeHumanTaskAcksIntoBoard`. Soft reloads
 re-apply that overlay until git `human_task_acks.json` catches up. Durable ack
 still lands through the bridge worker. Lifecycle Acknowledge / Start still wait
-on `done` before treating the action as recorded.
+on `done` before treating the action as recorded. Hard-refresh clears a stale
+optimistic overlay if a burst failed before this batching fix.
 
 ## Lifecycle Start / Acknowledge dedupe
 

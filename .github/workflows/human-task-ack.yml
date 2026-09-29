@@ -2,6 +2,9 @@ name: Human task ack
 
 # Observe-only human ack / approval from the Automation → Human tasks card.
 # Dispatched by dashboard-bridge after a Supabase dashboard_commands insert.
+# Bridge batches pending human-task-ack rows into one dispatch (GitHub concurrency
+# cancels pending siblings even when cancel-in-progress is false). Commands stay
+# processing until this workflow marks them done after a successful push.
 # Never applies promotion, cron import, or live capital — durable record only.
 on:
   repository_dispatch:
@@ -10,7 +13,7 @@ on:
     inputs:
       task_id:
         description: Human checklist task id
-        required: true
+        required: false
         type: string
       decision:
         description: ack_observe | approve | defer
@@ -23,6 +26,10 @@ on:
         type: string
       note:
         description: Optional note
+        required: false
+        type: string
+      commands_json:
+        description: Optional JSON array of {task_id,decision,finding_fingerprint,command_id}
         required: false
         type: string
 
@@ -49,52 +56,140 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Record human-task ack + refresh board
+      - name: Record human-task ack batch + refresh board
+        id: record
         env:
-          TASK_ID: ${{ github.event.client_payload.task_id || github.event.inputs.task_id }}
+          TASK_ID: ${{ github.event.client_payload.task_id || github.event.inputs.task_id || '' }}
           DECISION: ${{ github.event.client_payload.decision || github.event.inputs.decision || 'ack_observe' }}
           FINGERPRINT: ${{ github.event.client_payload.finding_fingerprint || github.event.inputs.finding_fingerprint || '' }}
           NOTE: ${{ github.event.client_payload.note || github.event.inputs.note || '' }}
+          COMMAND_ID: ${{ github.event.client_payload.command_id || '' }}
+          COMMANDS_JSON: ${{ toJson(github.event.client_payload.commands) }}
+          INPUT_COMMANDS_JSON: ${{ github.event.inputs.commands_json || '' }}
         run: |
           python3 - <<'PY'
           import json
           import os
           from pathlib import Path
-          from value_investor.human_task_ack import run_human_task_ack
+          from value_investor.dashboard_bridge import commands_from_client_payload
+          from value_investor.human_task_ack import run_human_task_ack_batch
 
-          result = run_human_task_ack(
+          items = []
+          raw_batch = os.environ.get("COMMANDS_JSON") or ""
+          if raw_batch and raw_batch not in ("null", "None", ""):
+              try:
+                  parsed = json.loads(raw_batch)
+              except json.JSONDecodeError:
+                  parsed = None
+              if isinstance(parsed, list):
+                  items = [row for row in parsed if isinstance(row, dict)]
+          if not items:
+              input_batch = os.environ.get("INPUT_COMMANDS_JSON") or ""
+              if input_batch.strip():
+                  try:
+                      parsed = json.loads(input_batch)
+                  except json.JSONDecodeError:
+                      parsed = None
+                  if isinstance(parsed, list):
+                      items = [row for row in parsed if isinstance(row, dict)]
+          if not items:
+              items = commands_from_client_payload(
+                  {
+                      "task_id": os.environ.get("TASK_ID") or "",
+                      "decision": os.environ.get("DECISION") or "ack_observe",
+                      "finding_fingerprint": os.environ.get("FINGERPRINT") or "",
+                      "note": os.environ.get("NOTE") or "",
+                      "command_id": os.environ.get("COMMAND_ID") or "",
+                  }
+              )
+          # Drop empty workflow_dispatch shells
+          items = [row for row in items if str(row.get("task_id") or "").strip()]
+          if not items:
+              raise SystemExit("No human-task-ack items in payload")
+
+          result = run_human_task_ack_batch(
               Path("docs/data"),
-              task_id=os.environ.get("TASK_ID") or "",
-              decision=os.environ.get("DECISION") or "ack_observe",
-              note=os.environ.get("NOTE") or "",
-              finding_fingerprint=os.environ.get("FINGERPRINT") or "",
+              items,
               source="dashboard_bridge",
               acked_by="dashboard",
           )
           print(json.dumps(result, indent=2, sort_keys=True, default=str))
+          command_ids = [
+              str(row.get("command_id"))
+              for row in items
+              if str(row.get("command_id") or "").strip()
+          ]
+          Path("/tmp/human_task_ack_command_ids.json").write_text(
+              json.dumps(command_ids), encoding="utf-8"
+          )
+          if result.get("errors"):
+              raise SystemExit(f"ack batch had errors: {result['errors']}")
           PY
 
-      - name: Configure git author
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Commit dashboard slices (L348 retry)
+        id: commit
+        env:
+          COMMIT_MESSAGE: "chore: human task observe-ack from dashboard [skip ci]"
+          GHA_COMMIT_LABEL: human-task-ack
+          GHA_COMMIT_REF: main
+          GHA_COMMIT_OWNED: |
+            docs/data/human_task_acks.json
+            docs/data/human_tasks_board.json
+          # Own both slices fully — do not skip board when generated_at races.
+          GHA_COMMIT_PRESERVE_NEWER_GENERATED_AT: "0"
+        run: bash scripts/gha_commit_artifacts.sh
 
-      # Explicit add — auto-commit file_pattern has dropped the board file in
-      # concurrent drains; stage both paths before the commit action runs.
-      - name: Stage ack + board slices
+      - name: Mark dashboard commands done
+        if: success()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          git add -- docs/data/human_task_acks.json docs/data/human_tasks_board.json
-          git status --short -- docs/data/human_task_acks.json docs/data/human_tasks_board.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from value_investor.dashboard_bridge import complete_dashboard_commands
 
-      - name: Commit dashboard slices
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: human task observe-ack from dashboard [skip ci]"
-          file_pattern: docs/data/human_task_acks.json docs/data/human_tasks_board.json
-          skip_fetch: false
-          skip_dirty_check: false
+          ids = json.loads(Path("/tmp/human_task_ack_command_ids.json").read_text(encoding="utf-8"))
+          if not ids:
+              print("no command_ids to complete")
+          else:
+              result = complete_dashboard_commands(
+                  ids,
+                  status="done",
+                  message="human-task-ack committed",
+                  github_run_url=__import__("os").environ.get("GITHUB_RUN_URL"),
+              )
+              print(json.dumps(result, indent=2, sort_keys=True))
+          PY
+
+      - name: Mark dashboard commands failed
+        if: failure()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from value_investor.dashboard_bridge import complete_dashboard_commands
+
+          path = Path("/tmp/human_task_ack_command_ids.json")
+          ids = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else []
+          if ids:
+              result = complete_dashboard_commands(
+                  ids,
+                  status="failed",
+                  message="human-task-ack workflow failed",
+                  github_run_url=__import__("os").environ.get("GITHUB_RUN_URL"),
+              )
+              print(json.dumps(result, indent=2, sort_keys=True))
+          PY
 
       - name: Notify dashboard channel
+        if: success()
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
