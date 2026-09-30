@@ -292,7 +292,16 @@ def test_daily_hub_history_session_and_status_chips() -> None:
     assert ".daily-assess-key" in css
 
 
-def test_daily_hub_market_warning_triage_badges() -> None:
+def test_daily_hub_accept_passes_focus_ack_decision() -> None:
+    """Reconcile dismiss requires Accept to forward accept_action.payload.decision."""
+    text = APP_JS.read_text(encoding="utf-8")
+    focus_block = text.split('} else if (action === "focus-ack") {', 1)[1].split(
+        '} else if (action === "link_only") {', 1
+    )[0]
+    assert "actionPayload.decision" in focus_block
+    assert 'focusDecision === "dismiss"' in focus_block
+    assert "Dismissed for today" in focus_block
+
     text = APP_JS.read_text(encoding="utf-8")
     card = text.split("function renderDailyHubTaskCard(", 1)[1].split(
         "\nfunction renderDailyHubPanel(", 1
@@ -302,7 +311,7 @@ def test_daily_hub_market_warning_triage_badges() -> None:
     assert "no dismiss" in card
     assert "badge-sell" in card
     html = Path("docs/index.html").read_text(encoding="utf-8")
-    assert "app.js?v=daily-hub-expansive-assessment1" in html
+    assert "app.js?v=reconcile-dismiss-observe1" in html
     assert "Market warning triage" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "zero_body_stuck" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "Expansive assessment" in OPS_MONITOR.read_text(encoding="utf-8")
