@@ -1,15 +1,31 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-29T09:28:18.360477+01:00",
+    "local_time": "2026-09-30T09:28:51.291214+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-29T08:00:00+01:00",
-    "settle_at": "2026-09-29T09:15:00+01:00",
+    "market_open_at": "2026-09-30T08:00:00+01:00",
+    "settle_at": "2026-09-30T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "cd0f400d-41a3-4107-8cc5-edff7296bf89",
+      "fund_id": "3785bdc3-0abb-4088-ad68-00ee4d335872",
+      "acted_at": "2026-09-30T09:28:51.291214+01:00",
+      "ticker": "BAG.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.0112,
+      "price": 573.0,
+      "gross": 6.42,
+      "cost": 0.19,
+      "net_cash": -6.61,
+      "note": "Automated buy",
+      "name": "A.G. BARR p.l.c."
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +39,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 778.64,
-    "cash": 6.61,
+    "nav": 772.91,
+    "cash": 0.0,
     "max_positions": 5,
     "min_conviction": 0.0,
     "sector_cap": 0.25,
@@ -33,42 +49,42 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 155.73,
+    "target_sleeve_value": 154.58,
     "targets": [
       {
         "ticker": "KLR.L",
         "name": "Keller Group plc",
         "signal": "buy",
-        "conviction_score": 0.8619000000000002,
-        "price": 3408.7739
+        "conviction_score": 0.9119000000000003,
+        "price": 3400.759
       },
       {
         "ticker": "PPH.L",
         "name": "PPHE Hotel Group Limited",
         "signal": "buy",
-        "conviction_score": 0.8233000000000001,
-        "price": 1476.0
+        "conviction_score": 0.8733000000000002,
+        "price": 1492.0
       },
       {
         "ticker": "PAF.L",
         "name": "Pan African Resources PLC",
         "signal": "strong_buy",
-        "conviction_score": 0.6449000000000001,
-        "price": 118.35
+        "conviction_score": 0.6949000000000002,
+        "price": 119.2
       },
       {
         "ticker": "BP.L",
         "name": "BP p.l.c.",
         "signal": "buy",
-        "conviction_score": 0.6024000000000002,
-        "price": 557.675
+        "conviction_score": 0.6524000000000002,
+        "price": 541.6
       },
       {
         "ticker": "BAG.L",
         "name": "A.G. BARR p.l.c.",
         "signal": "buy",
-        "conviction_score": 0.49999999999999994,
-        "price": 586.25
+        "conviction_score": 0.5499999999999999,
+        "price": 573.0
       }
     ],
     "anticipated_exits": [],
@@ -81,35 +97,32 @@
         "ticker": "KLR.L",
         "name": "Keller Group plc",
         "reason": "Already near equal-weight target",
-        "value": 154.41,
-        "target_value": 155.73,
-        "conviction_score": 0.8619000000000002,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "PPH.L",
-        "name": "PPHE Hotel Group Limited",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 150.2,
-        "target_value": 155.73,
-        "conviction_score": 0.8233000000000001,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "BAG.L",
-        "name": "A.G. BARR p.l.c.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 146.51,
-        "target_value": 155.73,
-        "conviction_score": 0.49999999999999994,
+        "value": 154.04,
+        "target_value": 154.58,
+        "conviction_score": 0.9119000000000003,
         "signal": "buy"
       }
     ],
-    "skipped": [],
+    "skipped": [
+      {
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 154.58,
+        "conviction_score": 0.8733000000000002,
+        "signal": "buy"
+      },
+      {
+        "ticker": "BAG.L",
+        "name": "A.G. BARR p.l.c.",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 154.58,
+        "conviction_score": 0.5499999999999999,
+        "signal": "buy"
+      }
+    ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -118,7 +131,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3408.77392578125,
+      "mark": 3400.759033203125,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -129,7 +142,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 1476.0,
+      "mark": 1492.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -140,7 +153,7 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
-      "mark": 118.3499984741211,
+      "mark": 119.19999694824219,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -151,7 +164,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 557.6749877929688,
+      "mark": 541.5999755859375,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -161,8 +174,8 @@
       "name": "A.G. BARR p.l.c.",
       "source": "paper",
       "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 586.25,
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
+      "mark": 573.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -183,7 +196,7 @@
       "id": "3785bdc3-0abb-4088-ad68-00ee4d335872",
       "created_at": "2026-08-24T08:26:46.903538+00:00"
     },
-    "cash": 6.61,
+    "cash": 0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -233,8 +246,8 @@
       },
       "BAG.L": {
         "ticker": "BAG.L",
-        "shares": 0.249909,
-        "avg_cost": 605.0,
+        "shares": 0.261109,
+        "avg_cost": 603.6274,
         "name": "A.G. BARR p.l.c.",
         "sector": "Consumer Defensive",
         "currency": "GBP",
@@ -970,6 +983,21 @@
         "net_cash": -15.35,
         "note": "Automated buy",
         "name": "Pan African Resources PLC"
+      },
+      {
+        "id": "cd0f400d-41a3-4107-8cc5-edff7296bf89",
+        "fund_id": "3785bdc3-0abb-4088-ad68-00ee4d335872",
+        "acted_at": "2026-09-30T09:28:51.291214+01:00",
+        "ticker": "BAG.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.0112,
+        "price": 573.0,
+        "gross": 6.42,
+        "cost": 0.19,
+        "net_cash": -6.61,
+        "note": "Automated buy",
+        "name": "A.G. BARR p.l.c."
       }
     ],
     "equity_curve": [
@@ -1380,19 +1408,35 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-30T09:28:51.291214+01:00",
+        "portfolio_value": 772.91,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-29T09:28:18.360477+01:00",
+    "last_mark_at": "2026-09-30T09:28:51.291214+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated_r2",
-    "generated_at": "2026-09-29T08:28:27.742608+00:00",
+    "generated_at": "2026-09-30T08:29:04.132460+00:00",
     "open_count": 16,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -1406,12 +1450,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 2
+    "checkpoints_added_this_pass": 4
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated_r2",
-    "generated_at": "2026-09-29T08:28:27.744112+00:00",
+    "generated_at": "2026-09-30T08:29:04.134320+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1509,7 +1553,7 @@
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -1517,8 +1561,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment_calibrated_r2",
-    "updated_at": "2026-09-29T08:28:27.746270+00:00",
-    "as_of": "2026-09-29T09:28:18.360477+01:00",
+    "updated_at": "2026-09-30T08:29:04.136788+00:00",
+    "as_of": "2026-09-30T09:28:51.291214+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1531,7 +1575,7 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 5,
-    "underwater_count": 1,
+    "underwater_count": 2,
     "thesis_status_counts": {
       "intact": 5,
       "weakening": 0,
@@ -1540,31 +1584,33 @@
     },
     "portfolio_feedback": {
       "holding_count": 5,
-      "loser_count": 1,
-      "loser_share": 0.2,
-      "loser_nav_share": 0.2073,
+      "loser_count": 2,
+      "loser_share": 0.4,
+      "loser_nav_share": 0.4021,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
-      "within_tolerance": true,
-      "intact_loser_count": 1,
+      "within_tolerance": false,
+      "intact_loser_count": 2,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
-        "quality": 0.0,
-        "dividend": 0.0,
-        "garp": 0.0,
-        "risk": 0.0
-      },
-      "family_fail_rate_non_losers": {
-        "cheapness": 0.0,
-        "quality": 0.25,
+        "quality": 0.5,
         "dividend": 0.0,
         "garp": 0.5,
         "risk": 0.0
       },
-      "selection_feedback_flags": [],
-      "balancing_hint": "tolerate_intact_losers",
+      "family_fail_rate_non_losers": {
+        "cheapness": 0.0,
+        "quality": 0.0,
+        "dividend": 0.0,
+        "garp": 0.3333,
+        "risk": 0.0
+      },
+      "selection_feedback_flags": [
+        "quality fails more often among losers (50% vs 0%)"
+      ],
+      "balancing_hint": "hold_intact_review_selection",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
@@ -1575,12 +1621,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0731,
-        "mark": 118.35,
+        "unrealized_pct": -0.0664,
+        "mark": 119.2,
         "avg_cost": 127.6803,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.6449,
+        "conviction_score": 0.6949,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1597,14 +1643,56 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 64%"
+          "conviction 69%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 64%"
+          "conviction 69%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "BAG.L",
+        "name": "A.G. BARR p.l.c.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": true,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0507,
+        "mark": 573.0,
+        "avg_cost": 603.6274,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.55,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "quality",
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "price drawdown alone does not invalidate value thesis",
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 55%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 55%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1616,12 +1704,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0477,
-        "mark": 1476.0,
+        "unrealized_pct": -0.0374,
+        "mark": 1492.0,
         "avg_cost": 1550.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8233,
+        "conviction_score": 0.8733,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1637,55 +1725,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 82%"
+          "conviction 87%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 82%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "BAG.L",
-        "name": "A.G. BARR p.l.c.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.031,
-        "mark": 586.25,
-        "avg_cost": 605.0,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.5,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "quality",
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 50%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 50%"
+          "conviction 87%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1697,12 +1744,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0201,
-        "mark": 557.675,
+        "unrealized_pct": -0.0093,
+        "mark": 541.6,
         "avg_cost": 546.7,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.6024,
+        "conviction_score": 0.6524,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1719,14 +1766,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 60%"
+          "conviction 65%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 60%"
+          "conviction 65%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1738,12 +1785,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.1439,
-        "mark": 3408.7739,
+        "unrealized_pct": 0.1412,
+        "mark": 3400.759,
         "avg_cost": 2980.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8619,
+        "conviction_score": 0.9119,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1759,14 +1806,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 86%"
+          "conviction 91%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 86%"
+          "conviction 91%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1779,7 +1826,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment_calibrated_r2",
-    "generated_at": "2026-09-29T08:28:27.748693+00:00",
+    "generated_at": "2026-09-30T08:29:04.139312+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1846,7 +1893,7 @@
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated_r2",
     "observe_only": true,
-    "generated_at": "2026-09-29T08:28:27.753477+00:00",
+    "generated_at": "2026-09-30T08:29:04.143415+00:00",
     "open_count": 5,
     "closed_count": 9,
     "scored_count": 8,
@@ -1914,7 +1961,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "ai_judgment_calibrated_r2",
-    "generated_at": "2026-09-29T09:28:18.360477+01:00",
+    "generated_at": "2026-09-30T09:28:51.291214+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1968,7 +2015,7 @@
       "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-29T08:28:27.755271+00:00",
+  "generated_at": "2026-09-30T08:29:04.144749+00:00",
   "track_id": "ai_judgment_calibrated_r2",
   "track_label": "AI judgment calibrated shadow rank 2 (frozen priors)",
   "is_primary_learning_track": false,

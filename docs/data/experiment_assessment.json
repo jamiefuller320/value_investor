@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-29T08:29:36.767831+00:00",
+  "updated_at": "2026-09-30T08:30:30.539537+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -27,11 +27,11 @@
     "entry_dca_ready": true
   },
   "summary": {
-    "continue": 5,
     "fail": 5,
-    "proposed": 1,
     "observing": 0,
-    "recommend": 4,
+    "continue": 6,
+    "proposed": 1,
+    "recommend": 3,
     "human_ack_pending": 2,
     "total": 15
   },
@@ -54,10 +54,10 @@
         "sector_cap": 0.2,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 28,
-      "gate_excess_after_costs": -0.238,
-      "excess_vs_primary": 0.1308,
-      "excess_vs_rules": 0.2031,
+      "gate_marks": 29,
+      "gate_excess_after_costs": -0.2337,
+      "excess_vs_primary": 0.1306,
+      "excess_vs_rules": 0.2028,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated/calibration_provenance.json"
     },
@@ -79,10 +79,10 @@
         "sector_cap": 0.25,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 25,
-      "gate_excess_after_costs": -0.2035,
-      "excess_vs_primary": 0.1653,
-      "excess_vs_rules": 0.2376,
+      "gate_marks": 26,
+      "gate_excess_after_costs": -0.1993,
+      "excess_vs_primary": 0.165,
+      "excess_vs_rules": 0.2372,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r2/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -105,10 +105,10 @@
         "sector_cap": 0.3,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 25,
-      "gate_excess_after_costs": -0.2039,
-      "excess_vs_primary": 0.1649,
-      "excess_vs_rules": 0.2372,
+      "gate_marks": 26,
+      "gate_excess_after_costs": -0.1995,
+      "excess_vs_primary": 0.1648,
+      "excess_vs_rules": 0.237,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r3/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -125,9 +125,9 @@
       "track_id": "ai_judgment_exclusion_u4",
       "exclusion_ladder_step_id": "u4",
       "parent_track_id": "ai_judgment",
-      "gate_marks": 15,
-      "gate_excess_after_costs": -0.1825,
-      "excess_vs_parent": 0.1863,
+      "gate_marks": 16,
+      "gate_excess_after_costs": -0.1781,
+      "excess_vs_parent": 0.1862,
       "gate_uses_post_seed": true,
       "evidence_path": "docs/data/paper_automation/ai_judgment_exclusion_u4/exclusion_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -138,23 +138,20 @@
       "title": "Screen rules + graduated allocation",
       "area": "paper_knobs",
       "pipeline": "paper_automation",
-      "status": "recommend",
-      "source_status": "surviving",
+      "status": "continue",
+      "source_status": "observing",
       "human_ack_required": false,
       "track_id": "graduated_allocation",
-      "gate_marks": 23,
-      "gate_excess_after_costs": 0.0012,
-      "excess_vs_primary": 0.37,
+      "gate_marks": 25,
+      "gate_excess_after_costs": -0.0018,
+      "excess_vs_primary": 0.3625,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": false,
         "use_graduated_allocation": true
       },
       "evidence_path": "docs/data/paper_automation/markets/euro_depth/graduated_allocation/config.json",
-      "initiated_at": "2026-09-07T08:30:22.057015+00:00",
-      "human_acked": true,
-      "acked_at": "2026-09-22T08:14:45.342024+00:00",
-      "ack_decision": "ack_observe"
+      "initiated_at": "2026-09-07T08:30:22.057015+00:00"
     },
     {
       "experiment_id": "momentum_grace",
@@ -166,8 +163,8 @@
       "source_status": "failed",
       "human_ack_required": false,
       "track_id": "momentum_grace",
-      "gate_marks": 36,
-      "gate_excess_after_costs": -0.0897,
+      "gate_marks": 37,
+      "gate_excess_after_costs": -0.0852,
       "excess_vs_primary": 0.2791,
       "forward_evidence": {
         "source": "learning_track_metrics",
