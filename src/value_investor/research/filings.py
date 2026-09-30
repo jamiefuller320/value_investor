@@ -1508,7 +1508,33 @@ _INDEX_NOISE_HEADLINE_MARKERS = (
     "kalkine media",
     "simplywall.st",
     "across the markets:",
+    "euronext markets",
 )
+
+# Euronext equity product shells (quotes / ESG / overview) — not statutory filings.
+# Keep company-news and /sites/default/files PDF attachments as fetch candidates.
+_EURONEXT_NON_FILING_PRODUCT_RE = re.compile(
+    r"live\.euronext\.com/.*/product[s]?/equities/"
+    r"(?!company-news/)[^?#]+?(?:/(?:esg|order-book|quotes?|chart|overview))?/?$",
+    re.I,
+)
+
+
+def _is_euronext_non_filing_product_url(url: str | None) -> bool:
+    """True for Euronext equity product pages (ESG/quotes), not company-news or PDFs."""
+    text = str(url or "").strip()
+    if not text:
+        return False
+    lower = text.lower()
+    if "live.euronext.com" not in lower and "www.euronext.com" not in lower:
+        return False
+    if lower.endswith(".pdf") or "/sites/default/files/" in lower:
+        return False
+    if "/company-news/" in lower:
+        return False
+    if "/esg" in lower and "/product" in lower:
+        return True
+    return bool(_EURONEXT_NON_FILING_PRODUCT_RE.search(lower))
 
 
 def _is_index_noise_row(row: dict[str, Any]) -> bool:
@@ -1521,6 +1547,9 @@ def _is_index_noise_row(row: dict[str, Any]) -> bool:
     # ASX code listing pages (year=2008 etc.), not downloadable announcements.
     if "asx.com.au/asx/v2/statistics/announcements.do" in url:
         return True
+    # Euronext ESG / equity product shells from Google News (e.g. C5H.IR).
+    if _is_euronext_non_filing_product_url(url):
+        return True
     headline = str(row.get("headline") or "").lower()
     source = str(row.get("source") or "")
     if source.startswith("google_news"):
@@ -1530,6 +1559,20 @@ def _is_index_noise_row(row: dict[str, Any]) -> bool:
     ):
         return True
     return False
+
+
+def drop_index_noise_filing_rows(
+    filings: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], int]:
+    """Drop bodiless index-noise rows so they cannot reappear as IWB leftovers."""
+    kept: list[dict[str, Any]] = []
+    dropped = 0
+    for row in filings:
+        if not row.get("has_body") and _is_index_noise_row(row):
+            dropped += 1
+            continue
+        kept.append(row)
+    return kept, dropped
 
 
 def _is_routine_own_share_or_pdmr_row(row: dict[str, Any]) -> bool:
@@ -10111,6 +10154,7 @@ def sanitize_filings_index(
         ticker=ticker,
         regime=regime,
     )
+    filtered, _noise_dropped = drop_index_noise_filing_rows(filtered)
     reclassified = normalize_companies_house_index_rows(
         [
             _apply_headline_period(
@@ -10299,6 +10343,9 @@ def ingest_filings(
     )
     if regime in {"uk_rns", "euro_filings"}:
         merged, _ = dedupe_rns_index_rows(merged, filings_dir=filings_dir)
+    # Drop Google News / exchange product shells before body fetch so they never
+    # become durable indexed-without-body leftovers (e.g. Euronext ESG pages).
+    merged, _ = drop_index_noise_filing_rows(merged)
     # Allow more bodies when deepening historical accounts for memo names.
     max_bodies = 20 if deepen_history else 12
     merged = _write_bodies(

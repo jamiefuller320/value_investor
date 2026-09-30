@@ -8934,6 +8934,144 @@ def test_asx_statistics_listing_page_is_index_noise():
     assert _is_index_noise_row(row) is False
 
 
+def test_euronext_esg_product_page_is_index_noise_not_iwb():
+    """C5H.IR Google News Euronext ESG shell must not count as material IWB."""
+    from value_investor.research.filings import (
+        _is_index_noise_row,
+        drop_index_noise_filing_rows,
+        filing_lacks_material_body,
+    )
+
+    row = {
+        "id": "aea71864a35f7dc6",
+        "has_body": False,
+        "source": "google_news_euro",
+        "headline": "CAIRN HOMES PLC - Euronext Markets",
+        "url": "https://live.euronext.com/el/product/equities/IE00BWY4ZF18-XMSM/esg",
+        "period": "other",
+        "entity_type": "other",
+    }
+    assert _is_index_noise_row(row) is True
+    assert filing_lacks_material_body(row) is False
+    kept, dropped = drop_index_noise_filing_rows([row])
+    assert dropped == 1
+    assert kept == []
+
+    # Legitimate Euronext company-news / PDF attachments stay IWB-eligible.
+    company_news = {
+        **row,
+        "id": "san-news",
+        "headline": "Press Release: Sanofi approved in the EU",
+        "url": (
+            "https://live.euronext.com/en/products/equities/company-news/"
+            "2026-06-23-press-release-sanofis-cenrifki-tolebrutinib-approved-eu"
+        ),
+    }
+    assert _is_index_noise_row(company_news) is False
+    assert filing_lacks_material_body(company_news) is True
+
+    pdf = {
+        **row,
+        "id": "pdf1",
+        "headline": "FY results PDF",
+        "url": (
+            "https://live.euronext.com/sites/default/files/company_press_releases/"
+            "attachments/2026/02/25/cpr01_notified_EN_Results_FY25.pdf"
+        ),
+    }
+    assert _is_index_noise_row(pdf) is False
+
+
+def test_refetch_residual_prunes_euronext_esg_product_noise(tmp_path, monkeypatch):
+    from value_investor.research.filings import refetch_residual_filing_bodies
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "ticker": "C5H.IR",
+        "company_name": "Cairn Homes plc",
+        "filings": [
+            {
+                "id": "esg1",
+                "source": "google_news_euro",
+                "headline": "CAIRN HOMES PLC - Euronext Markets",
+                "published_at": "2026-07-28T07:19:46+00:00",
+                "url": "https://live.euronext.com/el/product/equities/IE00BWY4ZF18-XMSM/esg",
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 0,
+            },
+            {
+                "id": "real1",
+                "source": "ir_allowlist",
+                "headline": "Annual Report 2025",
+                "published_at": "2026-03-01T00:00:00+00:00",
+                "url": "https://example.com/ar2025.pdf",
+                "period": "annual",
+                "has_body": True,
+                "body_path": "bodies/real1.txt",
+                "priority": 90,
+            },
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    (filings_dir / "bodies").mkdir()
+    (filings_dir / "bodies" / "real1.txt").write_text("Cairn Homes annual report body " * 20)
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda filings, **kwargs: list(filings),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: None,
+    )
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="C5H.IR",
+        company_name="Cairn Homes plc",
+        max_bodies=4,
+    )
+    assert result["pruned_noise"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert [row["id"] for row in saved["filings"]] == ["real1"]
+
+
+def test_coverage_path_does_not_reinflate_excluded_index_noise(tmp_path):
+    """Material IWB exclusions must survive library health coverage fallback."""
+    from value_investor.library_ingest_loop import _coverage_from_filing_index_path
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "ticker": "C5H.IR",
+        "summary": {"total": 2, "with_body": 1},
+        "filings": [
+            {
+                "id": "esg1",
+                "has_body": False,
+                "source": "google_news_euro",
+                "headline": "CAIRN HOMES PLC - Euronext Markets",
+                "url": "https://live.euronext.com/el/product/equities/IE00BWY4ZF18-XMSM/esg",
+            },
+            {
+                "id": "ok1",
+                "has_body": True,
+                "source": "ir_allowlist",
+                "headline": "Annual Report",
+                "url": "https://example.com/ar.pdf",
+            },
+        ],
+    }
+    path = filings_dir / "filings_index.json"
+    path.write_text(json.dumps(index), encoding="utf-8")
+    coverage = _coverage_from_filing_index_path(path)
+    assert coverage is not None
+    assert coverage["filings_total"] == 2
+    assert coverage["filings_with_body"] == 1
+    assert coverage["indexed_without_body"] == 0
+
+
 @patch("value_investor.research.filings.fetch_filings_tsx_news", return_value=[])
 @patch(
     "value_investor.research.filings._sec_edgar_supplement_allowed",

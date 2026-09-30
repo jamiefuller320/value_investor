@@ -58,6 +58,14 @@ and persists `docs/data/library/euro_ingest_dispatch.json`:
 | `exhausted` | unmeasured + zero-body are 0, leftover thin/IWB names parked after complete 0-improve sprints | off | on — unparked names stay on FTSE-volume maintenance; parked leftovers skipped |
 | `maintenance` | FTSE quality bar met (all four **raw** counts zero) | off (skipped) | ≤4×/day, 62 targets + discovery scan via `library-ingest-maintenance.yml` |
 
+**Index-noise IWB auto-drop:** Google News / exchange **product shells** that are
+not filings (e.g. Euronext equity ESG / quotes pages such as the former
+`C5H.IR` `live.euronext.com/.../esg` leftover) are classified by
+`_is_index_noise_row` / `filing_lacks_material_body`, dropped on ingest +
+sanitize + residual refetch, and excluded from library IWB health. Legitimate
+Euronext `company-news` / PDF attachment URLs stay IWB-eligible. This is
+observe-safe auto-drop — it does not park real thin/IWB leftovers.
+
 Phase 3 readiness is **informational only** — weekday ladder crons stay enabled during maintenance.
 
 **Sprint UTC slots** (`euro-ingest-loop.yml`): Mon–Sat **07:15 / 10:15**; daily (incl. Sunday) **13:15 / 16:15**. Sunday morning is skipped so the quiet bundle (orchestrator ~06:20 → backup ~12:30) is not contended.
