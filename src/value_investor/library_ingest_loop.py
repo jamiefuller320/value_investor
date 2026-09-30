@@ -218,15 +218,21 @@ def _empty_filing_coverage() -> dict[str, int]:
 
 def _coverage_from_filing_index_path(path: Path) -> dict[str, int] | None:
     try:
-        read_json(path)
+        payload = read_json(path)
     except (OSError, ValueError, TypeError):
         return None
     summary = _coverage_from_index(path)
     total = int(summary.get("filings_total") or 0)
     with_body = int(summary.get("filings_with_body") or 0)
     indexed = int(summary.get("indexed_without_body") or 0)
+    # Prefer material IWB from filing_lacks_material_body. Only fall back to
+    # total-with_body when the index has no per-row filings to classify — the
+    # blunt fallback would re-count index-noise / holding / PDMR stubs that the
+    # classifier correctly excludes (e.g. Euronext ESG product pages).
     if indexed == 0 and total > with_body:
-        indexed = total - with_body
+        rows = list(payload.get("filings") or []) if isinstance(payload, dict) else []
+        if not rows:
+            indexed = total - with_body
     return {
         "filings_total": total,
         "filings_with_body": with_body,
