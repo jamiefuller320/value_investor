@@ -104,7 +104,9 @@ def test_compose_assessment_does_not_invent_duration() -> None:
         title="Ship History",
         notes_block="Next: Open draft PR\nWaiting on: CI green",
     )
-    assess = compose_assessment(status=status, title="Ship History", now=datetime(2026, 9, 30, tzinfo=UTC))
+    assess = compose_assessment(
+        status=status, title="Ship History", now=datetime(2026, 9, 30, tzinfo=UTC)
+    )
     assert assess["stage_since"] is None
     assert assess["days_in_stage"] is None
     assert assess["stage_duration"] == "duration unknown"

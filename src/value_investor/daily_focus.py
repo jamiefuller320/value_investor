@@ -249,9 +249,7 @@ def compose_assessment(
         waiting_for = "; ".join(waiting_bits)
         provenance.append("status:waiting_on")
 
-    next_steps = [
-        _blank(x) for x in (status.get("next_steps") or []) if _blank(x)
-    ]
+    next_steps = [_blank(x) for x in (status.get("next_steps") or []) if _blank(x)]
     if not how and next_steps:
         how = next_steps[0]
         provenance.append("status:next_steps")
@@ -892,7 +890,9 @@ def _prior_assessments(data_dir: Path) -> dict[str, dict[str, Any]]:
         assess = row.get("assessment")
         if not isinstance(assess, dict):
             status = row.get("status") if isinstance(row.get("status"), dict) else {}
-            assess = status.get("assessment") if isinstance(status.get("assessment"), dict) else None
+            assess = (
+                status.get("assessment") if isinstance(status.get("assessment"), dict) else None
+            )
         if isinstance(assess, dict):
             out[ref] = assess
     return out
@@ -926,10 +926,7 @@ def _observe_for_market_warn(task: dict[str, Any]) -> dict[str, Any]:
         how = _blank(next_steps[0])
     if not how:
         if task.get("prefer_discuss"):
-            how = (
-                "Discuss in Project chat before deepen — clash-aware; "
-                "Accept only after judgment."
-            )
+            how = "Discuss in Project chat before deepen — clash-aware; Accept only after judgment."
         elif action in {"park", "dismiss"}:
             how = f"Accept observe-safe {action} triage for local_date (no eng spray)."
         else:
