@@ -87,3 +87,18 @@ def test_sunday_shadow_endurance_urgency_policy():
     assert "ana-*" in summary
     assert "auto-promote" in summary.lower()
     assert "N58" in summary or "N59" in summary
+
+
+def test_weekday_parked_backlog_quiet_auto_ack_policy():
+    payload = load_human_tasks_checklist()
+    tasks = [task for section in payload["sections"] for task in section["tasks"]]
+    row = next(
+        task for task in tasks if task["id"] == "weekday-engineering-parked-backlog-clear"
+    )
+    assert row["automated"] is False
+    summary = row["summary"]
+    assert "attention_parked_count=0" in summary
+    assert "queue_clearing.pause_active=false" in summary
+    assert "auto-acks" in summary.lower() or "auto-ack" in summary.lower()
+    assert "list-parked" in summary
+    assert "recover-queue" in summary
