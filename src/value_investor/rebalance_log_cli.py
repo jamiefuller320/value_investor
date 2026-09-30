@@ -65,6 +65,11 @@ def _cmd_replay(args: argparse.Namespace) -> int:
         exit_confirm_screens=(
             int(args.exit_confirm_screens) if args.exit_confirm_screens is not None else None
         ),
+        reentry_cooldown_screens=(
+            int(args.reentry_cooldown_screens)
+            if args.reentry_cooldown_screens is not None
+            else None
+        ),
         lookback_days=int(args.lookback_days) if args.lookback_days is not None else None,
         candidate_source=str(args.candidate_source),
         actual_fund=fund,
@@ -270,6 +275,12 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         default=None,
         help="Counterfactual: override hold-buffer exit_confirm_screens knob",
+    )
+    replay.add_argument(
+        "--reentry-cooldown-screens",
+        type=int,
+        default=None,
+        help="Counterfactual: override reentry_cooldown_screens knob (observe-only)",
     )
     replay.add_argument(
         "--lookback-days",

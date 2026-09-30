@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-30T14:56:48+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-30T18:17:41+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -225,6 +225,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N97 | **Do not add extra S&P or ASX sprint slots for leftover IWB** | Saturday 5 Sep ran 8 spare-stream jobs per market with leftover minutes (S&P ~1000s unused, ASX ~2000s). S&P IWB stayed at 15 (8-K HTML); ASX thin is Markit latest-five plus Google News junk. More targets/runtime will not fetch those bodies. Prefer IR seeds, index-noise prune, and 8-K exhibit follow-through. | S&P 8-K residual refetch starts returning bodies, or Markit/ASX listing history exists beyond the latest five announcements |
 | N98 | **Do not spawn a 61-name buy-tier book immediately** | An unfiltered lifecycle baseline is the right control, but do not stand it up this weekend as an extra paper track. Live-path FCF/overlay bind is still the spend priority; archive u0 already gives gross EW history; a same-day spawn without a written buy-threshold/sector-cap/cost spec would starve P1 and muddy epoch zero. | Same gate as L316: human-authored Suite B spec exists and FCF-basis enforcement on live buy-tier is in flight or closed. |
 | N99 | **No per-knob counterfactual warm-start twins of a cohort book** | When the buy-tier baseline exists, compare recommended knob changes as overlays or divergence on the same held names plus a new epoch-zero datum. Do not spawn a new warm-started twin per knob recommendation — that is the calibration-shadow factory that already failed three times (N53). | A recommend-status knob has ≥4 forward weeks on the single baseline cohort and a human asks for at most one Suite B twin. |
+| N173 | **Live LLM sell overlay without evidence trail** | Do not put LLM (or silent human) judgment on the live sell/hold/reentry path until an evidence schema writes structured reasons + citations into the decision pack / rebalance log. Algo gates (cooldown, still-in-buy-set, rank-drop) stay the default; judgment is observe/shadow only and must never influence sells without an auditable record. | After reentry_cooldown=2 and/or still-in-buy-set observe marks exist, and an exit_reason evidence schema is wired into rebalance_log / decision packs; P1 live-path utilization not starving. |
 
 ---
 
@@ -297,6 +298,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L476 | **Stamp per-model scores on rebalance_log buys for exit attribution** | Optional hardening: persist top model_id scores on rebalance_log buy rows to simplify exit-quintile joins. Not required for first observe rollup that joins nearest models_*.json at acted_at. | When implementing paper-exit score-quintile observe and day-level nearest-screen join proves brittle |
 | L491 | **Post-close sleeve autopsy archive (drawdown + missed-signal review)** | Observe-only post-close / material-drawdown reviews per sleeve: retrospect held data vs external news/evidence; tag missed_in_held vs absent_from_held to accumulate justification for new ingest sources. Not a live track or news pipeline. | Thick closed sleeve cohort available (or several material held drawdowns) and P1 FTSE decision-input freshness is stable; before proposing any new news/alt-data ingest. |
 | L502 | **No new calibrated ranks until Suite B or new method** | Park further calibrated-shadow churn: weekday spawn-shadow --top-n 3 may keep existing fail books marking cheaply (L275), but do not add ranks, reopen cancelled N58/N59 knob rows, or invent a parallel promotion ladder from Suite A stress. Retire/disable dirs only after Sunday confirms durable fail with no forward differentiation. | Sunday experiment_assessment still marks calibrated r1-r3 fail with no new forward differentiation, and Suite B fair-cost evidence or a replacement calibration method exists to supersede this ladder |
+| L507 | **Still-in-buy-set no-capacity-bump-exit observe shadow** | After cooldown=2 replay: residual PAF/BP thrash is capacity-bump sells while names remain buy-tier. Observe/shadow a deterministic rule: no full exit solely to seat another buy-tier name (or require rank-drop threshold). Twin/epoch before any live apply. | After cooldown=2 observe is accepted; next churn instrument slot free; prefer before any LLM sell layer. |
 
 ### Universe & data
 
