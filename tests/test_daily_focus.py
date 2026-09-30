@@ -138,6 +138,21 @@ def test_build_daily_focus_collates_sources(tmp_path: Path) -> None:
     assert "human:weekday-engineering-parked-backlog-clear" in refs
     assert "progress:defer-1" in refs
     assert "reconcile:learning_tracks_dual_suite_present" in refs
+    reconcile = next(
+        t
+        for t in payload["tasks"]
+        if t["task_ref"] == "reconcile:learning_tracks_dual_suite_present"
+    )
+    assert reconcile["closeable"] is True
+    assert reconcile["close_action"] == "daily-focus-ack"
+    assert reconcile["close_payload"]["decision"] == "dismiss"
+    assert reconcile["dismissable"] is True
+    reconcile_rec = reconcile["recommendation"]
+    assert reconcile_rec["accept_action"]["kind"] == "focus-ack"
+    assert reconcile_rec["accept_action"]["payload"]["decision"] == "dismiss"
+    assert reconcile_rec["accept_action"]["payload"]["focus_id"] == (
+        "reconcile:learning_tracks_dual_suite_present"
+    )
     recs = payload["recommendations"]
     assert recs
     sample = recs[0]
@@ -178,6 +193,108 @@ def test_focus_ack_closes_for_local_date(tmp_path: Path) -> None:
     focus = json.loads((tmp_path / "daily_focus.json").read_text(encoding="utf-8"))
     focus_task = next(t for t in focus["tasks"] if t["task_ref"] == "focus-1")
     assert focus_task["closed"] is True
+
+
+def test_reconcile_dismiss_closes_for_local_date(tmp_path: Path) -> None:
+    """UI reconcile Accept is observe-dismiss via daily-focus-ack (not link_only)."""
+    _write_minimal_board(tmp_path)
+    # Keep planted Cap B warn so the reconcile row is present (skip live refresh).
+    write_daily_focus(
+        data_dir=tmp_path,
+        now=datetime(2026, 9, 28, 2, 0, tzinfo=UTC),
+        refresh_reconcile=False,
+    )
+    focus = json.loads((tmp_path / "daily_focus.json").read_text(encoding="utf-8"))
+    ref = "reconcile:learning_tracks_dual_suite_present"
+    assert any(t.get("task_ref") == ref and not t.get("closed") for t in focus["tasks"])
+    rec = next(t for t in focus["tasks"] if t.get("task_ref") == ref)["recommendation"]
+    result = run_daily_focus_ack(
+        tmp_path,
+        focus_id=ref,
+        decision="dismiss",
+        local_date="2026-09-28",
+        recommendation_id=rec["id"],
+    )
+    assert result["ok"] is True
+    acks = json.loads((tmp_path / "daily_focus_acks.json").read_text(encoding="utf-8"))
+    dismiss_rows = [
+        a for a in acks["acks"] if a.get("task_ref") == ref and a.get("decision") == "dismiss"
+    ]
+    assert dismiss_rows
+    refreshed = json.loads((tmp_path / "daily_focus.json").read_text(encoding="utf-8"))
+    # Dismiss closes for local_date even if Cap B refresh clears the amber source.
+    assert ref in refreshed.get("closed_today") or not any(
+        t.get("task_ref") == ref and not t.get("closed") for t in refreshed["tasks"]
+    )
+
+
+def test_write_daily_focus_refreshes_stale_reconcile_amber(tmp_path: Path) -> None:
+    """Hub-only writes must not keep embedding a Cap B amber that already passes live."""
+    _write_minimal_board(tmp_path)
+    # Plant healthy artifacts so live Cap B is ok despite stale warn store.
+    now = datetime(2026, 9, 28, 12, 0, tzinfo=UTC)
+    write_json(
+        tmp_path / "daily_focus.json",
+        {
+            "local_date": "2026-09-28",
+            "timezone": "Europe/London",
+            "generated_at": now.isoformat().replace("+00:00", "Z"),
+            "stale_for_local_date": False,
+            "focus_lines": [],
+            "tasks": [],
+        },
+        compact=False,
+    )
+    write_json(
+        tmp_path / "progress_report.json",
+        {"schema_version": 1, "generated_at": now.isoformat()},
+        compact=False,
+    )
+    write_json(
+        tmp_path / "latest.json",
+        {
+            "learning_tracks_dual_suite": {"suite_a": {}, "suite_b": {}},
+            "paper_automation": {"learning_tracks_review": {"tracks": [{"id": "x"}]}},
+        },
+        compact=False,
+    )
+    write_json(
+        tmp_path / "human_task_acks.json",
+        {"acks": []},
+        compact=False,
+    )
+    write_json(
+        tmp_path / "lifecycle_board.json",
+        {"generated_at": now.isoformat()},
+        compact=False,
+    )
+    # Stale Cap B warn (the sticky-amber failure mode).
+    write_json(
+        tmp_path / "ui_state_reconciliation.json",
+        {
+            "schema_version": 1,
+            "generated_at": "2026-09-28T07:00:00Z",
+            "overall": "warn",
+            "checks": [
+                {
+                    "id": "daily_hub_local_date_matches_today",
+                    "title": "Daily hub local_date matches today",
+                    "status": "warn",
+                    "detail": "stale planted amber",
+                }
+            ],
+            "summary": {"ok": 0, "warn": 1, "fail": 0},
+        },
+        compact=False,
+    )
+    payload = write_daily_focus(data_dir=tmp_path, now=now)
+    cap_b = json.loads((tmp_path / "ui_state_reconciliation.json").read_text(encoding="utf-8"))
+    assert cap_b.get("overall") == "ok"
+    assert payload.get("counts", {}).get("reconcile", 0) == 0
+    assert not any(
+        str(t.get("task_ref") or "").startswith("reconcile:") and not t.get("closed")
+        for t in payload.get("tasks") or []
+    )
 
 
 def test_discuss_inbox_queues_project_pickup(tmp_path: Path) -> None:
