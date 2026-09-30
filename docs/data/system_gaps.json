@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "assessed_at": "2026-09-27T10:37:27.397054+00:00",
+  "assessed_at": "2026-09-30T20:08:38.447388+00:00",
   "purpose": "Latent learning-path gaps that healthy ops counters hide. Split produce / persist / publish / apply, and filing parity vs learning clock. Existence is not quality; unused budget is not demand met.",
   "probe_questions": [
     "Is the learning consumer seeing the research we already paid for?",
@@ -10,23 +10,9 @@
     "Are observe-sim / paper clocks accumulating on markets that look ingest-healthy?",
     "Did Sunday rememo include admitted buy-tier, or only the focus book?"
   ],
-  "flag_count": 2,
-  "high_flag_count": 1,
+  "flag_count": 1,
+  "high_flag_count": 0,
   "flags": [
-    {
-      "id": "research_skipped_already_done",
-      "severity": "high",
-      "layer": "produce",
-      "title": "Research skipped as already-done while the learning path may still be hungry",
-      "summary": "Last ladder executed 0 memos and skipped 457 as already researched. That is not proof the overlay or rememo path is fed.",
-      "evidence": {
-        "executed": 0,
-        "already_researched_count": 457,
-        "dedupe_skipped_count": 335,
-        "allow_research": true,
-        "budget_flag": "enforced"
-      }
-    },
     {
       "id": "filing_ready_learning_stale",
       "severity": "medium",
@@ -40,8 +26,8 @@
         "span": [
           {
             "market_id": "sp500",
-            "unique_days": 25,
-            "observe_snapshots": 31,
+            "unique_days": 28,
+            "observe_snapshots": 34,
             "learning_ready": false
           }
         ]
@@ -51,19 +37,19 @@
   "layers": {
     "produce": {
       "ladder_research": {
-        "run_at": "2026-09-27T06:22:31.514590+00:00",
+        "run_at": "2026-09-30T06:52:42.218162+00:00",
         "focus_market": "euro_depth",
         "allow_research": true,
-        "executed": 0,
-        "created": 0,
+        "executed": 2,
+        "created": 2,
         "updated": 0,
         "skipped": false,
         "budget_flag": "enforced",
         "constraining": false,
-        "remaining_usd_before": 26.9,
-        "already_researched_count": 457,
-        "dedupe_skipped_count": 335,
-        "rememo_eligible_count": 0,
+        "remaining_usd_before": 76.1,
+        "already_researched_count": 458,
+        "dedupe_skipped_count": 361,
+        "rememo_eligible_count": 2,
         "research_markets": [
           "euro_depth",
           "sp500",
@@ -75,16 +61,14 @@
           "cac40",
           "dax",
           "aim",
-          "ibex35"
+          "ibex35",
+          "ftse_mib",
+          "aex",
+          "bel20"
         ],
         "research_all_graduated": false,
         "dedupe_note": "Exact Yahoo ticker match; earlier queue market wins. Each market queue puts no-memo buy-tier first, then rememo. Fresh memos are skipped; thin / body-lag memos rememo after ingest.",
         "skipped_sample": [
-          {
-            "market": "euro_depth",
-            "ticker": "ERIC-B.ST",
-            "reason": "fresh_memo"
-          },
           {
             "market": "euro_depth",
             "ticker": "DG.PA",
@@ -92,12 +76,7 @@
           },
           {
             "market": "euro_depth",
-            "ticker": "SGO.PA",
-            "reason": "fresh_memo"
-          },
-          {
-            "market": "euro_depth",
-            "ticker": "AD.AS",
+            "ticker": "ERIC-B.ST",
             "reason": "fresh_memo"
           },
           {
@@ -107,39 +86,49 @@
           },
           {
             "market": "euro_depth",
-            "ticker": "SAN.PA",
+            "ticker": "AD.AS",
             "reason": "fresh_memo"
           },
           {
             "market": "euro_depth",
-            "ticker": "STR.VI",
+            "ticker": "SGO.PA",
+            "reason": "fresh_memo"
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "SAN.PA",
             "reason": "fresh_memo"
           },
           {
             "market": "euro_depth",
             "ticker": "PHIA.AS",
             "reason": "fresh_memo"
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "STR.VI",
+            "reason": "fresh_memo"
           }
         ]
       },
       "weekly_ops": {
-        "remaining_weekly_ops_usd": 16.5,
-        "flag": "near_limit",
+        "remaining_weekly_ops_usd": 72.1,
+        "flag": "enforced",
         "constraining": false,
-        "estimated_spend_weekly_ops_usd_this_week": 68.0
+        "estimated_spend_weekly_ops_usd_this_week": 12.4
       },
       "live_committed": {
-        "committed_count": 78,
-        "committed_with_verdict": 78,
+        "committed_count": 79,
+        "committed_with_verdict": 79,
         "thin_or_zero_body": 0,
         "mode_initial": 0
       },
       "focus_library_research": {
         "market_id": "euro_depth",
-        "buy_tier_count": 51,
+        "buy_tier_count": 53,
         "memo_count": 21,
         "sampled": 21,
-        "thin_or_zero_body": 3,
+        "thin_or_zero_body": 2,
         "missing_verdict": 0,
         "mode_initial": 4,
         "samples": [
@@ -223,23 +212,29 @@
           "cac40",
           "dax",
           "aim",
-          "ibex35"
+          "ibex35",
+          "ftse_mib",
+          "aex",
+          "bel20"
         ],
         "research_markets": [
-          "sp500",
-          "dax",
-          "ftse_smallcap",
-          "ibex35",
-          "cac40",
-          "euro_depth",
-          "aim",
-          "euro_stoxx50",
           "tsx60",
+          "ftse_mib",
+          "asx200",
+          "sp500",
+          "euro_depth",
+          "ftse_smallcap",
+          "dax",
+          "cac40",
+          "aim",
+          "aex",
+          "euro_stoxx50",
           "nasdaq100",
-          "asx200"
+          "ibex35",
+          "bel20"
         ],
         "starved": [],
-        "weekday_backlog": 13
+        "weekday_backlog": 2
       }
     },
     "persist": {
@@ -346,13 +341,13 @@
       "persist_hole": false
     },
     "publish": {
-      "research_index_count": 78,
+      "research_index_count": 79,
       "index_missing_committed_verdicts": 0,
       "committed_not_indexed_sample": []
     },
     "apply": {
       "buy_tier_count": 57,
-      "buy_tier_wired_count": 56,
+      "buy_tier_wired_count": 57,
       "strong_buy_count": 12,
       "strong_buy_wired_count": 12,
       "wired_missing_committed_verdicts": 0,
@@ -367,9 +362,9 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 30,
-          "last_screen": "2026-09-27",
-          "observe_snapshots": 32
+          "unique_days": 33,
+          "last_screen": "2026-09-30",
+          "observe_snapshots": 35
         },
         {
           "market_id": "dax",
@@ -377,9 +372,9 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 15,
-          "last_screen": "2026-09-27",
-          "observe_snapshots": 21
+          "unique_days": 18,
+          "last_screen": "2026-09-30",
+          "observe_snapshots": 24
         },
         {
           "market_id": "asx200",
@@ -387,9 +382,9 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 25,
-          "last_screen": "2026-09-27",
-          "observe_snapshots": 35
+          "unique_days": 28,
+          "last_screen": "2026-09-30",
+          "observe_snapshots": 41
         },
         {
           "market_id": "sp500",
@@ -397,9 +392,9 @@
           "learning_ready": false,
           "trajectory_ready": false,
           "screen_stale": false,
-          "unique_days": 25,
-          "last_screen": "2026-09-27",
-          "observe_snapshots": 31
+          "unique_days": 28,
+          "last_screen": "2026-09-30",
+          "observe_snapshots": 34
         },
         {
           "market_id": "ftse_smallcap",
@@ -407,9 +402,9 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 22,
-          "last_screen": "2026-09-27",
-          "observe_snapshots": 29
+          "unique_days": 25,
+          "last_screen": "2026-09-30",
+          "observe_snapshots": 32
         },
         {
           "market_id": "tsx60",
@@ -417,9 +412,9 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 22,
-          "last_screen": "2026-09-27",
-          "observe_snapshots": 28
+          "unique_days": 25,
+          "last_screen": "2026-09-30",
+          "observe_snapshots": 31
         },
         {
           "market_id": "euro_stoxx50",
@@ -427,9 +422,9 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 17,
-          "last_screen": "2026-09-27",
-          "observe_snapshots": 23
+          "unique_days": 20,
+          "last_screen": "2026-09-30",
+          "observe_snapshots": 26
         },
         {
           "market_id": "nasdaq100",
@@ -437,9 +432,9 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 16,
-          "last_screen": "2026-09-27",
-          "observe_snapshots": 21
+          "unique_days": 19,
+          "last_screen": "2026-09-30",
+          "observe_snapshots": 24
         },
         {
           "market_id": "cac40",
@@ -447,9 +442,9 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 15,
-          "last_screen": "2026-09-27",
-          "observe_snapshots": 22
+          "unique_days": 18,
+          "last_screen": "2026-09-30",
+          "observe_snapshots": 25
         }
       ],
       "filing_ready_learning_stale": [
