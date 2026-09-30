@@ -216,3 +216,8 @@ jobs:
               payload={"artifact": "daily_focus", "source": "daily-focus-ack"},
           )
           PY
+
+      # [skip ci] on the ack commit skips pages.yml push — dispatch so live hub updates.
+      - name: Deploy dashboard to GitHub Pages
+        if: success()
+        run: bash scripts/dispatch_pages.sh
