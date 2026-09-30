@@ -6662,18 +6662,23 @@ async function acceptDailyRecommendation(button) {
       setDailyRecStatus(button, "Accepted → human-task-ack");
       await reloadDashboard({ silent: true });
     } else if (action === "focus-ack") {
+      const focusDecision =
+        String(actionPayload.decision || "accept").trim() || "accept";
       await queueDailyBridgeAction(
         "daily-focus-ack",
         {
           focus_id: actionPayload.focus_id || payload.task_ref,
           task_ref: actionPayload.focus_id || payload.task_ref,
           recommendation_id: payload.recommendation_id,
-          decision: "accept",
+          decision: focusDecision,
           local_date: payload.local_date || "",
         },
         (msg) => setDailyRecStatus(button, msg)
       );
-      setDailyRecStatus(button, "Accepted for today");
+      setDailyRecStatus(
+        button,
+        focusDecision === "dismiss" ? "Dismissed for today" : "Accepted for today"
+      );
       await reloadDashboard({ silent: true });
     } else if (action === "link_only") {
       const href = actionPayload.href || "#overview";

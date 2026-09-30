@@ -830,6 +830,7 @@ def _recommendation_for_progress_item(item: dict[str, Any], *, priority: int) ->
 
 def _recommendation_for_reconcile(check: dict[str, Any], *, priority: int) -> dict[str, Any]:
     cid = str(check.get("id") or "reconcile")
+    task_ref = f"reconcile:{cid}"
     title = str(check.get("title") or cid)
     rid = f"rec-{_stable_id('reconcile', cid, str(check.get('detail') or ''))}"
     summary = f"UI reconcile warn: {title}."
@@ -841,22 +842,36 @@ def _recommendation_for_reconcile(check: dict[str, Any], *, priority: int) -> di
         f"Rationale: {rationale}\n"
         f"Runbook: {runbook}\n"
         "Suggested options:\n"
-        "1) Hard-refresh Pages / regenerate the named artifact\n"
-        "2) Force republish if publish_lag (supervised)\n"
-        "3) Confirm false positive and dismiss after condition clears"
+        "1) Wait next ops-monitor cycle (preferred for one-cycle lag; no eng spray)\n"
+        "2) Accept — observe-dismiss for local_date while waiting / after condition clears\n"
+        "3) Hard-refresh Pages or supervised republish if publish_lag persists"
     )
     return {
         "id": rid,
-        "task_id": f"reconcile:{cid}",
+        "task_id": task_ref,
         "summary": summary,
         "rationale": rationale,
+        # Match market-warning park/dismiss: Accept = daily-focus-ack, not link_only.
+        # link_only left operators with no way to clear sticky Cap B ambers from Daily.
         "accept_action": {
-            "kind": "link_only",
-            "payload": {"href": "#automation/ops", "runbook": runbook},
+            "kind": "focus-ack",
+            "payload": {
+                "focus_id": task_ref,
+                "decision": "dismiss",
+                "href": "#automation/ops",
+                "runbook": runbook,
+            },
         },
         "discuss_prompt": discuss_prompt,
         "priority": priority,
-        "options": ["Open runbook", "Supervised republish", "Discuss"],
+        "options": [
+            "Accept — observe-dismiss for today",
+            "Wait ops-monitor / open Ops",
+            "Discuss",
+        ],
+        "dismissable": True,
+        "work_class": "surface",
+        "task_family": cid,
     }
 
 
@@ -1265,11 +1280,15 @@ def build_daily_focus(
                     "title": check.get("title") or cid,
                     "summary": check.get("detail") or "",
                     "sort_bucket": "reconcile",
-                    "closeable": False,
-                    "close_action": "link_only",
-                    "close_payload": {"href": "#automation/ops"},
+                    "closeable": True,
+                    "close_action": "daily-focus-ack",
+                    "close_payload": {
+                        "focus_id": task_ref,
+                        "decision": "dismiss",
+                    },
                     "href": "#automation/ops",
                     "recommendation_id": rec["id"],
+                    "dismissable": True,
                     "status": status,
                     "closed": False,
                 }
@@ -1409,10 +1428,30 @@ def write_daily_focus(
     seed_path: Path | None = None,
     notes_text: str | None = None,
     acks_path: Path | None = None,
+    refresh_reconcile: bool = True,
     **kwargs: Any,
 ) -> dict[str, Any]:
+    """Persist Cap C daily hub.
+
+    When ``refresh_reconcile`` is true (default), rewrite Cap B
+    (``ui_state_reconciliation.json``) first so hub-only rebuilds
+    (focus-ack / discuss / human-task-ack) cannot keep embedding a
+    stale reconcile amber after the underlying check already passes.
+    """
     data_dir = Path(data_dir or DEFAULT_DATA_DIR)
     store_path = Path(store_path or (data_dir / "daily_focus.json"))
+    if refresh_reconcile:
+        try:
+            from value_investor.ui_state_reconciliation import write_ui_state_reconciliation
+
+            write_kwargs: dict[str, Any] = {}
+            if kwargs.get("now") is not None:
+                write_kwargs["now"] = kwargs["now"]
+            if kwargs.get("timezone") is not None:
+                write_kwargs["timezone"] = kwargs["timezone"]
+            write_ui_state_reconciliation(data_dir=data_dir, **write_kwargs)
+        except Exception:  # noqa: BLE001 — Cap B must not block Cap C
+            pass
     acks = None
     if acks_path is not None or (data_dir / "daily_focus_acks.json").exists():
         from value_investor.daily_focus_acks import load_daily_focus_acks
