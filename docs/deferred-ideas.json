@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-30T18:17:41+00:00",
+  "updated_at": "2026-09-30T18:27:25+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -11524,19 +11524,19 @@
     {
       "id": "N173",
       "category": "not_now",
-      "section": "learning",
+      "section": "not_now",
       "title": "Live LLM sell overlay without evidence trail",
-      "summary": "Do not put LLM (or silent human) judgment on the live sell/hold/reentry path until an evidence schema writes structured reasons + citations into the decision pack / rebalance log. Algo gates (cooldown, still-in-buy-set, rank-drop) stay the default; judgment is observe/shadow only and must never influence sells without an auditable record.",
-      "revisit_when": "After reentry_cooldown=2 and/or still-in-buy-set observe marks exist, and an exit_reason evidence schema is wired into rebalance_log / decision packs; P1 live-path utilization not starving.",
+      "summary": "Do not give LLM/human sell authority on Suite A without durable exit_reason + citations in the rebalance/decision trail. Prefer algo still-in-buy-set / rank-drop / cooldown gates; judgment stays shadow-only.",
+      "revisit_when": "Still-in-buy-set twin marks exist AND exit-card evidence schema is wired into rebalance log",
       "tags": [
-        "sell-logic",
         "llm",
+        "sell",
         "evidence",
         "churn",
-        "observe"
+        "N173"
       ],
       "status": "open",
-      "source": "reentry-cooldown-replay / churn-cost-drag dialogue",
+      "source": "https://cursor.com/agents/bc-bbb1dd0e-b47c-56d6-bab4-93f84fa54576",
       "added_at": "2026-09-30T18:17:41+00:00"
     },
     {
@@ -11544,17 +11544,52 @@
       "category": "later",
       "section": "learning",
       "title": "Still-in-buy-set no-capacity-bump-exit observe shadow",
-      "summary": "After cooldown=2 replay: residual PAF/BP thrash is capacity-bump sells while names remain buy-tier. Observe/shadow a deterministic rule: no full exit solely to seat another buy-tier name (or require rank-drop threshold). Twin/epoch before any live apply.",
-      "revisit_when": "After cooldown=2 observe is accepted; next churn instrument slot free; prefer before any LLM sell layer.",
+      "summary": "Observe probe done 2026-09-30 (Project docs/still-in-buy-set-observe.md): every focus BSB never left candidates; rank-gated hold (drop<3) catches PAF/IMB/SN beyond cooldown=2. Next = cold-start twin only; do not mid-flight Suite A edit.",
+      "revisit_when": "Eng capacity for a cold-start twin of rank-gated still-in-buy-set hold (\u00b1 cooldown=2); after Suite B adoption framing is clear",
       "tags": [
-        "sell-logic",
         "churn",
-        "capacity-bump",
-        "observe"
+        "still-in-buy-set",
+        "rank-drop",
+        "observe",
+        "L507"
       ],
       "status": "open",
-      "source": "reentry-cooldown-replay residual gaps",
+      "source": "https://cursor.com/agents/bc-bbb1dd0e-b47c-56d6-bab4-93f84fa54576",
       "added_at": "2026-09-30T18:17:41+00:00"
+    },
+    {
+      "id": "N174",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Naive still-buyish hold without rank-drop carve-out",
+      "summary": "Holding every still-screen-buyish displaced name blocks decisive leaves (large rank drops 28-35 on MEGP/AEP/ITV). Observe showed 11-14 false-holds without drop<3 gate. Do not ship un-gated hold-all-buyish.",
+      "revisit_when": "Designing the still-in-buy-set cold-start twin exit predicate",
+      "tags": [
+        "churn",
+        "still-in-buy-set",
+        "false-hold",
+        "rank-drop"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-bbb1dd0e-b47c-56d6-bab4-93f84fa54576",
+      "added_at": "2026-09-30T18:27:25+00:00"
+    },
+    {
+      "id": "N175",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Mid-flight Suite A still-in-buy-set or cooldown=2 knob flip",
+      "summary": "Preferences and observe results: twins over mid-flight edits. Live rules/ai_judgment stay at cooldown=1 until a cold-start twin of rank-gated still-in-buy-set (\u00b1 CD2) has marks; adoption on Suite B.",
+      "revisit_when": "Cold-start twin has thick enough closed cohort / stated readiness gates",
+      "tags": [
+        "churn",
+        "twin",
+        "suite-a",
+        "not-mid-flight"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-bbb1dd0e-b47c-56d6-bab4-93f84fa54576",
+      "added_at": "2026-09-30T18:27:25+00:00"
     }
   ],
   "fragments": [
