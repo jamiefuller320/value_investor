@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-30T07:55:18.775642+00:00",
+  "run_at": "2026-09-30T16:34:37.017143+00:00",
   "market_id": "aex",
   "targets": [
     "SHELL.AS"
@@ -101,7 +101,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-30T07:54:44.424848+00:00",
+    "snapshot_at": "2026-09-30T16:34:07.569191+00:00",
     "market_id": "aex",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
@@ -133,13 +133,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-30T07:55:17.084561+00:00",
+    "snapshot_at": "2026-09-30T16:34:30.801646+00:00",
     "market_id": "aex",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 2,
-    "indexed_without_body": 0,
+    "indexed_without_body": 1,
     "bodies_min": 2,
     "bodies_median": 3.5,
     "bodies_max": 37,
@@ -151,18 +151,25 @@
       "KPN.AS",
       "ADYEN.AS"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "ADYEN.AS"
+    ],
+    "indexed_without_body_by_ticker": {
+      "ADYEN.AS": 1
+    },
     "parked_tickers": [
-      "ADYEN.AS",
       "KPN.AS"
     ],
-    "parked_count": 2,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "parked_count": 1,
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
+      "ADYEN.AS"
+    ],
+    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body_tickers": [
+      "ADYEN.AS"
+    ],
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -172,9 +179,9 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 8,
-    "hits": 5,
-    "new_rows_total": 0,
-    "curiosity_total": 5,
+    "hits": 6,
+    "new_rows_total": 1,
+    "curiosity_total": 6,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -193,14 +200,10 @@
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "aex"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "aex",
-    "assessed_at": "2026-09-30T07:54:44.838143+00:00",
+    "assessed_at": "2026-09-30T16:34:08.004361+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -225,9 +228,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 31.83772031500007,
+  "used_seconds": 22.376272046999986,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3568.1622796849997,
+  "leftover_seconds": 3577.623727953,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -235,21 +238,11 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aex",
-    "updated_at": "2026-09-30T07:55:17.085835+00:00",
-    "exhausted": true,
+    "updated_at": "2026-09-30T16:34:30.803035+00:00",
+    "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
-      {
-        "ticker": "ADYEN.AS",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-29T14:53:07.098634+00:00",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true
-      },
       {
         "ticker": "KPN.AS",
         "reason": "awaiting_periodic_report",
@@ -267,39 +260,22 @@
       "ADYEN.AS",
       "KPN.AS"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "ADYEN.AS"
+    ],
     "path": "docs/data/library/markets/aex/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "aex",
-    "ingest_exhausted_markets": [
-      "aex",
-      "asx200",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "ibex35",
-      "nasdaq100",
-      "sp500",
-      "tsx60"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "aex"
   },
   "parked_hunter_compile": {
-    "compiled_count": 1,
-    "task_ids": [
-      "eng-20260930-01"
-    ],
-    "task_count": 119,
-    "market_id": "euro_depth",
-    "hunter_ticker": "ADYEN.AS",
+    "compiled_count": 0,
+    "task_ids": [],
+    "task_count": 120,
+    "market_id": "nasdaq100",
+    "hunter_ticker": "PDD",
     "priority_score": 12.0
   }
 }
