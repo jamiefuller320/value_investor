@@ -1465,4 +1465,51 @@ def write_daily_focus(
         **kwargs,
     )
     write_json(store_path, payload, compact=False)
+    # When Cap B is green, auto-resolve open Discuss rows for reconcile checks
+    # that no longer appear on the open board (Discuss alone never closes).
+    try:
+        _resolve_cleared_reconcile_discuss(data_dir, payload)
+    except Exception:  # noqa: BLE001 — discuss resolve must not block Cap C
+        pass
     return payload
+
+
+def _resolve_cleared_reconcile_discuss(
+    data_dir: Path, payload: dict[str, Any]
+) -> list[dict[str, Any]]:
+    """Resolve open discuss inbox items for Cap B checks that are no longer open."""
+    from value_investor.daily_focus_acks import resolve_discuss_inbox_item
+
+    open_refs = {
+        str(t.get("task_ref") or "")
+        for t in (payload.get("tasks") or [])
+        if isinstance(t, dict) and not t.get("closed") and t.get("source") == "ui_reconcile"
+    }
+    local_date = str(payload.get("local_date") or "")
+    resolved: list[dict[str, Any]] = []
+    inbox = _safe_read(Path(data_dir) / "daily_discuss_inbox.json") or {}
+    for item in inbox.get("items") or []:
+        if not isinstance(item, dict):
+            continue
+        if str(item.get("status") or "open") != "open":
+            continue
+        tid = str(item.get("task_id") or "")
+        if not tid.startswith("reconcile:"):
+            continue
+        if local_date and str(item.get("local_date") or "") != local_date:
+            continue
+        if tid in open_refs:
+            continue
+        row = resolve_discuss_inbox_item(
+            data_dir,
+            recommendation_id=str(item.get("recommendation_id") or ""),
+            task_id=tid,
+            local_date=local_date,
+            resolution_summary=(
+                "Auto-resolved: Cap B / Daily hub no longer open this reconcile check"
+            ),
+            resolved_by="daily_focus_builder",
+        )
+        if row:
+            resolved.append(row)
+    return resolved

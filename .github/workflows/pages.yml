@@ -17,7 +17,10 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  # Prefer newest deploy. cancel-in-progress:false left a stuck environment
+  # "waiting" run blocking the group for hours, so Pages kept serving a stale
+  # Daily hub (reconcile amber + link_only Accept) after Cap B had cleared on main.
+  cancel-in-progress: true
 
 jobs:
   deploy:

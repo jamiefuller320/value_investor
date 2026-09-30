@@ -871,6 +871,56 @@ function prunePendingDailyAcceptsAgainstDurable(data) {
   }
 }
 
+/**
+ * Hide phantom Cap B date ambers when the hub artifact already matches today.
+ * Sticky failure mode: Cap B warn re-embedded into daily_focus while
+ * hub.local_date already equals Europe/London today (Pages lag / hub-only write).
+ */
+function healClearedReconcileTasks(hub, now = new Date()) {
+  if (!hub || !Array.isArray(hub.tasks)) return hub;
+  let today = "";
+  try {
+    today = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Europe/London",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(now);
+  } catch {
+    today = now.toISOString().slice(0, 10);
+  }
+  const hubDate = String(hub.local_date || "").trim();
+  if (!hubDate || hubDate !== today) return hub;
+  const healRef = "reconcile:daily_hub_local_date_matches_today";
+  let changed = false;
+  const tasks = hub.tasks.map((task) => {
+    if (!task || typeof task !== "object" || task.closed) return task;
+    if (String(task.task_ref || "").trim() !== healRef) return task;
+    changed = true;
+    return {
+      ...task,
+      closed: true,
+      closed_healed: true,
+      closed_reason: "hub_local_date_matches_today",
+    };
+  });
+  if (!changed) return hub;
+  const closedToday = new Set(
+    (hub.closed_today || []).map((x) => String(x || "").trim()).filter(Boolean)
+  );
+  closedToday.add(healRef);
+  const openTasks = tasks.filter((t) => t && !t.closed);
+  const counts = { ...(hub.counts || {}) };
+  counts.reconcile = openTasks.filter((t) => t.source === "ui_reconcile").length;
+  return {
+    ...hub,
+    tasks,
+    open_task_count: openTasks.length,
+    closed_today: Array.from(closedToday),
+    counts,
+  };
+}
+
 /** Mark accepted tasks closed via session pending until durable hub catch-up. */
 function applyPendingDailyOverlays(base) {
   if (!base || !Array.isArray(base.tasks)) return base;
@@ -910,8 +960,13 @@ function applyPendingDailyOverlays(base) {
  */
 function syncDailyFocusOverlay(data) {
   if (!data) return data;
-  const base = dailyFocusBase || data.daily_focus;
+  let base = dailyFocusBase || data.daily_focus;
   if (!base || !Array.isArray(base.tasks)) return data;
+  const healed = healClearedReconcileTasks(base);
+  if (healed !== base) {
+    dailyFocusBase = healed;
+    base = healed;
+  }
   prunePendingDailyAcceptsAgainstDurable(data);
   data.daily_focus = applyPendingDailyOverlays(base);
   return data;

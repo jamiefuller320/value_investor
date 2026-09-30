@@ -297,6 +297,83 @@ def test_write_daily_focus_refreshes_stale_reconcile_amber(tmp_path: Path) -> No
     )
 
 
+def test_write_daily_focus_resolves_cleared_reconcile_discuss(tmp_path: Path) -> None:
+    """Open Discuss for a reconcile check auto-resolves once Cap B / hub clears it."""
+    _write_minimal_board(tmp_path)
+    now = datetime(2026, 9, 28, 12, 0, tzinfo=UTC)
+    write_json(
+        tmp_path / "daily_focus.json",
+        {
+            "local_date": "2026-09-28",
+            "timezone": "Europe/London",
+            "generated_at": now.isoformat().replace("+00:00", "Z"),
+            "stale_for_local_date": False,
+            "focus_lines": [],
+            "tasks": [],
+        },
+        compact=False,
+    )
+    write_json(
+        tmp_path / "progress_report.json",
+        {"schema_version": 1, "generated_at": now.isoformat()},
+        compact=False,
+    )
+    write_json(
+        tmp_path / "latest.json",
+        {
+            "learning_tracks_dual_suite": {"suite_a": {}, "suite_b": {}},
+            "paper_automation": {"learning_tracks_review": {"tracks": [{"id": "x"}]}},
+        },
+        compact=False,
+    )
+    write_json(tmp_path / "human_task_acks.json", {"acks": []}, compact=False)
+    write_json(
+        tmp_path / "lifecycle_board.json",
+        {"generated_at": now.isoformat()},
+        compact=False,
+    )
+    write_json(
+        tmp_path / "ui_state_reconciliation.json",
+        {
+            "schema_version": 1,
+            "generated_at": "2026-09-28T07:00:00Z",
+            "overall": "warn",
+            "checks": [
+                {
+                    "id": "daily_hub_local_date_matches_today",
+                    "title": "Daily hub local_date matches today",
+                    "status": "warn",
+                    "detail": "stale planted amber",
+                }
+            ],
+            "summary": {"ok": 0, "warn": 1, "fail": 0},
+        },
+        compact=False,
+    )
+    write_json(
+        tmp_path / "daily_discuss_inbox.json",
+        {
+            "schema_version": 1,
+            "updated_at": now.isoformat(),
+            "items": [
+                {
+                    "recommendation_id": "rec-676a09a614ea",
+                    "task_id": "reconcile:daily_hub_local_date_matches_today",
+                    "local_date": "2026-09-28",
+                    "status": "open",
+                    "summary": "UI reconcile warn",
+                }
+            ],
+        },
+        compact=False,
+    )
+    write_daily_focus(data_dir=tmp_path, now=now)
+    inbox = json.loads((tmp_path / "daily_discuss_inbox.json").read_text(encoding="utf-8"))
+    item = next(i for i in inbox["items"] if i["recommendation_id"] == "rec-676a09a614ea")
+    assert item["status"] == "resolved"
+    assert item.get("resolved_by") == "daily_focus_builder"
+
+
 def test_discuss_inbox_queues_project_pickup(tmp_path: Path) -> None:
     _write_minimal_board(tmp_path)
     write_daily_focus(data_dir=tmp_path, now=datetime(2026, 9, 28, 2, 0, tzinfo=UTC))

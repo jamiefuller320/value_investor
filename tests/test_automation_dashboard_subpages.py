@@ -301,6 +301,10 @@ def test_daily_hub_accept_passes_focus_ack_decision() -> None:
     assert "actionPayload.decision" in focus_block
     assert 'focusDecision === "dismiss"' in focus_block
     assert "Dismissed for today" in focus_block
+    assert "function healClearedReconcileTasks(" in text
+    assert "reconcile:daily_hub_local_date_matches_today" in text
+    assert "hub_local_date_matches_today" in text
+    assert "healClearedReconcileTasks(base)" in text
 
     text = APP_JS.read_text(encoding="utf-8")
     card = text.split("function renderDailyHubTaskCard(", 1)[1].split(
@@ -311,10 +315,14 @@ def test_daily_hub_accept_passes_focus_ack_decision() -> None:
     assert "no dismiss" in card
     assert "badge-sell" in card
     html = Path("docs/index.html").read_text(encoding="utf-8")
-    assert "app.js?v=reconcile-dismiss-observe1" in html
+    assert "app.js?v=reconcile-pages-heal1" in html
     assert "Market warning triage" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "zero_body_stuck" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "Expansive assessment" in OPS_MONITOR.read_text(encoding="utf-8")
+    assert "Client heal" in OPS_MONITOR.read_text(encoding="utf-8")
+    assert "cancel-in-progress: true" in Path(".github/workflows/pages.yml").read_text(
+        encoding="utf-8"
+    )
 
 
 def test_overview_pulse_links_daily_hub() -> None:

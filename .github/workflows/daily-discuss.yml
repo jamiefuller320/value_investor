@@ -197,3 +197,8 @@ jobs:
               payload={"artifact": "daily_discuss_inbox", "source": "daily-discuss"},
           )
           PY
+
+      # [skip ci] on the discuss commit skips pages.yml push — dispatch so live hub updates.
+      - name: Deploy dashboard to GitHub Pages
+        if: success()
+        run: bash scripts/dispatch_pages.sh
