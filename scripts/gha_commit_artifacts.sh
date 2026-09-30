@@ -201,6 +201,88 @@ restore_file() {
   cp "$WORKDIR/$path" "$path"
 }
 
+# Blind overlay of daily_focus_acks.json loses accept rows when a concurrent
+# discuss/ack job started from a stale checkout. Merge by (local_date, task_ref).
+restore_or_merge_owned_file() {
+  local path="$1"
+  local remote_rev="$2"
+  if [ ! -f "$WORKDIR/$path" ]; then
+    return 0
+  fi
+  case "$path" in
+    */daily_focus_acks.json|daily_focus_acks.json) ;;
+    *)
+      restore_file "$path"
+      return 0
+      ;;
+  esac
+  mkdir -p "$(dirname "$path")"
+  local remote_file
+  remote_file="$(mktemp "$WORKDIR/remote_acks.XXXXXX.json")"
+  if ! git show "${remote_rev}:${path}" >"$remote_file" 2>/dev/null; then
+    rm -f "$remote_file"
+    restore_file "$path"
+    return 0
+  fi
+  if python3 - "$WORKDIR/$path" "$remote_file" "$path" <<'PY'
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+def load(path: Path) -> dict:
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {"schema_version": 1, "acks": []}
+    return raw if isinstance(raw, dict) else {"schema_version": 1, "acks": []}
+
+def key(row: dict) -> tuple[str, str]:
+    return (
+        str(row.get("local_date") or "").strip(),
+        str(row.get("task_ref") or row.get("focus_id") or "").strip(),
+    )
+
+def ts(row: dict) -> str:
+    return str(row.get("acked_at") or "").strip()
+
+local = load(Path(sys.argv[1]))
+remote = load(Path(sys.argv[2]))
+by_key: dict[tuple[str, str], dict] = {}
+for store in (remote, local):
+    for row in store.get("acks") or []:
+        if not isinstance(row, dict):
+            continue
+        k = key(row)
+        if not k[0] or not k[1]:
+            continue
+        prev = by_key.get(k)
+        if prev is None or ts(row) >= ts(prev):
+            by_key[k] = dict(row)
+acks = sorted(
+    by_key.values(),
+    key=lambda r: (str(r.get("local_date") or ""), str(r.get("acked_at") or ""), key(r)[1]),
+)
+stamps = []
+for store in (remote, local):
+    stamp = store.get("updated_at")
+    if isinstance(stamp, str) and stamp.strip():
+        stamps.append(stamp.strip())
+updated = max(stamps) if stamps else datetime.now(timezone.utc).isoformat()
+out = {"schema_version": 1, "updated_at": updated, "acks": acks}
+Path(sys.argv[3]).write_text(json.dumps(out, indent=2, sort_keys=False) + "\n", encoding="utf-8")
+print(f"merged {len(acks)} ack rows")
+PY
+  then
+    echo "Merged ${path} with ${remote_rev} (union by local_date+task_ref)" >&2
+    rm -f "$remote_file"
+    return 0
+  fi
+  echo "Warn: daily_focus_acks merge failed; falling back to local overlay" >&2
+  rm -f "$remote_file"
+  restore_file "$path"
+}
+
 # Expand pathspecs to concrete files currently in the working tree (including
 # untracked). Supports exact files, directories, and bash globs (including **).
 expand_to_files() {
@@ -286,7 +368,7 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
       echo "Preserving newer ${REMOTE}/${REF} $path (generated_at ahead of ${LABEL} snapshot)" >&2
       continue
     fi
-    restore_file "$path"
+    restore_or_merge_owned_file "$path" "${REMOTE}/${REF}"
     if [ -e "$path" ]; then
       restored+=("$path")
     fi

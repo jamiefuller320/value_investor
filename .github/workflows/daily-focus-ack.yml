@@ -39,8 +39,11 @@ permissions:
   contents: write
   actions: write
 
+# Share a group with daily-discuss + human-task-ack: all three RMW overlapping
+# hub sidecars (acks / daily_focus). Separate groups allowed a discuss push to
+# clobber accept rows from a concurrent daily-focus-ack (2026-09-30 race).
 concurrency:
-  group: daily-focus-ack
+  group: daily-hub-sidecars
   cancel-in-progress: false
 
 jobs:

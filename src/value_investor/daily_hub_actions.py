@@ -138,11 +138,21 @@ def run_daily_discuss(
         work_class=str(entry.get("work_class") or ""),
         task_family=str(entry.get("task_family") or ""),
     )
+    # Rebuild hub so open/closed counts stay coherent with the sidecar (and so
+    # we never commit a stale checkout copy of daily_focus.json).
+    focus_now = _now_for_local_date(local_date)
+    focus = write_daily_focus(data_dir=data_dir, now=focus_now)
+    try:
+        write_daily_hub_history(data_dir=data_dir, now=focus_now)
+    except Exception:  # noqa: BLE001 — history must not block discuss
+        pass
     return {
         "ok": True,
         "item": entry,
         "inbox_path": str(data_dir / "daily_discuss_inbox.json"),
         "project_pickup": entry.get("project_pickup"),
+        "open_task_count": focus.get("open_task_count"),
+        "focus_path": str(data_dir / "daily_focus.json"),
     }
 
 
