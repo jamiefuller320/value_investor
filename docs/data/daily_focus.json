@@ -2,7 +2,7 @@
   "schema_version": 1,
   "local_date": "2026-09-30",
   "timezone": "Europe/London",
-  "generated_at": "2026-09-30T14:34:30.784036Z",
+  "generated_at": "2026-09-30T14:53:12.854193Z",
   "refresh_deadline_local": "04:00",
   "stale_for_local_date": false,
   "focus_lines": [
@@ -167,7 +167,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-09-30T14:34:30.784036Z",
+        "updated_at": "2026-09-30T14:53:12.854193Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Leave euro fat slot; watch first memo + entry DCA. Policy green ≠ utility.",
@@ -256,7 +256,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-09-30T14:34:30.784036Z",
+        "updated_at": "2026-09-30T14:53:12.854193Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Ship Automation Daily hub; do not open parallel eng spray from reconcile ambers.",
@@ -359,7 +359,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": "judgment call — Discuss before deepening fat slot",
-        "updated_at": "2026-09-30T14:34:30.784036Z",
+        "updated_at": "2026-09-30T14:53:12.854193Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "euro_depth · zero_improve_stall (focus/fat-slot head) — proposed triage: deepen. Observe-only; do not divert the euro fat slot on ritual ambers.",
@@ -484,7 +484,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-09-30T14:34:30.784036Z",
+        "updated_at": "2026-09-30T14:53:12.854193Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: PR fix common issues",
@@ -582,137 +582,11 @@
       }
     },
     {
-      "task_ref": "human:weekday-engineering-parked-backlog-clear",
-      "source": "human_tasks",
-      "work_class": "ops_gate",
-      "task_family": "weekday-engineering-parked-backlog-clear",
-      "priority": 12,
-      "title": "Clear engineering parked backlog when dispatch pauses",
-      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When the warning still fires, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
-      "sort_bucket": "new_info",
-      "closeable": true,
-      "close_action": "human-task-ack",
-      "close_payload": {
-        "task_id": "weekday-engineering-parked-backlog-clear",
-        "decision": "ack_observe",
-        "finding_fingerprint": "c0c3ee56f97eb146"
-      },
-      "href": "#automation/human",
-      "recommendation_id": "rec-61772ce771b4",
-      "status": {
-        "state": "ready",
-        "label": "Proposed",
-        "next_steps": [
-          "Accept runs human-task-ack — never auto-applies knobs, crons, or capital"
-        ],
-        "waiting_on": [
-          {
-            "kind": "external",
-            "ref": null,
-            "detail": "operator Acknowledge (observe-only) or Discuss"
-          }
-        ],
-        "ready": true,
-        "ready_reason": "proposal present · no blockers",
-        "blocked_reason": null,
-        "updated_at": "2026-09-30T14:34:30.784036Z",
-        "updated_by": "morning_builder",
-        "assessment": {
-          "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: 0 attention-parked eng tasks",
-          "stage_label": "ops_gate:new_info",
-          "stage_state": "ready",
-          "stage_since": null,
-          "days_in_stage": null,
-          "stage_duration": "duration unknown",
-          "waiting_for": "operator Acknowledge (observe-only) or Discuss",
-          "how_achieved": "Accept runs human-task-ack — never auto-applies knobs, crons, or capital",
-          "provenance": [
-            "observe:where",
-            "observe:stage_label",
-            "observe:waiting_for",
-            "observe:how"
-          ],
-          "incomplete_fields": [
-            "stage_duration"
-          ],
-          "observe_only": true
-        }
-      },
-      "human_task": {
-        "id": "weekday-engineering-parked-backlog-clear",
-        "sort_bucket": "new_info",
-        "analysis": {
-          "headline": "0 attention-parked eng tasks",
-          "updated_at": null,
-          "fingerprint": "c0c3ee56f97eb146",
-          "bullets": [
-            "Parked tasks: 0 (attention ~0)",
-            "Traffic pause active: False"
-          ],
-          "source_keys": [
-            "engineering_tasks"
-          ]
-        },
-        "ack": {
-          "acked": true,
-          "stale": true,
-          "acked_at": "2026-09-28T22:54:20.452687+00:00",
-          "decision": "ack_observe",
-          "finding_fingerprint": "9fc44a095c2ab772"
-        },
-        "approval_gate": false,
-        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
-        "cadence": "weekday"
-      },
-      "closed": false,
-      "assessment": {
-        "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: 0 attention-parked eng tasks",
-        "stage_label": "ops_gate:new_info",
-        "stage_state": "ready",
-        "stage_since": null,
-        "days_in_stage": null,
-        "stage_duration": "duration unknown",
-        "waiting_for": "operator Acknowledge (observe-only) or Discuss",
-        "how_achieved": "Accept runs human-task-ack — never auto-applies knobs, crons, or capital",
-        "provenance": [
-          "observe:where",
-          "observe:stage_label",
-          "observe:waiting_for",
-          "observe:how"
-        ],
-        "incomplete_fields": [
-          "stage_duration"
-        ],
-        "observe_only": true
-      },
-      "recommendation": {
-        "id": "rec-61772ce771b4",
-        "task_id": "human:weekday-engineering-parked-backlog-clear",
-        "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks",
-        "accept_action": {
-          "kind": "human-task-ack",
-          "payload": {
-            "task_id": "weekday-engineering-parked-backlog-clear",
-            "decision": "ack_observe",
-            "finding_fingerprint": "c0c3ee56f97eb146"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-61772ce771b4` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-61772ce771b4` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 12,
-        "options": [
-          "Accept → Acknowledge (observe-only)",
-          "Open runbook / defer",
-          "Discuss in Project chat"
-        ]
-      }
-    },
-    {
       "task_ref": "reconcile:daily_hub_local_date_matches_today",
       "source": "ui_reconcile",
       "work_class": "surface",
       "task_family": "daily_hub_local_date_matches_today",
-      "priority": 13,
+      "priority": 12,
       "title": "Daily hub local_date matches today",
       "summary": "hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h",
       "sort_bucket": "reconcile",
@@ -739,7 +613,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": "hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h",
-        "updated_at": "2026-09-30T14:34:30.784036Z",
+        "updated_at": "2026-09-30T14:53:12.854193Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "UI reconcile amber: Daily hub local_date matches today",
@@ -796,7 +670,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-676a09a614ea` (reconcile `daily_hub_local_date_matches_today`):\nSummary: UI reconcile warn: Daily hub local_date matches today.\nRationale: hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h\nRunbook: docs/ops/ops-monitor.md#daily-hub\nSuggested options:\n1) Hard-refresh Pages / regenerate the named artifact\n2) Force republish if publish_lag (supervised)\n3) Confirm false positive and dismiss after condition clears",
-        "priority": 13,
+        "priority": 12,
         "options": [
           "Open runbook",
           "Supervised republish",
@@ -805,7 +679,7 @@
       }
     }
   ],
-  "open_task_count": 4,
+  "open_task_count": 3,
   "recommendations": [
     {
       "id": "rec-b877dd532f10",
@@ -899,27 +773,6 @@
       ]
     },
     {
-      "id": "rec-61772ce771b4",
-      "task_id": "human:weekday-engineering-parked-backlog-clear",
-      "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks",
-      "accept_action": {
-        "kind": "human-task-ack",
-        "payload": {
-          "task_id": "weekday-engineering-parked-backlog-clear",
-          "decision": "ack_observe",
-          "finding_fingerprint": "c0c3ee56f97eb146"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-61772ce771b4` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-61772ce771b4` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 12,
-      "options": [
-        "Accept → Acknowledge (observe-only)",
-        "Open runbook / defer",
-        "Discuss in Project chat"
-      ]
-    },
-    {
       "id": "rec-676a09a614ea",
       "task_id": "reconcile:daily_hub_local_date_matches_today",
       "summary": "UI reconcile warn: Daily hub local_date matches today.",
@@ -932,7 +785,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-676a09a614ea` (reconcile `daily_hub_local_date_matches_today`):\nSummary: UI reconcile warn: Daily hub local_date matches today.\nRationale: hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h\nRunbook: docs/ops/ops-monitor.md#daily-hub\nSuggested options:\n1) Hard-refresh Pages / regenerate the named artifact\n2) Force republish if publish_lag (supervised)\n3) Confirm false positive and dismiss after condition clears",
-      "priority": 13,
+      "priority": 12,
       "options": [
         "Open runbook",
         "Supervised republish",
@@ -954,14 +807,14 @@
   "counts": {
     "focus": 0,
     "market_warnings": 1,
-    "human_new_info": 2,
+    "human_new_info": 1,
     "human_unacked": 0,
     "progress": 0,
     "reconcile": 1
   },
   "project_sync": {
     "notes_fingerprint": null,
-    "synced_at": "2026-09-30T14:34:30.784036Z",
+    "synced_at": "2026-09-30T14:53:12.854193Z",
     "method": "morning_builder_reads_committed_export_or_manual"
   },
   "illumination_hints": {
@@ -969,14 +822,14 @@
       "attention": true,
       "new_info": true,
       "reasons": [
-        "open_tasks=4"
+        "open_tasks=3"
       ]
     },
     "automation.human": {
       "attention": true,
       "new_info": true,
       "reasons": [
-        "human_tasks.new_info=2",
+        "human_tasks.new_info=1",
         "human_tasks.unacked=0"
       ]
     },
