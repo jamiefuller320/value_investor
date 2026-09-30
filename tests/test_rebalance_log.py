@@ -887,12 +887,8 @@ def test_reentry_cooldown_screens_counterfactual_blocks_adjacent_rebuy(tmp_path:
     assert baseline["knobs"]["reentry_cooldown_screens"] == 1
     assert tighter["knobs"]["reentry_cooldown_screens"] == 2
 
-    fund_c1, _ = build_replay_fund_from_log(
-        entries, max_positions=2, reentry_cooldown_screens=1
-    )
-    fund_c2, _ = build_replay_fund_from_log(
-        entries, max_positions=2, reentry_cooldown_screens=2
-    )
+    fund_c1, _ = build_replay_fund_from_log(entries, max_positions=2, reentry_cooldown_screens=1)
+    fund_c2, _ = build_replay_fund_from_log(entries, max_positions=2, reentry_cooldown_screens=2)
     assert fund_c1 is not None and fund_c2 is not None
     assert "PAF.L" in fund_c1.holdings
     assert "PAF.L" not in fund_c2.holdings
