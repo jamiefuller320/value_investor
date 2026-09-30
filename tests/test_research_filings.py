@@ -10631,6 +10631,111 @@ def test_parked_source_hunter_dg_pa_euro_depth_has_fetchable_ir():
     )
 
 
+def test_mc_pa_ir_allowlist_uses_globenewswire_pdf_not_html():
+    rows = fetch_filings_ir_allowlist("MC.PA")
+    urls = [row["url"] for row in rows]
+    assert len(urls) == 1
+    assert all("globenewswire.com/Resource/Download" in url for url in urls)
+    assert all(url.endswith("press-release-lvmh-2025-annual-results.pdf") for url in urls)
+    assert all("globenewswire.com/news-release" not in url for url in urls)
+
+
+def test_fetch_filings_ir_allowlist_euro_depth_mc_pa_builtins(tmp_path: Path):
+    """Regression: MC.PA parked IWB — ml-eu GlobeNewswire FY2025 results PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("MC.PA", path=allowlist_path)
+    assert len(rows) == 1
+    assert rows[0]["source"] == "ir_allowlist"
+    assert "d18b2bea-e144-44ea-9f53-71cd9cca8440" in rows[0]["url"]
+    assert rows[0]["url"].endswith("press-release-lvmh-2025-annual-results.pdf")
+    assert rows[0]["period"] == "annual"
+
+
+def test_load_ir_url_allowlist_canonicalizes_mc_pa_dead_globenewswire_urls(tmp_path: Path):
+    """Dead GlobeNewswire HTML maps to live ml-eu FY2025 results PDF."""
+    dead_html = (
+        "https://www.globenewswire.com/news-release/2026/01/27/3226833/0/en/"
+        "LVMH-Solid-performance-in-a-disrupted-global-economic-and-geopolitical-environment.html"
+    )
+    bare_uuid = (
+        "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440"
+    )
+    live = _BUILTIN_IR_URLS["MC.PA"][0]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"MC.PA": [dead_html, bare_uuid]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["MC.PA"]
+    assert dead_html not in mapping["MC.PA"]
+    assert bare_uuid not in mapping["MC.PA"]
+
+
+def test_refetch_ir_allowlist_migrates_mc_pa_dead_globenewswire_url(tmp_path: Path, monkeypatch):
+    """Indexed unfetchable MC.PA GlobeNewswire HTML row is rewritten to ml-eu results PDF."""
+    dead = (
+        "https://www.globenewswire.com/news-release/2026/01/27/3226833/0/en/"
+        "LVMH-Solid-performance-in-a-disrupted-global-economic-and-geopolitical-environment.html"
+    )
+    live = _BUILTIN_IR_URLS["MC.PA"][0]
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(json.dumps({"urls": {"MC.PA": [live]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_5de3c6a77a728881",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — LVMH-Solid-performance.html",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "ir_allowlist_fetch_failed",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return (
+            "LVMH Moët Hennessy Louis Vuitton revenue profit from recurring operations "
+            "operating free cash flow consolidated " * 20,
+            "pdf",
+        )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "MC.PA",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = saved["filings"][0]
+    assert row["url"] == live
+    assert row.get("unfetchable") is not True
+    assert row["has_body"] is True
+
+
+def test_parked_source_hunter_mc_pa_euro_depth_has_fetchable_ir():
+    """eng-20260930-02: MC.PA has live ml-eu GlobeNewswire FY2025 results PDF."""
+    assert "MC.PA" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("MC.PA")
+    assert len(rows) == 1
+    assert "d18b2bea-e144-44ea-9f53-71cd9cca8440" in rows[0]["url"]
+    assert rows[0]["url"].endswith("press-release-lvmh-2025-annual-results.pdf")
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_wkl_as_builtins(tmp_path: Path):
     """Regression: WKL.AS parked IWB — contenthub FY2025 annual + full-year + H1 2026 PDFs."""
     allowlist_path = tmp_path / "ir.json"
