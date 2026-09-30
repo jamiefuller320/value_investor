@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-29T18:23:26.220595+00:00",
+  "updated_at": "2026-09-30T08:42:33.749843+00:00",
   "items": [
     {
       "recommendation_id": "rec-6d2619c1c5ba",
@@ -139,6 +139,63 @@
       "queued_at": "2026-09-29T18:23:26.220595+00:00",
       "source": "dashboard_bridge",
       "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-083479b7f4ee`"
+    },
+    {
+      "recommendation_id": "rec-c032e5e6b350",
+      "task_id": "mwarn:dax:unmeasured_stuck",
+      "local_date": "2026-09-30",
+      "status": "open",
+      "summary": "Market warning triage → deepen: DAX / unmeasured_stuck · G1A.DE.",
+      "title": "Deepen · DAX · unmeasured_stuck",
+      "rationale": "unmeasured_stuck on dax (G1A.DE) blocks sprint_ingest_complete and cannot be dismissed or parked. Spare-stream factory path — leave on spare deepen; do not steal the euro fat slot. Accept observes spare-factory deepen — do not divert euro capacity. IR allowlist is empty for G1A.DE — deepen alone will 0-yield; seed `_BUILTIN_IR_URLS` / issuer PDFs (or fix discovery) before another intensive pin. Do not auto-park unmeasured.",
+      "discuss_prompt": "Discuss daily recommendation `rec-c032e5e6b350` (market warning `mwarn:dax:unmeasured_stuck`):\nProposed action: deepen\nMarket: dax (focus=False spare=True)\nFlag: unmeasured_stuck — 1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)\nRationale: unmeasured_stuck on dax (G1A.DE) blocks sprint_ingest_complete and cannot be dismissed or parked. Spare-stream factory path — leave on spare deepen; do not steal the euro fat slot. Accept observes spare-factory deepen — do not divert euro capacity. IR allowlist is empty for G1A.DE — deepen alone will 0-yield; seed `_BUILTIN_IR_URLS` / issuer PDFs (or fix discovery) before another intensive pin. Do not auto-park unmeasured.\nPolicy: dismissable=False parkable=False\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
+      "options": [
+        "Accept — park / observe-ack for today",
+        "Discuss — only if this should become deepen",
+        "Do not ritual-clear badges or starve euro fat slot"
+      ],
+      "priority": 6,
+      "accept_action": {
+        "kind": "focus-ack",
+        "payload": {
+          "decision": "accept",
+          "focus_id": "mwarn:dax:unmeasured_stuck",
+          "triage_action": "deepen"
+        }
+      },
+      "work_class": "surface",
+      "task_family": "market-warning-triage",
+      "queued_at": "2026-09-30T08:42:33.747715+00:00",
+      "source": "dashboard_bridge",
+      "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-c032e5e6b350`"
+    },
+    {
+      "recommendation_id": "rec-676a09a614ea",
+      "task_id": "reconcile:daily_hub_local_date_matches_today",
+      "local_date": "2026-09-30",
+      "status": "open",
+      "summary": "UI reconcile warn: Daily hub local_date matches today.",
+      "title": "Daily hub local_date matches today",
+      "rationale": "hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h",
+      "discuss_prompt": "Discuss daily recommendation `rec-676a09a614ea` (reconcile `daily_hub_local_date_matches_today`):\nSummary: UI reconcile warn: Daily hub local_date matches today.\nRationale: hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h\nRunbook: docs/ops/ops-monitor.md#daily-hub\nSuggested options:\n1) Hard-refresh Pages / regenerate the named artifact\n2) Force republish if publish_lag (supervised)\n3) Confirm false positive and dismiss after condition clears",
+      "options": [
+        "Open runbook",
+        "Supervised republish",
+        "Discuss"
+      ],
+      "priority": 17,
+      "accept_action": {
+        "kind": "link_only",
+        "payload": {
+          "href": "#automation/ops",
+          "runbook": "docs/ops/ops-monitor.md#daily-hub"
+        }
+      },
+      "work_class": "surface",
+      "task_family": "daily_hub_local_date_matches_today",
+      "queued_at": "2026-09-30T08:42:33.749843+00:00",
+      "source": "dashboard_bridge",
+      "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-676a09a614ea`"
     }
   ]
 }
