@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-30T12:52:30.418155+00:00",
-  "occasion_count": 110,
+  "updated_at": "2026-09-30T13:34:38.979283+00:00",
+  "occasion_count": 112,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -1968,6 +1968,44 @@
       ],
       "notes": "autofix commit 62eee26d61 left subsequent PR workflows action_required; re-trigger via merge-main push",
       "details": {}
+    },
+    {
+      "id": "prf-20260930-002",
+      "recorded_at": "2026-09-30T13:28:17.869345+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test (3) failed on merge-main head",
+      "pr_number": 915,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (3)"
+      ],
+      "notes": "Investigating after main merge for #915",
+      "details": {}
+    },
+    {
+      "id": "prf-20260930-003",
+      "recorded_at": "2026-09-30T13:34:38.979283+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "test (3): filings SEC dual-list patch + live body flake",
+      "pr_number": 915,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (3)"
+      ],
+      "notes": "Patched _sec_edgar_supplement_allowed; unique GIB-A bodies; live SEC fetch retry+skip",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -2191,13 +2229,13 @@
       },
       {
         "kind": "ci_check",
-        "count": 47
+        "count": 49
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 110
+        "count": 112
       }
     ]
   }
