@@ -6257,9 +6257,7 @@ def test_esef_entity_aliases_include_g1a():
 
     aliases = _ESEF_ENTITY_SEARCH_ALIASES.get("G1A") or ()
     assert any("GEA Group" in name for name in aliases)
-    variants = _esef_entity_name_variants(
-        "GEA Group Aktiengesellschaft", ticker="G1A.DE"
-    )
+    variants = _esef_entity_name_variants("GEA Group Aktiengesellschaft", ticker="G1A.DE")
     assert any("GEA Group" in name for name in variants)
 
 

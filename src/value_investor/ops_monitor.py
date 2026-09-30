@@ -1341,8 +1341,7 @@ def check_missing_ir_allowlist_stall(
         "Focus-head severity; spare sprint rows also included when present."
         if focus_rows and spare_rows
         else (
-            "Spare-sprint path (warn) — seed IR on spare deepen; do not divert "
-            "the euro fat slot."
+            "Spare-sprint path (warn) — seed IR on spare deepen; do not divert the euro fat slot."
             if spare_rows and not focus_rows
             else "Focus-head severity."
         )
