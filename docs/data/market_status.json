@@ -125,7 +125,7 @@
         "held_path": "current_book_marked",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in ^FTSE (recycling epoch-0). DCA £500/mo book overlays the cold-start realism twin; DCA £500/mo in ^FTSE is the deposit-matched index path for that twin.",
+        "note": "Held-stock value vs the same capital in ^FTSE (recycling epoch-0). DCA \u00a3500/mo book overlays the cold-start realism twin; DCA \u00a3500/mo in ^FTSE is the deposit-matched index path for that twin.",
         "points": [
           {
             "date": "2026-09-07",
@@ -314,7 +314,7 @@
           },
           {
             "id": "branch:buy_tier_level_dca",
-            "label": "DCA £500/mo book",
+            "label": "DCA \u00a3500/mo book",
             "kind": "branch",
             "status": "active",
             "color": "#7c3aed",
@@ -325,7 +325,7 @@
           },
           {
             "id": "branch:buy_tier_level_dca_market",
-            "label": "DCA £500/mo in ^FTSE",
+            "label": "DCA \u00a3500/mo in ^FTSE",
             "kind": "branch",
             "status": "active",
             "color": "#b8860b",
@@ -338,7 +338,7 @@
         "branches": [
           {
             "id": "buy_tier_level_dca",
-            "label": "DCA £500/mo book",
+            "label": "DCA \u00a3500/mo book",
             "kind": "branch",
             "status": "active",
             "knobs": {
@@ -349,7 +349,7 @@
           },
           {
             "id": "buy_tier_level_dca_market",
-            "label": "DCA £500/mo in ^FTSE",
+            "label": "DCA \u00a3500/mo in ^FTSE",
             "kind": "branch",
             "status": "active",
             "knobs": {
@@ -583,7 +583,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-25",
@@ -715,12 +715,12 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=10, indexed_without_body=0)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=10, indexed_without_body=0)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 7,
       "shared_maintenance": true,
-      "health": "warn",
+      "health": "ok",
       "coverage_pct": 1.0,
       "honest_coverage_pct": 1.0,
       "ticker_count": 40,
@@ -769,11 +769,11 @@
       },
       "filing_health": {
         "buy_tier_count": 12,
-        "unmeasured_buy_tier": 1,
+        "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 10,
         "indexed_without_body": 0,
-        "bodies_median": 1.0,
+        "bodies_median": 1.5,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
@@ -789,9 +789,7 @@
           "FRE.DE",
           "HNR1.DE"
         ],
-        "unmeasured_tickers": [
-          "G1A.DE"
-        ],
+        "unmeasured_tickers": [],
         "parked_tickers": [
           "BAS.DE",
           "DTE.DE",
@@ -803,7 +801,7 @@
           "MUV2.DE"
         ]
       },
-      "filing_gaps": 1,
+      "filing_gaps": 0,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -859,9 +857,11 @@
         "window_days": 2,
         "run_count": 20,
         "targets": 32,
-        "improved": 0,
-        "improved_tickers": [],
-        "last_run_at": "2026-09-30T14:24:59.140009+00:00",
+        "improved": 1,
+        "improved_tickers": [
+          "G1A.DE"
+        ],
+        "last_run_at": "2026-09-30T08:56:40.687023+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -872,40 +872,29 @@
           "filing_gaps": 1
         },
         "gaps_after": {
-          "unmeasured": 1,
-          "zero_body": 0,
-          "thin": 10,
-          "indexed_without_body": 0,
-          "filing_gaps": 1
-        },
-        "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 0,
+          "thin": 10,
           "indexed_without_body": 0,
           "filing_gaps": 0
         },
+        "gap_delta": {
+          "unmeasured": -1,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": -1
+        },
         "remaining": {
-          "unmeasured": 1,
+          "unmeasured": 0,
           "zero_body": 0,
           "thin": 10,
           "indexed_without_body": 0,
-          "filing_gaps": 1
+          "filing_gaps": 0
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "zero_improve_stall",
-            "severity": "high",
-            "summary": "Last 2 days improved nobody while filing gaps remain"
-          },
-          {
-            "id": "unmeasured_stuck",
-            "severity": "high",
-            "summary": "1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
-          }
-        ],
+        "admission_warnings": [],
         "sprint_entered_at": "2026-09-24T20:13:01.747826+00:00"
       },
       "held_vs_market": {
@@ -920,7 +909,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-25",
@@ -1203,7 +1192,7 @@
           {
             "id": "no_observe_benchmark",
             "severity": "warn",
-            "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
+            "summary": "No Yahoo benchmark \u2014 Sunday screen-lite cannot refresh the buy-tier clock"
           }
         ],
         "sprint_entered_at": "2026-09-29T21:27:28.733100+00:00"
@@ -1220,7 +1209,7 @@
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [],
         "series": [
           {
@@ -1372,7 +1361,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-29",
@@ -1583,7 +1572,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-24",
@@ -1804,7 +1793,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-30",
@@ -2002,7 +1991,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-25",
@@ -2252,7 +2241,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-25",
@@ -2500,7 +2489,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-28",
@@ -2725,7 +2714,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-09",
@@ -3094,7 +3083,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-27",
@@ -3331,7 +3320,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-25",
@@ -3584,7 +3573,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-25",
@@ -3835,7 +3824,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-25",
@@ -4085,7 +4074,7 @@
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [
           {
             "date": "2026-09-25",
@@ -4206,7 +4195,7 @@
     {
       "market_id": "atx",
       "label": "ATX",
-      "exchange": "Wiener Börse",
+      "exchange": "Wiener B\u00f6rse",
       "currency": "EUR",
       "role": "graduated",
       "is_live": false,
@@ -4267,7 +4256,7 @@
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [],
         "series": [
           {
@@ -4351,7 +4340,7 @@
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [],
         "series": [
           {
@@ -4435,7 +4424,7 @@
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [],
         "series": [
           {
@@ -4518,7 +4507,7 @@
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [],
         "series": [
           {
@@ -4602,7 +4591,7 @@
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [],
         "series": [
           {
@@ -4686,7 +4675,7 @@
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [],
         "series": [
           {
@@ -4770,7 +4759,7 @@
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied \u2014 do not spawn a twin book per knob.",
         "points": [],
         "series": [
           {
