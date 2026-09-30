@@ -192,6 +192,87 @@ def test_check_missing_ir_allowlist_stall_emits_finding(tmp_path: Path, monkeypa
     assert "IR allowlist" in findings[0].title
 
 
+def test_check_missing_ir_allowlist_stall_covers_dax_spare(tmp_path: Path, monkeypatch):
+    """Spare DAX unmeasured + empty IR must escalate (warn), not only focus head."""
+    runs_path = tmp_path / "ingest_gap_closure_runs.json"
+    write_json(
+        runs_path,
+        {
+            "runs": [
+                _zero_yield_run(
+                    run_id="igc-dax-1",
+                    ticker="G1A.DE",
+                    market_id="dax",
+                    completed_at="2026-09-28T10:00:00+00:00",
+                ),
+                _zero_yield_run(
+                    run_id="igc-dax-2",
+                    ticker="G1A.DE",
+                    market_id="dax",
+                    completed_at="2026-09-29T10:00:00+00:00",
+                ),
+            ]
+        },
+    )
+    status = {
+        "focus_market": "euro_depth",
+        "markets": [
+            {
+                "market_id": "euro_depth",
+                "is_focus": True,
+                "filing_health": {
+                    "unmeasured_tickers": [],
+                    "zero_body_tickers": [],
+                },
+                "sprint_progress": {"admission_warnings": []},
+            },
+            {
+                "market_id": "dax",
+                "is_focus": False,
+                "filing_health": {
+                    "unmeasured_tickers": ["G1A.DE"],
+                    "zero_body_tickers": [],
+                },
+                "sprint_progress": {
+                    "admission_warnings": [
+                        {
+                            "id": "unmeasured_stuck",
+                            "severity": "high",
+                            "summary": "1 unmeasured",
+                        }
+                    ]
+                },
+            },
+        ],
+    }
+    status_path = tmp_path / "market_status.json"
+    write_json(status_path, status)
+    monkeypatch.setattr(
+        "value_investor.ingest_gap_closure.ticker_ir_allowlist_count",
+        lambda ticker: 0,
+    )
+    rows = stuck_coverage_tickers_missing_ir(
+        market_status=status,
+        runs_path=runs_path,
+        min_zero_yield=2,
+    )
+    assert len(rows) == 1
+    assert rows[0]["market_id"] == "dax"
+    assert rows[0]["ticker"] == "G1A.DE"
+    assert rows[0]["is_focus"] is False
+    findings = check_missing_ir_allowlist_stall(
+        market_status_path=status_path,
+        runs_path=runs_path,
+        min_zero_yield=2,
+    )
+    assert len(findings) == 1
+    assert findings[0].severity == "warn"
+    assert findings[0].auto_fixable is False
+    assert "G1A.DE" in findings[0].summary
+    assert "Spare-sprint" in findings[0].summary
+    assert "do not divert" in findings[0].summary.lower()
+
+
 def test_propose_triage_names_empty_ir_allowlist(monkeypatch):
     monkeypatch.setattr(
         "value_investor.ingest_gap_closure.ticker_ir_allowlist_count",
