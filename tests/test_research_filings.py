@@ -6860,6 +6860,69 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_hei_de_index(tmp_path: Path
     assert "ir_allowlist" in payload["sources_used"]
 
 
+def test_fetch_filings_ir_allowlist_hang_seng_unmeasured_builtins_eng_20260930_03(
+    tmp_path: Path,
+):
+    """eng-20260930-03: hang_seng buy-tier unmeasured — HKEX/IR PDF seeds when Google News empty."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    sinopharm = fetch_filings_ir_allowlist("1099.HK", path=allowlist_path)
+    assert len(sinopharm) == 2
+    assert all(row["source"] == "ir_allowlist" for row in sinopharm)
+    assert all(row["period"] == "annual" for row in sinopharm)
+    assert any("hkexnews.hk" in row["url"] for row in sinopharm)
+
+    for ticker in ("1378.HK", "0762.HK", "2382.HK", "6862.HK"):
+        rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
+        assert rows, ticker
+        assert all(row["source"] == "ir_allowlist" for row in rows)
+        assert any(row["period"] == "annual" for row in rows)
+
+
+def test_fetch_filings_ir_allowlist_hang_seng_zero_body_builtins_eng_20260930_03(
+    tmp_path: Path,
+):
+    """eng-20260930-03: hang_seng zero-body — statutory PDFs alongside indexed news shells."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    for ticker in ("0288.HK", "0857.HK", "0868.HK", "1113.HK", "0285.HK"):
+        rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
+        assert rows, ticker
+        assert all(row["source"] == "ir_allowlist" for row in rows)
+        assert any(row["period"] == "annual" for row in rows)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_1099_hk_index(tmp_path: Path):
+    """Empty 1099.HK filings_index.json must gain IR rows for library hang_seng measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("1099.HK", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] >= 2
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 2
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_sec_edgar_supplement_allowed_hang_seng_petrochina_and_byd_electronic():
+    from value_investor.research.filings import _sec_edgar_supplement_allowed
+
+    assert _sec_edgar_supplement_allowed("0857.HK", "PetroChina Company Limited")
+    assert _sec_edgar_supplement_allowed(
+        "0285.HK", "BYD Electronic (International) Company Limited"
+    )
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_bas_de_builtins(tmp_path: Path):
     """Regression: BAS.DE awaiting_periodic_report — report.basf.com FY2025 annual PDF."""
     allowlist_path = tmp_path / "ir.json"

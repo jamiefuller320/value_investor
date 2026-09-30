@@ -551,6 +551,43 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/311337/000155837025010330/su-20250630xex99d1.htm",
         "https://www.sec.gov/Archives/edgar/data/311337/000155837025010330/su-20250630xex99d2.htm",
     ],
+    # hang_seng buy-tier deepen — eng-20260930-03: asia_filings Google News miss / zero-body;
+    # seed HKEX statutory PDFs and issuer IR mirrors for stalled buy-tier names.
+    "1099.HK": [
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042400680.pdf",
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0323/2026032300021.pdf",
+    ],
+    "1378.HK": [
+        "http://www.hongqiaochina.com/Uploads/File/2026/04/24/C26013969-Hongqiao-AR25.20260424202105.pdf",
+    ],
+    "0762.HK": [
+        "https://www.chinaunicom.com.hk/en/ir/reports/ar2025.pdf",
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0428/2026042801719.pdf",
+    ],
+    "2382.HK": [
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042401983.pdf",
+    ],
+    "6862.HK": [
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042401135_c.pdf",
+    ],
+    "0288.HK": [
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0415/2026041501042.pdf",
+        "https://www.eqs-news.com/media/custom-news/60043f86-d31d-4d95-9c95-adf5fbccecd3/assets/2e041d93-d10f-4914-8767-52bad2eacfdc/20260324165601476912064360_en.pdf",
+    ],
+    "0857.HK": [
+        "https://www.petrochina.com.cn/ptr/ndbg/202605/c734755cc9764eb5ba8628aac4e3230c/files/c7e4f2a5e9aa4c9eacafb02ff2367d78.pdf",
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0429/2026042906260.pdf",
+    ],
+    "0868.HK": [
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0430/2026043002475.pdf",
+    ],
+    "1113.HK": [
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0417/2026041700385.pdf",
+    ],
+    "0285.HK": [
+        "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0422/2026042200749_c.pdf",
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0327/2026032702072.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -656,6 +693,11 @@ _SEC_TICKER_ALIASES: dict[str, str] = {
     "LOGN": "LOGI",
     "C5H": "CRH",
     "GIB-A": "GIB",
+    # hang_seng — Yahoo base symbols for .HK tickers → SEC ADR/OTC tickers.
+    "0857": "PCCYF",
+    "857": "PCCYF",
+    "0285": "BYDIF",
+    "285": "BYDIF",
 }
 
 # Verified dual-listed issuers — used when SEC company_tickers.json is unreachable (CI/rate limits).
@@ -666,6 +708,8 @@ _SEC_TICKER_CIK_FALLBACK: dict[str, int] = {
     "BUD": 1668717,
     "LOGI": 1032975,
     "CRH": 849395,
+    "PCCYF": 1108329,
+    "BYDIF": 1447956,
 }
 
 # Registrant names for _SEC_TICKER_CIK_FALLBACK — used when submissions metadata fetch fails.
@@ -676,6 +720,8 @@ _SEC_ENTITY_NAME_FALLBACK: dict[int, str] = {
     1668717: "Anheuser-Busch InBev SA/NV",
     1032975: "LOGITECH INTERNATIONAL S.A.",
     849395: "CRH PUBLIC LTD CO",
+    1108329: "PETROCHINA CO LTD",
+    1447956: "BYD Electronic (International) Co Ltd",
 }
 
 # Cross-listing inheritance for manual IR allowlist URLs (e.g. Amsterdam vs LSE Shell).
@@ -5113,6 +5159,22 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # euro_depth thin_memo — opaque issuer CMS/API filenames (system_gaps BN.PA / EL.PA).
     "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf": "annual",
     "https://www.essilorluxottica.com/api/getCapContent/?download=true&id=284350": "annual",
+    # eng-20260930-03: opaque HKEX listconews slugs for hang_seng IR allowlist seeds.
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042400680.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0323/2026032300021.pdf": "annual",
+    "http://www.hongqiaochina.com/Uploads/File/2026/04/24/C26013969-Hongqiao-AR25.20260424202105.pdf": "annual",
+    "https://www.chinaunicom.com.hk/en/ir/reports/ar2025.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0428/2026042801719.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042401983.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042401135_c.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0415/2026041501042.pdf": "annual",
+    "https://www.eqs-news.com/media/custom-news/60043f86-d31d-4d95-9c95-adf5fbccecd3/assets/2e041d93-d10f-4914-8767-52bad2eacfdc/20260324165601476912064360_en.pdf": "annual",
+    "https://www.petrochina.com.cn/ptr/ndbg/202605/c734755cc9764eb5ba8628aac4e3230c/files/c7e4f2a5e9aa4c9eacafb02ff2367d78.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0429/2026042906260.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0430/2026043002475.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0417/2026041700385.pdf": "annual",
+    "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0422/2026042200749_c.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0327/2026032702072.pdf": "annual",
 }
 
 
@@ -5128,6 +5190,7 @@ def _ir_allowlist_period_from_url(url: str) -> str:
         for token in (
             "annual",
             "aif",  # Canadian Annual Information Form (e.g. CNQ_2025-AIF-….pdf)
+            "ndbg",  # PetroChina annual report path segment (Chinese site)
             "fy",
             "full-year",
             "full_year",
