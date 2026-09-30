@@ -580,6 +580,14 @@ self-heal can avert the alert when possible:
 
 Remaining `ci_blocked` / stubborn `preflight_clash` / manual parks still need human triage.
 
+**Quiet observe auto-ack:** when `attention_parked_count=0` and
+`queue_clearing.pause_active=false` (after recover-queue), the checklist card
+`weekday-engineering-parked-backlog-clear` is **auto_ackable** — board rebuild
+records observe-only `ack_observe` (`source=board_auto_quiet_parked_backlog`).
+That refreshes the Daily hub fingerprint without `list-parked` work. It does
+**not** unpark, cancel, or resume dispatch. Human triage stays required when the
+cap-8 pause / warning still fires after self-heal.
+
 Human triage (oldest first) for parks that survive self-heal:
 
 1. `ftse-engineering list-parked`

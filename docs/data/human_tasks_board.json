@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-30T14:53:12.837651+00:00",
+  "generated_at": "2026-09-30T16:08:53.522492+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -29,10 +29,10 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-09-30T13:34:38.979283+00:00",
-        "fingerprint": "18827085018761e6",
+        "updated_at": "2026-09-30T16:08:31.957844+00:00",
+        "fingerprint": "74cad3d747643c33",
         "bullets": [
-          "Occasions logged: 112",
+          "Occasions logged: 119",
           "PR mergeable=CONFLICTING against main: 7",
           "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
           "validate check failed: 3",
@@ -58,7 +58,7 @@
     {
       "id": "weekday-engineering-parked-backlog-clear",
       "title": "Clear engineering parked backlog when dispatch pauses",
-      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When the warning still fires, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
       "automated": false,
       "cadence": "weekday",
       "section_id": "weekday",
@@ -69,27 +69,32 @@
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "0 attention-parked eng tasks",
-        "updated_at": null,
+        "headline": "0 attention-parked eng tasks · quiet (auto-ackable)",
+        "updated_at": "2026-09-30T15:17:57.897694+00:00",
         "fingerprint": "c0c3ee56f97eb146",
         "bullets": [
+          "Quiet after recover-queue — observe Acknowledge is sufficient (no list-parked triage).",
           "Parked tasks: 0 (attention ~0)",
+          "Queue-clearing pause active: False — evaluated 2026-09-30T15:17:57.897694+00:00",
           "Traffic pause active: False"
         ],
         "source_keys": [
           "engineering_tasks"
-        ]
+        ],
+        "ack_sufficient": true,
+        "auto_ackable": true,
+        "ack_reason": "quiet_zero_attention_no_pause"
       },
       "ack": {
         "acked": true,
         "stale": false,
-        "acked_at": "2026-09-30T14:53:12.806538+00:00",
+        "acked_at": "2026-09-30T14:44:15.387984+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "c0c3ee56f97eb146"
       },
       "sort_bucket": "acked",
-      "auto_ackable": false,
-      "ack_sufficient": false
+      "auto_ackable": true,
+      "ack_sufficient": true
     },
     {
       "id": "sunday-spawn-fair-twins",
@@ -564,7 +569,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 14",
-        "updated_at": "2026-09-30T14:39:21.323661+00:00",
+        "updated_at": "2026-09-30T15:00:48.372821+00:00",
         "fingerprint": "81a33d48c945b845",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=37",
@@ -1483,7 +1488,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-09-30T14:37:33.910289+00:00",
+        "updated_at": "2026-09-30T14:59:48.530548+00:00",
         "fingerprint": "750849fd9e662f70",
         "bullets": [
           "Open deviations: 0"
