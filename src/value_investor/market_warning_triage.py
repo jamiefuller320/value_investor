@@ -233,6 +233,7 @@ def collect_open_market_flags(
                 "deviation_id": dev_id,
                 "signal_triage": triage,
                 "recommended_action": str(row.get("recommended_action") or "").strip(),
+                "first_seen_at": str(row.get("first_seen_at") or "").strip() or None,
             }
         )
 
@@ -670,6 +671,7 @@ def build_market_warning_triage_items(
                     "tickers": tickers or None,
                     "cli_hint": triage.get("cli_hint"),
                     "deviation_id": flag.get("deviation_id"),
+                    "first_seen_at": flag.get("first_seen_at"),
                 },
             }
         )

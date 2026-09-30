@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-29T16:56:40.080584+00:00",
+  "run_at": "2026-09-30T13:43:25.591617+00:00",
   "market_id": "euro_stoxx50",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-29T16:56:02.540900+00:00",
+    "snapshot_at": "2026-09-30T13:42:45.175935+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 16,
     "unmeasured_buy_tier": 0,
@@ -62,13 +62,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-29T16:56:37.247148+00:00",
+    "snapshot_at": "2026-09-30T13:43:25.570659+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 16,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 5,
-    "indexed_without_body": 11,
+    "indexed_without_body": 12,
     "bodies_min": 1,
     "bodies_median": 3.0,
     "bodies_max": 100,
@@ -88,14 +88,16 @@
       "TTE.PA",
       "SGO.PA",
       "DTE.DE",
-      "SAP.DE"
+      "SAP.DE",
+      "ADYEN.AS"
     ],
     "indexed_without_body_by_ticker": {
       "SAN.PA": 1,
       "TTE.PA": 6,
       "SGO.PA": 2,
       "DTE.DE": 1,
-      "SAP.DE": 1
+      "SAP.DE": 1,
+      "ADYEN.AS": 1
     },
     "parked_tickers": [
       "ADYEN.AS",
@@ -122,9 +124,9 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 16,
-    "hits": 14,
-    "new_rows_total": 0,
-    "curiosity_total": 16,
+    "hits": 15,
+    "new_rows_total": 1,
+    "curiosity_total": 17,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -156,14 +158,14 @@
   },
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-09-29T16:56:02.944961+00:00",
+    "assessed_at": "2026-09-30T13:42:45.996213+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
       {
         "ticker": "TTE.PA",
         "indexed_without_body": 6,
-        "filings_total": 107,
+        "filings_total": 108,
         "filings_with_body": 100
       },
       {
@@ -224,9 +226,9 @@
       "thin_need_bodies": 2
     }
   },
-  "used_seconds": 33.880843744,
+  "used_seconds": 38.752128838999965,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3566.1191562559998,
+  "leftover_seconds": 3561.247871161,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -234,9 +236,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-09-29T16:56:37.249375+00:00",
+    "updated_at": "2026-09-30T13:43:25.574405+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 15,
+    "complete_zero_improve_runs": 16,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -280,16 +282,6 @@
         "thin": false
       },
       {
-        "ticker": "ADYEN.AS",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-24T15:23:32.223873+00:00",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true
-      },
-      {
         "ticker": "SGO.PA",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
@@ -318,6 +310,16 @@
         "filings_with_body": 100,
         "indexed_without_body": 6,
         "thin": false
+      },
+      {
+        "ticker": "ADYEN.AS",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-30T13:43:25.574405+00:00",
+        "filings_total": 3,
+        "filings_with_body": 2,
+        "indexed_without_body": 1,
+        "thin": true
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
@@ -342,6 +344,7 @@
     "ingest_exhausted_markets": [
       "aex",
       "asx200",
+      "bel20",
       "cac40",
       "dax",
       "euro_depth",
@@ -358,10 +361,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "task_ids": [],
-    "task_count": 118,
-    "market_id": "nasdaq100",
-    "hunter_ticker": "PDD",
-    "priority_score": 12.0
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20260930-02"
   }
 }

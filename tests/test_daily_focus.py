@@ -193,10 +193,66 @@ def test_discuss_inbox_queues_project_pickup(tmp_path: Path) -> None:
     )
     assert result["ok"] is True
     assert "discuss daily recommendation" in (result.get("project_pickup") or "").lower()
+    assert "open_task_count" in result
     inbox = json.loads((tmp_path / "daily_discuss_inbox.json").read_text(encoding="utf-8"))
     assert inbox["items"]
     assert inbox["items"][-1]["recommendation_id"] == rec["id"]
     assert inbox["items"][-1]["discuss_prompt"]
+    # Discuss must refresh hub (not leave a stale checkout copy for GHA commit).
+    refreshed = json.loads((tmp_path / "daily_focus.json").read_text(encoding="utf-8"))
+    assert refreshed.get("local_date") == "2026-09-28"
+
+
+def test_merge_daily_focus_acks_keeps_accepts_across_stale_discuss(
+    tmp_path: Path,
+) -> None:
+    from value_investor.daily_focus_acks import merge_daily_focus_acks_stores
+
+    accepts = {
+        "schema_version": 1,
+        "updated_at": "2026-09-30T08:42:27+00:00",
+        "acks": [
+            {
+                "task_ref": "focus-1",
+                "focus_id": "focus-1",
+                "decision": "accept",
+                "status": "open",
+                "local_date": "2026-09-30",
+                "acked_at": "2026-09-30T08:42:20+00:00",
+            },
+            {
+                "task_ref": "mwarn:dax:zero_improve_stall",
+                "focus_id": "mwarn:dax:zero_improve_stall",
+                "decision": "accept",
+                "status": "open",
+                "local_date": "2026-09-30",
+                "acked_at": "2026-09-30T08:42:21+00:00",
+            },
+        ],
+    }
+    # Stale discuss job never saw the accepts; only wrote discuss rows.
+    discuss_stale = {
+        "schema_version": 1,
+        "updated_at": "2026-09-30T08:42:33+00:00",
+        "acks": [
+            {
+                "task_ref": "mwarn:dax:unmeasured_stuck",
+                "focus_id": "mwarn:dax:unmeasured_stuck",
+                "decision": "discuss",
+                "status": "open",
+                "local_date": "2026-09-30",
+                "acked_at": "2026-09-30T08:42:33+00:00",
+            }
+        ],
+    }
+    merged = merge_daily_focus_acks_stores(accepts, discuss_stale)
+    refs = {a["task_ref"] for a in merged["acks"]}
+    assert refs == {
+        "focus-1",
+        "mwarn:dax:zero_improve_stall",
+        "mwarn:dax:unmeasured_stuck",
+    }
+    assert merged["updated_at"] == "2026-09-30T08:42:33+00:00"
 
 
 def test_append_discuss_dedupes_same_day(tmp_path: Path) -> None:

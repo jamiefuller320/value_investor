@@ -2,7 +2,7 @@
   "schema_version": 1,
   "local_date": "2026-09-30",
   "timezone": "Europe/London",
-  "generated_at": "2026-09-30T07:47:55.382300Z",
+  "generated_at": "2026-09-30T11:00:00Z",
   "refresh_deadline_local": "04:00",
   "stale_for_local_date": false,
   "focus_lines": [
@@ -82,17 +82,17 @@
       "href": null,
       "recommendation_id": "rec-b877dd532f10",
       "status": {
-        "state": "ready",
+        "state": "proposed",
         "label": "Proposed",
         "next_steps": [],
         "waiting_on": [],
-        "ready": true,
-        "ready_reason": "proposal present · no blockers",
+        "ready": false,
+        "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-09-30T07:47:55.382300Z",
+        "updated_at": "2026-09-30T11:00:00Z",
         "updated_by": "morning_builder"
       },
-      "closed": false,
+      "closed": true,
       "recommendation": {
         "id": "rec-b877dd532f10",
         "task_id": "focus-1",
@@ -132,17 +132,17 @@
       "href": "#automation/daily",
       "recommendation_id": "rec-e3faadfb7339",
       "status": {
-        "state": "ready",
+        "state": "proposed",
         "label": "Proposed",
         "next_steps": [],
         "waiting_on": [],
-        "ready": true,
-        "ready_reason": "proposal present · no blockers",
+        "ready": false,
+        "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-09-30T07:47:55.382300Z",
+        "updated_at": "2026-09-30T11:00:00Z",
         "updated_by": "morning_builder"
       },
-      "closed": false,
+      "closed": true,
       "recommendation": {
         "id": "rec-e3faadfb7339",
         "task_id": "focus-2",
@@ -165,89 +165,11 @@
       }
     },
     {
-      "task_ref": "mwarn:euro_depth:health_warn",
-      "source": "market_warning_triage",
-      "work_class": "surface",
-      "task_family": "market-warning-triage",
-      "priority": 5,
-      "title": "Park · EU depth composite (STOXX50 + periphery) · health_warn",
-      "summary": "health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear",
-      "sort_bucket": "market_warn",
-      "closeable": true,
-      "close_action": "daily-focus-ack",
-      "close_payload": {
-        "focus_id": "mwarn:euro_depth:health_warn",
-        "decision": "accept",
-        "triage_action": "park"
-      },
-      "href": "#overview",
-      "recommendation_id": "rec-23b769e8280f",
-      "status": {
-        "state": "ready",
-        "label": "Ready to park",
-        "next_steps": [
-          "Accept park/dismiss triage for today"
-        ],
-        "waiting_on": [],
-        "ready": true,
-        "ready_reason": "observe-safe Accept → park",
-        "blocked_reason": null,
-        "updated_at": "2026-09-30T07:47:55.382300Z",
-        "updated_by": "morning_builder"
-      },
-      "closed": false,
-      "triage_action": "park",
-      "prefer_discuss": false,
-      "dismissable": true,
-      "parkable": true,
-      "market_warning": {
-        "kind": "health_amber",
-        "flag_id": "health_warn",
-        "market_id": "euro_depth",
-        "is_focus": true,
-        "is_spare": false,
-        "severity": "warn",
-        "tickers": null,
-        "cli_hint": null,
-        "deviation_id": null
-      },
-      "recommendation": {
-        "id": "rec-23b769e8280f",
-        "task_id": "mwarn:euro_depth:health_warn",
-        "summary": "Market warning triage → park: EU depth composite (STOXX50 + periphery) / health_warn.",
-        "rationale": "euro_depth: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
-        "accept_action": {
-          "kind": "focus-ack",
-          "payload": {
-            "focus_id": "mwarn:euro_depth:health_warn",
-            "decision": "accept",
-            "triage_action": "park"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-23b769e8280f` (market warning `mwarn:euro_depth:health_warn`):\nProposed action: park\nMarket: euro_depth (focus=True spare=False)\nFlag: health_warn — health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear\nRationale: euro_depth: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-        "priority": 5,
-        "options": [
-          "Accept — park / observe-ack for today",
-          "Discuss — only if this should become deepen",
-          "Do not ritual-clear badges or starve euro fat slot"
-        ],
-        "triage_action": "park",
-        "prefer_discuss": false,
-        "dismissable": true,
-        "parkable": true,
-        "market_id": "euro_depth",
-        "flag_id": "health_warn",
-        "cli_hint": null,
-        "work_class": "surface",
-        "task_family": "market-warning-triage"
-      }
-    },
-    {
       "task_ref": "mwarn:dax:unmeasured_stuck",
       "source": "market_warning_triage",
       "work_class": "surface",
       "task_family": "market-warning-triage",
-      "priority": 6,
+      "priority": 5,
       "title": "Deepen · DAX · unmeasured_stuck",
       "summary": "1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete) · G1A.DE",
       "sort_bucket": "market_warn",
@@ -276,7 +198,7 @@
         "ready": false,
         "ready_reason": "observe-safe Accept → deepen",
         "blocked_reason": null,
-        "updated_at": "2026-09-30T07:47:55.382300Z",
+        "updated_at": "2026-09-30T11:00:00Z",
         "updated_by": "morning_builder"
       },
       "closed": false,
@@ -309,7 +231,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-c032e5e6b350` (market warning `mwarn:dax:unmeasured_stuck`):\nProposed action: deepen\nMarket: dax (focus=False spare=True)\nFlag: unmeasured_stuck — 1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)\nRationale: unmeasured_stuck on dax (G1A.DE) blocks sprint_ingest_complete and cannot be dismissed or parked. Spare-stream factory path — leave on spare deepen; do not steal the euro fat slot. Accept observes spare-factory deepen — do not divert euro capacity. IR allowlist is empty for G1A.DE — deepen alone will 0-yield; seed `_BUILTIN_IR_URLS` / issuer PDFs (or fix discovery) before another intensive pin. Do not auto-park unmeasured.\nPolicy: dismissable=False parkable=False\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-        "priority": 6,
+        "priority": 5,
         "options": [
           "Accept — park / observe-ack for today",
           "Discuss — only if this should become deepen",
@@ -327,23 +249,23 @@
       }
     },
     {
-      "task_ref": "mwarn:dax:zero_improve_stall",
+      "task_ref": "mwarn:hang_seng:health_warn",
       "source": "market_warning_triage",
       "work_class": "surface",
       "task_family": "market-warning-triage",
-      "priority": 7,
-      "title": "Park · DAX · zero_improve_stall",
-      "summary": "Last 2 days improved nobody while filing gaps remain",
+      "priority": 6,
+      "title": "Park · Hang Seng · health_warn",
+      "summary": "health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear",
       "sort_bucket": "market_warn",
       "closeable": true,
       "close_action": "daily-focus-ack",
       "close_payload": {
-        "focus_id": "mwarn:dax:zero_improve_stall",
+        "focus_id": "mwarn:hang_seng:health_warn",
         "decision": "accept",
         "triage_action": "park"
       },
       "href": "#overview",
-      "recommendation_id": "rec-dcee86dd9816",
+      "recommendation_id": "rec-340f9802a5f3",
       "status": {
         "state": "ready",
         "label": "Ready to park",
@@ -354,7 +276,7 @@
         "ready": true,
         "ready_reason": "observe-safe Accept → park",
         "blocked_reason": null,
-        "updated_at": "2026-09-30T07:47:55.382300Z",
+        "updated_at": "2026-09-30T11:00:00Z",
         "updated_by": "morning_builder"
       },
       "closed": false,
@@ -363,86 +285,8 @@
       "dismissable": true,
       "parkable": true,
       "market_warning": {
-        "kind": "admission_warning",
-        "flag_id": "zero_improve_stall",
-        "market_id": "dax",
-        "is_focus": false,
-        "is_spare": true,
-        "severity": "high",
-        "tickers": null,
-        "cli_hint": null,
-        "deviation_id": null
-      },
-      "recommendation": {
-        "id": "rec-dcee86dd9816",
-        "task_id": "mwarn:dax:zero_improve_stall",
-        "summary": "Market warning triage → park: DAX / zero_improve_stall.",
-        "rationale": "Spare/non-focus stall on dax: park the worry — leave spare-stream factory / exhaustion; do not divert euro fat slot or mint intensive pins from this flag alone.",
-        "accept_action": {
-          "kind": "focus-ack",
-          "payload": {
-            "focus_id": "mwarn:dax:zero_improve_stall",
-            "decision": "accept",
-            "triage_action": "park"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-dcee86dd9816` (market warning `mwarn:dax:zero_improve_stall`):\nProposed action: park\nMarket: dax (focus=False spare=True)\nFlag: zero_improve_stall — Last 2 days improved nobody while filing gaps remain\nRationale: Spare/non-focus stall on dax: park the worry — leave spare-stream factory / exhaustion; do not divert euro fat slot or mint intensive pins from this flag alone.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-        "priority": 7,
-        "options": [
-          "Accept — park / observe-ack for today",
-          "Discuss — only if this should become deepen",
-          "Do not ritual-clear badges or starve euro fat slot"
-        ],
-        "triage_action": "park",
-        "prefer_discuss": false,
-        "dismissable": true,
-        "parkable": true,
-        "market_id": "dax",
-        "flag_id": "zero_improve_stall",
-        "cli_hint": null,
-        "work_class": "surface",
-        "task_family": "market-warning-triage"
-      }
-    },
-    {
-      "task_ref": "mwarn:hang_seng:awaiting_first_ingest",
-      "source": "market_warning_triage",
-      "work_class": "surface",
-      "task_family": "market-warning-triage",
-      "priority": 8,
-      "title": "Park · Hang Seng · awaiting_first_ingest",
-      "summary": "Entered sprint on 2026-09-29; waiting on the first deepen slot",
-      "sort_bucket": "market_warn",
-      "closeable": true,
-      "close_action": "daily-focus-ack",
-      "close_payload": {
-        "focus_id": "mwarn:hang_seng:awaiting_first_ingest",
-        "decision": "accept",
-        "triage_action": "park"
-      },
-      "href": "#overview",
-      "recommendation_id": "rec-219606637454",
-      "status": {
-        "state": "ready",
-        "label": "Ready to park",
-        "next_steps": [
-          "Accept park/dismiss triage for today"
-        ],
-        "waiting_on": [],
-        "ready": true,
-        "ready_reason": "observe-safe Accept → park",
-        "blocked_reason": null,
-        "updated_at": "2026-09-30T07:47:55.382300Z",
-        "updated_by": "morning_builder"
-      },
-      "closed": false,
-      "triage_action": "park",
-      "prefer_discuss": false,
-      "dismissable": true,
-      "parkable": true,
-      "market_warning": {
-        "kind": "admission_warning",
-        "flag_id": "awaiting_first_ingest",
+        "kind": "health_amber",
+        "flag_id": "health_warn",
         "market_id": "hang_seng",
         "is_focus": false,
         "is_spare": true,
@@ -452,20 +296,20 @@
         "deviation_id": null
       },
       "recommendation": {
-        "id": "rec-219606637454",
-        "task_id": "mwarn:hang_seng:awaiting_first_ingest",
-        "summary": "Market warning triage → park: Hang Seng / awaiting_first_ingest.",
-        "rationale": "awaiting_first_ingest on hang_seng (non-focus): park / watch spare factory — do not starve the euro fat slot.",
+        "id": "rec-340f9802a5f3",
+        "task_id": "mwarn:hang_seng:health_warn",
+        "summary": "Market warning triage → park: Hang Seng / health_warn.",
+        "rationale": "hang_seng: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
         "accept_action": {
           "kind": "focus-ack",
           "payload": {
-            "focus_id": "mwarn:hang_seng:awaiting_first_ingest",
+            "focus_id": "mwarn:hang_seng:health_warn",
             "decision": "accept",
             "triage_action": "park"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-219606637454` (market warning `mwarn:hang_seng:awaiting_first_ingest`):\nProposed action: park\nMarket: hang_seng (focus=False spare=True)\nFlag: awaiting_first_ingest — Entered sprint on 2026-09-29; waiting on the first deepen slot\nRationale: awaiting_first_ingest on hang_seng (non-focus): park / watch spare factory — do not starve the euro fat slot.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-        "priority": 8,
+        "discuss_prompt": "Discuss daily recommendation `rec-340f9802a5f3` (market warning `mwarn:hang_seng:health_warn`):\nProposed action: park\nMarket: hang_seng (focus=False spare=True)\nFlag: health_warn — health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear\nRationale: hang_seng: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
+        "priority": 6,
         "options": [
           "Accept — park / observe-ack for today",
           "Discuss — only if this should become deepen",
@@ -476,186 +320,30 @@
         "dismissable": true,
         "parkable": true,
         "market_id": "hang_seng",
-        "flag_id": "awaiting_first_ingest",
+        "flag_id": "health_warn",
         "cli_hint": null,
         "work_class": "surface",
         "task_family": "market-warning-triage"
       }
     },
     {
-      "task_ref": "mwarn:hang_seng:no_observe_benchmark",
-      "source": "market_warning_triage",
-      "work_class": "surface",
-      "task_family": "market-warning-triage",
-      "priority": 9,
-      "title": "Park · Hang Seng · no_observe_benchmark",
-      "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock",
-      "sort_bucket": "market_warn",
-      "closeable": true,
-      "close_action": "daily-focus-ack",
-      "close_payload": {
-        "focus_id": "mwarn:hang_seng:no_observe_benchmark",
-        "decision": "accept",
-        "triage_action": "park"
-      },
-      "href": "#overview",
-      "recommendation_id": "rec-a54566dc5947",
-      "status": {
-        "state": "ready",
-        "label": "Ready to park",
-        "next_steps": [
-          "Accept park/dismiss triage for today"
-        ],
-        "waiting_on": [],
-        "ready": true,
-        "ready_reason": "observe-safe Accept → park",
-        "blocked_reason": null,
-        "updated_at": "2026-09-30T07:47:55.382300Z",
-        "updated_by": "morning_builder"
-      },
-      "closed": false,
-      "triage_action": "park",
-      "prefer_discuss": false,
-      "dismissable": true,
-      "parkable": true,
-      "market_warning": {
-        "kind": "admission_warning",
-        "flag_id": "no_observe_benchmark",
-        "market_id": "hang_seng",
-        "is_focus": false,
-        "is_spare": true,
-        "severity": "warn",
-        "tickers": null,
-        "cli_hint": null,
-        "deviation_id": null
-      },
-      "recommendation": {
-        "id": "rec-a54566dc5947",
-        "task_id": "mwarn:hang_seng:no_observe_benchmark",
-        "summary": "Market warning triage → park: Hang Seng / no_observe_benchmark.",
-        "rationale": "hang_seng: No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
-        "accept_action": {
-          "kind": "focus-ack",
-          "payload": {
-            "focus_id": "mwarn:hang_seng:no_observe_benchmark",
-            "decision": "accept",
-            "triage_action": "park"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-a54566dc5947` (market warning `mwarn:hang_seng:no_observe_benchmark`):\nProposed action: park\nMarket: hang_seng (focus=False spare=True)\nFlag: no_observe_benchmark — No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock\nRationale: hang_seng: No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-        "priority": 9,
-        "options": [
-          "Accept — park / observe-ack for today",
-          "Discuss — only if this should become deepen",
-          "Do not ritual-clear badges or starve euro fat slot"
-        ],
-        "triage_action": "park",
-        "prefer_discuss": false,
-        "dismissable": true,
-        "parkable": true,
-        "market_id": "hang_seng",
-        "flag_id": "no_observe_benchmark",
-        "cli_hint": null,
-        "work_class": "surface",
-        "task_family": "market-warning-triage"
-      }
-    },
-    {
-      "task_ref": "mwarn:multi:health_warn_rollup",
-      "source": "market_warning_triage",
-      "work_class": "surface",
-      "task_family": "market-warning-triage",
-      "priority": 10,
-      "title": "Park · Admitted / maintenance ambers · health_warn_rollup",
-      "summary": "health=warn on aex, aim, bel20, ftse_mib, ftse_smallcap, ibex35 without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray",
-      "sort_bucket": "market_warn",
-      "closeable": true,
-      "close_action": "daily-focus-ack",
-      "close_payload": {
-        "focus_id": "mwarn:multi:health_warn_rollup",
-        "decision": "accept",
-        "triage_action": "park"
-      },
-      "href": "#overview",
-      "recommendation_id": "rec-f5640d8d9d85",
-      "status": {
-        "state": "ready",
-        "label": "Ready to park",
-        "next_steps": [
-          "Accept park/dismiss triage for today"
-        ],
-        "waiting_on": [],
-        "ready": true,
-        "ready_reason": "observe-safe Accept → park",
-        "blocked_reason": null,
-        "updated_at": "2026-09-30T07:47:55.382300Z",
-        "updated_by": "morning_builder"
-      },
-      "closed": false,
-      "triage_action": "park",
-      "prefer_discuss": false,
-      "dismissable": true,
-      "parkable": true,
-      "market_warning": {
-        "kind": "health_amber_rollup",
-        "flag_id": "health_warn_rollup",
-        "market_id": "multi",
-        "is_focus": false,
-        "is_spare": false,
-        "severity": "warn",
-        "tickers": null,
-        "cli_hint": null,
-        "deviation_id": null
-      },
-      "recommendation": {
-        "id": "rec-f5640d8d9d85",
-        "task_id": "mwarn:multi:health_warn_rollup",
-        "summary": "Market warning triage → park: Admitted / maintenance ambers / health_warn_rollup.",
-        "rationale": "multi: health=warn on aex, aim, bel20, ftse_mib, ftse_smallcap, ibex35 without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
-        "accept_action": {
-          "kind": "focus-ack",
-          "payload": {
-            "focus_id": "mwarn:multi:health_warn_rollup",
-            "decision": "accept",
-            "triage_action": "park"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-f5640d8d9d85` (market warning `mwarn:multi:health_warn_rollup`):\nProposed action: park\nMarket: multi (focus=False spare=False)\nFlag: health_warn_rollup — health=warn on aex, aim, bel20, ftse_mib, ftse_smallcap, ibex35 without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray\nRationale: multi: health=warn on aex, aim, bel20, ftse_mib, ftse_smallcap, ibex35 without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-        "priority": 10,
-        "options": [
-          "Accept — park / observe-ack for today",
-          "Discuss — only if this should become deepen",
-          "Do not ritual-clear badges or starve euro fat slot"
-        ],
-        "triage_action": "park",
-        "prefer_discuss": false,
-        "dismissable": true,
-        "parkable": true,
-        "market_id": "multi",
-        "flag_id": "health_warn_rollup",
-        "cli_hint": null,
-        "work_class": "surface",
-        "task_family": "market-warning-triage"
-      }
-    },
-    {
-      "task_ref": "human:sunday-shard-epoch0-watch",
+      "task_ref": "human:sunday-shadow-vs-primary",
       "source": "human_tasks",
       "work_class": "ops_gate",
-      "task_family": "sunday-shard-epoch0-watch",
-      "priority": 16,
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "task_family": "sunday-shadow-vs-primary",
+      "priority": 12,
+      "title": "Compare calibrated shadows vs primary AI judgment",
+      "summary": "Observe-only: compare forward marks for ai_judgment vs competing calibrated shadows. Fail-closed as a promotion path (N171) — status fail closes promote; do not spawn new calibrated ranks or reopen N58/N59. Acknowledge when reviewed; revisit only after fair-cost Suite B evidence or a new calibration method (not Suite A stress green).",
       "sort_bucket": "new_info",
       "closeable": true,
       "close_action": "human-task-ack",
       "close_payload": {
-        "task_id": "sunday-shard-epoch0-watch",
+        "task_id": "sunday-shadow-vs-primary",
         "decision": "ack_observe",
-        "finding_fingerprint": "244c0da819c2c510"
+        "finding_fingerprint": "e9214b24f8dce0f5"
       },
       "href": "#automation/human",
-      "recommendation_id": "rec-fdfe0615ed83",
+      "recommendation_id": "rec-f86eb9119d0d",
       "status": {
         "state": "ready",
         "label": "Proposed",
@@ -664,57 +352,519 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-09-30T07:47:55.382300Z",
+        "updated_at": "2026-09-30T11:00:00Z",
         "updated_by": "morning_builder"
       },
       "human_task": {
-        "id": "sunday-shard-epoch0-watch",
+        "id": "sunday-shadow-vs-primary",
         "sort_bucket": "new_info",
         "analysis": {
-          "headline": "Admitted shard epoch-0 watch · 14",
-          "updated_at": "2026-09-30T07:36:34.721372+00:00",
-          "fingerprint": "244c0da819c2c510",
+          "headline": "Experiment assessment · 0 blocking (review/continue)",
+          "updated_at": "2026-09-30T08:30:30.539537+00:00",
+          "fingerprint": "e9214b24f8dce0f5",
           "bullets": [
-            "euro_depth: phase=3 ai=False knob=False holdings=37",
-            "dax: phase=1 ai=False knob=False holdings=3",
-            "aex: phase=0 ai=False knob=False holdings=6",
-            "aim: phase=0 ai=False knob=False holdings=15",
-            "bel20: phase=0 ai=None knob=None holdings=—",
-            "cac40: phase=1 ai=False knob=False holdings=5",
-            "euro_stoxx50: phase=1 ai=False knob=False holdings=8",
-            "ftse_mib: phase=0 ai=False knob=False holdings=3"
+            "Blocking recommend: 0 · acked: 1 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 3 / 15",
+            "Failed calibration/exclusion shadows close promote — not a do-now pile. Already-acked overlays and ana-* capacity strands are not promote urgency.",
+            "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
+            "capacity: ana-20260921-02 area=scoring",
+            "capacity: ana-20260921-04 area=paper_churn"
           ],
           "source_keys": [
-            "market_status"
+            "experiment_assessment",
+            "knob_calibration_priors"
+          ],
+          "ack_sufficient": true,
+          "auto_ackable": false,
+          "experiment_assessment_gate": {
+            "ack_sufficient": true,
+            "reason": "failed_shadows_close_promote_no_blocking_recommend",
+            "failed_shadows": [
+              {
+                "experiment_id": "ai_judgment_calibrated",
+                "kind": "calibration_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ai_judgment_calibrated_r2",
+                "kind": "calibration_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ai_judgment_calibrated_r3",
+                "kind": "calibration_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ai_judgment_exclusion_u4",
+                "kind": "exclusion_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              }
+            ],
+            "recommend_raw_count": 3,
+            "recommend_acked": [
+              {
+                "experiment_id": "entry_dca_overlay",
+                "kind": "lifecycle_overlay",
+                "status": "recommend",
+                "area": "paper_churn",
+                "human_acked": true,
+                "acked_at": "2026-09-13T17:41:11.138086+00:00"
+              }
+            ],
+            "recommend_blocking": [],
+            "recommend_capacity": [
+              {
+                "experiment_id": "ana-20260921-02",
+                "kind": "analysis_task",
+                "status": "recommend",
+                "area": "scoring",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ana-20260921-04",
+                "kind": "analysis_task",
+                "status": "recommend",
+                "area": "paper_churn",
+                "human_acked": false,
+                "acked_at": null
+              }
+            ],
+            "human_ack_pending": 2,
+            "summary_recommend": 3,
+            "summary_fail": 5,
+            "total_experiments": 15
+          }
+        },
+        "ack": {
+          "acked": true,
+          "stale": true,
+          "acked_at": "2026-09-29T15:11:48.701542+00:00",
+          "decision": "ack_observe",
+          "finding_fingerprint": "77a2b495eeb70657"
+        },
+        "approval_gate": false,
+        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#competing-calibrated-shadows",
+        "cadence": "sunday"
+      },
+      "closed": false,
+      "recommendation": {
+        "id": "rec-f86eb9119d0d",
+        "task_id": "human:sunday-shadow-vs-primary",
+        "summary": "Review new analysis on “Compare calibrated shadows vs primary AI judgment”, then Acknowledge (observe-only).",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
+        "accept_action": {
+          "kind": "human-task-ack",
+          "payload": {
+            "task_id": "sunday-shadow-vs-primary",
+            "decision": "ack_observe",
+            "finding_fingerprint": "e9214b24f8dce0f5"
+          }
+        },
+        "discuss_prompt": "Discuss daily recommendation `rec-f86eb9119d0d` (human task `sunday-shadow-vs-primary`):\nTitle: Compare calibrated shadows vs primary AI judgment\nSummary: Review new analysis on “Compare calibrated shadows vs primary AI judgment”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-f86eb9119d0d` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "priority": 12,
+        "options": [
+          "Accept → Acknowledge (observe-only)",
+          "Open runbook / defer",
+          "Discuss in Project chat"
+        ]
+      }
+    },
+    {
+      "task_ref": "human:sunday-promote-knobs-gate",
+      "source": "human_tasks",
+      "work_class": "ops_gate",
+      "task_family": "sunday-promote-knobs-gate",
+      "priority": 13,
+      "title": "Promote knob priors only when gates pass",
+      "summary": "Stays CLOSED while calibrated shadows are fail / not adoptable (N171). Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, confidence is acceptable, and fair-cost Suite B supports adoption. Survivors are starting priors — never auto-apply. Suite A stress excess vs ^FTSE alone is not sufficient.",
+      "sort_bucket": "new_info",
+      "closeable": true,
+      "close_action": "human-task-ack",
+      "close_payload": {
+        "task_id": "sunday-promote-knobs-gate",
+        "decision": "ack_observe",
+        "finding_fingerprint": "e9214b24f8dce0f5"
+      },
+      "href": "#automation/human",
+      "recommendation_id": "rec-0ed019c09296",
+      "status": {
+        "state": "ready",
+        "label": "Proposed",
+        "next_steps": [],
+        "waiting_on": [],
+        "ready": true,
+        "ready_reason": "proposal present · no blockers",
+        "blocked_reason": null,
+        "updated_at": "2026-09-30T11:00:00Z",
+        "updated_by": "morning_builder"
+      },
+      "human_task": {
+        "id": "sunday-promote-knobs-gate",
+        "sort_bucket": "new_info",
+        "analysis": {
+          "headline": "Experiment assessment · 0 blocking (review/continue)",
+          "updated_at": "2026-09-30T08:30:30.539537+00:00",
+          "fingerprint": "e9214b24f8dce0f5",
+          "bullets": [
+            "Blocking recommend: 0 · acked: 1 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 3 / 15",
+            "Failed calibration/exclusion shadows close promote — not a do-now pile. Already-acked overlays and ana-* capacity strands are not promote urgency.",
+            "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
+            "capacity: ana-20260921-02 area=scoring",
+            "capacity: ana-20260921-04 area=paper_churn"
+          ],
+          "source_keys": [
+            "experiment_assessment",
+            "knob_calibration_priors"
+          ],
+          "ack_sufficient": true,
+          "auto_ackable": false,
+          "experiment_assessment_gate": {
+            "ack_sufficient": true,
+            "reason": "failed_shadows_close_promote_no_blocking_recommend",
+            "failed_shadows": [
+              {
+                "experiment_id": "ai_judgment_calibrated",
+                "kind": "calibration_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ai_judgment_calibrated_r2",
+                "kind": "calibration_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ai_judgment_calibrated_r3",
+                "kind": "calibration_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ai_judgment_exclusion_u4",
+                "kind": "exclusion_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              }
+            ],
+            "recommend_raw_count": 3,
+            "recommend_acked": [
+              {
+                "experiment_id": "entry_dca_overlay",
+                "kind": "lifecycle_overlay",
+                "status": "recommend",
+                "area": "paper_churn",
+                "human_acked": true,
+                "acked_at": "2026-09-13T17:41:11.138086+00:00"
+              }
+            ],
+            "recommend_blocking": [],
+            "recommend_capacity": [
+              {
+                "experiment_id": "ana-20260921-02",
+                "kind": "analysis_task",
+                "status": "recommend",
+                "area": "scoring",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ana-20260921-04",
+                "kind": "analysis_task",
+                "status": "recommend",
+                "area": "paper_churn",
+                "human_acked": false,
+                "acked_at": null
+              }
+            ],
+            "human_ack_pending": 2,
+            "summary_recommend": 3,
+            "summary_fail": 5,
+            "total_experiments": 15
+          }
+        },
+        "ack": {
+          "acked": true,
+          "stale": true,
+          "acked_at": "2026-09-29T15:11:49.299726+00:00",
+          "decision": "ack_observe",
+          "finding_fingerprint": "77a2b495eeb70657"
+        },
+        "approval_gate": true,
+        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#promoting-a-prior-human-gate",
+        "cadence": "sunday"
+      },
+      "closed": false,
+      "recommendation": {
+        "id": "rec-0ed019c09296",
+        "task_id": "human:sunday-promote-knobs-gate",
+        "summary": "Review new analysis on “Promote knob priors only when gates pass”, then Acknowledge (observe-only).",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
+        "accept_action": {
+          "kind": "human-task-ack",
+          "payload": {
+            "task_id": "sunday-promote-knobs-gate",
+            "decision": "ack_observe",
+            "finding_fingerprint": "e9214b24f8dce0f5"
+          }
+        },
+        "discuss_prompt": "Discuss daily recommendation `rec-0ed019c09296` (human task `sunday-promote-knobs-gate`):\nTitle: Promote knob priors only when gates pass\nSummary: Review new analysis on “Promote knob priors only when gates pass”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-0ed019c09296` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "priority": 13,
+        "options": [
+          "Accept → Acknowledge (observe-only)",
+          "Open runbook / defer",
+          "Discuss in Project chat"
+        ]
+      }
+    },
+    {
+      "task_ref": "human:sunday-spawn-fair-twins",
+      "source": "human_tasks",
+      "work_class": "ops_gate",
+      "task_family": "sunday-spawn-fair-twins",
+      "priority": 14,
+      "title": "Spawn Suite B twins only for recommend experiments",
+      "summary": "If experiment_assessment has recommend calibration/exclusion/experimental tracks, dry-run then optionally apply ftse-trading-costs spawn-fair-twins (max 2). Never auto-fork every shadow (N53). Zero recommend rows is a no-op.",
+      "sort_bucket": "new_info",
+      "closeable": true,
+      "close_action": "human-task-ack",
+      "close_payload": {
+        "task_id": "sunday-spawn-fair-twins",
+        "decision": "ack_observe",
+        "finding_fingerprint": "e9214b24f8dce0f5"
+      },
+      "href": "#automation/human",
+      "recommendation_id": "rec-60e3efe5c7e3",
+      "status": {
+        "state": "ready",
+        "label": "Proposed",
+        "next_steps": [],
+        "waiting_on": [],
+        "ready": true,
+        "ready_reason": "proposal present · no blockers",
+        "blocked_reason": null,
+        "updated_at": "2026-09-30T11:00:00Z",
+        "updated_by": "morning_builder"
+      },
+      "human_task": {
+        "id": "sunday-spawn-fair-twins",
+        "sort_bucket": "new_info",
+        "analysis": {
+          "headline": "Experiment assessment · 0 blocking (review/continue)",
+          "updated_at": "2026-09-30T08:30:30.539537+00:00",
+          "fingerprint": "e9214b24f8dce0f5",
+          "bullets": [
+            "Blocking recommend: 0 · acked: 1 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 3 / 15",
+            "Failed calibration/exclusion shadows close promote — not a do-now pile. Already-acked overlays and ana-* capacity strands are not promote urgency.",
+            "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
+            "capacity: ana-20260921-02 area=scoring",
+            "capacity: ana-20260921-04 area=paper_churn"
+          ],
+          "source_keys": [
+            "experiment_assessment",
+            "knob_calibration_priors"
+          ],
+          "ack_sufficient": true,
+          "auto_ackable": false,
+          "experiment_assessment_gate": {
+            "ack_sufficient": true,
+            "reason": "failed_shadows_close_promote_no_blocking_recommend",
+            "failed_shadows": [
+              {
+                "experiment_id": "ai_judgment_calibrated",
+                "kind": "calibration_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ai_judgment_calibrated_r2",
+                "kind": "calibration_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ai_judgment_calibrated_r3",
+                "kind": "calibration_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ai_judgment_exclusion_u4",
+                "kind": "exclusion_shadow",
+                "status": "fail",
+                "area": "paper_knobs",
+                "human_acked": false,
+                "acked_at": null
+              }
+            ],
+            "recommend_raw_count": 3,
+            "recommend_acked": [
+              {
+                "experiment_id": "entry_dca_overlay",
+                "kind": "lifecycle_overlay",
+                "status": "recommend",
+                "area": "paper_churn",
+                "human_acked": true,
+                "acked_at": "2026-09-13T17:41:11.138086+00:00"
+              }
+            ],
+            "recommend_blocking": [],
+            "recommend_capacity": [
+              {
+                "experiment_id": "ana-20260921-02",
+                "kind": "analysis_task",
+                "status": "recommend",
+                "area": "scoring",
+                "human_acked": false,
+                "acked_at": null
+              },
+              {
+                "experiment_id": "ana-20260921-04",
+                "kind": "analysis_task",
+                "status": "recommend",
+                "area": "paper_churn",
+                "human_acked": false,
+                "acked_at": null
+              }
+            ],
+            "human_ack_pending": 2,
+            "summary_recommend": 3,
+            "summary_fail": 5,
+            "total_experiments": 15
+          }
+        },
+        "ack": {
+          "acked": true,
+          "stale": true,
+          "acked_at": "2026-09-29T20:33:13.689376+00:00",
+          "decision": "ack_observe",
+          "finding_fingerprint": "77a2b495eeb70657"
+        },
+        "approval_gate": true,
+        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-trading-costs.md#selective-a-to-b-fair-cost-twins",
+        "cadence": "sunday"
+      },
+      "closed": false,
+      "recommendation": {
+        "id": "rec-60e3efe5c7e3",
+        "task_id": "human:sunday-spawn-fair-twins",
+        "summary": "Review new analysis on “Spawn Suite B twins only for recommend experiments”, then Acknowledge (observe-only).",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
+        "accept_action": {
+          "kind": "human-task-ack",
+          "payload": {
+            "task_id": "sunday-spawn-fair-twins",
+            "decision": "ack_observe",
+            "finding_fingerprint": "e9214b24f8dce0f5"
+          }
+        },
+        "discuss_prompt": "Discuss daily recommendation `rec-60e3efe5c7e3` (human task `sunday-spawn-fair-twins`):\nTitle: Spawn Suite B twins only for recommend experiments\nSummary: Review new analysis on “Spawn Suite B twins only for recommend experiments”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-60e3efe5c7e3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "priority": 14,
+        "options": [
+          "Accept → Acknowledge (observe-only)",
+          "Open runbook / defer",
+          "Discuss in Project chat"
+        ]
+      }
+    },
+    {
+      "task_ref": "human:weekday-engineering-parked-backlog-clear",
+      "source": "human_tasks",
+      "work_class": "ops_gate",
+      "task_family": "weekday-engineering-parked-backlog-clear",
+      "priority": 15,
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When the warning still fires, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+      "sort_bucket": "new_info",
+      "closeable": true,
+      "close_action": "human-task-ack",
+      "close_payload": {
+        "task_id": "weekday-engineering-parked-backlog-clear",
+        "decision": "ack_observe",
+        "finding_fingerprint": "c0c3ee56f97eb146"
+      },
+      "href": "#automation/human",
+      "recommendation_id": "rec-61772ce771b4",
+      "status": {
+        "state": "ready",
+        "label": "Proposed",
+        "next_steps": [],
+        "waiting_on": [],
+        "ready": true,
+        "ready_reason": "proposal present · no blockers",
+        "blocked_reason": null,
+        "updated_at": "2026-09-30T11:00:00Z",
+        "updated_by": "morning_builder"
+      },
+      "human_task": {
+        "id": "weekday-engineering-parked-backlog-clear",
+        "sort_bucket": "new_info",
+        "analysis": {
+          "headline": "0 attention-parked eng tasks",
+          "updated_at": null,
+          "fingerprint": "c0c3ee56f97eb146",
+          "bullets": [
+            "Parked tasks: 0 (attention ~0)",
+            "Traffic pause active: False"
+          ],
+          "source_keys": [
+            "engineering_tasks"
           ]
         },
         "ack": {
           "acked": true,
           "stale": true,
-          "acked_at": "2026-09-29T20:33:13.631579+00:00",
+          "acked_at": "2026-09-28T22:54:20.452687+00:00",
           "decision": "ack_observe",
-          "finding_fingerprint": "0e7a62d585fe593e"
+          "finding_fingerprint": "9fc44a095c2ab772"
         },
         "approval_gate": false,
-        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
-        "cadence": "sunday"
+        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
+        "cadence": "weekday"
       },
       "closed": false,
       "recommendation": {
-        "id": "rec-fdfe0615ed83",
-        "task_id": "human:sunday-shard-epoch0-watch",
-        "summary": "Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 14",
+        "id": "rec-61772ce771b4",
+        "task_id": "human:weekday-engineering-parked-backlog-clear",
+        "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
-            "task_id": "sunday-shard-epoch0-watch",
+            "task_id": "weekday-engineering-parked-backlog-clear",
             "decision": "ack_observe",
-            "finding_fingerprint": "244c0da819c2c510"
+            "finding_fingerprint": "c0c3ee56f97eb146"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-fdfe0615ed83` (human task `sunday-shard-epoch0-watch`):\nTitle: Watch shard epoch-0 and near-miss before forking AI\nSummary: Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 14\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-fdfe0615ed83` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 16,
+        "discuss_prompt": "Discuss daily recommendation `rec-61772ce771b4` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-61772ce771b4` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "priority": 15,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -727,7 +877,7 @@
       "source": "ui_reconcile",
       "work_class": "surface",
       "task_family": "daily_hub_local_date_matches_today",
-      "priority": 17,
+      "priority": 16,
       "title": "Daily hub local_date matches today",
       "summary": "hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h",
       "sort_bucket": "reconcile",
@@ -754,7 +904,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": "hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h",
-        "updated_at": "2026-09-30T07:47:55.382300Z",
+        "updated_at": "2026-09-30T11:00:00Z",
         "updated_by": "morning_builder"
       },
       "closed": false,
@@ -771,7 +921,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-676a09a614ea` (reconcile `daily_hub_local_date_matches_today`):\nSummary: UI reconcile warn: Daily hub local_date matches today.\nRationale: hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h\nRunbook: docs/ops/ops-monitor.md#daily-hub\nSuggested options:\n1) Hard-refresh Pages / regenerate the named artifact\n2) Force republish if publish_lag (supervised)\n3) Confirm false positive and dismiss after condition clears",
-        "priority": 17,
+        "priority": 16,
         "options": [
           "Open runbook",
           "Supervised republish",
@@ -780,7 +930,7 @@
       }
     }
   ],
-  "open_task_count": 10,
+  "open_task_count": 7,
   "recommendations": [
     {
       "id": "rec-b877dd532f10",
@@ -823,36 +973,6 @@
       ]
     },
     {
-      "id": "rec-23b769e8280f",
-      "task_id": "mwarn:euro_depth:health_warn",
-      "summary": "Market warning triage → park: EU depth composite (STOXX50 + periphery) / health_warn.",
-      "rationale": "euro_depth: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
-      "accept_action": {
-        "kind": "focus-ack",
-        "payload": {
-          "focus_id": "mwarn:euro_depth:health_warn",
-          "decision": "accept",
-          "triage_action": "park"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-23b769e8280f` (market warning `mwarn:euro_depth:health_warn`):\nProposed action: park\nMarket: euro_depth (focus=True spare=False)\nFlag: health_warn — health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear\nRationale: euro_depth: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-      "priority": 5,
-      "options": [
-        "Accept — park / observe-ack for today",
-        "Discuss — only if this should become deepen",
-        "Do not ritual-clear badges or starve euro fat slot"
-      ],
-      "triage_action": "park",
-      "prefer_discuss": false,
-      "dismissable": true,
-      "parkable": true,
-      "market_id": "euro_depth",
-      "flag_id": "health_warn",
-      "cli_hint": null,
-      "work_class": "surface",
-      "task_family": "market-warning-triage"
-    },
-    {
       "id": "rec-c032e5e6b350",
       "task_id": "mwarn:dax:unmeasured_stuck",
       "summary": "Market warning triage → deepen: DAX / unmeasured_stuck · G1A.DE.",
@@ -866,7 +986,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-c032e5e6b350` (market warning `mwarn:dax:unmeasured_stuck`):\nProposed action: deepen\nMarket: dax (focus=False spare=True)\nFlag: unmeasured_stuck — 1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)\nRationale: unmeasured_stuck on dax (G1A.DE) blocks sprint_ingest_complete and cannot be dismissed or parked. Spare-stream factory path — leave on spare deepen; do not steal the euro fat slot. Accept observes spare-factory deepen — do not divert euro capacity. IR allowlist is empty for G1A.DE — deepen alone will 0-yield; seed `_BUILTIN_IR_URLS` / issuer PDFs (or fix discovery) before another intensive pin. Do not auto-park unmeasured.\nPolicy: dismissable=False parkable=False\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-      "priority": 6,
+      "priority": 5,
       "options": [
         "Accept — park / observe-ack for today",
         "Discuss — only if this should become deepen",
@@ -883,50 +1003,20 @@
       "task_family": "market-warning-triage"
     },
     {
-      "id": "rec-dcee86dd9816",
-      "task_id": "mwarn:dax:zero_improve_stall",
-      "summary": "Market warning triage → park: DAX / zero_improve_stall.",
-      "rationale": "Spare/non-focus stall on dax: park the worry — leave spare-stream factory / exhaustion; do not divert euro fat slot or mint intensive pins from this flag alone.",
+      "id": "rec-340f9802a5f3",
+      "task_id": "mwarn:hang_seng:health_warn",
+      "summary": "Market warning triage → park: Hang Seng / health_warn.",
+      "rationale": "hang_seng: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
       "accept_action": {
         "kind": "focus-ack",
         "payload": {
-          "focus_id": "mwarn:dax:zero_improve_stall",
+          "focus_id": "mwarn:hang_seng:health_warn",
           "decision": "accept",
           "triage_action": "park"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-dcee86dd9816` (market warning `mwarn:dax:zero_improve_stall`):\nProposed action: park\nMarket: dax (focus=False spare=True)\nFlag: zero_improve_stall — Last 2 days improved nobody while filing gaps remain\nRationale: Spare/non-focus stall on dax: park the worry — leave spare-stream factory / exhaustion; do not divert euro fat slot or mint intensive pins from this flag alone.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-      "priority": 7,
-      "options": [
-        "Accept — park / observe-ack for today",
-        "Discuss — only if this should become deepen",
-        "Do not ritual-clear badges or starve euro fat slot"
-      ],
-      "triage_action": "park",
-      "prefer_discuss": false,
-      "dismissable": true,
-      "parkable": true,
-      "market_id": "dax",
-      "flag_id": "zero_improve_stall",
-      "cli_hint": null,
-      "work_class": "surface",
-      "task_family": "market-warning-triage"
-    },
-    {
-      "id": "rec-219606637454",
-      "task_id": "mwarn:hang_seng:awaiting_first_ingest",
-      "summary": "Market warning triage → park: Hang Seng / awaiting_first_ingest.",
-      "rationale": "awaiting_first_ingest on hang_seng (non-focus): park / watch spare factory — do not starve the euro fat slot.",
-      "accept_action": {
-        "kind": "focus-ack",
-        "payload": {
-          "focus_id": "mwarn:hang_seng:awaiting_first_ingest",
-          "decision": "accept",
-          "triage_action": "park"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-219606637454` (market warning `mwarn:hang_seng:awaiting_first_ingest`):\nProposed action: park\nMarket: hang_seng (focus=False spare=True)\nFlag: awaiting_first_ingest — Entered sprint on 2026-09-29; waiting on the first deepen slot\nRationale: awaiting_first_ingest on hang_seng (non-focus): park / watch spare factory — do not starve the euro fat slot.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-      "priority": 8,
+      "discuss_prompt": "Discuss daily recommendation `rec-340f9802a5f3` (market warning `mwarn:hang_seng:health_warn`):\nProposed action: park\nMarket: hang_seng (focus=False spare=True)\nFlag: health_warn — health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear\nRationale: hang_seng: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
+      "priority": 6,
       "options": [
         "Accept — park / observe-ack for today",
         "Discuss — only if this should become deepen",
@@ -937,86 +1027,89 @@
       "dismissable": true,
       "parkable": true,
       "market_id": "hang_seng",
-      "flag_id": "awaiting_first_ingest",
+      "flag_id": "health_warn",
       "cli_hint": null,
       "work_class": "surface",
       "task_family": "market-warning-triage"
     },
     {
-      "id": "rec-a54566dc5947",
-      "task_id": "mwarn:hang_seng:no_observe_benchmark",
-      "summary": "Market warning triage → park: Hang Seng / no_observe_benchmark.",
-      "rationale": "hang_seng: No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
-      "accept_action": {
-        "kind": "focus-ack",
-        "payload": {
-          "focus_id": "mwarn:hang_seng:no_observe_benchmark",
-          "decision": "accept",
-          "triage_action": "park"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-a54566dc5947` (market warning `mwarn:hang_seng:no_observe_benchmark`):\nProposed action: park\nMarket: hang_seng (focus=False spare=True)\nFlag: no_observe_benchmark — No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock\nRationale: hang_seng: No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-      "priority": 9,
-      "options": [
-        "Accept — park / observe-ack for today",
-        "Discuss — only if this should become deepen",
-        "Do not ritual-clear badges or starve euro fat slot"
-      ],
-      "triage_action": "park",
-      "prefer_discuss": false,
-      "dismissable": true,
-      "parkable": true,
-      "market_id": "hang_seng",
-      "flag_id": "no_observe_benchmark",
-      "cli_hint": null,
-      "work_class": "surface",
-      "task_family": "market-warning-triage"
-    },
-    {
-      "id": "rec-f5640d8d9d85",
-      "task_id": "mwarn:multi:health_warn_rollup",
-      "summary": "Market warning triage → park: Admitted / maintenance ambers / health_warn_rollup.",
-      "rationale": "multi: health=warn on aex, aim, bel20, ftse_mib, ftse_smallcap, ibex35 without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
-      "accept_action": {
-        "kind": "focus-ack",
-        "payload": {
-          "focus_id": "mwarn:multi:health_warn_rollup",
-          "decision": "accept",
-          "triage_action": "park"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-f5640d8d9d85` (market warning `mwarn:multi:health_warn_rollup`):\nProposed action: park\nMarket: multi (focus=False spare=False)\nFlag: health_warn_rollup — health=warn on aex, aim, bel20, ftse_mib, ftse_smallcap, ibex35 without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray\nRationale: multi: health=warn on aex, aim, bel20, ftse_mib, ftse_smallcap, ibex35 without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
-      "priority": 10,
-      "options": [
-        "Accept — park / observe-ack for today",
-        "Discuss — only if this should become deepen",
-        "Do not ritual-clear badges or starve euro fat slot"
-      ],
-      "triage_action": "park",
-      "prefer_discuss": false,
-      "dismissable": true,
-      "parkable": true,
-      "market_id": "multi",
-      "flag_id": "health_warn_rollup",
-      "cli_hint": null,
-      "work_class": "surface",
-      "task_family": "market-warning-triage"
-    },
-    {
-      "id": "rec-fdfe0615ed83",
-      "task_id": "human:sunday-shard-epoch0-watch",
-      "summary": "Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 14",
+      "id": "rec-f86eb9119d0d",
+      "task_id": "human:sunday-shadow-vs-primary",
+      "summary": "Review new analysis on “Compare calibrated shadows vs primary AI judgment”, then Acknowledge (observe-only).",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
-          "task_id": "sunday-shard-epoch0-watch",
+          "task_id": "sunday-shadow-vs-primary",
           "decision": "ack_observe",
-          "finding_fingerprint": "244c0da819c2c510"
+          "finding_fingerprint": "e9214b24f8dce0f5"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-fdfe0615ed83` (human task `sunday-shard-epoch0-watch`):\nTitle: Watch shard epoch-0 and near-miss before forking AI\nSummary: Review new analysis on “Watch shard epoch-0 and near-miss before forking AI”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Admitted shard epoch-0 watch · 14\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-fdfe0615ed83` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 16,
+      "discuss_prompt": "Discuss daily recommendation `rec-f86eb9119d0d` (human task `sunday-shadow-vs-primary`):\nTitle: Compare calibrated shadows vs primary AI judgment\nSummary: Review new analysis on “Compare calibrated shadows vs primary AI judgment”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-f86eb9119d0d` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "priority": 12,
+      "options": [
+        "Accept → Acknowledge (observe-only)",
+        "Open runbook / defer",
+        "Discuss in Project chat"
+      ]
+    },
+    {
+      "id": "rec-0ed019c09296",
+      "task_id": "human:sunday-promote-knobs-gate",
+      "summary": "Review new analysis on “Promote knob priors only when gates pass”, then Acknowledge (observe-only).",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
+      "accept_action": {
+        "kind": "human-task-ack",
+        "payload": {
+          "task_id": "sunday-promote-knobs-gate",
+          "decision": "ack_observe",
+          "finding_fingerprint": "e9214b24f8dce0f5"
+        }
+      },
+      "discuss_prompt": "Discuss daily recommendation `rec-0ed019c09296` (human task `sunday-promote-knobs-gate`):\nTitle: Promote knob priors only when gates pass\nSummary: Review new analysis on “Promote knob priors only when gates pass”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-0ed019c09296` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "priority": 13,
+      "options": [
+        "Accept → Acknowledge (observe-only)",
+        "Open runbook / defer",
+        "Discuss in Project chat"
+      ]
+    },
+    {
+      "id": "rec-60e3efe5c7e3",
+      "task_id": "human:sunday-spawn-fair-twins",
+      "summary": "Review new analysis on “Spawn Suite B twins only for recommend experiments”, then Acknowledge (observe-only).",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
+      "accept_action": {
+        "kind": "human-task-ack",
+        "payload": {
+          "task_id": "sunday-spawn-fair-twins",
+          "decision": "ack_observe",
+          "finding_fingerprint": "e9214b24f8dce0f5"
+        }
+      },
+      "discuss_prompt": "Discuss daily recommendation `rec-60e3efe5c7e3` (human task `sunday-spawn-fair-twins`):\nTitle: Spawn Suite B twins only for recommend experiments\nSummary: Review new analysis on “Spawn Suite B twins only for recommend experiments”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-60e3efe5c7e3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "priority": 14,
+      "options": [
+        "Accept → Acknowledge (observe-only)",
+        "Open runbook / defer",
+        "Discuss in Project chat"
+      ]
+    },
+    {
+      "id": "rec-61772ce771b4",
+      "task_id": "human:weekday-engineering-parked-backlog-clear",
+      "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks",
+      "accept_action": {
+        "kind": "human-task-ack",
+        "payload": {
+          "task_id": "weekday-engineering-parked-backlog-clear",
+          "decision": "ack_observe",
+          "finding_fingerprint": "c0c3ee56f97eb146"
+        }
+      },
+      "discuss_prompt": "Discuss daily recommendation `rec-61772ce771b4` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-61772ce771b4` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "priority": 15,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -1036,7 +1129,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-676a09a614ea` (reconcile `daily_hub_local_date_matches_today`):\nSummary: UI reconcile warn: Daily hub local_date matches today.\nRationale: hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h\nRunbook: docs/ops/ops-monitor.md#daily-hub\nSuggested options:\n1) Hard-refresh Pages / regenerate the named artifact\n2) Force republish if publish_lag (supervised)\n3) Confirm false positive and dismiss after condition clears",
-      "priority": 17,
+      "priority": 16,
       "options": [
         "Open runbook",
         "Supervised republish",
@@ -1044,18 +1137,26 @@
       ]
     }
   ],
-  "closed_today": [],
+  "closed_today": [
+    "focus-1",
+    "focus-2",
+    "mwarn:dax:zero_improve_stall",
+    "mwarn:euro_depth:health_warn",
+    "mwarn:hang_seng:awaiting_first_ingest",
+    "mwarn:hang_seng:no_observe_benchmark",
+    "mwarn:multi:health_warn_rollup"
+  ],
   "counts": {
-    "focus": 2,
-    "market_warnings": 6,
-    "human_new_info": 1,
+    "focus": 0,
+    "market_warnings": 2,
+    "human_new_info": 4,
     "human_unacked": 0,
     "progress": 0,
     "reconcile": 1
   },
   "project_sync": {
     "notes_fingerprint": null,
-    "synced_at": "2026-09-30T07:47:55.382300Z",
+    "synced_at": "2026-09-30T11:00:00Z",
     "method": "morning_builder_reads_committed_export_or_manual"
   },
   "illumination_hints": {
@@ -1063,14 +1164,14 @@
       "attention": true,
       "new_info": true,
       "reasons": [
-        "open_tasks=10"
+        "open_tasks=7"
       ]
     },
     "automation.human": {
       "attention": true,
       "new_info": true,
       "reasons": [
-        "human_tasks.new_info=1",
+        "human_tasks.new_info=4",
         "human_tasks.unacked=0"
       ]
     },
