@@ -374,9 +374,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.vinci.com/sites/default/files/medias/communiques/file/2026-07/CP%20VINCI%20H1%202026%20EN.pdf",
         "https://www.vinci.com/sites/default/files/medias/communiques/file/2026-04/first-quarter-2026-stable-revenue-increase-in-order-intake.pdf",
     ],
-    # euro_depth IWB blocker — MC.PA unfetchable_iwb resolved; GlobeNewswire HTML times out → ml-eu PDF.
+    # euro_depth IWB blocker — MC.PA unfetchable_iwb resolved; GlobeNewswire HTML times out →
+    # ml-eu PDF with Content-Disposition filename (UUID-only slug fails IR title_mismatch).
     "MC.PA": [
-        "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440",
+        "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440/press-release-lvmh-2025-annual-results.pdf",
     ],
     # euro_depth IWB blocker — WKL.AS unfetchable_iwb resolved; contenthub PDFs (wolterskluwer.com is Cloudflare-gated).
     "WKL.AS": [
@@ -4807,9 +4808,13 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     "https://www.globenewswire.com/news-release/2026/04/23/3280202/0/en/VINCI-FIRST-QUARTER-2026-STABLE-REVENUE-INCREASE-IN-ORDER-INTAKE.html": (
         "https://www.vinci.com/sites/default/files/medias/communiques/file/2026-04/first-quarter-2026-stable-revenue-increase-in-order-intake.pdf"
     ),
-    # eng-20260930-02: GlobeNewswire HTML IR row times out; ml-eu FY2025 results PDF serves.
+    # eng-20260930-02: GlobeNewswire HTML IR row times out; ml-eu FY2025 results PDF serves
+    # (filename suffix supplies title tokens — bare UUID Resource/Download fails title_mismatch).
     "https://www.globenewswire.com/news-release/2026/01/27/3226833/0/en/LVMH-Solid-performance-in-a-disrupted-global-economic-and-geopolitical-environment.html": (
-        "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440"
+        "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440/press-release-lvmh-2025-annual-results.pdf"
+    ),
+    "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440": (
+        "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440/press-release-lvmh-2025-annual-results.pdf"
     ),
     # eng-20260911-01: GlobeNewswire HTML/PDF IR rows fail validation; contenthub statutory PDFs serve.
     "https://www.globenewswire.com/news-release/2026/02/25/3244280/0/en/Wolters-Kluwer-2025-Full-Year-Report.html": (
