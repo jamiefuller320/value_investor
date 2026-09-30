@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-30T12:31:48.203181+00:00`
+Generated: `2026-09-30T17:32:04.977985+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,10 +33,11 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `human`/human PR #912 `eng-20260930-02` — Hunt fetchable IR source for parked euro_depth leftover MC.PA
 - `parked_hunter`/verified PR #911 `eng-20260930-01` — Hunt fetchable IR source for parked euro_depth leftover ADYEN.AS
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 109
+- Occasion count: 119
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 3×
