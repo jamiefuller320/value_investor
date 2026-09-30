@@ -87,7 +87,9 @@ def merge_daily_focus_acks_stores(
     }
 
 
-def merge_daily_focus_acks_files(local_path: Path, remote_path: Path, out_path: Path) -> dict[str, Any]:
+def merge_daily_focus_acks_files(
+    local_path: Path, remote_path: Path, out_path: Path
+) -> dict[str, Any]:
     """Merge two on-disk ack stores (used by ``gha_commit_artifacts.sh``)."""
 
     def _load(path: Path) -> dict[str, Any]:
