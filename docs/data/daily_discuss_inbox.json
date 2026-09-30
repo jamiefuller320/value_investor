@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-30T14:43:03.819263+00:00",
+  "updated_at": "2026-09-30T14:54:01.383258+00:00",
   "items": [
     {
       "recommendation_id": "rec-6d2619c1c5ba",
@@ -225,6 +225,40 @@
       "queued_at": "2026-09-30T14:43:03.819263+00:00",
       "source": "dashboard_bridge",
       "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-61772ce771b4`"
+    },
+    {
+      "recommendation_id": "rec-3d9c771c707c",
+      "task_id": "mwarn:euro_depth:zero_improve_stall",
+      "local_date": "2026-09-30",
+      "status": "resolved",
+      "summary": "Last 2 days improved nobody while filing gaps remain",
+      "title": "Deepen · EU depth composite (STOXX50 + periphery) · zero_improve_stall",
+      "rationale": "Focus-market zero_improve_stall on euro_depth — Accept recorded deepen intent 2026-09-29; condition later cleared (filing_gaps=0, ingest=maintenance).",
+      "discuss_prompt": "Discuss daily recommendation `rec-3d9c771c707c` — Close / archive as superseded (euro_depth maintenance; no fat slot; do not reopen deepen).",
+      "options": [
+        "Close / archive as superseded",
+        "Confirm Accept already done",
+        "Re-open deepen only if euro re-emits stall",
+        "Do not divert #913 / DAX spare onto euro fat slot"
+      ],
+      "priority": 20,
+      "accept_action": {
+        "kind": "focus-ack",
+        "payload": {
+          "focus_id": "mwarn:euro_depth:zero_improve_stall",
+          "decision": "accept",
+          "triage_action": "deepen"
+        }
+      },
+      "work_class": "surface",
+      "task_family": "market-warning-triage",
+      "queued_at": "2026-09-30T14:54:01.382682+00:00",
+      "source": "project_discuss_resolve",
+      "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-3d9c771c707c`",
+      "resolved_at": "2026-09-30T14:54:01.383258+00:00",
+      "resolved_by": "project_worker",
+      "resolution_summary": "Option 1 — Close / archive as superseded. Premise obsolete: euro_depth filing_gaps=0, ingest=maintenance (shared_maintenance, ingest_exhausted), no fat slot. Prior Accept 2026-09-29 (accept_followed) stands; do not reopen deepen or divert #913/#916 capacity. Observe-only archive via discuss-resolve.",
+      "resolved_local_date": "2026-09-30"
     }
   ]
 }

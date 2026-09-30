@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-30T12:58:05+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-30T14:56:48+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -575,6 +575,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L501 | **Phase B Daily hub Accept → observe-safe market-warning dismiss automation** | When market warning triage proposes dismiss (e.g. ingest-deviation signal triage dismiss) and Accept streak is clean, optionally run the observe-safe CLI dismiss / board ack from ops-monitor — never auto-deepen or divert euro fat slot. | Market warning triage has ≥2 weeks of Accept/Discuss outcomes in daily_hub_history and operators confirm dismiss Accepts are not rubber-stamps |
 | L504 | **Daily hub assessment: auto-date stage_since from git/PR history** | Expansive assessments leave stage_since blank unless seed/notes/observe first_seen provide it. Auto-dating from git blame or PR open times would fill more durations but risks inventing progress and needs a clear provenance rule. | After expansive assessments are in daily use for ≥2 weeks and operators still ask how long items have been stuck without Since: lines |
 | L505 | **Daily hub assessment: write-back Where/How into notes.md** | Builder currently reads notes/seed into JSON. Auto writing assessment prose back into Project notes.md would close the edit loop but risks clobbering human editorial surface after morning JSON-wins rule. | When operators routinely edit assessments in the UI and expect notes.md to stay in sync |
+| L506 | **Suppress euro zero_improve_stall when filing_gaps already 0** | market_status can keep admission_warnings zero_improve_stall with summary 'while filing gaps remain' even after gaps_after.filing_gaps=0, which re-opens a superseded Daily hub deepen card. | Next market_warning_triage or sprint_progress admission_warnings edit for euro_depth / focus markets |
 
 ---
 
