@@ -6717,6 +6717,36 @@ def test_fetch_filings_ir_allowlist_euro_depth_apam_as_builtins(tmp_path: Path):
     assert "AnnualReport_2025" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_aex_adyen_as_builtins(tmp_path: Path):
+    """eng-20260930-01: ADYEN.AS awaiting_periodic_report — brand.adyen.com FY + H1 PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("ADYEN.AS", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all("brand.adyen.com/api/asset" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_adyen_as_aex_has_fetchable_ir():
+    """eng-20260930-01: ADYEN.AS has live brand.adyen.com FY2025 annual report PDF."""
+    assert "ADYEN.AS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ADYEN.AS")
+    annual_2025 = next(
+        row
+        for row in rows
+        if row["period"] == "annual" and "DEcCEo4XPo3eDfzj-fjMZ366g2pQkuoZMPARCHC5BoE" in row["url"]
+    )
+    body = fetch_filing_body(annual_2025["url"])
+    assert body and len(body) > 5000
+    assert "Annual Report" in body
+    valid, reason = _validate_ir_allowlist_body_content(annual_2025, body, ticker="ADYEN.AS")
+    assert valid, reason
+
+
 def test_fetch_filings_ir_allowlist_ftse_mib_unmeasured_builtins_eng_20260926_01(
     tmp_path: Path,
 ):
