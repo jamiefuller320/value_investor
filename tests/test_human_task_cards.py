@@ -12,12 +12,15 @@ from value_investor.human_task_acks import load_human_task_acks, record_human_ta
 from value_investor.human_task_cards import (
     APPROVAL_GATE_IDS,
     KNOB_PRIORS_REVIEW_TASK_ID,
+    PARKED_BACKLOG_CLEAR_TASK_ID,
     SHADOW_ENDURANCE_TASK_ID,
     apply_experiment_assessment_observe_auto_ack,
     apply_knob_priors_observe_auto_ack,
+    apply_parked_backlog_observe_auto_ack,
     build_human_tasks_board,
     experiment_assessment_gate_status,
     knob_priors_ack_sufficient,
+    parked_backlog_ack_sufficient,
     write_human_tasks_board,
 )
 from value_investor.human_tasks_checklist import load_human_tasks_checklist
@@ -595,3 +598,103 @@ def test_experiment_assessment_gate_blocking_recommend_stays_open(tmp_path: Path
     assert hit["sort_bucket"] == "unacked"
     assert hit["ack_sufficient"] is False
     assert "1 blocking" in hit["analysis"]["headline"]
+
+
+def test_parked_backlog_ack_sufficient_when_quiet():
+    status = parked_backlog_ack_sufficient(
+        {
+            "queue_clearing": {"attention_parked_count": 0, "pause_active": False},
+            "tasks": [],
+        }
+    )
+    assert status["ack_sufficient"] is True
+    assert status["reason"] == "quiet_zero_attention_no_pause"
+    assert status["attention_parked_count"] == 0
+    assert status["pause_active"] is False
+
+
+def test_parked_backlog_ack_not_sufficient_when_pause_or_attention():
+    paused = parked_backlog_ack_sufficient(
+        {
+            "queue_clearing": {"attention_parked_count": 0, "pause_active": True},
+            "tasks": [],
+        }
+    )
+    assert paused["ack_sufficient"] is False
+    assert paused["reason"] == "queue_clearing_pause_active"
+    attention = parked_backlog_ack_sufficient(
+        {
+            "queue_clearing": {"attention_parked_count": 3, "pause_active": False},
+            "tasks": [
+                {"id": "eng-1", "status": "parked", "park_kind": "attention"},
+                {"id": "eng-2", "status": "parked", "park_kind": "attention"},
+                {"id": "eng-3", "status": "parked", "park_kind": "attention"},
+            ],
+        }
+    )
+    assert attention["ack_sufficient"] is False
+    assert attention["reason"] == "attention_parked_remaining"
+    assert attention["attention_parked_count"] == 3
+
+
+def test_write_board_auto_acks_quiet_parked_backlog(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    write_json(
+        data_dir / "engineering_tasks.json",
+        {
+            "updated_at": "2026-09-30T13:18:00+00:00",
+            "queue_clearing": {
+                "attention_parked_count": 0,
+                "pause_active": False,
+                "evaluated_at": "2026-09-30T13:18:00+00:00",
+            },
+            "traffic_control": {"pause_active": False},
+            "tasks": [{"id": "eng-merged", "status": "merged"}],
+        },
+    )
+    board = write_human_tasks_board(data_dir=data_dir)
+    hit = next(row for row in board["tasks"] if row["id"] == PARKED_BACKLOG_CLEAR_TASK_ID)
+    assert hit["auto_ackable"] is True
+    assert hit["ack_sufficient"] is True
+    assert hit["sort_bucket"] == "acked"
+    assert hit["ack"]["decision"] == "ack_observe"
+    assert hit["ack"]["stale"] is False
+    assert "quiet" in hit["analysis"]["headline"]
+    store = load_human_task_acks(data_dir)
+    row = next(r for r in store["acks"] if r["task_id"] == PARKED_BACKLOG_CLEAR_TASK_ID)
+    assert row["decision"] == "ack_observe"
+    assert row["source"] == "board_auto_quiet_parked_backlog"
+    assert row["acked_by"] == "system"
+    assert apply_parked_backlog_observe_auto_ack(data_dir) is None
+
+
+def test_parked_backlog_auto_ack_skips_when_not_quiet(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    write_json(
+        data_dir / "engineering_tasks.json",
+        {
+            "updated_at": "2026-09-30T13:18:00+00:00",
+            "queue_clearing": {
+                "attention_parked_count": 8,
+                "pause_active": True,
+                "evaluated_at": "2026-09-30T13:18:00+00:00",
+            },
+            "tasks": [
+                {
+                    "id": f"eng-park-{i}",
+                    "status": "parked",
+                    "park_kind": "attention",
+                    "title": f"park {i}",
+                }
+                for i in range(8)
+            ],
+        },
+    )
+    assert apply_parked_backlog_observe_auto_ack(data_dir) is None
+    board = write_human_tasks_board(data_dir=data_dir)
+    hit = next(row for row in board["tasks"] if row["id"] == PARKED_BACKLOG_CLEAR_TASK_ID)
+    assert hit["auto_ackable"] is False
+    assert hit["sort_bucket"] == "unacked"
+    assert hit["ack_sufficient"] is False

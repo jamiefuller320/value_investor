@@ -35,6 +35,9 @@ _LOW_PRIOR_CONFIDENCE = frozenset({"low", "insufficient"})
 
 SHADOW_ENDURANCE_TASK_ID = "sunday-shadow-endurance"
 
+# Observe-only residual triage after recover-queue — auto-ack when queue is quiet.
+PARKED_BACKLOG_CLEAR_TASK_ID = "weekday-engineering-parked-backlog-clear"
+
 # Fail closes the promote/knob path — never counts as Sunday "do now" urgency.
 _SHADOW_FAIL_KINDS = frozenset({"calibration_shadow", "exclusion_shadow"})
 # Recommend rows that can still mean a Sunday promote / overlay gate is open.
@@ -378,11 +381,93 @@ def _admitted_market_rows(status: dict[str, Any]) -> list[dict[str, Any]]:
     return [row for row in rows if bool(row.get("is_admitted"))]
 
 
+def parked_backlog_ack_sufficient(eng: dict[str, Any] | None) -> dict[str, Any]:
+    """True when recover-queue left the parked gate quiet (nothing to triage).
+
+    Policy: Acknowledge (observe-only) when ``attention_parked_count=0`` and
+    ``queue_clearing.pause_active=false``. Human triage remains when the
+    cap-8 pause / warning still fires after recover-queue. Never unparks,
+    cancels, or resumes dispatch from this ack.
+    """
+    eng = _as_dict(eng)
+    queue_clearing = _as_dict(eng.get("queue_clearing"))
+    tasks = [t for t in (eng.get("tasks") or []) if isinstance(t, dict)]
+    parked = [t for t in tasks if str(t.get("status") or "") == "parked"]
+    attention_rows = [
+        t
+        for t in parked
+        if str(t.get("park_kind") or t.get("attention") or "attention") != "ignore"
+    ]
+    raw_count = queue_clearing.get("attention_parked_count")
+    try:
+        attention_count = int(raw_count) if raw_count is not None else len(attention_rows)
+    except (TypeError, ValueError):
+        attention_count = len(attention_rows)
+    pause_active = bool(queue_clearing.get("pause_active"))
+    ack_sufficient = attention_count == 0 and not pause_active
+    if ack_sufficient:
+        reason = "quiet_zero_attention_no_pause"
+    elif pause_active:
+        reason = "queue_clearing_pause_active"
+    else:
+        reason = "attention_parked_remaining"
+    return {
+        "ack_sufficient": ack_sufficient,
+        "reason": reason,
+        "attention_parked_count": attention_count,
+        "pause_active": pause_active,
+        "parked_count": len(parked),
+    }
+
+
+def apply_parked_backlog_observe_auto_ack(data_dir: Path) -> dict[str, Any] | None:
+    """Record observe-only ack when the parked-backlog gate is quiet.
+
+    Never records approve / never unparks, cancels, or resumes the eng queue.
+    Idempotent when an open ack already matches the live fingerprint.
+    """
+    data_dir = Path(data_dir)
+    eng = _read(data_dir, "engineering_tasks.json")
+    if not eng:
+        return None
+    status = parked_backlog_ack_sufficient(eng)
+    if not status.get("ack_sufficient"):
+        return None
+    analysis = _analysis_for_task(PARKED_BACKLOG_CLEAR_TASK_ID, data_dir)
+    fingerprint = str(analysis.get("fingerprint") or "").strip()
+    if not fingerprint:
+        return None
+    store = load_human_task_acks(data_dir)
+    existing = matching_ack(store, task_id=PARKED_BACKLOG_CLEAR_TASK_ID)
+    if existing:
+        decision = str(existing.get("decision") or "").strip()
+        if decision == "approve":
+            return None
+        if (
+            decision == "ack_observe"
+            and str(existing.get("finding_fingerprint") or "").strip() == fingerprint
+        ):
+            return None
+    return record_human_task_ack(
+        data_dir,
+        task_id=PARKED_BACKLOG_CLEAR_TASK_ID,
+        decision="ack_observe",
+        note=(
+            "Auto-ack observe-only: attention_parked_count=0 and "
+            "queue_clearing.pause_active=false after recover-queue. "
+            "Human triage remains when pause/warning still fires."
+        ),
+        finding_fingerprint=fingerprint,
+        source="board_auto_quiet_parked_backlog",
+        acked_by="system",
+    )
+
+
 def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
     """Slim analysis view from existing artifacts. Empty when nothing published."""
     tid = str(task_id or "").strip()
 
-    if tid == "weekday-engineering-parked-backlog-clear":
+    if tid == PARKED_BACKLOG_CLEAR_TASK_ID:
         eng = _read(data_dir, "engineering_tasks.json")
         tasks = [t for t in (eng.get("tasks") or []) if isinstance(t, dict)]
         parked = [t for t in tasks if str(t.get("status") or "") == "parked"]
@@ -391,14 +476,34 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             for t in parked
             if str(t.get("park_kind") or t.get("attention") or "attention") != "ignore"
         ]
+        queue_clearing = _as_dict(eng.get("queue_clearing"))
         traffic = _as_dict(eng.get("traffic_control"))
+        status = parked_backlog_ack_sufficient(eng)
+        attention_count = int(status.get("attention_parked_count") or 0)
+        pause_active = bool(status.get("pause_active"))
         bullets = [
-            _bullet(f"Parked tasks: {len(parked)} (attention ~{len(attention)})"),
+            _bullet(f"Parked tasks: {len(parked)} (attention ~{attention_count})"),
+            _bullet(
+                f"Queue-clearing pause active: {pause_active}"
+                + (
+                    f" — evaluated {queue_clearing.get('evaluated_at')}"
+                    if queue_clearing.get("evaluated_at")
+                    else ""
+                )
+            ),
             _bullet(
                 f"Traffic pause active: {bool(traffic.get('pause_active'))}"
                 + (f" — {traffic.get('reason')}" if traffic.get("reason") else "")
             ),
         ]
+        if status.get("ack_sufficient"):
+            bullets.insert(
+                0,
+                _bullet(
+                    "Quiet after recover-queue — observe Acknowledge is sufficient "
+                    "(no list-parked triage)."
+                ),
+            )
         oldest = sorted(
             attention,
             key=lambda row: str(row.get("parked_at") or row.get("updated_at") or ""),
@@ -409,19 +514,30 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
                     f"{row.get('id') or '?'}: {row.get('title') or row.get('park_reason') or 'parked'}"
                 )
             )
+        # Fingerprint stays on parked set + queue-clearing pause (gate surface).
+        # When quiet, pause is False — same hash as prior traffic-False quiet snaps.
         fp = _fingerprint(
             {
                 "n": len(parked),
                 "ids": [str(t.get("id")) for t in oldest],
-                "pause": traffic.get("pause_active"),
+                "pause": pause_active,
             }
         )
+        if status.get("ack_sufficient"):
+            headline = f"{attention_count} attention-parked eng tasks · quiet (auto-ackable)"
+        else:
+            headline = f"{attention_count} attention-parked eng tasks"
         return {
-            "headline": f"{len(attention)} attention-parked eng tasks",
-            "updated_at": eng.get("updated_at") or eng.get("generated_at"),
+            "headline": headline,
+            "updated_at": eng.get("updated_at")
+            or eng.get("generated_at")
+            or queue_clearing.get("evaluated_at"),
             "fingerprint": fp,
             "bullets": [b for b in bullets if b][:8],
             "source_keys": ["engineering_tasks"],
+            "ack_sufficient": bool(status.get("ack_sufficient")),
+            "auto_ackable": bool(status.get("ack_sufficient")),
+            "ack_reason": status.get("reason"),
         }
 
     if tid == "sunday-read-analysis-review":
@@ -1131,6 +1247,10 @@ def write_human_tasks_board(
     # the review card (failed shadows / acked overlays / capacity ana-* ≠ do-now).
     # Never auto-promotes experiments.
     apply_experiment_assessment_observe_auto_ack(data_dir)
+    # Observe-safe: when recover-queue left zero attention-parked and no
+    # queue_clearing pause, ack the residual triage card (no list-parked work).
+    # Never unparks / cancels / resumes dispatch.
+    apply_parked_backlog_observe_auto_ack(data_dir)
     board = build_human_tasks_board(data_dir=data_dir, checklist_path=checklist_path)
     dest = data_dir / BOARD_FILENAME
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -1150,4 +1270,7 @@ __all__ = [
     "SHADOW_ENDURANCE_TASK_ID",
     "apply_experiment_assessment_observe_auto_ack",
     "experiment_assessment_gate_status",
+    "PARKED_BACKLOG_CLEAR_TASK_ID",
+    "apply_parked_backlog_observe_auto_ack",
+    "parked_backlog_ack_sufficient",
 ]
