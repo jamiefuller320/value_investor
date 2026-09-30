@@ -2,6 +2,10 @@
 
 Never auto-applies promotion, cron import, or capital actions — durable
 decision record + board refresh only.
+
+Also refreshes Cap C ``daily_focus.json`` so Automation → Daily
+``open_task_count`` tracks the durable board (Daily Accept for human cards
+routes here, not through ``daily-focus-ack``).
 """
 
 from __future__ import annotations
@@ -11,6 +15,25 @@ from typing import Any
 
 from value_investor.human_task_acks import ACK_DECISIONS, record_human_task_ack
 from value_investor.human_task_cards import build_human_tasks_board, write_human_tasks_board
+
+
+def _refresh_daily_hub_after_board(data_dir: Path) -> dict[str, Any] | None:
+    """Rebuild Daily hub from the just-written human_tasks_board.
+
+    Best-effort: hub refresh must not fail a durable observe-ack.
+    """
+    try:
+        from value_investor.daily_focus import write_daily_focus
+        from value_investor.daily_hub_history import write_daily_hub_history
+
+        focus = write_daily_focus(data_dir=data_dir)
+        try:
+            write_daily_hub_history(data_dir=data_dir)
+        except Exception:  # noqa: BLE001 — history must not block ack
+            pass
+        return focus if isinstance(focus, dict) else None
+    except Exception:  # noqa: BLE001 — hub must not block ack
+        return None
 
 
 def _resolve_fingerprint(data_dir: Path, task_id: str, finding_fingerprint: str) -> str:
@@ -99,6 +122,7 @@ def run_human_task_ack(
         acked_by=acked_by,
     )
     board = write_human_tasks_board(data_dir=data_dir)
+    focus = _refresh_daily_hub_after_board(data_dir)
     return {
         "ok": True,
         "ack": ack,
@@ -106,6 +130,7 @@ def run_human_task_ack(
         "counts": board.get("counts"),
         "task_id": task_id,
         "decision": decision,
+        "daily_focus_open_task_count": (focus or {}).get("open_task_count"),
     }
 
 
@@ -116,7 +141,7 @@ def run_human_task_ack_batch(
     source: str = "dashboard_bridge",
     acked_by: str = "dashboard",
 ) -> dict[str, Any]:
-    """Record many observe-acks then refresh the board once."""
+    """Record many observe-acks then refresh the board + Daily hub once."""
     results: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []
     for raw in items:
@@ -158,6 +183,7 @@ def run_human_task_ack_batch(
                 }
             )
     board = write_human_tasks_board(data_dir=data_dir)
+    focus = _refresh_daily_hub_after_board(data_dir)
     return {
         "ok": not errors,
         "acked": results,
@@ -165,6 +191,7 @@ def run_human_task_ack_batch(
         "counts": board.get("counts"),
         "board_path": board.get("path"),
         "command_ids": [str(row.get("command_id")) for row in results if row.get("command_id")],
+        "daily_focus_open_task_count": (focus or {}).get("open_task_count"),
     }
 
 
