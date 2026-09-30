@@ -63,12 +63,25 @@ class RebalanceState:
 
     exit_streak: dict[str, int] = field(default_factory=dict)
     reentry_cooldown: dict[str, int] = field(default_factory=dict)
+    # Still-in-buy-set twin: conviction rank (1=best) at sleeve open.
+    entry_candidate_rank: dict[str, int] = field(default_factory=dict)
+    # Block rebuy while name never left the buy candidate pool since exit.
+    still_in_candidates_block: dict[str, bool] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload: dict[str, Any] = {
             "exit_streak": dict(self.exit_streak),
             "reentry_cooldown": dict(self.reentry_cooldown),
         }
+        if self.entry_candidate_rank:
+            payload["entry_candidate_rank"] = {
+                str(k): int(v) for k, v in self.entry_candidate_rank.items()
+            }
+        if self.still_in_candidates_block:
+            payload["still_in_candidates_block"] = {
+                str(k): bool(v) for k, v in self.still_in_candidates_block.items()
+            }
+        return payload
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> RebalanceState:
@@ -78,7 +91,54 @@ class RebalanceState:
             reentry_cooldown={
                 str(k): int(v) for k, v in (raw.get("reentry_cooldown") or {}).items()
             },
+            entry_candidate_rank={
+                str(k): int(v) for k, v in (raw.get("entry_candidate_rank") or {}).items()
+            },
+            still_in_candidates_block={
+                str(k): bool(v)
+                for k, v in (raw.get("still_in_candidates_block") or {}).items()
+                if v
+            },
         )
+
+
+DEFAULT_RANK_DROP_EXIT_MIN = 3
+
+
+def conviction_buy_ranks(
+    candidates: list[dict[str, Any]],
+    *,
+    use_adjusted_signal: bool = False,
+) -> dict[str, int]:
+    """1-indexed conviction ranks among buy/strong_buy names (higher = worse)."""
+    ranked: list[tuple[float, str]] = []
+    for row in candidates:
+        ticker = str(row.get("ticker") or "").strip()
+        if not ticker:
+            continue
+        signal = _candidate_screen_signal(row, use_adjusted_signal=use_adjusted_signal)
+        if signal not in BUY_SIGNALS:
+            continue
+        ranked.append((float(row.get("conviction_score") or 0), ticker))
+    ranked.sort(key=lambda item: item[0], reverse=True)
+    return {ticker: idx for idx, (_, ticker) in enumerate(ranked, start=1)}
+
+
+def tick_still_in_candidates_block(
+    fund: PaperFund,
+    candidates: list[dict[str, Any]],
+    *,
+    use_adjusted_signal: bool = False,
+) -> None:
+    """Clear rebuy blocks once a name leaves the buy candidate pool."""
+    ranks = conviction_buy_ranks(candidates, use_adjusted_signal=use_adjusted_signal)
+    for ticker in list(fund.rebalance_state.still_in_candidates_block):
+        if ticker not in ranks:
+            fund.rebalance_state.still_in_candidates_block.pop(ticker, None)
+
+
+def still_in_candidates_rebuy_blocked(fund: PaperFund, ticker: str) -> bool:
+    return bool(fund.rebalance_state.still_in_candidates_block.get(ticker))
 
 
 @dataclass
@@ -887,6 +947,9 @@ def resolve_automated_holdings_to_exit(
     exit_confirm_screens: int,
     mutate_state: bool = True,
     force_exit_tickers: set[str] | None = None,
+    still_in_buy_set_hold: bool = False,
+    rank_drop_exit_min: int = DEFAULT_RANK_DROP_EXIT_MIN,
+    buy_ranks: dict[str, int] | None = None,
 ) -> tuple[set[str], set[str]]:
     """
     Return (keep_tickers, full_exit_tickers).
@@ -894,11 +957,17 @@ def resolve_automated_holdings_to_exit(
     When ``exit_confirm_screens`` > 0, holdings must be outside the target set
     for that many consecutive rebalance passes before a full exit fires.
     ``force_exit_tickers`` bypass the hold buffer (e.g. momentum grace failures).
+
+    When ``still_in_buy_set_hold`` is on, capacity-bump exits are blocked while the
+    name remains buyish and ``current_rank - entry_rank < rank_drop_exit_min``.
     """
     state = fund.rebalance_state
     forced = set(force_exit_tickers or ())
     buffer_held: set[str] = set()
+    buy_set_held: set[str] = set()
     sell_tickers: set[str] = set()
+    ranks = buy_ranks or {}
+    drop_min = max(1, int(rank_drop_exit_min or DEFAULT_RANK_DROP_EXIT_MIN))
 
     for ticker in fund.holdings:
         if ticker in target_tickers or ticker in grace_kept:
@@ -911,6 +980,16 @@ def resolve_automated_holdings_to_exit(
             if mutate_state:
                 state.exit_streak.pop(ticker, None)
             continue
+
+        if still_in_buy_set_hold and ticker in ranks:
+            current_rank = int(ranks[ticker])
+            entry_rank = int(state.entry_candidate_rank.get(ticker) or current_rank)
+            rank_drop = current_rank - entry_rank
+            if rank_drop < drop_min:
+                buy_set_held.add(ticker)
+                if mutate_state:
+                    state.exit_streak.pop(ticker, None)
+                continue
 
         if exit_confirm_screens <= 0:
             sell_tickers.add(ticker)
@@ -929,7 +1008,7 @@ def resolve_automated_holdings_to_exit(
         else:
             buffer_held.add(ticker)
 
-    keep_tickers = set(target_tickers) | set(grace_kept) | buffer_held
+    keep_tickers = set(target_tickers) | set(grace_kept) | buffer_held | buy_set_held
     return keep_tickers, sell_tickers
 
 
@@ -1020,6 +1099,9 @@ def preview_automated_plan(
     exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS,
     reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS,
     min_rebalance_notional_gbp: float = DEFAULT_MIN_REBALANCE_NOTIONAL_GBP,
+    still_in_buy_set_hold: bool = False,
+    rank_drop_exit_min: int = DEFAULT_RANK_DROP_EXIT_MIN,
+    block_rebuy_while_in_candidates: bool = False,
 ) -> dict[str, Any]:
     """
     Dry-run the automated rebalance rules without mutating the fund.
@@ -1040,6 +1122,7 @@ def preview_automated_plan(
         require_research_accumulate=require_research_accumulate,
     )
     target_tickers = {str(row["ticker"]) for row in targets}
+    buy_ranks = conviction_buy_ranks(candidates, use_adjusted_signal=use_adjusted_signal)
     grace_kept: set[str] = set()
     grace_transitions: list[dict[str, Any]] = []
     grace_force_exit: set[str] = set()
@@ -1064,8 +1147,25 @@ def preview_automated_plan(
         exit_confirm_screens=exit_confirm_screens,
         mutate_state=False,
         force_exit_tickers=grace_force_exit,
+        still_in_buy_set_hold=still_in_buy_set_hold,
+        rank_drop_exit_min=rank_drop_exit_min,
+        buy_ranks=buy_ranks,
     )
     buffer_held = keep_tickers - target_tickers - grace_kept
+    buy_set_held = {
+        t
+        for t in keep_tickers
+        if t not in target_tickers
+        and t not in grace_kept
+        and still_in_buy_set_hold
+        and t in buy_ranks
+        and (
+            int(buy_ranks[t])
+            - int(fund.rebalance_state.entry_candidate_rank.get(t) or buy_ranks[t])
+        )
+        < max(1, int(rank_drop_exit_min or DEFAULT_RANK_DROP_EXIT_MIN))
+    }
+    buffer_held = buffer_held - buy_set_held
     price_map = {
         str(row["ticker"]): float(_candidate_price(row) or 0)
         for row in candidates
@@ -1178,6 +1278,21 @@ def preview_automated_plan(
                 }
             )
             continue
+        if block_rebuy_while_in_candidates and still_in_candidates_rebuy_blocked(fund, ticker):
+            skipped.append(
+                {
+                    "ticker": ticker,
+                    "name": str(row.get("name") or ticker),
+                    "reason": (
+                        "Still-in-candidates rebuy block — name never left the buy "
+                        "candidate pool since exit"
+                    ),
+                    "target_value": round(target_each, 2),
+                    "conviction_score": conviction,
+                    "signal": signal,
+                }
+            )
+            continue
         budget = min(shortfall, cash)
         if budget <= REBALANCE_CASH_FLOOR:
             skipped.append(
@@ -1244,6 +1359,30 @@ def preview_automated_plan(
             }
         )
 
+    for ticker in buy_set_held:
+        position = remaining_holdings.get(ticker)
+        if position is None:
+            continue
+        price = price_map.get(ticker) or position.avg_cost
+        current_rank = int(buy_ranks.get(ticker) or 0)
+        entry_rank = int(
+            fund.rebalance_state.entry_candidate_rank.get(ticker) or current_rank
+        )
+        holds.append(
+            {
+                "action": "hold",
+                "ticker": ticker,
+                "name": position.name or ticker,
+                "reason": (
+                    "Still-in-buy-set hold — capacity bump with insufficient rank drop "
+                    f"(drop {current_rank - entry_rank} < {rank_drop_exit_min})"
+                ),
+                "value": round(position.shares * float(price or 0), 2),
+                "conviction_score": None,
+                "signal": None,
+            }
+        )
+
     waitlisted = [
         {
             "ticker": str(row.get("ticker")),
@@ -1288,6 +1427,16 @@ def preview_automated_plan(
             f"Re-entry cooldown: wait {reentry_cooldown_screens} rebalance(s) after a "
             "full exit before buying the same name again."
         )
+    if still_in_buy_set_hold:
+        narrative.append(
+            "Still-in-buy-set hold: block capacity-bump full exits while still buyish "
+            f"and rank_drop < {int(rank_drop_exit_min)} vs entry conviction rank."
+        )
+    if block_rebuy_while_in_candidates:
+        narrative.append(
+            "Never-left-candidates rebuy block: do not rebuy a name that has remained "
+            "in the buy candidate pool continuously since exit."
+        )
     narrative.append(
         f"Dust guard: skip trim/top-up adjustments below £{min_rebalance_notional_gbp:.0f}."
     )
@@ -1308,6 +1457,9 @@ def preview_automated_plan(
         "use_momentum_grace": bool(use_momentum_grace),
         "exit_confirm_screens": int(exit_confirm_screens),
         "reentry_cooldown_screens": int(reentry_cooldown_screens),
+        "still_in_buy_set_hold": bool(still_in_buy_set_hold),
+        "rank_drop_exit_min": int(rank_drop_exit_min),
+        "block_rebuy_while_in_candidates": bool(block_rebuy_while_in_candidates),
         "min_rebalance_notional_gbp": round(float(min_rebalance_notional_gbp), 2),
         "target_sleeve_value": round(target_each, 2),
         "targets": [
@@ -1368,6 +1520,9 @@ def run_automated_rebalance(
     exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS,
     reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS,
     min_rebalance_notional_gbp: float = DEFAULT_MIN_REBALANCE_NOTIONAL_GBP,
+    still_in_buy_set_hold: bool = False,
+    rank_drop_exit_min: int = DEFAULT_RANK_DROP_EXIT_MIN,
+    block_rebuy_while_in_candidates: bool = False,
 ) -> list[PaperTrade]:
     """Equal-weight rebalance into top buy-tier names, constrained by cash + max positions."""
     if fund.config.mode != "automated":
@@ -1384,6 +1539,11 @@ def run_automated_rebalance(
         require_research_accumulate=require_research_accumulate,
     )
     target_tickers = {str(row["ticker"]) for row in targets}
+    buy_ranks = conviction_buy_ranks(candidates, use_adjusted_signal=use_adjusted_signal)
+    if block_rebuy_while_in_candidates:
+        tick_still_in_candidates_block(
+            fund, candidates, use_adjusted_signal=use_adjusted_signal
+        )
     price_map = {
         str(row["ticker"]): float(_candidate_price(row) or 0)
         for row in candidates
@@ -1418,6 +1578,9 @@ def run_automated_rebalance(
         exit_confirm_screens=exit_confirm_screens,
         mutate_state=True,
         force_exit_tickers=grace_force_exit,
+        still_in_buy_set_hold=still_in_buy_set_hold,
+        rank_drop_exit_min=rank_drop_exit_min,
+        buy_ranks=buy_ranks,
     )
 
     for ticker in list(fund.holdings):
@@ -1431,6 +1594,7 @@ def run_automated_rebalance(
             if fund.holdings[ticker].momentum_grace
             else "Automated exit — left target set"
         )
+        still_buyish_at_exit = ticker in buy_ranks
         trades.append(
             fund.sell(
                 ticker=ticker,
@@ -1443,7 +1607,10 @@ def run_automated_rebalance(
             )
         )
         sold_this_pass.add(ticker)
+        fund.rebalance_state.entry_candidate_rank.pop(ticker, None)
         mark_reentry_cooldown(fund, ticker, reentry_cooldown_screens)
+        if block_rebuy_while_in_candidates and still_buyish_at_exit:
+            fund.rebalance_state.still_in_candidates_block[ticker] = True
 
     if not targets:
         fund.record_mark(price_map, acted_at=when, note="Automated rebalance (no targets)")
@@ -1458,6 +1625,8 @@ def run_automated_rebalance(
         if price <= 0:
             continue
         if reentry_blocked(fund, ticker):
+            continue
+        if block_rebuy_while_in_candidates and still_in_candidates_rebuy_blocked(fund, ticker):
             continue
         current = fund.holdings.get(ticker)
         current_value = (current.shares * price) if current else 0.0
@@ -1508,6 +1677,11 @@ def run_automated_rebalance(
                     prices_for_nav=price_map,
                 )
             )
+            if still_in_buy_set_hold and ticker in buy_ranks:
+                # Freeze entry rank on first open only.
+                if ticker not in fund.rebalance_state.entry_candidate_rank:
+                    fund.rebalance_state.entry_candidate_rank[ticker] = int(buy_ranks[ticker])
+            fund.rebalance_state.still_in_candidates_block.pop(ticker, None)
         except ValueError:
             continue
 
@@ -1530,6 +1704,9 @@ def run_graduated_rebalance(
     exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS,
     reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS,
     min_rebalance_notional_gbp: float = DEFAULT_MIN_REBALANCE_NOTIONAL_GBP,
+    still_in_buy_set_hold: bool = False,
+    rank_drop_exit_min: int = DEFAULT_RANK_DROP_EXIT_MIN,
+    block_rebuy_while_in_candidates: bool = False,
     capital_allocation_config: Any | None = None,
     entry_dca_execute_cadence: str | None = None,
     entry_dca_pending_path: Path | None = None,
@@ -1539,7 +1716,11 @@ def run_graduated_rebalance(
 
     Still uses top-N conviction selection and churn guards; differs from equal-weight
     rebalance in per-sleeve target sizing and partial trims on extended winners.
+
+    Still-in-buy-set knobs are accepted for selection_kwargs compatibility; the
+    churn twin uses equal-weight ``run_automated_rebalance`` (not graduated).
     """
+    _ = (still_in_buy_set_hold, rank_drop_exit_min, block_rebuy_while_in_candidates)
     from value_investor.capital_allocation import (
         CapitalAllocationConfig,
         entry_appetite,

@@ -19,6 +19,7 @@ trade checklist — it is a performance comparison to market datums. Success =
 | **Exclusion ladder** *(experimental)* | `docs/data/paper_automation/ai_judgment_exclusion_u4/` | AI judgment + frozen archive ladder `u4` knobs (spawned shadow) | Loser-filter ladder experiment |
 | **Buy-tier level** *(cohort lab)* | `docs/data/paper_automation/buy_tier_level/` | Raw screen buy-tier, no conviction/sector cap, Suite B T212 costs, frozen knobs | Unfiltered cohort baseline (Monday cold start) |
 | **Buy-tier level DCA** *(realism)* | `docs/data/paper_automation/buy_tier_level_dca/` | Same level-book policy + £500/mo deposits (cold-start capital epoch) | Household DCA realism; overlays FTSE held-vs-market |
+| **Still-in-buy-set** *(churn twin)* | `docs/data/paper_automation/still_in_buy_set/` | Screen rules + rank-gated still-in-buy-set hold (`rank_drop < 3`) + never-left-candidates rebuy block + `reentry_cooldown_screens=2` | Suite A cold-start churn twin; frozen; do not mid-flight edit live rules / ai_judgment |
 
 Both primary books use the same costs, position caps, and weekday paper-auto schedule.
 Live FTSE configs keep the **3% per-side stress** cost by default (Suite A —
@@ -26,6 +27,11 @@ defensive / low-churn lab). Fair T212-shaped performance truth is Suite B /
 `ftse-trading-costs assess` — see
 [`market-trading-costs.md`](market-trading-costs.md#test-and-adoption-strategy-dual-suite).
 Do **not** promote knobs on stress excess vs ^FTSE alone.
+
+The **still_in_buy_set** track is a Suite A **cold-start churn twin** (rank-gated
+hold + never-left-candidates + CD2). Frozen (`is_churn_policy_twin`); do **not**
+mid-flight flip live rules / ai_judgment cooldown or still-in-buy-set knobs.
+Compare marks to rules; adoption stays on Suite B.
 
 The dashboard **Automation → Learning tracks** panel publishes a dual-suite
 scoreboard (`learning_tracks_dual_suite` in the dashboard bundle): Suite B fair

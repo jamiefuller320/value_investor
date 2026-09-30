@@ -40,6 +40,7 @@ from value_investor.paper_fund import (
     DEFAULT_INITIAL_CASH,
     DEFAULT_MAX_POSITIONS,
     DEFAULT_MIN_REBALANCE_NOTIONAL_GBP,
+    DEFAULT_RANK_DROP_EXIT_MIN,
     DEFAULT_REENTRY_COOLDOWN_SCREENS,
     DEFAULT_TRADE_COST_PCT,
     PaperFund,
@@ -197,12 +198,19 @@ class AutomationConfig:
     fair_cost_parent_track: str | None = None
     # Cohort lab — unfiltered buy-tier book; frozen vs decision-review --apply.
     is_cohort_lab: bool = False
+    # Churn-policy twin (still-in-buy-set) — frozen knobs; cold-start capital epoch.
+    is_churn_policy_twin: bool = False
+    churn_policy_parent_track: str | None = None
     # Paper NAV reporting currency (create-time only on the fund — never mid-flight).
     reporting_currency: str = "GBP"
     # Churn guards — tuneable via config.json (not decision-review knobs yet).
     exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS
     reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS
     min_rebalance_notional_gbp: float = DEFAULT_MIN_REBALANCE_NOTIONAL_GBP
+    # Still-in-buy-set hold / never-left-candidates rebuy (churn twin).
+    still_in_buy_set_hold: bool = False
+    rank_drop_exit_min: int = DEFAULT_RANK_DROP_EXIT_MIN
+    block_rebuy_while_in_candidates: bool = False
 
     def tz(self) -> ZoneInfo:
         return ZoneInfo(self.timezone)
@@ -228,6 +236,9 @@ class AutomationConfig:
             "exit_confirm_screens": int(self.exit_confirm_screens),
             "reentry_cooldown_screens": int(self.reentry_cooldown_screens),
             "min_rebalance_notional_gbp": round(float(self.min_rebalance_notional_gbp), 2),
+            "still_in_buy_set_hold": bool(self.still_in_buy_set_hold),
+            "rank_drop_exit_min": int(self.rank_drop_exit_min),
+            "block_rebuy_while_in_candidates": bool(self.block_rebuy_while_in_candidates),
         }
 
     def to_dict(self) -> dict[str, Any]:
@@ -297,6 +308,12 @@ class AutomationConfig:
                 str(raw["fair_cost_parent_track"]) if raw.get("fair_cost_parent_track") else None
             ),
             is_cohort_lab=bool(raw.get("is_cohort_lab", False)),
+            is_churn_policy_twin=bool(raw.get("is_churn_policy_twin", False)),
+            churn_policy_parent_track=(
+                str(raw["churn_policy_parent_track"])
+                if raw.get("churn_policy_parent_track")
+                else None
+            ),
             reporting_currency=str(raw.get("reporting_currency") or "GBP").upper(),
             exit_confirm_screens=int(raw.get("exit_confirm_screens", DEFAULT_EXIT_CONFIRM_SCREENS)),
             reentry_cooldown_screens=int(
@@ -304,6 +321,11 @@ class AutomationConfig:
             ),
             min_rebalance_notional_gbp=float(
                 raw.get("min_rebalance_notional_gbp", DEFAULT_MIN_REBALANCE_NOTIONAL_GBP)
+            ),
+            still_in_buy_set_hold=bool(raw.get("still_in_buy_set_hold", False)),
+            rank_drop_exit_min=int(raw.get("rank_drop_exit_min", DEFAULT_RANK_DROP_EXIT_MIN)),
+            block_rebuy_while_in_candidates=bool(
+                raw.get("block_rebuy_while_in_candidates", False)
             ),
         )
 
@@ -319,6 +341,7 @@ BUY_TIER_LEVEL_DCA_TRACK_ID = "buy_tier_level_dca"
 # Non-UK shard capital epoch: trade + mark in market currency (N153). Shard-only —
 # not registered on the FTSE live learning-track list.
 BUY_TIER_LEVEL_NATIVE_TRACK_ID = "buy_tier_level_native"
+STILL_IN_BUY_SET_TRACK_ID = "still_in_buy_set"
 AI_JUDGMENT_SUBDIR = "ai_judgment"
 AI_JUDGMENT_CALIBRATED_SUBDIR = "ai_judgment_calibrated"
 MOMENTUM_GRACE_SUBDIR = "momentum_grace"
@@ -327,9 +350,13 @@ TECHNICAL_SUBDIR = "technical"
 BUY_TIER_LEVEL_SUBDIR = "buy_tier_level"
 BUY_TIER_LEVEL_DCA_SUBDIR = "buy_tier_level_dca"
 BUY_TIER_LEVEL_NATIVE_SUBDIR = "buy_tier_level_native"
+STILL_IN_BUY_SET_SUBDIR = "still_in_buy_set"
+STILL_IN_BUY_SET_PROVENANCE_FILENAME = "still_in_buy_set_provenance.json"
 BUY_TIER_LEVEL_MAX_POSITIONS = 120
 # FTSE household-realism capital epoch: £500/mo on a cold-start level twin.
 BUY_TIER_LEVEL_DCA_MONTHLY_DEPOSIT = 500.0
+# Still-in-buy-set twin: secondary rebuy brake (live Suite A stays at 1).
+STILL_IN_BUY_SET_REENTRY_COOLDOWN_SCREENS = 2
 LEARNING_TRACK_IDS = (
     RULES_TRACK_ID,
     AI_JUDGMENT_TRACK_ID,
@@ -339,6 +366,7 @@ LEARNING_TRACK_IDS = (
     TECHNICAL_TRACK_ID,
     BUY_TIER_LEVEL_TRACK_ID,
     BUY_TIER_LEVEL_DCA_TRACK_ID,
+    STILL_IN_BUY_SET_TRACK_ID,
 )
 
 
@@ -438,6 +466,36 @@ def default_buy_tier_level_dca_config(base: AutomationConfig | None = None) -> A
     return cfg
 
 
+def default_still_in_buy_set_config(base: AutomationConfig | None = None) -> AutomationConfig:
+    """Suite A churn twin: rules + rank-gated still-in-buy-set hold (± CD2).
+
+    Cold-start capital epoch only — do not mid-flight rewrite live rules / ai_judgment.
+    """
+    cfg = default_rules_config(base)
+    cfg.track_id = STILL_IN_BUY_SET_TRACK_ID
+    cfg.track_label = (
+        "Still-in-buy-set hold twin (rank-drop<3, never-left-candidates, CD2; Suite A)"
+    )
+    cfg.is_primary_learning_track = False
+    cfg.is_churn_policy_twin = True
+    cfg.churn_policy_parent_track = RULES_TRACK_ID
+    cfg.is_cohort_lab = False
+    cfg.is_fair_cost_lab = False
+    cfg.is_calibration_shadow = False
+    cfg.is_exclusion_shadow = False
+    cfg.use_adjusted_signal = False
+    cfg.require_research_accumulate = False
+    cfg.use_momentum_grace = False
+    cfg.use_graduated_allocation = False
+    cfg.still_in_buy_set_hold = True
+    cfg.rank_drop_exit_min = DEFAULT_RANK_DROP_EXIT_MIN
+    cfg.block_rebuy_while_in_candidates = True
+    cfg.reentry_cooldown_screens = STILL_IN_BUY_SET_REENTRY_COOLDOWN_SCREENS
+    cfg.exit_confirm_screens = DEFAULT_EXIT_CONFIRM_SCREENS
+    cfg.monthly_deposit = 0.0
+    return cfg
+
+
 def default_buy_tier_level_native_config(
     market_id: str,
     base: AutomationConfig | None = None,
@@ -488,6 +546,7 @@ def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
         TECHNICAL_TRACK_ID: root / TECHNICAL_SUBDIR,
         BUY_TIER_LEVEL_TRACK_ID: root / BUY_TIER_LEVEL_SUBDIR,
         BUY_TIER_LEVEL_DCA_TRACK_ID: root / BUY_TIER_LEVEL_DCA_SUBDIR,
+        STILL_IN_BUY_SET_TRACK_ID: root / STILL_IN_BUY_SET_SUBDIR,
     }
     for rank in discover_calibration_shadow_ranks(root):
         track_id = calibrated_shadow_track_id(rank)
@@ -1651,6 +1710,76 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
     dca_path.write_text(json.dumps(dca.to_dict(), indent=2), encoding="utf-8")
     configs[BUY_TIER_LEVEL_DCA_TRACK_ID] = dca
 
+    sibs_dir = dirs[STILL_IN_BUY_SET_TRACK_ID]
+    sibs_path = sibs_dir / CONFIG_FILENAME
+    sibs_dir.mkdir(parents=True, exist_ok=True)
+    if sibs_path.exists():
+        sibs = AutomationConfig.from_dict(json.loads(sibs_path.read_text(encoding="utf-8")))
+        sibs.track_id = STILL_IN_BUY_SET_TRACK_ID
+        sibs.is_primary_learning_track = False
+        sibs.is_churn_policy_twin = True
+        sibs.churn_policy_parent_track = sibs.churn_policy_parent_track or RULES_TRACK_ID
+        sibs.is_cohort_lab = False
+        sibs.is_fair_cost_lab = False
+        sibs.is_calibration_shadow = False
+        sibs.is_exclusion_shadow = False
+        sibs.use_adjusted_signal = False
+        sibs.require_research_accumulate = False
+        sibs.use_momentum_grace = False
+        sibs.use_graduated_allocation = False
+        sibs.still_in_buy_set_hold = True
+        sibs.rank_drop_exit_min = int(sibs.rank_drop_exit_min or DEFAULT_RANK_DROP_EXIT_MIN)
+        sibs.block_rebuy_while_in_candidates = True
+        sibs.reentry_cooldown_screens = STILL_IN_BUY_SET_REENTRY_COOLDOWN_SCREENS
+        sibs.track_label = sibs.track_label or (
+            "Still-in-buy-set hold twin (rank-drop<3, never-left-candidates, CD2; Suite A)"
+        )
+        sibs.timezone = rules.timezone
+        sibs.market_open = rules.market_open
+        sibs.settle_minutes_after_open = rules.settle_minutes_after_open
+        sibs.weekdays_only = rules.weekdays_only
+        # Inherit Suite A stress costs from rules — churn twin, not Suite B.
+        _inherit_cost_fields(sibs, rules)
+        sibs.initial_cash = rules.initial_cash
+        sibs.max_positions = int(rules.max_positions)
+        sibs.min_conviction = float(rules.min_conviction)
+        sibs.sector_cap = float(rules.sector_cap)
+        sibs.skip_timing_wait = bool(rules.skip_timing_wait)
+        sibs.min_rebalance_notional_gbp = float(rules.min_rebalance_notional_gbp)
+        sibs.exit_confirm_screens = int(rules.exit_confirm_screens)
+    else:
+        sibs = default_still_in_buy_set_config(rules)
+    sibs_path.write_text(json.dumps(sibs.to_dict(), indent=2), encoding="utf-8")
+    configs[STILL_IN_BUY_SET_TRACK_ID] = sibs
+    provenance_path = sibs_dir / STILL_IN_BUY_SET_PROVENANCE_FILENAME
+    if not provenance_path.exists():
+        provenance_path.write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "track_id": STILL_IN_BUY_SET_TRACK_ID,
+                    "parent_track": RULES_TRACK_ID,
+                    "capital_epoch": "cold_start",
+                    "suite": "A",
+                    "knobs": {
+                        "still_in_buy_set_hold": True,
+                        "rank_drop_exit_min": DEFAULT_RANK_DROP_EXIT_MIN,
+                        "block_rebuy_while_in_candidates": True,
+                        "reentry_cooldown_screens": STILL_IN_BUY_SET_REENTRY_COOLDOWN_SCREENS,
+                        "exit_confirm_screens": DEFAULT_EXIT_CONFIRM_SCREENS,
+                    },
+                    "note": (
+                        "Cold-start twin of rank-gated still-in-buy-set hold. "
+                        "Do not mid-flight edit Suite A rules / ai_judgment. "
+                        "Adoption truth remains on Suite B fair twins."
+                    ),
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
     return configs
 
 
@@ -1688,6 +1817,7 @@ def run_learning_tracks(
         or getattr(cfg, "is_exclusion_shadow", False)
         or getattr(cfg, "is_fair_cost_lab", False)
         or getattr(cfg, "is_cohort_lab", False)
+        or getattr(cfg, "is_churn_policy_twin", False)
     ]
     insert_at = default_tracks.index(AI_JUDGMENT_TRACK_ID) + 1
     for track_id in sorted(shadow_ids):
@@ -1731,6 +1861,8 @@ def run_learning_tracks(
             "graduated_allocation tests trade-plan entry sizing and harvest skims; "
             "buy_tier_level is a Suite B unfiltered buy-tier cohort (frozen knobs); "
             "buy_tier_level_dca is the FTSE £500/mo realism capital epoch (same policy); "
+            "still_in_buy_set is a Suite A cold-start churn twin "
+            "(rank-gated hold + never-left-candidates + CD2); "
             "entry_dca_overlay scores counterfactual entry cadences on every track; "
             "sleeve_episodes records widest near-buy→grace-end+~1m lifecycles tagged "
             "on_book/off_book/never_funded (observe-only); "
