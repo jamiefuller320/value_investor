@@ -1329,6 +1329,7 @@ def check_missing_ir_allowlist_stall(
         return []
 
     focus_rows = [r for r in rows if r.get("is_focus")]
+    spare_rows = [r for r in rows if not r.get("is_focus")]
     primary = focus_rows or rows
     samples = ", ".join(
         f"{r['market_id']}/{r['ticker']} ({r['coverage_hole']}, "
@@ -1336,6 +1337,16 @@ def check_missing_ir_allowlist_stall(
         for r in primary[:4]
     )
     extra = f" (+{len(primary) - 4} more)" if len(primary) > 4 else ""
+    slot_note = (
+        "Focus-head severity; spare sprint rows also included when present."
+        if focus_rows and spare_rows
+        else (
+            "Spare-sprint path (warn) — seed IR on spare deepen; do not divert "
+            "the euro fat slot."
+            if spare_rows and not focus_rows
+            else "Focus-head severity."
+        )
+    )
     return [
         OpsFinding(
             severity="high" if focus_rows else "warn",
@@ -1344,8 +1355,8 @@ def check_missing_ir_allowlist_stall(
             summary=(
                 f"{len(rows)} coverage-hole ticker(s) still unmeasured/zero-body after "
                 f"≥{min_zero_yield} intensive 0-improve pins with empty IR allowlist: "
-                f"{samples}{extra}. Seed `_BUILTIN_IR_URLS` / issuer PDFs or fix "
-                "discovery — do not auto-park unmeasured and do not keep empty "
+                f"{samples}{extra}. {slot_note} Seed `_BUILTIN_IR_URLS` / issuer PDFs "
+                "or fix discovery — do not auto-park unmeasured and do not keep empty "
                 "intensify-only loops. Daily hub deepen Discuss remains; this finding "
                 "aims at the IR-seed blocker."
             ),

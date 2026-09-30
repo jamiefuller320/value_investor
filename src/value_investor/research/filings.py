@@ -263,6 +263,23 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "http://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
         "http://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
     ],
+    # dax spare unmeasured stuck — G1A.DE (GEA Group): ESEF/news discovery
+    # repeatedly 0-improve with empty IR allowlist. Seed gea.com CDN statutory PDFs
+    # on the spare factory path only (do not divert euro_depth fat slot).
+    "G1A.DE": [
+        "https://cdn.gea.com/-/media/investors/annual-report/2025/annual-report-2025-en.pdf",
+        "https://cdn.gea.com/-/media/investors/annual-report/2025/consolidated-financial-statements-2025-en.pdf",
+        "https://cdn.gea.com/-/media/investors/events-and-releases/quarterly-reports/2026/q2-half-year/q2-26-half-yearly-statement-gea-group-ag-en.pdf",
+        "https://cdn.gea.com/-/media/investors/events-and-releases/quarterly-reports/2026/q1/gea-q1-2026-en.pdf",
+        "https://cdn.gea.com/-/media/investors/events-and-releases/quarterly-reports/2025/q3/gea-q3-2025-en.pdf",
+    ],
+    "G1A": [
+        "https://cdn.gea.com/-/media/investors/annual-report/2025/annual-report-2025-en.pdf",
+        "https://cdn.gea.com/-/media/investors/annual-report/2025/consolidated-financial-statements-2025-en.pdf",
+        "https://cdn.gea.com/-/media/investors/events-and-releases/quarterly-reports/2026/q2-half-year/q2-26-half-yearly-statement-gea-group-ag-en.pdf",
+        "https://cdn.gea.com/-/media/investors/events-and-releases/quarterly-reports/2026/q1/gea-q1-2026-en.pdf",
+        "https://cdn.gea.com/-/media/investors/events-and-releases/quarterly-reports/2025/q3/gea-q3-2025-en.pdf",
+    ],
     # euro_depth unmeasured stuck — OIZ.IR (Origin Enterprises): ESEF/news discovery
     # repeatedly 0-improve with empty IR allowlist. Seed originenterprises.com IR PDFs.
     "OIZ.IR": [
@@ -679,6 +696,11 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
         "Origin Enterprises",
         "Origin Enterprises plc",
         "Origin Enterprises Public Limited Company",
+    ),
+    "G1A": (
+        "GEA Group",
+        "GEA Group AG",
+        "GEA Group Aktiengesellschaft",
     ),
     "AZE": ("Azelis", "Azelis Group"),
     "AGS": ("ageas", "Ageas SA/NV"),
