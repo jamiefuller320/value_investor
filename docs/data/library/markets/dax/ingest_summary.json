@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-30T18:36:33.380773+00:00",
+  "run_at": "2026-09-30T21:05:18.593225+00:00",
   "market_id": "dax",
   "targets": [
     "DHL.DE"
@@ -7,7 +7,7 @@
   "target_details": [
     {
       "ticker": "DHL.DE",
-      "priority_score": 7.8438,
+      "priority_score": 5.8438,
       "filings_total": 2,
       "filings_with_body": 2,
       "indexed_without_body": 0,
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-30T18:35:52.825710+00:00",
+    "snapshot_at": "2026-09-30T21:04:12.312981+00:00",
     "market_id": "dax",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
@@ -132,7 +132,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-30T18:36:26.608836+00:00",
+    "snapshot_at": "2026-09-30T21:04:22.481600+00:00",
     "market_id": "dax",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
@@ -162,6 +162,7 @@
     "indexed_without_body_by_ticker": {},
     "parked_tickers": [
       "BAS.DE",
+      "DHL.DE",
       "DTE.DE",
       "DTG.DE",
       "FRE.DE",
@@ -171,14 +172,12 @@
       "MUV2.DE",
       "VOW3.DE"
     ],
-    "parked_count": 9,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "DHL.DE"
-    ],
+    "parked_count": 10,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -186,41 +185,54 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 12,
-    "hits": 11,
-    "new_rows_total": 0,
-    "curiosity_total": 12,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "DHL.DE",
-      "HEI.DE",
-      "DTE.DE",
-      "MUV2.DE",
-      "DTG.DE",
-      "BAS.DE",
-      "FRE.DE",
-      "HNR1.DE",
-      "HEN3.DE",
-      "VOW3.DE"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "dax",
+    "to_market": "ftse_smallcap",
+    "stream_markets_after": [
+      "ftse_smallcap"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "dax",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "BAS.DE",
+        "DHL.DE",
+        "DTE.DE",
+        "DTG.DE",
+        "FRE.DE",
+        "HEI.DE",
+        "HEN3.DE",
+        "HNR1.DE",
+        "MUV2.DE",
+        "VOW3.DE"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "ftse_smallcap",
+      "forced": true,
+      "prior_screen_at": "2026-09-30T06:52:42.218162+00:00",
+      "prior_age_days": 0,
+      "run_at": "2026-09-30T21:05:12.681778+00:00",
+      "shortlist_count": 8,
+      "ticker_count": 77
+    },
+    "at": "2026-09-30T21:04:31.183199+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "dax",
-    "assessed_at": "2026-09-30T18:35:53.412608+00:00",
+    "assessed_at": "2026-09-30T21:04:12.757190+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -253,9 +265,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 32.62946929500001,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3567.370530705,
+  "used_seconds": 9.258919536999997,
+  "budget_seconds": 1358.6204661040001,
+  "leftover_seconds": 1349.361546567,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -263,9 +275,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "dax",
-    "updated_at": "2026-09-30T18:36:26.614644+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-09-30T21:04:22.486131+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -357,6 +369,16 @@
         "filings_with_body": 2,
         "indexed_without_body": 0,
         "thin": true
+      },
+      {
+        "ticker": "DHL.DE",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-09-30T21:04:22.486131+00:00",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
@@ -373,15 +395,30 @@
       "MUV2.DE",
       "VOW3.DE"
     ],
-    "unparked_leftover": [
-      "DHL.DE"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/dax/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "dax"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "dax",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "ibex35",
+      "nasdaq100",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
