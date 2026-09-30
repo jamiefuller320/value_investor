@@ -92,9 +92,7 @@ def test_sunday_shadow_endurance_urgency_policy():
 def test_weekday_parked_backlog_quiet_auto_ack_policy():
     payload = load_human_tasks_checklist()
     tasks = [task for section in payload["sections"] for task in section["tasks"]]
-    row = next(
-        task for task in tasks if task["id"] == "weekday-engineering-parked-backlog-clear"
-    )
+    row = next(task for task in tasks if task["id"] == "weekday-engineering-parked-backlog-clear")
     assert row["automated"] is False
     summary = row["summary"]
     assert "attention_parked_count=0" in summary
