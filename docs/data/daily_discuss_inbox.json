@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-30T14:43:03.819263+00:00",
+  "updated_at": "2026-09-30T14:54:10.340759+00:00",
   "items": [
     {
       "recommendation_id": "rec-6d2619c1c5ba",
@@ -225,6 +225,35 @@
       "queued_at": "2026-09-30T14:43:03.819263+00:00",
       "source": "dashboard_bridge",
       "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-61772ce771b4`"
+    },
+    {
+      "recommendation_id": "rec-3d9c771c707c",
+      "task_id": "mwarn:euro_depth:zero_improve_stall",
+      "local_date": "2026-09-30",
+      "status": "open",
+      "summary": "Market warning triage → deepen: EU depth composite (STOXX50 + periphery) / zero_improve_stall.",
+      "title": "Deepen · EU depth composite (STOXX50 + periphery) · zero_improve_stall",
+      "rationale": "Focus-market zero_improve_stall on euro_depth — Discuss before changing fat-slot targeting or rate-limited sources.",
+      "discuss_prompt": "Discuss daily recommendation `rec-3d9c771c707c` (market warning `mwarn:euro_depth:zero_improve_stall`):\nProposed action: deepen\nMarket: euro_depth (focus=True spare=False)\nFlag: zero_improve_stall — Last 2 days improved nobody while filing gaps remain\nRationale: Focus-market zero_improve_stall on euro_depth — Discuss before changing fat-slot targeting or rate-limited sources.\nPolicy: dismissable=False parkable=False\nSuggested options:\n1) Discuss — judgment / fat-slot / rate-limit call\n2) Accept — observe-only record of deepen intent (does not dismiss or park)\n3) Do not ritual-clear the badge or divert euro capacity\nContext: docs/data/market_status.json + Daily hub market warning triage",
+      "options": [
+        "Discuss — judgment / fat-slot / rate-limit call",
+        "Accept — observe-only record of deepen intent (does not dismiss or park)",
+        "Do not ritual-clear the badge or divert euro capacity"
+      ],
+      "priority": 5,
+      "accept_action": {
+        "kind": "focus-ack",
+        "payload": {
+          "decision": "accept",
+          "focus_id": "mwarn:euro_depth:zero_improve_stall",
+          "triage_action": "deepen"
+        }
+      },
+      "work_class": "surface",
+      "task_family": "market-warning-triage",
+      "queued_at": "2026-09-30T14:54:10.340759+00:00",
+      "source": "dashboard_bridge",
+      "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-3d9c771c707c`"
     }
   ]
 }
