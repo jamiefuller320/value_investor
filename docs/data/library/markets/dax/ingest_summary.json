@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-30T07:58:52.910715+00:00",
+  "run_at": "2026-09-30T08:56:40.699157+00:00",
   "market_id": "dax",
   "targets": [
     "G1A.DE"
@@ -7,44 +7,44 @@
   "target_details": [
     {
       "ticker": "G1A.DE",
-      "priority_score": 12.5937,
-      "filings_total": 0,
+      "priority_score": 23.5937,
+      "filings_total": 5,
       "filings_with_body": 0,
-      "indexed_without_body": 0,
-      "reason": "unmeasured"
+      "indexed_without_body": 5,
+      "reason": "zero_body"
     }
   ],
   "results": [
     {
       "ticker": "G1A.DE",
-      "reason": "unmeasured",
+      "reason": "zero_body",
       "before": {
-        "filings_total": 0,
+        "filings_total": 5,
         "filings_with_body": 0,
-        "indexed_without_body": 0
+        "indexed_without_body": 5
       },
       "after": {
-        "filings_total": 0,
-        "filings_with_body": 0,
+        "filings_total": 5,
+        "filings_with_body": 5,
         "indexed_without_body": 0
       },
-      "improved": false,
+      "improved": true,
       "regime": "euro_filings",
       "filings_summary": {
-        "total": 0,
-        "annual": 0,
-        "interim": 0,
+        "total": 5,
+        "annual": 2,
+        "interim": 3,
         "trading_update": 0,
         "other": 0,
-        "with_body": 0,
+        "with_body": 5,
         "period_coverage": {
           "annual": {
-            "total": 0,
-            "with_body": 0
+            "total": 2,
+            "with_body": 2
           },
           "interim": {
-            "total": 0,
-            "with_body": 0
+            "total": 3,
+            "with_body": 3
           },
           "trading_update": {
             "total": 0,
@@ -62,15 +62,15 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 0,
-        "with_body_after": 0,
+        "with_body_before": 5,
+        "with_body_after": 5,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
         "deadline_hit": false,
         "merge": {
           "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
+          "total_allowlist": 5,
+          "note": "merge_ir_allowlist_filings"
         },
         "shared_body_propagated": 0,
         "ir_metadata_reconciled": 0,
@@ -78,12 +78,14 @@
       }
     }
   ],
-  "improved": [],
+  "improved": [
+    "G1A.DE"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-30T07:58:32.521698+00:00",
+    "snapshot_at": "2026-09-30T08:56:09.888226+00:00",
     "market_id": "dax",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 1,
@@ -134,21 +136,19 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-30T07:58:52.889889+00:00",
+    "snapshot_at": "2026-09-30T08:56:40.677631+00:00",
     "market_id": "dax",
     "buy_tier_count": 12,
-    "unmeasured_buy_tier": 1,
+    "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 10,
     "indexed_without_body": 0,
     "bodies_min": 1,
-    "bodies_median": 1,
+    "bodies_median": 1.5,
     "bodies_max": 50,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
-    "unmeasured_tickers": [
-      "G1A.DE"
-    ],
+    "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "DHL.DE",
@@ -187,16 +187,49 @@
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
+  "discovery_scan": {
+    "scanned": 1,
+    "hits": 1,
+    "new_rows_total": 5,
+    "curiosity_total": 1,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": true,
+    "max_runtime_seconds": 525.0,
+    "prefer_tickers": [
+      "G1A.DE",
+      "DHL.DE",
+      "HEI.DE",
+      "DTE.DE",
+      "MUV2.DE",
+      "DTG.DE",
+      "BAS.DE",
+      "FRE.DE",
+      "HNR1.DE",
+      "HEN3.DE",
+      "VOW3.DE"
+    ],
+    "runtime_cutoff": false
+  },
   "maintenance_mode": false,
-  "parity_handoff": null,
+  "parity_handoff": {
+    "skipped": true,
+    "reason": "not_focus_market",
+    "market_id": "dax"
+  },
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "dax",
-    "assessed_at": "2026-09-30T07:58:32.878626+00:00",
+    "assessed_at": "2026-09-30T08:56:10.261749+00:00",
     "unmeasured": [
       "G1A.DE"
     ],
@@ -234,22 +267,21 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 19.586644019999994,
+  "used_seconds": 30.00465502899999,
   "budget_seconds": 2100.0,
-  "leftover_seconds": 2080.4133559800002,
+  "leftover_seconds": 2069.995344971,
   "blocker_ticker": null,
   "per_ticker_max_seconds": null,
   "pin_tickers": [
-    "G1A.DE",
-    "DHL.DE"
+    "G1A.DE"
   ],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "dax",
-    "updated_at": "2026-09-30T07:58:52.894497+00:00",
+    "updated_at": "2026-09-30T08:56:40.691102+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 36,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -344,7 +376,7 @@
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "BAS.DE",
       "DHL.DE",
@@ -370,6 +402,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20260930-01"
+    "task_id": "eng-20260930-02"
   }
 }
