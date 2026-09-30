@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-30T08:42:33.749843+00:00",
+  "updated_at": "2026-09-30T14:43:03.819263+00:00",
   "items": [
     {
       "recommendation_id": "rec-6d2619c1c5ba",
@@ -196,6 +196,35 @@
       "queued_at": "2026-09-30T08:42:33.749843+00:00",
       "source": "dashboard_bridge",
       "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-676a09a614ea`"
+    },
+    {
+      "recommendation_id": "rec-61772ce771b4",
+      "task_id": "human:weekday-engineering-parked-backlog-clear",
+      "local_date": "2026-09-30",
+      "status": "open",
+      "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks",
+      "discuss_prompt": "Discuss daily recommendation `rec-61772ce771b4` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-61772ce771b4` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "options": [
+        "Accept → Acknowledge (observe-only)",
+        "Open runbook / defer",
+        "Discuss in Project chat"
+      ],
+      "priority": 15,
+      "accept_action": {
+        "kind": "human-task-ack",
+        "payload": {
+          "decision": "ack_observe",
+          "finding_fingerprint": "c0c3ee56f97eb146",
+          "task_id": "weekday-engineering-parked-backlog-clear"
+        }
+      },
+      "work_class": "ops_gate",
+      "task_family": "weekday-engineering-parked-backlog-clear",
+      "queued_at": "2026-09-30T14:43:03.819263+00:00",
+      "source": "dashboard_bridge",
+      "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-61772ce771b4`"
     }
   ]
 }
