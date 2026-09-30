@@ -395,3 +395,120 @@ def test_ingest_loop_has_saturday_pre_sunday_schedules() -> None:
     assert 'cron: "5 23 * * 6"' in text
     assert "Saturday quiet-bundle window" in text or "Sunday quiet-bundle window" in text
     assert "max_drain_generations=6" in text
+
+
+def test_daily_hub_sidecar_workflows_share_concurrency() -> None:
+    """Accept / Discuss / human-ack must serialize hub sidecar writes."""
+    for name in (
+        "daily-focus-ack.yml",
+        "daily-discuss.yml",
+        "human-task-ack.yml",
+    ):
+        text = Path(f".github/workflows/{name}").read_text(encoding="utf-8")
+        assert "group: daily-hub-sidecars" in text
+        assert "cancel-in-progress: false" in text
+
+
+def test_artifact_commit_merges_daily_focus_acks_on_race(tmp_path: Path):
+    """Discuss overlay must union remote accept rows, not replace the store."""
+    remote, work = _seed_repo(tmp_path)
+    _write(
+        work / "docs" / "data" / "daily_focus_acks.json",
+        json.dumps(
+            {
+                "schema_version": 1,
+                "updated_at": "2026-09-30T08:40:00+00:00",
+                "acks": [
+                    {
+                        "task_ref": "focus-1",
+                        "focus_id": "focus-1",
+                        "decision": "accept",
+                        "status": "open",
+                        "local_date": "2026-09-30",
+                        "acked_at": "2026-09-30T08:40:00+00:00",
+                    }
+                ],
+            }
+        )
+        + "\n",
+    )
+    _git(work, "add", "docs/data")
+    _git(work, "commit", "-m", "seed acks")
+    _git(work, "push", "origin", "main")
+
+    other = tmp_path / "other"
+    _git(tmp_path, "clone", str(remote), str(other))
+    _git(other, "config", "user.email", "other@example.com")
+    _git(other, "config", "user.name", "other")
+    _write(
+        other / "docs" / "data" / "daily_focus_acks.json",
+        json.dumps(
+            {
+                "schema_version": 1,
+                "updated_at": "2026-09-30T08:42:27+00:00",
+                "acks": [
+                    {
+                        "task_ref": "focus-1",
+                        "focus_id": "focus-1",
+                        "decision": "accept",
+                        "status": "open",
+                        "local_date": "2026-09-30",
+                        "acked_at": "2026-09-30T08:42:20+00:00",
+                    },
+                    {
+                        "task_ref": "mwarn:dax:zero_improve_stall",
+                        "focus_id": "mwarn:dax:zero_improve_stall",
+                        "decision": "accept",
+                        "status": "open",
+                        "local_date": "2026-09-30",
+                        "acked_at": "2026-09-30T08:42:21+00:00",
+                    },
+                ],
+            }
+        )
+        + "\n",
+    )
+    _git(other, "add", "docs/data/daily_focus_acks.json")
+    _git(other, "commit", "-m", "daily-focus-ack")
+    _git(other, "push", "origin", "main")
+
+    # Stale discuss job: only its discuss row, missing the accepts.
+    _write(
+        work / "docs" / "data" / "daily_focus_acks.json",
+        json.dumps(
+            {
+                "schema_version": 1,
+                "updated_at": "2026-09-30T08:42:33+00:00",
+                "acks": [
+                    {
+                        "task_ref": "mwarn:dax:unmeasured_stuck",
+                        "focus_id": "mwarn:dax:unmeasured_stuck",
+                        "decision": "discuss",
+                        "status": "open",
+                        "local_date": "2026-09-30",
+                        "acked_at": "2026-09-30T08:42:33+00:00",
+                    }
+                ],
+            }
+        )
+        + "\n",
+    )
+    result = _run_script(
+        work,
+        owned="docs/data/daily_focus_acks.json",
+        message="chore: daily discuss [skip ci]",
+    )
+    assert result.returncode == 0, result.stderr
+    assert "Merged docs/data/daily_focus_acks.json" in result.stderr
+
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    acks = json.loads(
+        (latest / "docs" / "data" / "daily_focus_acks.json").read_text(encoding="utf-8")
+    )
+    refs = {row["task_ref"] for row in acks["acks"]}
+    assert refs == {
+        "focus-1",
+        "mwarn:dax:zero_improve_stall",
+        "mwarn:dax:unmeasured_stuck",
+    }

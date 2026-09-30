@@ -22,8 +22,9 @@ permissions:
   contents: write
   actions: write
 
+# Shared with daily-focus-ack + human-task-ack (overlapping hub sidecars).
 concurrency:
-  group: daily-discuss
+  group: daily-hub-sidecars
   cancel-in-progress: false
 
 jobs:
@@ -122,7 +123,10 @@ jobs:
             docs/data/daily_discuss_inbox.json
             docs/data/daily_focus_acks.json
             docs/data/daily_focus.json
-          GHA_COMMIT_PRESERVE_NEWER_GENERATED_AT: "0"
+            docs/data/daily_hub_history.json
+          # Hub is rebuilt in-job; keep default generated_at preserve so a
+          # stale discuss checkout cannot rewind a fresher daily-focus-ack hub.
+          # daily_focus_acks.json is merge-restored by gha_commit_artifacts.sh.
         run: bash scripts/gha_commit_artifacts.sh
 
       - name: Mark dashboard commands done

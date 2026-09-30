@@ -34,6 +34,76 @@ def load_daily_focus_acks(data_dir: Path) -> dict[str, Any]:
     }
 
 
+def _ack_row_key(row: dict[str, Any]) -> tuple[str, str]:
+    local_date = str(row.get("local_date") or "").strip()
+    task_ref = str(row.get("task_ref") or row.get("focus_id") or "").strip()
+    return (local_date, task_ref)
+
+
+def _ack_row_ts(row: dict[str, Any]) -> str:
+    return str(row.get("acked_at") or row.get("updated_at") or "").strip()
+
+
+def merge_daily_focus_acks_stores(
+    *stores: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Union daily-focus ack stores by ``(local_date, task_ref)``.
+
+    Concurrent dashboard workflows (daily-focus-ack / daily-discuss /
+    human-task-ack) each RMW ``daily_focus_acks.json``. A later push that
+    started from a stale checkout must not drop accept rows from an earlier
+    successful ack. Newer ``acked_at`` wins for the same key.
+    """
+    by_key: dict[tuple[str, str], dict[str, Any]] = {}
+    updated_candidates: list[str] = []
+    for store in stores:
+        if not isinstance(store, dict):
+            continue
+        stamp = store.get("updated_at")
+        if isinstance(stamp, str) and stamp.strip():
+            updated_candidates.append(stamp.strip())
+        for row in store.get("acks") or []:
+            if not isinstance(row, dict):
+                continue
+            key = _ack_row_key(row)
+            if not key[0] or not key[1]:
+                continue
+            existing = by_key.get(key)
+            if existing is None or _ack_row_ts(row) >= _ack_row_ts(existing):
+                by_key[key] = dict(row)
+    acks = sorted(
+        by_key.values(),
+        key=lambda row: (
+            str(row.get("local_date") or ""),
+            str(row.get("acked_at") or ""),
+            str(row.get("task_ref") or row.get("focus_id") or ""),
+        ),
+    )
+    updated_at = max(updated_candidates) if updated_candidates else _utcnow()
+    return {
+        "schema_version": 1,
+        "updated_at": updated_at,
+        "acks": acks,
+    }
+
+
+def merge_daily_focus_acks_files(local_path: Path, remote_path: Path, out_path: Path) -> dict[str, Any]:
+    """Merge two on-disk ack stores (used by ``gha_commit_artifacts.sh``)."""
+
+    def _load(path: Path) -> dict[str, Any]:
+        try:
+            raw = read_json(path)
+        except FileNotFoundError:
+            return {"schema_version": 1, "acks": []}
+        if not isinstance(raw, dict):
+            return {"schema_version": 1, "acks": []}
+        return raw
+
+    merged = merge_daily_focus_acks_stores(_load(local_path), _load(remote_path))
+    write_json(out_path, merged, compact=False)
+    return merged
+
+
 def _load_discuss_inbox(data_dir: Path) -> dict[str, Any]:
     path = Path(data_dir) / DISCUSS_FILENAME
     try:
