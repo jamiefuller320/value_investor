@@ -10660,8 +10660,7 @@ def test_load_ir_url_allowlist_canonicalizes_mc_pa_dead_globenewswire_urls(tmp_p
         "LVMH-Solid-performance-in-a-disrupted-global-economic-and-geopolitical-environment.html"
     )
     bare_uuid = (
-        "https://ml-eu.globenewswire.com/Resource/Download/"
-        "d18b2bea-e144-44ea-9f53-71cd9cca8440"
+        "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440"
     )
     live = _BUILTIN_IR_URLS["MC.PA"][0]
     path = tmp_path / "ir.json"
