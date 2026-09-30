@@ -8957,20 +8957,16 @@ def test_euronext_esg_product_page_is_index_noise_not_iwb():
     assert dropped == 1
     assert kept == []
 
-    # Unresolved Google News wrappers stay until residual prune (may still resolve).
+    # Normal google_news filing headlines / unresolved wrappers are not dropped
+    # at ingest (residual prune still treats news.google.com as noise for IWB).
     gnews = {
         **row,
         "id": "gn1",
-        "headline": "BHP Group Full Year Results",
-        "url": "https://news.google.com/rss/articles/asx1",
+        "headline": "SAP Full Year Results",
+        "url": "https://news.google.com/rss/articles/euro1",
     }
-    assert _is_index_noise_row(gnews) is True
-    assert filing_lacks_material_body(gnews) is False
-    kept_gn, dropped_gn = drop_index_noise_filing_rows([gnews])
-    assert dropped_gn == 0
-    assert [r["id"] for r in kept_gn] == ["gn1"]
+    assert drop_index_noise_filing_rows([gnews]) == ([gnews], 0)
 
-    # Legitimate Euronext company-news / PDF attachments stay IWB-eligible.
     company_news = {
         **row,
         "id": "san-news",
@@ -8982,6 +8978,10 @@ def test_euronext_esg_product_page_is_index_noise_not_iwb():
     }
     assert _is_index_noise_row(company_news) is False
     assert filing_lacks_material_body(company_news) is True
+    assert drop_index_noise_filing_rows([company_news]) == ([company_news], 0)
+
+    # Legitimate Euronext company-news / PDF attachments stay IWB-eligible.
+    # (company_news checked above)
 
     pdf = {
         **row,
@@ -8993,6 +8993,7 @@ def test_euronext_esg_product_page_is_index_noise_not_iwb():
         ),
     }
     assert _is_index_noise_row(pdf) is False
+    assert drop_index_noise_filing_rows([pdf]) == ([pdf], 0)
 
 
 def test_refetch_residual_prunes_euronext_esg_product_noise(tmp_path, monkeypatch):

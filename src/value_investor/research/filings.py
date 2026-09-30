@@ -1564,21 +1564,20 @@ def _is_index_noise_row(row: dict[str, Any]) -> bool:
 def drop_index_noise_filing_rows(
     filings: list[dict[str, Any]],
 ) -> tuple[list[dict[str, Any]], int]:
-    """Drop bodiless durable index-noise rows so they cannot reappear as IWB leftovers.
+    """Drop bodiless Euronext ESG/product shells so they cannot reappear as IWB.
 
-    Unresolved ``news.google.com`` wrappers stay in the index until residual
-    refetch prune — enrich/refetch may still resolve them to a publisher URL.
-    Resolved non-filing shells (Euronext ESG/product pages, ASX listing pages,
-    share-price headlines) are dropped immediately.
+    Narrow on purpose: only resolved Euronext equity product pages (ESG/quotes/
+    overview). Unresolved ``news.google.com`` wrappers, company-news, PDF
+    attachments, and other google_news filing headlines stay indexed; residual
+    refetch still prunes the broader ``_is_index_noise_row`` set.
     """
     kept: list[dict[str, Any]] = []
     dropped = 0
     for row in filings:
-        if not row.get("has_body") and _is_index_noise_row(row):
-            url = str(row.get("url") or "").lower()
-            if "news.google.com" in url:
-                kept.append(row)
-                continue
+        if (
+            not row.get("has_body")
+            and _is_euronext_non_filing_product_url(str(row.get("url") or ""))
+        ):
             dropped += 1
             continue
         kept.append(row)
@@ -10353,8 +10352,9 @@ def ingest_filings(
     )
     if regime in {"uk_rns", "euro_filings"}:
         merged, _ = dedupe_rns_index_rows(merged, filings_dir=filings_dir)
-    # Drop Google News / exchange product shells before body fetch so they never
-    # become durable indexed-without-body leftovers (e.g. Euronext ESG pages).
+    # Drop Euronext ESG/product shells before body fetch so they never become
+    # durable indexed-without-body leftovers. Does not touch google_news wrappers
+    # or company-news / PDF rows.
     merged, _ = drop_index_noise_filing_rows(merged)
     # Allow more bodies when deepening historical accounts for memo names.
     max_bodies = 20 if deepen_history else 12
