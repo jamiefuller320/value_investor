@@ -515,6 +515,7 @@ def build_replay_fund_from_log(
     use_adjusted_signal: bool | None = None,
     require_research_accumulate: bool | None = None,
     exit_confirm_screens: int | None = None,
+    reentry_cooldown_screens: int | None = None,
     candidate_source: str = "auto",
     sim_start: str | datetime | None = None,
     lookback_days: int | None = None,
@@ -580,6 +581,7 @@ def build_replay_fund_from_log(
             use_adjusted_signal=use_adjusted_signal,
             require_research_accumulate=require_research_accumulate,
             exit_confirm_screens=exit_confirm_screens,
+            reentry_cooldown_screens=reentry_cooldown_screens,
         )
         fund.config.max_positions = int(kwargs.pop("max_positions"))
         if mode == "technical":
@@ -709,11 +711,13 @@ def _selection_kwargs_for_replay(
     use_adjusted_signal: bool | None = None,
     require_research_accumulate: bool | None = None,
     exit_confirm_screens: int | None = None,
+    reentry_cooldown_screens: int | None = None,
 ) -> dict[str, Any]:
     selection = dict(entry.get("selection") or {})
     logged_use_adj = bool(selection.get("use_adjusted_signal", False))
     logged_req_acc = bool(selection.get("require_research_accumulate", False))
     logged_exit_confirm = int(selection.get("exit_confirm_screens") or 2)
+    logged_reentry_cooldown = int(selection.get("reentry_cooldown_screens") or 1)
     return {
         "skip_timing_wait": bool(skip_timing_wait),
         "min_conviction": float(min_conviction),
@@ -730,7 +734,11 @@ def _selection_kwargs_for_replay(
         "exit_confirm_screens": (
             logged_exit_confirm if exit_confirm_screens is None else int(exit_confirm_screens)
         ),
-        "reentry_cooldown_screens": int(selection.get("reentry_cooldown_screens") or 1),
+        "reentry_cooldown_screens": (
+            logged_reentry_cooldown
+            if reentry_cooldown_screens is None
+            else int(reentry_cooldown_screens)
+        ),
         "min_rebalance_notional_gbp": float(selection.get("min_rebalance_notional_gbp") or 10.0),
         "max_positions": int(max_positions),
     }
@@ -789,6 +797,7 @@ def replay_counterfactual_from_log(
     use_adjusted_signal: bool | None = None,
     require_research_accumulate: bool | None = None,
     exit_confirm_screens: int | None = None,
+    reentry_cooldown_screens: int | None = None,
     candidate_source: str = "auto",
     lookback_days: int | None = None,
     as_of: datetime | None = None,
@@ -802,6 +811,7 @@ def replay_counterfactual_from_log(
 
     Pass ``lookback_days`` to replay only passes within that window (observe-only
     churn probe). ``exit_confirm_screens`` overrides the logged hold-buffer knob.
+    ``reentry_cooldown_screens`` overrides the logged post-exit rebuy cooldown.
 
     Returns None when there are no acted log entries to replay.
     """
@@ -855,6 +865,7 @@ def replay_counterfactual_from_log(
             use_adjusted_signal=use_adjusted_signal,
             require_research_accumulate=require_research_accumulate,
             exit_confirm_screens=exit_confirm_screens,
+            reentry_cooldown_screens=reentry_cooldown_screens,
         )
         fund.config.max_positions = int(kwargs.pop("max_positions"))
         if mode == "technical":
@@ -897,6 +908,11 @@ def replay_counterfactual_from_log(
         if exit_confirm_screens is None
         else int(exit_confirm_screens)
     )
+    effective_reentry_cooldown = (
+        int(selection.get("reentry_cooldown_screens") or 1)
+        if reentry_cooldown_screens is None
+        else int(reentry_cooldown_screens)
+    )
     payload: dict[str, Any] = {
         "scope": "rebalance_log_replay",
         "knobs": {
@@ -907,6 +923,7 @@ def replay_counterfactual_from_log(
             "use_adjusted_signal": effective_use_adj,
             "require_research_accumulate": effective_req_acc,
             "exit_confirm_screens": effective_exit_confirm,
+            "reentry_cooldown_screens": effective_reentry_cooldown,
             "candidate_source": str(candidate_source or "auto"),
         },
         "used_screen_buy_tier_pool": used_screen_pool,

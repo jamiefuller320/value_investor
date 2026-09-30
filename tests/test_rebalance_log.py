@@ -8,6 +8,7 @@ from value_investor.paper_fund import PaperFund, PaperFundConfig
 from value_investor.rebalance_log import (
     REBALANCE_LOG_FILENAME,
     append_rebalance_log,
+    build_replay_fund_from_log,
     collect_buy_tier_history_tickers,
     collect_decision_candidates,
     collect_screen_buy_tier,
@@ -716,6 +717,182 @@ def test_exit_confirm_screens_counterfactual_changes_trade_count(tmp_path: Path)
     assert buffered["knobs"]["exit_confirm_screens"] == 2
     assert immediate["knobs"]["exit_confirm_screens"] == 1
     assert immediate["simulated_trade_count"] > buffered["simulated_trade_count"]
+
+
+def test_reentry_cooldown_screens_counterfactual_blocks_adjacent_rebuy(tmp_path: Path):
+    """Observe-only: cooldown=2 blocks next-pass rebuy that cooldown=1 allows after one idle tick."""
+    out = tmp_path / "rules"
+    out.mkdir()
+    sell_pass = {
+        "schema_version": 2,
+        "track_id": "rules",
+        "strategy_mode": "automated",
+        "trade_cost_pct": 0.0,
+        "max_positions": 2,
+        "acted": True,
+        "gate": {"local_time": "2026-09-25T09:27:00+01:00"},
+        "selection": {
+            "skip_timing_wait": True,
+            "min_conviction": 0.0,
+            "sector_cap": 1.0,
+            "use_adjusted_signal": False,
+            "require_research_accumulate": False,
+            "use_momentum_grace": False,
+            "exit_confirm_screens": 1,
+            "reentry_cooldown_screens": 1,
+            "min_rebalance_notional_gbp": 0.0,
+        },
+        "nav_before": 1000.0,
+        "cash_before": 0.0,
+        "contributed_capital_before": 1000.0,
+        "holdings_before": [
+            {
+                "ticker": "PAF.L",
+                "shares": 50,
+                "avg_cost": 10,
+                "sector": "Mining",
+                "name": "PanAf",
+            },
+            {
+                "ticker": "KEEP.L",
+                "shares": 50,
+                "avg_cost": 10,
+                "sector": "Banks",
+                "name": "Keep",
+            },
+        ],
+        "rebalance_state_before": {"exit_streak": {}, "reentry_cooldown": {}},
+        "candidates": [
+            {
+                "ticker": "BP.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.95,
+                "price": 10,
+                "sector": "Energy",
+            },
+            {
+                "ticker": "KEEP.L",
+                "signal": "buy",
+                "conviction_score": 0.9,
+                "price": 10,
+                "sector": "Banks",
+            },
+            {
+                "ticker": "PAF.L",
+                "signal": "hold",
+                "conviction_score": 0.4,
+                "price": 10,
+                "sector": "Mining",
+            },
+        ],
+        "holdings_after": [],
+        "rebalance_state_after": {},
+    }
+    idle_pass = {
+        **sell_pass,
+        "gate": {"local_time": "2026-09-28T09:27:00+01:00"},
+        "cash_before": 500.0,
+        "holdings_before": [
+            {
+                "ticker": "BP.L",
+                "shares": 50,
+                "avg_cost": 10,
+                "sector": "Energy",
+                "name": "BP",
+            },
+            {
+                "ticker": "KEEP.L",
+                "shares": 50,
+                "avg_cost": 10,
+                "sector": "Banks",
+                "name": "Keep",
+            },
+        ],
+        "candidates": [
+            {
+                "ticker": "BP.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.95,
+                "price": 10,
+                "sector": "Energy",
+            },
+            {
+                "ticker": "KEEP.L",
+                "signal": "buy",
+                "conviction_score": 0.9,
+                "price": 10,
+                "sector": "Banks",
+            },
+        ],
+    }
+    rebuy_pass = {
+        **sell_pass,
+        "gate": {"local_time": "2026-09-29T09:27:00+01:00"},
+        "cash_before": 500.0,
+        "holdings_before": [
+            {
+                "ticker": "BP.L",
+                "shares": 50,
+                "avg_cost": 10,
+                "sector": "Energy",
+                "name": "BP",
+            },
+            {
+                "ticker": "KEEP.L",
+                "shares": 50,
+                "avg_cost": 10,
+                "sector": "Banks",
+                "name": "Keep",
+            },
+        ],
+        "candidates": [
+            {
+                "ticker": "PAF.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.99,
+                "price": 10,
+                "sector": "Mining",
+            },
+            {
+                "ticker": "KEEP.L",
+                "signal": "buy",
+                "conviction_score": 0.9,
+                "price": 10,
+                "sector": "Banks",
+            },
+            {
+                "ticker": "BP.L",
+                "signal": "hold",
+                "conviction_score": 0.4,
+                "price": 10,
+                "sector": "Energy",
+            },
+        ],
+    }
+    for entry in (sell_pass, idle_pass, rebuy_pass):
+        append_rebalance_log(out, entry)
+
+    entries = load_rebalance_log(out)
+    baseline = replay_counterfactual_from_log(
+        entries,
+        max_positions=2,
+        reentry_cooldown_screens=1,
+    )
+    tighter = replay_counterfactual_from_log(
+        entries,
+        max_positions=2,
+        reentry_cooldown_screens=2,
+    )
+    assert baseline is not None and tighter is not None
+    assert baseline["knobs"]["reentry_cooldown_screens"] == 1
+    assert tighter["knobs"]["reentry_cooldown_screens"] == 2
+
+    fund_c1, _ = build_replay_fund_from_log(entries, max_positions=2, reentry_cooldown_screens=1)
+    fund_c2, _ = build_replay_fund_from_log(entries, max_positions=2, reentry_cooldown_screens=2)
+    assert fund_c1 is not None and fund_c2 is not None
+    assert "PAF.L" in fund_c1.holdings
+    assert "PAF.L" not in fund_c2.holdings
+    assert baseline["simulated_trade_count"] > tighter["simulated_trade_count"]
 
 
 def test_compare_buffered_hold_counterfactual_structure(tmp_path: Path):
