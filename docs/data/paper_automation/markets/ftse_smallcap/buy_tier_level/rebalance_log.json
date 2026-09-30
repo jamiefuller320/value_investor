@@ -6681,5 +6681,258 @@
       "exit_streak": {},
       "reentry_cooldown": {}
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-09-30T07:26:42.953437+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_smallcap/screen_latest.json",
+      "run_at": "2026-09-30T06:52:42.218162+00:00",
+      "generated_at": "2026-09-30T07:26:42.925691+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-09-30T08:26:42.936756+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-09-30T08:00:00+01:00",
+      "settle_at": "2026-09-30T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (2 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.003,
+    "candidates": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6979000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 77.9,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 120.5,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6979000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 77.9,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 120.5,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.55% / sell 0.05% (legacy symmetric slot 0.30%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1095.86,
+      "cash": 21.07,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 547.93,
+      "targets": [
+        {
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "signal": "buy",
+          "conviction_score": 0.7125,
+          "price": 120.5
+        },
+        {
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "signal": "strong_buy",
+          "conviction_score": 0.6979000000000001,
+          "price": 77.9
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "reason": "Top-up to equal weight",
+          "value": 21.07,
+          "price": 120.5,
+          "target_value": 547.93,
+          "conviction_score": 0.7125,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "reason": "Already near equal-weight target",
+          "value": 547.94,
+          "target_value": 547.93,
+          "conviction_score": 0.6979000000000001,
+          "signal": "strong_buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 1 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "281f2d81-51ad-44d5-91fc-26c3b9de0b29",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-30T08:26:42.936756+01:00",
+        "ticker": "CAPD.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.041184,
+        "price": 120.5,
+        "gross": 4.96,
+        "cost": 0.03,
+        "net_cash": -4.99,
+        "note": "Automated buy",
+        "name": "Capital Limited"
+      },
+      {
+        "id": "0dddecad-50aa-43fb-ab96-e78a373ed0c1",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-30T08:26:42.936756+01:00",
+        "ticker": "CARD.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.270647,
+        "price": 77.9,
+        "gross": 21.08,
+        "cost": 0.01,
+        "net_cash": 21.07,
+        "note": "Automated trim",
+        "name": "Card Factory plc",
+        "avg_cost_at_exit": 70.2187
+      }
+    ],
+    "nav_before": 1095.9,
+    "cash_before": 4.99,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "CARD.L",
+        "shares": 7.304508,
+        "avg_cost": 70.2187,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 4.330999,
+        "avg_cost": 117.4584,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 1095.86,
+    "cash_after": 21.07,
+    "holdings_after": [
+      {
+        "ticker": "CARD.L",
+        "shares": 7.033861,
+        "avg_cost": 70.2187,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 4.372183,
+        "avg_cost": 117.4871,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    }
   }
 ]

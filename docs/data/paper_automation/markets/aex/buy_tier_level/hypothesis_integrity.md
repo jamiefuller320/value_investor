@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-29T15:06:08.779239+00:00
+Track: `buy_tier_level` · updated 2026-09-30T07:26:48.097237+00:00
 
 ## Portfolio loser feedback
 
@@ -10,44 +10,44 @@ Track: `buy_tier_level` · updated 2026-09-29T15:06:08.779239+00:00
 
 ## Holding reviews
 
-### AD.AS — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 89%
-
-### SHELL.AS — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 83%
-
-### AKZA.AS — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 81%
-
-### WKL.AS — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 78%
-
-### RAND.AS — intact / hold_tolerate (+0.0%)
+### RAND.AS — intact / hold_tolerate (-1.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
 
-### PHIA.AS — intact / hold_tolerate (+0.0%)
+### WKL.AS — intact / hold_tolerate (-1.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 78%
+
+### PHIA.AS — intact / hold_tolerate (-0.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 57%
+- conviction 65%
+
+### AKZA.AS — intact / hold_tolerate (-0.1%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 81%
+
+### SHELL.AS — intact / hold_tolerate (-0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 83%
+
+### AD.AS — intact / hold_tolerate (+0.7%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 89%

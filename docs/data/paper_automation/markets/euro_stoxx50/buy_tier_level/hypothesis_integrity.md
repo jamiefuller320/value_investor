@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-29T07:24:18.099488+00:00
+Track: `buy_tier_level` · updated 2026-09-30T07:26:44.195363+00:00
 
 ## Portfolio loser feedback
 
@@ -12,7 +12,7 @@ Track: `buy_tier_level` · updated 2026-09-29T07:24:18.099488+00:00
 
 ## Holding reviews
 
-### VOW.DE — intact / hold_tolerate (-9.4%)
+### VOW.DE — intact / hold_tolerate (-9.2%)
 - price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
@@ -20,42 +20,42 @@ Track: `buy_tier_level` · updated 2026-09-29T07:24:18.099488+00:00
 - data_quality 1.00
 - conviction 68%
 
-### MC.PA — intact / hold_tolerate (-1.6%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 67%
-
-### ABI.BR — intact / hold_tolerate (-1.6%)
+### ABI.BR — intact / hold_tolerate (-4.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 63%
 
-### WKL.AS — intact / hold_tolerate (-1.4%)
+### MC.PA — intact / hold_tolerate (-2.6%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 67%
+
+### DG.PA — intact / hold_tolerate (-2.1%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 93%
+
+### WKL.AS — intact / hold_tolerate (-0.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
 
-### DG.PA — intact / hold_tolerate (+0.3%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 92%
-
-### ENI.MI — intact / hold_tolerate (+1.3%)
+### ENI.MI — intact / hold_tolerate (+0.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 65%
 
-### AD.AS — intact / hold_tolerate (+1.3%)
+### AD.AS — intact / hold_tolerate (+0.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

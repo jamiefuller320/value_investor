@@ -1,15 +1,47 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-29T08:24:16.656708+01:00",
+    "local_time": "2026-09-30T08:26:42.936756+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-09-29T08:00:00+01:00",
-    "settle_at": "2026-09-29T09:15:00+01:00",
+    "market_open_at": "2026-09-30T08:00:00+01:00",
+    "settle_at": "2026-09-30T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "281f2d81-51ad-44d5-91fc-26c3b9de0b29",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-09-30T08:26:42.936756+01:00",
+      "ticker": "CAPD.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.041184,
+      "price": 120.5,
+      "gross": 4.96,
+      "cost": 0.03,
+      "net_cash": -4.99,
+      "note": "Automated buy",
+      "name": "Capital Limited"
+    },
+    {
+      "id": "0dddecad-50aa-43fb-ab96-e78a373ed0c1",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-09-30T08:26:42.936756+01:00",
+      "ticker": "CARD.L",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.270647,
+      "price": 77.9,
+      "gross": 21.08,
+      "cost": 0.01,
+      "net_cash": 21.07,
+      "note": "Automated trim",
+      "name": "Card Factory plc",
+      "avg_cost_at_exit": 70.2187
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +55,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1053.58,
-    "cash": 4.99,
+    "nav": 1095.86,
+    "cash": 21.07,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -33,52 +65,54 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 526.79,
+    "target_sleeve_value": 547.93,
     "targets": [
       {
         "ticker": "CAPD.L",
         "name": "Capital Limited",
         "signal": "buy",
         "conviction_score": 0.7125,
-        "price": 119.5
+        "price": 120.5
       },
       {
         "ticker": "CARD.L",
         "name": "Card Factory plc",
         "signal": "strong_buy",
-        "conviction_score": 0.7079000000000001,
-        "price": 72.7
+        "conviction_score": 0.6979000000000001,
+        "price": 77.9
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
+        "action": "buy",
         "ticker": "CAPD.L",
         "name": "Capital Limited",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 517.55,
-        "target_value": 526.79,
+        "reason": "Top-up to equal weight",
+        "value": 21.07,
+        "price": 120.5,
+        "target_value": 547.93,
         "conviction_score": 0.7125,
         "signal": "buy"
-      },
+      }
+    ],
+    "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "CARD.L",
         "name": "Card Factory plc",
         "reason": "Already near equal-weight target",
-        "value": 531.04,
-        "target_value": 526.79,
-        "conviction_score": 0.7079000000000001,
+        "value": 547.94,
+        "target_value": 547.93,
+        "conviction_score": 0.6979000000000001,
         "signal": "strong_buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -87,7 +121,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 72.7,
+      "mark": 77.9,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -98,7 +132,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 119.5,
+      "mark": 120.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -119,13 +153,13 @@
       "id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
       "created_at": "2026-09-09T07:23:01.537822+00:00"
     },
-    "cash": 4.99,
+    "cash": 21.07,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
       "CARD.L": {
         "ticker": "CARD.L",
-        "shares": 7.304508,
+        "shares": 7.033861,
         "avg_cost": 70.2187,
         "name": "Card Factory plc",
         "sector": "Consumer Cyclical",
@@ -136,8 +170,8 @@
       },
       "CAPD.L": {
         "ticker": "CAPD.L",
-        "shares": 4.330999,
-        "avg_cost": 117.4584,
+        "shares": 4.372183,
+        "avg_cost": 117.4871,
         "name": "Capital Limited",
         "sector": "Basic Materials",
         "currency": "GBP",
@@ -996,6 +1030,37 @@
         "net_cash": -311.96,
         "note": "Automated buy",
         "name": "Card Factory plc"
+      },
+      {
+        "id": "281f2d81-51ad-44d5-91fc-26c3b9de0b29",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-30T08:26:42.936756+01:00",
+        "ticker": "CAPD.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.041184,
+        "price": 120.5,
+        "gross": 4.96,
+        "cost": 0.03,
+        "net_cash": -4.99,
+        "note": "Automated buy",
+        "name": "Capital Limited"
+      },
+      {
+        "id": "0dddecad-50aa-43fb-ab96-e78a373ed0c1",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-30T08:26:42.936756+01:00",
+        "ticker": "CARD.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.270647,
+        "price": 77.9,
+        "gross": 21.08,
+        "cost": 0.01,
+        "net_cash": 21.07,
+        "note": "Automated trim",
+        "name": "Card Factory plc",
+        "avg_cost_at_exit": 70.2187
       }
     ],
     "equity_curve": [
@@ -1310,19 +1375,35 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-30T08:26:42.936756+01:00",
+        "portfolio_value": 1095.86,
+        "cash": 21.07,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-29T08:24:16.656708+01:00",
+    "last_mark_at": "2026-09-30T08:26:42.936756+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-29T07:24:16.662634+00:00",
+    "generated_at": "2026-09-30T07:26:42.941565+00:00",
     "open_count": 13,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -1341,7 +1422,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-29T07:24:16.664124+00:00",
+    "generated_at": "2026-09-30T07:26:42.942522+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1422,9 +1503,9 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 13,
+        "count": 14,
         "verdicts": {
-          "open": 13
+          "open": 14
         }
       },
       "closed": {
@@ -1434,11 +1515,11 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     }
   },
   "hypothesis_integrity": {
@@ -1446,8 +1527,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-29T07:24:16.665970+00:00",
-    "as_of": "2026-09-29T08:24:16.656708+01:00",
+    "updated_at": "2026-09-30T07:26:42.943856+00:00",
+    "as_of": "2026-09-30T08:26:42.936756+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1504,9 +1585,9 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0174,
-        "mark": 119.5,
-        "avg_cost": 117.4584,
+        "unrealized_pct": 0.0256,
+        "mark": 120.5,
+        "avg_cost": 117.4871,
         "signal": "buy",
         "timing_signal": "neutral",
         "conviction_score": 0.7125,
@@ -1544,12 +1625,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0353,
-        "mark": 72.7,
+        "unrealized_pct": 0.1094,
+        "mark": 77.9,
         "avg_cost": 70.2187,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.7079,
+        "conviction_score": 0.6979,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1566,14 +1647,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 71%"
+          "conviction 70%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 71%"
+          "conviction 70%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1586,7 +1667,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-29T07:24:16.668560+00:00",
+    "generated_at": "2026-09-30T07:26:42.945552+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1660,7 +1741,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-29T07:24:16.673049+00:00",
+    "generated_at": "2026-09-30T07:26:42.948476+00:00",
     "open_count": 0,
     "closed_count": 11,
     "scored_count": 7,
@@ -1726,7 +1807,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-29T08:24:16.656708+01:00",
+    "generated_at": "2026-09-30T08:26:42.936756+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1780,7 +1861,7 @@
       "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-29T07:24:16.674461+00:00",
+  "generated_at": "2026-09-30T07:26:42.949600+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

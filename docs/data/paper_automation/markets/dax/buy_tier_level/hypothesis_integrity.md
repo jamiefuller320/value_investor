@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-29T07:24:20.321973+00:00
+Track: `buy_tier_level` · updated 2026-09-30T07:26:46.058769+00:00
 
 ## Portfolio loser feedback
 
@@ -10,21 +10,21 @@ Track: `buy_tier_level` · updated 2026-09-29T07:24:20.321973+00:00
 
 ## Holding reviews
 
-### DHL.DE — intact / hold_tolerate (-0.9%)
+### DHL.DE — intact / hold_tolerate (+0.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 89%
 
-### FME.DE — weakening / watch_review (+0.9%)
+### FME.DE — weakening / watch_review (+0.6%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
 
-### G1A.DE — intact / hold_tolerate (+1.7%)
+### G1A.DE — intact / hold_tolerate (+1.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 62%
+- conviction 64%

@@ -359,14 +359,14 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 820.9,
-    "estimated_spend_usd_this_week": 9.6,
+    "estimated_spend_usd_this_cycle": 821.7,
+    "estimated_spend_usd_this_week": 10.4,
     "week_id": "2026-W40",
     "cycle_id": "2026-09-d8",
     "weekly_ops_cap_usd": 84.5,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 8.4,
+    "estimated_spend_weekly_ops_usd_this_week": 9.2,
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
@@ -542,7 +542,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-09-29T21:27:28.733111+00:00",
+  "updated_at": "2026-09-30T07:29:02.700850+00:00",
   "ingest_parity_markets": [
     "aim",
     "asx200",
@@ -566,10 +566,10 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-09-29T06:52:38.048455+00:00",
+      "run_at": "2026-09-30T06:52:42.218162+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 54,
+      "screen_shortlist": 53,
       "research": {
         "model": "composer-2.5",
         "research_cap": 100,
@@ -585,7 +585,9 @@
           "dax",
           "aim",
           "ibex35",
-          "ftse_mib"
+          "ftse_mib",
+          "aex",
+          "bel20"
         ],
         "research_all_graduated": false,
         "spend_pool": "weekly_ops",
@@ -594,17 +596,26 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 84.5,
-        "estimated_spend_weekly_ops_usd_this_week": 5.2,
+        "estimated_spend_weekly_ops_usd_this_week": 9.2,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 79.3,
+        "remaining_usd_before": 76.1,
         "dedupe": {
           "already_researched_count": 458,
-          "fresh_skipped_count": 458,
-          "rememo_eligible_count": 0,
-          "rememo_eligible_sample": [],
-          "skipped_count": 353,
+          "fresh_skipped_count": 456,
+          "rememo_eligible_count": 2,
+          "rememo_eligible_sample": [
+            {
+              "ticker": "HM-B.ST",
+              "reason": "stale_thin_grade_zero_body_catchup_4"
+            },
+            {
+              "ticker": "OIZ.IR",
+              "reason": "stale_thin_grade_zero_body_catchup_5"
+            }
+          ],
+          "skipped_count": 361,
           "skipped_sample": [
             {
               "market": "euro_depth",
@@ -618,7 +629,7 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "SGO.PA",
+              "ticker": "UMI.BR",
               "reason": "fresh_memo"
             },
             {
@@ -628,7 +639,7 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "UMI.BR",
+              "ticker": "SGO.PA",
               "reason": "fresh_memo"
             },
             {
@@ -638,22 +649,22 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "STR.VI",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "PHIA.AS",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "DHL.DE",
+              "ticker": "STR.VI",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
               "ticker": "LOGN.SW",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "DHL.DE",
               "reason": "fresh_memo"
             },
             {
@@ -673,12 +684,12 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "VOW.DE",
+              "ticker": "WKL.AS",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "WKL.AS",
+              "ticker": "VOW.DE",
               "reason": "fresh_memo"
             },
             {
@@ -693,6 +704,11 @@
             },
             {
               "market": "euro_depth",
+              "ticker": "RAND.AS",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
               "ticker": "ANDR.VI",
               "reason": "fresh_memo"
             },
@@ -700,19 +716,53 @@
               "market": "euro_depth",
               "ticker": "WIE.VI",
               "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "C5H.IR",
-              "reason": "fresh_memo"
             }
           ],
           "first_time_preferred": true,
           "note": "Exact Yahoo ticker match; earlier queue market wins. Each market queue puts no-memo buy-tier first, then rememo. Fresh memos are skipped; thin / body-lag memos rememo after ingest."
         },
-        "targets": [],
-        "dry_run": true,
-        "executed": 0
+        "targets": [
+          {
+            "market": "euro_depth",
+            "ticker": "OIZ.IR",
+            "name": "Origin Enterprises plc",
+            "signal": "buy",
+            "conviction_score": 0.5743
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "HM-B.ST",
+            "name": "H & M Hennes & Mauritz AB (publ)",
+            "signal": "buy",
+            "conviction_score": 0.5594
+          }
+        ],
+        "executed": 2,
+        "created": 2,
+        "updated": 0,
+        "errors": [],
+        "rememo_seeds": [
+          {
+            "ticker": "OIZ.IR",
+            "focus_market": "euro_depth",
+            "action": "home_ahead_or_same_store",
+            "home_market": "euro_depth",
+            "canonical_bodies": 5,
+            "home_bodies_before": 5,
+            "home_bodies_after": 5
+          },
+          {
+            "ticker": "HM-B.ST",
+            "focus_market": "euro_depth",
+            "action": "seeded",
+            "home_market": "omxs30",
+            "canonical_bodies": 4,
+            "home_bodies_before": 0,
+            "home_bodies_after": 4
+          }
+        ],
+        "estimated_spend_usd": 0.8,
+        "remaining_usd_after": 75.3
       },
       "graduation": {
         "graduated": false,
