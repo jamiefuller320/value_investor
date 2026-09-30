@@ -1564,11 +1564,21 @@ def _is_index_noise_row(row: dict[str, Any]) -> bool:
 def drop_index_noise_filing_rows(
     filings: list[dict[str, Any]],
 ) -> tuple[list[dict[str, Any]], int]:
-    """Drop bodiless index-noise rows so they cannot reappear as IWB leftovers."""
+    """Drop bodiless durable index-noise rows so they cannot reappear as IWB leftovers.
+
+    Unresolved ``news.google.com`` wrappers stay in the index until residual
+    refetch prune — enrich/refetch may still resolve them to a publisher URL.
+    Resolved non-filing shells (Euronext ESG/product pages, ASX listing pages,
+    share-price headlines) are dropped immediately.
+    """
     kept: list[dict[str, Any]] = []
     dropped = 0
     for row in filings:
         if not row.get("has_body") and _is_index_noise_row(row):
+            url = str(row.get("url") or "").lower()
+            if "news.google.com" in url:
+                kept.append(row)
+                continue
             dropped += 1
             continue
         kept.append(row)

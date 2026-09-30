@@ -8957,6 +8957,19 @@ def test_euronext_esg_product_page_is_index_noise_not_iwb():
     assert dropped == 1
     assert kept == []
 
+    # Unresolved Google News wrappers stay until residual prune (may still resolve).
+    gnews = {
+        **row,
+        "id": "gn1",
+        "headline": "BHP Group Full Year Results",
+        "url": "https://news.google.com/rss/articles/asx1",
+    }
+    assert _is_index_noise_row(gnews) is True
+    assert filing_lacks_material_body(gnews) is False
+    kept_gn, dropped_gn = drop_index_noise_filing_rows([gnews])
+    assert dropped_gn == 0
+    assert [r["id"] for r in kept_gn] == ["gn1"]
+
     # Legitimate Euronext company-news / PDF attachments stay IWB-eligible.
     company_news = {
         **row,
