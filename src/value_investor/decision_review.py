@@ -891,7 +891,10 @@ def run_decision_review(
         config = AutomationConfig()
 
     frozen_lab = bool(
-        config.is_calibration_shadow or config.is_exclusion_shadow or config.is_cohort_lab
+        config.is_calibration_shadow
+        or config.is_exclusion_shadow
+        or config.is_cohort_lab
+        or getattr(config, "is_churn_policy_twin", False)
     )
     if frozen_lab and apply:
         apply = False

@@ -15,9 +15,11 @@ from value_investor.paper_automation import (
     GRADUATED_ALLOCATION_TRACK_ID,
     MOMENTUM_GRACE_TRACK_ID,
     RULES_TRACK_ID,
+    STILL_IN_BUY_SET_TRACK_ID,
     TECHNICAL_TRACK_ID,
     AutomationConfig,
     default_buy_tier_level_config,
+    default_still_in_buy_set_config,
     format_automation_text,
     learning_track_dirs,
     run_daily_automation,
@@ -77,6 +79,7 @@ def main(argv: list[str] | None = None) -> int:
             "rules_fair",
             "buy_tier_level",
             "buy_tier_level_dca",
+            "still_in_buy_set",
         ],
         help="Which learning track(s) to run (default: all, includes Suite B when present)",
     )
@@ -154,6 +157,7 @@ def main(argv: list[str] | None = None) -> int:
         "rules_fair": "rules_fair",
         "buy_tier_level": BUY_TIER_LEVEL_TRACK_ID,
         "buy_tier_level_dca": BUY_TIER_LEVEL_DCA_TRACK_ID,
+        "still_in_buy_set": STILL_IN_BUY_SET_TRACK_ID,
     }[args.tracks]
     dirs = learning_track_dirs(output_dir)
     if track_id not in dirs:
@@ -205,6 +209,8 @@ def main(argv: list[str] | None = None) -> int:
         config.track_label = "Technical levels (stops / trade_plan)"
     elif args.tracks == "buy_tier_level":
         config = default_buy_tier_level_config(config)
+    elif args.tracks == "still_in_buy_set":
+        config = default_still_in_buy_set_config(config)
     else:
         config.track_id = RULES_TRACK_ID
         config.is_primary_learning_track = False

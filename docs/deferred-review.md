@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-30T18:27:25+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-30T19:19:33+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -228,6 +228,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N173 | **Live LLM sell overlay without evidence trail** | Do not give LLM/human sell authority on Suite A without durable exit_reason + citations in the rebalance/decision trail. Prefer algo still-in-buy-set / rank-drop / cooldown gates; judgment stays shadow-only. | Still-in-buy-set twin marks exist AND exit-card evidence schema is wired into rebalance log |
 | N174 | **Naive still-buyish hold without rank-drop carve-out** | Holding every still-screen-buyish displaced name blocks decisive leaves (large rank drops 28-35 on MEGP/AEP/ITV). Observe showed 11-14 false-holds without drop<3 gate. Do not ship un-gated hold-all-buyish. | Designing the still-in-buy-set cold-start twin exit predicate |
 | N175 | **Mid-flight Suite A still-in-buy-set or cooldown=2 knob flip** | Preferences and observe results: twins over mid-flight edits. Live rules/ai_judgment stay at cooldown=1 until a cold-start twin of rank-gated still-in-buy-set (± CD2) has marks; adoption on Suite B. | Cold-start twin has thick enough closed cohort / stated readiness gates |
+| N176 | **Promote still_in_buy_set knobs onto live Suite A** | Do not copy still_in_buy_set_hold / CD2 onto live rules or ai_judgment mid-flight. Twin marks first; any live apply needs a new capital epoch or explicit promotion gate. Adoption stays on Suite B. | still_in_buy_set twin clears readiness gates in still-in-buy-set-twin.md |
 
 ---
 
@@ -301,6 +302,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L491 | **Post-close sleeve autopsy archive (drawdown + missed-signal review)** | Observe-only post-close / material-drawdown reviews per sleeve: retrospect held data vs external news/evidence; tag missed_in_held vs absent_from_held to accumulate justification for new ingest sources. Not a live track or news pipeline. | Thick closed sleeve cohort available (or several material held drawdowns) and P1 FTSE decision-input freshness is stable; before proposing any new news/alt-data ingest. |
 | L502 | **No new calibrated ranks until Suite B or new method** | Park further calibrated-shadow churn: weekday spawn-shadow --top-n 3 may keep existing fail books marking cheaply (L275), but do not add ranks, reopen cancelled N58/N59 knob rows, or invent a parallel promotion ladder from Suite A stress. Retire/disable dirs only after Sunday confirms durable fail with no forward differentiation. | Sunday experiment_assessment still marks calibrated r1-r3 fail with no new forward differentiation, and Suite B fair-cost evidence or a replacement calibration method exists to supersede this ladder |
 | L507 | **Still-in-buy-set no-capacity-bump-exit observe shadow** | Observe probe done 2026-09-30 (Project docs/still-in-buy-set-observe.md): every focus BSB never left candidates; rank-gated hold (drop<3) catches PAF/IMB/SN beyond cooldown=2. Next = cold-start twin only; do not mid-flight Suite A edit. | Eng capacity for a cold-start twin of rank-gated still-in-buy-set hold (± cooldown=2); after Suite B adoption framing is clear |
+| L508 | **Suite B fair-cost twin of still_in_buy_set** | Optional fair-cost cold-start twin of the Suite A still_in_buy_set churn policy so adoption-shaped drag can be read without Suite A 3% stress. Do not fork until the Suite A twin has marks. | still_in_buy_set twin has multi-week marks and Suite B capacity allows another fair book |
+| L509 | **AI-judgment still_in_buy_set twin** | Second cold-start twin using ai_judgment selection gates plus the same rank-gated hold / never-left-candidates / CD2 knobs. Skipped now to keep eng capacity to one Suite A rules twin. | rules still_in_buy_set twin shows churn relief and a second twin slot is free |
 
 ### Universe & data
 
