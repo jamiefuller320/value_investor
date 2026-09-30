@@ -6099,7 +6099,7 @@ function isDailyHubStale(hub, now = new Date()) {
   return artifactDate !== londonLocalDate(now);
 }
 
-function renderDailyHubStatusChips(status) {
+function renderDailyHubStatusChips(status, { compact = false } = {}) {
   if (!status || typeof status !== "object") return "";
   const ready = !!status.ready;
   const state = String(status.state || "");
@@ -6115,6 +6115,7 @@ function renderDailyHubStatusChips(status) {
   } else if (state) {
     chip = `<span class="badge badge-neutral daily-status-chip">${esc(state.replace(/_/g, " "))}</span>`;
   }
+  if (compact) return chip;
   const next = Array.isArray(status.next_steps) && status.next_steps.length
     ? `<div class="small daily-status-next"><span class="muted">Next:</span> ${esc(status.next_steps[0])}</div>`
     : "";
@@ -6125,6 +6126,81 @@ function renderDailyHubStatusChips(status) {
     ? `<div class="small muted daily-status-waiting">Waiting on: ${esc(waitingBits.join("; "))}</div>`
     : "";
   return `${chip}${next}${waiting}`;
+}
+
+function renderDailyHubAssessment(task) {
+  const assessment =
+    (task && task.assessment) ||
+    (task && task.status && task.status.assessment) ||
+    null;
+  const status = (task && task.status) || null;
+  if (!assessment && !status) return "";
+  const where =
+    (assessment && assessment.where_we_are) ||
+    (status && status.label) ||
+    "";
+  const stageLabel = (assessment && assessment.stage_label) || "";
+  const duration =
+    (assessment && assessment.stage_duration) || "duration unknown";
+  const since = (assessment && assessment.stage_since) || "";
+  const waitingFor =
+    (assessment && assessment.waiting_for) ||
+    ((Array.isArray(status && status.waiting_on) ? status.waiting_on : [])
+      .map((w) => (w && (w.detail || w.ref)) || "")
+      .filter(Boolean)
+      .join("; "));
+  const how =
+    (assessment && assessment.how_achieved) ||
+    (Array.isArray(status && status.next_steps) && status.next_steps[0]) ||
+    "";
+  const nextAll = Array.isArray(status && status.next_steps)
+    ? status.next_steps.filter(Boolean)
+    : [];
+  const incomplete = Array.isArray(assessment && assessment.incomplete_fields)
+    ? assessment.incomplete_fields
+    : [];
+  const durationTitle = since
+    ? `since ${since}`
+    : "no stage_since — builder does not invent dates";
+  const rows = [
+    where
+      ? `<div class="daily-assess-row"><span class="muted daily-assess-key">Where</span> <span class="daily-assess-val">${esc(
+          where
+        )}</span></div>`
+      : "",
+    `<div class="daily-assess-row"><span class="muted daily-assess-key">In stage</span> <span class="daily-assess-val" title="${esc(
+      durationTitle
+    )}">${esc(duration)}${
+      stageLabel ? ` · ${esc(stageLabel)}` : ""
+    }${since ? ` · since ${esc(since)}` : ""}</span></div>`,
+    waitingFor
+      ? `<div class="daily-assess-row"><span class="muted daily-assess-key">Waiting for</span> <span class="daily-assess-val">${esc(
+          waitingFor
+        )}</span></div>`
+      : `<div class="daily-assess-row daily-assess-missing"><span class="muted daily-assess-key">Waiting for</span> <span class="muted daily-assess-val">not stated</span></div>`,
+    how
+      ? `<div class="daily-assess-row"><span class="muted daily-assess-key">How</span> <span class="daily-assess-val">${esc(
+          how
+        )}</span></div>`
+      : `<div class="daily-assess-row daily-assess-missing"><span class="muted daily-assess-key">How</span> <span class="muted daily-assess-val">not stated</span></div>`,
+  ];
+  if (nextAll.length > 1) {
+    rows.push(
+      `<div class="daily-assess-row"><span class="muted daily-assess-key">Next</span> <span class="daily-assess-val">${esc(
+        nextAll.join(" · ")
+      )}</span></div>`
+    );
+  }
+  const incompleteNote =
+    incomplete.length > 0
+      ? `<div class="small muted daily-assess-incomplete">Incomplete: ${esc(
+          incomplete.join(", ")
+        )} (observe-only — fill via notes Where:/Since:/Waiting on:/How: or seed)</div>`
+      : "";
+  return `<div class="daily-hub-assessment" role="group" aria-label="Task assessment">
+    ${rows.filter(Boolean).join("")}
+    ${incompleteNote}
+  </div>`;
 }
 
 function renderDailyHubHistorySession(data) {
@@ -6274,17 +6350,13 @@ function renderDailyHubTaskCard(task) {
         ${workClass}
         ${humanHint}
         ${triageHint}
-        ${renderDailyHubStatusChips(status)}
+        ${renderDailyHubStatusChips(status, { compact: true })}
       </span>
       ${closeBtn}
     </summary>
     <div class="human-task-card-panel">
       <p class="small">${esc(task.summary || "")}</p>
-      ${
-        status
-          ? `<div class="daily-hub-status-detail">${renderDailyHubStatusChips(status)}</div>`
-          : ""
-      }
+      ${renderDailyHubAssessment(task)}
       ${
         task.href
           ? `<p class="small"><a href="${esc(task.href)}">${esc(task.href)}</a></p>`
@@ -6316,10 +6388,30 @@ function renderDailyHubPanel(data) {
     .map((line) => {
       const task = (hub.tasks || []).find((t) => t.task_ref === line.id) || {};
       const status = task.status || line.status || null;
+      const assess = task.assessment || (status && status.assessment) || line.assessment || null;
+      const whereBit =
+        assess && assess.where_we_are
+          ? `<div class="small daily-assess-focus-where">${esc(assess.where_we_are)}</div>`
+          : "";
+      const waitBit =
+        assess && assess.waiting_for
+          ? `<div class="small muted">Waiting for: ${esc(assess.waiting_for)}</div>`
+          : "";
+      const howBit =
+        assess && assess.how_achieved
+          ? `<div class="small muted">How: ${esc(assess.how_achieved)}</div>`
+          : "";
+      const durBit =
+        assess && assess.stage_duration
+          ? `<div class="small muted">In stage: ${esc(assess.stage_duration)}${
+              assess.stage_since ? ` · since ${esc(assess.stage_since)}` : ""
+            }</div>`
+          : "";
       return `<li><strong>${esc(line.title || "")}</strong>
         <span class="badge badge-neutral">${esc(line.source || "focus")}</span>
-        ${renderDailyHubStatusChips(status)}
-        <div class="small muted">${esc(line.summary || "")}</div></li>`;
+        ${renderDailyHubStatusChips(status, { compact: true })}
+        <div class="small muted">${esc(line.summary || "")}</div>
+        ${whereBit}${durBit}${waitBit}${howBit}</li>`;
     })
     .join("");
   const openTasks = (hub.tasks || []).filter((t) => !t.closed);

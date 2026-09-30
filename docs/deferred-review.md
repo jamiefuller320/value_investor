@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-30T08:59:42+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-30T12:58:05+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -224,6 +224,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N169 | **Auto-flip human checklist `automated: true` from Accept streaks** | Never flip checklist automated:true from Accept streaks alone; streaks are observe-only automation candidates until an explicit human audit gate (N-style). | Never without explicit human audit gate (N-style) |
 | N170 | **Supabase-backed daily history table** | Keep daily hub history as git JSON plus bridge payloads; do not add a Supabase history table unless git JSON + bridge pressure forces it (align N168). | If git JSON + bridge pressure forces it (align N168) |
 | N171 | **Calibrated shadows are not a promotion path (fail-closed)** | User-approved 2026-09-29: competing calibrated shadows (ai_judgment_calibrated r1–r3) are observe-only and currently experiment_assessment=fail. Do not treat them as a knob/prior promotion path; do not spawn new calibrated ranks beyond the existing top-3 GC; do not reopen N58/N59 from this fail-close. sunday-promote-knobs-gate stays closed. | Fair-cost Suite B (ai_judgment_fair / rules_fair) shows thick forward excess vs ^FTSE and fair rules control, OR a new calibration method lands that is not Suite A stress-green alone |
+| N172 | **Daily hub assessment: eng-queue collation into per-task notes** | Do not fold engineering-queue open/PR rows into Daily hub assessment bodies yet — would dilute Cap C morning board and clash with max-2 eng capacity. Related prior C2/L492 park. | After eng-queue collation instrument (C2) is designed separately and clash-aware capacity allows a single observe-only join |
 
 ---
 
@@ -572,7 +573,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L498 | **Include routine ops_gate rows in History by default** | History defaults to work_class=dev only; include routine ops_gate rows in History by default only if operators explicitly want gate memory. | Only if operators explicitly want gate memory; default stays off |
 | L500 | **Ingest-loop named pin starved by unmeasured prepend** | ingest-loop --pin-ticker HM-B.ST with max-targets 1 only ran OIZ.IR because unmeasured names are auto-prepended. Named pins for zero-body clearance should guarantee a slot or bump target budget. | Next time a named euro zero-body pin is skipped while unmeasured leftovers consume the ticker budget |
 | L501 | **Phase B Daily hub Accept → observe-safe market-warning dismiss automation** | When market warning triage proposes dismiss (e.g. ingest-deviation signal triage dismiss) and Accept streak is clean, optionally run the observe-safe CLI dismiss / board ack from ops-monitor — never auto-deepen or divert euro fat slot. | Market warning triage has ≥2 weeks of Accept/Discuss outcomes in daily_hub_history and operators confirm dismiss Accepts are not rubber-stamps |
-| L504 | **Spare ingest-loop must not overwrite euro_ingest_dispatch** | Pinning a spare market (e.g. dax G1A.DE) rewrote docs/data/library/euro_ingest_dispatch.json to that spare. Restored via euro-ingest-dispatch --refresh; harden so spare deepen writes only per-market / shared discovery artifacts. | Next spare-stream IR-seed / pin-ticker deepen, or when euro dispatch is observed flipped off euro_depth after a spare run |
+| L504 | **Daily hub assessment: auto-date stage_since from git/PR history** | Expansive assessments leave stage_since blank unless seed/notes/observe first_seen provide it. Auto-dating from git blame or PR open times would fill more durations but risks inventing progress and needs a clear provenance rule. | After expansive assessments are in daily use for ≥2 weeks and operators still ask how long items have been stuck without Since: lines |
+| L505 | **Daily hub assessment: write-back Where/How into notes.md** | Builder currently reads notes/seed into JSON. Auto writing assessment prose back into Project notes.md would close the edit loop but risks clobbering human editorial surface after morning JSON-wins rule. | When operators routinely edit assessments in the UI and expect notes.md to stay in sync |
+| L506 | **Spare ingest-loop must not overwrite euro_ingest_dispatch** | Pinning a spare market (e.g. dax G1A.DE) rewrote docs/data/library/euro_ingest_dispatch.json to that spare. Restored via euro-ingest-dispatch --refresh; harden so spare deepen writes only per-market / shared discovery artifacts. | Next spare-stream IR-seed / pin-ticker deepen, or when euro dispatch is observed flipped off euro_depth after a spare run |
 
 ---
 
