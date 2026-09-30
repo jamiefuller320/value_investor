@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-30T14:37:33.314349+00:00",
+  "compiled_at": "2026-09-30T14:40:29.925387+00:00",
   "run_at": null,
-  "task_count": 121,
+  "task_count": 120,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1586,111 +1586,6 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
-    },
-    {
-      "id": "eng-20260930-03",
-      "area": "ingest",
-      "title": "Seed IR allowlist for unmeasured/zero-body 1099.HK (hang_seng) — empty allowlist after 0-improve pin (igc-20260930-07)",
-      "summary": "Gap-closure run igc-20260930-07 targeted 1099.HK with outstanding coverage holes but zero IR allowlist URLs (refetch never attempted). Seed `_BUILTIN_IR_URLS` / issuer PDFs or fix discovery; do not keep re-pinning empty intensify. Add a regression test; verify with a pinned library ingest gap-closure / ingest-loop pass.",
-      "priority": "high",
-      "priority_score": 88.0,
-      "source": "ingest_gap_closure",
-      "evidence": {
-        "gap_closure_run_id": "igc-20260930-07",
-        "trial_id": "igc-20260930-07",
-        "chain_root_id": "igc-20260930-07",
-        "chain_round": 1,
-        "tickers": [
-          "1099.HK"
-        ],
-        "ticker": "1099.HK",
-        "market_id": "hang_seng",
-        "library_market": "hang_seng",
-        "universe": "library",
-        "rerun_ingest_gap_closure": true,
-        "rerun_ingest_trial": true,
-        "rerun_library_ingest_loop": true,
-        "refetch_attempted": 0,
-        "refetch_fetched": 0,
-        "gap_closure_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "1099.HK",
-            "1378.HK",
-            "0762.HK",
-            "2382.HK",
-            "6862.HK",
-            "1113.HK",
-            "6618.HK",
-            "0101.HK",
-            "0291.HK",
-            "0288.HK",
-            "0857.HK",
-            "0868.HK",
-            "0285.HK"
-          ],
-          "market_id": "hang_seng",
-          "universe": "library",
-          "critical_path_blocker": "unmeasured"
-        },
-        "trial_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "1099.HK",
-            "1378.HK",
-            "0762.HK",
-            "2382.HK",
-            "6862.HK",
-            "1113.HK",
-            "6618.HK",
-            "0101.HK",
-            "0291.HK",
-            "0288.HK",
-            "0857.HK",
-            "0868.HK",
-            "0285.HK"
-          ],
-          "market_id": "hang_seng",
-          "universe": "library",
-          "critical_path_blocker": "unmeasured"
-        },
-        "compile_reason": "gaps_remain_without_allowlist"
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for 1099.HK",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
     },
     {
       "id": "eng-20260924-03",
@@ -6988,6 +6883,53 @@
       "cancelled_at": "2026-09-15T17:49:28.000706+00:00"
     },
     {
+      "id": "eng-20260918-16",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
+      "summary": "Library market nasdaq100 (Nasdaq-100) parked PDD after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statut",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "nasdaq100",
+        "library_market": "nasdaq100",
+        "hunter_market_id": "nasdaq100",
+        "hunter_ticker": "PDD",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for PDD only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "cancelled"
+    },
+    {
       "id": "eng-20260930-02",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover MC.PA",
@@ -7032,11 +6974,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260930-02.md",
       "branch_name": "cursor/eng-20260930-02-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-30T08:40:50.398099+00:00"
+      "completed_at": "2026-09-30T08:40:50.398099+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/912",
+      "pr_number": 912,
+      "merged_at": "2026-09-30T14:39:53.542738+00:00"
     },
     {
       "id": "eng-20260930-01",
@@ -7092,53 +7037,6 @@
       "completed_at": "2026-09-30T08:23:27.833470+00:00",
       "merge_class": "parked_hunter",
       "merged_at": "2026-09-30T08:23:38.415292+00:00"
-    },
-    {
-      "id": "eng-20260918-16",
-      "area": "ingest",
-      "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
-      "summary": "Library market nasdaq100 (Nasdaq-100) parked PDD after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statut",
-      "priority": "low",
-      "priority_score": 12.0,
-      "source": "parked_source_hunter",
-      "evidence": {
-        "market_id": "nasdaq100",
-        "library_market": "nasdaq100",
-        "hunter_market_id": "nasdaq100",
-        "hunter_ticker": "PDD",
-        "parked_reason": "unfetchable_iwb",
-        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
-      },
-      "acceptance_criteria": [
-        "Inspect IR / exchange sources for PDD only — do not invent URLs",
-        "If a fetchable statutory/IR body exists, add allowlist + regression test",
-        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
-        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "cancelled"
     },
     {
       "id": "eng-20260924-02",
@@ -7564,7 +7462,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-30T14:30:11.992635+00:00",
+    "evaluated_at": "2026-09-30T14:40:58.424860+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -7572,9 +7470,9 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "ingest_gap_closure",
-  "library_market_id": "dax",
-  "hunter_ticker": "MC.PA",
+  "micro_compile_source": "parked_source_hunter",
+  "library_market_id": "nasdaq100",
+  "hunter_ticker": "PDD",
   "queue_block_notify": {
     "last_fingerprint": "clash_blocked|no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
     "last_sent_at": "2026-09-27T12:22:33.775710+00:00",
@@ -7643,8 +7541,5 @@
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
-  },
-  "source_gap_closure_run_id": "igc-20260930-07",
-  "source_trial_id": "igc-20260930-07",
-  "source_chain_root_id": "igc-20260930-07"
+  }
 }
