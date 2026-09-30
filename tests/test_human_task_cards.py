@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from value_investor.experiment_acks import load_acks as load_experiment_acks
@@ -440,6 +441,20 @@ def test_run_human_task_ack_batch_records_many_once(tmp_path: Path):
         hit = next(r for r in board["tasks"] if r["id"] == tid)
         assert hit["ack"]["acked"] is True
         assert hit["sort_bucket"] == "acked"
+    # Cap C hub must refresh so Daily open list drops the just-acked humans.
+    hub_path = data_dir / "daily_focus.json"
+    assert hub_path.exists()
+    hub = json.loads(hub_path.read_text(encoding="utf-8"))
+    open_human_refs = {
+        str(t.get("task_ref") or "")
+        for t in (hub.get("tasks") or [])
+        if isinstance(t, dict)
+        and t.get("source") == "human_tasks"
+        and not t.get("closed")
+    }
+    assert "human:sunday-read-analysis-review" not in open_human_refs
+    assert "human:monthly-pr-fix-common-issues" not in open_human_refs
+    assert result.get("daily_focus_open_task_count") is not None
 
 
 def test_euro_ingest_cron_reimport_is_automated():
