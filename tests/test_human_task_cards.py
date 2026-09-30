@@ -448,9 +448,7 @@ def test_run_human_task_ack_batch_records_many_once(tmp_path: Path):
     open_human_refs = {
         str(t.get("task_ref") or "")
         for t in (hub.get("tasks") or [])
-        if isinstance(t, dict)
-        and t.get("source") == "human_tasks"
-        and not t.get("closed")
+        if isinstance(t, dict) and t.get("source") == "human_tasks" and not t.get("closed")
     }
     assert "human:sunday-read-analysis-review" not in open_human_refs
     assert "human:monthly-pr-fix-common-issues" not in open_human_refs
