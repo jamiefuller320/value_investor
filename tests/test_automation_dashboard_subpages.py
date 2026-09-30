@@ -262,6 +262,7 @@ def test_daily_hub_history_session_and_status_chips() -> None:
     text = APP_JS.read_text(encoding="utf-8")
     assert "function renderDailyHubHistorySession(" in text
     assert "function renderDailyHubStatusChips(" in text
+    assert "function renderDailyHubAssessment(" in text
     assert "function isDailyHubStale(" in text
     assert "function londonLocalDate(" in text
     assert "Accept followed" in text
@@ -270,6 +271,8 @@ def test_daily_hub_history_session_and_status_chips() -> None:
     assert "Ready to progress" in text or ">Ready<" in text
     assert "daily-hub-history" in text
     assert "daily-hub-today" in text
+    assert "daily-hub-assessment" in text
+    assert "Waiting for" in text
     panel = text.split("function renderDailyHubPanel(", 1)[1].split(
         "\n/** Canonical Project-chat pickup phrase", 1
     )[0]
@@ -277,9 +280,16 @@ def test_daily_hub_history_session_and_status_chips() -> None:
     assert "isDailyHubStale(hub)" in panel
     assert "counts.market_warnings" in panel
     assert "Market warning triage" in panel
+    card = text.split("function renderDailyHubTaskCard(", 1)[1].split(
+        "\nfunction renderDailyHubPanel(", 1
+    )[0]
+    assert "renderDailyHubAssessment(task)" in card
+    assert "compact: true" in card
     css = STYLES.read_text(encoding="utf-8")
     assert ".daily-hub-history" in css
     assert ".daily-hub-accept-streak" in css
+    assert ".daily-hub-assessment" in css
+    assert ".daily-assess-key" in css
 
 
 def test_daily_hub_market_warning_triage_badges() -> None:
@@ -292,9 +302,10 @@ def test_daily_hub_market_warning_triage_badges() -> None:
     assert "no dismiss" in card
     assert "badge-sell" in card
     html = Path("docs/index.html").read_text(encoding="utf-8")
-    assert "app.js?v=daily-hub-warning-triage1" in html
+    assert "app.js?v=daily-hub-expansive-assessment1" in html
     assert "Market warning triage" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "zero_body_stuck" in OPS_MONITOR.read_text(encoding="utf-8")
+    assert "Expansive assessment" in OPS_MONITOR.read_text(encoding="utf-8")
 
 
 def test_overview_pulse_links_daily_hub() -> None:

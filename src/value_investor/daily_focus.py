@@ -74,10 +74,306 @@ _WAITING_RE = re.compile(
     r"^\s*(?:-\s*)?(?:\*\*)?Waiting on:\s*(?:\*\*)?\s*(.+?)\s*$",
     re.IGNORECASE,
 )
+_WHERE_RE = re.compile(
+    r"^\s*(?:-\s*)?(?:\*\*)?(?:Where|Stage):\s*(?:\*\*)?\s*(.+?)\s*$",
+    re.IGNORECASE,
+)
+_SINCE_RE = re.compile(
+    r"^\s*(?:-\s*)?(?:\*\*)?(?:Since|In stage since|Stage since):\s*(?:\*\*)?\s*(.+?)\s*$",
+    re.IGNORECASE,
+)
+_HOW_RE = re.compile(
+    r"^\s*(?:-\s*)?(?:\*\*)?(?:How|How achieved|Path|Achieve):\s*(?:\*\*)?\s*(.+?)\s*$",
+    re.IGNORECASE,
+)
 _TODAY_RE = re.compile(
     r"^\s*(?:-\s*(?:\[[ xX]\]\s*)?)?(?:\*\*)?Today\s*[—–-]\s*(?:\*\*)?\s*(.+?)\s*$",
     re.IGNORECASE,
 )
+
+
+def _blank(value: Any) -> str:
+    return str(value or "").strip()
+
+
+def format_stage_duration(
+    stage_since: str | None,
+    *,
+    now: datetime | None = None,
+) -> tuple[int | None, str]:
+    """Return ``(days_in_stage, human_label)`` without inventing a start date."""
+    now = now or _utcnow()
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=UTC)
+    text = _blank(stage_since)
+    if not text:
+        return None, "duration unknown"
+    # Accept date-only or ISO datetime.
+    parsed = _parse_dt(text)
+    if parsed is None and len(text) == 10:
+        try:
+            parsed = datetime.fromisoformat(text).replace(tzinfo=UTC)
+        except ValueError:
+            parsed = None
+    if parsed is None:
+        return None, "duration unknown"
+    days = (now.astimezone(UTC).date() - parsed.astimezone(UTC).date()).days
+    if days < 0:
+        days = 0
+    if days == 0:
+        return 0, "same day in stage"
+    if days == 1:
+        return 1, "1 day in stage"
+    return days, f"{days} days in stage"
+
+
+def empty_assessment() -> dict[str, Any]:
+    return {
+        "where_we_are": "",
+        "stage_label": "",
+        "stage_state": "",
+        "stage_since": None,
+        "days_in_stage": None,
+        "stage_duration": "duration unknown",
+        "waiting_for": "",
+        "how_achieved": "",
+        "provenance": [],
+        "incomplete_fields": [],
+        "observe_only": True,
+    }
+
+
+def compose_assessment(
+    *,
+    status: dict[str, Any] | None = None,
+    title: str = "",
+    summary: str = "",
+    notes_block: str = "",
+    seed_row: dict[str, Any] | None = None,
+    prior_assessment: dict[str, Any] | None = None,
+    observe: dict[str, Any] | None = None,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Build an expansive per-task assessment from seed/notes/status/observe.
+
+    Never invents progress: missing duration stays ``duration unknown``; observe
+    fillers only restate known artifacts (market role, triage action, board
+    bucket, reconcile detail).
+    """
+    now = now or _utcnow()
+    status = dict(status or {})
+    seed_row = seed_row or {}
+    observe = observe if isinstance(observe, dict) else {}
+    prior = prior_assessment if isinstance(prior_assessment, dict) else {}
+    out = empty_assessment()
+    provenance: list[str] = []
+
+    seed_assess = seed_row.get("assessment") if isinstance(seed_row.get("assessment"), dict) else {}
+    status_assess = status.get("assessment") if isinstance(status.get("assessment"), dict) else {}
+
+    where = (
+        _blank(seed_assess.get("where_we_are"))
+        or _blank(status_assess.get("where_we_are"))
+        or _blank(seed_row.get("where_we_are"))
+    )
+    stage_label = (
+        _blank(seed_assess.get("stage_label"))
+        or _blank(status_assess.get("stage_label"))
+        or _blank(seed_row.get("stage_label"))
+    )
+    stage_since = (
+        _blank(seed_assess.get("stage_since"))
+        or _blank(status_assess.get("stage_since"))
+        or _blank(seed_row.get("stage_since"))
+        or None
+    )
+    waiting_for = (
+        _blank(seed_assess.get("waiting_for"))
+        or _blank(status_assess.get("waiting_for"))
+        or _blank(seed_row.get("waiting_for"))
+    )
+    how = (
+        _blank(seed_assess.get("how_achieved"))
+        or _blank(status_assess.get("how_achieved"))
+        or _blank(seed_row.get("how_achieved"))
+        or _blank(seed_row.get("how"))
+    )
+    if where or stage_label or stage_since or waiting_for or how:
+        provenance.append("seed")
+
+    # Prose conventions on notes / summary / title lines.
+    for block in (notes_block or "", summary or "", title or ""):
+        for raw in str(block).splitlines():
+            line = raw.strip()
+            m_where = _WHERE_RE.match(line)
+            if m_where and not where:
+                where = m_where.group(1).strip()
+                provenance.append("notes:where")
+                continue
+            m_since = _SINCE_RE.match(line)
+            if m_since and not stage_since:
+                stage_since = m_since.group(1).strip() or None
+                provenance.append("notes:since")
+                continue
+            m_wait = _WAITING_RE.match(line)
+            if m_wait and not waiting_for:
+                waiting_for = m_wait.group(1).strip()
+                provenance.append("notes:waiting")
+                continue
+            m_how = _HOW_RE.match(line)
+            if m_how:
+                text = m_how.group(1).strip()
+                if text:
+                    # How: always wins over Next: filler.
+                    if not how or "notes:next" in provenance:
+                        how = text
+                        provenance = [p for p in provenance if p != "notes:next"]
+                        provenance.append("notes:how")
+                continue
+            m_next = _NEXT_RE.match(line)
+            if m_next and not how:
+                how = m_next.group(1).strip()
+                provenance.append("notes:next")
+                continue
+
+    # Derive waiting_for / how from existing status markers when prose empty.
+    waiting_bits = []
+    for item in status.get("waiting_on") or []:
+        if isinstance(item, dict):
+            bit = _blank(item.get("detail") or item.get("ref"))
+        else:
+            bit = _blank(item)
+        if bit:
+            waiting_bits.append(bit)
+    if not waiting_for and waiting_bits:
+        waiting_for = "; ".join(waiting_bits)
+        provenance.append("status:waiting_on")
+
+    next_steps = [
+        _blank(x) for x in (status.get("next_steps") or []) if _blank(x)
+    ]
+    if not how and next_steps:
+        how = next_steps[0]
+        provenance.append("status:next_steps")
+
+    # Observe fillers — restate known context only.
+    if not where:
+        where = _blank(observe.get("where_we_are"))
+        if where:
+            provenance.append("observe:where")
+    if not stage_label:
+        stage_label = _blank(observe.get("stage_label"))
+        if stage_label:
+            provenance.append("observe:stage_label")
+    if not stage_since:
+        stage_since = _blank(observe.get("stage_since")) or None
+        if stage_since:
+            provenance.append("observe:stage_since")
+    if not waiting_for:
+        waiting_for = _blank(observe.get("waiting_for"))
+        if waiting_for:
+            provenance.append("observe:waiting_for")
+    if not how:
+        how = _blank(observe.get("how_achieved"))
+        if how:
+            provenance.append("observe:how")
+
+    state = _blank(status.get("state")) or "proposed"
+    # Soft fallback where_we_are from status label / title — still observe-honest.
+    if not where:
+        label = _blank(status.get("label"))
+        if label and label.lower() not in {"proposed", "ready to progress"}:
+            where = label
+            provenance.append("status:label")
+        elif _blank(summary):
+            where = summary
+            provenance.append("summary")
+        elif _blank(title):
+            where = title
+            provenance.append("title")
+
+    if not stage_label:
+        stage_label = state.replace("_", " ")
+
+    # Carry stage_since across rebuilds only when state is unchanged.
+    prior_state = _blank(prior.get("stage_state"))
+    prior_since = _blank(prior.get("stage_since")) or None
+    if not stage_since and prior_since and (not prior_state or prior_state == state):
+        stage_since = prior_since
+        provenance.append("prior:stage_since")
+
+    days, duration_label = format_stage_duration(stage_since, now=now)
+
+    incomplete: list[str] = []
+    if not where:
+        incomplete.append("where_we_are")
+    if days is None:
+        incomplete.append("stage_duration")
+    if not waiting_for:
+        incomplete.append("waiting_for")
+    if not how:
+        incomplete.append("how_achieved")
+
+    # Dedupe provenance while preserving order.
+    seen_prov: set[str] = set()
+    prov_out: list[str] = []
+    for p in provenance:
+        if p not in seen_prov:
+            seen_prov.add(p)
+            prov_out.append(p)
+
+    out.update(
+        {
+            "where_we_are": where,
+            "stage_label": stage_label,
+            "stage_state": state,
+            "stage_since": stage_since,
+            "days_in_stage": days,
+            "stage_duration": duration_label,
+            "waiting_for": waiting_for,
+            "how_achieved": how,
+            "provenance": prov_out,
+            "incomplete_fields": incomplete,
+            "observe_only": True,
+        }
+    )
+    return out
+
+
+def attach_assessment(
+    task: dict[str, Any],
+    *,
+    prior_by_ref: dict[str, dict[str, Any]] | None = None,
+    now: datetime | None = None,
+    observe: dict[str, Any] | None = None,
+    notes_block: str = "",
+    seed_row: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Attach ``status.assessment`` + top-level ``assessment`` onto a task row."""
+    prior_by_ref = prior_by_ref or {}
+    status = dict(task.get("status") or {})
+    prior = prior_by_ref.get(str(task.get("task_ref") or ""))
+    assessment = compose_assessment(
+        status=status,
+        title=str(task.get("title") or ""),
+        summary=str(task.get("summary") or ""),
+        notes_block=notes_block,
+        seed_row=seed_row if seed_row is not None else task,
+        prior_assessment=prior,
+        observe=observe,
+        now=now,
+    )
+    status["assessment"] = assessment
+    # Keep next_steps / waiting_on mirrored for Phase A clients.
+    if assessment.get("how_achieved") and not (status.get("next_steps") or []):
+        status["next_steps"] = [assessment["how_achieved"]]
+    if assessment.get("waiting_for") and not (status.get("waiting_on") or []):
+        status["waiting_on"] = [
+            {"kind": "external", "ref": None, "detail": assessment["waiting_for"]}
+        ]
+    task["status"] = status
+    task["assessment"] = assessment
+    return task
 
 
 def parse_status_conventions(
@@ -278,13 +574,24 @@ def parse_today_bullets_from_notes(notes_text: str) -> list[dict[str, Any]]:
             nxt = raw_lines[i]
             if _TODAY_RE.match(nxt.strip()):
                 break
-            if _NEXT_RE.match(nxt.strip()) or _WAITING_RE.match(nxt.strip()):
+            stripped = nxt.strip()
+            if (
+                _NEXT_RE.match(stripped)
+                or _WAITING_RE.match(stripped)
+                or _WHERE_RE.match(stripped)
+                or _SINCE_RE.match(stripped)
+                or _HOW_RE.match(stripped)
+            ):
                 block_lines.append(nxt)
                 i += 1
                 continue
-            # Stop at next top-level bullet that is not Next/Waiting.
+            # Stop at next top-level bullet that is not a status/assessment line.
             if re.match(r"^\s*-\s+", nxt) and not (
-                _NEXT_RE.match(nxt.strip()) or _WAITING_RE.match(nxt.strip())
+                _NEXT_RE.match(stripped)
+                or _WAITING_RE.match(stripped)
+                or _WHERE_RE.match(stripped)
+                or _SINCE_RE.match(stripped)
+                or _HOW_RE.match(stripped)
             ):
                 break
             if nxt.strip() == "":
@@ -295,6 +602,13 @@ def parse_today_bullets_from_notes(notes_text: str) -> list[dict[str, Any]]:
             continue
         notes_block = "\n".join(block_lines)
         status = parse_status_conventions(title=title, summary=title, notes_block=notes_block)
+        assessment = compose_assessment(
+            status=status,
+            title=title,
+            summary=title,
+            notes_block=notes_block,
+        )
+        status["assessment"] = assessment
         lines.append(
             {
                 "id": f"focus-{_stable_id('notes', title)}",
@@ -306,6 +620,8 @@ def parse_today_bullets_from_notes(notes_text: str) -> list[dict[str, Any]]:
                 "next_steps": status.get("next_steps") or [],
                 "waiting_on": status.get("waiting_on") or [],
                 "status": status,
+                "assessment": assessment,
+                "notes_block": notes_block,
             }
         )
     return lines
@@ -339,6 +655,14 @@ def load_focus_seed(
                 notes_block=str(row.get("notes_block") or ""),
                 seed_row=row,
             )
+            assessment = compose_assessment(
+                status=status,
+                title=title,
+                summary=summary,
+                notes_block=str(row.get("notes_block") or ""),
+                seed_row=row,
+            )
+            status["assessment"] = assessment
             out.append(
                 {
                     "id": fid,
@@ -357,6 +681,8 @@ def load_focus_seed(
                     "next_steps": status.get("next_steps") or [],
                     "waiting_on": status.get("waiting_on") or [],
                     "status": status,
+                    "assessment": assessment,
+                    "notes_block": str(row.get("notes_block") or ""),
                 }
             )
         if out:
@@ -553,6 +879,135 @@ def _closed_ids(acks: dict[str, Any] | None, *, local_date: str) -> set[str]:
     return out
 
 
+def _prior_assessments(data_dir: Path) -> dict[str, dict[str, Any]]:
+    """Map task_ref → prior assessment from last committed daily_focus.json."""
+    prior_payload = _safe_read(data_dir / "daily_focus.json") or {}
+    out: dict[str, dict[str, Any]] = {}
+    for row in prior_payload.get("tasks") or []:
+        if not isinstance(row, dict):
+            continue
+        ref = str(row.get("task_ref") or "").strip()
+        if not ref:
+            continue
+        assess = row.get("assessment")
+        if not isinstance(assess, dict):
+            status = row.get("status") if isinstance(row.get("status"), dict) else {}
+            assess = status.get("assessment") if isinstance(status.get("assessment"), dict) else None
+        if isinstance(assess, dict):
+            out[ref] = assess
+    return out
+
+
+def _observe_for_market_warn(task: dict[str, Any]) -> dict[str, Any]:
+    mw = task.get("market_warning") if isinstance(task.get("market_warning"), dict) else {}
+    action = _blank(task.get("triage_action")) or "triage"
+    market = _blank(mw.get("market_id")) or "market"
+    flag_id = _blank(mw.get("flag_id")) or "flag"
+    role_bits = []
+    if mw.get("is_focus"):
+        role_bits.append("focus/fat-slot head")
+    elif mw.get("is_spare"):
+        role_bits.append("spare sprint")
+    else:
+        role_bits.append(_blank(mw.get("kind")) or "admitted/maintenance")
+    role = ", ".join(role_bits)
+    where = (
+        f"{market} · {flag_id} ({role}) — proposed triage: {action}. "
+        "Observe-only; do not divert the euro fat slot on ritual ambers."
+    )
+    waiting = ""
+    how = ""
+    status = task.get("status") if isinstance(task.get("status"), dict) else {}
+    waits = status.get("waiting_on") or []
+    if waits and isinstance(waits[0], dict):
+        waiting = _blank(waits[0].get("detail"))
+    next_steps = status.get("next_steps") or []
+    if next_steps:
+        how = _blank(next_steps[0])
+    if not how:
+        if task.get("prefer_discuss"):
+            how = (
+                "Discuss in Project chat before deepen — clash-aware; "
+                "Accept only after judgment."
+            )
+        elif action in {"park", "dismiss"}:
+            how = f"Accept observe-safe {action} triage for local_date (no eng spray)."
+        else:
+            how = f"Review {action} path against market_status / ingest_deviations."
+    if not waiting:
+        if task.get("prefer_discuss"):
+            waiting = "human judgment on fat-slot / rate-limit deepen"
+        elif action in {"park", "dismiss"}:
+            waiting = "operator Accept on observe-safe triage"
+        else:
+            waiting = f"triage action `{action}` disposition"
+    stage_since = _blank(mw.get("first_seen_at")) or None
+    return {
+        "where_we_are": where,
+        "stage_label": f"warn:{action}",
+        "stage_since": stage_since,
+        "waiting_for": waiting,
+        "how_achieved": how,
+    }
+
+
+def _observe_for_human_task(task: dict[str, Any]) -> dict[str, Any]:
+    ht = task.get("human_task") if isinstance(task.get("human_task"), dict) else {}
+    bucket = _blank(ht.get("sort_bucket") or task.get("sort_bucket")) or "open"
+    analysis = ht.get("analysis") if isinstance(ht.get("analysis"), dict) else {}
+    headline = _blank(analysis.get("headline"))
+    where = f"Human checklist gate · sort_bucket={bucket}"
+    if headline:
+        where = f"{where} · analysis: {headline}"
+    return {
+        "where_we_are": where,
+        "stage_label": f"ops_gate:{bucket}",
+        "waiting_for": "operator Acknowledge (observe-only) or Discuss",
+        "how_achieved": (
+            "Accept runs human-task-ack — never auto-applies knobs, crons, or capital"
+        ),
+    }
+
+
+def _observe_for_progress(task: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "where_we_are": (
+            f"Progress actionable defer_now: {_blank(task.get('title')) or 'item'} "
+            "— surface only; Daily hub is not a second backlog."
+        ),
+        "stage_label": "progress:defer_now",
+        "waiting_for": "underlying so-what / deferred-idea disposition",
+        "how_achieved": "Open the progress deep-link; park with ftse-defer if not now",
+    }
+
+
+def _observe_for_reconcile(task: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "where_we_are": (
+            f"UI reconcile amber: {_blank(task.get('title')) or task.get('task_ref')}"
+        ),
+        "stage_label": "reconcile:warn",
+        "waiting_for": _blank(task.get("summary")) or "dashboard health drift",
+        "how_achieved": "Open Automation → Ops / runbook; supervised republish if publish_lag",
+    }
+
+
+def _observe_for_focus(task: dict[str, Any]) -> dict[str, Any]:
+    """Soft observe filler for focus lines when notes omit Where/How."""
+    title = _blank(task.get("title"))
+    return {
+        "where_we_are": (
+            f"Pinned Today focus: {title}. "
+            "Policy green ≠ utility — advance P1 live-path or a registered gate."
+            if title
+            else ""
+        ),
+        "stage_label": "focus",
+        "waiting_for": "",
+        "how_achieved": "",
+    }
+
+
 def build_daily_focus(
     *,
     data_dir: Path | None = None,
@@ -593,6 +1048,7 @@ def build_daily_focus(
     ingest_deviations = _safe_read(data_dir / "ingest_deviations.json") or {}
     closed_ids = _closed_ids(acks, local_date=local_date)
     generated_at = now.astimezone(UTC).isoformat().replace("+00:00", "Z")
+    prior_by_ref = _prior_assessments(data_dir)
 
     tasks: list[dict[str, Any]] = []
     recommendations: list[dict[str, Any]] = []
@@ -641,6 +1097,7 @@ def build_daily_focus(
                 "recommendation_id": rec["id"],
                 "status": status,
                 "closed": is_closed,
+                "notes_block": str(line.get("notes_block") or ""),
             }
         )
 
@@ -837,6 +1294,47 @@ def build_daily_focus(
 
     rec_by_id = {r["id"]: r for r in recommendations}
     for task in tasks:
+        source = str(task.get("source") or "")
+        if source == "daily_focus":
+            observe = _observe_for_focus(task)
+            notes_block = str(task.get("notes_block") or "")
+            # Match seed row when present for structured assessment fields.
+            seed_row = next(
+                (
+                    line
+                    for line in focus_lines
+                    if str(line.get("id") or "") == str(task.get("task_ref") or "")
+                ),
+                task,
+            )
+        elif source == "market_warning_triage":
+            observe = _observe_for_market_warn(task)
+            notes_block = ""
+            seed_row = task
+        elif source == "human_tasks":
+            observe = _observe_for_human_task(task)
+            notes_block = ""
+            seed_row = task
+        elif source == "progress_actionable":
+            observe = _observe_for_progress(task)
+            notes_block = ""
+            seed_row = task
+        elif source == "ui_reconcile":
+            observe = _observe_for_reconcile(task)
+            notes_block = ""
+            seed_row = task
+        else:
+            observe = {}
+            notes_block = ""
+            seed_row = task
+        attach_assessment(
+            task,
+            prior_by_ref=prior_by_ref,
+            now=now,
+            observe=observe,
+            notes_block=notes_block,
+            seed_row=seed_row if isinstance(seed_row, dict) else task,
+        )
         rid = task.get("recommendation_id")
         if rid and rid in rec_by_id:
             task["recommendation"] = rec_by_id[rid]

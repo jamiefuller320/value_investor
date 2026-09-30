@@ -60,17 +60,162 @@ def test_parse_status_conventions_next_and_waiting() -> None:
     assert ready["state"] == "waiting"
 
 
+def test_compose_assessment_from_notes_conventions() -> None:
+    from value_investor.daily_focus import compose_assessment, format_stage_duration
+
+    status = parse_status_conventions(
+        title="P1 rememo",
+        notes_block=(
+            "Where: RAT.L body_lag after holdings-first rememo\n"
+            "Since: 2026-09-27\n"
+            "Waiting on: filing body land\n"
+            "How: ingest then body-lag rememo; leave euro fat slot\n"
+            "Next: Confirm RAT.L memo"
+        ),
+    )
+    now = datetime(2026, 9, 30, 8, 0, tzinfo=UTC)
+    assess = compose_assessment(
+        status=status,
+        title="P1 rememo",
+        notes_block=(
+            "Where: RAT.L body_lag after holdings-first rememo\n"
+            "Since: 2026-09-27\n"
+            "Waiting on: filing body land\n"
+            "How: ingest then body-lag rememo; leave euro fat slot\n"
+            "Next: Confirm RAT.L memo"
+        ),
+        now=now,
+    )
+    assert "RAT.L body_lag" in assess["where_we_are"]
+    assert assess["waiting_for"] == "filing body land"
+    assert "body-lag rememo" in assess["how_achieved"]
+    assert assess["stage_since"] == "2026-09-27"
+    assert assess["days_in_stage"] == 3
+    assert "3 days" in assess["stage_duration"]
+    days, label = format_stage_duration(None, now=now)
+    assert days is None
+    assert label == "duration unknown"
+
+
+def test_compose_assessment_does_not_invent_duration() -> None:
+    from value_investor.daily_focus import compose_assessment
+
+    status = parse_status_conventions(
+        title="Ship History",
+        notes_block="Next: Open draft PR\nWaiting on: CI green",
+    )
+    assess = compose_assessment(status=status, title="Ship History", now=datetime(2026, 9, 30, tzinfo=UTC))
+    assert assess["stage_since"] is None
+    assert assess["days_in_stage"] is None
+    assert assess["stage_duration"] == "duration unknown"
+    assert "stage_duration" in assess["incomplete_fields"]
+    assert assess["waiting_for"] == "CI green"
+    assert assess["how_achieved"] == "Open draft PR"
+    assert assess["observe_only"] is True
+
+
+def test_build_daily_focus_attaches_expansive_assessment(tmp_path: Path) -> None:
+    _seed_board(tmp_path)
+    write_json(
+        tmp_path / "project_daily_seed.json",
+        {
+            "focus_lines": [
+                {
+                    "id": "focus-1",
+                    "title": "P1 rememo",
+                    "summary": "Leave euro fat slot",
+                    "source": "project_notes",
+                    "tags": ["p1", "rememo"],
+                    "notes_block": (
+                        "Where: Holdings rememo queue · RAT.L first\n"
+                        "Since: 2026-09-28\n"
+                        "Waiting on: memo body\n"
+                        "How: body_lag rememo after ingest"
+                    ),
+                    "waiting_on": [{"kind": "artifact", "detail": "memo body"}],
+                }
+            ]
+        },
+        compact=False,
+    )
+    now = datetime(2026, 9, 30, 1, 30, tzinfo=UTC)
+    payload = build_daily_focus(data_dir=tmp_path, now=now)
+    task = next(t for t in payload["tasks"] if t["task_ref"] == "focus-1")
+    assess = task["assessment"]
+    assert assess["where_we_are"].startswith("Holdings rememo")
+    assert assess["waiting_for"] == "memo body"
+    assert "body_lag rememo" in assess["how_achieved"]
+    assert assess["days_in_stage"] == 2
+    assert task["status"]["assessment"]["stage_since"] == "2026-09-28"
+
+
+def test_assessment_carries_stage_since_across_rebuilds(tmp_path: Path) -> None:
+    _seed_board(tmp_path)
+    write_json(
+        tmp_path / "project_daily_seed.json",
+        {
+            "focus_lines": [
+                {
+                    "id": "focus-carry",
+                    "title": "Carry duration",
+                    "summary": "Waiting on: review",
+                    "tags": ["carry"],
+                    "assessment": {
+                        "where_we_are": "In review",
+                        "stage_since": "2026-09-25",
+                        "waiting_for": "review",
+                        "how_achieved": "human Discuss",
+                    },
+                    "waiting_on": [{"kind": "human", "detail": "review"}],
+                }
+            ]
+        },
+        compact=False,
+    )
+    first = write_daily_focus(data_dir=tmp_path, now=datetime(2026, 9, 28, 8, 0, tzinfo=UTC))
+    t1 = next(t for t in first["tasks"] if t["task_ref"] == "focus-carry")
+    assert t1["assessment"]["stage_since"] == "2026-09-25"
+    # Drop explicit stage_since from seed; prior assessment should carry it.
+    write_json(
+        tmp_path / "project_daily_seed.json",
+        {
+            "focus_lines": [
+                {
+                    "id": "focus-carry",
+                    "title": "Carry duration",
+                    "summary": "Waiting on: review",
+                    "tags": ["carry"],
+                    "waiting_on": [{"kind": "human", "detail": "review"}],
+                }
+            ]
+        },
+        compact=False,
+    )
+    second = build_daily_focus(data_dir=tmp_path, now=datetime(2026, 9, 30, 8, 0, tzinfo=UTC))
+    t2 = next(t for t in second["tasks"] if t["task_ref"] == "focus-carry")
+    assert t2["assessment"]["stage_since"] == "2026-09-25"
+    assert t2["assessment"]["days_in_stage"] == 5
+    assert "prior:stage_since" in t2["assessment"]["provenance"]
+
+
 def test_parse_today_bullets_captures_status_lines() -> None:
     notes = """## Daily
 - [ ] Today — P1 holdings rememo / RAT.L
+  Where: Holdings rememo · RAT.L first
+  Since: 2026-09-27
   Next: Confirm memo body
   Waiting on: RAT.L filing body
+  How: body_lag rememo after ingest
 - Today — Ship daily hub History
 """
     bullets = parse_today_bullets_from_notes(notes)
     assert len(bullets) == 2
     assert bullets[0]["status"]["next_steps"][0] == "Confirm memo body"
     assert "RAT.L filing body" in bullets[0]["status"]["waiting_on"][0]["detail"]
+    assess = bullets[0]["assessment"]
+    assert "Holdings rememo" in assess["where_we_are"]
+    assert assess["stage_since"] == "2026-09-27"
+    assert "body_lag rememo" in assess["how_achieved"]
     assert bullets[1]["title"].startswith("Ship daily hub")
 
 
