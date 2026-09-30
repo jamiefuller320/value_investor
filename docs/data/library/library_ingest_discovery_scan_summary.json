@@ -1,16 +1,17 @@
 {
-  "run_at": "2026-09-30T16:34:21.086042+00:00",
-  "market_id": "aex",
+  "run_at": "2026-09-30T16:52:45.788191+00:00",
+  "market_id": "bel20",
   "scan_cap": null,
   "max_runtime_seconds": 900.0,
   "prefer_tickers": [
-    "KPN.AS",
-    "ADYEN.AS"
+    "ACKB.BR",
+    "APAM.AS",
+    "SOLB.BR"
   ],
-  "scanned": 8,
-  "hits": 6,
-  "new_rows_total": 1,
-  "curiosity_total": 6,
+  "scanned": 5,
+  "hits": 4,
+  "new_rows_total": 0,
+  "curiosity_total": 5,
   "errors": 0,
   "runtime_cutoff": false,
   "prioritization_weights": {
@@ -23,75 +24,68 @@
   "note": "Scan-then-target: listing-only discovery; deepen uses existing ingest pass. Library sprint caps discovery wall-clock so body deepen still runs. Engineering fetch surface is never assumed complete.",
   "tickers": [
     {
-      "ticker": "KPN.AS",
-      "name": "Koninklijke KPN N.V.",
+      "ticker": "ACKB.BR",
+      "name": "Ackermans & Van Haaren NV",
       "signal": "buy",
       "new_row_count": 0,
       "listed_count": 2,
       "prior_count": 2,
-      "priority_bonus": 0.0,
-      "curiosity": [],
+      "priority_bonus": 4.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.avh.be'",
+          "source": "ir_allowlist",
+          "url": "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
+          "headline": "IR allowlist document — 2025-AvH-annualreport_UK_A4.pdf"
+        },
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.vfb.be'",
+          "source": "ir_allowlist",
+          "url": "https://www.vfb.be/Media/Default/pdf/avh-halfjaarresultaten-2025-persbericht-20250829.pdf",
+          "headline": "IR allowlist document — avh-halfjaarresultaten-2025-persbericht-20250829.pdf"
+        }
+      ],
       "new_row_ids": [],
       "error": null
     },
     {
-      "ticker": "ADYEN.AS",
-      "name": "Adyen N.V.",
+      "ticker": "APAM.AS",
+      "name": "Aperam S.A.",
       "signal": "buy",
-      "new_row_count": 1,
-      "listed_count": 3,
+      "new_row_count": 0,
+      "listed_count": 1,
+      "prior_count": 1,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.aperam.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf",
+          "headline": "IR allowlist document — Aperam_AnnualReport_2025.pdf"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "SOLB.BR",
+      "name": "Solvay SA",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 1,
       "prior_count": 2,
-      "priority_bonus": 11.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'brand.adyen.com'",
-          "source": "ir_allowlist",
-          "url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjgyOTA3LCJ0aW1lc3RhbXAiOjE3NTU3NjI1ODEsInZlcnNpb24iOjE3NTU3NjI1NTh9:adyen:AnY4yqsJ-O5B_fRhiYXZpTaJ2RO2xhk5zUPFwcJanNc/download",
-          "headline": "IR allowlist document — download"
-        }
-      ],
-      "new_row_ids": [
-        "ir_48c0813ec8b3dd3e"
-      ],
-      "error": null
-    },
-    {
-      "ticker": "AD.AS",
-      "name": "Koninklijke Ahold Delhaize N.V.",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 3,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'media.aholddelhaize.com'",
-          "source": "ir_allowlist",
-          "url": "https://media.aholddelhaize.com/media/bdsnpbxm/ahold-delhaize-q4-2025-summary-report.pdf",
-          "headline": "IR allowlist document — ahold-delhaize-q4-2025-summary-report.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "SHELL.AS",
-      "name": "Shell plc",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 38,
-      "prior_count": 37,
       "priority_bonus": 0.0,
       "curiosity": [],
       "new_row_ids": [],
       "error": null
     },
     {
-      "ticker": "AKZA.AS",
-      "name": "Akzo Nobel N.V.",
-      "signal": "strong_buy",
+      "ticker": "UMI.BR",
+      "name": "Umicore SA",
+      "signal": "buy",
       "new_row_count": 0,
       "listed_count": 3,
       "prior_count": 3,
@@ -99,38 +93,18 @@
       "curiosity": [
         {
           "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.akzonobel.com'",
+          "detail": "Unfamiliar filing URL host 'www.umicore.com'",
           "source": "ir_allowlist",
-          "url": "https://www.akzonobel.com/en/investors/results-center",
-          "headline": "IR allowlist document — results-center"
+          "url": "https://www.umicore.com/files/secure-documents/7cfa416e-e500-4fbd-a040-2b45c0575430.pdf",
+          "headline": "IR allowlist document — 7cfa416e-e500-4fbd-a040-2b45c0575430.pdf"
         }
       ],
       "new_row_ids": [],
       "error": null
     },
     {
-      "ticker": "WKL.AS",
-      "name": "Wolters Kluwer N.V.",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 5,
-      "prior_count": 5,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'assets.contenthub.wolterskluwer.com'",
-          "source": "ir_allowlist",
-          "url": "https://assets.contenthub.wolterskluwer.com/api/public/content/3118646-2026-02-25-wolters-kluwer-2025-full-year-results-7391945524?v=2c966da9",
-          "headline": "IR allowlist document — 3118646-2026-02-25-wolters-kluwer-2025-full-year-results-7391945524?v=2c966da9"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "RAND.AS",
-      "name": "Randstad N.V.",
+      "ticker": "AED.BR",
+      "name": "Aedifica NV/SA",
       "signal": "buy",
       "new_row_count": 0,
       "listed_count": 4,
@@ -139,30 +113,10 @@
       "curiosity": [
         {
           "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.randstad.com'",
+          "detail": "Unfamiliar filing URL host 'aedifica.eu'",
           "source": "ir_allowlist",
-          "url": "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Randstad_Annual_Report_2025_F.pdf",
-          "headline": "IR allowlist document — Randstad_Annual_Report_2025_F.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "PHIA.AS",
-      "name": "Koninklijke Philips N.V.",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 4,
-      "prior_count": 4,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.results.philips.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.results.philips.com/app/uploads/2026/04/Philips20F-2025.pdf",
-          "headline": "IR allowlist document — Philips20F-2025.pdf"
+          "url": "https://aedifica.eu/wp-content/uploads/2026/03/AEDIFICA-RA25_EN_2026-03-24b.pdf",
+          "headline": "IR allowlist document — AEDIFICA-RA25_EN_2026-03-24b.pdf"
         }
       ],
       "new_row_ids": [],
