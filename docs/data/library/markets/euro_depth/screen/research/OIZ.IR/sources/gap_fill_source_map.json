@@ -2,11 +2,11 @@
   "ticker": "OIZ.IR",
   "company_name": "Origin Enterprises plc",
   "market": "euro_depth",
-  "built_at": "2026-09-29T18:57:49.605479+00:00",
+  "built_at": "2026-09-30T07:34:50.269307+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
-      "filings_bodies": false,
+      "filings_bodies": true,
       "yahoo_financials": true,
       "yahoo_quarterly_cashflow": false,
       "yahoo_quarterly_income": false,
@@ -18,32 +18,31 @@
       "alternate_news": true
     },
     "thin": [
-      "filings_bodies",
       "yahoo_quarterly_cashflow",
       "yahoo_quarterly_income",
       "screen_run_manifest"
     ],
-    "filings_body_files": 0,
-    "filings_indexed_bodies": 0,
+    "filings_body_files": 5,
+    "filings_indexed_bodies": 5,
     "filings_summary": {
-      "total": 0,
-      "annual": 0,
+      "total": 5,
+      "annual": 4,
       "interim": 0,
-      "trading_update": 0,
+      "trading_update": 1,
       "other": 0,
-      "with_body": 0,
+      "with_body": 5,
       "period_coverage": {
         "annual": {
-          "total": 0,
-          "with_body": 0
+          "total": 4,
+          "with_body": 4
         },
         "interim": {
           "total": 0,
           "with_body": 0
         },
         "trading_update": {
-          "total": 0,
-          "with_body": 0
+          "total": 1,
+          "with_body": 1
         },
         "other": {
           "total": 0,
@@ -53,23 +52,23 @@
     },
     "period_coverage": {
       "annual": {
-        "total": 0,
-        "with_body": 0
+        "total": 4,
+        "with_body": 4
       },
       "interim": {
         "total": 0,
         "with_body": 0
       },
       "trading_update": {
-        "total": 0,
-        "with_body": 0
+        "total": 1,
+        "with_body": 1
       },
       "other": {
         "total": 0,
         "with_body": 0
       }
     },
-    "news_article_count": 47,
+    "news_article_count": 53,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
@@ -86,14 +85,33 @@
   "body_refetch": {
     "attempted": 0,
     "fetched": 0,
-    "with_body_before": 0,
-    "with_body_after": 0,
+    "with_body_before": 5,
+    "with_body_after": 5,
     "note": "refetch_missing_filing_bodies"
   },
   "ch_refetch": {},
   "investegate_refetch": {},
   "ticker_rns_refetch": {},
-  "ir_refetch": {},
+  "ir_refetch": {
+    "attempted": 0,
+    "fetched": 0,
+    "failed": 0,
+    "with_body_before": 5,
+    "with_body_after": 5,
+    "investegate_fallbacks": 0,
+    "skipped_unfetchable": 0,
+    "deadline_hit": false,
+    "merge": {
+      "added": 0,
+      "total_allowlist": 5,
+      "note": "merge_ir_allowlist_filings"
+    },
+    "shared_body_propagated": 0,
+    "ir_metadata_reconciled": 0,
+    "note": "no missing IR allowlist bodies",
+    "mandatory": true,
+    "allowlist_count": 5
+  },
   "screen_run_manifest": {
     "attached": false,
     "reason": "not_ftse350"
@@ -102,7 +120,7 @@
     "bridge_count": 0,
     "segment_split_count": 0,
     "lease_maturity_count": 0,
-    "mandatory": false,
+    "mandatory": true,
     "path": "docs/data/library/markets/euro_depth/screen/research/OIZ.IR/sources/ir_presentation_metrics.json"
   },
   "filing_interim_financials": {
@@ -116,28 +134,9 @@
     "latest_secured_workload_to_revenue_ratio": null,
     "path": "docs/data/library/markets/euro_depth/screen/research/OIZ.IR/sources/ch_annual_year_in_numbers.json"
   },
-  "alternate_news_added": 1,
+  "alternate_news_added": 5,
   "alternate_news_path": "docs/data/library/markets/euro_depth/screen/research/OIZ.IR/sources/alternate_news.json",
-  "planned_alternate_sources": [
-    {
-      "id": "investegate_rns_full",
-      "label": "Full Investegate / RNS HTML body re-pull",
-      "why": "Many Euro large-caps publish on Investegate; index may list filings without bodies",
-      "score": "3"
-    },
-    {
-      "id": "exchange_filings_full",
-      "label": "Euronext / national register filing full-text re-pull",
-      "why": "Euro memos often index headlines without bodies",
-      "score": "3"
-    },
-    {
-      "id": "company_ir_presentation",
-      "label": "Company IR annual report / results deck PDF",
-      "why": "ESEF/iXBRL and segment tables often missing from Yahoo",
-      "score": "3"
-    }
-  ],
+  "planned_alternate_sources": [],
   "evidence_ladder": [
     "filings_bodies",
     "filings_index",
