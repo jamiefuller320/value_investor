@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-30T14:39:21.323661+00:00",
+  "generated_at": "2026-09-30T15:00:48.372821+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -715,12 +715,12 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=10, indexed_without_body=0)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=10, indexed_without_body=0)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 7,
       "shared_maintenance": true,
-      "health": "warn",
+      "health": "ok",
       "coverage_pct": 1.0,
       "honest_coverage_pct": 1.0,
       "ticker_count": 40,
@@ -769,11 +769,11 @@
       },
       "filing_health": {
         "buy_tier_count": 12,
-        "unmeasured_buy_tier": 1,
+        "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 10,
         "indexed_without_body": 0,
-        "bodies_median": 1.0,
+        "bodies_median": 1.5,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
@@ -789,9 +789,7 @@
           "FRE.DE",
           "HNR1.DE"
         ],
-        "unmeasured_tickers": [
-          "G1A.DE"
-        ],
+        "unmeasured_tickers": [],
         "parked_tickers": [
           "BAS.DE",
           "DTE.DE",
@@ -803,7 +801,7 @@
           "MUV2.DE"
         ]
       },
-      "filing_gaps": 1,
+      "filing_gaps": 0,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -857,11 +855,13 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 20,
-        "targets": 32,
-        "improved": 0,
-        "improved_tickers": [],
-        "last_run_at": "2026-09-30T14:24:59.140009+00:00",
+        "run_count": 17,
+        "targets": 26,
+        "improved": 1,
+        "improved_tickers": [
+          "G1A.DE"
+        ],
+        "last_run_at": "2026-09-30T08:56:40.687023+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -872,40 +872,29 @@
           "filing_gaps": 1
         },
         "gaps_after": {
-          "unmeasured": 1,
-          "zero_body": 0,
-          "thin": 10,
-          "indexed_without_body": 0,
-          "filing_gaps": 1
-        },
-        "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 0,
+          "thin": 10,
           "indexed_without_body": 0,
           "filing_gaps": 0
         },
+        "gap_delta": {
+          "unmeasured": -1,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": -1
+        },
         "remaining": {
-          "unmeasured": 1,
+          "unmeasured": 0,
           "zero_body": 0,
           "thin": 10,
           "indexed_without_body": 0,
-          "filing_gaps": 1
+          "filing_gaps": 0
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "zero_improve_stall",
-            "severity": "high",
-            "summary": "Last 2 days improved nobody while filing gaps remain"
-          },
-          {
-            "id": "unmeasured_stuck",
-            "severity": "high",
-            "summary": "1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
-          }
-        ],
+        "admission_warnings": [],
         "sprint_entered_at": "2026-09-24T20:13:01.747826+00:00"
       },
       "held_vs_market": {
@@ -1052,7 +1041,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=9, zero_body=4, thin=7, indexed_without_body=8)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=8, zero_body=5, thin=7, indexed_without_body=9)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 14,
@@ -1104,10 +1093,10 @@
       },
       "filing_health": {
         "buy_tier_count": 25,
-        "unmeasured_buy_tier": 9,
-        "zero_body_buy_tier": 4,
+        "unmeasured_buy_tier": 8,
+        "zero_body_buy_tier": 5,
         "thin_body_buy_tier": 7,
-        "indexed_without_body": 8,
+        "indexed_without_body": 9,
         "bodies_median": 1.5,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
@@ -1117,6 +1106,7 @@
           "0288.HK",
           "0857.HK",
           "0868.HK",
+          "1113.HK",
           "0285.HK"
         ],
         "thin_body_tickers": [
@@ -1134,9 +1124,9 @@
           "0762.HK",
           "2382.HK",
           "6862.HK",
-          "1113.HK",
           "6618.HK",
-          "0101.HK"
+          "0101.HK",
+          "0291.HK"
         ],
         "parked_tickers": []
       },
@@ -1149,9 +1139,9 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 3,
-        "targets": 47,
-        "improved": 16,
+        "run_count": 4,
+        "targets": 53,
+        "improved": 17,
         "improved_tickers": [
           "1093.HK",
           "2318.HK",
@@ -1166,7 +1156,7 @@
           "0883.HK",
           "2618.HK"
         ],
-        "last_run_at": "2026-09-30T14:36:32.956091+00:00",
+        "last_run_at": "2026-09-30T14:58:42.393848+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -1177,24 +1167,24 @@
           "filing_gaps": 25
         },
         "gaps_after": {
-          "unmeasured": 9,
-          "zero_body": 4,
+          "unmeasured": 8,
+          "zero_body": 5,
           "thin": 7,
-          "indexed_without_body": 8,
+          "indexed_without_body": 9,
           "filing_gaps": 13
         },
         "gap_delta": {
-          "unmeasured": -6,
-          "zero_body": -6,
+          "unmeasured": -7,
+          "zero_body": -5,
           "thin": 7,
-          "indexed_without_body": -7,
+          "indexed_without_body": -6,
           "filing_gaps": -12
         },
         "remaining": {
-          "unmeasured": 9,
-          "zero_body": 4,
+          "unmeasured": 8,
+          "zero_body": 5,
           "thin": 7,
-          "indexed_without_body": 8,
+          "indexed_without_body": 9,
           "filing_gaps": 13
         },
         "admission_ready": false,

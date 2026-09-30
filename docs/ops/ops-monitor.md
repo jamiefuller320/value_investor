@@ -77,10 +77,11 @@ lane change and readiness gate (see N152 / P1 pin rules).
   Accept-streak hints are observe-only — never auto-flip checklist `automated`.
   Morning board also emits **market warning triage** rows (deepen / dismiss /
   park) from open `market_status` admission flags and ingest deviations.
-- **Missing-IR allowlist stall** — ops finding when focus/sprint
+- **Missing-IR allowlist stall** — ops finding when focus **or spare sprint**
   `unmeasured_stuck` / `zero_body_stuck` tickers still have empty IR allowlist
   after ≥2 intensive 0-improve pins (`check_missing_ir_allowlist_stall`,
-  `auto_fixable=False`). Complements Daily deepen Discuss; aims at IR seed,
+  `auto_fixable=False`; severity `high` on focus head, `warn` on spare —
+  e.g. DAX `G1A.DE`). Complements Daily deepen Discuss; aims at IR seed,
   does not auto-park unmeasured. Gap-closure eng compile also prioritizes
   coverage-hole + empty-allowlist pending runs over stale IWB rows.
 

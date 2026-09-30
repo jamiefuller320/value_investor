@@ -6230,6 +6230,20 @@ def test_builtin_ir_allowlist_includes_oiz_ir():
     assert len(fetch_filings_ir_allowlist("OIZ")) >= 4
 
 
+def test_builtin_ir_allowlist_includes_g1a_de():
+    """DAX spare unmeasured G1A.DE needs GEA Group IR seeds (empty discovery)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("G1A.DE") or []
+    assert any("annual-report-2025-en.pdf" in url for url in urls)
+    assert any("q2-26-half-yearly-statement" in url for url in urls)
+    assert all("cdn.gea.com" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("G1A.DE")
+    assert len(rows) >= 4
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    assert len(fetch_filings_ir_allowlist("G1A")) >= 4
+
+
 def test_esef_entity_aliases_include_oiz():
     from value_investor.research.filings import (
         _ESEF_ENTITY_SEARCH_ALIASES,
@@ -6240,6 +6254,18 @@ def test_esef_entity_aliases_include_oiz():
     assert any("Origin Enterprises" in name for name in aliases)
     variants = _esef_entity_name_variants("Origin Enterprises plc", ticker="OIZ.IR")
     assert any("Origin Enterprises" in name for name in variants)
+
+
+def test_esef_entity_aliases_include_g1a():
+    from value_investor.research.filings import (
+        _ESEF_ENTITY_SEARCH_ALIASES,
+        _esef_entity_name_variants,
+    )
+
+    aliases = _ESEF_ENTITY_SEARCH_ALIASES.get("G1A") or ()
+    assert any("GEA Group" in name for name in aliases)
+    variants = _esef_entity_name_variants("GEA Group Aktiengesellschaft", ticker="G1A.DE")
+    assert any("GEA Group" in name for name in variants)
 
 
 def test_filter_misattributed_filings_drops_us_homonym_sec_rows():
