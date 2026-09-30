@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-29T21:30:19.994558+00:00`
+Generated: `2026-09-30T07:47:55.431634+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -45,6 +45,14 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `ruff_format` — 1×
 - `dirty merge: deferred-ideas.json / deferred-review.md vs main after L424-L426 landings` — 1×
 - `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 4 (open=4, resolved=0)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN UI state reconciliation drift — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Unmeasured/zero-body stall needs IR allowlist seed — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**

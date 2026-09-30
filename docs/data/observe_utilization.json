@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-29T07:47:38.831892+00:00",
+  "generated_at": "2026-09-30T07:47:55.168236+00:00",
   "observe_only": true,
-  "headline": "1 observe utilization warn(s) — cohorts need attention.",
+  "headline": "1 warn instrument(s); trajectory worsening on 1.",
   "surface_freshness": "fresh",
-  "ops_run_at": "2026-09-29T07:46:38.357436+00:00",
+  "ops_run_at": "2026-09-30T07:46:39.776251+00:00",
   "warn_instrument_count": 1,
   "trajectory_summary": {
-    "improving": 0,
-    "worsening": 0,
-    "flat": 3,
+    "improving": 1,
+    "worsening": 1,
+    "flat": 1,
     "unknown": 0,
-    "history_points": 10,
+    "history_points": 11,
     "note": "Deltas vs prior dashboard cycle (warn/gap counts; lower is better). Raw instrument stores commit with ops-monitor (L460)."
   },
   "instruments": [
@@ -22,37 +22,38 @@
       "observe_only": true,
       "warn_active": true,
       "severity": "warn",
-      "finding_summary": "26 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, cac40, dax, euro_depth, ftse350, nasdaq100 (+2 more): euro_depth/OMV.VI (no_memo, 487.78h since flip), sp500/BKNG (no_memo, 487.78h since flip), sp500/PEP (no_memo, 391.78h since flip), sp500/ADSK (no_memo, 319.78h since flip), tsx60/PPL.TO (no_key_bodies, 319.78h since flip), nasdaq100/PAYX (no_memo, 295.78h since flip), tsx60/SAP.TO (no_key_bodies, 295.78h since flip), sp500/FANG (no_memo, 271.78h since flip), cac40/TTE.PA (no_memo, 247.78h since flip), euro_depth/NBA.LS (no_key_bodies, 223.78h since flip) (+16 more). Blocking: no_key_bodies=11, no_memo=15.",
+      "finding_summary": "27 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, bel20, cac40, dax, euro_depth, nasdaq100 (+2 more): euro_depth/OMV.VI (no_memo, 511.78h since flip), sp500/BKNG (no_memo, 511.78h since flip), sp500/PEP (no_memo, 415.78h since flip), sp500/ADSK (no_memo, 343.78h since flip), tsx60/PPL.TO (no_key_bodies, 343.78h since flip), nasdaq100/PAYX (no_memo, 319.78h since flip), tsx60/SAP.TO (no_key_bodies, 319.78h since flip), sp500/FANG (no_memo, 295.78h since flip), cac40/TTE.PA (no_memo, 271.78h since flip), euro_depth/NBA.LS (no_key_bodies, 247.78h since flip) (+17 more). Blocking: no_index=1, no_key_bodies=10, no_memo=16.",
       "metrics": {
-        "warn_not_usable": 26,
+        "warn_not_usable": 27,
         "open_not_usable": 46,
-        "cohort_count": 103,
-        "usable_in_window": 57,
-        "market_count": 13,
+        "cohort_count": 105,
+        "usable_in_window": 59,
+        "market_count": 15,
         "blocking_stage_counts": {
-          "no_memo": 18,
-          "no_accumulate_verdict": 16,
-          "no_key_bodies": 12
+          "no_memo": 17,
+          "no_accumulate_verdict": 17,
+          "no_key_bodies": 11,
+          "no_index": 1
         }
       },
       "primary_metric": "warn_not_usable",
-      "primary_value": 26,
+      "primary_value": 27,
       "primary_label": "Warn cohort (≥24h path-incomplete)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-09-29T07:46:39.468886+00:00",
+        "as_of": "2026-09-30T07:46:41.051292+00:00",
         "age_hours": 0.02,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 0,
-        "direction": "flat",
-        "label": "Unchanged vs last cycle",
+        "delta": 1,
+        "direction": "worsening",
+        "label": "Worse since last cycle",
         "prior_value": 26,
-        "prior_at": "2026-09-29T07:47:38.502157+00:00"
+        "prior_at": "2026-09-29T07:47:38.831892+00:00"
       }
     },
     {
@@ -65,36 +66,36 @@
       "finding_summary": null,
       "metrics": {
         "inventory_count": 57,
-        "fully_ready_count": 56,
-        "names_with_any_gap": 1,
-        "dominant_gap_field": "overlay_bound",
-        "dominant_gap_count": 1,
+        "fully_ready_count": 57,
+        "names_with_any_gap": 0,
+        "dominant_gap_field": "P1 green-enough",
+        "dominant_gap_count": 0,
         "gap_counts": {
           "key_filing_bodies": 0,
           "fcf_basis_bound": 0,
-          "overlay_bound": 1,
-          "memo_recent": 1
+          "overlay_bound": 0,
+          "memo_recent": 0
         },
         "verdict": "P1 green-enough"
       },
       "primary_metric": "dominant_gap_count",
-      "primary_value": 1,
-      "primary_label": "Dominant gap (overlay_bound)",
+      "primary_value": 0,
+      "primary_label": "Dominant gap",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-09-29T07:46:56.624917+00:00",
+        "as_of": "2026-09-30T07:47:06.833350+00:00",
         "age_hours": 0.01,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 0,
-        "direction": "flat",
-        "label": "Unchanged vs last cycle",
+        "delta": -1,
+        "direction": "improving",
+        "label": "Better since last cycle",
         "prior_value": 1,
-        "prior_at": "2026-09-29T07:47:38.502157+00:00"
+        "prior_at": "2026-09-29T07:47:38.831892+00:00"
       }
     },
     {
@@ -107,10 +108,10 @@
       "finding_summary": null,
       "metrics": {
         "warn_count": 0,
-        "gbp_warp_count": 10,
-        "native_twin_active": 10,
+        "gbp_warp_count": 12,
+        "native_twin_active": 12,
         "native_twin_pending": 0,
-        "market_count": 10,
+        "market_count": 12,
         "warn_markets": []
       },
       "primary_metric": "warn_count",
@@ -120,7 +121,7 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-09-29T07:46:56.766014+00:00",
+        "as_of": "2026-09-30T07:47:07.013298+00:00",
         "age_hours": 0.01,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
@@ -130,7 +131,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-09-29T07:47:38.502157+00:00"
+        "prior_at": "2026-09-29T07:47:38.831892+00:00"
       }
     }
   ],
@@ -296,6 +297,24 @@
       },
       "decision_input_inventory": {
         "primary_value": 1,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "shard_nav_fx_warp": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      }
+    },
+    {
+      "at": "2026-09-30T07:47:55.168236+00:00",
+      "buy_tier_flip_lag": {
+        "primary_value": 27,
+        "warn_active": true,
+        "freshness_state": "fresh"
+      },
+      "decision_input_inventory": {
+        "primary_value": 0,
         "warn_active": false,
         "freshness_state": "fresh"
       },
