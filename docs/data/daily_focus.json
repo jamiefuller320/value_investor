@@ -2,7 +2,7 @@
   "schema_version": 1,
   "local_date": "2026-09-30",
   "timezone": "Europe/London",
-  "generated_at": "2026-09-30T11:00:00Z",
+  "generated_at": "2026-09-30T14:34:30.784036Z",
   "refresh_deadline_local": "04:00",
   "stale_for_local_date": false,
   "focus_lines": [
@@ -167,7 +167,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-09-30T11:00:00Z",
+        "updated_at": "2026-09-30T14:34:30.784036Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Leave euro fat slot; watch first memo + entry DCA. Policy green ≠ utility.",
@@ -256,7 +256,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": null,
-        "updated_at": "2026-09-30T11:00:00Z",
+        "updated_at": "2026-09-30T14:34:30.784036Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Ship Automation Daily hub; do not open parallel eng spray from reconcile ambers.",
@@ -359,7 +359,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": "judgment call — Discuss before deepening fat slot",
-        "updated_at": "2026-09-30T11:00:00Z",
+        "updated_at": "2026-09-30T14:34:30.784036Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "euro_depth · zero_improve_stall (focus/fat-slot head) — proposed triage: deepen. Observe-only; do not divert the euro fat slot on ritual ambers.",
@@ -451,23 +451,23 @@
       }
     },
     {
-      "task_ref": "human:sunday-shadow-vs-primary",
+      "task_ref": "human:monthly-pr-fix-common-issues",
       "source": "human_tasks",
       "work_class": "ops_gate",
-      "task_family": "sunday-shadow-vs-primary",
+      "task_family": "monthly-pr-fix-common-issues",
       "priority": 11,
-      "title": "Compare calibrated shadows vs primary AI judgment",
-      "summary": "Observe-only: compare forward marks for ai_judgment vs competing calibrated shadows. Fail-closed as a promotion path (N171) — status fail closes promote; do not spawn new calibrated ranks or reopen N58/N59. Acknowledge when reviewed; revisit only after fair-cost Suite B evidence or a new calibration method (not Suite A stress green).",
+      "title": "Review common PR check / merge fix-request reasons",
+      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
       "sort_bucket": "new_info",
       "closeable": true,
       "close_action": "human-task-ack",
       "close_payload": {
-        "task_id": "sunday-shadow-vs-primary",
+        "task_id": "monthly-pr-fix-common-issues",
         "decision": "ack_observe",
-        "finding_fingerprint": "e9214b24f8dce0f5"
+        "finding_fingerprint": "18827085018761e6"
       },
       "href": "#automation/human",
-      "recommendation_id": "rec-f86eb9119d0d",
+      "recommendation_id": "rec-0f59dba074c3",
       "status": {
         "state": "ready",
         "label": "Proposed",
@@ -484,10 +484,10 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-09-30T11:00:00Z",
+        "updated_at": "2026-09-30T14:34:30.784036Z",
         "updated_by": "morning_builder",
         "assessment": {
-          "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Experiment assessment · 0 blocking (review/continue)",
+          "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: PR fix common issues",
           "stage_label": "ops_gate:new_info",
           "stage_state": "ready",
           "stage_since": null,
@@ -508,112 +508,39 @@
         }
       },
       "human_task": {
-        "id": "sunday-shadow-vs-primary",
+        "id": "monthly-pr-fix-common-issues",
         "sort_bucket": "new_info",
         "analysis": {
-          "headline": "Experiment assessment · 0 blocking (review/continue)",
-          "updated_at": "2026-09-30T08:30:30.539537+00:00",
-          "fingerprint": "e9214b24f8dce0f5",
+          "headline": "PR fix common issues",
+          "updated_at": "2026-09-30T13:34:38.979283+00:00",
+          "fingerprint": "18827085018761e6",
           "bullets": [
-            "Blocking recommend: 0 · acked: 1 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 3 / 15",
-            "Failed calibration/exclusion shadows close promote — not a do-now pile. Already-acked overlays and ana-* capacity strands are not promote urgency.",
-            "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
-            "capacity: ana-20260921-02 area=scoring",
-            "capacity: ana-20260921-04 area=paper_churn"
+            "Occasions logged: 112",
+            "PR mergeable=CONFLICTING against main: 7",
+            "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
+            "validate check failed: 3",
+            "Merge conflicts in deferred-ideas.json with main: 2",
+            "Ruff F841 unused dismissable in market_warning_triage.propose_triage: 2"
           ],
           "source_keys": [
-            "experiment_assessment",
-            "knob_calibration_priors"
-          ],
-          "ack_sufficient": true,
-          "auto_ackable": false,
-          "experiment_assessment_gate": {
-            "ack_sufficient": true,
-            "reason": "failed_shadows_close_promote_no_blocking_recommend",
-            "failed_shadows": [
-              {
-                "experiment_id": "ai_judgment_calibrated",
-                "kind": "calibration_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ai_judgment_calibrated_r2",
-                "kind": "calibration_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ai_judgment_calibrated_r3",
-                "kind": "calibration_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ai_judgment_exclusion_u4",
-                "kind": "exclusion_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              }
-            ],
-            "recommend_raw_count": 3,
-            "recommend_acked": [
-              {
-                "experiment_id": "entry_dca_overlay",
-                "kind": "lifecycle_overlay",
-                "status": "recommend",
-                "area": "paper_churn",
-                "human_acked": true,
-                "acked_at": "2026-09-13T17:41:11.138086+00:00"
-              }
-            ],
-            "recommend_blocking": [],
-            "recommend_capacity": [
-              {
-                "experiment_id": "ana-20260921-02",
-                "kind": "analysis_task",
-                "status": "recommend",
-                "area": "scoring",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ana-20260921-04",
-                "kind": "analysis_task",
-                "status": "recommend",
-                "area": "paper_churn",
-                "human_acked": false,
-                "acked_at": null
-              }
-            ],
-            "human_ack_pending": 2,
-            "summary_recommend": 3,
-            "summary_fail": 5,
-            "total_experiments": 15
-          }
+            "pr_fix_occasions",
+            "project_traffic_digest"
+          ]
         },
         "ack": {
           "acked": true,
           "stale": true,
-          "acked_at": "2026-09-29T15:11:48.701542+00:00",
+          "acked_at": "2026-09-29T20:33:13.661770+00:00",
           "decision": "ack_observe",
-          "finding_fingerprint": "77a2b495eeb70657"
+          "finding_fingerprint": "c536130f25bfa22a"
         },
         "approval_gate": false,
-        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#competing-calibrated-shadows",
-        "cadence": "sunday"
+        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
+        "cadence": "monthly"
       },
       "closed": false,
       "assessment": {
-        "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Experiment assessment · 0 blocking (review/continue)",
+        "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: PR fix common issues",
         "stage_label": "ops_gate:new_info",
         "stage_state": "ready",
         "stage_since": null,
@@ -633,428 +560,20 @@
         "observe_only": true
       },
       "recommendation": {
-        "id": "rec-f86eb9119d0d",
-        "task_id": "human:sunday-shadow-vs-primary",
-        "summary": "Review new analysis on “Compare calibrated shadows vs primary AI judgment”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
+        "id": "rec-0f59dba074c3",
+        "task_id": "human:monthly-pr-fix-common-issues",
+        "summary": "Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).",
+        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues",
         "accept_action": {
           "kind": "human-task-ack",
           "payload": {
-            "task_id": "sunday-shadow-vs-primary",
+            "task_id": "monthly-pr-fix-common-issues",
             "decision": "ack_observe",
-            "finding_fingerprint": "e9214b24f8dce0f5"
+            "finding_fingerprint": "18827085018761e6"
           }
         },
-        "discuss_prompt": "Discuss daily recommendation `rec-f86eb9119d0d` (human task `sunday-shadow-vs-primary`):\nTitle: Compare calibrated shadows vs primary AI judgment\nSummary: Review new analysis on “Compare calibrated shadows vs primary AI judgment”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-f86eb9119d0d` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+        "discuss_prompt": "Discuss daily recommendation `rec-0f59dba074c3` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-0f59dba074c3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
         "priority": 11,
-        "options": [
-          "Accept → Acknowledge (observe-only)",
-          "Open runbook / defer",
-          "Discuss in Project chat"
-        ]
-      }
-    },
-    {
-      "task_ref": "human:sunday-promote-knobs-gate",
-      "source": "human_tasks",
-      "work_class": "ops_gate",
-      "task_family": "sunday-promote-knobs-gate",
-      "priority": 12,
-      "title": "Promote knob priors only when gates pass",
-      "summary": "Stays CLOSED while calibrated shadows are fail / not adoptable (N171). Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, confidence is acceptable, and fair-cost Suite B supports adoption. Survivors are starting priors — never auto-apply. Suite A stress excess vs ^FTSE alone is not sufficient.",
-      "sort_bucket": "new_info",
-      "closeable": true,
-      "close_action": "human-task-ack",
-      "close_payload": {
-        "task_id": "sunday-promote-knobs-gate",
-        "decision": "ack_observe",
-        "finding_fingerprint": "e9214b24f8dce0f5"
-      },
-      "href": "#automation/human",
-      "recommendation_id": "rec-0ed019c09296",
-      "status": {
-        "state": "ready",
-        "label": "Proposed",
-        "next_steps": [
-          "Accept runs human-task-ack — never auto-applies knobs, crons, or capital"
-        ],
-        "waiting_on": [
-          {
-            "kind": "external",
-            "ref": null,
-            "detail": "operator Acknowledge (observe-only) or Discuss"
-          }
-        ],
-        "ready": true,
-        "ready_reason": "proposal present · no blockers",
-        "blocked_reason": null,
-        "updated_at": "2026-09-30T11:00:00Z",
-        "updated_by": "morning_builder",
-        "assessment": {
-          "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Experiment assessment · 0 blocking (review/continue)",
-          "stage_label": "ops_gate:new_info",
-          "stage_state": "ready",
-          "stage_since": null,
-          "days_in_stage": null,
-          "stage_duration": "duration unknown",
-          "waiting_for": "operator Acknowledge (observe-only) or Discuss",
-          "how_achieved": "Accept runs human-task-ack — never auto-applies knobs, crons, or capital",
-          "provenance": [
-            "observe:where",
-            "observe:stage_label",
-            "observe:waiting_for",
-            "observe:how"
-          ],
-          "incomplete_fields": [
-            "stage_duration"
-          ],
-          "observe_only": true
-        }
-      },
-      "human_task": {
-        "id": "sunday-promote-knobs-gate",
-        "sort_bucket": "new_info",
-        "analysis": {
-          "headline": "Experiment assessment · 0 blocking (review/continue)",
-          "updated_at": "2026-09-30T08:30:30.539537+00:00",
-          "fingerprint": "e9214b24f8dce0f5",
-          "bullets": [
-            "Blocking recommend: 0 · acked: 1 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 3 / 15",
-            "Failed calibration/exclusion shadows close promote — not a do-now pile. Already-acked overlays and ana-* capacity strands are not promote urgency.",
-            "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
-            "capacity: ana-20260921-02 area=scoring",
-            "capacity: ana-20260921-04 area=paper_churn"
-          ],
-          "source_keys": [
-            "experiment_assessment",
-            "knob_calibration_priors"
-          ],
-          "ack_sufficient": true,
-          "auto_ackable": false,
-          "experiment_assessment_gate": {
-            "ack_sufficient": true,
-            "reason": "failed_shadows_close_promote_no_blocking_recommend",
-            "failed_shadows": [
-              {
-                "experiment_id": "ai_judgment_calibrated",
-                "kind": "calibration_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ai_judgment_calibrated_r2",
-                "kind": "calibration_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ai_judgment_calibrated_r3",
-                "kind": "calibration_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ai_judgment_exclusion_u4",
-                "kind": "exclusion_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              }
-            ],
-            "recommend_raw_count": 3,
-            "recommend_acked": [
-              {
-                "experiment_id": "entry_dca_overlay",
-                "kind": "lifecycle_overlay",
-                "status": "recommend",
-                "area": "paper_churn",
-                "human_acked": true,
-                "acked_at": "2026-09-13T17:41:11.138086+00:00"
-              }
-            ],
-            "recommend_blocking": [],
-            "recommend_capacity": [
-              {
-                "experiment_id": "ana-20260921-02",
-                "kind": "analysis_task",
-                "status": "recommend",
-                "area": "scoring",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ana-20260921-04",
-                "kind": "analysis_task",
-                "status": "recommend",
-                "area": "paper_churn",
-                "human_acked": false,
-                "acked_at": null
-              }
-            ],
-            "human_ack_pending": 2,
-            "summary_recommend": 3,
-            "summary_fail": 5,
-            "total_experiments": 15
-          }
-        },
-        "ack": {
-          "acked": true,
-          "stale": true,
-          "acked_at": "2026-09-29T15:11:49.299726+00:00",
-          "decision": "ack_observe",
-          "finding_fingerprint": "77a2b495eeb70657"
-        },
-        "approval_gate": true,
-        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#promoting-a-prior-human-gate",
-        "cadence": "sunday"
-      },
-      "closed": false,
-      "assessment": {
-        "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Experiment assessment · 0 blocking (review/continue)",
-        "stage_label": "ops_gate:new_info",
-        "stage_state": "ready",
-        "stage_since": null,
-        "days_in_stage": null,
-        "stage_duration": "duration unknown",
-        "waiting_for": "operator Acknowledge (observe-only) or Discuss",
-        "how_achieved": "Accept runs human-task-ack — never auto-applies knobs, crons, or capital",
-        "provenance": [
-          "observe:where",
-          "observe:stage_label",
-          "observe:waiting_for",
-          "observe:how"
-        ],
-        "incomplete_fields": [
-          "stage_duration"
-        ],
-        "observe_only": true
-      },
-      "recommendation": {
-        "id": "rec-0ed019c09296",
-        "task_id": "human:sunday-promote-knobs-gate",
-        "summary": "Review new analysis on “Promote knob priors only when gates pass”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
-        "accept_action": {
-          "kind": "human-task-ack",
-          "payload": {
-            "task_id": "sunday-promote-knobs-gate",
-            "decision": "ack_observe",
-            "finding_fingerprint": "e9214b24f8dce0f5"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-0ed019c09296` (human task `sunday-promote-knobs-gate`):\nTitle: Promote knob priors only when gates pass\nSummary: Review new analysis on “Promote knob priors only when gates pass”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-0ed019c09296` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 12,
-        "options": [
-          "Accept → Acknowledge (observe-only)",
-          "Open runbook / defer",
-          "Discuss in Project chat"
-        ]
-      }
-    },
-    {
-      "task_ref": "human:sunday-spawn-fair-twins",
-      "source": "human_tasks",
-      "work_class": "ops_gate",
-      "task_family": "sunday-spawn-fair-twins",
-      "priority": 13,
-      "title": "Spawn Suite B twins only for recommend experiments",
-      "summary": "If experiment_assessment has recommend calibration/exclusion/experimental tracks, dry-run then optionally apply ftse-trading-costs spawn-fair-twins (max 2). Never auto-fork every shadow (N53). Zero recommend rows is a no-op.",
-      "sort_bucket": "new_info",
-      "closeable": true,
-      "close_action": "human-task-ack",
-      "close_payload": {
-        "task_id": "sunday-spawn-fair-twins",
-        "decision": "ack_observe",
-        "finding_fingerprint": "e9214b24f8dce0f5"
-      },
-      "href": "#automation/human",
-      "recommendation_id": "rec-60e3efe5c7e3",
-      "status": {
-        "state": "ready",
-        "label": "Proposed",
-        "next_steps": [
-          "Accept runs human-task-ack — never auto-applies knobs, crons, or capital"
-        ],
-        "waiting_on": [
-          {
-            "kind": "external",
-            "ref": null,
-            "detail": "operator Acknowledge (observe-only) or Discuss"
-          }
-        ],
-        "ready": true,
-        "ready_reason": "proposal present · no blockers",
-        "blocked_reason": null,
-        "updated_at": "2026-09-30T11:00:00Z",
-        "updated_by": "morning_builder",
-        "assessment": {
-          "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Experiment assessment · 0 blocking (review/continue)",
-          "stage_label": "ops_gate:new_info",
-          "stage_state": "ready",
-          "stage_since": null,
-          "days_in_stage": null,
-          "stage_duration": "duration unknown",
-          "waiting_for": "operator Acknowledge (observe-only) or Discuss",
-          "how_achieved": "Accept runs human-task-ack — never auto-applies knobs, crons, or capital",
-          "provenance": [
-            "observe:where",
-            "observe:stage_label",
-            "observe:waiting_for",
-            "observe:how"
-          ],
-          "incomplete_fields": [
-            "stage_duration"
-          ],
-          "observe_only": true
-        }
-      },
-      "human_task": {
-        "id": "sunday-spawn-fair-twins",
-        "sort_bucket": "new_info",
-        "analysis": {
-          "headline": "Experiment assessment · 0 blocking (review/continue)",
-          "updated_at": "2026-09-30T08:30:30.539537+00:00",
-          "fingerprint": "e9214b24f8dce0f5",
-          "bullets": [
-            "Blocking recommend: 0 · acked: 1 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 3 / 15",
-            "Failed calibration/exclusion shadows close promote — not a do-now pile. Already-acked overlays and ana-* capacity strands are not promote urgency.",
-            "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
-            "capacity: ana-20260921-02 area=scoring",
-            "capacity: ana-20260921-04 area=paper_churn"
-          ],
-          "source_keys": [
-            "experiment_assessment",
-            "knob_calibration_priors"
-          ],
-          "ack_sufficient": true,
-          "auto_ackable": false,
-          "experiment_assessment_gate": {
-            "ack_sufficient": true,
-            "reason": "failed_shadows_close_promote_no_blocking_recommend",
-            "failed_shadows": [
-              {
-                "experiment_id": "ai_judgment_calibrated",
-                "kind": "calibration_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ai_judgment_calibrated_r2",
-                "kind": "calibration_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ai_judgment_calibrated_r3",
-                "kind": "calibration_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ai_judgment_exclusion_u4",
-                "kind": "exclusion_shadow",
-                "status": "fail",
-                "area": "paper_knobs",
-                "human_acked": false,
-                "acked_at": null
-              }
-            ],
-            "recommend_raw_count": 3,
-            "recommend_acked": [
-              {
-                "experiment_id": "entry_dca_overlay",
-                "kind": "lifecycle_overlay",
-                "status": "recommend",
-                "area": "paper_churn",
-                "human_acked": true,
-                "acked_at": "2026-09-13T17:41:11.138086+00:00"
-              }
-            ],
-            "recommend_blocking": [],
-            "recommend_capacity": [
-              {
-                "experiment_id": "ana-20260921-02",
-                "kind": "analysis_task",
-                "status": "recommend",
-                "area": "scoring",
-                "human_acked": false,
-                "acked_at": null
-              },
-              {
-                "experiment_id": "ana-20260921-04",
-                "kind": "analysis_task",
-                "status": "recommend",
-                "area": "paper_churn",
-                "human_acked": false,
-                "acked_at": null
-              }
-            ],
-            "human_ack_pending": 2,
-            "summary_recommend": 3,
-            "summary_fail": 5,
-            "total_experiments": 15
-          }
-        },
-        "ack": {
-          "acked": true,
-          "stale": true,
-          "acked_at": "2026-09-29T20:33:13.689376+00:00",
-          "decision": "ack_observe",
-          "finding_fingerprint": "77a2b495eeb70657"
-        },
-        "approval_gate": true,
-        "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-trading-costs.md#selective-a-to-b-fair-cost-twins",
-        "cadence": "sunday"
-      },
-      "closed": false,
-      "assessment": {
-        "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: Experiment assessment · 0 blocking (review/continue)",
-        "stage_label": "ops_gate:new_info",
-        "stage_state": "ready",
-        "stage_since": null,
-        "days_in_stage": null,
-        "stage_duration": "duration unknown",
-        "waiting_for": "operator Acknowledge (observe-only) or Discuss",
-        "how_achieved": "Accept runs human-task-ack — never auto-applies knobs, crons, or capital",
-        "provenance": [
-          "observe:where",
-          "observe:stage_label",
-          "observe:waiting_for",
-          "observe:how"
-        ],
-        "incomplete_fields": [
-          "stage_duration"
-        ],
-        "observe_only": true
-      },
-      "recommendation": {
-        "id": "rec-60e3efe5c7e3",
-        "task_id": "human:sunday-spawn-fair-twins",
-        "summary": "Review new analysis on “Spawn Suite B twins only for recommend experiments”, then Acknowledge (observe-only).",
-        "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
-        "accept_action": {
-          "kind": "human-task-ack",
-          "payload": {
-            "task_id": "sunday-spawn-fair-twins",
-            "decision": "ack_observe",
-            "finding_fingerprint": "e9214b24f8dce0f5"
-          }
-        },
-        "discuss_prompt": "Discuss daily recommendation `rec-60e3efe5c7e3` (human task `sunday-spawn-fair-twins`):\nTitle: Spawn Suite B twins only for recommend experiments\nSummary: Review new analysis on “Spawn Suite B twins only for recommend experiments”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-60e3efe5c7e3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 13,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1067,7 +586,7 @@
       "source": "human_tasks",
       "work_class": "ops_gate",
       "task_family": "weekday-engineering-parked-backlog-clear",
-      "priority": 14,
+      "priority": 12,
       "title": "Clear engineering parked backlog when dispatch pauses",
       "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When the warning still fires, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
       "sort_bucket": "new_info",
@@ -1096,7 +615,7 @@
         "ready": true,
         "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-09-30T11:00:00Z",
+        "updated_at": "2026-09-30T14:34:30.784036Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Human checklist gate · sort_bucket=new_info · analysis: 0 attention-parked eng tasks",
@@ -1180,7 +699,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-61772ce771b4` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-61772ce771b4` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-        "priority": 14,
+        "priority": 12,
         "options": [
           "Accept → Acknowledge (observe-only)",
           "Open runbook / defer",
@@ -1193,7 +712,7 @@
       "source": "ui_reconcile",
       "work_class": "surface",
       "task_family": "daily_hub_local_date_matches_today",
-      "priority": 15,
+      "priority": 13,
       "title": "Daily hub local_date matches today",
       "summary": "hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h",
       "sort_bucket": "reconcile",
@@ -1220,7 +739,7 @@
         "ready": false,
         "ready_reason": null,
         "blocked_reason": "hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h",
-        "updated_at": "2026-09-30T11:00:00Z",
+        "updated_at": "2026-09-30T14:34:30.784036Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "UI reconcile amber: Daily hub local_date matches today",
@@ -1277,7 +796,7 @@
           }
         },
         "discuss_prompt": "Discuss daily recommendation `rec-676a09a614ea` (reconcile `daily_hub_local_date_matches_today`):\nSummary: UI reconcile warn: Daily hub local_date matches today.\nRationale: hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h\nRunbook: docs/ops/ops-monitor.md#daily-hub\nSuggested options:\n1) Hard-refresh Pages / regenerate the named artifact\n2) Force republish if publish_lag (supervised)\n3) Confirm false positive and dismiss after condition clears",
-        "priority": 15,
+        "priority": 13,
         "options": [
           "Open runbook",
           "Supervised republish",
@@ -1286,7 +805,7 @@
       }
     }
   ],
-  "open_task_count": 6,
+  "open_task_count": 4,
   "recommendations": [
     {
       "id": "rec-b877dd532f10",
@@ -1359,62 +878,20 @@
       "task_family": "market-warning-triage"
     },
     {
-      "id": "rec-f86eb9119d0d",
-      "task_id": "human:sunday-shadow-vs-primary",
-      "summary": "Review new analysis on “Compare calibrated shadows vs primary AI judgment”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
+      "id": "rec-0f59dba074c3",
+      "task_id": "human:monthly-pr-fix-common-issues",
+      "summary": "Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues",
       "accept_action": {
         "kind": "human-task-ack",
         "payload": {
-          "task_id": "sunday-shadow-vs-primary",
+          "task_id": "monthly-pr-fix-common-issues",
           "decision": "ack_observe",
-          "finding_fingerprint": "e9214b24f8dce0f5"
+          "finding_fingerprint": "18827085018761e6"
         }
       },
-      "discuss_prompt": "Discuss daily recommendation `rec-f86eb9119d0d` (human task `sunday-shadow-vs-primary`):\nTitle: Compare calibrated shadows vs primary AI judgment\nSummary: Review new analysis on “Compare calibrated shadows vs primary AI judgment”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-f86eb9119d0d` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "discuss_prompt": "Discuss daily recommendation `rec-0f59dba074c3` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-0f59dba074c3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
       "priority": 11,
-      "options": [
-        "Accept → Acknowledge (observe-only)",
-        "Open runbook / defer",
-        "Discuss in Project chat"
-      ]
-    },
-    {
-      "id": "rec-0ed019c09296",
-      "task_id": "human:sunday-promote-knobs-gate",
-      "summary": "Review new analysis on “Promote knob priors only when gates pass”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
-      "accept_action": {
-        "kind": "human-task-ack",
-        "payload": {
-          "task_id": "sunday-promote-knobs-gate",
-          "decision": "ack_observe",
-          "finding_fingerprint": "e9214b24f8dce0f5"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-0ed019c09296` (human task `sunday-promote-knobs-gate`):\nTitle: Promote knob priors only when gates pass\nSummary: Review new analysis on “Promote knob priors only when gates pass”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-0ed019c09296` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 12,
-      "options": [
-        "Accept → Acknowledge (observe-only)",
-        "Open runbook / defer",
-        "Discuss in Project chat"
-      ]
-    },
-    {
-      "id": "rec-60e3efe5c7e3",
-      "task_id": "human:sunday-spawn-fair-twins",
-      "summary": "Review new analysis on “Spawn Suite B twins only for recommend experiments”, then Acknowledge (observe-only).",
-      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)",
-      "accept_action": {
-        "kind": "human-task-ack",
-        "payload": {
-          "task_id": "sunday-spawn-fair-twins",
-          "decision": "ack_observe",
-          "finding_fingerprint": "e9214b24f8dce0f5"
-        }
-      },
-      "discuss_prompt": "Discuss daily recommendation `rec-60e3efe5c7e3` (human task `sunday-spawn-fair-twins`):\nTitle: Spawn Suite B twins only for recommend experiments\nSummary: Review new analysis on “Spawn Suite B twins only for recommend experiments”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: Experiment assessment · 0 blocking (review/continue)\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-60e3efe5c7e3` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 13,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -1435,7 +912,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-61772ce771b4` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 0 attention-parked eng tasks\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-61772ce771b4` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
-      "priority": 14,
+      "priority": 12,
       "options": [
         "Accept → Acknowledge (observe-only)",
         "Open runbook / defer",
@@ -1455,7 +932,7 @@
         }
       },
       "discuss_prompt": "Discuss daily recommendation `rec-676a09a614ea` (reconcile `daily_hub_local_date_matches_today`):\nSummary: UI reconcile warn: Daily hub local_date matches today.\nRationale: hub local_date=2026-09-29 ≠ today 2026-09-30 after 04:00 Europe/London; artifact age 20.8h\nRunbook: docs/ops/ops-monitor.md#daily-hub\nSuggested options:\n1) Hard-refresh Pages / regenerate the named artifact\n2) Force republish if publish_lag (supervised)\n3) Confirm false positive and dismiss after condition clears",
-      "priority": 15,
+      "priority": 13,
       "options": [
         "Open runbook",
         "Supervised republish",
@@ -1477,14 +954,14 @@
   "counts": {
     "focus": 0,
     "market_warnings": 1,
-    "human_new_info": 4,
+    "human_new_info": 2,
     "human_unacked": 0,
     "progress": 0,
     "reconcile": 1
   },
   "project_sync": {
     "notes_fingerprint": null,
-    "synced_at": "2026-09-30T11:00:00Z",
+    "synced_at": "2026-09-30T14:34:30.784036Z",
     "method": "morning_builder_reads_committed_export_or_manual"
   },
   "illumination_hints": {
@@ -1492,14 +969,14 @@
       "attention": true,
       "new_info": true,
       "reasons": [
-        "open_tasks=6"
+        "open_tasks=4"
       ]
     },
     "automation.human": {
       "attention": true,
       "new_info": true,
       "reasons": [
-        "human_tasks.new_info=4",
+        "human_tasks.new_info=2",
         "human_tasks.unacked=0"
       ]
     },
