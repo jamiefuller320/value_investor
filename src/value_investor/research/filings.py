@@ -1574,9 +1574,8 @@ def drop_index_noise_filing_rows(
     kept: list[dict[str, Any]] = []
     dropped = 0
     for row in filings:
-        if (
-            not row.get("has_body")
-            and _is_euronext_non_filing_product_url(str(row.get("url") or ""))
+        if not row.get("has_body") and _is_euronext_non_filing_product_url(
+            str(row.get("url") or "")
         ):
             dropped += 1
             continue
