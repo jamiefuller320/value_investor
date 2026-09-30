@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-29T15:48:12+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-30T08:59:42+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -572,6 +572,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L498 | **Include routine ops_gate rows in History by default** | History defaults to work_class=dev only; include routine ops_gate rows in History by default only if operators explicitly want gate memory. | Only if operators explicitly want gate memory; default stays off |
 | L500 | **Ingest-loop named pin starved by unmeasured prepend** | ingest-loop --pin-ticker HM-B.ST with max-targets 1 only ran OIZ.IR because unmeasured names are auto-prepended. Named pins for zero-body clearance should guarantee a slot or bump target budget. | Next time a named euro zero-body pin is skipped while unmeasured leftovers consume the ticker budget |
 | L501 | **Phase B Daily hub Accept → observe-safe market-warning dismiss automation** | When market warning triage proposes dismiss (e.g. ingest-deviation signal triage dismiss) and Accept streak is clean, optionally run the observe-safe CLI dismiss / board ack from ops-monitor — never auto-deepen or divert euro fat slot. | Market warning triage has ≥2 weeks of Accept/Discuss outcomes in daily_hub_history and operators confirm dismiss Accepts are not rubber-stamps |
+| L504 | **Spare ingest-loop must not overwrite euro_ingest_dispatch** | Pinning a spare market (e.g. dax G1A.DE) rewrote docs/data/library/euro_ingest_dispatch.json to that spare. Restored via euro-ingest-dispatch --refresh; harden so spare deepen writes only per-market / shared discovery artifacts. | Next spare-stream IR-seed / pin-ticker deepen, or when euro dispatch is observed flipped off euro_depth after a spare run |
 
 ---
 
