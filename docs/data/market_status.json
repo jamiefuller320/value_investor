@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-30T13:53:18.874488+00:00",
+  "generated_at": "2026-09-30T14:20:42.005344+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -23,8 +23,8 @@
     "market_count": 23,
     "ingest_counts": {
       "live": 1,
-      "maintenance": 20,
-      "sprint": 2
+      "sprint": 3,
+      "maintenance": 19
     },
     "role_counts": {
       "live": 1,
@@ -33,8 +33,8 @@
       "admitted": 12,
       "graduated": 7
     },
-    "sprint_count": 2,
-    "maintenance_count": 20,
+    "sprint_count": 3,
+    "maintenance_count": 19,
     "live_count": 1,
     "admitted_count": 14,
     "should_run_library_maintenance": true,
@@ -45,7 +45,6 @@
       "bel20",
       "cac40",
       "dax",
-      "euro_depth",
       "euro_stoxx50",
       "ftse_mib",
       "ftse_smallcap",
@@ -58,7 +57,7 @@
       "1": "dax",
       "2": "hang_seng"
     },
-    "equal_support_generated_at": "2026-09-30T08:46:43.788390+00:00"
+    "equal_support_generated_at": "2026-09-30T14:16:52.731332+00:00"
   },
   "markets": [
     {
@@ -382,13 +381,13 @@
       "is_queue": false,
       "is_admitted": true,
       "is_ftse_equivalent": false,
-      "ingest": "maintenance",
+      "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest avenues exhausted \u2014 parked 18 leftover thin/IWB name(s) (ABI.BR, ACKB.BR, ADYEN.AS, APAM.AS, BAS.DE, BN.PA, DQ7A.IR, DTE.DE); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=16, indexed_without_body=19)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
-      "shared_maintenance": true,
+      "shared_maintenance": false,
       "health": "warn",
       "coverage_pct": 0.9948,
       "honest_coverage_pct": null,
@@ -439,11 +438,11 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 16,
-        "indexed_without_body": 17,
+        "indexed_without_body": 19,
         "bodies_median": 3.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
-        "ingest_exhausted": true,
+        "ingest_exhausted": false,
         "parked_count": 18,
         "zero_body_tickers": [],
         "thin_body_tickers": [
@@ -524,7 +523,54 @@
           "BMW.DE"
         ]
       },
-      "sprint_progress": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 3,
+        "targets": 2,
+        "improved": 0,
+        "improved_tickers": [],
+        "last_run_at": "2026-09-30T13:51:11.859041+00:00",
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 1,
+          "zero_body": 1,
+          "thin": 16,
+          "indexed_without_body": 19,
+          "filing_gaps": 2
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 16,
+          "indexed_without_body": 17,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": -1,
+          "zero_body": -1,
+          "thin": 0,
+          "indexed_without_body": -2,
+          "filing_gaps": -2
+        },
+        "remaining": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 16,
+          "indexed_without_body": 19,
+          "filing_gaps": 0
+        },
+        "admission_ready": true,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "zero_improve_stall",
+            "severity": "high",
+            "summary": "Last 2 days improved nobody while filing gaps remain"
+          }
+        ],
+        "sprint_entered_at": null
+      },
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
