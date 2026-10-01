@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-02T07:06:12+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-02T07:36:05+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -312,6 +312,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L511 | **LLM agree/veto judge-spec A/B challenger** | After multi-week llm_agree_veto_shadow marks, run an observe-only second judge_spec (heuristic tweak or bounded LLM) writing parallel cards with judge_spec_id; never influences_live. Compare disagreement themes vs still_in_buy_set twin before any live prompt swap. | learning_tracks_llm_agree_veto shows multi-week marks with a concrete disagreement theme vs still_in_buy_set twin, and a human picks Option 2/3 from docs/refinement-learning-loops.md |
 | L512 | **DCA dynamic tranche sizing from intervening behaviour** | After fixed-cadence graduation marks, score an observe-only dynamic add policy (vary remaining tranche size from rank/signal drift or adverse move between marks). Keep separate from ID and timing questions; do not mid-flight rewrite graduated_allocation executes. | entry_dca overlay has thick completed-window marks on a stable leading cadence (or paper_execute_graduated running) and timing-shift Q1 counterfactuals are scored or parked |
 | L513 | **DCA timing-shift overlay cadences after graduation** | First post-graduation DCA refinement instrument: score front-loaded vs equal weekly timing shifts as extra overlay cadences on existing episodes (net end value after costs). No new paper book; prefer before dynamic sizing. | ready_for_cadence_analysis true with completed-window scores, or paper_execute_graduated stage open, and human opens refinement lane from docs/refinement-learning-loops.md |
+| L517 | **Momentum grace leave-buy-tier episode scarcity on 3-slot Suite A track** | Live momentum_grace almost never arms true leave-buy-tier grace (0 grace_enter); Suite A max_positions=3 exits are mostly still-buy-tier rank demotions, which grace correctly refuses. NAV/excess vs rules is confounded and exit_shadow has 0 closed grace. Prefer observe counters + L86 archive leave-tier priors — do not graft onto buy_tier_level (N23) or promote on NAV alone. | exit_shadow shows grace_enter/grace exits accumulating, or L86 archive leave-tier grace lab is opened; after ≥6 months marks only if true grace episodes exist |
 
 ### Universe & data
 
