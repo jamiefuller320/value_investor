@@ -1,0 +1,675 @@
+[
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-01T19:31:47.044128+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (HKD reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/hang_seng/screen_latest.json",
+      "run_at": "2026-09-29T21:28:27.000060+00:00",
+      "generated_at": "2026-10-01T19:31:44.256804+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-01T20:31:45.671061+01:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-10-01T08:00:00+01:00",
+      "settle_at": "2026-10-01T09:15:00+01:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (4 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0004,
+    "candidates": [
+      {
+        "ticker": "0883.HK",
+        "name": "CNOOC Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.5461,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 23.76,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "2318.HK",
+        "name": "Ping An Insurance (Group) Company of China, Ltd.",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.5094,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 53.05,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "2331.HK",
+        "name": "Li Ning Company Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6358,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Consumer Cyclical",
+        "price": 12.58,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "0175.HK",
+        "name": "Geely Automobile Holdings Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.429,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 14.98
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "0883.HK",
+        "name": "CNOOC Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.5461,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 23.76,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "2318.HK",
+        "name": "Ping An Insurance (Group) Company of China, Ltd.",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.5094,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 53.05,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "2331.HK",
+        "name": "Li Ning Company Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6358,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Consumer Cyclical",
+        "price": 12.58,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "0175.HK",
+        "name": "Geely Automobile Holdings Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.429,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 14.98
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.04% / sell 0.04% (legacy symmetric slot 0.04%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 999.6,
+      "cash": -0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 249.9,
+      "targets": [
+        {
+          "ticker": "2331.HK",
+          "name": "Li Ning Company Limited",
+          "signal": "strong_buy",
+          "conviction_score": 0.6358,
+          "price": 12.58
+        },
+        {
+          "ticker": "0883.HK",
+          "name": "CNOOC Limited",
+          "signal": "strong_buy",
+          "conviction_score": 0.5461,
+          "price": 23.76
+        },
+        {
+          "ticker": "2318.HK",
+          "name": "Ping An Insurance (Group) Company of China, Ltd.",
+          "signal": "strong_buy",
+          "conviction_score": 0.5094,
+          "price": 53.05
+        },
+        {
+          "ticker": "0175.HK",
+          "name": "Geely Automobile Holdings Limited",
+          "signal": "buy",
+          "conviction_score": 0.429,
+          "price": 14.98
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "2331.HK",
+          "name": "Li Ning Company Limited",
+          "reason": "Already near equal-weight target",
+          "value": 249.9,
+          "target_value": 249.9,
+          "conviction_score": 0.6358,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "0883.HK",
+          "name": "CNOOC Limited",
+          "reason": "Already near equal-weight target",
+          "value": 249.9,
+          "target_value": 249.9,
+          "conviction_score": 0.5461,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "2318.HK",
+          "name": "Ping An Insurance (Group) Company of China, Ltd.",
+          "reason": "Already near equal-weight target",
+          "value": 249.9,
+          "target_value": 249.9,
+          "conviction_score": 0.5094,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "0175.HK",
+          "name": "Geely Automobile Holdings Limited",
+          "reason": "Already near equal-weight target",
+          "value": 249.9,
+          "target_value": 249.9,
+          "conviction_score": 0.429,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "1133031a-ca78-4511-9e8b-c250fa01eeb1",
+        "fund_id": "8245fe7e-eb0d-4902-9d87-4649029a66be",
+        "acted_at": "2026-10-01T20:31:45.671061+01:00",
+        "ticker": "2331.HK",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 19.864868,
+        "price": 12.58,
+        "gross": 249.9,
+        "cost": 0.1,
+        "net_cash": -250.0,
+        "note": "Automated buy",
+        "name": "Li Ning Company Limited"
+      },
+      {
+        "id": "2bd58b4b-6000-43b3-8dd1-ce2716b47373",
+        "fund_id": "8245fe7e-eb0d-4902-9d87-4649029a66be",
+        "acted_at": "2026-10-01T20:31:45.671061+01:00",
+        "ticker": "0883.HK",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 10.517678,
+        "price": 23.76,
+        "gross": 249.9,
+        "cost": 0.1,
+        "net_cash": -250.0,
+        "note": "Automated buy",
+        "name": "CNOOC Limited"
+      },
+      {
+        "id": "7d824c6c-bb89-4615-a233-2c677cace88b",
+        "fund_id": "8245fe7e-eb0d-4902-9d87-4649029a66be",
+        "acted_at": "2026-10-01T20:31:45.671061+01:00",
+        "ticker": "2318.HK",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 4.710651,
+        "price": 53.05,
+        "gross": 249.9,
+        "cost": 0.1,
+        "net_cash": -250.0,
+        "note": "Automated buy",
+        "name": "Ping An Insurance (Group) Company of China, Ltd."
+      },
+      {
+        "id": "e2e210b7-6d07-47ec-9020-d269f560017b",
+        "fund_id": "8245fe7e-eb0d-4902-9d87-4649029a66be",
+        "acted_at": "2026-10-01T20:31:45.671061+01:00",
+        "ticker": "0175.HK",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 16.682246,
+        "price": 14.98,
+        "gross": 249.9,
+        "cost": 0.1,
+        "net_cash": -250.0,
+        "note": "Automated buy",
+        "name": "Geely Automobile Holdings Limited"
+      }
+    ],
+    "nav_before": 1000.0,
+    "cash_before": 1000.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 999.6,
+    "cash_after": -0.0,
+    "holdings_after": [
+      {
+        "ticker": "2331.HK",
+        "shares": 19.864868,
+        "avg_cost": 12.58,
+        "sector": "Consumer Cyclical",
+        "name": "Li Ning Company Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "0883.HK",
+        "shares": 10.517678,
+        "avg_cost": 23.76,
+        "sector": "Energy",
+        "name": "CNOOC Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "2318.HK",
+        "shares": 4.710651,
+        "avg_cost": 53.05,
+        "sector": "Financial Services",
+        "name": "Ping An Insurance (Group) Company of China, Ltd.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "0175.HK",
+        "shares": 16.682246,
+        "avg_cost": 14.98,
+        "sector": "Consumer Cyclical",
+        "name": "Geely Automobile Holdings Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 4,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "2331.HK",
+          "name": "Li Ning Company Limited",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 1
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 1
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.6358
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-01T20:31:45.671061+01:00",
+          "proposal_id": "buy_tier_level_native:2331.HK:buy:2026-10-01T20:31:45.671061+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1"
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "0883.HK",
+          "name": "CNOOC Limited",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 2
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 2
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.5461
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-01T20:31:45.671061+01:00",
+          "proposal_id": "buy_tier_level_native:0883.HK:buy:2026-10-01T20:31:45.671061+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1"
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "2318.HK",
+          "name": "Ping An Insurance (Group) Company of China, Ltd.",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.5094
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-01T20:31:45.671061+01:00",
+          "proposal_id": "buy_tier_level_native:2318.HK:buy:2026-10-01T20:31:45.671061+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1"
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "0175.HK",
+          "name": "Geely Automobile Holdings Limited",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 4
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 4
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.429
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-01T20:31:45.671061+01:00",
+          "proposal_id": "buy_tier_level_native:0175.HK:buy:2026-10-01T20:31:45.671061+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1"
+          },
+          "schema_version": 1
+        }
+      ]
+    }
+  }
+]
