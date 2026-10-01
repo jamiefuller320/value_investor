@@ -1,33 +1,91 @@
 {
-  "market_id": "cac40",
-  "assessed_at": "2026-10-01T17:11:58.411853+00:00",
+  "market_id": "hang_seng",
+  "assessed_at": "2026-10-01T17:18:51.015142+00:00",
   "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
-  "thin_need_discovery": [
-    "CAP.PA",
-    "EN.PA",
-    "RI.PA",
-    "URW.PA",
-    "VIE.PA",
-    "MC.PA",
-    "SGO.PA",
-    "CA.PA"
+  "indexed_without_body": [
+    {
+      "ticker": "0857.HK",
+      "indexed_without_body": 3,
+      "filings_total": 5,
+      "filings_with_body": 2
+    },
+    {
+      "ticker": "0868.HK",
+      "indexed_without_body": 2,
+      "filings_total": 3,
+      "filings_with_body": 1
+    },
+    {
+      "ticker": "9961.HK",
+      "indexed_without_body": 2,
+      "filings_total": 7,
+      "filings_with_body": 5
+    },
+    {
+      "ticker": "0285.HK",
+      "indexed_without_body": 1,
+      "filings_total": 3,
+      "filings_with_body": 2
+    },
+    {
+      "ticker": "0288.HK",
+      "indexed_without_body": 1,
+      "filings_total": 4,
+      "filings_with_body": 3
+    },
+    {
+      "ticker": "1113.HK",
+      "indexed_without_body": 1,
+      "filings_total": 2,
+      "filings_with_body": 1
+    }
   ],
-  "thin_need_bodies": [],
-  "primary_blocker": "thin_need_discovery",
+  "thin_need_discovery": [
+    "1099.HK",
+    "1378.HK",
+    "0762.HK",
+    "1093.HK",
+    "2618.HK",
+    "2382.HK",
+    "6862.HK",
+    "0941.HK",
+    "1024.HK",
+    "1113.HK",
+    "1109.HK",
+    "2313.HK",
+    "6618.HK",
+    "2628.HK",
+    "0101.HK",
+    "0291.HK"
+  ],
+  "thin_need_bodies": [
+    "0857.HK",
+    "0868.HK",
+    "1113.HK",
+    "0285.HK"
+  ],
+  "primary_blocker": "indexed_without_body",
   "force_discovery_scan": true,
-  "auto_pin_tickers": [],
+  "auto_pin_tickers": [
+    "0857.HK",
+    "0868.HK",
+    "9961.HK",
+    "0285.HK",
+    "0288.HK",
+    "1113.HK"
+  ],
   "recommended_actions": [
-    "Discovery/IR seed for 8 thin ticker(s) that already have bodies for every indexed filing",
+    "Prefer indexed-without-body body refetch (6 tickers, top: 0857.HK(3), 0868.HK(2), 9961.HK(2), 0285.HK(1), 0288.HK(1))",
+    "Discovery/IR seed for 16 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
-    "thin_need_discovery": 8,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 6,
+    "indexed_without_body_rows": 10,
+    "thin_need_discovery": 16,
+    "thin_need_bodies": 4
   }
 }

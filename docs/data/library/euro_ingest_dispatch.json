@@ -31,7 +31,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-01T17:13:18.664593+00:00",
+    "snapshot_at": "2026-10-01T17:24:25.006709+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 53,
     "unmeasured_buy_tier": 0,
@@ -115,7 +115,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-01T17:13:18.666403+00:00",
+  "evaluated_at": "2026-10-01T17:24:25.008705+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -126,6 +126,7 @@
     "euro_stoxx50",
     "ftse_mib",
     "ftse_smallcap",
+    "hang_seng",
     "ibex35",
     "nasdaq100",
     "sp500",
@@ -141,6 +142,7 @@
     "euro_stoxx50",
     "ftse_mib",
     "ftse_smallcap",
+    "hang_seng",
     "ibex35",
     "nasdaq100",
     "sp500",
@@ -174,7 +176,7 @@
         "cac40 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-01T17:13:43.507600+00:00",
+        "snapshot_at": "2026-10-01T17:24:52.047759+00:00",
         "market_id": "cac40",
         "buy_tier_count": 13,
         "unmeasured_buy_tier": 0,
@@ -230,19 +232,19 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-01T17:13:43.508195+00:00",
+      "evaluated_at": "2026-10-01T17:24:52.048396+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "hang_seng"
+    "sti"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "hang_seng",
+      "market_id": "sti",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=19, indexed_without_body=10)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=3, zero_body=2, thin=0, indexed_without_body=0)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
@@ -251,96 +253,42 @@
       "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "no benchmark configured for hang_seng"
+        "no benchmark configured for sti"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-01T17:13:44.889605+00:00",
-        "market_id": "hang_seng",
-        "buy_tier_count": 25,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 19,
-        "indexed_without_body": 10,
-        "bodies_min": 1,
-        "bodies_median": 1,
-        "bodies_max": 5,
+        "snapshot_at": "2026-10-01T17:24:52.537824+00:00",
+        "market_id": "sti",
+        "buy_tier_count": 6,
+        "unmeasured_buy_tier": 3,
+        "zero_body_buy_tier": 2,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+        "bodies_min": 4,
+        "bodies_median": 4,
+        "bodies_max": 4,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
-        "unmeasured_tickers": [],
-        "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "1099.HK",
-          "1378.HK",
-          "0762.HK",
-          "1093.HK",
-          "2618.HK",
-          "2382.HK",
-          "6862.HK",
-          "0857.HK",
-          "0868.HK",
-          "0941.HK",
-          "1024.HK",
-          "1113.HK",
-          "1109.HK",
-          "2313.HK",
-          "6618.HK",
-          "2628.HK",
-          "0101.HK",
-          "0291.HK",
-          "0285.HK"
+        "unmeasured_tickers": [
+          "BUOU.SI",
+          "BS6.SI",
+          "N2IU.SI"
         ],
-        "indexed_without_body_tickers": [
-          "9961.HK",
-          "0288.HK",
-          "0857.HK",
-          "0868.HK",
-          "1113.HK",
-          "0285.HK"
+        "zero_body_tickers": [
+          "J36.SI",
+          "U14.SI"
         ],
-        "indexed_without_body_by_ticker": {
-          "9961.HK": 2,
-          "0288.HK": 1,
-          "0857.HK": 3,
-          "0868.HK": 2,
-          "1113.HK": 1,
-          "0285.HK": 1
-        },
+        "thin_body_tickers": [],
+        "indexed_without_body_tickers": [],
+        "indexed_without_body_by_ticker": {},
         "parked_tickers": [],
         "parked_count": 0,
-        "effective_thin_body_buy_tier": 19,
-        "effective_thin_body_tickers": [
-          "1099.HK",
-          "1378.HK",
-          "0762.HK",
-          "1093.HK",
-          "2618.HK",
-          "2382.HK",
-          "6862.HK",
-          "0857.HK",
-          "0868.HK",
-          "0941.HK",
-          "1024.HK",
-          "1113.HK",
-          "1109.HK",
-          "2313.HK",
-          "6618.HK",
-          "2628.HK",
-          "0101.HK",
-          "0291.HK",
-          "0285.HK"
-        ],
-        "effective_indexed_without_body": 10,
-        "effective_indexed_without_body_tickers": [
-          "9961.HK",
-          "0288.HK",
-          "0857.HK",
-          "0868.HK",
-          "1113.HK",
-          "0285.HK"
-        ],
+        "effective_thin_body_buy_tier": 0,
+        "effective_thin_body_tickers": [],
+        "effective_indexed_without_body": 0,
+        "effective_indexed_without_body_tickers": [],
         "ingest_exhausted": false
       },
-      "filing_gaps": 0,
+      "filing_gaps": 5,
       "max_daily_successes": 4,
       "max_targets": 24,
       "cron_morning": true,
@@ -352,14 +300,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-01T17:13:44.890442+00:00",
+      "evaluated_at": "2026-10-01T17:24:52.538131+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "cac40",
-    "hang_seng"
+    "sti"
   ],
   "market_queue": [
     "sp500",
@@ -375,7 +323,8 @@
     "ftse_mib",
     "aex",
     "bel20",
-    "hang_seng"
+    "hang_seng",
+    "sti"
   ],
   "ingest_cascade": {
     "enabled": true,
@@ -408,7 +357,7 @@
     "cac40"
   ],
   "scheduler_stream_2_markets": [
-    "hang_seng"
+    "sti"
   ],
   "should_run_library_maintenance": true
 }

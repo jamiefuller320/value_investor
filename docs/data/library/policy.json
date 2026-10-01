@@ -15,7 +15,8 @@
     "ftse_mib",
     "aex",
     "bel20",
-    "hang_seng"
+    "hang_seng",
+    "sti"
   ],
   "ftse_equivalent_markets": [
     "sp500"
@@ -542,7 +543,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-01T13:49:11.208196+00:00",
+  "updated_at": "2026-10-01T17:22:11.265513+00:00",
   "ingest_parity_markets": [
     "aim",
     "asx200",
@@ -552,7 +553,7 @@
     "cac40"
   ],
   "ingest_parallel_sprint_2": [
-    "hang_seng"
+    "sti"
   ],
   "ladder": {
     "enabled": true,
@@ -828,7 +829,8 @@
       "ibex35",
       "ftse_mib",
       "aex",
-      "bel20"
+      "bel20",
+      "hang_seng"
     ],
     "epoch0_shard_after_screen": true,
     "equal_support_after_screen": true,
@@ -852,16 +854,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-09-06T18:42:06.023427+00:00",
-        "parallel_stream": 1,
-        "from_market": "sp500",
-        "to_market": "asx200",
-        "stream_markets_after": [
-          "asx200"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-09-07T10:48:32.569375+00:00",
         "parallel_stream": 1,
@@ -1349,6 +1341,16 @@
           "cac40"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-10-01T17:22:11.265502+00:00",
+        "parallel_stream": 2,
+        "from_market": "hang_seng",
+        "to_market": "sti",
+        "stream_markets_after": [
+          "sti"
+        ],
+        "ingest_parity_recorded": false
       }
     ]
   },
@@ -1362,6 +1364,7 @@
     "euro_stoxx50",
     "ftse_mib",
     "ftse_smallcap",
+    "hang_seng",
     "ibex35",
     "nasdaq100",
     "sp500",
