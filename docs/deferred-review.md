@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-01T09:46:16+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-01T13:24:24+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -233,6 +233,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N178 | **Standalone refinement-registry UI parallel to experiment assessment** | Do not ship a second refinement ledger/dashboard. Prefer parent_id/refinement_of on experiment_assessment rows plus judge_spec_id on agree/veto cards so A and B share one lineage pattern. | experiment_assessment winner-evolution parent_id lineage is implemented and Sunday review needs a dedicated refinement surface beyond the ledger |
 | N179 | **Mid-flight rewrite of graduated DCA cadence on live books** | After DCA graduates, refine via overlay counterfactuals or a new cold-start/twin — never silently change tranche count/timing on the running graduated_allocation (or primary) book mid-flight. | A documented DCA refinement twin/cold-start is authorised after Q1/Q2 overlay evidence; human asks for epoch promotion |
 | N180 | **Do not start universe archive crawler or fourth sprint stream** | Isolation/miss-rate/hydrate scaffolds exist for L499, but cold-store writers, pack assemble loops, and preemptible archive workflows must wait. Starting them now would compete with euro fat-slot deepen and shared source/runners. | euro_depth (or successor) reaches sprint_ingest_complete AND archive_lane_gate allows (no focus pressure) AND miss-rate instrument shows material enter-without-bodies |
+| N181 | **Whole-universe week-first pass as live ingest scheduler** | Do not replace serialize-to-maintenance + spare front-start with a whole-universe 'this week then backward' deepen pass. It dilutes the fat head, fights rate limits, and confuses calendar freshness with sprint_ingest_complete / epoch-0 readiness. | Only if archive quiet lane is live with hard isolation and someone proposes week-first scoring for cold packs — still not as euro-ingest-loop / sprint scheduler |
 
 ---
 
@@ -332,6 +333,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L312 | **Add observe-sim benchmark if a sprint stream stays on a market without one** | Sprint-2 currently holds ftse_smallcap, which has no MARKET_BENCHMARKS entry, so Sunday observe-sim does not write a dated screen archive. Gap analysis correctly ignores it. If a no-benchmark market stays on a sprint stream for more than a couple of weeks, add a local index ticker so the archive clock can follow ingest effort. | A parallel sprint stream has held a market missing MARKET_BENCHMARKS for two Sunday ladders |
 | L346 | **Bootstrap CCL-B.TO zero-body leftover on TSX 60** | After GIB-A.TO left unmeasured, S&P/TSX 60 still has one zero-body buy-tier name (CCL Industries Class B). Same class-share discovery issues may apply; it cannot be parked and still blocks sprint_ingest_complete. | TSX 60 spare sprint is otherwise at leftover thin/IWB only, or the next ingest loop still reports zero_body_stuck on CCL-B.TO |
 | L499 | **Universe-wide filing archive / data-pack lane (cold store)** | Observe-only archival collation of filings for full admitted universes (not buy-tier-only deepen), serving data packs when names rotate toward buy. Isolation firewall, quiet-window gate, miss-rate observe, and fail-open hydrate scaffolds shipped; engine/crawler still parked — must not compete with euro fat-slot / P2 focus head. | Focus ingest head (euro_depth or successor) at maintenance threshold (sprint_ingest_complete) AND docs/data/universe_filing_archive_miss_rate.json shows material enter-without-bodies; isolation gate + fail-open hydrate scaffolds already shipped — do not start crawler/pack writers until then. |
+| L514 | **Week-first coverage score for archive pack only** | After fat-slot release, optional archive-lane metric: % of admitted universe with pack bodies for filings dated this week, plus iterative backward fill. Fail-open hydrate; never fourth sprint. | Focus head at sprint_ingest_complete and archive engine/miss-rate gate (L499/N180) clears |
 
 ### Research & portfolio product
 

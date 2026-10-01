@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-01T09:46:16+00:00",
+  "updated_at": "2026-10-01T13:24:24+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -11780,6 +11780,39 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-a6fcbbd4-de3d-592d-9540-7d4de85f17fe",
       "added_at": "2026-10-01T09:46:01+00:00"
+    },
+    {
+      "id": "N181",
+      "category": "not_now",
+      "section": "universe",
+      "title": "Whole-universe week-first pass as live ingest scheduler",
+      "summary": "Do not replace serialize-to-maintenance + spare front-start with a whole-universe 'this week then backward' deepen pass. It dilutes the fat head, fights rate limits, and confuses calendar freshness with sprint_ingest_complete / epoch-0 readiness.",
+      "revisit_when": "Only if archive quiet lane is live with hard isolation and someone proposes week-first scoring for cold packs \u2014 still not as euro-ingest-loop / sprint scheduler",
+      "tags": [
+        "market-focus",
+        "ingest-cascade",
+        "archive",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-4900572a-7e2c-5e55-ae27-5e6e93d1b6f0",
+      "added_at": "2026-10-01T13:24:24+00:00"
+    },
+    {
+      "id": "L514",
+      "category": "later",
+      "section": "universe",
+      "title": "Week-first coverage score for archive pack only",
+      "summary": "After fat-slot release, optional archive-lane metric: % of admitted universe with pack bodies for filings dated this week, plus iterative backward fill. Fail-open hydrate; never fourth sprint.",
+      "revisit_when": "Focus head at sprint_ingest_complete and archive engine/miss-rate gate (L499/N180) clears",
+      "tags": [
+        "archive-pack",
+        "market-focus",
+        "later"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-4900572a-7e2c-5e55-ae27-5e6e93d1b6f0",
+      "added_at": "2026-10-01T13:24:24+00:00"
     }
   ],
   "fragments": [
