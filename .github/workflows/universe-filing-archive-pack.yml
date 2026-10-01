@@ -1,0 +1,100 @@
+name: Universe filing archive pack
+
+# Quiet-window cold archive lane (L499). Week-first then iterative-backward pack
+# plan under archive_lane_gate. Preemptible, max concurrency 1, NOT a fourth
+# equal sprint stream. Suspends while focus fat sprint is active (euro_depth
+# today). Writes bottleneck review for observe-only pipeline tuning.
+# See docs/ops/universe-filing-archive-pack.md
+on:
+  schedule:
+    # Primary quiet slot: Mon–Fri 22:00 UTC (inside 21:00–05:00 quiet band).
+    - cron: "0 22 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      allow_outside_quiet:
+        description: "Pilot: allow daytime dry run (still suspends on focus pressure)"
+        type: boolean
+        default: false
+      lookback_weeks:
+        description: "ISO weeks to plan backward from current week"
+        type: string
+        default: "12"
+      max_units:
+        description: "Optional cap on week×market units (empty = uncapped)"
+        type: string
+        default: ""
+      apply:
+        description: "Request apply mode (writers still parked — no crawler)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: universe-filing-archive-pack
+  # Preemptible: a newer dispatch cancels an in-flight dry pass.
+  cancel-in-progress: true
+
+jobs:
+  archive-pack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: bash scripts/gha_pip_install.sh -e .
+
+      - name: Run gated archive pack (dry / suspend fail-open)
+        id: pack
+        env:
+          ALLOW_OUTSIDE_QUIET: ${{ github.event.inputs.allow_outside_quiet || 'false' }}
+          APPLY: ${{ github.event.inputs.apply || 'false' }}
+          LOOKBACK_WEEKS: ${{ github.event.inputs.lookback_weeks || '12' }}
+          MAX_UNITS: ${{ github.event.inputs.max_units || '' }}
+        run: |
+          set -euo pipefail
+          ARGS=(--lookback-weeks "${LOOKBACK_WEEKS}")
+          if [ "${ALLOW_OUTSIDE_QUIET}" = "true" ]; then
+            ARGS+=(--allow-outside-quiet)
+          fi
+          if [ "${APPLY}" = "true" ]; then
+            ARGS+=(--apply)
+          fi
+          if [ -n "${MAX_UNITS}" ]; then
+            ARGS+=(--max-units "${MAX_UNITS}")
+          fi
+          # Exit 0 on suspend/quiet_only; writes pack_run + bottleneck review.
+          ftse-universe-archive-pack "${ARGS[@]}"
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          run = json.loads(Path("docs/data/universe_filing_archive_pack_run.json").read_text())
+          review = json.loads(Path("docs/data/universe_filing_archive_bottleneck_review.json").read_text())
+          outcome = run.get("outcome") or ""
+          print(f"outcome={outcome}")
+          print(f"pack_order={run.get('pack_order')}")
+          print(f"gate={run.get('gate')}")
+          print(f"plan_unit_count={run.get('plan_unit_count')}")
+          print(f"bottlenecks={len(review.get('bottlenecks') or [])}")
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          with out.open("a", encoding="utf-8") as fh:
+              fh.write(f"outcome={outcome}\n")
+              fh.write(f"should_commit=true\n")
+          PY
+
+      - name: Commit pack run + bottleneck review
+        if: always() && steps.pack.outcome == 'success'
+        env:
+          COMMIT_MESSAGE: "chore: universe filing archive pack run [skip ci]"
+          GHA_COMMIT_OWNED: >-
+            docs/data/universe_filing_archive_pack_run.json
+            docs/data/universe_filing_archive_bottleneck_review.json
+          GHA_COMMIT_LABEL: universe-filing-archive-pack
+        run: bash scripts/gha_commit_artifacts.sh

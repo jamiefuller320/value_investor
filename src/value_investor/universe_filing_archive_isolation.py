@@ -1,8 +1,10 @@
 """Isolation firewall for the universe filing archive / data-pack lane (L499).
 
-Design-only gate: never starts a crawler, never shares critical-path rate-limit
-identity, and never claims a fourth equal sprint stream. Callers that later
-add a cold-lane poll must consult ``archive_lane_gate`` before any fetch.
+Design-only gate historically; the weekday pack runner now consults
+``archive_lane_gate`` before any dry plan work. Never starts a crawler, never
+shares critical-path rate-limit identity, and never claims a fourth equal sprint
+stream. Callers that later add a cold-lane poll must consult ``archive_lane_gate``
+before any fetch.
 
 Hard isolation requirements (from ``docs/ops/universe-filing-archive-pack.md``):
 
