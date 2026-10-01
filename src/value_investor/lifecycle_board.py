@@ -409,6 +409,7 @@ def _slim_card(
     opened_at: str | None,
     sold_at: str | None,
     now: datetime,
+    exit_price: float | None = None,
 ) -> dict[str, Any]:
     src = row or {}
     hold = holding or {}
@@ -443,6 +444,8 @@ def _slim_card(
         card["sold_at"] = sold_at
     if avg_cost is not None:
         card["avg_cost"] = avg_cost
+    if exit_price is not None:
+        card["exit_price"] = round(float(exit_price), 4)
     if pnl_pct is not None:
         card["unrealized_pnl_pct"] = pnl_pct
     days_in_column: float | None = None
@@ -574,6 +577,35 @@ def _last_closed_sells(trades: list[Any]) -> dict[str, dict[str, Any]]:
     return closed
 
 
+def _episode_opened_at(
+    trades: list[Any],
+    *,
+    ticker: str,
+    sold_at: str | None,
+) -> str | None:
+    """First buy in the closed episode ending at ``sold_at`` (after any prior close)."""
+    if not ticker or not sold_at:
+        return None
+    rows = [_as_dict(raw) for raw in trades if _ticker(_as_dict(raw)) == ticker]
+    rows.sort(key=lambda row: str(row.get("acted_at") or ""))
+    prior_close: str | None = None
+    for row in rows:
+        acted = str(row.get("acted_at") or "")
+        if acted >= sold_at:
+            break
+        if str(row.get("side") or "").lower() == "sell" and row.get("position_closed"):
+            prior_close = acted
+    for row in rows:
+        acted = str(row.get("acted_at") or "")
+        if prior_close and acted <= prior_close:
+            continue
+        if acted >= sold_at:
+            break
+        if str(row.get("side") or "").lower() == "buy":
+            return acted or None
+    return None
+
+
 def _holding_phase(
     *,
     holding: dict[str, Any],
@@ -676,17 +708,19 @@ def _classify_market_track(
         )
         placed.add(ticker_key)
 
+    all_trades = _as_list(fund.get("trades"))
     for ticker_key, trade in closed_sells.items():
         if ticker_key in placed:
             continue
         row = row_index.get(ticker_key)
+        sold_at = str(trade.get("acted_at") or "") or None
         cooldown = int(cooldowns.get(ticker_key) or 0) > 0
         column_id = classify_board_column(
             held=False,
             signal=_signal(row or {}),
             timing=_timing(row or {}),
             conviction=_conviction(row or {}),
-            sold_at=str(trade.get("acted_at") or "") or None,
+            sold_at=sold_at,
             cooldown=cooldown,
             now=now,
         )
@@ -699,9 +733,10 @@ def _classify_market_track(
                 holding={"name": trade.get("name"), "avg_cost": trade.get("avg_cost_at_exit")},
                 column_id=column_id,
                 phase="exit" if column_id == "just_sold" else "recommit",
-                opened_at=None,
-                sold_at=str(trade.get("acted_at") or "") or None,
+                opened_at=_episode_opened_at(all_trades, ticker=ticker_key, sold_at=sold_at),
+                sold_at=sold_at,
                 now=now,
+                exit_price=_optional_float(trade.get("price")),
             )
         )
         placed.add(ticker_key)

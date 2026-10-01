@@ -7974,6 +7974,8 @@ function openLifecycleTickerCard(ticker) {
     void mountPriceChart(mount, report.ticker ? report : { ticker, name }, {
       book_cost: card.avg_cost,
       opened_at: card.opened_at,
+      sold_at: card.sold_at,
+      exit_price: card.exit_price,
     });
   }
 }

@@ -144,7 +144,7 @@ function chartSeriesPolyline(values, xAt, yAt, color, label) {
   return { path, legend };
 }
 
-function dateMarkerLine(dates, markerDate, xAt, pad, label, labelOffset = 0) {
+function dateMarkerLine(dates, markerDate, xAt, pad, label, labelOffset = 0, color = "#0f172a") {
   if (!markerDate || !dates.length) return "";
   let markerIndex = dates.findIndex((date) => date >= markerDate);
   if (markerIndex < 0) markerIndex = dates.length - 1;
@@ -156,8 +156,31 @@ function dateMarkerLine(dates, markerDate, xAt, pad, label, labelOffset = 0) {
   const labelY = pad.top + 14 + labelOffset;
   return `
     <line x1="${mx}" y1="${pad.top}" x2="${mx}" y2="${pad.top + pad.plotH}"
-      stroke="#0f172a" stroke-width="1.5" stroke-dasharray="5 4" stroke-opacity="0.75" />
-    <text x="${mx + 4}" y="${labelY}" class="chart-signal-marker-label">${esc(label)}</text>`;
+      stroke="${color}" stroke-width="1.5" stroke-dasharray="5 4" stroke-opacity="0.75" />
+    <text x="${mx + 4}" y="${labelY}" class="chart-signal-marker-label" style="fill:${color}">${esc(label)}</text>`;
+}
+
+function tradeFillMarker(dates, markerDate, price, xAt, yAt, pad, label, color, labelOffset = 0) {
+  if (!markerDate || !dates.length) return "";
+  let markerIndex = dates.findIndex((date) => date >= markerDate);
+  if (markerIndex < 0) markerIndex = dates.length - 1;
+  for (let i = 0; i < dates.length; i += 1) {
+    if (dates[i] <= markerDate) markerIndex = i;
+    else break;
+  }
+  const mx = xAt(markerIndex);
+  const labelY = pad.top + 14 + labelOffset;
+  const hasPrice = price != null && !Number.isNaN(Number(price));
+  const my = hasPrice ? yAt(Number(price)) : null;
+  const point =
+    my != null
+      ? `<circle cx="${mx}" cy="${my}" r="5" fill="${color}" stroke="#fff" stroke-width="1.5" />`
+      : "";
+  return `
+    <line x1="${mx}" y1="${pad.top}" x2="${mx}" y2="${pad.top + pad.plotH}"
+      stroke="${color}" stroke-width="1.5" stroke-dasharray="5 4" stroke-opacity="0.8" />
+    ${point}
+    <text x="${mx + 6}" y="${labelY}" class="chart-signal-marker-label" style="fill:${color}">${esc(label)}</text>`;
 }
 
 function renderPriceChartSvg(payload, levelsOverride) {
@@ -200,10 +223,19 @@ function renderPriceChartSvg(payload, levelsOverride) {
       : []
   );
   const levelValues = activeLevels.map(([key]) => Number(levels[key]));
+  const entryPrice =
+    payload._entry_price != null && !Number.isNaN(Number(payload._entry_price))
+      ? Number(payload._entry_price)
+      : null;
+  const exitPrice =
+    payload._exit_price != null && !Number.isNaN(Number(payload._exit_price))
+      ? Number(payload._exit_price)
+      : null;
+  const fillValues = [entryPrice, exitPrice].filter((v) => v != null);
   const minClose = Math.min(...closes);
   const maxClose = Math.max(...closes);
-  const minY = Math.min(minClose, ...levelValues, ...seriesValues, minClose * 0.98);
-  const maxY = Math.max(maxClose, ...levelValues, ...seriesValues, maxClose * 1.02);
+  const minY = Math.min(minClose, ...levelValues, ...seriesValues, ...fillValues, minClose * 0.98);
+  const maxY = Math.max(maxClose, ...levelValues, ...seriesValues, ...fillValues, maxClose * 1.02);
   const spanY = maxY - minY || 1;
 
   const xAt = (index) => pad.left + (index / Math.max(dates.length - 1, 1)) * plotW;
@@ -258,19 +290,55 @@ function renderPriceChartSvg(payload, levelsOverride) {
   const smaLegend = smaPlots.map((row) => row.legend).join("");
 
   const openedAt = (payload._opened_at || "").slice(0, 10);
+  const soldAt = (payload._sold_at || "").slice(0, 10);
   const signalSince = (payload.signal_since || payload.levels_as_of || "").slice(0, 10);
   let signalMarker = "";
+  let labelOffset = 0;
   if (openedAt) {
-    signalMarker += dateMarkerLine(dates, openedAt, xAt, pad, `Opened ${openedAt}`, 0);
+    const buyLabel =
+      entryPrice != null
+        ? `Bought ${openedAt} · ${formatChartPrice(entryPrice, currency)}`
+        : `Bought ${openedAt}`;
+    signalMarker += tradeFillMarker(
+      dates,
+      openedAt,
+      entryPrice,
+      xAt,
+      yAt,
+      pad,
+      buyLabel,
+      "#2e9c4f",
+      labelOffset
+    );
+    labelOffset += 16;
   }
-  if (signalSince && signalSince !== openedAt) {
+  if (soldAt) {
+    const sellLabel =
+      exitPrice != null
+        ? `Sold ${soldAt} · ${formatChartPrice(exitPrice, currency)}`
+        : `Sold ${soldAt}`;
+    signalMarker += tradeFillMarker(
+      dates,
+      soldAt,
+      exitPrice,
+      xAt,
+      yAt,
+      pad,
+      sellLabel,
+      "#b33a3a",
+      labelOffset
+    );
+    labelOffset += 16;
+  }
+  if (signalSince && signalSince !== openedAt && signalSince !== soldAt) {
     signalMarker += dateMarkerLine(
       dates,
       signalSince,
       xAt,
       pad,
       `Signal since ${signalSince}`,
-      openedAt ? 16 : 0
+      labelOffset,
+      "#0f172a"
     );
   }
 
@@ -385,6 +453,15 @@ function renderChartBody(payload, report, source, overlays) {
   const initialAsOf = (payload.initial_levels_as_of || payload.signal_since || "").slice(0, 10);
   const signalSince = (payload.signal_since || "").slice(0, 10);
   const openedAt = (overlays && overlays.opened_at ? String(overlays.opened_at) : "").slice(0, 10);
+  const soldAt = (overlays && overlays.sold_at ? String(overlays.sold_at) : "").slice(0, 10);
+  const entryPrice =
+    overlays && overlays.book_cost != null && !Number.isNaN(Number(overlays.book_cost))
+      ? Number(overlays.book_cost)
+      : null;
+  const exitPrice =
+    overlays && overlays.exit_price != null && !Number.isNaN(Number(overlays.exit_price))
+      ? Number(overlays.exit_price)
+      : null;
   const usingInitial = source === "initial" && payload.initial_levels;
   const planHint = !usingInitial && report.trade_plan?.trade_plan_summary
     ? `<p class="small muted">${esc(report.trade_plan.trade_plan_summary)}</p>`
@@ -402,13 +479,28 @@ function renderChartBody(payload, report, source, overlays) {
         : usingInitial
           ? ` Trade levels frozen at the initial recommendation (${esc(asOfLabel)}). Last is the latest close so you can see what has played out.`
           : ` Trade levels from the latest screen (${esc(levelsAsOf)}).`;
+    const fillBits = [];
+    if (openedAt) {
+      fillBits.push(
+        entryPrice != null
+          ? `Bought marker ${esc(openedAt)} @ ${esc(formatChartPrice(entryPrice, currency))}`
+          : `Bought marker ${esc(openedAt)}`
+      );
+    }
+    if (soldAt) {
+      fillBits.push(
+        exitPrice != null
+          ? `Sold marker ${esc(soldAt)} @ ${esc(formatChartPrice(exitPrice, currency))}`
+          : `Sold marker ${esc(soldAt)}`
+      );
+    }
     levelsHint = `<p class="small muted">${basisLine.trim()}${
       smaAsSeries
         ? " SMA 50 / SMA 200 plot as rolling overlays (not flat point-in-time lines)."
         : " SMA values are point-in-time until the next chart publish adds rolling paths."
     }${
       signalSince ? ` Vertical line marks signal since ${esc(signalSince)}.` : ""
-    }${openedAt ? ` Opened marker ${esc(openedAt)}.` : ""}</p>`;
+    }${fillBits.length ? ` ${fillBits.join(". ")}.` : ""}</p>`;
   }
   if (!tradeLevelsPresent) {
     levelsHint += `<p class="small muted">No core/tactical buy or target/stop available. ${
@@ -425,7 +517,13 @@ function renderChartBody(payload, report, source, overlays) {
         hasInitial ? "Show levels from the first week of this signal" : "No initial recommendation snapshot yet"
       }">Initial recommendation</button>
     </div>`;
-  const chartPayload = { ...payload, _opened_at: openedAt || null };
+  const chartPayload = {
+    ...payload,
+    _opened_at: openedAt || null,
+    _sold_at: soldAt || null,
+    _entry_price: entryPrice,
+    _exit_price: exitPrice,
+  };
   return `
     <p class="small muted">
       ${esc(payload.period || "1y")} daily closes · as of ${esc((payload.as_of || "").slice(0, 10) || "—")}
