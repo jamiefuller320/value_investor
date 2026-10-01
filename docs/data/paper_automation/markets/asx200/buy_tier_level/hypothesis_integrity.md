@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-30T07:26:40.230731+00:00
+Track: `buy_tier_level` · updated 2026-10-01T00:46:34.494514+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **12** / 27 (44% count, 41% NAV)
+- Losers: **12** / 26 (46% count, 43% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -132,13 +132,6 @@ Track: `buy_tier_level` · updated 2026-09-30T07:26:40.230731+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 51%
-
-### YAL.AX — weakening / watch_review (-1.8%)
-- left buy tier (hold)
-- research verdict caution
-- conviction 16% below intact floor
-- cheapness family still passes
-- data_quality 0.95
 
 ### HVN.AX — intact / hold_tolerate (-1.4%)
 - still strong_buy
