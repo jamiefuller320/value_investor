@@ -180,7 +180,9 @@ def units_from_plan(plan: dict[str, Any] | None) -> list[PackCoverageUnit]:
     return out
 
 
-def summarize_plan_by_week(plan: dict[str, Any] | Iterable[PackCoverageUnit]) -> list[dict[str, Any]]:
+def summarize_plan_by_week(
+    plan: dict[str, Any] | Iterable[PackCoverageUnit],
+) -> list[dict[str, Any]]:
     """Roll plan units into per-week market counts (for bottleneck / CLI summary)."""
     if isinstance(plan, dict):
         rows = units_from_plan(plan)

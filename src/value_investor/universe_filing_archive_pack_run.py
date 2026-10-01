@@ -409,8 +409,7 @@ def ops_finding_from_bottleneck_review(
             "category": "ingest",
             "title": FINDING_TITLE_BOTTLENECK,
             "summary": (
-                f"Archive pack pass recorded {len(errors)} error(s); "
-                f"first={errors[0]!s}"[:400]
+                f"Archive pack pass recorded {len(errors)} error(s); first={errors[0]!s}"[:400]
             ),
             "auto_fixable": False,
         }
@@ -497,9 +496,7 @@ def _finalize_and_persist(
     bn_row = bn_timer.finish("ok", bottlenecks=len(review.get("bottlenecks") or []))
     stages.append(bn_row)
     review["stages"] = list(stages)
-    review["throughput"]["total_elapsed_ms"] = sum(
-        int(s.get("elapsed_ms") or 0) for s in stages
-    )
+    review["throughput"]["total_elapsed_ms"] = sum(int(s.get("elapsed_ms") or 0) for s in stages)
     pack_run["outcome"] = outcome
     if persist:
         write_json(Path(pack_run_path), pack_run)
@@ -658,8 +655,7 @@ def run_universe_filing_archive_pack(
                     "Dry assemble — plan only; no source fetches"
                     if dry_run
                     else (
-                        "Cold-store writers remain gated until euro graduation "
-                        "+ miss-rate evidence"
+                        "Cold-store writers remain gated until euro graduation + miss-rate evidence"
                     )
                 ),
             )

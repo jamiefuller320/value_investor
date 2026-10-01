@@ -159,7 +159,11 @@ def test_ops_finding_stale_and_bottleneck_check(tmp_path: Path) -> None:
         run_id="t1",
         generated_at=datetime(2026, 9, 1, 22, 0, tzinfo=UTC),
         outcome="suspend",
-        gate={"decision": "suspend", "allowed": False, "focus_pressure_reasons": ["focus_fat_slot_sprint_active"]},
+        gate={
+            "decision": "suspend",
+            "allowed": False,
+            "focus_pressure_reasons": ["focus_fat_slot_sprint_active"],
+        },
         plan={},
         stages=[{"id": "gate", "elapsed_ms": 1, "status": "ok", "detail": {}}],
         dry_run=True,
@@ -184,9 +188,7 @@ def test_ops_finding_stale_and_bottleneck_check(tmp_path: Path) -> None:
 
 
 def test_workflow_pins_weekday_2200_utc_and_week_first() -> None:
-    text = Path(".github/workflows/universe-filing-archive-pack.yml").read_text(
-        encoding="utf-8"
-    )
+    text = Path(".github/workflows/universe-filing-archive-pack.yml").read_text(encoding="utf-8")
     assert 'cron: "0 22 * * 1-5"' in text
     assert "cancel-in-progress: true" in text
     assert "ftse-universe-archive-pack" in text

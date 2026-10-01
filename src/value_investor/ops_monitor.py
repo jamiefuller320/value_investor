@@ -1580,11 +1580,7 @@ def check_universe_filing_archive_pack_bottleneck(
                     auto_fixable=False,
                 )
             ]
-    stale = (
-        float(stale_after_hours)
-        if stale_after_hours is not None
-        else DEFAULT_STALE_AFTER_HOURS
-    )
+    stale = float(stale_after_hours) if stale_after_hours is not None else DEFAULT_STALE_AFTER_HOURS
     finding = ops_finding_from_bottleneck_review(payload, stale_after_hours=stale)
     if not finding:
         return []
