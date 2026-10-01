@@ -31,7 +31,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-01T10:43:47.315399+00:00",
+    "snapshot_at": "2026-10-01T10:51:31.636867+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 53,
     "unmeasured_buy_tier": 0,
@@ -115,7 +115,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-01T10:43:47.317500+00:00",
+  "evaluated_at": "2026-10-01T10:51:31.639118+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -147,63 +147,83 @@
     "tsx60"
   ],
   "parallel_sprint_markets": [
-    "aex"
+    "euro_stoxx50"
   ],
   "parallel_sprint_status": [
     {
-      "market_id": "aex",
+      "market_id": "euro_stoxx50",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=2, indexed_without_body=1)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=6, indexed_without_body=11)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
       "parked_tickers": [
-        "KPN.AS"
+        "ADYEN.AS",
+        "BAS.DE",
+        "DTE.DE",
+        "MUV2.DE",
+        "SAP.DE",
+        "SGO.PA",
+        "TTE.PA"
       ],
       "phase3_ready": false,
-      "current_phase": 0,
+      "current_phase": 1,
       "next_phase": 1,
       "phase_blockers": [
-        "no benchmark configured for aex"
+        "euro_stoxx50 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-01T10:44:13.441322+00:00",
-        "market_id": "aex",
-        "buy_tier_count": 8,
+        "snapshot_at": "2026-10-01T10:51:54.940228+00:00",
+        "market_id": "euro_stoxx50",
+        "buy_tier_count": 16,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 2,
-        "indexed_without_body": 1,
-        "bodies_min": 2,
-        "bodies_median": 3.5,
-        "bodies_max": 37,
+        "thin_body_buy_tier": 6,
+        "indexed_without_body": 11,
+        "bodies_min": 1,
+        "bodies_median": 3.0,
+        "bodies_max": 100,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [
-          "KPN.AS",
+          "SGO.PA",
+          "MUV2.DE",
+          "DTE.DE",
+          "MC.PA",
+          "BAS.DE",
           "ADYEN.AS"
         ],
         "indexed_without_body_tickers": [
+          "TTE.PA",
+          "SGO.PA",
+          "SAP.DE",
           "ADYEN.AS"
         ],
         "indexed_without_body_by_ticker": {
+          "TTE.PA": 7,
+          "SGO.PA": 2,
+          "SAP.DE": 1,
           "ADYEN.AS": 1
         },
         "parked_tickers": [
-          "KPN.AS"
+          "ADYEN.AS",
+          "BAS.DE",
+          "DTE.DE",
+          "MUV2.DE",
+          "SAP.DE",
+          "SGO.PA",
+          "TTE.PA"
         ],
-        "parked_count": 1,
+        "parked_count": 7,
         "effective_thin_body_buy_tier": 1,
         "effective_thin_body_tickers": [
-          "ADYEN.AS"
+          "MC.PA"
         ],
-        "effective_indexed_without_body": 1,
-        "effective_indexed_without_body_tickers": [
-          "ADYEN.AS"
-        ],
+        "effective_indexed_without_body": 0,
+        "effective_indexed_without_body_tickers": [],
         "ingest_exhausted": false
       },
       "filing_gaps": 0,
@@ -218,7 +238,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-01T10:44:13.441935+00:00",
+      "evaluated_at": "2026-10-01T10:51:54.941048+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -242,7 +262,7 @@
         "no benchmark configured for hang_seng"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-01T10:44:14.951910+00:00",
+        "snapshot_at": "2026-10-01T10:51:56.222759+00:00",
         "market_id": "hang_seng",
         "buy_tier_count": 25,
         "unmeasured_buy_tier": 3,
@@ -340,13 +360,13 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-01T10:44:14.952789+00:00",
+      "evaluated_at": "2026-10-01T10:51:56.223791+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
-    "aex",
+    "euro_stoxx50",
     "hang_seng"
   ],
   "market_queue": [
@@ -393,7 +413,7 @@
     }
   },
   "scheduler_stream_1_markets": [
-    "aex"
+    "euro_stoxx50"
   ],
   "scheduler_stream_2_markets": [
     "hang_seng"
