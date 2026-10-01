@@ -50,9 +50,7 @@ def test_episode_opened_at_skips_prior_closed_cycle():
             "position_closed": True,
         },
     ]
-    opened = _episode_opened_at(
-        trades, ticker="SGE.L", sold_at="2026-09-12T10:00:00+00:00"
-    )
+    opened = _episode_opened_at(trades, ticker="SGE.L", sold_at="2026-09-12T10:00:00+00:00")
     assert opened == "2026-09-10T10:00:00+00:00"
 
 
@@ -179,7 +177,7 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
                     "position_closed": True,
                     "avg_cost_at_exit": 1.0,
                     "name": "Sold PLC",
-                }
+                },
             ],
             "equity_curve": [{"at": NOW.isoformat(), "portfolio_value": 1500}],
             "rebalance_state": {"exit_streak": {}, "reentry_cooldown": {}},
