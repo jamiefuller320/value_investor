@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-01T06:32:37+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-01T08:37:11+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -229,6 +229,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N174 | **Naive still-buyish hold without rank-drop carve-out** | Holding every still-screen-buyish displaced name blocks decisive leaves (large rank drops 28-35 on MEGP/AEP/ITV). Observe showed 11-14 false-holds without drop<3 gate. Do not ship un-gated hold-all-buyish. | Designing the still-in-buy-set cold-start twin exit predicate |
 | N175 | **Mid-flight Suite A still-in-buy-set or cooldown=2 knob flip** | Preferences and observe results: twins over mid-flight edits. Live rules/ai_judgment stay at cooldown=1 until a cold-start twin of rank-gated still-in-buy-set (± CD2) has marks; adoption on Suite B. | Cold-start twin has thick enough closed cohort / stated readiness gates |
 | N176 | **Promote still_in_buy_set knobs onto live Suite A** | Do not copy still_in_buy_set_hold / CD2 onto live rules or ai_judgment mid-flight. Twin marks first; any live apply needs a new capital epoch or explicit promotion gate. Adoption stays on Suite B. | still_in_buy_set twin clears readiness gates in still-in-buy-set-twin.md |
+| N177 | **Live swap of refined agree/veto prompt or judge** | Do not mid-flight replace the live agree/veto judge or prompt on Suite A from shadow A/B wins. Live influence stays fail-closed (authorize_live_llm_influence); hard veto remains N173/L510 cold-start/epoch only. | Same gates as N173/L510: thick twin + shadow A/B marks, evidence on every live-bound card, explicit cold-start/epoch promotion |
+| N178 | **Standalone refinement-registry UI parallel to experiment assessment** | Do not ship a second refinement ledger/dashboard. Prefer parent_id/refinement_of on experiment_assessment rows plus judge_spec_id on agree/veto cards so A and B share one lineage pattern. | experiment_assessment winner-evolution parent_id lineage is implemented and Sunday review needs a dedicated refinement surface beyond the ledger |
+| N179 | **Mid-flight rewrite of graduated DCA cadence on live books** | After DCA graduates, refine via overlay counterfactuals or a new cold-start/twin — never silently change tranche count/timing on the running graduated_allocation (or primary) book mid-flight. | A documented DCA refinement twin/cold-start is authorised after Q1/Q2 overlay evidence; human asks for epoch promotion |
 
 ---
 
@@ -305,6 +308,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L508 | **Suite B fair-cost twin of still_in_buy_set** | Optional fair-cost cold-start twin of the Suite A still_in_buy_set churn policy so adoption-shaped drag can be read without Suite A 3% stress. Do not fork until the Suite A twin has marks. | still_in_buy_set twin has multi-week marks and Suite B capacity allows another fair book |
 | L509 | **AI-judgment still_in_buy_set twin** | Second cold-start twin using ai_judgment selection gates plus the same rank-gated hold / never-left-candidates / CD2 knobs. Skipped now to keep eng capacity to one Suite A rules twin. | rules still_in_buy_set twin shows churn relief and a second twin slot is free |
 | L510 | **Promote LLM agree/veto shadow to hard veto** | Observe-only llm_agree_veto_shadow is live. Promote to hard veto on live capital only after thick disagreement marks vs still_in_buy_set twin, fail-closed evidence on every live-bound card, and an explicit cold-start/epoch — never mid-flight Suite A edit. | still_in_buy_set twin multi-week marks show material shadow veto-on-sell agreement AND authorize_live_llm_influence gate is reviewed |
+| L511 | **LLM agree/veto judge-spec A/B challenger** | After multi-week llm_agree_veto_shadow marks, run an observe-only second judge_spec (heuristic tweak or bounded LLM) writing parallel cards with judge_spec_id; never influences_live. Compare disagreement themes vs still_in_buy_set twin before any live prompt swap. | learning_tracks_llm_agree_veto shows multi-week marks with a concrete disagreement theme vs still_in_buy_set twin, and a human picks Option 2/3 from docs/refinement-learning-loops.md |
+| L512 | **DCA dynamic tranche sizing from intervening behaviour** | After fixed-cadence graduation marks, score an observe-only dynamic add policy (vary remaining tranche size from rank/signal drift or adverse move between marks). Keep separate from ID and timing questions; do not mid-flight rewrite graduated_allocation executes. | entry_dca overlay has thick completed-window marks on a stable leading cadence (or paper_execute_graduated running) and timing-shift Q1 counterfactuals are scored or parked |
+| L513 | **DCA timing-shift overlay cadences after graduation** | First post-graduation DCA refinement instrument: score front-loaded vs equal weekly timing shifts as extra overlay cadences on existing episodes (net end value after costs). No new paper book; prefer before dynamic sizing. | ready_for_cadence_analysis true with completed-window scores, or paper_execute_graduated stage open, and human opens refinement lane from docs/refinement-learning-loops.md |
 
 ### Universe & data
 
