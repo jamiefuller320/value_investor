@@ -43,7 +43,8 @@ lane change and readiness gate (see N152 / P1 pin rules).
   hunter + Analysis (`docs/data/observe_utilization.json`), with freshness /
   staleness banners and trajectory deltas vs last cycle.
 - **L460** — raw instrument stores (`buy_tier_flip_lag.json`,
-  `decision_input_inventory.json`) in ops-monitor `GHA_COMMIT_OPTIONAL` so
+  `decision_input_inventory.json`, `universe_filing_archive_miss_rate.json`) in
+  ops-monitor `GHA_COMMIT_OPTIONAL` so
   daily cohort history persists in git (email-report excludes them so a broad
   `docs/data` overlay cannot rewind fresher ops commits).
 - **L463** — **Lifecycle maturity mix trajectory** on Lifecycle → **Maturity mix**
@@ -345,14 +346,19 @@ pass.
 Both checks are **observe / warn-only** (`auto_fixable=False`). They refresh a
 runner-local store JSON and emit an ops finding when the warn cohort is material.
 Manual drill-down: `ftse-ingest-audit --flip-lag` /
-`ftse-ingest-audit --decision-inputs` (mutually exclusive).
+`ftse-ingest-audit --decision-inputs` /
+`ftse-ingest-audit --archive-miss-rate` (mutually exclusive).
 They do **not** deepen ingest or rememo.
 
 | Check | Finding title | When it warns | Store (runner) | Status |
 |-------|---------------|---------------|----------------|--------|
 | `check_buy_tier_flip_lag` | **New buy-tier not yet usable** | Path-incomplete ≥24h cohort non-empty (FTSE live ∪ admitted; schema v2) | `docs/data/buy_tier_flip_lag.json` | Live on main |
 | `check_decision_input_inventory` | **FTSE decision-input utilization gap** | Dominant bind gap count ≥3 on FTSE holdings ∪ buy-tier (else quiet / `P1 green-enough`) | `docs/data/decision_input_inventory.json` | Live on main |
+| `check_universe_filing_archive_miss_rate` | **Universe archive body-miss rate elevated** | Flip-lag proxy miss rate elevated with open body gaps (L499; no crawler) | `docs/data/universe_filing_archive_miss_rate.json` | Scaffold live |
 | `check_shard_nav_fx_warp` | **Shard NAV FX unit mismatch** | Non-GBP shard GBP book shows day-0 NAV≈FX and `buy_tier_level_native` is not yet active (N153) | `docs/data/shard_nav_fx_warp.json` | Live with N153 |
+
+Isolation firewall + fail-open hydrate scaffolds (no crawler): see
+[`universe-filing-archive-pack.md`](universe-filing-archive-pack.md).
 
 Called from `collect_ops_findings` on the daily ops-monitor schedule. Raw
 instrument store JSON **is** in `GHA_COMMIT_OPTIONAL` (**L460**) so day-over-day

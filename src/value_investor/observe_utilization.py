@@ -25,6 +25,7 @@ DEFAULT_OPS_STATUS_PATH = Path("docs/data/ops_status.json")
 DEFAULT_FLIP_LAG_PATH = Path("docs/data/buy_tier_flip_lag.json")
 DEFAULT_DECISION_INPUT_PATH = Path("docs/data/decision_input_inventory.json")
 DEFAULT_SHARD_NAV_FX_PATH = Path("docs/data/shard_nav_fx_warp.json")
+DEFAULT_ARCHIVE_MISS_PATH = Path("docs/data/universe_filing_archive_miss_rate.json")
 
 SCHEMA_VERSION = 1
 # Ops-monitor runs ~2×/day; past this the surface is obviously stale.
@@ -38,6 +39,7 @@ HISTORY_MIN_INTERVAL_HOURS = 6.0
 FLIP_LAG_FINDING_TITLE = "New buy-tier not yet usable"
 DECISION_INPUT_FINDING_TITLE = "FTSE decision-input utilization gap"
 SHARD_NAV_FX_FINDING_TITLE = "Shard NAV FX unit mismatch"
+ARCHIVE_MISS_FINDING_TITLE = "Universe archive body-miss rate elevated"
 
 _WARN_COUNT_RE = re.compile(r"^(\d+)\s+recent buy-tier flip", re.I)
 _GAP_COUNT_RE = re.compile(r"(\d+)\s+of\s+\d+\s+names", re.I)
@@ -343,6 +345,57 @@ def _shard_nav_fx_instrument(
     }
 
 
+def _archive_miss_instrument(
+    *,
+    store: dict[str, Any] | None,
+    finding: dict[str, Any] | None,
+    now: datetime,
+    ops_run_at: datetime | None,
+    stale_after_hours: float,
+    store_lag_warn_hours: float,
+) -> dict[str, Any]:
+    summary = (store or {}).get("summary") or {}
+    miss_rate = summary.get("miss_rate")
+    miss_count = summary.get("enter_body_miss_count")
+    cohort = summary.get("cohort_count")
+    open_missing = summary.get("open_still_missing_bodies")
+    as_of = _parse_dt((store or {}).get("updated_at"))
+    freshness = _freshness_block(
+        as_of=as_of,
+        now=now,
+        ops_run_at=ops_run_at,
+        stale_after_hours=stale_after_hours,
+        store_lag_warn_hours=store_lag_warn_hours,
+        present=store is not None,
+    )
+    warn_flag = bool(summary.get("warn"))
+    warn_active = finding is not None or warn_flag
+    # Primary metric: open still missing bodies (lower is better for trajectory).
+    primary = int(open_missing) if open_missing is not None else None
+    return {
+        "id": "universe_filing_archive_miss_rate",
+        "title": "Universe archive body-miss (proxy)",
+        "finding_title": ARCHIVE_MISS_FINDING_TITLE,
+        "observe_only": True,
+        "warn_active": bool(warn_active),
+        "severity": (finding or {}).get("severity")
+        if finding
+        else ("warn" if warn_active else "ok"),
+        "finding_summary": (finding or {}).get("summary"),
+        "metrics": {
+            "miss_rate": miss_rate,
+            "enter_body_miss_count": int(miss_count) if miss_count is not None else None,
+            "cohort_count": int(cohort) if cohort is not None else None,
+            "open_still_missing_bodies": primary,
+            "by_market": summary.get("by_market") or {},
+        },
+        "primary_metric": "open_still_missing_bodies",
+        "primary_value": primary,
+        "primary_label": "Open flips still missing key bodies (archive-miss proxy)",
+        "freshness": freshness,
+    }
+
+
 def _history_point(instruments: list[dict[str, Any]], *, now: datetime) -> dict[str, Any]:
     point: dict[str, Any] = {"at": now.isoformat()}
     for inst in instruments:
@@ -397,6 +450,7 @@ def build_observe_utilization_snapshot(
     flip_lag_path: Path = DEFAULT_FLIP_LAG_PATH,
     decision_input_path: Path = DEFAULT_DECISION_INPUT_PATH,
     shard_nav_fx_path: Path = DEFAULT_SHARD_NAV_FX_PATH,
+    archive_miss_path: Path = DEFAULT_ARCHIVE_MISS_PATH,
     ops_status_path: Path = DEFAULT_OPS_STATUS_PATH,
     prior_path: Path = DEFAULT_STORE_PATH,
     now: datetime | None = None,
@@ -411,6 +465,7 @@ def build_observe_utilization_snapshot(
     flip_store = _safe_read(Path(flip_lag_path))
     decision_store = _safe_read(Path(decision_input_path))
     shard_fx_store = _safe_read(Path(shard_nav_fx_path))
+    archive_miss_store = _safe_read(Path(archive_miss_path))
     prior = _safe_read(Path(prior_path))
 
     instruments = [
@@ -425,6 +480,14 @@ def build_observe_utilization_snapshot(
         _decision_input_instrument(
             store=decision_store,
             finding=findings.get(DECISION_INPUT_FINDING_TITLE),
+            now=clock,
+            ops_run_at=ops_run_at,
+            stale_after_hours=stale_after_hours,
+            store_lag_warn_hours=store_lag_warn_hours,
+        ),
+        _archive_miss_instrument(
+            store=archive_miss_store,
+            finding=findings.get(ARCHIVE_MISS_FINDING_TITLE),
             now=clock,
             ops_run_at=ops_run_at,
             stale_after_hours=stale_after_hours,
@@ -519,6 +582,7 @@ def refresh_observe_utilization(
     flip_lag_path: Path = DEFAULT_FLIP_LAG_PATH,
     decision_input_path: Path = DEFAULT_DECISION_INPUT_PATH,
     shard_nav_fx_path: Path = DEFAULT_SHARD_NAV_FX_PATH,
+    archive_miss_path: Path = DEFAULT_ARCHIVE_MISS_PATH,
     ops_status_path: Path = DEFAULT_OPS_STATUS_PATH,
     now: datetime | None = None,
 ) -> dict[str, Any]:
@@ -528,6 +592,7 @@ def refresh_observe_utilization(
         flip_lag_path=flip_lag_path,
         decision_input_path=decision_input_path,
         shard_nav_fx_path=shard_nav_fx_path,
+        archive_miss_path=archive_miss_path,
         ops_status_path=ops_status_path,
         prior_path=store_path,
         now=now,
@@ -538,7 +603,9 @@ def refresh_observe_utilization(
 
 
 __all__ = [
+    "ARCHIVE_MISS_FINDING_TITLE",
     "DECISION_INPUT_FINDING_TITLE",
+    "DEFAULT_ARCHIVE_MISS_PATH",
     "DEFAULT_DECISION_INPUT_PATH",
     "DEFAULT_FLIP_LAG_PATH",
     "DEFAULT_OPS_STATUS_PATH",
