@@ -90,6 +90,18 @@ Independence answers *how books are kept apart*. **Gates + capacity** answer *wh
 
 Spare 50%/25% fractions apply only while a market is still *in front* of that threshold, so the head can finish. They are not the long-run treatment.
 
+**Straggler soft-park (do not demote the head).** If the fat-slot head briefly hits `sprint_ingest_complete` / maintenance and then a few names resurface as thin/IWB leftovers — or if peer deepen keeps resetting the market-wide 0-improve streak while one IR-exhausted straggler never moves — **soft-park** those leftovers (`awaiting_periodic_report` when fully bodied thin; `unfetchable_iwb` when IWB) so fat can release. Do **not** demote the market from cascade head policy, open a fourth equal sprint stream, or burn disproportionate deepen for limited gain.
+
+| Gate | Rule |
+|------|------|
+| Bootstrap clear | `unmeasured == 0` and `zero_body == 0` (never park those) |
+| Small leftover | Unparked thin∪IWB count ≤ **3** (`DEFAULT_STRAGGLER_MAX_LEFTOVERS`) |
+| Per-ticker streak | Ticker stayed in *effective* leftover across ≥ **2** complete deepen runs (`DEFAULT_STRAGGLER_ZERO_RUNS`) without that ticker in `improved_tickers` — peer improves do **not** reset |
+| Reason | Same as market-wide exhaustion: thin fully-bodied → `awaiting_periodic_report`; IWB → `unfetchable_iwb` |
+| Effect | `ingest_exhausted` / `sprint_ingest_complete` → fat slot releases; market stays on maintenance + admitted package |
+
+Wired in `library_ingest_exhaustion.refresh_library_ingest_exhaustion` (`park_via=straggler_soft_park`). Market-wide 3× complete 0-improve parking is unchanged.
+
 **What is wired vs not.** Ingest already follows this: exhaustion parks leftovers, vacates the sprint, and puts unparked names on FTSE-volume maintenance (`ingest_exhausted_markets`, today including `sp500`). **L322 learning flip:** hitting `sprint_ingest_complete` (raw parity or exhaustion) also admits the market to the equal-resource set — weekday epoch-0 `buy_tier_level`, screen cadence, equal-support near-miss watch, and buy-tier rememo (L321). **N94** still keeps the capacity-1 *weekly* paper slot on `euro_depth`; that is deliberate slot scarcity, not a missing admission. Do not read “0 weekly paper batches” on an admitted maintenance market as a failed flip when epoch-0 weekday marks are running.
 
 **Equal treatment after admission.** Compare only admitted markets that have the same package (N103). Do **not** spray leftover plan credit across 21 thin markets (N96). Residual skew you cannot policy away: filing *yield* (ESEF vs EDGAR vs ASX IR), session timezone, and buy-tier width. Spare-slot fractions on a *pre-threshold* market are expected; leaving a *post-threshold* market on observe-sim only is a treatment bug.

@@ -174,6 +174,164 @@ def test_improved_run_breaks_exhaustion_streak(tmp_path: Path):
     assert count == 1
 
 
+def test_straggler_soft_park_ignores_peer_improve_streak(tmp_path: Path):
+    """Peers improving must not block soft-park of a sole thin leftover."""
+    from value_investor.library_ingest_exhaustion import (
+        DEFAULT_STRAGGLER_ZERO_RUNS,
+        count_trailing_ticker_leftover_no_improve_runs,
+    )
+
+    root = tmp_path / "library"
+    market = "euro_depth"
+    _write_index(root, market, "MC.PA", total=2, with_body=2)
+    log_path = root / "markets" / market / "ingest_health_log.json"
+    # Market-wide streak is 0 (peers keep improving), but MC stays effective leftover.
+    write_json(
+        log_path,
+        {
+            "entries": [
+                {
+                    "market_id": market,
+                    "improved": 4,
+                    "improved_tickers": ["MC.PA", "ADYEN.AS", "SHELL.AS", "C5H.IR"],
+                    "targets": 4,
+                    "runtime_cutoff": False,
+                    "partial": False,
+                    "health_after": {
+                        **_health(
+                            thin=1,
+                            thin_tickers=["MC.PA", "SGO.PA"],
+                            iwb=0,
+                        ),
+                        "effective_thin_body_tickers": ["MC.PA"],
+                        "effective_indexed_without_body_tickers": [],
+                        "parked_tickers": ["SGO.PA"],
+                    },
+                },
+                {
+                    "market_id": market,
+                    "improved": 2,
+                    "improved_tickers": ["SHELL.AS", "TTE.PA"],
+                    "targets": 3,
+                    "runtime_cutoff": False,
+                    "partial": False,
+                    "health_after": {
+                        **_health(
+                            thin=1,
+                            thin_tickers=["MC.PA", "SGO.PA"],
+                            iwb=0,
+                        ),
+                        "effective_thin_body_tickers": ["MC.PA"],
+                        "effective_indexed_without_body_tickers": [],
+                        "parked_tickers": ["SGO.PA"],
+                    },
+                },
+                {
+                    "market_id": market,
+                    "improved": 1,
+                    "improved_tickers": ["SHELL.AS"],
+                    "targets": 2,
+                    "runtime_cutoff": False,
+                    "partial": False,
+                    "health_after": {
+                        **_health(
+                            thin=1,
+                            thin_tickers=["MC.PA", "SGO.PA"],
+                            iwb=0,
+                        ),
+                        "effective_thin_body_tickers": ["MC.PA"],
+                        "effective_indexed_without_body_tickers": [],
+                        "parked_tickers": ["SGO.PA"],
+                    },
+                },
+            ]
+        },
+        compact=False,
+    )
+    assert (
+        count_trailing_ticker_leftover_no_improve_runs(log_path, market_id=market, ticker="MC.PA")
+        == 2
+    )
+    path = root / "markets" / market / "ingest_exhaustion.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(
+        path,
+        {
+            "schema_version": 1,
+            "market_id": market,
+            "exhausted": False,
+            "parked": [
+                {
+                    "ticker": "SGO.PA",
+                    "reason": REASON_AWAITING_PERIODIC,
+                    "filings_total": 2,
+                    "filings_with_body": 2,
+                    "indexed_without_body": 0,
+                    "thin": True,
+                }
+            ],
+        },
+        compact=False,
+    )
+    payload = refresh_library_ingest_exhaustion(
+        market,
+        library_root=root,
+        health=_health(
+            thin=2,
+            thin_tickers=["MC.PA", "SGO.PA"],
+            iwb=0,
+        ),
+        health_log_path=log_path,
+        min_zero_runs=DEFAULT_EXHAUSTION_ZERO_RUNS,
+        straggler_zero_runs=DEFAULT_STRAGGLER_ZERO_RUNS,
+    )
+    tickers = {row["ticker"]: row for row in payload["parked"]}
+    assert payload["exhausted"] is True
+    assert payload["unparked_leftover"] == []
+    assert "MC.PA" in tickers
+    assert tickers["MC.PA"]["reason"] == REASON_AWAITING_PERIODIC
+    assert tickers["MC.PA"]["park_via"] == "straggler_soft_park"
+    assert tickers["SGO.PA"]["reason"] == REASON_AWAITING_PERIODIC
+
+
+def test_straggler_soft_park_skips_when_too_many_unparked(tmp_path: Path):
+    root = tmp_path / "library"
+    market = "euro_depth"
+    for ticker in ("AAA.PA", "BBB.PA", "CCC.PA", "DDD.PA"):
+        _write_index(root, market, ticker, total=2, with_body=2)
+    log_path = root / "markets" / market / "ingest_health_log.json"
+    thin = ["AAA.PA", "BBB.PA", "CCC.PA", "DDD.PA"]
+    entries = []
+    for _ in range(3):
+        entries.append(
+            {
+                "market_id": market,
+                "improved": 1,
+                "improved_tickers": ["PEER.AS"],
+                "targets": 5,
+                "runtime_cutoff": False,
+                "partial": False,
+                "health_after": {
+                    **_health(thin=4, thin_tickers=thin),
+                    "effective_thin_body_tickers": thin,
+                    "effective_indexed_without_body_tickers": [],
+                },
+            }
+        )
+    write_json(log_path, {"entries": entries}, compact=False)
+    payload = refresh_library_ingest_exhaustion(
+        market,
+        library_root=root,
+        health=_health(thin=4, thin_tickers=thin),
+        health_log_path=log_path,
+        straggler_max_leftovers=3,
+        straggler_zero_runs=2,
+    )
+    assert payload["exhausted"] is False
+    assert payload["parked"] == []
+    assert payload["unparked_leftover"] == thin
+
+
 def test_refresh_parks_leftover_iwb_and_thin_after_zero_improve_runs(tmp_path: Path):
     root = tmp_path / "library"
     market = "sp500"

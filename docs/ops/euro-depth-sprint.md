@@ -55,7 +55,7 @@ and persists `docs/data/library/euro_ingest_dispatch.json`:
 | Mode | When | Sprint workflow (`euro-ingest-loop.yml`) | Shared maintenance workflow |
 |------|------|------------------------------------------|-----------------------------|
 | `sprint` | any of unmeasured / zero-body / thin / `indexed_without_body` > 0 (and leftover names are not yet parked) | ≤4×/day, 24 targets | **on if** `maintenance_markets` is nonempty (admitted / exhausted / parity). Euro itself stays on the sprint loop; do not turn off the shared workflow just because focus is still sprinting. |
-| `exhausted` | unmeasured + zero-body are 0, leftover thin/IWB names parked after complete 0-improve sprints | off | on — unparked names stay on FTSE-volume maintenance; parked leftovers skipped |
+| `exhausted` | unmeasured + zero-body are 0, leftover thin/IWB names parked after complete 0-improve sprints **or** straggler soft-park (≤3 unparked leftovers, each ≥2 complete runs without that ticker improving — peer improves do not block) | off | on — unparked names stay on FTSE-volume maintenance; parked leftovers skipped |
 | `maintenance` | FTSE quality bar met (all four **raw** counts zero) | off (skipped) | ≤4×/day, 62 targets + discovery scan via `library-ingest-maintenance.yml` |
 
 **Index-noise IWB auto-drop:** Google News / exchange **product shells** that are
@@ -81,7 +81,11 @@ threshold (raw parity or leftover thin/IWB parked), then give that market
 equivalent resource and move the fat slot — see
 [`AGENTS.md`](../../AGENTS.md) and
 [`market-sharded-learning.md`](market-sharded-learning.md#what-enter-learning-means).
-Spare streams only front-start the next queue names. Stagger slots and run
+**Straggler soft-park:** when a few IR-exhausted leftovers resurface after the
+head already hit the threshold (or peer deepen starves the market-wide
+0-improve streak), park them (`awaiting_periodic_report` /
+`unfetchable_iwb`) so fat releases — do not demote the head from cascade
+policy. Spare streams only front-start the next queue names. Stagger slots and run
 **parallel maintenance** for graduated markets; do **not** add a fourth equal
 sprint workflow (`library-ingest-sprint-3.yml` or similar) that can starve the
 current head. Learning resource flips with maintenance graduation (L322):
