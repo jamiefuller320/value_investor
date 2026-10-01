@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-30T20:12:54.936824Z",
+  "generated_at": "2026-10-01T07:48:23.787670Z",
   "timezone": "Europe/London",
-  "overall": "ok",
-  "surface_freshness": "fresh",
+  "overall": "warn",
+  "surface_freshness": "stale",
   "checks": [
     {
       "id": "progress_report_vs_email_overlay",
@@ -11,9 +11,9 @@
       "status": "ok",
       "drift_class": null,
       "ui_path": "docs/data/progress_report.json",
-      "ui_generated_at": "2026-09-28T08:53:07+00:00",
+      "ui_generated_at": "2026-09-30T20:08:50+00:00",
       "authority_path": "docs/data/progress_report.json",
-      "authority_generated_at": "2026-09-28T08:53:07+00:00",
+      "authority_generated_at": "2026-09-30T20:08:50+00:00",
       "detail": "ui matches authority (sidecar present with generated_at)",
       "runbook": "docs/ops/progress-report.md"
     },
@@ -38,7 +38,7 @@
       "ui_generated_at": null,
       "authority_path": null,
       "authority_generated_at": null,
-      "detail": "0/33 open acks stale (under mass-stale threshold)",
+      "detail": "2/33 open acks stale (under mass-stale threshold)",
       "runbook": "docs/ops/human-tasks-checklist.md"
     },
     {
@@ -47,28 +47,28 @@
       "status": "ok",
       "drift_class": null,
       "ui_path": "docs/data/lifecycle_board.json",
-      "ui_generated_at": "2026-09-30T07:47:07.102021+00:00",
+      "ui_generated_at": "2026-10-01T07:47:03.847142+00:00",
       "authority_path": null,
       "authority_generated_at": null,
-      "detail": "board age 12.4h (limit 30h)",
+      "detail": "board age 0.0h (limit 30h)",
       "runbook": "docs/ops/position-lifecycle.md"
     },
     {
       "id": "daily_hub_local_date_matches_today",
       "title": "Daily hub local_date matches today",
-      "status": "ok",
-      "drift_class": null,
+      "status": "warn",
+      "drift_class": "stale_surface",
       "ui_path": "docs/data/daily_focus.json",
-      "ui_generated_at": "2026-09-30T17:12:41.094556Z",
+      "ui_generated_at": "2026-09-30T20:12:54.936824Z",
       "authority_path": null,
       "authority_generated_at": null,
-      "detail": "hub local_date=2026-09-30 matches Europe/London today",
+      "detail": "hub local_date=2026-09-30 ≠ today 2026-10-01 after 04:00 Europe/London; artifact age 11.6h",
       "runbook": "docs/ops/ops-monitor.md#daily-hub"
     }
   ],
   "summary": {
-    "ok": 5,
-    "warn": 0,
+    "ok": 4,
+    "warn": 1,
     "fail": 0
   },
   "observe_only": true,

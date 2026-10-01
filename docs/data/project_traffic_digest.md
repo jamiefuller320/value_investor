@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-30T21:30:27.327675+00:00`
+Generated: `2026-10-01T07:48:23.882970+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,12 +33,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `ingest_narrow`/verified PR #919 `eng-20260930-03` — Close library ingest filing gaps for Hang Seng (hang_seng): 13 buy-tier gaps after stalled weekday loop
-- `human`/human PR #912 `eng-20260930-02` — Hunt fetchable IR source for parked euro_depth leftover MC.PA
-- `parked_hunter`/verified PR #911 `eng-20260930-01` — Hunt fetchable IR source for parked euro_depth leftover ADYEN.AS
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 122
+- Occasion count: 124
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 3×
@@ -47,6 +45,13 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `ruff_format` — 1×
 - `dirty merge: deferred-ideas.json / deferred-review.md vs main after L424-L426 landings` — 1×
 - `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 3 (open=3, resolved=0)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN UI state reconciliation drift — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Recent workflow failure: Automation Orchestrator — planned: `cancel_recovered_workflow_failure` (PM v1: cancel open workflow_failure eng tasks when the workflow has succeeded after the minting failure; else rerun/dispatch / eng draft; no recovered workflow_failure rows to cancel — keep rerun/eng path)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
