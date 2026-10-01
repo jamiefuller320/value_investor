@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-01T13:39:48+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-01T21:20:35+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -593,6 +593,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L506 | **Suppress euro zero_improve_stall when filing_gaps already 0** | market_status can keep admission_warnings zero_improve_stall with summary 'while filing gaps remain' even after gaps_after.filing_gaps=0, which re-opens a superseded Daily hub deepen card. | Next market_warning_triage or sprint_progress admission_warnings edit for euro_depth / focus markets |
 | L514 | **Archive pack observe-utilization card for bottleneck review** | Bottleneck review is ops-monitor + CLI today. Optional L461-style observe-utilization card for archive pack stage timings after writers unpark and trajectories matter. | Cold-store writers unparked and bottleneck reviews show multi-week stage timing history worth dashboarding |
 | L515 | **cron-job.org mirror for archive pack 22:00 UTC** | GHA schedule alone may drift; optional cron-job.org dispatch for universe-filing-archive-pack.yml like dashboard-bridge, only if weekday 22:00 misses become material. | Bottleneck review stale findings fire repeatedly due to GHA schedule drift on the weekday 22:00 slot |
+| L516 | **Clarify left target set vs chart Target on just-sold** | Sell notes say Automated exit — left target set (buy-tier ticker set), while lifecycle charts still show a technical/prospective Target line. Users can read just-sold-below-target as a bug. Later: clearer note wording and/or card copy that names screen_rotation vs take-profit. | Lifecycle UX pass or when exit_shadow promotion / just-sold card redesign is in flight |
 
 ---
 
