@@ -212,9 +212,7 @@ def archive_lane_gate(
         )
         or None,
         "focus_mode": str((dispatch_payload or {}).get("mode") or "") or None,
-        "ingest_sprint_complete": bool(
-            (dispatch_payload or {}).get("ingest_sprint_complete")
-        ),
+        "ingest_sprint_complete": bool((dispatch_payload or {}).get("ingest_sprint_complete")),
         "note": (
             "Gate only — no crawler. Separate budget IDs + preemptible + quiet window "
             "are required before any archive poll; focus pressure always suspends."

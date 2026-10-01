@@ -96,11 +96,7 @@ def normalized_zstd_path(
     cold_root: Path = DEFAULT_COLD_ROOT,
 ) -> Path:
     oid = str(object_id or "").strip() or "object"
-    return (
-        cold_ticker_dir(market_id, ticker, cold_root=cold_root)
-        / "normalized"
-        / f"{oid}.txt.zst"
-    )
+    return cold_ticker_dir(market_id, ticker, cold_root=cold_root) / "normalized" / f"{oid}.txt.zst"
 
 
 def _safe_read_index(path: Path) -> dict[str, Any] | None:
