@@ -113,6 +113,7 @@ Raw `summary.recommend` (including acked overlays and capacity `ana-*` rows) is 
 | **Paper-learning review** when churn / exit-timing cohorts mature | Human | [paper-learning-review.md](paper-learning-review.md) |
 | **Extend epoch-0 cron timezone map** when admitting a market whose session TZ has no ASX/EU/US bucket (`EPOCH0_WEEKDAY_SLOTS`) | Human (residual) | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | **Re-import library ingest crons** after cadence changes — `import-ingest-crons.yml` on main path changes (soft-skip if secrets missing; manual only if deleted) | CI | [euro-depth-sprint.md](euro-depth-sprint.md#register-euro-ingest-crons-after-cadence-changes) |
+| **ops-monitor 02:30 early hub** on cron-job.org (live; re-import only if deleted) | CI | [ops-monitor.md](ops-monitor.md#cron-joborg-setup-one-time) |
 | **ops-monitor 13:15 catch-up** on cron-job.org (live; re-import only if deleted) | CI | [ops-monitor.md](ops-monitor.md#email-deferral-day-complete-gate) |
 | **project-traffic weekday crons** (12:30 + 17:30 UTC) on cron-job.org (live; re-import only if deleted) | CI | [project-traffic.md](project-traffic.md#schedule) |
 | **GHA secret-hygiene daily cron** on cron-job.org (live; re-import only if deleted) | CI | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |

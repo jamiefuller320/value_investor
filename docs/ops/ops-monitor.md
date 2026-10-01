@@ -187,18 +187,34 @@ Alert email is skipped when **every** unfixed warn/fail is still “pending toda
 tasks are **not** drafted for deferred findings. Use `email_always=true` / `--email-always`
 to force a digest anyway.
 
-### cron-job.org setup (one-time)
+### cron-job.org setup (one-time) {#cron-joborg-setup-one-time}
 
-Register the scheduled HTTP job on cron-job.org (daily **07:45 UTC**). This is
-separate from the GitHub `workflow_dispatch` curl above — cron-job.org calls
-GitHub on your behalf.
-
-**curl (recommended one-liner setup):**
+Register **three** HTTP jobs on cron-job.org (early hub + morning + catch-up).
+This is separate from the GitHub `workflow_dispatch` curl above — cron-job.org
+calls GitHub on your behalf. Prefer the import script (idempotent by title):
 
 ```bash
 export CRONJOB_API_KEY=…   # cron-job.org → Settings → API
 export WORKFLOW_DISPATCH_PAT=…            # fine-grained PAT, Actions: Read and write on this repo
 
+CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py \
+  --job ops-monitor-early --job ops-monitor --job ops-monitor-catchup
+```
+
+| Job key | Title | UTC schedule | Role |
+|---------|-------|--------------|------|
+| `ops-monitor-early` | FTSE ops monitor early hub (daily) | `30 2 * * *` | Daily hub before **04:00 Europe/London** |
+| `ops-monitor` | FTSE ops monitor (daily) | `45 7 * * *` | Morning detect / heal |
+| `ops-monitor-catchup` | FTSE ops monitor catch-up | `15 13 * * *` | Day-complete email if still red |
+
+`ops-monitor-early` is in `KNOWN_JOB_IDS` (jobId `8550657` as of 2026-10-01).
+Re-import only if deleted. GitHub `schedule` expressions are backup only.
+
+Dry-run payloads: `./scripts/import_cron_jobs.py --job ops-monitor-early --dry-run --json`
+
+**curl (morning job example):**
+
+```bash
 curl -sS -X PUT 'https://api.cron-job.org/jobs' \
   -H "Authorization: Bearer $CRONJOB_API_KEY" \
   -H 'Content-Type: application/json' \
@@ -229,37 +245,18 @@ curl -sS -X PUT 'https://api.cron-job.org/jobs' \
   }'
 ```
 
-Response is `{"jobId":12345}` on success. Then trigger once from the cron-job.org
-console (**Run now**) or wait for the next 07:45 UTC slot.
-
-**Optional bulk import** (all production jobs — idempotent by title):
-
-```bash
-CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py --all
-# or just ops monitor:
-CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py --job ops-monitor
-```
-
-Dry-run payloads: `./scripts/import_cron_jobs.py --job ops-monitor --dry-run --json`
-
-**Manual UI** (alternative): [cron-job.org](https://cron-job.org) → **Create cronjob**
-
-1. **Title:** `FTSE ops monitor (daily)`
-2. **URL:** `https://api.github.com/repos/jamiefuller320/value_investor/actions/workflows/ops-monitor.yml/dispatches`
-3. **Schedule:** custom `45 7 * * *` (daily 07:45 UTC)
-4. **Request method:** `POST`
-5. **Request headers:** `Accept: application/vnd.github+json`, `Authorization: Bearer <WORKFLOW_DISPATCH_PAT>`
-6. **Request body:** `{"ref":"main"}`
-7. **Timezone:** UTC
+For the early hub job, use title `FTSE ops monitor early hub (daily)` and
+`hours: [2], minutes: [30]` (same URL/body). Or import with `--job ops-monitor-early`.
 
 Verify:
 
 ```bash
-gh run list --workflow=ops-monitor.yml --limit 3
+gh run list --workflow=ops-monitor.yml --limit 5
 ```
 
-Expect a successful `workflow_dispatch` run; `docs/data/ops_status.json` updates each
-run (including healed-only mornings).
+Expect a successful `workflow_dispatch` near **02:30 UTC** (hub date rolls) and
+again near **07:45 UTC**; `docs/data/ops_status.json` / `daily_focus.json` update
+each full monitor pass.
 
 See [orchestrator-cron.md](orchestrator-cron.md) for the repo-wide scheduling policy.
 
