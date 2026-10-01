@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-30T16:52:52.577089+00:00",
+  "run_at": "2026-10-01T07:38:56.175266+00:00",
   "market_id": "bel20",
   "targets": [],
   "target_details": [],
@@ -9,13 +9,13 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-30T16:51:56.292710+00:00",
+    "snapshot_at": "2026-10-01T07:38:25.814389+00:00",
     "market_id": "bel20",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 3,
-    "indexed_without_body": 1,
+    "indexed_without_body": 0,
     "bodies_min": 1,
     "bodies_median": 2,
     "bodies_max": 4,
@@ -28,12 +28,8 @@
       "APAM.AS",
       "SOLB.BR"
     ],
-    "indexed_without_body_tickers": [
-      "SOLB.BR"
-    ],
-    "indexed_without_body_by_ticker": {
-      "SOLB.BR": 1
-    },
+    "indexed_without_body_tickers": [],
+    "indexed_without_body_by_ticker": {},
     "parked_tickers": [
       "ACKB.BR",
       "APAM.AS",
@@ -47,13 +43,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-30T16:52:46.119135+00:00",
+    "snapshot_at": "2026-10-01T07:38:50.397881+00:00",
     "market_id": "bel20",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 3,
-    "indexed_without_body": 1,
+    "indexed_without_body": 0,
     "bodies_min": 1,
     "bodies_median": 2,
     "bodies_max": 4,
@@ -66,23 +62,20 @@
       "APAM.AS",
       "SOLB.BR"
     ],
-    "indexed_without_body_tickers": [
-      "SOLB.BR"
-    ],
-    "indexed_without_body_by_ticker": {
-      "SOLB.BR": 1
-    },
+    "indexed_without_body_tickers": [],
+    "indexed_without_body_by_ticker": {},
     "parked_tickers": [
       "ACKB.BR",
-      "APAM.AS",
+      "APAM.AS"
+    ],
+    "parked_count": 2,
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
       "SOLB.BR"
     ],
-    "parked_count": 3,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -114,54 +107,38 @@
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "bel20"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "bel20",
-    "assessed_at": "2026-09-30T16:51:56.616388+00:00",
+    "assessed_at": "2026-10-01T07:38:26.087977+00:00",
     "unmeasured": [],
     "zero_body": [],
-    "indexed_without_body": [
-      {
-        "ticker": "SOLB.BR",
-        "indexed_without_body": 1,
-        "filings_total": 2,
-        "filings_with_body": 1
-      }
-    ],
+    "indexed_without_body": [],
     "thin_need_discovery": [
       "ACKB.BR",
       "APAM.AS",
       "SOLB.BR"
     ],
-    "thin_need_bodies": [
-      "SOLB.BR"
-    ],
-    "primary_blocker": "indexed_without_body",
+    "thin_need_bodies": [],
+    "primary_blocker": "thin_need_discovery",
     "force_discovery_scan": true,
-    "auto_pin_tickers": [
-      "SOLB.BR"
-    ],
+    "auto_pin_tickers": [],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (1 tickers, top: SOLB.BR(1))",
       "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 1,
-      "indexed_without_body_rows": 1,
+      "indexed_without_body_tickers": 0,
+      "indexed_without_body_rows": 0,
       "thin_need_discovery": 3,
-      "thin_need_bodies": 1
+      "thin_need_bodies": 0
     }
   },
-  "used_seconds": 49.17409701999998,
+  "used_seconds": 24.041320967999994,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3550.82590298,
+  "leftover_seconds": 3575.958679032,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -169,9 +146,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "bel20",
-    "updated_at": "2026-09-30T16:52:46.120492+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-10-01T07:38:50.399078+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -193,16 +170,6 @@
         "filings_with_body": 1,
         "indexed_without_body": 0,
         "thin": true
-      },
-      {
-        "ticker": "SOLB.BR",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-09-29T21:27:07.533657+00:00",
-        "filings_total": 2,
-        "filings_with_body": 1,
-        "indexed_without_body": 1,
-        "thin": true
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
@@ -212,35 +179,20 @@
       "APAM.AS",
       "SOLB.BR"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "SOLB.BR"
+    ],
     "path": "docs/data/library/markets/bel20/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "bel20",
-    "ingest_exhausted_markets": [
-      "aex",
-      "asx200",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "ibex35",
-      "nasdaq100",
-      "sp500",
-      "tsx60"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "bel20"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 120,
+    "task_count": 121,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0

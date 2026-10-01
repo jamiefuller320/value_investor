@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-01T07:48:23.010808+00:00",
+  "compiled_at": "2026-10-01T07:41:46.308417+00:00",
   "run_at": null,
-  "task_count": 122,
+  "task_count": 121,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1586,87 +1586,6 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
-    },
-    {
-      "id": "eng-20261001-01",
-      "area": "ingest",
-      "title": "Seed IR allowlist for unmeasured/zero-body SOLB.BR (bel20) — empty allowlist after 0-improve pin (igc-20260929-06)",
-      "summary": "Gap-closure run igc-20260929-06 targeted SOLB.BR with outstanding coverage holes but zero IR allowlist URLs (refetch never attempted). Seed `_BUILTIN_IR_URLS` / issuer PDFs or fix discovery; do not keep re-pinning empty intensify. Add a regression test; verify with a pinned library ingest gap-closure / ingest-loop pass.",
-      "priority": "high",
-      "priority_score": 88.0,
-      "source": "ingest_gap_closure",
-      "evidence": {
-        "gap_closure_run_id": "igc-20260929-06",
-        "trial_id": "igc-20260929-06",
-        "chain_root_id": "igc-20260929-06",
-        "chain_round": 1,
-        "tickers": [
-          "SOLB.BR"
-        ],
-        "ticker": "SOLB.BR",
-        "market_id": "bel20",
-        "library_market": "bel20",
-        "universe": "library",
-        "rerun_ingest_gap_closure": true,
-        "rerun_ingest_trial": true,
-        "rerun_library_ingest_loop": true,
-        "refetch_attempted": 0,
-        "refetch_fetched": 0,
-        "gap_closure_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "SOLB.BR"
-          ],
-          "market_id": "bel20",
-          "universe": "library",
-          "critical_path_blocker": "indexed_without_body"
-        },
-        "trial_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "SOLB.BR"
-          ],
-          "market_id": "bel20",
-          "universe": "library",
-          "critical_path_blocker": "indexed_without_body"
-        },
-        "compile_reason": "gaps_remain_without_allowlist"
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for SOLB.BR",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
     },
     {
       "id": "eng-20260924-03",
@@ -7686,7 +7605,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-01T07:48:00.345381+00:00",
+    "evaluated_at": "2026-09-30T18:05:11.141522+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -7720,7 +7639,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-10-01T07:48:00.319333+00:00",
+    "evaluated_at": "2026-10-01T06:18:14.883648+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -7728,7 +7647,7 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "ingest_gap_closure",
+  "micro_compile_source": "parked_source_hunter",
   "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
   "queue_block_notify": {
@@ -7826,8 +7745,5 @@
       "0285.HK"
     ],
     "ingest_exhausted": false
-  },
-  "source_gap_closure_run_id": "igc-20260929-06",
-  "source_trial_id": "igc-20260929-06",
-  "source_chain_root_id": "igc-20260929-06"
+  }
 }
