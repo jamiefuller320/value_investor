@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-01T18:32:44.122657+00:00`
+Generated: `2026-10-01T21:55:21.363632+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -36,15 +36,15 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `ingest_narrow`/verified PR #930 `eng-20261001-01` — Close library ingest filing gaps for Hang Seng (hang_seng): 3 buy-tier gaps after stalled weekday loop
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 130
+- Occasion count: 133
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 3×
 - `Merge conflicts in deferred-ideas.json with main` — 2×
+- `validate job failed` — 2×
 - `Ruff F841 unused dismissable in market_warning_triage.propose_triage` — 2×
 - `ruff_format` — 1×
 - `dirty merge: deferred-ideas.json / deferred-review.md vs main after L424-L426 landings` — 1×
-- `dirty merge: engineering_tasks/automation/queue_health stale vs merged salvage PRs #726-#728` — 1×
 
 ## Merge authority
 - Status: **scoped_auto_merge**

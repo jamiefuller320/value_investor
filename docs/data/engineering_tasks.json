@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-01T21:54:15.201670+00:00",
+  "compiled_at": "2026-10-01T21:36:22.100114+00:00",
   "run_at": null,
-  "task_count": 123,
+  "task_count": 122,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2345,95 +2345,6 @@
       "cancelled_at": "2026-09-22T09:11:47.275469+00:00",
       "cancelled_reason": "tier-1 housekeep: gap closed — ticker no longer has outstanding material gaps",
       "cancelled_policy": "resolved_gap_closure"
-    },
-    {
-      "id": "eng-20261001-02",
-      "area": "ingest",
-      "title": "Close library ingest filing gaps for Straits Times Index (sti): 1 buy-tier gaps after stalled weekday loop",
-      "summary": "Library market sti buy-tier filing deepen stalled with 1 unmeasured and 0 zero-body names (buy_tier_count=6). Improve euro_filings / ESEF / IR allowlist source coverage for representative tickers and add regression tests; verify with ftse-library ingest-loop --market sti. Sample unmeasured: BUOU.SI.",
-      "priority": "high",
-      "priority_score": 86.0,
-      "source": "library_ingest_stall",
-      "evidence": {
-        "market_id": "sti",
-        "library_market": "sti",
-        "universe": "library",
-        "filing_health": {
-          "snapshot_at": "2026-10-01T21:53:10.640731+00:00",
-          "market_id": "sti",
-          "buy_tier_count": 6,
-          "unmeasured_buy_tier": 1,
-          "zero_body_buy_tier": 0,
-          "thin_body_buy_tier": 2,
-          "indexed_without_body": 2,
-          "bodies_min": 1,
-          "bodies_median": 3,
-          "bodies_max": 4,
-          "coverage_scope": "canonical_plus_shards",
-          "ftse_equivalent": false,
-          "unmeasured_tickers": [
-            "BUOU.SI"
-          ],
-          "zero_body_tickers": [],
-          "thin_body_tickers": [
-            "J36.SI",
-            "BS6.SI"
-          ],
-          "indexed_without_body_tickers": [
-            "N2IU.SI"
-          ],
-          "indexed_without_body_by_ticker": {
-            "N2IU.SI": 2
-          },
-          "parked_tickers": [],
-          "parked_count": 0,
-          "effective_thin_body_buy_tier": 2,
-          "effective_thin_body_tickers": [
-            "J36.SI",
-            "BS6.SI"
-          ],
-          "effective_indexed_without_body": 2,
-          "effective_indexed_without_body_tickers": [
-            "N2IU.SI"
-          ],
-          "ingest_exhausted": false
-        },
-        "filing_gaps": 1,
-        "sample_unmeasured": [
-          "BUOU.SI"
-        ],
-        "sample_zero_body": [],
-        "rerun_library_ingest_loop": true,
-        "doc": "docs/ops/library-ingest-escalation.md"
-      },
-      "acceptance_criteria": [
-        "Representative sti buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
-        "ftse-library ingest-loop --market sti reports improved > 0 on a verification run",
-        "Add focused regression tests for the source/parser fix",
-        "No change to live FTSE 350 ingest path or blocked_paths"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
     },
     {
       "id": "eng-20261001-01",
@@ -7871,7 +7782,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-01T18:32:44.122657+00:00",
+    "evaluated_at": "2026-10-01T21:55:21.363632+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -7913,8 +7824,8 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "library_ingest_loop",
-  "library_market_id": "sti",
+  "micro_compile_source": "parked_source_hunter",
+  "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
   "queue_block_notify": {
     "last_fingerprint": "clash_blocked|no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
@@ -7935,42 +7846,89 @@
   "reprioritized_at": "2026-09-27T12:35:36.375572+00:00",
   "reprioritized_after_task": "eng-20260927-01",
   "library_ingest_health": {
-    "snapshot_at": "2026-10-01T21:53:10.640731+00:00",
-    "market_id": "sti",
-    "buy_tier_count": 6,
-    "unmeasured_buy_tier": 1,
+    "snapshot_at": "2026-10-01T08:21:24.102794+00:00",
+    "market_id": "hang_seng",
+    "buy_tier_count": 25,
+    "unmeasured_buy_tier": 3,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 2,
-    "indexed_without_body": 2,
+    "thin_body_buy_tier": 17,
+    "indexed_without_body": 9,
     "bodies_min": 1,
-    "bodies_median": 3,
-    "bodies_max": 4,
+    "bodies_median": 1.5,
+    "bodies_max": 5,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
-      "BUOU.SI"
+      "6618.HK",
+      "0101.HK",
+      "0291.HK"
     ],
     "zero_body_tickers": [],
     "thin_body_tickers": [
-      "J36.SI",
-      "BS6.SI"
+      "1099.HK",
+      "1378.HK",
+      "0762.HK",
+      "1093.HK",
+      "2618.HK",
+      "0288.HK",
+      "2382.HK",
+      "6862.HK",
+      "0857.HK",
+      "0868.HK",
+      "0941.HK",
+      "1024.HK",
+      "1113.HK",
+      "1109.HK",
+      "2313.HK",
+      "2628.HK",
+      "0285.HK"
     ],
     "indexed_without_body_tickers": [
-      "N2IU.SI"
+      "9961.HK",
+      "0288.HK",
+      "0857.HK",
+      "0868.HK",
+      "1113.HK",
+      "0285.HK"
     ],
     "indexed_without_body_by_ticker": {
-      "N2IU.SI": 2
+      "9961.HK": 2,
+      "0288.HK": 1,
+      "0857.HK": 2,
+      "0868.HK": 2,
+      "1113.HK": 1,
+      "0285.HK": 1
     },
     "parked_tickers": [],
     "parked_count": 0,
-    "effective_thin_body_buy_tier": 2,
+    "effective_thin_body_buy_tier": 17,
     "effective_thin_body_tickers": [
-      "J36.SI",
-      "BS6.SI"
+      "1099.HK",
+      "1378.HK",
+      "0762.HK",
+      "1093.HK",
+      "2618.HK",
+      "0288.HK",
+      "2382.HK",
+      "6862.HK",
+      "0857.HK",
+      "0868.HK",
+      "0941.HK",
+      "1024.HK",
+      "1113.HK",
+      "1109.HK",
+      "2313.HK",
+      "2628.HK",
+      "0285.HK"
     ],
-    "effective_indexed_without_body": 2,
+    "effective_indexed_without_body": 9,
     "effective_indexed_without_body_tickers": [
-      "N2IU.SI"
+      "9961.HK",
+      "0288.HK",
+      "0857.HK",
+      "0868.HK",
+      "1113.HK",
+      "0285.HK"
     ],
     "ingest_exhausted": false
   }
