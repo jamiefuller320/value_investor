@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-09-30T07:26:38.317994+00:00",
+  "updated_at": "2026-10-01T14:16:41.988664+00:00",
   "hold_episodes": [
     {
       "episode_id": "buy_tier_level:ACN:2026-09-10T11:37:59.908791-04:00",
@@ -2968,7 +2968,7 @@
       "ticker": "UBER",
       "name": "Uber Technologies, Inc.",
       "started_at": "2026-09-10T11:37:59.908791-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -3010,9 +3010,9 @@
       "peak_unrealized_pct": -0.0347,
       "trough_unrealized_pct": -0.1003,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-01T10:16:41.404903-04:00",
+      "linked_sell_trade_id": "a1bcc196-d657-42d8-b4de-ef6f3deab668"
     },
     {
       "episode_id": "buy_tier_level:AMCR:2026-09-10T11:37:59.908791-04:00",
@@ -3645,7 +3645,7 @@
       "ticker": "INCY",
       "name": "Incyte Corporation",
       "started_at": "2026-09-10T11:37:59.908791-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -3687,9 +3687,9 @@
       "peak_unrealized_pct": 0.0069,
       "trough_unrealized_pct": -0.0417,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-01T10:16:41.404903-04:00",
+      "linked_sell_trade_id": "3495e48d-b03f-450a-b645-d73d237474d3"
     },
     {
       "episode_id": "buy_tier_level:SMCI:2026-09-10T11:37:59.908791-04:00",
@@ -6679,7 +6679,16 @@
       "conviction_score": 0.5488000000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T10:16:41.404903-04:00",
+          "days_after": 7,
+          "price": 140.83,
+          "unrealized_pct": -0.1136,
+          "peak_unrealized_pct": -0.0223,
+          "trough_unrealized_pct": -0.1136
+        }
+      ],
       "peak_unrealized_pct": -0.0223,
       "trough_unrealized_pct": -0.1136,
       "recovered_to_breakeven": null,
@@ -6865,7 +6874,7 @@
       "ticker": "ZBH",
       "name": "Zimmer Biomet Holdings, Inc.",
       "started_at": "2026-09-30T03:26:38.221748-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -6898,9 +6907,9 @@
       "peak_unrealized_pct": 0.0033,
       "trough_unrealized_pct": 0.0033,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-01T10:16:41.404903-04:00",
+      "linked_sell_trade_id": "c93a151d-c8b4-4e87-b66c-9b58357374ab"
     }
   ],
   "swap_rotations": [
@@ -7860,7 +7869,15 @@
           "cost": 0.01
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T10:16:41.404903-04:00",
+          "days_after": 7,
+          "avg_sell_return": 0.006,
+          "avg_buy_return": 0.0071,
+          "replacement_delta": 0.0011
+        }
+      ],
       "sell_returns_since_rotation": {
         "LEN": 0.0183,
         "CPAY": -0.0062
@@ -8077,7 +8094,127 @@
       },
       "verdict": null,
       "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-01T10:16:41.404903-04:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-01T10:16:41.404903-04:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "UBER",
+          "price": 69.36,
+          "shares": 0.109804,
+          "gross": 7.62,
+          "cost": 0.01,
+          "avg_cost_at_exit": 75.76,
+          "realized_pct": -0.0845,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0845
+        },
+        {
+          "ticker": "INCY",
+          "price": 123.2,
+          "shares": 0.065631,
+          "gross": 8.09,
+          "cost": 0.01,
+          "avg_cost_at_exit": 126.75,
+          "realized_pct": -0.028,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.028
+        },
+        {
+          "ticker": "ZBH",
+          "price": 91.34,
+          "shares": 0.086359,
+          "gross": 7.89,
+          "cost": 0.01,
+          "avg_cost_at_exit": 91.04,
+          "realized_pct": 0.0033,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0033
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VRSN",
+          "price": 279.84,
+          "shares": 0.027843,
+          "gross": 7.79,
+          "cost": 0.01
+        },
+        {
+          "ticker": "BKNG",
+          "price": 162.34,
+          "shares": 0.047995,
+          "gross": 7.79,
+          "cost": 0.01
+        },
+        {
+          "ticker": "CPRT",
+          "price": 27.14,
+          "shares": 0.287084,
+          "gross": 7.79,
+          "cost": 0.01
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "UBER": 0.0,
+        "INCY": 0.0,
+        "ZBH": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "VRSN": 0.0,
+        "BKNG": 0.0,
+        "CPRT": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
     }
   ],
-  "hypothesis_outcome_link_updated_at": "2026-09-30T03:26:38.221748-04:00"
+  "hypothesis_outcome_link_updated_at": "2026-10-01T10:16:41.404903-04:00"
 }

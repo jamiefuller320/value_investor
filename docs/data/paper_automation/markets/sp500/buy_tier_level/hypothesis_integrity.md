@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-30T07:26:38.323708+00:00
+Track: `buy_tier_level` · updated 2026-10-01T14:16:41.996343+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **66** / 120 (55% count, 53% NAV)
+- Losers: **65** / 120 (54% count, 52% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -270,14 +270,6 @@ Track: `buy_tier_level` · updated 2026-09-30T07:26:38.323708+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 51%
-
-### UBER — intact / hold_tolerate (-8.5%)
-- price drawdown alone does not invalidate value thesis
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 38%
 
 ### LOW — intact / hold_tolerate (-8.4%)
 - price drawdown alone does not invalidate value thesis
@@ -662,13 +654,6 @@ Track: `buy_tier_level` · updated 2026-09-30T07:26:38.323708+00:00
 - data_quality 1.00
 - conviction 62%
 
-### INCY — intact / hold_tolerate (-2.8%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 56%
-
 ### CB — intact / hold_tolerate (-2.8%)
 - still buy
 - research accumulate
@@ -824,12 +809,24 @@ Track: `buy_tier_level` · updated 2026-09-30T07:26:38.323708+00:00
 - data_quality 0.90
 - conviction 71%
 
-### ZBH — intact / hold_tolerate (+0.3%)
+### VRSN — weakening / watch_review (+0.0%)
+- cheapness family no longer passes
+- still buy
+- research accumulate
+
+### BKNG — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 40%
+- data_quality 0.90
+- conviction 48%
+
+### CPRT — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 47%
 
 ### GDDY — intact / hold_tolerate (+0.4%)
 - still buy
