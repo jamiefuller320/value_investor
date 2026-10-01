@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-30T07:26:48.097237+00:00
+Track: `buy_tier_level` · updated 2026-10-01T08:47:06.340121+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 6 (0% count, 0% NAV)
+- Losers: **0** / 7 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
@@ -44,6 +44,13 @@ Track: `buy_tier_level` · updated 2026-09-30T07:26:48.097237+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 83%
+
+### ADYEN.AS — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 40%
 
 ### AD.AS — intact / hold_tolerate (+0.7%)
 - still strong_buy

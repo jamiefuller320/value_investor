@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-30T09:27:45.142081+02:00",
+    "local_time": "2026-10-01T10:46:39.603762+02:00",
     "trading_day": true,
-    "after_settle": false,
-    "market_open_at": "2026-09-30T09:00:00+02:00",
-    "settle_at": "2026-09-30T09:30:00+02:00",
-    "can_act": false,
-    "reason": "waiting for open settle (30 min after 09:00 Europe/Paris)"
+    "after_settle": true,
+    "market_open_at": "2026-10-01T09:00:00+02:00",
+    "settle_at": "2026-10-01T09:30:00+02:00",
+    "can_act": true,
+    "reason": "ok"
   },
   "trades": [],
   "plan": {
@@ -18,12 +18,12 @@
       "Sector cap: disabled.",
       "Ranking: highest conviction_score first, keep at most 120 names.",
       "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
-      "Costs: buy 0.53% / sell 0.03% (legacy symmetric slot 0.28%).",
+      "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
       "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 973.36,
+    "nav": 979.78,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -32,232 +32,193 @@
     "use_momentum_grace": false,
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
+    "still_in_buy_set_hold": false,
+    "rank_drop_exit_min": 3,
+    "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 21.63,
+    "target_sleeve_value": 28.81,
     "targets": [
       {
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "signal": "strong_buy",
         "conviction_score": 0.9331,
-        "price": 109.1
+        "price": 108.8
       },
       {
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "signal": "strong_buy",
         "conviction_score": 0.9183,
-        "price": 93.58
+        "price": 93.36
       },
       {
         "ticker": "UMI.BR",
         "name": "Umicore SA",
         "signal": "strong_buy",
         "conviction_score": 0.9025000000000001,
-        "price": 21.18
+        "price": 21.2
       },
       {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "signal": "strong_buy",
         "conviction_score": 0.9,
-        "price": 32.29
-      },
-      {
-        "ticker": "SGO.PA",
-        "name": "Compagnie de Saint-Gobain S.A.",
-        "signal": "strong_buy",
-        "conviction_score": 0.8994000000000001,
-        "price": 70.34
+        "price": 32.32
       },
       {
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "signal": "strong_buy",
         "conviction_score": 0.8851,
-        "price": 71.83
+        "price": 71.56
       },
       {
         "ticker": "PHIA.AS",
         "name": "Koninklijke Philips N.V.",
         "signal": "strong_buy",
         "conviction_score": 0.8507,
-        "price": 21.83
-      },
-      {
-        "ticker": "STR.VI",
-        "name": "Strabag SE",
-        "signal": "strong_buy",
-        "conviction_score": 0.8463,
-        "price": 105.4
+        "price": 21.8
       },
       {
         "ticker": "LOGN.SW",
         "name": "Logitech International S.A.",
         "signal": "strong_buy",
         "conviction_score": 0.7988000000000001,
-        "price": 84.4
+        "price": 83.72
       },
       {
         "ticker": "DHL.DE",
         "name": "DHL AG",
         "signal": "strong_buy",
         "conviction_score": 0.7844000000000001,
-        "price": 57.74
-      },
-      {
-        "ticker": "SHELL.AS",
-        "name": "Shell plc",
-        "signal": "strong_buy",
-        "conviction_score": 0.775,
-        "price": 41.875
-      },
-      {
-        "ticker": "ACKB.BR",
-        "name": "Ackermans & Van Haaren NV",
-        "signal": "strong_buy",
-        "conviction_score": 0.7681,
-        "price": 268.8
+        "price": 57.86
       },
       {
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
         "signal": "strong_buy",
         "conviction_score": 0.7639,
-        "price": 18.75
+        "price": 18.65
       },
       {
         "ticker": "WKL.AS",
         "name": "Wolters Kluwer N.V.",
         "signal": "strong_buy",
         "conviction_score": 0.7531,
-        "price": 68.12
-      },
-      {
-        "ticker": "ANDR.VI",
-        "name": "Andritz AG",
-        "signal": "buy",
-        "conviction_score": 0.7431000000000001,
-        "price": 84.1
+        "price": 67.92
       },
       {
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
         "signal": "buy",
         "conviction_score": 0.7323000000000001,
-        "price": 2.75
+        "price": 2.77
       },
       {
         "ticker": "VOE.VI",
         "name": "Voestalpine AG",
         "signal": "buy",
         "conviction_score": 0.7268,
-        "price": 45.22
+        "price": 44.66
       },
       {
         "ticker": "NOVN.SW",
         "name": "Novartis AG",
         "signal": "buy",
         "conviction_score": 0.7226,
-        "price": 122.08
+        "price": 120.92
       },
       {
         "ticker": "ESSITY-B.ST",
         "name": "Essity AB (publ)",
         "signal": "buy",
         "conviction_score": 0.7183,
-        "price": 260.5
+        "price": 259.3
       },
       {
         "ticker": "VOW.DE",
         "name": "Volkswagen AG",
         "signal": "strong_buy",
         "conviction_score": 0.7155,
-        "price": 71.7
+        "price": 71.45
       },
       {
         "ticker": "AKZA.AS",
         "name": "Akzo Nobel N.V.",
         "signal": "buy",
         "conviction_score": 0.7130000000000001,
-        "price": 56.98
+        "price": 56.76
       },
       {
         "ticker": "MELE.BR",
         "name": "Melexis NV",
         "signal": "buy",
         "conviction_score": 0.7046,
-        "price": 69.5
+        "price": 69.55
       },
       {
         "ticker": "DOC.VI",
         "name": "DO & CO Aktiengesellschaft",
         "signal": "buy",
         "conviction_score": 0.6606000000000001,
-        "price": 189.8
+        "price": 187.8
       },
       {
         "ticker": "TTE.PA",
         "name": "TotalEnergies SE",
         "signal": "buy",
         "conviction_score": 0.6541,
-        "price": 76.67
+        "price": 78.1
       },
       {
         "ticker": "HEIA.AS",
         "name": "Heineken N.V.",
         "signal": "buy",
         "conviction_score": 0.6512,
-        "price": 70.44
+        "price": 69.48
       },
       {
         "ticker": "VOLV-B.ST",
         "name": "AB Volvo (publ)",
         "signal": "buy",
         "conviction_score": 0.65,
-        "price": 326.1
+        "price": 324.1
       },
       {
         "ticker": "BOL.ST",
         "name": "Boliden AB (publ)",
         "signal": "buy",
         "conviction_score": 0.629,
-        "price": 515.2
+        "price": 505.0
+      },
+      {
+        "ticker": "OIZ.IR",
+        "name": "Origin Enterprises plc",
+        "signal": "buy",
+        "conviction_score": 0.6243000000000001,
+        "price": 4.0
       },
       {
         "ticker": "MC.PA",
         "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
         "signal": "buy",
         "conviction_score": 0.6133000000000001,
-        "price": 397.05
-      },
-      {
-        "ticker": "BN.PA",
-        "name": "Danone S.A.",
-        "signal": "buy",
-        "conviction_score": 0.6096,
-        "price": 59.18
+        "price": 394.6
       },
       {
         "ticker": "HM-B.ST",
         "name": "H & M Hennes & Mauritz AB (publ)",
         "signal": "buy",
         "conviction_score": 0.6094,
-        "price": 159.3
+        "price": 156.95
       },
       {
         "ticker": "AED.BR",
         "name": "Aedifica NV/SA",
         "signal": "strong_buy",
         "conviction_score": 0.5969000000000001,
-        "price": 64.8
-      },
-      {
-        "ticker": "OIZ.IR",
-        "name": "Origin Enterprises plc",
-        "signal": "buy",
-        "conviction_score": 0.5743,
-        "price": 4.06
+        "price": 64.25
       },
       {
         "ticker": "POST.VI",
@@ -265,13 +226,6 @@
         "signal": "buy",
         "conviction_score": 0.5700000000000001,
         "price": 31.3
-      },
-      {
-        "ticker": "DTE.DE",
-        "name": "Deutsche Telekom AG",
-        "signal": "buy",
-        "conviction_score": 0.5625,
-        "price": 26.41
       },
       {
         "ticker": "MIO.IR",
@@ -292,49 +246,28 @@
         "name": "OMV Aktiengesellschaft",
         "signal": "buy",
         "conviction_score": 0.5167,
-        "price": 70.9
-      },
-      {
-        "ticker": "UCB.BR",
-        "name": "UCB SA",
-        "signal": "buy",
-        "conviction_score": 0.5031,
-        "price": 206.5
+        "price": 71.4
       },
       {
         "ticker": "AMRZ.SW",
         "name": "Amrize AG",
         "signal": "buy",
         "conviction_score": 0.5011,
-        "price": 31.65
+        "price": 31.23
       },
       {
         "ticker": "RAND.AS",
         "name": "Randstad N.V.",
         "signal": "strong_buy",
         "conviction_score": 0.4965,
-        "price": 35.63
-      },
-      {
-        "ticker": "NBA.LS",
-        "name": "Novabase S.G.P.S., S.A.",
-        "signal": "buy",
-        "conviction_score": 0.409955,
-        "price": 7.14
+        "price": 35.62
       },
       {
         "ticker": "ADYEN.AS",
         "name": "Adyen N.V.",
         "signal": "buy",
         "conviction_score": 0.37579999999999997,
-        "price": 878.4
-      },
-      {
-        "ticker": "DQ7A.IR",
-        "name": "Donegal Investment Group plc",
-        "signal": "buy",
-        "conviction_score": 0.366095,
-        "price": 10.0
+        "price": 870.0
       },
       {
         "ticker": "NVG.LS",
@@ -342,115 +275,409 @@
         "signal": "buy",
         "conviction_score": 0.34543999999999997,
         "price": 3.218
-      },
-      {
-        "ticker": "EL.PA",
-        "name": "EssilorLuxottica Soci\u00e9t\u00e9 anonyme",
-        "signal": "buy",
-        "conviction_score": 0.3169,
-        "price": 145.75
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "SHELL.AS",
+        "name": "Shell plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.680563,
+        "price": 41.95,
+        "value": 28.55
+      },
+      {
+        "action": "sell",
+        "ticker": "STR.VI",
+        "name": "Strabag SE",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.264071,
+        "price": 105.8,
+        "value": 27.94
+      },
+      {
+        "action": "sell",
+        "ticker": "ACKB.BR",
+        "name": "Ackermans & Van Haaren NV",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.103104,
+        "price": 272.0,
+        "value": 28.04
+      },
+      {
+        "action": "sell",
+        "ticker": "ANDR.VI",
+        "name": "Andritz AG",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.333862,
+        "price": 84.2,
+        "value": 28.11
+      },
+      {
+        "action": "sell",
+        "ticker": "DTE.DE",
+        "name": "Deutsche Telekom AG",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.980915,
+        "price": 28.59,
+        "value": 28.04
+      },
+      {
+        "action": "sell",
+        "ticker": "DQ7A.IR",
+        "name": "Donegal Investment Group plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 2.245307,
+        "price": 12.5,
+        "value": 28.07
+      },
+      {
+        "action": "sell",
+        "ticker": "UCB.BR",
+        "name": "UCB SA",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.046722,
+        "price": 215.4,
+        "value": 10.06
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
-        "ticker": "MIO.IR",
-        "name": "Mincon Group plc",
-        "reason": "Already near equal-weight target",
-        "value": 21.7,
-        "target_value": 21.63,
-        "conviction_score": 0.558365,
+        "action": "buy",
+        "ticker": "OIZ.IR",
+        "name": "Origin Enterprises plc",
+        "reason": "New sleeve",
+        "value": 28.81,
+        "price": 4.0,
+        "target_value": 28.81,
+        "conviction_score": 0.6243000000000001,
         "signal": "buy"
-      }
-    ],
-    "skipped": [
-      {
-        "ticker": "SGO.PA",
-        "name": "Compagnie de Saint-Gobain S.A.",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 21.63,
-        "conviction_score": 0.8994000000000001,
-        "signal": "strong_buy"
       },
       {
+        "action": "buy",
         "ticker": "MC.PA",
         "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 21.63,
+        "reason": "Top-up to equal weight",
+        "value": 28.77,
+        "price": 394.6,
+        "target_value": 28.81,
         "conviction_score": 0.6133000000000001,
         "signal": "buy"
       },
       {
-        "ticker": "BN.PA",
-        "name": "Danone S.A.",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 21.63,
-        "conviction_score": 0.6096,
-        "signal": "buy"
-      },
-      {
+        "action": "buy",
         "ticker": "HM-B.ST",
         "name": "H & M Hennes & Mauritz AB (publ)",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 21.63,
+        "reason": "New sleeve",
+        "value": 28.81,
+        "price": 156.95,
+        "target_value": 28.81,
         "conviction_score": 0.6094,
         "signal": "buy"
       },
       {
-        "ticker": "OIZ.IR",
-        "name": "Origin Enterprises plc",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 21.63,
-        "conviction_score": 0.5743,
-        "signal": "buy"
-      },
-      {
-        "ticker": "UCB.BR",
-        "name": "UCB SA",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 21.63,
-        "conviction_score": 0.5031,
-        "signal": "buy"
-      },
-      {
+        "action": "buy",
         "ticker": "AMRZ.SW",
         "name": "Amrize AG",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 21.63,
+        "reason": "New sleeve",
+        "value": 28.81,
+        "price": 31.23,
+        "target_value": 28.81,
         "conviction_score": 0.5011,
         "signal": "buy"
       },
       {
-        "ticker": "NBA.LS",
-        "name": "Novabase S.G.P.S., S.A.",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 21.63,
-        "conviction_score": 0.409955,
-        "signal": "buy"
-      },
-      {
+        "action": "buy",
         "ticker": "ADYEN.AS",
         "name": "Adyen N.V.",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 21.63,
+        "reason": "New sleeve",
+        "value": 28.81,
+        "price": 870.0,
+        "target_value": 28.81,
         "conviction_score": 0.37579999999999997,
-        "signal": "buy"
-      },
-      {
-        "ticker": "EL.PA",
-        "name": "EssilorLuxottica Soci\u00e9t\u00e9 anonyme",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 21.63,
-        "conviction_score": 0.3169,
         "signal": "buy"
       }
     ],
-    "waitlisted": [],
-    "summary": "Next rebalance would target 45 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    "anticipated_holds": [
+      {
+        "action": "hold",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 27.38,
+        "target_value": 28.81,
+        "conviction_score": 0.9331,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 26.67,
+        "target_value": 28.81,
+        "conviction_score": 0.9183,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 26.52,
+        "target_value": 28.81,
+        "conviction_score": 0.9025000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 27.53,
+        "target_value": 28.81,
+        "conviction_score": 0.8851,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "PHIA.AS",
+        "name": "Koninklijke Philips N.V.",
+        "reason": "Already near equal-weight target",
+        "value": 29.07,
+        "target_value": 28.81,
+        "conviction_score": 0.8507,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 28.33,
+        "target_value": 28.81,
+        "conviction_score": 0.7988000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "EG7.IR",
+        "name": "FBD Holdings plc",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 27.97,
+        "target_value": 28.81,
+        "conviction_score": 0.7639,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "WKL.AS",
+        "name": "Wolters Kluwer N.V.",
+        "reason": "Already near equal-weight target",
+        "value": 28.76,
+        "target_value": 28.81,
+        "conviction_score": 0.7531,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "C5H.IR",
+        "name": "Cairn Homes plc",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 28.51,
+        "target_value": 28.81,
+        "conviction_score": 0.7323000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "VOE.VI",
+        "name": "Voestalpine AG",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 28.11,
+        "target_value": 28.81,
+        "conviction_score": 0.7268,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "ESSITY-B.ST",
+        "name": "Essity AB (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 27.83,
+        "target_value": 28.81,
+        "conviction_score": 0.7183,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "VOW.DE",
+        "name": "Volkswagen AG",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 24.8,
+        "target_value": 28.81,
+        "conviction_score": 0.7155,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "AKZA.AS",
+        "name": "Akzo Nobel N.V.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 27.47,
+        "target_value": 28.81,
+        "conviction_score": 0.7130000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "DOC.VI",
+        "name": "DO & CO Aktiengesellschaft",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 26.76,
+        "target_value": 28.81,
+        "conviction_score": 0.6606000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 27.95,
+        "target_value": 28.81,
+        "conviction_score": 0.6541,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "HEIA.AS",
+        "name": "Heineken N.V.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 27.87,
+        "target_value": 28.81,
+        "conviction_score": 0.6512,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "VOLV-B.ST",
+        "name": "AB Volvo (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 26.69,
+        "target_value": 28.81,
+        "conviction_score": 0.65,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "BOL.ST",
+        "name": "Boliden AB (publ)",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 25.88,
+        "target_value": 28.81,
+        "conviction_score": 0.629,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 27.56,
+        "target_value": 28.81,
+        "conviction_score": 0.5969000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "POST.VI",
+        "name": "\u00d6sterreichische Post AG",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 27.91,
+        "target_value": 28.81,
+        "conviction_score": 0.5700000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "MIO.IR",
+        "name": "Mincon Group plc",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 21.7,
+        "target_value": 28.81,
+        "conviction_score": 0.558365,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "JMT.LS",
+        "name": "Jer\u00f3nimo Martins, SGPS, S.A.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 28.17,
+        "target_value": 28.81,
+        "conviction_score": 0.547,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "OMV.VI",
+        "name": "OMV Aktiengesellschaft",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 27.87,
+        "target_value": 28.81,
+        "conviction_score": 0.5167,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "RAND.AS",
+        "name": "Randstad N.V.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 26.74,
+        "target_value": 28.81,
+        "conviction_score": 0.4965,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "NVG.LS",
+        "name": "The Navigator Company, S.A.",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 27.9,
+        "target_value": 28.81,
+        "conviction_score": 0.34543999999999997,
+        "signal": "buy"
+      }
+    ],
+    "skipped": [],
+    "waitlisted": [
+      {
+        "ticker": "STR.VI",
+        "name": "Strabag SE",
+        "signal": "strong_buy",
+        "conviction_score": 0.8463,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      },
+      {
+        "ticker": "SHELL.AS",
+        "name": "Shell plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.775,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      },
+      {
+        "ticker": "ANDR.VI",
+        "name": "Andritz AG",
+        "signal": "buy",
+        "conviction_score": 0.7431000000000001,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      }
+    ],
+    "summary": "Next rebalance would target 34 equal-weight sleeve(s); sell 7 name(s) that left the set; deploy cash into 5 buy(s); leave 25 near-target holding(s)."
   },
   "alerts": [
     {
@@ -459,10 +686,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 93.58000183105469,
+      "mark": 93.36,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "AD.AS",
@@ -470,10 +697,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 32.290000915527344,
+      "mark": 32.32,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "SAN.PA",
@@ -481,10 +708,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 71.83000183105469,
+      "mark": 71.56,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "PHIA.AS",
@@ -492,10 +719,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 21.829999923706055,
+      "mark": 21.8,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "LOGN.SW",
@@ -503,10 +730,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 84.4000015258789,
+      "mark": 83.72,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DHL.DE",
@@ -514,21 +741,21 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 57.7400016784668,
+      "mark": 57.86,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "SHELL.AS",
       "name": "Shell plc",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 41.875,
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
+      "mark": 41.95,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "wait"
     },
     {
       "ticker": "RAND.AS",
@@ -536,10 +763,10 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
-      "mark": 35.630001068115234,
+      "mark": 35.62,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "AED.BR",
@@ -547,10 +774,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 64.80000305175781,
+      "mark": 64.25,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "AKZA.AS",
@@ -558,10 +785,10 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 56.97999954223633,
+      "mark": 56.76,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "VOW.DE",
@@ -569,10 +796,10 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
-      "mark": 71.69999694824219,
+      "mark": 71.45,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "HEIA.AS",
@@ -580,10 +807,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 70.44000244140625,
+      "mark": 69.48,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "TTE.PA",
@@ -591,10 +818,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 76.66999816894531,
+      "mark": 78.1,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DOC.VI",
@@ -602,10 +829,10 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 189.8000030517578,
+      "mark": 187.8,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "BOL.ST",
@@ -613,10 +840,10 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 515.2000122070312,
+      "mark": 505.0,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "MIO.IR",
@@ -624,10 +851,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 0.8700000047683716,
+      "mark": 0.87,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "MELE.BR",
@@ -635,10 +862,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 69.5,
+      "mark": 69.55,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DG.PA",
@@ -646,10 +873,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 109.0999984741211,
+      "mark": 108.8,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "UMI.BR",
@@ -657,21 +884,21 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
-      "mark": 21.18000030517578,
+      "mark": 21.2,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "STR.VI",
       "name": "Strabag SE",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 105.4000015258789,
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
+      "mark": 105.8,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "wait"
     },
     {
       "ticker": "ACKB.BR",
@@ -679,10 +906,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 268.79998779296875,
+      "mark": 272.0,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": null
     },
     {
       "ticker": "WKL.AS",
@@ -690,21 +917,21 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 68.12000274658203,
+      "mark": 67.92,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "ANDR.VI",
       "name": "Andritz AG",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 84.0999984741211,
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
+      "mark": 84.2,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "wait"
     },
     {
       "ticker": "C5H.IR",
@@ -712,10 +939,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2.75,
+      "mark": 2.77,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "ESSITY-B.ST",
@@ -723,10 +950,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 260.5,
+      "mark": 259.3,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "NOVN.SW",
@@ -734,10 +961,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 122.08000183105469,
+      "mark": 120.92,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "VOLV-B.ST",
@@ -745,10 +972,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 326.1000061035156,
+      "mark": 324.1,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "EG7.IR",
@@ -756,10 +983,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 18.75,
+      "mark": 18.65,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "POST.VI",
@@ -767,21 +994,21 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 31.299999237060547,
+      "mark": 31.3,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DTE.DE",
       "name": "Deutsche Telekom AG",
       "source": "paper",
       "severity": "info",
-      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 26.40999984741211,
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 28.59,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": null
     },
     {
       "ticker": "VOE.VI",
@@ -789,10 +1016,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 45.220001220703125,
+      "mark": 44.66,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "JMT.LS",
@@ -803,7 +1030,7 @@
       "mark": 18.0,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "OMV.VI",
@@ -811,10 +1038,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 70.9000015258789,
+      "mark": 71.4,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "NVG.LS",
@@ -822,21 +1049,21 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3.2179999351501465,
+      "mark": 3.218,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DQ7A.IR",
       "name": "Donegal Investment Group plc",
       "source": "paper",
-      "severity": "watch",
-      "message": "Underwater \u2014 re-check hypothesis: research verdict caution; still buy",
-      "mark": 10.0,
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 12.5,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": null
     },
     {
       "ticker": "MC.PA",
@@ -844,10 +1071,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 397.04998779296875,
+      "mark": 394.6,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "UCB.BR",
@@ -855,10 +1082,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 206.5,
+      "mark": 215.4,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": null
     }
   ],
   "fund": {
@@ -867,9 +1094,9 @@
       "mode": "automated",
       "initial_cash": 1000.0,
       "monthly_deposit": 0.0,
-      "trade_cost_pct": 0.0027500000000000003,
-      "buy_cost_pct": 0.00525,
-      "sell_cost_pct": 0.00025,
+      "trade_cost_pct": 0.00185,
+      "buy_cost_pct": 0.00185,
+      "sell_cost_pct": 0.00185,
       "max_positions": 120,
       "reporting_currency": "GBP",
       "hedge_assumption": "none",
@@ -3181,11 +3408,38 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-01T10:46:39.603762+02:00",
+        "portfolio_value": 756.55,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 37,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CHF": 0.9051,
+            "EUR": 0.85429,
+            "SEK": 0.07503
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-30T09:27:45.142081+02:00",
+    "last_mark_at": "2026-10-01T10:46:39.603762+02:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "SHELL.AS": 1,
+        "STR.VI": 1,
+        "ACKB.BR": 1,
+        "ANDR.VI": 1,
+        "DTE.DE": 1,
+        "DQ7A.IR": 1,
+        "UCB.BR": 1
+      },
       "reentry_cooldown": {}
     }
   },
@@ -3193,7 +3447,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-30T07:27:54.667041+00:00",
+    "generated_at": "2026-10-01T08:46:40.021164+00:00",
     "open_count": 6,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -3212,7 +3466,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-30T07:27:54.668171+00:00",
+    "generated_at": "2026-10-01T08:46:40.022852+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -3278,7 +3532,7 @@
     "hold_recovery": {
       "open": {
         "count": 32,
-        "recovered_to_breakeven": 19,
+        "recovered_to_breakeven": 21,
         "close_reasons": {
           "open": 32
         }
@@ -3308,7 +3562,7 @@
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 2,
       "swap_rotations": 0
     }
   },
@@ -3317,8 +3571,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-30T07:27:54.670116+00:00",
-    "as_of": "2026-09-30T09:27:45.142081+02:00",
+    "updated_at": "2026-10-01T08:46:40.026134+00:00",
+    "as_of": "2026-10-01T10:46:39.603762+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3331,37 +3585,37 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 37,
-    "underwater_count": 8,
+    "underwater_count": 6,
     "thesis_status_counts": {
-      "intact": 34,
-      "weakening": 3,
-      "broken": 0,
+      "intact": 31,
+      "weakening": 2,
+      "broken": 4,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
       "holding_count": 37,
-      "loser_count": 8,
-      "loser_share": 0.2162,
-      "loser_nav_share": 0.2132,
+      "loser_count": 6,
+      "loser_share": 0.1622,
+      "loser_nav_share": 0.1614,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
-      "intact_loser_count": 7,
-      "weakening_loser_count": 1,
+      "intact_loser_count": 6,
+      "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
-        "quality": 0.25,
-        "dividend": 0.0,
-        "garp": 0.125,
-        "risk": 0.0
-      },
-      "family_fail_rate_non_losers": {
-        "cheapness": 0.0,
-        "quality": 0.1379,
+        "quality": 0.1667,
         "dividend": 0.0,
         "garp": 0.0,
         "risk": 0.0
+      },
+      "family_fail_rate_non_losers": {
+        "cheapness": 0.129,
+        "quality": 0.2581,
+        "dividend": 0.129,
+        "garp": 0.129,
+        "risk": 0.129
       },
       "selection_feedback_flags": [],
       "balancing_hint": "tolerate_intact_losers",
@@ -3369,44 +3623,132 @@
     },
     "holdings": [
       {
-        "ticker": "DQ7A.IR",
-        "name": "Donegal Investment Group plc",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": true,
-        "deep_underwater": true,
-        "unrealized_pct": -0.2,
-        "mark": 10.0,
-        "avg_cost": 12.5,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.3661,
-        "data_quality_score": 0.9,
-        "passed_families": [
+        "ticker": "ACKB.BR",
+        "name": "ACKB.BR",
+        "thesis_status": "broken",
+        "recommended_action": "exit_candidate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 272.0,
+        "avg_cost": 272.0,
+        "signal": null,
+        "timing_signal": null,
+        "conviction_score": null,
+        "data_quality_score": null,
+        "passed_families": [],
+        "failed_families": [
           "cheapness",
+          "quality",
           "dividend",
+          "garp",
           "risk"
         ],
-        "failed_families": [
-          "quality",
-          "garp"
-        ],
-        "research_verdict": "caution",
+        "research_verdict": null,
         "reasons": [
-          "research verdict caution",
-          "still buy",
-          "cheapness family still passes"
+          "cheapness lost and not in buy tier"
         ],
-        "intact_reasons": [
-          "still buy",
-          "cheapness family still passes",
-          "data_quality 0.90",
-          "conviction 37%"
+        "intact_reasons": [],
+        "weaken_reasons": [],
+        "broken_reasons": [
+          "cheapness lost and not in buy tier"
+        ]
+      },
+      {
+        "ticker": "DTE.DE",
+        "name": "DTE.DE",
+        "thesis_status": "broken",
+        "recommended_action": "exit_candidate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 28.59,
+        "avg_cost": 28.59,
+        "signal": null,
+        "timing_signal": null,
+        "conviction_score": null,
+        "data_quality_score": null,
+        "passed_families": [],
+        "failed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
         ],
-        "weaken_reasons": [
-          "research verdict caution"
+        "research_verdict": null,
+        "reasons": [
+          "cheapness lost and not in buy tier"
         ],
-        "broken_reasons": []
+        "intact_reasons": [],
+        "weaken_reasons": [],
+        "broken_reasons": [
+          "cheapness lost and not in buy tier"
+        ]
+      },
+      {
+        "ticker": "DQ7A.IR",
+        "name": "DQ7A.IR",
+        "thesis_status": "broken",
+        "recommended_action": "exit_candidate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 12.5,
+        "avg_cost": 12.5,
+        "signal": null,
+        "timing_signal": null,
+        "conviction_score": null,
+        "data_quality_score": null,
+        "passed_families": [],
+        "failed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "research_verdict": null,
+        "reasons": [
+          "cheapness lost and not in buy tier"
+        ],
+        "intact_reasons": [],
+        "weaken_reasons": [],
+        "broken_reasons": [
+          "cheapness lost and not in buy tier"
+        ]
+      },
+      {
+        "ticker": "UCB.BR",
+        "name": "UCB.BR",
+        "thesis_status": "broken",
+        "recommended_action": "exit_candidate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 215.4,
+        "avg_cost": 215.4,
+        "signal": null,
+        "timing_signal": null,
+        "conviction_score": null,
+        "data_quality_score": null,
+        "passed_families": [],
+        "failed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "research_verdict": null,
+        "reasons": [
+          "cheapness lost and not in buy tier"
+        ],
+        "intact_reasons": [],
+        "weaken_reasons": [],
+        "broken_reasons": [
+          "cheapness lost and not in buy tier"
+        ]
       },
       {
         "ticker": "VOW.DE",
@@ -3415,11 +3757,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.1351,
-        "mark": 71.7,
+        "unrealized_pct": -0.1381,
+        "mark": 71.45,
         "avg_cost": 82.9,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7155,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3457,11 +3799,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.112,
-        "mark": 515.2,
+        "unrealized_pct": -0.1296,
+        "mark": 505.0,
         "avg_cost": 580.2,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.629,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3492,99 +3834,17 @@
         "broken_reasons": []
       },
       {
-        "ticker": "DTE.DE",
-        "name": "Deutsche Telekom AG",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": true,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0763,
-        "mark": 26.41,
-        "avg_cost": 28.59,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.5625,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "price drawdown alone does not invalidate value thesis",
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 56%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 56%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "RAND.AS",
-        "name": "Randstad N.V.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": true,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0702,
-        "mark": 35.63,
-        "avg_cost": 38.32,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.4965,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "price drawdown alone does not invalidate value thesis",
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 50%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 50%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "DOC.VI",
         "name": "DO & CO Aktiengesellschaft",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0673,
-        "mark": 189.8,
+        "unrealized_pct": -0.0771,
+        "mark": 187.8,
         "avg_cost": 203.5,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6606,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3615,17 +3875,58 @@
         "broken_reasons": []
       },
       {
+        "ticker": "RAND.AS",
+        "name": "Randstad N.V.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": true,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0705,
+        "mark": 35.62,
+        "avg_cost": 38.32,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.4965,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "price drawdown alone does not invalidate value thesis",
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 50%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 50%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "AKZA.AS",
         "name": "Akzo Nobel N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0604,
-        "mark": 56.98,
+        "unrealized_pct": -0.064,
+        "mark": 56.76,
         "avg_cost": 60.64,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.713,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3662,11 +3963,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0553,
-        "mark": 21.18,
+        "unrealized_pct": -0.0544,
+        "mark": 21.2,
         "avg_cost": 22.42,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.9025,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3703,11 +4004,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0423,
-        "mark": 326.1,
+        "unrealized_pct": -0.0482,
+        "mark": 324.1,
         "avg_cost": 340.5,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.65,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3737,57 +4038,17 @@
         "broken_reasons": []
       },
       {
-        "ticker": "UCB.BR",
-        "name": "UCB SA",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0413,
-        "mark": 206.5,
-        "avg_cost": 215.4,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.5031,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 50%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 50%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0412,
-        "mark": 93.58,
+        "unrealized_pct": -0.0434,
+        "mark": 93.36,
         "avg_cost": 97.6,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.9183,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3823,11 +4084,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0343,
-        "mark": 64.8,
+        "unrealized_pct": -0.0425,
+        "mark": 64.25,
         "avg_cost": 67.1,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.5969,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3857,57 +4118,17 @@
         "broken_reasons": []
       },
       {
-        "ticker": "SAN.PA",
-        "name": "Sanofi",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0287,
-        "mark": 71.83,
-        "avg_cost": 73.95,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.8851,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 89%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 89%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "HEIA.AS",
         "name": "Heineken N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0244,
-        "mark": 70.44,
+        "unrealized_pct": -0.0377,
+        "mark": 69.48,
         "avg_cost": 72.2,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6512,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3937,18 +4158,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "TTE.PA",
-        "name": "TotalEnergies SE",
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0219,
-        "mark": 76.67,
-        "avg_cost": 78.39,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.6541,
+        "unrealized_pct": -0.0323,
+        "mark": 71.56,
+        "avg_cost": 73.95,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.8851,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3960,18 +4181,18 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 65%"
+          "conviction 89%"
         ],
         "intact_reasons": [
-          "still buy",
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 65%"
+          "conviction 89%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3983,11 +4204,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0211,
-        "mark": 109.1,
+        "unrealized_pct": -0.0238,
+        "mark": 108.8,
         "avg_cost": 111.45,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.9331,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4017,17 +4238,97 @@
         "broken_reasons": []
       },
       {
+        "ticker": "MC.PA",
+        "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0183,
+        "mark": 394.6,
+        "avg_cost": 401.95,
+        "signal": "buy",
+        "timing_signal": "accumulate",
+        "conviction_score": 0.6133,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 61%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 61%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "ESSITY-B.ST",
+        "name": "Essity AB (publ)",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0077,
+        "mark": 259.3,
+        "avg_cost": 261.3,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.7183,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 72%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 72%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "OMV.VI",
         "name": "OMV Aktiengesellschaft",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0132,
-        "mark": 70.9,
+        "unrealized_pct": -0.0063,
+        "mark": 71.4,
         "avg_cost": 71.85,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.5167,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4058,126 +4359,6 @@
         "broken_reasons": []
       },
       {
-        "ticker": "MC.PA",
-        "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0122,
-        "mark": 397.05,
-        "avg_cost": 401.95,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.6133,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 61%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 61%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "ACKB.BR",
-        "name": "Ackermans & Van Haaren NV",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0118,
-        "mark": 268.8,
-        "avg_cost": 272.0,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.7681,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 77%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 77%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "STR.VI",
-        "name": "Strabag SE",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0075,
-        "mark": 105.4,
-        "avg_cost": 106.2,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.8463,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 85%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 85%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "NVG.LS",
         "name": "The Navigator Company, S.A.",
         "thesis_status": "weakening",
@@ -4188,7 +4369,7 @@
         "mark": 3.218,
         "avg_cost": 3.238,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.3454,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -4229,7 +4410,7 @@
         "mark": 31.3,
         "avg_cost": 31.45,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.57,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4260,98 +4441,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "ESSITY-B.ST",
-        "name": "Essity AB (publ)",
+        "ticker": "STR.VI",
+        "name": "Strabag SE",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0031,
-        "mark": 260.5,
-        "avg_cost": 261.3,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.7183,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 72%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 72%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "ANDR.VI",
-        "name": "Andritz AG",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0012,
-        "mark": 84.1,
-        "avg_cost": 84.0,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.7431,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 74%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 74%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "PHIA.AS",
-        "name": "Koninklijke Philips N.V.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0023,
-        "mark": 21.83,
-        "avg_cost": 21.78,
+        "unrealized_pct": -0.0038,
+        "mark": 105.8,
+        "avg_cost": 106.2,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.8507,
+        "timing_signal": "wait",
+        "conviction_score": 0.8463,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -4375,6 +4476,46 @@
           "cheapness family still passes",
           "data_quality 1.00",
           "conviction 85%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0037,
+        "mark": 78.1,
+        "avg_cost": 78.39,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6541,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 65%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 65%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -4386,11 +4527,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0027,
-        "mark": 18.75,
+        "unrealized_pct": -0.0027,
+        "mark": 18.65,
         "avg_cost": 18.7,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7639,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -4420,6 +4561,126 @@
         "broken_reasons": []
       },
       {
+        "ticker": "PHIA.AS",
+        "name": "Koninklijke Philips N.V.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0009,
+        "mark": 21.8,
+        "avg_cost": 21.78,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.8507,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 85%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 85%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "VOE.VI",
+        "name": "Voestalpine AG",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0022,
+        "mark": 44.66,
+        "avg_cost": 44.56,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.7268,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 73%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 73%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "ANDR.VI",
+        "name": "Andritz AG",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0024,
+        "mark": 84.2,
+        "avg_cost": 84.0,
+        "signal": "buy",
+        "timing_signal": "wait",
+        "conviction_score": 0.7431,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 74%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 74%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "JMT.LS",
         "name": "Jer\u00f3nimo Martins, SGPS, S.A.",
         "thesis_status": "intact",
@@ -4430,7 +4691,7 @@
         "mark": 18.0,
         "avg_cost": 17.92,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.547,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4461,57 +4722,17 @@
         "broken_reasons": []
       },
       {
-        "ticker": "C5H.IR",
-        "name": "Cairn Homes plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0092,
-        "mark": 2.75,
-        "avg_cost": 2.725,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.7323,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 73%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 73%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "SHELL.AS",
         "name": "Shell plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0147,
-        "mark": 41.875,
+        "unrealized_pct": 0.0165,
+        "mark": 41.95,
         "avg_cost": 41.27,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "wait",
         "conviction_score": 0.775,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4541,18 +4762,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "VOE.VI",
-        "name": "Voestalpine AG",
+        "ticker": "C5H.IR",
+        "name": "Cairn Homes plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0148,
-        "mark": 45.22,
-        "avg_cost": 44.56,
+        "unrealized_pct": 0.0165,
+        "mark": 2.77,
+        "avg_cost": 2.725,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.7268,
+        "timing_signal": "neutral",
+        "conviction_score": 0.7323,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -4587,11 +4808,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0284,
-        "mark": 68.12,
+        "unrealized_pct": 0.0254,
+        "mark": 67.92,
         "avg_cost": 66.24,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7531,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4627,11 +4848,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0369,
-        "mark": 32.29,
+        "unrealized_pct": 0.0379,
+        "mark": 32.32,
         "avg_cost": 31.14,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.9,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4667,11 +4888,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0443,
-        "mark": 69.5,
+        "unrealized_pct": 0.0451,
+        "mark": 69.55,
         "avg_cost": 66.55,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7046,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4701,57 +4922,17 @@
         "broken_reasons": []
       },
       {
-        "ticker": "DHL.DE",
-        "name": "DHL AG",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0529,
-        "mark": 57.74,
-        "avg_cost": 54.84,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.7844,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 78%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 78%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "LOGN.SW",
         "name": "Logitech International S.A.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0555,
-        "mark": 84.4,
+        "unrealized_pct": 0.047,
+        "mark": 83.72,
         "avg_cost": 79.96,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7988,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4781,17 +4962,57 @@
         "broken_reasons": []
       },
       {
+        "ticker": "DHL.DE",
+        "name": "DHL AG",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0551,
+        "mark": 57.86,
+        "avg_cost": 54.84,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.7844,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 78%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 78%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "NOVN.SW",
         "name": "Novartis AG",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0896,
-        "mark": 122.08,
+        "unrealized_pct": 0.0793,
+        "mark": 120.92,
         "avg_cost": 112.04,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7226,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4831,7 +5052,7 @@
         "mark": 0.87,
         "avg_cost": 0.71,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.5584,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4867,7 +5088,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-30T07:27:54.672948+00:00",
+    "generated_at": "2026-10-01T08:46:40.030973+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -4934,7 +5155,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-30T07:27:54.800293+00:00",
+    "generated_at": "2026-10-01T08:46:40.038484+00:00",
     "open_count": 20,
     "closed_count": 3,
     "scored_count": 3,
@@ -5000,7 +5221,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-30T09:27:45.142081+02:00",
+    "generated_at": "2026-10-01T10:46:39.603762+02:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -5054,7 +5275,56 @@
       "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-30T07:27:54.802728+00:00",
+  "llm_agree_veto_shadow": {
+    "schema_version": 1,
+    "track_id": "buy_tier_level",
+    "generated_at": "2026-10-01T10:46:39.603762+02:00",
+    "observe_only": true,
+    "influences_live": false,
+    "judge_backend": "evidence_heuristic",
+    "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+    "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
+    "proposal_count": 0,
+    "card_count": 0,
+    "verdict_counts": {
+      "agree": 0,
+      "veto": 0,
+      "abstain": 0
+    },
+    "by_algo_action": {},
+    "cards": [],
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer.",
+    "review": {
+      "schema_version": 1,
+      "track_id": "buy_tier_level",
+      "generated_at": "2026-10-01T10:46:39.603762+02:00",
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+      "card_count": 0,
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {},
+      "veto_sell_count": 0,
+      "veto_sell_tickers": [],
+      "promotion_gate": {
+        "ready_for_hard_veto": false,
+        "requires": [
+          "Thick disagreement cohort vs still_in_buy_set twin marks",
+          "Evidence schema present on every live-bound card (fail-closed)",
+          "Explicit cold-start / epoch promotion \u2014 never mid-flight Suite A edit",
+          "Suite B framing before treating as adoption truth"
+        ],
+        "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
+      },
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer."
+    }
+  },
+  "generated_at": "2026-10-01T08:46:40.042158+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
@@ -5068,6 +5338,9 @@
     "use_graduated_allocation": false,
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
-    "min_rebalance_notional_gbp": 10.0
+    "min_rebalance_notional_gbp": 10.0,
+    "still_in_buy_set_hold": false,
+    "rank_drop_exit_min": 3,
+    "block_rebuy_while_in_candidates": false
   }
 }

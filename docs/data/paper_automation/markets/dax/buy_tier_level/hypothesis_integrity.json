@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-09-30T07:26:46.058769+00:00",
-  "as_of": "2026-09-30T08:26:46.039528+01:00",
+  "updated_at": "2026-10-01T08:46:59.201202+00:00",
+  "as_of": "2026-10-01T09:46:59.181607+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -19,9 +19,9 @@
   "holding_count": 3,
   "underwater_count": 0,
   "thesis_status_counts": {
-    "intact": 2,
+    "intact": 1,
     "weakening": 1,
-    "broken": 0,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
@@ -43,11 +43,11 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
-      "quality": 0.0,
-      "dividend": 0.0,
-      "garp": 0.0,
-      "risk": 0.0
+      "cheapness": 0.3333,
+      "quality": 0.3333,
+      "dividend": 0.3333,
+      "garp": 0.3333,
+      "risk": 0.3333
     },
     "selection_feedback_flags": [],
     "balancing_hint": "maintain",
@@ -56,43 +56,35 @@
   "holdings": [
     {
       "ticker": "DHL.DE",
-      "name": "DHL AG",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "name": "DHL.DE",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0042,
-      "mark": 57.86,
+      "unrealized_pct": 0.0,
+      "mark": 57.62,
       "avg_cost": 57.62,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8938,
-      "data_quality_score": 1.0,
-      "passed_families": [
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
         "cheapness",
         "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
+      "research_verdict": null,
       "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 89%"
+        "cheapness lost and not in buy tier"
       ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 89%"
-      ],
+      "intact_reasons": [],
       "weaken_reasons": [],
-      "broken_reasons": []
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
     },
     {
       "ticker": "FME.DE",

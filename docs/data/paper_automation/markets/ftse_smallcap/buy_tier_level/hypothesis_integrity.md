@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-30T07:26:42.943856+00:00
+Track: `buy_tier_level` · updated 2026-10-01T08:46:56.288622+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level` · updated 2026-09-30T07:26:42.943856+00:00
 
 ## Holding reviews
 
-### CAPD.L — intact / hold_tolerate (+2.6%)
+### CAPD.L — intact / hold_tolerate (+2.5%)
 - still buy
 - research accumulate
 - cheapness family still passes

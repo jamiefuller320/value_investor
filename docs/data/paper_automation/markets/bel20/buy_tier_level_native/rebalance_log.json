@@ -227,5 +227,414 @@
       "exit_streak": {},
       "reentry_cooldown": {}
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-01T08:47:06.848213+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/bel20/screen_latest.json",
+      "run_at": "2026-09-30T06:52:42.218162+00:00",
+      "generated_at": "2026-10-01T08:47:06.797640+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-01T09:47:06.836319+01:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-10-01T08:00:00+01:00",
+      "settle_at": "2026-10-01T09:15:00+01:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (3 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0003,
+    "candidates": [
+      {
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5648000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 21.1,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5375,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 64.35,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "SOLB.BR",
+        "name": "Solvay SA",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.32844,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 24.52,
+        "research_verdict": "caution"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "UMI.BR",
+        "name": "Umicore SA",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5648000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 21.1,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5375,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 64.35,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "SOLB.BR",
+        "name": "Solvay SA",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.32844,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 24.52,
+        "research_verdict": "caution"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 999.58,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 333.19,
+      "targets": [
+        {
+          "ticker": "UMI.BR",
+          "name": "Umicore SA",
+          "signal": "buy",
+          "conviction_score": 0.5648000000000001,
+          "price": 21.1
+        },
+        {
+          "ticker": "AED.BR",
+          "name": "Aedifica NV/SA",
+          "signal": "buy",
+          "conviction_score": 0.5375,
+          "price": 64.35
+        },
+        {
+          "ticker": "SOLB.BR",
+          "name": "Solvay SA",
+          "signal": "buy",
+          "conviction_score": 0.32844,
+          "price": 24.52
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "UMI.BR",
+          "name": "Umicore SA",
+          "reason": "Already near equal-weight target",
+          "value": 333.21,
+          "target_value": 333.19,
+          "conviction_score": 0.5648000000000001,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "AED.BR",
+          "name": "Aedifica NV/SA",
+          "reason": "Already near equal-weight target",
+          "value": 333.21,
+          "target_value": 333.19,
+          "conviction_score": 0.5375,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "SOLB.BR",
+          "name": "Solvay SA",
+          "reason": "Already near equal-weight target",
+          "value": 333.17,
+          "target_value": 333.19,
+          "conviction_score": 0.32844,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "e2478a29-a7c1-4d74-ae4d-333a72604cf8",
+        "fund_id": "0077d59b-0902-4d01-add7-458a2b36bf3b",
+        "acted_at": "2026-10-01T09:47:06.836319+01:00",
+        "ticker": "UMI.BR",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 7.898895,
+        "price": 21.1,
+        "gross": 166.67,
+        "cost": 0.04,
+        "net_cash": 166.63,
+        "note": "Automated trim",
+        "name": "Umicore SA",
+        "avg_cost_at_exit": 21.1
+      },
+      {
+        "id": "fe6fdf5e-fa93-43e9-af43-25c258f66af3",
+        "fund_id": "0077d59b-0902-4d01-add7-458a2b36bf3b",
+        "acted_at": "2026-10-01T09:47:06.836319+01:00",
+        "ticker": "AED.BR",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 2.590003,
+        "price": 64.35,
+        "gross": 166.67,
+        "cost": 0.04,
+        "net_cash": 166.63,
+        "note": "Automated trim",
+        "name": "Aedifica NV/SA",
+        "avg_cost_at_exit": 64.35
+      },
+      {
+        "id": "b2d50ad7-995c-44b1-952a-6ba253f2febc",
+        "fund_id": "0077d59b-0902-4d01-add7-458a2b36bf3b",
+        "acted_at": "2026-10-01T09:47:06.836319+01:00",
+        "ticker": "SOLB.BR",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 13.58755,
+        "price": 24.52,
+        "gross": 333.17,
+        "cost": 0.08,
+        "net_cash": -333.25,
+        "note": "Automated buy",
+        "name": "Solvay SA"
+      }
+    ],
+    "nav_before": 999.75,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "UMI.BR",
+        "shares": 23.69076,
+        "avg_cost": 21.1,
+        "sector": "Industrials",
+        "name": "Umicore SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AED.BR",
+        "shares": 7.768066,
+        "avg_cost": 64.35,
+        "sector": "Real Estate",
+        "name": "Aedifica NV/SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 999.58,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "UMI.BR",
+        "shares": 15.791865,
+        "avg_cost": 21.1,
+        "sector": "Industrials",
+        "name": "Umicore SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AED.BR",
+        "shares": 5.178063,
+        "avg_cost": 64.35,
+        "sector": "Real Estate",
+        "name": "Aedifica NV/SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "SOLB.BR",
+        "shares": 13.58755,
+        "avg_cost": 24.52,
+        "sector": "Basic Materials",
+        "name": "Solvay SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 1
+      },
+      "cards": [
+        {
+          "ticker": "SOLB.BR",
+          "name": "Solvay SA",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "abstain",
+          "reasons": [
+            "Buy while not buyish \u2014 abstain."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.32844
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-01T09:47:06.836319+01:00",
+          "proposal_id": "buy_tier_level_native:SOLB.BR:buy:2026-10-01T09:47:06.836319+01:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?"
+          },
+          "schema_version": 1
+        }
+      ]
+    }
   }
 ]

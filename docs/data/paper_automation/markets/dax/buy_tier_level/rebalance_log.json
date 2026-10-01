@@ -1665,5 +1665,275 @@
       "exit_streak": {},
       "reentry_cooldown": {}
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-01T08:46:59.208933+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/dax/screen_latest.json",
+      "run_at": "2026-09-30T06:52:42.218162+00:00",
+      "generated_at": "2026-10-01T08:46:59.170549+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-01T09:46:59.181607+01:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-10-01T08:00:00+01:00",
+      "settle_at": "2026-10-01T09:15:00+01:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (0 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "FME.DE",
+        "name": "Fresenius Medical Care AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.775625,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 39.7,
+        "research_verdict": "caution"
+      },
+      {
+        "ticker": "G1A.DE",
+        "name": "GEA Group Aktiengesellschaft",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6437,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 66.9,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "FME.DE",
+        "name": "Fresenius Medical Care AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.775625,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 39.7,
+        "research_verdict": "caution"
+      },
+      {
+        "ticker": "G1A.DE",
+        "name": "GEA Group Aktiengesellschaft",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6437,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 66.9,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 999.49,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 499.45,
+      "targets": [
+        {
+          "ticker": "FME.DE",
+          "name": "Fresenius Medical Care AG",
+          "signal": "strong_buy",
+          "conviction_score": 0.775625,
+          "price": 39.7
+        },
+        {
+          "ticker": "G1A.DE",
+          "name": "GEA Group Aktiengesellschaft",
+          "signal": "buy",
+          "conviction_score": 0.6437,
+          "price": 66.9
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "DHL.DE",
+          "name": "DHL AG",
+          "reason": "No longer in the top conviction target set",
+          "shares": 5.819272,
+          "price": 57.62,
+          "value": 335.31
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "FME.DE",
+          "name": "Fresenius Medical Care AG",
+          "reason": "Top-up to equal weight",
+          "value": 167.87,
+          "price": 39.7,
+          "target_value": 499.45,
+          "conviction_score": 0.775625,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "G1A.DE",
+          "name": "GEA Group Aktiengesellschaft",
+          "reason": "Top-up to equal weight",
+          "value": 166.85,
+          "price": 66.9,
+          "target_value": 499.45,
+          "conviction_score": 0.6437,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s)."
+    },
+    "trades": [],
+    "nav_before": 999.49,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "FME.DE",
+        "shares": 8.352168,
+        "avg_cost": 39.47,
+        "sector": "Healthcare",
+        "name": "Fresenius Medical Care AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DHL.DE",
+        "shares": 5.819272,
+        "avg_cost": 57.62,
+        "sector": "Industrials",
+        "name": "DHL AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "G1A.DE",
+        "shares": 4.97167,
+        "avg_cost": 66.05,
+        "sector": "Industrials",
+        "name": "GEA Group Aktiengesellschaft",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 999.49,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "FME.DE",
+        "shares": 8.352168,
+        "avg_cost": 39.47,
+        "sector": "Healthcare",
+        "name": "Fresenius Medical Care AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DHL.DE",
+        "shares": 5.819272,
+        "avg_cost": 57.62,
+        "sector": "Industrials",
+        "name": "DHL AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "G1A.DE",
+        "shares": 4.97167,
+        "avg_cost": 66.05,
+        "sector": "Industrials",
+        "name": "GEA Group Aktiengesellschaft",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {
+        "DHL.DE": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": []
+    }
   }
 ]

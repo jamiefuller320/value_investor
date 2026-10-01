@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-30T07:26:46.958297+00:00
+Track: `buy_tier_level` · updated 2026-10-01T08:47:01.154790+00:00
 
 ## Portfolio loser feedback
 
@@ -23,12 +23,10 @@ Track: `buy_tier_level` · updated 2026-09-30T07:26:46.958297+00:00
 - still strong_buy
 - research accumulate
 
-### YNGN.L — intact / hold_tolerate (-4.2%)
+### YNGN.L — weakening / watch_review (-4.2%)
+- research verdict caution
 - still strong_buy
-- research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 61%
 
 ### CREO.L — weakening / watch_review (-3.1%)
 - research verdict caution
@@ -66,9 +64,10 @@ Track: `buy_tier_level` · updated 2026-09-30T07:26:46.958297+00:00
 
 ### TFW.L — intact / hold_tolerate (+0.0%)
 - still buy
+- research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 62%
+- conviction 67%
 
 ### ASY.L — intact / hold_tolerate (+1.8%)
 - still buy
@@ -85,9 +84,10 @@ Track: `buy_tier_level` · updated 2026-09-30T07:26:46.958297+00:00
 - conviction 56%
 
 ### WJG.L — weakening / watch_review (+3.4%)
-- conviction 31% below intact floor
+- research verdict caution
+- conviction 22% below intact floor
 - still buy
-- research accumulate
+- cheapness family still passes
 
 ### IGR.L — weakening / watch_review (+5.3%)
 - research verdict caution
