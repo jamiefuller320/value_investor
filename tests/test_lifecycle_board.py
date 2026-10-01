@@ -7,6 +7,7 @@ from pathlib import Path
 
 from value_investor.lifecycle_board import (
     COLUMN_SHOW_CAPS,
+    _episode_opened_at,
     build_lifecycle_board,
     classify_board_column,
     merge_track_columns,
@@ -18,6 +19,39 @@ from value_investor.position_lifecycle import BOARD_COLUMN_IDS
 from value_investor.storage import write_json
 
 NOW = datetime(2026, 9, 13, 12, 0, tzinfo=UTC)
+
+
+def test_episode_opened_at_skips_prior_closed_cycle():
+    trades = [
+        {
+            "ticker": "SGE.L",
+            "side": "buy",
+            "acted_at": "2026-09-01T10:00:00+00:00",
+            "price": 100,
+        },
+        {
+            "ticker": "SGE.L",
+            "side": "sell",
+            "acted_at": "2026-09-05T10:00:00+00:00",
+            "price": 95,
+            "position_closed": True,
+        },
+        {
+            "ticker": "SGE.L",
+            "side": "buy",
+            "acted_at": "2026-09-10T10:00:00+00:00",
+            "price": 90,
+        },
+        {
+            "ticker": "SGE.L",
+            "side": "sell",
+            "acted_at": "2026-09-12T10:00:00+00:00",
+            "price": 88,
+            "position_closed": True,
+        },
+    ]
+    opened = _episode_opened_at(trades, ticker="SGE.L", sold_at="2026-09-12T10:00:00+00:00")
+    assert opened == "2026-09-10T10:00:00+00:00"
 
 
 def test_classify_board_column_funnel():
@@ -115,6 +149,20 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
             },
             "trades": [
                 {
+                    "id": "t0",
+                    "fund_id": "f1",
+                    "acted_at": (NOW - timedelta(days=20)).isoformat(),
+                    "ticker": "SOLD.L",
+                    "side": "buy",
+                    "sizing_mode": "shares",
+                    "shares": 5,
+                    "price": 1.0,
+                    "gross": 5,
+                    "cost": 0.05,
+                    "net_cash": -5.05,
+                    "name": "Sold PLC",
+                },
+                {
                     "id": "t1",
                     "fund_id": "f1",
                     "acted_at": (NOW - timedelta(days=4)).isoformat(),
@@ -127,8 +175,9 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
                     "cost": 0.1,
                     "net_cash": 5.9,
                     "position_closed": True,
+                    "avg_cost_at_exit": 1.0,
                     "name": "Sold PLC",
-                }
+                },
             ],
             "equity_curve": [{"at": NOW.isoformat(), "portfolio_value": 1500}],
             "rebalance_state": {"exit_streak": {}, "reentry_cooldown": {}},
@@ -164,6 +213,10 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
     sold_card = next(card for card in columns["just_sold"]["shown"] if card["ticker"] == "SOLD.L")
     assert sold_card["days_in_column"] == 4
     assert sold_card["tenure_band"] == "fresh"
+    assert sold_card["exit_price"] == 1.2
+    assert sold_card["avg_cost"] == 1.0
+    assert sold_card["opened_at"][:10] == (NOW - timedelta(days=20)).date().isoformat()
+    assert sold_card["sold_at"][:10] == (NOW - timedelta(days=4)).date().isoformat()
     wait_card = next(card for card in columns["not_now"]["shown"] if card["ticker"] == "WAIT.L")
     assert wait_card["days_in_column"] == 10
     assert wait_card["tenure_band"] == "recent"
@@ -475,6 +528,12 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert "levels_basis" in charts
     assert "prospective" in charts
     assert "formatChartPrice(value, currency)" in charts
+    assert "function tradeFillMarker(" in charts
+    assert "sold_at: card.sold_at" in app
+    assert "exit_price: card.exit_price" in app
+    assert "_exit_price" in charts
+    assert "Bought ${openedAt}" in charts
+    assert "Sold ${soldAt}" in charts
 
 
 def _write_btl_fund(paper: Path, *, ticker: str, avg_cost: float, opened_days: int = 60) -> None:
