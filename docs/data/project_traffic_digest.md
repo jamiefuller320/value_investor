@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-01T12:32:07.359902+00:00`
+Generated: `2026-10-01T17:31:57.492016+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -36,7 +36,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `ingest_narrow`/verified PR #930 `eng-20261001-01` — Close library ingest filing gaps for Hang Seng (hang_seng): 3 buy-tier gaps after stalled weekday loop
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 128
+- Occasion count: 130
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 3×

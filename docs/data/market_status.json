@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-01T17:28:48.147239+00:00",
+  "generated_at": "2026-10-01T18:07:36.431432+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -1024,7 +1024,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=3, zero_body=2, thin=0, indexed_without_body=0)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=2, indexed_without_body=1)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 15,
@@ -1076,28 +1076,26 @@
       },
       "filing_health": {
         "buy_tier_count": 6,
-        "unmeasured_buy_tier": 3,
-        "zero_body_buy_tier": 2,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 0,
-        "bodies_median": 4.0,
+        "unmeasured_buy_tier": 1,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 2,
+        "indexed_without_body": 1,
+        "bodies_median": 3.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
         "parked_count": 0,
-        "zero_body_tickers": [
+        "zero_body_tickers": [],
+        "thin_body_tickers": [
           "J36.SI",
-          "U14.SI"
+          "BS6.SI"
         ],
-        "thin_body_tickers": [],
         "unmeasured_tickers": [
-          "BUOU.SI",
-          "BS6.SI",
-          "N2IU.SI"
+          "BUOU.SI"
         ],
         "parked_tickers": []
       },
-      "filing_gaps": 5,
+      "filing_gaps": 1,
       "paper_instrument": null,
       "ai_judgment": null,
       "knob_apply": null,
@@ -1106,49 +1104,49 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 0,
-        "targets": 0,
-        "improved": 0,
-        "improved_tickers": [],
-        "last_run_at": null,
+        "run_count": 1,
+        "targets": 5,
+        "improved": 4,
+        "improved_tickers": [
+          "BS6.SI",
+          "N2IU.SI",
+          "J36.SI",
+          "U14.SI"
+        ],
+        "last_run_at": "2026-10-01T17:29:27.495084+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 0,
-          "filing_gaps": 0
-        },
-        "gaps_after": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 0,
-          "filing_gaps": 0
-        },
-        "gap_delta": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 0,
-          "filing_gaps": 0
-        },
-        "remaining": {
           "unmeasured": 3,
           "zero_body": 2,
           "thin": 0,
           "indexed_without_body": 0,
           "filing_gaps": 5
         },
+        "gaps_after": {
+          "unmeasured": 1,
+          "zero_body": 0,
+          "thin": 2,
+          "indexed_without_body": 1,
+          "filing_gaps": 1
+        },
+        "gap_delta": {
+          "unmeasured": -2,
+          "zero_body": -2,
+          "thin": 2,
+          "indexed_without_body": 1,
+          "filing_gaps": -4
+        },
+        "remaining": {
+          "unmeasured": 1,
+          "zero_body": 0,
+          "thin": 2,
+          "indexed_without_body": 1,
+          "filing_gaps": 1
+        },
         "admission_ready": false,
         "admission_gate": "sprint_ingest_complete",
         "admission_warnings": [
-          {
-            "id": "awaiting_first_ingest",
-            "severity": "warn",
-            "summary": "Entered sprint on 2026-10-01; waiting on the first deepen slot"
-          },
           {
             "id": "no_observe_benchmark",
             "severity": "warn",
