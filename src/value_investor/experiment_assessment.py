@@ -27,6 +27,12 @@ from value_investor.exclusion_ladder_replay import (
 )
 from value_investor.experiment_acks import ACKS_FILENAME, apply_ack_to_experiment, load_acks
 from value_investor.paper_automation import AI_JUDGMENT_TRACK_ID, CONFIG_FILENAME, AutomationConfig
+from value_investor.refinement_progression import (
+    apply_graduation_refinements,
+    merge_preserved_refinement_rows,
+    preserve_lineage_fields,
+    progression_triggers,
+)
 from value_investor.storage import COMMITTED_HISTORY_DIR, read_json, write_json
 from value_investor.trajectory_evidence import build_model_focus_candidates
 
@@ -748,16 +754,20 @@ def refresh_experiment_assessment(
     previous_by_id = {
         str(row.get("experiment_id")): row
         for row in (previous.get("experiments") or [])
-        if row.get("experiment_id")
+        if isinstance(row, dict) and row.get("experiment_id")
     }
     now = datetime.now(UTC).isoformat()
     for row in experiments:
         exp_id = str(row.get("experiment_id") or "")
         prior = previous_by_id.get(exp_id) or {}
+        preserve_lineage_fields(row, prior)
         if prior.get("initiated_at"):
             row["initiated_at"] = prior["initiated_at"]
         elif exp_id and exp_id not in previous_by_id:
             row["initiated_at"] = now
+
+    # Re-attach observe refinement children that evidence rebuild omits.
+    merge_preserved_refinement_rows(experiments, previous_by_id)
 
     acks = load_acks(data_dir)
     for row in experiments:
@@ -765,6 +775,15 @@ def refresh_experiment_assessment(
 
     dca_plan = evaluate_entry_dca_adoption_plan(data_dir=data_dir, paper_root=paper_root)
     write_entry_dca_adoption_plan(dca_plan, data_dir=data_dir)
+
+    # Graduation → next bounded refinement lane (observe/twin mark only).
+    refinement = apply_graduation_refinements(
+        experiments,
+        data_dir=data_dir,
+        paper_root=paper_root,
+        adoption=dca_plan,
+        persist=True,
+    )
 
     sync_result: dict[str, Any] | None = None
     if sync_task_status:
@@ -814,6 +833,21 @@ def refresh_experiment_assessment(
         "experiments": experiments,
         "recommendations": recommendations,
         "entry_dca_adoption": slim_entry_dca_adoption(dca_plan),
+        "refinement_progression": {
+            "observe_only": True,
+            "influences_live": False,
+            "opened": refinement.get("opened") or [],
+            "skipped_count": len(refinement.get("skipped") or []),
+            "satisfied": refinement.get("satisfied") or [],
+            "progression_triggers": progression_triggers(),
+            "lanes_path": refinement.get("lanes_path"),
+            "note": (
+                "On graduation/adoption success, auto-registers the next observe "
+                "refinement child (parent_id / refinement_of). Never mid-flight "
+                "rewrites live books; LLM challenger stays fail-closed without a "
+                "disagreement theme."
+            ),
+        },
         "task_sync": sync_result,
         "sources": {
             "calibration_shadow_endurance": str(paper_root / ENDURANCE_FILENAME),
@@ -823,6 +857,7 @@ def refresh_experiment_assessment(
             "trajectory_evidence_review": str(data_dir / "trajectory_evidence_review.json"),
             "experiment_acks": str(data_dir / ACKS_FILENAME),
             "entry_dca_adoption_plan": str(data_dir / PLAN_FILENAME),
+            "refinement_lanes": str(data_dir / "refinement_lanes.json"),
         },
     }
     dest = output_path or (data_dir / ASSESSMENT_FILENAME)
@@ -863,6 +898,12 @@ def slim_experiment_assessment_for_review(payload: dict[str, Any] | None) -> dic
             slim["gate_excess_after_costs"] = row.get("gate_excess_after_costs")
         if row.get("forward_evidence"):
             slim["forward_evidence"] = row.get("forward_evidence")
+        if row.get("parent_id"):
+            slim["parent_id"] = row.get("parent_id")
+        if row.get("refinement_of"):
+            slim["refinement_of"] = row.get("refinement_of")
+        if row.get("superseded_by"):
+            slim["superseded_by"] = row.get("superseded_by")
         by_status[status].append(slim)
 
     return {
@@ -870,10 +911,13 @@ def slim_experiment_assessment_for_review(payload: dict[str, Any] | None) -> dic
         "summary": payload.get("summary"),
         "recommendations": payload.get("recommendations") or [],
         "entry_dca_adoption": payload.get("entry_dca_adoption"),
+        "refinement_progression": payload.get("refinement_progression"),
         "by_status": {key: rows for key, rows in by_status.items() if rows},
         "note": (
             "Unified assessment loop: proposed → observing → continue | fail | recommend. "
-            "Only unacked recommend requires human ack; never auto-apply."
+            "Only unacked recommend requires human ack; never auto-apply. "
+            "Graduation opens the next observe refinement child via parent_id / "
+            "refinement_of (not a live capital switch)."
         ),
     }
 

@@ -1419,6 +1419,8 @@ def run_daily_automation(
         "observe_only": True,
         "influences_live": False,
         "judge_backend": llm_agree_veto_shadow.get("judge_backend"),
+        "judge_spec_id": llm_agree_veto_shadow.get("judge_spec_id"),
+        "parent_spec_id": llm_agree_veto_shadow.get("parent_spec_id"),
         "verdict_counts": llm_agree_veto_shadow.get("verdict_counts"),
         "cards": llm_agree_veto_shadow.get("cards") or [],
     }

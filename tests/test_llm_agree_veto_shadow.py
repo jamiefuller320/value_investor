@@ -158,6 +158,50 @@ def test_run_pass_writes_store_and_never_influences_live(tmp_path):
     assert review["veto_sell_count"] == 1
 
 
+def test_judge_cards_carry_judge_spec_id():
+    proposal = {
+        "ticker": "PAF.L",
+        "name": "Pan African",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit — left target set",
+    }
+    card = judge_proposal(
+        proposal,
+        candidate={"ticker": "PAF.L", "signal": "buy", "conviction_score": 0.7},
+        buy_ranks={"PAF.L": 8},
+        entry_ranks={"PAF.L": 7},
+        track_id="rules",
+    )
+    assert card.judge_spec_id == "heuristic.v1"
+    payload = card.to_dict()
+    assert payload["judge_spec_id"] == "heuristic.v1"
+    assert "parent_spec_id" not in payload
+
+    challenger = judge_proposal(
+        proposal,
+        candidate={"ticker": "PAF.L", "signal": "buy", "conviction_score": 0.7},
+        buy_ranks={"PAF.L": 8},
+        entry_ranks={"PAF.L": 7},
+        track_id="rules",
+        judge_spec_id="heuristic.v2_rank_drop_4",
+        parent_spec_id="heuristic.v1",
+    ).to_dict()
+    assert challenger["judge_spec_id"] == "heuristic.v2_rank_drop_4"
+    assert challenger["parent_spec_id"] == "heuristic.v1"
+    assert challenger["influences_live"] is False
+
+
+def test_build_shadow_pass_includes_judge_spec_id():
+    payload = build_shadow_pass(
+        track_id="rules",
+        plan={"exits": [{"ticker": "KLR.L", "reason": "left"}], "holds": [], "buys": []},
+        trades=[],
+        candidates=[{"ticker": "KLR.L", "signal": "hold", "conviction_score": 0.1}],
+    )
+    assert payload["judge_spec_id"] == "heuristic.v1"
+    assert all(c.get("judge_spec_id") == "heuristic.v1" for c in payload["cards"])
+
+
 def test_build_shadow_pass_strips_live_influence():
     payload = build_shadow_pass(
         track_id="ai_judgment",

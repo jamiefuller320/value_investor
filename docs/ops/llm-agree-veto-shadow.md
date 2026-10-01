@@ -22,8 +22,11 @@ On every `ftse-paper-auto` track pass (after fills are already decided):
 4. **Never** change sells, holds, or buys — `influences_live=false`.
 
 Default judge backend: `evidence_heuristic` (deterministic, cites trail inputs).
-Schema is LLM-ready (`judge_backend=llm`) but paper-auto does **not** call an
-LLM (N24). A future LLM backend must emit the same evidence fields.
+Every card carries **`judge_spec_id`** (default `heuristic.v1`) so a later
+observe A/B challenger can set a new id + optional `parent_spec_id` without
+live influence. Schema is LLM-ready (`judge_backend=llm`) but paper-auto does
+**not** call an LLM (N24). A future LLM backend must emit the same evidence
+fields. See [`refinement-learning-loops.md`](refinement-learning-loops.md).
 
 ## Artifacts
 
