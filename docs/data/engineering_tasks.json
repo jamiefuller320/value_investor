@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-10-01T08:22:09.489488+00:00",
+  "compiled_at": "2026-10-01T08:57:34.581398+00:00",
   "run_at": null,
   "task_count": 122,
   "tasks": [
@@ -2453,7 +2453,37 @@
         ],
         "sample_zero_body": [],
         "rerun_library_ingest_loop": true,
-        "doc": "docs/ops/library-ingest-escalation.md"
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "stall_triage": {
+          "analyzed_at": "2026-10-01T08:57:26.626012+00:00",
+          "market_id": "hang_seng",
+          "task_id": "eng-20261001-01",
+          "status": "open",
+          "filing_gaps": 3,
+          "lanes": {
+            "unmeasured": 3,
+            "zero_body": 0,
+            "indexed_without_body": 9,
+            "thin_bodies": 17
+          },
+          "active_lanes": [
+            "unmeasured",
+            "indexed_without_body",
+            "thin_bodies"
+          ],
+          "bundled": true,
+          "focus_ticker": "6618.HK",
+          "focus_lane": "unmeasured",
+          "reburn_loop": false,
+          "reburn_investigation": null,
+          "recommendations": [
+            "narrow_reframe:6618.HK:unmeasured",
+            "intensive_pin_or_allowlist_batch",
+            "split_by_ticker_not_broad_market_task"
+          ],
+          "filing_health_snapshot_at": "2026-10-01T08:57:26.622802+00:00",
+          "doc": "docs/ops/library-ingest-escalation.md#library-stall-task-triage"
+        }
       },
       "acceptance_criteria": [
         "Representative hang_seng buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
@@ -7777,7 +7807,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-10-01T08:10:58.251045+00:00",
+    "evaluated_at": "2026-10-01T08:58:07.402535+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -7785,8 +7815,8 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "library_ingest_loop",
-  "library_market_id": "hang_seng",
+  "micro_compile_source": "parked_source_hunter",
+  "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
   "queue_block_notify": {
     "last_fingerprint": "clash_blocked|no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
