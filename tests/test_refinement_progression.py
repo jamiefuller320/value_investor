@@ -97,9 +97,10 @@ def test_dca_graduation_opens_timing_shift_lane(tmp_path: Path):
         persist=True,
     )
     assert result2["opened"] == []
-    assert sum(
-        1 for row in experiments if row["experiment_id"] == "entry_dca_timing_shift_overlay"
-    ) == 1
+    assert (
+        sum(1 for row in experiments if row["experiment_id"] == "entry_dca_timing_shift_overlay")
+        == 1
+    )
 
 
 def test_llm_challenger_fail_closed_without_theme(tmp_path: Path):
