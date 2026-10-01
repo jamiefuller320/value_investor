@@ -1496,6 +1496,56 @@ def check_buy_tier_flip_lag(
     ]
 
 
+def check_universe_filing_archive_miss_rate(
+    *,
+    flip_lag_path: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only: L499 archive body-miss proxy from flip-lag (no crawler).
+
+    Refreshes ``docs/data/universe_filing_archive_miss_rate.json``. Warns when
+    miss rate is elevated with open body gaps. Does not deepen ingest or rememo.
+    """
+    from value_investor.universe_filing_archive_miss_rate import (
+        DEFAULT_FLIP_LAG_PATH,
+        DEFAULT_STORE_PATH,
+        ops_finding_from_archive_miss_rate,
+        update_universe_filing_archive_miss_rate,
+    )
+
+    path = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+    flip_path = Path(flip_lag_path) if flip_lag_path is not None else DEFAULT_FLIP_LAG_PATH
+    try:
+        payload = update_universe_filing_archive_miss_rate(
+            flip_lag_path=flip_path,
+            store_path=path,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="ingest",
+                title="Universe archive miss-rate observe failed",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_archive_miss_rate(payload)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "warn"),
+            category=str(finding.get("category") or "ingest"),
+            title=str(finding.get("title") or "Universe archive body-miss rate elevated"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+    ]
+
+
 def check_decision_input_inventory(
     *,
     latest_path: Path = DEFAULT_LATEST_PATH,
@@ -2401,6 +2451,7 @@ def collect_ops_findings(
     findings.extend(check_memo_rememo_backlog())
     findings.extend(check_buy_tier_flip_lag(latest_path=latest_path))
     findings.extend(check_decision_input_inventory(latest_path=latest_path))
+    findings.extend(check_universe_filing_archive_miss_rate())
     findings.extend(check_shard_nav_fx_warp())
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_ui_state_reconciliation())

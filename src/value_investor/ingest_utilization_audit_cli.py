@@ -40,6 +40,16 @@ from value_investor.ingest_utilization_audit import (
     run_ingest_utilization_audit,
     write_ingest_utilization_audit,
 )
+from value_investor.universe_filing_archive_miss_rate import (
+    DEFAULT_FLIP_LAG_PATH as DEFAULT_ARCHIVE_FLIP_LAG_PATH,
+)
+from value_investor.universe_filing_archive_miss_rate import (
+    DEFAULT_STORE_PATH as DEFAULT_ARCHIVE_MISS_STORE,
+)
+from value_investor.universe_filing_archive_miss_rate import (
+    format_archive_miss_rate_summary,
+    update_universe_filing_archive_miss_rate,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -124,6 +134,27 @@ def main(argv: list[str] | None = None) -> int:
         help=(f"Decision-input inventory store path (default: {DEFAULT_DECISION_INPUT_STORE})"),
     )
     parser.add_argument(
+        "--archive-miss-rate",
+        action="store_true",
+        help=(
+            "Observe-only: roll up flip-lag into "
+            "docs/data/universe_filing_archive_miss_rate.json "
+            "(L499 archive body-miss proxy; no crawler)"
+        ),
+    )
+    parser.add_argument(
+        "--archive-miss-store",
+        type=Path,
+        default=DEFAULT_ARCHIVE_MISS_STORE,
+        help=f"Archive miss-rate store path (default: {DEFAULT_ARCHIVE_MISS_STORE})",
+    )
+    parser.add_argument(
+        "--archive-miss-flip-lag",
+        type=Path,
+        default=DEFAULT_ARCHIVE_FLIP_LAG_PATH,
+        help=f"Flip-lag store to roll up (default: {DEFAULT_ARCHIVE_FLIP_LAG_PATH})",
+    )
+    parser.add_argument(
         "--paper-fund",
         type=Path,
         default=DEFAULT_PAPER_FUND_PATH,
@@ -155,7 +186,11 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     if args.flip_lag and args.decision_inputs:
-        parser.error("Use only one of --flip-lag or --decision-inputs")
+        parser.error("Use only one of --flip-lag, --decision-inputs, or --archive-miss-rate")
+    if args.flip_lag and args.archive_miss_rate:
+        parser.error("Use only one of --flip-lag, --decision-inputs, or --archive-miss-rate")
+    if args.decision_inputs and args.archive_miss_rate:
+        parser.error("Use only one of --flip-lag, --decision-inputs, or --archive-miss-rate")
 
     if args.flip_lag:
         market_ids = [m.strip() for m in str(args.markets or "").split(",") if m.strip()]
@@ -198,6 +233,20 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(payload, indent=2))
         else:
             print(format_decision_input_summary(payload))
+        return 0
+
+    if args.archive_miss_rate:
+        payload = update_universe_filing_archive_miss_rate(
+            flip_lag_path=args.archive_miss_flip_lag,
+            store_path=args.archive_miss_store,
+            persist=not args.no_write,
+        )
+        if not args.no_write:
+            logger.info("Wrote %s", args.archive_miss_store)
+        if args.json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(format_archive_miss_rate_summary(payload))
         return 0
 
     payload = run_ingest_utilization_audit(

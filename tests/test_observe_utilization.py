@@ -20,6 +20,20 @@ def _write(path: Path, payload: dict) -> None:
     write_json(path, payload, compact=False)
 
 
+def _quiet_archive_miss(now: datetime) -> dict:
+    return {
+        "updated_at": (now - timedelta(hours=1)).isoformat(),
+        "summary": {
+            "cohort_count": 0,
+            "enter_body_miss_count": 0,
+            "miss_rate": 0.0,
+            "open_still_missing_bodies": 0,
+            "warn": False,
+            "by_market": {},
+        },
+    }
+
+
 def _quiet_shard_fx(now: datetime) -> dict:
     return {
         "updated_at": (now - timedelta(hours=1)).isoformat(),
@@ -39,6 +53,7 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     flip_path = tmp_path / "buy_tier_flip_lag.json"
     decision_path = tmp_path / "decision_input_inventory.json"
     shard_fx_path = tmp_path / "shard_nav_fx_warp.json"
+    archive_miss_path = tmp_path / "universe_filing_archive_miss_rate.json"
     ops_path = tmp_path / "ops_status.json"
     store_path = tmp_path / "observe_utilization.json"
 
@@ -76,6 +91,7 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
         },
     )
     _write(shard_fx_path, _quiet_shard_fx(now))
+    _write(archive_miss_path, _quiet_archive_miss(now))
     _write(
         ops_path,
         {
@@ -119,6 +135,11 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
                         "warn_active": False,
                         "freshness_state": "fresh",
                     },
+                    "universe_filing_archive_miss_rate": {
+                        "primary_value": 0,
+                        "warn_active": False,
+                        "freshness_state": "fresh",
+                    },
                 }
             ],
         },
@@ -129,6 +150,7 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
         flip_lag_path=flip_path,
         decision_input_path=decision_path,
         shard_nav_fx_path=shard_fx_path,
+        archive_miss_path=archive_miss_path,
         ops_status_path=ops_path,
         now=now,
     )
@@ -138,6 +160,8 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     flip = by_id["buy_tier_flip_lag"]
     decision = by_id["decision_input_inventory"]
     assert "shard_nav_fx_warp" in by_id
+    assert "universe_filing_archive_miss_rate" in by_id
+    assert by_id["universe_filing_archive_miss_rate"]["warn_active"] is False
     assert flip["warn_active"] is True
     assert flip["primary_value"] == 10
     assert flip["trajectory"]["direction"] == "improving"
@@ -163,13 +187,14 @@ def test_observe_utilization_stale_and_missing(tmp_path: Path):
             "summary": {"warn_not_usable": 2, "open_not_usable": 2, "cohort_count": 5},
         },
     )
-    # decision_path + shard_fx missing
+    # decision_path + shard_fx + archive_miss missing
     _write(ops_path, {"run_at": now.isoformat(), "overall": "ok", "findings": []})
 
     snap = build_observe_utilization_snapshot(
         flip_lag_path=flip_path,
         decision_input_path=decision_path,
         shard_nav_fx_path=tmp_path / "missing_fx.json",
+        archive_miss_path=tmp_path / "missing_archive_miss.json",
         ops_status_path=ops_path,
         prior_path=tmp_path / "missing.json",
         now=now,
@@ -178,6 +203,7 @@ def test_observe_utilization_stale_and_missing(tmp_path: Path):
     assert by_id["buy_tier_flip_lag"]["freshness"]["state"] == "stale"
     assert by_id["decision_input_inventory"]["freshness"]["state"] == "missing"
     assert by_id["shard_nav_fx_warp"]["freshness"]["state"] == "missing"
+    assert by_id["universe_filing_archive_miss_rate"]["freshness"]["state"] == "missing"
     assert snap["surface_freshness"] == "degraded"
     assert snap["warn_instrument_count"] >= 1
 
@@ -188,6 +214,7 @@ def test_observe_utilization_store_lag_vs_ops(tmp_path: Path):
     flip_path = tmp_path / "flip.json"
     decision_path = tmp_path / "decision.json"
     shard_fx_path = tmp_path / "fx.json"
+    archive_miss_path = tmp_path / "archive_miss.json"
     ops_path = tmp_path / "ops.json"
     # Store from yesterday; ops ran an hour ago (simulates missed store commit).
     _write(
@@ -218,12 +245,26 @@ def test_observe_utilization_store_lag_vs_ops(tmp_path: Path):
             "summary": {"warn_count": 0, "gbp_warp_count": 0, "market_count": 0},
         },
     )
+    _write(
+        archive_miss_path,
+        {
+            "updated_at": (now - timedelta(hours=20)).isoformat(),
+            "summary": {
+                "cohort_count": 0,
+                "enter_body_miss_count": 0,
+                "miss_rate": 0.0,
+                "open_still_missing_bodies": 0,
+                "warn": False,
+            },
+        },
+    )
     _write(ops_path, {"run_at": (now - timedelta(hours=1)).isoformat(), "findings": []})
 
     snap = build_observe_utilization_snapshot(
         flip_lag_path=flip_path,
         decision_input_path=decision_path,
         shard_nav_fx_path=shard_fx_path,
+        archive_miss_path=archive_miss_path,
         ops_status_path=ops_path,
         prior_path=tmp_path / "prior.json",
         now=now,
@@ -247,6 +288,7 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
     flip_path = tmp_path / "flip.json"
     decision_path = tmp_path / "decision.json"
     shard_fx_path = tmp_path / "fx.json"
+    archive_miss_path = tmp_path / "archive_miss.json"
     ops_path = tmp_path / "ops.json"
     as_of = now - timedelta(minutes=5)
     _write(
@@ -277,6 +319,19 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
             "summary": {"warn_count": 0, "gbp_warp_count": 0, "market_count": 1},
         },
     )
+    _write(
+        archive_miss_path,
+        {
+            "updated_at": as_of.isoformat(),
+            "summary": {
+                "cohort_count": 0,
+                "enter_body_miss_count": 0,
+                "miss_rate": 0.0,
+                "open_still_missing_bodies": 0,
+                "warn": False,
+            },
+        },
+    )
     # ops_status run_at a few minutes after store refresh (same job) — not lagging.
     _write(ops_path, {"run_at": (now - timedelta(minutes=2)).isoformat(), "findings": []})
 
@@ -284,6 +339,7 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
         flip_lag_path=flip_path,
         decision_input_path=decision_path,
         shard_nav_fx_path=shard_fx_path,
+        archive_miss_path=archive_miss_path,
         ops_status_path=ops_path,
         prior_path=tmp_path / "prior.json",
         now=now,
