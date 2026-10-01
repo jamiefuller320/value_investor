@@ -13,9 +13,10 @@ callers attach tickers later. See ``docs/ops/universe-filing-archive-pack.md``.
 
 from __future__ import annotations
 
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, timedelta
-from typing import Any, Iterable, Sequence
+from typing import Any
 
 SCHEMA_VERSION = 1
 PACK_ORDER_ID = "week_first_then_backward"
