@@ -491,6 +491,8 @@ _COOLOFF_MESSAGE = (
 # Update if a job is deleted/recreated on cron-job.org. Full title→id cache is N156.
 KNOWN_JOB_IDS: dict[str, int] = {
     "dashboard-bridge": 8513740,
+    # Daily hub Phase A0 — pre-04:00 Europe/London refresh (created 2026-10-01).
+    "ops-monitor-early": 8550657,
 }
 
 

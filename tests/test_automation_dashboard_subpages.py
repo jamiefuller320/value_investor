@@ -373,5 +373,9 @@ def test_ops_monitor_early_cron_and_gate() -> None:
     assert 'key="ops-monitor-early"' in cron
     assert "hours=[2]" in cron
     assert "minutes=[30]" in cron
+    assert '"ops-monitor-early": 8550657' in cron
+    orch = Path("docs/ops/orchestrator-cron.md").read_text(encoding="utf-8")
+    assert "30 2 * * *" in orch
+    assert "Early hub" in orch or "early hub" in orch.lower()
     commit = Path("scripts/gha_commit_ops_monitor.sh").read_text(encoding="utf-8")
     assert "docs/data/daily_hub_history.json" in commit

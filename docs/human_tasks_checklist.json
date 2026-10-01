@@ -392,6 +392,14 @@
           "doc_anchor": "register-euro-ingest-crons-after-cadence-changes"
         },
         {
+          "id": "adhoc-ops-monitor-early-cron",
+          "title": "Register ops-monitor 02:30 UTC early hub on cron-job.org",
+          "summary": "Already live on cron-job.org (title FTSE ops monitor early hub; jobId 8550657). Re-import only if deleted: import_cron_jobs.py --job ops-monitor-early. Keeps Daily hub fresh before 04:00 Europe/London. GitHub schedule is backup. Verify next day with gh run list --workflow=ops-monitor.yml (expect workflow_dispatch ~02:30 UTC).",
+          "automated": true,
+          "doc_path": "docs/ops/ops-monitor.md",
+          "doc_anchor": "cron-joborg-setup-one-time"
+        },
+        {
           "id": "adhoc-ops-monitor-catchup-cron",
           "title": "Register ops-monitor 13:15 UTC catch-up on cron-job.org",
           "summary": "Already live on cron-job.org (title FTSE ops monitor catch-up). Re-import only if deleted: import_cron_jobs.py --job ops-monitor-catchup. GitHub schedule is backup. Verify with gh run list --workflow=ops-monitor.yml.",
