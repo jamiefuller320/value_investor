@@ -99,6 +99,18 @@ WORKFLOW_SCHEDULES = {
         ),
         "workflow": "ingest-loop.yml",
     },
+    "universe_filing_archive_pack": {
+        "name": "Universe filing archive pack",
+        "cron": "0 22 * * 1-5",
+        "cadence": (
+            "Mon–Fri 22:00 UTC quiet-window cold archive lane under "
+            "archive_lane_gate (week-first then backward pack plan). "
+            "Preemptible; suspends while focus fat sprint active. "
+            "Writes bottleneck review (observe-only). "
+            "docs/ops/universe-filing-archive-pack.md."
+        ),
+        "workflow": "universe-filing-archive-pack.yml",
+    },
     "analysis_review": {
         "name": "Modelling analysis review",
         "cron": "30 8 * * 0",

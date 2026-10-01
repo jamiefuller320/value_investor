@@ -1546,6 +1546,59 @@ def check_universe_filing_archive_miss_rate(
     ]
 
 
+def check_universe_filing_archive_pack_bottleneck(
+    *,
+    store_path: Path | None = None,
+    stale_after_hours: float | None = None,
+) -> list[OpsFinding]:
+    """Observe-only: post-run archive pack bottleneck review (no deepen rewrite).
+
+    Reads ``docs/data/universe_filing_archive_bottleneck_review.json`` written by
+    the weekday 22:00 UTC ``universe-filing-archive-pack`` workflow. Warns when
+    the review is missing/stale or (on an allowed dry pass) a stage dominates.
+    Suspend/quiet_only outcomes while euro fat is active do **not** warn.
+    """
+    from value_investor.universe_filing_archive_pack_run import (
+        DEFAULT_BOTTLENECK_PATH,
+        DEFAULT_STALE_AFTER_HOURS,
+        ops_finding_from_bottleneck_review,
+    )
+
+    path = Path(store_path) if store_path is not None else DEFAULT_BOTTLENECK_PATH
+    payload: dict[str, Any] | None = None
+    if path.exists():
+        try:
+            raw = read_json(path)
+            payload = raw if isinstance(raw, dict) else None
+        except (OSError, ValueError, TypeError) as exc:
+            return [
+                OpsFinding(
+                    severity="warn",
+                    category="ingest",
+                    title="Universe archive pack bottleneck review unreadable",
+                    summary=str(exc),
+                    auto_fixable=False,
+                )
+            ]
+    stale = (
+        float(stale_after_hours)
+        if stale_after_hours is not None
+        else DEFAULT_STALE_AFTER_HOURS
+    )
+    finding = ops_finding_from_bottleneck_review(payload, stale_after_hours=stale)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "warn"),
+            category=str(finding.get("category") or "ingest"),
+            title=str(finding.get("title") or "Universe archive pack processing bottleneck"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+    ]
+
+
 def check_decision_input_inventory(
     *,
     latest_path: Path = DEFAULT_LATEST_PATH,
@@ -2452,6 +2505,7 @@ def collect_ops_findings(
     findings.extend(check_buy_tier_flip_lag(latest_path=latest_path))
     findings.extend(check_decision_input_inventory(latest_path=latest_path))
     findings.extend(check_universe_filing_archive_miss_rate())
+    findings.extend(check_universe_filing_archive_pack_bottleneck())
     findings.extend(check_shard_nav_fx_warp())
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_ui_state_reconciliation())

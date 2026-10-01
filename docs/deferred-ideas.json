@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-01T09:46:16+00:00",
+  "updated_at": "2026-10-01T13:39:48+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8479,8 +8479,8 @@
       "category": "later",
       "section": "universe",
       "title": "Universe-wide filing archive / data-pack lane (cold store)",
-      "summary": "Observe-only archival collation of filings for full admitted universes (not buy-tier-only deepen), serving data packs when names rotate toward buy. Isolation firewall, quiet-window gate, miss-rate observe, and fail-open hydrate scaffolds shipped; engine/crawler still parked \u2014 must not compete with euro fat-slot / P2 focus head.",
-      "revisit_when": "Focus ingest head (euro_depth or successor) at maintenance threshold (sprint_ingest_complete) AND docs/data/universe_filing_archive_miss_rate.json shows material enter-without-bodies; isolation gate + fail-open hydrate scaffolds already shipped \u2014 do not start crawler/pack writers until then.",
+      "summary": "Gated dry pack lane shipped (week-first plan, Mon\u2013Fri 22:00 UTC workflow, bottleneck review). Isolation/miss-rate/hydrate scaffolds remain. Cold-store writers and real fetches still parked \u2014 must not compete with euro fat-slot / P2 focus head.",
+      "revisit_when": "Focus ingest head (euro_depth or successor) at maintenance threshold (sprint_ingest_complete) AND docs/data/universe_filing_archive_miss_rate.json shows material enter-without-bodies; then unpark writers under archive_lane_gate and use bottleneck review to tune stages.",
       "tags": [
         "universe",
         "ingest",
@@ -8490,7 +8490,7 @@
         "not-live-path"
       ],
       "status": "open",
-      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "source": "https://cursor.com/agents/bc-04317836-2a6e-5101-b999-d6e933746814",
       "added_at": "2026-09-29T09:23:09+00:00"
     },
     {
@@ -11768,7 +11768,7 @@
       "category": "not_now",
       "section": "not_now",
       "title": "Do not start universe archive crawler or fourth sprint stream",
-      "summary": "Isolation/miss-rate/hydrate scaffolds exist for L499, but cold-store writers, pack assemble loops, and preemptible archive workflows must wait. Starting them now would compete with euro fat-slot deepen and shared source/runners.",
+      "summary": "Gated dry pack workflow runs at 22:00 UTC and suspends under euro fat. Cold-store writers, real pack fetches, and any crawler/fourth sprint stream must still wait \u2014 dry plan + bottleneck review only.",
       "revisit_when": "euro_depth (or successor) reaches sprint_ingest_complete AND archive_lane_gate allows (no focus pressure) AND miss-rate instrument shows material enter-without-bodies",
       "tags": [
         "universe",
@@ -11778,8 +11778,40 @@
         "not-live-path"
       ],
       "status": "open",
-      "source": "https://cursor.com/agents/bc-a6fcbbd4-de3d-592d-9540-7d4de85f17fe",
+      "source": "https://cursor.com/agents/bc-04317836-2a6e-5101-b999-d6e933746814",
       "added_at": "2026-10-01T09:46:01+00:00"
+    },
+    {
+      "id": "L514",
+      "category": "later",
+      "section": "ops",
+      "title": "Archive pack observe-utilization card for bottleneck review",
+      "summary": "Bottleneck review is ops-monitor + CLI today. Optional L461-style observe-utilization card for archive pack stage timings after writers unpark and trajectories matter.",
+      "revisit_when": "Cold-store writers unparked and bottleneck reviews show multi-week stage timing history worth dashboarding",
+      "tags": [
+        "archive",
+        "observe",
+        "L461"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-04317836-2a6e-5101-b999-d6e933746814",
+      "added_at": "2026-10-01T13:39:34+00:00"
+    },
+    {
+      "id": "L515",
+      "category": "later",
+      "section": "ops",
+      "title": "cron-job.org mirror for archive pack 22:00 UTC",
+      "summary": "GHA schedule alone may drift; optional cron-job.org dispatch for universe-filing-archive-pack.yml like dashboard-bridge, only if weekday 22:00 misses become material.",
+      "revisit_when": "Bottleneck review stale findings fire repeatedly due to GHA schedule drift on the weekday 22:00 slot",
+      "tags": [
+        "archive",
+        "cron",
+        "ops"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-04317836-2a6e-5101-b999-d6e933746814",
+      "added_at": "2026-10-01T13:39:34+00:00"
     }
   ],
   "fragments": [
