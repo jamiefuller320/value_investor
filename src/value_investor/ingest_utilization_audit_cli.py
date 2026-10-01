@@ -31,16 +31,6 @@ from value_investor.decision_input_inventory import (
 from value_investor.decision_input_inventory import (
     DEFAULT_STORE_PATH as DEFAULT_DECISION_INPUT_STORE,
 )
-from value_investor.universe_filing_archive_miss_rate import (
-    format_archive_miss_rate_summary,
-    update_universe_filing_archive_miss_rate,
-)
-from value_investor.universe_filing_archive_miss_rate import (
-    DEFAULT_FLIP_LAG_PATH as DEFAULT_ARCHIVE_FLIP_LAG_PATH,
-)
-from value_investor.universe_filing_archive_miss_rate import (
-    DEFAULT_STORE_PATH as DEFAULT_ARCHIVE_MISS_STORE,
-)
 from value_investor.ingest_utilization_audit import (
     DEFAULT_LATEST_PATH,
     DEFAULT_MEMO_DIR,
@@ -49,6 +39,16 @@ from value_investor.ingest_utilization_audit import (
     format_audit_summary,
     run_ingest_utilization_audit,
     write_ingest_utilization_audit,
+)
+from value_investor.universe_filing_archive_miss_rate import (
+    DEFAULT_FLIP_LAG_PATH as DEFAULT_ARCHIVE_FLIP_LAG_PATH,
+)
+from value_investor.universe_filing_archive_miss_rate import (
+    DEFAULT_STORE_PATH as DEFAULT_ARCHIVE_MISS_STORE,
+)
+from value_investor.universe_filing_archive_miss_rate import (
+    format_archive_miss_rate_summary,
+    update_universe_filing_archive_miss_rate,
 )
 
 logger = logging.getLogger(__name__)
