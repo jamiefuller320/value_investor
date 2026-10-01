@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-01T14:43:22.077142+00:00",
+  "run_at": "2026-10-01T14:55:11.316884+00:00",
   "market_id": "tsx60",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-01T14:43:06.157863+00:00",
+    "snapshot_at": "2026-10-01T14:55:02.728003+00:00",
     "market_id": "tsx60",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
@@ -50,7 +50,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-01T14:43:15.696099+00:00",
+    "snapshot_at": "2026-10-01T14:55:04.674058+00:00",
     "market_id": "tsx60",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
@@ -79,53 +79,34 @@
     },
     "parked_tickers": [
       "GIB-A.TO",
-      "NTR.TO"
-    ],
-    "parked_count": 2,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 24,
-    "effective_indexed_without_body_tickers": [
+      "NTR.TO",
       "SU.TO",
       "TRI.TO"
     ],
-    "ingest_exhausted": false
+    "parked_count": 4,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": false,
+  "recorded_gap_closure": true,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 17,
-    "hits": 9,
-    "new_rows_total": 11,
-    "curiosity_total": 1,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "SU.TO",
-      "NTR.TO",
-      "TRI.TO",
-      "GIB-A.TO"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "tsx60"
+  },
   "critical_path": {
     "market_id": "tsx60",
-    "assessed_at": "2026-10-01T14:43:07.153785+00:00",
+    "assessed_at": "2026-10-01T14:55:03.677697+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -176,21 +157,33 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 7.576939863999996,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3592.423060136,
+  "used_seconds": 0.001682088000009685,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 2099.998317912,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": 320.0,
-  "pin_tickers": [],
+  "per_ticker_max_seconds": null,
+  "pin_tickers": [
+    "SU.TO"
+  ],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "tsx60",
-    "updated_at": "2026-10-01T14:43:15.701791+00:00",
-    "exhausted": false,
+    "updated_at": "2026-10-01T14:55:04.679366+00:00",
+    "exhausted": true,
     "complete_zero_improve_runs": 15,
     "min_zero_runs": 3,
     "parked": [
+      {
+        "ticker": "SU.TO",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-14T11:18:36.638354+00:00",
+        "filings_total": 48,
+        "filings_with_body": 31,
+        "indexed_without_body": 17,
+        "thin": false
+      },
       {
         "ticker": "NTR.TO",
         "reason": "unfetchable_iwb",
@@ -210,6 +203,16 @@
         "filings_with_body": 19,
         "indexed_without_body": 1,
         "thin": false
+      },
+      {
+        "ticker": "TRI.TO",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-17T15:35:47.139539+00:00",
+        "filings_total": 156,
+        "filings_with_body": 149,
+        "indexed_without_body": 7,
+        "thin": false
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
@@ -220,16 +223,30 @@
       "SU.TO",
       "TRI.TO"
     ],
-    "unparked_leftover": [
-      "SU.TO",
-      "TRI.TO"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/tsx60/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "tsx60"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "tsx60",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "ibex35",
+      "nasdaq100",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
