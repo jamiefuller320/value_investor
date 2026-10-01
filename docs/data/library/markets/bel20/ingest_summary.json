@@ -1,49 +1,89 @@
 {
-  "run_at": "2026-10-01T07:38:56.175266+00:00",
+  "run_at": "2026-10-01T16:36:51.347180+00:00",
   "market_id": "bel20",
-  "targets": [],
-  "target_details": [],
-  "results": [],
+  "targets": [
+    "SOLB.BR"
+  ],
+  "target_details": [
+    {
+      "ticker": "SOLB.BR",
+      "priority_score": 5.3864,
+      "filings_total": 2,
+      "filings_with_body": 1,
+      "indexed_without_body": 0,
+      "reason": "thin_bodies"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "SOLB.BR",
+      "reason": "thin_bodies",
+      "before": {
+        "filings_total": 2,
+        "filings_with_body": 1,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 1,
+        "annual": 0,
+        "interim": 0,
+        "trading_update": 0,
+        "other": 1,
+        "with_body": 1,
+        "period_coverage": {
+          "annual": {
+            "total": 0,
+            "with_body": 0
+          },
+          "interim": {
+            "total": 0,
+            "with_body": 0
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 1,
+            "with_body": 1
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 1,
+        "with_body_after": 1,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-01T07:38:25.814389+00:00",
-    "market_id": "bel20",
-    "buy_tier_count": 5,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 3,
-    "indexed_without_body": 0,
-    "bodies_min": 1,
-    "bodies_median": 2,
-    "bodies_max": 4,
-    "coverage_scope": "canonical_plus_shards",
-    "ftse_equivalent": false,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "ACKB.BR",
-      "APAM.AS",
-      "SOLB.BR"
-    ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
-    "parked_tickers": [
-      "ACKB.BR",
-      "APAM.AS",
-      "SOLB.BR"
-    ],
-    "parked_count": 3,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
-  },
-  "health_after": {
-    "snapshot_at": "2026-10-01T07:38:50.397881+00:00",
+    "snapshot_at": "2026-10-01T16:36:14.072842+00:00",
     "market_id": "bel20",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -77,6 +117,40 @@
     "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
   },
+  "health_after": {
+    "snapshot_at": "2026-10-01T16:36:43.722334+00:00",
+    "market_id": "bel20",
+    "buy_tier_count": 5,
+    "unmeasured_buy_tier": 0,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 3,
+    "indexed_without_body": 0,
+    "bodies_min": 1,
+    "bodies_median": 2,
+    "bodies_max": 4,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [
+      "ACKB.BR",
+      "APAM.AS",
+      "SOLB.BR"
+    ],
+    "indexed_without_body_tickers": [],
+    "indexed_without_body_by_ticker": {},
+    "parked_tickers": [
+      "ACKB.BR",
+      "APAM.AS",
+      "SOLB.BR"
+    ],
+    "parked_count": 3,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
+  },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
@@ -107,10 +181,14 @@
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "bel20"
+  },
   "critical_path": {
     "market_id": "bel20",
-    "assessed_at": "2026-10-01T07:38:26.087977+00:00",
+    "assessed_at": "2026-10-01T16:36:14.397420+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -136,9 +214,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 24.041320967999994,
+  "used_seconds": 28.960573789999984,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3575.958679032,
+  "leftover_seconds": 3571.03942621,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -146,9 +224,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "bel20",
-    "updated_at": "2026-10-01T07:38:50.399078+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-10-01T16:36:43.723951+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -170,29 +248,54 @@
         "filings_with_body": 1,
         "indexed_without_body": 0,
         "thin": true
+      },
+      {
+        "ticker": "SOLB.BR",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-01T16:36:43.723951+00:00",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "ACKB.BR",
       "APAM.AS",
       "SOLB.BR"
     ],
-    "unparked_leftover": [
-      "SOLB.BR"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/bel20/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "bel20"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "bel20",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "ibex35",
+      "nasdaq100",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 121,
+    "task_count": 122,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
