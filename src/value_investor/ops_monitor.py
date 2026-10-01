@@ -883,6 +883,27 @@ def check_paper_learning_tracks(
                 )
             )
 
+    # Observe-only: algo→agree/veto shadow rollup should exist once core tracks act.
+    core_acted = any(
+        isinstance(summary_tracks.get(tid), dict) and summary_tracks[tid].get("acted")
+        for tid in (RULES_TRACK_ID, AI_JUDGMENT_TRACK_ID)
+    )
+    agree_veto_rollup = root / "learning_tracks_llm_agree_veto.json"
+    if core_acted and not agree_veto_rollup.exists():
+        findings.append(
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title="LLM agree/veto shadow rollup missing",
+                summary=(
+                    f"{agree_veto_rollup.as_posix()} missing after core tracks acted — "
+                    "observe-only algo→agree/veto cards should land on each paper-auto "
+                    "pass (never blocks fills). See docs/ops/llm-agree-veto-shadow.md."
+                ),
+                auto_fixable=False,
+            )
+        )
+
     return findings
 
 

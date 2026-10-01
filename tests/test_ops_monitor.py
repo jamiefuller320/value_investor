@@ -1517,12 +1517,31 @@ def _write_paper_learning_root(
         json.dumps({"cash": 0.0 if holdings else 1000.0, "holdings": fund_holdings}),
         encoding="utf-8",
     )
+    # Observe-only agree/veto rollup present when core tracks have acted.
+    (paper / "learning_tracks_llm_agree_veto.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "observe_only": True,
+                "influences_live": False,
+                "tracks": {},
+            }
+        ),
+        encoding="utf-8",
+    )
     return paper
 
 
 def test_check_paper_learning_tracks_healthy_ignores_underperforming_excess(tmp_path: Path):
     paper = _write_paper_learning_root(tmp_path)
     assert check_paper_learning_tracks(paper) == []
+
+
+def test_check_paper_learning_tracks_warns_when_agree_veto_rollup_missing(tmp_path: Path):
+    paper = _write_paper_learning_root(tmp_path)
+    (paper / "learning_tracks_llm_agree_veto.json").unlink()
+    titles = [row.title for row in check_paper_learning_tracks(paper)]
+    assert "LLM agree/veto shadow rollup missing" in titles
 
 
 def test_check_paper_learning_tracks_flags_missing_review(tmp_path: Path):

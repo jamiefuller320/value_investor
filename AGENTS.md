@@ -41,6 +41,23 @@ Also keep:
 - **Not every good idea is a live track** — shadows, archives, and deferred
   entries are first-class outcomes of a good dialogue turn.
 
+### LLM live-path evidence (required)
+
+**Any LLM influence on a live capital or decision path** (sell, hold, rebuy,
+size, promote, apply) **must** write durable justifying evidence into the
+decision trail (structured reasons + cited inputs). No silent LLM discretion.
+
+- Prefer **algo propose → LLM agree/veto** as an **observe-only shadow** first
+  (`llm_agree_veto_shadow` on paper-auto / rebalance log). Do **not** hard-veto
+  live fills until disagreement marks justify a cold-start / epoch promotion.
+- Missing or stale evidence **fail-closes influence** (no effect) — never invents
+  a silent override. Helper: `authorize_live_llm_influence()` in
+  `src/value_investor/llm_agree_veto_shadow.py`.
+- Canonical ops principle: [`docs/ops/llm-live-path-evidence.md`](docs/ops/llm-live-path-evidence.md).
+- Shadow design / promotion gate:
+  Project store `docs/llm-sell-agree-veto-shadow.md` (and repo
+  [`docs/ops/llm-agree-veto-shadow.md`](docs/ops/llm-agree-veto-shadow.md)).
+
 Spend priorities (P1/P2), clash-aware eng capacity, and “new agent session after
 a long multi-topic chat” still apply; this section is about *how* ideas enter
 the system, not *what* to work on first.

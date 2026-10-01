@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-30T19:19:33+00:00",
+  "updated_at": "2026-10-01T06:32:37+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -11526,8 +11526,8 @@
       "category": "not_now",
       "section": "not_now",
       "title": "Live LLM sell overlay without evidence trail",
-      "summary": "Do not give LLM/human sell authority on Suite A without durable exit_reason + citations in the rebalance/decision trail. Prefer algo still-in-buy-set / rank-drop / cooldown gates; judgment stays shadow-only.",
-      "revisit_when": "Still-in-buy-set twin marks exist AND exit-card evidence schema is wired into rebalance log",
+      "summary": "Do not give LLM hard veto / sell authority on Suite A live books without durable exit_reason + citations. Observe-only llm_agree_veto_shadow is wired; prefer still_in_buy_set twin for capital-path churn. Promote hard veto only via cold-start/epoch after disagreement marks.",
+      "revisit_when": "still_in_buy_set twin has thick marks AND llm_agree_veto_shadow disagreement cohort justifies hard veto (evidence schema already wired 2026-10-01)",
       "tags": [
         "llm",
         "sell",
@@ -11641,6 +11641,24 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-58e09d40-7764-52c7-a03f-7a191bfc6fb2",
       "added_at": "2026-09-30T19:19:33+00:00"
+    },
+    {
+      "id": "L510",
+      "category": "later",
+      "section": "learning",
+      "title": "Promote LLM agree/veto shadow to hard veto",
+      "summary": "Observe-only llm_agree_veto_shadow is live. Promote to hard veto on live capital only after thick disagreement marks vs still_in_buy_set twin, fail-closed evidence on every live-bound card, and an explicit cold-start/epoch \u2014 never mid-flight Suite A edit.",
+      "revisit_when": "still_in_buy_set twin multi-week marks show material shadow veto-on-sell agreement AND authorize_live_llm_influence gate is reviewed",
+      "tags": [
+        "llm",
+        "agree-veto",
+        "shadow",
+        "promotion",
+        "N173"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-45805248-ee8b-5645-b7aa-cc5d6a743a6b",
+      "added_at": "2026-10-01T06:32:31+00:00"
     }
   ],
   "fragments": [

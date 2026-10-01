@@ -35,6 +35,10 @@ from value_investor.hypothesis_outcome_linker import (
     run_hypothesis_outcome_link_pass,
     summarize_learning_tracks_hypothesis_outcomes,
 )
+from value_investor.llm_agree_veto_shadow import (
+    run_llm_agree_veto_shadow_pass,
+    summarize_learning_tracks_llm_agree_veto,
+)
 from value_investor.paper_fund import (
     DEFAULT_EXIT_CONFIRM_SCREENS,
     DEFAULT_INITIAL_CASH,
@@ -324,9 +328,7 @@ class AutomationConfig:
             ),
             still_in_buy_set_hold=bool(raw.get("still_in_buy_set_hold", False)),
             rank_drop_exit_min=int(raw.get("rank_drop_exit_min", DEFAULT_RANK_DROP_EXIT_MIN)),
-            block_rebuy_while_in_candidates=bool(
-                raw.get("block_rebuy_while_in_candidates", False)
-            ),
+            block_rebuy_while_in_candidates=bool(raw.get("block_rebuy_while_in_candidates", False)),
         )
 
 
@@ -1117,6 +1119,7 @@ class AutomationRunResult:
     hypothesis_outcome_link: dict[str, Any] = field(default_factory=dict)
     entry_dca_overlay_review: dict[str, Any] = field(default_factory=dict)
     sleeve_episodes_review: dict[str, Any] = field(default_factory=dict)
+    llm_agree_veto_shadow: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -1133,6 +1136,7 @@ class AutomationRunResult:
             "hypothesis_outcome_link": self.hypothesis_outcome_link,
             "entry_dca_overlay_review": self.entry_dca_overlay_review,
             "sleeve_episodes_review": self.sleeve_episodes_review,
+            "llm_agree_veto_shadow": self.llm_agree_veto_shadow,
             "generated_at": datetime.now(UTC).isoformat(),
         }
 
@@ -1339,6 +1343,22 @@ def run_daily_automation(
             use_adjusted_signal=bool(config.use_adjusted_signal),
         ),
     )
+    # Observe-only: algo propose → evidence-citing agree/veto. Never blocks fills.
+    llm_agree_veto_shadow = run_llm_agree_veto_shadow_pass(
+        output_dir=output_dir,
+        track_id=str(config.track_id or "rules"),
+        plan=plan if isinstance(plan, dict) else {},
+        trades=trades,
+        candidates=decision_candidates,
+        holdings_before=holdings_before,
+        rebalance_state_before=rebalance_state_before,
+        use_adjusted_signal=bool(config.use_adjusted_signal),
+        rank_drop_exit_min=int(
+            getattr(config, "rank_drop_exit_min", DEFAULT_RANK_DROP_EXIT_MIN)
+            or DEFAULT_RANK_DROP_EXIT_MIN
+        ),
+        as_of=gate.get("local_time"),
+    )
 
     result = AutomationRunResult(
         acted=acted,
@@ -1354,6 +1374,7 @@ def run_daily_automation(
         hypothesis_outcome_link=hypothesis_outcome_link,
         entry_dca_overlay_review=entry_dca_overlay_review,
         sleeve_episodes_review=sleeve_episodes_review,
+        llm_agree_veto_shadow=llm_agree_veto_shadow,
     )
     payload = result.to_dict()
     payload["track_id"] = config.track_id
@@ -1393,6 +1414,14 @@ def run_daily_automation(
         holdings_after=snapshot_holdings(fund),
         rebalance_state_after=fund.rebalance_state.to_dict(),
     )
+    # Observe-only trail: cards never change fills (influences_live=false).
+    log_entry["llm_agree_veto_shadow"] = {
+        "observe_only": True,
+        "influences_live": False,
+        "judge_backend": llm_agree_veto_shadow.get("judge_backend"),
+        "verdict_counts": llm_agree_veto_shadow.get("verdict_counts"),
+        "cards": llm_agree_veto_shadow.get("cards") or [],
+    }
     append_rebalance_log(output_dir, log_entry)
     return result
 
@@ -1866,6 +1895,8 @@ def run_learning_tracks(
             "entry_dca_overlay scores counterfactual entry cadences on every track; "
             "sleeve_episodes records widest near-buy→grace-end+~1m lifecycles tagged "
             "on_book/off_book/never_funded (observe-only); "
+            "llm_agree_veto_shadow records algo→agree/veto cards with evidence "
+            "(observe-only; never blocks fills); "
             "hypothesis_integrity reviews underwater holdings before crude stops."
         ),
         "tracks": results,
@@ -1906,6 +1937,11 @@ def run_learning_tracks(
     sleeve_summary = summarize_learning_tracks_sleeve_episodes(base_dir)
     (base_dir / "learning_tracks_sleeve_episodes.json").write_text(
         json.dumps(sleeve_summary, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    agree_veto_summary = summarize_learning_tracks_llm_agree_veto(base_dir)
+    (base_dir / "learning_tracks_llm_agree_veto.json").write_text(
+        json.dumps(agree_veto_summary, indent=2) + "\n",
         encoding="utf-8",
     )
     return summary

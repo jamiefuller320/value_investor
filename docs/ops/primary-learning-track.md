@@ -33,6 +33,16 @@ hold + never-left-candidates + CD2). Frozen (`is_churn_policy_twin`); do **not**
 mid-flight flip live rules / ai_judgment cooldown or still-in-buy-set knobs.
 Compare marks to rules; adoption stays on Suite B.
 
+## Algo → LLM agree/veto shadow (observe-only)
+
+Parallel **review layer** (not a capital-path twin): on every paper-auto pass the
+algo proposals (sell / hold / rebuy) get evidence-citing agree/veto/abstain cards
+written into `llm_agree_veto_shadow.json` and the rebalance log. Cards never
+block fills (`influences_live=false`). See
+[`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md) and the live-path evidence
+principle [`llm-live-path-evidence.md`](llm-live-path-evidence.md). Hard veto
+stays parked until the promotion gate in that doc (N173).
+
 The dashboard **Automation → Learning tracks** panel publishes a dual-suite
 scoreboard (`learning_tracks_dual_suite` in the dashboard bundle): Suite B fair
 excess is the adoption headline; Suite A remains the primary-flag churn lab.

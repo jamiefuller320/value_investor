@@ -324,9 +324,16 @@ human glance.
 | Competing calibrated shadows present in the paper-auto rollup but omitted from decision-review | fail | Shadows spawned after the last paper-auto (Sunday calibrate) are ignored until they appear in the summary |
 | `buy_tier_level` acted with empty `automated_fund.json` holdings | fail | Monday cold-start fill; do not treat NAV as promotion truth |
 | Core track `acted=false` after a post-settle last_run | warn | Track skipped |
+| `learning_tracks_llm_agree_veto.json` missing after core tracks acted | warn | Observe-only algo→agree/veto shadow; never blocks fills — see [`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md) |
 
 Does **not** alert on `beat_market` / excess vs ^FTSE. Underperformance on the
 3% stress books is expected; interpretation stays Sunday analysis-review /
+
+LLM live-path evidence principle (any LLM influence requires durable trail
+evidence; shadow first): [`llm-live-path-evidence.md`](llm-live-path-evidence.md).
+Shadow cards are written on each paper-auto pass into the rebalance log and
+per-track `llm_agree_veto_shadow.json` — see
+[`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md).
 shadow-vs-primary / promotion gates.
 
 Weekday paper findings before **10:00 UTC** defer alert email (same ready time
