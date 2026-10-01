@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-01T19:37:28.022433+00:00",
+  "generated_at": "2026-10-01T19:43:06.391233+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -945,7 +945,7 @@
       "sprint_progress": {
         "window_days": 2,
         "run_count": 2,
-        "targets": 9,
+        "targets": 6,
         "improved": 4,
         "improved_tickers": [
           "BS6.SI",
@@ -953,7 +953,7 @@
           "J36.SI",
           "U14.SI"
         ],
-        "last_run_at": "2026-10-01T19:35:19.907263+00:00",
+        "last_run_at": "2026-10-01T19:40:23.647667+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -3136,7 +3136,7 @@
       "strong_buy": 9,
       "buy": 16,
       "learning_phase": 0,
-      "learning_phase_label": "Not started",
+      "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
         "no benchmark configured for hang_seng"
       ],
@@ -3163,10 +3163,23 @@
       },
       "filing_health": null,
       "filing_gaps": null,
-      "paper_instrument": "buy_tier_level",
+      "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
-      "epoch0": null,
+      "epoch0": {
+        "present": true,
+        "paper_instrument": "buy_tier_level",
+        "ai_judgment": false,
+        "knob_apply": false,
+        "acted": true,
+        "last_run_at": "2026-10-01T19:31:47.065288+00:00",
+        "holdings": 4,
+        "nav": 96.36,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "weekday_batch_count": 1,
+        "epoch0_batch_count": 0
+      },
       "equal_support": {
         "present": true,
         "ai_judgment": false,
@@ -3204,18 +3217,32 @@
       "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
-        "status": "empty",
-        "reason": "No paper book or observe-sim marks",
+        "status": "ok",
+        "reason": null,
         "market_id": "hang_seng",
-        "source": null,
-        "paper_instrument": "buy_tier_level",
+        "source": "paper_fund",
+        "paper_instrument": "buy_tier_level_native",
         "currency": "HKD",
         "benchmark_ticker": "^HSI",
-        "held_path": null,
-        "market_path": null,
+        "held_path": "equity_marks",
+        "market_path": "index_levels",
         "branch_ready": true,
         "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
-        "points": [],
+        "points": [
+          {
+            "date": "2026-10-01",
+            "held": 999.6,
+            "nav": 999.6,
+            "held_stock": 999.6,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 96.36
+            },
+            "market": 999.6
+          }
+        ],
         "series": [
           {
             "id": "held",
@@ -3228,10 +3255,42 @@
             "label": "^HSI equivalent",
             "kind": "market",
             "color": "#64748b"
+          },
+          {
+            "id": "branch:buy_tier_level_gbp_fx_warped",
+            "label": "GBP book (FX-warped archive)",
+            "kind": "branch",
+            "status": "active",
+            "color": "#7c3aed",
+            "knobs": {
+              "reporting_currency": "GBP",
+              "capital_epoch": "contaminated_gbp_unit_mismatch",
+              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
+            }
           }
         ],
-        "branches": [],
-        "last": null
+        "branches": [
+          {
+            "id": "buy_tier_level_gbp_fx_warped",
+            "label": "GBP book (FX-warped archive)",
+            "kind": "branch",
+            "status": "active",
+            "knobs": {
+              "reporting_currency": "GBP",
+              "capital_epoch": "contaminated_gbp_unit_mismatch",
+              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
+            },
+            "point_count": 1
+          }
+        ],
+        "last": {
+          "date": "2026-10-01",
+          "held": 999.6,
+          "market": 999.6,
+          "nav": 999.6,
+          "positions": 4,
+          "excess_pct": 0.0
+        }
       }
     },
     {
