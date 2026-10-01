@@ -3,7 +3,7 @@
   "observe_only": false,
   "experiment_id": "entry_dca_overlay",
   "target_cadence": "dca_4x_weekly",
-  "updated_at": "2026-09-30T08:30:30.537927+00:00",
+  "updated_at": "2026-10-01T08:29:05.547216+00:00",
   "acked": true,
   "execute_started": true,
   "execute_started_at": "2026-09-25T17:56:08.074645+00:00",
@@ -40,8 +40,8 @@
       "do_not": "Do not treat failing calibration shadows as live-book confirmation",
       "evidence": {
         "first_entry_by_track": {
-          "ai_judgment": 6,
-          "rules": 5
+          "ai_judgment": 7,
+          "rules": 6
         },
         "ack_snapshot": {
           "ai_judgment": 1,
@@ -63,7 +63,7 @@
       "revisit_when": "out_of_sample_first_entry ready AND graduated_allocation equity_marks>=8",
       "do_not": "Do not execute on primary, rules, or a new DCA paper book",
       "evidence": {
-        "graduated_equity_marks": 17,
+        "graduated_equity_marks": 18,
         "graduated_marks_min": 8,
         "graduated_cost_drag": 0.1202
       }
@@ -77,30 +77,31 @@
       "do_not": "Overlay end-value vs lump-sum is not adoption truth vs ^FTSE",
       "evidence": {
         "beat_market": false,
-        "fair_or_primary_excess_after_costs": -0.1511
+        "fair_or_primary_excess_after_costs": -0.1483
       }
     }
   ],
   "finding": {
     "leading_cadence": "dca_4x_weekly",
     "ready_for_cadence_analysis": true,
-    "scored_count": 138,
+    "scored_count": 147,
     "tracks_with_closed": 13,
     "model_independent_hint": true,
     "first_entry_by_track": {
-      "rules": 5,
-      "ai_judgment": 6,
+      "rules": 6,
+      "ai_judgment": 7,
       "momentum_grace": 1,
-      "graduated_allocation": 13,
+      "graduated_allocation": 14,
       "technical": 5,
       "buy_tier_level": 64,
       "buy_tier_level_dca": 2,
-      "ai_judgment_calibrated": 8,
-      "ai_judgment_calibrated_r2": 8,
-      "ai_judgment_calibrated_r3": 8,
-      "ai_judgment_exclusion_u4": 6,
-      "ai_judgment_fair": 6,
-      "rules_fair": 6
+      "still_in_buy_set": 0,
+      "ai_judgment_calibrated": 9,
+      "ai_judgment_calibrated_r2": 9,
+      "ai_judgment_calibrated_r3": 9,
+      "ai_judgment_exclusion_u4": 7,
+      "ai_judgment_fair": 7,
+      "rules_fair": 7
     }
   },
   "note": "Human review/implementation plan for the 2026-09-13 overlay recommend. Never auto-apply. Revisit on Sunday or when first-entry windows close."

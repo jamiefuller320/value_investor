@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-30T09:29:04.190155+01:00",
+    "local_time": "2026-10-01T09:28:07.957700+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-30T08:00:00+01:00",
-    "settle_at": "2026-09-30T09:15:00+01:00",
+    "market_open_at": "2026-10-01T08:00:00+01:00",
+    "settle_at": "2026-10-01T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 772.25,
+    "nav": 760.48,
     "cash": 0.0,
     "max_positions": 5,
     "min_conviction": 0.0,
@@ -32,83 +32,81 @@
     "use_momentum_grace": false,
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
+    "still_in_buy_set_hold": false,
+    "rank_drop_exit_min": 3,
+    "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 154.45,
+    "target_sleeve_value": 152.1,
     "targets": [
       {
         "ticker": "KLR.L",
         "name": "Keller Group plc",
         "signal": "buy",
-        "conviction_score": 0.9119000000000003,
-        "price": 3400.759
+        "conviction_score": 0.9619000000000003,
+        "price": 3318.0
       },
       {
         "ticker": "PPH.L",
         "name": "PPHE Hotel Group Limited",
         "signal": "buy",
-        "conviction_score": 0.8733000000000002,
-        "price": 1492.0
+        "conviction_score": 0.9233000000000002,
+        "price": 1480.0
       },
       {
         "ticker": "PAF.L",
         "name": "Pan African Resources PLC",
         "signal": "strong_buy",
-        "conviction_score": 0.6949000000000002,
-        "price": 119.1
+        "conviction_score": 0.7449000000000002,
+        "price": 118.6
       },
       {
         "ticker": "BP.L",
         "name": "BP p.l.c.",
         "signal": "buy",
-        "conviction_score": 0.6524000000000002,
+        "conviction_score": 0.7024000000000002,
         "price": 541.6
       },
       {
         "ticker": "BAG.L",
         "name": "A.G. BARR p.l.c.",
         "signal": "buy",
-        "conviction_score": 0.5499999999999999,
-        "price": 573.0
+        "conviction_score": 0.6,
+        "price": 550.0
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_holds": [],
+    "skipped": [
       {
-        "action": "hold",
         "ticker": "KLR.L",
         "name": "Keller Group plc",
-        "reason": "Already near equal-weight target",
-        "value": 154.01,
-        "target_value": 154.45,
-        "conviction_score": 0.9119000000000003,
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 152.1,
+        "conviction_score": 0.9619000000000003,
         "signal": "buy"
       },
-      {
-        "action": "hold",
-        "ticker": "BAG.L",
-        "name": "A.G. BARR p.l.c.",
-        "reason": "Already near equal-weight target",
-        "value": 153.02,
-        "target_value": 154.45,
-        "conviction_score": 0.5499999999999999,
-        "signal": "buy"
-      }
-    ],
-    "skipped": [
       {
         "ticker": "PPH.L",
         "name": "PPHE Hotel Group Limited",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 154.45,
-        "conviction_score": 0.8733000000000002,
+        "target_value": 152.1,
+        "conviction_score": 0.9233000000000002,
+        "signal": "buy"
+      },
+      {
+        "ticker": "BAG.L",
+        "name": "A.G. BARR p.l.c.",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 152.1,
+        "conviction_score": 0.6,
         "signal": "buy"
       }
     ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 5 equal-weight sleeve(s)."
   },
   "alerts": [
     {
@@ -117,7 +115,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3400.759033203125,
+      "mark": 3318.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -128,7 +126,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 1492.0,
+      "mark": 1480.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -139,7 +137,7 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
-      "mark": 119.0999984741211,
+      "mark": 118.5999984741211,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -161,7 +159,7 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 573.0,
+      "mark": 550.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -1410,9 +1408,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-01T09:28:07.957700+01:00",
+        "portfolio_value": 760.48,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-30T09:29:04.190155+01:00",
+    "last_mark_at": "2026-10-01T09:28:07.957700+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1422,7 +1436,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated_r3",
-    "generated_at": "2026-09-30T08:29:16.945004+00:00",
+    "generated_at": "2026-10-01T08:28:14.698934+00:00",
     "open_count": 16,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -1436,12 +1450,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 4
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated_r3",
-    "generated_at": "2026-09-30T08:29:16.946608+00:00",
+    "generated_at": "2026-10-01T08:28:14.700239+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1538,7 +1552,7 @@
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 3,
       "swap_rotations": 1
     }
   },
@@ -1547,8 +1561,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment_calibrated_r3",
-    "updated_at": "2026-09-30T08:29:16.948467+00:00",
-    "as_of": "2026-09-30T09:29:04.190155+01:00",
+    "updated_at": "2026-10-01T08:28:14.702022+00:00",
+    "as_of": "2026-10-01T09:28:07.957700+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1572,7 +1586,7 @@
       "holding_count": 5,
       "loser_count": 2,
       "loser_share": 0.4,
-      "loser_nav_share": 0.4016,
+      "loser_nav_share": 0.3989,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": false,
@@ -1601,59 +1615,18 @@
     },
     "holdings": [
       {
-        "ticker": "PAF.L",
-        "name": "Pan African Resources PLC",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": true,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0692,
-        "mark": 119.1,
-        "avg_cost": 127.954,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.6949,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "price drawdown alone does not invalidate value thesis",
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 69%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 69%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "BAG.L",
         "name": "A.G. BARR p.l.c.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0515,
-        "mark": 573.0,
+        "unrealized_pct": -0.0895,
+        "mark": 550.0,
         "avg_cost": 604.0919,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.55,
+        "conviction_score": 0.6,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1671,14 +1644,55 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 55%"
+          "conviction 60%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 55%"
+          "conviction 60%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "PAF.L",
+        "name": "Pan African Resources PLC",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": true,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0731,
+        "mark": 118.6,
+        "avg_cost": 127.954,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.7449,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "price drawdown alone does not invalidate value thesis",
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 74%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 74%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1690,12 +1704,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0374,
-        "mark": 1492.0,
+        "unrealized_pct": -0.0452,
+        "mark": 1480.0,
         "avg_cost": 1550.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8733,
+        "conviction_score": 0.9233,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1711,14 +1725,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 87%"
+          "conviction 92%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 87%"
+          "conviction 92%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1735,7 +1749,7 @@
         "avg_cost": 546.528,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.6524,
+        "conviction_score": 0.7024,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1752,14 +1766,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 65%"
+          "conviction 70%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 65%"
+          "conviction 70%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1771,12 +1785,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.1412,
-        "mark": 3400.759,
+        "unrealized_pct": 0.1134,
+        "mark": 3318.0,
         "avg_cost": 2980.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9119,
+        "conviction_score": 0.9619,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1792,14 +1806,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 91%"
+          "conviction 96%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 91%"
+          "conviction 96%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1812,7 +1826,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment_calibrated_r3",
-    "generated_at": "2026-09-30T08:29:16.950686+00:00",
+    "generated_at": "2026-10-01T08:28:14.704160+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1879,75 +1893,76 @@
     "schema_version": 1,
     "track_id": "ai_judgment_calibrated_r3",
     "observe_only": true,
-    "generated_at": "2026-09-30T08:29:16.954725+00:00",
-    "open_count": 5,
-    "closed_count": 9,
-    "scored_count": 8,
-    "scored_count_all": 9,
+    "generated_at": "2026-10-01T08:28:14.708456+00:00",
+    "open_count": 4,
+    "closed_count": 10,
+    "scored_count": 9,
+    "scored_count_all": 10,
     "recommit_scored_count": 1,
     "entry_kind_counts": {
-      "first_entry": 8,
+      "first_entry": 9,
       "recommit": 1
     },
-    "any_de_risk_count": 8,
+    "any_de_risk_count": 9,
     "winning_cadence_counts": {
       "dca_4x_weekly": 5,
+      "dca_5x_weekday": 1,
       "dca_2x_weekly": 1,
       "dca_2x_biweekly": 2
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 8,
-        "mean_end_value_delta": 1.0475,
-        "mean_de_risk_gbp": 2.225,
-        "de_risk_rate": 1.0,
+        "scored_episodes": 9,
+        "mean_end_value_delta": 0.2244,
+        "mean_de_risk_gbp": 1.5989,
+        "de_risk_rate": 0.8889,
         "win_count": 1
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 8,
-        "mean_end_value_delta": 1.79,
-        "mean_de_risk_gbp": 3.6012,
-        "de_risk_rate": 1.0,
+        "scored_episodes": 9,
+        "mean_end_value_delta": -0.0156,
+        "mean_de_risk_gbp": 2.1489,
+        "de_risk_rate": 0.8889,
         "win_count": 5
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 8,
-        "mean_end_value_delta": 1.2662,
-        "mean_de_risk_gbp": 2.4875,
-        "de_risk_rate": 1.0,
+        "scored_episodes": 9,
+        "mean_end_value_delta": -0.0478,
+        "mean_de_risk_gbp": 1.42,
+        "de_risk_rate": 0.8889,
         "win_count": 2
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 8,
-        "mean_end_value_delta": -0.6075,
-        "mean_de_risk_gbp": 2.5762,
+        "scored_episodes": 9,
+        "mean_end_value_delta": -0.7789,
+        "mean_de_risk_gbp": 2.4733,
         "de_risk_rate": 1.0,
-        "win_count": 0
+        "win_count": 1
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 8,
+      "closed_episodes": 9,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 8,
+      "first_entry_scored": 9,
       "recommit_scored": 1
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
     "marked_this_pass": 5,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "ai_judgment_calibrated_r3",
-    "generated_at": "2026-09-30T09:29:04.190155+01:00",
+    "generated_at": "2026-10-01T09:28:07.957700+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2001,7 +2016,288 @@
       "tagged_off_book": 0
     }
   },
-  "generated_at": "2026-09-30T08:29:16.956169+00:00",
+  "llm_agree_veto_shadow": {
+    "schema_version": 1,
+    "track_id": "ai_judgment_calibrated_r3",
+    "generated_at": "2026-10-01T09:28:07.957700+01:00",
+    "observe_only": true,
+    "influences_live": false,
+    "judge_backend": "evidence_heuristic",
+    "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+    "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
+    "proposal_count": 3,
+    "card_count": 3,
+    "verdict_counts": {
+      "agree": 3,
+      "veto": 0,
+      "abstain": 0
+    },
+    "by_algo_action": {
+      "rebuy_skip": {
+        "agree": 3,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
+    "cards": [
+      {
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 1
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 1
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.9619000000000003
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_calibrated_r3",
+        "logged_at": "2026-10-01T09:28:07.957700+01:00",
+        "proposal_id": "ai_judgment_calibrated_r3:KLR.L:rebuy_skip:2026-10-01T09:28:07.957700+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?"
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 3
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 3
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.9233000000000002
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_calibrated_r3",
+        "logged_at": "2026-10-01T09:28:07.957700+01:00",
+        "proposal_id": "ai_judgment_calibrated_r3:PPH.L:rebuy_skip:2026-10-01T09:28:07.957700+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?"
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "BAG.L",
+        "name": "A.G. BARR p.l.c.",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 9
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 9
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.6
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_calibrated_r3",
+        "logged_at": "2026-10-01T09:28:07.957700+01:00",
+        "proposal_id": "ai_judgment_calibrated_r3:BAG.L:rebuy_skip:2026-10-01T09:28:07.957700+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?"
+        },
+        "schema_version": 1
+      }
+    ],
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer.",
+    "review": {
+      "schema_version": 1,
+      "track_id": "ai_judgment_calibrated_r3",
+      "generated_at": "2026-10-01T09:28:07.957700+01:00",
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+      "card_count": 3,
+      "verdict_counts": {
+        "agree": 3,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 3,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "veto_sell_count": 0,
+      "veto_sell_tickers": [],
+      "promotion_gate": {
+        "ready_for_hard_veto": false,
+        "requires": [
+          "Thick disagreement cohort vs still_in_buy_set twin marks",
+          "Evidence schema present on every live-bound card (fail-closed)",
+          "Explicit cold-start / epoch promotion \u2014 never mid-flight Suite A edit",
+          "Suite B framing before treating as adoption truth"
+        ],
+        "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
+      },
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer."
+    }
+  },
+  "generated_at": "2026-10-01T08:28:14.710437+00:00",
   "track_id": "ai_judgment_calibrated_r3",
   "track_label": "AI judgment calibrated shadow rank 3 (frozen priors)",
   "is_primary_learning_track": false,
@@ -2015,6 +2311,9 @@
     "use_graduated_allocation": false,
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
-    "min_rebalance_notional_gbp": 10.0
+    "min_rebalance_notional_gbp": 10.0,
+    "still_in_buy_set_hold": false,
+    "rank_drop_exit_min": 3,
+    "block_rebuy_while_in_candidates": false
   }
 }
