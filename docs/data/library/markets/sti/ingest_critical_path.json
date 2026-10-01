@@ -1,37 +1,41 @@
 {
   "market_id": "sti",
-  "assessed_at": "2026-10-01T17:28:40.080988+00:00",
+  "assessed_at": "2026-10-01T19:34:57.619593+00:00",
   "unmeasured": [
-    "BUOU.SI",
-    "BS6.SI",
-    "N2IU.SI"
+    "BUOU.SI"
   ],
-  "zero_body": [
+  "zero_body": [],
+  "indexed_without_body": [
+    {
+      "ticker": "N2IU.SI",
+      "indexed_without_body": 1,
+      "filings_total": 5,
+      "filings_with_body": 4
+    }
+  ],
+  "thin_need_discovery": [
     "J36.SI",
-    "U14.SI"
+    "BS6.SI"
   ],
-  "indexed_without_body": [],
-  "thin_need_discovery": [],
   "thin_need_bodies": [],
   "primary_blocker": "unmeasured",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
     "BUOU.SI",
-    "BS6.SI",
-    "N2IU.SI",
-    "J36.SI",
-    "U14.SI"
+    "N2IU.SI"
   ],
   "recommended_actions": [
-    "Bootstrap 3 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (1 tickers, top: N2IU.SI(1))",
+    "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 3,
-    "zero_body": 2,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
-    "thin_need_discovery": 0,
+    "unmeasured": 1,
+    "zero_body": 0,
+    "indexed_without_body_tickers": 1,
+    "indexed_without_body_rows": 1,
+    "thin_need_discovery": 2,
     "thin_need_bodies": 0
   }
 }
