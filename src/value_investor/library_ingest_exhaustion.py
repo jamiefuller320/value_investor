@@ -6,6 +6,12 @@ deepen. Those leftovers are parked (accepted as thin for now), excluded from
 the learning pool, and treated as sprint-complete so the effort cascade can
 move on. Unparked names stay on FTSE-volume maintenance. True FTSE filing
 parity (all four counts zero) is unchanged and still gates ``ingest_parity_markets``.
+
+**Straggler soft-park (cascade):** when only a few unparked leftovers remain and
+a ticker stays leftover across complete deepen runs without *that* ticker
+improving, park it even if peer names still improve on the same runs. This
+covers the post-graduation regap case (head briefly at maintenance, then a
+thin/IWB name resurfaces) without demoting the market from fat-head policy.
 """
 
 from __future__ import annotations
@@ -19,6 +25,10 @@ from value_investor.storage import read_json, write_json
 
 INGEST_EXHAUSTION_FILENAME = "ingest_exhaustion.json"
 DEFAULT_EXHAUSTION_ZERO_RUNS = 3
+# Soft-park path when a few leftovers starve the market-wide 0-improve streak
+# because other names still improve on the same runs (MC.PA / euro fat case).
+DEFAULT_STRAGGLER_MAX_LEFTOVERS = 3
+DEFAULT_STRAGGLER_ZERO_RUNS = 2
 
 REASON_UNFETCHABLE_IWB = "unfetchable_iwb"
 REASON_AWAITING_PERIODIC = "awaiting_periodic_report"
@@ -46,7 +56,9 @@ def empty_exhaustion(market_id: str, *, now: datetime | None = None) -> dict[str
         "parked": [],
         "note": (
             "Leftover thin / indexed-without-body names parked after complete "
-            "0-improve sprints. Unmeasured and zero-body names are never parked."
+            "0-improve sprints, or via straggler soft-park when a few leftovers "
+            "starve the market-wide streak while peers still improve. Unmeasured "
+            "and zero-body names are never parked."
         ),
     }
 
@@ -220,27 +232,30 @@ def apply_stored_exhaustion_overlay(
     )
 
 
+def _scoped_health_log_entries(log_path: Path, *, market_id: str) -> list[dict[str, Any]]:
+    if not log_path.exists():
+        return []
+    try:
+        payload = read_json(log_path)
+    except (OSError, ValueError, TypeError):
+        return []
+    entries = list(payload.get("entries") or [])
+    scoped = [row for row in entries if str(row.get("market_id") or "") == market_id]
+    if not scoped and market_id == "euro_depth":
+        scoped = [row for row in entries if not row.get("market_id")]
+    return [row for row in scoped if isinstance(row, dict)]
+
+
 def count_trailing_complete_zero_improve_runs(
     log_path: Path,
     *,
     market_id: str,
 ) -> tuple[int, bool]:
     """Return (trailing complete 0-improve count, any of those runs had targets)."""
-    if not log_path.exists():
-        return 0, False
-    try:
-        payload = read_json(log_path)
-    except (OSError, ValueError, TypeError):
-        return 0, False
-    entries = list(payload.get("entries") or [])
-    scoped = [row for row in entries if str(row.get("market_id") or "") == market_id]
-    if not scoped and market_id == "euro_depth":
-        scoped = [row for row in entries if not row.get("market_id")]
+    scoped = _scoped_health_log_entries(log_path, market_id=market_id)
     trailing = 0
     had_targets = False
     for row in reversed(scoped):
-        if not isinstance(row, dict):
-            break
         if row.get("runtime_cutoff") or row.get("partial"):
             break
         if int(row.get("improved") or 0) > 0:
@@ -249,6 +264,102 @@ def count_trailing_complete_zero_improve_runs(
         if int(row.get("targets") or 0) > 0:
             had_targets = True
     return trailing, had_targets
+
+
+def _leftover_tickers_from_health(health: dict[str, Any] | None) -> set[str]:
+    """Raw thin ∪ IWB leftovers, excluding unmeasured / zero-body bootstrap."""
+    health = health or {}
+    unmeasured = {
+        str(t).strip() for t in (health.get("unmeasured_tickers") or []) if str(t).strip()
+    }
+    zero_body = {str(t).strip() for t in (health.get("zero_body_tickers") or []) if str(t).strip()}
+    thin = {str(t).strip() for t in (health.get("thin_body_tickers") or []) if str(t).strip()}
+    iwb = {
+        str(t).strip()
+        for t in (health.get("indexed_without_body_tickers") or [])
+        if str(t).strip()
+    }
+    return (thin | iwb) - (unmeasured | zero_body)
+
+
+def _effective_leftover_tickers_from_health(health: dict[str, Any] | None) -> set[str]:
+    """Unparked thin/IWB leftovers from a health snapshot (prefers effective_*)."""
+    health = health or {}
+    has_effective = (
+        "effective_thin_body_tickers" in health
+        or "effective_indexed_without_body_tickers" in health
+    )
+    if has_effective:
+        thin = {
+            str(t).strip()
+            for t in (health.get("effective_thin_body_tickers") or [])
+            if str(t).strip()
+        }
+        iwb = {
+            str(t).strip()
+            for t in (health.get("effective_indexed_without_body_tickers") or [])
+            if str(t).strip()
+        }
+        return thin | iwb
+    parked = {str(t).strip() for t in (health.get("parked_tickers") or []) if str(t).strip()}
+    return _leftover_tickers_from_health(health) - parked
+
+
+def count_trailing_ticker_leftover_no_improve_runs(
+    log_path: Path,
+    *,
+    market_id: str,
+    ticker: str,
+) -> int:
+    """Count trailing complete runs where ``ticker`` stayed leftover without improving.
+
+    Other tickers improving on the same run do **not** reset this streak. Used to
+    soft-park IR-exhausted stragglers when the market-wide 0-improve counter is
+    starved by peer progress (cascade fat-slot release).
+    """
+    name = str(ticker or "").strip()
+    if not name:
+        return 0
+    scoped = _scoped_health_log_entries(log_path, market_id=market_id)
+    trailing = 0
+    for row in reversed(scoped):
+        if row.get("runtime_cutoff") or row.get("partial"):
+            break
+        if int(row.get("targets") or 0) <= 0:
+            break
+        improved = {
+            str(t).strip() for t in (row.get("improved_tickers") or []) if str(t).strip()
+        }
+        if name in improved:
+            break
+        leftover = _effective_leftover_tickers_from_health(row.get("health_after") or {})
+        if name not in leftover:
+            break
+        trailing += 1
+    return trailing
+
+
+def _straggler_soft_park_eligible(
+    ticker: str,
+    *,
+    unparked_leftover: set[str],
+    health_log_path: Path,
+    market_id: str,
+    min_zero_runs: int = DEFAULT_STRAGGLER_ZERO_RUNS,
+    max_leftovers: int = DEFAULT_STRAGGLER_MAX_LEFTOVERS,
+) -> bool:
+    """True when a small leftover set should soft-park without market-wide 0-streak."""
+    name = str(ticker or "").strip()
+    if not name or name not in unparked_leftover:
+        return False
+    if len(unparked_leftover) > max(1, int(max_leftovers)):
+        return False
+    streak = count_trailing_ticker_leftover_no_improve_runs(
+        health_log_path,
+        market_id=market_id,
+        ticker=name,
+    )
+    return streak >= max(1, int(min_zero_runs))
 
 
 def _coverage_for_ticker(
@@ -297,6 +408,8 @@ def refresh_library_ingest_exhaustion(
     health: dict[str, Any] | None = None,
     health_log_path: Path | None = None,
     min_zero_runs: int = DEFAULT_EXHAUSTION_ZERO_RUNS,
+    straggler_max_leftovers: int = DEFAULT_STRAGGLER_MAX_LEFTOVERS,
+    straggler_zero_runs: int = DEFAULT_STRAGGLER_ZERO_RUNS,
     now: datetime | None = None,
     write: bool = True,
 ) -> dict[str, Any]:
@@ -304,6 +417,13 @@ def refresh_library_ingest_exhaustion(
 
     Never parks unmeasured or zero-body names. Unparks when coverage improves
     or the ticker leaves the leftover-gap sets.
+
+    **Straggler soft-park:** when only a few leftovers remain (≤
+    ``straggler_max_leftovers``) and a ticker stayed leftover across
+    ``straggler_zero_runs`` complete deepen runs without *that* ticker
+    improving, park it even if peer tickers still improve on the same runs.
+    This releases the cascade fat slot after a sensible threshold without
+    demoting the market from head policy.
     """
     from value_investor.library_ingest_escalation import resolve_library_ingest_health_log_path
 
@@ -354,7 +474,7 @@ def refresh_library_ingest_exhaustion(
         )
         seen.add(ticker)
 
-    can_park_new = (
+    can_park_market_wide = (
         int(health.get("unmeasured_buy_tier") or 0) == 0
         and int(health.get("zero_body_buy_tier") or 0) == 0
         and not unmeasured
@@ -363,18 +483,39 @@ def refresh_library_ingest_exhaustion(
         and zero_runs >= max(1, int(min_zero_runs))
         and had_targets
     )
-    if can_park_new:
-        for ticker in sorted(leftover):
+    unparked_now = leftover - seen
+    can_consider_stragglers = (
+        int(health.get("unmeasured_buy_tier") or 0) == 0
+        and int(health.get("zero_body_buy_tier") or 0) == 0
+        and not unmeasured
+        and not zero_body
+        and unparked_now
+        and len(unparked_now) <= max(1, int(straggler_max_leftovers))
+    )
+    if can_park_market_wide or can_consider_stragglers:
+        candidates = sorted(leftover if can_park_market_wide else unparked_now)
+        for ticker in candidates:
             if ticker in seen:
+                continue
+            if not can_park_market_wide and not _straggler_soft_park_eligible(
+                ticker,
+                unparked_leftover=unparked_now,
+                health_log_path=log_path,
+                market_id=market_id,
+                min_zero_runs=straggler_zero_runs,
+                max_leftovers=straggler_max_leftovers,
+            ):
                 continue
             coverage = _coverage_for_ticker(ticker, market_id=market_id, library_root=library_root)
             reason, revisit = _park_reason(ticker, iwb_tickers=iwb)
+            park_via = "market_wide_zero_improve" if can_park_market_wide else "straggler_soft_park"
             kept.append(
                 {
                     "ticker": ticker,
                     "reason": reason,
                     "revisit_when": revisit,
                     "parked_at": stamp.isoformat(),
+                    "park_via": park_via,
                     **coverage,
                     "thin": ticker in thin,
                 }
@@ -394,6 +535,8 @@ def refresh_library_ingest_exhaustion(
         "exhausted": exhausted,
         "complete_zero_improve_runs": int(zero_runs),
         "min_zero_runs": int(min_zero_runs),
+        "straggler_max_leftovers": int(straggler_max_leftovers),
+        "straggler_zero_runs": int(straggler_zero_runs),
         "had_complete_targets": had_targets,
         "leftover_tickers": sorted(leftover),
         "parked": kept,
@@ -409,11 +552,14 @@ def refresh_library_ingest_exhaustion(
 
 __all__ = [
     "DEFAULT_EXHAUSTION_ZERO_RUNS",
+    "DEFAULT_STRAGGLER_MAX_LEFTOVERS",
+    "DEFAULT_STRAGGLER_ZERO_RUNS",
     "INGEST_EXHAUSTION_FILENAME",
     "REASON_AWAITING_PERIODIC",
     "REASON_UNFETCHABLE_IWB",
     "apply_stored_exhaustion_overlay",
     "count_trailing_complete_zero_improve_runs",
+    "count_trailing_ticker_leftover_no_improve_runs",
     "empty_exhaustion",
     "ingest_exhaustion_path",
     "iter_parked_hunter_candidates",
