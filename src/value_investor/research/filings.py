@@ -588,6 +588,16 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0422/2026042200749_c.pdf",
         "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0327/2026032702072.pdf",
     ],
+    # hang_seng buy-tier deepen — eng-20261001-01: remaining unmeasured (6618/0101/0291).
+    "6618.HK": [
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042401364.pdf",
+    ],
+    "0101.HK": [
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0326/2026032600824.pdf",
+    ],
+    "0291.HK": [
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0423/2026042300830.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -5175,6 +5185,10 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0417/2026041700385.pdf": "annual",
     "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0422/2026042200749_c.pdf": "annual",
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0327/2026032702072.pdf": "annual",
+    # eng-20261001-01: hang_seng unmeasured — opaque HKEX annual report slugs.
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042401364.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0326/2026032600824.pdf": "annual",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0423/2026042300830.pdf": "annual",
 }
 
 

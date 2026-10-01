@@ -6894,6 +6894,41 @@ def test_fetch_filings_ir_allowlist_hang_seng_zero_body_builtins_eng_20260930_03
         assert any(row["period"] == "annual" for row in rows)
 
 
+def test_fetch_filings_ir_allowlist_hang_seng_unmeasured_builtins_eng_20261001_01(
+    tmp_path: Path,
+):
+    """eng-20261001-01: hang_seng buy-tier unmeasured — 6618/0101/0291 HKEX annual PDF seeds."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    for ticker in ("6618.HK", "0101.HK", "0291.HK"):
+        rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
+        assert rows, ticker
+        assert all(row["source"] == "ir_allowlist" for row in rows)
+        assert any(row["period"] == "annual" for row in rows)
+        assert any("hkexnews.hk" in row["url"] for row in rows)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_6618_hk_index(tmp_path: Path):
+    """Empty 6618.HK filings_index.json must gain IR rows for library hang_seng measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("6618.HK", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] >= 1
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 1
+    assert "ir_allowlist" in payload["sources_used"]
+
+
 def test_merge_ir_allowlist_filings_bootstraps_empty_1099_hk_index(tmp_path: Path):
     """Empty 1099.HK filings_index.json must gain IR rows for library hang_seng measurability."""
     from value_investor.research.filings import merge_ir_allowlist_filings
