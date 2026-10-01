@@ -20,17 +20,21 @@ does not count; discretionary tasks **12**; expensive new paper books **8**.
 Agents manage overflow (`experiment_inventory.complexity`) — soft-warn, not a
 hard reject. See [`learning-director-vision.md`](learning-director-vision.md#complexity-budget-default).
 
-What the five states do **not** do yet (planned — vision phase
-`experiment_lineage_and_park`):
+What the five states do **not** do yet (vision phase
+`experiment_lineage_and_park` — **thin lineage scaffold landed**):
 
-| Intent | Today | Planned |
-|--------|-------|---------|
-| Winner evolves | Human ack; next Sunday grid / new task is manual | Child experiment, same stage/factor, parent id |
+| Intent | Today | Planned / scaffold |
+|--------|-------|--------------------|
+| Winner evolves | **Scaffold:** graduation hook opens observe child with `parent_id` / `refinement_of` | Full park lifecycle + complexity-budget swap |
 | Loser stops spending budget | `fail` → task `cancelled` (shadow dirs still mark if left on disk) | `parked`: drop from complexity budget, **keep cheap marks** |
 | Late vindication | No lifecycle bound | Park until `max_trade_lifecycle_days`, then `retired` |
-| Lineage | `initiated_at` only | `parent_id` / `superseded_by` |
+| Lineage | `initiated_at` + **`parent_id` / `refinement_of` / `superseded_by`** (preserved) | Richer park / retire transitions |
 
-Until that phase is active, treat `fail` as “do not promote”, not “delete
+Graduation → next observe refinement: see
+[`refinement-learning-loops.md`](refinement-learning-loops.md).
+"Applied" = child lane **spawned and marked**, not a live capital switch.
+
+Until the full park phase is active, treat `fail` as “do not promote”, not “delete
 history”. Leave shadow directories in place so weekday paper-auto can still
 mark them. Do not cancel a lifecycle overlay — it is the cheap feed.
 
@@ -47,10 +51,12 @@ retired. Summaries stay; dense marks may thin (same policy as library history).
 
 ### Winner evolution
 
-A `recommend` ack should open a **child** (tighter cadence, cheaper-only adds,
-smaller recommit size) rather than a sibling on a new stage. The parent stays
-`parked` or `retired`, not deleted — the child is the live complexity-budget
-slot.
+A `recommend` ack (or DCA execute-stage readiness) **auto-opens** the next
+bounded observe refinement child via
+[`refinement-learning-loops.md`](refinement-learning-loops.md) (policy table +
+`parent_id` / `refinement_of`). The parent is not deleted; the child is the next
+learning question. Promotion to live capital still requires human Start /
+cold-start — never mid-flight book rewrite.
 
 ### History thinning (original sketch — still suitable)
 

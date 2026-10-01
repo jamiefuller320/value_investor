@@ -324,6 +324,10 @@ human glance.
 | Core track `acted=false` after a post-settle last_run | warn | Track skipped |
 | `learning_tracks_llm_agree_veto.json` missing after core tracks acted | warn | Observe-only algo→agree/veto shadow; never blocks fills — see [`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md) |
 
+Graduation → observe refinement children (lineage on experiment assessment) are
+documented in [`refinement-learning-loops.md`](refinement-learning-loops.md);
+they do not emit a separate ops finding (fail-closed / observe-only marks).
+
 Does **not** alert on `beat_market` / excess vs ^FTSE. Underperformance on the
 3% stress books is expected; interpretation stays Sunday analysis-review /
 

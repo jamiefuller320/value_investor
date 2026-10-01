@@ -28,6 +28,8 @@ PASS_KEY = "llm_agree_veto_shadow"
 BUYISH = frozenset({"buy", "strong_buy"})
 DEFAULT_RANK_DROP_EXIT_MIN = 3
 KEEP_CARDS = 400
+# Versioned judge/prompt spec — unlocks observe A/B later without live influence.
+DEFAULT_JUDGE_SPEC_ID = "heuristic.v1"
 
 LEARNING_QUESTION = (
     "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto "
@@ -65,6 +67,8 @@ class AgreeVetoCard:
     reasons: list[str] = field(default_factory=list)
     evidence: list[dict[str, Any]] = field(default_factory=list)
     judge_backend: str = "evidence_heuristic"
+    judge_spec_id: str = DEFAULT_JUDGE_SPEC_ID
+    parent_spec_id: str | None = None
     influences_live: bool = False
     observe_only: bool = True
     track_id: str = "rules"
@@ -73,7 +77,7 @@ class AgreeVetoCard:
     meta: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "ticker": self.ticker,
             "name": self.name,
             "algo_action": self.algo_action,
@@ -82,6 +86,7 @@ class AgreeVetoCard:
             "reasons": list(self.reasons),
             "evidence": list(self.evidence),
             "judge_backend": self.judge_backend,
+            "judge_spec_id": self.judge_spec_id or DEFAULT_JUDGE_SPEC_ID,
             "influences_live": False,  # hard: this instrument never influences live
             "observe_only": True,
             "track_id": self.track_id,
@@ -90,6 +95,9 @@ class AgreeVetoCard:
             "meta": dict(self.meta),
             "schema_version": SCHEMA_VERSION,
         }
+        if self.parent_spec_id:
+            payload["parent_spec_id"] = self.parent_spec_id
+        return payload
 
 
 def _utcnow() -> str:
@@ -257,6 +265,8 @@ def judge_proposal(
     track_id: str = "rules",
     logged_at: str | None = None,
     judge_backend: str = "evidence_heuristic",
+    judge_spec_id: str = DEFAULT_JUDGE_SPEC_ID,
+    parent_spec_id: str | None = None,
 ) -> AgreeVetoCard:
     """Evidence-citing agree/veto for one algo proposal (observe-only)."""
     ticker = str(proposal.get("ticker") or "")
@@ -420,6 +430,8 @@ def judge_proposal(
         reasons=reasons,
         evidence=evidence,
         judge_backend=judge_backend,
+        judge_spec_id=judge_spec_id or DEFAULT_JUDGE_SPEC_ID,
+        parent_spec_id=parent_spec_id,
         influences_live=False,
         observe_only=True,
         track_id=track_id,
@@ -431,6 +443,7 @@ def judge_proposal(
             "rank_drop_exit_min": int(rank_drop_exit_min),
             "research_verdict": research_verdict or None,
             "learning_question": LEARNING_QUESTION,
+            "judge_spec_id": judge_spec_id or DEFAULT_JUDGE_SPEC_ID,
         },
     )
 
@@ -447,9 +460,12 @@ def build_shadow_pass(
     rank_drop_exit_min: int = DEFAULT_RANK_DROP_EXIT_MIN,
     as_of: str | None = None,
     judge_backend: str = "evidence_heuristic",
+    judge_spec_id: str = DEFAULT_JUDGE_SPEC_ID,
+    parent_spec_id: str | None = None,
 ) -> dict[str, Any]:
     """Build observe-only agree/veto cards for one paper-auto pass."""
     logged_at = as_of or _utcnow()
+    spec_id = judge_spec_id or DEFAULT_JUDGE_SPEC_ID
     by_ticker = _candidate_index(candidates)
     buy_ranks = _conviction_ranks(candidates, use_adjusted_signal=use_adjusted_signal)
     entry_ranks_raw = (rebalance_state_before or {}).get("entry_candidate_rank") or {}
@@ -473,6 +489,8 @@ def build_shadow_pass(
             track_id=track_id,
             logged_at=logged_at,
             judge_backend=judge_backend,
+            judge_spec_id=spec_id,
+            parent_spec_id=parent_spec_id,
         ).to_dict()
         for proposal in proposals
     ]
@@ -502,6 +520,8 @@ def build_shadow_pass(
         "observe_only": True,
         "influences_live": False,
         "judge_backend": judge_backend,
+        "judge_spec_id": spec_id,
+        "parent_spec_id": parent_spec_id,
         "learning_question": LEARNING_QUESTION,
         "principle": PRINCIPLE,
         "proposal_count": len(proposals),
@@ -512,7 +532,7 @@ def build_shadow_pass(
         "note": (
             "Observe-only agree/veto shadow — never blocks fills. "
             "still_in_buy_set remains the algo capital-path twin; this is a "
-            "parallel review layer."
+            "parallel review layer. Cards carry judge_spec_id for later A/B."
         ),
     }
 
@@ -573,6 +593,8 @@ def build_review(pass_payload: dict[str, Any], *, track_id: str) -> dict[str, An
         "observe_only": True,
         "influences_live": False,
         "judge_backend": pass_payload.get("judge_backend") or "evidence_heuristic",
+        "judge_spec_id": pass_payload.get("judge_spec_id") or DEFAULT_JUDGE_SPEC_ID,
+        "parent_spec_id": pass_payload.get("parent_spec_id"),
         "learning_question": LEARNING_QUESTION,
         "card_count": len(cards),
         "verdict_counts": pass_payload.get("verdict_counts") or {},
