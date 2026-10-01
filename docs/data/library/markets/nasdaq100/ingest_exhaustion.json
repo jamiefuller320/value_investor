@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "market_id": "nasdaq100",
-  "updated_at": "2026-10-01T13:34:50.684196+00:00",
-  "exhausted": true,
+  "updated_at": "2026-10-01T21:17:03.731063+00:00",
+  "exhausted": false,
   "complete_zero_improve_runs": 0,
   "min_zero_runs": 3,
   "parked": [
@@ -25,24 +25,18 @@
       "filings_with_body": 85,
       "indexed_without_body": 8,
       "thin": false
-    },
-    {
-      "ticker": "CCEP",
-      "reason": "unfetchable_iwb",
-      "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-      "parked_at": "2026-09-28T15:58:27.142121+00:00",
-      "filings_total": 99,
-      "filings_with_body": 97,
-      "indexed_without_body": 1,
-      "thin": false
     }
   ],
-  "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
+  "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
+  "straggler_max_leftovers": 3,
+  "straggler_zero_runs": 2,
   "had_complete_targets": false,
   "leftover_tickers": [
     "CCEP",
     "PDD",
     "TRI"
   ],
-  "unparked_leftover": []
+  "unparked_leftover": [
+    "CCEP"
+  ]
 }

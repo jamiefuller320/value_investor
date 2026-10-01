@@ -1,21 +1,11 @@
 {
   "schema_version": 1,
   "market_id": "tsx60",
-  "updated_at": "2026-10-01T14:55:04.679366+00:00",
-  "exhausted": true,
-  "complete_zero_improve_runs": 15,
+  "updated_at": "2026-10-01T21:20:48.175582+00:00",
+  "exhausted": false,
+  "complete_zero_improve_runs": 16,
   "min_zero_runs": 3,
   "parked": [
-    {
-      "ticker": "SU.TO",
-      "reason": "unfetchable_iwb",
-      "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-      "parked_at": "2026-09-14T11:18:36.638354+00:00",
-      "filings_total": 48,
-      "filings_with_body": 31,
-      "indexed_without_body": 17,
-      "thin": false
-    },
     {
       "ticker": "NTR.TO",
       "reason": "unfetchable_iwb",
@@ -35,19 +25,11 @@
       "filings_with_body": 19,
       "indexed_without_body": 1,
       "thin": false
-    },
-    {
-      "ticker": "TRI.TO",
-      "reason": "unfetchable_iwb",
-      "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-      "parked_at": "2026-09-17T15:35:47.139539+00:00",
-      "filings_total": 156,
-      "filings_with_body": 149,
-      "indexed_without_body": 7,
-      "thin": false
     }
   ],
-  "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
+  "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
+  "straggler_max_leftovers": 3,
+  "straggler_zero_runs": 2,
   "had_complete_targets": false,
   "leftover_tickers": [
     "GIB-A.TO",
@@ -55,5 +37,8 @@
     "SU.TO",
     "TRI.TO"
   ],
-  "unparked_leftover": []
+  "unparked_leftover": [
+    "SU.TO",
+    "TRI.TO"
+  ]
 }
