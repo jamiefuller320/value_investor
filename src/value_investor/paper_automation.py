@@ -35,6 +35,10 @@ from value_investor.hypothesis_outcome_linker import (
     run_hypothesis_outcome_link_pass,
     summarize_learning_tracks_hypothesis_outcomes,
 )
+from value_investor.llm_agree_veto_shadow import (
+    run_llm_agree_veto_shadow_pass,
+    summarize_learning_tracks_llm_agree_veto,
+)
 from value_investor.paper_fund import (
     DEFAULT_EXIT_CONFIRM_SCREENS,
     DEFAULT_INITIAL_CASH,
@@ -61,10 +65,6 @@ from value_investor.rebalance_log import (
     load_knob_epoch_started_at,
     resolve_screen_source,
     snapshot_holdings,
-)
-from value_investor.llm_agree_veto_shadow import (
-    run_llm_agree_veto_shadow_pass,
-    summarize_learning_tracks_llm_agree_veto,
 )
 from value_investor.sleeve_episodes import (
     SleeveEpisodeConfig,
@@ -328,9 +328,7 @@ class AutomationConfig:
             ),
             still_in_buy_set_hold=bool(raw.get("still_in_buy_set_hold", False)),
             rank_drop_exit_min=int(raw.get("rank_drop_exit_min", DEFAULT_RANK_DROP_EXIT_MIN)),
-            block_rebuy_while_in_candidates=bool(
-                raw.get("block_rebuy_while_in_candidates", False)
-            ),
+            block_rebuy_while_in_candidates=bool(raw.get("block_rebuy_while_in_candidates", False)),
         )
 
 

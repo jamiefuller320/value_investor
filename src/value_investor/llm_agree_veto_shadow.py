@@ -13,10 +13,11 @@ influence stays fail-closed without durable evidence (N173 / project principle).
 from __future__ import annotations
 
 import json
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 SCHEMA_VERSION = 1
 STORE_FILENAME = "llm_agree_veto_shadow.json"
@@ -139,9 +140,7 @@ def _conviction_ranks(
     return {ticker: idx + 1 for idx, (_, ticker) in enumerate(rows)}
 
 
-def _cite(
-    kind: str, source: str, detail: str, value: Any = None
-) -> dict[str, Any]:
+def _cite(kind: str, source: str, detail: str, value: Any = None) -> dict[str, Any]:
     return EvidenceCitation(kind=kind, source=source, detail=detail, value=value).to_dict()
 
 
@@ -166,9 +165,7 @@ def authorize_live_llm_influence(card: dict[str, Any] | AgreeVetoCard) -> bool:
         wants_live = bool(card.influences_live) and not bool(card.observe_only)
         payload = card.to_dict()
     else:
-        wants_live = bool(card.get("influences_live")) and not bool(
-            card.get("observe_only", True)
-        )
+        wants_live = bool(card.get("influences_live")) and not bool(card.get("observe_only", True))
         payload = card
     if not wants_live:
         return False
@@ -278,9 +275,7 @@ def judge_proposal(
     if current_rank is not None and entry_rank is not None:
         rank_drop = int(current_rank) - int(entry_rank)
     research_verdict = (
-        str((candidate or {}).get("research_verdict") or "").strip().lower()
-        if candidate
-        else ""
+        str((candidate or {}).get("research_verdict") or "").strip().lower() if candidate else ""
     )
     conviction = (candidate or {}).get("conviction_score")
 
@@ -459,9 +454,7 @@ def build_shadow_pass(
     buy_ranks = _conviction_ranks(candidates, use_adjusted_signal=use_adjusted_signal)
     entry_ranks_raw = (rebalance_state_before or {}).get("entry_candidate_rank") or {}
     entry_ranks = {
-        str(k): int(v)
-        for k, v in entry_ranks_raw.items()
-        if str(k).strip() and v is not None
+        str(k): int(v) for k, v in entry_ranks_raw.items() if str(k).strip() and v is not None
     }
     held = {
         str(row.get("ticker") or "").strip()
@@ -571,9 +564,7 @@ def save_store(path: Path, store: dict[str, Any]) -> None:
 def build_review(pass_payload: dict[str, Any], *, track_id: str) -> dict[str, Any]:
     cards = [c for c in (pass_payload.get("cards") or []) if isinstance(c, dict)]
     veto_sells = [
-        c
-        for c in cards
-        if c.get("algo_action") == "sell" and c.get("shadow_verdict") == "veto"
+        c for c in cards if c.get("algo_action") == "sell" and c.get("shadow_verdict") == "veto"
     ]
     return {
         "schema_version": SCHEMA_VERSION,
@@ -652,9 +643,7 @@ def run_llm_agree_veto_shadow_pass(
     save_store(store_path, store)
 
     review = build_review(pass_payload, track_id=track_id)
-    (output_dir / REVIEW_FILENAME).write_text(
-        json.dumps(review, indent=2) + "\n", encoding="utf-8"
-    )
+    (output_dir / REVIEW_FILENAME).write_text(json.dumps(review, indent=2) + "\n", encoding="utf-8")
     pass_payload["review"] = review
     return pass_payload
 
