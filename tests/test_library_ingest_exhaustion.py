@@ -249,9 +249,7 @@ def test_straggler_soft_park_ignores_peer_improve_streak(tmp_path: Path):
         compact=False,
     )
     assert (
-        count_trailing_ticker_leftover_no_improve_runs(
-            log_path, market_id=market, ticker="MC.PA"
-        )
+        count_trailing_ticker_leftover_no_improve_runs(log_path, market_id=market, ticker="MC.PA")
         == 2
     )
     path = root / "markets" / market / "ingest_exhaustion.json"

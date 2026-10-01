@@ -275,9 +275,7 @@ def _leftover_tickers_from_health(health: dict[str, Any] | None) -> set[str]:
     zero_body = {str(t).strip() for t in (health.get("zero_body_tickers") or []) if str(t).strip()}
     thin = {str(t).strip() for t in (health.get("thin_body_tickers") or []) if str(t).strip()}
     iwb = {
-        str(t).strip()
-        for t in (health.get("indexed_without_body_tickers") or [])
-        if str(t).strip()
+        str(t).strip() for t in (health.get("indexed_without_body_tickers") or []) if str(t).strip()
     }
     return (thin | iwb) - (unmeasured | zero_body)
 
@@ -327,9 +325,7 @@ def count_trailing_ticker_leftover_no_improve_runs(
             break
         if int(row.get("targets") or 0) <= 0:
             break
-        improved = {
-            str(t).strip() for t in (row.get("improved_tickers") or []) if str(t).strip()
-        }
+        improved = {str(t).strip() for t in (row.get("improved_tickers") or []) if str(t).strip()}
         if name in improved:
             break
         leftover = _effective_leftover_tickers_from_health(row.get("health_after") or {})
