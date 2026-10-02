@@ -546,7 +546,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-02T16:28:22.364841+00:00",
+  "updated_at": "2026-10-02T19:20:28.123781+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -557,7 +557,7 @@
     "psi20"
   ],
   "ingest_parallel_sprint_2": [
-    "atx"
+    "nasdaq100"
   ],
   "ladder": {
     "enabled": true,
@@ -836,7 +836,8 @@
       "bel20",
       "hang_seng",
       "us_adr_asia",
-      "sti"
+      "sti",
+      "atx"
     ],
     "epoch0_shard_after_screen": true,
     "equal_support_after_screen": true,
@@ -860,16 +861,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-09-11T13:49:02.416107+00:00",
-        "parallel_stream": 1,
-        "from_market": "sp500",
-        "to_market": "asx200",
-        "stream_markets_after": [
-          "asx200"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-09-12T13:54:53.025446+00:00",
         "parallel_stream": 1,
@@ -1357,12 +1348,23 @@
           "psi20"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-10-02T19:20:28.123771+00:00",
+        "parallel_stream": 2,
+        "from_market": "atx",
+        "to_market": "nasdaq100",
+        "stream_markets_after": [
+          "nasdaq100"
+        ],
+        "ingest_parity_recorded": false
       }
     ]
   },
   "ingest_exhausted_markets": [
     "aex",
     "asx200",
+    "atx",
     "bel20",
     "cac40",
     "dax",
