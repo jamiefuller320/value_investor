@@ -247,6 +247,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjU2NjkxLCJ0aW1lc3RhbXAiOjE3NDEzNDgzNDEsInZlcnNpb24iOjE3NDEzNDgyMDV9:adyen:kj44Bpqibw5DHCvRHFCwtnzOuM88_WWzAKJ1odHfCfY/download",
         "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjgyOTA3LCJ0aW1lc3RhbXAiOjE3NTU3NjI1ODEsInZlcnNpb24iOjE3NTU3NjI1NTh9:adyen:AnY4yqsJ-O5B_fRhiYXZpTaJ2RO2xhk5zUPFwcJanNc/download",
     ],
+    # aex leftover awaiting_periodic_report — KPN.AS ESEF lag; ir.kpn.com Q4 CDN statutory PDFs.
+    "KPN.AS": [
+        "https://s202.q4cdn.com/886546970/files/doc_downloads/2026/03/6-KPN-Integrated-Annual-Report-2025.pdf",
+        "https://s202.q4cdn.com/886546970/files/doc_financials/2025/q2/KPN-Interim-Financial-Statements-2025.pdf",
+    ],
     "POST.VI": [
         "https://assets.post.at/-/media/Dokumente/En/Investor-Relations/Geschaefts--und-Nachhaltigkeitsberichte/AustrianPost_Annual_Report_2025.pdf",
     ],
