@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-02T16:26:04.547686+00:00",
+  "run_at": "2026-10-02T16:35:38.755341+00:00",
   "market_id": "sti",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-02T16:25:53.399016+00:00",
+    "snapshot_at": "2026-10-02T16:35:31.081881+00:00",
     "market_id": "sti",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -46,13 +46,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-02T16:25:57.129394+00:00",
+    "snapshot_at": "2026-10-02T16:35:31.900441+00:00",
     "market_id": "sti",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 2,
-    "indexed_without_body": 1,
+    "indexed_without_body": 2,
     "bodies_min": 1,
     "bodies_median": 3.0,
     "bodies_max": 5,
@@ -68,55 +68,37 @@
       "N2IU.SI"
     ],
     "indexed_without_body_by_ticker": {
-      "N2IU.SI": 1
+      "N2IU.SI": 2
     },
     "parked_tickers": [
       "BS6.SI",
-      "J36.SI"
-    ],
-    "parked_count": 2,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
+      "J36.SI",
       "N2IU.SI"
     ],
-    "ingest_exhausted": false
+    "parked_count": 3,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": false,
+  "recorded_gap_closure": true,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 6,
-    "hits": 1,
-    "new_rows_total": 0,
-    "curiosity_total": 1,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "J36.SI",
-      "BS6.SI",
-      "N2IU.SI"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "sti"
+  },
   "critical_path": {
     "market_id": "sti",
-    "assessed_at": "2026-10-02T16:25:53.781708+00:00",
+    "assessed_at": "2026-10-02T16:35:31.474966+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -151,18 +133,20 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 2.961136143000033,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3597.038863857,
+  "used_seconds": 0.0015885359999998627,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 2099.998411464,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": 320.0,
-  "pin_tickers": [],
+  "per_ticker_max_seconds": null,
+  "pin_tickers": [
+    "N2IU.SI"
+  ],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sti",
-    "updated_at": "2026-10-02T16:25:57.130885+00:00",
-    "exhausted": false,
+    "updated_at": "2026-10-02T16:35:31.901896+00:00",
+    "exhausted": true,
     "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
@@ -187,6 +171,17 @@
         "filings_with_body": 1,
         "indexed_without_body": 0,
         "thin": true
+      },
+      {
+        "ticker": "N2IU.SI",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-02T14:19:21.991917+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 7,
+        "filings_with_body": 5,
+        "indexed_without_body": 2,
+        "thin": false
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -198,15 +193,33 @@
       "J36.SI",
       "N2IU.SI"
     ],
-    "unparked_leftover": [
-      "N2IU.SI"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/sti/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "sti"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "sti",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "nasdaq100",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
