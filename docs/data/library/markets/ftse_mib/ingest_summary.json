@@ -1,15 +1,91 @@
 {
-  "run_at": "2026-10-01T17:10:38.231518+00:00",
+  "run_at": "2026-10-02T13:40:43.144499+00:00",
   "market_id": "ftse_mib",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "AMP.MI"
+  ],
+  "target_details": [
+    {
+      "ticker": "AMP.MI",
+      "priority_score": 14.83,
+      "filings_total": 59,
+      "filings_with_body": 58,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "AMP.MI",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 59,
+        "filings_with_body": 58,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 63,
+        "filings_with_body": 63,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 61,
+        "annual": 5,
+        "interim": 3,
+        "trading_update": 0,
+        "other": 53,
+        "with_body": 61,
+        "period_coverage": {
+          "annual": {
+            "total": 5,
+            "with_body": 5
+          },
+          "interim": {
+            "total": 3,
+            "with_body": 3
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 51,
+            "with_body": 51
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 63,
+        "with_body_after": 63,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "AMP.MI"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-01T17:10:14.616766+00:00",
+    "snapshot_at": "2026-10-02T13:38:32.714306+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -53,7 +129,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-01T17:10:32.458546+00:00",
+    "snapshot_at": "2026-10-02T13:40:37.208239+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -62,7 +138,7 @@
     "indexed_without_body": 0,
     "bodies_min": 1,
     "bodies_median": 2,
-    "bodies_max": 58,
+    "bodies_max": 63,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -138,7 +214,7 @@
   },
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-10-01T17:10:15.044184+00:00",
+    "assessed_at": "2026-10-02T13:38:33.372842+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -169,9 +245,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 16.950268719999997,
+  "used_seconds": 123.19292826200001,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3583.04973128,
+  "leftover_seconds": 3476.807071738,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -179,9 +255,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-10-01T17:10:32.460720+00:00",
+    "updated_at": "2026-10-02T13:40:37.210905+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -265,7 +341,9 @@
         "thin": true
       }
     ],
-    "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
+    "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
+    "straggler_max_leftovers": 3,
+    "straggler_zero_runs": 2,
     "had_complete_targets": false,
     "leftover_tickers": [
       "BC.MI",
@@ -294,6 +372,7 @@
       "euro_stoxx50",
       "ftse_mib",
       "ftse_smallcap",
+      "hang_seng",
       "ibex35",
       "nasdaq100",
       "sp500",
@@ -305,7 +384,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 122,
+    "task_count": 126,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0

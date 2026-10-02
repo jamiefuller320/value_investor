@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-01T17:09:34.347170+00:00",
+  "run_at": "2026-10-02T13:37:34.404766+00:00",
   "market_id": "euro_stoxx50",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-01T17:09:00.199571+00:00",
+    "snapshot_at": "2026-10-02T13:36:59.820899+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 16,
     "unmeasured_buy_tier": 0,
@@ -61,7 +61,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-01T17:09:28.668160+00:00",
+    "snapshot_at": "2026-10-02T13:37:28.177307+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 16,
     "unmeasured_buy_tier": 0,
@@ -154,7 +154,7 @@
   },
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-10-01T17:09:00.776571+00:00",
+    "assessed_at": "2026-10-02T13:37:00.708004+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -215,9 +215,9 @@
       "thin_need_bodies": 2
     }
   },
-  "used_seconds": 27.322619962000005,
+  "used_seconds": 26.608490381999957,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3572.677380038,
+  "leftover_seconds": 3573.391509618,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -225,9 +225,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-10-01T17:09:28.671851+00:00",
+    "updated_at": "2026-10-02T13:37:28.181952+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 19,
+    "complete_zero_improve_runs": 20,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -311,7 +311,9 @@
         "thin": false
       }
     ],
-    "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
+    "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
+    "straggler_max_leftovers": 3,
+    "straggler_zero_runs": 2,
     "had_complete_targets": true,
     "leftover_tickers": [
       "ADYEN.AS",
@@ -340,6 +342,7 @@
       "euro_stoxx50",
       "ftse_mib",
       "ftse_smallcap",
+      "hang_seng",
       "ibex35",
       "nasdaq100",
       "sp500",
@@ -351,7 +354,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 122,
+    "task_count": 126,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
