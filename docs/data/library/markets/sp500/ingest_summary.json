@@ -1,97 +1,21 @@
 {
-  "run_at": "2026-10-02T14:13:20.146740+00:00",
+  "run_at": "2026-10-02T16:24:51.210034+00:00",
   "market_id": "sp500",
-  "targets": [
-    "LDOS"
-  ],
-  "target_details": [
-    {
-      "ticker": "LDOS",
-      "priority_score": 17.5125,
-      "filings_total": 20,
-      "filings_with_body": 18,
-      "indexed_without_body": 2,
-      "reason": "indexed_without_body"
-    }
-  ],
-  "results": [
-    {
-      "ticker": "LDOS",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 20,
-        "filings_with_body": 18,
-        "indexed_without_body": 2
-      },
-      "after": {
-        "filings_total": 20,
-        "filings_with_body": 20,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "sec_edgar",
-      "filings_summary": {
-        "total": 20,
-        "annual": 2,
-        "interim": 7,
-        "trading_update": 0,
-        "other": 11,
-        "with_body": 20,
-        "period_coverage": {
-          "annual": {
-            "total": 2,
-            "with_body": 2
-          },
-          "interim": {
-            "total": 7,
-            "with_body": 7
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 11,
-            "with_body": 11
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 20,
-        "with_body_after": 20,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    }
-  ],
-  "improved": [
-    "LDOS"
-  ],
+  "targets": [],
+  "target_details": [],
+  "results": [],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-02T14:11:46.450955+00:00",
+    "snapshot_at": "2026-10-02T16:24:14.430994+00:00",
     "market_id": "sp500",
     "buy_tier_count": 143,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 14,
+    "indexed_without_body": 12,
     "bodies_min": 14,
     "bodies_median": 20,
     "bodies_max": 74,
@@ -101,7 +25,6 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
-      "LDOS",
       "APTV",
       "LMT",
       "CRH",
@@ -109,7 +32,6 @@
       "BXP"
     ],
     "indexed_without_body_by_ticker": {
-      "LDOS": 2,
       "APTV": 2,
       "LMT": 1,
       "CRH": 2,
@@ -126,14 +48,12 @@
     "parked_count": 5,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 2,
-    "effective_indexed_without_body_tickers": [
-      "LDOS"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-02T14:12:08.005321+00:00",
+    "snapshot_at": "2026-10-02T16:24:42.592864+00:00",
     "market_id": "sp500",
     "buy_tier_count": 143,
     "unmeasured_buy_tier": 0,
@@ -182,49 +102,40 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 143,
+    "hits": 0,
+    "new_rows_total": 0,
+    "curiosity_total": 0,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "FICO",
+      "APTV",
+      "BXP",
+      "CRH",
+      "LMT"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "advanced": true,
-    "parallel_stream": 1,
-    "from_market": "sp500",
-    "to_market": "tsx60",
-    "stream_markets_after": [
-      "tsx60"
-    ],
-    "parity_event": {
-      "recorded": false,
-      "reason": "ingest_exhausted_leftover_gaps",
-      "market_id": "sp500",
-      "ingest_exhausted": true,
-      "exhausted_maintenance_recorded": true,
-      "parked_tickers": [
-        "APTV",
-        "BXP",
-        "CRH",
-        "FICO",
-        "LMT"
-      ],
-      "learning_admitted_changed": false,
-      "learning_admitted": true
-    },
-    "screen_refresh": {
-      "refreshed": true,
-      "market_id": "tsx60",
-      "forced": true,
-      "prior_screen_at": "2026-09-30T06:52:42.218162+00:00",
-      "prior_age_days": 2,
-      "run_at": "2026-10-02T14:13:12.524478+00:00",
-      "shortlist_count": 17,
-      "ticker_count": 59
-    },
-    "at": "2026-10-02T14:12:12.796993+00:00",
-    "ingest_parity_recorded": false
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "sp500"
   },
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-10-02T14:11:55.204738+00:00",
+    "assessed_at": "2026-10-02T16:24:22.589673+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -253,12 +164,6 @@
         "filings_with_body": 63
       },
       {
-        "ticker": "LDOS",
-        "indexed_without_body": 2,
-        "filings_total": 20,
-        "filings_with_body": 18
-      },
-      {
         "ticker": "LMT",
         "indexed_without_body": 1,
         "filings_total": 20,
@@ -274,24 +179,23 @@
       "APTV",
       "BXP",
       "CRH",
-      "LDOS",
       "LMT"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (6 tickers, top: FICO(5), APTV(2), BXP(2), CRH(2), LDOS(2))"
+      "Prefer indexed-without-body body refetch (5 tickers, top: FICO(5), APTV(2), BXP(2), CRH(2), LMT(1))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 6,
-      "indexed_without_body_rows": 14,
+      "indexed_without_body_tickers": 5,
+      "indexed_without_body_rows": 12,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 4.122179308999989,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2095.877820691,
+  "used_seconds": 12.025483049999991,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3587.97451695,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -299,9 +203,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-10-02T14:12:08.015676+00:00",
+    "updated_at": "2026-10-02T16:24:42.604248+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -387,6 +291,7 @@
       "ibex35",
       "nasdaq100",
       "sp500",
+      "sti",
       "tsx60",
       "us_adr_asia"
     ],
