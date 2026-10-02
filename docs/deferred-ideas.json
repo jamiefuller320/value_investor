@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-02T08:28:27+00:00",
+  "updated_at": "2026-10-02T08:57:28+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8479,8 +8479,8 @@
       "category": "later",
       "section": "universe",
       "title": "Universe-wide filing archive / data-pack lane (cold store)",
-      "summary": "Gated dry pack lane shipped (week-first plan, Mon\u2013Fri 22:00 UTC workflow, bottleneck review). Isolation/miss-rate/hydrate scaffolds remain. Cold-store writers and real fetches still parked \u2014 must not compete with euro fat-slot / P2 focus head.",
-      "revisit_when": "Focus ingest head (euro_depth or successor) at maintenance threshold (sprint_ingest_complete) AND docs/data/universe_filing_archive_miss_rate.json shows material enter-without-bodies; then unpark writers under archive_lane_gate and use bottleneck review to tune stages.",
+      "summary": "Gated dry pack lane shipped (week-first plan, Mon\u2013Fri 22:00 UTC workflow, bottleneck review). Isolation/hydrate scaffolds remain; miss-rate is observe-only (not a writer start gate \u2014 collect-while-easy). Cold-store writers still need a thin quiet-window pilot under archive_lane_gate + separate budgets; must not compete with P2 fat while active or become a fourth equal sprint (N180).",
+      "revisit_when": "Focus ingest head at sprint_ingest_complete (euro fat released) AND archive_lane_gate allows (quiet, no focus pressure) AND thin writer pilot ready under separate source budgets \u2014 then unpark quiet cold-store fetches. Do not wait for elevated miss-rate.",
       "tags": [
         "universe",
         "ingest",
@@ -11768,8 +11768,8 @@
       "category": "not_now",
       "section": "not_now",
       "title": "Do not start universe archive crawler or fourth sprint stream",
-      "summary": "Gated dry pack workflow runs at 22:00 UTC and suspends under euro fat. Cold-store writers, real pack fetches, and any crawler/fourth sprint stream must still wait \u2014 dry plan + bottleneck review only.",
-      "revisit_when": "euro_depth (or successor) reaches sprint_ingest_complete AND archive_lane_gate allows (no focus pressure) AND miss-rate instrument shows material enter-without-bodies",
+      "summary": "Do not start a second *live* crawler or fourth equal sprint stream. Quiet cold-store writers under archive_lane_gate are a separate lane (L499 pilot) and must not be framed as an equal sprint. Miss-rate observe is not the unlock for a live crawler.",
+      "revisit_when": "Quiet cold-store writer pilot proves capacity isolation across multiple nights AND there is evidence a live/daytime crawler is still needed beyond the quiet lane \u2014 without stealing fat/spare sprint capacity",
       "tags": [
         "universe",
         "ingest",
@@ -11900,6 +11900,43 @@
       "status": "open",
       "source": "sold high-water capitalize dialogue",
       "added_at": "2026-10-01T22:04:17+00:00"
+    },
+    {
+      "id": "L521",
+      "category": "later",
+      "section": "ops",
+      "title": "Cold-store pack status panel (hours since run + achievement)",
+      "summary": "Dedicated UI card for universe filing archive pack: hours since last run plus achievement metrics (units fetched, week coverage, source hit-rate). Observe-util miss-rate + ops bottleneck already cover low-attention monitoring while the lane is dry.",
+      "revisit_when": "Cold-store writers unparked and at least one real-fetch quiet pass produces non-zero achievement metrics",
+      "tags": [
+        "archive",
+        "ops",
+        "ui",
+        "observe",
+        "L499"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "added_at": "2026-10-02T08:11:31+00:00"
+    },
+    {
+      "id": "N181",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Archive lane self-improvement eng authority",
+      "summary": "Do not grant the offline universe archive lane autonomous eng/self-improve authority (bottleneck\u2192eng spray, deepen rewrite, or clash-aware agents). Quiet-window gate+observe is enough; within-lane knobs only after a thin writer pilot proves isolation.",
+      "revisit_when": "Thin cold-store writer pilot has completed quiet nights without shared 429/runner collision AND bottleneck trajectories show a stable within-lane knob to tune",
+      "tags": [
+        "archive",
+        "ingest",
+        "eng",
+        "self-improve",
+        "L499",
+        "not-live-path"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a",
+      "added_at": "2026-10-02T08:11:31+00:00"
     }
   ],
   "fragments": [
@@ -12469,6 +12506,20 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0cf50-1ed8-7d91-b75d-9b3de88bf703",
       "added_at": "2026-09-23T18:08:15+00:00"
+    },
+    {
+      "id": "frag-20261002-01",
+      "text": "Policy 2026-10-02: drop miss-rate \u226550% as cold-store / L499 writer start gate. Collect-while-easy / week-first archive must not wait for live-path miss-rate to degrade. Miss-rate stays observe-only outcome. Remaining gates: euro fat released, quiet window, capacity isolation, thin writer pilot, N180, N181.",
+      "tags": [
+        "archive",
+        "L499",
+        "policy",
+        "miss-rate"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-218fff67-a0fc-576c-8efc-f4bd760011c6",
+      "added_at": "2026-10-02T08:57:28+00:00",
+      "updated_at": "2026-10-02T08:57:28+00:00"
     }
   ],
   "schema_version": 1

@@ -5,7 +5,8 @@ buy-tier enter is the best proxy for “would an archive pack have helped?”.
 
 This instrument **does not** deepen ingest, rememo, or start a crawler. It rolls
 up ``docs/data/buy_tier_flip_lag.json`` into
-``docs/data/universe_filing_archive_miss_rate.json`` for the L499 revisit gate.
+``docs/data/universe_filing_archive_miss_rate.json`` as an **outcome / learning**
+signal — **not** a start gate for quiet cold-store writers (collect-while-easy).
 """
 
 from __future__ import annotations
@@ -205,9 +206,9 @@ def ops_finding_from_archive_miss_rate(
         "summary": (
             f"Archive body-miss proxy {miss_rate:.0%} of {cohort} recent buy-tier "
             f"flips; {open_n} still open without key bodies "
-            f"(sample: {sample_txt}). Observe-only — isolation + fail-open hydrate "
-            "scaffolds exist; do not start a second crawler until focus head is at "
-            "maintenance threshold."
+            f"(sample: {sample_txt}). Observe-only outcome signal — not a cold-store "
+            "start gate; do not eng-spray or add a second live crawler / fourth sprint "
+            "stream (N180/N181)."
         ),
         "auto_fixable": False,
     }
