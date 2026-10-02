@@ -26,6 +26,7 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.storage import read_json, write_json
+from value_investor.universe_filing_archive_hydrate import DEFAULT_COLD_ROOT
 from value_investor.universe_filing_archive_isolation import (
     ARCHIVE_LANE_BUDGET_ID,
     DEFAULT_DISPATCH_PATH,
@@ -38,7 +39,6 @@ from value_investor.universe_filing_archive_pack_order import (
     build_week_first_pack_plan,
     summarize_plan_by_week,
 )
-from value_investor.universe_filing_archive_hydrate import DEFAULT_COLD_ROOT
 from value_investor.universe_filing_archive_writer import (
     DEFAULT_APPLY_MAX_UNITS,
     DEFAULT_LIBRARY_ROOT,
@@ -244,10 +244,15 @@ def build_bottleneck_review(
                 ),
             }
         )
-    if dominant and dominant_share >= DEFAULT_DOMINANT_STAGE_SHARE and outcome in {
-        "dry_complete",
-        "apply_complete",
-    }:
+    if (
+        dominant
+        and dominant_share >= DEFAULT_DOMINANT_STAGE_SHARE
+        and outcome
+        in {
+            "dry_complete",
+            "apply_complete",
+        }
+    ):
         bottlenecks.append(
             {
                 "kind": "dominant_stage",

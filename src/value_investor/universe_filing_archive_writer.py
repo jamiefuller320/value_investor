@@ -81,9 +81,7 @@ class ArchiveFetchBudget:
 
     def snapshot(self) -> dict[str, Any]:
         used = sorted(self.by_budget)
-        shared = any(
-            budgets_share_quota(bid, f"{CRITICAL_PATH_BUDGET_ID}:probe") for bid in used
-        )
+        shared = any(budgets_share_quota(bid, f"{CRITICAL_PATH_BUDGET_ID}:probe") for bid in used)
         return {
             "lane_budget": ARCHIVE_LANE_BUDGET_ID,
             "source_budgets_used": used,
@@ -94,9 +92,8 @@ class ArchiveFetchBudget:
             "shared_critical_path": False if not shared else True,
             "preemptible": True,
             "fourth_equal_sprint_stream": False,
-            "isolation_ok": (not shared) and all(
-                b.startswith(f"{ARCHIVE_LANE_BUDGET_ID}:") for b in used
-            ),
+            "isolation_ok": (not shared)
+            and all(b.startswith(f"{ARCHIVE_LANE_BUDGET_ID}:") for b in used),
         }
 
 
@@ -105,7 +102,7 @@ def critical_budget_probe() -> str:
 
 
 def _safe_object_id(source: str, url: str, title: str = "") -> str:
-    raw = f"{source}|{url}|{title}".encode("utf-8")
+    raw = f"{source}|{url}|{title}".encode()
     digest = hashlib.sha256(raw).hexdigest()[:16]
     src = re.sub(r"[^a-z0-9]+", "_", str(source or "src").lower()).strip("_") or "src"
     return f"{src}_{digest}"
@@ -134,8 +131,10 @@ def select_pilot_tickers(
     cap = max(0, int(max_tickers))
     if not mid or cap <= 0:
         return []
-    path = Path(universe_csv) if universe_csv is not None else (
-        Path(library_root) / "markets" / mid / "screen" / "latest_universe.csv"
+    path = (
+        Path(universe_csv)
+        if universe_csv is not None
+        else (Path(library_root) / "markets" / mid / "screen" / "latest_universe.csv")
     )
     if not path.exists():
         return []
