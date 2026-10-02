@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-01T07:48:23.561420+00:00",
+  "generated_at": "2026-10-02T02:32:46.012685+00:00",
   "observe_only": true,
-  "headline": "1 warn instrument(s); improving vs last cycle on 1.",
+  "headline": "2 warn instrument(s); trajectory worsening on 1.",
   "surface_freshness": "fresh",
-  "ops_run_at": "2026-10-01T07:46:38.898031+00:00",
-  "warn_instrument_count": 1,
+  "ops_run_at": "2026-10-02T02:31:26.780787+00:00",
+  "warn_instrument_count": 2,
   "trajectory_summary": {
-    "improving": 1,
-    "worsening": 0,
+    "improving": 0,
+    "worsening": 1,
     "flat": 2,
-    "unknown": 0,
-    "history_points": 12,
+    "unknown": 1,
+    "history_points": 13,
     "note": "Deltas vs prior dashboard cycle (warn/gap counts; lower is better). Raw instrument stores commit with ops-monitor (L460)."
   },
   "instruments": [
@@ -22,37 +22,37 @@
       "observe_only": true,
       "warn_active": true,
       "severity": "warn",
-      "finding_summary": "24 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, aim, bel20, cac40, euro_depth, nasdaq100 (+2 more): sp500/PEP (no_memo, 439.78h since flip), sp500/ADSK (no_memo, 367.78h since flip), tsx60/PPL.TO (no_key_bodies, 367.78h since flip), nasdaq100/PAYX (no_memo, 343.78h since flip), tsx60/SAP.TO (no_key_bodies, 343.78h since flip), sp500/FANG (no_memo, 319.78h since flip), cac40/TTE.PA (no_memo, 295.78h since flip), nasdaq100/SNDK (no_memo, 271.78h since flip), sp500/PCAR (no_memo, 223.78h since flip), aim/CAM.L (no_memo, 199.78h since flip) (+14 more). Blocking: no_key_bodies=7, no_memo=17.",
+      "finding_summary": "25 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, bel20, cac40, euro_depth, hang_seng, nasdaq100 (+2 more): sp500/PEP (no_memo, 458.52h since flip), sp500/ADSK (no_memo, 386.52h since flip), tsx60/PPL.TO (no_key_bodies, 386.52h since flip), nasdaq100/PAYX (no_memo, 362.52h since flip), tsx60/SAP.TO (no_key_bodies, 362.52h since flip), sp500/FANG (no_memo, 338.52h since flip), cac40/TTE.PA (no_memo, 314.52h since flip), nasdaq100/SNDK (no_memo, 290.52h since flip), sp500/PCAR (no_memo, 242.52h since flip), aim/CAM.L (no_memo, 218.52h since flip) (+15 more). Blocking: no_key_bodies=8, no_memo=17.",
       "metrics": {
-        "warn_not_usable": 24,
-        "open_not_usable": 41,
-        "cohort_count": 94,
-        "usable_in_window": 53,
-        "market_count": 15,
+        "warn_not_usable": 25,
+        "open_not_usable": 42,
+        "cohort_count": 96,
+        "usable_in_window": 54,
+        "market_count": 16,
         "blocking_stage_counts": {
           "no_accumulate_verdict": 17,
           "no_memo": 17,
-          "no_key_bodies": 7
+          "no_key_bodies": 8
         }
       },
       "primary_metric": "warn_not_usable",
-      "primary_value": 24,
+      "primary_value": 25,
       "primary_label": "Warn cohort (≥24h path-incomplete)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-10-01T07:46:40.325037+00:00",
-        "age_hours": 0.03,
+        "as_of": "2026-10-02T02:31:28.207297+00:00",
+        "age_hours": 0.02,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": -3,
-        "direction": "improving",
-        "label": "Better since last cycle",
-        "prior_value": 27,
-        "prior_at": "2026-09-30T07:47:55.168236+00:00"
+        "delta": 1,
+        "direction": "worsening",
+        "label": "Worse since last cycle",
+        "prior_value": 24,
+        "prior_at": "2026-10-01T07:48:23.097522+00:00"
       }
     },
     {
@@ -84,7 +84,7 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-10-01T07:47:03.529364+00:00",
+        "as_of": "2026-10-02T02:31:42.671087+00:00",
         "age_hours": 0.02,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
@@ -94,7 +94,127 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-09-30T07:47:55.168236+00:00"
+        "prior_at": "2026-10-01T07:48:23.097522+00:00"
+      }
+    },
+    {
+      "id": "universe_filing_archive_miss_rate",
+      "title": "Universe archive body-miss (proxy)",
+      "finding_title": "Universe archive body-miss rate elevated",
+      "observe_only": true,
+      "warn_active": true,
+      "severity": "warn",
+      "finding_summary": "Archive body-miss proxy 52% of 148 recent buy-tier flips; 12 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/YNGN.L). Observe-only — isolation + fail-open hydrate scaffolds exist; do not start a second crawler until focus head is at maintenance threshold.",
+      "metrics": {
+        "miss_rate": 0.5203,
+        "enter_body_miss_count": 77,
+        "cohort_count": 148,
+        "open_still_missing_bodies": 12,
+        "by_market": {
+          "ftse350": {
+            "cohort_count": 30,
+            "enter_body_miss_count": 4,
+            "open_still_missing_bodies": 0,
+            "miss_rate": 0.1333
+          },
+          "sp500": {
+            "cohort_count": 43,
+            "enter_body_miss_count": 27,
+            "open_still_missing_bodies": 0,
+            "miss_rate": 0.6279
+          },
+          "asx200": {
+            "cohort_count": 16,
+            "enter_body_miss_count": 12,
+            "open_still_missing_bodies": 0,
+            "miss_rate": 0.75
+          },
+          "euro_depth": {
+            "cohort_count": 23,
+            "enter_body_miss_count": 9,
+            "open_still_missing_bodies": 2,
+            "miss_rate": 0.3913
+          },
+          "ftse_smallcap": {
+            "cohort_count": 3,
+            "enter_body_miss_count": 3,
+            "open_still_missing_bodies": 0,
+            "miss_rate": 1.0
+          },
+          "tsx60": {
+            "cohort_count": 6,
+            "enter_body_miss_count": 6,
+            "open_still_missing_bodies": 3,
+            "miss_rate": 1.0
+          },
+          "euro_stoxx50": {
+            "cohort_count": 2,
+            "enter_body_miss_count": 1,
+            "open_still_missing_bodies": 1,
+            "miss_rate": 0.5
+          },
+          "nasdaq100": {
+            "cohort_count": 9,
+            "enter_body_miss_count": 5,
+            "open_still_missing_bodies": 0,
+            "miss_rate": 0.5556
+          },
+          "cac40": {
+            "cohort_count": 1,
+            "enter_body_miss_count": 0,
+            "open_still_missing_bodies": 0,
+            "miss_rate": 0.0
+          },
+          "dax": {
+            "cohort_count": 1,
+            "enter_body_miss_count": 0,
+            "open_still_missing_bodies": 0,
+            "miss_rate": 0.0
+          },
+          "aim": {
+            "cohort_count": 8,
+            "enter_body_miss_count": 7,
+            "open_still_missing_bodies": 4,
+            "miss_rate": 0.875
+          },
+          "bel20": {
+            "cohort_count": 2,
+            "enter_body_miss_count": 0,
+            "open_still_missing_bodies": 0,
+            "miss_rate": 0.0
+          },
+          "aex": {
+            "cohort_count": 1,
+            "enter_body_miss_count": 1,
+            "open_still_missing_bodies": 0,
+            "miss_rate": 1.0
+          },
+          "hang_seng": {
+            "cohort_count": 3,
+            "enter_body_miss_count": 2,
+            "open_still_missing_bodies": 2,
+            "miss_rate": 0.6667
+          }
+        }
+      },
+      "primary_metric": "open_still_missing_bodies",
+      "primary_value": 12,
+      "primary_label": "Open flips still missing key bodies (archive-miss proxy)",
+      "freshness": {
+        "state": "fresh",
+        "label": "Fresh",
+        "detail": "Last refresh 0.0h ago.",
+        "as_of": "2026-10-02T02:31:42.730459+00:00",
+        "age_hours": 0.02,
+        "store_lag_hours": null,
+        "stale_after_hours": 30.0
+      },
+      "trajectory": {
+        "delta": null,
+        "direction": "unknown",
+        "label": "No prior cycle",
+        "prior_value": null,
+        "prior_at": "2026-10-01T07:48:23.097522+00:00"
       }
     },
     {
@@ -108,9 +228,9 @@
       "metrics": {
         "warn_count": 0,
         "gbp_warp_count": 12,
-        "native_twin_active": 12,
+        "native_twin_active": 13,
         "native_twin_pending": 0,
-        "market_count": 12,
+        "market_count": 13,
         "warn_markets": []
       },
       "primary_metric": "warn_count",
@@ -120,7 +240,7 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-10-01T07:47:03.722689+00:00",
+        "as_of": "2026-10-02T02:31:42.809781+00:00",
         "age_hours": 0.02,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
@@ -130,7 +250,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-09-30T07:47:55.168236+00:00"
+        "prior_at": "2026-10-01T07:48:23.097522+00:00"
       }
     }
   ],
@@ -333,6 +453,29 @@
       "decision_input_inventory": {
         "primary_value": 0,
         "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "shard_nav_fx_warp": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      }
+    },
+    {
+      "at": "2026-10-02T02:32:46.012685+00:00",
+      "buy_tier_flip_lag": {
+        "primary_value": 25,
+        "warn_active": true,
+        "freshness_state": "fresh"
+      },
+      "decision_input_inventory": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "universe_filing_archive_miss_rate": {
+        "primary_value": 12,
+        "warn_active": true,
         "freshness_state": "fresh"
       },
       "shard_nav_fx_warp": {

@@ -1,30 +1,21 @@
 {
-  "run_at": "2026-10-01T07:46:38.898031+00:00",
+  "run_at": "2026-10-02T02:31:26.780787+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "24 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aex, aim, bel20, cac40, euro_depth, nasdaq100 (+2 more): sp500/PEP (no_memo, 439.78h since flip), sp500/ADSK (no_memo, 367.78h since flip), tsx60/PPL.TO (no_key_bodies, 367.78h since flip), nasdaq100/PAYX (no_memo, 343.78h since flip), tsx60/SAP.TO (no_key_bodies, 343.78h since flip), sp500/FANG (no_memo, 319.78h since flip), cac40/TTE.PA (no_memo, 295.78h since flip), nasdaq100/SNDK (no_memo, 271.78h since flip), sp500/PCAR (no_memo, 223.78h since flip), aim/CAM.L (no_memo, 199.78h since flip) (+14 more). Blocking: no_key_bodies=7, no_memo=17.",
+      "summary": "25 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, bel20, cac40, euro_depth, hang_seng, nasdaq100 (+2 more): sp500/PEP (no_memo, 458.52h since flip), sp500/ADSK (no_memo, 386.52h since flip), tsx60/PPL.TO (no_key_bodies, 386.52h since flip), nasdaq100/PAYX (no_memo, 362.52h since flip), tsx60/SAP.TO (no_key_bodies, 362.52h since flip), sp500/FANG (no_memo, 338.52h since flip), cac40/TTE.PA (no_memo, 314.52h since flip), nasdaq100/SNDK (no_memo, 290.52h since flip), sp500/PCAR (no_memo, 242.52h since flip), aim/CAM.L (no_memo, 218.52h since flip) (+15 more). Blocking: no_key_bodies=8, no_memo=17.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
     },
     {
       "severity": "warn",
-      "category": "dashboard_health",
-      "title": "UI state reconciliation drift",
-      "summary": "UI state reconciliation warn: 1 warn / 0 fail (daily_hub_local_date_matches_today). Observe-only — do not eng-spray.",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "workflows",
-      "title": "Recent workflow failure: Automation Orchestrator",
-      "summary": "1 unresolved failure(s) since last success (runs: 36826966955).",
+      "category": "ingest",
+      "title": "Universe archive body-miss rate elevated",
+      "summary": "Archive body-miss proxy 52% of 148 recent buy-tier flips; 12 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/YNGN.L). Observe-only — isolation + fail-open hydrate scaffolds exist; do not start a second crawler until focus head is at maintenance threshold.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -33,22 +24,20 @@
   "auto_fixes": [
     {
       "action": "market_eng_gap_burndown",
-      "detail": "gap_closure_compile for bel20 → eng-20261001-01"
+      "detail": "parked_hunter for aex → "
     }
   ],
-  "drafted_task_ids": [
-    "eng-20261001-01"
-  ],
+  "drafted_task_ids": [],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-10-01T07:24:07+00:00",
-      "last_success_run_id": 36830104581,
-      "age_hours": 0.4,
+      "last_success_at": "2026-10-02T02:18:50+00:00",
+      "last_success_run_id": 36955042010,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -57,14 +46,14 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-30T16:53:25+00:00",
-      "last_success_run_id": 36747485410,
-      "age_hours": 14.9,
+      "last_success_at": "2026-10-01T17:25:43+00:00",
+      "last_success_run_id": 36899299427,
+      "age_hours": 9.1,
       "stale": false,
-      "recent_failures_24h": 1,
-      "unresolved_failures_12h": 1
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
     },
     {
       "workflow": "engineering-queue.yml",
@@ -72,9 +61,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 26,
-      "last_success_at": "2026-09-09T20:15:31+00:00",
-      "last_success_run_id": 34399943427,
-      "age_hours": 515.5,
+      "last_success_at": "2026-10-02T02:15:25+00:00",
+      "last_success_run_id": 36954780751,
+      "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -85,9 +74,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-10-01T07:31:11+00:00",
-      "last_success_run_id": 36830790223,
-      "age_hours": 0.3,
+      "last_success_at": "2026-10-02T02:20:43+00:00",
+      "last_success_run_id": 36955189316,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -98,9 +87,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-30T14:00:13+00:00",
-      "last_success_run_id": 36725797694,
-      "age_hours": 17.8,
+      "last_success_at": "2026-10-01T14:38:44+00:00",
+      "last_success_run_id": 36877950665,
+      "age_hours": 11.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -113,7 +102,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-27T14:07:36+00:00",
       "last_success_run_id": 36324788097,
-      "age_hours": 89.7,
+      "age_hours": 108.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -126,7 +115,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-30T06:51:52+00:00",
       "last_success_run_id": 36680484377,
-      "age_hours": 24.9,
+      "age_hours": 43.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -139,7 +128,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-27T07:14:31+00:00",
       "last_success_run_id": 36302491980,
-      "age_hours": 96.5,
+      "age_hours": 115.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -152,7 +141,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-27T07:14:33+00:00",
       "last_success_run_id": 36302492961,
-      "age_hours": 96.5,
+      "age_hours": 115.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -165,7 +154,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-27T17:05:03+00:00",
       "last_success_run_id": 36335604285,
-      "age_hours": 86.7,
+      "age_hours": 105.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -176,9 +165,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-30T08:26:29+00:00",
-      "last_success_run_id": 36689715588,
-      "age_hours": 23.3,
+      "last_success_at": "2026-10-01T08:26:24+00:00",
+      "last_success_run_id": 36836303907,
+      "age_hours": 18.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -189,9 +178,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-30T18:26:03+00:00",
-      "last_success_run_id": 36758536170,
-      "age_hours": 13.4,
+      "last_success_at": "2026-10-01T18:51:28+00:00",
+      "last_success_run_id": 36909959302,
+      "age_hours": 7.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -201,7 +190,7 @@
     "open_count": 0,
     "pr_open_count": 0,
     "parked_count": 0,
-    "merged_count": 96,
+    "merged_count": 97,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
