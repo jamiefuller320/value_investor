@@ -275,9 +275,12 @@ def test_daily_hub_history_session_and_status_chips() -> None:
     assert "daily-hub-assessment" in text
     assert "daily-assess-prose" in text
     assert "Waiting for" in text
-    assert "not stated" not in text.split("function renderDailyHubAssessment(", 1)[1].split(
-        "\nfunction renderDailyHubHistorySession(", 1
-    )[0]
+    assert (
+        "not stated"
+        not in text.split("function renderDailyHubAssessment(", 1)[1].split(
+            "\nfunction renderDailyHubHistorySession(", 1
+        )[0]
+    )
     panel = text.split("function renderDailyHubPanel(", 1)[1].split(
         "\n/** Canonical Project-chat pickup phrase", 1
     )[0]
