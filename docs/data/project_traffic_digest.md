@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-02T17:31:38.018163+00:00`
+Generated: `2026-10-02T17:59:27.962385+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -40,7 +40,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `parked_hunter`/verified PR #939 `eng-20261002-01` — Hunt fetchable IR source for parked aex leftover KPN.AS
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 141
+- Occasion count: 142
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 3×
