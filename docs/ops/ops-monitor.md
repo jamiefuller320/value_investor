@@ -457,7 +457,8 @@ with **Accept followed** vs **Discuss resolved**.
 | Stale | Builder `stale_for_local_date` + client wall-clock (`Europe/London` date ≠ artifact `local_date`) amber banner; reconcile check `daily_hub_local_date_matches_today` after 04:00 |
 | Dashboard | Automation → **Daily** (`#automation/daily`): **Today** session + **History** session; Overview pulse embeds top focus lines + history counts |
 | Close | Focus lines → `daily-focus-ack` (enriched title/work_class/outcome); human tasks → existing `human-task-ack`; **UI reconcile** ambers → `daily-focus-ack` with `decision=dismiss` (observe-only for `local_date`; Accept is not link-only) |
-| Recommendations | Per-task `recommendation` with **Accept** / **Discuss**; Discuss writes `daily_discuss_inbox.json` and copies a Project pickup prompt |
+| Recommendations | Per-task `recommendation` with **Accept** / **Discuss**; structured `options[]` (`{id,label,action}`) render as in-card buttons (human-task ack/defer/approve, focus-ack park, runbook links) without Project chat; Discuss writes `daily_discuss_inbox.json` and copies a Project pickup prompt |
+| Review detail | Human-task cards embed `review_detail` (analysis headline + bullets + runbook link) beside the assessment paragraph so PR-fix / checklist review context stays on-card |
 | Cap B before Cap C | `write_daily_focus` refreshes `ui_state_reconciliation.json` before embedding reconcile rows so hub-only rebuilds (ack / discuss / human-task-ack) cannot stick a cleared amber |
 | Client heal | If `reconcile:daily_hub_local_date_matches_today` is still open but hub `local_date` already equals Europe/London today, Daily UI auto-closes the card (covers Pages lag after Cap B cleared on main) |
 | Discuss auto-resolve | When Cap B / hub no longer opens a reconcile check, `write_daily_focus` resolves matching open `daily_discuss_inbox` rows (Discuss alone never closes) |
