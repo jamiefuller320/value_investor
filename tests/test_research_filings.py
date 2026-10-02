@@ -6780,6 +6780,18 @@ def test_parked_source_hunter_adyen_as_aex_has_fetchable_ir():
     assert valid, reason
 
 
+def test_parked_source_hunter_adyen_as_h1_2026_interim_live():
+    """eng-20261002-13: ADYEN.AS interim allowlist uses investors.adyen.com H1 2026 letter PDF."""
+    rows = fetch_filings_ir_allowlist("ADYEN.AS")
+    interim = next(row for row in rows if row["period"] == "interim")
+    assert "XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE" in interim["url"]
+    body = fetch_filing_body(interim["url"])
+    assert body and len(body) > 5000
+    assert "first half of 2026" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(interim, body, ticker="ADYEN.AS")
+    assert valid, reason
+
+
 def test_fetch_filings_ir_allowlist_aex_kpn_as_builtins(tmp_path: Path):
     """eng-20261002-01: KPN.AS awaiting_periodic_report — ir.kpn.com FY2025 IAR + H1 interim PDFs."""
     allowlist_path = tmp_path / "ir.json"

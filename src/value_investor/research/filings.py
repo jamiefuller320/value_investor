@@ -245,7 +245,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "ADYEN.AS": [
         "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEyMjMwOCwidGltZXN0YW1wIjoxNzc1NTY0MjQ0LCJ2ZXJzaW9uIjoxNzcyNjkwMjA3fQ:adyen:DEcCEo4XPo3eDfzj-fjMZ366g2pQkuoZMPARCHC5BoE/download",
         "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjU2NjkxLCJ0aW1lc3RhbXAiOjE3NDEzNDgzNDEsInZlcnNpb24iOjE3NDEzNDgyMDV9:adyen:kj44Bpqibw5DHCvRHFCwtnzOuM88_WWzAKJ1odHfCfY/download",
-        "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjgyOTA3LCJ0aW1lc3RhbXAiOjE3NTU3NjI1ODEsInZlcnNpb24iOjE3NTU3NjI1NTh9:adyen:AnY4yqsJ-O5B_fRhiYXZpTaJ2RO2xhk5zUPFwcJanNc/download",
+        "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
     ],
     # aex leftover awaiting_periodic_report — KPN.AS ESEF lag; ir.kpn.com Q4 CDN statutory PDFs.
     "KPN.AS": [
@@ -4968,6 +4968,10 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     "https://announcements.asx.com.au/asxpdf/20260511/pdf/06zg0w0pw5rswl.pdf": (
         "https://investorpa.com/announcement-pdf/20260511/291611.pdf"
     ),
+    # eng-20261002-13: H1 2025 Frontify asset slug fails monitor live-fetch; H1 2026 letter on IR.
+    "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjgyOTA3LCJ0aW1lc3RhbXAiOjE3NTU3NjI1ODEsInZlcnNpb24iOjE3NTU3NjI1NTh9:adyen:AnY4yqsJ-O5B_fRhiYXZpTaJ2RO2xhk5zUPFwcJanNc/download": (
+        "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download"
+    ),
     # eng-20260924-01: saint-gobain.com regulated-information hub is bot-gated (403).
     "https://www.saint-gobain.com/en/finance/regulated-information": (
         "https://files.webdisclosure.com/1391369/CP_Resultats_2025_VA_t.pdf"
@@ -5170,7 +5174,7 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # eng-20260930-01: Adyen brand.adyen.com Frontify asset slugs (opaque; avoid false FY token hits).
     "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEyMjMwOCwidGltZXN0YW1wIjoxNzc1NTY0MjQ0LCJ2ZXJzaW9uIjoxNzcyNjkwMjA3fQ:adyen:DEcCEo4XPo3eDfzj-fjMZ366g2pQkuoZMPARCHC5BoE/download": "annual",
     "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjU2NjkxLCJ0aW1lc3RhbXAiOjE3NDEzNDgzNDEsInZlcnNpb24iOjE3NDEzNDgyMDV9:adyen:kj44Bpqibw5DHCvRHFCwtnzOuM88_WWzAKJ1odHfCfY/download": "annual",
-    "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjgyOTA3LCJ0aW1lc3RhbXAiOjE3NTU3NjI1ODEsInZlcnNpb24iOjE3NTU3NjI1NTh9:adyen:AnY4yqsJ-O5B_fRhiYXZpTaJ2RO2xhk5zUPFwcJanNc/download": "interim",
+    "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download": "interim",
     # euro_depth thin_memo — opaque issuer CMS/API filenames (system_gaps BN.PA / EL.PA).
     "https://www.danone.com/content/dam/corp/global/danonecom/investors/en-all-publications/2026/registrationdocuments/danoneurdaccessible.pdf": "annual",
     "https://www.essilorluxottica.com/api/getCapContent/?download=true&id=284350": "annual",
