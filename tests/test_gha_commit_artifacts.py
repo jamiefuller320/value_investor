@@ -409,6 +409,16 @@ def test_daily_hub_sidecar_workflows_share_concurrency() -> None:
         assert "cancel-in-progress: false" in text
 
 
+def test_daily_hub_sidecars_pass_gh_token_for_pages_dispatch() -> None:
+    """gh workflow run pages.yml needs GH_TOKEN; missing env failed Daily discuss 2026-10-02."""
+    for name in ("daily-focus-ack.yml", "daily-discuss.yml"):
+        text = Path(f".github/workflows/{name}").read_text(encoding="utf-8")
+        assert "scripts/dispatch_pages.sh" in text
+        # Deploy step must set GH_TOKEN (same pattern as paper-auto / ops-monitor).
+        deploy_block = text.split("Deploy dashboard to GitHub Pages", 1)[1]
+        assert "GH_TOKEN: ${{ github.token }}" in deploy_block.split("- name:", 1)[0]
+
+
 def test_artifact_commit_merges_daily_focus_acks_on_race(tmp_path: Path):
     """Discuss overlay must union remote accept rows, not replace the store."""
     remote, work = _seed_repo(tmp_path)
