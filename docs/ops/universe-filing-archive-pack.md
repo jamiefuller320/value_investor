@@ -1,11 +1,11 @@
 # Universe-wide filing archive / data-pack lane (cold store)
 
-**Status:** Isolation + miss-rate observe + fail-open hydrate scaffolds shipped; **gated
-dry pack lane runnable** (week-first plan + bottleneck review). Archive
-**writers still parked** pending a thin quiet-window pilot (euro fat released
-2026-10-01). Do **not** add a second live crawler or a fourth equal sprint stream.
-**Deferred:** **L499** (thin writer pilot); **N180** (live crawler / fourth stream);
-**N181** (eng self-improve authority).
+**Status:** Isolation + miss-rate observe + fail-open hydrate + **thin quiet
+`--apply` writers** shipped (week-first plan, tiny `max_units`, archive budgets).
+Weekday 22:00 UTC cron runs bounded apply under `archive_lane_gate`. Do **not**
+add a second live crawler or a fourth equal sprint stream.
+**Deferred:** **N180** (live crawler / fourth stream); **N181** (eng self-improve);
+**L521** (status panel). **L499** writers pilot is live — scale cautiously.
 **Source:** [Project conversation](https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a)
 
 ## Learning question
@@ -64,20 +64,21 @@ Best-effort “low priority” without those controls is not sufficient.
 Module: `universe_filing_archive_pack_order.py` (`PACK_ORDER_ID=week_first_then_backward`).
 This order must **not** drive `euro-ingest-loop` / sprint streams.
 
-## Runnable gated lane (dry today)
+## Runnable gated lane (thin apply)
 
 | Piece | Role |
 |-------|------|
 | Workflow | `.github/workflows/universe-filing-archive-pack.yml` — cron `0 22 * * 1-5` |
 | Gate | `archive_lane_gate` — suspend on focus fat / stuck; `quiet_only` outside band; fail-open exit 0 |
-| Runner | `ftse-universe-archive-pack` → `run_universe_filing_archive_pack` |
-| Last run | `docs/data/universe_filing_archive_pack_run.json` |
-| Bottleneck review | `docs/data/universe_filing_archive_bottleneck_review.json` (post-run timings / throughput / errors by stage·market·source) |
+| Runner | `ftse-universe-archive-pack --apply --max-units 2 --max-http-fetches 8` |
+| Writers | `universe_filing_archive_writer` → cold root `docs/data/archive/universe_filings/` (gitignored) |
+| Last run | `docs/data/universe_filing_archive_pack_run.json` (includes `capacity_isolation`) |
+| Bottleneck review | `docs/data/universe_filing_archive_bottleneck_review.json` |
 | Ops-monitor | `check_universe_filing_archive_pack_bottleneck` — stale review warn; suspend outcomes do **not** warn |
 
-While `mode=sprint` ∧ ¬`ingest_sprint_complete` (euro fat today), the 22:00 UTC job **runs and no-ops** with `outcome=suspend`, still refreshing the bottleneck review so the observe instrument stays fresh.
+While `mode=sprint` ∧ ¬`ingest_sprint_complete`, the 22:00 UTC job **runs and no-ops** with `outcome=suspend`, still refreshing the bottleneck review.
 
-Writers / real fetches remain parked — dry assemble records the week-first plan only.
+Apply caps (pilot): `max_units=2`, ≤2 tickers/unit, ≤1 body/ticker, ≤8 HTTP fetches/run, archive budget IDs only (`universe_filing_archive:*`), preemptible, `fourth_equal_sprint_stream=false`.
 
 ## Shipped scaffolds
 
@@ -85,7 +86,8 @@ Writers / real fetches remain parked — dry assemble records the week-first pla
 |-------|-------------------|------|
 | Isolation firewall + quiet window | `universe_filing_archive_isolation.py` → `archive_lane_gate` | Separate budget IDs, preemptible, focus-pressure auto-suspend, quiet-window preference |
 | Week-first pack order | `universe_filing_archive_pack_order.py` | Archive-only coverage order |
-| Gated dry pack run | `universe_filing_archive_pack_run.py` + workflow | Gate → plan → dry assemble → bottleneck review |
+| Gated pack run | `universe_filing_archive_pack_run.py` + workflow | Gate → plan → dry or thin apply → bottleneck review |
+| Thin writers | `universe_filing_archive_writer.py` | Bounded fetch + cold `pack_index` / raw / normalized |
 | Miss-rate observe | `universe_filing_archive_miss_rate.py` → `docs/data/universe_filing_archive_miss_rate.json` | Outcome proxy only — **not** a writer start gate |
 | Fail-open hydrate | `universe_filing_archive_hydrate.py` → `try_hydrate_pack` | Pack hit accelerates; miss/error always continues live deepen |
 | Ops wiring | miss-rate + bottleneck checks in ops-monitor; L460 optional commit for miss-rate; observe-utilization card for miss-rate | Full automation bar for observe instruments |
@@ -106,18 +108,16 @@ Writers / real fetches remain parked — dry assemble records the week-first pla
 |----------|------|
 | Focus fat released (`sprint_ingest_complete`) | No steal of P2 fat slot — **met** for `euro_depth` as of 2026-10-01 |
 | `archive_lane_gate` allow | Quiet band + no focus-pressure suspend |
-| Capacity isolation | Separate source budgets; preemptible; max-concurrency 1; no shared-quota collision with maintenance/spares |
-| Thin writer pilot | Implement quiet poll→fetch→normalize→zstd path; tiny `max_units` first |
+| Capacity isolation | Archive budget IDs + hard HTTP fetch cap; recorded on each `pack_run` as `capacity_isolation` |
+| Thin writer pilot | **Shipped** — quiet apply with tiny caps |
 | **N180** | No second live crawler / fourth equal sprint stream |
 | **N181** | No eng-spray / self-improve authority from archive findings |
 
 Miss-rate observe stays wired for learning / dashboard attention — it does **not** block or unlock writers.
 
-## Revisit trigger (engine / writers)
+## Scale / revisit (after pilot nights)
 
-Focus ingest head at **maintenance threshold** (`sprint_ingest_complete`) **and**
-`archive_lane_gate` allows (quiet, no focus pressure) **and** a thin writer pilot
-is ready under separate budgets — **then** unpark quiet cold-store fetches.
-Do **not** wait for elevated miss-rate. Keep **N180** (live crawler / fourth stream)
-and **N181** (eng self-improve) parked. Use bottleneck review trajectories to tune
-pack stages after writers unpark; use miss-rate to measure whether packs helped.
+Keep caps tiny until several quiet nights show `capacity_isolation.isolation_ok=true`
+and no shared 429 / runner collision with euro maintenance or spare sprints. Then
+raise `max_units` / fetch caps gradually. Keep **N180** / **N181** parked. Use
+bottleneck review to tune stages; use miss-rate to measure whether packs helped.

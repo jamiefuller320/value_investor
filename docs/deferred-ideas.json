@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-02T08:57:28+00:00",
+  "updated_at": "2026-10-02T10:53:42+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8479,8 +8479,8 @@
       "category": "later",
       "section": "universe",
       "title": "Universe-wide filing archive / data-pack lane (cold store)",
-      "summary": "Gated dry pack lane shipped (week-first plan, Mon\u2013Fri 22:00 UTC workflow, bottleneck review). Isolation/hydrate scaffolds remain; miss-rate is observe-only (not a writer start gate \u2014 collect-while-easy). Cold-store writers still need a thin quiet-window pilot under archive_lane_gate + separate budgets; must not compete with P2 fat while active or become a fourth equal sprint (N180).",
-      "revisit_when": "Focus ingest head at sprint_ingest_complete (euro fat released) AND archive_lane_gate allows (quiet, no focus pressure) AND thin writer pilot ready under separate source budgets \u2014 then unpark quiet cold-store fetches. Do not wait for elevated miss-rate.",
+      "summary": "Thin quiet --apply cold-store writers shipped (week-first plan, max_units=2, archive budgets, gitignored cold root). Miss-rate remains observe-only. Scale caps only after quiet nights prove isolation_ok; keep N180/N181 parked.",
+      "revisit_when": "Several quiet apply nights with capacity_isolation.isolation_ok and no shared 429/runner collision vs euro maintenance or spare sprints \u2014 then raise max_units / fetch caps gradually",
       "tags": [
         "universe",
         "ingest",
@@ -12520,6 +12520,19 @@
       "source": "https://cursor.com/agents/bc-218fff67-a0fc-576c-8efc-f4bd760011c6",
       "added_at": "2026-10-02T08:57:28+00:00",
       "updated_at": "2026-10-02T08:57:28+00:00"
+    },
+    {
+      "id": "frag-20261002-02",
+      "text": "2026-10-02: cold-store thin writer pilot shipped \u2014 blockers (writers + capacity isolation instrumentation) addressed under archive_lane_gate; scale still gated; N180/N181 kept.",
+      "tags": [
+        "archive",
+        "L499",
+        "writers"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-218fff67-a0fc-576c-8efc-f4bd760011c6",
+      "added_at": "2026-10-02T10:53:42+00:00",
+      "updated_at": "2026-10-02T10:53:42+00:00"
     }
   ],
   "schema_version": 1

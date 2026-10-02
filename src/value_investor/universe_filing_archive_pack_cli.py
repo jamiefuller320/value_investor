@@ -1,7 +1,7 @@
-"""CLI for the gated universe filing archive pack lane (week-first dry pass).
+"""CLI for the gated universe filing archive pack lane (week-first pass).
 
 Production path is the weekday 22:00 UTC workflow. This CLI is for ad-hoc
-drill-down and local dry runs. Always consults ``archive_lane_gate``.
+drill-down and local dry/apply runs. Always consults ``archive_lane_gate``.
 """
 
 from __future__ import annotations
@@ -23,21 +23,26 @@ from value_investor.universe_filing_archive_pack_run import (
     format_bottleneck_review_summary,
     run_universe_filing_archive_pack,
 )
+from value_investor.universe_filing_archive_writer import (
+    DEFAULT_APPLY_MAX_UNITS,
+    DEFAULT_MAX_HTTP_FETCHES,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Universe filing archive pack lane: gate → week-first plan → dry "
-            "assemble → bottleneck review. Fail-open suspend under focus fat."
+            "Universe filing archive pack lane: gate → week-first plan → "
+            "dry or thin apply assemble → bottleneck review. Fail-open suspend "
+            "under focus fat."
         )
     )
     parser.add_argument(
         "--apply",
         action="store_true",
         help=(
-            "Request apply mode (writers still parked — records "
-            "apply_requested_but_writers_parked; no crawler)"
+            "Thin quiet cold-store writers (archive budgets, tiny max_units "
+            f"default {DEFAULT_APPLY_MAX_UNITS}; not a fourth equal sprint)"
         ),
     )
     parser.add_argument(
@@ -60,7 +65,16 @@ def main(argv: list[str] | None = None) -> int:
         "--max-units",
         type=int,
         default=None,
-        help="Optional cap on week×market coverage units",
+        help=(
+            "Cap on week×market coverage units "
+            f"(apply default {DEFAULT_APPLY_MAX_UNITS} when omitted)"
+        ),
+    )
+    parser.add_argument(
+        "--max-http-fetches",
+        type=int,
+        default=DEFAULT_MAX_HTTP_FETCHES,
+        help=f"Hard archive-lane HTTP fetch cap (default {DEFAULT_MAX_HTTP_FETCHES})",
     )
     parser.add_argument(
         "--dispatch-path",
@@ -105,6 +119,7 @@ def main(argv: list[str] | None = None) -> int:
         allow_outside_quiet_for_pilot=bool(args.allow_outside_quiet),
         lookback_weeks=int(args.lookback_weeks),
         max_units=args.max_units,
+        max_http_fetches=int(args.max_http_fetches),
         dispatch_path=Path(args.dispatch_path),
         market_status_path=Path(args.market_status_path),
         policy_path=Path(args.policy_path),

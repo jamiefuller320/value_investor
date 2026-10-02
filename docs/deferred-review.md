@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-02T08:57:28+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-02T10:53:42+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -335,7 +335,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L311 | **ASX announcement history beyond Markit latest-five** | Markit Digital returns at most five rows per symbol with no public pagination, so thin names (JBH.AX, DNL.AX) index dividend/news instead of statutory reports. IR allowlists are the current workaround. A historical announcements.asx.com.au or AFR company-announcements listing would remove the need to hand-seed each thin ticker. | More than two asx200 buy-tier names are thin_need_discovery after IR seeds, or Markit exposes a paginated feed |
 | L312 | **Add observe-sim benchmark if a sprint stream stays on a market without one** | Sprint-2 currently holds ftse_smallcap, which has no MARKET_BENCHMARKS entry, so Sunday observe-sim does not write a dated screen archive. Gap analysis correctly ignores it. If a no-benchmark market stays on a sprint stream for more than a couple of weeks, add a local index ticker so the archive clock can follow ingest effort. | A parallel sprint stream has held a market missing MARKET_BENCHMARKS for two Sunday ladders |
 | L346 | **Bootstrap CCL-B.TO zero-body leftover on TSX 60** | After GIB-A.TO left unmeasured, S&P/TSX 60 still has one zero-body buy-tier name (CCL Industries Class B). Same class-share discovery issues may apply; it cannot be parked and still blocks sprint_ingest_complete. | TSX 60 spare sprint is otherwise at leftover thin/IWB only, or the next ingest loop still reports zero_body_stuck on CCL-B.TO |
-| L499 | **Universe-wide filing archive / data-pack lane (cold store)** | Gated dry pack lane shipped (week-first plan, Mon–Fri 22:00 UTC workflow, bottleneck review). Isolation/hydrate scaffolds remain; miss-rate is observe-only (not a writer start gate — collect-while-easy). Cold-store writers still need a thin quiet-window pilot under archive_lane_gate + separate budgets; must not compete with P2 fat while active or become a fourth equal sprint (N180). | Focus ingest head at sprint_ingest_complete (euro fat released) AND archive_lane_gate allows (quiet, no focus pressure) AND thin writer pilot ready under separate source budgets — then unpark quiet cold-store fetches. Do not wait for elevated miss-rate. |
+| L499 | **Universe-wide filing archive / data-pack lane (cold store)** | Thin quiet --apply cold-store writers shipped (week-first plan, max_units=2, archive budgets, gitignored cold root). Miss-rate remains observe-only. Scale caps only after quiet nights prove isolation_ok; keep N180/N181 parked. | Several quiet apply nights with capacity_isolation.isolation_ok and no shared 429/runner collision vs euro maintenance or spare sprints — then raise max_units / fetch caps gradually |
 
 ### Research & portfolio product
 

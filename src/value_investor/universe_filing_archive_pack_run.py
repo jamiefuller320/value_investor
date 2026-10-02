@@ -4,15 +4,17 @@ Minimum runnable lane under ``archive_lane_gate``:
 
 - Quiet window + focus-pressure suspend (fail-open exit 0)
 - Week-first then iterative-backward pack plan (no fourth sprint stream)
-- Dry assemble by default (writers parked pending thin quiet pilot; not a
-  miss-rate start gate; no live crawler / fourth equal sprint)
-- Post-run bottleneck review artifact for pipeline tuning (observe-only)
+- Dry assemble by default; ``--apply`` runs the thin quiet cold-store writer
+  pilot (tiny max_units, archive budgets only — not a fourth equal sprint)
+- Post-run bottleneck review artifact for pipeline tuning (no eng-spray)
 
 Artifacts:
 
 - ``docs/data/universe_filing_archive_pack_run.json`` — last run summary
 - ``docs/data/universe_filing_archive_bottleneck_review.json`` — stage timings /
   throughput / errors by market (and source when fetches exist)
+- Cold packs under ``docs/data/archive/universe_filings/`` (apply only; not
+  committed by the weekday workflow)
 """
 
 from __future__ import annotations
@@ -35,6 +37,15 @@ from value_investor.universe_filing_archive_pack_order import (
     PACK_ORDER_ID,
     build_week_first_pack_plan,
     summarize_plan_by_week,
+)
+from value_investor.universe_filing_archive_hydrate import DEFAULT_COLD_ROOT
+from value_investor.universe_filing_archive_writer import (
+    DEFAULT_APPLY_MAX_UNITS,
+    DEFAULT_LIBRARY_ROOT,
+    DEFAULT_MAX_BODIES_PER_TICKER,
+    DEFAULT_MAX_HTTP_FETCHES,
+    DEFAULT_MAX_TICKERS_PER_UNIT,
+    assemble_archive_pack_units,
 )
 
 SCHEMA_VERSION = 1
@@ -233,7 +244,10 @@ def build_bottleneck_review(
                 ),
             }
         )
-    if dominant and dominant_share >= DEFAULT_DOMINANT_STAGE_SHARE and outcome == "dry_complete":
+    if dominant and dominant_share >= DEFAULT_DOMINANT_STAGE_SHARE and outcome in {
+        "dry_complete",
+        "apply_complete",
+    }:
         bottlenecks.append(
             {
                 "kind": "dominant_stage",
@@ -257,7 +271,7 @@ def build_bottleneck_review(
         "pack_order": PACK_ORDER_ID,
         "outcome": outcome,
         "dry_run": dry_run,
-        "observe_only": True,
+        "observe_only": True,  # bottleneck never eng-sprays (N181)
         "auto_rewrite_deepen": False,
         "gate": {
             "decision": gate.get("decision"),
@@ -432,9 +446,17 @@ def _finalize_and_persist(
     pack_run_path: Path,
     bottleneck_path: Path,
     persist: bool,
+    assemble: dict[str, Any] | None = None,
+    max_units: int | None = None,
 ) -> dict[str, Any]:
     write_timer = _StageTimer("write_artifacts")
     write_timer.start()
+    assemble = assemble or {}
+    isolation = (
+        assemble.get("capacity_isolation")
+        if isinstance(assemble.get("capacity_isolation"), dict)
+        else {}
+    )
     pack_run = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": clock.isoformat(),
@@ -454,14 +476,26 @@ def _finalize_and_persist(
         "markets": list(roster),
         "plan_unit_count": int(plan.get("unit_count") or 0),
         "lookback_weeks": int(plan.get("lookback_weeks") or lookback_weeks),
+        "max_units": max_units,
         "fourth_equal_sprint_stream": False,
         "preemptible": True,
+        "units_attempted": int(assemble.get("units_attempted") or 0),
+        "units_completed": int(assemble.get("units_completed") or 0),
+        "objects_written": int(assemble.get("objects_written") or 0),
+        "hydrate_hits": int(assemble.get("hydrate_hits") or 0),
+        "capacity_isolation": isolation,
+        "assemble_caps": assemble.get("caps") or {},
         "bottleneck_review_path": str(bottleneck_path),
         "week_summary": summarize_plan_by_week(plan)[:4] if plan.get("units") else [],
         "note": (
             "Week-first archive pack pass under archive_lane_gate. "
-            "Writers/crawler still parked while focus fat sprint is active; "
-            "bottleneck review is observe-only."
+            "Apply uses thin quiet cold-store writers (archive budgets, tiny caps); "
+            "not a fourth equal sprint; bottleneck never eng-sprays (N180/N181)."
+            if not dry_run
+            else (
+                "Week-first archive pack dry pass under archive_lane_gate. "
+                "Use --apply for thin quiet cold-store writers."
+            )
         ),
     }
     try:
@@ -484,6 +518,7 @@ def _finalize_and_persist(
 
     bn_timer = _StageTimer("bottleneck_review")
     bn_timer.start()
+    by_source = assemble.get("by_source") if isinstance(assemble.get("by_source"), dict) else None
     review = build_bottleneck_review(
         run_id=run_id,
         generated_at=clock,
@@ -493,7 +528,13 @@ def _finalize_and_persist(
         stages=stages,
         dry_run=dry_run,
         errors=errors,
+        by_source=by_source,
     )
+    review["throughput"]["units_attempted"] = int(assemble.get("units_attempted") or 0)
+    review["throughput"]["units_completed"] = int(assemble.get("units_completed") or 0)
+    review["throughput"]["objects_written"] = int(assemble.get("objects_written") or 0)
+    if isolation:
+        review["capacity_isolation"] = isolation
     bn_row = bn_timer.finish("ok", bottlenecks=len(review.get("bottlenecks") or []))
     stages.append(bn_row)
     review["stages"] = list(stages)
@@ -508,6 +549,7 @@ def _finalize_and_persist(
         "pack_run": pack_run,
         "bottleneck_review": review,
         "exit_code": exit_code,
+        "assemble": assemble,
     }
 
 
@@ -524,13 +566,23 @@ def run_universe_filing_archive_pack(
     policy_path: Path = DEFAULT_POLICY_PATH,
     pack_run_path: Path = DEFAULT_PACK_RUN_PATH,
     bottleneck_path: Path = DEFAULT_BOTTLENECK_PATH,
+    cold_root: Path = DEFAULT_COLD_ROOT,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    max_tickers_per_unit: int = DEFAULT_MAX_TICKERS_PER_UNIT,
+    max_bodies_per_ticker: int = DEFAULT_MAX_BODIES_PER_TICKER,
+    max_http_fetches: int = DEFAULT_MAX_HTTP_FETCHES,
     persist: bool = True,
     force_allow_for_test: bool = False,
+    discover_fn: Any | None = None,
+    body_fetch_fn: Any | None = None,
 ) -> dict[str, Any]:
     """Execute one gated archive pack pass (dry by default) + bottleneck review.
 
     Always fail-open for cron: suspend / quiet_only outcomes still exit success
     at the CLI layer and still write the bottleneck review.
+
+    When ``dry_run=False``, runs the thin quiet writer pilot with archive-only
+    budgets and tiny caps (default ``max_units`` = ``DEFAULT_APPLY_MAX_UNITS``).
     """
     clock = now or _now()
     if clock.tzinfo is None:
@@ -538,11 +590,16 @@ def run_universe_filing_archive_pack(
     else:
         clock = clock.astimezone(UTC)
 
+    effective_max_units = max_units
+    if not dry_run and effective_max_units is None:
+        effective_max_units = DEFAULT_APPLY_MAX_UNITS
+
     run_id = f"uap-{clock.strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:8]}"
     stages: list[dict[str, Any]] = []
     errors: list[str] = []
     plan: dict[str, Any] = {}
     roster: list[str] = []
+    assemble: dict[str, Any] = {}
 
     gate_timer = _StageTimer("gate")
     gate_timer.start()
@@ -590,7 +647,7 @@ def run_universe_filing_archive_pack(
         outcome = "suspend" if decision == "suspend" else "quiet_only"
         stages.append(_StageTimer("roster").skip(outcome))
         stages.append(_StageTimer("pack_plan").skip(outcome))
-        stages.append(_StageTimer("assemble_dry").skip(outcome))
+        stages.append(_StageTimer("assemble_dry" if dry_run else "assemble").skip(outcome))
         return _finalize_and_persist(
             run_id=run_id,
             clock=clock,
@@ -605,6 +662,7 @@ def run_universe_filing_archive_pack(
             pack_run_path=Path(pack_run_path),
             bottleneck_path=Path(bottleneck_path),
             persist=persist,
+            max_units=effective_max_units,
         )
 
     roster_timer = _StageTimer("roster")
@@ -627,7 +685,7 @@ def run_universe_filing_archive_pack(
             roster,
             as_of=clock,
             lookback_weeks=lookback_weeks,
-            max_units=max_units,
+            max_units=effective_max_units,
         )
         stages.append(
             plan_timer.finish(
@@ -635,6 +693,7 @@ def run_universe_filing_archive_pack(
                 unit_count=int(plan.get("unit_count") or 0),
                 lookback_weeks=int(plan.get("lookback_weeks") or lookback_weeks),
                 pack_order=PACK_ORDER_ID,
+                max_units=effective_max_units,
             )
         )
     except Exception as exc:  # noqa: BLE001
@@ -642,32 +701,77 @@ def run_universe_filing_archive_pack(
         errors.append(f"pack_plan: {exc}")
         plan = {}
 
-    assemble_timer = _StageTimer("assemble_dry")
+    stage_name = "assemble_dry" if dry_run else "assemble"
+    assemble_timer = _StageTimer(stage_name)
     assemble_timer.start()
     try:
-        mode = "dry" if dry_run else "apply_requested_but_writers_parked"
-        stages.append(
-            assemble_timer.finish(
-                "ok",
-                mode=mode,
-                units_planned=int(plan.get("unit_count") or 0),
-                units_fetched=0,
-                note=(
-                    "Dry assemble — plan only; no source fetches"
-                    if dry_run
-                    else (
-                        "Cold-store writers remain parked pending thin quiet-window "
-                        "pilot (fat released + archive_lane_gate + capacity isolation); "
-                        "miss-rate is observe-only, not a start gate"
-                    )
-                ),
+        if dry_run:
+            assemble = {
+                "mode": "dry",
+                "units_planned": int(plan.get("unit_count") or 0),
+                "units_attempted": 0,
+                "units_completed": 0,
+                "objects_written": 0,
+                "capacity_isolation": {
+                    "lane_budget": ARCHIVE_LANE_BUDGET_ID,
+                    "source_budgets_used": [],
+                    "http_fetches": 0,
+                    "shared_critical_path": False,
+                    "isolation_ok": True,
+                    "preemptible": True,
+                    "fourth_equal_sprint_stream": False,
+                },
+            }
+            stages.append(
+                assemble_timer.finish(
+                    "ok",
+                    mode="dry",
+                    units_planned=int(plan.get("unit_count") or 0),
+                    units_fetched=0,
+                    note="Dry assemble — plan only; no source fetches",
+                )
             )
-        )
+        else:
+            assemble = assemble_archive_pack_units(
+                plan,
+                cold_root=Path(cold_root),
+                library_root=Path(library_root),
+                max_tickers_per_unit=int(max_tickers_per_unit),
+                max_bodies_per_ticker=int(max_bodies_per_ticker),
+                max_http_fetches=int(max_http_fetches),
+                discover_fn=discover_fn,
+                body_fetch_fn=body_fetch_fn,
+            )
+            for err in assemble.get("errors") or []:
+                errors.append(str(err))
+            stages.append(
+                assemble_timer.finish(
+                    "ok",
+                    mode="apply",
+                    units_planned=int(assemble.get("units_planned") or 0),
+                    units_attempted=int(assemble.get("units_attempted") or 0),
+                    units_completed=int(assemble.get("units_completed") or 0),
+                    objects_written=int(assemble.get("objects_written") or 0),
+                    http_fetches=int(
+                        (assemble.get("capacity_isolation") or {}).get("http_fetches") or 0
+                    ),
+                    isolation_ok=bool(
+                        (assemble.get("capacity_isolation") or {}).get("isolation_ok")
+                    ),
+                    note=str(assemble.get("note") or "Thin quiet cold-store assemble"),
+                )
+            )
     except Exception as exc:  # noqa: BLE001
         stages.append(assemble_timer.fail(exc))
         errors.append(f"assemble: {exc}")
 
-    outcome = "error" if errors else "dry_complete"
+    if errors and not dry_run and int(assemble.get("units_completed") or 0) == 0:
+        outcome = "error"
+    elif dry_run:
+        outcome = "error" if errors else "dry_complete"
+    else:
+        outcome = "apply_complete"
+
     return _finalize_and_persist(
         run_id=run_id,
         clock=clock,
@@ -682,6 +786,8 @@ def run_universe_filing_archive_pack(
         pack_run_path=Path(pack_run_path),
         bottleneck_path=Path(bottleneck_path),
         persist=persist,
+        assemble=assemble,
+        max_units=effective_max_units,
     )
 
 

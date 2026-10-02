@@ -1,9 +1,10 @@
 name: Universe filing archive pack
 
 # Quiet-window cold archive lane (L499). Week-first then iterative-backward pack
-# plan under archive_lane_gate. Preemptible, max concurrency 1, NOT a fourth
-# equal sprint stream. Suspends while focus fat sprint is active (euro_depth
-# today). Writes bottleneck review for observe-only pipeline tuning.
+# under archive_lane_gate. Preemptible, max concurrency 1, NOT a fourth equal
+# sprint stream. Thin --apply writers use archive budgets + tiny max_units.
+# Suspends while focus fat sprint is active. Cold blobs stay on the runner;
+# only pack_run + bottleneck review are committed.
 # See docs/ops/universe-filing-archive-pack.md
 on:
   schedule:
@@ -12,7 +13,7 @@ on:
   workflow_dispatch:
     inputs:
       allow_outside_quiet:
-        description: "Pilot: allow daytime dry run (still suspends on focus pressure)"
+        description: "Pilot: allow daytime run (still suspends on focus pressure)"
         type: boolean
         default: false
       lookback_weeks:
@@ -20,20 +21,24 @@ on:
         type: string
         default: "12"
       max_units:
-        description: "Optional cap on week×market units (empty = uncapped)"
+        description: "Cap on week×market units (apply pilot default 2)"
         type: string
-        default: ""
+        default: "2"
       apply:
-        description: "Request apply mode (writers still parked — no crawler)"
+        description: "Thin quiet cold-store writers (archive budgets; tiny caps)"
         type: boolean
-        default: false
+        default: true
+      max_http_fetches:
+        description: "Hard archive-lane HTTP fetch cap"
+        type: string
+        default: "8"
 
 permissions:
   contents: write
 
 concurrency:
   group: universe-filing-archive-pack
-  # Preemptible: a newer dispatch cancels an in-flight dry pass.
+  # Preemptible: a newer dispatch cancels an in-flight pass.
   cancel-in-progress: true
 
 jobs:
@@ -50,24 +55,29 @@ jobs:
       - name: Install package
         run: bash scripts/gha_pip_install.sh -e .
 
-      - name: Run gated archive pack (dry / suspend fail-open)
+      - name: Run gated archive pack (thin apply / suspend fail-open)
         id: pack
         env:
+          EVENT_NAME: ${{ github.event_name }}
           ALLOW_OUTSIDE_QUIET: ${{ github.event.inputs.allow_outside_quiet || 'false' }}
-          APPLY: ${{ github.event.inputs.apply || 'false' }}
+          APPLY_INPUT: ${{ github.event.inputs.apply }}
           LOOKBACK_WEEKS: ${{ github.event.inputs.lookback_weeks || '12' }}
-          MAX_UNITS: ${{ github.event.inputs.max_units || '' }}
+          MAX_UNITS: ${{ github.event.inputs.max_units || '2' }}
+          MAX_HTTP_FETCHES: ${{ github.event.inputs.max_http_fetches || '8' }}
         run: |
           set -euo pipefail
-          ARGS=(--lookback-weeks "${LOOKBACK_WEEKS}")
+          # Schedule always applies; workflow_dispatch honors apply input (default true).
+          if [ "${EVENT_NAME}" = "schedule" ] || [ -z "${APPLY_INPUT}" ] || [ "${APPLY_INPUT}" = "true" ]; then
+            APPLY=true
+          else
+            APPLY=false
+          fi
+          ARGS=(--lookback-weeks "${LOOKBACK_WEEKS}" --max-units "${MAX_UNITS}" --max-http-fetches "${MAX_HTTP_FETCHES}")
           if [ "${ALLOW_OUTSIDE_QUIET}" = "true" ]; then
             ARGS+=(--allow-outside-quiet)
           fi
           if [ "${APPLY}" = "true" ]; then
             ARGS+=(--apply)
-          fi
-          if [ -n "${MAX_UNITS}" ]; then
-            ARGS+=(--max-units "${MAX_UNITS}")
           fi
           # Exit 0 on suspend/quiet_only; writes pack_run + bottleneck review.
           ftse-universe-archive-pack "${ARGS[@]}"
@@ -78,10 +88,16 @@ jobs:
           run = json.loads(Path("docs/data/universe_filing_archive_pack_run.json").read_text())
           review = json.loads(Path("docs/data/universe_filing_archive_bottleneck_review.json").read_text())
           outcome = run.get("outcome") or ""
+          isolation = run.get("capacity_isolation") or {}
           print(f"outcome={outcome}")
           print(f"pack_order={run.get('pack_order')}")
+          print(f"dry_run={run.get('dry_run')}")
           print(f"gate={run.get('gate')}")
           print(f"plan_unit_count={run.get('plan_unit_count')}")
+          print(f"units_completed={run.get('units_completed')}")
+          print(f"objects_written={run.get('objects_written')}")
+          print(f"isolation_ok={isolation.get('isolation_ok')}")
+          print(f"http_fetches={isolation.get('http_fetches')}")
           print(f"bottlenecks={len(review.get('bottlenecks') or [])}")
           out = Path(os.environ["GITHUB_OUTPUT"])
           with out.open("a", encoding="utf-8") as fh:
