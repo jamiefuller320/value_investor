@@ -6,8 +6,9 @@ Archive packs are a **best-effort accelerator**. On activate/hydrate:
 - On miss / hole / error → fall through to live deepen
 - Never block the active regime on pack holes
 
-No cold-store writers live here — only path layout + hydrate lookup.
-Until packs exist, every call returns ``status=miss`` with ``fail_open=True``.
+Writers live in ``universe_filing_archive_writer``; this module is path layout +
+fail-open hydrate lookup only. Missing packs return ``status=miss`` with
+``fail_open=True``.
 """
 
 from __future__ import annotations
