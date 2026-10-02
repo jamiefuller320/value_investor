@@ -18153,8 +18153,117 @@
       },
       "trigger": "stall_slowdown",
       "engineering_task_id": "eng-20261002-08"
+    },
+    {
+      "id": "igc-20261002-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "BIDU",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "TME"
+        ],
+        "market_id": "us_adr_asia",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261002-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-02T07:55:32.347629+00:00",
+      "completed_at": "2026-10-02T07:56:23.040127+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "TME"
+        ],
+        "results": [
+          {
+            "ticker": "TME",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 44,
+              "filings_with_body": 33,
+              "indexed_without_body": 11
+            },
+            "after": {
+              "filings_total": 44,
+              "filings_with_body": 33,
+              "indexed_without_body": 11
+            },
+            "improved": false,
+            "regime": "sec_edgar",
+            "filings_summary": {
+              "total": 44,
+              "annual": 2,
+              "interim": 42,
+              "trading_update": 0,
+              "other": 0,
+              "with_body": 33,
+              "period_coverage": {
+                "annual": {
+                  "total": 2,
+                  "with_body": 2
+                },
+                "interim": {
+                  "total": 42,
+                  "with_body": 31
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 0,
+                  "with_body": 0
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 33,
+              "with_body_after": 33,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "TME",
+            "with_body_before": 33,
+            "with_body_after": 33,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-10-02T07:46:57.007613+00:00",
+  "updated_at": "2026-10-02T07:56:23.040136+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
