@@ -263,6 +263,7 @@ def test_daily_hub_history_session_and_status_chips() -> None:
     assert "function renderDailyHubHistorySession(" in text
     assert "function renderDailyHubStatusChips(" in text
     assert "function renderDailyHubAssessment(" in text
+    assert "function formatDailyHubAssessmentProse(" in text
     assert "function isDailyHubStale(" in text
     assert "function londonLocalDate(" in text
     assert "Accept followed" in text
@@ -272,7 +273,11 @@ def test_daily_hub_history_session_and_status_chips() -> None:
     assert "daily-hub-history" in text
     assert "daily-hub-today" in text
     assert "daily-hub-assessment" in text
+    assert "daily-assess-prose" in text
     assert "Waiting for" in text
+    assert "not stated" not in text.split("function renderDailyHubAssessment(", 1)[1].split(
+        "\nfunction renderDailyHubHistorySession(", 1
+    )[0]
     panel = text.split("function renderDailyHubPanel(", 1)[1].split(
         "\n/** Canonical Project-chat pickup phrase", 1
     )[0]
@@ -280,6 +285,7 @@ def test_daily_hub_history_session_and_status_chips() -> None:
     assert "isDailyHubStale(hub)" in panel
     assert "counts.market_warnings" in panel
     assert "Market warning triage" in panel
+    assert "formatDailyHubAssessmentProse(assess, status" in panel
     card = text.split("function renderDailyHubTaskCard(", 1)[1].split(
         "\nfunction renderDailyHubPanel(", 1
     )[0]
@@ -289,7 +295,7 @@ def test_daily_hub_history_session_and_status_chips() -> None:
     assert ".daily-hub-history" in css
     assert ".daily-hub-accept-streak" in css
     assert ".daily-hub-assessment" in css
-    assert ".daily-assess-key" in css
+    assert ".daily-assess-prose" in css
 
 
 def test_daily_hub_accept_passes_focus_ack_decision() -> None:

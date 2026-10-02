@@ -6183,20 +6183,19 @@ function renderDailyHubStatusChips(status, { compact = false } = {}) {
   return `${chip}${next}${waiting}`;
 }
 
-function renderDailyHubAssessment(task) {
-  const assessment =
-    (task && task.assessment) ||
-    (task && task.status && task.status.assessment) ||
-    null;
-  const status = (task && task.status) || null;
-  if (!assessment && !status) return "";
+/**
+ * Compose Daily hub assessment into one prose blurb.
+ * Structured fields stay in JSON; UI only shows what is relevant (no "not stated").
+ */
+function formatDailyHubAssessmentProse(assessment, status, opts) {
+  const options = opts || {};
+  const skipWhere = String(options.skipWhere || "").trim();
   const where =
     (assessment && assessment.where_we_are) ||
     (status && status.label) ||
     "";
   const stageLabel = (assessment && assessment.stage_label) || "";
-  const duration =
-    (assessment && assessment.stage_duration) || "duration unknown";
+  const duration = (assessment && assessment.stage_duration) || "";
   const since = (assessment && assessment.stage_since) || "";
   const waitingFor =
     (assessment && assessment.waiting_for) ||
@@ -6211,50 +6210,72 @@ function renderDailyHubAssessment(task) {
   const nextAll = Array.isArray(status && status.next_steps)
     ? status.next_steps.filter(Boolean)
     : [];
-  const incomplete = Array.isArray(assessment && assessment.incomplete_fields)
-    ? assessment.incomplete_fields
-    : [];
-  const durationTitle = since
-    ? `since ${since}`
-    : "no stage_since — builder does not invent dates";
-  const rows = [
-    where
-      ? `<div class="daily-assess-row"><span class="muted daily-assess-key">Where</span> <span class="daily-assess-val">${esc(
-          where
-        )}</span></div>`
-      : "",
-    `<div class="daily-assess-row"><span class="muted daily-assess-key">In stage</span> <span class="daily-assess-val" title="${esc(
-      durationTitle
-    )}">${esc(duration)}${
-      stageLabel ? ` · ${esc(stageLabel)}` : ""
-    }${since ? ` · since ${esc(since)}` : ""}</span></div>`,
-    waitingFor
-      ? `<div class="daily-assess-row"><span class="muted daily-assess-key">Waiting for</span> <span class="daily-assess-val">${esc(
-          waitingFor
-        )}</span></div>`
-      : `<div class="daily-assess-row daily-assess-missing"><span class="muted daily-assess-key">Waiting for</span> <span class="muted daily-assess-val">not stated</span></div>`,
-    how
-      ? `<div class="daily-assess-row"><span class="muted daily-assess-key">How</span> <span class="daily-assess-val">${esc(
-          how
-        )}</span></div>`
-      : `<div class="daily-assess-row daily-assess-missing"><span class="muted daily-assess-key">How</span> <span class="muted daily-assess-val">not stated</span></div>`,
-  ];
-  if (nextAll.length > 1) {
-    rows.push(
-      `<div class="daily-assess-row"><span class="muted daily-assess-key">Next</span> <span class="daily-assess-val">${esc(
-        nextAll.join(" · ")
-      )}</span></div>`
+  const sentences = [];
+  const whereTrim = String(where || "").trim();
+  if (whereTrim && whereTrim !== skipWhere) {
+    sentences.push(/[.!?]$/.test(whereTrim) ? whereTrim : `${whereTrim}.`);
+  }
+  // Skip bare "proposed" + "duration unknown" — that is seed noise, not status.
+  const stageBits = [];
+  if (stageLabel && stageLabel !== "proposed") stageBits.push(stageLabel);
+  if (duration && duration !== "duration unknown") stageBits.push(duration);
+  if (since) stageBits.push(`since ${since}`);
+  if (stageBits.length) {
+    sentences.push(`In stage: ${stageBits.join(" · ")}.`);
+  }
+  const waitTrim = String(waitingFor || "").trim();
+  if (waitTrim) {
+    sentences.push(
+      /^waiting\b/i.test(waitTrim)
+        ? /[.!?]$/.test(waitTrim)
+          ? waitTrim
+          : `${waitTrim}.`
+        : `Waiting for ${waitTrim}.`
     );
   }
-  const incompleteNote =
-    incomplete.length > 0
-      ? `<div class="small muted daily-assess-incomplete">Incomplete: ${esc(
-          incomplete.join(", ")
-        )} (observe-only — fill via notes Where:/Since:/Waiting on:/How: or seed)</div>`
-      : "";
-  return `<div class="daily-hub-assessment" role="group" aria-label="Task assessment">
-    ${rows.filter(Boolean).join("")}
-    ${incompleteNote}
+  const howTrim = String(how || "").trim();
+  if (howTrim) {
+    sentences.push(/[.!?]$/.test(howTrim) ? howTrim : `${howTrim}.`);
+  }
+  if (nextAll.length > 1) {
+    const rest = nextAll.slice(howTrim ? 1 : 0).filter(Boolean);
+    if (rest.length) {
+      sentences.push(`Next: ${rest.join(" · ")}.`);
+    }
+  }
+  return sentences.join(" ").trim();
+}
+
+function renderDailyHubAssessment(task) {
+  const assessment =
+    (task && task.assessment) ||
+    (task && task.status && task.status.assessment) ||
+    null;
+  const status = (task && task.status) || null;
+  if (!assessment && !status) return "";
+  // Prefer a coherent paragraph; fall back to where/summary so the card still
+  // answers "why is this on the list?" when stage/waiting/how are empty.
+  let prose = formatDailyHubAssessmentProse(assessment, status, {});
+  if (!prose) {
+    const fallback = String(
+      (assessment && assessment.where_we_are) ||
+        (task && task.summary) ||
+        (status && status.label) ||
+        ""
+    ).trim();
+    if (fallback) {
+      prose = /[.!?]$/.test(fallback) ? fallback : `${fallback}.`;
+    }
+  }
+  if (!prose) return "";
+  const durationTitle =
+    assessment && assessment.stage_since
+      ? `since ${assessment.stage_since}`
+      : "no stage_since — builder does not invent dates";
+  return `<div class="daily-hub-assessment" role="group" aria-label="Task assessment" title="${esc(
+    durationTitle
+  )}">
+    <p class="daily-assess-prose">${esc(prose)}</p>
   </div>`;
 }
 
@@ -6444,29 +6465,18 @@ function renderDailyHubPanel(data) {
       const task = (hub.tasks || []).find((t) => t.task_ref === line.id) || {};
       const status = task.status || line.status || null;
       const assess = task.assessment || (status && status.assessment) || line.assessment || null;
-      const whereBit =
-        assess && assess.where_we_are
-          ? `<div class="small daily-assess-focus-where">${esc(assess.where_we_are)}</div>`
-          : "";
-      const waitBit =
-        assess && assess.waiting_for
-          ? `<div class="small muted">Waiting for: ${esc(assess.waiting_for)}</div>`
-          : "";
-      const howBit =
-        assess && assess.how_achieved
-          ? `<div class="small muted">How: ${esc(assess.how_achieved)}</div>`
-          : "";
-      const durBit =
-        assess && assess.stage_duration
-          ? `<div class="small muted">In stage: ${esc(assess.stage_duration)}${
-              assess.stage_since ? ` · since ${esc(assess.stage_since)}` : ""
-            }</div>`
-          : "";
+      const summary = String(line.summary || "").trim();
+      const prose = formatDailyHubAssessmentProse(assess, status, {
+        skipWhere: summary,
+      });
+      const proseBit = prose
+        ? `<div class="small daily-assess-focus-prose">${esc(prose)}</div>`
+        : "";
       return `<li><strong>${esc(line.title || "")}</strong>
         <span class="badge badge-neutral">${esc(line.source || "focus")}</span>
         ${renderDailyHubStatusChips(status, { compact: true })}
-        <div class="small muted">${esc(line.summary || "")}</div>
-        ${whereBit}${durBit}${waitBit}${howBit}</li>`;
+        <div class="small muted">${esc(summary)}</div>
+        ${proseBit}</li>`;
     })
     .join("");
   const openTasks = (hub.tasks || []).filter((t) => !t.closed);
