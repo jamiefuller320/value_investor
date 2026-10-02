@@ -1,9 +1,7 @@
 {
   "market_id": "atx",
-  "assessed_at": "2026-10-02T16:40:24.098522+00:00",
-  "unmeasured": [
-    "CAI.VI"
-  ],
+  "assessed_at": "2026-10-02T17:18:23.883359+00:00",
+  "unmeasured": [],
   "zero_body": [],
   "indexed_without_body": [
     {
@@ -19,29 +17,30 @@
       "filings_with_body": 2
     }
   ],
-  "thin_need_discovery": [],
+  "thin_need_discovery": [
+    "CAI.VI"
+  ],
   "thin_need_bodies": [
     "WIE.VI",
     "EVN.VI"
   ],
-  "primary_blocker": "unmeasured",
+  "primary_blocker": "indexed_without_body",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "CAI.VI",
     "EVN.VI",
     "WIE.VI"
   ],
   "recommended_actions": [
-    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
     "Prefer indexed-without-body body refetch (2 tickers, top: EVN.VI(1), WIE.VI(1))",
+    "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 1,
+    "unmeasured": 0,
     "zero_body": 0,
     "indexed_without_body_tickers": 2,
     "indexed_without_body_rows": 2,
-    "thin_need_discovery": 0,
+    "thin_need_discovery": 1,
     "thin_need_bodies": 2
   }
 }
