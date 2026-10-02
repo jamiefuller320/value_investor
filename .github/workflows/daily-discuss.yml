@@ -201,4 +201,7 @@ jobs:
       # [skip ci] on the discuss commit skips pages.yml push — dispatch so live hub updates.
       - name: Deploy dashboard to GitHub Pages
         if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_ACTIONS: "true"
         run: bash scripts/dispatch_pages.sh
