@@ -603,6 +603,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "0291.HK": [
         "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0423/2026042300830.pdf",
     ],
+    # sti buy-tier deepen — eng-20261002-14: BUOU.SI unmeasured — asia_filings Google News
+    # misses statutory results; seed SGX links.sgx.com PDFs (flct.frasersproperty.com is WAF-gated).
+    "BUOU.SI": [
+        "https://links.sgx.com/1.0.0/corporate-announcements/531D1L1A4ZGIBBAO/870400_FLCT%20-%20Annual%20Report%202025.pdf",
+        "https://links.sgx.com/1.0.0/corporate-announcements/WKFS34K5F6T83U1G/866254_FLCT%20-%202HFY25%20Condensed%20Interim%20FS.pdf",
+        "https://links.sgx.com/1.0.0/corporate-announcements/WKFS34K5F6T83U1G/866255_FLCT%20-%20FY2025%20Press%20Release.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -5198,6 +5205,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042401364.pdf": "annual",
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0326/2026032600824.pdf": "annual",
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0423/2026042300830.pdf": "annual",
+    # eng-20261002-14: BUOU.SI — 2HFY25 slug reads interim but is full-year condensed FS.
+    "https://links.sgx.com/1.0.0/corporate-announcements/WKFS34K5F6T83U1G/866254_FLCT%20-%202HFY25%20Condensed%20Interim%20FS.pdf": "annual",
 }
 
 
