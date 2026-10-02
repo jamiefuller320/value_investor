@@ -4,7 +4,8 @@ Minimum runnable lane under ``archive_lane_gate``:
 
 - Quiet window + focus-pressure suspend (fail-open exit 0)
 - Week-first then iterative-backward pack plan (no fourth sprint stream)
-- Dry assemble by default (writers/crawler still parked while euro fat)
+- Dry assemble by default (writers parked pending thin quiet pilot; not a
+  miss-rate start gate; no live crawler / fourth equal sprint)
 - Post-run bottleneck review artifact for pipeline tuning (observe-only)
 
 Artifacts:
@@ -655,7 +656,9 @@ def run_universe_filing_archive_pack(
                     "Dry assemble — plan only; no source fetches"
                     if dry_run
                     else (
-                        "Cold-store writers remain gated until euro graduation + miss-rate evidence"
+                        "Cold-store writers remain parked pending thin quiet-window "
+                        "pilot (fat released + archive_lane_gate + capacity isolation); "
+                        "miss-rate is observe-only, not a start gate"
                     )
                 ),
             )

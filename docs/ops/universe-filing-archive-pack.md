@@ -1,15 +1,20 @@
 # Universe-wide filing archive / data-pack lane (cold store)
 
-**Status:** Isolation + miss-rate + fail-open hydrate scaffolds shipped; **gated
+**Status:** Isolation + miss-rate observe + fail-open hydrate scaffolds shipped; **gated
 dry pack lane runnable** (week-first plan + bottleneck review). Archive
-**writers / crawler still parked** while focus fat sprint is active.
-Do **not** add a second live crawler or a fourth equal sprint stream.
-**Deferred:** **L499** (engine/writers gate); **N180** (crawler / fourth stream).
+**writers still parked** pending a thin quiet-window pilot (euro fat released
+2026-10-01). Do **not** add a second live crawler or a fourth equal sprint stream.
+**Deferred:** **L499** (thin writer pilot); **N180** (live crawler / fourth stream);
+**N181** (eng self-improve authority).
 **Source:** [Project conversation](https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a)
 
 ## Learning question
 
 When names rotate into buy-tier, what is the **miss rate** of first-memo / body-lag because no prior archive bodies existed — vs buy-tier-only deepen catching up in time?
+
+Miss-rate is an **outcome / observe instrument** for that question — **not** a start
+gate for cold-store collection. Waiting for live-path miss-rate to degrade before
+archiving runs counter to collect-while-easy / week-first cold store.
 
 ## Idea (user)
 
@@ -23,10 +28,11 @@ A separate archival engine (possibly a separate repo) that:
 
 | Decision | Rationale |
 |----------|-----------|
-| Useful as **cold archive later**, not a second live ingest now | Must not compete with euro fat-slot / P2 focus head (`euro_depth` or successor) |
+| Useful as **cold archive**, not a second live ingest | Must not compete with euro fat-slot / P2 focus head (`euro_depth` or successor) while fat is active; once fat is released, quiet offline collection is in-scope |
 | Prefer **offline lane in-repo** before a separate repo | Non-interfering collation; separate repo only if size/ops evidence demands it |
 | Prefer **raw originals + zstd + normalized text** first | Proprietary compact format only after size/retrieval evidence |
-| Gate engine on miss-rate evidence + isolation | Isolation / quiet-window / fail-open hydrate + **gated dry pack** may ship **without** stealing the fat slot; the **crawler / pack writer** waits for maintenance threshold |
+| **Do not** gate writers on miss-rate ≥50% | Collect-while-easy: elevated miss-rate means it is already too late for those flips; keep miss-rate observe-only |
+| Gate writers on isolation + fat release + thin pilot | Quiet window, `archive_lane_gate`, separate budgets, no fourth equal sprint (**N180**), no eng-spray (**N181**) |
 
 ### Conditional benefit
 
@@ -80,27 +86,38 @@ Writers / real fetches remain parked — dry assemble records the week-first pla
 | Isolation firewall + quiet window | `universe_filing_archive_isolation.py` → `archive_lane_gate` | Separate budget IDs, preemptible, focus-pressure auto-suspend, quiet-window preference |
 | Week-first pack order | `universe_filing_archive_pack_order.py` | Archive-only coverage order |
 | Gated dry pack run | `universe_filing_archive_pack_run.py` + workflow | Gate → plan → dry assemble → bottleneck review |
-| Miss-rate observe | `universe_filing_archive_miss_rate.py` → `docs/data/universe_filing_archive_miss_rate.json` | Flip-lag proxy: enter without key bodies ≈ archive miss |
+| Miss-rate observe | `universe_filing_archive_miss_rate.py` → `docs/data/universe_filing_archive_miss_rate.json` | Outcome proxy only — **not** a writer start gate |
 | Fail-open hydrate | `universe_filing_archive_hydrate.py` → `try_hydrate_pack` | Pack hit accelerates; miss/error always continues live deepen |
 | Ops wiring | miss-rate + bottleneck checks in ops-monitor; L460 optional commit for miss-rate; observe-utilization card for miss-rate | Full automation bar for observe instruments |
 | CLI drill-down | `ftse-ingest-audit --archive-miss-rate`; `ftse-universe-archive-pack` | Ad-hoc only |
 
 ## Explicit non-goals (still)
 
-- Second live crawler parallel to `euro-ingest-loop` / sprint streams.
+- Second live crawler parallel to `euro-ingest-loop` / sprint streams (**N180**).
 - Proprietary binary filing format as v1.
 - Forking shard AI-judgment or live-path utilization work to “fill the archive.”
 - Fourth equal sprint stream / weekend full-universe crawl.
-- Auto-rewriting live deepen from bottleneck review (observe/report first).
+- Auto-rewriting live deepen from bottleneck / miss-rate (observe/report first; **N181**).
+- Waiting for miss-rate ≥50% before cold-store collection.
 
-## Still parked (euro graduation)
+## Gates for cold-store writers (real fetches)
 
-| Item | Gate |
-|------|------|
-| Cold-store writers / real pack assemble fetches | Focus head at `sprint_ingest_complete` **and** isolation gate allows **and** miss-rate evidence |
-| Separate-repo packaging | Only if size/ops evidence demands it |
-| Promoting miss-rate / bottleneck → eng spray | Never from observe alone |
+| Required | Role |
+|----------|------|
+| Focus fat released (`sprint_ingest_complete`) | No steal of P2 fat slot — **met** for `euro_depth` as of 2026-10-01 |
+| `archive_lane_gate` allow | Quiet band + no focus-pressure suspend |
+| Capacity isolation | Separate source budgets; preemptible; max-concurrency 1; no shared-quota collision with maintenance/spares |
+| Thin writer pilot | Implement quiet poll→fetch→normalize→zstd path; tiny `max_units` first |
+| **N180** | No second live crawler / fourth equal sprint stream |
+| **N181** | No eng-spray / self-improve authority from archive findings |
+
+Miss-rate observe stays wired for learning / dashboard attention — it does **not** block or unlock writers.
 
 ## Revisit trigger (engine / writers)
 
-Focus ingest head (`euro_depth` or successor) at **maintenance threshold** (`sprint_ingest_complete`) **and** `docs/data/universe_filing_archive_miss_rate.json` shows material enter-without-bodies — **before** proposing a second live crawler or separate archive repo. Use bottleneck review trajectories to tune pack stages after writers unpark.
+Focus ingest head at **maintenance threshold** (`sprint_ingest_complete`) **and**
+`archive_lane_gate` allows (quiet, no focus pressure) **and** a thin writer pilot
+is ready under separate budgets — **then** unpark quiet cold-store fetches.
+Do **not** wait for elevated miss-rate. Keep **N180** (live crawler / fourth stream)
+and **N181** (eng self-improve) parked. Use bottleneck review trajectories to tune
+pack stages after writers unpark; use miss-rate to measure whether packs helped.
