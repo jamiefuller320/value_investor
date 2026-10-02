@@ -6780,6 +6780,36 @@ def test_parked_source_hunter_adyen_as_aex_has_fetchable_ir():
     assert valid, reason
 
 
+def test_fetch_filings_ir_allowlist_aex_kpn_as_builtins(tmp_path: Path):
+    """eng-20261002-01: KPN.AS awaiting_periodic_report — ir.kpn.com FY2025 IAR + H1 interim PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("KPN.AS", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all("q4cdn.com" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_kpn_as_aex_has_fetchable_ir():
+    """eng-20261002-01: KPN.AS has live q4cdn FY2025 integrated annual report PDF."""
+    assert "KPN.AS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("KPN.AS")
+    annual_2025 = next(
+        row
+        for row in rows
+        if row["period"] == "annual" and "Integrated-Annual-Report-2025" in row["url"]
+    )
+    body = fetch_filing_body(annual_2025["url"])
+    assert body and len(body) > 5000
+    assert "integrated annual report" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(annual_2025, body, ticker="KPN.AS")
+    assert valid, reason
+
+
 def test_fetch_filings_ir_allowlist_ftse_mib_unmeasured_builtins_eng_20260926_01(
     tmp_path: Path,
 ):
