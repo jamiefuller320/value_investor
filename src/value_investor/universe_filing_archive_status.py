@@ -193,9 +193,7 @@ def build_universe_filing_archive_status(
         clock = clock.astimezone(UTC)
 
     run = _as_dict(pack_run if pack_run is not None else _safe_read(Path(pack_run_path)))
-    review = _as_dict(
-        bottleneck if bottleneck is not None else _safe_read(Path(bottleneck_path))
-    )
+    review = _as_dict(bottleneck if bottleneck is not None else _safe_read(Path(bottleneck_path)))
 
     present = bool(run)
     generated_at = _parse_dt(run.get("generated_at"))
@@ -219,9 +217,7 @@ def build_universe_filing_archive_status(
 
     clash_flags = {
         "isolation_ok": isolation.get("isolation_ok"),
-        "shared_critical_path": bool(isolation.get("shared_critical_path"))
-        if isolation
-        else None,
+        "shared_critical_path": bool(isolation.get("shared_critical_path")) if isolation else None,
         "fourth_equal_sprint_stream": bool(
             run.get("fourth_equal_sprint_stream")
             if run.get("fourth_equal_sprint_stream") is not None
