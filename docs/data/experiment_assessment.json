@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-10-01T08:29:05.548745+00:00",
+  "updated_at": "2026-10-02T08:29:58.424952+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -27,13 +27,13 @@
     "entry_dca_ready": true
   },
   "summary": {
-    "proposed": 1,
-    "recommend": 3,
     "continue": 6,
-    "fail": 5,
     "observing": 0,
+    "fail": 5,
+    "recommend": 3,
+    "proposed": 2,
     "human_ack_pending": 2,
-    "total": 15
+    "total": 16
   },
   "experiments": [
     {
@@ -54,10 +54,10 @@
         "sector_cap": 0.2,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 30,
-      "gate_excess_after_costs": -0.2308,
-      "excess_vs_primary": 0.1306,
-      "excess_vs_rules": 0.2028,
+      "gate_marks": 31,
+      "gate_excess_after_costs": -0.2143,
+      "excess_vs_primary": 0.1304,
+      "excess_vs_rules": 0.2024,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated/calibration_provenance.json"
     },
@@ -79,10 +79,10 @@
         "sector_cap": 0.25,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 27,
-      "gate_excess_after_costs": -0.1964,
-      "excess_vs_primary": 0.165,
-      "excess_vs_rules": 0.2372,
+      "gate_marks": 28,
+      "gate_excess_after_costs": -0.1801,
+      "excess_vs_primary": 0.1646,
+      "excess_vs_rules": 0.2366,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r2/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -105,10 +105,10 @@
         "sector_cap": 0.3,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 27,
-      "gate_excess_after_costs": -0.1966,
-      "excess_vs_primary": 0.1648,
-      "excess_vs_rules": 0.237,
+      "gate_marks": 28,
+      "gate_excess_after_costs": -0.1803,
+      "excess_vs_primary": 0.1644,
+      "excess_vs_rules": 0.2364,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r3/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -125,9 +125,9 @@
       "track_id": "ai_judgment_exclusion_u4",
       "exclusion_ladder_step_id": "u4",
       "parent_track_id": "ai_judgment",
-      "gate_marks": 17,
-      "gate_excess_after_costs": -0.1752,
-      "excess_vs_parent": 0.1862,
+      "gate_marks": 18,
+      "gate_excess_after_costs": -0.1588,
+      "excess_vs_parent": 0.1859,
       "gate_uses_post_seed": true,
       "evidence_path": "docs/data/paper_automation/ai_judgment_exclusion_u4/exclusion_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -144,7 +144,7 @@
       "track_id": "graduated_allocation",
       "gate_marks": 25,
       "gate_excess_after_costs": -0.0018,
-      "excess_vs_primary": 0.3596,
+      "excess_vs_primary": 0.3429,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": false,
@@ -163,9 +163,9 @@
       "source_status": "failed",
       "human_ack_required": false,
       "track_id": "momentum_grace",
-      "gate_marks": 38,
-      "gate_excess_after_costs": -0.0824,
-      "excess_vs_primary": 0.279,
+      "gate_marks": 39,
+      "gate_excess_after_costs": -0.0661,
+      "excess_vs_primary": 0.2786,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": true,
@@ -195,7 +195,8 @@
       "initiated_at": "2026-09-04T08:29:30.298700+00:00",
       "human_acked": true,
       "acked_at": "2026-09-13T17:41:11.138086+00:00",
-      "ack_decision": "ack_observe"
+      "ack_decision": "ack_observe",
+      "superseded_by": "entry_dca_timing_shift_overlay"
     },
     {
       "experiment_id": "ana-20260728-04",
@@ -608,6 +609,32 @@
         }
       },
       "evidence_path": "docs/data/learning_director_tasks.json"
+    },
+    {
+      "experiment_id": "entry_dca_timing_shift_overlay",
+      "kind": "lifecycle_overlay_refinement",
+      "title": "DCA timing-shift overlay cadences (Q1 post-graduation)",
+      "area": "paper_churn",
+      "pipeline": "refinement_progression",
+      "status": "proposed",
+      "source_status": "graduation_hook",
+      "human_ack_required": false,
+      "parent_id": "entry_dca_overlay",
+      "refinement_of": "entry_dca_overlay",
+      "observe_only": true,
+      "influences_live": false,
+      "refinement_instrument": "observe_overlay_cadences",
+      "forward_evidence": {
+        "source": "refinement_progression",
+        "opened_by": "graduation_hook",
+        "opened_at": "2026-10-02T08:29:58.423469+00:00",
+        "graduation_signal": "execute_started",
+        "gate": "dca_completed_window_or_execute_stage",
+        "llm_evidence_required": false,
+        "note": "First post-graduation DCA refinement: front-load vs equal weekly as extra overlay cadences on existing episodes. No new paper book."
+      },
+      "evidence_path": null,
+      "initiated_at": "2026-10-02T08:29:58.423469+00:00"
     }
   ],
   "recommendations": [
@@ -679,6 +706,67 @@
     ],
     "note": "Human review/implementation plan for the 2026-09-13 overlay recommend. Never auto-apply. Revisit on Sunday or when first-entry windows close."
   },
+  "refinement_progression": {
+    "observe_only": true,
+    "influences_live": false,
+    "opened": [
+      {
+        "child_id": "entry_dca_timing_shift_overlay",
+        "parent_id": "entry_dca_overlay",
+        "status": "open",
+        "opened_at": "2026-10-02T08:29:58.423469+00:00",
+        "graduation_signal": "execute_started",
+        "instrument": "observe_overlay_cadences",
+        "kind": "lifecycle_overlay_refinement",
+        "observe_only": true,
+        "influences_live": false,
+        "title": "DCA timing-shift overlay cadences (Q1 post-graduation)"
+      }
+    ],
+    "skipped_count": 2,
+    "satisfied": [
+      {
+        "parent_id": "still_in_buy_set",
+        "instrument": "twin_already_open",
+        "graduation_signal": "twin_present",
+        "noted_at": "2026-10-02T08:29:58.423469+00:00",
+        "title": "Sell-gate churn twin already open",
+        "note": "still_in_buy_set Suite A twin is the capital-path churn instrument; do not spawn a duplicate sell-gate refinement book."
+      }
+    ],
+    "progression_triggers": [
+      {
+        "id": "dca_timing_shift_after_graduation",
+        "when": "entry_dca_overlay human-acked, paper_execute_graduated ready, or execute_started — and cadence analysis / completed-window readiness",
+        "open": "entry_dca_timing_shift_overlay",
+        "mode": "observe_overlay_cadences",
+        "do_not": "Mid-flight rewrite of graduated_allocation cadence or primary books"
+      },
+      {
+        "id": "dca_tranche_count_after_timing_shift",
+        "when": "Timing-shift child lane observing with thick completed-window marks",
+        "open": "entry_dca_tranche_count_overlay",
+        "mode": "observe_overlay_cadences",
+        "do_not": "Open dynamic sizing (Q3) before fixed timing/count marks"
+      },
+      {
+        "id": "sell_gate_twin_already_open",
+        "when": "Sell/churn gate graduates or is adopted",
+        "open": null,
+        "mode": "twin_already_open",
+        "do_not": "Spawn a second sell-gate paper book; use still_in_buy_set twin"
+      },
+      {
+        "id": "llm_judge_ab_after_disagreement_theme",
+        "when": "learning_tracks_llm_agree_veto shows ≥2 tracks with veto-on-sell and ≥3 veto_sell total",
+        "open": "llm_agree_veto_judge_ab",
+        "mode": "observe_judge_spec_ab",
+        "do_not": "Hard veto or live prompt swap — N173/L510; challenger influences_live=false"
+      }
+    ],
+    "lanes_path": "docs/data/refinement_lanes.json",
+    "note": "On graduation/adoption success, auto-registers the next observe refinement child (parent_id / refinement_of). Never mid-flight rewrites live books; LLM challenger stays fail-closed without a disagreement theme."
+  },
   "task_sync": {
     "updated": [
       "ana-20260728-04",
@@ -700,6 +788,7 @@
     "learning_director_tasks": "docs/data/learning_director_tasks.json",
     "trajectory_evidence_review": "docs/data/trajectory_evidence_review.json",
     "experiment_acks": "docs/data/experiment_acks.json",
-    "entry_dca_adoption_plan": "docs/data/entry_dca_adoption_plan.json"
+    "entry_dca_adoption_plan": "docs/data/entry_dca_adoption_plan.json",
+    "refinement_lanes": "docs/data/refinement_lanes.json"
   }
 }

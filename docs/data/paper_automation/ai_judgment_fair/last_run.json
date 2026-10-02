@@ -1,15 +1,31 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-01T09:28:21.594314+01:00",
+    "local_time": "2026-10-02T09:28:55.610032+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-10-01T08:00:00+01:00",
-    "settle_at": "2026-10-01T09:15:00+01:00",
+    "market_open_at": "2026-10-02T08:00:00+01:00",
+    "settle_at": "2026-10-02T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "4c56e988-c1b2-4212-8347-c5ed53869ea5",
+      "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
+      "acted_at": "2026-10-02T09:28:55.610032+01:00",
+      "ticker": "PPH.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.00658,
+      "price": 1480.0,
+      "gross": 9.74,
+      "cost": 0.05,
+      "net_cash": -9.79,
+      "note": "Automated buy",
+      "name": "PPHE Hotel Group Limited"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +39,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 851.28,
-    "cash": 9.79,
+    "nav": 861.95,
+    "cash": -0.0,
     "max_positions": 3,
     "min_conviction": 0.6,
     "sector_cap": 0.2,
@@ -36,28 +52,28 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 283.76,
+    "target_sleeve_value": 287.32,
     "targets": [
       {
         "ticker": "KLR.L",
         "name": "Keller Group plc",
         "signal": "buy",
-        "conviction_score": 0.9619000000000003,
-        "price": 3318.0
+        "conviction_score": 1.0,
+        "price": 3374.0
       },
       {
         "ticker": "PPH.L",
         "name": "PPHE Hotel Group Limited",
         "signal": "buy",
-        "conviction_score": 0.9233000000000002,
+        "conviction_score": 0.9733000000000003,
         "price": 1480.0
       },
       {
         "ticker": "PAF.L",
         "name": "Pan African Resources PLC",
         "signal": "strong_buy",
-        "conviction_score": 0.7449000000000002,
-        "price": 118.6
+        "conviction_score": 0.7949000000000003,
+        "price": 121.1
       }
     ],
     "anticipated_exits": [],
@@ -67,38 +83,27 @@
     "anticipated_holds": [
       {
         "action": "hold",
-        "ticker": "KLR.L",
-        "name": "Keller Group plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 278.73,
-        "target_value": 283.76,
-        "conviction_score": 0.9619000000000003,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
         "ticker": "PPH.L",
         "name": "PPHE Hotel Group Limited",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 277.31,
-        "target_value": 283.76,
-        "conviction_score": 0.9233000000000002,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "PAF.L",
-        "name": "Pan African Resources PLC",
         "reason": "Already near equal-weight target",
-        "value": 285.46,
-        "target_value": 283.76,
-        "conviction_score": 0.7449000000000002,
-        "signal": "strong_buy"
+        "value": 287.05,
+        "target_value": 287.32,
+        "conviction_score": 0.9733000000000003,
+        "signal": "buy"
       }
     ],
-    "skipped": [],
+    "skipped": [
+      {
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 287.32,
+        "conviction_score": 1.0,
+        "signal": "buy"
+      }
+    ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -107,7 +112,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3318.0,
+      "mark": 3374.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -129,7 +134,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 118.5999984741211,
+      "mark": 121.0999984741211,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -150,7 +155,7 @@
       "id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
       "created_at": "2026-09-01T14:23:57.454226+00:00"
     },
-    "cash": 9.79,
+    "cash": -0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -167,8 +172,8 @@
       },
       "PPH.L": {
         "ticker": "PPH.L",
-        "shares": 0.187371,
-        "avg_cost": 1550.0,
+        "shares": 0.193951,
+        "avg_cost": 1547.6251,
         "name": "PPHE Hotel Group Limited",
         "sector": "Consumer Cyclical",
         "currency": "GBP",
@@ -713,6 +718,21 @@
         "net_cash": -286.35,
         "note": "Automated buy",
         "name": "Pan African Resources PLC"
+      },
+      {
+        "id": "4c56e988-c1b2-4212-8347-c5ed53869ea5",
+        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
+        "acted_at": "2026-10-02T09:28:55.610032+01:00",
+        "ticker": "PPH.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.00658,
+        "price": 1480.0,
+        "gross": 9.74,
+        "cost": 0.05,
+        "net_cash": -9.79,
+        "note": "Automated buy",
+        "name": "PPHE Hotel Group Limited"
       }
     ],
     "equity_curve": [
@@ -1227,19 +1247,35 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-02T09:28:55.610032+01:00",
+        "portfolio_value": 861.95,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-01T09:28:21.594314+01:00",
+    "last_mark_at": "2026-10-02T09:28:55.610032+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-01T08:28:28.483902+00:00",
+    "generated_at": "2026-10-02T08:29:05.792994+00:00",
     "open_count": 13,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -1253,12 +1289,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "checkpoints_added_this_pass": 1
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-01T08:28:28.485018+00:00",
+    "generated_at": "2026-10-02T08:29:05.794366+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1355,8 +1391,8 @@
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 1,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -1364,8 +1400,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment_fair",
-    "updated_at": "2026-10-01T08:28:28.486445+00:00",
-    "as_of": "2026-10-01T09:28:21.594314+01:00",
+    "updated_at": "2026-10-02T08:29:05.796176+00:00",
+    "as_of": "2026-10-02T09:28:55.610032+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1422,12 +1458,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0452,
+        "unrealized_pct": -0.0437,
         "mark": 1480.0,
-        "avg_cost": 1550.0,
+        "avg_cost": 1547.6251,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9233,
+        "conviction_score": 0.9733,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1443,14 +1479,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 92%"
+          "conviction 97%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 92%"
+          "conviction 97%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1462,12 +1498,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0021,
-        "mark": 118.6,
+        "unrealized_pct": 0.0232,
+        "mark": 121.1,
         "avg_cost": 118.35,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7449,
+        "conviction_score": 0.7949,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1483,14 +1519,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 74%"
+          "conviction 79%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 74%"
+          "conviction 79%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1502,12 +1538,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.1134,
-        "mark": 3318.0,
+        "unrealized_pct": 0.1322,
+        "mark": 3374.0,
         "avg_cost": 2980.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9619,
+        "conviction_score": 1.0,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1523,14 +1559,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 96%"
+          "conviction 100%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 96%"
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1543,7 +1579,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-01T08:28:28.488140+00:00",
+    "generated_at": "2026-10-02T08:29:05.798233+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1610,7 +1646,7 @@
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
     "observe_only": true,
-    "generated_at": "2026-10-01T08:28:28.491658+00:00",
+    "generated_at": "2026-10-02T08:29:05.802708+00:00",
     "open_count": 2,
     "closed_count": 8,
     "scored_count": 7,
@@ -1671,13 +1707,13 @@
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
-    "marked_this_pass": 3,
-    "closed_this_pass": 1
+    "marked_this_pass": 2,
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-01T09:28:21.594314+01:00",
+    "generated_at": "2026-10-02T09:28:55.610032+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1734,37 +1770,214 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-01T09:28:21.594314+01:00",
+    "generated_at": "2026-10-02T09:28:55.610032+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
+    "judge_spec_id": "heuristic.v1",
+    "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 2,
+    "card_count": 2,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 2,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
-    "cards": [],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer.",
-    "review": {
-      "schema_version": 1,
-      "track_id": "ai_judgment_fair",
-      "generated_at": "2026-10-01T09:28:21.594314+01:00",
-      "observe_only": true,
-      "influences_live": false,
-      "judge_backend": "evidence_heuristic",
-      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
-      "verdict_counts": {
-        "agree": 0,
+    "by_algo_action": {
+      "rebuy_skip": {
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
+    "cards": [
+      {
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 2
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 2
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 1.0
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_fair",
+        "logged_at": "2026-10-02T09:28:55.610032+01:00",
+        "proposal_id": "ai_judgment_fair:KLR.L:rebuy_skip:2026-10-02T09:28:55.610032+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1"
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy into buyish target set \u2014 agree with algo selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 3
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 3
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.9733000000000003
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_fair",
+        "logged_at": "2026-10-02T09:28:55.610032+01:00",
+        "proposal_id": "ai_judgment_fair:PPH.L:buy:2026-10-02T09:28:55.610032+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1"
+        },
+        "schema_version": 1
+      }
+    ],
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
+    "review": {
+      "schema_version": 1,
+      "track_id": "ai_judgment_fair",
+      "generated_at": "2026-10-02T09:28:55.610032+01:00",
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+      "card_count": 2,
+      "verdict_counts": {
+        "agree": 2,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -1777,10 +1990,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-01T08:28:28.493266+00:00",
+  "generated_at": "2026-10-02T08:29:05.805039+00:00",
   "track_id": "ai_judgment_fair",
   "track_label": "AI judgment fair-cost lab (Suite B)",
   "is_primary_learning_track": false,

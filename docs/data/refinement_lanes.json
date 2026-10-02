@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-10-02T08:29:58.423653+00:00",
+  "observe_only": true,
+  "influences_live": false,
+  "lanes": [
+    {
+      "child_id": "entry_dca_timing_shift_overlay",
+      "parent_id": "entry_dca_overlay",
+      "status": "open",
+      "opened_at": "2026-10-02T08:29:58.423469+00:00",
+      "graduation_signal": "execute_started",
+      "instrument": "observe_overlay_cadences",
+      "kind": "lifecycle_overlay_refinement",
+      "observe_only": true,
+      "influences_live": false,
+      "title": "DCA timing-shift overlay cadences (Q1 post-graduation)"
+    }
+  ],
+  "satisfied": [
+    {
+      "parent_id": "still_in_buy_set",
+      "instrument": "twin_already_open",
+      "graduation_signal": "twin_present",
+      "noted_at": "2026-10-02T08:29:58.423469+00:00",
+      "title": "Sell-gate churn twin already open",
+      "note": "still_in_buy_set Suite A twin is the capital-path churn instrument; do not spawn a duplicate sell-gate refinement book."
+    }
+  ],
+  "note": "Graduation → refinement marks only. Not a dashboard registry; lineage lives on experiment_assessment rows (parent_id / refinement_of)."
+}
