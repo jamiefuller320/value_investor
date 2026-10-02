@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-02T06:32:53.736517+00:00",
+  "updated_at": "2026-10-02T11:03:57.351204+00:00",
   "items": [
     {
       "recommendation_id": "rec-6d2619c1c5ba",
@@ -319,6 +319,35 @@
       "queued_at": "2026-10-02T06:32:53.736517+00:00",
       "source": "dashboard_bridge",
       "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-e3faadfb7339`"
+    },
+    {
+      "recommendation_id": "rec-8c5618459335",
+      "task_id": "human:monthly-pr-fix-common-issues",
+      "local_date": "2026-10-02",
+      "status": "open",
+      "summary": "Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).",
+      "title": "Review common PR check / merge fix-request reasons",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues",
+      "discuss_prompt": "Discuss daily recommendation `rec-8c5618459335` (human task `monthly-pr-fix-common-issues`):\nTitle: Review common PR check / merge fix-request reasons\nSummary: Review new analysis on “Review common PR check / merge fix-request reasons”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: PR fix common issues\nSuggested options:\n1) Accept — Acknowledge via human-task-ack (observe-only)\n2) Approve gate if this is a promotion checklist item (still observe-only)\n3) Defer / rewrite runbook expectation\nSay: discuss daily recommendation `rec-8c5618459335` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "options": [
+        "Accept → Acknowledge (observe-only)",
+        "Open runbook / defer",
+        "Discuss in Project chat"
+      ],
+      "priority": 10,
+      "accept_action": {
+        "kind": "human-task-ack",
+        "payload": {
+          "decision": "ack_observe",
+          "finding_fingerprint": "34dc2f3e9369014d",
+          "task_id": "monthly-pr-fix-common-issues"
+        }
+      },
+      "work_class": "ops_gate",
+      "task_family": "monthly-pr-fix-common-issues",
+      "queued_at": "2026-10-02T11:03:57.351204+00:00",
+      "source": "dashboard_bridge",
+      "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-8c5618459335`"
     }
   ]
 }
