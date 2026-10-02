@@ -2900,6 +2900,16 @@ def run_ops_monitor(
     except Exception:  # noqa: BLE001 — dashboard slice must not fail ops monitor
         pass
 
+    try:
+        from value_investor.universe_filing_archive_status import (
+            write_universe_filing_archive_status,
+        )
+
+        # Thin L521 Ops panel — hours-since + next-widen from last pack_run.
+        write_universe_filing_archive_status()
+    except Exception:  # noqa: BLE001 — status panel must not fail ops monitor
+        pass
+
     return report
 
 

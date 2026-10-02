@@ -358,6 +358,10 @@ They do **not** deepen ingest or rememo.
 | `check_decision_input_inventory` | **FTSE decision-input utilization gap** | Dominant bind gap count ≥3 on FTSE holdings ∪ buy-tier (else quiet / `P1 green-enough`) | `docs/data/decision_input_inventory.json` | Live on main |
 | `check_universe_filing_archive_miss_rate` | **Universe archive body-miss rate elevated** | Flip-lag proxy miss rate elevated with open body gaps — observe-only outcome (not a cold-store start gate; N180/N181) | `docs/data/universe_filing_archive_miss_rate.json` | Scaffold live |
 | `check_universe_filing_archive_pack_bottleneck` | **Universe archive pack bottleneck review stale** / **… processing bottleneck** | Bottleneck review missing/stale (>36h) or dominant stage / errors on an allowed dry pass; suspend/quiet_only while euro fat does **not** warn | `docs/data/universe_filing_archive_bottleneck_review.json` (owned by `universe-filing-archive-pack.yml` @ 22:00 UTC weekdays) | Gated dry lane live |
+
+Thin **L521** Ops panel: `docs/data/universe_filing_archive_status.json` (last outcome,
+dry/apply, clash/`capacity_isolation` flags, next widen step). Written by the
+archive pack workflow and refreshed at end of ops-monitor. Dashboard: Automation → Ops.
 | `check_shard_nav_fx_warp` | **Shard NAV FX unit mismatch** | Non-GBP shard GBP book shows day-0 NAV≈FX and `buy_tier_level_native` is not yet active (N153) | `docs/data/shard_nav_fx_warp.json` | Live with N153 |
 
 Isolation firewall + fail-open hydrate + **week-first gated dry pack** (no crawler): see
@@ -373,8 +377,10 @@ state, **freshness / staleness**, and **trajectory** (delta vs last cycle;
 lower warn/gap = better). Prefer those trajectory indicators over
 non-contextual absolute counts. A `lagging` freshness badge now means a
 commit-path anomaly (stores should co-commit with `ops_status`); it is no
-longer an intentional gap. Archive pack run / bottleneck JSON are owned by the
-archive workflow (not L460) so ops-monitor cannot rewind a fresher pack pass.
+longer an intentional gap. Archive pack run / bottleneck / status-panel JSON are
+owned by the archive workflow (not L460) so ops-monitor cannot rewind a fresher
+pack pass; ops-monitor still refreshes `universe_filing_archive_status.json`
+hours-since / next-widen from the committed pack_run.
 
 ## Lifecycle maturity mix trajectory (L463)
 

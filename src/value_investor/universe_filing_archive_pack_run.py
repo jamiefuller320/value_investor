@@ -545,14 +545,30 @@ def _finalize_and_persist(
     review["stages"] = list(stages)
     review["throughput"]["total_elapsed_ms"] = sum(int(s.get("elapsed_ms") or 0) for s in stages)
     pack_run["outcome"] = outcome
+    status_payload: dict[str, Any] | None = None
     if persist:
         write_json(Path(pack_run_path), pack_run)
         write_json(Path(bottleneck_path), review)
+        try:
+            from value_investor.universe_filing_archive_status import (
+                write_universe_filing_archive_status,
+            )
+
+            status_payload = write_universe_filing_archive_status(
+                pack_run=pack_run,
+                bottleneck=review,
+                pack_run_path=Path(pack_run_path),
+                bottleneck_path=Path(bottleneck_path),
+                now=clock,
+            )
+        except Exception:  # noqa: BLE001 — status panel must not fail the lane
+            status_payload = None
 
     exit_code = 0 if outcome != "error" else 1
     return {
         "pack_run": pack_run,
         "bottleneck_review": review,
+        "status": status_payload,
         "exit_code": exit_code,
         "assemble": assemble,
     }

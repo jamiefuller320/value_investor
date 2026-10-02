@@ -605,6 +605,7 @@ const DASHBOARD_SIDECARS = [
   ["human_task_acks", "data/human_task_acks.json"],
   ["lifecycle_board", "data/lifecycle_board.json"],
   ["ui_state_reconciliation", "data/ui_state_reconciliation.json"],
+  ["universe_filing_archive_status", "data/universe_filing_archive_status.json"],
   ["daily_focus", "data/daily_focus.json"],
   ["daily_focus_acks", "data/daily_focus_acks.json"],
   ["daily_discuss_inbox", "data/daily_discuss_inbox.json"],
@@ -5881,7 +5882,11 @@ function automationIlluminationFor(sectionId, data) {
   }
   if (sectionId === "ops") {
     const recon = (data && data.ui_state_reconciliation) || {};
-    const attn = String(recon.overall || "ok") !== "ok" || !!hint.attention;
+    const archive = (data && data.universe_filing_archive_status) || {};
+    const lastBadge = String(((archive.last_run || {}).badge) || "");
+    const archiveAttn = ["fail", "warn"].includes(lastBadge);
+    const attn =
+      String(recon.overall || "ok") !== "ok" || archiveAttn || !!hint.attention;
     return { new_info: false, attention: attn };
   }
   if (sectionId === "daily") {
@@ -6073,6 +6078,119 @@ function renderUiReconcileTable(data) {
       <thead><tr><th>Id</th><th>Check</th><th>Status</th><th>Drift</th><th>Detail</th><th>Runbook</th></tr></thead>
       <tbody>${rows || '<tr><td colspan="6" class="muted">No checks</td></tr>'}</tbody>
     </table></div>
+  </section>`;
+}
+
+function archiveStatusBadgeClass(badge) {
+  const key = String(badge || "").toLowerCase();
+  if (key === "fail" || key === "error") return "badge-ii-no";
+  if (key === "warn" || key === "missing") return "badge-watch";
+  if (key === "ok") return "badge-buy";
+  return "badge-neutral";
+}
+
+function renderArchiveClashChips(flags) {
+  if (!flags || typeof flags !== "object") return "";
+  const chips = [];
+  const iso = flags.isolation_ok;
+  if (iso === true) {
+    chips.push(`<span class="badge badge-buy" title="capacity_isolation.isolation_ok">isolation_ok</span>`);
+  } else if (iso === false) {
+    chips.push(`<span class="badge badge-ii-no" title="capacity_isolation.isolation_ok">isolation fail</span>`);
+  } else {
+    chips.push(`<span class="badge badge-neutral" title="capacity_isolation missing">isolation —</span>`);
+  }
+  if (flags.shared_critical_path) {
+    chips.push(`<span class="badge badge-ii-no" title="shared_critical_path">shared quota</span>`);
+  }
+  if (flags.fourth_equal_sprint_stream) {
+    chips.push(`<span class="badge badge-ii-no" title="fourth_equal_sprint_stream">4th sprint</span>`);
+  } else if (flags.fourth_equal_sprint_stream === false) {
+    chips.push(`<span class="badge badge-buy" title="not a fourth equal sprint">no 4th sprint</span>`);
+  }
+  if (flags.focus_pressure) {
+    chips.push(`<span class="badge badge-watch" title="focus_pressure_reasons">focus pressure</span>`);
+  }
+  if (flags.gate_decision) {
+    const gateCls =
+      String(flags.gate_decision) === "allow"
+        ? "badge-buy"
+        : String(flags.gate_decision) === "suspend"
+          ? "badge-watch"
+          : "badge-neutral";
+    chips.push(
+      `<span class="badge ${gateCls}" title="archive_lane_gate">gate ${esc(flags.gate_decision)}</span>`
+    );
+  }
+  return chips.join(" ");
+}
+
+function renderColdStoreArchiveStatusPanel(data) {
+  const status = (data && data.universe_filing_archive_status) || null;
+  if (!status) {
+    return `<section class="automation-section automation-section-full cold-store-archive-status" id="cold-store-archive-status">
+      <h2>Cold-store archive pack</h2>
+      <p class="muted">Status panel not published yet — waits for next archive pack / ops-monitor cycle.</p>
+    </section>`;
+  }
+  const last = status.last_run || {};
+  const widen = status.next_widen_step || {};
+  const caps = status.current_caps || {};
+  const hours =
+    last.hours_since != null && Number.isFinite(Number(last.hours_since))
+      ? `${Number(last.hours_since).toFixed(Number(last.hours_since) >= 10 ? 0 : 1)}h ago`
+      : "—";
+  const mode =
+    last.mode || (last.dry_run === true ? "dry" : last.dry_run === false ? "apply" : "—");
+  const outcomeLabel = last.outcome || "missing";
+  const errN = Number(last.error_count || 0);
+  const errors = Array.isArray(last.errors) ? last.errors : [];
+  const errLine =
+    errN > 0
+      ? `<p class="small cold-store-archive-errors" role="status"><span class="badge badge-ii-no">${esc(String(errN))} fail</span> ${esc(errors[0] || "see bottleneck review")}</p>`
+      : "";
+  const capsLine = [
+    caps.max_units != null ? `units≤${caps.max_units}` : null,
+    caps.max_http_fetches != null ? `http≤${caps.max_http_fetches}` : null,
+    caps.max_tickers_per_unit != null ? `tickers/unit≤${caps.max_tickers_per_unit}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  const runbook = status.runbook
+    ? `<a href="${esc(status.runbook)}" target="_blank" rel="noopener">runbook</a>`
+    : "";
+  return `<section class="automation-section automation-section-full cold-store-archive-status" id="cold-store-archive-status">
+    <h2>Cold-store archive pack <span class="badge ${archiveStatusBadgeClass(last.badge)}">${esc(outcomeLabel)}</span></h2>
+    <p class="small muted" style="margin-top:0">
+      Quiet lane status (observe-only; no eng spray). ${runbook}
+      · panel ${esc(fmtDate(status.generated_at))}
+    </p>
+    <div class="cold-store-archive-grid">
+      <div class="setting-row">
+        <span class="setting-label">Last run</span>
+        <span class="setting-value small">${esc(fmtDate(last.at))} · ${esc(hours)} · <code>${esc(mode)}</code></span>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">Throughput</span>
+        <span class="setting-value small">${esc(
+          `attempted ${last.units_attempted ?? "—"} / completed ${last.units_completed ?? "—"} / objects ${last.objects_written ?? "—"}`
+        )}</span>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">Clash / isolation</span>
+        <span class="setting-value small cold-store-archive-chips">${renderArchiveClashChips(status.clash_flags)}</span>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">Pilot caps</span>
+        <span class="setting-value small">${esc(capsLine || "—")}</span>
+      </div>
+      <div class="setting-row setting-row-widen">
+        <span class="setting-label">Next widen</span>
+        <span class="setting-value small"><strong>${esc(widen.label || "Hold pilot caps")}</strong>
+          <span class="muted"> — ${esc(widen.detail || status.note || "")}</span></span>
+      </div>
+    </div>
+    ${errLine}
   </section>`;
 }
 
@@ -7293,6 +7411,7 @@ function renderAutomation(data) {
     <div class="automation-section-pane" data-automation-pane="ops" ${
       section === "ops" ? "" : "hidden"
     }>
+      ${renderColdStoreArchiveStatusPanel(data)}
       ${renderUiReconcileTable(data)}
     </div>
     <div class="automation-section-pane" data-automation-pane="settings" ${

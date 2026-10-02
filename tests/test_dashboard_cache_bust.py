@@ -32,6 +32,7 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     assert "mergeHumanTaskAcksIntoBoard(" in text
     assert '["daily_focus", "data/daily_focus.json"]' in text
     assert '["ui_state_reconciliation", "data/ui_state_reconciliation.json"]' in text
+    assert '["universe_filing_archive_status", "data/universe_filing_archive_status.json"]' in text
     assert '["daily_focus_acks", "data/daily_focus_acks.json"]' in text
     assert '["daily_discuss_inbox", "data/daily_discuss_inbox.json"]' in text
     assert '["daily_hub_history", "data/daily_hub_history.json"]' in text

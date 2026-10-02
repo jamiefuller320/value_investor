@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-02T10:53:42+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-02T17:06:29+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -599,7 +599,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L515 | **cron-job.org mirror for archive pack 22:00 UTC** | GHA schedule alone may drift; optional cron-job.org dispatch for universe-filing-archive-pack.yml like dashboard-bridge, only if weekday 22:00 misses become material. | Bottleneck review stale findings fire repeatedly due to GHA schedule drift on the weekday 22:00 slot |
 | L516 | **Clarify left target set vs chart Target on just-sold** | Sell notes say Automated exit — left target set (buy-tier ticker set), while lifecycle charts still show a technical/prospective Target line. Users can read just-sold-below-target as a bug. Later: clearer note wording and/or card copy that names screen_rotation vs take-profit. | Lifecycle UX pass or when exit_shadow promotion / just-sold card redesign is in flight |
 | L520 | **Daily hub assessment content enrichment beyond prose UI** | UI now collapses Where/In stage/Waiting/How into one paragraph (#940). Still often empty waiting/how on sticky seed cards — enrich compose_assessment fillers (notes conventions, triage, reconcile) so the paragraph carries real blockers/next steps without reintroducing labeled empty rows. | After #940 merges and a weekday hub glance still shows thin prose that only restates the summary |
-| L521 | **Cold-store pack status panel (hours since run + achievement)** | Dedicated UI card for universe filing archive pack: hours since last run plus achievement metrics (units fetched, week coverage, source hit-rate). Observe-util miss-rate + ops bottleneck already cover low-attention monitoring while the lane is dry. | Cold-store writers unparked and at least one real-fetch quiet pass produces non-zero achievement metrics |
+| L522 | **Cold-store pack achievement metrics panel** | Extend thin Ops status panel with achievement metrics: units fetched over nights, week coverage, source hit-rate history. Thin outcome/clash/next-widen panel already shipped. | Several quiet apply nights with isolation_ok produce non-zero units_completed / objects_written worth graphing |
 
 ---
 

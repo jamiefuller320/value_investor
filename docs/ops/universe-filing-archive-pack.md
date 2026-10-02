@@ -5,7 +5,7 @@
 Weekday 22:00 UTC cron runs bounded apply under `archive_lane_gate`. Do **not**
 add a second live crawler or a fourth equal sprint stream.
 **Deferred:** **N180** (live crawler / fourth stream); **N181** (eng self-improve);
-**L521** (status panel). **L499** writers pilot is live — scale cautiously.
+**L521** thin Ops status panel shipped (outcome / clash / next widen); full achievement metrics still later. **L499** writers pilot is live — scale cautiously.
 **Source:** [Project conversation](https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a)
 
 ## Learning question
@@ -74,7 +74,8 @@ This order must **not** drive `euro-ingest-loop` / sprint streams.
 | Writers | `universe_filing_archive_writer` → cold root `docs/data/archive/universe_filings/` (gitignored) |
 | Last run | `docs/data/universe_filing_archive_pack_run.json` (includes `capacity_isolation`) |
 | Bottleneck review | `docs/data/universe_filing_archive_bottleneck_review.json` |
-| Ops-monitor | `check_universe_filing_archive_pack_bottleneck` — stale review warn; suspend outcomes do **not** warn |
+| Status panel | `docs/data/universe_filing_archive_status.json` — thin Ops card (outcome, clash flags, next widen); Automation → Ops |
+| Ops-monitor | `check_universe_filing_archive_pack_bottleneck` — stale review warn; suspend outcomes do **not** warn; refreshes status panel |
 
 While `mode=sprint` ∧ ¬`ingest_sprint_complete`, the 22:00 UTC job **runs and no-ops** with `outcome=suspend`, still refreshing the bottleneck review.
 
