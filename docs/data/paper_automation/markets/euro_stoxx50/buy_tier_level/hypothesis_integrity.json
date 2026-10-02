@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-10-01T08:46:57.442452+00:00",
-  "as_of": "2026-10-01T10:46:57.372355+02:00",
+  "updated_at": "2026-10-02T08:47:14.811106+00:00",
+  "as_of": "2026-10-02T10:47:14.647600+02:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -19,16 +19,16 @@
   "holding_count": 8,
   "underwater_count": 1,
   "thesis_status_counts": {
-    "intact": 8,
+    "intact": 7,
     "weakening": 0,
-    "broken": 0,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
     "holding_count": 8,
     "loser_count": 1,
     "loser_share": 0.125,
-    "loser_nav_share": 0.1267,
+    "loser_nav_share": 0.1262,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
@@ -43,19 +43,51 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
-      "quality": 0.0,
-      "dividend": 0.0,
-      "garp": 0.0,
-      "risk": 0.0
+      "cheapness": 0.1429,
+      "quality": 0.1429,
+      "dividend": 0.1429,
+      "garp": 0.1429,
+      "risk": 0.1429
     },
     "selection_feedback_flags": [
-      "quality fails more often among losers (100% vs 0%)"
+      "quality fails more often among losers (100% vs 14%)"
     ],
     "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
+    {
+      "ticker": "MC.PA",
+      "name": "MC.PA",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 405.3496,
+      "avg_cost": 405.3496,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
     {
       "ticker": "VOW.DE",
       "name": "Volkswagen AG",
@@ -134,46 +166,6 @@
         "cheapness family still passes",
         "data_quality 1.00",
         "conviction 63%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "MC.PA",
-      "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0265,
-      "mark": 394.6,
-      "avg_cost": 405.3496,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.6666,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 67%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 67%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []

@@ -1,10 +1,12 @@
 {
   "schema_version": 1,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-01T09:47:01.817775+01:00",
+  "generated_at": "2026-10-02T09:47:27.239623+01:00",
   "observe_only": true,
   "influences_live": false,
   "judge_backend": "evidence_heuristic",
+  "judge_spec_id": "heuristic.v1",
+  "parent_spec_id": null,
   "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
   "card_count": 1,
   "verdict_counts": {
@@ -31,5 +33,5 @@
     ],
     "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
   },
-  "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer."
+  "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
 }

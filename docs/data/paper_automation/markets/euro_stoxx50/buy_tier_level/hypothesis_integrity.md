@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-01T08:46:57.442452+00:00
+Track: `buy_tier_level` · updated 2026-10-02T08:47:14.811106+00:00
 
 ## Portfolio loser feedback
 
@@ -8,9 +8,12 @@ Track: `buy_tier_level` · updated 2026-10-01T08:46:57.442452+00:00
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - quality fails more often among losers (100% vs 0%)
+  - quality fails more often among losers (100% vs 14%)
 
 ## Holding reviews
+
+### MC.PA — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### VOW.DE — intact / hold_tolerate (-9.2%)
 - price drawdown alone does not invalidate value thesis
@@ -26,13 +29,6 @@ Track: `buy_tier_level` · updated 2026-10-01T08:46:57.442452+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 63%
-
-### MC.PA — intact / hold_tolerate (-2.6%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 67%
 
 ### DG.PA — intact / hold_tolerate (-2.1%)
 - still strong_buy

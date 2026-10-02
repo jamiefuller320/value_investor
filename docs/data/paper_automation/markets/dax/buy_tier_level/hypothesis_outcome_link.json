@@ -3,21 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-01T08:46:59.202289+00:00",
+  "generated_at": "2026-10-02T08:47:24.626019+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 1,
+    "open_with_thesis": 0,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0042,
+        "mean_trough_unrealized_pct": -0.0198,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "broken": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (weakening=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -66,7 +74,7 @@
       "ticker": "DHL.DE",
       "name": "DHL AG",
       "started_at": "2026-09-25T08:28:45.459840+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -95,13 +103,22 @@
       "conviction_score": 0.8938,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T09:47:24.580163+01:00",
+          "days_after": 7,
+          "price": 56.48,
+          "unrealized_pct": -0.0198,
+          "peak_unrealized_pct": 0.0042,
+          "trough_unrealized_pct": -0.0198
+        }
+      ],
       "peak_unrealized_pct": 0.0042,
       "trough_unrealized_pct": -0.0198,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-02T09:47:24.580163+01:00",
+      "linked_sell_trade_id": "d1617db8-45a0-47c9-a7b4-e1ed9429030b"
     }
   ],
   "swap_rotations": [
@@ -172,13 +189,79 @@
           "cost": 0.57
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T09:47:24.580163+01:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0044,
+          "avg_buy_return": 0.0129,
+          "replacement_delta": 0.0084
+        }
+      ],
       "sell_returns_since_rotation": {
         "FME.DE": 0.0089,
-        "DHL.DE": 0.0202
+        "DHL.DE": 0.0
       },
       "buy_returns_since_rotation": {
         "G1A.DE": 0.0129
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-02T09:47:24.580163+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-02T09:47:24.580163+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "DHL.DE",
+          "price": 57.62,
+          "shares": 5.819272,
+          "gross": 335.31,
+          "cost": 0.59,
+          "avg_cost_at_exit": 57.62,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "FME.DE",
+          "price": 39.7,
+          "shares": 4.221118,
+          "gross": 167.58,
+          "cost": 0.29
+        },
+        {
+          "ticker": "G1A.DE",
+          "price": 66.9,
+          "shares": 2.489634,
+          "gross": 166.56,
+          "cost": 0.29
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "DHL.DE": -0.0198
+      },
+      "buy_returns_since_rotation": {
+        "FME.DE": 0.0,
+        "G1A.DE": 0.0
       },
       "verdict": null,
       "closed_at": null

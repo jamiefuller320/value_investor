@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-10-01T08:47:06.825772+00:00",
-  "as_of": "2026-10-01T09:47:06.806324+01:00",
+  "updated_at": "2026-10-02T08:47:32.923326+00:00",
+  "as_of": "2026-10-02T09:47:32.875107+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -20,8 +20,8 @@
   "underwater_count": 0,
   "thesis_status_counts": {
     "intact": 2,
-    "weakening": 1,
-    "broken": 0,
+    "weakening": 0,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
@@ -43,17 +43,49 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
+      "cheapness": 0.3333,
       "quality": 0.3333,
-      "dividend": 0.0,
-      "garp": 0.0,
-      "risk": 0.0
+      "dividend": 0.3333,
+      "garp": 0.3333,
+      "risk": 0.3333
     },
     "selection_feedback_flags": [],
     "balancing_hint": "maintain",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
+    {
+      "ticker": "SOLB.BR",
+      "name": "SOLB.BR",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 24.52,
+      "avg_cost": 24.52,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
     {
       "ticker": "UMI.BR",
       "name": "Umicore SA",
@@ -132,47 +164,6 @@
         "conviction 54%"
       ],
       "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "SOLB.BR",
-      "name": "Solvay SA",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 24.52,
-      "avg_cost": 24.52,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.3284,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "conviction 33% below intact floor",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "research verdict caution",
-        "conviction 33% below intact floor"
-      ],
       "broken_reasons": []
     }
   ],
