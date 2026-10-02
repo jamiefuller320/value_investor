@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-02T12:31:56.967173+00:00`
+Generated: `2026-10-02T17:31:38.018163+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,6 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `ingest_narrow`/verified PR #948 `eng-20261002-14` — Close library ingest filing gaps for Straits Times Index (sti): 1 buy-tier gaps after stalled weekday loop
 - `ingest_narrow`/verified PR #945 `eng-20261002-02` — Rework verify round 2/3: Hunt fetchable IR source for parked euro_depth leftover ADYEN.AS
 - `ingest_narrow`/verified PR #944 `eng-20261002-13` — Repair dead hunter allowlist URL for ADYEN.AS
 - `parked_hunter`/verified PR #911 `eng-20260930-01` — Hunt fetchable IR source for parked euro_depth leftover ADYEN.AS
