@@ -19,7 +19,8 @@
     "sti",
     "us_adr_asia",
     "atx",
-    "psi20"
+    "psi20",
+    "smi"
   ],
   "ftse_equivalent_markets": [
     "sp500"
@@ -546,7 +547,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-02T19:20:28.123781+00:00",
+  "updated_at": "2026-10-02T21:03:56.686617+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -554,7 +555,7 @@
     "euro_depth"
   ],
   "ingest_parallel_sprint": [
-    "psi20"
+    "smi"
   ],
   "ingest_parallel_sprint_2": [
     "nasdaq100"
@@ -837,7 +838,8 @@
       "hang_seng",
       "us_adr_asia",
       "sti",
-      "atx"
+      "atx",
+      "psi20"
     ],
     "epoch0_shard_after_screen": true,
     "equal_support_after_screen": true,
@@ -861,14 +863,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-09-12T13:54:53.025446+00:00",
-        "parallel_stream": 1,
-        "from_market": "asx200",
-        "to_market": null,
-        "stream_markets_after": [],
-        "ingest_parity_recorded": true
-      },
       {
         "at": "2026-09-14T11:18:44.700224+00:00",
         "parallel_stream": 2,
@@ -1358,6 +1352,16 @@
           "nasdaq100"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-10-02T21:03:56.686607+00:00",
+        "parallel_stream": 1,
+        "from_market": "psi20",
+        "to_market": "smi",
+        "stream_markets_after": [
+          "smi"
+        ],
+        "ingest_parity_recorded": false
       }
     ]
   },
@@ -1375,6 +1379,7 @@
     "hang_seng",
     "ibex35",
     "nasdaq100",
+    "psi20",
     "sp500",
     "sti",
     "tsx60",

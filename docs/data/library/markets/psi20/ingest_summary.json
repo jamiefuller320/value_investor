@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-02T18:45:45.402119+00:00",
+  "run_at": "2026-10-02T21:05:06.826038+00:00",
   "market_id": "psi20",
   "targets": [
     "GALP.LS"
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-02T18:45:25.801382+00:00",
+    "snapshot_at": "2026-10-02T21:03:20.996958+00:00",
     "market_id": "psi20",
     "buy_tier_count": 2,
     "unmeasured_buy_tier": 0,
@@ -113,7 +113,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-02T18:45:38.513003+00:00",
+    "snapshot_at": "2026-10-02T21:03:33.642327+00:00",
     "market_id": "psi20",
     "buy_tier_count": 2,
     "unmeasured_buy_tier": 0,
@@ -132,15 +132,15 @@
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
+    "parked_tickers": [
       "GALP.LS"
     ],
+    "parked_count": 1,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -151,10 +151,42 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "psi20",
+    "to_market": "smi",
+    "stream_markets_after": [
+      "smi"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "psi20",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "GALP.LS"
+      ],
+      "learning_admitted_changed": true,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "smi",
+      "forced": true,
+      "prior_screen_at": "2026-08-16T11:58:34.144147+00:00",
+      "prior_age_days": 47,
+      "run_at": "2026-10-02T21:04:59.450217+00:00",
+      "shortlist_count": 5,
+      "ticker_count": 20
+    },
+    "at": "2026-10-02T21:03:56.686607+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "psi20",
-    "assessed_at": "2026-10-02T18:45:26.034753+00:00",
+    "assessed_at": "2026-10-02T21:03:21.229653+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -178,9 +210,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 12.247707169999998,
+  "used_seconds": 12.176606707999994,
   "budget_seconds": 2100.0,
-  "leftover_seconds": 2087.75229283,
+  "leftover_seconds": 2087.823393292,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -188,11 +220,23 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "psi20",
-    "updated_at": "2026-10-02T18:45:38.513780+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-10-02T21:03:33.643308+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "GALP.LS",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-02T21:03:33.643308+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
@@ -200,15 +244,35 @@
     "leftover_tickers": [
       "GALP.LS"
     ],
-    "unparked_leftover": [
-      "GALP.LS"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/psi20/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "psi20"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "psi20",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "nasdaq100",
+      "psi20",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
