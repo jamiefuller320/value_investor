@@ -293,12 +293,18 @@ def test_daily_hub_history_session_and_status_chips() -> None:
         "\nfunction renderDailyHubPanel(", 1
     )[0]
     assert "renderDailyHubAssessment(task)" in card
+    assert "renderDailyHubReviewDetail(task)" in card
+    assert "function normalizeDailyRecOption(" in text
+    assert "data-daily-option" in text
+    assert "function applyDailyRecOption(" in text
     assert "compact: true" in card
     css = STYLES.read_text(encoding="utf-8")
     assert ".daily-hub-history" in css
     assert ".daily-hub-accept-streak" in css
     assert ".daily-hub-assessment" in css
     assert ".daily-assess-prose" in css
+    assert ".daily-hub-review-detail" in css
+    assert ".daily-rec-option-list" in css
 
 
 def test_daily_hub_accept_passes_focus_ack_decision() -> None:
@@ -324,7 +330,7 @@ def test_daily_hub_accept_passes_focus_ack_decision() -> None:
     assert "no dismiss" in card
     assert "badge-sell" in card
     html = Path("docs/index.html").read_text(encoding="utf-8")
-    assert "app.js?v=reconcile-pages-heal1" in html
+    assert "app.js?v=daily-hub-inline-detail1" in html
     assert "Market warning triage" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "zero_body_stuck" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "Expansive assessment" in OPS_MONITOR.read_text(encoding="utf-8")

@@ -1028,6 +1028,10 @@ function disableDailyRecRowButtons(button, { accept = true, discuss = true } = {
       btn.setAttribute("aria-disabled", "true");
     });
   }
+  block.querySelectorAll("[data-daily-option]").forEach((btn) => {
+    btn.disabled = true;
+    btn.setAttribute("aria-disabled", "true");
+  });
   return block;
 }
 
@@ -1052,6 +1056,10 @@ function enableDailyRecRowButtons(button, { accept = true, discuss = true } = {}
       btn.setAttribute("aria-disabled", "false");
     });
   }
+  block.querySelectorAll("[data-daily-option]").forEach((btn) => {
+    btn.disabled = false;
+    btn.setAttribute("aria-disabled", "false");
+  });
 }
 
 function setHumanTaskAckStatus(taskId, text) {
@@ -5961,6 +5969,12 @@ function bindAutomationPanel(panel) {
       void acceptDailyRecommendation(acceptBtn);
       return;
     }
+    const optionBtn = event.target.closest("[data-daily-option]");
+    if (optionBtn && panel.contains(optionBtn)) {
+      event.preventDefault();
+      void applyDailyRecOption(optionBtn);
+      return;
+    }
     const discussBtn = event.target.closest("[data-daily-discuss]");
     if (discussBtn && panel.contains(discussBtn)) {
       event.preventDefault();
@@ -6086,7 +6100,51 @@ function renderDailyRecommendationBlock(rec, task) {
   });
   const options = Array.isArray(rec.options) ? rec.options : [];
   const optionsHtml = options.length
-    ? `<ul class="daily-rec-options">${options.map((o) => `<li>${esc(o)}</li>`).join("")}</ul>`
+    ? `<div class="daily-rec-options" role="group" aria-label="Close options">
+        <p class="small muted" style="margin:0.25rem 0">Choose an option in-card (no chat required for Accept / Defer / Park):</p>
+        <ul class="daily-rec-option-list">${options
+          .map((opt, idx) => {
+            const normalized = normalizeDailyRecOption(opt, rec, task, idx);
+            if (!normalized || !normalized.label) return "";
+            const optPayload = JSON.stringify({
+              recommendation_id: rec.id,
+              task_ref: (task && task.task_ref) || rec.task_id,
+              option_id: normalized.id,
+              accept_action: normalized.action,
+              preferred_option: normalized.preferredOption || normalized.id,
+              local_date:
+                (dashboardData &&
+                  dashboardData.daily_focus &&
+                  dashboardData.daily_focus.local_date) ||
+                "",
+              discuss_fallback: {
+                recommendation_id: rec.id,
+                recommendation: {
+                  id: rec.id,
+                  task_id: rec.task_id,
+                  summary: rec.summary,
+                  rationale: rec.rationale,
+                  accept_action: rec.accept_action,
+                  discuss_prompt: rec.discuss_prompt,
+                  priority: rec.priority,
+                  options: rec.options || [],
+                },
+                local_date:
+                  (dashboardData &&
+                    dashboardData.daily_focus &&
+                    dashboardData.daily_focus.local_date) ||
+                  "",
+              },
+            });
+            const kind = String((normalized.action && normalized.action.kind) || "");
+            const isPrimary = kind === "human-task-ack" || kind === "focus-ack";
+            const btnClass = isPrimary && normalized.id === "accept" ? "btn btn-primary" : "btn";
+            return `<li><button type="button" class="${btnClass} daily-rec-option-btn" data-daily-option="${esc(
+              optPayload
+            )}" title="${esc(normalized.label)}">${esc(normalized.label)}</button></li>`;
+          })
+          .join("")}</ul>
+      </div>`
     : "";
   const pastePhrase = dailyDiscussPastePhrase(rec.id || "");
   const rowState = dailyRecRowState(rec.id || "");
@@ -6128,7 +6186,138 @@ function renderDailyRecommendationBlock(rec, task) {
     </div>
     <p class="small muted">Discuss: click Discuss to copy <code>${esc(
       pastePhrase
-    )}</code> and queue the inbox — then paste that phrase in Project chat.</p>
+    )}</code> and queue the inbox — then paste that phrase in Project chat. Prefer in-card options above when they close the task.</p>
+  </div>`;
+}
+
+/** Normalize legacy string options or structured {id,label,action} rows. */
+function normalizeDailyRecOption(opt, rec, task, idx) {
+  if (opt && typeof opt === "object" && !Array.isArray(opt)) {
+    const action = opt.action && typeof opt.action === "object" ? opt.action : null;
+    if (!action) return null;
+    return {
+      id: String(opt.id || `opt-${idx}`),
+      label: String(opt.label || opt.id || "").trim(),
+      action,
+      preferredOption: String(opt.id || ""),
+    };
+  }
+  const label = String(opt || "").trim();
+  if (!label) return null;
+  const lower = label.toLowerCase();
+  const defaultAccept = (rec && rec.accept_action) || {};
+  if (/^accept\b/.test(lower) || lower.includes("acknowledge")) {
+    return { id: `accept-${idx}`, label, action: defaultAccept, preferredOption: "accept" };
+  }
+  if (lower.includes("approve")) {
+    const payload = Object.assign({}, (defaultAccept && defaultAccept.payload) || {}, {
+      decision: "approve",
+    });
+    return {
+      id: `approve-${idx}`,
+      label,
+      action: { kind: "human-task-ack", payload },
+      preferredOption: "approve",
+    };
+  }
+  if (lower.includes("defer") || lower.includes("park for today") || lower.includes("dismiss")) {
+    if ((defaultAccept && defaultAccept.kind) === "human-task-ack") {
+      const payload = Object.assign({}, defaultAccept.payload || {}, { decision: "defer" });
+      return {
+        id: `defer-${idx}`,
+        label,
+        action: { kind: "human-task-ack", payload },
+        preferredOption: "defer",
+      };
+    }
+    if ((defaultAccept && defaultAccept.kind) === "focus-ack") {
+      const payload = Object.assign({}, defaultAccept.payload || {}, { decision: "dismiss" });
+      return {
+        id: `park-${idx}`,
+        label,
+        action: { kind: "focus-ack", payload },
+        preferredOption: "park",
+      };
+    }
+  }
+  if (lower.includes("runbook") || lower.startsWith("open ")) {
+    const href =
+      (task && task.review_detail && task.review_detail.doc_url) ||
+      (task && task.human_task && task.human_task.doc_url) ||
+      (task && task.href) ||
+      ((defaultAccept && defaultAccept.payload && defaultAccept.payload.href) || "#overview");
+    return {
+      id: `link-${idx}`,
+      label,
+      action: { kind: "link_only", payload: { href } },
+      preferredOption: "runbook",
+    };
+  }
+  if (lower.includes("discuss") || lower.includes("rewrite") || lower.includes("park")) {
+    return {
+      id: `discuss-${idx}`,
+      label,
+      action: { kind: "discuss", payload: { preferred_option: label } },
+      preferredOption: "discuss",
+    };
+  }
+  return {
+    id: `discuss-${idx}`,
+    label,
+    action: { kind: "discuss", payload: { preferred_option: label } },
+    preferredOption: "discuss",
+  };
+}
+
+function renderDailyHubReviewDetail(task) {
+  const detail =
+    (task && task.review_detail) ||
+    (task &&
+      task.human_task &&
+      task.human_task.analysis && {
+        headline: task.human_task.analysis.headline,
+        updated_at: task.human_task.analysis.updated_at,
+        bullets: task.human_task.analysis.bullets,
+        doc_url: task.human_task.doc_url,
+        cadence: task.human_task.cadence,
+        source_keys: task.human_task.analysis.source_keys,
+        fingerprint: task.human_task.analysis.fingerprint,
+        observe_only: true,
+      });
+  if (!detail || typeof detail !== "object") return "";
+  const bullets = Array.isArray(detail.bullets)
+    ? detail.bullets.map((b) => String(b || "").trim()).filter(Boolean)
+    : [];
+  const headline = String(detail.headline || "").trim();
+  const docUrl = String(detail.doc_url || "").trim();
+  if (!headline && !bullets.length && !docUrl) return "";
+  const metaBits = [];
+  if (detail.cadence) metaBits.push(String(detail.cadence));
+  if (detail.updated_at) metaBits.push(`updated ${fmtDate(detail.updated_at)}`);
+  if (Array.isArray(detail.source_keys) && detail.source_keys.length) {
+    metaBits.push(detail.source_keys.slice(0, 4).join(", "));
+  }
+  return `<div class="daily-hub-review-detail" role="group" aria-label="Review detail">
+    <h4 class="small" style="margin:0.45rem 0 0.2rem">Review detail</h4>
+    ${headline ? `<p class="small"><strong>${esc(headline)}</strong></p>` : ""}
+    ${
+      bullets.length
+        ? `<ul class="daily-review-bullets">${bullets
+            .slice(0, 8)
+            .map((b) => `<li class="small">${esc(b)}</li>`)
+            .join("")}</ul>`
+        : ""
+    }
+    ${
+      docUrl
+        ? `<p class="small"><a href="${esc(docUrl)}" target="_blank" rel="noopener noreferrer">Open related runbook / review</a></p>`
+        : ""
+    }
+    ${
+      metaBits.length
+        ? `<p class="small muted" style="margin:0.2rem 0 0">${esc(metaBits.join(" · "))}</p>`
+        : ""
+    }
   </div>`;
 }
 
@@ -6433,6 +6622,7 @@ function renderDailyHubTaskCard(task) {
     <div class="human-task-card-panel">
       <p class="small">${esc(task.summary || "")}</p>
       ${renderDailyHubAssessment(task)}
+      ${renderDailyHubReviewDetail(task)}
       ${
         task.href
           ? `<p class="small"><a href="${esc(task.href)}">${esc(task.href)}</a></p>`
@@ -6672,6 +6862,50 @@ async function acceptDailyRecommendation(button) {
   } catch {
     payload = {};
   }
+  await runDailyRecommendationAction(button, payload);
+}
+
+async function applyDailyRecOption(button) {
+  if (!button || button.disabled) return;
+  let payload = {};
+  try {
+    payload = JSON.parse(button.getAttribute("data-daily-option") || "{}");
+  } catch {
+    payload = {};
+  }
+  const action = (payload.accept_action && payload.accept_action.kind) || "";
+  if (action === "discuss") {
+    const fallback = payload.discuss_fallback || {
+      recommendation_id: payload.recommendation_id,
+      local_date: payload.local_date || "",
+    };
+    // Prefer attaching chosen option into discuss recommendation note path.
+    if (fallback.recommendation && payload.preferred_option) {
+      const pref = String(payload.preferred_option || "");
+      const existing = String(fallback.recommendation.summary || "");
+      if (pref && !existing.includes(`[option:${pref}]`)) {
+        fallback.recommendation = Object.assign({}, fallback.recommendation, {
+          summary: `${existing} [option:${pref}]`.trim(),
+          preferred_option: pref,
+        });
+      }
+    }
+    // Reuse Discuss button path by synthesizing a temporary attribute carrier.
+    button.setAttribute("data-daily-discuss", JSON.stringify(fallback));
+    await discussDailyRecommendation(button);
+    return;
+  }
+  await runDailyRecommendationAction(button, {
+    recommendation_id: payload.recommendation_id,
+    task_ref: payload.task_ref,
+    accept_action: payload.accept_action || {},
+    local_date: payload.local_date || "",
+  });
+}
+
+async function runDailyRecommendationAction(button, payload) {
+  if (!button || button.disabled) return;
+  payload = payload || {};
   const action = (payload.accept_action && payload.accept_action.kind) || "";
   const actionPayload = (payload.accept_action && payload.accept_action.payload) || {};
   const recKey = dailyRecOverlayKey(payload);
@@ -6681,8 +6915,15 @@ async function acceptDailyRecommendation(button) {
   // Optimistic first: disable Accept+Discuss and overlay-close before any await
   // so soft reload / bridge latency cannot leave the row clickable.
   disableDailyRecRowButtons(button, { accept: true, discuss: true });
-  setDailyRecStatus(button, "Accepting…");
-  if (action !== "link_only") {
+  const block = button.closest && button.closest(".daily-rec-block");
+  if (block) {
+    block.querySelectorAll("[data-daily-option]").forEach((btn) => {
+      btn.disabled = true;
+      btn.setAttribute("aria-disabled", "true");
+    });
+  }
+  setDailyRecStatus(button, "Applying…");
+  if (action !== "link_only" && action !== "discuss") {
     applyOptimisticDailyAccept(payload);
   }
 
@@ -6724,7 +6965,15 @@ async function acceptDailyRecommendation(button) {
           );
         }
       }
-      setDailyRecStatus(button, "Accepted → human-task-ack");
+      const decisionLabel = String(htPayload.decision || "ack_observe");
+      setDailyRecStatus(
+        button,
+        decisionLabel === "defer"
+          ? "Deferred → human-task-ack"
+          : decisionLabel === "approve"
+            ? "Approved → human-task-ack"
+            : "Accepted → human-task-ack"
+      );
       await reloadDashboard({ silent: true });
     } else if (action === "focus-ack") {
       const focusDecision =
@@ -6752,11 +7001,19 @@ async function acceptDailyRecommendation(button) {
         jumpToAutomationSection(section);
       } else if (href.startsWith("#")) {
         activateTab(href.replace("#", "").split("/")[0] || "overview", { updateHash: true });
+      } else if (/^https?:\/\//i.test(href)) {
+        window.open(href, "_blank", "noopener,noreferrer");
       } else {
         window.location.href = href;
       }
       setDailyRecStatus(button, "Opened link");
       enableDailyRecRowButtons(button, { accept: true, discuss: true });
+      if (block) {
+        block.querySelectorAll("[data-daily-option]").forEach((btn) => {
+          btn.disabled = false;
+          btn.setAttribute("aria-disabled", "false");
+        });
+      }
       return;
     } else {
       await queueDailyBridgeAction(
@@ -6778,6 +7035,12 @@ async function acceptDailyRecommendation(button) {
     }
     if (recKey) revertOptimisticDailyAccept(recKey);
     else enableDailyRecRowButtons(button, { accept: true, discuss: true });
+    if (block) {
+      block.querySelectorAll("[data-daily-option]").forEach((btn) => {
+        btn.disabled = false;
+        btn.setAttribute("aria-disabled", "false");
+      });
+    }
     setDailyRecStatus(button, String(err && err.message ? err.message : err));
   } finally {
     if (recKey) delete inflightDailyRecActions[recKey];

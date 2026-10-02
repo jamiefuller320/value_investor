@@ -176,6 +176,13 @@ def test_build_daily_focus_collates_sources(tmp_path: Path) -> None:
     focus_task = next(t for t in payload["tasks"] if t["task_ref"] == "focus-1")
     assert focus_task["recommendation"]["id"].startswith("rec-")
     assert payload["illumination_hints"]["automation.human"]["new_info"] is True
+    human_task = next(
+        t for t in payload["tasks"] if t["task_ref"] == "human:weekday-daily-hub-glance"
+    )
+    assert human_task.get("review_detail", {}).get("headline")
+    assert human_task["recommendation"]["options"][0]["action"]["kind"] == "human-task-ack"
+    focus_opts = focus_task["recommendation"]["options"]
+    assert isinstance(focus_opts[0], dict) and focus_opts[0]["id"] == "accept"
 
 
 def test_focus_ack_closes_for_local_date(tmp_path: Path) -> None:

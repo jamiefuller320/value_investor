@@ -1,5 +1,7 @@
 """Daily focus hub builder — collated morning task board (Cap C).
 
+# CI tip bump for PR #947 after ruff format.
+
 Composes Project focus lines, market-warning triage (deepen/dismiss/park),
 human-task open buckets, progress actionable items, and UI reconciliation
 ambers into ``docs/data/daily_focus.json``.
@@ -661,28 +663,30 @@ def load_focus_seed(
                 seed_row=row,
             )
             status["assessment"] = assessment
-            out.append(
-                {
-                    "id": fid,
-                    "priority": int(row.get("priority") or i),
-                    "title": title,
-                    "summary": summary,
-                    "source": str(row.get("source") or "project_notes_sync"),
-                    "href": row.get("href"),
-                    "tags": list(row.get("tags") or ["project_notes"]),
-                    "task_family": task_family_for_row(row, fallback=fid),
-                    "work_class": str(row.get("work_class") or "").strip()
-                    or work_class_for_source(
-                        str(row.get("source") or "project_notes_sync"),
-                        tags=list(row.get("tags") or []),
-                    ),
-                    "next_steps": status.get("next_steps") or [],
-                    "waiting_on": status.get("waiting_on") or [],
-                    "status": status,
-                    "assessment": assessment,
-                    "notes_block": str(row.get("notes_block") or ""),
-                }
-            )
+            entry: dict[str, Any] = {
+                "id": fid,
+                "priority": int(row.get("priority") or i),
+                "title": title,
+                "summary": summary,
+                "source": str(row.get("source") or "project_notes_sync"),
+                "href": row.get("href"),
+                "tags": list(row.get("tags") or ["project_notes"]),
+                "task_family": task_family_for_row(row, fallback=fid),
+                "work_class": str(row.get("work_class") or "").strip()
+                or work_class_for_source(
+                    str(row.get("source") or "project_notes_sync"),
+                    tags=list(row.get("tags") or []),
+                ),
+                "next_steps": status.get("next_steps") or [],
+                "waiting_on": status.get("waiting_on") or [],
+                "status": status,
+                "assessment": assessment,
+                "notes_block": str(row.get("notes_block") or ""),
+            }
+            pinned_rid = str(row.get("recommendation_id") or "").strip()
+            if pinned_rid.startswith("rec-"):
+                entry["recommendation_id"] = pinned_rid
+            out.append(entry)
         if out:
             return out
     if notes_text:
@@ -693,8 +697,26 @@ def load_focus_seed(
     return []
 
 
+def _option_labels(options: list[Any]) -> list[str]:
+    """String labels for discuss prompts / inbox (structured or legacy)."""
+    labels: list[str] = []
+    for opt in options:
+        if isinstance(opt, dict):
+            label = str(opt.get("label") or opt.get("id") or "").strip()
+            if label:
+                labels.append(label)
+        else:
+            text = str(opt or "").strip()
+            if text:
+                labels.append(text)
+    return labels
+
+
 def _recommendation_for_focus(line: dict[str, Any]) -> dict[str, Any]:
-    rid = f"rec-{_stable_id('focus', str(line.get('id') or ''), str(line.get('title') or ''))}"
+    focus_id = str(line.get("id") or "").strip()
+    pinned_rid = str(line.get("recommendation_id") or "").strip()
+    # Stable across title/summary rewrites; seed may pin legacy sticky ids.
+    rid = pinned_rid if pinned_rid.startswith("rec-") else f"rec-{_stable_id('focus', focus_id)}"
     title = str(line.get("title") or "Focus line")
     summary = (
         f"Keep this as today's north star: {title}. "
@@ -705,15 +727,40 @@ def _recommendation_for_focus(line: dict[str, Any]) -> dict[str, Any]:
         "handoff. Policy green ≠ utility — action should advance P1 live-path "
         "utilization or clear a registered human gate."
     )
+    options: list[dict[str, Any]] = [
+        {
+            "id": "accept",
+            "label": "Accept and ack for today",
+            "action": {
+                "kind": "focus-ack",
+                "payload": {"focus_id": focus_id, "decision": "accept"},
+            },
+        },
+        {
+            "id": "rewrite",
+            "label": "Rewrite focus bullet (narrower P1)",
+            "action": {
+                "kind": "discuss",
+                "payload": {"preferred_option": "rewrite"},
+            },
+        },
+        {
+            "id": "park",
+            "label": "Park for today (observe-dismiss)",
+            "action": {
+                "kind": "focus-ack",
+                "payload": {"focus_id": focus_id, "decision": "dismiss"},
+            },
+        },
+    ]
+    labels = _option_labels(options)
     discuss_prompt = (
         f"Discuss daily recommendation `{rid}` (focus `{line.get('id')}`):\n"
         f"Summary: {summary}\n"
         f"Rationale: {rationale}\n"
         "Suggested options:\n"
-        "1) Accept — ack focus line for local_date and proceed\n"
-        "2) Narrow scope — rewrite the focus bullet to a smaller P1 step\n"
-        "3) Park — move to deferred / later coordinator pass\n"
-        "Context: Project store notes Today block + docs/data/daily_focus.json"
+        + "".join(f"{i}) {label}\n" for i, label in enumerate(labels, start=1))
+        + "Context: Project store notes Today block + docs/data/daily_focus.json"
     )
     return {
         "id": rid,
@@ -723,17 +770,35 @@ def _recommendation_for_focus(line: dict[str, Any]) -> dict[str, Any]:
         "accept_action": {
             "kind": "focus-ack",
             "payload": {
-                "focus_id": line.get("id"),
+                "focus_id": focus_id,
                 "decision": "accept",
             },
         },
         "discuss_prompt": discuss_prompt,
         "priority": int(line.get("priority") or 1),
-        "options": [
-            "Accept and ack for today",
-            "Rewrite focus bullet (narrower P1)",
-            "Park / discuss later",
-        ],
+        "options": options,
+    }
+
+
+def _human_task_review_detail(task: dict[str, Any]) -> dict[str, Any] | None:
+    """Compact review/process detail for Daily hub cards (observe-only)."""
+    analysis = task.get("analysis") if isinstance(task.get("analysis"), dict) else {}
+    if not analysis:
+        return None
+    bullets = [str(b).strip() for b in (analysis.get("bullets") or []) if str(b).strip()]
+    headline = str(analysis.get("headline") or "").strip()
+    doc_url = str(task.get("doc_url") or "").strip()
+    if not headline and not bullets and not doc_url:
+        return None
+    return {
+        "headline": headline or None,
+        "updated_at": analysis.get("updated_at"),
+        "fingerprint": str(analysis.get("fingerprint") or "").strip() or None,
+        "bullets": bullets[:8],
+        "doc_url": doc_url or None,
+        "cadence": task.get("cadence"),
+        "source_keys": list(analysis.get("source_keys") or [])[:8],
+        "observe_only": True,
     }
 
 
@@ -743,6 +808,7 @@ def _recommendation_for_human_task(task: dict[str, Any], *, priority: int) -> di
     bucket = str(task.get("sort_bucket") or "unacked")
     analysis = task.get("analysis") or {}
     headline = str(analysis.get("headline") or "").strip()
+    bullets = [str(b).strip() for b in (analysis.get("bullets") or []) if str(b).strip()]
     rid = f"rec-{_stable_id('human', tid, str(analysis.get('fingerprint') or ''))}"
     if bucket == "new_info":
         summary = f"Review new analysis on “{title}”, then Acknowledge (observe-only)."
@@ -754,18 +820,76 @@ def _recommendation_for_human_task(task: dict[str, Any], *, priority: int) -> di
     ]
     if headline:
         rationale_bits.append(f"analysis: {headline}")
+    if bullets:
+        rationale_bits.append("detail: " + "; ".join(bullets[:4]))
     rationale = " ".join(rationale_bits)
     fp = str(analysis.get("fingerprint") or "")
+    doc_url = str(task.get("doc_url") or "").strip()
+    approval_gate = bool(task.get("approval_gate"))
+    base_payload = {
+        "task_id": tid,
+        "decision": "ack_observe",
+        "finding_fingerprint": fp,
+    }
+    options: list[dict[str, Any]] = [
+        {
+            "id": "accept",
+            "label": "Accept → Acknowledge (observe-only)",
+            "action": {
+                "kind": "human-task-ack",
+                "payload": dict(base_payload),
+            },
+        }
+    ]
+    if approval_gate:
+        options.append(
+            {
+                "id": "approve",
+                "label": "Approve gate (observe-only)",
+                "action": {
+                    "kind": "human-task-ack",
+                    "payload": {**base_payload, "decision": "approve"},
+                },
+            }
+        )
+    options.append(
+        {
+            "id": "defer",
+            "label": "Defer / rewrite runbook expectation",
+            "action": {
+                "kind": "human-task-ack",
+                "payload": {**base_payload, "decision": "defer"},
+            },
+        }
+    )
+    if doc_url:
+        options.append(
+            {
+                "id": "runbook",
+                "label": "Open runbook",
+                "action": {"kind": "link_only", "payload": {"href": doc_url}},
+            }
+        )
+    options.append(
+        {
+            "id": "discuss",
+            "label": "Discuss in Project chat",
+            "action": {"kind": "discuss", "payload": {}},
+        }
+    )
+    labels = _option_labels(options)
+    detail_block = ""
+    if bullets:
+        detail_block = "Review detail:\n" + "".join(f"- {b}\n" for b in bullets[:6])
     discuss_prompt = (
         f"Discuss daily recommendation `{rid}` (human task `{tid}`):\n"
         f"Title: {title}\n"
         f"Summary: {summary}\n"
         f"Rationale: {rationale}\n"
+        f"{detail_block}"
         "Suggested options:\n"
-        "1) Accept — Acknowledge via human-task-ack (observe-only)\n"
-        "2) Approve gate if this is a promotion checklist item (still observe-only)\n"
-        "3) Defer / rewrite runbook expectation\n"
-        "Say: discuss daily recommendation "
+        + "".join(f"{i}) {label}\n" for i, label in enumerate(labels, start=1))
+        + "Say: discuss daily recommendation "
         f"`{rid}` — coordinator reads docs/data/daily_discuss_inbox.json "
         "and Project store docs/daily-discuss-inbox.md"
     )
@@ -776,19 +900,11 @@ def _recommendation_for_human_task(task: dict[str, Any], *, priority: int) -> di
         "rationale": rationale,
         "accept_action": {
             "kind": "human-task-ack",
-            "payload": {
-                "task_id": tid,
-                "decision": "ack_observe",
-                "finding_fingerprint": fp,
-            },
+            "payload": dict(base_payload),
         },
         "discuss_prompt": discuss_prompt,
         "priority": priority,
-        "options": [
-            "Accept → Acknowledge (observe-only)",
-            "Open runbook / defer",
-            "Discuss in Project chat",
-        ],
+        "options": options,
     }
 
 
@@ -804,14 +920,25 @@ def _recommendation_for_progress_item(item: dict[str, Any], *, priority: int) ->
         "so-what / deferred-idea disposition — Daily hub does not invent a second truth."
     )
     href = item.get("href") or item.get("doc_path") or "#overview"
+    options: list[dict[str, Any]] = [
+        {
+            "id": "open",
+            "label": "Open progress link",
+            "action": {"kind": "link_only", "payload": {"href": href}},
+        },
+        {
+            "id": "discuss",
+            "label": "Discuss / park",
+            "action": {"kind": "discuss", "payload": {"preferred_option": "park"}},
+        },
+    ]
+    labels = _option_labels(options)
     discuss_prompt = (
         f"Discuss daily recommendation `{rid}` (progress `{iid}`):\n"
         f"Summary: {summary}\n"
         f"Rationale: {rationale}\n"
         "Suggested options:\n"
-        "1) Act on the linked progress / so-what item\n"
-        "2) Snooze for today (session only)\n"
-        "3) Park with ftse-defer if not relevant now"
+        + "".join(f"{i}) {label}\n" for i, label in enumerate(labels, start=1))
     )
     return {
         "id": rid,
@@ -824,7 +951,7 @@ def _recommendation_for_progress_item(item: dict[str, Any], *, priority: int) ->
         },
         "discuss_prompt": discuss_prompt,
         "priority": priority,
-        "options": ["Open progress link", "Snooze today", "Discuss / park"],
+        "options": options,
     }
 
 
@@ -836,15 +963,40 @@ def _recommendation_for_reconcile(check: dict[str, Any], *, priority: int) -> di
     summary = f"UI reconcile warn: {title}."
     rationale = str(check.get("detail") or "Dashboard health drift — observe-only.")
     runbook = str(check.get("runbook") or "docs/ops/ops-monitor.md")
+    dismiss_action = {
+        "kind": "focus-ack",
+        "payload": {
+            "focus_id": task_ref,
+            "decision": "dismiss",
+            "href": "#automation/ops",
+            "runbook": runbook,
+        },
+    }
+    options: list[dict[str, Any]] = [
+        {
+            "id": "accept",
+            "label": "Accept — observe-dismiss for today",
+            "action": dismiss_action,
+        },
+        {
+            "id": "ops",
+            "label": "Wait ops-monitor / open Ops",
+            "action": {"kind": "link_only", "payload": {"href": "#automation/ops"}},
+        },
+        {
+            "id": "discuss",
+            "label": "Discuss",
+            "action": {"kind": "discuss", "payload": {}},
+        },
+    ]
+    labels = _option_labels(options)
     discuss_prompt = (
         f"Discuss daily recommendation `{rid}` (reconcile `{cid}`):\n"
         f"Summary: {summary}\n"
         f"Rationale: {rationale}\n"
         f"Runbook: {runbook}\n"
         "Suggested options:\n"
-        "1) Wait next ops-monitor cycle (preferred for one-cycle lag; no eng spray)\n"
-        "2) Accept — observe-dismiss for local_date while waiting / after condition clears\n"
-        "3) Hard-refresh Pages or supervised republish if publish_lag persists"
+        + "".join(f"{i}) {label}\n" for i, label in enumerate(labels, start=1))
     )
     return {
         "id": rid,
@@ -853,22 +1005,10 @@ def _recommendation_for_reconcile(check: dict[str, Any], *, priority: int) -> di
         "rationale": rationale,
         # Match market-warning park/dismiss: Accept = daily-focus-ack, not link_only.
         # link_only left operators with no way to clear sticky Cap B ambers from Daily.
-        "accept_action": {
-            "kind": "focus-ack",
-            "payload": {
-                "focus_id": task_ref,
-                "decision": "dismiss",
-                "href": "#automation/ops",
-                "runbook": runbook,
-            },
-        },
+        "accept_action": dismiss_action,
         "discuss_prompt": discuss_prompt,
         "priority": priority,
-        "options": [
-            "Accept — observe-dismiss for today",
-            "Wait ops-monitor / open Ops",
-            "Discuss",
-        ],
+        "options": options,
         "dismissable": True,
         "work_class": "surface",
         "task_family": cid,
@@ -1162,39 +1302,40 @@ def build_daily_focus(
                 closed=False,
             )
             status["updated_at"] = status.get("updated_at") or generated_at
-            tasks.append(
-                {
-                    "task_ref": task_ref,
-                    "source": "human_tasks",
-                    "work_class": "ops_gate",
-                    "task_family": tid or task_ref,
-                    "priority": priority,
-                    "title": task.get("title"),
-                    "summary": task.get("summary"),
+            review_detail = _human_task_review_detail(task)
+            row = {
+                "task_ref": task_ref,
+                "source": "human_tasks",
+                "work_class": "ops_gate",
+                "task_family": tid or task_ref,
+                "priority": priority,
+                "title": task.get("title"),
+                "summary": task.get("summary"),
+                "sort_bucket": bucket,
+                "closeable": True,
+                "close_action": "human-task-ack",
+                "close_payload": {
+                    "task_id": tid,
+                    "decision": "ack_observe",
+                    "finding_fingerprint": (task.get("analysis") or {}).get("fingerprint") or "",
+                },
+                "href": "#automation/human",
+                "recommendation_id": rec["id"],
+                "status": status,
+                "human_task": {
+                    "id": tid,
                     "sort_bucket": bucket,
-                    "closeable": True,
-                    "close_action": "human-task-ack",
-                    "close_payload": {
-                        "task_id": tid,
-                        "decision": "ack_observe",
-                        "finding_fingerprint": (task.get("analysis") or {}).get("fingerprint")
-                        or "",
-                    },
-                    "href": "#automation/human",
-                    "recommendation_id": rec["id"],
-                    "status": status,
-                    "human_task": {
-                        "id": tid,
-                        "sort_bucket": bucket,
-                        "analysis": task.get("analysis") or {},
-                        "ack": task.get("ack") or {},
-                        "approval_gate": task.get("approval_gate"),
-                        "doc_url": task.get("doc_url"),
-                        "cadence": task.get("cadence"),
-                    },
-                    "closed": False,
-                }
-            )
+                    "analysis": task.get("analysis") or {},
+                    "ack": task.get("ack") or {},
+                    "approval_gate": task.get("approval_gate"),
+                    "doc_url": task.get("doc_url"),
+                    "cadence": task.get("cadence"),
+                },
+                "closed": False,
+            }
+            if review_detail:
+                row["review_detail"] = review_detail
+            tasks.append(row)
             priority += 1
 
     # 4) Progress actionable defer_now (read-only close → deep link)
