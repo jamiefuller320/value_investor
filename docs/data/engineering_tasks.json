@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-02T08:19:08.296638+00:00",
+  "compiled_at": "2026-10-02T08:24:00.259150+00:00",
   "run_at": null,
-  "task_count": 125,
+  "task_count": 126,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1586,6 +1586,89 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
+    },
+    {
+      "id": "eng-20261002-08",
+      "area": "ingest",
+      "title": "Seed IR allowlist for unmeasured/zero-body BUOU.SI (sti) — empty allowlist after 0-improve pin (igc-20261002-03)",
+      "summary": "Gap-closure run igc-20261002-03 targeted BUOU.SI with outstanding coverage holes but zero IR allowlist URLs (refetch never attempted). Seed `_BUILTIN_IR_URLS` / issuer PDFs or fix discovery; do not keep re-pinning empty intensify. Add a regression test; verify with a pinned library ingest gap-closure / ingest-loop pass.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20261002-03",
+        "trial_id": "igc-20261002-03",
+        "chain_root_id": "igc-20261002-03",
+        "chain_round": 1,
+        "tickers": [
+          "BUOU.SI"
+        ],
+        "ticker": "BUOU.SI",
+        "market_id": "sti",
+        "library_market": "sti",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "BUOU.SI",
+            "N2IU.SI"
+          ],
+          "market_id": "sti",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "BUOU.SI",
+            "N2IU.SI"
+          ],
+          "market_id": "sti",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "compile_reason": "gaps_remain_without_allowlist"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for BUOU.SI",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260924-03",
@@ -7990,7 +8073,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-10-02T08:05:13.441988+00:00",
+    "evaluated_at": "2026-10-02T08:17:56.850744+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -7998,7 +8081,7 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "ingest_gap_closure",
   "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
   "queue_block_notify": {
@@ -8106,5 +8189,8 @@
     ],
     "ingest_exhausted": false
   },
-  "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjgyOTA3LCJ0aW1lc3RhbXAiOjE3NTU3NjI1ODEsInZlcnNpb24iOjE3NTU3NjI1NTh9:adyen:AnY4yqsJ-O5B_fRhiYXZpTaJ2RO2xhk5zUPFwcJanNc/download"
+  "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjgyOTA3LCJ0aW1lc3RhbXAiOjE3NTU3NjI1ODEsInZlcnNpb24iOjE3NTU3NjI1NTh9:adyen:AnY4yqsJ-O5B_fRhiYXZpTaJ2RO2xhk5zUPFwcJanNc/download",
+  "source_gap_closure_run_id": "igc-20261002-03",
+  "source_trial_id": "igc-20261002-03",
+  "source_chain_root_id": "igc-20261002-03"
 }
