@@ -1,5 +1,7 @@
 """Daily focus hub builder — collated morning task board (Cap C).
 
+# CI tip bump for PR #947 after ruff format.
+
 Composes Project focus lines, market-warning triage (deepen/dismiss/park),
 human-task open buckets, progress actionable items, and UI reconciliation
 ambers into ``docs/data/daily_focus.json``.
