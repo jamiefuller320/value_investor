@@ -32,7 +32,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-02T21:06:10.882655+00:00",
+    "snapshot_at": "2026-10-02T21:31:04.547681+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 53,
     "unmeasured_buy_tier": 0,
@@ -115,7 +115,7 @@
   "should_run_sprint_ingest": false,
   "should_run_maintenance_ingest": true,
   "should_run_ingest": false,
-  "evaluated_at": "2026-10-02T21:06:10.884230+00:00",
+  "evaluated_at": "2026-10-02T21:31:04.549382+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -177,7 +177,7 @@
         "no benchmark configured for smi"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-02T21:06:37.498929+00:00",
+        "snapshot_at": "2026-10-02T21:31:31.305271+00:00",
         "market_id": "smi",
         "buy_tier_count": 5,
         "unmeasured_buy_tier": 2,
@@ -223,72 +223,69 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-02T21:06:37.499059+00:00",
+      "evaluated_at": "2026-10-02T21:31:31.305430+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "nasdaq100"
+    "omxs30"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "nasdaq100",
+      "market_id": "omxs30",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=11)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=4, zero_body=0, thin=3, indexed_without_body=0)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
-      "parked_tickers": [
-        "PDD",
-        "TRI"
-      ],
+      "parked_tickers": [],
       "phase3_ready": false,
-      "current_phase": 1,
+      "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "nasdaq100 not in ladder.weekly_paper_shard_markets"
+        "no benchmark configured for omxs30"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-02T21:06:39.225900+00:00",
-        "market_id": "nasdaq100",
-        "buy_tier_count": 37,
-        "unmeasured_buy_tier": 0,
+        "snapshot_at": "2026-10-02T21:31:31.818495+00:00",
+        "market_id": "omxs30",
+        "buy_tier_count": 11,
+        "unmeasured_buy_tier": 4,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 11,
-        "bodies_min": 17,
-        "bodies_median": 20,
-        "bodies_max": 97,
+        "thin_body_buy_tier": 3,
+        "indexed_without_body": 0,
+        "bodies_min": 2,
+        "bodies_median": 3,
+        "bodies_max": 8,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
-        "unmeasured_tickers": [],
+        "unmeasured_tickers": [
+          "TEL2-B.ST",
+          "SKF-B.ST",
+          "SAND.ST",
+          "TELIA.ST"
+        ],
         "zero_body_tickers": [],
-        "thin_body_tickers": [],
-        "indexed_without_body_tickers": [
-          "TRI",
-          "PDD",
-          "CCEP"
+        "thin_body_tickers": [
+          "ASSA-B.ST",
+          "SKA-B.ST",
+          "ESSITY-B.ST"
         ],
-        "indexed_without_body_by_ticker": {
-          "TRI": 8,
-          "PDD": 1,
-          "CCEP": 2
-        },
-        "parked_tickers": [
-          "PDD",
-          "TRI"
+        "indexed_without_body_tickers": [],
+        "indexed_without_body_by_ticker": {},
+        "parked_tickers": [],
+        "parked_count": 0,
+        "effective_thin_body_buy_tier": 3,
+        "effective_thin_body_tickers": [
+          "ASSA-B.ST",
+          "SKA-B.ST",
+          "ESSITY-B.ST"
         ],
-        "parked_count": 2,
-        "effective_thin_body_buy_tier": 0,
-        "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 2,
-        "effective_indexed_without_body_tickers": [
-          "CCEP"
-        ],
+        "effective_indexed_without_body": 0,
+        "effective_indexed_without_body_tickers": [],
         "ingest_exhausted": false
       },
-      "filing_gaps": 0,
+      "filing_gaps": 4,
       "max_daily_successes": 4,
       "max_targets": 24,
       "cron_morning": true,
@@ -300,13 +297,13 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-02T21:06:39.226866+00:00",
+      "evaluated_at": "2026-10-02T21:31:31.818763+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "smi",
-    "nasdaq100"
+    "omxs30"
   ],
   "market_queue": [
     "sp500",
@@ -327,7 +324,8 @@
     "us_adr_asia",
     "atx",
     "psi20",
-    "smi"
+    "smi",
+    "omxs30"
   ],
   "ingest_cascade": {
     "enabled": true,
@@ -360,7 +358,7 @@
     "smi"
   ],
   "scheduler_stream_2_markets": [
-    "nasdaq100"
+    "omxs30"
   ],
   "should_run_library_maintenance": true
 }
