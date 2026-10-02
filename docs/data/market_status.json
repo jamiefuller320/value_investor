@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-02T16:39:53.822395+00:00",
+  "generated_at": "2026-10-02T16:43:01.877873+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -874,7 +874,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=2, indexed_without_body=2)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=3, indexed_without_body=2)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 17,
@@ -926,11 +926,11 @@
       },
       "filing_health": {
         "buy_tier_count": 5,
-        "unmeasured_buy_tier": 1,
+        "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 2,
+        "thin_body_buy_tier": 3,
         "indexed_without_body": 2,
-        "bodies_median": 2.5,
+        "bodies_median": 2.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
@@ -938,14 +938,13 @@
         "zero_body_tickers": [],
         "thin_body_tickers": [
           "WIE.VI",
-          "EVN.VI"
-        ],
-        "unmeasured_tickers": [
+          "EVN.VI",
           "CAI.VI"
         ],
+        "unmeasured_tickers": [],
         "parked_tickers": []
       },
-      "filing_gaps": 1,
+      "filing_gaps": 0,
       "paper_instrument": null,
       "ai_judgment": null,
       "knob_apply": null,
@@ -954,49 +953,46 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 0,
-        "targets": 0,
-        "improved": 0,
-        "improved_tickers": [],
-        "last_run_at": null,
+        "run_count": 1,
+        "targets": 3,
+        "improved": 1,
+        "improved_tickers": [
+          "CAI.VI"
+        ],
+        "last_run_at": "2026-10-02T16:41:07.725960+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 2,
-          "filing_gaps": 0
-        },
-        "gaps_after": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 2,
-          "filing_gaps": 0
-        },
-        "gap_delta": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 0,
-          "filing_gaps": 0
-        },
-        "remaining": {
           "unmeasured": 1,
           "zero_body": 0,
           "thin": 2,
           "indexed_without_body": 2,
           "filing_gaps": 1
         },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 3,
+          "indexed_without_body": 2,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": -1,
+          "zero_body": 0,
+          "thin": 1,
+          "indexed_without_body": 0,
+          "filing_gaps": -1
+        },
+        "remaining": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 3,
+          "indexed_without_body": 2,
+          "filing_gaps": 0
+        },
         "admission_ready": false,
         "admission_gate": "sprint_ingest_complete",
         "admission_warnings": [
-          {
-            "id": "awaiting_first_ingest",
-            "severity": "warn",
-            "summary": "Entered sprint on 2026-10-02; waiting on the first deepen slot"
-          },
           {
             "id": "no_observe_benchmark",
             "severity": "warn",
