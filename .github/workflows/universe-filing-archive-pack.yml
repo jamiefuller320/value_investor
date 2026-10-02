@@ -105,12 +105,13 @@ jobs:
               fh.write(f"should_commit=true\n")
           PY
 
-      - name: Commit pack run + bottleneck review
+      - name: Commit pack run + bottleneck review + status panel
         if: always() && steps.pack.outcome == 'success'
         env:
           COMMIT_MESSAGE: "chore: universe filing archive pack run [skip ci]"
           GHA_COMMIT_OWNED: >-
             docs/data/universe_filing_archive_pack_run.json
             docs/data/universe_filing_archive_bottleneck_review.json
+            docs/data/universe_filing_archive_status.json
           GHA_COMMIT_LABEL: universe-filing-archive-pack
         run: bash scripts/gha_commit_artifacts.sh

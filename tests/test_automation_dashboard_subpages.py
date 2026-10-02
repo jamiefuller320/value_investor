@@ -44,6 +44,12 @@ def test_render_automation_uses_section_panes() -> None:
     assert 'data-automation-pane="ops"' in fn
     assert 'data-automation-pane="settings"' in fn
     assert "renderUiReconcileTable(" in fn
+    assert "renderColdStoreArchiveStatusPanel(" in fn
+    assert "cold-store-archive-status" in text
+    assert '["universe_filing_archive_status", "data/universe_filing_archive_status.json"]' in text
+    css = STYLES.read_text(encoding="utf-8")
+    assert ".cold-store-archive-status" in css
+    assert ".cold-store-archive-grid" in css
 
 
 def test_daily_hub_accept_discuss_ux() -> None:
