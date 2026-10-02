@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-01T21:55:14.042948+00:00",
+  "generated_at": "2026-10-02T07:48:11.179634+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -60,7 +60,7 @@
       "1": "us_adr_asia",
       "2": "sti"
     },
-    "equal_support_generated_at": "2026-10-01T20:22:34.675366+00:00"
+    "equal_support_generated_at": "2026-10-02T06:10:29.091342+00:00"
   },
   "markets": [
     {
@@ -4147,10 +4147,10 @@
         "acted": true,
         "last_run_at": "2026-09-30T07:26:40.376772+00:00",
         "holdings": 26,
-        "nav": 545.56,
+        "nav": 546.41,
         "cash": 100.19,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 36,
+        "weekday_batch_count": 37,
         "epoch0_batch_count": 19
       },
       "equal_support": {
@@ -4279,6 +4279,19 @@
               "buy_tier_level_gbp_fx_warped": 445.37
             },
             "market": 999.44
+          },
+          {
+            "date": "2026-10-02",
+            "held": 991.86,
+            "nav": 993.95,
+            "held_stock": 991.86,
+            "cash": 2.09,
+            "positions": 26,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 446.22
+            },
+            "market": 999.44
           }
         ],
         "series": [
@@ -4318,11 +4331,11 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 21
+            "point_count": 22
           }
         ],
         "last": {
-          "date": "2026-10-01",
+          "date": "2026-10-02",
           "held": 991.86,
           "market": 999.44,
           "nav": 993.95,
