@@ -1,58 +1,58 @@
 {
-  "run_at": "2026-10-01T16:35:10.732347+00:00",
+  "run_at": "2026-10-02T07:42:49.423871+00:00",
   "market_id": "asx200",
   "targets": [
-    "WAF.AX"
+    "CSC.AX"
   ],
   "target_details": [
     {
-      "ticker": "WAF.AX",
-      "priority_score": 18.9768,
-      "filings_total": 19,
-      "filings_with_body": 18,
+      "ticker": "CSC.AX",
+      "priority_score": 26.7989,
+      "filings_total": 69,
+      "filings_with_body": 66,
       "indexed_without_body": 1,
       "reason": "indexed_without_body"
     }
   ],
   "results": [
     {
-      "ticker": "WAF.AX",
+      "ticker": "CSC.AX",
       "reason": "indexed_without_body",
       "before": {
-        "filings_total": 19,
-        "filings_with_body": 18,
+        "filings_total": 69,
+        "filings_with_body": 66,
         "indexed_without_body": 1
       },
       "after": {
-        "filings_total": 19,
-        "filings_with_body": 19,
+        "filings_total": 73,
+        "filings_with_body": 72,
         "indexed_without_body": 0
       },
       "improved": true,
       "regime": "asx_announcements",
       "filings_summary": {
-        "total": 19,
-        "annual": 3,
-        "interim": 1,
-        "trading_update": 3,
-        "other": 12,
-        "with_body": 19,
+        "total": 69,
+        "annual": 11,
+        "interim": 13,
+        "trading_update": 6,
+        "other": 39,
+        "with_body": 68,
         "period_coverage": {
           "annual": {
-            "total": 3,
-            "with_body": 3
+            "total": 11,
+            "with_body": 11
           },
           "interim": {
-            "total": 1,
-            "with_body": 1
+            "total": 13,
+            "with_body": 13
           },
           "trading_update": {
-            "total": 3,
-            "with_body": 3
+            "total": 6,
+            "with_body": 6
           },
           "other": {
-            "total": 12,
-            "with_body": 12
+            "total": 30,
+            "with_body": 29
           }
         }
       },
@@ -62,8 +62,8 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 19,
-        "with_body_after": 19,
+        "with_body_before": 72,
+        "with_body_after": 72,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
         "deadline_hit": false,
@@ -79,13 +79,13 @@
     }
   ],
   "improved": [
-    "WAF.AX"
+    "CSC.AX"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-01T16:34:28.170233+00:00",
+    "snapshot_at": "2026-10-02T07:40:07.176232+00:00",
     "market_id": "asx200",
     "buy_tier_count": 26,
     "unmeasured_buy_tier": 0,
@@ -111,7 +111,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-01T16:35:02.106936+00:00",
+    "snapshot_at": "2026-10-02T07:42:42.848680+00:00",
     "market_id": "asx200",
     "buy_tier_count": 26,
     "unmeasured_buy_tier": 0,
@@ -144,8 +144,8 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 26,
-    "hits": 22,
-    "new_rows_total": 7,
+    "hits": 23,
+    "new_rows_total": 12,
     "curiosity_total": 28,
     "errors": 0,
     "prioritization_weights": {
@@ -169,7 +169,7 @@
   },
   "critical_path": {
     "market_id": "asx200",
-    "assessed_at": "2026-10-01T16:34:31.061186+00:00",
+    "assessed_at": "2026-10-02T07:40:10.083379+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -190,9 +190,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 28.15467836100001,
+  "used_seconds": 150.01049596300004,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3571.845321639,
+  "leftover_seconds": 3449.989504037,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -200,12 +200,14 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "asx200",
-    "updated_at": "2026-10-01T16:35:02.112822+00:00",
+    "updated_at": "2026-10-02T07:42:42.855968+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [],
-    "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
+    "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
+    "straggler_max_leftovers": 3,
+    "straggler_zero_runs": 2,
     "had_complete_targets": false,
     "leftover_tickers": [],
     "unparked_leftover": [],
@@ -219,7 +221,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 122,
+    "task_count": 125,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
