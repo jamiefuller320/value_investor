@@ -1,33 +1,60 @@
 {
-  "market_id": "ftse_mib",
-  "assessed_at": "2026-10-02T13:38:33.372842+00:00",
+  "market_id": "us_adr_asia",
+  "assessed_at": "2026-10-02T13:48:47.273340+00:00",
   "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
-  "thin_need_discovery": [
-    "MONC.MI",
-    "PST.MI",
-    "BZU.MI",
-    "INW.MI",
-    "UNI.MI",
-    "BC.MI",
-    "FCT.MI",
-    "IVG.MI"
+  "indexed_without_body": [
+    {
+      "ticker": "BIDU",
+      "indexed_without_body": 24,
+      "filings_total": 65,
+      "filings_with_body": 41
+    },
+    {
+      "ticker": "UMC",
+      "indexed_without_body": 17,
+      "filings_total": 48,
+      "filings_with_body": 31
+    },
+    {
+      "ticker": "TME",
+      "indexed_without_body": 11,
+      "filings_total": 44,
+      "filings_with_body": 33
+    },
+    {
+      "ticker": "JD",
+      "indexed_without_body": 9,
+      "filings_total": 35,
+      "filings_with_body": 26
+    },
+    {
+      "ticker": "PDD",
+      "indexed_without_body": 1,
+      "filings_total": 18,
+      "filings_with_body": 17
+    }
   ],
+  "thin_need_discovery": [],
   "thin_need_bodies": [],
-  "primary_blocker": "thin_need_discovery",
-  "force_discovery_scan": true,
-  "auto_pin_tickers": [],
+  "primary_blocker": "indexed_without_body",
+  "force_discovery_scan": false,
+  "auto_pin_tickers": [
+    "BIDU",
+    "UMC",
+    "TME",
+    "JD",
+    "PDD"
+  ],
   "recommended_actions": [
-    "Discovery/IR seed for 8 thin ticker(s) that already have bodies for every indexed filing",
-    "Run listing-only discovery_scan before deepen"
+    "Prefer indexed-without-body body refetch (5 tickers, top: BIDU(24), UMC(17), TME(11), JD(9), PDD(1))"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
-    "thin_need_discovery": 8,
+    "indexed_without_body_tickers": 5,
+    "indexed_without_body_rows": 62,
+    "thin_need_discovery": 0,
     "thin_need_bodies": 0
   }
 }

@@ -544,14 +544,14 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-02T12:00:45.962147+00:00",
+  "updated_at": "2026-10-02T13:50:13.591373+00:00",
   "ingest_parity_markets": [
     "aim",
     "asx200",
     "euro_depth"
   ],
   "ingest_parallel_sprint": [
-    "us_adr_asia"
+    "sp500"
   ],
   "ingest_parallel_sprint_2": [
     "sti"
@@ -831,7 +831,8 @@
       "ftse_mib",
       "aex",
       "bel20",
-      "hang_seng"
+      "hang_seng",
+      "us_adr_asia"
     ],
     "epoch0_shard_after_screen": true,
     "equal_support_after_screen": true,
@@ -855,16 +856,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-09-08T17:19:08.584615+00:00",
-        "parallel_stream": 2,
-        "from_market": "ftse_smallcap",
-        "to_market": "asx200",
-        "stream_markets_after": [
-          "asx200"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-09-09T15:11:29.636158+00:00",
         "parallel_stream": 2,
@@ -1352,6 +1343,16 @@
           "us_adr_asia"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-10-02T13:50:13.591353+00:00",
+        "parallel_stream": 1,
+        "from_market": "us_adr_asia",
+        "to_market": "sp500",
+        "stream_markets_after": [
+          "sp500"
+        ],
+        "ingest_parity_recorded": false
       }
     ]
   },
@@ -1369,6 +1370,7 @@
     "ibex35",
     "nasdaq100",
     "sp500",
-    "tsx60"
+    "tsx60",
+    "us_adr_asia"
   ]
 }

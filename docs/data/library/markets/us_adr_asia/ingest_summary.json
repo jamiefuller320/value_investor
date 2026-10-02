@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-02T10:50:39.211143+00:00",
+  "run_at": "2026-10-02T13:51:26.042870+00:00",
   "market_id": "us_adr_asia",
   "targets": [
     "BIDU",
@@ -367,7 +367,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-02T10:48:50.399730+00:00",
+    "snapshot_at": "2026-10-02T13:48:46.926842+00:00",
     "market_id": "us_adr_asia",
     "buy_tier_count": 7,
     "unmeasured_buy_tier": 0,
@@ -411,7 +411,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-02T10:50:31.839331+00:00",
+    "snapshot_at": "2026-10-02T13:50:06.683614+00:00",
     "market_id": "us_adr_asia",
     "buy_tier_count": 7,
     "unmeasured_buy_tier": 0,
@@ -440,19 +440,19 @@
       "PDD": 1,
       "BIDU": 24
     },
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 62,
-    "effective_indexed_without_body_tickers": [
-      "TME",
-      "UMC",
+    "parked_tickers": [
+      "BIDU",
       "JD",
       "PDD",
-      "BIDU"
+      "TME",
+      "UMC"
     ],
-    "ingest_exhausted": false
+    "parked_count": 5,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -463,10 +463,46 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "us_adr_asia",
+    "to_market": "sp500",
+    "stream_markets_after": [
+      "sp500"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "us_adr_asia",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "BIDU",
+        "JD",
+        "PDD",
+        "TME",
+        "UMC"
+      ],
+      "learning_admitted_changed": true,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "sp500",
+      "forced": true,
+      "prior_screen_at": "2026-09-30T06:52:42.218162+00:00",
+      "prior_age_days": 2,
+      "run_at": "2026-10-02T13:51:12.416109+00:00",
+      "shortlist_count": 143,
+      "ticker_count": 503
+    },
+    "at": "2026-10-02T13:50:13.591353+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "us_adr_asia",
-    "assessed_at": "2026-10-02T10:48:50.813436+00:00",
+    "assessed_at": "2026-10-02T13:48:47.273340+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -524,9 +560,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 100.60870764699999,
+  "used_seconds": 79.10730646599995,
   "budget_seconds": 2100.0,
-  "leftover_seconds": 1999.391292353,
+  "leftover_seconds": 2020.892693534,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -534,11 +570,67 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "us_adr_asia",
-    "updated_at": "2026-10-02T10:50:31.840552+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-10-02T13:50:06.684846+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "BIDU",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-02T13:50:06.684846+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 65,
+        "filings_with_body": 41,
+        "indexed_without_body": 24,
+        "thin": false
+      },
+      {
+        "ticker": "JD",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-02T13:50:06.684846+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 35,
+        "filings_with_body": 26,
+        "indexed_without_body": 9,
+        "thin": false
+      },
+      {
+        "ticker": "PDD",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-02T13:50:06.684846+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 18,
+        "filings_with_body": 17,
+        "indexed_without_body": 1,
+        "thin": false
+      },
+      {
+        "ticker": "TME",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-02T13:50:06.684846+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 44,
+        "filings_with_body": 33,
+        "indexed_without_body": 11,
+        "thin": false
+      },
+      {
+        "ticker": "UMC",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-02T13:50:06.684846+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 48,
+        "filings_with_body": 31,
+        "indexed_without_body": 17,
+        "thin": false
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
@@ -550,24 +642,37 @@
       "TME",
       "UMC"
     ],
-    "unparked_leftover": [
-      "BIDU",
-      "JD",
-      "PDD",
-      "TME",
-      "UMC"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/us_adr_asia/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "us_adr_asia"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "us_adr_asia",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "nasdaq100",
+      "sp500",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 125,
+    "task_count": 126,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
