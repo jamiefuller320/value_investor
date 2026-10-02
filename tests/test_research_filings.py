@@ -6750,8 +6750,8 @@ def test_fetch_filings_ir_allowlist_euro_depth_apam_as_builtins(tmp_path: Path):
     assert "AnnualReport_2025" in rows[0]["url"]
 
 
-def test_fetch_filings_ir_allowlist_aex_adyen_as_builtins(tmp_path: Path):
-    """eng-20260930-01: ADYEN.AS awaiting_periodic_report — brand.adyen.com FY + H1 PDFs."""
+def test_fetch_filings_ir_allowlist_euro_depth_adyen_as_builtins(tmp_path: Path):
+    """eng-20261002-02: ADYEN.AS euro_depth awaiting_periodic_report — brand.adyen.com FY + H1 PDFs."""
     allowlist_path = tmp_path / "ir.json"
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
 
@@ -6764,8 +6764,8 @@ def test_fetch_filings_ir_allowlist_aex_adyen_as_builtins(tmp_path: Path):
     assert sum(1 for row in rows if row["period"] == "interim") == 1
 
 
-def test_parked_source_hunter_adyen_as_aex_has_fetchable_ir():
-    """eng-20260930-01: ADYEN.AS has live brand.adyen.com FY2025 annual report PDF."""
+def test_parked_source_hunter_adyen_as_euro_depth_fy2025_annual_live():
+    """eng-20261002-02: ADYEN.AS has live brand.adyen.com FY2025 annual report PDF."""
     assert "ADYEN.AS" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("ADYEN.AS")
     annual_2025 = next(
@@ -6780,8 +6780,25 @@ def test_parked_source_hunter_adyen_as_aex_has_fetchable_ir():
     assert valid, reason
 
 
-def test_parked_source_hunter_adyen_as_h1_2026_interim_live():
-    """eng-20261002-13: ADYEN.AS interim allowlist uses investors.adyen.com H1 2026 letter PDF."""
+def test_parked_source_hunter_adyen_as_euro_depth_fy2024_annual_live():
+    """eng-20261002-02: ADYEN.AS has live brand.adyen.com FY2024 annual report PDF."""
+    assert "ADYEN.AS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ADYEN.AS")
+    annual_2024 = next(
+        row
+        for row in rows
+        if row["period"] == "annual" and "kj44Bpqibw5DHCvRHFCwtnzOuM88_WWzAKJ1odHfCfY" in row["url"]
+    )
+    body = fetch_filing_body(annual_2024["url"])
+    assert body and len(body) > 5000
+    assert "2024" in body[:2000]
+    assert "Annual Report" in body
+    valid, reason = _validate_ir_allowlist_body_content(annual_2024, body, ticker="ADYEN.AS")
+    assert valid, reason
+
+
+def test_parked_source_hunter_adyen_as_euro_depth_h1_2026_interim_live():
+    """eng-20261002-02: ADYEN.AS interim allowlist uses brand.adyen.com H1 2026 letter PDF."""
     rows = fetch_filings_ir_allowlist("ADYEN.AS")
     interim = next(row for row in rows if row["period"] == "interim")
     assert "XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE" in interim["url"]
@@ -9060,6 +9077,21 @@ def test_load_ir_url_allowlist_canonicalizes_dnl_ax_dead_asx_guidance_url(tmp_pa
     assert _ir_allowlist_period_from_url(live) == "interim"
 
 
+def test_load_ir_url_allowlist_canonicalizes_adyen_as_dead_h1_2025_frontify_url(tmp_path: Path):
+    """eng-20261002-02: Rotated H1 2025 Frontify slug maps to live H1 2026 letter PDF."""
+    dead = (
+        "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjgyOTA3LCJ0aW1lc3RhbXAiOjE3NTU3NjI1ODEs"
+        "InZlcnNpb24iOjE3NTU3NjI1NTh9:adyen:AnY4yqsJ-O5B_fRhiYXZpTaJ2RO2xhk5zUPFwcJanNc/download"
+    )
+    live = _BUILTIN_IR_URLS["ADYEN.AS"][2]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"ADYEN.AS": [dead]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["ADYEN.AS"]
+    assert dead not in mapping["ADYEN.AS"]
+    assert _ir_allowlist_period_from_url(live) == "interim"
+
+
 def test_asx_statistics_listing_page_is_index_noise():
     from value_investor.research.filings import _is_index_noise_row
 
@@ -10367,6 +10399,17 @@ def test_parked_source_hunter_apam_as_euro_depth_has_fetchable_ir():
     assert rows[0]["period"] == "annual"
     assert "aperam.com" in rows[0]["url"]
     assert "AnnualReport_2025" in rows[0]["url"]
+
+
+def test_parked_source_hunter_adyen_as_euro_depth_has_fetchable_ir():
+    """eng-20261002-02: ADYEN.AS brand.adyen.com FY2024/FY2025 + H1 2026 statutory PDFs (hunter confirmed)."""
+    assert "ADYEN.AS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ADYEN.AS")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("brand.adyen.com/api/asset" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
 
 
 def test_parked_source_hunter_assa_b_st_euro_depth_has_fetchable_ir():
