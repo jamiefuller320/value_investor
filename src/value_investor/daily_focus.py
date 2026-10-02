@@ -662,25 +662,25 @@ def load_focus_seed(
             )
             status["assessment"] = assessment
             entry: dict[str, Any] = {
-                    "id": fid,
-                    "priority": int(row.get("priority") or i),
-                    "title": title,
-                    "summary": summary,
-                    "source": str(row.get("source") or "project_notes_sync"),
-                    "href": row.get("href"),
-                    "tags": list(row.get("tags") or ["project_notes"]),
-                    "task_family": task_family_for_row(row, fallback=fid),
-                    "work_class": str(row.get("work_class") or "").strip()
-                    or work_class_for_source(
-                        str(row.get("source") or "project_notes_sync"),
-                        tags=list(row.get("tags") or []),
-                    ),
-                    "next_steps": status.get("next_steps") or [],
-                    "waiting_on": status.get("waiting_on") or [],
-                    "status": status,
-                    "assessment": assessment,
-                    "notes_block": str(row.get("notes_block") or ""),
-                }
+                "id": fid,
+                "priority": int(row.get("priority") or i),
+                "title": title,
+                "summary": summary,
+                "source": str(row.get("source") or "project_notes_sync"),
+                "href": row.get("href"),
+                "tags": list(row.get("tags") or ["project_notes"]),
+                "task_family": task_family_for_row(row, fallback=fid),
+                "work_class": str(row.get("work_class") or "").strip()
+                or work_class_for_source(
+                    str(row.get("source") or "project_notes_sync"),
+                    tags=list(row.get("tags") or []),
+                ),
+                "next_steps": status.get("next_steps") or [],
+                "waiting_on": status.get("waiting_on") or [],
+                "status": status,
+                "assessment": assessment,
+                "notes_block": str(row.get("notes_block") or ""),
+            }
             pinned_rid = str(row.get("recommendation_id") or "").strip()
             if pinned_rid.startswith("rec-"):
                 entry["recommendation_id"] = pinned_rid
@@ -714,11 +714,7 @@ def _recommendation_for_focus(line: dict[str, Any]) -> dict[str, Any]:
     focus_id = str(line.get("id") or "").strip()
     pinned_rid = str(line.get("recommendation_id") or "").strip()
     # Stable across title/summary rewrites; seed may pin legacy sticky ids.
-    rid = (
-        pinned_rid
-        if pinned_rid.startswith("rec-")
-        else f"rec-{_stable_id('focus', focus_id)}"
-    )
+    rid = pinned_rid if pinned_rid.startswith("rec-") else f"rec-{_stable_id('focus', focus_id)}"
     title = str(line.get("title") or "Focus line")
     summary = (
         f"Keep this as today's north star: {title}. "
@@ -1319,8 +1315,7 @@ def build_daily_focus(
                 "close_payload": {
                     "task_id": tid,
                     "decision": "ack_observe",
-                    "finding_fingerprint": (task.get("analysis") or {}).get("fingerprint")
-                    or "",
+                    "finding_fingerprint": (task.get("analysis") or {}).get("fingerprint") or "",
                 },
                 "href": "#automation/human",
                 "recommendation_id": rec["id"],
