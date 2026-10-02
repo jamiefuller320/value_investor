@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-02T14:15:24.969127+00:00",
+  "generated_at": "2026-10-02T14:21:51.708220+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -19,7 +19,8 @@
     "aex",
     "bel20",
     "hang_seng",
-    "us_adr_asia"
+    "us_adr_asia",
+    "sti"
   ],
   "summary": {
     "market_count": 23,
@@ -38,7 +39,7 @@
     "sprint_count": 2,
     "maintenance_count": 20,
     "live_count": 1,
-    "admitted_count": 16,
+    "admitted_count": 17,
     "should_run_library_maintenance": true,
     "maintenance_markets": [
       "aex",
@@ -55,12 +56,13 @@
       "ibex35",
       "nasdaq100",
       "sp500",
+      "sti",
       "tsx60",
       "us_adr_asia"
     ],
     "spare_sprint": {
       "1": "tsx60",
-      "2": "sti"
+      "2": "aex"
     },
     "equal_support_generated_at": "2026-10-02T08:47:45.822201+00:00"
   },
@@ -1014,198 +1016,21 @@
       }
     },
     {
-      "market_id": "sti",
-      "label": "Straits Times Index",
-      "exchange": "SGX",
-      "currency": "SGD",
-      "role": "sprint",
-      "is_live": false,
-      "is_focus": false,
-      "is_graduated": true,
-      "is_queue": true,
-      "is_admitted": false,
-      "is_ftse_equivalent": false,
-      "ingest": "sprint",
-      "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=2, indexed_without_body=2)",
-      "ingest_parity_met": false,
-      "ingest_exhausted": false,
-      "queue_rank": 15,
-      "shared_maintenance": false,
-      "health": "warn",
-      "coverage_pct": 1.0,
-      "honest_coverage_pct": 1.0,
-      "ticker_count": 30,
-      "stale": 0,
-      "fresh": 30,
-      "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-30T07:16:28.554258+00:00",
-      "last_constituents_refresh": "2026-09-30T07:13:21.627574+00:00",
-      "last_screen_at": "2026-10-01T17:23:12.535344+00:00",
-      "signal_counts": {
-        "hold": 20,
-        "buy": 4,
-        "avoid": 4,
-        "strong_buy": 2
-      },
-      "shortlist_count": 6,
-      "strong_buy": 2,
-      "buy": 4,
-      "learning_phase": 0,
-      "learning_phase_label": "Ingest only",
-      "phase_blockers": [
-        "no benchmark configured for sti"
-      ],
-      "expected_epoch0_blockers": [],
-      "learning": {
-        "current_phase": 0,
-        "next_phase": 1,
-        "phase1_ready": false,
-        "phase2_ready": false,
-        "phase3_ready": false,
-        "weekly_paper_enabled": false,
-        "weekday_paper_enabled": false,
-        "blockers": [
-          "no benchmark configured for sti"
-        ],
-        "phase1": {
-          "screen_archives": 0,
-          "observe_snapshot_count": 0
-        },
-        "phase2": {
-          "weekly_batch_count": 0,
-          "min_weekly_batches": 0
-        }
-      },
-      "filing_health": {
-        "buy_tier_count": 6,
-        "unmeasured_buy_tier": 1,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 2,
-        "indexed_without_body": 2,
-        "bodies_median": 3.0,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
-        "ingest_exhausted": false,
-        "parked_count": 0,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "J36.SI",
-          "BS6.SI"
-        ],
-        "unmeasured_tickers": [
-          "BUOU.SI"
-        ],
-        "parked_tickers": []
-      },
-      "filing_gaps": 1,
-      "paper_instrument": null,
-      "ai_judgment": null,
-      "knob_apply": null,
-      "epoch0": null,
-      "equal_support": null,
-      "near_miss": null,
-      "sprint_progress": {
-        "window_days": 2,
-        "run_count": 5,
-        "targets": 15,
-        "improved": 4,
-        "improved_tickers": [
-          "BS6.SI",
-          "N2IU.SI",
-          "J36.SI",
-          "U14.SI"
-        ],
-        "last_run_at": "2026-10-02T11:19:01.007218+00:00",
-        "runtime_cutoff_runs": 0,
-        "error_runs": 0,
-        "gaps_before": {
-          "unmeasured": 3,
-          "zero_body": 2,
-          "thin": 0,
-          "indexed_without_body": 0,
-          "filing_gaps": 5
-        },
-        "gaps_after": {
-          "unmeasured": 1,
-          "zero_body": 0,
-          "thin": 2,
-          "indexed_without_body": 2,
-          "filing_gaps": 1
-        },
-        "gap_delta": {
-          "unmeasured": -2,
-          "zero_body": -2,
-          "thin": 2,
-          "indexed_without_body": 2,
-          "filing_gaps": -4
-        },
-        "remaining": {
-          "unmeasured": 1,
-          "zero_body": 0,
-          "thin": 2,
-          "indexed_without_body": 2,
-          "filing_gaps": 1
-        },
-        "admission_ready": false,
-        "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "no_observe_benchmark",
-            "severity": "warn",
-            "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
-          }
-        ],
-        "sprint_entered_at": "2026-10-01T17:22:11.265502+00:00"
-      },
-      "held_vs_market": {
-        "schema_version": 1,
-        "status": "empty",
-        "reason": "No paper book or observe-sim marks",
-        "market_id": "sti",
-        "source": null,
-        "paper_instrument": "buy_tier_level",
-        "currency": "SGD",
-        "benchmark_ticker": "^HSI",
-        "held_path": null,
-        "market_path": null,
-        "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
-        "points": [],
-        "series": [
-          {
-            "id": "held",
-            "label": "Held book",
-            "kind": "held",
-            "color": "#2b6cb0"
-          },
-          {
-            "id": "market",
-            "label": "^HSI equivalent",
-            "kind": "market",
-            "color": "#64748b"
-          }
-        ],
-        "branches": [],
-        "last": null
-      }
-    },
-    {
       "market_id": "aex",
       "label": "AEX",
       "exchange": "Euronext Amsterdam",
       "currency": "EUR",
-      "role": "admitted",
+      "role": "sprint",
       "is_live": false,
       "is_focus": false,
       "is_graduated": true,
       "is_queue": true,
       "is_admitted": true,
       "is_ftse_equivalent": false,
-      "ingest": "maintenance",
-      "ingest_stream": null,
-      "ingest_reason": null,
-      "ingest_parity_met": null,
+      "ingest": "sprint",
+      "ingest_stream": 2,
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=2)",
+      "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 12,
       "shared_maintenance": true,
@@ -1218,7 +1043,7 @@
       "failed_fetch_count": 0,
       "last_metrics_refresh": "2026-09-30T07:12:05.787459+00:00",
       "last_constituents_refresh": "2026-09-30T07:11:53.328391+00:00",
-      "last_screen_at": "2026-10-01T07:50:50.021090+00:00",
+      "last_screen_at": "2026-10-02T14:20:21.240976+00:00",
       "signal_counts": {
         "hold": 16,
         "strong_buy": 4,
@@ -1241,21 +1066,38 @@
         "phase2_ready": false,
         "phase3_ready": false,
         "weekly_paper_enabled": false,
-        "weekday_paper_enabled": true,
+        "weekday_paper_enabled": false,
         "blockers": [
           "no benchmark configured for aex"
         ],
         "phase1": {
-          "screen_archives": 14,
+          "screen_archives": 0,
           "observe_snapshot_count": 0
         },
         "phase2": {
           "weekly_batch_count": 0,
-          "min_weekly_batches": 4
+          "min_weekly_batches": 0
         }
       },
-      "filing_health": null,
-      "filing_gaps": null,
+      "filing_health": {
+        "buy_tier_count": 8,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 2,
+        "bodies_median": 3.5,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "ingest_exhausted": false,
+        "parked_count": 0,
+        "zero_body_tickers": [],
+        "thin_body_tickers": [
+          "KPN.AS"
+        ],
+        "unmeasured_tickers": [],
+        "parked_tickers": []
+      },
+      "filing_gaps": 0,
       "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
@@ -1309,7 +1151,57 @@
           "BESI.AS"
         ]
       },
-      "sprint_progress": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 5,
+        "targets": 4,
+        "improved": 4,
+        "improved_tickers": [
+          "SHELL.AS",
+          "ADYEN.AS"
+        ],
+        "last_run_at": "2026-10-02T07:34:30.447288+00:00",
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 2,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 1,
+          "indexed_without_body": 2,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": -1,
+          "indexed_without_body": 2,
+          "filing_gaps": 0
+        },
+        "remaining": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 1,
+          "indexed_without_body": 2,
+          "filing_gaps": 0
+        },
+        "admission_ready": true,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "no_observe_benchmark",
+            "severity": "warn",
+            "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
+          }
+        ],
+        "sprint_entered_at": "2026-10-02T14:19:36.878439+00:00"
+      },
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -4638,6 +4530,111 @@
           "positions": 26,
           "excess_pct": -0.007584
         }
+      }
+    },
+    {
+      "market_id": "sti",
+      "label": "Straits Times Index",
+      "exchange": "SGX",
+      "currency": "SGD",
+      "role": "admitted",
+      "is_live": false,
+      "is_focus": false,
+      "is_graduated": true,
+      "is_queue": true,
+      "is_admitted": true,
+      "is_ftse_equivalent": false,
+      "ingest": "maintenance",
+      "ingest_stream": null,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
+      "ingest_exhausted": true,
+      "queue_rank": 15,
+      "shared_maintenance": true,
+      "health": "warn",
+      "coverage_pct": 1.0,
+      "honest_coverage_pct": 1.0,
+      "ticker_count": 30,
+      "stale": 0,
+      "fresh": 30,
+      "failed_fetch_count": 0,
+      "last_metrics_refresh": "2026-09-30T07:16:28.554258+00:00",
+      "last_constituents_refresh": "2026-09-30T07:13:21.627574+00:00",
+      "last_screen_at": "2026-10-01T17:23:12.535344+00:00",
+      "signal_counts": {
+        "hold": 20,
+        "buy": 4,
+        "avoid": 4,
+        "strong_buy": 2
+      },
+      "shortlist_count": 6,
+      "strong_buy": 2,
+      "buy": 4,
+      "learning_phase": 0,
+      "learning_phase_label": "Not started",
+      "phase_blockers": [
+        "no benchmark configured for sti"
+      ],
+      "expected_epoch0_blockers": [],
+      "learning": {
+        "current_phase": 0,
+        "next_phase": 1,
+        "phase1_ready": false,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": true,
+        "blockers": [
+          "no benchmark configured for sti"
+        ],
+        "phase1": {
+          "screen_archives": 12,
+          "observe_snapshot_count": 0
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 4
+        }
+      },
+      "filing_health": null,
+      "filing_gaps": null,
+      "paper_instrument": null,
+      "ai_judgment": false,
+      "knob_apply": false,
+      "epoch0": null,
+      "equal_support": null,
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "sti",
+        "source": null,
+        "paper_instrument": "buy_tier_level",
+        "currency": "SGD",
+        "benchmark_ticker": "^HSI",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^HSI equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
       }
     },
     {
