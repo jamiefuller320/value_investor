@@ -6751,7 +6751,7 @@ def test_fetch_filings_ir_allowlist_euro_depth_apam_as_builtins(tmp_path: Path):
 
 
 def test_fetch_filings_ir_allowlist_aex_adyen_as_builtins(tmp_path: Path):
-    """eng-20260930-01: ADYEN.AS awaiting_periodic_report — brand.adyen.com FY + H1 PDFs."""
+    """eng-20260930-01 / eng-20261002-07: ADYEN.AS brand.adyen.com FY + interim shareholder PDF."""
     allowlist_path = tmp_path / "ir.json"
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
 
@@ -6762,6 +6762,19 @@ def test_fetch_filings_ir_allowlist_aex_adyen_as_builtins(tmp_path: Path):
     assert all("brand.adyen.com/api/asset" in url for url in urls)
     assert sum(1 for row in rows if row["period"] == "annual") == 2
     assert sum(1 for row in rows if row["period"] == "interim") == 1
+    interim = next(row for row in rows if row["period"] == "interim")
+    assert "H5vsx79VwLKJkfLZBrmssAmZF4pGvB9sTS75BJt4_pU" in interim["url"]
+
+
+def test_load_ir_url_allowlist_canonicalizes_adyen_as_dead_h1_interim_url(tmp_path: Path):
+    """eng-20261002-07: dead Frontify H1 asset maps to live H2 2025 shareholder letter PDF."""
+    dead = "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjgyOTA3LCJ0aW1lc3RhbXAiOjE3NTU3NjI1ODEsInZlcnNpb24iOjE3NTU3NjI1NTh9:adyen:AnY4yqsJ-O5B_fRhiYXZpTaJ2RO2xhk5zUPFwcJanNc/download"
+    live = _BUILTIN_IR_URLS["ADYEN.AS"][2]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"ADYEN.AS": [dead]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["ADYEN.AS"]
+    assert dead not in mapping["ADYEN.AS"]
 
 
 def test_parked_source_hunter_adyen_as_aex_has_fetchable_ir():
@@ -6778,6 +6791,20 @@ def test_parked_source_hunter_adyen_as_aex_has_fetchable_ir():
     assert "Annual Report" in body
     valid, reason = _validate_ir_allowlist_body_content(annual_2025, body, ticker="ADYEN.AS")
     assert valid, reason
+
+
+def test_parked_source_hunter_adyen_as_interim_h2_2025_live_fetch():
+    """eng-20261002-07: ADYEN.AS interim allowlist serves live H2 2025 shareholder letter PDF."""
+    from value_investor.hunter_auto_merge import live_fetch_hunter_urls
+
+    rows = fetch_filings_ir_allowlist("ADYEN.AS")
+    interim = next(row for row in rows if row["period"] == "interim")
+    ok, reason = live_fetch_hunter_urls([interim["url"]], ticker="ADYEN.AS")
+    assert ok, reason
+    body = fetch_filing_body(interim["url"])
+    assert body and "Shareholder letter" in body
+    valid, vreason = _validate_ir_allowlist_body_content(interim, body, ticker="ADYEN.AS")
+    assert valid, vreason
 
 
 def test_fetch_filings_ir_allowlist_aex_kpn_as_builtins(tmp_path: Path):
