@@ -241,7 +241,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "APAM.AS": [
         "https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf",
     ],
-    # aex leftover awaiting_periodic_report — ADYEN.AS thin ESEF-only; brand.adyen.com PDFs.
+    # euro_depth leftover awaiting_periodic_report — ADYEN.AS thin ESEF-only; brand.adyen.com PDFs.
     "ADYEN.AS": [
         "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEyMjMwOCwidGltZXN0YW1wIjoxNzc1NTY0MjQ0LCJ2ZXJzaW9uIjoxNzcyNjkwMjA3fQ:adyen:DEcCEo4XPo3eDfzj-fjMZ366g2pQkuoZMPARCHC5BoE/download",
         "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjU2NjkxLCJ0aW1lc3RhbXAiOjE3NDEzNDgzNDEsInZlcnNpb24iOjE3NDEzNDgyMDV9:adyen:kj44Bpqibw5DHCvRHFCwtnzOuM88_WWzAKJ1odHfCfY/download",
