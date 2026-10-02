@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-01T14:16:43.245059+00:00
+Track: `buy_tier_level` · updated 2026-10-02T14:18:41.051457+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **4** / 13 (31% count, 29% NAV)
+- Losers: **4** / 14 (29% count, 29% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
@@ -68,6 +68,11 @@ Track: `buy_tier_level` · updated 2026-10-01T14:16:43.245059+00:00
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
+
+### TRI.TO — weakening / watch_review (+0.0%)
+- cheapness family no longer passes
+- still buy
+- research accumulate
 
 ### MRU.TO — intact / hold_tolerate (+0.2%)
 - still buy
