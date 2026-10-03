@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-03T10:19:23.481625+00:00",
-  "occasion_count": 148,
+  "updated_at": "2026-10-03T10:44:19.008662+00:00",
+  "occasion_count": 149,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -2662,6 +2662,25 @@
       ],
       "notes": "CI pytest shards import tests/*.py as top-level modules; switch helper import from tests.test_market_status to test_market_status",
       "details": {}
+    },
+    {
+      "id": "prf-20261003-007",
+      "recorded_at": "2026-10-03T10:44:19.008662+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "pytest calendar flake: archive pack bottleneck review stale vs 36h threshold",
+      "pr_number": 952,
+      "branch": "cursor/market-tile-gate-indicator-dc9b",
+      "title": "Overview market tiles: Start → FTSE-parity → live-ready gate indicator",
+      "url": "https://github.com/jamiefuller320/value_investor/pull/952",
+      "task_id": null,
+      "head_sha": "abffa56af1",
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (1)"
+      ],
+      "notes": "test_gated_run_suspends_under_fat_sprint_and_writes_bottleneck: generated_at 2026-10-01T22:00 vs wall clock ~36.7h on 2026-10-03; pin now= to the run clock",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -2888,13 +2907,13 @@
       },
       {
         "kind": "ci_check",
-        "count": 71
+        "count": 72
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 148
+        "count": 149
       }
     ]
   }
