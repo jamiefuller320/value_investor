@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-02T21:24:58.716403+00:00`
+Generated: `2026-10-03T02:33:24.669386+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,11 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `ingest_narrow`/verified PR #948 `eng-20261002-14` — Close library ingest filing gaps for Straits Times Index (sti): 1 buy-tier gaps after stalled weekday loop
-- `ingest_narrow`/verified PR #945 `eng-20261002-02` — Rework verify round 2/3: Hunt fetchable IR source for parked euro_depth leftover ADYEN.AS
-- `ingest_narrow`/verified PR #944 `eng-20261002-13` — Repair dead hunter allowlist URL for ADYEN.AS
-- `parked_hunter`/verified PR #911 `eng-20260930-01` — Hunt fetchable IR source for parked euro_depth leftover ADYEN.AS
-- `parked_hunter`/verified PR #939 `eng-20261002-01` — Hunt fetchable IR source for parked aex leftover KPN.AS
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 142
@@ -49,6 +45,12 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `validate job failed` — 2×
 - `Ruff F841 unused dismissable in market_warning_triage.propose_triage` — 2×
 - `ruff_format` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 2 (open=2, resolved=0)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Universe archive body-miss rate elevated — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
