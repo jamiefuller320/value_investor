@@ -325,6 +325,22 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.volvogroup.com/content/dam/volvo-group/markets/master/news/2026/feb/Volvo-Group-Annual-Report-2025.pdf",
         "https://www.volvogroup.com/content/dam/volvo-group/markets/master/investors/reports-and-presentations/interim-reports/2025/volvo-group-q4-2025-eng.pdf",
     ],
+    # omxs30 buy-tier deepen — eng-20261003-03: SAND.ST unmeasured — not on filings.xbrl.org; IR PDF seeds.
+    "SAND.ST": [
+        "https://www.annualreport.sandvik/en/2025/_assets/downloads/entire-en-svk-ar25.pdf",
+        "https://www.sandvik.com/siteassets/investors/reports--presentations/interim-reports/2026/interim-report-second-quarter-2026.pdf",
+    ],
+    "SAND": [
+        "https://www.annualreport.sandvik/en/2025/_assets/downloads/entire-en-svk-ar25.pdf",
+        "https://www.sandvik.com/siteassets/investors/reports--presentations/interim-reports/2026/interim-report-second-quarter-2026.pdf",
+    ],
+    # omxs30 buy-tier deepen — eng-20261003-03: SKF-B.ST — GLEIF may cache a non-filing subsidiary LEI; IR backup when ESEF misses.
+    "SKF-B.ST": [
+        "https://cdn.skfmediahub.skf.com/api/public/096ee325b273e74a/pdf_preview_medium/SKF_ASR_2025_ENG_locked_pdf_preview_medium.pdf",
+    ],
+    "SKF-B": [
+        "https://cdn.skfmediahub.skf.com/api/public/096ee325b273e74a/pdf_preview_medium/SKF_ASR_2025_ENG_locked_pdf_preview_medium.pdf",
+    ],
     "GVR.IR": [
         "https://glenveagh.ie/download/annual-report-and-accounts-2025",
     ],
@@ -777,6 +793,7 @@ _IR_ALLOWLIST_TICKER_ALIASES: dict[str, tuple[str, ...]] = {
 _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "SKF": ("SKF Group",),
     "SKF-B": ("SKF Group",),
+    "SAND": ("Sandvik AB", "Sandvik"),
     "PHIA": ("Koninklijke Philips", "Philips", "Koninklijke Philips N.V."),
     "HEIA": ("Heineken", "Heineken N.V."),
     "AKZA": ("Akzo Nobel", "AkzoNobel"),
@@ -3263,7 +3280,9 @@ def _sanitize_http_url(url: str) -> str:
         return text
     parsed = urllib.parse.urlsplit(text)
     path = urllib.parse.quote(parsed.path, safe="/%")
-    query = urllib.parse.quote(parsed.query, safe="=&%/")
+    # Preserve ``+`` in query strings: urlencode uses ``+`` for spaces and must not
+    # be re-encoded to ``%2B`` or filings.xbrl.org entity name search returns empty.
+    query = urllib.parse.quote(parsed.query, safe="=&%/+")
     return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, path, query, parsed.fragment))
 
 
@@ -4055,6 +4074,25 @@ def _esef_apply_recency_bound(
     return kept
 
 
+def _esef_identifier_has_filings(identifier: str) -> bool:
+    """True when filings.xbrl.org lists at least one package for this LEI."""
+    lei = str(identifier or "").strip()
+    if not lei:
+        return False
+    query = urllib.parse.urlencode(
+        {
+            "filter[entity.identifier]": lei,
+            "page[size]": "1",
+        }
+    )
+    url = f"{ESEF_API_BASE}/filings?{query}"
+    try:
+        payload = json.loads(_http_get(url, timeout=20).decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError):
+        return False
+    return bool(payload.get("data"))
+
+
 def _esef_resolve_identifier(
     company_name: str,
     *,
@@ -4073,7 +4111,7 @@ def _esef_resolve_identifier(
         persist=False,
         name_variants=variants,
     )
-    if cached:
+    if cached and _esef_identifier_has_filings(cached):
         return cached
     identifier = _esef_search_entity_identifier(company_name, ticker=ticker)
     if identifier:
