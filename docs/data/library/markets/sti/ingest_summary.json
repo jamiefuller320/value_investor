@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-02T16:35:38.755341+00:00",
+  "run_at": "2026-10-03T12:44:52.164209+00:00",
   "market_id": "sti",
   "targets": [],
   "target_details": [],
@@ -9,13 +9,13 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-02T16:35:31.081881+00:00",
+    "snapshot_at": "2026-10-03T12:44:43.044703+00:00",
     "market_id": "sti",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 2,
-    "indexed_without_body": 2,
+    "indexed_without_body": 1,
     "bodies_min": 1,
     "bodies_median": 3.0,
     "bodies_max": 5,
@@ -31,7 +31,7 @@
       "N2IU.SI"
     ],
     "indexed_without_body_by_ticker": {
-      "N2IU.SI": 2
+      "N2IU.SI": 1
     },
     "parked_tickers": [
       "BS6.SI",
@@ -46,13 +46,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-02T16:35:31.900441+00:00",
+    "snapshot_at": "2026-10-03T12:44:46.074465+00:00",
     "market_id": "sti",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 2,
-    "indexed_without_body": 2,
+    "indexed_without_body": 0,
     "bodies_min": 1,
     "bodies_median": 3.0,
     "bodies_max": 5,
@@ -64,18 +64,13 @@
       "J36.SI",
       "BS6.SI"
     ],
-    "indexed_without_body_tickers": [
-      "N2IU.SI"
-    ],
-    "indexed_without_body_by_ticker": {
-      "N2IU.SI": 2
-    },
+    "indexed_without_body_tickers": [],
+    "indexed_without_body_by_ticker": {},
     "parked_tickers": [
       "BS6.SI",
-      "J36.SI",
-      "N2IU.SI"
+      "J36.SI"
     ],
-    "parked_count": 3,
+    "parked_count": 2,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -85,11 +80,32 @@
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 6,
+    "hits": 1,
+    "new_rows_total": 0,
+    "curiosity_total": 1,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "J36.SI",
+      "BS6.SI",
+      "N2IU.SI"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
     "skipped": true,
@@ -98,13 +114,13 @@
   },
   "critical_path": {
     "market_id": "sti",
-    "assessed_at": "2026-10-02T16:35:31.474966+00:00",
+    "assessed_at": "2026-10-03T12:44:43.323379+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
       {
         "ticker": "N2IU.SI",
-        "indexed_without_body": 2,
+        "indexed_without_body": 1,
         "filings_total": 7,
         "filings_with_body": 5
       }
@@ -120,7 +136,7 @@
       "N2IU.SI"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (1 tickers, top: N2IU.SI(2))",
+      "Prefer indexed-without-body body refetch (1 tickers, top: N2IU.SI(1))",
       "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
@@ -128,26 +144,24 @@
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 1,
-      "indexed_without_body_rows": 2,
+      "indexed_without_body_rows": 1,
       "thin_need_discovery": 2,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 0.0015885359999998627,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2099.998411464,
+  "used_seconds": 2.510759877000055,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3597.489240123,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "N2IU.SI"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sti",
-    "updated_at": "2026-10-02T16:35:31.901896+00:00",
+    "updated_at": "2026-10-03T12:44:46.075732+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -171,17 +185,6 @@
         "filings_with_body": 1,
         "indexed_without_body": 0,
         "thin": true
-      },
-      {
-        "ticker": "N2IU.SI",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-02T14:19:21.991917+00:00",
-        "park_via": "straggler_soft_park",
-        "filings_total": 7,
-        "filings_with_body": 5,
-        "indexed_without_body": 2,
-        "thin": false
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -190,8 +193,7 @@
     "had_complete_targets": false,
     "leftover_tickers": [
       "BS6.SI",
-      "J36.SI",
-      "N2IU.SI"
+      "J36.SI"
     ],
     "unparked_leftover": [],
     "path": "docs/data/library/markets/sti/ingest_exhaustion.json"
@@ -203,6 +205,7 @@
     "ingest_exhausted_markets": [
       "aex",
       "asx200",
+      "atx",
       "bel20",
       "cac40",
       "dax",
@@ -213,6 +216,7 @@
       "hang_seng",
       "ibex35",
       "nasdaq100",
+      "psi20",
       "sp500",
       "sti",
       "tsx60",
@@ -224,7 +228,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 126,
+    "task_count": 127,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
