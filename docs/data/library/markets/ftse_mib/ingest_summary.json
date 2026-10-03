@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-03T07:41:16.085535+00:00",
+  "run_at": "2026-10-03T17:40:00.167039+00:00",
   "market_id": "ftse_mib",
   "targets": [],
   "target_details": [],
@@ -9,16 +9,16 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-03T07:41:07.124017+00:00",
+    "snapshot_at": "2026-10-03T17:39:36.516200+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 8,
-    "indexed_without_body": 0,
+    "indexed_without_body": 1,
     "bodies_min": 1,
     "bodies_median": 2,
-    "bodies_max": 63,
+    "bodies_max": 59,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -33,8 +33,12 @@
       "FCT.MI",
       "IVG.MI"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "BZU.MI"
+    ],
+    "indexed_without_body_by_ticker": {
+      "BZU.MI": 1
+    },
     "parked_tickers": [
       "BC.MI",
       "BZU.MI",
@@ -53,16 +57,16 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-03T07:41:08.361516+00:00",
+    "snapshot_at": "2026-10-03T17:39:54.229821+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 8,
-    "indexed_without_body": 0,
+    "indexed_without_body": 1,
     "bodies_min": 1,
     "bodies_median": 2,
-    "bodies_max": 63,
+    "bodies_max": 59,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -77,11 +81,14 @@
       "FCT.MI",
       "IVG.MI"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "BZU.MI"
+    ],
+    "indexed_without_body_by_ticker": {
+      "BZU.MI": 1
+    },
     "parked_tickers": [
       "BC.MI",
-      "BZU.MI",
       "FCT.MI",
       "INW.MI",
       "IVG.MI",
@@ -89,89 +96,114 @@
       "PST.MI",
       "UNI.MI"
     ],
-    "parked_count": 8,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "parked_count": 7,
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
+      "BZU.MI"
+    ],
+    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body_tickers": [
+      "BZU.MI"
+    ],
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
-  "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "ftse_mib"
+  "discovery_scan": {
+    "scanned": 11,
+    "hits": 3,
+    "new_rows_total": 0,
+    "curiosity_total": 3,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "MONC.MI",
+      "PST.MI",
+      "INW.MI",
+      "UNI.MI",
+      "BC.MI",
+      "FCT.MI",
+      "IVG.MI",
+      "BZU.MI"
+    ],
+    "runtime_cutoff": false
   },
+  "maintenance_mode": true,
+  "parity_handoff": null,
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-10-03T07:41:07.729902+00:00",
+    "assessed_at": "2026-10-03T17:39:37.151869+00:00",
     "unmeasured": [],
     "zero_body": [],
-    "indexed_without_body": [],
+    "indexed_without_body": [
+      {
+        "ticker": "BZU.MI",
+        "indexed_without_body": 1,
+        "filings_total": 3,
+        "filings_with_body": 2
+      }
+    ],
     "thin_need_discovery": [
       "MONC.MI",
       "PST.MI",
-      "BZU.MI",
       "INW.MI",
       "UNI.MI",
       "BC.MI",
       "FCT.MI",
       "IVG.MI"
     ],
-    "thin_need_bodies": [],
-    "primary_blocker": "thin_need_discovery",
+    "thin_need_bodies": [
+      "BZU.MI"
+    ],
+    "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
-    "auto_pin_tickers": [],
+    "auto_pin_tickers": [
+      "BZU.MI"
+    ],
     "recommended_actions": [
-      "Discovery/IR seed for 8 thin ticker(s) that already have bodies for every indexed filing",
+      "Prefer indexed-without-body body refetch (1 tickers, top: BZU.MI(1))",
+      "Discovery/IR seed for 7 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 0,
-      "indexed_without_body_rows": 0,
-      "thin_need_discovery": 8,
-      "thin_need_bodies": 0
+      "indexed_without_body_tickers": 1,
+      "indexed_without_body_rows": 1,
+      "thin_need_discovery": 7,
+      "thin_need_bodies": 1
     }
   },
-  "used_seconds": 0.0013601349999987633,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2099.998639865,
+  "used_seconds": 16.414323814,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3583.585676186,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "BZU.MI"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-10-03T07:41:08.364381+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-10-03T17:39:54.232512+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
         "ticker": "BC.MI",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-27T20:12:58.751368+00:00",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true
-      },
-      {
-        "ticker": "BZU.MI",
         "reason": "awaiting_periodic_report",
         "revisit_when": "Next statutory annual or interim report is issued and indexed",
         "parked_at": "2026-09-27T20:12:58.751368+00:00",
@@ -255,40 +287,20 @@
       "PST.MI",
       "UNI.MI"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "BZU.MI"
+    ],
     "path": "docs/data/library/markets/ftse_mib/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "ftse_mib",
-    "ingest_exhausted_markets": [
-      "aex",
-      "asx200",
-      "atx",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "hang_seng",
-      "ibex35",
-      "nasdaq100",
-      "psi20",
-      "sp500",
-      "sti",
-      "tsx60",
-      "us_adr_asia"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "ftse_mib"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 127,
+    "task_count": 129,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
