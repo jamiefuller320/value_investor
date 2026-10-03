@@ -44,6 +44,12 @@ PRIMARY_FREEZE_AT_T: tuple[str, ...] = (
     "slim_candidate.sector",
     "slim_candidate.price",
     "slim_candidate.research_verdict",
+    "slim_candidate.fcf_basis_overlay",
+    "slim_candidate.filings_with_body",
+    "slim_candidate.key_filing_bodies",
+    "slim_candidate.overlay_bound",
+    "slim_candidate.interim_eps_decline_pct",
+    "slim_candidate.adjusted_eps_growth_pct",
     "membership.in_screen_buy_tier",
     "membership.in_candidates",
     "membership.in_gate_excluded",
@@ -100,6 +106,12 @@ CANDIDATE_FIELDS: tuple[str, ...] = (
     "sector",
     "price",
     "research_verdict",
+    "fcf_basis_overlay",
+    "filings_with_body",
+    "key_filing_bodies",
+    "overlay_bound",
+    "interim_eps_decline_pct",
+    "adjusted_eps_growth_pct",
 )
 
 AUTOPSY_FREEZE_FIELDS: tuple[str, ...] = (

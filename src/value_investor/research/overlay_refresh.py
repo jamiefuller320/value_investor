@@ -8,71 +8,62 @@ from typing import Any
 
 import pandas as pd
 
+from value_investor.buy_tier_flip_lag import _index_meta
 from value_investor.research.document import ResearchDocument
 from value_investor.research.market_store import resolve_research_documents
 from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
 from value_investor.research.store import ResearchStore
 from value_investor.storage import read_json, write_json
 from value_investor.summary import CompanyReport, build_company_reports
-from value_investor.technical_analysis import trade_plan_from_row
 
 logger = logging.getLogger(__name__)
 
+# Keys paper-auto slim / marks still need that CompanyReport.to_dict() omits.
+_PASSTHROUGH_KEYS = ("price", "last")
+
 
 def _company_report_from_dict(data: dict[str, Any]) -> CompanyReport:
-    row = pd.Series(data)
-    trade_plan = trade_plan_from_row(row)
-    composite = row.get("composite_score")
-    sector_score = row.get("sector_composite_score")
-    rsi = row.get("rsi_14")
-    vs_sma = row.get("price_vs_sma200_pct")
-    research_conf = row.get("research_confidence")
+    """Rebuild a report from a published bundle row without dropping overlay fields."""
+    return CompanyReport.from_dict(data)
 
-    return CompanyReport(
-        ticker=str(data["ticker"]),
-        name=str(data.get("name") or data["ticker"]),
-        sector=data.get("sector"),
-        signal=str(data.get("signal") or "hold"),
-        models_passed=int(data.get("models_passed") or 0),
-        model_count=int(data.get("model_count") or 0),
-        composite_score=float(composite)
-        if composite is not None and not pd.isna(composite)
-        else None,
-        sector_composite_score=(
-            float(sector_score) if sector_score is not None and not pd.isna(sector_score) else None
-        ),
-        families_passed=int(data.get("families_passed") or 0),
-        passed_families=data.get("passed_families"),
-        family_count=int(data.get("family_count") or 5),
-        data_quality_score=float(data.get("data_quality_score") or 0),
-        metrics_present=int(data.get("metrics_present") or 0),
-        metrics_total=int(data.get("metrics_total") or 20),
-        weeks_at_signal=int(data.get("weeks_at_signal") or 1),
-        signal_trend=str(data.get("signal_trend") or "new"),
-        conviction_score=float(data.get("conviction_score") or 0),
-        stability_label=str(data.get("stability_label") or "new"),
-        signal_since=data.get("signal_since"),
-        timing_signal=str(data.get("timing_signal") or "insufficient_data"),
-        timing_score=float(data.get("timing_score") or 0),
-        rsi_14=float(rsi) if rsi is not None and not pd.isna(rsi) else None,
-        price_vs_sma200_pct=float(vs_sma) if vs_sma is not None and not pd.isna(vs_sma) else None,
-        action_note=str(data.get("action_note") or ""),
-        trade_plan=trade_plan,
-        summary=str(data.get("summary") or ""),
-        passed_models=list(data.get("passed_models") or []),
-        key_metrics=dict(data.get("key_metrics") or {}),
-        adjusted_signal=data.get("adjusted_signal"),
-        fcf_basis_overlay=bool(data.get("fcf_basis_overlay")),
-        research_verdict=data.get("research_verdict"),
-        research_risk_level=data.get("research_risk_level"),
-        research_confidence=(
-            float(research_conf)
-            if research_conf is not None
-            and not (isinstance(research_conf, float) and pd.isna(research_conf))
-            else None
-        ),
-        research_rationale=data.get("research_rationale"),
-    )
+
+def _overlay_bound(report: dict[str, Any]) -> bool:
+    verdict = report.get("research_verdict")
+    adjusted = report.get("adjusted_signal")
+    return bool(str(verdict or "").strip()) and bool(str(adjusted or "").strip())
+
+
+def stamp_p1_live_inputs(
+    original: dict[str, Any],
+    updated: dict[str, Any],
+    *,
+    research_root: Path | None,
+) -> dict[str, Any]:
+    """Join filing-index presence onto the live report the weekday pass reads.
+
+    Observe-only: does not fetch bodies or rememo. Index meta is what is on disk
+    at refresh time (decision-time *t*), not a later backfill into old log rows.
+    """
+    ticker = str(updated.get("ticker") or original.get("ticker") or "").strip().upper()
+    if research_root is not None and ticker:
+        meta = _index_meta(ticker, research_root=research_root)
+        updated["has_index"] = bool(meta.get("has_index"))
+        updated["filings_total"] = int(meta.get("filings_total") or 0)
+        updated["filings_with_body"] = int(meta.get("filings_with_body") or 0)
+        updated["key_filing_bodies"] = bool(meta.get("key_bodies"))
+    else:
+        for key in ("has_index", "filings_total", "filings_with_body", "key_filing_bodies"):
+            if key in original and key not in updated:
+                updated[key] = original[key]
+
+    updated["overlay_bound"] = _overlay_bound(updated)
+    if "fcf_basis_overlay" not in updated and "fcf_basis_overlay" in original:
+        updated["fcf_basis_overlay"] = original.get("fcf_basis_overlay")
+
+    for key in _PASSTHROUGH_KEYS:
+        if updated.get(key) is None and original.get(key) is not None:
+            updated[key] = original[key]
+    return updated
 
 
 def _load_research_documents(
@@ -108,7 +99,18 @@ def refresh_research_overlay(output_dir: Path) -> int:
     reports = build_company_reports(signals, model_results)
     documents = ResearchStore(output_dir).list_documents()
     reports = apply_research_overlay(reports, documents)
-    write_json(output_dir / "email_reports.json", [r.to_dict() for r in reports], compact=True)
+    research_root = output_dir / "research"
+    stamped: list[dict[str, Any]] = []
+    for report in reports:
+        payload = report.to_dict()
+        stamped.append(
+            stamp_p1_live_inputs(
+                payload,
+                payload,
+                research_root=research_root if research_root.is_dir() else None,
+            )
+        )
+    write_json(output_dir / "email_reports.json", stamped, compact=True)
     return len(documents)
 
 
@@ -124,6 +126,9 @@ def refresh_dashboard_bundle(
     Unions this-run ``output/research``, the committed FTSE store
     (``docs/data/research/``), and the bundle ``research[]`` index so weekday
     paper-auto sees every written memo, not only the last publish snapshot.
+
+    Uses ``CompanyReport.from_dict`` so Sunday filing-derived EPS / FCF / overlay
+    flags survive the weekday rebuild instead of being zeroed.
     """
     bundle_path = Path(bundle_path)
     bundle = read_json(bundle_path)
@@ -145,9 +150,21 @@ def refresh_dashboard_bundle(
         logger.warning("No research documents available — skipping overlay refresh")
         return 0
 
-    reports = [_company_report_from_dict(item) for item in raw_reports if isinstance(item, dict)]
+    originals = [item for item in raw_reports if isinstance(item, dict)]
+    reports = [_company_report_from_dict(item) for item in originals]
     updated = apply_research_overlay(reports, documents)
-    bundle["reports"] = [report.to_dict() for report in updated]
+    research_root = resolved_committed if resolved_committed is not None else inferred
+    stamped: list[dict[str, Any]] = []
+    for original, report in zip(originals, updated, strict=False):
+        payload = report.to_dict()
+        stamped.append(
+            stamp_p1_live_inputs(
+                original,
+                payload,
+                research_root=research_root if Path(research_root).is_dir() else None,
+            )
+        )
+    bundle["reports"] = stamped
     write_json(bundle_path, bundle, compact=True)
     return len(documents)
 

@@ -55,8 +55,15 @@ Already on `rebalance_log` / candidates (do not drop):
 - `screen_source`, `knob_epoch_started_at`, `gate`, `selection`
 - `acted`, `plan`, `trades`
 - candidate slim: ticker, name, signal, adjusted_signal, conviction, data quality,
-  timing, sector, price, research_verdict (short)
+  timing, sector, price, research_verdict (short), plus observe-only P1 live
+  inputs when present on the report the pass read: `fcf_basis_overlay`,
+  `filings_with_body`, `key_filing_bodies`, `overlay_bound`,
+  `interim_eps_decline_pct`, `adjusted_eps_growth_pct`
 - membership: in buy-tier / candidates / gate-excluded / holdings-before
+
+Weekday overlay refresh rebuilds reports with `CompanyReport.from_dict` and
+stamps filing-index presence so those slim fields are available at *t*. This
+does **not** enable the Phase C `autopsy_freeze` writer.
 
 **Extend** (Phase C `autopsy_freeze` object — design locked, writer gated on readiness):
 

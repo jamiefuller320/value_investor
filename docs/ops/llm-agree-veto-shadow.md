@@ -17,7 +17,8 @@ On every `ftse-paper-auto` track pass (after fills are already decided):
 1. Extract algo proposals from `plan` (exits / holds / buys / skipped) + trades.
 2. Build structured **agree / veto / abstain** cards with reasons + evidence
    citations (screen signal, conviction rank, entry rank, rank drop, research
-   verdict, still-buyish).
+   verdict, still-buyish, plus observe-only P1 cites when frozen on the
+   candidate: filing presence, FCF basis overlay, overlay bind, EPS-from-body).
 3. Persist cards; attach a slim copy onto the **rebalance log** entry.
 4. **Never** change sells, holds, or buys — `influences_live=false`.
 

@@ -24,6 +24,9 @@ def test_primary_answers_cover_four_questions():
     assert "ticker" in answers["unit_of_analysis"].lower()
     assert answers["freeze_at_t"]
     assert "autopsy_freeze.research_revision_id" in answers["freeze_at_t"]
+    assert "slim_candidate.key_filing_bodies" in answers["freeze_at_t"]
+    assert "slim_candidate.fcf_basis_overlay" in answers["freeze_at_t"]
+    assert "slim_candidate.overlay_bound" in answers["freeze_at_t"]
     assert answers["join_later"]
     assert answers["never_backfill"]
     assert answers["writer_gate"].startswith("ftse-phase-c-readiness")
