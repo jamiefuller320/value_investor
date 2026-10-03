@@ -191,6 +191,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     text = SCRIPT.read_text(encoding="utf-8")
     assert "docs/data/buy_tier_flip_lag.json" in text
     assert "docs/data/decision_input_inventory.json" in text
+    assert "docs/data/p1_first_run_pin.json" in text
     assert "docs/data/universe_filing_archive_miss_rate.json" in text
     assert "docs/data/observe_utilization.json" in text
     assert "docs/data/lifecycle_maturity_trajectory.json" in text
@@ -210,6 +211,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     )
     assert "buy_tier_flip_lag.json" in optional_line
     assert "decision_input_inventory.json" in optional_line
+    assert "p1_first_run_pin.json" in optional_line
     assert "universe_filing_archive_miss_rate.json" in optional_line
     assert "lifecycle_maturity_trajectory.json" in optional_line
     assert "lifecycle_board.json" in optional_line
@@ -225,6 +227,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     )
     assert "buy_tier_flip_lag.json" not in owned_line
     assert "decision_input_inventory.json" not in owned_line
+    assert "p1_first_run_pin.json" not in owned_line
     assert "universe_filing_archive_miss_rate.json" not in owned_line
     assert "lifecycle_maturity_trajectory.json" not in owned_line
     assert "lifecycle_board.json" not in owned_line

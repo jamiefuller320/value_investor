@@ -43,7 +43,8 @@ lane change and readiness gate (see N152 / P1 pin rules).
   hunter + Analysis (`docs/data/observe_utilization.json`), with freshness /
   staleness banners and trajectory deltas vs last cycle.
 - **L460** — raw instrument stores (`buy_tier_flip_lag.json`,
-  `decision_input_inventory.json`, `universe_filing_archive_miss_rate.json`) in
+  `decision_input_inventory.json`, `p1_first_run_pin.json`,
+  `universe_filing_archive_miss_rate.json`) in
   ops-monitor `GHA_COMMIT_OPTIONAL` so
   daily cohort history persists in git (email-report excludes them so a broad
   `docs/data` overlay cannot rewind fresher ops commits).
@@ -338,7 +339,8 @@ per-track `llm_agree_veto_shadow.json` — see
 [`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md). Weekday overlay refresh
 (`refresh_dashboard_bundle`) round-trips filing presence, FCF overlay, overlay
 bind, and EPS-from-body onto reports → slim candidates → agree/veto cites
-(observe-only; does not enable Phase C `autopsy_freeze`).
+(observe-only; does not enable Phase C `autopsy_freeze`). First-run observe pin:
+`check_p1_first_run_pin` (time-boxed; see table below).
 shadow-vs-primary / promotion gates.
 
 Weekday paper findings before **10:00 UTC** defer alert email (same ready time
@@ -351,7 +353,8 @@ Both checks are **observe / warn-only** (`auto_fixable=False`). They refresh a
 runner-local store JSON and emit an ops finding when the warn cohort is material.
 Manual drill-down: `ftse-ingest-audit --flip-lag` /
 `ftse-ingest-audit --decision-inputs` /
-`ftse-ingest-audit --archive-miss-rate` (mutually exclusive) /
+`ftse-ingest-audit --archive-miss-rate` /
+`ftse-ingest-audit --p1-first-run` (mutually exclusive) /
 `ftse-universe-archive-pack` (archive pack gate + bottleneck summary).
 They do **not** deepen ingest or rememo.
 
@@ -359,6 +362,7 @@ They do **not** deepen ingest or rememo.
 |-------|---------------|---------------|----------------|--------|
 | `check_buy_tier_flip_lag` | **New buy-tier not yet usable** | Path-incomplete ≥24h cohort non-empty (FTSE live ∪ admitted; schema v2) | `docs/data/buy_tier_flip_lag.json` | Live on main |
 | `check_decision_input_inventory` | **FTSE decision-input utilization gap** | Dominant bind gap count ≥3 on FTSE holdings ∪ buy-tier (else quiet / `P1 green-enough`) | `docs/data/decision_input_inventory.json` | Live on main |
+| `check_p1_first_run_pin` | **P1 first-run: EPS-from-body missing after Sunday screen** / **… slim freeze missing after Monday paper-auto** | After the relevant post-#953 run, EPS-from-body still 0/n on holdings ∪ buy-tier reports or `rebalance_log` slim. Auto-oks when a count lands. Empty/pre-Sunday is **not** a warn. Window 10d from #953 merge then expires (no forever babysit). Not a soak platform or utilization dashboard | `docs/data/p1_first_run_pin.json` | First-run pin |
 | `check_universe_filing_archive_miss_rate` | **Universe archive body-miss rate elevated** | Flip-lag proxy miss rate elevated with open body gaps — observe-only outcome (not a cold-store start gate; N180/N181) | `docs/data/universe_filing_archive_miss_rate.json` | Scaffold live |
 | `check_universe_filing_archive_pack_bottleneck` | **Universe archive pack bottleneck review stale** / **… processing bottleneck** | Bottleneck review missing/stale (>36h) or dominant stage / errors on an allowed dry pass; suspend/quiet_only while euro fat does **not** warn | `docs/data/universe_filing_archive_bottleneck_review.json` (owned by `universe-filing-archive-pack.yml` @ 22:00 UTC weekdays) | Gated dry lane live |
 

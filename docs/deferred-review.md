@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-03T08:12:28+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-03T19:50:48+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -234,6 +234,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N179 | **Mid-flight rewrite of graduated DCA cadence on live books** | After DCA graduates, refine via overlay counterfactuals or a new cold-start/twin — never silently change tranche count/timing on the running graduated_allocation (or primary) book mid-flight. | A documented DCA refinement twin/cold-start is authorised after Q1/Q2 overlay evidence; human asks for epoch promotion |
 | N180 | **Do not start universe archive crawler or fourth sprint stream** | Do not start a second *live* crawler or fourth equal sprint stream. Quiet cold-store writers under archive_lane_gate are a separate lane (L499 pilot) and must not be framed as an equal sprint. Miss-rate observe is not the unlock for a live crawler. | Quiet cold-store writer pilot proves capacity isolation across multiple nights AND there is evidence a live/daytime crawler is still needed beyond the quiet lane — without stealing fat/spare sprint capacity |
 | N181 | **Archive lane self-improvement eng authority** | Do not grant the offline universe archive lane autonomous eng/self-improve authority (bottleneck→eng spray, deepen rewrite, or clash-aware agents). Quiet-window gate+observe is enough; within-lane knobs only after a thin writer pilot proves isolation. | Thin cold-store writer pilot has completed quiet nights without shared 429/runner collision AND bottleneck trajectories show a stable within-lane knob to tune |
+| N182 | **Promote P1 first-run pin to chronic EPS coverage soak** | After the 10-day #953 first-run window, do not keep warning on 0/n forever. A standing EPS-from-body coverage soak would be a different instrument. | First-run window expired and Sunday+Monday still 0/57 with an explicit soak request |
 
 ---
 
@@ -601,6 +602,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L516 | **Clarify left target set vs chart Target on just-sold** | Sell notes say Automated exit — left target set (buy-tier ticker set), while lifecycle charts still show a technical/prospective Target line. Users can read just-sold-below-target as a bug. Later: clearer note wording and/or card copy that names screen_rotation vs take-profit. | Lifecycle UX pass or when exit_shadow promotion / just-sold card redesign is in flight |
 | L520 | **Daily hub assessment content enrichment beyond prose UI** | UI now collapses Where/In stage/Waiting/How into one paragraph (#940). Still often empty waiting/how on sticky seed cards — enrich compose_assessment fillers (notes conventions, triage, reconcile) so the paragraph carries real blockers/next steps without reintroducing labeled empty rows. | After #940 merges and a weekday hub glance still shows thin prose that only restates the summary |
 | L522 | **Cold-store pack achievement metrics panel** | Extend thin Ops status panel with achievement metrics: units fetched over nights, week coverage, source hit-rate history. Thin outcome/clash/next-widen panel already shipped. | Several quiet apply nights with isolation_ok produce non-zero units_completed / objects_written worth graphing |
+| L524 | **L461 observe-utilization card for P1 first-run pin** | Do not add a stability/utilization dashboard card for the thin #953 first-run observe pin. Ops-monitor finding + p1_first_run_pin.json is the approved surface. | Pin window has expired or a chronic EPS-from-body soak is explicitly approved |
 
 ---
 

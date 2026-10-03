@@ -1656,6 +1656,69 @@ def check_decision_input_inventory(
     ]
 
 
+def check_p1_first_run_pin(
+    *,
+    latest_path: Path = DEFAULT_LATEST_PATH,
+    paper_fund_path: Path | None = None,
+    paper_track_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Observe-only: time-boxed first-run pin for the #953 P1 round-trip.
+
+    Sunday: EPS-from-body on holdings ∪ buy-tier ``reports[]``.
+    Monday: those fields frozen onto ``rebalance_log`` slim candidates.
+    Auto-oks when a count lands. One warn per surface if still 0/n after the
+    relevant run. Empty / pre-Sunday is not a warn. Does not rememo or change
+    fills.
+    """
+    from value_investor.p1_first_run_pin import (
+        DEFAULT_PAPER_FUND_PATH,
+        DEFAULT_PAPER_TRACK_DIR,
+        DEFAULT_STORE_PATH,
+        ops_findings_from_p1_first_run_pin,
+        run_p1_first_run_pin,
+    )
+
+    path = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+    try:
+        payload = run_p1_first_run_pin(
+            latest_path=Path(latest_path),
+            paper_fund_path=Path(paper_fund_path)
+            if paper_fund_path is not None
+            else DEFAULT_PAPER_FUND_PATH,
+            paper_track_dir=Path(paper_track_dir)
+            if paper_track_dir is not None
+            else DEFAULT_PAPER_TRACK_DIR,
+            store_path=path,
+            persist=persist,
+            now=now,
+        )
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title="P1 first-run observe pin failed",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    findings: list[OpsFinding] = []
+    for finding in ops_findings_from_p1_first_run_pin(payload):
+        findings.append(
+            OpsFinding(
+                severity=str(finding.get("severity") or "warn"),
+                category=str(finding.get("category") or "research"),
+                title=str(finding.get("title") or "P1 first-run observe pin"),
+                summary=str(finding.get("summary") or ""),
+                auto_fixable=False,
+            )
+        )
+    return findings
+
+
 def check_shard_nav_fx_warp(
     *,
     store_path: Path | None = None,
@@ -2553,6 +2616,7 @@ def collect_ops_findings(
     findings.extend(check_memo_rememo_backlog())
     findings.extend(check_buy_tier_flip_lag(latest_path=latest_path))
     findings.extend(check_decision_input_inventory(latest_path=latest_path))
+    findings.extend(check_p1_first_run_pin(latest_path=latest_path))
     findings.extend(check_universe_filing_archive_miss_rate())
     findings.extend(check_universe_filing_archive_pack_bottleneck())
     findings.extend(check_shard_nav_fx_warp())
