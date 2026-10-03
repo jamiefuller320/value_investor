@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from tests.test_market_status import _by_id, _seed_library, _status_roots
 from value_investor.market_status import (
     GATE_FTSE_PARITY,
     GATE_LIVE_READY,
@@ -13,8 +14,6 @@ from value_investor.market_status import (
     build_market_status,
 )
 from value_investor.storage import write_json
-
-from tests.test_market_status import _by_id, _seed_library, _status_roots
 
 
 def _statuses(gate: dict) -> dict[str, str]:

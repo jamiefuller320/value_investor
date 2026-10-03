@@ -464,10 +464,7 @@ def build_learning_gate_indicator(
     filing_ready = bool(depth.get("filing_ready")) if depth else False
     if not depth:
         filing_ready = bool(
-            is_admitted
-            or ingest_parity_met
-            or ingest_exhausted
-            or sprint.get("admission_ready")
+            is_admitted or ingest_parity_met or ingest_exhausted or sprint.get("admission_ready")
         )
     start_complete = bool(
         is_live
@@ -600,8 +597,7 @@ def build_learning_gate_indicator(
         }
 
     annotation = (
-        f"Next: {next_gate['name']} — {next_gate['criteria']} "
-        f"Timeframe: {next_gate['timeframe']}"
+        f"Next: {next_gate['name']} — {next_gate['criteria']} Timeframe: {next_gate['timeframe']}"
     )
     return {
         "schema_version": 1,
@@ -1487,9 +1483,7 @@ def build_market_status(
             macro_closes=macro_closes,
         )
         learning_depth = (
-            None
-            if market_id == LIVE_MARKET_ID
-            else _slim_learning_depth(library_root, market_id)
+            None if market_id == LIVE_MARKET_ID else _slim_learning_depth(library_root, market_id)
         )
         learning_gate = build_learning_gate_indicator(
             is_live=market_id == LIVE_MARKET_ID,
