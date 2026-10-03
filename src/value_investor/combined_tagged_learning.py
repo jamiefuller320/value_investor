@@ -194,9 +194,7 @@ def collect_tagged_exit_shadows(
     policy_path: Path = DEFAULT_POLICY_PATH,
     markets: list[str] | None = None,
 ) -> dict[str, Any]:
-    books = discover_tagged_books(
-        paper_root=paper_root, policy_path=policy_path, markets=markets
-    )
+    books = discover_tagged_books(paper_root=paper_root, policy_path=policy_path, markets=markets)
     by_market: dict[str, Any] = {}
     all_records: list[ExitShadowRecord] = []
     missing_market_id = 0
@@ -207,9 +205,7 @@ def collect_tagged_exit_shadows(
         for path in _iter_exit_shadow_files(root, skip_markets=not is_shard):
             store = load_exit_shadow(path)
             track_id = str(store.get("track_id") or _track_id_from_path(path, root))
-            records, missing = _records_from_store(
-                store, market_id=market_id, track_id=track_id
-            )
+            records, missing = _records_from_store(store, market_id=market_id, track_id=track_id)
             missing_market_id += missing
             source_files += 1
             tracks[track_id] = {
@@ -279,9 +275,7 @@ def build_combined_tagged_learning(
             "closed_count": combined.get("closed_count") or 0,
             "first_episode_open_count": first.get("open_count") or 0,
             "first_episode_closed_count": first.get("closed_count") or 0,
-            "source_records_missing_market_id": collected.get(
-                "source_records_missing_market_id"
-            )
+            "source_records_missing_market_id": collected.get("source_records_missing_market_id")
             or 0,
             "join_key_unique": collected.get("join_key_unique") or 0,
             "warn": False,
