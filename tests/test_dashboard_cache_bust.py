@@ -303,9 +303,13 @@ def test_learning_gate_indicator_helper_renders_steps() -> None:
 const html = renderLearningGateIndicator({
   current_id: 'ftse_parity_learning',
   steps: [
-    {id:'start', label:'Start', gate:'sprint_ingest_complete', status:'done'},
-    {id:'ftse_parity_learning', label:'FTSE-parity', gate:'learning_ready', status:'current'},
-    {id:'live_ready', label:'Live-ready', gate:'phase_4_live_screen', status:'pending'},
+    {id:'start', label:'Start', gate:'ingest_clock', status:'done'},
+    {id:'bodies', label:'Bodies', gate:'unmeasured_zero_clear', status:'done'},
+    {id:'sprint_complete', label:'Sprint', gate:'sprint_ingest_complete', status:'done'},
+    {id:'admit', label:'Admit', gate:'l322_admit', status:'done'},
+    {id:'epoch0', label:'Epoch-0', gate:'epoch0_marks', status:'done'},
+    {id:'ftse_parity_learning', label:'Parity', gate:'learning_ready', status:'current'},
+    {id:'live_ready', label:'Live', gate:'phase_4_live_screen', status:'pending'},
   ],
   next_gate: {name:'FTSE-parity learning', criteria:'learning_ready = filing_ready and 12w', timeframe:'~1.4w remaining'},
   annotation: 'full card text',
@@ -314,9 +318,13 @@ const live = renderLearningGateIndicator({
   current_id: 'live_ready',
   annotation: 'Next: Live-path utilization (P1) — FTSE 350 is already the live screen',
   steps: [
-    {id:'start', label:'Start', gate:'sprint_ingest_complete', status:'done'},
-    {id:'ftse_parity_learning', label:'FTSE-parity', gate:'learning_ready', status:'done'},
-    {id:'live_ready', label:'Live-ready', gate:'phase_4_live_screen', status:'done'},
+    {id:'start', label:'Start', gate:'ingest_clock', status:'done'},
+    {id:'bodies', label:'Bodies', gate:'unmeasured_zero_clear', status:'done'},
+    {id:'sprint_complete', label:'Sprint', gate:'sprint_ingest_complete', status:'done'},
+    {id:'admit', label:'Admit', gate:'l322_admit', status:'done'},
+    {id:'epoch0', label:'Epoch-0', gate:'epoch0_marks', status:'done'},
+    {id:'ftse_parity_learning', label:'Parity', gate:'learning_ready', status:'done'},
+    {id:'live_ready', label:'Live', gate:'phase_4_live_screen', status:'done'},
   ],
   next_gate: {name:'Live-path utilization (P1)', criteria:'FTSE 350 is already the live screen', timeframe:'Not calendar'},
 });
@@ -327,7 +335,7 @@ console.log(JSON.stringify({html, live, empty: renderLearningGateIndicator(null)
     assert "learning-gate-track" in payload["html"]
     assert "is-current" in payload["html"]
     assert "is-done" in payload["html"]
-    assert "FTSE-parity" in payload["html"]
+    assert "Parity" in payload["html"]
     assert "~1.4w remaining" in payload["html"]
     assert "Live-path utilization" in payload["live"]
     assert payload["empty"] == ""

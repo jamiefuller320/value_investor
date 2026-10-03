@@ -423,7 +423,7 @@ def test_dashboard_assets_include_market_status_grid():
     assert "function sprintProgressLine(progress)" in app
     assert "function renderLearningGateIndicator(gate" in app
     assert "row.learning_gate" in app
-    assert "Start → FTSE-parity" in app
+    assert "Start → Bodies → Sprint" in app
     assert ".learning-gate-track" in css
     assert ".learning-gate-note" in css
     assert "function renderSprintProgressCard(progress)" in app

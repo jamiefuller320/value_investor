@@ -1710,7 +1710,7 @@ function marketStatusBadgeLegend() {
       ${marketRoleBadge("graduated")}
       ${marketRoleBadge("ftse_equivalent")}</span>
     <span class="market-status-legend-axis"><strong>Learning gate</strong>
-      Start → FTSE-parity (<code>learning_ready</code>) → Live-ready</span>
+      Start → Bodies → Sprint → Admit → Epoch-0 → Parity → Live</span>
     <span class="market-status-legend-note">graduated ≠ admitted · maintenance ≠ live screen · live FTSE is live-path, not self catch-up</span>
   </p>`;
 }
@@ -1737,7 +1737,7 @@ function renderLearningGateIndicator(gate, { compact = false } = {}) {
     ? `${next.name || "Next gate"}: ${next.criteria || ""} Timeframe: ${next.timeframe || ""}`
     : gate.annotation || "";
   return `<div class="learning-gate" data-current="${esc(gate.current_id || "")}">
-    <ol class="learning-gate-track" aria-label="Start to FTSE-parity learning to live-ready">${steps}</ol>
+    <ol class="learning-gate-track" aria-label="Start through FTSE-parity to live-ready">${steps}</ol>
     <p class="small muted learning-gate-note">${esc(note)}</p>
   </div>`;
 }
