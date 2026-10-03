@@ -426,6 +426,24 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.novartis.com/sites/novartis_com/files/q4-2025-interim-financial-report-en.pdf",
         "https://www.novartis.com/sites/novartis_com/files/2025-01-interim-financial-report-en.pdf",
     ],
+    # smi buy-tier deepen — eng-20261003-02: PGHN.SW unmeasured — ESEF/news empty; IR PDF seeds.
+    "PGHN.SW": [
+        "https://www.partnersgroup.com/~/media/Files/P/Partnersgroup/Universal/shareholders/reports-and-presentations/2026/annual-report-2025.pdf",
+        "https://www.partnersgroup.com/~/media/Files/P/Partnersgroup/Universal/shareholders/reports-and-presentations/2026/pghn-interim-report-2026.pdf",
+    ],
+    "PGHN": [
+        "https://www.partnersgroup.com/~/media/Files/P/Partnersgroup/Universal/shareholders/reports-and-presentations/2026/annual-report-2025.pdf",
+        "https://www.partnersgroup.com/~/media/Files/P/Partnersgroup/Universal/shareholders/reports-and-presentations/2026/pghn-interim-report-2026.pdf",
+    ],
+    # smi buy-tier deepen — eng-20261003-02: RO.SW (Roche bearer) unmeasured — roche.com CDN PDFs.
+    "RO.SW": [
+        "https://assets.roche.com/f/250698/x/840001eb3d/rocheannualreport2025.pdf",
+        "https://assets.roche.com/f/176343/x/2d95c66259/hy25e.pdf",
+    ],
+    "RO": [
+        "https://assets.roche.com/f/250698/x/840001eb3d/rocheannualreport2025.pdf",
+        "https://assets.roche.com/f/176343/x/2d95c66259/hy25e.pdf",
+    ],
     # euro_depth IWB blocker — Andritz CMS reshuffled blob IDs; annual report PDF.
     "ANDR.VI": [
         "https://www.andritz.com/resource/blob/689306/6ad9400073c46323b95b1be977870245/andritz-annual-report-2025-data.pdf",
@@ -787,6 +805,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "ABI": ("Anheuser-Busch InBev", "Anheuser Busch InBev"),
     "RAND": ("Randstad", "Randstad N.V."),
     "NOVN": ("Novartis", "Novartis AG"),
+    "RO": ("Roche Holding AG", "Roche"),
+    "PGHN": ("Partners Group", "Partners Group Holding AG"),
     "NTR": ("Nutrien", "Nutrien Ltd."),
     "TRI": ("Thomson Reuters",),
     "SU": ("Suncor", "Suncor Energy"),
@@ -5250,6 +5270,9 @@ def _ir_allowlist_period_from_url(url: str) -> str:
     if any(token in lower for token in ("trading",)):
         return "trading_update"
     if any(token in lower for token in ("interim", "half", "h1", "q1", "q2", "q3", "10-q", "10q")):
+        return "interim"
+    # Roche half-year CDN slugs (e.g. hy25e.pdf) — eng-20261003-02 smi RO.SW IR allowlist.
+    if re.search(r"[-_/]hy\d{2}[a-z]?(?:[.?]|$)", lower):
         return "interim"
     if "stock-exchange-release" in lower and re.search(r"2802\d{2}", lower):
         return "interim"
