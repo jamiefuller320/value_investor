@@ -189,6 +189,7 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "docs/data/buy_tier_flip_lag.json" in email
     assert "docs/data/decision_input_inventory.json" in email
     assert "docs/data/observe_utilization.json" in email
+    assert "docs/data/combined_tagged_learning.json" in email
     assert "docs/data/lifecycle_maturity_trajectory.json" in email
     assert "docs/data/ui_state_reconciliation.json" in email
     assert "docs/data/daily_focus.json" in email

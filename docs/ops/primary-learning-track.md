@@ -60,6 +60,13 @@ scores post-exit price paths at 1/4/8/12 weeks. Artifacts per track:
 Verdicts (`good_exit`, `early_exit`, `neutral`) are **not** wired to auto-tune grace knobs yet —
 wait for a thicker closed cohort before promoting parameter changes.
 
+Cross-market **tagged join** (observe-only): each record carries `market_id` (live book =
+`ftse350`) plus first-episode identity so FTSE / euro_depth / sp500 `buy_tier_level`
+rows do not collide. Combined vs per-market rollup:
+[`combined-tagged-learning.md`](combined-tagged-learning.md) /
+`docs/data/combined_tagged_learning.json`. No shared NAV and no live exit-policy
+change (**N23**).
+
 ## Exit-timing cohorts (observe-only)
 
 On the same paper-auto pass, each track also records **hold-recovery** and **swap-rotation**
