@@ -18410,8 +18410,46 @@
         "per_ticker": []
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261003-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "BZU.MI",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "BZU.MI"
+        ],
+        "market_id": "ftse_mib",
+        "universe": "library",
+        "critical_path_blocker": "thin_need_discovery"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261003-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-03T07:41:07.752156+00:00",
+      "completed_at": "2026-10-03T07:42:09.280510+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [],
+        "results": [],
+        "per_ticker": []
+      },
+      "trigger": "stall_slowdown",
+      "engineering_task_id": "eng-20261003-02"
     }
   ],
-  "updated_at": "2026-10-02T16:36:31.098486+00:00",
+  "updated_at": "2026-10-03T07:42:09.709754+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
