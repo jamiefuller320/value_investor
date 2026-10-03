@@ -20,6 +20,22 @@ def _write(path: Path, payload: dict) -> None:
     write_json(path, payload, compact=False)
 
 
+def _quiet_combined(now: datetime) -> dict:
+    return {
+        "updated_at": (now - timedelta(hours=1)).isoformat(),
+        "summary": {
+            "market_count": 3,
+            "source_files": 0,
+            "record_count": 0,
+            "open_count": 0,
+            "closed_count": 0,
+            "first_episode_closed_count": 0,
+            "source_records_missing_market_id": 0,
+            "warn": False,
+        },
+    }
+
+
 def _quiet_archive_miss(now: datetime) -> dict:
     return {
         "updated_at": (now - timedelta(hours=1)).isoformat(),
@@ -54,6 +70,7 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     decision_path = tmp_path / "decision_input_inventory.json"
     shard_fx_path = tmp_path / "shard_nav_fx_warp.json"
     archive_miss_path = tmp_path / "universe_filing_archive_miss_rate.json"
+    combined_path = tmp_path / "combined_tagged_learning.json"
     ops_path = tmp_path / "ops_status.json"
     store_path = tmp_path / "observe_utilization.json"
 
@@ -92,6 +109,7 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     )
     _write(shard_fx_path, _quiet_shard_fx(now))
     _write(archive_miss_path, _quiet_archive_miss(now))
+    _write(combined_path, _quiet_combined(now))
     _write(
         ops_path,
         {
@@ -140,6 +158,11 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
                         "warn_active": False,
                         "freshness_state": "fresh",
                     },
+                    "combined_tagged_learning": {
+                        "primary_value": 0,
+                        "warn_active": False,
+                        "freshness_state": "fresh",
+                    },
                 }
             ],
         },
@@ -151,6 +174,7 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
         decision_input_path=decision_path,
         shard_nav_fx_path=shard_fx_path,
         archive_miss_path=archive_miss_path,
+        combined_tagged_path=combined_path,
         ops_status_path=ops_path,
         now=now,
     )
@@ -161,6 +185,8 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     decision = by_id["decision_input_inventory"]
     assert "shard_nav_fx_warp" in by_id
     assert "universe_filing_archive_miss_rate" in by_id
+    assert "combined_tagged_learning" in by_id
+    assert by_id["combined_tagged_learning"]["warn_active"] is False
     assert by_id["universe_filing_archive_miss_rate"]["warn_active"] is False
     assert flip["warn_active"] is True
     assert flip["primary_value"] == 10
@@ -195,6 +221,7 @@ def test_observe_utilization_stale_and_missing(tmp_path: Path):
         decision_input_path=decision_path,
         shard_nav_fx_path=tmp_path / "missing_fx.json",
         archive_miss_path=tmp_path / "missing_archive_miss.json",
+        combined_tagged_path=tmp_path / "missing_combined.json",
         ops_status_path=ops_path,
         prior_path=tmp_path / "missing.json",
         now=now,
@@ -204,6 +231,7 @@ def test_observe_utilization_stale_and_missing(tmp_path: Path):
     assert by_id["decision_input_inventory"]["freshness"]["state"] == "missing"
     assert by_id["shard_nav_fx_warp"]["freshness"]["state"] == "missing"
     assert by_id["universe_filing_archive_miss_rate"]["freshness"]["state"] == "missing"
+    assert by_id["combined_tagged_learning"]["freshness"]["state"] == "missing"
     assert snap["surface_freshness"] == "degraded"
     assert snap["warn_instrument_count"] >= 1
 
@@ -215,6 +243,7 @@ def test_observe_utilization_store_lag_vs_ops(tmp_path: Path):
     decision_path = tmp_path / "decision.json"
     shard_fx_path = tmp_path / "fx.json"
     archive_miss_path = tmp_path / "archive_miss.json"
+    combined_path = tmp_path / "combined.json"
     ops_path = tmp_path / "ops.json"
     # Store from yesterday; ops ran an hour ago (simulates missed store commit).
     _write(
@@ -258,6 +287,13 @@ def test_observe_utilization_store_lag_vs_ops(tmp_path: Path):
             },
         },
     )
+    _write(
+        combined_path,
+        {
+            "updated_at": (now - timedelta(hours=20)).isoformat(),
+            "summary": {"source_records_missing_market_id": 0, "closed_count": 0, "warn": False},
+        },
+    )
     _write(ops_path, {"run_at": (now - timedelta(hours=1)).isoformat(), "findings": []})
 
     snap = build_observe_utilization_snapshot(
@@ -265,6 +301,7 @@ def test_observe_utilization_store_lag_vs_ops(tmp_path: Path):
         decision_input_path=decision_path,
         shard_nav_fx_path=shard_fx_path,
         archive_miss_path=archive_miss_path,
+        combined_tagged_path=combined_path,
         ops_status_path=ops_path,
         prior_path=tmp_path / "prior.json",
         now=now,
@@ -289,6 +326,7 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
     decision_path = tmp_path / "decision.json"
     shard_fx_path = tmp_path / "fx.json"
     archive_miss_path = tmp_path / "archive_miss.json"
+    combined_path = tmp_path / "combined.json"
     ops_path = tmp_path / "ops.json"
     as_of = now - timedelta(minutes=5)
     _write(
@@ -332,6 +370,13 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
             },
         },
     )
+    _write(
+        combined_path,
+        {
+            "updated_at": as_of.isoformat(),
+            "summary": {"source_records_missing_market_id": 0, "closed_count": 0, "warn": False},
+        },
+    )
     # ops_status run_at a few minutes after store refresh (same job) — not lagging.
     _write(ops_path, {"run_at": (now - timedelta(minutes=2)).isoformat(), "findings": []})
 
@@ -340,6 +385,7 @@ def test_observe_utilization_co_committed_stores_are_fresh(tmp_path: Path):
         decision_input_path=decision_path,
         shard_nav_fx_path=shard_fx_path,
         archive_miss_path=archive_miss_path,
+        combined_tagged_path=combined_path,
         ops_status_path=ops_path,
         prior_path=tmp_path / "prior.json",
         now=now,
