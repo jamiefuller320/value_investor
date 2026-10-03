@@ -378,9 +378,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://ir-api.eqs.com/storage/ir/deb4b5/documents/34b94849-45e1-46c9-88f4-15e01195eafc/DE0006048432-JA-2025-EQ-E-00.pdf",
     ],
     # ftse_mib buy-tier deepen — eng-20260926-01: ESEF index empty; IR PDF seeds unmeasured names.
+    # eng-20261003-01: two statutory PDFs left BZU.MI thin_body (needs ≥3 bodies); add March 2026 trading update.
     "BZU.MI": [
         "https://www.buzzi.com/documents/20143/276716/Annual%20Report%20Buzzi%20SpA%20-%202025.pdf/f0a2ac3f-5cf7-42db-225b-0d1fc45c27e0",
         "https://www.buzzi.com/documents/20143/3983778/2026%20Half%20Year%20results.pdf/ce754f87-b94f-8f2b-30ff-83455cbf2f76",
+        "https://www.buzzi.com/documents/20143/276903/Trading%20update%20March%202026.pdf/2cd0d4e7-e6e8-e300-47a5-d6a26471d536",
     ],
     "PST.MI": [
         "https://www.posteitaliane.it/files/1476646637138/Annual-Report-2025.pdf",

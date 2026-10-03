@@ -6847,11 +6847,15 @@ def test_fetch_filings_ir_allowlist_ftse_mib_unmeasured_builtins_eng_20260926_01
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
 
     bzu = fetch_filings_ir_allowlist("BZU.MI", path=allowlist_path)
-    assert len(bzu) == 2
+    assert len(bzu) == 3
     assert all(row["source"] == "ir_allowlist" for row in bzu)
-    assert {row["period"] for row in bzu} == {"annual", "interim"}
+    assert {row["period"] for row in bzu} == {"annual", "interim", "trading_update"}
     assert any("buzzi.com" in row["url"] and "Annual%20Report" in row["url"] for row in bzu)
     assert any(row["period"] == "interim" and "Half%20Year" in row["url"] for row in bzu)
+    assert any(
+        row["period"] == "trading_update" and "Trading%20update%20March%202026" in row["url"]
+        for row in bzu
+    )
 
     pst = fetch_filings_ir_allowlist("PST.MI", path=allowlist_path)
     assert len(pst) == 2
@@ -6875,11 +6879,25 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_bzu_mi_index(tmp_path: Path
 
     meta = merge_ir_allowlist_filings("BZU.MI", filings_dir)
     assert meta["added"] >= 1
-    assert meta["total_allowlist"] >= 2
+    assert meta["total_allowlist"] >= 3
 
     payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
-    assert int(payload["summary"]["total"]) >= 2
+    assert int(payload["summary"]["total"]) >= 3
     assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_fetch_filings_ir_allowlist_bzu_mi_trading_update_live_eng_20261003_01():
+    """eng-20261003-01: BZU.MI third IR PDF clears library thin_body (≥3 bodied filings)."""
+    rows = fetch_filings_ir_allowlist("BZU.MI")
+    trading = next(
+        row
+        for row in rows
+        if row["period"] == "trading_update" and "Trading%20update%20March%202026" in row["url"]
+    )
+    body = fetch_filing_body(trading["url"])
+    assert body and len(body) > 5000
+    valid, reason = _validate_ir_allowlist_body_content(trading, body, ticker="BZU.MI")
+    assert valid, reason
 
 
 def test_fetch_filings_ir_allowlist_dax_unmeasured_builtins_eng_20260922_05(tmp_path: Path):
