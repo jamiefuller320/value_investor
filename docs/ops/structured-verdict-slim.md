@@ -170,7 +170,9 @@ Hard compatibility rules:
    forms (already true in `verdict.py`).
 3. Slim docs must still flow through `refresh_dashboard_bundle` /
    weekday paper-auto overlay refresh so `latest.json` reports carry
-   `research_verdict` + `adjusted_signal`.
+   `research_verdict` + `adjusted_signal`. Refresh uses `CompanyReport.from_dict`
+   and stamps filing-index presence so FCF / EPS-from-body / overlay bind
+   survive onto `rebalance_log` slim candidates (observe-only; no gate change).
 4. Do **not** gate on rationale length, risk tags, memo_quality, or essay
    presence (**N27**).
 5. Pre-Phase-B essay memos remain valid PIT joins for Phase C; slim cutover

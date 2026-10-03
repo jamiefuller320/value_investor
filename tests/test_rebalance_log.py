@@ -47,6 +47,34 @@ def test_slim_candidate_keeps_replay_fields():
     assert slim["data_quality_score"] == 0.92
     assert slim["trade_plan"]["tactical_stop_loss"] == 9.0
     assert "noise" not in slim.get("trade_plan", {})
+    assert slim["overlay_bound"] is True
+    assert "fcf_basis_overlay" not in slim
+
+
+def test_slim_candidate_freezes_p1_live_inputs():
+    slim = slim_candidate(
+        {
+            "ticker": "KLR.L",
+            "name": "Keller",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "conviction_score": 0.6,
+            "research_verdict": "accumulate",
+            "fcf_basis_overlay": False,
+            "filings_with_body": 69,
+            "filings_total": 70,
+            "key_filing_bodies": True,
+            "overlay_bound": True,
+            "has_index": True,
+            "interim_eps_decline_pct": 0.039,
+            "price": 15.0,
+        }
+    )
+    assert slim["fcf_basis_overlay"] is False
+    assert slim["filings_with_body"] == 69
+    assert slim["key_filing_bodies"] is True
+    assert slim["overlay_bound"] is True
+    assert slim["interim_eps_decline_pct"] == 0.039
 
 
 def test_collect_decision_candidates_includes_holdings():

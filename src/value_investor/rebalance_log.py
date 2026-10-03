@@ -26,6 +26,18 @@ MIN_LOG_ACTED_ENTRIES = 2
 
 _VERDICT_PREVIEW_CHARS = 120
 
+# Observe-only P1 fields frozen onto weekday candidates (not Phase C autopsy_freeze).
+P1_SLIM_FIELDS: tuple[str, ...] = (
+    "fcf_basis_overlay",
+    "filings_with_body",
+    "filings_total",
+    "key_filing_bodies",
+    "overlay_bound",
+    "has_index",
+    "interim_eps_decline_pct",
+    "adjusted_eps_growth_pct",
+)
+
 
 def _utcnow_iso() -> str:
     return datetime.now(UTC).isoformat()
@@ -40,6 +52,14 @@ def _truncate_verdict(value: Any) -> str | None:
     if len(text) <= _VERDICT_PREVIEW_CHARS:
         return text
     return text[: _VERDICT_PREVIEW_CHARS - 3] + "..."
+
+
+def _overlay_bound_from_row(row: dict[str, Any]) -> bool:
+    if isinstance(row.get("overlay_bound"), bool):
+        return bool(row.get("overlay_bound"))
+    verdict = row.get("research_verdict")
+    adjusted = row.get("adjusted_signal")
+    return bool(str(verdict or "").strip()) and bool(str(adjusted or "").strip())
 
 
 def slim_candidate(row: dict[str, Any]) -> dict[str, Any]:
@@ -70,6 +90,13 @@ def slim_candidate(row: dict[str, Any]) -> dict[str, Any]:
         }
         if plan_subset:
             slim["trade_plan"] = plan_subset
+    for key in P1_SLIM_FIELDS:
+        if key in row:
+            slim[key] = row.get(key)
+    if "overlay_bound" not in slim:
+        slim["overlay_bound"] = _overlay_bound_from_row(row)
+    if "fcf_basis_overlay" in row:
+        slim["fcf_basis_overlay"] = bool(row.get("fcf_basis_overlay"))
     return {key: value for key, value in slim.items() if value is not None}
 
 

@@ -349,6 +349,66 @@ def judge_proposal(
             still_buyish,
         )
     )
+    cand = candidate or {}
+    if "fcf_basis_overlay" in cand:
+        evidence.append(
+            _cite(
+                "fcf_basis_overlay",
+                "candidates",
+                "FCF basis overlay flag bound on the live report at decision time",
+                bool(cand.get("fcf_basis_overlay")),
+            )
+        )
+    if "key_filing_bodies" in cand or "filings_with_body" in cand:
+        filings_with_body = cand.get("filings_with_body")
+        try:
+            filings_n = int(filings_with_body) if filings_with_body is not None else None
+        except (TypeError, ValueError):
+            filings_n = None
+        evidence.append(
+            _cite(
+                "filing_presence",
+                "candidates",
+                "Key filing bodies / body count on disk at decision time",
+                {
+                    "key_filing_bodies": bool(cand.get("key_filing_bodies")),
+                    "filings_with_body": filings_n,
+                    "has_index": cand.get("has_index"),
+                },
+            )
+        )
+    if "overlay_bound" in cand or cand.get("research_verdict") or cand.get("adjusted_signal"):
+        overlay_bound = cand.get("overlay_bound")
+        if not isinstance(overlay_bound, bool):
+            overlay_bound = bool(str(cand.get("research_verdict") or "").strip()) and bool(
+                str(cand.get("adjusted_signal") or "").strip()
+            )
+        evidence.append(
+            _cite(
+                "overlay_bound",
+                "candidates",
+                "Research overlay bound (verdict + adjusted_signal) at decision time",
+                overlay_bound,
+            )
+        )
+    if cand.get("interim_eps_decline_pct") is not None:
+        evidence.append(
+            _cite(
+                "interim_eps_decline_pct",
+                "candidates",
+                "Filing-body interim EPS decline on the live report at decision time",
+                cand.get("interim_eps_decline_pct"),
+            )
+        )
+    if cand.get("adjusted_eps_growth_pct") is not None:
+        evidence.append(
+            _cite(
+                "adjusted_eps_growth_pct",
+                "candidates",
+                "Filing-body adjusted EPS growth on the live report at decision time",
+                cand.get("adjusted_eps_growth_pct"),
+            )
+        )
 
     reasons: list[str] = []
     verdict = "abstain"
@@ -444,6 +504,14 @@ def judge_proposal(
             "research_verdict": research_verdict or None,
             "learning_question": LEARNING_QUESTION,
             "judge_spec_id": judge_spec_id or DEFAULT_JUDGE_SPEC_ID,
+            "p1_live_inputs": {
+                "fcf_basis_overlay": cand.get("fcf_basis_overlay"),
+                "key_filing_bodies": cand.get("key_filing_bodies"),
+                "filings_with_body": cand.get("filings_with_body"),
+                "overlay_bound": cand.get("overlay_bound"),
+                "interim_eps_decline_pct": cand.get("interim_eps_decline_pct"),
+                "adjusted_eps_growth_pct": cand.get("adjusted_eps_growth_pct"),
+            },
         },
     )
 

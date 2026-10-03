@@ -335,7 +335,10 @@ LLM live-path evidence principle (any LLM influence requires durable trail
 evidence; shadow first): [`llm-live-path-evidence.md`](llm-live-path-evidence.md).
 Shadow cards are written on each paper-auto pass into the rebalance log and
 per-track `llm_agree_veto_shadow.json` — see
-[`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md).
+[`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md). Weekday overlay refresh
+(`refresh_dashboard_bundle`) round-trips filing presence, FCF overlay, overlay
+bind, and EPS-from-body onto reports → slim candidates → agree/veto cites
+(observe-only; does not enable Phase C `autopsy_freeze`).
 shadow-vs-primary / promotion gates.
 
 Weekday paper findings before **10:00 UTC** defer alert email (same ready time

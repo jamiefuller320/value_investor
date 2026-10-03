@@ -177,6 +177,47 @@ def test_judge_cards_carry_judge_spec_id():
     assert payload["judge_spec_id"] == "heuristic.v1"
     assert "parent_spec_id" not in payload
 
+
+def test_judge_cites_p1_live_inputs_without_live_influence():
+    proposal = {
+        "ticker": "KLR.L",
+        "name": "Keller",
+        "algo_action": "hold",
+        "algo_reason": "Near target",
+    }
+    candidate = {
+        "ticker": "KLR.L",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.61,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": False,
+        "key_filing_bodies": True,
+        "filings_with_body": 69,
+        "has_index": True,
+        "overlay_bound": True,
+        "interim_eps_decline_pct": 0.02,
+    }
+    card = judge_proposal(
+        proposal,
+        candidate=candidate,
+        buy_ranks={"KLR.L": 2},
+        entry_ranks={"KLR.L": 2},
+        holdings_before={"KLR.L"},
+        track_id="ai_judgment",
+    )
+    kinds = {item["kind"] for item in card.evidence}
+    assert kinds >= {
+        "fcf_basis_overlay",
+        "filing_presence",
+        "overlay_bound",
+        "interim_eps_decline_pct",
+        "research_verdict",
+    }
+    assert card.influences_live is False
+    assert card.observe_only is True
+    assert card.meta["p1_live_inputs"]["key_filing_bodies"] is True
+
     challenger = judge_proposal(
         proposal,
         candidate={"ticker": "PAF.L", "signal": "buy", "conviction_score": 0.7},
