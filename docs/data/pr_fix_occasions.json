@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-03T09:09:15.765650+00:00",
-  "occasion_count": 145,
+  "updated_at": "2026-10-03T10:44:19.008662+00:00",
+  "occasion_count": 149,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -2607,6 +2607,80 @@
       ],
       "notes": "run 37110570393: test_esef_entity_search_skf_ab_resolves_via_group_alias skipped /entities? when a prior shard test cached SKF in issuer_identifiers.json; isolate identifier_map_path",
       "details": {}
+    },
+    {
+      "id": "prf-20261003-004",
+      "recorded_at": "2026-10-03T09:58:46.697631+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "Ruff I001 unsorted imports in tests/test_learning_gate_indicator.py",
+      "pr_number": 952,
+      "branch": "cursor/market-tile-gate-indicator-dc9b",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/952",
+      "task_id": null,
+      "head_sha": "cd9506e6d09bf4ba87ef41dcfa0b48d82e5f6c02",
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate (Ruff)"
+      ],
+      "notes": "ci-pr-autofix already pushed import-order + line-length cleanup; recording occasion and retriggering CI from agent (bot push left checks action_required)",
+      "details": {}
+    },
+    {
+      "id": "prf-20261003-005",
+      "recorded_at": "2026-10-03T09:58:46.743054+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "docs/data/pr_fix_occasions.json both-changed vs main",
+      "pr_number": 952,
+      "branch": "cursor/market-tile-gate-indicator-dc9b",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/952",
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": "CONFLICTING",
+      "failed_check_names": [],
+      "notes": "Merged origin/main; kept main 951 occasions and re-appended 952 logs (date-id collision)",
+      "details": {}
+    },
+    {
+      "id": "prf-20261003-006",
+      "recorded_at": "2026-10-03T10:19:23.481625+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ERROR collecting tests/test_learning_gate_indicator.py: ModuleNotFoundError tests package",
+      "pr_number": 952,
+      "branch": "cursor/market-tile-gate-indicator-dc9b",
+      "title": null,
+      "url": "https://github.com/jamiefuller320/value_investor/pull/952",
+      "task_id": null,
+      "head_sha": "71955239b1",
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (1)"
+      ],
+      "notes": "CI pytest shards import tests/*.py as top-level modules; switch helper import from tests.test_market_status to test_market_status",
+      "details": {}
+    },
+    {
+      "id": "prf-20261003-007",
+      "recorded_at": "2026-10-03T10:44:19.008662+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "pytest calendar flake: archive pack bottleneck review stale vs 36h threshold",
+      "pr_number": 952,
+      "branch": "cursor/market-tile-gate-indicator-dc9b",
+      "title": "Overview market tiles: Start → FTSE-parity → live-ready gate indicator",
+      "url": "https://github.com/jamiefuller320/value_investor/pull/952",
+      "task_id": null,
+      "head_sha": "abffa56af1",
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (1)"
+      ],
+      "notes": "test_gated_run_suspends_under_fat_sprint_and_writes_bottleneck: generated_at 2026-10-01T22:00 vs wall clock ~36.7h on 2026-10-03; pin now= to the run clock",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -2829,17 +2903,17 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 76
+        "count": 77
       },
       {
         "kind": "ci_check",
-        "count": 69
+        "count": 72
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 145
+        "count": 149
       }
     ]
   }

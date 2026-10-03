@@ -1395,6 +1395,100 @@ tr.selected td {
 }
 
 .market-status-legend-note {
+  display: block;
+  width: 100%;
+}
+
+.learning-gate {
+  margin: 0.3rem 0 0.15rem;
+}
+
+.learning-gate-track {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-width: 0;
+}
+
+.learning-gate-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.12rem;
+  flex: 1 1 0;
+  min-width: 0;
+  position: relative;
+}
+
+.learning-gate-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 0.28rem;
+  left: calc(50% + 0.45rem);
+  right: calc(-50% + 0.45rem);
+  height: 2px;
+  background: var(--border);
+}
+
+.learning-gate-step.is-done:not(:last-child)::after {
+  background: var(--buy);
+}
+
+.learning-gate-dot {
+  width: 0.62rem;
+  height: 0.62rem;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  z-index: 1;
+}
+
+.learning-gate-step.is-done .learning-gate-dot {
+  background: var(--buy);
+  border-color: var(--buy);
+}
+
+.learning-gate-step.is-current .learning-gate-dot {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.18);
+}
+
+.learning-gate-label {
+  font-size: 0.58rem;
+  line-height: 1.1;
+  color: var(--muted);
+  text-align: center;
+  max-width: 3.4rem;
+  overflow-wrap: anywhere;
+}
+
+.learning-gate-step.is-current .learning-gate-label {
+  color: inherit;
+  font-weight: 650;
+}
+
+.learning-gate-note {
+  margin: 0.25rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.market-status-dialog .learning-gate-note {
+  -webkit-line-clamp: unset;
+  display: block;
+  overflow: visible;
+}
   font-style: italic;
 }
 

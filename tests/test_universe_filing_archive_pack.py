@@ -103,7 +103,14 @@ def test_gated_run_suspends_under_fat_sprint_and_writes_bottleneck(tmp_path: Pat
     assert pack_run_path.exists()
     assert bottleneck_path.exists()
     # Suspend must not raise ops finding (expected under euro fat).
-    assert ops_finding_from_bottleneck_review(review) is None
+    # Pin now to the run clock so the 36h stale threshold is not a calendar flake.
+    assert (
+        ops_finding_from_bottleneck_review(
+            review,
+            now=datetime(2026, 10, 1, 22, 0, tzinfo=UTC),
+        )
+        is None
+    )
 
 
 def test_gated_dry_complete_when_allowed(tmp_path: Path) -> None:
