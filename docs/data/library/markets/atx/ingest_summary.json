@@ -1,89 +1,15 @@
 {
-  "run_at": "2026-10-02T19:21:38.362104+00:00",
+  "run_at": "2026-10-03T14:53:51.773372+00:00",
   "market_id": "atx",
-  "targets": [
-    "CAI.VI"
-  ],
-  "target_details": [
-    {
-      "ticker": "CAI.VI",
-      "priority_score": 3.3232,
-      "filings_total": 2,
-      "filings_with_body": 2,
-      "indexed_without_body": 0,
-      "reason": "thin_bodies"
-    }
-  ],
-  "results": [
-    {
-      "ticker": "CAI.VI",
-      "reason": "thin_bodies",
-      "before": {
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0
-      },
-      "after": {
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0
-      },
-      "improved": false,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 2,
-        "annual": 0,
-        "interim": 0,
-        "trading_update": 0,
-        "other": 2,
-        "with_body": 2,
-        "period_coverage": {
-          "annual": {
-            "total": 0,
-            "with_body": 0
-          },
-          "interim": {
-            "total": 0,
-            "with_body": 0
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 2,
-            "with_body": 2
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 2,
-        "with_body_after": 2,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    }
-  ],
+  "targets": [],
+  "target_details": [],
+  "results": [],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-02T19:20:04.112379+00:00",
+    "snapshot_at": "2026-10-03T14:53:35.283918+00:00",
     "market_id": "atx",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -111,20 +37,19 @@
       "EVN.VI": 1
     },
     "parked_tickers": [
+      "CAI.VI",
       "EVN.VI",
       "WIE.VI"
     ],
-    "parked_count": 2,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "CAI.VI"
-    ],
+    "parked_count": 3,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-02T19:20:11.854601+00:00",
+    "snapshot_at": "2026-10-03T14:53:45.324202+00:00",
     "market_id": "atx",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -169,47 +94,38 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 5,
+    "hits": 4,
+    "new_rows_total": 0,
+    "curiosity_total": 4,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "CAI.VI",
+      "EVN.VI",
+      "WIE.VI"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "advanced": true,
-    "parallel_stream": 2,
-    "from_market": "atx",
-    "to_market": "nasdaq100",
-    "stream_markets_after": [
-      "nasdaq100"
-    ],
-    "parity_event": {
-      "recorded": false,
-      "reason": "ingest_exhausted_leftover_gaps",
-      "market_id": "atx",
-      "ingest_exhausted": true,
-      "exhausted_maintenance_recorded": true,
-      "parked_tickers": [
-        "CAI.VI",
-        "EVN.VI",
-        "WIE.VI"
-      ],
-      "learning_admitted_changed": true,
-      "learning_admitted": true
-    },
-    "screen_refresh": {
-      "refreshed": true,
-      "market_id": "nasdaq100",
-      "forced": true,
-      "prior_screen_at": "2026-09-30T06:52:42.218162+00:00",
-      "prior_age_days": 2,
-      "run_at": "2026-10-02T19:21:29.900778+00:00",
-      "shortlist_count": 37,
-      "ticker_count": 101
-    },
-    "at": "2026-10-02T19:20:28.123771+00:00",
-    "ingest_parity_recorded": false
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "atx"
   },
   "critical_path": {
     "market_id": "atx",
-    "assessed_at": "2026-10-02T19:20:04.413245+00:00",
+    "assessed_at": "2026-10-03T14:53:35.608472+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -253,9 +169,9 @@
       "thin_need_bodies": 2
     }
   },
-  "used_seconds": 7.116171548000011,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2092.8838284519998,
+  "used_seconds": 9.412608455999987,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3590.587391544,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -263,9 +179,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "atx",
-    "updated_at": "2026-10-02T19:20:11.855571+00:00",
+    "updated_at": "2026-10-03T14:53:45.325301+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -332,6 +248,7 @@
       "hang_seng",
       "ibex35",
       "nasdaq100",
+      "psi20",
       "sp500",
       "sti",
       "tsx60",
@@ -343,7 +260,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 126,
+    "task_count": 128,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
