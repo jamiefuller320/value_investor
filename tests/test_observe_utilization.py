@@ -221,6 +221,7 @@ def test_observe_utilization_stale_and_missing(tmp_path: Path):
         decision_input_path=decision_path,
         shard_nav_fx_path=tmp_path / "missing_fx.json",
         archive_miss_path=tmp_path / "missing_archive_miss.json",
+        combined_tagged_path=tmp_path / "missing_combined.json",
         ops_status_path=ops_path,
         prior_path=tmp_path / "missing.json",
         now=now,
