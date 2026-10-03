@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-02T14:06:34.746855+00:00",
+  "run_at": "2026-10-03T10:33:48.064598+00:00",
   "market_id": "hang_seng",
   "targets": [],
   "target_details": [],
@@ -9,13 +9,13 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-02T14:06:15.490544+00:00",
+    "snapshot_at": "2026-10-03T10:33:29.696820+00:00",
     "market_id": "hang_seng",
     "buy_tier_count": 25,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 19,
-    "indexed_without_body": 11,
+    "indexed_without_body": 9,
     "bodies_min": 1,
     "bodies_median": 1,
     "bodies_max": 6,
@@ -54,8 +54,8 @@
     ],
     "indexed_without_body_by_ticker": {
       "9961.HK": 2,
-      "0288.HK": 2,
-      "0857.HK": 3,
+      "0288.HK": 1,
+      "0857.HK": 2,
       "0868.HK": 2,
       "1113.HK": 1,
       "0285.HK": 1
@@ -91,7 +91,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-02T14:06:27.551190+00:00",
+    "snapshot_at": "2026-10-03T10:33:42.065934+00:00",
     "market_id": "hang_seng",
     "buy_tier_count": 25,
     "unmeasured_buy_tier": 0,
@@ -180,7 +180,7 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 25,
-    "hits": 15,
+    "hits": 13,
     "new_rows_total": 3,
     "curiosity_total": 17,
     "errors": 0,
@@ -198,10 +198,8 @@
       "1378.HK",
       "1093.HK",
       "2618.HK",
-      "2382.HK",
       "6862.HK",
       "0941.HK",
-      "1024.HK",
       "1113.HK",
       "1109.HK",
       "2313.HK",
@@ -210,10 +208,10 @@
       "0101.HK",
       "0291.HK",
       "0857.HK",
-      "0288.HK",
       "0868.HK",
       "9961.HK",
-      "0285.HK"
+      "0285.HK",
+      "0288.HK"
     ],
     "runtime_cutoff": false
   },
@@ -226,21 +224,15 @@
   },
   "critical_path": {
     "market_id": "hang_seng",
-    "assessed_at": "2026-10-02T14:06:16.983879+00:00",
+    "assessed_at": "2026-10-03T10:33:30.493557+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
       {
         "ticker": "0857.HK",
-        "indexed_without_body": 3,
-        "filings_total": 5,
-        "filings_with_body": 2
-      },
-      {
-        "ticker": "0288.HK",
         "indexed_without_body": 2,
         "filings_total": 5,
-        "filings_with_body": 3
+        "filings_with_body": 2
       },
       {
         "ticker": "0868.HK",
@@ -251,7 +243,7 @@
       {
         "ticker": "9961.HK",
         "indexed_without_body": 2,
-        "filings_total": 9,
+        "filings_total": 11,
         "filings_with_body": 6
       },
       {
@@ -259,6 +251,12 @@
         "indexed_without_body": 1,
         "filings_total": 3,
         "filings_with_body": 2
+      },
+      {
+        "ticker": "0288.HK",
+        "indexed_without_body": 1,
+        "filings_total": 5,
+        "filings_with_body": 3
       },
       {
         "ticker": "1113.HK",
@@ -272,10 +270,8 @@
       "1378.HK",
       "1093.HK",
       "2618.HK",
-      "2382.HK",
       "6862.HK",
       "0941.HK",
-      "1024.HK",
       "1113.HK",
       "1109.HK",
       "2313.HK",
@@ -294,29 +290,29 @@
     "force_discovery_scan": true,
     "auto_pin_tickers": [
       "0857.HK",
-      "0288.HK",
       "0868.HK",
       "9961.HK",
       "0285.HK",
+      "0288.HK",
       "1113.HK"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (6 tickers, top: 0857.HK(3), 0288.HK(2), 0868.HK(2), 9961.HK(2), 0285.HK(1))",
-      "Discovery/IR seed for 15 thin ticker(s) that already have bodies for every indexed filing",
+      "Prefer indexed-without-body body refetch (6 tickers, top: 0857.HK(2), 0868.HK(2), 9961.HK(2), 0285.HK(1), 0288.HK(1))",
+      "Discovery/IR seed for 13 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 6,
-      "indexed_without_body_rows": 11,
-      "thin_need_discovery": 15,
+      "indexed_without_body_rows": 9,
+      "thin_need_discovery": 13,
       "thin_need_bodies": 4
     }
   },
-  "used_seconds": 9.057958947999992,
+  "used_seconds": 10.781262690000005,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3590.942041052,
+  "leftover_seconds": 3589.21873731,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -324,9 +320,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "hang_seng",
-    "updated_at": "2026-10-02T14:06:27.554662+00:00",
+    "updated_at": "2026-10-03T10:33:42.109079+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 5,
+    "complete_zero_improve_runs": 6,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -380,16 +376,6 @@
         "thin": true
       },
       {
-        "ticker": "1099.HK",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-01T17:21:49.546404+00:00",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true
-      },
-      {
         "ticker": "1113.HK",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
@@ -428,17 +414,6 @@
         "filings_with_body": 1,
         "indexed_without_body": 0,
         "thin": true
-      },
-      {
-        "ticker": "0288.HK",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-10-01T19:03:13.518736+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 5,
-        "filings_with_body": 3,
-        "indexed_without_body": 1,
-        "thin": false
       },
       {
         "ticker": "0762.HK",
@@ -549,6 +524,28 @@
         "filings_with_body": 6,
         "indexed_without_body": 2,
         "thin": false
+      },
+      {
+        "ticker": "0288.HK",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-03T10:33:42.109079+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 7,
+        "filings_with_body": 3,
+        "indexed_without_body": 1,
+        "thin": false
+      },
+      {
+        "ticker": "1099.HK",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-03T10:33:42.109079+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 3,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -588,6 +585,7 @@
     "ingest_exhausted_markets": [
       "aex",
       "asx200",
+      "atx",
       "bel20",
       "cac40",
       "dax",
@@ -598,7 +596,9 @@
       "hang_seng",
       "ibex35",
       "nasdaq100",
+      "psi20",
       "sp500",
+      "sti",
       "tsx60",
       "us_adr_asia"
     ],
@@ -608,7 +608,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 126,
+    "task_count": 127,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
