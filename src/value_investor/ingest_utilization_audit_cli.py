@@ -1,7 +1,8 @@
 """CLI for buy-tier ingest fragment utilization audit (+ flip→usable lag pin).
 
 Also hosts the observe-only FTSE holdings ∪ buy-tier decision-input inventory
-(``--decision-inputs``) — steady-state P1 utilization, not flip-lag.
+(``--decision-inputs``) and the time-boxed #953 first-run pin
+(``--p1-first-run``).
 """
 
 from __future__ import annotations
@@ -39,6 +40,14 @@ from value_investor.ingest_utilization_audit import (
     format_audit_summary,
     run_ingest_utilization_audit,
     write_ingest_utilization_audit,
+)
+from value_investor.p1_first_run_pin import (
+    DEFAULT_PAPER_TRACK_DIR,
+    format_p1_first_run_summary,
+    run_p1_first_run_pin,
+)
+from value_investor.p1_first_run_pin import (
+    DEFAULT_STORE_PATH as DEFAULT_P1_FIRST_RUN_STORE,
 )
 from value_investor.universe_filing_archive_miss_rate import (
     DEFAULT_FLIP_LAG_PATH as DEFAULT_ARCHIVE_FLIP_LAG_PATH,
@@ -155,6 +164,26 @@ def main(argv: list[str] | None = None) -> int:
         help=f"Flip-lag store to roll up (default: {DEFAULT_ARCHIVE_FLIP_LAG_PATH})",
     )
     parser.add_argument(
+        "--p1-first-run",
+        action="store_true",
+        help=(
+            "Observe-only: refresh docs/data/p1_first_run_pin.json — time-boxed "
+            "first Sunday EPS-from-body + first Monday slim freeze after #953"
+        ),
+    )
+    parser.add_argument(
+        "--p1-first-run-store",
+        type=Path,
+        default=DEFAULT_P1_FIRST_RUN_STORE,
+        help=f"P1 first-run pin store path (default: {DEFAULT_P1_FIRST_RUN_STORE})",
+    )
+    parser.add_argument(
+        "--p1-paper-track",
+        type=Path,
+        default=DEFAULT_PAPER_TRACK_DIR,
+        help=f"AI-judgment rebalance_log directory (default: {DEFAULT_PAPER_TRACK_DIR})",
+    )
+    parser.add_argument(
         "--paper-fund",
         type=Path,
         default=DEFAULT_PAPER_FUND_PATH,
@@ -185,12 +214,16 @@ def main(argv: list[str] | None = None) -> int:
         format="%(levelname)s %(message)s",
     )
 
-    if args.flip_lag and args.decision_inputs:
-        parser.error("Use only one of --flip-lag, --decision-inputs, or --archive-miss-rate")
-    if args.flip_lag and args.archive_miss_rate:
-        parser.error("Use only one of --flip-lag, --decision-inputs, or --archive-miss-rate")
-    if args.decision_inputs and args.archive_miss_rate:
-        parser.error("Use only one of --flip-lag, --decision-inputs, or --archive-miss-rate")
+    observe_flags = [
+        args.flip_lag,
+        args.decision_inputs,
+        args.archive_miss_rate,
+        args.p1_first_run,
+    ]
+    if sum(1 for flag in observe_flags if flag) > 1:
+        parser.error(
+            "Use only one of --flip-lag, --decision-inputs, --archive-miss-rate, or --p1-first-run"
+        )
 
     if args.flip_lag:
         market_ids = [m.strip() for m in str(args.markets or "").split(",") if m.strip()]
@@ -247,6 +280,22 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(payload, indent=2))
         else:
             print(format_archive_miss_rate_summary(payload))
+        return 0
+
+    if args.p1_first_run:
+        payload = run_p1_first_run_pin(
+            latest_path=args.latest_path,
+            paper_fund_path=args.paper_fund,
+            paper_track_dir=args.p1_paper_track,
+            store_path=args.p1_first_run_store,
+            persist=not args.no_write,
+        )
+        if not args.no_write:
+            logger.info("Wrote %s", args.p1_first_run_store)
+        if args.json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(format_p1_first_run_summary(payload))
         return 0
 
     payload = run_ingest_utilization_audit(
