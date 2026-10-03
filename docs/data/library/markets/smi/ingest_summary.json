@@ -1,13 +1,22 @@
 {
-  "run_at": "2026-10-03T10:53:14.790853+00:00",
+  "run_at": "2026-10-03T12:46:34.814001+00:00",
   "market_id": "smi",
   "targets": [
-    "PGHN.SW"
+    "PGHN.SW",
+    "RO.SW"
   ],
   "target_details": [
     {
       "ticker": "PGHN.SW",
       "priority_score": 12.6013,
+      "filings_total": 0,
+      "filings_with_body": 0,
+      "indexed_without_body": 0,
+      "reason": "unmeasured"
+    },
+    {
+      "ticker": "RO.SW",
+      "priority_score": 12.3438,
       "filings_total": 0,
       "filings_with_body": 0,
       "indexed_without_body": 0,
@@ -76,6 +85,68 @@
         "ir_metadata_reconciled": 0,
         "note": "no missing IR allowlist bodies"
       }
+    },
+    {
+      "ticker": "RO.SW",
+      "reason": "unmeasured",
+      "before": {
+        "filings_total": 0,
+        "filings_with_body": 0,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 0,
+        "filings_with_body": 0,
+        "indexed_without_body": 0
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 0,
+        "annual": 0,
+        "interim": 0,
+        "trading_update": 0,
+        "other": 0,
+        "with_body": 0,
+        "period_coverage": {
+          "annual": {
+            "total": 0,
+            "with_body": 0
+          },
+          "interim": {
+            "total": 0,
+            "with_body": 0
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 0,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 0,
+        "with_body_after": 0,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
     }
   ],
   "improved": [],
@@ -83,7 +154,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-03T10:52:50.604081+00:00",
+    "snapshot_at": "2026-10-03T12:45:54.747785+00:00",
     "market_id": "smi",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 2,
@@ -112,7 +183,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-03T10:53:09.663909+00:00",
+    "snapshot_at": "2026-10-03T12:46:27.465729+00:00",
     "market_id": "smi",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 2,
@@ -143,7 +214,7 @@
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
@@ -152,7 +223,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "smi",
-    "assessed_at": "2026-10-03T10:52:50.797672+00:00",
+    "assessed_at": "2026-10-03T12:45:55.062114+00:00",
     "unmeasured": [
       "PGHN.SW",
       "RO.SW"
@@ -180,22 +251,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 18.669092777000003,
+  "used_seconds": 32.12621298799999,
   "budget_seconds": 2100.0,
-  "leftover_seconds": 2081.330907223,
+  "leftover_seconds": 2067.873787012,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "PGHN.SW",
-    "RO.SW"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "smi",
-    "updated_at": "2026-10-03T10:53:09.664618+00:00",
+    "updated_at": "2026-10-03T12:46:27.466648+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
