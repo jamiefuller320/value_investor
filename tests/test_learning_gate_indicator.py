@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from tests.test_market_status import _by_id, _seed_library, _status_roots
+from test_market_status import _by_id, _seed_library, _status_roots
+
 from value_investor.market_status import (
     GATE_ADMIT,
     GATE_BODIES,
