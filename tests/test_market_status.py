@@ -421,6 +421,11 @@ def test_dashboard_assets_include_market_status_grid():
     assert "grid-auto-rows: 1fr" in css
     assert 'class="market-tile-chips"' in app
     assert "function sprintProgressLine(progress)" in app
+    assert "function renderLearningGateIndicator(gate" in app
+    assert "row.learning_gate" in app
+    assert "Start → FTSE-parity" in app
+    assert ".learning-gate-track" in css
+    assert ".learning-gate-note" in css
     assert "function renderSprintProgressCard(progress)" in app
     assert "Last ${esc(String(progress.window_days || 2))} days ingest" in app
     assert "admission-flag" in app

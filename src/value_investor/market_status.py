@@ -34,6 +34,11 @@ from value_investor.library_ingest_escalation import (
     ftse_equivalent_markets,
     resolve_library_ingest_health_log_path,
 )
+from value_investor.library_learning_depth import (
+    TRAJECTORY_READY_MIN_SPAN_WEEKS,
+    TRAJECTORY_READY_MIN_UNIQUE_DAYS,
+    learning_depth_path,
+)
 from value_investor.library_near_miss_watch import NEAR_MISS_FILENAME
 from value_investor.library_screen import screen_dir_for
 from value_investor.library_sim import ingest_profile_observe_sim_markets
@@ -84,6 +89,21 @@ PHASE_LABELS = {
 }
 EPOCH0_PHASE_LABEL = "Epoch-0 level"
 INGEST_ONLY_PHASE_LABEL = "Ingest only"
+
+GATE_START = "start"
+GATE_FTSE_PARITY = "ftse_parity_learning"
+GATE_LIVE_READY = "live_ready"
+GATE_STEP_IDS = (GATE_START, GATE_FTSE_PARITY, GATE_LIVE_READY)
+GATE_STEP_LABELS = {
+    GATE_START: "Start",
+    GATE_FTSE_PARITY: "FTSE-parity",
+    GATE_LIVE_READY: "Live-ready",
+}
+GATE_STEP_GATES = {
+    GATE_START: "sprint_ingest_complete",
+    GATE_FTSE_PARITY: "learning_ready",
+    GATE_LIVE_READY: "phase_4_live_screen",
+}
 
 ROLE_ORDER = {
     ROLE_LIVE: 0,
@@ -395,6 +415,208 @@ def _phase_label(
     if current_phase is None:
         return PHASE_LABELS[0]
     return PHASE_LABELS.get(current_phase, f"Phase {current_phase}")
+
+
+def _slim_learning_depth(library_root: Path, market_id: str) -> dict[str, Any] | None:
+    """Cached learning-depth snapshot only — do not re-assess filings here."""
+    raw = _as_dict(_safe_read(learning_depth_path(library_root, market_id)))
+    if not raw:
+        return None
+    screen = _as_dict(raw.get("screen"))
+    return {
+        "filing_ready": bool(raw.get("filing_ready")),
+        "trajectory_ready": bool(raw.get("trajectory_ready")),
+        "learning_ready": bool(raw.get("learning_ready")),
+        "span_weeks": _float(screen.get("span_weeks")),
+        "unique_days": _optional_int(screen.get("unique_days")),
+        "assessed_at": raw.get("assessed_at"),
+    }
+
+
+def _weeks_to_parity(span_weeks: float | None, unique_days: int | None) -> tuple[float, int]:
+    weeks_left = max(0.0, round(TRAJECTORY_READY_MIN_SPAN_WEEKS - float(span_weeks or 0.0), 2))
+    days_left = max(0, TRAJECTORY_READY_MIN_UNIQUE_DAYS - int(unique_days or 0))
+    return weeks_left, days_left
+
+
+def build_learning_gate_indicator(
+    *,
+    is_live: bool,
+    is_admitted: bool = False,
+    ingest_parity_met: bool | None = None,
+    ingest_exhausted: bool = False,
+    sprint_progress: dict[str, Any] | None = None,
+    learning_depth: dict[str, Any] | None = None,
+    filing_health: dict[str, Any] | None = None,
+    remaining_gaps: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Observe-only Start → FTSE-parity → live-ready stepper for a market tile.
+
+    Uses published gates from market-sharded-learning.md. Live FTSE reports
+    live-path status, not a self catch-up. Does not blend NAV or change knobs.
+    """
+    depth = _as_dict(learning_depth)
+    sprint = _as_dict(sprint_progress)
+    remain = _as_dict(remaining_gaps) or _as_dict(_as_dict(sprint).get("remaining"))
+    if not remain:
+        remain = _gap_counts(filing_health)
+
+    filing_ready = bool(depth.get("filing_ready")) if depth else False
+    if not depth:
+        filing_ready = bool(
+            is_admitted
+            or ingest_parity_met
+            or ingest_exhausted
+            or sprint.get("admission_ready")
+        )
+    start_complete = bool(
+        is_live
+        or is_admitted
+        or ingest_parity_met
+        or ingest_exhausted
+        or sprint.get("admission_ready")
+        or filing_ready
+    )
+    span_weeks = _float(depth.get("span_weeks"))
+    unique_days = _optional_int(depth.get("unique_days"))
+    trajectory_ready = bool(depth.get("trajectory_ready")) if depth else False
+    if depth.get("learning_ready") is not None:
+        learning_ready = bool(depth.get("learning_ready"))
+    else:
+        learning_ready = bool(filing_ready and trajectory_ready)
+    if is_live:
+        learning_ready = True
+        start_complete = True
+
+    live_complete = bool(is_live)
+    if live_complete:
+        current_id = GATE_LIVE_READY
+    elif learning_ready:
+        current_id = GATE_LIVE_READY
+    elif start_complete:
+        current_id = GATE_FTSE_PARITY
+    else:
+        current_id = GATE_START
+
+    def _status(step_id: str) -> str:
+        if step_id == GATE_START:
+            if start_complete:
+                return "done"
+            return "current"
+        if step_id == GATE_FTSE_PARITY:
+            if learning_ready:
+                return "done"
+            if start_complete:
+                return "current"
+            return "pending"
+        if live_complete:
+            return "done"
+        if learning_ready:
+            return "current"
+        return "pending"
+
+    steps = [
+        {
+            "id": step_id,
+            "label": GATE_STEP_LABELS[step_id],
+            "gate": GATE_STEP_GATES[step_id],
+            "status": _status(step_id),
+        }
+        for step_id in GATE_STEP_IDS
+    ]
+
+    if is_live:
+        next_gate = {
+            "id": "live_path",
+            "name": "Live-path utilization (P1)",
+            "gate": "live_ftse350",
+            "criteria": (
+                "FTSE 350 is already the live screen. Next work is weekday "
+                "paper-auto evidence (filings, FCF, overlay, memo recency on "
+                "holdings and buy-tier), not catching this tile up to itself. "
+                "Stage 4 live expansion waits on persistent AI-track excess vs "
+                "^FTSE plus one shard completing Phase 3."
+            ),
+            "timeframe": (
+                "Not calendar — project stage 4 after Phase 3 evidence. "
+                "Live screener stays FTSE 350 until then."
+            ),
+        }
+    elif not start_complete:
+        bits = [
+            f"unmeas {remain.get('unmeasured', 0)}",
+            f"zero {remain.get('zero_body', 0)}",
+            f"thin {remain.get('thin', 0)}",
+            f"IWB {remain.get('indexed_without_body', 0)}",
+        ]
+        next_gate = {
+            "id": GATE_START,
+            "name": "L322 admit",
+            "gate": "sprint_ingest_complete",
+            "criteria": (
+                "sprint_ingest_complete: unmeasured and zero-body cleared, leftover "
+                f"thin/IWB parked (or raw ingest_parity_met). Remaining {', '.join(bits)}."
+            ),
+            "timeframe": (
+                "Sprint until exhaustion — extra ingest jobs do not create unique "
+                "weeks. Fat slot serializes one head at a time."
+            ),
+        }
+    elif not learning_ready:
+        weeks_left, days_left = _weeks_to_parity(span_weeks, unique_days)
+        span_txt = (
+            f"{span_weeks:g}w / {unique_days} unique days"
+            if span_weeks is not None and unique_days is not None
+            else "span not yet published in learning_depth.json"
+        )
+        next_gate = {
+            "id": GATE_FTSE_PARITY,
+            "name": "FTSE-parity learning",
+            "gate": "learning_ready",
+            "criteria": (
+                "learning_ready = filing_ready and ≥12 weeks / 12 unique screen "
+                f"days (canonical filings). Now {span_txt}."
+            ),
+            "timeframe": (
+                f"Sunday archive clock: ~{weeks_left:g}w and {days_left} unique "
+                "day(s) remaining. Extra deepen jobs do not shorten the calendar."
+            ),
+        }
+    else:
+        next_gate = {
+            "id": GATE_LIVE_READY,
+            "name": "Live screen inclusion",
+            "gate": "phase_4_live_screen",
+            "criteria": (
+                "Phase 2 (≥8 weekly paper batches + beat control) then Phase 3 "
+                "weekday pilot (8–12 weeks, capacity 1) then project stage 4: "
+                "persistent FTSE AI-track excess vs ^FTSE and one shard through "
+                "Phase 3. Do not fork shard AI or apply knobs yet."
+            ),
+            "timeframe": (
+                "~2 months Phase 2 + 8–12 weeks Phase 3, then stage 4 is not "
+                "calendar-driven. Live screen stays FTSE 350."
+            ),
+        }
+
+    annotation = (
+        f"Next: {next_gate['name']} — {next_gate['criteria']} "
+        f"Timeframe: {next_gate['timeframe']}"
+    )
+    return {
+        "schema_version": 1,
+        "observe_only": True,
+        "current_id": current_id,
+        "start_complete": start_complete,
+        "learning_ready": learning_ready,
+        "live_ready": live_complete,
+        "filing_ready": filing_ready if not is_live else True,
+        "span_weeks": span_weeks,
+        "unique_days": unique_days,
+        "steps": steps,
+        "next_gate": next_gate,
+        "annotation": annotation,
+    }
 
 
 def _phase_from_dispatch(dispatch_row: dict[str, Any]) -> dict[str, Any] | None:
@@ -1264,6 +1486,25 @@ def build_market_status(
             charts_dir=charts_base,
             macro_closes=macro_closes,
         )
+        learning_depth = (
+            None
+            if market_id == LIVE_MARKET_ID
+            else _slim_learning_depth(library_root, market_id)
+        )
+        learning_gate = build_learning_gate_indicator(
+            is_live=market_id == LIVE_MARKET_ID,
+            is_admitted=is_admitted,
+            ingest_parity_met=(
+                None
+                if dispatch_row.get("ingest_parity_met") is None
+                else bool(dispatch_row.get("ingest_parity_met"))
+            ),
+            ingest_exhausted=ingest_exhausted,
+            sprint_progress=sprint_progress,
+            learning_depth=learning_depth,
+            filing_health=_as_dict(filing_health) or None,
+            remaining_gaps=_as_dict(_as_dict(sprint_progress).get("remaining")) or None,
+        )
         paper_instrument = None
         if held_vs_market.get("status") == "ok" and held_vs_market.get("paper_instrument"):
             paper_instrument = held_vs_market.get("paper_instrument")
@@ -1329,6 +1570,8 @@ def build_market_status(
                 "near_miss": near_miss,
                 "sprint_progress": sprint_progress,
                 "held_vs_market": held_vs_market,
+                "learning_depth": learning_depth,
+                "learning_gate": learning_gate,
             }
         )
 
@@ -1357,9 +1600,12 @@ def build_market_status(
             "the live FTSE screen or each library latest_summary.json. "
             "Admitted markets show epoch-0 buy-tier-level + equal-support near-miss "
             "(watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest "
-            "rollup and admission-progress flags. held_vs_market plots held-stock "
-            "value vs local-index equivalent; knob-changed branches overlay the same "
-            "dates when applied."
+            "rollup and admission-progress flags. learning_gate is an observe-only "
+            "Start → FTSE-parity (learning_ready) → live-ready stepper with next-gate "
+            "criteria and timeframe; live FTSE shows live-path status, not self catch-up. "
+            "held_vs_market plots held-stock value vs local-index equivalent; "
+            "knob-changed branches overlay the same dates when applied. "
+            "Do not blend NAV into the gate graphic."
         ),
         "focus_market": focus or None,
         "admitted_markets": admitted_list,
@@ -1434,6 +1680,7 @@ __all__ = [
     "ROLE_QUEUE",
     "ROLE_SPRINT",
     "SCHEMA_VERSION",
+    "build_learning_gate_indicator",
     "build_market_status",
     "live_inputs_from_latest",
     "write_market_status",

@@ -1709,13 +1709,37 @@ function marketStatusBadgeLegend() {
       ${marketRoleBadge("queue")}
       ${marketRoleBadge("graduated")}
       ${marketRoleBadge("ftse_equivalent")}</span>
-    <span class="market-status-legend-note">graduated ≠ admitted · maintenance ≠ live screen</span>
+    <span class="market-status-legend-axis"><strong>Learning gate</strong>
+      Start → FTSE-parity (<code>learning_ready</code>) → Live-ready</span>
+    <span class="market-status-legend-note">graduated ≠ admitted · maintenance ≠ live screen · live FTSE is live-path, not self catch-up</span>
   </p>`;
 }
 
 function learningBookLine(row) {
   const label = (row && row.learning_phase_label) || "Not started";
   return `Learning · ${label}`;
+}
+
+function renderLearningGateIndicator(gate, { compact = false } = {}) {
+  if (!gate || !Array.isArray(gate.steps) || !gate.steps.length) return "";
+  const steps = gate.steps
+    .map((step) => {
+      const status = String(step.status || "pending");
+      return `<li class="learning-gate-step is-${esc(status)}" title="${esc(
+        `${step.label} (${step.gate || ""}) — ${status}`
+      )}"><span class="learning-gate-dot" aria-hidden="true"></span><span class="learning-gate-label">${esc(
+        step.label
+      )}</span></li>`;
+    })
+    .join("");
+  const next = gate.next_gate || {};
+  const note = compact
+    ? `${next.name || "Next gate"}: ${next.criteria || ""} Timeframe: ${next.timeframe || ""}`
+    : gate.annotation || "";
+  return `<div class="learning-gate" data-current="${esc(gate.current_id || "")}">
+    <ol class="learning-gate-track" aria-label="Start to FTSE-parity learning to live-ready">${steps}</ol>
+    <p class="small muted learning-gate-note">${esc(note)}</p>
+  </div>`;
 }
 
 const ADMISSION_FLAG_LABELS = {
@@ -2083,6 +2107,7 @@ function renderMarketStatusCard(row) {
       ${row.ingest_exhausted ? '<span class="stage-badge mingest-queued" title="Sprint leftovers parked after exhaustion">exhausted leftovers</span>' : ""}
     </div>
     <p class="small muted" style="margin:0 0 0.75rem">Ingest = capacity · Learning role = path. Graduated ≠ admitted; maintenance ≠ live screen.</p>
+    ${typeof renderLearningGateIndicator === "function" ? renderLearningGateIndicator(row.learning_gate) : ""}
     ${typeof renderHeldVsMarketChart === "function" ? renderHeldVsMarketChart(row.held_vs_market) : ""}
     ${row.ingest_reason ? `<p class="small">${esc(row.ingest_reason)}</p>` : ""}
     ${settingRow("Role", esc(row.role || "—"))}
@@ -2199,6 +2224,7 @@ function renderMarketStatusGrid(data) {
           </span>
         </div>
         <div class="small muted market-tile-phase">${esc(learningBookLine(row))}${row.shared_maintenance ? " · maint cron" : ""}</div>
+        ${typeof renderLearningGateIndicator === "function" ? renderLearningGateIndicator(row.learning_gate, { compact: true }) : ""}
         <div class="market-tile-body">
         ${marketSignalBar(row.signal_counts)}
         <div class="small market-tile-signals">${marketSignalSummary(row)}</div>

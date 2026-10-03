@@ -288,6 +288,51 @@ console.log(JSON.stringify({
     assert "stage-complete" not in payload["ingestMaint"]
 
 
+def test_learning_gate_indicator_helper_renders_steps() -> None:
+    text = APP_JS.read_text(encoding="utf-8")
+    start = text.index("function renderLearningGateIndicator(")
+    end = text.index("const ADMISSION_FLAG_LABELS =")
+    chunk = text[start:end]
+    import json
+    from subprocess import check_output
+
+    script = (
+        "function esc(t){return String(t??'');}\n"
+        + chunk
+        + """
+const html = renderLearningGateIndicator({
+  current_id: 'ftse_parity_learning',
+  steps: [
+    {id:'start', label:'Start', gate:'sprint_ingest_complete', status:'done'},
+    {id:'ftse_parity_learning', label:'FTSE-parity', gate:'learning_ready', status:'current'},
+    {id:'live_ready', label:'Live-ready', gate:'phase_4_live_screen', status:'pending'},
+  ],
+  next_gate: {name:'FTSE-parity learning', criteria:'learning_ready = filing_ready and 12w', timeframe:'~1.4w remaining'},
+  annotation: 'full card text',
+}, {compact: true});
+const live = renderLearningGateIndicator({
+  current_id: 'live_ready',
+  annotation: 'Next: Live-path utilization (P1) — FTSE 350 is already the live screen',
+  steps: [
+    {id:'start', label:'Start', gate:'sprint_ingest_complete', status:'done'},
+    {id:'ftse_parity_learning', label:'FTSE-parity', gate:'learning_ready', status:'done'},
+    {id:'live_ready', label:'Live-ready', gate:'phase_4_live_screen', status:'done'},
+  ],
+  next_gate: {name:'Live-path utilization (P1)', criteria:'FTSE 350 is already the live screen', timeframe:'Not calendar'},
+});
+console.log(JSON.stringify({html, live, empty: renderLearningGateIndicator(null)}));
+"""
+    )
+    payload = json.loads(check_output(["node", "-e", script], text=True))
+    assert "learning-gate-track" in payload["html"]
+    assert "is-current" in payload["html"]
+    assert "is-done" in payload["html"]
+    assert "FTSE-parity" in payload["html"]
+    assert "~1.4w remaining" in payload["html"]
+    assert "Live-path utilization" in payload["live"]
+    assert payload["empty"] == ""
+
+
 def test_model_attribution_panel_prefers_primary_horizon() -> None:
     """Performance historical panel: 28d buy-tier excess primary; 7d demoted."""
     text = APP_JS.read_text(encoding="utf-8")
