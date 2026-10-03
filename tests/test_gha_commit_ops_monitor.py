@@ -203,6 +203,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "docs/data/daily_discuss_inbox.json" in text
     assert "docs/data/daily_hub_history.json" in text
     assert "docs/data/shard_nav_fx_warp.json" in text
+    assert "docs/data/combined_tagged_learning.json" in text
     # Optional (not OWNED) — same race-safe lane as queue_health / observe rollup.
     optional_line = next(
         line for line in text.splitlines() if "GHA_COMMIT_OPTIONAL" in line and ":-" in line
@@ -218,6 +219,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "daily_focus.json" in optional_line
     assert "daily_hub_history.json" in optional_line
     assert "shard_nav_fx_warp.json" in optional_line
+    assert "combined_tagged_learning.json" in optional_line
     owned_line = next(
         line for line in text.splitlines() if "GHA_COMMIT_OWNED" in line and ":-" in line
     )
@@ -228,3 +230,4 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "lifecycle_board.json" not in owned_line
     assert "human_tasks_board.json" not in owned_line
     assert "shard_nav_fx_warp.json" not in owned_line
+    assert "combined_tagged_learning.json" not in owned_line

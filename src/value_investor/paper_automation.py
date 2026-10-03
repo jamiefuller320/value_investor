@@ -1279,12 +1279,15 @@ def run_daily_automation(
         save_automated_fund(fund_path, fund)
 
     price_map = _marked_price_map(marked, fund)
+    from value_investor.exit_shadow import canonical_exit_shadow_market_id
+
     exit_shadow_review = run_exit_shadow_pass(
         output_dir=output_dir,
         fund=fund,
         track_id=config.track_id,
         prices_by_ticker=price_map,
         as_of=gate["local_time"],
+        market_id=canonical_exit_shadow_market_id(market_id),
     )
     exit_timing_cohorts_review = run_exit_timing_cohort_pass(
         output_dir=output_dir,

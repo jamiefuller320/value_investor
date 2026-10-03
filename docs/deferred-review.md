@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-02T17:06:29+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-03T08:12:28+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -316,6 +316,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L517 | **Momentum grace leave-buy-tier episode scarcity on 3-slot Suite A track** | Live momentum_grace almost never arms true leave-buy-tier grace (0 grace_enter); Suite A max_positions=3 exits are mostly still-buy-tier rank demotions, which grace correctly refuses. NAV/excess vs rules is confounded and exit_shadow has 0 closed grace. Prefer observe counters + L86 archive leave-tier priors — do not graft onto buy_tier_level (N23) or promote on NAV alone. | exit_shadow shows grace_enter/grace exits accumulating, or L86 archive leave-tier grace lab is opened; after ≥6 months marks only if true grace episodes exist |
 | L518 | **Post-sale days-to-peak and cost-breakeven fields on exit_shadow** | exit_shadow already tracks peak/trough vs exit price at 7/28/56/84d. Optional observe enrichment: explicit days_to_peak_since_exit and days_to_cost_breakeven after underwater sells (avg_cost reclaim), maybe window>12w. Do not start a parallel sold-stock monitor or change exits; wait for closed shadow thickness (N25). | learning_tracks_exit_shadow shows ≥15 closed exits per track (N25) and Sunday review still wants cost-basis TTEB / unbounded high beyond peak_since_exit_pct |
 | L519 | **Observe-only perfect-HWM vs NAV rollup on exit_shadow** | Automate the sold-high-water envelope: sum exit_notional x peak_since_exit_pct vs NAV/contrib, with concentration and open-censor flags. Observe dashboard/rollup only; do not change buy_tier_level exits or treat as fundamentals validation (N23). | learning_tracks_exit_shadow shows ≥15 closed exits per track (N25) or Sunday review wants the HWM-vs-NAV envelope next to early_exit rates |
+| L523 | **Stamp market_id on rebalance-log sells for tagged join** | Exit_shadow records now carry market_id and first-episode identity. Raw sell rows in rebalance_log are still path-implied. Tag sells the same way if a non-shadow sell join is needed. | Combined tagged learning is in use for closed-cohort stats and a sell-level join (not just exit_shadow) is required. |
 
 ### Universe & data
 

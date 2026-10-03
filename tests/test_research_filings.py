@@ -7233,7 +7233,7 @@ def test_fetch_filings_investegate_c5h_ir_resolves_via_crn_epic(mock_fetch):
 
 
 @patch("value_investor.research.filings._http_get")
-def test_esef_entity_search_skf_ab_resolves_via_group_alias(mock_get):
+def test_esef_entity_search_skf_ab_resolves_via_group_alias(mock_get, tmp_path: Path):
     entity_payload = {
         "data": [{"attributes": {"identifier": "894500JU9WRAJQOVBI12", "name": "SKF Group"}}]
     }
@@ -7254,10 +7254,18 @@ def test_esef_entity_search_skf_ab_resolves_via_group_alias(mock_get):
         return json.dumps(filings_payload).encode("utf-8")
 
     mock_get.side_effect = _fake_get
-    rows = fetch_filings_esef_direct(company_name="SKF AB", ticker="SKF-B.ST")
+    rows = fetch_filings_esef_direct(
+        company_name="SKF AB",
+        ticker="SKF-B.ST",
+        identifier_map_path=tmp_path / "empty.json",
+    )
     assert len(rows) == 1
     assert rows[0]["source"] == "esef_direct"
-    assert any("/entities?" in str(args[0]) for args, _kwargs in mock_get.call_args_list if args)
+    called = [
+        str(args[0]) if args else str(kwargs.get("url") or "")
+        for args, kwargs in mock_get.call_args_list
+    ]
+    assert any("/entities?" in url for url in called)
 
 
 def test_esef_entity_variants_include_periphery_aliases_and_strip_bv():

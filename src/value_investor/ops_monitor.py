@@ -1709,6 +1709,59 @@ def check_shard_nav_fx_warp(
     ]
 
 
+def check_combined_tagged_learning(
+    *,
+    store_path: Path | None = None,
+    policy_path: Path | None = None,
+    paper_root: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only: combined vs per-market exit_shadow join tagged by market_id.
+
+    Refreshes ``docs/data/combined_tagged_learning.json``. Does not merge books,
+    apply knobs, or change live exit policy (N23). Zero closed N is not a warn.
+    """
+    from value_investor.combined_tagged_learning import (
+        DEFAULT_PAPER_ROOT,
+        DEFAULT_POLICY_PATH,
+        DEFAULT_STORE_PATH,
+        FINDING_TITLE,
+        ops_finding_from_combined_tagged_learning,
+        update_combined_tagged_learning,
+    )
+
+    path = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+    try:
+        payload = update_combined_tagged_learning(
+            store_path=path,
+            policy_path=Path(policy_path) if policy_path is not None else DEFAULT_POLICY_PATH,
+            paper_root=Path(paper_root) if paper_root is not None else DEFAULT_PAPER_ROOT,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title="Combined tagged learning observe failed",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_combined_tagged_learning(payload, store_present=True)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "warn"),
+            category=str(finding.get("category") or "paper"),
+            title=str(finding.get("title") or FINDING_TITLE),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_lifecycle_maturity_trajectory(
     *,
     board_path: Path | None = None,
@@ -2503,6 +2556,7 @@ def collect_ops_findings(
     findings.extend(check_universe_filing_archive_miss_rate())
     findings.extend(check_universe_filing_archive_pack_bottleneck())
     findings.extend(check_shard_nav_fx_warp())
+    findings.extend(check_combined_tagged_learning())
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_ui_state_reconciliation())
     findings.extend(check_thin_memo_learning_gap())

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-02T17:18:30.853254+00:00",
-  "occasion_count": 142,
+  "updated_at": "2026-10-03T09:09:15.765650+00:00",
+  "occasion_count": 145,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -2550,6 +2550,63 @@
       ],
       "notes": "unformatted: review=_as_dict line wrap and shared_critical_path ternary",
       "details": {}
+    },
+    {
+      "id": "prf-20261003-001",
+      "recorded_at": "2026-10-03T08:15:54.618766+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ruff format (combined_tagged_learning.py)",
+      "pr_number": 951,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / validate"
+      ],
+      "notes": "validate failed: ruff format would reformat three call/get sites in combined_tagged_learning.py",
+      "details": {}
+    },
+    {
+      "id": "prf-20261003-002",
+      "recorded_at": "2026-10-03T08:41:38.786953+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "observe_utilization missing-store test hit committed combined_tagged_learning.json",
+      "pr_number": 951,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (3)"
+      ],
+      "notes": "test_observe_utilization_stale_and_missing used default store path; committed JSON looked fresh instead of missing",
+      "details": {}
+    },
+    {
+      "id": "prf-20261003-003",
+      "recorded_at": "2026-10-03T09:09:15.765650+00:00",
+      "source": "human_request",
+      "kind": "ci_check",
+      "failure_reason": "ESEF SKF test hit cached LEI (shard order)",
+      "pr_number": 951,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [
+        "CI / test (2)"
+      ],
+      "notes": "run 37110570393: test_esef_entity_search_skf_ab_resolves_via_group_alias skipped /entities? when a prior shard test cached SKF in issuer_identifiers.json; isolate identifier_map_path",
+      "details": {}
     }
   ],
   "common_issues": {
@@ -2776,13 +2833,13 @@
       },
       {
         "kind": "ci_check",
-        "count": 66
+        "count": 69
       }
     ],
     "by_source": [
       {
         "source": "human_request",
-        "count": 142
+        "count": 145
       }
     ]
   }

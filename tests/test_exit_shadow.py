@@ -64,6 +64,10 @@ def test_ingest_new_exits_from_full_position_sell():
     assert record["momentum_grace"] is True
     assert record["avg_cost"] == 100
     assert record["realized_return_pct"] == 0.2
+    assert record["market_id"] == "ftse350"
+    assert record["first_episode"] is True
+    assert record["episode_index"] == 1
+    assert "ftse350|" in record["join_key"]
 
 
 def test_update_shadow_scores_adds_checkpoints_and_closes(tmp_path):
@@ -106,10 +110,13 @@ def test_run_exit_shadow_pass_writes_artifacts(tmp_path):
         as_of="2026-07-20T09:15:00+01:00",
     )
     assert review["track_id"] == "momentum_grace"
+    assert review["market_id"] == "ftse350"
     assert (tmp_path / "exit_shadow.json").exists()
     assert (tmp_path / "exit_shadow_review.json").exists()
     store = load_exit_shadow(tmp_path / "exit_shadow.json")
     assert len(store["records"]) == 1
+    assert store["market_id"] == "ftse350"
+    assert store["records"][0]["market_id"] == "ftse350"
 
 
 def test_build_exit_shadow_review_summarizes_by_kind():
@@ -139,4 +146,34 @@ def test_build_exit_shadow_review_summarizes_by_kind():
     review = build_exit_shadow_review(store, track_id="momentum_grace")
     assert review["closed_count"] == 1
     assert review["by_exit_kind"]["grace"]["count"] == 1
+    assert review["market_id"] == "ftse350"
+    assert review["first_episode"]["closed_count"] == 1
     assert "observe-only" in review["note"].lower()
+
+
+def test_second_sell_same_ticker_is_not_first_episode():
+    fund = _fund_with_sell()
+    fund.holdings["OLD.L"] = Position(
+        ticker="OLD.L",
+        shares=10,
+        avg_cost=110,
+        name="Old",
+    )
+    fund.sell(
+        ticker="OLD.L",
+        price=108,
+        sizing_mode="shares",
+        amount=10,
+        note="Automated exit — left target set",
+        acted_at="2026-08-01T09:15:00+01:00",
+    )
+    store = {"records": []}
+    ingest_new_exits(fund, store, track_id="buy_tier_level", market_id="ftse350")
+    rows = sorted(store["records"], key=lambda r: r["exited_at"])
+    assert len(rows) == 2
+    assert rows[0]["first_episode"] is True
+    assert rows[0]["episode_index"] == 1
+    assert rows[1]["first_episode"] is False
+    assert rows[1]["episode_index"] == 2
+    assert rows[0]["join_key"] != rows[1]["join_key"]
+    assert rows[0]["join_key"].startswith("ftse350|buy_tier_level|OLD.L|")
