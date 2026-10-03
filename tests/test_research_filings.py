@@ -7003,6 +7003,55 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_buou_si_index(tmp_path: Pat
     assert "ir_allowlist" in payload["sources_used"]
 
 
+def test_fetch_filings_ir_allowlist_smi_unmeasured_builtins_eng_20261003_02(tmp_path: Path):
+    """eng-20261003-02: smi buy-tier unmeasured — IR PDF seeds when ESEF/news discovery is empty."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    for ticker in ("PGHN.SW", "RO.SW"):
+        rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
+        assert len(rows) == 2, ticker
+        assert all(row["source"] == "ir_allowlist" for row in rows)
+        assert any(row["period"] == "annual" for row in rows)
+        assert any(row["period"] == "interim" for row in rows)
+
+    pghn_urls = [row["url"] for row in fetch_filings_ir_allowlist("PGHN.SW", path=allowlist_path)]
+    assert any("annual-report-2025.pdf" in url for url in pghn_urls)
+    assert any("pghn-interim-report-2026.pdf" in url for url in pghn_urls)
+
+    ro_urls = [row["url"] for row in fetch_filings_ir_allowlist("RO.SW", path=allowlist_path)]
+    assert any("rocheannualreport2025.pdf" in url for url in ro_urls)
+    assert any("hy25e.pdf" in url for url in ro_urls)
+
+
+def test_ir_allowlist_period_classifies_roche_hy25_slug():
+    """eng-20261003-02: opaque Roche CDN half-year slug maps to interim."""
+    assert (
+        _ir_allowlist_period_from_url("https://assets.roche.com/f/176343/x/2d95c66259/hy25e.pdf")
+        == "interim"
+    )
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_pghn_sw_index(tmp_path: Path):
+    """Empty PGHN.SW filings_index.json must gain IR rows for library smi measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("PGHN.SW", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] >= 2
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 2
+    assert "ir_allowlist" in payload["sources_used"]
+
+
 def test_fetch_filings_ir_allowlist_hang_seng_unmeasured_builtins_eng_20261001_01(
     tmp_path: Path,
 ):
