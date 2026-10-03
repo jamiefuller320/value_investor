@@ -7052,6 +7052,109 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_pghn_sw_index(tmp_path: Pat
     assert "ir_allowlist" in payload["sources_used"]
 
 
+def test_sanitize_http_url_preserves_plus_in_query():
+    """ESEF entity search uses urlencode spaces as ``+``; must not become literal ``%2B``."""
+    from value_investor.research.filings import _sanitize_http_url
+
+    raw = "https://filings.xbrl.org/api/entities?filter%5Bname%5D=SKF+Group&page%5Bsize%5D=8"
+    cleaned = _sanitize_http_url(raw)
+    assert "SKF%2BGroup" not in cleaned
+    assert "SKF+Group" in cleaned or "SKF%20Group" in cleaned
+
+
+@patch("value_investor.research.filings._http_get")
+def test_esef_resolve_identifier_skips_cached_lei_without_packages(mock_get, tmp_path: Path):
+    """Wrong GLEIF subsidiary LEI with zero ESEF packages must fall through to name search."""
+    from value_investor.research.filings import _esef_resolve_identifier
+
+    wrong_lei = "636700IK9V7O68VGRA55"
+    good_lei = "894500JU9WRAJQOVBI12"
+    id_path = tmp_path / "ids.json"
+    id_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "issuers": {
+                    "SKF-B.ST": {
+                        "lei": wrong_lei,
+                        "lei_name": "SKF Vertevo AB",
+                        "source": "gleif",
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def _fake_get(url: str, **kwargs):
+        if f"filter%5Bentity.identifier%5D={wrong_lei}" in url or f"identifier]={wrong_lei}" in url:
+            return json.dumps({"data": []}).encode("utf-8")
+        if "/entities?" in url and "SKF" in url:
+            return json.dumps(
+                {
+                    "data": [
+                        {
+                            "attributes": {
+                                "identifier": good_lei,
+                                "name": "SKF Group",
+                            }
+                        }
+                    ]
+                }
+            ).encode("utf-8")
+        if f"filter%5Bentity.identifier%5D={good_lei}" in url:
+            return json.dumps({"data": [{"attributes": {"period_end": "2024-12-31"}}]}).encode(
+                "utf-8"
+            )
+        raise AssertionError(f"unexpected url {url}")
+
+    mock_get.side_effect = _fake_get
+    resolved = _esef_resolve_identifier(
+        "AB SKF (publ)",
+        ticker="SKF-B.ST",
+        identifier_map_path=id_path,
+    )
+    assert resolved == good_lei
+
+
+def test_fetch_filings_ir_allowlist_omxs30_unmeasured_builtins_eng_20261003_03(tmp_path: Path):
+    """eng-20261003-03: omxs30 buy-tier unmeasured — IR PDF seeds when ESEF/GLEIF miss."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    sand = fetch_filings_ir_allowlist("SAND.ST", path=allowlist_path)
+    assert len(sand) == 2
+    assert all(row["source"] == "ir_allowlist" for row in sand)
+    assert any(row["period"] == "annual" for row in sand)
+    assert any(row["period"] == "interim" for row in sand)
+    assert any("entire-en-svk-ar25.pdf" in row["url"] for row in sand)
+
+    skf = fetch_filings_ir_allowlist("SKF-B.ST", path=allowlist_path)
+    assert len(skf) == 1
+    assert skf[0]["source"] == "ir_allowlist"
+    assert "SKF_ASR_2025" in skf[0]["url"]
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_sand_st_index(tmp_path: Path):
+    """Empty SAND.ST filings_index.json must gain IR rows for library omxs30 measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("SAND.ST", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] >= 2
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 2
+    assert "ir_allowlist" in payload["sources_used"]
+
+
 def test_fetch_filings_ir_allowlist_hang_seng_unmeasured_builtins_eng_20261001_01(
     tmp_path: Path,
 ):
