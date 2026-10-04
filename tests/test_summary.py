@@ -384,6 +384,10 @@ def test_build_company_reports_exports_overridden_plantation_sector():
     assert report.sector_composite_score == 0.55
     assert "sector-relative 55%" in report.summary
 
+    exported = report.to_dict()
+    assert exported["sector"] == AGRICULTURE_COMMODITIES_SECTOR
+    assert exported["sector_composite_score"] == 0.55
+
 
 def _healthcare_overlay_models(*, f_score: int = 3) -> pd.DataFrame:
     return pd.DataFrame(
