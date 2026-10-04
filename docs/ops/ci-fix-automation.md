@@ -83,6 +83,7 @@ ftse-engineering try-auto-merge --branch cursor/eng-20260802-01-1de3
 - Does **not** edit `blocked_paths` (paper fund, simulator, `policy.json`, etc.)
 - `engineering-path-guard` CI job still runs on every engineering PR
 - Main-branch failures only (push, schedule, workflow_dispatch) — not PR CI
+- **Allowlisted mechanical GHA fix:** workflows that `gh workflow run` / `createWorkflowDispatch` must have `permissions.actions: write` (same as `email-report.yml`). Missing write → HTTP 403 `Resource not accessible by integration`. Enforced by `gha_secret_hygiene` (`workflow_dispatch_missing_actions_write`) and a workflow-failure signature that drafts a YAML-scoped supervised task. **Not** auto-merged. Not a universal GHA factory.
 
 ## PR CI monitoring (`cursor/*` pull requests)
 

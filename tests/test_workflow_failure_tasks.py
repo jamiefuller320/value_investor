@@ -109,6 +109,17 @@ def test_generic_fallback_matches_library_ingest_sprint_failure():
         assert spec["area"] == "scoring"
 
 
+def test_match_dispatch_403_signature():
+    log = (
+        "could not create workflow dispatch event: HTTP 403: Resource not accessible by integration"
+    )
+    spec = match_workflow_failure_signature("analysis-review.yml", log)
+    assert spec is not None
+    assert spec.get("kind") == "dispatch_403"
+    assert ".github/workflows/analysis-review.yml" in spec["allowed_paths"]
+    assert spec["title"].startswith("Workflow fix: GITHUB_TOKEN needs actions")
+
+
 def test_generic_fallback_ignored_for_unlisted_workflow():
     log = "##[error]Process completed with exit code 1."
     assert match_workflow_failure_signature("pages.yml", log) is None

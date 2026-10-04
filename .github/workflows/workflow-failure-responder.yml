@@ -96,25 +96,28 @@ jobs:
           from pathlib import Path
           data = json.loads(Path("/tmp/workflow_failure_draft.json").read_text())
           drafted = list(data.get("drafted") or [])
+          hub = bool(data.get("hub_recorded"))
           out = Path(os.environ["GITHUB_OUTPUT"])
           out.write_text(
               f"drafted={'true' if drafted else 'false'}\n"
+              f"hub={'true' if hub else 'false'}\n"
+              f"changed={'true' if drafted or hub else 'false'}\n"
               f"task_ids={','.join(drafted)}\n",
               encoding="utf-8",
           )
           PY
 
       - name: Sync main before commit
-        if: steps.draft.outputs.drafted == 'true'
+        if: steps.draft.outputs.changed == 'true'
         run: git pull --rebase --autostash origin main
 
       - name: Commit drafted workflow-failure task
-        if: steps.draft.outputs.drafted == 'true'
+        if: steps.draft.outputs.changed == 'true'
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           branch: main
-          commit_message: "chore: draft workflow-failure engineering task [skip ci]"
-          file_pattern: docs/data/engineering_tasks.json
+          commit_message: "chore: record workflow-failure triage [skip ci]"
+          file_pattern: docs/data/engineering_tasks.json docs/data/gha_failure_triage.json
           skip_fetch: false
 
       - name: Dispatch engineering queue

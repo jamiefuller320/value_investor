@@ -1036,22 +1036,25 @@ def _cmd_draft_workflow_failure(args: argparse.Namespace) -> int:
         print("Provide --run-id or --log-file", file=sys.stderr)
         return 2
 
-    from value_investor.workflow_failure_tasks import draft_workflow_failure_task
+    from value_investor.workflow_failure_tasks import respond_to_workflow_failure
 
-    drafted = draft_workflow_failure_task(
+    result = respond_to_workflow_failure(
         workflow_file=str(args.workflow_file),
         log_text=log_text,
         run_id=args.run_id,
         run_url=args.run_url,
         tasks_path=_resolve_tasks_path(args.tasks_path),
     )
+    drafted = list(result.get("drafted") or [])
     if args.json:
-        _print_json({"drafted": drafted, "workflow": args.workflow_file})
+        _print_json(result)
     elif drafted:
         print(f"Drafted workflow-failure task(s): {', '.join(drafted)}")
+    elif result.get("hub_recorded"):
+        print("Recorded unmatched GHA failure onto Daily-hub bundle")
     else:
         print("No workflow-failure signature matched log")
-    return 0 if drafted or not args.require_draft else 1
+    return 0 if drafted or result.get("hub_recorded") or not args.require_draft else 1
 
 
 def _cmd_respond_library_ladder(args: argparse.Namespace) -> int:
