@@ -201,6 +201,7 @@ class IngestImprovementSummary:
     targets_deferred: int = 0
     cutoff_reason: str | None = None
     discovery_scan: dict[str, Any] | None = None
+    research_index_reconcile: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         payload = {
@@ -229,6 +230,7 @@ class IngestImprovementSummary:
             "targets_deferred": self.targets_deferred,
             "cutoff_reason": self.cutoff_reason,
             "discovery_scan": self.discovery_scan,
+            "research_index_reconcile": self.research_index_reconcile,
         }
         return payload
 
@@ -1439,6 +1441,15 @@ def _execute_ingest_improvement_pass(
         runtime_cutoff=summary.runtime_cutoff,
         path=backlog_path,
     )
+    try:
+        from value_investor.research.ingest import reconcile_committed_research_index
+
+        summary.research_index_reconcile = reconcile_committed_research_index(
+            data_dir=Path("docs/data"),
+            tickers=completed_tickers or None,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Research index reconcile skipped: %s", exc)
     write_json(
         output_dir / "ingest_improvement_summary.json",
         {

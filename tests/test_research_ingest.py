@@ -246,3 +246,104 @@ def test_attach_filing_interim_financials_when_yahoo_quarterlies_empty(tmp_path:
     interim = merged.get("filing_interim_financials") or {}
     assert interim.get("interim_highlights", {}).get("free_cash_flow_millions") == 40.0
     assert (tmp_path / "filing_interim_financials.json").is_file()
+
+
+def test_research_index_cohesion_matches_committed_verdict_count_in_repo():
+    """CI: committed verdict memos must appear in latest.json research[] (eng-20261004-05)."""
+    from pathlib import Path
+
+    from value_investor.research.ingest import research_index_cohesion_metrics
+
+    metrics = research_index_cohesion_metrics(data_dir=Path("docs/data"))
+    assert metrics["index_missing_committed_verdicts"] == 0
+    assert metrics["counts_match"] is True
+    assert metrics["committed_with_verdict"] == metrics["indexed_verdict_count"]
+    assert metrics["committed_with_verdict"] > 0
+
+
+def test_reconcile_committed_research_index_merges_missing_tickers(tmp_path: Path):
+    from value_investor.research.ingest import (
+        reconcile_committed_research_index,
+        research_index_cohesion_metrics,
+    )
+    from value_investor.storage import write_json
+
+    data_dir = tmp_path / "data"
+    committed = data_dir / "research" / "AO.L"
+    committed.mkdir(parents=True)
+    write_json(
+        committed / "research.json",
+        {
+            "ticker": "AO.L",
+            "name": "AO World plc",
+            "research_verdict": "accumulate",
+            "executive_summary": "Profit pivot with net funds.",
+            "version": 1,
+        },
+        compact=True,
+    )
+    (committed / "research.md").write_text("# AO World memo\n", encoding="utf-8")
+    latest_path = data_dir / "latest.json"
+    write_json(latest_path, {"research": [], "reports": []}, compact=True)
+
+    result = reconcile_committed_research_index(
+        data_dir=data_dir,
+        dest_dir=tmp_path / "docs",
+        latest_path=latest_path,
+        committed_root=committed.parent,
+    )
+    assert result["reconciled"] == ["AO.L"]
+    after = research_index_cohesion_metrics(
+        data_dir=data_dir,
+        latest_path=latest_path,
+        committed_root=committed.parent,
+    )
+    assert after["index_missing_committed_verdicts"] == 0
+    assert (tmp_path / "docs" / "research" / "AO.L.md").is_file()
+
+
+@patch("value_investor.research.ingest.fetch_google_news_rss", return_value=[])
+@patch("value_investor.research.ingest.fetch_yfinance_news", return_value=[])
+@patch(
+    "value_investor.research.ingest.fetch_annual_financials", return_value={"income_statement": {}}
+)
+@patch(
+    "value_investor.research.gap_fill_sources.deepen_thin_filings_if_needed",
+    return_value={"skipped": True},
+)
+@patch("value_investor.research.filings.refetch_uk_primary_filing_bodies")
+@patch("value_investor.research.filings.refresh_uk_filing_listings_into_index")
+@patch("value_investor.research.filings.ingest_filings")
+def test_uk_deepen_ingest_refreshes_listings_before_body_refetch(
+    mock_ingest_filings,
+    mock_refresh,
+    mock_uk_refetch,
+    _mock_deepen,
+    _mock_financials,
+    _mock_yf_news,
+    _mock_google_news,
+    tmp_path: Path,
+):
+    """AO.L-style UK memo ingest should merge fresh listings then refetch bodies."""
+    mock_ingest_filings.return_value = {
+        "filings_index_path": str(tmp_path / "filings" / "filings_index.json"),
+        "filings_summary": {"total": 3, "with_body": 0, "annual": 2, "interim": 1},
+        "filings_sources": ["companies_house"],
+        "filings_regime": "uk_rns",
+    }
+    mock_refresh.return_value = {"added": 2, "added_interim": 1}
+    mock_uk_refetch.return_value = {"fetched": 2, "with_body_after": 2}
+
+    meta = ingest_research_sources(
+        ticker="AO.L",
+        company_name="AO World plc",
+        screening_snapshot={"ticker": "AO.L", "signal": "buy"},
+        sources_dir=tmp_path,
+        market="ftse350",
+        deepen_history=True,
+    )
+
+    assert mock_refresh.call_count >= 1
+    assert mock_refresh.call_args.kwargs.get("max_ch_accounts") == 5
+    mock_uk_refetch.assert_called_once()
+    assert meta["filings_summary"]["total"] == 3

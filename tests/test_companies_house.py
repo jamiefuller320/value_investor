@@ -164,6 +164,25 @@ def test_search_company_number_prefers_active_name_overlap(monkeypatch):
     assert number == "00006400"
 
 
+def test_resolve_company_number_ao_world_from_repo_map(monkeypatch):
+    """eng-20261004-05: AO.L uses cached Companies House number for filing fetch."""
+    monkeypatch.setenv("COMPANIES_HOUSE_API_KEY", "test-key")
+
+    def boom(*args, **kwargs):
+        raise AssertionError("should not search when AO.L is mapped")
+
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.search_company_number",
+        boom,
+    )
+    number = resolve_company_number(
+        ticker="AO.L",
+        company_name="AO World plc",
+        map_path=Path("docs/data/companies_house_numbers.json"),
+    )
+    assert number == "05525751"
+
+
 def test_resolve_company_number_uses_cache_before_search(tmp_path: Path, monkeypatch):
     path = tmp_path / "ch.json"
     save_company_number_map({"SHEL.L": "00006400"}, path)

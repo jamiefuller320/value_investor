@@ -6,6 +6,7 @@ import hashlib
 import json
 import logging
 import re
+import shutil
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -1370,15 +1371,62 @@ def ingest_research_sources(
             )
 
             if resolve_filings_regime(market, ticker) == "uk_rns":
+                from value_investor.research.companies_house import DEEPEN_MAX_ACCOUNTS
+                from value_investor.research.filings import (
+                    reconcile_filings_index_body_flags,
+                    refetch_uk_primary_filing_bodies,
+                    refresh_uk_filing_listings_into_index,
+                )
+
                 summary = filings_meta.get("filings_summary") or {}
-                if int(summary.get("with_body") or 0) == 0 and int(summary.get("total") or 0) > 0:
-                    ch_refetch = refetch_companies_house_filing_bodies(
+                listing_refresh: dict[str, Any] = {}
+                if deepen_history:
+                    listing_refresh = refresh_uk_filing_listings_into_index(
                         sources_dir / "filings",
-                        max_bodies=12,
                         ticker=ticker,
                         company_name=company_name,
+                        max_ch_accounts=DEEPEN_MAX_ACCOUNTS,
                     )
-                    if int(ch_refetch.get("fetched") or 0) > 0:
+                    reconcile_filings_index_body_flags(
+                        sources_dir / "filings",
+                        company_name=company_name,
+                        ticker=ticker,
+                    )
+                    index_path = sources_dir / "filings" / "filings_index.json"
+                    resolved_index = resolve_json_path(index_path)
+                    if resolved_index is not None:
+                        try:
+                            index_payload = read_json(resolved_index)
+                            summary = dict(index_payload.get("summary") or summary)
+                            filings_meta["filings_summary"] = summary
+                            filings_meta["filings_sources"] = list(
+                                index_payload.get("sources_used") or []
+                            )
+                        except (OSError, ValueError, TypeError):
+                            pass
+                    filings_meta["uk_listing_refresh"] = listing_refresh
+
+                needs_body_refetch = (
+                    int(summary.get("with_body") or 0) == 0 and int(summary.get("total") or 0) > 0
+                ) or int(listing_refresh.get("added") or 0) > 0
+                if needs_body_refetch:
+                    if deepen_history:
+                        uk_refetch = refetch_uk_primary_filing_bodies(
+                            sources_dir / "filings",
+                            ticker=ticker,
+                            company_name=company_name,
+                            max_bodies=20,
+                        )
+                        filings_meta["uk_primary_refetch"] = uk_refetch
+                    else:
+                        uk_refetch = refetch_companies_house_filing_bodies(
+                            sources_dir / "filings",
+                            max_bodies=12,
+                            ticker=ticker,
+                            company_name=company_name,
+                        )
+                        filings_meta["ch_body_refetch"] = uk_refetch
+                    if int(uk_refetch.get("fetched") or 0) > 0:
                         index_path = sources_dir / "filings" / "filings_index.json"
                         resolved_index = resolve_json_path(index_path)
                         if resolved_index is not None:
@@ -1392,7 +1440,6 @@ def ingest_research_sources(
                                 )
                             except (OSError, ValueError, TypeError):
                                 pass
-                        filings_meta["ch_body_refetch"] = ch_refetch
 
             elif resolve_filings_regime(market, ticker) in {
                 "euro_filings",
@@ -1607,6 +1654,172 @@ def ingest_research_sources(
         "cma_ofcom_merger_path": str(written_merger) if written_merger else None,
         "cma_ofcom_merger": cma_ofcom_merger,
         "market": market_s,
+    }
+
+
+def _research_ticker_key(value: Any) -> str:
+    return str(value or "").strip().upper()
+
+
+def research_index_cohesion_metrics(
+    *,
+    data_dir: Path,
+    latest_path: Path | None = None,
+    committed_root: Path | None = None,
+) -> dict[str, Any]:
+    """
+    Compare ``latest.json`` research[] against committed ``research.json`` verdicts.
+
+    Mirrors the publish-layer counts in ``system_gap_analysis`` so ingest CI can
+    fail when committed memos with verdicts are absent from the dashboard index.
+    """
+    from value_investor.storage import read_json
+
+    data_dir = Path(data_dir)
+    latest_path = Path(latest_path or data_dir / "latest.json")
+    committed_root = Path(committed_root or data_dir / "research")
+
+    index_rows: list[dict[str, Any]] = []
+    if latest_path.is_file():
+        payload = read_json(latest_path)
+        if isinstance(payload, dict):
+            index_rows = [row for row in (payload.get("research") or []) if isinstance(row, dict)]
+
+    index_tickers = {
+        _research_ticker_key(row.get("ticker")) for row in index_rows if row.get("ticker")
+    }
+    indexed_verdict_count = sum(
+        1 for row in index_rows if str(row.get("research_verdict") or "").strip()
+    )
+
+    committed_rows: list[dict[str, Any]] = []
+    if committed_root.is_dir():
+        for path in sorted(committed_root.glob("*/research.json")):
+            meta = read_json(path)
+            if not isinstance(meta, dict):
+                continue
+            ticker = _research_ticker_key(meta.get("ticker") or path.parent.name)
+            verdict = str(meta.get("research_verdict") or "").strip()
+            committed_rows.append({"ticker": ticker, "verdict": verdict, "path": path})
+
+    verdict_tickers = {row["ticker"] for row in committed_rows if row["verdict"]}
+    committed_not_indexed = sorted(verdict_tickers - index_tickers)
+    counts_match = indexed_verdict_count == len(verdict_tickers)
+
+    return {
+        "research_index_count": len(index_rows),
+        "indexed_verdict_count": indexed_verdict_count,
+        "committed_count": len(committed_rows),
+        "committed_with_verdict": len(verdict_tickers),
+        "index_missing_committed_verdicts": len(committed_not_indexed),
+        "committed_not_indexed": committed_not_indexed,
+        "committed_not_indexed_sample": committed_not_indexed[:12],
+        "counts_match": counts_match,
+        "cohesive": not committed_not_indexed and counts_match and len(verdict_tickers) > 0,
+    }
+
+
+def _committed_research_dir(committed_root: Path, ticker: str) -> Path | None:
+    key = _research_ticker_key(ticker)
+    direct = committed_root / key
+    if (direct / "research.json").is_file():
+        return direct
+    for path in committed_root.iterdir():
+        if path.is_dir() and _research_ticker_key(path.name) == key:
+            if (path / "research.json").is_file():
+                return path
+    return None
+
+
+def reconcile_committed_research_index(
+    *,
+    data_dir: Path,
+    dest_dir: Path = Path("docs"),
+    latest_path: Path | None = None,
+    committed_root: Path | None = None,
+    tickers: list[str] | None = None,
+) -> dict[str, Any]:
+    """
+    Union committed memo metadata into ``latest.json`` research[] when publish lagged.
+
+    Used after Sunday research for names like AO.L / HOC.L that landed in
+    ``docs/data/research`` before the dashboard index was merged.
+    """
+    from value_investor.publish import _research_index_entry, _slug_ticker
+    from value_investor.storage import read_json, write_json
+
+    data_dir = Path(data_dir)
+    dest_dir = Path(dest_dir)
+    latest_path = Path(latest_path or data_dir / "latest.json")
+    committed_root = Path(committed_root or data_dir / "research")
+    metrics = research_index_cohesion_metrics(
+        data_dir=data_dir,
+        latest_path=latest_path,
+        committed_root=committed_root,
+    )
+
+    if not latest_path.is_file():
+        return {**metrics, "error": f"missing {latest_path}", "reconciled": []}
+
+    payload = read_json(latest_path)
+    if not isinstance(payload, dict):
+        return {**metrics, "error": "latest.json is not an object", "reconciled": []}
+
+    missing = list(metrics.get("committed_not_indexed") or [])
+    if tickers:
+        wanted = {_research_ticker_key(t) for t in tickers if str(t).strip()}
+        missing = [t for t in missing if t in wanted]
+
+    by_ticker = {
+        _research_ticker_key(row.get("ticker")): row
+        for row in (payload.get("research") or [])
+        if isinstance(row, dict) and row.get("ticker")
+    }
+    memo_dir = dest_dir / "research"
+    memo_dir.mkdir(parents=True, exist_ok=True)
+    reconciled: list[str] = []
+
+    for ticker in missing:
+        tree = _committed_research_dir(committed_root, ticker)
+        if tree is None:
+            continue
+        meta_path = tree / "research.json"
+        md_src = tree / "research.md"
+        if not md_src.is_file():
+            continue
+        meta = read_json(meta_path)
+        if not isinstance(meta, dict):
+            continue
+        if not str(meta.get("research_verdict") or "").strip():
+            continue
+        slug = _slug_ticker(ticker)
+        memo_dest = memo_dir / f"{slug}.md"
+        if not memo_dest.exists():
+            shutil.copy2(md_src, memo_dest)
+        by_ticker[ticker] = _research_index_entry(
+            str(meta.get("ticker") or ticker),
+            meta,
+            f"research/{slug}.md",
+        )
+        reconciled.append(ticker)
+
+    if reconciled:
+        payload["research"] = sorted(
+            by_ticker.values(),
+            key=lambda item: str(item.get("name") or ""),
+        )
+        payload["generated_at"] = datetime.now(UTC).isoformat()
+        write_json(latest_path, payload, compact=True, compress=False)
+
+    after = research_index_cohesion_metrics(
+        data_dir=data_dir,
+        latest_path=latest_path,
+        committed_root=committed_root,
+    )
+    return {
+        **after,
+        "reconciled": reconciled,
+        "reconciled_count": len(reconciled),
     }
 
 
