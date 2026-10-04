@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-04T09:17:48.759997+00:00",
+  "compiled_at": "2026-10-04T11:10:32.867671+00:00",
   "run_at": null,
-  "task_count": 134,
+  "task_count": 135,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -443,7 +443,7 @@
       "status": "parked",
       "parked_reason": "preflight blocked PR open — preflight failed",
       "parked_policy": "preflight_clash",
-      "parked_at": "2026-10-04T09:07:39.947069+00:00"
+      "parked_at": "2026-10-04T11:27:27.233775+00:00"
     },
     {
       "id": "eng-20261004-04",
@@ -462,7 +462,8 @@
         "narrow_scope_mode": "cohesion_bypass",
         "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
         "narrow_parent_title": "Sector taxonomy overrides for non-standard GICS buckets (backlog example: plantation/agricultural issuers such as AEP.L) so peer-relative cheapness/quality is n",
-        "narrow_cohesion_bypass": true
+        "narrow_cohesion_bypass": true,
+        "merge_class": "scoring_narrow"
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -485,9 +486,16 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open",
-      "no_diff_count": 1,
-      "last_no_diff_at": "2026-10-04T09:20:54.641604+00:00"
+      "status": "merged",
+      "no_diff_count": 0,
+      "last_no_diff_at": "2026-10-04T09:20:54.641604+00:00",
+      "result_path": "output/engineering_result_eng-20261004-04.md",
+      "branch_name": "cursor/eng-20261004-04-1de3",
+      "completed_at": "2026-10-04T10:44:11.281424+00:00",
+      "merge_class": "scoring_narrow",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/959",
+      "pr_number": 959,
+      "merged_at": "2026-10-04T11:08:39.073737+00:00"
     },
     {
       "id": "eng-20260927-01",
@@ -1770,6 +1778,45 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/674",
       "pr_number": 674,
       "merged_at": "2026-09-16T16:11:25.884730+00:00"
+    },
+    {
+      "id": "eng-20261004-06",
+      "area": "ops",
+      "title": "Workflow fix: analysis review failure",
+      "summary": "GitHub workflow analysis-review.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/37195835399",
+      "priority": "high",
+      "priority_score": 90.0,
+      "source": "workflow_failure",
+      "evidence": {
+        "workflow": "analysis-review.yml",
+        "run_id": "37195835399",
+        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/37195835399",
+        "signature": [
+          "analysis.review",
+          "ftse-analysis-review"
+        ]
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        ".github/workflows/analysis-review.yml",
+        "src/value_investor/analysis_review.py",
+        "tests/test_analysis_review.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "parked",
+      "parked_reason": "engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update",
+      "parked_policy": "workflow_permission",
+      "parked_at": "2026-10-04T11:13:51.250406+00:00"
     },
     {
       "id": "eng-20260914-03",
@@ -8723,7 +8770,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 1,
-    "evaluated_at": "2026-10-04T09:18:26.401768+00:00",
+    "evaluated_at": "2026-10-04T11:11:05.720491+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -8733,5 +8780,6 @@
   },
   "micro_compile_source": "parked_source_hunter",
   "library_market_id": "nasdaq100",
-  "hunter_ticker": "PDD"
+  "hunter_ticker": "PDD",
+  "workflow_failure_compiled": true
 }
