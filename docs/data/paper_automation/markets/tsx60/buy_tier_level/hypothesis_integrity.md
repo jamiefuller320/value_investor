@@ -1,26 +1,29 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-02T14:18:41.051457+00:00
+Track: `buy_tier_level` · updated 2026-10-04T07:10:04.371285+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **4** / 14 (29% count, 29% NAV)
+- Losers: **3** / 14 (21% count, 21% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
-### K.TO — weakening / watch_review (-16.3%)
+### TRI.TO — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### K.TO — weakening / watch_review (-16.6%)
 - research verdict neutral
 - still strong_buy
 - cheapness family still passes
 
-### RCI-B.TO — weakening / watch_review (-13.0%)
+### RCI-B.TO — weakening / watch_review (-12.8%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### IFC.TO — intact / hold_tolerate (-5.4%)
+### IFC.TO — intact / hold_tolerate (-5.2%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
@@ -28,74 +31,68 @@ Track: `buy_tier_level` · updated 2026-10-02T14:18:41.051457+00:00
 - data_quality 0.95
 - conviction 67%
 
-### WSP.TO — intact / hold_tolerate (-5.1%)
-- price drawdown alone does not invalidate value thesis
+### WSP.TO — intact / hold_tolerate (-4.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
 
-### PPL.TO — intact / hold_tolerate (-4.2%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 51%
-
-### CNQ.TO — intact / hold_tolerate (-3.9%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 74%
-
-### ABX.TO — intact / hold_tolerate (-2.9%)
+### ABX.TO — intact / hold_tolerate (-4.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 80%
+- conviction 81%
 
-### OTEX.TO — intact / hold_tolerate (-2.5%)
+### SAP.TO — weakening / watch_review (-3.3%)
+- research verdict caution
+- still strong_buy
+- cheapness family still passes
+
+### OTEX.TO — intact / hold_tolerate (-2.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 91%
 
-### SAP.TO — weakening / watch_review (-0.1%)
-- research verdict caution
-- still strong_buy
-- cheapness family still passes
-
-### TRI.TO — weakening / watch_review (+0.0%)
-- cheapness family no longer passes
-- still buy
-- research accumulate
-
-### MRU.TO — intact / hold_tolerate (+0.2%)
+### MRU.TO — intact / hold_tolerate (-1.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 69%
 
-### MG.TO — weakening / watch_review (+0.4%)
+### PPL.TO — intact / hold_tolerate (-0.8%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 50%
+
+### CNQ.TO — intact / hold_tolerate (-0.7%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 74%
+
+### MG.TO — weakening / watch_review (+1.0%)
 - research verdict neutral
 - still buy
 - cheapness family still passes
 
-### CVE.TO — intact / hold_tolerate (+0.4%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 75%
-
-### CNR.TO — intact / hold_tolerate (+1.4%)
+### CNR.TO — intact / hold_tolerate (+1.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
+
+### CVE.TO — intact / hold_tolerate (+5.5%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 46%

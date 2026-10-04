@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-10-02T08:47:23.702366+00:00",
-  "as_of": "2026-10-02T09:47:23.558295+01:00",
+  "updated_at": "2026-10-04T07:10:06.761473+00:00",
+  "as_of": "2026-10-04T08:10:06.735426+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,78 +16,46 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 6,
-  "underwater_count": 1,
+  "holding_count": 5,
+  "underwater_count": 2,
   "thesis_status_counts": {
     "intact": 4,
     "weakening": 1,
-    "broken": 1,
+    "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 6,
-    "loser_count": 1,
-    "loser_share": 0.1667,
-    "loser_nav_share": 0.1667,
+    "holding_count": 5,
+    "loser_count": 2,
+    "loser_share": 0.4,
+    "loser_nav_share": 0.3366,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
-    "intact_loser_count": 0,
+    "intact_loser_count": 1,
     "weakening_loser_count": 1,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
       "quality": 0.0,
       "dividend": 0.0,
-      "garp": 1.0,
+      "garp": 0.5,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.2,
-      "quality": 0.4,
-      "dividend": 0.2,
-      "garp": 0.2,
-      "risk": 0.2
+      "cheapness": 0.0,
+      "quality": 0.3333,
+      "dividend": 0.0,
+      "garp": 0.0,
+      "risk": 0.0
     },
     "selection_feedback_flags": [
-      "garp fails more often among losers (100% vs 20%)"
+      "garp fails more often among losers (50% vs 0%)"
     ],
-    "balancing_hint": "maintain",
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
-    {
-      "ticker": "MC.PA",
-      "name": "MC.PA",
-      "thesis_status": "broken",
-      "recommended_action": "exit_candidate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 394.6,
-      "avg_cost": 394.6,
-      "signal": null,
-      "timing_signal": null,
-      "conviction_score": null,
-      "data_quality_score": null,
-      "passed_families": [],
-      "failed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "research_verdict": null,
-      "reasons": [
-        "cheapness lost and not in buy tier"
-      ],
-      "intact_reasons": [],
-      "weaken_reasons": [],
-      "broken_reasons": [
-        "cheapness lost and not in buy tier"
-      ]
-    },
     {
       "ticker": "ORA.PA",
       "name": "Orange S.A.",
@@ -95,12 +63,12 @@
       "recommended_action": "watch_review",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0747,
-      "mark": 13.73,
+      "unrealized_pct": -0.0578,
+      "mark": 13.98,
       "avg_cost": 14.8381,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5427,
+      "conviction_score": 0.5326,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -121,7 +89,7 @@
         "still strong_buy",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 54%"
+        "conviction 53%"
       ],
       "weaken_reasons": [
         "research verdict caution"
@@ -129,18 +97,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "DG.PA",
-      "name": "Vinci SA",
+      "ticker": "TTE.PA",
+      "name": "TotalEnergies SE",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0299,
-      "mark": 108.5,
-      "avg_cost": 111.8434,
-      "signal": "strong_buy",
+      "unrealized_pct": -0.0538,
+      "mark": 74.46,
+      "avg_cost": 78.6923,
+      "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7689,
+      "conviction_score": 0.7416,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -152,18 +120,19 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
-        "still strong_buy",
+        "price drawdown alone does not invalidate value thesis",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 77%"
+        "conviction 74%"
       ],
       "intact_reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 77%"
+        "conviction 74%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -175,9 +144,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0296,
-      "mark": 71.47,
-      "avg_cost": 73.6505,
+      "unrealized_pct": -0.0309,
+      "mark": 70.81,
+      "avg_cost": 73.0707,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.875,
@@ -209,18 +178,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "TTE.PA",
-      "name": "TotalEnergies SE",
+      "ticker": "DG.PA",
+      "name": "Vinci SA",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0085,
-      "mark": 78.1,
-      "avg_cost": 78.7656,
-      "signal": "buy",
+      "unrealized_pct": -0.0305,
+      "mark": 106.8,
+      "avg_cost": 110.1631,
+      "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7283,
+      "conviction_score": 0.7576,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -232,18 +201,18 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
-        "still buy",
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 73%"
+        "conviction 76%"
       ],
       "intact_reasons": [
-        "still buy",
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 73%"
+        "conviction 76%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -255,11 +224,11 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0171,
-      "mark": 71.44,
+      "unrealized_pct": -0.0176,
+      "mark": 69.0,
       "avg_cost": 70.2367,
       "signal": "strong_buy",
-      "timing_signal": "neutral",
+      "timing_signal": "wait",
       "conviction_score": 0.76,
       "data_quality_score": 1.0,
       "passed_families": [

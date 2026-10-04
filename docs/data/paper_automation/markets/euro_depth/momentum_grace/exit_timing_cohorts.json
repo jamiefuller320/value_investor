@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-09-30T07:27:35.715165+00:00",
+  "updated_at": "2026-10-04T07:10:50.917285+00:00",
   "hold_episodes": [
     {
       "episode_id": "momentum_grace:AD.AS:2026-09-13T08:49:07.244621+02:00",
@@ -152,7 +152,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0066,
-      "trough_unrealized_pct": -0.042,
+      "trough_unrealized_pct": -0.0457,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -279,9 +279,18 @@
       "conviction_score": 0.8661000000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-04T09:05:41.091719+02:00",
+          "days_after": 7,
+          "price": 70.81,
+          "unrealized_pct": -0.0425,
+          "peak_unrealized_pct": -0.0188,
+          "trough_unrealized_pct": -0.0425
+        }
+      ],
       "peak_unrealized_pct": -0.0188,
-      "trough_unrealized_pct": -0.0315,
+      "trough_unrealized_pct": -0.0425,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -367,7 +376,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0153,
-      "trough_unrealized_pct": -0.023,
+      "trough_unrealized_pct": -0.0361,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -379,7 +388,7 @@
       "ticker": "SHELL.AS",
       "name": "Shell plc",
       "started_at": "2026-09-30T09:23:07.611226+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -409,12 +418,12 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0146,
+      "peak_unrealized_pct": -0.0035,
       "trough_unrealized_pct": -0.0159,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-04T09:10:44.875428+02:00",
+      "linked_sell_trade_id": "4cfda898-c647-4651-a0e1-936ef55ad203"
     }
   ],
   "swap_rotations": [
@@ -492,14 +501,22 @@
           "cost": 0.37
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-04T09:05:41.091719+02:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0035,
+          "avg_buy_return": -0.0181,
+          "replacement_delta": -0.0146
+        }
+      ],
       "sell_returns_since_rotation": {
-        "DHL.DE": 0.0017,
-        "SHELL.AS": -0.0035
+        "DHL.DE": -0.016,
+        "SHELL.AS": 0.009
       },
       "buy_returns_since_rotation": {
-        "DG.PA": -0.0153,
-        "EG7.IR": -0.0132
+        "DG.PA": -0.0361,
+        "EG7.IR": 0.0
       },
       "verdict": null,
       "closed_at": null
@@ -548,14 +565,66 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "EG7.IR": -0.0079
+        "EG7.IR": 0.0053
       },
       "buy_returns_since_rotation": {
-        "SHELL.AS": -0.0159
+        "SHELL.AS": -0.0035
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "momentum_grace:2026-10-04T09:10:44.875428+02:00",
+      "track_id": "momentum_grace",
+      "logged_at": "2026-10-04T09:10:44.875428+02:00",
+      "status": "open",
+      "trade_cost_pct": 0.0019,
+      "sells": [
+        {
+          "ticker": "SHELL.AS",
+          "price": 42.4,
+          "shares": 4.715802,
+          "gross": 199.95,
+          "cost": 0.37,
+          "avg_cost_at_exit": 42.55,
+          "realized_pct": -0.0035,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0035
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "EG7.IR",
+          "price": 19.0,
+          "shares": 10.349045,
+          "gross": 196.63,
+          "cost": 0.36
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "SHELL.AS": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "EG7.IR": 0.0
       },
       "verdict": null,
       "closed_at": null
     }
   ],
-  "hypothesis_outcome_link_updated_at": "2026-09-30T09:27:26.016788+02:00"
+  "hypothesis_outcome_link_updated_at": "2026-10-04T09:10:44.875428+02:00"
 }

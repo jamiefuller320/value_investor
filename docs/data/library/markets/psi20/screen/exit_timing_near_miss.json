@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "scope": "archive_near_miss",
+  "track_id": "archive_near_miss",
+  "framework": {
+    "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+    "hold_recovery": {
+      "question": "When a position is stressed but still held, does it recover to breakeven?",
+      "episode_triggers": [
+        "unrealized below underwater_threshold",
+        "exit_streak >= 1 (hold buffer active)",
+        "momentum_grace on position",
+        "effective signal no longer buy-tier while still held"
+      ],
+      "outcomes": [
+        "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+        "sold_while_underwater",
+        "max_window_elapsed"
+      ],
+      "fields_for_later_analysis": [
+        "data_quality_score",
+        "conviction_score",
+        "screen_signal",
+        "effective_signal",
+        "exit_streak",
+        "stress_triggers",
+        "thesis_status_at_start",
+        "recommended_action_at_start",
+        "checkpoints"
+      ]
+    },
+    "swap_rotation": {
+      "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+      "pairing": "same rebalance pass sells vs buys on one track",
+      "outcomes": [
+        "replacement_outperformed",
+        "exit_outperformed",
+        "inconclusive"
+      ],
+      "fields_for_later_analysis": [
+        "sell_tickers",
+        "buy_tickers",
+        "sell_realized_pct",
+        "post_rotation_returns",
+        "trade_costs"
+      ]
+    },
+    "related_artifacts": [
+      "exit_shadow.json (post-exit path after sell)",
+      "rebalance_log.json (counterfactual replay)",
+      "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+      "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+      "learning_tracks_churn_health.json"
+    ],
+    "scope": "archive_near_miss",
+    "near_miss_gate": {
+      "below_buy_tier": true,
+      "held_book_from_rebalance_log": true,
+      "default_signals": [
+        "hold"
+      ],
+      "default_min_conviction": 0.28,
+      "default_max_episodes_per_week": 25,
+      "aligned_with": "trajectory_evidence.PRE_BUY_CONVICTION"
+    },
+    "note": "Observe-only priors from archived weekly screens plus rebalance_log held-ticker episodes. Does not replace live paper exit_timing cohorts."
+  },
+  "config": {
+    "min_conviction": 0.28,
+    "min_data_quality": 0.0,
+    "near_miss_signals": [
+      "hold"
+    ],
+    "max_episodes_per_week": 25,
+    "shadow_windows_days": [
+      7,
+      28,
+      56,
+      84
+    ],
+    "include_held_episodes": true,
+    "paper_root": null,
+    "track_ids": [
+      "rules",
+      "ai_judgment"
+    ]
+  },
+  "snapshot_count": 3,
+  "hold_episodes": [
+    {
+      "episode_id": "archive_near_miss:2026-10-02T16:29:27+00:00:NOS.LS",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NOS.LS",
+      "name": "",
+      "started_at": "2026-10-02T16:29:27+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 5.365,
+      "avg_cost": 5.365,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.3975,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0009,
+      "trough_unrealized_pct": 0.0009,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T16:29:27+00:00:RENE.LS",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "RENE.LS",
+      "name": "",
+      "started_at": "2026-10-02T16:29:27+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 3.56,
+      "avg_cost": 3.56,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.3384,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0056,
+      "trough_unrealized_pct": -0.0056,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T16:29:27+00:00:NVG.LS",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NVG.LS",
+      "name": "",
+      "started_at": "2026-10-02T16:29:27+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 3.218,
+      "avg_cost": 3.218,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.3024,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0155,
+      "trough_unrealized_pct": -0.0155,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T16:29:27+00:00:COR.LS",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "COR.LS",
+      "name": "",
+      "started_at": "2026-10-02T16:29:27+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 7.1,
+      "avg_cost": 7.1,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.85,
+      "conviction_score": 0.286,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0254,
+      "trough_unrealized_pct": -0.0254,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    }
+  ],
+  "swap_rotations": [],
+  "updated_at": "2026-10-04T07:09:53.045984+00:00"
+}

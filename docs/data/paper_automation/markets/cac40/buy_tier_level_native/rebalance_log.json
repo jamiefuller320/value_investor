@@ -3425,5 +3425,862 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-04T07:10:06.791814+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/cac40/screen_latest.json",
+      "run_at": "2026-10-04T06:22:29.681182+00:00",
+      "generated_at": "2026-10-04T07:10:06.724915+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-04T08:10:06.777368+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-10-04T08:00:00+01:00",
+      "settle_at": "2026-10-04T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (4 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0003,
+    "candidates": [
+      {
+        "ticker": "TEP.PA",
+        "name": "Teleperformance SE",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.76,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Industrials",
+        "price": 69.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.875,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 70.81,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ORA.PA",
+        "name": "Orange S.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.53261,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Communication Services",
+        "price": 13.98,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7576,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 106.8,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7416,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 74.46,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "TEP.PA",
+        "name": "Teleperformance SE",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.76,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Industrials",
+        "price": 69.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.875,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 70.81,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ORA.PA",
+        "name": "Orange S.A.",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.53261,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Communication Services",
+        "price": 13.98,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7576,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 106.8,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7416,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Energy",
+        "price": 74.46,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 967.52,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 241.87,
+      "targets": [
+        {
+          "ticker": "SAN.PA",
+          "name": "Sanofi",
+          "signal": "strong_buy",
+          "conviction_score": 0.875,
+          "price": 70.81
+        },
+        {
+          "ticker": "DG.PA",
+          "name": "Vinci SA",
+          "signal": "strong_buy",
+          "conviction_score": 0.7576,
+          "price": 106.8
+        },
+        {
+          "ticker": "TTE.PA",
+          "name": "TotalEnergies SE",
+          "signal": "buy",
+          "conviction_score": 0.7416,
+          "price": 74.46
+        },
+        {
+          "ticker": "ORA.PA",
+          "name": "Orange S.A.",
+          "signal": "strong_buy",
+          "conviction_score": 0.53261,
+          "price": 13.98
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "TEP.PA",
+          "name": "Teleperformance SE",
+          "reason": "No longer in the top conviction target set",
+          "shares": 2.291476,
+          "price": 69.0,
+          "value": 158.11
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "TTE.PA",
+          "name": "TotalEnergies SE",
+          "reason": "Top-up to equal weight",
+          "value": 82.89,
+          "price": 74.46,
+          "target_value": 241.87,
+          "conviction_score": 0.7416,
+          "signal": "buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "ORA.PA",
+          "name": "Orange S.A.",
+          "reason": "Top-up to equal weight",
+          "value": 75.18,
+          "price": 13.98,
+          "target_value": 241.87,
+          "conviction_score": 0.53261,
+          "signal": "strong_buy"
+        }
+      ],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "SAN.PA",
+          "name": "Sanofi",
+          "reason": "Already near equal-weight target",
+          "value": 241.88,
+          "target_value": 241.87,
+          "conviction_score": 0.875,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "DG.PA",
+          "name": "Vinci SA",
+          "reason": "Already near equal-weight target",
+          "value": 241.87,
+          "target_value": 241.87,
+          "conviction_score": 0.7576,
+          "signal": "strong_buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [
+        {
+          "ticker": "TEP.PA",
+          "name": "Teleperformance SE",
+          "signal": "strong_buy",
+          "conviction_score": 0.76,
+          "reason": "timing_signal=wait \u2014 skipped until timing improves"
+        }
+      ],
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s); leave 2 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "ba6e890f-1e59-4f02-bfa7-51058dd4caf3",
+        "fund_id": "3dac62e6-d20e-4e03-9467-f9858b18e921",
+        "acted_at": "2026-10-04T08:10:06.777368+01:00",
+        "ticker": "MC.PA",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.337455,
+        "price": 394.6,
+        "gross": 133.16,
+        "cost": 0.03,
+        "net_cash": 133.13,
+        "note": "Automated exit \u2014 left target set",
+        "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
+        "avg_cost_at_exit": 394.6,
+        "position_closed": true
+      },
+      {
+        "id": "7e08399a-d1ec-49ce-b868-52425e5ad00c",
+        "fund_id": "3dac62e6-d20e-4e03-9467-f9858b18e921",
+        "acted_at": "2026-10-04T08:10:06.777368+01:00",
+        "ticker": "SAN.PA",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.698424,
+        "price": 70.81,
+        "gross": 49.46,
+        "cost": 0.01,
+        "net_cash": -49.47,
+        "note": "Automated buy",
+        "name": "Sanofi"
+      },
+      {
+        "id": "0d83a0bb-28e3-4663-8842-670ff2be0da3",
+        "fund_id": "3dac62e6-d20e-4e03-9467-f9858b18e921",
+        "acted_at": "2026-10-04T08:10:06.777368+01:00",
+        "ticker": "DG.PA",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.755902,
+        "price": 106.8,
+        "gross": 80.73,
+        "cost": 0.02,
+        "net_cash": -80.75,
+        "note": "Automated buy",
+        "name": "Vinci SA"
+      },
+      {
+        "id": "bb1cd770-39ab-4aee-9945-60f09d779167",
+        "fund_id": "3dac62e6-d20e-4e03-9467-f9858b18e921",
+        "acted_at": "2026-10-04T08:10:06.777368+01:00",
+        "ticker": "TTE.PA",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.039047,
+        "price": 74.46,
+        "gross": 2.91,
+        "cost": 0.0,
+        "net_cash": -2.91,
+        "note": "Automated buy",
+        "name": "TotalEnergies SE"
+      }
+    ],
+    "nav_before": 967.59,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "SAN.PA",
+        "shares": 2.717434,
+        "avg_cost": 71.9562,
+        "sector": "Healthcare",
+        "name": "Sanofi",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TEP.PA",
+        "shares": 2.291476,
+        "avg_cost": 71.6871,
+        "sector": "Industrials",
+        "name": "Teleperformance SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DG.PA",
+        "shares": 1.50879,
+        "avg_cost": 110.6297,
+        "sector": "Industrials",
+        "name": "Vinci SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TTE.PA",
+        "shares": 2.096077,
+        "avg_cost": 80.8602,
+        "sector": "Energy",
+        "name": "TotalEnergies SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ORA.PA",
+        "shares": 11.923083,
+        "avg_cost": 14.0381,
+        "sector": "Communication Services",
+        "name": "Orange S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "MC.PA",
+        "shares": 0.337455,
+        "avg_cost": 394.6,
+        "sector": "Consumer Cyclical",
+        "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "MC.PA": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "nav_after": 967.52,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "SAN.PA",
+        "shares": 3.415858,
+        "avg_cost": 71.7218,
+        "sector": "Healthcare",
+        "name": "Sanofi",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TEP.PA",
+        "shares": 2.291476,
+        "avg_cost": 71.6871,
+        "sector": "Industrials",
+        "name": "Teleperformance SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DG.PA",
+        "shares": 2.264692,
+        "avg_cost": 109.3514,
+        "sector": "Industrials",
+        "name": "Vinci SA",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "TTE.PA",
+        "shares": 2.135124,
+        "avg_cost": 80.7432,
+        "sector": "Energy",
+        "name": "TotalEnergies SE",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ORA.PA",
+        "shares": 11.923083,
+        "avg_cost": 14.0381,
+        "sector": "Communication Services",
+        "name": "Orange S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {
+        "TEP.PA": 1
+      },
+      "reentry_cooldown": {
+        "MC.PA": 1
+      }
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 4,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "MC.PA",
+          "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-04T08:10:06.777368+01:00",
+          "proposal_id": "buy_tier_level_native:MC.PA:sell:2026-10-04T08:10:06.777368+01:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "SAN.PA",
+          "name": "Sanofi",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 1
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 1
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.875
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-04T08:10:06.777368+01:00",
+          "proposal_id": "buy_tier_level_native:SAN.PA:buy:2026-10-04T08:10:06.777368+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "DG.PA",
+          "name": "Vinci SA",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.7576
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-04T08:10:06.777368+01:00",
+          "proposal_id": "buy_tier_level_native:DG.PA:buy:2026-10-04T08:10:06.777368+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "TTE.PA",
+          "name": "TotalEnergies SE",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 4
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 4
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.7416
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-04T08:10:06.777368+01:00",
+          "proposal_id": "buy_tier_level_native:TTE.PA:buy:2026-10-04T08:10:06.777368+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        }
+      ]
+    }
   }
 ]

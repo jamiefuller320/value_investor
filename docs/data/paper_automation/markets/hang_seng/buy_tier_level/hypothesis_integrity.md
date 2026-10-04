@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-02T08:47:42.403175+00:00
+Track: `buy_tier_level` · updated 2026-10-04T07:10:10.799584+00:00
 
 ## Portfolio loser feedback
 
@@ -10,29 +10,30 @@ Track: `buy_tier_level` · updated 2026-10-02T08:47:42.403175+00:00
 
 ## Holding reviews
 
-### 2331.HK — intact / hold_tolerate (+0.0%)
+### 2331.HK — intact / hold_tolerate (-2.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 64%
+- conviction 63%
 
-### 0883.HK — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 55%
-
-### 2318.HK — intact / hold_tolerate (+0.0%)
+### 2318.HK — intact / hold_tolerate (-2.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 51%
+- conviction 60%
 
-### 0175.HK — intact / hold_tolerate (+0.0%)
-- still buy
+### 0175.HK — intact / hold_tolerate (-1.6%)
+- still strong_buy
+- research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 43%
+- conviction 49%
+
+### 0883.HK — intact / hold_tolerate (-1.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 65%

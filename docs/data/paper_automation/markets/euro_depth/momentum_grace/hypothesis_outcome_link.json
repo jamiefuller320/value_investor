@@ -3,28 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "momentum_grace",
-  "generated_at": "2026-09-30T07:27:35.717204+00:00",
+  "generated_at": "2026-10-04T07:10:50.920041+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 3,
+    "closed_total": 4,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 5,
+    "open_with_thesis": 4,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 3,
-        "recovery_rate": 0.6667,
-        "sold_underwater_rate": 0.3333,
-        "mean_peak_unrealized_pct": 0.026,
-        "mean_trough_unrealized_pct": 0.0107,
+        "closed_count": 4,
+        "recovery_rate": 0.5,
+        "sold_underwater_rate": 0.5,
+        "mean_peak_unrealized_pct": 0.0186,
+        "mean_trough_unrealized_pct": 0.004,
         "outcome_labels": {
           "recovered": 2,
-          "sold_underwater": 1
+          "sold_underwater": 2
         }
       },
       "broken": {
@@ -56,10 +56,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 3,
+    "hold_closed_with_thesis": 4,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=3 (target >=8)",
+      "hold closed with thesis=4 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -166,7 +166,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0066,
-      "trough_unrealized_pct": -0.042,
+      "trough_unrealized_pct": -0.0457,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -293,9 +293,18 @@
       "conviction_score": 0.8661000000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-04T09:05:41.091719+02:00",
+          "days_after": 7,
+          "price": 70.81,
+          "unrealized_pct": -0.0425,
+          "peak_unrealized_pct": -0.0188,
+          "trough_unrealized_pct": -0.0425
+        }
+      ],
       "peak_unrealized_pct": -0.0188,
-      "trough_unrealized_pct": -0.0315,
+      "trough_unrealized_pct": -0.0425,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -381,7 +390,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0153,
-      "trough_unrealized_pct": -0.023,
+      "trough_unrealized_pct": -0.0361,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -393,7 +402,7 @@
       "ticker": "SHELL.AS",
       "name": "Shell plc",
       "started_at": "2026-09-30T09:23:07.611226+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -423,12 +432,12 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0146,
+      "peak_unrealized_pct": -0.0035,
       "trough_unrealized_pct": -0.0159,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-04T09:10:44.875428+02:00",
+      "linked_sell_trade_id": "4cfda898-c647-4651-a0e1-936ef55ad203"
     }
   ],
   "swap_rotations": [
@@ -506,14 +515,22 @@
           "cost": 0.37
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-04T09:05:41.091719+02:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0035,
+          "avg_buy_return": -0.0181,
+          "replacement_delta": -0.0146
+        }
+      ],
       "sell_returns_since_rotation": {
-        "DHL.DE": 0.0017,
-        "SHELL.AS": -0.0035
+        "DHL.DE": -0.016,
+        "SHELL.AS": 0.009
       },
       "buy_returns_since_rotation": {
-        "DG.PA": -0.0153,
-        "EG7.IR": -0.0132
+        "DG.PA": -0.0361,
+        "EG7.IR": 0.0
       },
       "verdict": null,
       "closed_at": null
@@ -562,10 +579,62 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "EG7.IR": -0.0079
+        "EG7.IR": 0.0053
       },
       "buy_returns_since_rotation": {
-        "SHELL.AS": -0.0159
+        "SHELL.AS": -0.0035
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "momentum_grace:2026-10-04T09:10:44.875428+02:00",
+      "track_id": "momentum_grace",
+      "logged_at": "2026-10-04T09:10:44.875428+02:00",
+      "status": "open",
+      "trade_cost_pct": 0.0019,
+      "sells": [
+        {
+          "ticker": "SHELL.AS",
+          "price": 42.4,
+          "shares": 4.715802,
+          "gross": 199.95,
+          "cost": 0.37,
+          "avg_cost_at_exit": 42.55,
+          "realized_pct": -0.0035,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0035
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "EG7.IR",
+          "price": 19.0,
+          "shares": 10.349045,
+          "gross": 196.63,
+          "cost": 0.36
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "SHELL.AS": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "EG7.IR": 0.0
       },
       "verdict": null,
       "closed_at": null

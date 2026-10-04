@@ -1,0 +1,5207 @@
+{
+  "schema_version": 1,
+  "scope": "archive_near_miss",
+  "track_id": "archive_near_miss",
+  "framework": {
+    "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+    "hold_recovery": {
+      "question": "When a position is stressed but still held, does it recover to breakeven?",
+      "episode_triggers": [
+        "unrealized below underwater_threshold",
+        "exit_streak >= 1 (hold buffer active)",
+        "momentum_grace on position",
+        "effective signal no longer buy-tier while still held"
+      ],
+      "outcomes": [
+        "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+        "sold_while_underwater",
+        "max_window_elapsed"
+      ],
+      "fields_for_later_analysis": [
+        "data_quality_score",
+        "conviction_score",
+        "screen_signal",
+        "effective_signal",
+        "exit_streak",
+        "stress_triggers",
+        "thesis_status_at_start",
+        "recommended_action_at_start",
+        "checkpoints"
+      ]
+    },
+    "swap_rotation": {
+      "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+      "pairing": "same rebalance pass sells vs buys on one track",
+      "outcomes": [
+        "replacement_outperformed",
+        "exit_outperformed",
+        "inconclusive"
+      ],
+      "fields_for_later_analysis": [
+        "sell_tickers",
+        "buy_tickers",
+        "sell_realized_pct",
+        "post_rotation_returns",
+        "trade_costs"
+      ]
+    },
+    "related_artifacts": [
+      "exit_shadow.json (post-exit path after sell)",
+      "rebalance_log.json (counterfactual replay)",
+      "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+      "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+      "learning_tracks_churn_health.json"
+    ],
+    "scope": "archive_near_miss",
+    "near_miss_gate": {
+      "below_buy_tier": true,
+      "held_book_from_rebalance_log": true,
+      "default_signals": [
+        "hold"
+      ],
+      "default_min_conviction": 0.28,
+      "default_max_episodes_per_week": 25,
+      "aligned_with": "trajectory_evidence.PRE_BUY_CONVICTION"
+    },
+    "note": "Observe-only priors from archived weekly screens plus rebalance_log held-ticker episodes. Does not replace live paper exit_timing cohorts."
+  },
+  "config": {
+    "min_conviction": 0.28,
+    "min_data_quality": 0.0,
+    "near_miss_signals": [
+      "hold"
+    ],
+    "max_episodes_per_week": 25,
+    "shadow_windows_days": [
+      7,
+      28,
+      56,
+      84
+    ],
+    "include_held_episodes": true,
+    "paper_root": null,
+    "track_ids": [
+      "rules",
+      "ai_judgment"
+    ]
+  },
+  "snapshot_count": 13,
+  "hold_episodes": [
+    {
+      "episode_id": "archive_near_miss:2026-07-19T15:34:29+00:00:INFY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "INFY",
+      "name": "",
+      "started_at": "2026-07-19T15:34:29+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 11.49,
+      "avg_cost": 11.49,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.3652,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-07-26T16:52:52+00:00",
+          "days_after": 7,
+          "price": 11.11,
+          "unrealized_pct": -0.0331,
+          "peak_unrealized_pct": -0.0157,
+          "trough_unrealized_pct": -0.0331
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 10.64,
+          "unrealized_pct": -0.074,
+          "peak_unrealized_pct": 0.0522,
+          "trough_unrealized_pct": -0.074
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 10.64,
+          "unrealized_pct": -0.074,
+          "peak_unrealized_pct": 0.0522,
+          "trough_unrealized_pct": -0.074
+        }
+      ],
+      "peak_unrealized_pct": 0.0522,
+      "trough_unrealized_pct": -0.074,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-19T15:34:29+00:00:NMR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NMR",
+      "name": "",
+      "started_at": "2026-07-19T15:34:29+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 9.4,
+      "avg_cost": 9.4,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.75,
+      "conviction_score": 0.3067,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-07-26T16:52:52+00:00",
+          "days_after": 7,
+          "price": 9.81,
+          "unrealized_pct": 0.0436,
+          "peak_unrealized_pct": 0.0436,
+          "trough_unrealized_pct": -0.0011
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 9.91,
+          "unrealized_pct": 0.0543,
+          "peak_unrealized_pct": 0.0543,
+          "trough_unrealized_pct": -0.0011
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 9.91,
+          "unrealized_pct": 0.0543,
+          "peak_unrealized_pct": 0.0543,
+          "trough_unrealized_pct": -0.0011
+        }
+      ],
+      "peak_unrealized_pct": 0.0543,
+      "trough_unrealized_pct": -0.0011,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-20T20:06:59+00:00:NMR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NMR",
+      "name": "",
+      "started_at": "2026-07-20T20:06:59+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 9.39,
+      "avg_cost": 9.39,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.75,
+      "conviction_score": 0.3579,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 9.68,
+          "unrealized_pct": 0.0309,
+          "peak_unrealized_pct": 0.0447,
+          "trough_unrealized_pct": 0.0309
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 9.91,
+          "unrealized_pct": 0.0554,
+          "peak_unrealized_pct": 0.0554,
+          "trough_unrealized_pct": 0.0309
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 9.91,
+          "unrealized_pct": 0.0554,
+          "peak_unrealized_pct": 0.0554,
+          "trough_unrealized_pct": 0.0309
+        }
+      ],
+      "peak_unrealized_pct": 0.0554,
+      "trough_unrealized_pct": 0.0309,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-20T20:06:59+00:00:TSM",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "TSM",
+      "name": "",
+      "started_at": "2026-07-20T20:06:59+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 402.3,
+      "avg_cost": 402.3,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.3083,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 404.25,
+          "unrealized_pct": 0.0048,
+          "peak_unrealized_pct": 0.0048,
+          "trough_unrealized_pct": 0.0028
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 456.94,
+          "unrealized_pct": 0.1358,
+          "peak_unrealized_pct": 0.1358,
+          "trough_unrealized_pct": 0.0028
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 456.94,
+          "unrealized_pct": 0.1358,
+          "peak_unrealized_pct": 0.1358,
+          "trough_unrealized_pct": 0.0028
+        }
+      ],
+      "peak_unrealized_pct": 0.1752,
+      "trough_unrealized_pct": 0.0028,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T09:57:16+00:00:NMR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NMR",
+      "name": "",
+      "started_at": "2026-07-25T09:57:16+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 9.81,
+      "avg_cost": 9.81,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.8,
+      "conviction_score": 0.4363,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 9.68,
+          "unrealized_pct": -0.0133,
+          "peak_unrealized_pct": -0.0133,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        }
+      ],
+      "peak_unrealized_pct": 0.0102,
+      "trough_unrealized_pct": -0.0133,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T09:57:16+00:00:SONY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "SONY",
+      "name": "",
+      "started_at": "2026-07-25T09:57:16+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 20.98,
+      "avg_cost": 20.98,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3333,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 23.26,
+          "unrealized_pct": 0.1087,
+          "peak_unrealized_pct": 0.1087,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        }
+      ],
+      "peak_unrealized_pct": 0.1578,
+      "trough_unrealized_pct": 0.1087,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T09:57:16+00:00:TSM",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "TSM",
+      "name": "",
+      "started_at": "2026-07-25T09:57:16+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 403.41,
+      "avg_cost": 403.41,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3292,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 404.25,
+          "unrealized_pct": 0.0021,
+          "peak_unrealized_pct": 0.0021,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        }
+      ],
+      "peak_unrealized_pct": 0.172,
+      "trough_unrealized_pct": 0.0021,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T09:57:16+00:00:BABA",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "BABA",
+      "name": "",
+      "started_at": "2026-07-25T09:57:16+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 112.14,
+      "avg_cost": 112.14,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3158,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 122.25,
+          "unrealized_pct": 0.0902,
+          "peak_unrealized_pct": 0.0902,
+          "trough_unrealized_pct": 0.0902
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        }
+      ],
+      "peak_unrealized_pct": 0.1041,
+      "trough_unrealized_pct": -0.0561,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T09:57:16+00:00:ASX",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ASX",
+      "name": "",
+      "started_at": "2026-07-25T09:57:16+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 36.84,
+      "avg_cost": 36.84,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3125,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 35.17,
+          "unrealized_pct": -0.0453,
+          "peak_unrealized_pct": -0.0453,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        }
+      ],
+      "peak_unrealized_pct": 0.288,
+      "trough_unrealized_pct": -0.0453,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T10:00:51+00:00:NMR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NMR",
+      "name": "",
+      "started_at": "2026-07-25T10:00:51+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 9.81,
+      "avg_cost": 9.81,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.8,
+      "conviction_score": 0.4363,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 9.68,
+          "unrealized_pct": -0.0133,
+          "peak_unrealized_pct": -0.0133,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        }
+      ],
+      "peak_unrealized_pct": 0.0102,
+      "trough_unrealized_pct": -0.0133,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T10:00:51+00:00:SONY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "SONY",
+      "name": "",
+      "started_at": "2026-07-25T10:00:51+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 20.98,
+      "avg_cost": 20.98,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3333,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 23.26,
+          "unrealized_pct": 0.1087,
+          "peak_unrealized_pct": 0.1087,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        }
+      ],
+      "peak_unrealized_pct": 0.1578,
+      "trough_unrealized_pct": 0.1087,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T10:00:51+00:00:TSM",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "TSM",
+      "name": "",
+      "started_at": "2026-07-25T10:00:51+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 403.41,
+      "avg_cost": 403.41,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3292,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 404.25,
+          "unrealized_pct": 0.0021,
+          "peak_unrealized_pct": 0.0021,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        }
+      ],
+      "peak_unrealized_pct": 0.172,
+      "trough_unrealized_pct": 0.0021,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T10:00:51+00:00:BABA",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "BABA",
+      "name": "",
+      "started_at": "2026-07-25T10:00:51+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 112.14,
+      "avg_cost": 112.14,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3158,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 122.25,
+          "unrealized_pct": 0.0902,
+          "peak_unrealized_pct": 0.0902,
+          "trough_unrealized_pct": 0.0902
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        }
+      ],
+      "peak_unrealized_pct": 0.1041,
+      "trough_unrealized_pct": -0.0561,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T10:00:51+00:00:ASX",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ASX",
+      "name": "",
+      "started_at": "2026-07-25T10:00:51+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 36.84,
+      "avg_cost": 36.84,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3125,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 35.17,
+          "unrealized_pct": -0.0453,
+          "peak_unrealized_pct": -0.0453,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        }
+      ],
+      "peak_unrealized_pct": 0.288,
+      "trough_unrealized_pct": -0.0453,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T10:11:13+00:00:NMR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NMR",
+      "name": "",
+      "started_at": "2026-07-25T10:11:13+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 9.81,
+      "avg_cost": 9.81,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.8,
+      "conviction_score": 0.4363,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 9.68,
+          "unrealized_pct": -0.0133,
+          "peak_unrealized_pct": -0.0133,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        }
+      ],
+      "peak_unrealized_pct": 0.0102,
+      "trough_unrealized_pct": -0.0133,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T10:11:13+00:00:SONY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "SONY",
+      "name": "",
+      "started_at": "2026-07-25T10:11:13+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 20.98,
+      "avg_cost": 20.98,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3333,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 23.26,
+          "unrealized_pct": 0.1087,
+          "peak_unrealized_pct": 0.1087,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        }
+      ],
+      "peak_unrealized_pct": 0.1578,
+      "trough_unrealized_pct": 0.1087,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T10:11:13+00:00:TSM",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "TSM",
+      "name": "",
+      "started_at": "2026-07-25T10:11:13+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 403.41,
+      "avg_cost": 403.41,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3292,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 404.25,
+          "unrealized_pct": 0.0021,
+          "peak_unrealized_pct": 0.0021,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        }
+      ],
+      "peak_unrealized_pct": 0.172,
+      "trough_unrealized_pct": 0.0021,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T10:11:13+00:00:BABA",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "BABA",
+      "name": "",
+      "started_at": "2026-07-25T10:11:13+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 112.14,
+      "avg_cost": 112.14,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3158,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 122.25,
+          "unrealized_pct": 0.0902,
+          "peak_unrealized_pct": 0.0902,
+          "trough_unrealized_pct": 0.0902
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        }
+      ],
+      "peak_unrealized_pct": 0.1041,
+      "trough_unrealized_pct": -0.0561,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T10:11:13+00:00:ASX",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ASX",
+      "name": "",
+      "started_at": "2026-07-25T10:11:13+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 36.84,
+      "avg_cost": 36.84,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3125,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 35.17,
+          "unrealized_pct": -0.0453,
+          "peak_unrealized_pct": -0.0453,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        }
+      ],
+      "peak_unrealized_pct": 0.288,
+      "trough_unrealized_pct": -0.0453,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T13:14:47+00:00:NMR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NMR",
+      "name": "",
+      "started_at": "2026-07-25T13:14:47+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 9.81,
+      "avg_cost": 9.81,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.8,
+      "conviction_score": 0.4363,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 9.68,
+          "unrealized_pct": -0.0133,
+          "peak_unrealized_pct": -0.0133,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        }
+      ],
+      "peak_unrealized_pct": 0.0102,
+      "trough_unrealized_pct": -0.0133,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T13:14:47+00:00:SONY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "SONY",
+      "name": "",
+      "started_at": "2026-07-25T13:14:47+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 20.98,
+      "avg_cost": 20.98,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3333,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 23.26,
+          "unrealized_pct": 0.1087,
+          "peak_unrealized_pct": 0.1087,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        }
+      ],
+      "peak_unrealized_pct": 0.1578,
+      "trough_unrealized_pct": 0.1087,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T13:14:47+00:00:TSM",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "TSM",
+      "name": "",
+      "started_at": "2026-07-25T13:14:47+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 403.41,
+      "avg_cost": 403.41,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3292,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 404.25,
+          "unrealized_pct": 0.0021,
+          "peak_unrealized_pct": 0.0021,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        }
+      ],
+      "peak_unrealized_pct": 0.172,
+      "trough_unrealized_pct": 0.0021,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T13:14:47+00:00:BABA",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "BABA",
+      "name": "",
+      "started_at": "2026-07-25T13:14:47+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 112.14,
+      "avg_cost": 112.14,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3158,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 122.25,
+          "unrealized_pct": 0.0902,
+          "peak_unrealized_pct": 0.0902,
+          "trough_unrealized_pct": 0.0902
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        }
+      ],
+      "peak_unrealized_pct": 0.1041,
+      "trough_unrealized_pct": -0.0561,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T13:14:47+00:00:ASX",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ASX",
+      "name": "",
+      "started_at": "2026-07-25T13:14:47+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 36.84,
+      "avg_cost": 36.84,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3125,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 35.17,
+          "unrealized_pct": -0.0453,
+          "peak_unrealized_pct": -0.0453,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        }
+      ],
+      "peak_unrealized_pct": 0.288,
+      "trough_unrealized_pct": -0.0453,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T15:05:16+00:00:NMR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NMR",
+      "name": "",
+      "started_at": "2026-07-25T15:05:16+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 9.81,
+      "avg_cost": 9.81,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.8,
+      "conviction_score": 0.4363,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 9.68,
+          "unrealized_pct": -0.0133,
+          "peak_unrealized_pct": -0.0133,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        }
+      ],
+      "peak_unrealized_pct": 0.0102,
+      "trough_unrealized_pct": -0.0133,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T15:05:16+00:00:SONY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "SONY",
+      "name": "",
+      "started_at": "2026-07-25T15:05:16+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 20.98,
+      "avg_cost": 20.98,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3333,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 23.26,
+          "unrealized_pct": 0.1087,
+          "peak_unrealized_pct": 0.1087,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        }
+      ],
+      "peak_unrealized_pct": 0.1578,
+      "trough_unrealized_pct": 0.1087,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T15:05:16+00:00:TSM",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "TSM",
+      "name": "",
+      "started_at": "2026-07-25T15:05:16+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 403.41,
+      "avg_cost": 403.41,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3292,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 404.25,
+          "unrealized_pct": 0.0021,
+          "peak_unrealized_pct": 0.0021,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        }
+      ],
+      "peak_unrealized_pct": 0.172,
+      "trough_unrealized_pct": 0.0021,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T15:05:16+00:00:BABA",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "BABA",
+      "name": "",
+      "started_at": "2026-07-25T15:05:16+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 112.14,
+      "avg_cost": 112.14,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3158,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 122.25,
+          "unrealized_pct": 0.0902,
+          "peak_unrealized_pct": 0.0902,
+          "trough_unrealized_pct": 0.0902
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        }
+      ],
+      "peak_unrealized_pct": 0.1041,
+      "trough_unrealized_pct": -0.0561,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-25T15:05:16+00:00:ASX",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ASX",
+      "name": "",
+      "started_at": "2026-07-25T15:05:16+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 36.84,
+      "avg_cost": 36.84,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3125,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "price": 35.17,
+          "unrealized_pct": -0.0453,
+          "peak_unrealized_pct": -0.0453,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        }
+      ],
+      "peak_unrealized_pct": 0.288,
+      "trough_unrealized_pct": -0.0453,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-26T16:52:52+00:00:NMR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NMR",
+      "name": "",
+      "started_at": "2026-07-26T16:52:52+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 9.81,
+      "avg_cost": 9.81,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.8,
+      "conviction_score": 0.4363,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 9.82,
+          "unrealized_pct": 0.001,
+          "peak_unrealized_pct": 0.001,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 9.91,
+          "unrealized_pct": 0.0102,
+          "peak_unrealized_pct": 0.0102,
+          "trough_unrealized_pct": -0.0133
+        }
+      ],
+      "peak_unrealized_pct": 0.0102,
+      "trough_unrealized_pct": -0.0133,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-26T16:52:52+00:00:SONY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "SONY",
+      "name": "",
+      "started_at": "2026-07-26T16:52:52+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 20.98,
+      "avg_cost": 20.98,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3333,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 24.29,
+          "unrealized_pct": 0.1578,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 23.37,
+          "unrealized_pct": 0.1139,
+          "peak_unrealized_pct": 0.1578,
+          "trough_unrealized_pct": 0.1087
+        }
+      ],
+      "peak_unrealized_pct": 0.1578,
+      "trough_unrealized_pct": 0.1087,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-26T16:52:52+00:00:TSM",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "TSM",
+      "name": "",
+      "started_at": "2026-07-26T16:52:52+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 403.41,
+      "avg_cost": 403.41,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3292,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 426.35,
+          "unrealized_pct": 0.0569,
+          "peak_unrealized_pct": 0.0569,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 456.94,
+          "unrealized_pct": 0.1327,
+          "peak_unrealized_pct": 0.1327,
+          "trough_unrealized_pct": 0.0021
+        }
+      ],
+      "peak_unrealized_pct": 0.172,
+      "trough_unrealized_pct": 0.0021,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-26T16:52:52+00:00:BABA",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "BABA",
+      "name": "",
+      "started_at": "2026-07-26T16:52:52+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 112.14,
+      "avg_cost": 112.14,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3158,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 123.81,
+          "unrealized_pct": 0.1041,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": 0.0902
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 107.74,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": 0.1041,
+          "trough_unrealized_pct": -0.0392
+        }
+      ],
+      "peak_unrealized_pct": 0.1041,
+      "trough_unrealized_pct": -0.0561,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-07-26T16:52:52+00:00:ASX",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ASX",
+      "name": "",
+      "started_at": "2026-07-26T16:52:52+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 36.84,
+      "avg_cost": 36.84,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3125,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 39.54,
+          "unrealized_pct": 0.0733,
+          "peak_unrealized_pct": 0.0733,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 45.31,
+          "unrealized_pct": 0.2299,
+          "peak_unrealized_pct": 0.2299,
+          "trough_unrealized_pct": -0.0453
+        }
+      ],
+      "peak_unrealized_pct": 0.288,
+      "trough_unrealized_pct": -0.0453,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-02T11:04:38+00:00:SONY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "SONY",
+      "name": "",
+      "started_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 23.26,
+      "avg_cost": 23.26,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.5416,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 24.29,
+          "unrealized_pct": 0.0443,
+          "peak_unrealized_pct": 0.0443,
+          "trough_unrealized_pct": 0.0443
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 23.37,
+          "unrealized_pct": 0.0047,
+          "peak_unrealized_pct": 0.0443,
+          "trough_unrealized_pct": 0.0047
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 23.37,
+          "unrealized_pct": 0.0047,
+          "peak_unrealized_pct": 0.0443,
+          "trough_unrealized_pct": 0.0047
+        }
+      ],
+      "peak_unrealized_pct": 0.0443,
+      "trough_unrealized_pct": 0.0047,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-02T11:04:38+00:00:NMR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NMR",
+      "name": "",
+      "started_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 9.68,
+      "avg_cost": 9.68,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.8,
+      "conviction_score": 0.4363,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 9.82,
+          "unrealized_pct": 0.0145,
+          "peak_unrealized_pct": 0.0145,
+          "trough_unrealized_pct": 0.0145
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 9.91,
+          "unrealized_pct": 0.0238,
+          "peak_unrealized_pct": 0.0238,
+          "trough_unrealized_pct": 0.0145
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 9.91,
+          "unrealized_pct": 0.0238,
+          "peak_unrealized_pct": 0.0238,
+          "trough_unrealized_pct": 0.0145
+        }
+      ],
+      "peak_unrealized_pct": 0.0238,
+      "trough_unrealized_pct": 0.0052,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-02T11:04:38+00:00:INFY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "INFY",
+      "name": "",
+      "started_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 12.03,
+      "avg_cost": 12.03,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3255,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 12.09,
+          "unrealized_pct": 0.005,
+          "peak_unrealized_pct": 0.005,
+          "trough_unrealized_pct": 0.005
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 10.64,
+          "unrealized_pct": -0.1155,
+          "peak_unrealized_pct": 0.005,
+          "trough_unrealized_pct": -0.1155
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 10.64,
+          "unrealized_pct": -0.1155,
+          "peak_unrealized_pct": 0.005,
+          "trough_unrealized_pct": -0.1155
+        }
+      ],
+      "peak_unrealized_pct": 0.005,
+      "trough_unrealized_pct": -0.1155,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-02T11:04:38+00:00:BABA",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "BABA",
+      "name": "",
+      "started_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 122.25,
+      "avg_cost": 122.25,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3158,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 123.81,
+          "unrealized_pct": 0.0128,
+          "peak_unrealized_pct": 0.0128,
+          "trough_unrealized_pct": 0.0128
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 107.74,
+          "unrealized_pct": -0.1187,
+          "peak_unrealized_pct": 0.0128,
+          "trough_unrealized_pct": -0.1187
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 107.74,
+          "unrealized_pct": -0.1187,
+          "peak_unrealized_pct": 0.0128,
+          "trough_unrealized_pct": -0.1187
+        }
+      ],
+      "peak_unrealized_pct": 0.0128,
+      "trough_unrealized_pct": -0.1342,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-02T11:04:38+00:00:TSM",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "TSM",
+      "name": "",
+      "started_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 404.25,
+      "avg_cost": 404.25,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.2958,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 426.35,
+          "unrealized_pct": 0.0547,
+          "peak_unrealized_pct": 0.0547,
+          "trough_unrealized_pct": 0.0547
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 456.94,
+          "unrealized_pct": 0.1303,
+          "peak_unrealized_pct": 0.1303,
+          "trough_unrealized_pct": 0.0547
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "price": 456.94,
+          "unrealized_pct": 0.1303,
+          "peak_unrealized_pct": 0.1303,
+          "trough_unrealized_pct": 0.0547
+        }
+      ],
+      "peak_unrealized_pct": 0.1695,
+      "trough_unrealized_pct": 0.0547,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:SONY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "SONY",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 24.29,
+      "avg_cost": 24.29,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.5416,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 7,
+          "price": 23.37,
+          "unrealized_pct": -0.0379,
+          "peak_unrealized_pct": -0.0379,
+          "trough_unrealized_pct": -0.0379
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 23.37,
+          "unrealized_pct": -0.0379,
+          "peak_unrealized_pct": -0.0379,
+          "trough_unrealized_pct": -0.0379
+        }
+      ],
+      "peak_unrealized_pct": -0.0193,
+      "trough_unrealized_pct": -0.0379,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:NMR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NMR",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 9.82,
+      "avg_cost": 9.82,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.8,
+      "conviction_score": 0.4363,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 7,
+          "price": 9.91,
+          "unrealized_pct": 0.0092,
+          "peak_unrealized_pct": 0.0092,
+          "trough_unrealized_pct": 0.0092
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 9.91,
+          "unrealized_pct": 0.0092,
+          "peak_unrealized_pct": 0.0092,
+          "trough_unrealized_pct": 0.0092
+        }
+      ],
+      "peak_unrealized_pct": 0.0092,
+      "trough_unrealized_pct": -0.0092,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:INFY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "INFY",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 12.09,
+      "avg_cost": 12.09,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3594,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 7,
+          "price": 10.64,
+          "unrealized_pct": -0.1199,
+          "peak_unrealized_pct": -0.1199,
+          "trough_unrealized_pct": -0.1199
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 10.64,
+          "unrealized_pct": -0.1199,
+          "peak_unrealized_pct": -0.1199,
+          "trough_unrealized_pct": -0.1199
+        }
+      ],
+      "peak_unrealized_pct": -0.0868,
+      "trough_unrealized_pct": -0.1199,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:BABA",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "BABA",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 123.81,
+      "avg_cost": 123.81,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3158,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 7,
+          "price": 107.74,
+          "unrealized_pct": -0.1298,
+          "peak_unrealized_pct": -0.1298,
+          "trough_unrealized_pct": -0.1298
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 107.74,
+          "unrealized_pct": -0.1298,
+          "peak_unrealized_pct": -0.1298,
+          "trough_unrealized_pct": -0.1298
+        }
+      ],
+      "peak_unrealized_pct": -0.1298,
+      "trough_unrealized_pct": -0.1451,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:TSM",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "TSM",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 426.35,
+      "avg_cost": 426.35,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.2958,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 7,
+          "price": 456.94,
+          "unrealized_pct": 0.0717,
+          "peak_unrealized_pct": 0.0717,
+          "trough_unrealized_pct": 0.0717
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "price": 456.94,
+          "unrealized_pct": 0.0717,
+          "peak_unrealized_pct": 0.0717,
+          "trough_unrealized_pct": 0.0717
+        }
+      ],
+      "peak_unrealized_pct": 0.1089,
+      "trough_unrealized_pct": 0.0717,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-01T19:08:24+00:00:NMR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NMR",
+      "name": "",
+      "started_at": "2026-10-01T19:08:24+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 9.91,
+      "avg_cost": 9.91,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.8,
+      "conviction_score": 0.4363,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0182,
+      "trough_unrealized_pct": -0.0182,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-01T19:08:24+00:00:INFY",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "INFY",
+      "name": "",
+      "started_at": "2026-10-01T19:08:24+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 10.64,
+      "avg_cost": 10.64,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.4193,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0376,
+      "trough_unrealized_pct": 0.0376,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-01T19:08:24+00:00:TSM",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "TSM",
+      "name": "",
+      "started_at": "2026-10-01T19:08:24+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 456.94,
+      "avg_cost": 456.94,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.2958,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0347,
+      "trough_unrealized_pct": 0.0347,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-01T19:08:24+00:00:MUFG",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "MUFG",
+      "name": "",
+      "started_at": "2026-10-01T19:08:24+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 23.13,
+      "avg_cost": 23.13,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.7,
+      "conviction_score": 0.291,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0134,
+      "trough_unrealized_pct": -0.0134,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-04T06:22:29+00:00",
+      "linked_sell_trade_id": null
+    }
+  ],
+  "swap_rotations": [
+    {
+      "rotation_id": "archive_near_miss:2026-07-19T15:34:29+00:00:INFY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-19T15:34:29+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "INFY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "INFY",
+          "price": 11.49,
+          "shares": 1.0,
+          "gross": 11.49,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.86,
+          "shares": 1.0,
+          "gross": 1.86,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-07-26T16:52:52+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0331,
+          "avg_buy_return": 0.0054,
+          "replacement_delta": 0.0384
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.074,
+          "avg_buy_return": -0.1344,
+          "replacement_delta": -0.0604
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": -0.074,
+          "avg_buy_return": -0.1344,
+          "replacement_delta": -0.0604
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "INFY": -0.0392
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0753
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-19T15:34:29+00:00:NMR:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-19T15:34:29+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NMR",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "NMR",
+          "price": 9.4,
+          "shares": 1.0,
+          "gross": 9.4,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.86,
+          "shares": 1.0,
+          "gross": 1.86,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-07-26T16:52:52+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0436,
+          "avg_buy_return": 0.0054,
+          "replacement_delta": -0.0382
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0543,
+          "avg_buy_return": -0.1344,
+          "replacement_delta": -0.1887
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0543,
+          "avg_buy_return": -0.1344,
+          "replacement_delta": -0.1887
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "NMR": 0.0351
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0753
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-20T20:06:59+00:00:NMR:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-20T20:06:59+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NMR",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "NMR",
+          "price": 9.39,
+          "shares": 1.0,
+          "gross": 9.39,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.85,
+          "shares": 1.0,
+          "gross": 1.85,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0309,
+          "avg_buy_return": 0.0703,
+          "replacement_delta": 0.0394
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0554,
+          "avg_buy_return": -0.1297,
+          "replacement_delta": -0.1851
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0554,
+          "avg_buy_return": -0.1297,
+          "replacement_delta": -0.1851
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "NMR": 0.0362
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0703
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-20T20:06:59+00:00:TSM:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-20T20:06:59+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "TSM",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "TSM",
+          "price": 402.3,
+          "shares": 1.0,
+          "gross": 402.3,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.85,
+          "shares": 1.0,
+          "gross": 1.85,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0048,
+          "avg_buy_return": 0.0703,
+          "replacement_delta": 0.0654
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1358,
+          "avg_buy_return": -0.1297,
+          "replacement_delta": -0.2655
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1358,
+          "avg_buy_return": -0.1297,
+          "replacement_delta": -0.2655
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "TSM": 0.1752
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0703
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T09:57:16+00:00:NMR:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T09:57:16+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NMR",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "NMR",
+          "price": 9.81,
+          "shares": 1.0,
+          "gross": 9.81,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0133,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.0721
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "NMR": -0.0082
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T09:57:16+00:00:SONY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T09:57:16+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "SONY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "SONY",
+          "price": 20.98,
+          "shares": 1.0,
+          "gross": 20.98,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.1087,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": -0.0499
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "SONY": 0.1354
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T09:57:16+00:00:TSM:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T09:57:16+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "TSM",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "TSM",
+          "price": 403.41,
+          "shares": 1.0,
+          "gross": 403.41,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0021,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.0567
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "TSM": 0.172
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T09:57:16+00:00:BABA:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T09:57:16+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "BABA",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "BABA",
+          "price": 112.14,
+          "shares": 1.0,
+          "gross": 112.14,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0902,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": -0.0313
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "BABA": -0.0561
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T09:57:16+00:00:ASX:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T09:57:16+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ASX",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "ASX",
+          "price": 36.84,
+          "shares": 1.0,
+          "gross": 36.84,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0453,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.1042
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "ASX": 0.288
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T10:00:51+00:00:NMR:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T10:00:51+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NMR",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "NMR",
+          "price": 9.81,
+          "shares": 1.0,
+          "gross": 9.81,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0133,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.0721
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "NMR": -0.0082
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T10:00:51+00:00:SONY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T10:00:51+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "SONY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "SONY",
+          "price": 20.98,
+          "shares": 1.0,
+          "gross": 20.98,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.1087,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": -0.0499
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "SONY": 0.1354
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T10:00:51+00:00:TSM:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T10:00:51+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "TSM",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "TSM",
+          "price": 403.41,
+          "shares": 1.0,
+          "gross": 403.41,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0021,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.0567
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "TSM": 0.172
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T10:00:51+00:00:BABA:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T10:00:51+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "BABA",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "BABA",
+          "price": 112.14,
+          "shares": 1.0,
+          "gross": 112.14,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0902,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": -0.0313
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "BABA": -0.0561
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T10:00:51+00:00:ASX:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T10:00:51+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ASX",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "ASX",
+          "price": 36.84,
+          "shares": 1.0,
+          "gross": 36.84,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0453,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.1042
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "ASX": 0.288
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T10:11:13+00:00:NMR:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T10:11:13+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NMR",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "NMR",
+          "price": 9.81,
+          "shares": 1.0,
+          "gross": 9.81,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0133,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.0721
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "NMR": -0.0082
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T10:11:13+00:00:SONY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T10:11:13+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "SONY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "SONY",
+          "price": 20.98,
+          "shares": 1.0,
+          "gross": 20.98,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.1087,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": -0.0499
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "SONY": 0.1354
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T10:11:13+00:00:TSM:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T10:11:13+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "TSM",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "TSM",
+          "price": 403.41,
+          "shares": 1.0,
+          "gross": 403.41,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0021,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.0567
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "TSM": 0.172
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T10:11:13+00:00:BABA:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T10:11:13+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "BABA",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "BABA",
+          "price": 112.14,
+          "shares": 1.0,
+          "gross": 112.14,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0902,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": -0.0313
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "BABA": -0.0561
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T10:11:13+00:00:ASX:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T10:11:13+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ASX",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "ASX",
+          "price": 36.84,
+          "shares": 1.0,
+          "gross": 36.84,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0453,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.1042
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "ASX": 0.288
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T13:14:47+00:00:NMR:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T13:14:47+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NMR",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "NMR",
+          "price": 9.81,
+          "shares": 1.0,
+          "gross": 9.81,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0133,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.0721
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "NMR": -0.0082
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T13:14:47+00:00:SONY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T13:14:47+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "SONY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "SONY",
+          "price": 20.98,
+          "shares": 1.0,
+          "gross": 20.98,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.1087,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": -0.0499
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "SONY": 0.1354
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T13:14:47+00:00:TSM:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T13:14:47+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "TSM",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "TSM",
+          "price": 403.41,
+          "shares": 1.0,
+          "gross": 403.41,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0021,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.0567
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "TSM": 0.172
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T13:14:47+00:00:BABA:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T13:14:47+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "BABA",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "BABA",
+          "price": 112.14,
+          "shares": 1.0,
+          "gross": 112.14,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0902,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": -0.0313
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "BABA": -0.0561
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T13:14:47+00:00:ASX:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T13:14:47+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ASX",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "ASX",
+          "price": 36.84,
+          "shares": 1.0,
+          "gross": 36.84,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0453,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.1042
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "ASX": 0.288
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T15:05:16+00:00:NMR:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T15:05:16+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NMR",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "NMR",
+          "price": 9.81,
+          "shares": 1.0,
+          "gross": 9.81,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0133,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.0721
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "NMR": -0.0082
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T15:05:16+00:00:SONY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T15:05:16+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "SONY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "SONY",
+          "price": 20.98,
+          "shares": 1.0,
+          "gross": 20.98,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.1087,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": -0.0499
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "SONY": 0.1354
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T15:05:16+00:00:TSM:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T15:05:16+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "TSM",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "TSM",
+          "price": 403.41,
+          "shares": 1.0,
+          "gross": 403.41,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0021,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.0567
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "TSM": 0.172
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T15:05:16+00:00:BABA:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T15:05:16+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "BABA",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "BABA",
+          "price": 112.14,
+          "shares": 1.0,
+          "gross": 112.14,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0902,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": -0.0313
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "BABA": -0.0561
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-25T15:05:16+00:00:ASX:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-25T15:05:16+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ASX",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "ASX",
+          "price": 36.84,
+          "shares": 1.0,
+          "gross": 36.84,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-02T11:04:38+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0453,
+          "avg_buy_return": 0.0588,
+          "replacement_delta": 0.1042
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "ASX": 0.288
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-26T16:52:52+00:00:NMR:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-26T16:52:52+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NMR",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "NMR",
+          "price": 9.81,
+          "shares": 1.0,
+          "gross": 9.81,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.001,
+          "avg_buy_return": 0.0374,
+          "replacement_delta": 0.0364
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0102,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.1492
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "NMR": -0.0082
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-26T16:52:52+00:00:SONY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-26T16:52:52+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "SONY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "SONY",
+          "price": 20.98,
+          "shares": 1.0,
+          "gross": 20.98,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.1578,
+          "avg_buy_return": 0.0374,
+          "replacement_delta": -0.1203
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1139,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.253
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "SONY": 0.1354
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-26T16:52:52+00:00:TSM:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-26T16:52:52+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "TSM",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "TSM",
+          "price": 403.41,
+          "shares": 1.0,
+          "gross": 403.41,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0569,
+          "avg_buy_return": 0.0374,
+          "replacement_delta": -0.0194
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1327,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.2717
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "TSM": 0.172
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-26T16:52:52+00:00:BABA:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-26T16:52:52+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "BABA",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "BABA",
+          "price": 112.14,
+          "shares": 1.0,
+          "gross": 112.14,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.1041,
+          "avg_buy_return": 0.0374,
+          "replacement_delta": -0.0666
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": -0.0392,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.0998
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "BABA": -0.0561
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-07-26T16:52:52+00:00:ASX:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-07-26T16:52:52+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ASX",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "ASX",
+          "price": 36.84,
+          "shares": 1.0,
+          "gross": 36.84,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.87,
+          "shares": 1.0,
+          "gross": 1.87,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0733,
+          "avg_buy_return": 0.0374,
+          "replacement_delta": -0.0359
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.2299,
+          "avg_buy_return": -0.139,
+          "replacement_delta": -0.369
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "ASX": 0.288
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.0802
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-02T11:04:38+00:00:SONY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "SONY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "SONY",
+          "price": 23.26,
+          "shares": 1.0,
+          "gross": 23.26,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.98,
+          "shares": 1.0,
+          "gross": 1.98,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0443,
+          "avg_buy_return": -0.0202,
+          "replacement_delta": -0.0645
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0047,
+          "avg_buy_return": -0.1869,
+          "replacement_delta": -0.1916
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0047,
+          "avg_buy_return": -0.1869,
+          "replacement_delta": -0.1916
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "SONY": 0.0241
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.1313
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-02T11:04:38+00:00:NMR:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NMR",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "NMR",
+          "price": 9.68,
+          "shares": 1.0,
+          "gross": 9.68,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.98,
+          "shares": 1.0,
+          "gross": 1.98,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0145,
+          "avg_buy_return": -0.0202,
+          "replacement_delta": -0.0347
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0238,
+          "avg_buy_return": -0.1869,
+          "replacement_delta": -0.2106
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0238,
+          "avg_buy_return": -0.1869,
+          "replacement_delta": -0.2106
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "NMR": 0.0052
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.1313
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-02T11:04:38+00:00:INFY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "INFY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "INFY",
+          "price": 12.03,
+          "shares": 1.0,
+          "gross": 12.03,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.98,
+          "shares": 1.0,
+          "gross": 1.98,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.005,
+          "avg_buy_return": -0.0202,
+          "replacement_delta": -0.0252
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.1155,
+          "avg_buy_return": -0.1869,
+          "replacement_delta": -0.0713
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": -0.1155,
+          "avg_buy_return": -0.1869,
+          "replacement_delta": -0.0713
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "INFY": -0.0823
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.1313
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-02T11:04:38+00:00:BABA:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "BABA",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "BABA",
+          "price": 122.25,
+          "shares": 1.0,
+          "gross": 122.25,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.98,
+          "shares": 1.0,
+          "gross": 1.98,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0128,
+          "avg_buy_return": -0.0202,
+          "replacement_delta": -0.033
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.1187,
+          "avg_buy_return": -0.1869,
+          "replacement_delta": -0.0682
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": -0.1187,
+          "avg_buy_return": -0.1869,
+          "replacement_delta": -0.0682
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "BABA": -0.1342
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.1313
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-02T11:04:38+00:00:TSM:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "TSM",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "TSM",
+          "price": 404.25,
+          "shares": 1.0,
+          "gross": 404.25,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.98,
+          "shares": 1.0,
+          "gross": 1.98,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0547,
+          "avg_buy_return": -0.0202,
+          "replacement_delta": -0.0749
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.1303,
+          "avg_buy_return": -0.1869,
+          "replacement_delta": -0.3172
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.1303,
+          "avg_buy_return": -0.1869,
+          "replacement_delta": -0.3172
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "TSM": 0.1695
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.1313
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:SONY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "SONY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "SONY",
+          "price": 24.29,
+          "shares": 1.0,
+          "gross": 24.29,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.94,
+          "shares": 1.0,
+          "gross": 1.94,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0379,
+          "avg_buy_return": -0.1701,
+          "replacement_delta": -0.1322
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0379,
+          "avg_buy_return": -0.1701,
+          "replacement_delta": -0.1322
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "SONY": -0.0193
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.1134
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:NMR:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NMR",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "NMR",
+          "price": 9.82,
+          "shares": 1.0,
+          "gross": 9.82,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.94,
+          "shares": 1.0,
+          "gross": 1.94,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0092,
+          "avg_buy_return": -0.1701,
+          "replacement_delta": -0.1793
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0092,
+          "avg_buy_return": -0.1701,
+          "replacement_delta": -0.1793
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "NMR": -0.0092
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.1134
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:INFY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "INFY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "INFY",
+          "price": 12.09,
+          "shares": 1.0,
+          "gross": 12.09,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.94,
+          "shares": 1.0,
+          "gross": 1.94,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.1199,
+          "avg_buy_return": -0.1701,
+          "replacement_delta": -0.0502
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.1199,
+          "avg_buy_return": -0.1701,
+          "replacement_delta": -0.0502
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "INFY": -0.0868
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.1134
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:BABA:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "BABA",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "BABA",
+          "price": 123.81,
+          "shares": 1.0,
+          "gross": 123.81,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.94,
+          "shares": 1.0,
+          "gross": 1.94,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.1298,
+          "avg_buy_return": -0.1701,
+          "replacement_delta": -0.0403
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.1298,
+          "avg_buy_return": -0.1701,
+          "replacement_delta": -0.0403
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "BABA": -0.1451
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.1134
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:TSM:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "TSM",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "TSM",
+          "price": 426.35,
+          "shares": 1.0,
+          "gross": 426.35,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.94,
+          "shares": 1.0,
+          "gross": 1.94,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0717,
+          "avg_buy_return": -0.1701,
+          "replacement_delta": -0.2419
+        },
+        {
+          "scored_at": "2026-10-01T19:08:24+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0717,
+          "avg_buy_return": -0.1701,
+          "replacement_delta": -0.2419
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "TSM": 0.1089
+      },
+      "buy_returns_since_rotation": {
+        "WIT": -0.1134
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-01T19:08:24+00:00:NMR:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-01T19:08:24+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NMR",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "NMR",
+          "price": 9.91,
+          "shares": 1.0,
+          "gross": 9.91,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.61,
+          "shares": 1.0,
+          "gross": 1.61,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "NMR": -0.0182
+      },
+      "buy_returns_since_rotation": {
+        "WIT": 0.0683
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-01T19:08:24+00:00:INFY:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-01T19:08:24+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "INFY",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "INFY",
+          "price": 10.64,
+          "shares": 1.0,
+          "gross": 10.64,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.61,
+          "shares": 1.0,
+          "gross": 1.61,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "INFY": 0.0376
+      },
+      "buy_returns_since_rotation": {
+        "WIT": 0.0683
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-01T19:08:24+00:00:TSM:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-01T19:08:24+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "TSM",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "TSM",
+          "price": 456.94,
+          "shares": 1.0,
+          "gross": 456.94,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.61,
+          "shares": 1.0,
+          "gross": 1.61,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "TSM": 0.0347
+      },
+      "buy_returns_since_rotation": {
+        "WIT": 0.0683
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-01T19:08:24+00:00:MUFG:WIT",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-01T19:08:24+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "MUFG",
+      "swap_ticker": "WIT",
+      "sells": [
+        {
+          "ticker": "MUFG",
+          "price": 23.13,
+          "shares": 1.0,
+          "gross": 23.13,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WIT",
+          "price": 1.61,
+          "shares": 1.0,
+          "gross": 1.61,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "MUFG": -0.0134
+      },
+      "buy_returns_since_rotation": {
+        "WIT": 0.0683
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-04T06:22:29+00:00"
+    }
+  ],
+  "updated_at": "2026-10-04T07:09:48.230842+00:00"
+}

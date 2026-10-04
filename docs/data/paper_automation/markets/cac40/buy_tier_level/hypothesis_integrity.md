@@ -1,47 +1,45 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-02T08:47:23.702366+00:00
+Track: `buy_tier_level` · updated 2026-10-04T07:10:06.761473+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 6 (17% count, 17% NAV)
+- Losers: **2** / 5 (40% count, 34% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `maintain`
+- Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - garp fails more often among losers (100% vs 20%)
+  - garp fails more often among losers (50% vs 0%)
 
 ## Holding reviews
 
-### MC.PA — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### ORA.PA — weakening / watch_review (-7.5%)
+### ORA.PA — weakening / watch_review (-5.8%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
 
-### DG.PA — intact / hold_tolerate (-3.0%)
-- still strong_buy
+### TTE.PA — intact / hold_tolerate (-5.4%)
+- price drawdown alone does not invalidate value thesis
+- still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 77%
+- conviction 74%
 
-### SAN.PA — intact / hold_tolerate (-3.0%)
+### SAN.PA — intact / hold_tolerate (-3.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 88%
 
-### TTE.PA — intact / hold_tolerate (-0.9%)
-- still buy
+### DG.PA — intact / hold_tolerate (-3.0%)
+- still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 73%
+- conviction 76%
 
-### TEP.PA — intact / hold_tolerate (+1.7%)
+### TEP.PA — intact / hold_tolerate (-1.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

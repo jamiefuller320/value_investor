@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "updated_at": "2026-09-30T07:26:45.662768+00:00",
-  "as_of": "2026-09-30T08:26:45.658612+01:00",
+  "updated_at": "2026-10-04T07:10:06.783116+00:00",
+  "as_of": "2026-10-04T08:10:06.777368+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -17,7 +17,7 @@
     "skip_underwater_urgency_when_intact": true
   },
   "holding_count": 5,
-  "underwater_count": 0,
+  "underwater_count": 1,
   "thesis_status_counts": {
     "intact": 4,
     "weakening": 1,
@@ -26,13 +26,13 @@
   },
   "portfolio_feedback": {
     "holding_count": 5,
-    "loser_count": 0,
-    "loser_share": 0.0,
-    "loser_nav_share": 0.0,
+    "loser_count": 1,
+    "loser_share": 0.2,
+    "loser_nav_share": 0.1643,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
-    "intact_loser_count": 0,
+    "intact_loser_count": 1,
     "weakening_loser_count": 0,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
@@ -44,13 +44,13 @@
     },
     "family_fail_rate_non_losers": {
       "cheapness": 0.0,
-      "quality": 0.2,
+      "quality": 0.25,
       "dividend": 0.0,
-      "garp": 0.2,
+      "garp": 0.25,
       "risk": 0.0
     },
     "selection_feedback_flags": [],
-    "balancing_hint": "maintain",
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
@@ -59,14 +59,14 @@
       "name": "TotalEnergies SE",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0341,
-      "mark": 78.1,
-      "avg_cost": 80.8602,
+      "unrealized_pct": -0.0778,
+      "mark": 74.46,
+      "avg_cost": 80.7432,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7283,
+      "conviction_score": 0.7416,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -78,60 +78,62 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 73%"
+        "conviction 74%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 73%"
+        "conviction 74%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
     },
     {
-      "ticker": "ORA.PA",
-      "name": "Orange S.A.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
+      "ticker": "TEP.PA",
+      "name": "Teleperformance SE",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0219,
-      "mark": 13.73,
-      "avg_cost": 14.0381,
+      "unrealized_pct": -0.0375,
+      "mark": 69.0,
+      "avg_cost": 71.6871,
       "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5427,
+      "timing_signal": "wait",
+      "conviction_score": 0.76,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
-        "quality",
         "dividend",
+        "garp",
         "risk"
       ],
       "failed_families": [
-        "garp"
+        "quality"
       ],
-      "research_verdict": "caution",
+      "research_verdict": "accumulate",
       "reasons": [
-        "research verdict caution",
         "still strong_buy",
-        "cheapness family still passes"
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 76%"
       ],
       "intact_reasons": [
         "still strong_buy",
+        "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 54%"
+        "conviction 76%"
       ],
-      "weaken_reasons": [
-        "research verdict caution"
-      ],
+      "weaken_reasons": [],
       "broken_reasons": []
     },
     {
@@ -141,12 +143,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0193,
-      "mark": 108.5,
-      "avg_cost": 110.6297,
+      "unrealized_pct": -0.0233,
+      "mark": 106.8,
+      "avg_cost": 109.3514,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7689,
+      "conviction_score": 0.7576,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -162,14 +164,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 77%"
+        "conviction 76%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 77%"
+        "conviction 76%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -181,9 +183,9 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.008,
-      "mark": 71.47,
-      "avg_cost": 72.0468,
+      "unrealized_pct": -0.0127,
+      "mark": 70.81,
+      "avg_cost": 71.7218,
       "signal": "strong_buy",
       "timing_signal": "neutral",
       "conviction_score": 0.875,
@@ -215,44 +217,43 @@
       "broken_reasons": []
     },
     {
-      "ticker": "TEP.PA",
-      "name": "Teleperformance SE",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "ticker": "ORA.PA",
+      "name": "Orange S.A.",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0034,
-      "mark": 71.44,
-      "avg_cost": 71.6871,
+      "unrealized_pct": -0.0041,
+      "mark": 13.98,
+      "avg_cost": 14.0381,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.76,
+      "conviction_score": 0.5326,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
+        "quality",
         "dividend",
-        "garp",
         "risk"
       ],
       "failed_families": [
-        "quality"
+        "garp"
       ],
-      "research_verdict": "accumulate",
+      "research_verdict": "caution",
       "reasons": [
+        "research verdict caution",
         "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 76%"
+        "cheapness family still passes"
       ],
       "intact_reasons": [
         "still strong_buy",
-        "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 76%"
+        "conviction 53%"
       ],
-      "weaken_reasons": [],
+      "weaken_reasons": [
+        "research verdict caution"
+      ],
       "broken_reasons": []
     }
   ],

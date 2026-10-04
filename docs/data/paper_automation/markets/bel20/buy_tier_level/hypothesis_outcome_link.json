@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-02T08:47:32.924493+00:00",
+  "generated_at": "2026-10-04T07:10:09.921956+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 1,
     "by_thesis_status": {
@@ -17,7 +17,14 @@
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0,
+        "mean_trough_unrealized_pct": 0.0,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "broken": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (weakening=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -66,7 +74,7 @@
       "ticker": "SOLB.BR",
       "name": "Solvay SA",
       "started_at": "2026-10-01T09:47:06.806324+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -100,6 +108,49 @@
       "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": 0.0,
       "recovered_to_breakeven": true,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-04T08:10:09.895727+01:00",
+      "linked_sell_trade_id": "e6ba3801-7bed-4851-84be-88f24e44f7ab"
+    },
+    {
+      "episode_id": "buy_tier_level:AED.BR:2026-10-04T08:10:09.895727+01:00",
+      "track_id": "buy_tier_level",
+      "ticker": "AED.BR",
+      "name": "Aedifica NV/SA",
+      "started_at": "2026-10-04T08:10:09.895727+01:00",
+      "status": "open",
+      "stress_triggers": [
+        "underwater"
+      ],
+      "entry_mark": 61.2,
+      "avg_cost": 64.2445,
+      "unrealized_pct_at_start": -0.0474,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "still buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": -0.0474,
+      "screen_signal": "buy",
+      "effective_signal": "buy",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.6187,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0474,
+      "trough_unrealized_pct": -0.0474,
+      "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
@@ -175,11 +226,69 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "UMI.BR": 0.0,
-        "AED.BR": 0.0
+        "UMI.BR": 0.0038,
+        "AED.BR": -0.049
       },
       "buy_returns_since_rotation": {
         "SOLB.BR": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-04T08:10:09.895727+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-04T08:10:09.895727+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "SOLB.BR",
+          "price": 24.52,
+          "shares": 13.546889,
+          "gross": 332.17,
+          "cost": 0.58,
+          "avg_cost_at_exit": 24.52,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "AED.BR",
+          "price": 61.2,
+          "shares": 0.179087,
+          "gross": 10.96,
+          "cost": 0.02
+        },
+        {
+          "ticker": "ABI.BR",
+          "price": 64.88,
+          "shares": 4.932938,
+          "gross": 320.05,
+          "cost": 0.56
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "SOLB.BR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "AED.BR": 0.0,
+        "ABI.BR": 0.0
       },
       "verdict": null,
       "closed_at": null

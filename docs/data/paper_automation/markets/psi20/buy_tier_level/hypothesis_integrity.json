@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "scope": "hypothesis_integrity",
+  "observe_only": true,
+  "track_id": "buy_tier_level",
+  "updated_at": "2026-10-04T07:10:12.215668+00:00",
+  "as_of": "2026-10-04T08:10:11.986782+01:00",
+  "config": {
+    "underwater_pct": -0.05,
+    "deep_underwater_pct": -0.15,
+    "loser_share_tolerance": 0.4,
+    "loser_nav_tolerance": 0.35,
+    "min_data_quality": 0.55,
+    "min_conviction_for_intact": 0.35,
+    "intact_urgency_dampen": 0.18,
+    "broken_urgency_boost": 0.28,
+    "skip_underwater_urgency_when_intact": true
+  },
+  "holding_count": 1,
+  "underwater_count": 0,
+  "thesis_status_counts": {
+    "intact": 0,
+    "weakening": 1,
+    "broken": 0,
+    "insufficient_data": 0
+  },
+  "portfolio_feedback": {
+    "holding_count": 1,
+    "loser_count": 0,
+    "loser_share": 0.0,
+    "loser_nav_share": 0.0,
+    "loser_share_tolerance": 0.4,
+    "loser_nav_tolerance": 0.35,
+    "within_tolerance": true,
+    "intact_loser_count": 0,
+    "weakening_loser_count": 0,
+    "broken_loser_count": 0,
+    "family_fail_rate_losers": {
+      "cheapness": 0.0,
+      "quality": 0.0,
+      "dividend": 0.0,
+      "garp": 0.0,
+      "risk": 0.0
+    },
+    "family_fail_rate_non_losers": {
+      "cheapness": 0.0,
+      "quality": 1.0,
+      "dividend": 0.0,
+      "garp": 0.0,
+      "risk": 0.0
+    },
+    "selection_feedback_flags": [],
+    "balancing_hint": "maintain",
+    "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
+  },
+  "holdings": [
+    {
+      "ticker": "COR.LS",
+      "name": "Corticeira Amorim, S.G.P.S., S.A.",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 6.92,
+      "avg_cost": 6.92,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.2818,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "conviction 28% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 0.95"
+      ],
+      "weaken_reasons": [
+        "research verdict caution",
+        "conviction 28% below intact floor"
+      ],
+      "broken_reasons": []
+    }
+  ],
+  "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
+}

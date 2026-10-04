@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "primary_learning_track": "ai_judgment",
-  "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on the primary AI-judgment track; rules track is the control; technical track is the timing/levels baseline; momentum_grace is an experimental exit overlay; graduated_allocation tests trade-plan entry sizing and harvest skims; buy_tier_level is a Suite B unfiltered buy-tier cohort (frozen knobs); buy_tier_level_dca is the FTSE \u00a3500/mo realism capital epoch (same policy); entry_dca_overlay scores counterfactual entry cadences on every track; sleeve_episodes records widest near-buy\u2192grace-end+~1m lifecycles tagged on_book/off_book/never_funded (observe-only); hypothesis_integrity reviews underwater holdings before crude stops.",
+  "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on the primary AI-judgment track; rules track is the control; technical track is the timing/levels baseline; momentum_grace is an experimental exit overlay; graduated_allocation tests trade-plan entry sizing and harvest skims; buy_tier_level is a Suite B unfiltered buy-tier cohort (frozen knobs); buy_tier_level_dca is the FTSE \u00a3500/mo realism capital epoch (same policy); still_in_buy_set is a Suite A cold-start churn twin (rank-gated hold + never-left-candidates + CD2); entry_dca_overlay scores counterfactual entry cadences on every track; sleeve_episodes records widest near-buy\u2192grace-end+~1m lifecycles tagged on_book/off_book/never_funded (observe-only); llm_agree_veto_shadow records algo\u2192agree/veto cards with evidence (observe-only; never blocks fills); hypothesis_integrity reviews underwater holdings before crude stops.",
   "tracks": {
     "technical": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/technical",
@@ -19,14 +19,17 @@
         "use_graduated_allocation": false,
         "exit_confirm_screens": 2,
         "reentry_cooldown_screens": 1,
-        "min_rebalance_notional_gbp": 10.0
+        "min_rebalance_notional_gbp": 10.0,
+        "still_in_buy_set_hold": false,
+        "rank_drop_exit_min": 3,
+        "block_rebuy_while_in_candidates": false
       }
     },
     "rules": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth",
       "acted": true,
-      "trades": 0,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "trades": 2,
+      "note": "Rebalanced after open settle (2 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -38,14 +41,17 @@
         "use_graduated_allocation": false,
         "exit_confirm_screens": 2,
         "reentry_cooldown_screens": 1,
-        "min_rebalance_notional_gbp": 10.0
+        "min_rebalance_notional_gbp": 10.0,
+        "still_in_buy_set_hold": false,
+        "rank_drop_exit_min": 3,
+        "block_rebuy_while_in_candidates": false
       }
     },
     "ai_judgment": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/ai_judgment",
       "acted": true,
-      "trades": 0,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "trades": 2,
+      "note": "Rebalanced after open settle (2 trade(s)).",
       "is_primary_learning_track": true,
       "selection": {
         "skip_timing_wait": true,
@@ -57,14 +63,17 @@
         "use_graduated_allocation": false,
         "exit_confirm_screens": 2,
         "reentry_cooldown_screens": 1,
-        "min_rebalance_notional_gbp": 10.0
+        "min_rebalance_notional_gbp": 10.0,
+        "still_in_buy_set_hold": false,
+        "rank_drop_exit_min": 3,
+        "block_rebuy_while_in_candidates": false
       }
     },
     "buy_tier_level_dca": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/buy_tier_level_dca",
       "acted": true,
-      "trades": 0,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "trades": 17,
+      "note": "Rebalanced after open settle (17 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -76,14 +85,39 @@
         "use_graduated_allocation": false,
         "exit_confirm_screens": 2,
         "reentry_cooldown_screens": 1,
-        "min_rebalance_notional_gbp": 10.0
+        "min_rebalance_notional_gbp": 10.0,
+        "still_in_buy_set_hold": false,
+        "rank_drop_exit_min": 3,
+        "block_rebuy_while_in_candidates": false
+      }
+    },
+    "still_in_buy_set": {
+      "output_dir": "docs/data/paper_automation/markets/euro_depth/still_in_buy_set",
+      "acted": true,
+      "trades": 0,
+      "note": "Rebalanced after open settle (0 trade(s)).",
+      "is_primary_learning_track": false,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3,
+        "use_adjusted_signal": false,
+        "require_research_accumulate": false,
+        "use_momentum_grace": false,
+        "use_graduated_allocation": false,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 2,
+        "min_rebalance_notional_gbp": 10.0,
+        "still_in_buy_set_hold": true,
+        "rank_drop_exit_min": 3,
+        "block_rebuy_while_in_candidates": true
       }
     },
     "momentum_grace": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/momentum_grace",
       "acted": true,
-      "trades": 0,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "trades": 2,
+      "note": "Rebalanced after open settle (2 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -95,14 +129,17 @@
         "use_graduated_allocation": false,
         "exit_confirm_screens": 2,
         "reentry_cooldown_screens": 1,
-        "min_rebalance_notional_gbp": 10.0
+        "min_rebalance_notional_gbp": 10.0,
+        "still_in_buy_set_hold": false,
+        "rank_drop_exit_min": 3,
+        "block_rebuy_while_in_candidates": false
       }
     },
     "graduated_allocation": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/graduated_allocation",
       "acted": true,
-      "trades": 0,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "trades": 2,
+      "note": "Rebalanced after open settle (2 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -114,14 +151,17 @@
         "use_graduated_allocation": true,
         "exit_confirm_screens": 2,
         "reentry_cooldown_screens": 1,
-        "min_rebalance_notional_gbp": 10.0
+        "min_rebalance_notional_gbp": 10.0,
+        "still_in_buy_set_hold": false,
+        "rank_drop_exit_min": 3,
+        "block_rebuy_while_in_candidates": false
       }
     },
     "buy_tier_level": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/buy_tier_level",
       "acted": true,
-      "trades": 0,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "trades": 1,
+      "note": "Rebalanced after open settle (1 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -133,7 +173,10 @@
         "use_graduated_allocation": false,
         "exit_confirm_screens": 2,
         "reentry_cooldown_screens": 1,
-        "min_rebalance_notional_gbp": 10.0
+        "min_rebalance_notional_gbp": 10.0,
+        "still_in_buy_set_hold": false,
+        "rank_drop_exit_min": 3,
+        "block_rebuy_while_in_candidates": false
       }
     }
   }

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "track_id": "archive_near_miss",
-  "generated_at": "2026-09-30T07:26:22.807213+00:00",
+  "generated_at": "2026-10-04T07:09:27.859775+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -67,9 +67,9 @@
   },
   "readiness": {
     "ready_for_probability_analysis": true,
-    "hold_closed_count": 216,
-    "swap_closed_count": 216,
-    "hold_with_data_quality_count": 216,
+    "hold_closed_count": 230,
+    "swap_closed_count": 230,
+    "hold_with_data_quality_count": 230,
     "gaps": [],
     "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
   },
@@ -78,11 +78,11 @@
       "count": 0
     },
     "closed": {
-      "count": 216,
-      "recovered_to_breakeven": 169,
+      "count": 230,
+      "recovered_to_breakeven": 185,
       "close_reasons": {
-        "recovered_archive_end": 169,
-        "underwater_archive_end": 47
+        "recovered_archive_end": 185,
+        "underwater_archive_end": 45
       }
     }
   },
@@ -91,35 +91,35 @@
       "count": 0
     },
     "closed": {
-      "count": 216,
+      "count": 230,
       "verdicts": {
-        "exit_outperformed": 77,
-        "replacement_outperformed": 58,
-        "inconclusive": 81
+        "exit_outperformed": 103,
+        "replacement_outperformed": 70,
+        "inconclusive": 57
       }
     }
   },
   "note": "Archive near-miss + held-book observe sim \u2014 priors only; pair with live learning_tracks_exit_timing.json for paper-track evidence. Wider gate: min_conviction=0.28, max_episodes_per_week=25.",
   "scope": "archive_near_miss",
-  "snapshot_count": 18,
+  "snapshot_count": 19,
   "episodes_opened": {
-    "hold_recovery": 216,
-    "hold_recovery_near_miss": 216,
+    "hold_recovery": 230,
+    "hold_recovery_near_miss": 230,
     "hold_recovery_held_book": 0,
-    "swap_rotation": 216,
-    "swap_rotation_near_miss": 216,
+    "swap_rotation": 230,
+    "swap_rotation_near_miss": 230,
     "swap_rotation_log_book": 0
   },
   "by_conviction_band": {
     "high_ge_0.45": {
-      "closed_count": 42,
-      "recovered_to_breakeven_count": 33,
-      "recovery_rate": 0.7857
+      "closed_count": 45,
+      "recovered_to_breakeven_count": 39,
+      "recovery_rate": 0.8667
     },
     "pre_buy_0.28_0.45": {
-      "closed_count": 174,
-      "recovered_to_breakeven_count": 136,
-      "recovery_rate": 0.7816
+      "closed_count": 185,
+      "recovered_to_breakeven_count": 146,
+      "recovery_rate": 0.7892
     }
   }
 }

@@ -3,28 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "ai_judgment",
-  "generated_at": "2026-09-30T07:27:16.251742+00:00",
+  "generated_at": "2026-10-04T07:10:32.442263+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 3,
+    "closed_total": 4,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 5,
+    "open_with_thesis": 4,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 3,
-        "recovery_rate": 0.6667,
-        "sold_underwater_rate": 0.3333,
-        "mean_peak_unrealized_pct": 0.0055,
-        "mean_trough_unrealized_pct": -0.0053,
+        "closed_count": 4,
+        "recovery_rate": 0.5,
+        "sold_underwater_rate": 0.5,
+        "mean_peak_unrealized_pct": 0.0031,
+        "mean_trough_unrealized_pct": -0.0081,
         "outcome_labels": {
           "recovered": 2,
-          "sold_underwater": 1
+          "sold_underwater": 2
         }
       },
       "broken": {
@@ -56,10 +56,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 3,
+    "hold_closed_with_thesis": 4,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=3 (target >=8)",
+      "hold closed with thesis=4 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -209,7 +209,7 @@
         }
       ],
       "peak_unrealized_pct": 0.015,
-      "trough_unrealized_pct": -0.0316,
+      "trough_unrealized_pct": -0.0423,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -261,7 +261,7 @@
         }
       ],
       "peak_unrealized_pct": 0.0108,
-      "trough_unrealized_pct": -0.0292,
+      "trough_unrealized_pct": -0.0417,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -313,7 +313,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0066,
-      "trough_unrealized_pct": -0.042,
+      "trough_unrealized_pct": -0.0457,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -411,7 +411,7 @@
       "ticker": "SHELL.AS",
       "name": "Shell plc",
       "started_at": "2026-09-30T09:22:48.635058+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -441,12 +441,12 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.015,
+      "peak_unrealized_pct": -0.004,
       "trough_unrealized_pct": -0.0164,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-04T09:10:26.469431+02:00",
+      "linked_sell_trade_id": "f5e38869-ed6d-406c-9b14-647e4a5bc9d9"
     }
   ],
   "swap_rotations": [
@@ -502,10 +502,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "DHL.DE": 0.0494
+        "DHL.DE": 0.0309
       },
       "buy_returns_since_rotation": {
-        "DG.PA": -0.0211
+        "DG.PA": -0.0417
       },
       "verdict": null,
       "closed_at": null
@@ -552,12 +552,20 @@
           "cost": 0.37
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-04T09:05:22.084333+02:00",
+          "days_after": 7,
+          "avg_sell_return": 0.009,
+          "avg_buy_return": 0.0,
+          "replacement_delta": -0.009
+        }
+      ],
       "sell_returns_since_rotation": {
-        "SHELL.AS": -0.0036
+        "SHELL.AS": 0.009
       },
       "buy_returns_since_rotation": {
-        "EG7.IR": -0.0132
+        "EG7.IR": 0.0
       },
       "verdict": null,
       "closed_at": null
@@ -606,10 +614,62 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "EG7.IR": -0.0079
+        "EG7.IR": 0.0053
       },
       "buy_returns_since_rotation": {
-        "SHELL.AS": -0.0164
+        "SHELL.AS": -0.004
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "ai_judgment:2026-10-04T09:10:26.469431+02:00",
+      "track_id": "ai_judgment",
+      "logged_at": "2026-10-04T09:10:26.469431+02:00",
+      "status": "open",
+      "trade_cost_pct": 0.0019,
+      "sells": [
+        {
+          "ticker": "SHELL.AS",
+          "price": 42.4,
+          "shares": 4.664205,
+          "gross": 197.76,
+          "cost": 0.37,
+          "avg_cost_at_exit": 42.57,
+          "realized_pct": -0.004,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.004
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "EG7.IR",
+          "price": 19.0,
+          "shares": 10.240551,
+          "gross": 194.57,
+          "cost": 0.36
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "SHELL.AS": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "EG7.IR": 0.0
       },
       "verdict": null,
       "closed_at": null
