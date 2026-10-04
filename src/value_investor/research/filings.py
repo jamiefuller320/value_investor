@@ -313,6 +313,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "JMT.LS": [
         "https://reports.jeronimomartins.com/annual-report/2025/_assets/downloads/entire-jeronimomartins-ar25.pdf",
     ],
+    # psi20 IWB blocker — GALP.LS parked awaiting_periodic_report; galp.com/corp IR PDFs.
+    # IMR2025 ConsolidatedandIndividualFinancialStatements.pdf title-token fails
+    # (concatenated slug). Use FY25 results + spaced 1H/1Q26 report filenames.
+    "GALP.LS": [
+        "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf",
+        "https://www.galp.com/corp/Portals/0/Recursos/Inv 2Q26/2Q26 Report.pdf",
+        "https://www.galp.com/corp/Portals/0/Recursos/Inv 1Q26/1Q26 Report.pdf",
+    ],
     "MUV2.DE": [
         "https://www.munichre.com/content/dam/munichre/mrwebsiteslaunches/2025-annual-report/MunichRe-Group-Annual-Report-2025-en.pdf/_jcr_content/renditions/original./MunichRe-Group-Annual-Report-2025-en.pdf",
     ],
@@ -5267,6 +5275,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0423/2026042300830.pdf": "annual",
     # eng-20261002-14: BUOU.SI — 2HFY25 slug reads interim but is full-year condensed FS.
     "https://links.sgx.com/1.0.0/corporate-announcements/WKFS34K5F6T83U1G/866254_FLCT%20-%202HFY25%20Condensed%20Interim%20FS.pdf": "annual",
+    # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
+    "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
 }
 
 
