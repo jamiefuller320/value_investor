@@ -21,6 +21,11 @@ from value_investor.experiment_assessment import (
     slim_experiment_assessment_for_review,
 )
 from value_investor.knob_calibration import KNOB_CALIBRATION_PRIORS_FILENAME
+from value_investor.learning_tracks_dual_suite import (
+    build_learning_tracks_dual_suite,
+    build_paper_track_analysis_buckets,
+    slim_dual_suite_for_analysis,
+)
 from value_investor.review_payload_slim import (
     slim_backtest as _slim_backtest,
 )
@@ -240,6 +245,14 @@ def build_analysis_payload(
     paper_root = data_dir / "paper_automation"
     learning_review = _safe_read(paper_root / "learning_tracks_review.json")
     learning_summary = _safe_read(paper_root / "learning_tracks_summary.json")
+    learning_dual_suite = slim_dual_suite_for_analysis(
+        build_learning_tracks_dual_suite(
+            learning_review if isinstance(learning_review, dict) else None,
+            paper_root=paper_root,
+            include_fair_assess=False,
+        )
+    )
+    paper_track_buckets = build_paper_track_analysis_buckets(learning_dual_suite)
     exit_shadow = _safe_read(paper_root / "learning_tracks_exit_shadow.json")
     live_timing_review = resolve_live_exit_timing_review(paper_root)
     exit_timing = _slim_exit_timing(
@@ -315,6 +328,8 @@ def build_analysis_payload(
         "historical_analysis": historical,
         "learning_tracks_review": learning_review,
         "learning_tracks_summary": learning_summary,
+        "learning_tracks_dual_suite": learning_dual_suite,
+        "paper_track_buckets": paper_track_buckets,
         "exit_shadow": exit_shadow,
         "exit_timing_cohorts": exit_timing,
         "exit_timing_near_miss": exit_timing_near_miss,
@@ -349,6 +364,8 @@ def build_analysis_payload(
             "no_live_paper_changes": True,
             "no_base_signal_mutation": True,
             "engineering_promotion_manual": True,
+            "suite_b_identity_not_adoption": True,
+            "do_not_promote_from_stress_excess": True,
         },
     }
 
@@ -861,10 +878,17 @@ EXECUTIVE SUMMARY
 biggest modelling/analysis gap this week. Prefer naming a concrete focus from
 trajectory_evidence.model_focus_candidates, loser_snapshot_cards.top_failed_families,
 or exclusion readiness when present.
+When paper_track_buckets is present, name all three buckets explicitly:
+(1) Suite A stress — score on cost_drag / trade_count, not beat-^FTSE adoption;
+(2) Suite B adoption — ai_judgment_fair / rules_fair excess vs ^FTSE and vs each other;
+(3) Suite B identity — buy_tier_level / buy_tier_level_dca membership floor, not adoption.
+Do not describe identity greens as “Suite B beating the market.” Do not treat Suite A
+beat_control as Suite B green.
 
 PERFORMANCE DIAGNOSIS
 Bullets on primary vs control vs market excess after costs, cost drag, and whether marks
-are thick enough to trust. Do NOT recommend auto-applying decision-review knobs.
+are thick enough to trust. Label stress vs fair. Do NOT recommend auto-applying
+decision-review knobs. Do not promote from suite_b_identity excess.
 
 SIGNAL & BACKTEST FINDINGS
 What archived signal backtest / historical analysis / offline sim tracks show — cite
@@ -881,7 +905,9 @@ When exclusion_universe is present, cite recommended_step and readiness.ready_fo
 plus cumulative_exclusion_alpha on the recommended rung.
 
 PAPER TRACK COMPARISON
-Compare ai_judgment, rules, and momentum_grace using learning_tracks_review,
+When paper_track_buckets / learning_tracks_dual_suite is present, lead with the three
+buckets (stress lab, fair adoption twins, identity floor) and cite the JSON numbers —
+then compare ai_judgment, rules, and momentum_grace using learning_tracks_review,
 knob_calibration_priors (recommended_prior per track, confidence, changed_vs_current),
 and exit_shadow when present. Cite exit_timing_cohorts.readiness (hold/swap closed counts)
 and exit_timing_reconciliation.comparability before comparing live vs archive hold/swap rates
@@ -966,6 +992,8 @@ changes, auto-spawn shadows), each with a one-line revisit trigger.
 Rules:
 - Do not invent metrics — only use the JSON.
 - Never propose auto-merging paper-auto, decision-review --apply, or assign_signal changes.
+- Do not treat buy_tier_level / buy_tier_level_dca excess as fair-policy adoption
+  (paper_track_buckets.suite_b_identity).
 - Do not re-propose cancelled N58/N59 knob-retune or entry-timing probes. Cite open
   analysis_tasks ids instead of duplicating human-ack wrappers already on the ledger.
 - Distinguish forward paper evidence from archived backtest evidence.
@@ -1039,6 +1067,7 @@ def run_analysis_review(
                 "proposed_experiments": review.proposed_experiments,
                 "defer": review.defer,
             },
+            "paper_track_buckets": payload.get("paper_track_buckets"),
             "system_gap_flag_ids": [
                 row.get("id")
                 for row in ((payload.get("system_gaps") or {}).get("flags") or [])

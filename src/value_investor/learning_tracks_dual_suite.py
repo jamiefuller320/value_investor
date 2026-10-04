@@ -45,6 +45,14 @@ SUITE_B_CORE_ORDER: tuple[str, ...] = (
     "buy_tier_level",
     "buy_tier_level_dca",
 )
+SUITE_B_ADOPTION_TRACK_IDS: tuple[str, ...] = (
+    AI_JUDGMENT_FAIR_TRACK_ID,
+    RULES_FAIR_TRACK_ID,
+)
+SUITE_B_IDENTITY_TRACK_IDS: tuple[str, ...] = (
+    "buy_tier_level",
+    "buy_tier_level_dca",
+)
 
 
 def _metrics(row: dict[str, Any] | None) -> dict[str, Any]:
@@ -63,6 +71,7 @@ def _track_row_summary(track_id: str, row: dict[str, Any] | None) -> dict[str, A
         "total_return": metrics.get("total_return"),
         "cost_drag": metrics.get("cost_drag"),
         "trade_count": metrics.get("trade_count"),
+        "equity_marks": metrics.get("equity_marks"),
         "positions": metrics.get("positions"),
         "portfolio_value": metrics.get("portfolio_value"),
         "epoch_excess_after_costs": epoch.get("excess_after_costs"),
@@ -280,9 +289,125 @@ def build_learning_tracks_dual_suite(
     }
 
 
+def slim_dual_suite_for_analysis(
+    dual_suite: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Drop fair-assess replay from the analysis-review payload (observe cite only)."""
+    if not isinstance(dual_suite, dict):
+        return None
+    out = dict(dual_suite)
+    out.pop("fair_assess_suite_a", None)
+    return out
+
+
+def _bucket_track_slice(row: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not isinstance(row, dict) or not row:
+        return None
+    keys = (
+        "track_id",
+        "excess_after_costs",
+        "total_return",
+        "cost_drag",
+        "trade_count",
+        "equity_marks",
+        "epoch_excess_after_costs",
+    )
+    return {key: row.get(key) for key in keys}
+
+
+def build_paper_track_analysis_buckets(
+    dual_suite: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Three-bucket Sunday cite: A stress, B fair adoption, B identity floor.
+
+    Observe-only. Identity greens are not adoption truth. Does not flip primary
+    or apply knobs (N145 / N48 / N23).
+    """
+    if not isinstance(dual_suite, dict):
+        return None
+    suite_a = dual_suite.get("suite_a") if isinstance(dual_suite.get("suite_a"), dict) else {}
+    suite_b = dual_suite.get("suite_b") if isinstance(dual_suite.get("suite_b"), dict) else {}
+    a_tracks = suite_a.get("tracks") if isinstance(suite_a.get("tracks"), dict) else {}
+    b_tracks = suite_b.get("tracks") if isinstance(suite_b.get("tracks"), dict) else {}
+    identity_tracks = {
+        tid: _bucket_track_slice(b_tracks.get(tid) if isinstance(b_tracks.get(tid), dict) else None)
+        for tid in SUITE_B_IDENTITY_TRACK_IDS
+        if tid in b_tracks
+    }
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "observe_only": True,
+        "influences_live": False,
+        "success_definition": dual_suite.get("success_definition")
+        or SUCCESS_DEFINITION_FAIR_ADOPTION,
+        "note": (
+            "Score Suite A on cost_drag / trade_count (stress lab). "
+            "Score Suite B adoption on ai_judgment_fair / rules_fair excess vs ^FTSE "
+            "and vs each other. buy_tier_level / buy_tier_level_dca are membership "
+            "floors — do not read their greens as fair-policy adoption."
+        ),
+        "suite_a_stress": {
+            "id": "suite_a_stress",
+            "score_on": "cost_drag_and_trade_count",
+            "is_adoption_truth": False,
+            "label": "Suite A — stress / churn lab",
+            "primary_excess_after_costs": suite_a.get("primary_excess_after_costs"),
+            "beat_market": suite_a.get("beat_market"),
+            "beat_control": suite_a.get("beat_control"),
+            "verdict": suite_a.get("verdict"),
+            "ai_judgment": _bucket_track_slice(
+                a_tracks.get(AI_JUDGMENT_TRACK_ID)
+                if isinstance(a_tracks.get(AI_JUDGMENT_TRACK_ID), dict)
+                else None
+            ),
+            "rules": _bucket_track_slice(
+                a_tracks.get(RULES_TRACK_ID)
+                if isinstance(a_tracks.get(RULES_TRACK_ID), dict)
+                else None
+            ),
+        },
+        "suite_b_adoption": {
+            "id": "suite_b_adoption",
+            "score_on": "fair_excess_vs_ftse_and_fair_rules",
+            "is_adoption_truth": True,
+            "label": "Suite B — fair AI / rules adoption",
+            "available": bool(suite_b.get("available")),
+            "ai_judgment_fair": _bucket_track_slice(
+                b_tracks.get(AI_JUDGMENT_FAIR_TRACK_ID)
+                if isinstance(b_tracks.get(AI_JUDGMENT_FAIR_TRACK_ID), dict)
+                else None
+            ),
+            "rules_fair": _bucket_track_slice(
+                b_tracks.get(RULES_FAIR_TRACK_ID)
+                if isinstance(b_tracks.get(RULES_FAIR_TRACK_ID), dict)
+                else None
+            ),
+            "ai_excess_after_costs": suite_b.get("ai_excess_after_costs"),
+            "control_excess_after_costs": suite_b.get("control_excess_after_costs"),
+            "beat_market": suite_b.get("beat_market"),
+            "beat_control": suite_b.get("beat_control"),
+        },
+        "suite_b_identity": {
+            "id": "suite_b_identity",
+            "score_on": "membership_floor_not_adoption",
+            "is_adoption_truth": False,
+            "label": "Suite B — identity / membership floor",
+            "tracks": identity_tracks,
+            "warning": (
+                "Positive buy_tier_level / buy_tier_level_dca excess is the unfiltered "
+                "buy-tier membership floor at Suite B costs, not fair AI/rules adoption."
+            ),
+        },
+    }
+
+
 __all__ = [
     "SCHEMA_VERSION",
     "SUCCESS_DEFINITION_FAIR_ADOPTION",
+    "SUITE_B_ADOPTION_TRACK_IDS",
+    "SUITE_B_IDENTITY_TRACK_IDS",
     "build_learning_tracks_dual_suite",
+    "build_paper_track_analysis_buckets",
     "classify_suite",
+    "slim_dual_suite_for_analysis",
 ]

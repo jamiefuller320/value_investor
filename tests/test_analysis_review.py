@@ -73,6 +73,91 @@ def test_build_analysis_payload_reads_learning_tracks(tmp_path: Path):
     assert "probe_questions" in payload["system_gaps"]
     ok, _ = has_enough_analysis_inputs(payload)
     assert ok is True
+    assert payload["paper_track_buckets"] is None
+    assert payload["learning_tracks_dual_suite"] is None
+    assert payload["guardrails"]["suite_b_identity_not_adoption"] is True
+
+
+def test_build_analysis_payload_includes_paper_track_buckets(tmp_path: Path):
+    data_dir = tmp_path / "docs" / "data"
+    paper = data_dir / "paper_automation"
+    paper.mkdir(parents=True)
+    (paper / "learning_tracks_review.json").write_text(
+        json.dumps(
+            {
+                "primary_learning_track": "ai_judgment",
+                "primary_excess_after_costs": -0.35,
+                "beat_market": False,
+                "beat_control": True,
+                "verdict": "underperforming",
+                "reviews": {
+                    "ai_judgment": {
+                        "metrics": {
+                            "excess_after_costs": -0.35,
+                            "cost_drag": 0.39,
+                            "trade_count": 62,
+                            "equity_marks": 42,
+                        }
+                    },
+                    "rules": {
+                        "metrics": {
+                            "excess_after_costs": -0.42,
+                            "cost_drag": 0.47,
+                            "trade_count": 80,
+                        }
+                    },
+                    "ai_judgment_fair": {
+                        "metrics": {
+                            "excess_after_costs": -0.13,
+                            "cost_drag": 0.14,
+                            "trade_count": 34,
+                        }
+                    },
+                    "rules_fair": {
+                        "metrics": {
+                            "excess_after_costs": -0.10,
+                            "cost_drag": 0.08,
+                            "trade_count": 34,
+                        }
+                    },
+                    "buy_tier_level": {
+                        "metrics": {
+                            "excess_after_costs": 0.032,
+                            "cost_drag": 0.007,
+                            "trade_count": 93,
+                            "equity_marks": 19,
+                        }
+                    },
+                    "buy_tier_level_dca": {
+                        "metrics": {
+                            "excess_after_costs": 0.02,
+                            "cost_drag": 0.004,
+                            "trade_count": 61,
+                            "equity_marks": 8,
+                        }
+                    },
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = build_analysis_payload(data_dir=data_dir, output_dir=tmp_path / "output")
+    buckets = payload["paper_track_buckets"]
+    assert buckets is not None
+    assert buckets["observe_only"] is True
+    assert buckets["influences_live"] is False
+    assert buckets["suite_a_stress"]["is_adoption_truth"] is False
+    assert buckets["suite_a_stress"]["beat_control"] is True
+    assert buckets["suite_b_adoption"]["is_adoption_truth"] is True
+    assert buckets["suite_b_adoption"]["beat_market"] is False
+    assert buckets["suite_b_adoption"]["ai_excess_after_costs"] == -0.13
+    assert buckets["suite_b_identity"]["is_adoption_truth"] is False
+    assert buckets["suite_b_identity"]["tracks"]["buy_tier_level"]["excess_after_costs"] == 0.032
+    assert "fair_assess_suite_a" not in (payload["learning_tracks_dual_suite"] or {})
+    prompt = _build_analysis_prompt(tmp_path / "payload.json")
+    assert "paper_track_buckets" in prompt
+    assert "membership floor" in prompt
+    assert "suite_b_identity" in prompt
 
 
 def test_build_analysis_payload_includes_ingest_trials_for_analysis_trigger(tmp_path: Path):

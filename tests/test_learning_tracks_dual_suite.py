@@ -8,7 +8,9 @@ from pathlib import Path
 from value_investor.learning_tracks_dual_suite import (
     SUCCESS_DEFINITION_FAIR_ADOPTION,
     build_learning_tracks_dual_suite,
+    build_paper_track_analysis_buckets,
     classify_suite,
+    slim_dual_suite_for_analysis,
 )
 from value_investor.paper_automation import FUND_FILENAME
 
@@ -120,3 +122,55 @@ def test_build_dual_suite_without_fair_twins() -> None:
     assert payload["suite_b"]["available"] is False
     assert payload["suite_b"]["ai_excess_after_costs"] is None
     assert payload["fair_assess_suite_a"] is None
+
+
+def test_paper_track_analysis_buckets_split_identity_from_adoption() -> None:
+    review = {
+        "primary_learning_track": "ai_judgment",
+        "primary_excess_after_costs": -0.35,
+        "beat_market": False,
+        "beat_control": True,
+        "verdict": "underperforming",
+        "reviews": {
+            "ai_judgment": {
+                "metrics": {"excess_after_costs": -0.35, "cost_drag": 0.40, "trade_count": 62}
+            },
+            "rules": {
+                "metrics": {"excess_after_costs": -0.42, "cost_drag": 0.47, "trade_count": 80}
+            },
+            "ai_judgment_fair": {
+                "metrics": {"excess_after_costs": -0.13, "cost_drag": 0.14, "trade_count": 34}
+            },
+            "rules_fair": {
+                "metrics": {"excess_after_costs": -0.10, "cost_drag": 0.08, "trade_count": 34}
+            },
+            "buy_tier_level": {
+                "metrics": {
+                    "excess_after_costs": 0.032,
+                    "cost_drag": 0.007,
+                    "trade_count": 93,
+                    "equity_marks": 19,
+                }
+            },
+            "buy_tier_level_dca": {"metrics": {"excess_after_costs": 0.02, "equity_marks": 8}},
+        },
+    }
+    dual = build_learning_tracks_dual_suite(review, include_fair_assess=False)
+    buckets = build_paper_track_analysis_buckets(dual)
+    assert buckets is not None
+    assert buckets["suite_a_stress"]["is_adoption_truth"] is False
+    assert buckets["suite_b_adoption"]["is_adoption_truth"] is True
+    assert buckets["suite_b_adoption"]["beat_market"] is False
+    assert buckets["suite_b_adoption"]["beat_control"] is False
+    identity = buckets["suite_b_identity"]
+    assert identity["is_adoption_truth"] is False
+    assert identity["tracks"]["buy_tier_level"]["excess_after_costs"] == 0.032
+    assert identity["tracks"]["buy_tier_level"]["equity_marks"] == 19
+    slim = slim_dual_suite_for_analysis(dual)
+    assert slim is not None
+    assert "fair_assess_suite_a" not in slim
+
+
+def test_paper_track_analysis_buckets_none_without_dual() -> None:
+    assert build_paper_track_analysis_buckets(None) is None
+    assert slim_dual_suite_for_analysis(None) is None
