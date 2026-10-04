@@ -86,6 +86,44 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     load_fn = text.split("async function loadDashboard()", 1)[1].split("\ninitTabs()", 1)[0]
     assert "reloadDashboard()" in load_fn
     assert 'fetch("data/progress_report.json")' not in load_fn
+    assert "function shouldOverlayDashboardSidecar(key, existing, sidecar)" in text
+    sidecar_fn = text.split("async function applyDashboardSidecars(data)", 1)[1].split(
+        "\nfunction isLocalDashboardServe(", 1
+    )[0]
+    assert "shouldOverlayDashboardSidecar(key, data[key], payload)" in sidecar_fn
+
+
+def test_project_progress_sidecar_does_not_hide_newer_embed() -> None:
+    """L484-owned sidecar may lag Sunday publish; keep newer generated_at."""
+    from subprocess import check_output
+
+    text = APP_JS.read_text(encoding="utf-8")
+    start = text.index("function sidecarGeneratedAtMs(payload)")
+    end = text.index("async function applyDashboardSidecars(data)")
+    helpers = text[start:end]
+    script = (
+        helpers
+        + """
+const embed = { generated_at: "2026-10-04T08:19:40.234221+00:00", source: "embed" };
+const stale = { generated_at: "2026-09-30T20:08:50.133761+00:00", source: "sidecar" };
+const fresh = { generated_at: "2026-10-04T20:00:00Z", source: "sidecar" };
+const out = {
+  skip_stale: shouldOverlayDashboardSidecar("project_progress", embed, stale),
+  take_fresh: shouldOverlayDashboardSidecar("project_progress", embed, fresh),
+  other_key: shouldOverlayDashboardSidecar("automation", embed, stale),
+  missing_embed: shouldOverlayDashboardSidecar("project_progress", null, stale),
+};
+console.log(JSON.stringify(out));
+"""
+    )
+    raw = check_output(["node", "-e", script], text=True)
+    import json
+
+    out = json.loads(raw)
+    assert out["skip_stale"] is False
+    assert out["take_fresh"] is True
+    assert out["other_key"] is True
+    assert out["missing_embed"] is True
 
 
 def test_human_task_ack_optimistic_overlay_sorts_acked_to_bottom() -> None:
