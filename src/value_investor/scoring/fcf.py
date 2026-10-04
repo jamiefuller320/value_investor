@@ -2716,12 +2716,20 @@ def reconcile_fcf_for_ticker(
         bundle["filing_aligned"] = filing_aligned_preview
     if fiscal_year is not None and bundle.get("fiscal_year") is None:
         bundle["fiscal_year"] = fiscal_year
-    return bind_overlay_fcf_to_filing_year_company_adjusted(
+    bundle = bind_overlay_fcf_to_filing_year_company_adjusted(
         bundle,
         ticker=ticker,
         fiscal_year=fiscal_year,
         output_dir=output_dir,
     )
+    stub_row = pd.Series(
+        {
+            "ticker": ticker,
+            "free_cashflow_screen_ttm": screen_bases["screen_ttm"],
+            "fcf_yield_unit_fx_error": False,
+        }
+    )
+    return stamp_primary_fcf_on_bundle(bundle, stub_row)
 
 
 def _float_or_none(value: Any) -> float | None:
@@ -2879,6 +2887,14 @@ def screen_ttm_from_row(row: pd.Series) -> float | None:
 
 def resolve_free_cashflow(row: pd.Series) -> float | None:
     """Canonical FCF for overlays and key metrics."""
+    primary = _float_or_none(row.get("primary_fcf"))
+    if primary is not None:
+        return primary
+    row_fcf = row.get("fcf") if isinstance(row.get("fcf"), dict) else None
+    if row_fcf:
+        bundled = _float_or_none(row_fcf.get("primary_fcf"))
+        if bundled is not None:
+            return bundled
     return _float_or_none(row.get("free_cashflow"))
 
 
@@ -2975,12 +2991,27 @@ def fcf_ttm_suppressed_screen_filing_mismatch_flagged(
     )
 
 
-def overlay_free_cashflow_from_bundle(
+def _fcf_yield_unit_fx_error_from_row(row: pd.Series) -> bool:
+    unit_fx_raw = row.get("fcf_yield_unit_fx_error")
+    if unit_fx_raw is None or (isinstance(unit_fx_raw, float) and pd.isna(unit_fx_raw)):
+        return False
+    return bool(unit_fx_raw)
+
+
+def resolve_primary_fcf_for_overlay(
     row: pd.Series,
     fcf_bundle: dict[str, Any],
-) -> float | None:
-    """Pick company-adjusted or filing-aligned FCF; never Yahoo TTM when bases diverge."""
-    # Prefer reviewed / auto policy FCF when it is not lone Yahoo TTM.
+) -> tuple[float | None, str | None]:
+    """Pick one auditable primary FCF for overlays and dividend-family suppression.
+
+    Precedence (first match wins):
+    1. Reviewed or auto-resolved policy FCF when basis is not lone Yahoo screen TTM.
+    2. Company-adjusted / management APM FCF from filings or bridges.
+    3. When filing statutory OCF−CapEx disagrees with Yahoo TTM (or unit FX error):
+       reconciled canonical when source is not screen TTM, else filing-aligned, else None.
+    4. Yahoo screen TTM when bases agree.
+    5. Row ``free_cashflow`` (already canonicalised on the universe frame).
+    """
     policy_fcf = fcf_bundle.get("policy_fcf")
     policy_basis = str(fcf_bundle.get("policy_basis") or "")
     if (
@@ -2988,11 +3019,11 @@ def overlay_free_cashflow_from_bundle(
         and isinstance(policy_fcf, (int, float))
         and policy_basis != "screen_ttm"
     ):
-        return float(policy_fcf)
+        return float(policy_fcf), policy_basis or "policy_fcf"
 
     company_adjusted = fcf_bundle.get("company_adjusted")
     if isinstance(company_adjusted, (int, float)):
-        return float(company_adjusted)
+        return float(company_adjusted), "company_adjusted"
 
     screen_ttm = screen_ttm_from_row(row)
     filing_aligned = fcf_bundle.get("filing_aligned")
@@ -3001,27 +3032,84 @@ def overlay_free_cashflow_from_bundle(
     else:
         filing_aligned = None
 
-    mismatched = bool(fcf_bundle.get("filing_screen_mismatch")) or fcf_filing_screen_mismatch(
-        filing_aligned=filing_aligned,
-        screen_ttm=screen_ttm,
-        divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+    mismatched = (
+        bool(fcf_bundle.get("filing_screen_mismatch"))
+        or fcf_filing_screen_mismatch(
+            filing_aligned=filing_aligned,
+            screen_ttm=screen_ttm,
+            divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+        )
+        or _fcf_yield_unit_fx_error_from_row(row)
     )
     if mismatched:
         canonical = fcf_bundle.get("canonical")
-        if (
-            canonical is not None
-            and fcf_bundle.get("source") != "screen_ttm"
-            and not str(fcf_bundle.get("source") or "").endswith("_screen_ttm")
-        ):
-            return float(canonical)
+        source = str(fcf_bundle.get("source") or "")
+        if canonical is not None and source != "screen_ttm" and not source.endswith("_screen_ttm"):
+            basis = str(fcf_bundle.get("policy_basis") or "canonical")
+            return float(canonical), basis
         if filing_aligned is not None:
-            return filing_aligned
-        # Fail closed: do not feed divergent Yahoo TTM into yield / coverage models.
-        return None
+            return filing_aligned, "filing_aligned"
+        return None, None
 
     if screen_ttm is not None:
-        return screen_ttm
-    return resolve_free_cashflow(row)
+        return screen_ttm, "screen_ttm"
+
+    row_fcf = _float_or_none(row.get("primary_fcf"))
+    if row_fcf is not None:
+        basis = row.get("primary_fcf_basis")
+        return row_fcf, str(basis) if basis else "primary_fcf"
+    row_fcf = _float_or_none(row.get("free_cashflow"))
+    if row_fcf is not None:
+        return row_fcf, "free_cashflow"
+    return None, None
+
+
+def stamp_primary_fcf_on_bundle(
+    fcf_bundle: dict[str, Any],
+    row: pd.Series,
+) -> dict[str, Any]:
+    """Attach ``primary_fcf`` and ``primary_fcf_basis`` to a reconciled FCF bundle."""
+    primary, basis = resolve_primary_fcf_for_overlay(row, fcf_bundle)
+    out = dict(fcf_bundle)
+    if primary is not None:
+        out["primary_fcf"] = primary
+    if basis is not None:
+        out["primary_fcf_basis"] = basis
+    return out
+
+
+def surface_primary_fcf_on_overlay_record(
+    record: dict[str, Any],
+    *,
+    row: pd.Series | None = None,
+    fcf_bundle: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Copy harmonised primary FCF fields onto a screening snapshot or signal row."""
+    updated = dict(record)
+    bundle = dict(fcf_bundle) if fcf_bundle else {}
+    if not bundle and isinstance(updated.get("fcf"), dict):
+        bundle = dict(updated["fcf"])
+    series = row if row is not None else pd.Series(updated)
+    bundle = stamp_primary_fcf_on_bundle(bundle, series)
+    primary = bundle.get("primary_fcf")
+    basis = bundle.get("primary_fcf_basis")
+    if primary is not None:
+        updated["primary_fcf"] = primary
+        updated["free_cashflow"] = primary
+    if basis is not None:
+        updated["primary_fcf_basis"] = basis
+    if bundle:
+        updated["fcf"] = bundle
+    return updated
+
+
+def overlay_free_cashflow_from_bundle(
+    row: pd.Series,
+    fcf_bundle: dict[str, Any],
+) -> float | None:
+    """Pick company-adjusted or filing-aligned FCF; never Yahoo TTM when bases diverge."""
+    primary, _ = resolve_primary_fcf_for_overlay(row, fcf_bundle)
+    return primary
 
 
 def _format_fcf_compact(value: float, *, currency: str = "USD") -> str:
@@ -3258,9 +3346,9 @@ def enrich_universe_with_canonical_fcf(
     if "fcf_yield_unit_fx_error" not in out.columns:
         out["fcf_yield_unit_fx_error"] = False
     screen_ttms: list[float | None] = []
-    canonicals: list[float | None] = []
+    primaries: list[float | None] = []
+    primary_bases: list[str | None] = []
     mismatched_flags: list[bool] = []
-    unit_fx_flags: list[bool] = []
 
     for index, row in out.iterrows():
         screen_ttm = screen_ttm_from_row(row)
@@ -3280,7 +3368,6 @@ def enrich_universe_with_canonical_fcf(
             filing_currency=filing_currency,
             company_adjusted_currency=bundle.get("company_adjusted_currency"),
         )
-        unit_fx_flags.append(unit_fx_error)
         out.at[index, "fcf_yield_unit_fx_error"] = unit_fx_error
         mismatched = bool(bundle.get("filing_screen_mismatch")) or fcf_filing_screen_mismatch(
             filing_aligned=bundle.get("filing_aligned"),
@@ -3288,28 +3375,19 @@ def enrich_universe_with_canonical_fcf(
             divergence_flagged=bool(bundle.get("divergence_flagged")),
         )
         mismatched_flags.append(mismatched or unit_fx_error)
-        if (
-            bundle.get("bridge_resolved")
-            and bundle.get("policy_fcf") is not None
-            and str(bundle.get("policy_basis") or "") != "screen_ttm"
-        ):
-            canonicals.append(bundle.get("policy_fcf"))
-        elif bundle.get("company_adjusted") is not None:
-            canonicals.append(bundle.get("company_adjusted"))
-        elif mismatched or unit_fx_error:
-            canonical = bundle.get("canonical")
-            source = str(bundle.get("source") or "")
-            if source == "screen_ttm" or source.endswith("_screen_ttm"):
-                canonical = bundle.get("filing_aligned")
-            canonicals.append(canonical)
-        else:
-            canonicals.append(screen_ttm)
+        overlay_row = row.copy()
+        overlay_row["fcf_yield_unit_fx_error"] = unit_fx_error
+        primary, basis = resolve_primary_fcf_for_overlay(overlay_row, bundle)
+        primaries.append(primary)
+        primary_bases.append(basis)
 
     out["free_cashflow_screen_ttm"] = screen_ttms
+    out["primary_fcf"] = primaries
+    out["primary_fcf_basis"] = primary_bases
     out["free_cashflow"] = [
-        canonical if canonical is not None else (None if mismatched else screen)
-        for canonical, screen, mismatched in zip(
-            canonicals, screen_ttms, mismatched_flags, strict=True
+        primary if primary is not None else (None if mismatched else screen)
+        for primary, screen, mismatched in zip(
+            primaries, screen_ttms, mismatched_flags, strict=True
         )
     ]
     return out

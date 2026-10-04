@@ -23,6 +23,7 @@ from value_investor.scoring.fcf import (
     advertising_revenue_share_for_ticker,
     cap_research_verdict_at_accumulate,
     enrich_screening_snapshot_fcf_dividend_coverage,
+    resolve_free_cashflow,
     resolve_statutory_fcf_dividend_coverage,
     screen_ttm_from_row,
 )
@@ -193,12 +194,13 @@ def enforce_fcf_basis_in_snapshot(
                 ticker,
                 output_dir=output_dir,
             )
+    overlay_fcf = resolve_free_cashflow(pd.Series(updated))
     statutory_cover = resolve_statutory_fcf_dividend_coverage(
         fcf_dividend_coverage_net=_float_or_none(updated.get("fcf_dividend_coverage_net")),
         operating_cashflow=_float_or_none(updated.get("operating_cashflow")),
         capital_expenditure=_float_or_none(updated.get("capital_expenditure")),
         dividends_paid=_float_or_none(updated.get("dividends_paid")),
-        free_cashflow=_float_or_none(updated.get("free_cashflow")),
+        free_cashflow=overlay_fcf,
     )
     media_overlay, media_adjusted, media_conviction = (
         apply_media_cyclical_thin_fcf_export_enforcement(
@@ -234,7 +236,7 @@ def enforce_fcf_basis_in_snapshot(
             operating_cashflow=_float_or_none(updated.get("operating_cashflow")),
             capital_expenditure=_float_or_none(updated.get("capital_expenditure")),
             dividends_paid=_float_or_none(updated.get("dividends_paid")),
-            free_cashflow=_float_or_none(updated.get("free_cashflow")),
+            free_cashflow=overlay_fcf,
             interim_dividend_cut_pct=_float_or_none(updated.get("interim_dividend_cut_pct")),
             research_verdict=updated.get("research_verdict"),
         )
@@ -263,7 +265,7 @@ def enforce_fcf_basis_in_snapshot(
             operating_cashflow=_float_or_none(updated.get("operating_cashflow")),
             capital_expenditure=_float_or_none(updated.get("capital_expenditure")),
             dividends_paid=_float_or_none(updated.get("dividends_paid")),
-            free_cashflow=_float_or_none(updated.get("free_cashflow")),
+            free_cashflow=overlay_fcf,
             model_failures=model_failures,
         )
     )
@@ -282,7 +284,7 @@ def enforce_fcf_basis_in_snapshot(
         operating_cashflow=_float_or_none(updated.get("operating_cashflow")),
         capital_expenditure=_float_or_none(updated.get("capital_expenditure")),
         dividends_paid=_float_or_none(updated.get("dividends_paid")),
-        free_cashflow=_float_or_none(updated.get("free_cashflow")),
+        free_cashflow=overlay_fcf,
         model_failures=model_failures,
     )
     if capped_verdict != updated.get("research_verdict"):

@@ -2289,6 +2289,40 @@ def test_scan_so_what_skips_paf_style_supportive_fcf_prose(tmp_path: Path):
     assert not any(f.kind == "fcf_note_without_overlay" for f in findings)
 
 
+def test_guard_screening_snapshot_export_surfaces_primary_fcf_basis(monkeypatch):
+    """Export guard must stamp one auditable primary FCF basis on the overlay record."""
+    from value_investor.scoring import screening_export_guard
+
+    monkeypatch.setattr(
+        screening_export_guard,
+        "reconcile_fcf_for_ticker",
+        lambda *args, **kwargs: {},
+    )
+    snapshot = {
+        "ticker": "SRP.L",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.75,
+        "free_cashflow": 361_200_000.0,
+        "free_cashflow_screen_ttm": 361_200_000.0,
+        "fcf": {
+            "filing_aligned": 413_500_000.0,
+            "screen_ttm": 361_200_000.0,
+            "company_adjusted": 380_000_000.0,
+            "canonical": 380_000_000.0,
+            "bridge_resolved": True,
+            "policy_fcf": 380_000_000.0,
+            "policy_basis": "company_adjusted",
+            "filing_screen_mismatch": True,
+        },
+    }
+    guarded = screening_export_guard.guard_screening_snapshot_export(snapshot)
+    assert guarded["primary_fcf"] == pytest.approx(380_000_000.0)
+    assert guarded["primary_fcf_basis"] == "company_adjusted"
+    assert guarded["free_cashflow"] == pytest.approx(380_000_000.0)
+    assert guarded["fcf"]["primary_fcf_basis"] == "company_adjusted"
+
+
 def test_write_screening_snapshot_enforces_wix_style_fcf_note(tmp_path: Path):
     """Persisted WIX.L snapshots must not ship buy beside an FCF mismatch action note."""
     sources = tmp_path / "research" / "WIX.L" / "sources"
