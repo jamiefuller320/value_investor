@@ -3,8 +3,8 @@
 # CI tip bump for PR #947 after ruff format.
 
 Composes Project focus lines, market-warning triage (deepen/dismiss/park),
-human-task open buckets, progress actionable items, and UI reconciliation
-ambers into ``docs/data/daily_focus.json``.
+one bundled unmatched GHA/CI failure card, human-task open buckets, progress
+actionable items, and UI reconciliation ambers into ``docs/data/daily_focus.json``.
 Operator timezone: Europe/London. Refresh target: before 04:00 local.
 """
 
@@ -522,7 +522,12 @@ def work_class_for_source(source: str, *, tags: list[str] | None = None) -> str:
         return "dev"
     if source == "human_tasks":
         return "ops_gate"
-    if source in {"progress_actionable", "ui_reconcile", "market_warning_triage"}:
+    if source in {
+        "progress_actionable",
+        "ui_reconcile",
+        "market_warning_triage",
+        "gha_failure_triage",
+    }:
         return "surface"
     return "routine_auto"
 
@@ -1103,6 +1108,27 @@ def _observe_for_market_warn(task: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _observe_for_gha_failure(task: dict[str, Any]) -> dict[str, Any]:
+    bundle = task.get("gha_failure") if isinstance(task.get("gha_failure"), dict) else {}
+    n = int(bundle.get("failure_count") or 0)
+    kinds = [str(k) for k in (bundle.get("kinds") or []) if str(k).strip()]
+    shown = ", ".join(kinds[:4])
+    extra = f" (+{len(kinds) - 4})" if len(kinds) > 4 else ""
+    where = (
+        f"One Daily-hub bundle for unmatched workflow/CI failures "
+        f"({n} type(s): {shown}{extra}). Not on the ci-fix allowlist."
+    )
+    return {
+        "where_we_are": where,
+        "stage_label": "gha:triage_bundle",
+        "waiting_for": "operator Accept (observe today) or Discuss the proposed solutions",
+        "how_achieved": (
+            "Append distinct failure types onto this same task until acked for "
+            "local_date — do not mint parallel discuss recs"
+        ),
+    }
+
+
 def _observe_for_human_task(task: dict[str, Any]) -> dict[str, Any]:
     ht = task.get("human_task") if isinstance(task.get("human_task"), dict) else {}
     bucket = _blank(ht.get("sort_bucket") or task.get("sort_bucket")) or "open"
@@ -1278,6 +1304,30 @@ def build_daily_focus(
         task["status"] = status
         tasks.append(task)
     recommendations.extend(mwarn_recs)
+
+    from value_investor.gha_failure_triage import build_gha_failure_hub_items
+
+    gha_tasks, gha_recs = build_gha_failure_hub_items(
+        data_dir=data_dir,
+        closed_ids=closed_ids,
+        local_date=local_date,
+        priority_start=8,
+        generated_at=generated_at,
+    )
+    for task in gha_tasks:
+        status = derive_ready_status(
+            dict(task.get("status") or {}),
+            recommendation_present=True,
+            closed=False,
+        )
+        if task.get("prefer_discuss"):
+            status["ready"] = False
+            if status.get("state") in {"proposed", "ready"}:
+                status["state"] = "waiting"
+            status["label"] = status.get("label") or "Discuss preferred"
+        task["status"] = status
+        tasks.append(task)
+    recommendations.extend(gha_recs)
 
     # 2–3) Human tasks new_info then unacked
     human_tasks = [t for t in (board.get("tasks") or []) if isinstance(t, dict)]
@@ -1468,6 +1518,10 @@ def build_daily_focus(
             observe = _observe_for_market_warn(task)
             notes_block = ""
             seed_row = task
+        elif source == "gha_failure_triage":
+            observe = _observe_for_gha_failure(task)
+            notes_block = ""
+            seed_row = task
         elif source == "human_tasks":
             observe = _observe_for_human_task(task)
             notes_block = ""
@@ -1519,6 +1573,7 @@ def build_daily_focus(
             "market_warnings": sum(
                 1 for t in open_tasks if t.get("source") == "market_warning_triage"
             ),
+            "gha_failures": sum(1 for t in open_tasks if t.get("source") == "gha_failure_triage"),
             "human_new_info": sum(1 for t in open_tasks if t.get("sort_bucket") == "new_info"),
             "human_unacked": sum(1 for t in open_tasks if t.get("sort_bucket") == "unacked"),
             "progress": sum(1 for t in open_tasks if t.get("source") == "progress_actionable"),

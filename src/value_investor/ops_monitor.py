@@ -1940,6 +1940,44 @@ def check_ui_state_reconciliation(
     return out
 
 
+def check_gha_failure_triage(
+    *,
+    data_dir: Path | None = None,
+) -> list[OpsFinding]:
+    """Warn-only: unmatched GHA/CI failures bundled on the Daily hub."""
+    from value_investor.gha_failure_triage import (
+        FINDING_TITLE,
+        ops_findings_from_gha_failure_triage,
+    )
+
+    try:
+        rows = ops_findings_from_gha_failure_triage(data_dir=data_dir or Path("docs/data"))
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="workflows",
+                title=FINDING_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    out: list[OpsFinding] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        out.append(
+            OpsFinding(
+                severity=str(row.get("severity") or "warn"),
+                category=str(row.get("category") or "workflows"),
+                title=str(row.get("title") or FINDING_TITLE),
+                summary=str(row.get("summary") or ""),
+                auto_fixable=False,
+            )
+        )
+    return out
+
+
 def check_memo_rememo_backlog() -> list[OpsFinding]:
     """Flag when body-lag rememo backlog exceeds in-week maintenance capacity."""
     from value_investor.research.weekday_rememo import assess_rememo_backlog
@@ -2623,6 +2661,7 @@ def collect_ops_findings(
     findings.extend(check_combined_tagged_learning())
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_ui_state_reconciliation())
+    findings.extend(check_gha_failure_triage())
     findings.extend(check_thin_memo_learning_gap())
     findings.extend(check_missing_ir_allowlist_stall())
     findings.extend(check_phase_b_producer_progress())

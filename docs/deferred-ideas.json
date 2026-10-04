@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-03T19:50:48+00:00",
+  "updated_at": "2026-10-04T11:28:01+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12007,6 +12007,53 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-a925d4ae-936e-57cd-a8f2-588758bbdbb4",
       "added_at": "2026-10-03T19:50:48+00:00"
+    },
+    {
+      "id": "N183",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Universal GHA failure autofix factory",
+      "summary": "Do not auto-patch pytest/logic, soak every merge, or auto-merge YAML permission PRs. Dispatch 403 is allowlisted (hygiene + supervised YAML task); unmatched failures bundle on one Daily-hub item.",
+      "revisit_when": "Thick closed marks show unmatched GHA hub bundles are noisy or 403 still recurs after hygiene is on main",
+      "tags": [
+        "gha",
+        "ci-fix",
+        "daily-hub"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-523657af-851e-5d56-b155-7f9658d7f385",
+      "added_at": "2026-10-04T11:28:01+00:00"
+    },
+    {
+      "id": "L525",
+      "category": "later",
+      "section": "ops",
+      "title": "Investigate why PR ruff autofix skipped extra trailing newline",
+      "summary": "CI validate on #960 failed ruff format (extra trailing newline in test_gha_secret_hygiene.py) and ci-pr-autofix did not apply. Diagnose skip gate (chore(ci) prefix, changed-file scope) without expanding autofix kinds.",
+      "revisit_when": "Another cursor/* PR hits ruff_format and autofix does not push a chore(ci) commit",
+      "tags": [
+        "ci-pr-autofix",
+        "ruff"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-523657af-851e-5d56-b155-7f9658d7f385",
+      "added_at": "2026-10-04T11:28:01+00:00"
+    },
+    {
+      "id": "N184",
+      "category": "not_now",
+      "section": "security",
+      "title": "Pages token guessing from GHA 403",
+      "summary": "Do not infer or rotate GitHub Pages tokens from 403 logs. Pages #941 is a different class from workflow_dispatch actions:write.",
+      "revisit_when": "Pages deploy fails twice consecutively on main for a permissions/token error with a named runbook",
+      "tags": [
+        "pages",
+        "gha",
+        "secrets"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-523657af-851e-5d56-b155-7f9658d7f385",
+      "added_at": "2026-10-04T11:28:01+00:00"
     }
   ],
   "fragments": [

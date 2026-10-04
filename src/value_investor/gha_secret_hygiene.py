@@ -35,6 +35,8 @@ _UNTRUSTED_RUN_INTERP = re.compile(
 # workflow_dispatch inputs interpolated into run: enable shell injection when a
 # write token / WORKFLOW_DISPATCH_PAT can dispatch (and later steps may load secrets).
 _DISPATCH_INPUT_IN_RUN = re.compile(r"\$\{\{\s*github\.event\.inputs\.")
+_GH_WORKFLOW_RUN = re.compile(r"gh\s+workflow\s+run\s")
+_CREATE_WORKFLOW_DISPATCH = re.compile(r"createWorkflowDispatch")
 
 _WORKFLOW_RUN_TRIGGER = re.compile(r"(?m)^\s*workflow_run\s*:")
 _HEAD_REPO_GATE = re.compile(r"head_repository\.full_name\s*==\s*github\.repository")
@@ -252,6 +254,22 @@ def scan_workflow_text(path: str, text: str) -> list[HygieneFinding]:
                 message=(
                     "workflow_run job checks out PR head with ref: and uses pip install -e "
                     "(package code from the PR runs with write token)"
+                ),
+            )
+        )
+
+    dispatches_other = bool(_GH_WORKFLOW_RUN.search(text) or _CREATE_WORKFLOW_DISPATCH.search(text))
+    if dispatches_other and "actions: write" not in text:
+        findings.append(
+            HygieneFinding(
+                severity="error",
+                path=path,
+                rule="workflow_dispatch_missing_actions_write",
+                message=(
+                    "Workflow dispatches another workflow (gh workflow run / "
+                    "createWorkflowDispatch) but permissions lack `actions: write`. "
+                    "GITHUB_TOKEN with actions:read returns HTTP 403 "
+                    "(email-report.yml is the pattern)."
                 ),
             )
         )

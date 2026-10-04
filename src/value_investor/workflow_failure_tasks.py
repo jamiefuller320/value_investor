@@ -304,6 +304,19 @@ _FAILURE_LOG_MARKERS = re.compile(
     r"(?i)(##\[error\]|process completed with exit code [1-9]|traceback \(most recent|"
     r"AssertionError|fatal error|command failed)",
 )
+_DISPATCH_403_RE = re.compile(
+    r"could not create workflow dispatch event|HTTP 403: Resource not accessible by integration",
+    re.IGNORECASE,
+)
+_FLAKE_RE = re.compile(
+    r"The (?:job|run) was not acquired by Runner|higher priority waiting request|"
+    r"startup_failure",
+    re.IGNORECASE,
+)
+_DISPATCH_403_ALLOWED = (
+    "src/value_investor/gha_secret_hygiene.py",
+    "tests/test_gha_secret_hygiene.py",
+)
 
 
 def _looks_like_failure_log(log_text: str) -> bool:
@@ -313,6 +326,29 @@ def _looks_like_failure_log(log_text: str) -> bool:
     return bool(_FAILURE_LOG_MARKERS.search(text))
 
 
+def is_dispatch_403_log(log_text: str) -> bool:
+    return bool(_DISPATCH_403_RE.search(log_text or ""))
+
+
+def is_known_gha_flake_log(log_text: str) -> bool:
+    return bool(_FLAKE_RE.search(log_text or ""))
+
+
+def _dispatch_403_signature(workflow_file: str) -> dict[str, Any]:
+    yaml_path = f".github/workflows/{workflow_file}"
+    return {
+        "workflow": workflow_file,
+        "patterns": (
+            r"could not create workflow dispatch event",
+            r"HTTP 403: Resource not accessible by integration",
+        ),
+        "title": "Workflow fix: GITHUB_TOKEN needs actions: write for workflow_dispatch",
+        "area": "ops",
+        "kind": "dispatch_403",
+        "allowed_paths": [yaml_path, *_DISPATCH_403_ALLOWED],
+    }
+
+
 def match_workflow_failure_signature(
     workflow_file: str,
     log_text: str,
@@ -320,6 +356,8 @@ def match_workflow_failure_signature(
     """Return the first matching workflow failure signature for *workflow_file*."""
     workflow_file = str(workflow_file or "").strip()
     text = log_text or ""
+    if workflow_file and is_dispatch_403_log(text):
+        return _dispatch_403_signature(workflow_file)
     for spec in _WORKFLOW_SIGNATURES:
         if str(spec.get("workflow") or "") != workflow_file:
             continue
@@ -330,6 +368,74 @@ def match_workflow_failure_signature(
     if generic is not None and _looks_like_failure_log(text):
         return dict(generic)
     return None
+
+
+def classify_workflow_failure(
+    workflow_file: str,
+    log_text: str,
+) -> dict[str, Any]:
+    """Classify a failed run: allowlisted draft, skip/flake, or Daily-hub bundle."""
+    workflow_file = str(workflow_file or "").strip()
+    text = log_text or ""
+    if is_known_gha_flake_log(text):
+        return {
+            "action": "ignore",
+            "kind": "flake",
+            "signature": None,
+            "proposed_solution": (
+                "Known GHA flake (runner acquisition / cancelled supersede / "
+                "startup_failure) — re-run or ignore; see docs/ops/github-actions-flakes.md."
+            ),
+        }
+    signature = match_workflow_failure_signature(workflow_file, text)
+    if signature and signature.get("skip_draft"):
+        return {
+            "action": "ignore",
+            "kind": "skip_draft",
+            "signature": signature,
+            "proposed_solution": str(signature.get("skip_reason") or "skip_draft"),
+        }
+    if signature:
+        kind = str(signature.get("kind") or "signature")
+        if kind == "dispatch_403" or is_dispatch_403_log(text):
+            return {
+                "action": "draft",
+                "kind": "dispatch_403",
+                "signature": signature,
+                "proposed_solution": (
+                    f"Set `permissions.actions: write` on `{workflow_file}` "
+                    "(same as email-report.yml) so GITHUB_TOKEN can "
+                    "`gh workflow run`. Keep dispatch `continue-on-error` so a "
+                    "403 cannot skip later jobs."
+                ),
+            }
+        return {
+            "action": "draft",
+            "kind": kind,
+            "signature": signature,
+            "proposed_solution": (
+                f"Matched workflow-failure signature for `{workflow_file}` — "
+                "supervised engineering task (not Daily-hub)."
+            ),
+        }
+    if _looks_like_failure_log(text):
+        return {
+            "action": "hub",
+            "kind": f"unmatched:{workflow_file or 'unknown'}",
+            "signature": None,
+            "proposed_solution": (
+                f"Inspect failed run logs for `{workflow_file}`. If it matches "
+                "docs/ops/github-actions-flakes.md, re-run or ignore. Otherwise "
+                "add a workflow-failure signature or a supervised YAML/code fix; "
+                "Discuss if scope is unclear. Do not auto-patch pytest/logic."
+            ),
+        }
+    return {
+        "action": "ignore",
+        "kind": "no_failure_markers",
+        "signature": None,
+        "proposed_solution": "",
+    }
 
 
 def _next_engineering_seq(existing_rows: list[dict[str, Any]], run_stamp: str) -> int:
@@ -421,7 +527,61 @@ def draft_workflow_failure_task(
     return [task_id]
 
 
+def respond_to_workflow_failure(
+    *,
+    workflow_file: str,
+    log_text: str,
+    run_id: int | str | None = None,
+    run_url: str | None = None,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    data_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Draft an allowlisted eng task, or append onto the Daily-hub GHA bundle."""
+    classification = classify_workflow_failure(workflow_file, log_text)
+    action = str(classification.get("action") or "ignore")
+    drafted: list[str] = []
+    hub_recorded = False
+    hub_appended = False
+    if action == "draft":
+        drafted = draft_workflow_failure_task(
+            workflow_file=workflow_file,
+            log_text=log_text,
+            run_id=run_id,
+            run_url=run_url,
+            tasks_path=tasks_path,
+            signature=classification.get("signature"),
+        )
+    elif action == "hub":
+        from value_investor.gha_failure_triage import record_gha_failure_triage
+
+        result = record_gha_failure_triage(
+            workflow_file=workflow_file,
+            kind=str(classification.get("kind") or ""),
+            proposed_solution=str(classification.get("proposed_solution") or ""),
+            run_id=run_id,
+            run_url=run_url,
+            data_dir=data_dir or Path("docs/data"),
+        )
+        hub_recorded = bool(result.get("recorded"))
+        hub_appended = bool(result.get("appended"))
+    return {
+        "drafted": drafted,
+        "hub_recorded": hub_recorded,
+        "hub_appended": hub_appended,
+        "changed": bool(drafted or hub_recorded),
+        "classification": {
+            "action": action,
+            "kind": classification.get("kind"),
+            "proposed_solution": classification.get("proposed_solution"),
+        },
+    }
+
+
 __all__ = [
+    "classify_workflow_failure",
     "draft_workflow_failure_task",
+    "is_dispatch_403_log",
+    "is_known_gha_flake_log",
     "match_workflow_failure_signature",
+    "respond_to_workflow_failure",
 ]

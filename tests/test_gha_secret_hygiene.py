@@ -234,6 +234,24 @@ def test_cursor_agent_workflows_prefer_api_key_v2() -> None:
             assert "CURSOR_API_KEY_V2" in line, f"{name}:{i} bare CURSOR_API_KEY secret"
 
 
+def test_scan_flags_dispatch_without_actions_write() -> None:
+    text = """
+name: example
+on: workflow_dispatch
+permissions:
+  contents: write
+  actions: read
+jobs:
+  x:
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh workflow run engineering-queue.yml
+"""
+    findings = scan_workflow_text("example.yml", text)
+    rules = [item.rule for item in findings]
+    assert "workflow_dispatch_missing_actions_write" in rules
+
+
 def test_workflow_dispatch_callers_need_actions_write() -> None:
     """GITHUB_TOKEN with actions:read cannot create workflow_dispatch (HTTP 403).
 

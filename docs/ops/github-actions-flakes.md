@@ -29,6 +29,7 @@ If the **latest** `CI` and `Deploy GitHub Pages` runs on `main` are green, older
 | Pattern | Typical cause | Action needed |
 |---------|---------------|---------------|
 | `startup_failure` — *"workflow file issue"* | GitHub Actions runner could not start the job (no logs) | **Re-run** or push again; later runs on the same PR usually pass |
+| `HTTP 403: Resource not accessible by integration` on `gh workflow run` | Caller workflow `GITHUB_TOKEN` lacks `actions: write` | **Not a flake** — grant `actions: write` (email-report.yml pattern). Hygiene scan + workflow-failure signature. Unmatched other GHA failures bundle into **one** Daily-hub task (`gha:workflow-ci-failures`) |
 | `cancelled` — *"higher priority waiting request"* | `concurrency: cancel-in-progress` on CI when a newer commit lands on the same PR | **None** — superseded run |
 | `cancelled` after ~job `timeout-minutes` (no supersede message) | Job hit Actions timeout — often schedule runs omitting `max_runtime_seconds` defaults, or discovery+last ticker overrun past the budget | Ensure workflows always pass an explicit runtime budget; keep `timeout-minutes` > budget + setup + commit (see euro/library ingest workflows) |
 | Sunday `email-report` cancelled at ~6h mid PDF/OCR | Full buy-tier deepen inside quiet bundle (unbounded OCR) | **Preferred:** Saturday pre-Sunday `ingest-loop` deepen; Sunday email skips `--ingest-improvement-pass`. Mid-week `email_only` deepen should pass `--ingest-max-runtime-seconds` + OCR page cap (L429) |

@@ -78,7 +78,13 @@ lane change and readiness gate (see N152 / P1 pin rules).
   `daily-focus-ack` / `daily-discuss` (inbox: `daily_discuss_inbox.json`).
   Accept-streak hints are observe-only — never auto-flip checklist `automated`.
   Morning board also emits **market warning triage** rows (deepen / dismiss /
-  park) from open `market_status` admission flags and ingest deviations.
+  park) from open `market_status` admission flags and ingest deviations, plus
+  **at most one** unmatched **workflow/CI failure** Daily-hub task
+  (`gha:workflow-ci-failures`) with proposed solutions appended until acked
+  for the local date (`docs/data/gha_failure_triage.json`; finding
+  **GHA failure needs Daily-hub triage**, `auto_fixable=False`).
+  Dispatch HTTP 403 / missing `actions: write` is allowlisted (hygiene scan +
+  supervised YAML task) and does **not** mint a hub rec.
 - **Missing-IR allowlist stall** — ops finding when focus **or spare sprint**
   `unmeasured_stuck` / `zero_body_stuck` tickers still have empty IR allowlist
   after ≥2 intensive 0-improve pins (`check_missing_ir_allowlist_stall`,
@@ -466,7 +472,7 @@ with **Accept followed** vs **Discuss resolved**.
 
 | Layer | Behavior |
 |-------|----------|
-| Store | `docs/data/daily_focus.json` (+ `daily_focus_acks.json`, `daily_discuss_inbox.json`, `daily_hub_history.json`, `project_daily_seed.json`) |
+| Store | `docs/data/daily_focus.json` (+ `daily_focus_acks.json`, `daily_discuss_inbox.json`, `daily_hub_history.json`, `project_daily_seed.json`, `gha_failure_triage.json`) |
 | Trigger | End of `run_ops_monitor` (after human-tasks board); early **02:30 UTC** + morning **07:45 UTC**; optional commit via `GHA_COMMIT_OPTIONAL` |
 | Stale | Builder `stale_for_local_date` + client wall-clock (`Europe/London` date ≠ artifact `local_date`) amber banner; reconcile check `daily_hub_local_date_matches_today` after 04:00 |
 | Dashboard | Automation → **Daily** (`#automation/daily`): **Today** session + **History** session; Overview pulse embeds top focus lines + history counts |
@@ -478,6 +484,7 @@ with **Accept followed** vs **Discuss resolved**.
 | Discuss auto-resolve | When Cap B / hub no longer opens a reconcile check, `write_daily_focus` resolves matching open `daily_discuss_inbox` rows (Discuss alone never closes) |
 | Pages deploy | `pages.yml` uses `cancel-in-progress: true` so a stuck environment wait cannot block newer deploys; daily-focus-ack / daily-discuss dispatch `pages.yml` after `[skip ci]` commits |
 | Market warning triage | Open admission flags (`zero_body_stuck`, `unmeasured_stuck`, `zero_improve_stall`, …) + open ingest deviations become Daily rows with structured `triage_action` ∈ {`deepen`,`dismiss`,`park`}. **Accept** = observe-safe `focus-ack` when park/dismiss is safe; **Discuss** preferred for fat-slot / rate-limit deepen (euro head). `zero_body_stuck` / `unmeasured_stuck` are **not** dismissable or parkable. When those stuck tickers also have **empty IR allowlist**, triage rationale names IR-seed (deepen alone 0-yields) — still not auto-park. Do not ritual-clear bare `health=warn`. Spare DAX stall → park (do not divert euro). Ingest-deviation dismiss CLI stays manual (Phase B automation parked). |
+| GHA failure bundle | Unmatched workflow/CI failures (not on the ci-fix allowlist, not known flakes, not skip_draft timeouts) append onto **one** Daily-hub task (`gha:workflow-ci-failures`) for the Europe/London local date until Accept/ack. Distinct failure types + proposed solutions stack in `docs/data/gha_failure_triage.json`. One discuss rec for the window. Dispatch 403 / missing `actions: write` is hygiene + supervised YAML (email-report pattern), not this card. Ops finding **GHA failure needs Daily-hub triage** (`auto_fixable=False`). |
 | Status chips | `ready` / `next_steps` / `waiting_on` from seed + notes `Next:` / `Waiting on:` conventions |
 | Expansive assessment | Per-task structured `assessment` fields (`where_we_are`, stage duration / `stage_since`, `waiting_for`, `how_achieved`) from seed, notes (`Where:` / `Stage:` / `Since:` / `How:`), status markers, and observe fillers (market triage, human gates, reconcile). Missing duration stays `duration unknown` in JSON (no invented dates). **UI** renders one coherent paragraph from the fields that are present — empty waiting/how and bare “proposed / duration unknown” are omitted (no labeled “not stated” rows) |
 | Accept-streak hint | Observe-only footer when ≥5 Accepts / 30d with 0 Discuss on a family — never auto-flips `automated: true` (N169) |
