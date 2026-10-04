@@ -17,6 +17,7 @@ from value_investor.scoring.fcf import (
     fcf_bundle_from_persisted_report,
     reconcile_fcf_for_ticker,
     screen_ttm_from_row,
+    surface_primary_fcf_on_overlay_record,
 )
 from value_investor.scoring.fcf_basis_overlay import (
     action_note_has_fcf_basis_mismatch,
@@ -273,7 +274,13 @@ def _apply_export_fcf_flags(snapshot: dict[str, Any], fcf_bundle: dict[str, Any]
     snapshot["fcf_divergence_flagged"] = divergence
     fcf_bundle["fcf_definition_divergence"] = definition
     fcf_bundle["fcf_divergence_flagged"] = divergence
-    snapshot["fcf"] = fcf_bundle
+    surfaced = surface_primary_fcf_on_overlay_record(
+        snapshot,
+        row=pd.Series(snapshot),
+        fcf_bundle=fcf_bundle,
+    )
+    snapshot.clear()
+    snapshot.update(surfaced)
 
 
 def guard_screening_snapshot_export(

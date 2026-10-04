@@ -40,6 +40,7 @@ from value_investor.scoring.fcf import (
     profit_to_cash_yoy_decline_pp,
     reconcile_fcf,
     reconcile_fcf_for_ticker,
+    resolve_primary_fcf_for_overlay,
 )
 from value_investor.scoring.fcf_basis_overlay import action_note_has_fcf_basis_concern
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
@@ -1038,6 +1039,58 @@ def test_overlay_free_cashflow_from_bundle_suppresses_screen_ttm_on_mismatch():
         }
     )
     assert overlay_free_cashflow_from_bundle(close_row, bundle) == 92_000_000.0
+
+
+def test_resolve_primary_fcf_for_overlay_precedence_and_basis_labels():
+    row = pd.Series({"free_cashflow": 500.0, "free_cashflow_screen_ttm": 400.0})
+    policy_bundle = {
+        "bridge_resolved": True,
+        "policy_fcf": 120.0,
+        "policy_basis": "filing_aligned",
+        "filing_aligned": 120.0,
+        "screen_ttm": 400.0,
+    }
+    assert resolve_primary_fcf_for_overlay(row, policy_bundle) == (120.0, "filing_aligned")
+
+    company_bundle = {
+        "company_adjusted": 113_500_000.0,
+        "filing_aligned": 362_600_000.0,
+        "canonical": 362_600_000.0,
+        "filing_screen_mismatch": True,
+    }
+    assert resolve_primary_fcf_for_overlay(row, company_bundle) == (
+        113_500_000.0,
+        "company_adjusted",
+    )
+
+    aligned_bundle = {
+        "filing_aligned": 100.0,
+        "screen_ttm": 100.0,
+        "canonical": 100.0,
+        "source": "screen_ttm",
+    }
+    assert resolve_primary_fcf_for_overlay(
+        pd.Series({"free_cashflow_screen_ttm": 100.0}),
+        aligned_bundle,
+    ) == (100.0, "screen_ttm")
+
+
+def test_stamp_primary_fcf_on_bundle_attaches_basis():
+    from value_investor.scoring.fcf import stamp_primary_fcf_on_bundle
+
+    bundle = reconcile_fcf(
+        screen_ttm=211_900_000.0,
+        financials=_hik_financials(),
+        company_adjusted=187_000_000.0,
+        company_adjusted_currency="GBP",
+        filing_currency="GBP",
+    )
+    stamped = stamp_primary_fcf_on_bundle(
+        bundle,
+        pd.Series({"free_cashflow_screen_ttm": 211_900_000.0}),
+    )
+    assert stamped["primary_fcf"] == pytest.approx(187_000_000.0)
+    assert stamped["primary_fcf_basis"] == "company_adjusted"
 
 
 def test_append_fcf_divergence_note_when_filing_screen_gap_exceeds_25_pct():
