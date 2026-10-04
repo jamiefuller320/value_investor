@@ -1,6 +1,6 @@
 # Domino's Pizza Group plc (DOM.L) — Research memo
 
-_Version 3 · Updated 2026-09-21T17:39:59.563447+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-10-04T08:18:42.918185+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: H1 filings still support a cheap UK franchise, but no new RNS and unresolved FCF/cover definitions leave leverage and governance risks unchanged—confirming, not upgrading, the Buy screen.
+Rationale: H1 filings still anchor value, but only routine holdings/voting-rights RNS and commentator price noise since September—FCF/cover mismatch unchanged, confirming not upgrading the Buy screen.
 RiskTags: cyclical, governance, leverage, customer_concentration, competitive, accounting
 
 ## Weekly updates
@@ -22,3 +22,8 @@ An 11 September holdings disclosure adds no strategic change; the strong-buy scr
 No RNS results or trading updates since the 15 September refresh; only a routine 18 September NED open-market purchase (4,850 shares at ~£2.045).
 The quantitative screen stays Buy, with the same FCF filing vs TTM mismatch and neutral timing.
 Research view unchanged: accumulate.
+
+### 2026-10-04T08:18:42.918185+00:00
+No results or trading updates since the 21 September refresh; RNS since then is routine holdings (23–24 September) and total voting rights (1 October).
+News is third-party commentary on share volatility and macro uncertainty, with no new company disclosures.
+Buy screen unchanged (6 weeks); same filing vs screen TTM FCF divergence and neutral timing.

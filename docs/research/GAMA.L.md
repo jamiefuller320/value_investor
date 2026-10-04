@@ -1,6 +1,6 @@
 # Gamma Communications plc (GAMA.L) — Research memo
 
-_Version 3 · Updated 2026-09-21T08:29:24.714139+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-10-04T07:59:25.339753+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.65
-Rationale: Epiris’s recommended cash offer still caps standalone upside; thin news and no indexed H1 since 15 Sep leave research neutral on the persistent hold signal.
+Confidence: 0.66
+Rationale: Epiris’s recommended cash offer and 20 Oct vote still cap standalone upside; Waterland’s exit clears one rival but unindexed H1 leaves research neutral on the hold signal.
 RiskTags: competitive, regulatory, leverage, other
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Screen remains hold with wait timing; RSI ~59 vs prior overbought readings, with
 Since 15 Sep, news is limited to Polar Capital’s 16 Sep Form 8.3 (routine offer-period disclosure); no new indexed company RNS beyond the existing takeover pack.
 H1 2026 interim results are still not indexed (`interim: 0` in the filings index), so operating trends remain unverified in-source.
 Screen stays hold (9 weeks, stable); RSI ~59; FCF/earnings basis flags unchanged; dividend family no longer passes vs the prior snapshot.
+
+### 2026-10-04T07:59:25.339753+00:00
+Waterland ruled out a counter-offer on 1 Oct (Panel Rule 2.8); the Epiris scheme circular is dated 25 Sep, with shareholder meetings set for 20 Oct.  
+Filings add routine 1 Oct Rule 2.9/voting rights and a 2 Oct Form 8.3; H1 2026 interim results remain unindexed (`interim: 0`).  
+Screen stays hold (14w, stable); RSI ~45; FCF/earnings basis flags unchanged.

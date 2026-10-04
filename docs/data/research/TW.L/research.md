@@ -1,6 +1,6 @@
 # Taylor Wimpey plc (TW.L) — Research memo
 
-_Version 3 · Updated 2026-09-21T17:38:42.254516+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-10-04T08:17:42.435083+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Filings still support cheapness and net cash, but weak statutory FCF cover, unresolved FCF bases, and no indexed interim leave the buy case only partly confirmed.
+Rationale: Indexed annual filings still support cheapness and risk screens, but statutory ~0.38× FCF dividend cover and filing vs screen TTM FCF divergence leave the buy case only partly confirmed.
 RiskTags: regulatory, cyclical, governance, pension, competitive, liquidity, leverage, litigation
 
 ## Weekly updates
@@ -23,3 +23,8 @@ H1 distribution and completion cuts reported in press are still unverified from 
 News batch since 15 Sep is empty; indexed filings still show no interim or trading-update RNS.  
 Buy screen holds (~72% composite, 10/22 models) with FCF overlay still on statutory ~0.38× cover and filing vs unverified TTM FCF gap.  
 Timing little changed: RSI ~43 (was ~31), price still below the 200-day MA.
+
+### 2026-10-04T08:17:42.435083+00:00
+Since 21 Sep: no interim or trading-update RNS indexed; news batch is one third-party stock-analysis link only.  
+Buy screen unchanged (~72% composite, 10/22 models, six weeks persistent); FCF basis overlay and statutory cover still as before.  
+RSI ~49 (was ~43); price still below the 200-day MA — no filing-verified change to H1 trading or distributions.

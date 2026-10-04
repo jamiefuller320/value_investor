@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-10-02T08:29:58.424952+00:00",
+  "updated_at": "2026-10-04T08:20:38.152880+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -18,7 +18,7 @@
     "promotion": "recommend rows are human-gate only — never auto-apply knobs, config, or engineering tasks"
   },
   "context": {
-    "history_run_count": 22,
+    "history_run_count": 23,
     "backtest_run_count": 22,
     "trajectory_labeled_events": 336,
     "exit_shadow_closed_total": 0,
@@ -27,11 +27,11 @@
     "entry_dca_ready": true
   },
   "summary": {
-    "continue": 6,
-    "observing": 0,
     "fail": 5,
-    "recommend": 3,
     "proposed": 2,
+    "recommend": 4,
+    "observing": 0,
+    "continue": 5,
     "human_ack_pending": 2,
     "total": 16
   },
@@ -138,20 +138,23 @@
       "title": "Screen rules + graduated allocation",
       "area": "paper_knobs",
       "pipeline": "paper_automation",
-      "status": "continue",
-      "source_status": "observing",
+      "status": "recommend",
+      "source_status": "surviving",
       "human_ack_required": false,
       "track_id": "graduated_allocation",
-      "gate_marks": 25,
-      "gate_excess_after_costs": -0.0018,
-      "excess_vs_primary": 0.3429,
+      "gate_marks": 27,
+      "gate_excess_after_costs": 0.0104,
+      "excess_vs_primary": 0.3551,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": false,
         "use_graduated_allocation": true
       },
       "evidence_path": "docs/data/paper_automation/markets/euro_depth/graduated_allocation/config.json",
-      "initiated_at": "2026-09-07T08:30:22.057015+00:00"
+      "initiated_at": "2026-09-07T08:30:22.057015+00:00",
+      "human_acked": true,
+      "acked_at": "2026-09-22T08:14:45.342024+00:00",
+      "ack_decision": "ack_observe"
     },
     {
       "experiment_id": "momentum_grace",
@@ -192,11 +195,11 @@
         "model_independent_hint": true
       },
       "evidence_path": "docs/data/paper_automation/learning_tracks_entry_dca.json",
+      "superseded_by": "entry_dca_timing_shift_overlay",
       "initiated_at": "2026-09-04T08:29:30.298700+00:00",
       "human_acked": true,
       "acked_at": "2026-09-13T17:41:11.138086+00:00",
-      "ack_decision": "ack_observe",
-      "superseded_by": "entry_dca_timing_shift_overlay"
+      "ack_decision": "ack_observe"
     },
     {
       "experiment_id": "ana-20260728-04",
@@ -276,7 +279,7 @@
           ]
         },
         "archive": {
-          "history_run_count": 22,
+          "history_run_count": 23,
           "backtest_run_count": 22,
           "simulation_ready": true
         },
@@ -437,7 +440,7 @@
           ]
         },
         "archive": {
-          "history_run_count": 22,
+          "history_run_count": 23,
           "backtest_run_count": 22,
           "simulation_ready": true
         },
@@ -583,7 +586,7 @@
           ]
         },
         "archive": {
-          "history_run_count": 22,
+          "history_run_count": 23,
           "backtest_run_count": 22,
           "simulation_ready": true
         },
@@ -709,27 +712,14 @@
   "refinement_progression": {
     "observe_only": true,
     "influences_live": false,
-    "opened": [
-      {
-        "child_id": "entry_dca_timing_shift_overlay",
-        "parent_id": "entry_dca_overlay",
-        "status": "open",
-        "opened_at": "2026-10-02T08:29:58.423469+00:00",
-        "graduation_signal": "execute_started",
-        "instrument": "observe_overlay_cadences",
-        "kind": "lifecycle_overlay_refinement",
-        "observe_only": true,
-        "influences_live": false,
-        "title": "DCA timing-shift overlay cadences (Q1 post-graduation)"
-      }
-    ],
-    "skipped_count": 2,
+    "opened": [],
+    "skipped_count": 3,
     "satisfied": [
       {
         "parent_id": "still_in_buy_set",
         "instrument": "twin_already_open",
         "graduation_signal": "twin_present",
-        "noted_at": "2026-10-02T08:29:58.423469+00:00",
+        "noted_at": "2026-10-04T08:20:38.152423+00:00",
         "title": "Sell-gate churn twin already open",
         "note": "still_in_buy_set Suite A twin is the capital-path churn instrument; do not spawn a duplicate sell-gate refinement book."
       }
@@ -767,20 +757,7 @@
     "lanes_path": "docs/data/refinement_lanes.json",
     "note": "On graduation/adoption success, auto-registers the next observe refinement child (parent_id / refinement_of). Never mid-flight rewrites live books; LLM challenger stays fail-closed without a disagreement theme."
   },
-  "task_sync": {
-    "updated": [
-      "ana-20260728-04",
-      "ana-20260921-01",
-      "ana-20260921-03",
-      "ana-20260921-05",
-      "ldr-20260823-02",
-      "ldr-20260823-03"
-    ],
-    "skipped": [
-      "ana-20260921-02",
-      "ana-20260921-04"
-    ]
-  },
+  "task_sync": null,
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
     "analysis_tasks": "docs/data/analysis_tasks.json",

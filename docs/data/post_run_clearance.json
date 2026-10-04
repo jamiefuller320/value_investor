@@ -3,9 +3,9 @@
   "last_run": {
     "schema_version": 1,
     "trigger": "post_run_review_email",
-    "evaluated_at": "2026-09-27T08:29:14.065389+00:00",
+    "evaluated_at": "2026-10-04T08:27:13.870938+00:00",
     "review_source": "output/post_run_review.md",
-    "fingerprint": "8562ab28e81143dd9b55",
+    "fingerprint": "85c832ddf946a38d61df",
     "skipped": false,
     "skip_reason": null,
     "applied": true,
@@ -17,16 +17,16 @@
     "actions": [],
     "queue_before": {
       "open_count": 4,
-      "pr_open_count": 0
+      "pr_open_count": 1
     },
     "compile_cap_audit": {
-      "candidate_count": 4,
+      "candidate_count": 5,
       "truncated_count": 0,
       "post_run_plan_beyond_cap": []
     },
     "plan_alignment": {
       "unlinked_plan_titles": [
-        "Backfill indexed-without-body for buy-tier FTSE names (Investegate/LSE/NSM direct fetch, reject Google News wrappers)"
+        "Pipeline job to download and text-extract bodies for all `indexed_without_body` rows on buy-tier indexes (prioritise IMB.L, GFRD.L, DNLM.L, COST.L from `filing_coverage`) via Investegate/LSE direct URLs and CH document-api PDFs"
       ],
       "terminal_only_titles": []
     },
@@ -34,10 +34,10 @@
     "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
     "queue_after": {
       "open_count": 4,
-      "pr_open_count": 0
+      "pr_open_count": 1
     },
     "tasks_added_estimate": 0,
-    "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    "dispatch_reason": "queue ready — dispatch next open task"
   },
   "runs": [
     {
@@ -236,6 +236,45 @@
       },
       "tasks_added_estimate": 0,
       "dispatch_reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    },
+    {
+      "schema_version": 1,
+      "trigger": "post_run_review_email",
+      "evaluated_at": "2026-10-04T08:27:13.870938+00:00",
+      "review_source": "output/post_run_review.md",
+      "fingerprint": "85c832ddf946a38d61df",
+      "skipped": false,
+      "skip_reason": null,
+      "applied": true,
+      "lanes": {
+        "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
+      },
+      "should_dispatch_engineering": true,
+      "lane_c_recommended": false,
+      "actions": [],
+      "queue_before": {
+        "open_count": 4,
+        "pr_open_count": 1
+      },
+      "compile_cap_audit": {
+        "candidate_count": 5,
+        "truncated_count": 0,
+        "post_run_plan_beyond_cap": []
+      },
+      "plan_alignment": {
+        "unlinked_plan_titles": [
+          "Pipeline job to download and text-extract bodies for all `indexed_without_body` rows on buy-tier indexes (prioritise IMB.L, GFRD.L, DNLM.L, COST.L from `filing_coverage`) via Investegate/LSE direct URLs and CH document-api PDFs"
+        ],
+        "terminal_only_titles": []
+      },
+      "compile_cap_drain_skipped": "priority engineering queue not empty",
+      "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+      "queue_after": {
+        "open_count": 4,
+        "pr_open_count": 1
+      },
+      "tasks_added_estimate": 0,
+      "dispatch_reason": "queue ready — dispatch next open task"
     }
   ]
 }

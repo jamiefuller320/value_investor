@@ -1,6 +1,6 @@
 # Currys plc (CURY.L) — Research memo
 
-_Version 4 · Updated 2026-09-21T17:06:50.206071+00:00 · Mode: structured_verdict_update_
+_Version 5 · Updated 2026-10-04T07:49:06.559738+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.73
-Rationale: Filing-backed cheapness and the 10 Sep trading update support the strong-buy screen, but no new RNS since the morning refresh and unchanged cyclical, pension and execution risks keep research at accumulate.
+Confidence: 0.72
+Rationale: Filing-backed cheapness and the 10 Sep trading update support the strong-buy screen, but no new RNS and unchanged cyclical, pension and execution risks keep research at accumulate.
 RiskTags: cyclical, competitive, pension, leverage, key_person, regulatory, liquidity, accounting, other
 
 ## Weekly updates
@@ -28,3 +28,8 @@ Prior risks (cyclical demand, memory-chip costs, new CEO execution, leases/lever
 No new RNS, accounts or trading statements since the 21 Sep morning refresh; the case still rests on the 10 Sep trading update and 28 Aug annual report.  
 News since then is only generic UK retail commentary (Kalkine)—nothing filing-grade.  
 Cyclical, pension, leverage, CEO execution and liquidity risks are unchanged.
+
+### 2026-10-04T07:49:06.559738+00:00
+Quantitative screen is now **strong buy** (~74% composite, improving; first week at that signal on 4 Oct).  
+No new trading update, accounts or material RNS since 21 Sep—only routine buyback/voting-rights notices and Oct **Total Voting Rights**.  
+News is Kalkine/Yahoo-style commentary only; the case still rests on the 10 Sep update and 28 Aug annual report.
