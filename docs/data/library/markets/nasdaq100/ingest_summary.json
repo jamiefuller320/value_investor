@@ -1,24 +1,100 @@
 {
-  "run_at": "2026-10-03T10:35:21.680900+00:00",
+  "run_at": "2026-10-04T13:33:44.727188+00:00",
   "market_id": "nasdaq100",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "MU"
+  ],
+  "target_details": [
+    {
+      "ticker": "MU",
+      "priority_score": 18.5317,
+      "filings_total": 21,
+      "filings_with_body": 9,
+      "indexed_without_body": 12,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "MU",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 21,
+        "filings_with_body": 9,
+        "indexed_without_body": 12
+      },
+      "after": {
+        "filings_total": 21,
+        "filings_with_body": 21,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 21,
+        "annual": 2,
+        "interim": 7,
+        "trading_update": 0,
+        "other": 12,
+        "with_body": 19,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 7,
+            "with_body": 7
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 12,
+            "with_body": 10
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 21,
+        "with_body_after": 21,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "MU"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-03T10:35:11.651436+00:00",
+    "snapshot_at": "2026-10-04T13:33:28.427107+00:00",
     "market_id": "nasdaq100",
-    "buy_tier_count": 37,
+    "buy_tier_count": 38,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 11,
-    "bodies_min": 17,
-    "bodies_median": 20,
-    "bodies_max": 117,
+    "indexed_without_body": 21,
+    "bodies_min": 9,
+    "bodies_median": 20.0,
+    "bodies_max": 100,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -27,12 +103,14 @@
     "indexed_without_body_tickers": [
       "TRI",
       "PDD",
-      "CCEP"
+      "CCEP",
+      "MU"
     ],
     "indexed_without_body_by_ticker": {
       "TRI": 8,
       "PDD": 1,
-      "CCEP": 2
+      "CCEP": 2,
+      "MU": 10
     },
     "parked_tickers": [
       "CCEP",
@@ -42,20 +120,22 @@
     "parked_count": 3,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 10,
+    "effective_indexed_without_body_tickers": [
+      "MU"
+    ],
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-03T10:35:16.397765+00:00",
+    "snapshot_at": "2026-10-04T13:33:39.807843+00:00",
     "market_id": "nasdaq100",
-    "buy_tier_count": 37,
+    "buy_tier_count": 38,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 11,
     "bodies_min": 17,
-    "bodies_median": 20,
+    "bodies_median": 20.0,
     "bodies_max": 100,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -91,7 +171,7 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 37,
+    "scanned": 38,
     "hits": 0,
     "new_rows_total": 0,
     "curiosity_total": 0,
@@ -106,6 +186,7 @@
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
+      "MU",
       "TRI",
       "CCEP",
       "PDD"
@@ -121,10 +202,16 @@
   },
   "critical_path": {
     "market_id": "nasdaq100",
-    "assessed_at": "2026-10-03T10:35:12.642191+00:00",
+    "assessed_at": "2026-10-04T13:33:29.335730+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
+      {
+        "ticker": "MU",
+        "indexed_without_body": 10,
+        "filings_total": 19,
+        "filings_with_body": 9
+      },
       {
         "ticker": "TRI",
         "indexed_without_body": 8,
@@ -134,8 +221,8 @@
       {
         "ticker": "CCEP",
         "indexed_without_body": 2,
-        "filings_total": 120,
-        "filings_with_body": 117
+        "filings_total": 102,
+        "filings_with_body": 100
       },
       {
         "ticker": "PDD",
@@ -149,25 +236,26 @@
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": false,
     "auto_pin_tickers": [
+      "MU",
       "TRI",
       "CCEP",
       "PDD"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (3 tickers, top: TRI(8), CCEP(2), PDD(1))"
+      "Prefer indexed-without-body body refetch (4 tickers, top: MU(10), TRI(8), CCEP(2), PDD(1))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 3,
-      "indexed_without_body_rows": 11,
+      "indexed_without_body_tickers": 4,
+      "indexed_without_body_rows": 21,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 2.8730847369999992,
+  "used_seconds": 9.589266889000001,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3597.1269152630002,
+  "leftover_seconds": 3590.410733111,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -175,9 +263,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "nasdaq100",
-    "updated_at": "2026-10-03T10:35:16.400966+00:00",
+    "updated_at": "2026-10-04T13:33:39.810866+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 4,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -215,7 +303,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "CCEP",
       "PDD",
@@ -254,7 +342,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 127,
+    "task_count": 135,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0

@@ -1,26 +1,38 @@
 {
   "market_id": "psi20",
-  "assessed_at": "2026-10-03T12:42:34.499137+00:00",
+  "assessed_at": "2026-10-04T13:34:16.132284+00:00",
   "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
+  "indexed_without_body": [
+    {
+      "ticker": "COR.LS",
+      "indexed_without_body": 16,
+      "filings_total": 52,
+      "filings_with_body": 16
+    }
+  ],
   "thin_need_discovery": [
     "GALP.LS"
   ],
-  "thin_need_bodies": [],
-  "primary_blocker": "thin_need_discovery",
+  "thin_need_bodies": [
+    "COR.LS"
+  ],
+  "primary_blocker": "indexed_without_body",
   "force_discovery_scan": true,
-  "auto_pin_tickers": [],
+  "auto_pin_tickers": [
+    "COR.LS"
+  ],
   "recommended_actions": [
+    "Prefer indexed-without-body body refetch (1 tickers, top: COR.LS(16))",
     "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
+    "indexed_without_body_tickers": 1,
+    "indexed_without_body_rows": 16,
     "thin_need_discovery": 1,
-    "thin_need_bodies": 0
+    "thin_need_bodies": 1
   }
 }
