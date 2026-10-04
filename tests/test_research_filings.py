@@ -7271,6 +7271,22 @@ def test_fetch_filings_ir_allowlist_euro_depth_jmt_ls_builtins(tmp_path: Path):
     assert "entire-jeronimomartins-ar25.pdf" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_psi20_galp_ls_builtins(tmp_path: Path):
+    """Regression: GALP.LS awaiting_periodic_report — galp.com/corp FY2025 FS + 1Q/2Q26 reports."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("GALP.LS", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("ConsolidatedandIndividualFinancialStatements.pdf" in url for url in urls)
+    assert any("2Q26%20Report.pdf" in url for url in urls)
+    assert any("1Q26%20Report.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 2
+
+
 def test_load_ir_url_allowlist_canonicalizes_dte_de_dead_urls(tmp_path: Path):
     """Dead blob/publications URLs in research_ir_urls.json map to live FY2025 annual report PDF."""
     dead_pdf = (
@@ -7333,6 +7349,7 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         "OMV.VI": "reports.omv.com",
         "NVG.LS": "thenavigatorcompany.com",
         "JMT.LS": "reports.jeronimomartins.com",
+        "GALP.LS": "galp.com/corp",
         "DQ7A.IR": "donegaligroup.com",
         "NBA.LS": "novabase.com",
         "MUV2.DE": "munichre.com",
@@ -10671,6 +10688,18 @@ def test_parked_source_hunter_jmt_ls_euro_depth_has_fetchable_ir():
     assert "reports.jeronimomartins.com" in rows[0]["url"]
     assert "entire-jeronimomartins-ar25.pdf" in rows[0]["url"]
     body = fetch_filing_body(rows[0]["url"])
+    assert body
+    assert len(body) >= 50000
+
+
+def test_parked_source_hunter_galp_ls_psi20_has_fetchable_ir():
+    """eng-20261004-01: GALP.LS has live galp.com/corp FY2025 FS + 1Q/2Q26 interim report PDFs."""
+    assert "GALP.LS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("GALP.LS")
+    assert len(rows) == 3
+    interim = [row for row in rows if row["period"] == "interim"]
+    assert len(interim) == 2
+    body = fetch_filing_body(interim[0]["url"])
     assert body
     assert len(body) >= 50000
 
