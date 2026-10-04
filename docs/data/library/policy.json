@@ -21,7 +21,8 @@
     "atx",
     "psi20",
     "smi",
-    "omxs30"
+    "omxs30",
+    "iseq20"
   ],
   "ftse_equivalent_markets": [
     "sp500"
@@ -548,15 +549,16 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-04T18:00:33.148596+00:00",
+  "updated_at": "2026-10-04T19:52:26.054422+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
     "asx200",
-    "euro_depth"
+    "euro_depth",
+    "psi20"
   ],
   "ingest_parallel_sprint": [
-    "psi20"
+    "iseq20"
   ],
   "ingest_parallel_sprint_2": [
     "omxs30"
@@ -904,16 +906,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-09-15T15:41:22.244735+00:00",
-        "parallel_stream": 2,
-        "from_market": "ftse_smallcap",
-        "to_market": "asx200",
-        "stream_markets_after": [
-          "asx200"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-09-15T17:19:16.079797+00:00",
         "parallel_stream": 2,
@@ -1403,6 +1395,16 @@
           "psi20"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-10-04T19:52:26.054412+00:00",
+        "parallel_stream": 1,
+        "from_market": "psi20",
+        "to_market": "iseq20",
+        "stream_markets_after": [
+          "iseq20"
+        ],
+        "ingest_parity_recorded": true
       }
     ]
   },
