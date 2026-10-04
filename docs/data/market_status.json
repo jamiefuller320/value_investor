@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-04T19:55:07.841560+00:00",
+  "generated_at": "2026-10-04T20:17:03.078361+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -23,25 +23,26 @@
     "sti",
     "atx",
     "psi20",
-    "smi"
+    "smi",
+    "omxs30"
   ],
   "summary": {
     "market_count": 23,
     "ingest_counts": {
       "live": 1,
-      "maintenance": 20,
-      "sprint": 2
+      "maintenance": 21,
+      "sprint": 1
     },
     "role_counts": {
       "live": 1,
       "focus": 1,
-      "sprint": 2,
-      "admitted": 19
+      "sprint": 1,
+      "admitted": 20
     },
-    "sprint_count": 2,
-    "maintenance_count": 20,
+    "sprint_count": 1,
+    "maintenance_count": 21,
     "live_count": 1,
-    "admitted_count": 20,
+    "admitted_count": 21,
     "should_run_library_maintenance": true,
     "maintenance_markets": [
       "aex",
@@ -58,6 +59,7 @@
       "hang_seng",
       "ibex35",
       "nasdaq100",
+      "omxs30",
       "psi20",
       "smi",
       "sp500",
@@ -66,8 +68,7 @@
       "us_adr_asia"
     ],
     "spare_sprint": {
-      "1": "iseq20",
-      "2": "omxs30"
+      "1": "iseq20"
     },
     "equal_support_generated_at": "2026-10-04T07:09:53.053739+00:00"
   },
@@ -1150,256 +1151,6 @@
           "timeframe": "Sprint until exhaustion or raw parity. Extra jobs do not create unique weeks. Fat slot serializes one head at a time."
         },
         "annotation": "Next: sprint_ingest_complete — sprint_ingest_complete / filing_ready: raw ingest_parity_met (all four gap counts zero) or leftover thin/IWB parked. Now via leftover thin/IWB parked or raw ingest_parity_met. Remaining unmeas 0, zero 0, thin 1, IWB 1. Timeframe: Sprint until exhaustion or raw parity. Extra jobs do not create unique weeks. Fat slot serializes one head at a time."
-      }
-    },
-    {
-      "market_id": "omxs30",
-      "label": "OMX Stockholm 30",
-      "exchange": "Nasdaq Stockholm",
-      "currency": "SEK",
-      "role": "sprint",
-      "is_live": false,
-      "is_focus": false,
-      "is_graduated": true,
-      "is_queue": true,
-      "is_admitted": false,
-      "is_ftse_equivalent": false,
-      "ingest": "sprint",
-      "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=7, indexed_without_body=0)",
-      "ingest_parity_met": false,
-      "ingest_exhausted": false,
-      "queue_rank": 20,
-      "shared_maintenance": false,
-      "health": "warn",
-      "coverage_pct": 1.0,
-      "honest_coverage_pct": 1.0,
-      "ticker_count": 30,
-      "stale": 0,
-      "fresh": 30,
-      "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-10-04T06:56:38.754013+00:00",
-      "last_constituents_refresh": "2026-10-04T06:56:11.837911+00:00",
-      "last_screen_at": "2026-10-02T21:29:56.526810+00:00",
-      "signal_counts": {
-        "hold": 17,
-        "strong_buy": 7,
-        "buy": 4,
-        "avoid": 2
-      },
-      "shortlist_count": 11,
-      "strong_buy": 7,
-      "buy": 4,
-      "learning_phase": 0,
-      "learning_phase_label": "Ingest only",
-      "phase_blockers": [
-        "no benchmark configured for omxs30"
-      ],
-      "expected_epoch0_blockers": [],
-      "learning": {
-        "current_phase": 0,
-        "next_phase": 1,
-        "phase1_ready": false,
-        "phase2_ready": false,
-        "phase3_ready": false,
-        "weekly_paper_enabled": false,
-        "weekday_paper_enabled": false,
-        "blockers": [
-          "no benchmark configured for omxs30"
-        ],
-        "phase1": {
-          "screen_archives": 0,
-          "observe_snapshot_count": 0
-        },
-        "phase2": {
-          "weekly_batch_count": 0,
-          "min_weekly_batches": 0
-        }
-      },
-      "filing_health": {
-        "buy_tier_count": 11,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 7,
-        "indexed_without_body": 0,
-        "bodies_median": 2.0,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
-        "ingest_exhausted": false,
-        "parked_count": 0,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "TEL2-B.ST",
-          "ASSA-B.ST",
-          "SKA-B.ST",
-          "SKF-B.ST",
-          "ESSITY-B.ST",
-          "SAND.ST",
-          "TELIA.ST"
-        ],
-        "unmeasured_tickers": [],
-        "parked_tickers": []
-      },
-      "filing_gaps": 0,
-      "paper_instrument": null,
-      "ai_judgment": null,
-      "knob_apply": null,
-      "epoch0": null,
-      "equal_support": null,
-      "near_miss": null,
-      "sprint_progress": {
-        "window_days": 2,
-        "run_count": 11,
-        "targets": 70,
-        "improved": 4,
-        "improved_tickers": [
-          "TEL2-B.ST",
-          "TELIA.ST",
-          "SKF-B.ST",
-          "SAND.ST"
-        ],
-        "last_run_at": "2026-10-04T18:12:53.472524+00:00",
-        "runtime_cutoff_runs": 0,
-        "error_runs": 0,
-        "gaps_before": {
-          "unmeasured": 4,
-          "zero_body": 0,
-          "thin": 3,
-          "indexed_without_body": 0,
-          "filing_gaps": 4
-        },
-        "gaps_after": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 7,
-          "indexed_without_body": 0,
-          "filing_gaps": 0
-        },
-        "gap_delta": {
-          "unmeasured": -4,
-          "zero_body": 0,
-          "thin": 4,
-          "indexed_without_body": 0,
-          "filing_gaps": -4
-        },
-        "remaining": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 7,
-          "indexed_without_body": 0,
-          "filing_gaps": 0
-        },
-        "admission_ready": false,
-        "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "no_observe_benchmark",
-            "severity": "warn",
-            "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
-          }
-        ],
-        "sprint_entered_at": "2026-10-02T21:28:57.697136+00:00"
-      },
-      "held_vs_market": {
-        "schema_version": 1,
-        "status": "empty",
-        "reason": "No paper book or observe-sim marks",
-        "market_id": "omxs30",
-        "source": null,
-        "paper_instrument": "buy_tier_level",
-        "currency": "SEK",
-        "benchmark_ticker": "^STOXX50E",
-        "held_path": null,
-        "market_path": null,
-        "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
-        "points": [],
-        "series": [
-          {
-            "id": "held",
-            "label": "Held book",
-            "kind": "held",
-            "color": "#2b6cb0"
-          },
-          {
-            "id": "market",
-            "label": "^STOXX50E equivalent",
-            "kind": "market",
-            "color": "#64748b"
-          }
-        ],
-        "branches": [],
-        "last": null
-      },
-      "learning_depth": null,
-      "learning_gate": {
-        "schema_version": 2,
-        "observe_only": true,
-        "current_id": "sprint_complete",
-        "start_complete": true,
-        "bodies_complete": true,
-        "sprint_complete": false,
-        "admit_complete": false,
-        "epoch0_complete": false,
-        "trajectory_ready": false,
-        "learning_ready": false,
-        "live_ready": false,
-        "filing_ready": false,
-        "span_weeks": null,
-        "unique_days": null,
-        "leftover": 7,
-        "steps": [
-          {
-            "id": "start",
-            "label": "Start",
-            "gate": "ingest_clock",
-            "status": "done"
-          },
-          {
-            "id": "bodies",
-            "label": "Bodies",
-            "gate": "unmeasured_zero_clear",
-            "status": "done"
-          },
-          {
-            "id": "sprint_complete",
-            "label": "Sprint",
-            "gate": "sprint_ingest_complete",
-            "status": "current"
-          },
-          {
-            "id": "admit",
-            "label": "Admit",
-            "gate": "l322_admit",
-            "status": "pending"
-          },
-          {
-            "id": "epoch0",
-            "label": "Epoch-0",
-            "gate": "epoch0_marks",
-            "status": "pending"
-          },
-          {
-            "id": "ftse_parity_learning",
-            "label": "Parity",
-            "gate": "learning_ready",
-            "status": "pending"
-          },
-          {
-            "id": "live_ready",
-            "label": "Live",
-            "gate": "phase_4_live_screen",
-            "status": "pending"
-          }
-        ],
-        "next_gate": {
-          "id": "sprint_complete",
-          "name": "sprint_ingest_complete",
-          "gate": "sprint_ingest_complete",
-          "criteria": "sprint_ingest_complete / filing_ready: raw ingest_parity_met (all four gap counts zero) or leftover thin/IWB parked. Now via leftover thin/IWB parked or raw ingest_parity_met. Remaining unmeas 0, zero 0, thin 7, IWB 0.",
-          "timeframe": "Sprint until exhaustion or raw parity. Extra jobs do not create unique weeks. Fat slot serializes one head at a time."
-        },
-        "annotation": "Next: sprint_ingest_complete — sprint_ingest_complete / filing_ready: raw ingest_parity_met (all four gap counts zero) or leftover thin/IWB parked. Now via leftover thin/IWB parked or raw ingest_parity_met. Remaining unmeas 0, zero 0, thin 7, IWB 0. Timeframe: Sprint until exhaustion or raw parity. Extra jobs do not create unique weeks. Fat slot serializes one head at a time."
       }
     },
     {
@@ -5507,6 +5258,181 @@
           "timeframe": "Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
         },
         "annotation": "Next: FTSE-parity learning — learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json. Timeframe: Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
+      }
+    },
+    {
+      "market_id": "omxs30",
+      "label": "OMX Stockholm 30",
+      "exchange": "Nasdaq Stockholm",
+      "currency": "SEK",
+      "role": "admitted",
+      "is_live": false,
+      "is_focus": false,
+      "is_graduated": true,
+      "is_queue": true,
+      "is_admitted": true,
+      "is_ftse_equivalent": false,
+      "ingest": "maintenance",
+      "ingest_stream": null,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
+      "ingest_exhausted": true,
+      "queue_rank": 20,
+      "shared_maintenance": true,
+      "health": "warn",
+      "coverage_pct": 1.0,
+      "honest_coverage_pct": 1.0,
+      "ticker_count": 30,
+      "stale": 0,
+      "fresh": 30,
+      "failed_fetch_count": 0,
+      "last_metrics_refresh": "2026-10-04T06:56:38.754013+00:00",
+      "last_constituents_refresh": "2026-10-04T06:56:11.837911+00:00",
+      "last_screen_at": "2026-10-02T21:29:56.526810+00:00",
+      "signal_counts": {
+        "hold": 17,
+        "strong_buy": 7,
+        "buy": 4,
+        "avoid": 2
+      },
+      "shortlist_count": 11,
+      "strong_buy": 7,
+      "buy": 4,
+      "learning_phase": 0,
+      "learning_phase_label": "Not started",
+      "phase_blockers": [
+        "no benchmark configured for omxs30"
+      ],
+      "expected_epoch0_blockers": [],
+      "learning": {
+        "current_phase": 0,
+        "next_phase": 1,
+        "phase1_ready": false,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": true,
+        "blockers": [
+          "no benchmark configured for omxs30"
+        ],
+        "phase1": {
+          "screen_archives": 3,
+          "observe_snapshot_count": 0
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 4
+        }
+      },
+      "filing_health": null,
+      "filing_gaps": null,
+      "paper_instrument": null,
+      "ai_judgment": false,
+      "knob_apply": false,
+      "epoch0": null,
+      "equal_support": null,
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "omxs30",
+        "source": null,
+        "paper_instrument": "buy_tier_level",
+        "currency": "SEK",
+        "benchmark_ticker": "^STOXX50E",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^STOXX50E equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      },
+      "learning_depth": null,
+      "learning_gate": {
+        "schema_version": 2,
+        "observe_only": true,
+        "current_id": "epoch0",
+        "start_complete": true,
+        "bodies_complete": true,
+        "sprint_complete": true,
+        "admit_complete": true,
+        "epoch0_complete": false,
+        "trajectory_ready": false,
+        "learning_ready": false,
+        "live_ready": false,
+        "filing_ready": true,
+        "span_weeks": null,
+        "unique_days": null,
+        "leftover": 0,
+        "steps": [
+          {
+            "id": "start",
+            "label": "Start",
+            "gate": "ingest_clock",
+            "status": "done"
+          },
+          {
+            "id": "bodies",
+            "label": "Bodies",
+            "gate": "unmeasured_zero_clear",
+            "status": "done"
+          },
+          {
+            "id": "sprint_complete",
+            "label": "Sprint",
+            "gate": "sprint_ingest_complete",
+            "status": "done"
+          },
+          {
+            "id": "admit",
+            "label": "Admit",
+            "gate": "l322_admit",
+            "status": "done"
+          },
+          {
+            "id": "epoch0",
+            "label": "Epoch-0",
+            "gate": "epoch0_marks",
+            "status": "current"
+          },
+          {
+            "id": "ftse_parity_learning",
+            "label": "Parity",
+            "gate": "learning_ready",
+            "status": "pending"
+          },
+          {
+            "id": "live_ready",
+            "label": "Live",
+            "gate": "phase_4_live_screen",
+            "status": "pending"
+          }
+        ],
+        "next_gate": {
+          "id": "epoch0",
+          "name": "Epoch-0 marks",
+          "gate": "epoch0_marks",
+          "criteria": "Frozen buy_tier_level epoch-0 book with weekday local-open marks (no book yet; 0 epoch-0/weekday batches). Needs one current screen, prices, and a paper runner — not learning_ready.",
+          "timeframe": "Starts the same week as admit (Sunday stamp + weekday session). Do not wait 12 archives to open the book."
+        },
+        "annotation": "Next: Epoch-0 marks — Frozen buy_tier_level epoch-0 book with weekday local-open marks (no book yet; 0 epoch-0/weekday batches). Needs one current screen, prices, and a paper runner — not learning_ready. Timeframe: Starts the same week as admit (Sunday stamp + weekday session). Do not wait 12 archives to open the book."
       }
     },
     {

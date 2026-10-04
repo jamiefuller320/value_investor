@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-04T18:12:57.142580+00:00",
+  "run_at": "2026-10-04T20:15:34.795762+00:00",
   "market_id": "omxs30",
   "targets": [
     "TEL2-B.ST",
@@ -509,7 +509,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-04T18:11:52.038578+00:00",
+    "snapshot_at": "2026-10-04T20:13:30.971112+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -551,7 +551,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-04T18:12:53.471954+00:00",
+    "snapshot_at": "2026-10-04T20:14:38.486418+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -576,21 +576,21 @@
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 7,
-    "effective_thin_body_tickers": [
-      "TEL2-B.ST",
+    "parked_tickers": [
       "ASSA-B.ST",
-      "SKA-B.ST",
-      "SKF-B.ST",
       "ESSITY-B.ST",
       "SAND.ST",
+      "SKA-B.ST",
+      "SKF-B.ST",
+      "TEL2-B.ST",
       "TELIA.ST"
     ],
+    "parked_count": 7,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -601,10 +601,37 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "omxs30",
+    "to_market": null,
+    "stream_markets_after": [],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "omxs30",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "ASSA-B.ST",
+        "ESSITY-B.ST",
+        "SAND.ST",
+        "SKA-B.ST",
+        "SKF-B.ST",
+        "TEL2-B.ST",
+        "TELIA.ST"
+      ],
+      "learning_admitted_changed": true,
+      "learning_admitted": true
+    },
+    "screen_refresh": null,
+    "at": "2026-10-04T20:14:50.401043+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "omxs30",
-    "assessed_at": "2026-10-04T18:11:52.576843+00:00",
+    "assessed_at": "2026-10-04T20:13:31.221464+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -634,9 +661,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 60.347694959999984,
+  "used_seconds": 67.01226510999999,
   "budget_seconds": 2100.0,
-  "leftover_seconds": 2039.65230504,
+  "leftover_seconds": 2032.98773489,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -644,11 +671,89 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "omxs30",
-    "updated_at": "2026-10-04T18:12:53.473886+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-10-04T20:14:38.487772+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "ASSA-B.ST",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-04T20:14:38.487772+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "ESSITY-B.ST",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-04T20:14:38.487772+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "SAND.ST",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-04T20:14:38.487772+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "SKA-B.ST",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-04T20:14:38.487772+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "SKF-B.ST",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-04T20:14:38.487772+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "TEL2-B.ST",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-04T20:14:38.487772+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "TELIA.ST",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-04T20:14:38.487772+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
@@ -662,30 +767,41 @@
       "TEL2-B.ST",
       "TELIA.ST"
     ],
-    "unparked_leftover": [
-      "ASSA-B.ST",
-      "ESSITY-B.ST",
-      "SAND.ST",
-      "SKA-B.ST",
-      "SKF-B.ST",
-      "TEL2-B.ST",
-      "TELIA.ST"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/omxs30/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "omxs30"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "omxs30",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
-    "compiled_count": 1,
-    "task_ids": [
-      "eng-20261004-07"
-    ],
-    "task_count": 136,
-    "market_id": "asx200",
-    "hunter_ticker": "YAL.AX",
-    "priority_score": 12.0
+    "compiled_count": 0,
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261004-07"
   }
 }
