@@ -232,3 +232,21 @@ def test_cursor_agent_workflows_prefer_api_key_v2() -> None:
             if "secrets.CURSOR_API_KEY" not in line or line.lstrip().startswith("#"):
                 continue
             assert "CURSOR_API_KEY_V2" in line, f"{name}:{i} bare CURSOR_API_KEY secret"
+
+
+def test_workflow_dispatch_callers_need_actions_write() -> None:
+    """GITHUB_TOKEN with actions:read cannot create workflow_dispatch (HTTP 403).
+
+    Regression: 2026-10-04 analysis-review run 37195835399 failed at
+    'Dispatch engineering queue after analysis clearance' and skipped the
+    modelling agent.
+    """
+    missing: list[str] = []
+    for path in sorted(WORKFLOWS.glob("*.yml")):
+        text = path.read_text(encoding="utf-8")
+        if "gh workflow run " not in text and "createWorkflowDispatch" not in text:
+            continue
+        if "actions: write" not in text:
+            missing.append(path.name)
+    assert missing == [], f"workflows dispatch others without actions: write: {missing}"
+
