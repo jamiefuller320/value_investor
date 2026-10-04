@@ -548,7 +548,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-04T12:13:46.694795+00:00",
+  "updated_at": "2026-10-04T13:48:18.916778+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -556,7 +556,7 @@
     "euro_depth"
   ],
   "ingest_parallel_sprint": [
-    "smi"
+    "ftse_smallcap"
   ],
   "ingest_parallel_sprint_2": [
     "omxs30"
@@ -879,7 +879,8 @@
       "us_adr_asia",
       "sti",
       "atx",
-      "psi20"
+      "psi20",
+      "smi"
     ],
     "epoch0_shard_after_screen": true,
     "equal_support_after_screen": true,
@@ -903,17 +904,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "reseeded": true,
-        "at": "2026-09-14T20:30:45.674106+00:00",
-        "parallel_stream": 1,
-        "from_market": null,
-        "to_market": "asx200",
-        "stream_markets_after": [
-          "asx200"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "reseeded": true,
         "at": "2026-09-15T07:34:31.744393+00:00",
@@ -1404,6 +1394,16 @@
           "omxs30"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-10-04T13:48:18.916770+00:00",
+        "parallel_stream": 1,
+        "from_market": "smi",
+        "to_market": "ftse_smallcap",
+        "stream_markets_after": [
+          "ftse_smallcap"
+        ],
+        "ingest_parity_recorded": false
       }
     ]
   },
@@ -1422,6 +1422,7 @@
     "ibex35",
     "nasdaq100",
     "psi20",
+    "smi",
     "sp500",
     "sti",
     "tsx60",

@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-03T19:31:51.780295+00:00",
+  "run_at": "2026-10-04T13:48:54.765217+00:00",
   "market_id": "smi",
   "targets": [
     "PGHN.SW",
@@ -154,7 +154,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-03T19:31:25.891905+00:00",
+    "snapshot_at": "2026-10-04T13:47:51.590867+00:00",
     "market_id": "smi",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -186,7 +186,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-03T19:31:44.607177+00:00",
+    "snapshot_at": "2026-10-04T13:48:12.311396+00:00",
     "market_id": "smi",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -206,16 +206,16 @@
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 2,
-    "effective_thin_body_tickers": [
+    "parked_tickers": [
       "PGHN.SW",
       "RO.SW"
     ],
+    "parked_count": 2,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -226,10 +226,43 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "smi",
+    "to_market": "ftse_smallcap",
+    "stream_markets_after": [
+      "ftse_smallcap"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "smi",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "PGHN.SW",
+        "RO.SW"
+      ],
+      "learning_admitted_changed": true,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "ftse_smallcap",
+      "forced": true,
+      "prior_screen_at": "2026-10-04T06:22:29.681182+00:00",
+      "prior_age_days": 0,
+      "run_at": "2026-10-04T13:48:50.096836+00:00",
+      "shortlist_count": 9,
+      "ticker_count": 77
+    },
+    "at": "2026-10-04T13:48:18.916770+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "smi",
-    "assessed_at": "2026-10-03T19:31:26.209755+00:00",
+    "assessed_at": "2026-10-04T13:47:51.746741+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -254,9 +287,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 18.05763481300005,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2081.942365187,
+  "used_seconds": 20.406344426000032,
+  "budget_seconds": 1050.0,
+  "leftover_seconds": 1029.593655574,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -264,11 +297,34 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "smi",
-    "updated_at": "2026-10-03T19:31:44.608482+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-10-04T13:48:12.312361+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "PGHN.SW",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-04T13:48:12.312361+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      },
+      {
+        "ticker": "RO.SW",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-04T13:48:12.312361+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
@@ -277,21 +333,41 @@
       "PGHN.SW",
       "RO.SW"
     ],
-    "unparked_leftover": [
-      "PGHN.SW",
-      "RO.SW"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/smi/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "smi"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "smi",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "nasdaq100",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 129,
+    "task_count": 135,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0
