@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-04T11:28:01+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-04T17:30:15+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -606,6 +606,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L522 | **Cold-store pack achievement metrics panel** | Extend thin Ops status panel with achievement metrics: units fetched over nights, week coverage, source hit-rate history. Thin outcome/clash/next-widen panel already shipped. | Several quiet apply nights with isolation_ok produce non-zero units_completed / objects_written worth graphing |
 | L524 | **L461 observe-utilization card for P1 first-run pin** | Do not add a stability/utilization dashboard card for the thin #953 first-run observe pin. Ops-monitor finding + p1_first_run_pin.json is the approved surface. | Pin window has expired or a chronic EPS-from-body soak is explicitly approved |
 | L525 | **Investigate why PR ruff autofix skipped extra trailing newline** | CI validate on #960 failed ruff format (extra trailing newline in test_gha_secret_hygiene.py) and ci-pr-autofix did not apply. Diagnose skip gate (chore(ci) prefix, changed-file scope) without expanding autofix kinds. | Another cursor/* PR hits ruff_format and autofix does not push a chore(ci) commit |
+| L526 | **Pass current run_at into project_progress during publish** | build_project_progress reads on-disk latest.json before publish writes the new bundle, so evidence.screen_run_at and the 'confirm Sunday refresh' gap stay one week behind (e.g. 27 Sep inside a 4 Oct embed). Distinct from the Overview Updated line (sidecar generated_at). | After the Project progress tile overlay prefers newer generated_at, if the gaps line still says confirm Sunday refresh on a green Sunday screen. |
 
 ---
 

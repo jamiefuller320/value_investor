@@ -78,7 +78,12 @@ Legacy: a browser-stored fine-grained PAT can still `workflow_dispatch` directly
 Initial Overview load also cache-busts `data/progress_report.json` (`?ts=…` +
 `cache: "no-store"`). Sidecars (`market_status.json`, `automation.json`, and
 the rest) are **always** overlaid on `latest.json`, so a weekday ingest or
-ladder refresh is not hidden by Sunday's embedded copy. After Generate (local
+ladder refresh is not hidden by Sunday's embedded copy. The Overview **Project
+progress** tile dates `project_progress.generated_at` (clock of last
+`build_project_progress()`, not `week_ending`). Email-report does not commit
+`project_progress.json`; if that sidecar is older than the `latest.json` embed,
+the UI keeps the newer embed so “Updated …” is not stuck on the last
+progress-report write. After Generate (local
 or Pages) the whole dashboard reloads, not just the progress card. Returning
 to the tab after 45s also re-fetches (and locally rebuilds `market_status.json`).
 The market-status grid header shows admitted count, whether the shared

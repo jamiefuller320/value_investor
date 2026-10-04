@@ -1076,12 +1076,32 @@ function setHumanTaskAckStatus(taskId, text) {
   if (el) el.textContent = text || "";
 }
 
+function sidecarGeneratedAtMs(payload) {
+  if (!payload || typeof payload !== "object") return NaN;
+  const ms = Date.parse(String(payload.generated_at || ""));
+  return Number.isFinite(ms) ? ms : NaN;
+}
+
+/** Email-report excludes project_progress.json (L484), so the sidecar can lag
+ *  the Sunday publish embed. Do not hide a newer embed's generated_at. */
+function shouldOverlayDashboardSidecar(key, existing, sidecar) {
+  if (!sidecar) return false;
+  if (key !== "project_progress" || !existing) return true;
+  const sidecarMs = sidecarGeneratedAtMs(sidecar);
+  const embedMs = sidecarGeneratedAtMs(existing);
+  if (Number.isFinite(sidecarMs) && Number.isFinite(embedMs) && sidecarMs < embedMs) {
+    return false;
+  }
+  return true;
+}
+
 async function applyDashboardSidecars(data) {
   const rows = await Promise.all(
     DASHBOARD_SIDECARS.map(async ([key, path]) => [key, await loadOptionalDashboardJson(path)])
   );
   for (const [key, payload] of rows) {
-    if (payload) data[key] = payload;
+    if (!shouldOverlayDashboardSidecar(key, data[key], payload)) continue;
+    data[key] = payload;
   }
   // Acks sidecar is source of truth; board JSON can lag when the ack workflow
   // only committed human_task_acks.json (weekend drain / commit race).
