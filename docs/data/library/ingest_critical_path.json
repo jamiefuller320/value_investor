@@ -1,37 +1,87 @@
 {
-  "market_id": "omxs30",
-  "assessed_at": "2026-10-04T14:18:40.030720+00:00",
-  "unmeasured": [
-    "SKF-B.ST",
-    "SAND.ST"
-  ],
+  "market_id": "euro_depth",
+  "assessed_at": "2026-10-04T16:18:16.919066+00:00",
+  "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
-  "thin_need_discovery": [
-    "TEL2-B.ST",
-    "ASSA-B.ST",
-    "SKA-B.ST",
-    "ESSITY-B.ST",
-    "TELIA.ST"
+  "indexed_without_body": [
+    {
+      "ticker": "COR.LS",
+      "indexed_without_body": 16,
+      "filings_total": 52,
+      "filings_with_body": 16
+    },
+    {
+      "ticker": "ABI.BR",
+      "indexed_without_body": 12,
+      "filings_total": 37,
+      "filings_with_body": 25
+    },
+    {
+      "ticker": "EVN.VI",
+      "indexed_without_body": 1,
+      "filings_total": 3,
+      "filings_with_body": 2
+    },
+    {
+      "ticker": "SAP.DE",
+      "indexed_without_body": 1,
+      "filings_total": 17,
+      "filings_with_body": 16
+    },
+    {
+      "ticker": "UCB.BR",
+      "indexed_without_body": 1,
+      "filings_total": 2,
+      "filings_with_body": 1
+    },
+    {
+      "ticker": "WIE.VI",
+      "indexed_without_body": 1,
+      "filings_total": 3,
+      "filings_with_body": 2
+    }
   ],
-  "thin_need_bodies": [],
-  "primary_blocker": "unmeasured",
+  "thin_need_discovery": [
+    "SGO.PA",
+    "ACKB.BR",
+    "DTE.DE",
+    "MUV2.DE",
+    "SKA-B.ST",
+    "MC.PA",
+    "APAM.AS",
+    "UCB.BR",
+    "BAS.DE",
+    "NBA.LS",
+    "DQ7A.IR",
+    "EL.PA"
+  ],
+  "thin_need_bodies": [
+    "EVN.VI",
+    "WIE.VI",
+    "COR.LS",
+    "UCB.BR"
+  ],
+  "primary_blocker": "indexed_without_body",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "SKF-B.ST",
-    "SAND.ST"
+    "COR.LS",
+    "ABI.BR",
+    "EVN.VI",
+    "SAP.DE",
+    "UCB.BR",
+    "WIE.VI"
   ],
   "recommended_actions": [
-    "Bootstrap 2 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
-    "Discovery/IR seed for 5 thin ticker(s) that already have bodies for every indexed filing",
+    "Prefer indexed-without-body body refetch (6 tickers, top: COR.LS(16), ABI.BR(12), EVN.VI(1), SAP.DE(1), UCB.BR(1))",
+    "Discovery/IR seed for 12 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 2,
+    "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
-    "thin_need_discovery": 5,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 6,
+    "indexed_without_body_rows": 32,
+    "thin_need_discovery": 12,
+    "thin_need_bodies": 4
   }
 }
