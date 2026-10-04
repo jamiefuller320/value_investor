@@ -1,24 +1,109 @@
 {
-  "run_at": "2026-10-03T16:33:23.177228+00:00",
+  "run_at": "2026-10-04T19:50:50.080642+00:00",
   "market_id": "bel20",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "ABI.BR"
+  ],
+  "target_details": [
+    {
+      "ticker": "ABI.BR",
+      "priority_score": 26.3521,
+      "filings_total": 35,
+      "filings_with_body": 0,
+      "indexed_without_body": 35,
+      "reason": "zero_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "ABI.BR",
+      "reason": "zero_body",
+      "before": {
+        "filings_total": 35,
+        "filings_with_body": 0,
+        "indexed_without_body": 35
+      },
+      "after": {
+        "filings_total": 33,
+        "filings_with_body": 33,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 33,
+        "annual": 2,
+        "interim": 27,
+        "trading_update": 0,
+        "other": 4,
+        "with_body": 31,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 27,
+            "with_body": 27
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 4,
+            "with_body": 2
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 1,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 33,
+        "with_body_after": 33,
+        "retries_used": 0,
+        "retry_log": [
+          {
+            "filing_id": "ir_6b3c65b333ba036b",
+            "url": "https://www.sec.gov/Archives/edgar/data/1668717/000119312526326320/d142827dex991.htm",
+            "attempt": 1,
+            "outcome": "fetched_pdf",
+            "source": "pdf"
+          }
+        ],
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 4,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "mandatory": true,
+        "note": "refetch_ir_allowlist_filing_bodies"
+      }
+    }
+  ],
+  "improved": [
+    "ABI.BR"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-03T16:33:03.514976+00:00",
+    "snapshot_at": "2026-10-04T19:49:44.789420+00:00",
     "market_id": "bel20",
-    "buy_tier_count": 5,
+    "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 3,
     "indexed_without_body": 0,
     "bodies_min": 1,
-    "bodies_median": 2,
-    "bodies_max": 4,
+    "bodies_median": 2.5,
+    "bodies_max": 36,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -43,16 +128,16 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-03T16:33:17.914502+00:00",
+    "snapshot_at": "2026-10-04T19:50:50.074207+00:00",
     "market_id": "bel20",
-    "buy_tier_count": 5,
+    "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 3,
     "indexed_without_body": 0,
     "bodies_min": 1,
-    "bodies_median": 2,
-    "bodies_max": 4,
+    "bodies_median": 2.5,
+    "bodies_max": 33,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -83,9 +168,9 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 5,
-    "hits": 4,
-    "new_rows_total": 0,
+    "scanned": 6,
+    "hits": 5,
+    "new_rows_total": 35,
     "curiosity_total": 5,
     "errors": 0,
     "prioritization_weights": {
@@ -113,7 +198,7 @@
   },
   "critical_path": {
     "market_id": "bel20",
-    "assessed_at": "2026-10-03T16:33:03.675088+00:00",
+    "assessed_at": "2026-10-04T19:49:45.055074+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -139,9 +224,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 14.036358636999978,
+  "used_seconds": 64.84905899200001,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3585.963641363,
+  "leftover_seconds": 3535.150941008,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -149,9 +234,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "bel20",
-    "updated_at": "2026-10-03T16:33:17.940386+00:00",
+    "updated_at": "2026-10-04T19:50:50.075352+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 6,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -188,7 +273,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "ACKB.BR",
       "APAM.AS",
@@ -216,6 +301,7 @@
       "ibex35",
       "nasdaq100",
       "psi20",
+      "smi",
       "sp500",
       "sti",
       "tsx60",
@@ -226,10 +312,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "task_ids": [],
-    "task_count": 128,
-    "market_id": "nasdaq100",
-    "hunter_ticker": "PDD",
-    "priority_score": 12.0
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261004-07"
   }
 }
