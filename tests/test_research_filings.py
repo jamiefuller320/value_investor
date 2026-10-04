@@ -7272,7 +7272,7 @@ def test_fetch_filings_ir_allowlist_euro_depth_jmt_ls_builtins(tmp_path: Path):
 
 
 def test_fetch_filings_ir_allowlist_psi20_galp_ls_builtins(tmp_path: Path):
-    """Regression: GALP.LS awaiting_periodic_report — galp.com/corp FY2025 FS + 1Q/2Q26 reports."""
+    """Regression: GALP.LS awaiting_periodic_report — galp.com/corp FY25 results + 1Q/2Q26 reports."""
     allowlist_path = tmp_path / "ir.json"
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
 
@@ -7280,9 +7280,9 @@ def test_fetch_filings_ir_allowlist_psi20_galp_ls_builtins(tmp_path: Path):
     assert len(rows) == 3
     assert all(row["source"] == "ir_allowlist" for row in rows)
     urls = [row["url"] for row in rows]
-    assert any("ConsolidatedandIndividualFinancialStatements.pdf" in url for url in urls)
-    assert any("2Q26%20Report.pdf" in url for url in urls)
-    assert any("1Q26%20Report.pdf" in url for url in urls)
+    assert any("Results_4Q25.pdf" in url for url in urls)
+    assert any("2Q26 Report.pdf" in url for url in urls)
+    assert any("1Q26 Report.pdf" in url for url in urls)
     assert sum(1 for row in rows if row["period"] == "annual") == 1
     assert sum(1 for row in rows if row["period"] == "interim") == 2
 
@@ -10693,7 +10693,7 @@ def test_parked_source_hunter_jmt_ls_euro_depth_has_fetchable_ir():
 
 
 def test_parked_source_hunter_galp_ls_psi20_has_fetchable_ir():
-    """eng-20261004-01: GALP.LS has live galp.com/corp FY2025 FS + 1Q/2Q26 interim report PDFs."""
+    """eng-20261004-01: GALP.LS has live galp.com/corp FY25 results + 1Q/2Q26 interim report PDFs."""
     assert "GALP.LS" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("GALP.LS")
     assert len(rows) == 3
