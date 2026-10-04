@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-03T19:50:48+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-04T11:28:01+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -235,6 +235,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N180 | **Do not start universe archive crawler or fourth sprint stream** | Do not start a second *live* crawler or fourth equal sprint stream. Quiet cold-store writers under archive_lane_gate are a separate lane (L499 pilot) and must not be framed as an equal sprint. Miss-rate observe is not the unlock for a live crawler. | Quiet cold-store writer pilot proves capacity isolation across multiple nights AND there is evidence a live/daytime crawler is still needed beyond the quiet lane — without stealing fat/spare sprint capacity |
 | N181 | **Archive lane self-improvement eng authority** | Do not grant the offline universe archive lane autonomous eng/self-improve authority (bottleneck→eng spray, deepen rewrite, or clash-aware agents). Quiet-window gate+observe is enough; within-lane knobs only after a thin writer pilot proves isolation. | Thin cold-store writer pilot has completed quiet nights without shared 429/runner collision AND bottleneck trajectories show a stable within-lane knob to tune |
 | N182 | **Promote P1 first-run pin to chronic EPS coverage soak** | After the 10-day #953 first-run window, do not keep warning on 0/n forever. A standing EPS-from-body coverage soak would be a different instrument. | First-run window expired and Sunday+Monday still 0/57 with an explicit soak request |
+| N183 | **Universal GHA failure autofix factory** | Do not auto-patch pytest/logic, soak every merge, or auto-merge YAML permission PRs. Dispatch 403 is allowlisted (hygiene + supervised YAML task); unmatched failures bundle on one Daily-hub item. | Thick closed marks show unmatched GHA hub bundles are noisy or 403 still recurs after hygiene is on main |
+| N184 | **Pages token guessing from GHA 403** | Do not infer or rotate GitHub Pages tokens from 403 logs. Pages #941 is a different class from workflow_dispatch actions:write. | Pages deploy fails twice consecutively on main for a permissions/token error with a named runbook |
 
 ---
 
@@ -603,6 +605,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L520 | **Daily hub assessment content enrichment beyond prose UI** | UI now collapses Where/In stage/Waiting/How into one paragraph (#940). Still often empty waiting/how on sticky seed cards — enrich compose_assessment fillers (notes conventions, triage, reconcile) so the paragraph carries real blockers/next steps without reintroducing labeled empty rows. | After #940 merges and a weekday hub glance still shows thin prose that only restates the summary |
 | L522 | **Cold-store pack achievement metrics panel** | Extend thin Ops status panel with achievement metrics: units fetched over nights, week coverage, source hit-rate history. Thin outcome/clash/next-widen panel already shipped. | Several quiet apply nights with isolation_ok produce non-zero units_completed / objects_written worth graphing |
 | L524 | **L461 observe-utilization card for P1 first-run pin** | Do not add a stability/utilization dashboard card for the thin #953 first-run observe pin. Ops-monitor finding + p1_first_run_pin.json is the approved surface. | Pin window has expired or a chronic EPS-from-body soak is explicitly approved |
+| L525 | **Investigate why PR ruff autofix skipped extra trailing newline** | CI validate on #960 failed ruff format (extra trailing newline in test_gha_secret_hygiene.py) and ci-pr-autofix did not apply. Diagnose skip gate (chore(ci) prefix, changed-file scope) without expanding autofix kinds. | Another cursor/* PR hits ruff_format and autofix does not push a chore(ci) commit |
 
 ---
 
@@ -615,6 +618,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N51 | **Consider making value_investor private** | Public visibility widens fork-PR workflow_run attack surface. Private repo would reduce outsider triggerability of privileged responders; weigh against Pages/dashboard sharing needs. | If further secret exposure incidents occur or Pages no longer needs a public repo |
 | S1 | **Rotate any API/SMTP secrets that were pasted or committed** | Git history may still contain old keys even after gitignore fixes | Immediately if keys may still be live |
 | S3 | **Quote special characters in .env** | Unquoted passwords break source .env | When recreating or editing .env locally |
+| N184 | **Pages token guessing from GHA 403** | Do not infer or rotate GitHub Pages tokens from 403 logs. Pages #941 is a different class from workflow_dispatch actions:write. | Pages deploy fails twice consecutively on main for a permissions/token error with a named runbook |
 
 ---
 
