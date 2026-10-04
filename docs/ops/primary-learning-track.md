@@ -48,6 +48,11 @@ scoreboard (`learning_tracks_dual_suite` in the dashboard bundle): Suite B fair
 excess is the adoption headline; Suite A remains the primary-flag churn lab.
 Presentation only — does not flip `is_primary_learning_track` (**N145**).
 
+Sunday **analysis-review** cites the same split as three payload buckets
+(`paper_track_buckets`: Suite A stress, Suite B fair adoption, Suite B identity
+floor). Identity greens (`buy_tier_level` / DCA) are not the adoption series.
+See [`analysis-review.md`](analysis-review.md#dual-suite-paper-track-buckets-observe-only).
+
 ## Post-exit shadow learning (observe-only)
 
 On every paper-auto run, each track records **full position sells** into a shadow cohort and

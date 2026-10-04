@@ -80,6 +80,25 @@ stay off-limits (N3).
 
 See [trajectory-evidence.md](trajectory-evidence.md).
 
+## Dual-suite paper-track buckets (observe-only)
+
+Sunday payload includes a deterministic `paper_track_buckets` object (plus a slim
+`learning_tracks_dual_suite`, without fair-assess replay) built from
+`learning_tracks_review.json`. The modelling agent **must cite all three**:
+
+| Bucket | Score on | Adoption truth? |
+|--------|----------|-----------------|
+| `suite_a_stress` | cost drag / trade count on `ai_judgment` / `rules` | **No** — 3% churn lab |
+| `suite_b_adoption` | `ai_judgment_fair` / `rules_fair` excess vs `^FTSE` and vs each other | **Yes** |
+| `suite_b_identity` | `buy_tier_level` / `buy_tier_level_dca` membership floor | **No** — greens are not fair-policy adoption |
+
+Committed `docs/data/analysis_review.json` also stores `paper_track_buckets` next
+to `sections` so the split is durable even if prose aims at the wrong hurdle.
+Does **not** flip `is_primary_learning_track`, apply knobs, or open tracks
+(**N145** / **N48** / **N23**). Sibling of dashboard dual-suite scoreboard
+([market-trading-costs.md](market-trading-costs.md#test-and-adoption-strategy-dual-suite));
+UI story-badge **L485** remains a later presentation tweak.
+
 ## Chart outcomes (observe-only)
 
 Sunday `analysis-review.yml` and `ftse-publish` refresh
