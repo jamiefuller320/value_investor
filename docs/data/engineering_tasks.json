@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-04T09:17:48.759997+00:00",
+  "compiled_at": "2026-10-04T10:38:35.923253+00:00",
   "run_at": null,
-  "task_count": 134,
+  "task_count": 135,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1770,6 +1770,42 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/674",
       "pr_number": 674,
       "merged_at": "2026-09-16T16:11:25.884730+00:00"
+    },
+    {
+      "id": "eng-20261004-06",
+      "area": "ops",
+      "title": "Workflow fix: analysis review failure",
+      "summary": "GitHub workflow analysis-review.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/37195835399",
+      "priority": "high",
+      "priority_score": 90.0,
+      "source": "workflow_failure",
+      "evidence": {
+        "workflow": "analysis-review.yml",
+        "run_id": "37195835399",
+        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/37195835399",
+        "signature": [
+          "analysis.review",
+          "ftse-analysis-review"
+        ]
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        ".github/workflows/analysis-review.yml",
+        "src/value_investor/analysis_review.py",
+        "tests/test_analysis_review.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260914-03",
@@ -8733,5 +8769,6 @@
   },
   "micro_compile_source": "parked_source_hunter",
   "library_market_id": "nasdaq100",
-  "hunter_ticker": "PDD"
+  "hunter_ticker": "PDD",
+  "workflow_failure_compiled": true
 }
