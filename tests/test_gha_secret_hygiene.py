@@ -249,4 +249,3 @@ def test_workflow_dispatch_callers_need_actions_write() -> None:
         if "actions: write" not in text:
             missing.append(path.name)
     assert missing == [], f"workflows dispatch others without actions: write: {missing}"
-
