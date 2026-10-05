@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-05T16:45:46+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-05T19:10:51+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -327,6 +327,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L529 | **Statistical power and significance gate for learning-track verdicts** | No tracking error, information ratio, confidence interval or multiple-comparison correction exists anywhere in src/. A 3-name book has tracking error ~20%/yr, so detecting 3%/yr alpha at t=2 would take decades of forward paper marks; 14 parallel tracks plus shadows guarantee a lucky winner. Add TE/IR/bootstrap CI per track and a declared minimum detectable effect before adoption. | Before any track or shadow is promoted, or when the next new paper track is proposed |
 | L531 | **Holding-period / turnover mismatch with value thesis** | Closed holdings on ai_judgment last 1-18 days (median ~4) with turnover ~14x capital in 2.5 months; exits fire on 'left target set' rank flips. Value premia accrue over 1-3 years and the learning horizon is 28d. Add a minimum holding period / rank hysteresis band and measure at 6-12 month horizons (extends L170). | With the decision-review ratchet fix, or at the next Suite A/B policy epoch |
 | L532 | **Value-factor control to separate value beta from selection alpha** | Beating ^FTSE says nothing about whether the AI/overlay adds skill over passive value exposure. Early marks show the unfiltered 60-name buy_tier_level book ahead of the 3-name AI books. Add a passive value control (UK value ETF or equal-weight cheapest-quintile basket) and report AI excess vs it. | When ai_judgment adoption criteria are next reviewed |
+| L535 | **Mirror paper fills onto T212 demo account for measured execution** | Place each paper-auto trade as a real order on the T212 demo account and record actual fill vs assumed price, replacing the flat stress/fair cost models with measured spread and slippage and fixing stale listed-price fills on shard books. Caveats: demo ignores market impact on illiquid names; per-account rate limits and 50 pending orders per ticker. | After total-return accounting (L528) and the knob ratchet fix (L527) land |
 
 ### Universe & data
 
@@ -616,6 +617,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L525 | **Investigate why PR ruff autofix skipped extra trailing newline** | CI validate on #960 failed ruff format (extra trailing newline in test_gha_secret_hygiene.py) and ci-pr-autofix did not apply. Diagnose skip gate (chore(ci) prefix, changed-file scope) without expanding autofix kinds. | Another cursor/* PR hits ruff_format and autofix does not push a chore(ci) commit |
 | L526 | **Pass current run_at into project_progress during publish** | build_project_progress reads on-disk latest.json before publish writes the new bundle, so evidence.screen_run_at and the 'confirm Sunday refresh' gap stay one week behind (e.g. 27 Sep inside a 4 Oct embed). Distinct from the Overview Updated line (sidecar generated_at). | After the Project progress tile overlay prefers newer generated_at, if the gaps line still says confirm Sunday refresh on a green Sunday screen. |
 | L533 | **Suite B fair books contain legacy 3% stress-cost trades** | ai_judgment_fair's first trades were charged 3% per side before switching to ~0.53%/0.03%, so its -13% excess (the adoption headline) is partly cost-model contamination. Cold-start a clean fair epoch or restate excess from the clean epoch only. | Before Suite B excess is cited as adoption evidence |
+| L534 | **T212 catalogue as ISIN identifier master and currency cross-check** | T212 has no quotes, candles or fundamentals, but fetch_instruments() returns ISIN, currency (GBX vs GBP), exchange and addedOn. Use ISIN as the join key across Yahoo/library tickers and the T212 currency code to validate yahoo_price_units pence/pound corrections; use fetch_exchanges() schedules as the per-market trading calendar. | Next ticker-mapping or price-unit bug, or when a second market goes live (stage 4) |
 
 ---
 

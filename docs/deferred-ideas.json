@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-05T16:45:46+00:00",
+  "updated_at": "2026-10-05T19:10:51+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12215,6 +12215,41 @@
       "status": "open",
       "source": "Project-wide gap review (agent, 2026-10-05)",
       "added_at": "2026-10-05T16:45:46+00:00"
+    },
+    {
+      "id": "L534",
+      "category": "later",
+      "section": "ops",
+      "title": "T212 catalogue as ISIN identifier master and currency cross-check",
+      "summary": "T212 has no quotes, candles or fundamentals, but fetch_instruments() returns ISIN, currency (GBX vs GBP), exchange and addedOn. Use ISIN as the join key across Yahoo/library tickers and the T212 currency code to validate yahoo_price_units pence/pound corrections; use fetch_exchanges() schedules as the per-market trading calendar.",
+      "revisit_when": "Next ticker-mapping or price-unit bug, or when a second market goes live (stage 4)",
+      "tags": [
+        "t212",
+        "isin",
+        "identifiers",
+        "data-quality"
+      ],
+      "status": "open",
+      "source": "Project-wide gap review (agent, 2026-10-05) \u2014 T212 as data source",
+      "added_at": "2026-10-05T19:10:51+00:00"
+    },
+    {
+      "id": "L535",
+      "category": "later",
+      "section": "learning",
+      "title": "Mirror paper fills onto T212 demo account for measured execution",
+      "summary": "Place each paper-auto trade as a real order on the T212 demo account and record actual fill vs assumed price, replacing the flat stress/fair cost models with measured spread and slippage and fixing stale listed-price fills on shard books. Caveats: demo ignores market impact on illiquid names; per-account rate limits and 50 pending orders per ticker.",
+      "revisit_when": "After total-return accounting (L528) and the knob ratchet fix (L527) land",
+      "tags": [
+        "t212",
+        "demo",
+        "fills",
+        "costs",
+        "execution"
+      ],
+      "status": "open",
+      "source": "Project-wide gap review (agent, 2026-10-05) \u2014 T212 as data source",
+      "added_at": "2026-10-05T19:10:51+00:00"
     }
   ],
   "fragments": [
