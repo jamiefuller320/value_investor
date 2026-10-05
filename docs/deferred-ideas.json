@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-05T19:31:25+00:00",
+  "updated_at": "2026-10-05T20:58:27+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12287,6 +12287,38 @@
       "status": "open",
       "source": "Project-wide gap review (agent, 2026-10-05) \u2014 low-cost data sources",
       "added_at": "2026-10-05T19:31:25+00:00"
+    },
+    {
+      "id": "L538",
+      "category": "later",
+      "section": "learning",
+      "title": "Decision-review NAV marks holdings at avg cost",
+      "summary": "decision_review._mark_prices values open holdings at avg_cost, so published portfolio_value / excess_after_costs is cost-basis, not marked to market. The total-return view (L528) uses equity-curve marks instead.",
+      "revisit_when": "Before any track promotion or knob change cites published excess_after_costs, or when the live review is switched to total return",
+      "tags": [
+        "decision-review",
+        "nav",
+        "metrics"
+      ],
+      "status": "open",
+      "source": "Project gap review: total-return view PR #973",
+      "added_at": "2026-10-05T20:58:27+00:00"
+    },
+    {
+      "id": "L539",
+      "category": "later",
+      "section": "learning",
+      "title": "graduated_allocation max_positions re-applied daily",
+      "summary": "decision-review applies max_positions: 3 to graduated_allocation every weekday, which suggests a config sync resets it to 4 each run. The ratchet fix (PR #971) adds a cooldown but does not resolve the config conflict.",
+      "revisit_when": "After PR #971 merges, if graduated_allocation decision_review.json still shows a daily max_positions apply or the saturation finding fires for it",
+      "tags": [
+        "decision-review",
+        "config",
+        "graduated_allocation"
+      ],
+      "status": "open",
+      "source": "Project gap review: ratchet fix PR #971",
+      "added_at": "2026-10-05T20:58:27+00:00"
     }
   ],
   "fragments": [
