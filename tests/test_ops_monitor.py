@@ -1608,8 +1608,35 @@ def test_paper_learning_findings_defer_before_paper_auto_ready():
     assert finding_email_defer_reason(finding, workflow_checks=[], now=afternoon) is None
 
 
+def test_check_paper_learning_tracks_warns_on_saturated_knobs(tmp_path: Path):
+    paper = _write_paper_learning_root(tmp_path)
+    review_path = paper / "learning_tracks_review.json"
+    review = json.loads(review_path.read_text(encoding="utf-8"))
+    review["reviews"]["ai_judgment"]["saturated_knobs"] = [
+        {"knob": "min_conviction", "pressure": "raise", "bound": 0.6, "trigger": "cost drag"},
+        {"knob": "max_positions", "pressure": "lower", "bound": 3, "trigger": "excess"},
+    ]
+    review_path.write_text(json.dumps(review), encoding="utf-8")
+    findings = check_paper_learning_tracks(paper)
+    saturated = [
+        row for row in findings if row.title == "Decision-review knobs saturated at bounds"
+    ]
+    assert len(saturated) == 1
+    assert saturated[0].severity == "warn"
+    assert saturated[0].auto_fixable is False
+    assert "ai_judgment: min_conviction raise at 0.6, max_positions lower at 3" in (
+        saturated[0].summary
+    )
+
+
 def test_committed_paper_learning_tracks_are_complete():
-    assert check_paper_learning_tracks() == []
+    # Saturation is a data-dependent observe finding, not a structural gap.
+    structural = [
+        row
+        for row in check_paper_learning_tracks()
+        if row.title != "Decision-review knobs saturated at bounds"
+    ]
+    assert structural == []
 
 
 def test_check_phase_b_producer_progress_flags_essay_only_store(tmp_path: Path):

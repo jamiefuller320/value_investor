@@ -865,6 +865,35 @@ def check_paper_learning_tracks(
             )
         )
 
+    saturated_lines: list[str] = []
+    for track_id, row in sorted(reviews.items()):
+        saturated = row.get("saturated_knobs") if isinstance(row, dict) else None
+        if not isinstance(saturated, list) or not saturated:
+            continue
+        parts = [
+            f"{item.get('knob')} {item.get('pressure')} at {item.get('bound')}"
+            for item in saturated
+            if isinstance(item, dict)
+        ]
+        if parts:
+            saturated_lines.append(f"{track_id}: " + ", ".join(parts))
+    if saturated_lines:
+        findings.append(
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title="Decision-review knobs saturated at bounds",
+                summary=(
+                    "Proposal rules still fire but these knobs sit at their clamp bound, "
+                    "so decision-review can no longer respond on that axis — "
+                    + "; ".join(saturated_lines)
+                    + ". Human review: the driver (cost model, churn, or concentration) "
+                    "is outside the knob's reach. See docs/ops/decision-review.md."
+                ),
+                auto_fixable=False,
+            )
+        )
+
     buy_tier_row = summary_tracks.get(BUY_TIER_LEVEL_TRACK_ID) or {}
     if isinstance(buy_tier_row, dict) and buy_tier_row.get("acted"):
         fund = _paper_json_payload(root / BUY_TIER_LEVEL_SUBDIR / FUND_FILENAME)
