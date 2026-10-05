@@ -9267,6 +9267,41 @@ def test_fetch_filings_ir_allowlist_asx200_unmeasured_builtin(tmp_path: Path):
     assert all(row["source"] == "ir_allowlist" for row in cda + bsl + pxa)
 
 
+def test_fetch_filings_ir_allowlist_yal_ax_asx200_iwb_builtin(tmp_path: Path):
+    """eng-20261004-07: YAL.AX leftover IWB — seed Markit/ASX statutory PDFs (not Market Index HTML)."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("YAL.AX", path=allowlist_path)
+    urls = {row["url"] for row in rows}
+    assert len(rows) == 3
+    assert any("06frjf61kmrm39.pdf" in url for url in urls)
+    assert any("2A1698934" in url for url in urls)
+    assert any("2A1700926" in url for url in urls)
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert "YAL.AX" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_parked_source_hunter_yal_ax_asx200_has_fetchable_ir():
+    """eng-20261004-07: YAL.AX leftover IWB — Markit/ASX statutory PDFs in _BUILTIN_IR_URLS."""
+    assert "YAL.AX" not in PARKED_SOURCE_HUNTER_SKIP
+    urls = _BUILTIN_IR_URLS.get("YAL.AX") or []
+    assert len(urls) == 3
+    assert any("06frjf61kmrm39.pdf" in url for url in urls)
+    assert any("2A1698934" in url for url in urls)
+    assert any("2A1700926" in url for url in urls)
+
+
+def test_yal_ax_markit_leftover_pdfs_live_fetch():
+    """eng-20261004-07: Markit PDFs for parked IWB documentKeys fetch substantive bodies."""
+    interim = "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03139235-2A1698934"
+    kestrel = "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03142935-2A1700926"
+    for url in (interim, kestrel):
+        body = fetch_filing_body(url)
+        assert body and len(body) > 1000
+        assert "YANCOAL" in body.upper() or "Yancoal" in body
+
+
 def test_fetch_filings_ir_allowlist_jbh_dnl_thin_builtin(tmp_path: Path):
     """JBH.AX / DNL.AX thin buy-tier: seed statutory PDFs when Markit latest-five is noise."""
     allowlist_path = tmp_path / "empty_ir.json"
