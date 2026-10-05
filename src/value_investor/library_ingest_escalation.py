@@ -435,9 +435,7 @@ def _draft_parked_source_hunter_task(
         "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
     ]
     if leftover_kind == LEFTOVER_KEY_BODY_REASON:
-        criteria.append(
-            "Do not unpark eng-20261004-03 or change N155 / Sunday research cap"
-        )
+        criteria.append("Do not unpark eng-20261004-03 or change N155 / Sunday research cap")
     return EngineeringTask(
         id=task_id,
         area="ingest",

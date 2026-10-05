@@ -396,4 +396,3 @@ def test_compile_leftover_key_body_hunters_behind_open(tmp_path: Path, monkeypat
     assert leftover[0]["priority_score"] == 12.0
     assert leftover[0]["status"] == "open"
     assert leftover[0]["evidence"]["wait_behind_task_id"] == "eng-20261004-07"
-
