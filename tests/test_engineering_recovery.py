@@ -114,22 +114,16 @@ def test_unpark_agent_task_reopens_and_clears_parked_fields(tmp_path: Path):
 
 def test_cancel_agent_task_cancels_parked_without_unparking(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
-    sibling = (
-        _task("eng-keep-parked", status="parked").to_dict()
-        | {
-            "parked_reason": "preflight blocked PR open — preflight failed",
-            "parked_policy": "preflight_clash",
-            "parked_at": datetime.now(UTC).isoformat(),
-        }
-    )
-    target = (
-        _task("eng-cancel-me", status="parked").to_dict()
-        | {
-            "parked_reason": "engineering-agent cannot push workflows",
-            "parked_policy": "workflow_permission",
-            "parked_at": datetime.now(UTC).isoformat(),
-        }
-    )
+    sibling = _task("eng-keep-parked", status="parked").to_dict() | {
+        "parked_reason": "preflight blocked PR open — preflight failed",
+        "parked_policy": "preflight_clash",
+        "parked_at": datetime.now(UTC).isoformat(),
+    }
+    target = _task("eng-cancel-me", status="parked").to_dict() | {
+        "parked_reason": "engineering-agent cannot push workflows",
+        "parked_policy": "workflow_permission",
+        "parked_at": datetime.now(UTC).isoformat(),
+    }
     tasks_path.write_text(json.dumps({"tasks": [sibling, target]}), encoding="utf-8")
 
     action = cancel_agent_task(
