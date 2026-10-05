@@ -1,19 +1,27 @@
 {
   "market_id": "sp500",
-  "assessed_at": "2026-10-04T13:38:40.980149+00:00",
-  "unmeasured": [],
+  "assessed_at": "2026-10-05T11:18:54.778564+00:00",
+  "unmeasured": [
+    "MU"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "HAL",
+      "ticker": "GRMN",
       "indexed_without_body": 10,
-      "filings_total": 18,
-      "filings_with_body": 8
+      "filings_total": 19,
+      "filings_with_body": 9
     },
     {
-      "ticker": "RTX",
-      "indexed_without_body": 8,
-      "filings_total": 18,
+      "ticker": "DELL",
+      "indexed_without_body": 9,
+      "filings_total": 19,
+      "filings_with_body": 10
+    },
+    {
+      "ticker": "CCI",
+      "indexed_without_body": 6,
+      "filings_total": 16,
       "filings_with_body": 10
     },
     {
@@ -21,12 +29,6 @@
       "indexed_without_body": 5,
       "filings_total": 19,
       "filings_with_body": 14
-    },
-    {
-      "ticker": "APTV",
-      "indexed_without_body": 2,
-      "filings_total": 20,
-      "filings_with_body": 18
     },
     {
       "ticker": "BXP",
@@ -48,30 +50,30 @@
     }
   ],
   "thin_need_discovery": [],
-  "thin_need_bodies": [
-    "HAL"
-  ],
-  "primary_blocker": "indexed_without_body",
+  "thin_need_bodies": [],
+  "primary_blocker": "unmeasured",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "HAL",
-    "RTX",
+    "MU",
+    "GRMN",
+    "DELL",
+    "CCI",
     "FICO",
-    "APTV",
     "BXP",
     "CRH",
     "LMT"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (7 tickers, top: HAL(10), RTX(8), FICO(5), APTV(2), BXP(2))",
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (7 tickers, top: GRMN(10), DELL(9), CCI(6), FICO(5), BXP(2))",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
     "indexed_without_body_tickers": 7,
-    "indexed_without_body_rows": 30,
+    "indexed_without_body_rows": 35,
     "thin_need_discovery": 0,
-    "thin_need_bodies": 1
+    "thin_need_bodies": 0
   }
 }
