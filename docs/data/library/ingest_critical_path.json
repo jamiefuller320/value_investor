@@ -1,32 +1,36 @@
 {
-  "market_id": "asx200",
-  "assessed_at": "2026-10-05T21:41:09.917437+00:00",
-  "unmeasured": [],
-  "zero_body": [],
-  "indexed_without_body": [
-    {
-      "ticker": "YAL.AX",
-      "indexed_without_body": 2,
-      "filings_total": 34,
-      "filings_with_body": 32
-    }
+  "market_id": "ftse_mib",
+  "assessed_at": "2026-10-05T23:13:22.892366+00:00",
+  "unmeasured": [
+    "TEN.MI"
   ],
-  "thin_need_discovery": [],
+  "zero_body": [],
+  "indexed_without_body": [],
+  "thin_need_discovery": [
+    "MONC.MI",
+    "PST.MI",
+    "INW.MI",
+    "BC.MI",
+    "UNI.MI",
+    "FCT.MI"
+  ],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "YAL.AX"
+    "TEN.MI"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (1 tickers, top: YAL.AX(2))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Discovery/IR seed for 6 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 1,
-    "indexed_without_body_rows": 2,
-    "thin_need_discovery": 0,
+    "indexed_without_body_tickers": 0,
+    "indexed_without_body_rows": 0,
+    "thin_need_discovery": 6,
     "thin_need_bodies": 0
   }
 }
