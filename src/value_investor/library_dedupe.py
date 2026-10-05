@@ -17,18 +17,17 @@ def canonical_library_ticker(ticker: str) -> str:
     return str(ticker or "").strip().upper()
 
 
-def existing_library_research_tickers(root: Path) -> set[str]:
-    """
-    Tickers that already have a ``research.md`` under any market library.
+def library_research_homes(root: Path) -> dict[str, str]:
+    """Canonical ticker → first lexicographic library market that holds ``research.md``.
 
-    Used so a buy-tier name researched under ``sp500`` is not memo'd again under
-    ``nasdaq100``.
+    Exact Yahoo ticker only (``SHEL.L`` ≠ ``SHEL``). Does not inspect FTSE live
+    ``docs/data/research``.
     """
     markets_root = Path(root) / "markets"
-    found: set[str] = set()
+    homes: dict[str, str] = {}
     if not markets_root.is_dir():
-        return found
-    for market_dir in markets_root.iterdir():
+        return homes
+    for market_dir in sorted(markets_root.iterdir(), key=lambda p: p.name):
         if not market_dir.is_dir():
             continue
         research = market_dir / "screen" / "research"
@@ -36,8 +35,18 @@ def existing_library_research_tickers(root: Path) -> set[str]:
             continue
         for entry in research.iterdir():
             if entry.is_dir() and (entry / "research.md").exists():
-                found.add(canonical_library_ticker(entry.name))
-    return found
+                homes.setdefault(canonical_library_ticker(entry.name), market_dir.name)
+    return homes
+
+
+def existing_library_research_tickers(root: Path) -> set[str]:
+    """
+    Tickers that already have a ``research.md`` under any market library.
+
+    Used so a buy-tier name researched under ``sp500`` is not memo'd again under
+    ``nasdaq100``.
+    """
+    return set(library_research_homes(root))
 
 
 def research_home_market(root: Path, ticker: str) -> str | None:

@@ -1,29 +1,45 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-04T08:10:11.986782+01:00",
+    "local_time": "2026-10-05T08:38:15.377561+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-04T08:00:00+01:00",
-    "settle_at": "2026-10-04T09:15:00+01:00",
+    "market_open_at": "2026-10-05T08:00:00+01:00",
+    "settle_at": "2026-10-05T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [
     {
-      "id": "afe8aca3-f034-4f33-8219-0230dc3f277d",
+      "id": "c505955c-3aee-40f1-92a9-aae31bd08415",
       "fund_id": "97d001ec-6b08-4286-8657-7409e3d783fc",
-      "acted_at": "2026-10-04T08:10:11.986782+01:00",
+      "acted_at": "2026-10-05T08:38:15.377561+01:00",
       "ticker": "COR.LS",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 96.339409,
+      "price": 6.92,
+      "gross": 666.67,
+      "cost": 1.17,
+      "net_cash": 665.5,
+      "note": "Automated trim",
+      "name": "Corticeira Amorim, S.G.P.S., S.A.",
+      "avg_cost_at_exit": 6.92
+    },
+    {
+      "id": "92f9dd5a-6403-446c-8b42-11756c2e1287",
+      "fund_id": "97d001ec-6b08-4286-8657-7409e3d783fc",
+      "acted_at": "2026-10-05T08:38:15.377561+01:00",
+      "ticker": "NVG.LS",
       "side": "buy",
       "sizing_mode": "cash",
-      "shares": 144.256222,
-      "price": 6.92,
-      "gross": 998.25,
-      "cost": 1.75,
-      "net_cash": -1000.0,
+      "shares": 104.785401,
+      "price": 3.17,
+      "gross": 332.17,
+      "cost": 0.58,
+      "net_cash": -332.75,
       "note": "Automated buy",
-      "name": "Corticeira Amorim, S.G.P.S., S.A."
+      "name": "The Navigator Company, S.A."
     }
   ],
   "plan": {
@@ -39,8 +55,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 998.25,
-    "cash": 0.0,
+    "nav": 996.51,
+    "cash": 332.75,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -52,35 +68,71 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 998.25,
+    "target_sleeve_value": 332.17,
     "targets": [
+      {
+        "ticker": "GALP.LS",
+        "name": "Galp Energia, SGPS, S.A.",
+        "signal": "buy",
+        "conviction_score": 0.6133000000000001,
+        "price": 21.9
+      },
       {
         "ticker": "COR.LS",
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
         "signal": "buy",
-        "conviction_score": 0.281775,
+        "conviction_score": 0.35921,
         "price": 6.92
+      },
+      {
+        "ticker": "NVG.LS",
+        "name": "The Navigator Company, S.A.",
+        "signal": "buy",
+        "conviction_score": 0.23408999999999996,
+        "price": 3.17
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "GALP.LS",
+        "name": "Galp Energia, SGPS, S.A.",
+        "reason": "New sleeve",
+        "value": 332.17,
+        "price": 21.9,
+        "target_value": 332.17,
+        "conviction_score": 0.6133000000000001,
+        "signal": "buy"
+      }
+    ],
     "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "COR.LS",
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
         "reason": "Already near equal-weight target",
-        "value": 998.25,
-        "target_value": 998.25,
-        "conviction_score": 0.281775,
+        "value": 331.58,
+        "target_value": 332.17,
+        "conviction_score": 0.35921,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "NVG.LS",
+        "name": "The Navigator Company, S.A.",
+        "reason": "Already near equal-weight target",
+        "value": 332.17,
+        "target_value": 332.17,
+        "conviction_score": 0.23408999999999996,
         "signal": "buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 1 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -90,6 +142,17 @@
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
       "mark": 6.92,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "NVG.LS",
+      "name": "The Navigator Company, S.A.",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 3.17,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -110,13 +173,13 @@
       "id": "97d001ec-6b08-4286-8657-7409e3d783fc",
       "created_at": "2026-10-04T07:10:11.986866+00:00"
     },
-    "cash": 0.0,
+    "cash": 332.75,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
       "COR.LS": {
         "ticker": "COR.LS",
-        "shares": 144.256222,
+        "shares": 47.916813,
         "avg_cost": 6.92,
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
         "sector": "Basic Materials",
@@ -124,6 +187,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-04T08:10:11.986782+01:00"
+      },
+      "NVG.LS": {
+        "ticker": "NVG.LS",
+        "shares": 104.785401,
+        "avg_cost": 3.17,
+        "name": "The Navigator Company, S.A.",
+        "sector": "Basic Materials",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-10-05T08:38:15.377561+01:00"
       }
     },
     "trades": [
@@ -141,6 +215,37 @@
         "net_cash": -1000.0,
         "note": "Automated buy",
         "name": "Corticeira Amorim, S.G.P.S., S.A."
+      },
+      {
+        "id": "c505955c-3aee-40f1-92a9-aae31bd08415",
+        "fund_id": "97d001ec-6b08-4286-8657-7409e3d783fc",
+        "acted_at": "2026-10-05T08:38:15.377561+01:00",
+        "ticker": "COR.LS",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 96.339409,
+        "price": 6.92,
+        "gross": 666.67,
+        "cost": 1.17,
+        "net_cash": 665.5,
+        "note": "Automated trim",
+        "name": "Corticeira Amorim, S.G.P.S., S.A.",
+        "avg_cost_at_exit": 6.92
+      },
+      {
+        "id": "92f9dd5a-6403-446c-8b42-11756c2e1287",
+        "fund_id": "97d001ec-6b08-4286-8657-7409e3d783fc",
+        "acted_at": "2026-10-05T08:38:15.377561+01:00",
+        "ticker": "NVG.LS",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 104.785401,
+        "price": 3.17,
+        "gross": 332.17,
+        "cost": 0.58,
+        "net_cash": -332.75,
+        "note": "Automated buy",
+        "name": "The Navigator Company, S.A."
       }
     ],
     "equity_curve": [
@@ -184,20 +289,37 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-05T08:38:15.377561+01:00",
+        "portfolio_value": 894.96,
+        "cash": 332.75,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.84702
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-04T08:10:11.986782+01:00",
+    "last_mark_at": "2026-10-05T08:38:15.377561+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (1 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "psi20",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T07:10:12.215178+00:00",
+    "generated_at": "2026-10-05T07:38:15.405767+00:00",
     "observe_only": true,
     "open_count": 0,
     "closed_count": 0,
@@ -276,7 +398,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T07:10:12.215434+00:00",
+    "generated_at": "2026-10-05T07:38:15.406568+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -332,7 +454,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 0,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 1,
+      "hold_with_data_quality_count": 2,
       "gaps": [
         "hold_recovery closed episodes=0 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -341,10 +463,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 1,
-        "recovered_to_breakeven": 1,
+        "count": 2,
+        "recovered_to_breakeven": 2,
         "close_reasons": {
-          "open": 1
+          "open": 2
         }
       },
       "closed": {
@@ -353,7 +475,10 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 0
+        "count": 1,
+        "verdicts": {
+          "open": 1
+        }
       },
       "closed": {
         "count": 0
@@ -362,7 +487,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 1,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -374,8 +499,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-04T07:10:12.215668+00:00",
-    "as_of": "2026-10-04T08:10:11.986782+01:00",
+    "updated_at": "2026-10-05T07:38:15.407350+00:00",
+    "as_of": "2026-10-05T08:38:15.377561+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -387,16 +512,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 1,
+    "holding_count": 2,
     "underwater_count": 0,
     "thesis_status_counts": {
       "intact": 0,
-      "weakening": 1,
+      "weakening": 2,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 1,
+      "holding_count": 2,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -437,7 +562,7 @@
         "avg_cost": 6.92,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.2818,
+        "conviction_score": 0.3592,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -451,18 +576,58 @@
         "research_verdict": "caution",
         "reasons": [
           "research verdict caution",
-          "conviction 28% below intact floor",
           "still buy",
           "cheapness family still passes"
         ],
         "intact_reasons": [
           "still buy",
           "cheapness family still passes",
-          "data_quality 0.95"
+          "data_quality 0.95",
+          "conviction 36%"
+        ],
+        "weaken_reasons": [
+          "research verdict caution"
+        ],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "NVG.LS",
+        "name": "The Navigator Company, S.A.",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 3.17,
+        "avg_cost": 3.17,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.2341,
+        "data_quality_score": 0.9,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "quality"
+        ],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "conviction 23% below intact floor",
+          "still buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "cheapness family still passes",
+          "data_quality 0.90"
         ],
         "weaken_reasons": [
           "research verdict caution",
-          "conviction 28% below intact floor"
+          "conviction 23% below intact floor"
         ],
         "broken_reasons": []
       }
@@ -474,7 +639,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T07:10:12.215972+00:00",
+    "generated_at": "2026-10-05T07:38:15.623169+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -482,7 +647,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 0,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 1,
+      "open_with_thesis": 2,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -534,8 +699,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-04T07:10:12.216307+00:00",
-    "open_count": 1,
+    "generated_at": "2026-10-05T07:38:15.624693+00:00",
+    "open_count": 2,
     "closed_count": 0,
     "scored_count": 0,
     "scored_count_all": 0,
@@ -592,13 +757,13 @@
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 1,
-    "marked_this_pass": 0,
+    "marked_this_pass": 1,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T08:10:11.986782+01:00",
+    "generated_at": "2026-10-05T08:38:15.377561+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -622,12 +787,12 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 1,
+    "open_count": 3,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 1,
+      "on_book": 2,
       "off_book": 0,
-      "never_funded": 0
+      "never_funded": 1
     },
     "closed_by_capital_status": {
       "on_book": 0,
@@ -646,7 +811,7 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 1,
+      "opened": 2,
       "closed": 0,
       "tagged_on_book": 1,
       "tagged_off_book": 0
@@ -655,7 +820,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T08:10:11.986782+01:00",
+    "generated_at": "2026-10-05T08:38:15.377561+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -679,8 +844,8 @@
     },
     "cards": [
       {
-        "ticker": "COR.LS",
-        "name": "Corticeira Amorim, S.G.P.S., S.A.",
+        "ticker": "NVG.LS",
+        "name": "The Navigator Company, S.A.",
         "algo_action": "buy",
         "algo_reason": "Automated buy",
         "shadow_verdict": "abstain",
@@ -703,13 +868,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 1
+            "value": 3
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
+            "value": 3
           },
           {
             "kind": "rank_drop",
@@ -727,7 +892,7 @@
             "kind": "conviction_score",
             "source": "candidates",
             "detail": "Conviction score at decision time",
-            "value": 0.281775
+            "value": 0.23408999999999996
           },
           {
             "kind": "still_buyish",
@@ -753,8 +918,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-04T08:10:11.986782+01:00",
-        "proposal_id": "buy_tier_level:COR.LS:buy:2026-10-04T08:10:11.986782+01:00",
+        "logged_at": "2026-10-05T08:38:15.377561+01:00",
+        "proposal_id": "buy_tier_level:NVG.LS:buy:2026-10-05T08:38:15.377561+01:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": 0,
@@ -778,7 +943,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-04T08:10:11.986782+01:00",
+      "generated_at": "2026-10-05T08:38:15.377561+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
@@ -813,7 +978,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-04T07:10:12.216945+00:00",
+  "generated_at": "2026-10-05T07:38:15.626845+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

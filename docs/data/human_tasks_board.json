@@ -1,19 +1,61 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T08:19:40.184068+00:00",
+  "generated_at": "2026-10-05T07:47:46.329179+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-09-28",
   "counts": {
-    "new_info": 0,
+    "new_info": 6,
     "unacked": 0,
-    "acked": 33,
+    "acked": 27,
     "automated": 20,
     "human": 33
   },
   "tasks": [
+    {
+      "id": "weekday-engineering-parked-backlog-clear",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+      "automated": false,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "engineering-parked-backlog-clearing",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "2 attention-parked eng tasks",
+        "updated_at": "2026-10-05T07:47:42.673187+00:00",
+        "fingerprint": "e0feb3c4dc3b610c",
+        "bullets": [
+          "Parked tasks: 2 (attention ~2)",
+          "Queue-clearing pause active: False — evaluated 2026-10-05T07:47:42.673187+00:00",
+          "Traffic pause active: False",
+          "eng-20261004-05: Reconcile research index with committed overlays for the two `index_missing_committed_verdicts` names (AO.L, HOC.L) and add a CI check that `committed_count` eq",
+          "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo"
+        ],
+        "source_keys": [
+          "engineering_tasks"
+        ],
+        "ack_sufficient": false,
+        "auto_ackable": false,
+        "ack_reason": "attention_parked_remaining"
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-09-30T14:44:15.387984+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "c0c3ee56f97eb146"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
     {
       "id": "monthly-pr-fix-common-issues",
       "title": "Review common PR check / merge fix-request reasons",
@@ -29,10 +71,10 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-10-03T15:50:35.697634+00:00",
-        "fingerprint": "05900a47b6870fbe",
+        "updated_at": "2026-10-05T06:43:19.467204+00:00",
+        "fingerprint": "5690df023d5ee2e9",
         "bullets": [
-          "Occasions logged: 150",
+          "Occasions logged: 154",
           "PR mergeable=CONFLICTING against main: 7",
           "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
           "validate check failed: 3",
@@ -46,12 +88,12 @@
       },
       "ack": {
         "acked": true,
-        "stale": false,
+        "stale": true,
         "acked_at": "2026-10-03T18:23:38.129460+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "05900a47b6870fbe"
       },
-      "sort_bucket": "acked",
+      "sort_bucket": "new_info",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -69,9 +111,9 @@
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "Admitted shard epoch-0 watch · 19",
-        "updated_at": "2026-10-04T07:12:01.527730+00:00",
-        "fingerprint": "c7a1dd236ba3e49b",
+        "headline": "Admitted shard epoch-0 watch · 21",
+        "updated_at": "2026-10-04T20:17:03.078361+00:00",
+        "fingerprint": "f6a09476854cf089",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=36",
           "aex: phase=0 ai=False knob=False holdings=8",
@@ -88,75 +130,34 @@
       },
       "ack": {
         "acked": true,
-        "stale": false,
+        "stale": true,
         "acked_at": "2026-10-03T18:23:38.063060+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "c7a1dd236ba3e49b"
       },
-      "sort_bucket": "acked",
+      "sort_bucket": "new_info",
       "auto_ackable": false,
       "ack_sufficient": false
     },
     {
-      "id": "weekday-engineering-parked-backlog-clear",
-      "title": "Clear engineering parked backlog when dispatch pauses",
-      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
-      "automated": false,
-      "cadence": "weekday",
-      "section_id": "weekday",
-      "section_title": "Weekday (Mon–Fri)",
-      "doc_path": "docs/ops/ops-monitor.md",
-      "doc_anchor": "engineering-parked-backlog-clearing",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "0 attention-parked eng tasks · quiet (auto-ackable)",
-        "updated_at": "2026-10-04T02:35:43.370116+00:00",
-        "fingerprint": "c0c3ee56f97eb146",
-        "bullets": [
-          "Quiet after recover-queue — observe Acknowledge is sufficient (no list-parked triage).",
-          "Parked tasks: 0 (attention ~0)",
-          "Queue-clearing pause active: False — evaluated 2026-10-04T02:35:43.370116+00:00",
-          "Traffic pause active: False"
-        ],
-        "source_keys": [
-          "engineering_tasks"
-        ],
-        "ack_sufficient": true,
-        "auto_ackable": true,
-        "ack_reason": "quiet_zero_attention_no_pause"
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-09-30T14:44:15.387984+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "c0c3ee56f97eb146"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": true,
-      "ack_sufficient": true
-    },
-    {
-      "id": "sunday-spawn-fair-twins",
-      "title": "Spawn Suite B twins only for recommend experiments",
-      "summary": "If experiment_assessment has recommend calibration/exclusion/experimental tracks, dry-run then optionally apply ftse-trading-costs spawn-fair-twins (max 2). Never auto-fork every shadow (N53). Zero recommend rows is a no-op.",
+      "id": "sunday-shadow-vs-primary",
+      "title": "Compare calibrated shadows vs primary AI judgment",
+      "summary": "Observe-only: compare forward marks for ai_judgment vs competing calibrated shadows. Fail-closed as a promotion path (N171) — status fail closes promote; do not spawn new calibrated ranks or reopen N58/N59. Acknowledge when reviewed; revisit only after fair-cost Suite B evidence or a new calibration method (not Suite A stress green).",
       "automated": false,
       "cadence": "sunday",
       "section_id": "sunday",
       "section_title": "Sunday",
-      "doc_path": "docs/ops/market-trading-costs.md",
-      "doc_anchor": "selective-a-to-b-fair-cost-twins",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-trading-costs.md#selective-a-to-b-fair-cost-twins",
-      "approval_gate": true,
-      "approval_label": "Approve spawn fair twins",
+      "doc_path": "docs/ops/knob-calibration.md",
+      "doc_anchor": "competing-calibrated-shadows",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#competing-calibrated-shadows",
+      "approval_gate": false,
+      "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · 0 blocking (review/continue)",
-        "updated_at": "2026-10-02T08:29:58.424952+00:00",
-        "fingerprint": "e9214b24f8dce0f5",
+        "updated_at": "2026-10-04T08:20:38.152880+00:00",
+        "fingerprint": "77a2b495eeb70657",
         "bullets": [
-          "Blocking recommend: 0 · acked: 1 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 3 / 16",
+          "Blocking recommend: 0 · acked: 2 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 4 / 16",
           "Failed calibration/exclusion shadows close promote — not a do-now pile. Already-acked overlays and ana-* capacity strands are not promote urgency.",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
           "capacity: ana-20260921-02 area=scoring",
@@ -205,8 +206,16 @@
               "acked_at": null
             }
           ],
-          "recommend_raw_count": 3,
+          "recommend_raw_count": 4,
           "recommend_acked": [
+            {
+              "experiment_id": "graduated_allocation",
+              "kind": "experimental_paper_track",
+              "status": "recommend",
+              "area": "paper_knobs",
+              "human_acked": true,
+              "acked_at": "2026-09-22T08:14:45.342024+00:00"
+            },
             {
               "experiment_id": "entry_dca_overlay",
               "kind": "lifecycle_overlay",
@@ -236,19 +245,19 @@
             }
           ],
           "human_ack_pending": 2,
-          "summary_recommend": 3,
+          "summary_recommend": 4,
           "summary_fail": 5,
           "total_experiments": 16
         }
       },
       "ack": {
         "acked": true,
-        "stale": false,
-        "acked_at": "2026-09-30T14:34:30.712867+00:00",
+        "stale": true,
+        "acked_at": "2026-09-30T14:34:30.668406+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "e9214b24f8dce0f5"
       },
-      "sort_bucket": "acked",
+      "sort_bucket": "new_info",
       "auto_ackable": false,
       "ack_sufficient": true
     },
@@ -267,10 +276,10 @@
       "approval_label": "Approve knob promote",
       "analysis": {
         "headline": "Experiment assessment · 0 blocking (review/continue)",
-        "updated_at": "2026-10-02T08:29:58.424952+00:00",
-        "fingerprint": "e9214b24f8dce0f5",
+        "updated_at": "2026-10-04T08:20:38.152880+00:00",
+        "fingerprint": "77a2b495eeb70657",
         "bullets": [
-          "Blocking recommend: 0 · acked: 1 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 3 / 16",
+          "Blocking recommend: 0 · acked: 2 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 4 / 16",
           "Failed calibration/exclusion shadows close promote — not a do-now pile. Already-acked overlays and ana-* capacity strands are not promote urgency.",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
           "capacity: ana-20260921-02 area=scoring",
@@ -319,8 +328,16 @@
               "acked_at": null
             }
           ],
-          "recommend_raw_count": 3,
+          "recommend_raw_count": 4,
           "recommend_acked": [
+            {
+              "experiment_id": "graduated_allocation",
+              "kind": "experimental_paper_track",
+              "status": "recommend",
+              "area": "paper_knobs",
+              "human_acked": true,
+              "acked_at": "2026-09-22T08:14:45.342024+00:00"
+            },
             {
               "experiment_id": "entry_dca_overlay",
               "kind": "lifecycle_overlay",
@@ -350,41 +367,41 @@
             }
           ],
           "human_ack_pending": 2,
-          "summary_recommend": 3,
+          "summary_recommend": 4,
           "summary_fail": 5,
           "total_experiments": 16
         }
       },
       "ack": {
         "acked": true,
-        "stale": false,
+        "stale": true,
         "acked_at": "2026-09-30T14:34:30.689554+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "e9214b24f8dce0f5"
       },
-      "sort_bucket": "acked",
+      "sort_bucket": "new_info",
       "auto_ackable": false,
       "ack_sufficient": true
     },
     {
-      "id": "sunday-shadow-vs-primary",
-      "title": "Compare calibrated shadows vs primary AI judgment",
-      "summary": "Observe-only: compare forward marks for ai_judgment vs competing calibrated shadows. Fail-closed as a promotion path (N171) — status fail closes promote; do not spawn new calibrated ranks or reopen N58/N59. Acknowledge when reviewed; revisit only after fair-cost Suite B evidence or a new calibration method (not Suite A stress green).",
+      "id": "sunday-spawn-fair-twins",
+      "title": "Spawn Suite B twins only for recommend experiments",
+      "summary": "If experiment_assessment has recommend calibration/exclusion/experimental tracks, dry-run then optionally apply ftse-trading-costs spawn-fair-twins (max 2). Never auto-fork every shadow (N53). Zero recommend rows is a no-op.",
       "automated": false,
       "cadence": "sunday",
       "section_id": "sunday",
       "section_title": "Sunday",
-      "doc_path": "docs/ops/knob-calibration.md",
-      "doc_anchor": "competing-calibrated-shadows",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#competing-calibrated-shadows",
-      "approval_gate": false,
-      "approval_label": null,
+      "doc_path": "docs/ops/market-trading-costs.md",
+      "doc_anchor": "selective-a-to-b-fair-cost-twins",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-trading-costs.md#selective-a-to-b-fair-cost-twins",
+      "approval_gate": true,
+      "approval_label": "Approve spawn fair twins",
       "analysis": {
         "headline": "Experiment assessment · 0 blocking (review/continue)",
-        "updated_at": "2026-10-02T08:29:58.424952+00:00",
-        "fingerprint": "e9214b24f8dce0f5",
+        "updated_at": "2026-10-04T08:20:38.152880+00:00",
+        "fingerprint": "77a2b495eeb70657",
         "bullets": [
-          "Blocking recommend: 0 · acked: 1 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 3 / 16",
+          "Blocking recommend: 0 · acked: 2 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 4 / 16",
           "Failed calibration/exclusion shadows close promote — not a do-now pile. Already-acked overlays and ana-* capacity strands are not promote urgency.",
           "Priors ready_for_shadow_bootstrap=None ranking_mode=None",
           "capacity: ana-20260921-02 area=scoring",
@@ -433,8 +450,16 @@
               "acked_at": null
             }
           ],
-          "recommend_raw_count": 3,
+          "recommend_raw_count": 4,
           "recommend_acked": [
+            {
+              "experiment_id": "graduated_allocation",
+              "kind": "experimental_paper_track",
+              "status": "recommend",
+              "area": "paper_knobs",
+              "human_acked": true,
+              "acked_at": "2026-09-22T08:14:45.342024+00:00"
+            },
             {
               "experiment_id": "entry_dca_overlay",
               "kind": "lifecycle_overlay",
@@ -464,19 +489,19 @@
             }
           ],
           "human_ack_pending": 2,
-          "summary_recommend": 3,
+          "summary_recommend": 4,
           "summary_fail": 5,
           "total_experiments": 16
         }
       },
       "ack": {
         "acked": true,
-        "stale": false,
-        "acked_at": "2026-09-30T14:34:30.668406+00:00",
+        "stale": true,
+        "acked_at": "2026-09-30T14:34:30.712867+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "e9214b24f8dce0f5"
       },
-      "sort_bucket": "acked",
+      "sort_bucket": "new_info",
       "auto_ackable": false,
       "ack_sufficient": true
     },
@@ -495,12 +520,13 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-10-02T08:29:58.424952+00:00",
-        "fingerprint": "284c9ce89f3a00ae",
+        "updated_at": "2026-10-04T08:20:38.152880+00:00",
+        "fingerprint": "96ba278f151caba7",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
-          "ack_sufficient=True reason=failed_shadows_close_promote_no_blocking_recommend blocking=0 acked_recommend=1 capacity=2 fail_shadows=4 raw_recommend=3",
+          "ack_sufficient=True reason=failed_shadows_close_promote_no_blocking_recommend blocking=0 acked_recommend=2 capacity=2 fail_shadows=4 raw_recommend=4",
           "Failed shadows (close knob path, not promote): ai_judgment_calibrated, ai_judgment_calibrated_r2, ai_judgment_calibrated_r3, ai_judgment_exclusion_u4",
+          "acked: graduated_allocation at=2026-09-22",
           "acked: entry_dca_overlay at=2026-09-13",
           "capacity/eng|manual: ana-20260921-02 area=scoring",
           "capacity/eng|manual: ana-20260921-04 area=paper_churn",
@@ -549,8 +575,16 @@
               "acked_at": null
             }
           ],
-          "recommend_raw_count": 3,
+          "recommend_raw_count": 4,
           "recommend_acked": [
+            {
+              "experiment_id": "graduated_allocation",
+              "kind": "experimental_paper_track",
+              "status": "recommend",
+              "area": "paper_knobs",
+              "human_acked": true,
+              "acked_at": "2026-09-22T08:14:45.342024+00:00"
+            },
             {
               "experiment_id": "entry_dca_overlay",
               "kind": "lifecycle_overlay",
@@ -580,7 +614,7 @@
             }
           ],
           "human_ack_pending": 2,
-          "summary_recommend": 3,
+          "summary_recommend": 4,
           "summary_fail": 5,
           "total_experiments": 16
         }
@@ -588,9 +622,9 @@
       "ack": {
         "acked": true,
         "stale": false,
-        "acked_at": "2026-09-30T08:42:34.080438+00:00",
+        "acked_at": "2026-10-05T02:33:07.393157+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "284c9ce89f3a00ae"
+        "finding_fingerprint": "96ba278f151caba7"
       },
       "sort_bucket": "acked",
       "auto_ackable": true,
@@ -946,7 +980,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-10-02T08:29:58.422867+00:00",
+        "updated_at": "2026-10-04T08:20:38.151767+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
@@ -983,7 +1017,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Fair-cost Suite B lab",
-        "updated_at": "2026-10-02T08:29:58.424952+00:00",
+        "updated_at": "2026-10-04T08:20:38.152880+00:00",
         "fingerprint": "59730160636f429c",
         "bullets": [
           "Require fair-cost view before treating 3% stress excess as deployable."
@@ -1219,7 +1253,7 @@
       "approval_label": "Approve fair-cost view",
       "analysis": {
         "headline": "Fair-cost Suite B lab",
-        "updated_at": "2026-10-02T08:29:58.424952+00:00",
+        "updated_at": "2026-10-04T08:20:38.152880+00:00",
         "fingerprint": "59730160636f429c",
         "bullets": [
           "Require fair-cost view before treating 3% stress excess as deployable."
@@ -1454,7 +1488,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Sunday analysis review synthesis",
-        "updated_at": "2026-09-27T21:46:28.982333+00:00",
+        "updated_at": "2026-10-04T08:27:13.669831+00:00",
         "fingerprint": "489f92d878371fa0",
         "bullets": [],
         "source_keys": [
@@ -1488,7 +1522,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-10-03T19:55:01.180861+00:00",
+        "updated_at": "2026-10-04T20:16:18.682162+00:00",
         "fingerprint": "750849fd9e662f70",
         "bullets": [
           "Open deviations: 0"
@@ -2130,6 +2164,5 @@
       "auto_ackable": false,
       "ack_sufficient": false
     }
-  ],
-  "path": "docs/data/human_tasks_board.json"
+  ]
 }

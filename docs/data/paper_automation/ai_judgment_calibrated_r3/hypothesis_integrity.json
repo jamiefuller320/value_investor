@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "ai_judgment_calibrated_r3",
-  "updated_at": "2026-10-02T08:28:45.438188+00:00",
-  "as_of": "2026-10-02T09:28:35.363870+01:00",
+  "updated_at": "2026-10-05T08:33:27.851779+00:00",
+  "as_of": "2026-10-05T09:33:17.018956+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -19,8 +19,8 @@
   "holding_count": 5,
   "underwater_count": 2,
   "thesis_status_counts": {
-    "intact": 5,
-    "weakening": 0,
+    "intact": 4,
+    "weakening": 1,
     "broken": 0,
     "insufficient_data": 0
   },
@@ -28,17 +28,17 @@
     "holding_count": 5,
     "loser_count": 2,
     "loser_share": 0.4,
-    "loser_nav_share": 0.3986,
+    "loser_nav_share": 0.3996,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": false,
-    "intact_loser_count": 2,
-    "weakening_loser_count": 0,
+    "intact_loser_count": 1,
+    "weakening_loser_count": 1,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
       "quality": 0.5,
-      "dividend": 0.0,
+      "dividend": 0.5,
       "garp": 0.5,
       "risk": 0.0
     },
@@ -50,52 +50,52 @@
       "risk": 0.0
     },
     "selection_feedback_flags": [
-      "quality fails more often among losers (50% vs 0%)"
+      "quality fails more often among losers (50% vs 0%)",
+      "dividend fails more often among losers (50% vs 0%)"
     ],
-    "balancing_hint": "hold_intact_review_selection",
+    "balancing_hint": "trim_weakening_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
     {
       "ticker": "BAG.L",
       "name": "A.G. BARR p.l.c.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0879,
-      "mark": 551.0,
+      "unrealized_pct": -0.0912,
+      "mark": 549.0,
       "avg_cost": 604.0919,
-      "signal": "buy",
+      "signal": "hold",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.65,
+      "conviction_score": 0.1283,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
-        "dividend",
         "risk"
       ],
       "failed_families": [
         "quality",
+        "dividend",
         "garp"
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still buy",
+        "left buy tier (hold)",
+        "conviction 13% below intact floor",
         "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 65%"
+        "cheapness family still passes"
       ],
       "intact_reasons": [
-        "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 65%"
+        "data_quality 1.00"
       ],
-      "weaken_reasons": [],
+      "weaken_reasons": [
+        "left buy tier (hold)",
+        "conviction 13% below intact floor"
+      ],
       "broken_reasons": []
     },
     {
@@ -105,12 +105,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0536,
-      "mark": 121.1,
+      "unrealized_pct": -0.0512,
+      "mark": 121.4,
       "avg_cost": 127.954,
       "signal": "strong_buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.7949,
+      "conviction_score": 0.6848,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -127,14 +127,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 79%"
+        "conviction 68%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 79%"
+        "conviction 68%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -146,12 +146,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0452,
-      "mark": 1480.0,
+      "unrealized_pct": -0.049,
+      "mark": 1474.0,
       "avg_cost": 1550.0,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.9733,
+      "conviction_score": 0.7777,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -167,14 +167,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 97%"
+        "conviction 78%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 97%"
+        "conviction 78%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -186,12 +186,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0124,
-      "mark": 553.3,
+      "unrealized_pct": 0.0243,
+      "mark": 559.8,
       "avg_cost": 546.528,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 0.7524,
+      "conviction_score": 0.5524,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -208,14 +208,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 75%"
+        "conviction 55%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 75%"
+        "conviction 55%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -227,12 +227,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.1322,
-      "mark": 3374.0,
+      "unrealized_pct": 0.1081,
+      "mark": 3302.0,
       "avg_cost": 2980.0,
       "signal": "buy",
       "timing_signal": "insufficient_data",
-      "conviction_score": 1.0,
+      "conviction_score": 0.7984,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -248,14 +248,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 100%"
+        "conviction 80%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 100%"
+        "conviction 80%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []

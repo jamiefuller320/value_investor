@@ -1,18 +1,18 @@
 {
   "ticker": "CKN.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-15T13:40:11.769788+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-10-04T07:21:46.059744+00:00",
+  "attached_at": "2026-10-05T08:01:01.275314+00:00",
+  "history_run_path": "docs/data/history/run_20261004_072146.json.gz",
+  "history_models_path": "docs/data/history/models_20261004_072146.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
-      "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "strong_buy": 14,
+      "buy": 46,
+      "hold": 134,
+      "avoid": 54
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 14,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 18,
+      "buy": 30,
+      "hold": 43,
+      "avoid": 11
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -30,45 +33,68 @@
   "ticker_signal": {
     "ticker": "CKN.L",
     "signal": "buy",
-    "conviction_score": 0.24926249999999994,
+    "conviction_score": 0.20164975,
     "data_quality_score": 1.0,
     "name": "Clarkson PLC",
     "sector": "Industrials",
     "timing_signal": "neutral",
-    "timing_score": 0.625,
-    "action_note": "Buy — neutral timing",
+    "timing_score": 0.5,
+    "action_note": "Buy — neutral timing | FCF basis mismatch: filing £57M | screen TTM £102.7M | FCF definition divergence",
     "models_passed": 7.0,
-    "weighted_model_score": 0.5133545454545455,
+    "weighted_model_score": 0.5416454545454545,
     "research_verdict": null,
     "adjusted_signal": "hold",
     "research_as_of": null,
     "research_confidence": null,
     "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": -0.2187216673865205,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": -0.2187216673865205,
     "signal_trend": "improving",
     "weeks_at_signal": 1,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": 0.11390164687267221,
+    "passed_families": "cheapness,quality,garp,risk",
+    "price_vs_sma200_pct": 0.09862954106272373,
     "core_order": "limit",
-    "core_limit": 4858.68,
+    "core_limit": 4979.7,
     "core_allocation_pct": 0.6,
-    "tactical_limit": 4486.93,
+    "tactical_limit": 4578.43,
     "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 4352.32,
-    "tactical_take_profit": 5247.9,
-    "trade_plan_summary": "Trade plan: core 60% limit £4858.68; tactical 40% limit £4486.93; tactical stop £4352.32, target £5247.90.",
-    "atr_14": 123.6894,
-    "volume_ratio_20": 0.031,
+    "tactical_stop_loss": 4441.08,
+    "tactical_take_profit": 5432.4,
+    "trade_plan_summary": "Trade plan: core 60% limit £4979.70; tactical 40% limit £4578.43; tactical stop £4441.08, target £5432.40.",
+    "atr_14": 129.7631,
+    "volume_ratio_20": 1.0285,
     "operating_cashflow": 64400000.0,
     "operating_cashflow_gross": null,
     "fcf_dividend_coverage_gross": null,
     "fcf_dividend_coverage_net": 1.7272727272727273,
-    "fcf_definition_divergence": false,
+    "fcf_definition_divergence": true,
     "fcf_divergence_flagged": true,
-    "fcf_dividend_coverage": null
+    "fcf_dividend_coverage": {
+      "statutory_ocf_minus_capex": {
+        "label": "Statutory OCF−CapEx",
+        "ratio": 1.7272727272727273
+      },
+      "management_cash_generated_minus_capex": {
+        "label": "Management cash-generated−CapEx",
+        "ratio": null
+      }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 1.73×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -81,7 +107,7 @@
       "ticker": "CKN.L",
       "model_id": "graham_enterprising",
       "passed": true,
-      "score": 0.8
+      "score": 1.0
     },
     {
       "ticker": "CKN.L",
@@ -105,13 +131,13 @@
       "ticker": "CKN.L",
       "model_id": "earnings_yield",
       "passed": false,
-      "score": 0.4171
+      "score": 0.4142
     },
     {
       "ticker": "CKN.L",
       "model_id": "fcf_yield",
       "passed": false,
-      "score": 0.37
+      "score": 0.3688
     },
     {
       "ticker": "CKN.L",
@@ -122,20 +148,20 @@
     {
       "ticker": "CKN.L",
       "model_id": "lynch_peg",
-      "passed": false,
-      "score": 0.2
+      "passed": true,
+      "score": 0.5032
     },
     {
       "ticker": "CKN.L",
       "model_id": "neff_pegy",
       "passed": true,
-      "score": 0.9045
+      "score": 0.9248
     },
     {
       "ticker": "CKN.L",
       "model_id": "quality_value",
       "passed": true,
-      "score": 1.0
+      "score": 0.8
     },
     {
       "ticker": "CKN.L",
@@ -153,19 +179,19 @@
       "ticker": "CKN.L",
       "model_id": "high_dividend",
       "passed": false,
-      "score": 0.3565
+      "score": 0.3318
     },
     {
       "ticker": "CKN.L",
       "model_id": "dividend_growth",
-      "passed": true,
-      "score": 0.6667
+      "passed": false,
+      "score": 1.0
     },
     {
       "ticker": "CKN.L",
       "model_id": "magic_formula",
       "passed": false,
-      "score": 0.4498
+      "score": 0.4462
     },
     {
       "ticker": "CKN.L",
@@ -177,7 +203,7 @@
       "ticker": "CKN.L",
       "model_id": "dreman_contrarian",
       "passed": false,
-      "score": 0.3717
+      "score": 0.3666
     },
     {
       "ticker": "CKN.L",
@@ -189,7 +215,7 @@
       "ticker": "CKN.L",
       "model_id": "composite_value",
       "passed": false,
-      "score": 0.5234
+      "score": 0.5265
     },
     {
       "ticker": "CKN.L",

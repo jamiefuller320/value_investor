@@ -1,46 +1,46 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-04T09:10:20.552912+02:00",
+    "local_time": "2026-10-05T09:38:30.928846+02:00",
     "trading_day": true,
-    "after_settle": false,
-    "market_open_at": "2026-10-04T09:00:00+02:00",
-    "settle_at": "2026-10-04T09:30:00+02:00",
-    "can_act": false,
-    "reason": "waiting for open settle (30 min after 09:00 Europe/Paris)"
+    "after_settle": true,
+    "market_open_at": "2026-10-05T09:00:00+02:00",
+    "settle_at": "2026-10-05T09:30:00+02:00",
+    "can_act": true,
+    "reason": "ok"
   },
   "trades": [
     {
-      "id": "a42a0b20-3422-4516-a3d3-ba24b972396a",
+      "id": "c85b71e6-862d-44e8-95d5-774e0950bded",
       "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
-      "acted_at": "2026-10-04T09:10:20.552912+02:00",
-      "ticker": "SHELL.AS",
+      "acted_at": "2026-10-05T09:38:30.928846+02:00",
+      "ticker": "EG7.IR",
       "side": "sell",
       "sizing_mode": "shares",
-      "shares": 4.664103,
-      "price": 42.4,
-      "gross": 197.76,
-      "cost": 0.37,
-      "net_cash": 197.39,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Shell plc",
-      "avg_cost_at_exit": 42.57,
-      "position_closed": true
-    },
-    {
-      "id": "143bb96c-12be-4376-af5f-2341841b0401",
-      "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
-      "acted_at": "2026-10-04T09:10:20.552912+02:00",
-      "ticker": "EG7.IR",
-      "side": "buy",
-      "sizing_mode": "cash",
       "shares": 10.240128,
       "price": 19.0,
       "gross": 194.56,
       "cost": 0.36,
-      "net_cash": -194.92,
+      "net_cash": 194.2,
+      "note": "Automated exit \u2014 left target set",
+      "name": "FBD Holdings plc",
+      "avg_cost_at_exit": 19.0,
+      "position_closed": true
+    },
+    {
+      "id": "c91c54d1-2d22-486b-a862-dd79cf35e8c5",
+      "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
+      "acted_at": "2026-10-05T09:38:30.928846+02:00",
+      "ticker": "AED.BR",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 3.217569,
+      "price": 60.5,
+      "gross": 194.66,
+      "cost": 0.36,
+      "net_cash": -195.02,
       "note": "Automated buy",
-      "name": "FBD Holdings plc"
+      "name": "Aedifica NV/SA"
     }
   ],
   "plan": {
@@ -56,8 +56,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 974.25,
-    "cash": 14.73,
+    "nav": 974.76,
+    "cash": 13.91,
     "max_positions": 5,
     "min_conviction": 0.0,
     "sector_cap": 0.3,
@@ -69,42 +69,42 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 194.85,
+    "target_sleeve_value": 194.95,
     "targets": [
-      {
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
-        "signal": "strong_buy",
-        "conviction_score": 0.93,
-        "price": 106.8
-      },
       {
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "signal": "strong_buy",
-        "conviction_score": 0.9183,
-        "price": 93.18
+        "conviction_score": 0.9417000000000001,
+        "price": 93.76
       },
       {
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
         "signal": "strong_buy",
-        "conviction_score": 0.9,
-        "price": 31.5
+        "conviction_score": 0.9256000000000001,
+        "price": 105.55
       },
       {
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "signal": "strong_buy",
-        "conviction_score": 0.8851,
-        "price": 70.81
+        "conviction_score": 0.9048,
+        "price": 71.02
       },
       {
-        "ticker": "EG7.IR",
-        "name": "FBD Holdings plc",
+        "ticker": "AD.AS",
+        "name": "Koninklijke Ahold Delhaize N.V.",
         "signal": "strong_buy",
-        "conviction_score": 0.7475,
-        "price": 19.0
+        "conviction_score": 0.8615,
+        "price": 31.78
+      },
+      {
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
+        "signal": "strong_buy",
+        "conviction_score": 0.7792,
+        "price": 60.5
       }
     ],
     "anticipated_exits": [],
@@ -114,32 +114,22 @@
     "anticipated_holds": [
       {
         "action": "hold",
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 191.15,
-        "target_value": 194.85,
-        "conviction_score": 0.93,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 190.59,
-        "target_value": 194.85,
-        "conviction_score": 0.9183,
+        "value": 191.78,
+        "target_value": 194.95,
+        "conviction_score": 0.9417000000000001,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 192.02,
-        "target_value": 194.85,
-        "conviction_score": 0.9,
+        "value": 188.91,
+        "target_value": 194.95,
+        "conviction_score": 0.9256000000000001,
         "signal": "strong_buy"
       },
       {
@@ -147,19 +137,29 @@
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 191.21,
-        "target_value": 194.85,
-        "conviction_score": 0.8851,
+        "value": 191.77,
+        "target_value": 194.95,
+        "conviction_score": 0.9048,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "EG7.IR",
-        "name": "FBD Holdings plc",
+        "ticker": "AD.AS",
+        "name": "Koninklijke Ahold Delhaize N.V.",
         "reason": "Already near equal-weight target",
-        "value": 194.56,
-        "target_value": 194.85,
-        "conviction_score": 0.7475,
+        "value": 193.72,
+        "target_value": 194.95,
+        "conviction_score": 0.8615,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
+        "reason": "Already near equal-weight target",
+        "value": 194.66,
+        "target_value": 194.95,
+        "conviction_score": 0.7792,
         "signal": "strong_buy"
       }
     ],
@@ -174,7 +174,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 93.18000030517578,
+      "mark": 93.76000213623047,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -185,7 +185,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 31.5,
+      "mark": 31.780000686645508,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -196,7 +196,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 70.80999755859375,
+      "mark": 71.0199966430664,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -206,19 +206,19 @@
       "name": "Vinci SA",
       "source": "paper",
       "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 106.80000305175781,
+      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still strong_buy",
+      "mark": 105.55000305175781,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
     },
     {
-      "ticker": "EG7.IR",
-      "name": "FBD Holdings plc",
+      "ticker": "AED.BR",
+      "name": "Aedifica NV/SA",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 19.0,
+      "mark": 60.5,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -239,7 +239,7 @@
       "id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
       "created_at": "2026-09-09T07:22:16.764847+00:00"
     },
-    "cash": 14.73,
+    "cash": 13.91,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -287,16 +287,16 @@
         "take_profit": null,
         "opened_at": "2026-09-14T09:14:37.910691+02:00"
       },
-      "EG7.IR": {
-        "ticker": "EG7.IR",
-        "shares": 10.240128,
-        "avg_cost": 19.0,
-        "name": "FBD Holdings plc",
-        "sector": "Financial Services",
+      "AED.BR": {
+        "ticker": "AED.BR",
+        "shares": 3.217569,
+        "avg_cost": 60.5,
+        "name": "Aedifica NV/SA",
+        "sector": "Real Estate",
         "currency": "EUR",
         "stop_loss": null,
         "take_profit": null,
-        "opened_at": "2026-10-04T09:10:20.552912+02:00"
+        "opened_at": "2026-10-05T09:38:30.928846+02:00"
       }
     },
     "trades": [
@@ -518,6 +518,38 @@
         "net_cash": -194.92,
         "note": "Automated buy",
         "name": "FBD Holdings plc"
+      },
+      {
+        "id": "c85b71e6-862d-44e8-95d5-774e0950bded",
+        "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
+        "acted_at": "2026-10-05T09:38:30.928846+02:00",
+        "ticker": "EG7.IR",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 10.240128,
+        "price": 19.0,
+        "gross": 194.56,
+        "cost": 0.36,
+        "net_cash": 194.2,
+        "note": "Automated exit \u2014 left target set",
+        "name": "FBD Holdings plc",
+        "avg_cost_at_exit": 19.0,
+        "position_closed": true
+      },
+      {
+        "id": "c91c54d1-2d22-486b-a862-dd79cf35e8c5",
+        "fund_id": "094f3413-9c7b-4055-a6ab-0d2552c93542",
+        "acted_at": "2026-10-05T09:38:30.928846+02:00",
+        "ticker": "AED.BR",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 3.217569,
+        "price": 60.5,
+        "gross": 194.66,
+        "cost": 0.36,
+        "net_cash": -195.02,
+        "note": "Automated buy",
+        "name": "Aedifica NV/SA"
       }
     ],
     "equity_curve": [
@@ -1012,13 +1044,49 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-05T09:31:24.569995+02:00",
+        "portfolio_value": 681.86,
+        "cash": 14.73,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.84689,
+            "SEK": 0.07487
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-05T09:38:30.928846+02:00",
+        "portfolio_value": 679.65,
+        "cash": 13.91,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.84697,
+            "SEK": 0.07489
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-04T09:10:20.552912+02:00",
+    "last_mark_at": "2026-10-05T09:38:30.928846+02:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {
-        "SHELL.AS": 1
+        "EG7.IR": 1
       }
     }
   },
@@ -1027,9 +1095,9 @@
     "schema_version": 2,
     "market_id": "euro_depth",
     "track_id": "rules",
-    "generated_at": "2026-10-04T07:10:26.419822+00:00",
+    "generated_at": "2026-10-05T07:38:42.560470+00:00",
     "observe_only": true,
-    "open_count": 4,
+    "open_count": 5,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -1106,7 +1174,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-10-04T07:10:26.420949+00:00",
+    "generated_at": "2026-10-05T07:38:42.561470+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1160,11 +1228,11 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 4,
+      "hold_closed_count": 5,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 8,
+      "hold_with_data_quality_count": 9,
       "gaps": [
-        "hold_recovery closed episodes=4 (target >=15)",
+        "hold_recovery closed episodes=5 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
@@ -1178,19 +1246,19 @@
         }
       },
       "closed": {
-        "count": 4,
-        "recovered_to_breakeven": 2,
+        "count": 5,
+        "recovered_to_breakeven": 3,
         "close_reasons": {
-          "sold_while_recovered": 2,
+          "sold_while_recovered": 3,
           "sold_while_underwater": 2
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 4,
+        "count": 5,
         "verdicts": {
-          "open": 4
+          "open": 5
         }
       },
       "closed": {
@@ -1212,8 +1280,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "rules",
-    "updated_at": "2026-10-04T07:10:26.422131+00:00",
-    "as_of": "2026-10-04T09:10:20.552912+02:00",
+    "updated_at": "2026-10-05T07:38:42.562690+00:00",
+    "as_of": "2026-10-05T09:38:30.928846+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1226,7 +1294,7 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 5,
-    "underwater_count": 0,
+    "underwater_count": 1,
     "thesis_status_counts": {
       "intact": 5,
       "weakening": 0,
@@ -1235,13 +1303,13 @@
     },
     "portfolio_feedback": {
       "holding_count": 5,
-      "loser_count": 0,
-      "loser_share": 0.0,
-      "loser_nav_share": 0.0,
+      "loser_count": 1,
+      "loser_share": 0.2,
+      "loser_nav_share": 0.1966,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
-      "intact_loser_count": 0,
+      "intact_loser_count": 1,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
@@ -1259,23 +1327,23 @@
         "risk": 0.0
       },
       "selection_feedback_flags": [],
-      "balancing_hint": "maintain",
+      "balancing_hint": "tolerate_intact_losers",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
       {
-        "ticker": "ERIC-B.ST",
-        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
-        "underwater": false,
+        "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0453,
-        "mark": 93.18,
-        "avg_cost": 97.6,
+        "unrealized_pct": -0.0529,
+        "mark": 105.55,
+        "avg_cost": 111.45,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9183,
+        "conviction_score": 0.9256,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1287,18 +1355,19 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
+          "price drawdown alone does not invalidate value thesis",
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 92%"
+          "conviction 93%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 92%"
+          "conviction 93%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1310,12 +1379,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0422,
-        "mark": 70.81,
+        "unrealized_pct": -0.0394,
+        "mark": 71.02,
         "avg_cost": 73.93,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8851,
+        "conviction_score": 0.9048,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1331,31 +1400,31 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 89%"
+          "conviction 90%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 89%"
+          "conviction 90%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
       },
       {
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0417,
-        "mark": 106.8,
-        "avg_cost": 111.45,
+        "unrealized_pct": -0.0393,
+        "mark": 93.76,
+        "avg_cost": 97.6,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.93,
+        "conviction_score": 0.9417,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1371,32 +1440,32 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 93%"
+          "conviction 94%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 93%"
+          "conviction 94%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
       },
       {
-        "ticker": "EG7.IR",
-        "name": "FBD Holdings plc",
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
         "unrealized_pct": 0.0,
-        "mark": 19.0,
-        "avg_cost": 19.0,
+        "mark": 60.5,
+        "avg_cost": 60.5,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7475,
-        "data_quality_score": 0.95,
+        "conviction_score": 0.7792,
+        "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
           "quality",
@@ -1410,15 +1479,15 @@
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 0.95",
-          "conviction 75%"
+          "data_quality 1.00",
+          "conviction 78%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
-          "data_quality 0.95",
-          "conviction 75%"
+          "data_quality 1.00",
+          "conviction 78%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1430,12 +1499,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0112,
-        "mark": 31.5,
+        "unrealized_pct": 0.0202,
+        "mark": 31.78,
         "avg_cost": 31.15,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9,
+        "conviction_score": 0.8615,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1451,14 +1520,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 90%"
+          "conviction 86%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 90%"
+          "conviction 86%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1471,13 +1540,13 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "rules",
-    "generated_at": "2026-10-04T07:10:26.423757+00:00",
+    "generated_at": "2026-10-05T07:38:42.564266+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 4,
+      "closed_total": 5,
       "closed_unknown_thesis": 0,
       "open_with_thesis": 4,
       "by_thesis_status": {
@@ -1485,13 +1554,13 @@
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 4,
-          "recovery_rate": 0.5,
-          "sold_underwater_rate": 0.5,
-          "mean_peak_unrealized_pct": 0.0029,
-          "mean_trough_unrealized_pct": -0.0081,
+          "closed_count": 5,
+          "recovery_rate": 0.6,
+          "sold_underwater_rate": 0.4,
+          "mean_peak_unrealized_pct": 0.0023,
+          "mean_trough_unrealized_pct": -0.0065,
           "outcome_labels": {
-            "recovered": 2,
+            "recovered": 3,
             "sold_underwater": 2
           }
         },
@@ -1524,10 +1593,10 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 4,
+      "hold_closed_with_thesis": 5,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=4 (target >=8)",
+        "hold closed with thesis=5 (target >=8)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -1539,73 +1608,74 @@
     "schema_version": 1,
     "track_id": "rules",
     "observe_only": true,
-    "generated_at": "2026-10-04T07:10:26.426062+00:00",
-    "open_count": 2,
-    "closed_count": 2,
-    "scored_count": 1,
-    "scored_count_all": 2,
-    "recommit_scored_count": 1,
+    "generated_at": "2026-10-05T07:38:42.566889+00:00",
+    "open_count": 1,
+    "closed_count": 4,
+    "scored_count": 2,
+    "scored_count_all": 4,
+    "recommit_scored_count": 2,
     "entry_kind_counts": {
-      "first_entry": 1,
-      "recommit": 1
+      "first_entry": 2,
+      "recommit": 2
     },
-    "any_de_risk_count": 1,
+    "any_de_risk_count": 2,
     "winning_cadence_counts": {
+      "dca_4x_weekly": 1,
       "dca_5x_weekday": 1
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 1,
-        "mean_end_value_delta": 0.52,
-        "mean_de_risk_gbp": 1.58,
+        "scored_episodes": 2,
+        "mean_end_value_delta": 0.445,
+        "mean_de_risk_gbp": 1.07,
         "de_risk_rate": 1.0,
         "win_count": 0
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 1,
-        "mean_end_value_delta": 0.79,
-        "mean_de_risk_gbp": 2.36,
+        "scored_episodes": 2,
+        "mean_end_value_delta": 1.475,
+        "mean_de_risk_gbp": 2.4,
         "de_risk_rate": 1.0,
-        "win_count": 0
+        "win_count": 1
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 1,
-        "mean_end_value_delta": 0.52,
-        "mean_de_risk_gbp": 1.58,
-        "de_risk_rate": 1.0,
+        "scored_episodes": 2,
+        "mean_end_value_delta": 0.04,
+        "mean_de_risk_gbp": 0.665,
+        "de_risk_rate": 0.5,
         "win_count": 0
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 1,
-        "mean_end_value_delta": 0.97,
-        "mean_de_risk_gbp": 1.25,
-        "de_risk_rate": 1.0,
+        "scored_episodes": 2,
+        "mean_end_value_delta": 0.275,
+        "mean_de_risk_gbp": 0.565,
+        "de_risk_rate": 0.5,
         "win_count": 1
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 1,
+      "closed_episodes": 2,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 1,
-      "recommit_scored": 1
+      "first_entry_scored": 2,
+      "recommit_scored": 2
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 1,
-    "marked_this_pass": 2,
+    "marked_this_pass": 1,
     "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "rules",
-    "generated_at": "2026-10-04T09:10:20.552912+02:00",
+    "generated_at": "2026-10-05T09:38:30.928846+02:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1629,11 +1699,11 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 47,
+    "open_count": 48,
     "closed_count": 0,
     "open_by_capital_status": {
       "on_book": 5,
-      "off_book": 1,
+      "off_book": 2,
       "never_funded": 41
     },
     "closed_by_capital_status": {
@@ -1662,7 +1732,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "rules",
-    "generated_at": "2026-10-04T09:10:20.552912+02:00",
+    "generated_at": "2026-10-05T09:38:30.928846+02:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -1691,8 +1761,8 @@
     },
     "cards": [
       {
-        "ticker": "SHELL.AS",
-        "name": "Shell plc",
+        "ticker": "EG7.IR",
+        "name": "FBD Holdings plc",
         "algo_action": "sell",
         "algo_reason": "Automated exit \u2014 left target set",
         "shadow_verdict": "veto",
@@ -1709,19 +1779,19 @@
             "kind": "screen_signal",
             "source": "candidates",
             "detail": "Effective signal at decision time",
-            "value": "buy"
+            "value": "strong_buy"
           },
           {
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 33
+            "value": 11
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 33
+            "value": 11
           },
           {
             "kind": "rank_drop",
@@ -1739,7 +1809,7 @@
             "kind": "conviction_score",
             "source": "candidates",
             "detail": "Conviction score at decision time",
-            "value": 0.4562
+            "value": 0.7473000000000001
           },
           {
             "kind": "still_buyish",
@@ -1765,8 +1835,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "rules",
-        "logged_at": "2026-10-04T09:10:20.552912+02:00",
-        "proposal_id": "rules:SHELL.AS:sell:2026-10-04T09:10:20.552912+02:00",
+        "logged_at": "2026-10-05T09:38:30.928846+02:00",
+        "proposal_id": "rules:EG7.IR:sell:2026-10-05T09:38:30.928846+02:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -1786,8 +1856,8 @@
         "schema_version": 1
       },
       {
-        "ticker": "EG7.IR",
-        "name": "FBD Holdings plc",
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
         "algo_action": "buy",
         "algo_reason": "Automated buy",
         "shadow_verdict": "agree",
@@ -1834,7 +1904,7 @@
             "kind": "conviction_score",
             "source": "candidates",
             "detail": "Conviction score at decision time",
-            "value": 0.7475
+            "value": 0.7792
           },
           {
             "kind": "still_buyish",
@@ -1860,8 +1930,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "rules",
-        "logged_at": "2026-10-04T09:10:20.552912+02:00",
-        "proposal_id": "rules:EG7.IR:buy:2026-10-04T09:10:20.552912+02:00",
+        "logged_at": "2026-10-05T09:38:30.928846+02:00",
+        "proposal_id": "rules:AED.BR:buy:2026-10-05T09:38:30.928846+02:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -1885,7 +1955,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "rules",
-      "generated_at": "2026-10-04T09:10:20.552912+02:00",
+      "generated_at": "2026-10-05T09:38:30.928846+02:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
@@ -1912,7 +1982,7 @@
       },
       "veto_sell_count": 1,
       "veto_sell_tickers": [
-        "SHELL.AS"
+        "EG7.IR"
       ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
@@ -1927,7 +1997,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-04T07:10:26.429909+00:00",
+  "generated_at": "2026-10-05T07:38:42.570756+00:00",
   "track_id": "rules",
   "track_label": "Screen rules (control)",
   "is_primary_learning_track": false,

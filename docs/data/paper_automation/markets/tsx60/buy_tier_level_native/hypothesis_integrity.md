@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-04T07:10:04.413957+00:00
+Track: `buy_tier_level_native` · updated 2026-10-05T07:38:05.213066+00:00
 
 ## Portfolio loser feedback
 
@@ -11,18 +11,18 @@ Track: `buy_tier_level_native` · updated 2026-10-04T07:10:04.413957+00:00
 ## Holding reviews
 
 ### WSP.TO — intact / hold_tolerate (-4.3%)
-- still buy
+- still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 73%
+- conviction 50%
 
 ### ABX.TO — intact / hold_tolerate (-4.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 81%
+- conviction 82%
 
 ### SAP.TO — weakening / watch_review (-3.9%)
 - research verdict caution
@@ -46,7 +46,7 @@ Track: `buy_tier_level_native` · updated 2026-10-04T07:10:04.413957+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 91%
+- conviction 94%
 
 ### MRU.TO — intact / hold_tolerate (-0.7%)
 - still buy
@@ -65,7 +65,7 @@ Track: `buy_tier_level_native` · updated 2026-10-04T07:10:04.413957+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 68%
+- conviction 70%
 
 ### CNQ.TO — intact / hold_tolerate (+1.9%)
 - still buy
@@ -86,7 +86,7 @@ Track: `buy_tier_level_native` · updated 2026-10-04T07:10:04.413957+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 46%
+- conviction 54%
 
 ### MG.TO — weakening / watch_review (+4.8%)
 - research verdict neutral

@@ -1,46 +1,47 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `ai_judgment` · updated 2026-10-04T07:10:32.440596+00:00
+Track: `ai_judgment` · updated 2026-10-05T07:38:55.190097+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 5 (0% count, 0% NAV)
+- Losers: **1** / 5 (20% count, 20% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `maintain`
+- Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
-### ERIC-B.ST — intact / hold_tolerate (-4.6%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 92%
-
-### SAN.PA — intact / hold_tolerate (-4.2%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 89%
-
-### DG.PA — intact / hold_tolerate (-4.2%)
+### DG.PA — intact / hold_tolerate (-5.3%)
+- price drawdown alone does not invalidate value thesis
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 93%
 
-### EG7.IR — intact / hold_tolerate (+0.0%)
+### ERIC-B.ST — intact / hold_tolerate (-4.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
-- data_quality 0.95
-- conviction 75%
+- data_quality 1.00
+- conviction 94%
 
-### AD.AS — intact / hold_tolerate (+1.1%)
+### SAN.PA — intact / hold_tolerate (-4.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 90%
+
+### AED.BR — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 78%
+
+### AD.AS — intact / hold_tolerate (+2.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 86%

@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "scope": "hypothesis_integrity",
+  "observe_only": true,
+  "track_id": "buy_tier_level_native",
+  "updated_at": "2026-10-05T07:38:17.664851+00:00",
+  "as_of": "2026-10-05T08:38:16.342121+01:00",
+  "config": {
+    "underwater_pct": -0.05,
+    "deep_underwater_pct": -0.15,
+    "loser_share_tolerance": 0.4,
+    "loser_nav_tolerance": 0.35,
+    "min_data_quality": 0.55,
+    "min_conviction_for_intact": 0.35,
+    "intact_urgency_dampen": 0.18,
+    "broken_urgency_boost": 0.28,
+    "skip_underwater_urgency_when_intact": true
+  },
+  "holding_count": 3,
+  "underwater_count": 0,
+  "thesis_status_counts": {
+    "intact": 2,
+    "weakening": 1,
+    "broken": 0,
+    "insufficient_data": 0
+  },
+  "portfolio_feedback": {
+    "holding_count": 3,
+    "loser_count": 0,
+    "loser_share": 0.0,
+    "loser_nav_share": 0.0,
+    "loser_share_tolerance": 0.4,
+    "loser_nav_tolerance": 0.35,
+    "within_tolerance": true,
+    "intact_loser_count": 0,
+    "weakening_loser_count": 0,
+    "broken_loser_count": 0,
+    "family_fail_rate_losers": {
+      "cheapness": 0.0,
+      "quality": 0.0,
+      "dividend": 0.0,
+      "garp": 0.0,
+      "risk": 0.0
+    },
+    "family_fail_rate_non_losers": {
+      "cheapness": 0.0,
+      "quality": 0.3333,
+      "dividend": 0.3333,
+      "garp": 0.3333,
+      "risk": 0.0
+    },
+    "selection_feedback_flags": [],
+    "balancing_hint": "maintain",
+    "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
+  },
+  "holdings": [
+    {
+      "ticker": "NOVN.SW",
+      "name": "Novartis AG",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 117.26,
+      "avg_cost": 117.26,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8375,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 84%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 84%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "LOGN.SW",
+      "name": "Logitech International S.A.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 86.26,
+      "avg_cost": 86.26,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6646,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 66%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 66%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "AMRZ.SW",
+      "name": "Amrize AG",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 30.76,
+      "avg_cost": 30.76,
+      "signal": "buy",
+      "timing_signal": "accumulate",
+      "conviction_score": 0.2344,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "risk"
+      ],
+      "failed_families": [
+        "quality",
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "conviction 23% below intact floor",
+        "still buy",
+        "research accumulate"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00"
+      ],
+      "weaken_reasons": [
+        "conviction 23% below intact floor"
+      ],
+      "broken_reasons": []
+    }
+  ],
+  "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
+}

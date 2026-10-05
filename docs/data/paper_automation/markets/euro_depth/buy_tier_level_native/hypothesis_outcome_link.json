@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-04T07:10:02.841430+00:00",
+  "generated_at": "2026-10-05T07:38:03.194075+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 8,
+    "closed_total": 9,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 23,
     "by_thesis_status": {
@@ -27,13 +27,14 @@
         }
       },
       "broken": {
-        "closed_count": 1,
-        "recovery_rate": 1.0,
-        "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.036,
-        "mean_trough_unrealized_pct": 0.036,
+        "closed_count": 2,
+        "recovery_rate": 0.5,
+        "sold_underwater_rate": 0.5,
+        "mean_peak_unrealized_pct": 0.0147,
+        "mean_trough_unrealized_pct": 0.0147,
         "outcome_labels": {
-          "recovered": 1
+          "recovered": 1,
+          "sold_underwater": 1
         }
       },
       "insufficient_data": {
@@ -62,10 +63,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 8,
+    "hold_closed_with_thesis": 9,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold thesis buckets thin (broken=1; target >=3 each)",
+      "hold thesis buckets thin (broken=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -1396,7 +1397,7 @@
       "ticker": "AMRZ.SW",
       "name": "Amrize AG",
       "started_at": "2026-10-04T09:10:02.646045+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -1428,9 +1429,9 @@
       "peak_unrealized_pct": -0.0065,
       "trough_unrealized_pct": -0.0065,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-05T09:38:02.897175+02:00",
+      "linked_sell_trade_id": "942a1c64-e560-4fa9-9f10-d77df96e9f1f"
     },
     {
       "episode_id": "buy_tier_level_native:C5H.IR:2026-10-04T09:10:02.646045+02:00",
@@ -1471,6 +1472,48 @@
       "peak_unrealized_pct": -0.0112,
       "trough_unrealized_pct": -0.0112,
       "recovered_to_breakeven": null,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level_native:ADYEN.AS:2026-10-05T09:38:02.897175+02:00",
+      "track_id": "buy_tier_level_native",
+      "ticker": "ADYEN.AS",
+      "name": "Adyen N.V.",
+      "started_at": "2026-10-05T09:38:02.897175+02:00",
+      "status": "open",
+      "stress_triggers": [
+        "exit_streak",
+        "signal_downgrade"
+      ],
+      "entry_mark": 859.4,
+      "avg_cost": 843.5,
+      "unrealized_pct_at_start": 0.0189,
+      "thesis_status_at_start": "broken",
+      "recommended_action_at_start": "exit_candidate",
+      "thesis_reasons_at_start": [
+        "cheapness lost and not in buy tier"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": 0.0189,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.2328,
+      "exit_streak_at_start": 1,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0189,
+      "trough_unrealized_pct": 0.0189,
+      "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
@@ -1556,7 +1599,15 @@
           "cost": 0.0
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-05T09:38:02.897175+02:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0176,
+          "avg_buy_return": -0.0086,
+          "replacement_delta": 0.009
+        }
+      ],
       "sell_returns_since_rotation": {
         "EG7.IR": 0.0053,
         "AZE.BR": -0.0405
@@ -1691,6 +1742,72 @@
         "ANDR.VI": 0.0,
         "SHELL.AS": 0.0,
         "COR.LS": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-10-05T09:38:02.897175+02:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-10-05T09:38:02.897175+02:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "AMRZ.SW",
+          "price": 30.8,
+          "shares": 0.806169,
+          "gross": 24.83,
+          "cost": 0.01,
+          "avg_cost_at_exit": 31.0,
+          "realized_pct": -0.0065,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0065
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "STR.VI",
+          "price": 103.4,
+          "shares": 0.25967,
+          "gross": 26.85,
+          "cost": 0.01
+        },
+        {
+          "ticker": "UNA.AS",
+          "price": 52.84,
+          "shares": 0.508136,
+          "gross": 26.85,
+          "cost": 0.01
+        },
+        {
+          "ticker": "AZE.BR",
+          "price": 11.61,
+          "shares": 2.312651,
+          "gross": 26.85,
+          "cost": 0.01
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "AMRZ.SW": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "STR.VI": 0.0,
+        "UNA.AS": 0.0,
+        "AZE.BR": 0.0
       },
       "verdict": null,
       "closed_at": null

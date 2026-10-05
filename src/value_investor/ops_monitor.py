@@ -1446,8 +1446,10 @@ def check_buy_tier_flip_lag(
     """Observe-only: warn when recent buy-tier flips are not yet usable.
 
     Refreshes ``docs/data/buy_tier_flip_lag.json`` across FTSE live + admitted
-    learning markets (surfacing + stage lag clocks). Does not deepen ingest or
-    rememo. Ops warn stays path-incomplete ≥24h only (not accumulate miss).
+    learning markets (surfacing + stage lag clocks). Library ``has_memo``
+    inherits the sibling-home join from flip-lag. Does not deepen ingest or
+    rememo, copy memos, or auto-fix. Ops warn stays path-incomplete ≥24h only
+    (not accumulate miss).
     """
     from value_investor.buy_tier_flip_lag import (
         DEFAULT_LIBRARY_ROOT,

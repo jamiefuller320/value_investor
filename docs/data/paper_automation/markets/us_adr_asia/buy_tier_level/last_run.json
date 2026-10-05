@@ -1,47 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-04T08:10:11.097587+01:00",
+    "local_time": "2026-10-05T08:38:14.140750+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-04T08:00:00+01:00",
-    "settle_at": "2026-10-04T09:15:00+01:00",
+    "market_open_at": "2026-10-05T08:00:00+01:00",
+    "settle_at": "2026-10-05T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
-  "trades": [
-    {
-      "id": "ae3d263f-1158-4a79-97f3-44b11c32b512",
-      "fund_id": "6274124b-736c-48d4-88ab-e53d3dc06cfd",
-      "acted_at": "2026-10-04T08:10:11.097587+01:00",
-      "ticker": "WIT",
-      "side": "sell",
-      "sizing_mode": "cash",
-      "shares": 7.13193,
-      "price": 1.72,
-      "gross": 12.27,
-      "cost": 0.02,
-      "net_cash": 12.25,
-      "note": "Automated trim",
-      "name": "Wipro Limited",
-      "avg_cost_at_exit": 1.61
-    },
-    {
-      "id": "c112614e-b673-4c4a-ac21-ad2c14acb588",
-      "fund_id": "6274124b-736c-48d4-88ab-e53d3dc06cfd",
-      "acted_at": "2026-10-04T08:10:11.097587+01:00",
-      "ticker": "SONY",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.513185,
-      "price": 23.82,
-      "gross": 12.22,
-      "cost": 0.02,
-      "net_cash": -12.25,
-      "note": "Automated buy",
-      "name": "Sony Group Corporation"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -81,7 +49,7 @@
         "ticker": "SONY",
         "name": "Sony Group Corporation",
         "signal": "buy",
-        "conviction_score": 0.4875,
+        "conviction_score": 0.5604,
         "price": 23.82
       }
     ],
@@ -107,7 +75,7 @@
         "reason": "Already near equal-weight target",
         "value": 520.96,
         "target_value": 520.96,
-        "conviction_score": 0.4875,
+        "conviction_score": 0.5604,
         "signal": "buy"
       }
     ],
@@ -302,20 +270,37 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-05T08:38:14.140750+01:00",
+        "portfolio_value": 788.14,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "USD": 0.75643
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-04T08:10:11.097587+01:00",
+    "last_mark_at": "2026-10-05T08:38:14.140750+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (2 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "us_adr_asia",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T07:10:11.147440+00:00",
+    "generated_at": "2026-10-05T07:38:14.171169+00:00",
     "observe_only": true,
     "open_count": 0,
     "closed_count": 0,
@@ -394,7 +379,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T07:10:11.148295+00:00",
+    "generated_at": "2026-10-05T07:38:14.171855+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -480,7 +465,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -492,8 +477,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-04T07:10:11.149139+00:00",
-    "as_of": "2026-10-04T08:10:11.097587+01:00",
+    "updated_at": "2026-10-05T07:38:14.172550+00:00",
+    "as_of": "2026-10-05T08:38:14.140750+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -555,7 +540,7 @@
         "avg_cost": 23.3806,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4875,
+        "conviction_score": 0.5604,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -571,14 +556,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 49%"
+          "conviction 56%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 49%"
+          "conviction 56%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -631,7 +616,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T07:10:11.150570+00:00",
+    "generated_at": "2026-10-05T07:38:14.173477+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -691,7 +676,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-04T07:10:11.152093+00:00",
+    "generated_at": "2026-10-05T07:38:14.174662+00:00",
     "open_count": 2,
     "closed_count": 0,
     "scored_count": 0,
@@ -755,7 +740,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T08:10:11.097587+01:00",
+    "generated_at": "2026-10-05T08:38:14.140750+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -812,7 +797,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T08:10:11.097587+01:00",
+    "generated_at": "2026-10-05T08:38:14.140750+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -820,141 +805,33 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 1,
-    "card_count": 1,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 1,
+      "agree": 0,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "buy": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
-    "cards": [
-      {
-        "ticker": "SONY",
-        "name": "Sony Group Corporation",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Buy into buyish target set \u2014 agree with algo selection."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 2
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 2
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.4875
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-04T08:10:11.097587+01:00",
-        "proposal_id": "buy_tier_level:SONY:buy:2026-10-04T08:10:11.097587+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      }
-    ],
+    "by_algo_action": {},
+    "cards": [],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-04T08:10:11.097587+01:00",
+      "generated_at": "2026-10-05T08:38:14.140750+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 1,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 1,
+        "agree": 0,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "buy": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
+      "by_algo_action": {},
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -970,7 +847,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-04T07:10:11.155135+00:00",
+  "generated_at": "2026-10-05T07:38:14.176599+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

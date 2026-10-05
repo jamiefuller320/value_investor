@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-04T07:10:05.089710+00:00
+Track: `buy_tier_level_native` · updated 2026-10-05T07:38:05.979282+00:00
 
 ## Portfolio loser feedback
 
@@ -25,7 +25,7 @@ Track: `buy_tier_level_native` · updated 2026-10-04T07:10:05.089710+00:00
 - data_quality 1.00
 - conviction 68%
 
-### DG.PA — intact / hold_tolerate (-3.4%)
+### DG.PA — intact / hold_tolerate (-3.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
@@ -39,12 +39,10 @@ Track: `buy_tier_level_native` · updated 2026-10-04T07:10:05.089710+00:00
 - data_quality 1.00
 - conviction 73%
 
-### ENI.MI — intact / hold_tolerate (-0.8%)
-- still buy
+### ENI.MI — weakening / watch_review (-0.8%)
+- left buy tier (hold)
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 62%
 
 ### AD.AS — intact / hold_tolerate (-0.3%)
 - still strong_buy
@@ -58,11 +56,11 @@ Track: `buy_tier_level_native` · updated 2026-10-04T07:10:05.089710+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 85%
+- conviction 87%
 
 ### DHL.DE — intact / hold_tolerate (+0.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 48%
+- conviction 56%

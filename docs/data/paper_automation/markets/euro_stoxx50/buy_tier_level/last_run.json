@@ -1,46 +1,29 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-04T09:10:04.965809+02:00",
+    "local_time": "2026-10-05T09:38:05.914158+02:00",
     "trading_day": true,
-    "after_settle": false,
-    "market_open_at": "2026-10-04T09:00:00+02:00",
-    "settle_at": "2026-10-04T09:30:00+02:00",
-    "can_act": false,
-    "reason": "waiting for open settle (30 min after 09:00 Europe/Paris)"
+    "after_settle": true,
+    "market_open_at": "2026-10-05T09:00:00+02:00",
+    "settle_at": "2026-10-05T09:30:00+02:00",
+    "can_act": true,
+    "reason": "ok"
   },
   "trades": [
     {
-      "id": "d4f2686c-01d0-41a9-8a77-1f81864723e3",
+      "id": "58ace036-85e8-4c34-92af-5a30c6ff9c72",
       "fund_id": "92c715a5-11c6-4034-8455-c7a769d2e34f",
-      "acted_at": "2026-10-04T09:10:04.965809+02:00",
-      "ticker": "MC.PA",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 0.309006,
-      "price": 405.3496,
-      "gross": 125.26,
-      "cost": 0.22,
-      "net_cash": 125.04,
-      "note": "Automated exit \u2014 left target set",
-      "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
-      "avg_cost_at_exit": 405.3496,
-      "position_closed": true
-    },
-    {
-      "id": "94fa29a5-6662-43ff-aaf2-7070dc1150a3",
-      "fund_id": "92c715a5-11c6-4034-8455-c7a769d2e34f",
-      "acted_at": "2026-10-04T09:10:04.965809+02:00",
-      "ticker": "SAN.PA",
+      "acted_at": "2026-10-05T09:38:05.914158+02:00",
+      "ticker": "DG.PA",
       "side": "buy",
       "sizing_mode": "cash",
-      "shares": 1.702207,
-      "price": 70.81,
-      "gross": 120.53,
-      "cost": 0.21,
-      "net_cash": -120.74,
+      "shares": 0.040098,
+      "price": 106.8,
+      "gross": 4.28,
+      "cost": 0.01,
+      "net_cash": -4.29,
       "note": "Automated buy",
-      "name": "Sanofi"
+      "name": "Vinci SA"
     }
   ],
   "plan": {
@@ -56,8 +39,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 965.74,
-    "cash": 4.29,
+    "nav": 965.73,
+    "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -69,7 +52,7 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 120.72,
+    "target_sleeve_value": 137.93,
     "targets": [
       {
         "ticker": "DG.PA",
@@ -89,7 +72,7 @@
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "signal": "strong_buy",
-        "conviction_score": 0.8542000000000001,
+        "conviction_score": 0.8687,
         "price": 70.81
       },
       {
@@ -114,89 +97,109 @@
         "price": 64.88
       },
       {
-        "ticker": "ENI.MI",
-        "name": "Eni S.p.A.",
-        "signal": "buy",
-        "conviction_score": 0.6223000000000001,
-        "price": 24.19
-      },
-      {
         "ticker": "DHL.DE",
         "name": "DHL AG",
         "signal": "buy",
-        "conviction_score": 0.47659999999999997,
+        "conviction_score": 0.5619000000000001,
         "price": 56.72
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "reason": "No longer in the top conviction target set",
+        "shares": 5.034203,
+        "price": 24.19,
+        "value": 121.78
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
+        "action": "buy",
         "ticker": "DG.PA",
         "name": "Vinci SA",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 118.6,
-        "target_value": 120.72,
+        "reason": "Top-up to equal weight",
+        "value": 15.05,
+        "price": 106.8,
+        "target_value": 137.93,
         "conviction_score": 0.915,
         "signal": "strong_buy"
       },
       {
-        "action": "hold",
-        "ticker": "SAN.PA",
-        "name": "Sanofi",
-        "reason": "Already near equal-weight target",
-        "value": 120.53,
-        "target_value": 120.72,
-        "conviction_score": 0.8542000000000001,
+        "action": "buy",
+        "ticker": "AD.AS",
+        "name": "Koninklijke Ahold Delhaize N.V.",
+        "reason": "Top-up to equal weight",
+        "value": 15.61,
+        "price": 31.5,
+        "target_value": 137.93,
+        "conviction_score": 0.8813000000000001,
         "signal": "strong_buy"
       },
       {
-        "action": "hold",
+        "action": "buy",
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
+        "reason": "Top-up to equal weight",
+        "value": 17.4,
+        "price": 70.81,
+        "target_value": 137.93,
+        "conviction_score": 0.8687,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
         "ticker": "WKL.AS",
         "name": "Wolters Kluwer N.V.",
-        "reason": "Already near equal-weight target",
-        "value": 120.93,
-        "target_value": 120.72,
+        "reason": "Top-up to equal weight",
+        "value": 17.0,
+        "price": 67.82,
+        "target_value": 137.93,
         "conviction_score": 0.7250000000000001,
         "signal": "buy"
       },
       {
-        "action": "hold",
+        "action": "buy",
         "ticker": "VOW.DE",
         "name": "Volkswagen AG",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 117.5,
-        "target_value": 120.72,
+        "reason": "Top-up to equal weight",
+        "value": 20.43,
+        "price": 67.8,
+        "target_value": 137.93,
         "conviction_score": 0.6789000000000001,
         "signal": "strong_buy"
       },
       {
-        "action": "hold",
+        "action": "buy",
         "ticker": "ABI.BR",
         "name": "Anheuser-Busch InBev SA/NV",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 116.56,
-        "target_value": 120.72,
+        "reason": "Top-up to equal weight",
+        "value": 21.37,
+        "price": 64.88,
+        "target_value": 137.93,
         "conviction_score": 0.6313000000000001,
         "signal": "buy"
       },
       {
-        "action": "hold",
-        "ticker": "ENI.MI",
-        "name": "Eni S.p.A.",
-        "reason": "Already near equal-weight target",
-        "value": 121.78,
-        "target_value": 120.72,
-        "conviction_score": 0.6223000000000001,
+        "action": "buy",
+        "ticker": "DHL.DE",
+        "name": "DHL AG",
+        "reason": "Top-up to equal weight",
+        "value": 14.7,
+        "price": 56.72,
+        "target_value": 137.93,
+        "conviction_score": 0.5619000000000001,
         "signal": "buy"
       }
     ],
+    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 8 equal-weight sleeve(s); leave 6 near-target holding(s)."
+    "summary": "Next rebalance would target 7 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 7 buy(s)."
   },
   "alerts": [
     {
@@ -269,8 +272,8 @@
       "ticker": "ENI.MI",
       "name": "Eni S.p.A.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Screen signal is now hold",
       "mark": 24.19,
       "stop_loss": null,
       "take_profit": null,
@@ -303,14 +306,14 @@
       "id": "92c715a5-11c6-4034-8455-c7a769d2e34f",
       "created_at": "2026-09-16T08:46:50.799555+00:00"
     },
-    "cash": 4.29,
+    "cash": 0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
       "DG.PA": {
         "ticker": "DG.PA",
-        "shares": 1.110456,
-        "avg_cost": 110.8467,
+        "shares": 1.150554,
+        "avg_cost": 110.7057,
         "name": "Vinci SA",
         "sector": "Industrials",
         "currency": "EUR",
@@ -1131,6 +1134,21 @@
         "net_cash": -120.74,
         "note": "Automated buy",
         "name": "Sanofi"
+      },
+      {
+        "id": "58ace036-85e8-4c34-92af-5a30c6ff9c72",
+        "fund_id": "92c715a5-11c6-4034-8455-c7a769d2e34f",
+        "acted_at": "2026-10-05T09:38:05.914158+02:00",
+        "ticker": "DG.PA",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.040098,
+        "price": 106.8,
+        "gross": 4.28,
+        "cost": 0.01,
+        "net_cash": -4.29,
+        "note": "Automated buy",
+        "name": "Vinci SA"
       }
     ],
     "equity_curve": [
@@ -1429,22 +1447,39 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-05T09:38:05.914158+02:00",
+        "portfolio_value": 818.04,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 8,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.84707
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-04T09:10:04.965809+02:00",
+    "last_mark_at": "2026-10-05T09:38:05.914158+02:00",
     "rebalance_state": {
-      "exit_streak": {},
-      "reentry_cooldown": {
-        "MC.PA": 1
-      }
+      "exit_streak": {
+        "ENI.MI": 1
+      },
+      "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (2 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "euro_stoxx50",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T07:10:04.992083+00:00",
+    "generated_at": "2026-10-05T07:38:05.945427+00:00",
     "observe_only": true,
     "open_count": 4,
     "closed_count": 0,
@@ -1517,13 +1552,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T07:10:04.993185+00:00",
+    "generated_at": "2026-10-05T07:38:05.946389+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1617,7 +1652,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -1629,8 +1664,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-04T07:10:04.994598+00:00",
-    "as_of": "2026-10-04T09:10:04.965809+02:00",
+    "updated_at": "2026-10-05T07:38:05.947650+00:00",
+    "as_of": "2026-10-05T09:38:05.914158+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1645,8 +1680,8 @@
     "holding_count": 8,
     "underwater_count": 2,
     "thesis_status_counts": {
-      "intact": 8,
-      "weakening": 0,
+      "intact": 7,
+      "weakening": 1,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -1654,7 +1689,7 @@
       "holding_count": 8,
       "loser_count": 2,
       "loser_share": 0.25,
-      "loser_nav_share": 0.2434,
+      "loser_nav_share": 0.2424,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
@@ -1772,9 +1807,9 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0365,
+        "unrealized_pct": -0.0353,
         "mark": 106.8,
-        "avg_cost": 110.8467,
+        "avg_cost": 110.7057,
         "signal": "strong_buy",
         "timing_signal": "neutral",
         "conviction_score": 0.915,
@@ -1888,16 +1923,16 @@
       {
         "ticker": "ENI.MI",
         "name": "Eni S.p.A.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
         "unrealized_pct": -0.0035,
         "mark": 24.19,
         "avg_cost": 24.2747,
-        "signal": "buy",
+        "signal": "hold",
         "timing_signal": "neutral",
-        "conviction_score": 0.6223,
+        "conviction_score": 0.3803,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1909,20 +1944,19 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "left buy tier (hold)",
           "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 62%"
+          "cheapness family still passes"
         ],
         "intact_reasons": [
-          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 62%"
+          "conviction 38%"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "left buy tier (hold)"
+        ],
         "broken_reasons": []
       },
       {
@@ -1937,7 +1971,7 @@
         "avg_cost": 70.81,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.8542,
+        "conviction_score": 0.8687,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1953,14 +1987,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 85%"
+          "conviction 87%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 85%"
+          "conviction 87%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1977,7 +2011,7 @@
         "avg_cost": 55.9218,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4766,
+        "conviction_score": 0.5619,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1993,14 +2027,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 48%"
+          "conviction 56%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 48%"
+          "conviction 56%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2013,7 +2047,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T07:10:04.996319+00:00",
+    "generated_at": "2026-10-05T07:38:05.949333+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -2088,7 +2122,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-04T07:10:04.999407+00:00",
+    "generated_at": "2026-10-05T07:38:05.952469+00:00",
     "open_count": 8,
     "closed_count": 4,
     "scored_count": 4,
@@ -2149,14 +2183,14 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "marked_this_pass": 8,
-    "closed_this_pass": 1
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T09:10:04.965809+02:00",
+    "generated_at": "2026-10-05T09:38:05.914158+02:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2206,14 +2240,14 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 1,
-      "tagged_off_book": 1
+      "tagged_on_book": 0,
+      "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-04T09:10:04.965809+02:00",
+    "generated_at": "2026-10-05T09:38:05.914158+02:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -2221,19 +2255,14 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 2,
-    "card_count": 2,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 2,
+      "agree": 1,
       "veto": 0,
       "abstain": 0
     },
     "by_algo_action": {
-      "sell": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
-      },
       "buy": {
         "agree": 1,
         "veto": 0,
@@ -2242,55 +2271,8 @@
     },
     "cards": [
       {
-        "ticker": "MC.PA",
-        "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
-        "algo_action": "sell",
-        "algo_reason": "Automated exit \u2014 left target set",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated exit \u2014 left target set"
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-04T09:10:04.965809+02:00",
-        "proposal_id": "buy_tier_level:MC.PA:sell:2026-10-04T09:10:04.965809+02:00",
-        "meta": {
-          "still_buyish": false,
-          "rank_drop": null,
-          "rank_drop_exit_min": 3,
-          "research_verdict": null,
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": null,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": null,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      },
-      {
-        "ticker": "SAN.PA",
-        "name": "Sanofi",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
         "algo_action": "buy",
         "algo_reason": "Automated buy",
         "shadow_verdict": "agree",
@@ -2313,13 +2295,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 3
+            "value": 1
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 3
+            "value": 1
           },
           {
             "kind": "rank_drop",
@@ -2337,7 +2319,7 @@
             "kind": "conviction_score",
             "source": "candidates",
             "detail": "Conviction score at decision time",
-            "value": 0.8542000000000001
+            "value": 0.915
           },
           {
             "kind": "still_buyish",
@@ -2363,8 +2345,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-04T09:10:04.965809+02:00",
-        "proposal_id": "buy_tier_level:SAN.PA:buy:2026-10-04T09:10:04.965809+02:00",
+        "logged_at": "2026-10-05T09:38:05.914158+02:00",
+        "proposal_id": "buy_tier_level:DG.PA:buy:2026-10-05T09:38:05.914158+02:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -2388,25 +2370,20 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-04T09:10:04.965809+02:00",
+      "generated_at": "2026-10-05T09:38:05.914158+02:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 2,
+      "card_count": 1,
       "verdict_counts": {
-        "agree": 2,
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
       "by_algo_action": {
-        "sell": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        },
         "buy": {
           "agree": 1,
           "veto": 0,
@@ -2428,7 +2405,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-04T07:10:05.002069+00:00",
+  "generated_at": "2026-10-05T07:38:05.955008+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

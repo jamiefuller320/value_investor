@@ -368,7 +368,7 @@ They do **not** deepen ingest or rememo.
 
 | Check | Finding title | When it warns | Store (runner) | Status |
 |-------|---------------|---------------|----------------|--------|
-| `check_buy_tier_flip_lag` | **New buy-tier not yet usable** | Path-incomplete ≥24h cohort non-empty (FTSE live ∪ admitted; schema v2) | `docs/data/buy_tier_flip_lag.json` | Live on main |
+| `check_buy_tier_flip_lag` | **New buy-tier not yet usable** | Path-incomplete ≥24h cohort non-empty (FTSE live ∪ admitted; schema v2). Library rows treat a sibling `research_home_market` as `has_memo` (observe-only; no auto-fix, no memo copy). FTSE live stays on `docs/data/research`. | `docs/data/buy_tier_flip_lag.json` | Live on main |
 | `check_decision_input_inventory` | **FTSE decision-input utilization gap** | Dominant bind gap count ≥3 on FTSE holdings ∪ buy-tier (else quiet / `P1 green-enough`) | `docs/data/decision_input_inventory.json` | Live on main |
 | `check_p1_first_run_pin` | **P1 first-run: EPS-from-body missing after Sunday screen** / **… slim freeze missing after Monday paper-auto** | After the relevant post-#953 run, EPS-from-body still 0/n on holdings ∪ buy-tier reports or `rebalance_log` slim. Auto-oks when a count lands. Empty/pre-Sunday is **not** a warn. Window 10d from #953 merge then expires (no forever babysit). Not a soak platform or utilization dashboard | `docs/data/p1_first_run_pin.json` | First-run pin |
 | `check_universe_filing_archive_miss_rate` | **Universe archive body-miss rate elevated** | Flip-lag proxy miss rate elevated with open body gaps — observe-only outcome (not a cold-store start gate; N180/N181) | `docs/data/universe_filing_archive_miss_rate.json` | Scaffold live |
@@ -637,7 +637,7 @@ cap-8 pause / warning still fires after self-heal.
 Human triage (oldest first) for parks that survive self-heal:
 
 1. `ftse-engineering list-parked`
-2. For each task: merge the PR, cancel stale work, or `ftse-engineering unpark-task --task-id … --reason …` when appropriate
+2. For each task: merge the PR, `ftse-engineering cancel-task --task-id … --reason …` for stale/superseded work, or `ftse-engineering unpark-task --task-id … --reason …` when appropriate
 3. Tier-1 trims resolved/superseded/healed parks automatically — do not re-triage those
 
 **Auto-resume:** dispatch restarts when attention-parked count drops **below 7** **and**

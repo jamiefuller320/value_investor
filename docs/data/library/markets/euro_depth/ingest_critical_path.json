@@ -1,15 +1,11 @@
 {
   "market_id": "euro_depth",
-  "assessed_at": "2026-10-04T16:18:16.919066+00:00",
-  "unmeasured": [],
+  "assessed_at": "2026-10-05T13:27:36.641302+00:00",
+  "unmeasured": [
+    "UNA.AS"
+  ],
   "zero_body": [],
   "indexed_without_body": [
-    {
-      "ticker": "COR.LS",
-      "indexed_without_body": 16,
-      "filings_total": 52,
-      "filings_with_body": 16
-    },
     {
       "ticker": "ABI.BR",
       "indexed_without_body": 12,
@@ -44,27 +40,25 @@
   "thin_need_discovery": [
     "SGO.PA",
     "ACKB.BR",
+    "APAM.AS",
     "DTE.DE",
-    "MUV2.DE",
+    "UCB.BR",
     "SKA-B.ST",
     "MC.PA",
-    "APAM.AS",
-    "UCB.BR",
+    "MUV2.DE",
     "BAS.DE",
-    "NBA.LS",
-    "DQ7A.IR",
-    "EL.PA"
+    "EL.PA",
+    "DQ7A.IR"
   ],
   "thin_need_bodies": [
     "EVN.VI",
     "WIE.VI",
-    "COR.LS",
     "UCB.BR"
   ],
-  "primary_blocker": "indexed_without_body",
+  "primary_blocker": "unmeasured",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "COR.LS",
+    "UNA.AS",
     "ABI.BR",
     "EVN.VI",
     "SAP.DE",
@@ -72,16 +66,17 @@
     "WIE.VI"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (6 tickers, top: COR.LS(16), ABI.BR(12), EVN.VI(1), SAP.DE(1), UCB.BR(1))",
-    "Discovery/IR seed for 12 thin ticker(s) that already have bodies for every indexed filing",
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (5 tickers, top: ABI.BR(12), EVN.VI(1), SAP.DE(1), UCB.BR(1), WIE.VI(1))",
+    "Discovery/IR seed for 11 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 6,
-    "indexed_without_body_rows": 32,
-    "thin_need_discovery": 12,
-    "thin_need_bodies": 4
+    "indexed_without_body_tickers": 5,
+    "indexed_without_body_rows": 16,
+    "thin_need_discovery": 11,
+    "thin_need_bodies": 3
   }
 }

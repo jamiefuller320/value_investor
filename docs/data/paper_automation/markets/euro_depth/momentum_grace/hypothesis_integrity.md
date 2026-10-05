@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `momentum_grace` · updated 2026-10-04T07:10:50.918608+00:00
+Track: `momentum_grace` · updated 2026-10-05T07:39:31.581085+00:00
 
 ## Portfolio loser feedback
 
@@ -10,37 +10,37 @@ Track: `momentum_grace` · updated 2026-10-04T07:10:50.918608+00:00
 
 ## Holding reviews
 
-### ERIC-B.ST — intact / hold_tolerate (-4.6%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 92%
-
-### SAN.PA — intact / hold_tolerate (-4.2%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 89%
-
-### DG.PA — intact / hold_tolerate (-3.6%)
+### DG.PA — intact / hold_tolerate (-4.9%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 93%
 
-### EG7.IR — intact / hold_tolerate (+0.0%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 75%
-
-### AD.AS — intact / hold_tolerate (+1.1%)
+### SAN.PA — intact / hold_tolerate (-4.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 90%
+
+### ERIC-B.ST — intact / hold_tolerate (-4.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 94%
+
+### AED.BR — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 78%
+
+### AD.AS — intact / hold_tolerate (+2.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 86%
