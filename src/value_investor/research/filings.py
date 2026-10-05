@@ -559,7 +559,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     # Cap at HUNTER_MAX_NEW_URLS (3): ASX PDF + two Markit statutory leftovers.
     "YAL.AX": [
         "https://announcements.asx.com.au/asxpdf/20250220/pdf/06frjf61kmrm39.pdf",
-        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03134565-2A1696707",
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03139235-2A1698934",
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03142935-2A1700926",
     ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
@@ -844,6 +844,7 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "TRI": ("Thomson Reuters",),
     "SU": ("Suncor", "Suncor Energy"),
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
+    "YAL": ("Yancoal", "Yancoal Australia"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
     "HM-B": (
