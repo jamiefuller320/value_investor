@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-05T08:51:15+00:00",
+  "updated_at": "2026-10-05T16:45:46+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12087,6 +12087,134 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-4e0fd28a-2250-50e8-bb12-26d2fbc76b40",
       "added_at": "2026-10-05T08:51:15+00:00"
+    },
+    {
+      "id": "L527",
+      "category": "later",
+      "section": "learning",
+      "title": "Decision-review knob ratchet on cumulative cost_drag",
+      "summary": "propose_knob_updates reads lifetime cost_drag (monotone non-decreasing) and applies daily, so ai_judgment raised min_conviction 15 times in 16 days (Aug 11-26) to the 0.6 bound and max_positions sits at the 3 floor. Use per-epoch/rolling metrics, a cooldown between applies, and treat saturated bounds as a finding rather than learning.",
+      "revisit_when": "Before the next decision-review --apply change on any track, or now if P1 capacity allows",
+      "tags": [
+        "decision-review",
+        "knobs",
+        "ratchet"
+      ],
+      "status": "open",
+      "source": "Project-wide gap review (agent, 2026-10-05)",
+      "added_at": "2026-10-05T16:45:46+00:00"
+    },
+    {
+      "id": "L528",
+      "category": "later",
+      "section": "learning",
+      "title": "Total-return accounting: dividends in paper NAV and TR benchmark",
+      "summary": "Paper funds never credit dividends and excess is measured vs ^FTSE (FTSE 100 price index) while the universe is FTSE 350. Ex-div drops count as losses, which systematically penalises a high-yield value book by roughly its yield gap. Add dividend accrual and a FTSE 350/All-Share total-return benchmark.",
+      "revisit_when": "Before any excess-vs-market number is used for promotion or capital decisions",
+      "tags": [
+        "benchmark",
+        "dividends",
+        "total-return"
+      ],
+      "status": "open",
+      "source": "Project-wide gap review (agent, 2026-10-05)",
+      "added_at": "2026-10-05T16:45:46+00:00"
+    },
+    {
+      "id": "L529",
+      "category": "later",
+      "section": "learning",
+      "title": "Statistical power and significance gate for learning-track verdicts",
+      "summary": "No tracking error, information ratio, confidence interval or multiple-comparison correction exists anywhere in src/. A 3-name book has tracking error ~20%/yr, so detecting 3%/yr alpha at t=2 would take decades of forward paper marks; 14 parallel tracks plus shadows guarantee a lucky winner. Add TE/IR/bootstrap CI per track and a declared minimum detectable effect before adoption.",
+      "revisit_when": "Before any track or shadow is promoted, or when the next new paper track is proposed",
+      "tags": [
+        "statistics",
+        "power",
+        "significance"
+      ],
+      "status": "open",
+      "source": "Project-wide gap review (agent, 2026-10-05)",
+      "added_at": "2026-10-05T16:45:46+00:00"
+    },
+    {
+      "id": "L530",
+      "category": "later",
+      "section": "research",
+      "title": "Long-history PIT backtest of the value screen itself",
+      "summary": "The core premise that the 20 value models rank FTSE 350 forward returns has never been tested beyond ~10 weekly archives since Aug 2026. Forward paper trading cannot validate it in reasonable time. Build a multi-year point-in-time backtest (PIT fundamentals + delisted names + TR prices) from a licensed or reconstructed source (ties to L11) to establish the base rate before tuning overlays.",
+      "revisit_when": "When choosing the next foundation investment after P1, or when L11 data source is chosen",
+      "tags": [
+        "backtest",
+        "pit",
+        "value-premise"
+      ],
+      "status": "open",
+      "source": "Project-wide gap review (agent, 2026-10-05)",
+      "added_at": "2026-10-05T16:45:46+00:00"
+    },
+    {
+      "id": "L531",
+      "category": "later",
+      "section": "learning",
+      "title": "Holding-period / turnover mismatch with value thesis",
+      "summary": "Closed holdings on ai_judgment last 1-18 days (median ~4) with turnover ~14x capital in 2.5 months; exits fire on 'left target set' rank flips. Value premia accrue over 1-3 years and the learning horizon is 28d. Add a minimum holding period / rank hysteresis band and measure at 6-12 month horizons (extends L170).",
+      "revisit_when": "With the decision-review ratchet fix, or at the next Suite A/B policy epoch",
+      "tags": [
+        "turnover",
+        "holding-period",
+        "value-horizon"
+      ],
+      "status": "open",
+      "source": "Project-wide gap review (agent, 2026-10-05)",
+      "added_at": "2026-10-05T16:45:46+00:00"
+    },
+    {
+      "id": "L532",
+      "category": "later",
+      "section": "learning",
+      "title": "Value-factor control to separate value beta from selection alpha",
+      "summary": "Beating ^FTSE says nothing about whether the AI/overlay adds skill over passive value exposure. Early marks show the unfiltered 60-name buy_tier_level book ahead of the 3-name AI books. Add a passive value control (UK value ETF or equal-weight cheapest-quintile basket) and report AI excess vs it.",
+      "revisit_when": "When ai_judgment adoption criteria are next reviewed",
+      "tags": [
+        "benchmark",
+        "value-factor",
+        "attribution"
+      ],
+      "status": "open",
+      "source": "Project-wide gap review (agent, 2026-10-05)",
+      "added_at": "2026-10-05T16:45:46+00:00"
+    },
+    {
+      "id": "L533",
+      "category": "later",
+      "section": "ops",
+      "title": "Suite B fair books contain legacy 3% stress-cost trades",
+      "summary": "ai_judgment_fair's first trades were charged 3% per side before switching to ~0.53%/0.03%, so its -13% excess (the adoption headline) is partly cost-model contamination. Cold-start a clean fair epoch or restate excess from the clean epoch only.",
+      "revisit_when": "Before Suite B excess is cited as adoption evidence",
+      "tags": [
+        "fair-cost",
+        "contamination",
+        "suite-b"
+      ],
+      "status": "open",
+      "source": "Project-wide gap review (agent, 2026-10-05)",
+      "added_at": "2026-10-05T16:45:46+00:00"
+    },
+    {
+      "id": "N186",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Machinery-to-evidence ratio: freeze new instruments until core edge is measured",
+      "summary": "~280 modules, 43 workflows, ~8k commits, 14 paper tracks and 526 open deferred ideas in 3 months, yet no measured edge and the main knob loop is saturated. Most effort optimises ingest/memo/ops proxies whose link to returns is unproven. Prefer fixing measurement (TR, power, horizon) over adding instruments.",
+      "revisit_when": "When the next new observe-only instrument or paper track is proposed",
+      "tags": [
+        "complexity",
+        "machinery",
+        "focus"
+      ],
+      "status": "open",
+      "source": "Project-wide gap review (agent, 2026-10-05)",
+      "added_at": "2026-10-05T16:45:46+00:00"
     }
   ],
   "fragments": [
