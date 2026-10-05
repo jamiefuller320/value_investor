@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-05T07:52:40.320104+00:00",
+  "generated_at": "2026-10-05T07:47:01.217063+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -927,7 +927,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=0)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=1)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 21,
@@ -983,7 +983,7 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 1,
-        "indexed_without_body": 0,
+        "indexed_without_body": 1,
         "bodies_median": 5.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
@@ -1005,46 +1005,50 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 1,
-        "targets": 2,
-        "improved": 1,
-        "improved_tickers": [
-          "MIO.IR"
-        ],
-        "last_run_at": "2026-10-05T07:50:38.726783+00:00",
+        "run_count": 0,
+        "targets": 0,
+        "improved": 0,
+        "improved_tickers": [],
+        "last_run_at": null,
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 1,
+          "thin": 0,
           "indexed_without_body": 1,
           "filing_gaps": 0
         },
         "gaps_after": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 1,
-          "indexed_without_body": 0,
+          "thin": 0,
+          "indexed_without_body": 1,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": -1,
+          "indexed_without_body": 0,
           "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 1,
-          "indexed_without_body": 0,
+          "indexed_without_body": 1,
           "filing_gaps": 0
         },
         "admission_ready": false,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [],
+        "admission_warnings": [
+          {
+            "id": "awaiting_first_ingest",
+            "severity": "warn",
+            "summary": "Entered sprint on 2026-10-04; waiting on the first deepen slot"
+          }
+        ],
         "sprint_entered_at": "2026-10-04T19:52:26.054412+00:00"
       },
       "held_vs_market": {
@@ -1094,7 +1098,7 @@
         "filing_ready": false,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 1,
+        "leftover": 2,
         "steps": [
           {
             "id": "start",
@@ -1143,10 +1147,10 @@
           "id": "sprint_complete",
           "name": "sprint_ingest_complete",
           "gate": "sprint_ingest_complete",
-          "criteria": "sprint_ingest_complete / filing_ready: raw ingest_parity_met (all four gap counts zero) or leftover thin/IWB parked. Now via leftover thin/IWB parked or raw ingest_parity_met. Remaining unmeas 0, zero 0, thin 1, IWB 0.",
+          "criteria": "sprint_ingest_complete / filing_ready: raw ingest_parity_met (all four gap counts zero) or leftover thin/IWB parked. Now via leftover thin/IWB parked or raw ingest_parity_met. Remaining unmeas 0, zero 0, thin 1, IWB 1.",
           "timeframe": "Sprint until exhaustion or raw parity. Extra jobs do not create unique weeks. Fat slot serializes one head at a time."
         },
-        "annotation": "Next: sprint_ingest_complete — sprint_ingest_complete / filing_ready: raw ingest_parity_met (all four gap counts zero) or leftover thin/IWB parked. Now via leftover thin/IWB parked or raw ingest_parity_met. Remaining unmeas 0, zero 0, thin 1, IWB 0. Timeframe: Sprint until exhaustion or raw parity. Extra jobs do not create unique weeks. Fat slot serializes one head at a time."
+        "annotation": "Next: sprint_ingest_complete — sprint_ingest_complete / filing_ready: raw ingest_parity_met (all four gap counts zero) or leftover thin/IWB parked. Now via leftover thin/IWB parked or raw ingest_parity_met. Remaining unmeas 0, zero 0, thin 1, IWB 1. Timeframe: Sprint until exhaustion or raw parity. Extra jobs do not create unique weeks. Fat slot serializes one head at a time."
       }
     },
     {
