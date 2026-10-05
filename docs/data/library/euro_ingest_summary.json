@@ -1,9 +1,8 @@
 {
-  "run_at": "2026-10-05T13:21:34.365039+00:00",
+  "run_at": "2026-10-05T13:28:04.176374+00:00",
   "market_id": "euro_depth",
   "targets": [
-    "UNA.AS",
-    "SHELL.AS"
+    "UNA.AS"
   ],
   "target_details": [
     {
@@ -13,14 +12,6 @@
       "filings_with_body": 0,
       "indexed_without_body": 0,
       "reason": "unmeasured"
-    },
-    {
-      "ticker": "SHELL.AS",
-      "priority_score": 15.1875,
-      "filings_total": 44,
-      "filings_with_body": 42,
-      "indexed_without_body": 2,
-      "reason": "indexed_without_body"
     }
   ],
   "results": [
@@ -85,94 +76,14 @@
         "ir_metadata_reconciled": 0,
         "note": "no missing IR allowlist bodies"
       }
-    },
-    {
-      "ticker": "SHELL.AS",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 44,
-        "filings_with_body": 42,
-        "indexed_without_body": 2
-      },
-      "after": {
-        "filings_total": 42,
-        "filings_with_body": 42,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 42,
-        "annual": 3,
-        "interim": 39,
-        "trading_update": 0,
-        "other": 0,
-        "with_body": 42,
-        "period_coverage": {
-          "annual": {
-            "total": 3,
-            "with_body": 3
-          },
-          "interim": {
-            "total": 38,
-            "with_body": 38
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 0,
-            "with_body": 0
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 2,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 42,
-        "with_body_after": 42,
-        "retries_used": 0,
-        "retry_log": [
-          {
-            "filing_id": "ir_b4957d1e0b6ee417",
-            "url": "https://www.sec.gov/Archives/edgar/data/1306965/000130696525000007/shel-20241231.htm",
-            "attempt": 1,
-            "outcome": "fetched_pdf",
-            "source": "pdf"
-          },
-          {
-            "filing_id": "ir_d12a1392839b5a3f",
-            "url": "https://www.sec.gov/Archives/edgar/data/1306965/000130696524000026/shel-20231231.htm",
-            "attempt": 1,
-            "outcome": "fetched_pdf",
-            "source": "pdf"
-          }
-        ],
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 4,
-          "note": "merge_ir_allowlist_filings"
-        },
-        "mandatory": true,
-        "note": "refetch_ir_allowlist_filing_bodies"
-      }
     }
   ],
-  "improved": [
-    "SHELL.AS"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-05T13:18:44.832682+00:00",
+    "snapshot_at": "2026-10-05T13:27:34.569571+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 52,
     "unmeasured_buy_tier": 1,
@@ -243,7 +154,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-05T13:21:34.322636+00:00",
+    "snapshot_at": "2026-10-05T13:28:04.028059+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 52,
     "unmeasured_buy_tier": 1,
@@ -315,50 +226,16 @@
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": false,
+  "recorded_gap_closure": true,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 52,
-    "hits": 44,
-    "new_rows_total": 0,
-    "curiosity_total": 47,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": true,
-    "max_runtime_seconds": 675.0,
-    "prefer_tickers": [
-      "UNA.AS",
-      "SGO.PA",
-      "ACKB.BR",
-      "APAM.AS",
-      "DTE.DE",
-      "UCB.BR",
-      "SKA-B.ST",
-      "MC.PA",
-      "MUV2.DE",
-      "BAS.DE",
-      "EL.PA",
-      "DQ7A.IR",
-      "ABI.BR",
-      "EVN.VI",
-      "SAP.DE",
-      "WIE.VI"
-    ],
-    "runtime_cutoff": false
-  },
+  "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-10-05T13:18:48.005448+00:00",
+    "assessed_at": "2026-10-05T13:27:36.641302+00:00",
     "unmeasured": [
       "UNA.AS"
     ],
@@ -438,19 +315,21 @@
       "thin_need_bodies": 3
     }
   },
-  "used_seconds": 163.048152474,
-  "budget_seconds": 2700.0,
-  "leftover_seconds": 2536.951847526,
+  "used_seconds": 25.073509298000005,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 2074.926490702,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": 320.0,
-  "pin_tickers": [],
+  "per_ticker_max_seconds": null,
+  "pin_tickers": [
+    "UNA.AS"
+  ],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-10-05T13:21:34.331705+00:00",
+    "updated_at": "2026-10-05T13:28:04.044742+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -608,7 +487,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "ABI.BR",
       "ACKB.BR",
