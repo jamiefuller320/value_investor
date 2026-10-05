@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-04T18:12:57.134757+00:00",
+  "compiled_at": "2026-10-05T21:37:59.511493+00:00",
   "run_at": null,
-  "task_count": 136,
+  "task_count": 137,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2738,6 +2738,126 @@
       "cancelled_at": "2026-09-22T09:11:47.275469+00:00",
       "cancelled_reason": "tier-1 housekeep: gap closed — ticker no longer has outstanding material gaps",
       "cancelled_policy": "resolved_gap_closure"
+    },
+    {
+      "id": "eng-20261005-01",
+      "area": "ingest",
+      "title": "Close library ingest filing gaps for FTSE MIB (ftse_mib): 1 buy-tier gaps after stalled weekday loop",
+      "summary": "Library market ftse_mib buy-tier filing deepen stalled with 1 unmeasured and 0 zero-body names (buy_tier_count=11). Improve euro_filings / ESEF / IR allowlist source coverage for representative tickers and add regression tests; verify with ftse-library ingest-loop --market ftse_mib. Sample unmeasured: TEN.MI.",
+      "priority": "high",
+      "priority_score": 86.0,
+      "source": "library_ingest_stall",
+      "evidence": {
+        "market_id": "ftse_mib",
+        "library_market": "ftse_mib",
+        "universe": "library",
+        "filing_health": {
+          "snapshot_at": "2026-10-05T21:36:56.270997+00:00",
+          "market_id": "ftse_mib",
+          "buy_tier_count": 11,
+          "unmeasured_buy_tier": 1,
+          "zero_body_buy_tier": 0,
+          "thin_body_buy_tier": 6,
+          "indexed_without_body": 0,
+          "bodies_min": 1,
+          "bodies_median": 2.0,
+          "bodies_max": 64,
+          "coverage_scope": "canonical_plus_shards",
+          "ftse_equivalent": false,
+          "unmeasured_tickers": [
+            "TEN.MI"
+          ],
+          "zero_body_tickers": [],
+          "thin_body_tickers": [
+            "MONC.MI",
+            "PST.MI",
+            "INW.MI",
+            "BC.MI",
+            "UNI.MI",
+            "FCT.MI"
+          ],
+          "indexed_without_body_tickers": [],
+          "indexed_without_body_by_ticker": {},
+          "parked_tickers": [
+            "BC.MI",
+            "FCT.MI",
+            "INW.MI",
+            "MONC.MI",
+            "PST.MI",
+            "UNI.MI"
+          ],
+          "parked_count": 6,
+          "effective_thin_body_buy_tier": 0,
+          "effective_thin_body_tickers": [],
+          "effective_indexed_without_body": 0,
+          "effective_indexed_without_body_tickers": [],
+          "ingest_exhausted": false
+        },
+        "filing_gaps": 1,
+        "sample_unmeasured": [
+          "TEN.MI"
+        ],
+        "sample_zero_body": [],
+        "rerun_library_ingest_loop": true,
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "stall_triage": {
+          "analyzed_at": "2026-10-05T22:17:26.435289+00:00",
+          "market_id": "ftse_mib",
+          "task_id": "eng-20261005-01",
+          "status": "open",
+          "filing_gaps": 1,
+          "lanes": {
+            "unmeasured": 1,
+            "zero_body": 0,
+            "indexed_without_body": 0,
+            "thin_bodies": 6
+          },
+          "active_lanes": [
+            "unmeasured",
+            "thin_bodies"
+          ],
+          "bundled": true,
+          "focus_ticker": "TEN.MI",
+          "focus_lane": "unmeasured",
+          "reburn_loop": false,
+          "reburn_investigation": null,
+          "recommendations": [
+            "narrow_reframe:TEN.MI:unmeasured",
+            "intensive_pin_or_allowlist_batch",
+            "split_by_ticker_not_broad_market_task"
+          ],
+          "filing_health_snapshot_at": "2026-10-05T22:17:26.430574+00:00",
+          "doc": "docs/ops/library-ingest-escalation.md#library-stall-task-triage"
+        }
+      },
+      "acceptance_criteria": [
+        "Representative ftse_mib buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
+        "ftse-library ingest-loop --market ftse_mib reports improved > 0 on a verification run",
+        "Add focused regression tests for the source/parser fix",
+        "No change to live FTSE 350 ingest path or blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20261003-03",
@@ -8787,7 +8907,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-05T12:31:59.115336+00:00",
+    "evaluated_at": "2026-10-05T17:31:57.911678+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -8821,7 +8941,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 3,
-    "evaluated_at": "2026-10-05T15:17:49.245809+00:00",
+    "evaluated_at": "2026-10-05T22:18:09.589307+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -8829,8 +8949,55 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
-  "library_market_id": "asx200",
+  "micro_compile_source": "library_ingest_loop",
+  "library_market_id": "ftse_mib",
   "hunter_ticker": "YAL.AX",
-  "workflow_failure_compiled": true
+  "workflow_failure_compiled": true,
+  "library_ingest_health": {
+    "snapshot_at": "2026-10-05T21:36:56.270997+00:00",
+    "market_id": "ftse_mib",
+    "buy_tier_count": 11,
+    "unmeasured_buy_tier": 1,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 6,
+    "indexed_without_body": 0,
+    "bodies_min": 1,
+    "bodies_median": 2.0,
+    "bodies_max": 64,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [
+      "TEN.MI"
+    ],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [
+      "MONC.MI",
+      "PST.MI",
+      "INW.MI",
+      "BC.MI",
+      "UNI.MI",
+      "FCT.MI"
+    ],
+    "indexed_without_body_tickers": [],
+    "indexed_without_body_by_ticker": {},
+    "parked_tickers": [
+      "BC.MI",
+      "FCT.MI",
+      "INW.MI",
+      "MONC.MI",
+      "PST.MI",
+      "UNI.MI"
+    ],
+    "parked_count": 6,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": false
+  },
+  "queue_block_notify": {
+    "last_fingerprint": "clash_blocked|no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
+    "last_sent_at": "2026-10-05T22:18:24.726596+00:00",
+    "cooldown_hours": 12.0
+  }
 }
