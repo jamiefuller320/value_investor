@@ -1856,6 +1856,62 @@ def check_combined_tagged_learning(
     ]
 
 
+def check_track_statistics(
+    *,
+    paper_root: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+    benchmark_fetcher: Any = None,
+) -> list[OpsFinding]:
+    """Observe-only L529: refresh track statistics; warn on unsupported verdict claims.
+
+    Writes ``docs/data/track_statistics.json``. Never applies knobs or gates
+    (``auto_fixable=False``).
+    """
+    from value_investor.track_statistics import (
+        DEFAULT_PAPER_ROOT,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        fetch_benchmark_closes,
+        load_learning_tracks_review,
+        ops_finding_from_track_statistics,
+        refresh_track_statistics,
+    )
+
+    root = Path(paper_root) if paper_root is not None else DEFAULT_PAPER_ROOT
+    if not root.exists():
+        return []
+    try:
+        payload = refresh_track_statistics(
+            root,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            benchmark_fetcher=benchmark_fetcher or fetch_benchmark_closes,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_track_statistics(payload, load_learning_tracks_review(root))
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_lifecycle_maturity_trajectory(
     *,
     board_path: Path | None = None,
@@ -2690,6 +2746,7 @@ def collect_ops_findings(
     findings.extend(check_universe_filing_archive_pack_bottleneck())
     findings.extend(check_shard_nav_fx_warp())
     findings.extend(check_combined_tagged_learning())
+    findings.extend(check_track_statistics())
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_ui_state_reconciliation())
     findings.extend(check_gha_failure_triage())
