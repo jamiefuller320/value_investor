@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-04T18:12:57.134757+00:00",
+  "compiled_at": "2026-10-05T10:48:45.254306+00:00",
   "run_at": null,
-  "task_count": 136,
+  "task_count": 137,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1883,6 +1883,87 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
+    },
+    {
+      "id": "eng-20261005-01",
+      "area": "ingest",
+      "title": "Seed IR allowlist for unmeasured/zero-body TEN.MI (ftse_mib) — empty allowlist after 0-improve pin (igc-20261005-01)",
+      "summary": "Gap-closure run igc-20261005-01 targeted TEN.MI with outstanding coverage holes but zero IR allowlist URLs (refetch never attempted). Seed `_BUILTIN_IR_URLS` / issuer PDFs or fix discovery; do not keep re-pinning empty intensify. Add a regression test; verify with a pinned library ingest gap-closure / ingest-loop pass.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20261005-01",
+        "trial_id": "igc-20261005-01",
+        "chain_root_id": "igc-20261005-01",
+        "chain_round": 1,
+        "tickers": [
+          "TEN.MI"
+        ],
+        "ticker": "TEN.MI",
+        "market_id": "ftse_mib",
+        "library_market": "ftse_mib",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "TEN.MI"
+          ],
+          "market_id": "ftse_mib",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "TEN.MI"
+          ],
+          "market_id": "ftse_mib",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "compile_reason": "gaps_remain_without_allowlist"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for TEN.MI",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20261003-01",
@@ -8829,8 +8910,11 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "ingest_gap_closure",
   "library_market_id": "asx200",
   "hunter_ticker": "YAL.AX",
-  "workflow_failure_compiled": true
+  "workflow_failure_compiled": true,
+  "source_gap_closure_run_id": "igc-20261005-01",
+  "source_trial_id": "igc-20261005-01",
+  "source_chain_root_id": "igc-20261005-01"
 }
