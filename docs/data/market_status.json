@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-05T10:45:32.318745+00:00",
+  "generated_at": "2026-10-05T10:57:43.002095+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -24,7 +24,8 @@
     "atx",
     "psi20",
     "smi",
-    "omxs30"
+    "omxs30",
+    "iseq20"
   ],
   "summary": {
     "market_count": 23,
@@ -42,7 +43,7 @@
     "sprint_count": 3,
     "maintenance_count": 19,
     "live_count": 1,
-    "admitted_count": 21,
+    "admitted_count": 22,
     "should_run_library_maintenance": true,
     "maintenance_markets": [
       "aex",
@@ -57,6 +58,7 @@
       "ftse_smallcap",
       "hang_seng",
       "ibex35",
+      "iseq20",
       "nasdaq100",
       "omxs30",
       "psi20",
@@ -67,7 +69,7 @@
       "us_adr_asia"
     ],
     "spare_sprint": {
-      "1": "iseq20",
+      "1": "ftse_smallcap",
       "2": "sp500"
     },
     "equal_support_generated_at": "2026-10-05T08:46:39.658619+00:00"
@@ -978,64 +980,66 @@
       }
     },
     {
-      "market_id": "iseq20",
-      "label": "ISEQ 20",
-      "exchange": "Euronext Dublin",
-      "currency": "EUR",
+      "market_id": "ftse_smallcap",
+      "label": "FTSE SmallCap",
+      "exchange": "LSE",
+      "currency": "GBP",
       "role": "sprint",
       "is_live": false,
       "is_focus": false,
       "is_graduated": true,
       "is_queue": true,
-      "is_admitted": false,
+      "is_admitted": true,
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=1)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=70)",
       "ingest_parity_met": false,
-      "ingest_exhausted": false,
-      "queue_rank": 21,
-      "shared_maintenance": false,
+      "ingest_exhausted": true,
+      "queue_rank": 3,
+      "shared_maintenance": true,
       "health": "warn",
-      "coverage_pct": 1.0,
-      "honest_coverage_pct": 1.0,
-      "ticker_count": 20,
+      "coverage_pct": 0.8953,
+      "honest_coverage_pct": 0.8953,
+      "ticker_count": 77,
       "stale": 0,
-      "fresh": 20,
-      "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-10-05T07:21:08.382273+00:00",
-      "last_constituents_refresh": "2026-10-05T07:20:53.730064+00:00",
-      "last_screen_at": "2026-10-05T06:52:37.710806+00:00",
+      "fresh": 86,
+      "failed_fetch_count": 9,
+      "last_metrics_refresh": "2026-10-05T07:06:18.217393+00:00",
+      "last_constituents_refresh": "2026-10-05T07:04:43.448962+00:00",
+      "last_screen_at": "2026-10-05T10:55:03.667552+00:00",
       "signal_counts": {
-        "hold": 13,
-        "buy": 4,
-        "avoid": 3
+        "hold": 40,
+        "avoid": 20,
+        "buy": 7,
+        "insufficient_data": 6,
+        "strong_buy": 4
       },
-      "shortlist_count": 4,
-      "strong_buy": 0,
-      "buy": 4,
+      "shortlist_count": 11,
+      "strong_buy": 4,
+      "buy": 7,
       "learning_phase": 1,
-      "learning_phase_label": "Observe",
+      "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
-        "need 4 screen archives (have 3)",
-        "need 4 observe snapshots (have 3)"
+        "ftse_smallcap not in ladder.weekly_paper_shard_markets"
       ],
-      "expected_epoch0_blockers": [],
+      "expected_epoch0_blockers": [
+        "ftse_smallcap not in ladder.weekly_paper_shard_markets"
+      ],
       "learning": {
         "current_phase": 1,
         "next_phase": 1,
-        "phase1_ready": false,
+        "phase1_ready": true,
         "phase2_ready": false,
         "phase3_ready": false,
         "weekly_paper_enabled": false,
         "weekday_paper_enabled": true,
         "blockers": [
-          "need 4 screen archives (have 3)",
-          "need 4 observe snapshots (have 3)"
+          "ftse_smallcap not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
-          "screen_archives": 3,
-          "observe_snapshot_count": 3
+          "screen_archives": 36,
+          "observe_snapshot_count": 36
         },
         "phase2": {
           "weekly_batch_count": 0,
@@ -1043,118 +1047,397 @@
         }
       },
       "filing_health": {
-        "buy_tier_count": 4,
+        "buy_tier_count": 11,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 1,
-        "bodies_median": 15.5,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 70,
+        "bodies_median": 53.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
-        "parked_count": 0,
+        "parked_count": 7,
         "zero_body_tickers": [],
-        "thin_body_tickers": [],
+        "thin_body_tickers": [
+          "ENQ.L"
+        ],
         "unmeasured_tickers": [],
-        "parked_tickers": []
+        "parked_tickers": [
+          "APTD.L",
+          "DFS.L",
+          "FOXT.L",
+          "MER.L",
+          "REC.L",
+          "TPT.L",
+          "ULTP.L"
+        ]
       },
       "filing_gaps": 0,
       "paper_instrument": "buy_tier_level",
-      "ai_judgment": null,
-      "knob_apply": null,
-      "epoch0": null,
-      "equal_support": null,
-      "near_miss": null,
+      "ai_judgment": false,
+      "knob_apply": false,
+      "epoch0": {
+        "present": true,
+        "paper_instrument": "buy_tier_level",
+        "ai_judgment": false,
+        "knob_apply": false,
+        "acted": true,
+        "last_run_at": "2026-10-05T07:38:04.277328+00:00",
+        "holdings": 4,
+        "nav": 1118.09,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "weekday_batch_count": 23,
+        "epoch0_batch_count": 20
+      },
+      "equal_support": {
+        "present": true,
+        "ai_judgment": false,
+        "knob_apply": false,
+        "paper_instrument": "buy_tier_level",
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 16,
+        "not_buy_tier_count": 66,
+        "never_buy_tier_count": 61,
+        "rememo_eligible_count": 0,
+        "exclusion_ready_for_priors": null
+      },
+      "near_miss": {
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 16,
+        "not_buy_tier_count": 66,
+        "never_buy_tier_count": 61,
+        "timing_signal_present": true,
+        "observe_only": true,
+        "watch_cut": "buy_not_now + hold_near_buy",
+        "census_groups": "not_buy_tier + never_buy_tier",
+        "buy_tier_not_now_sample": [],
+        "hold_near_buy_sample": [
+          "NRR.L",
+          "ZTF.L",
+          "LSL.L",
+          "CLIG.L",
+          "FORT.L",
+          "LUCE.L",
+          "SNWS.L",
+          "FSTA.L"
+        ]
+      },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 1,
-        "targets": 2,
-        "improved": 1,
-        "improved_tickers": [
-          "MIO.IR"
-        ],
-        "last_run_at": "2026-10-05T07:50:38.726783+00:00",
+        "run_count": 2,
+        "targets": 1,
+        "improved": 0,
+        "improved_tickers": [],
+        "last_run_at": "2026-10-04T16:50:32.348074+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 1,
-          "indexed_without_body": 1,
+          "thin": 0,
+          "indexed_without_body": 40,
           "filing_gaps": 0
         },
         "gaps_after": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 1,
-          "indexed_without_body": 0,
+          "thin": 0,
+          "indexed_without_body": 45,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": -1,
+          "indexed_without_body": 5,
           "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 1,
+          "thin": 1,
+          "indexed_without_body": 70,
           "filing_gaps": 0
         },
-        "admission_ready": false,
+        "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [],
-        "sprint_entered_at": "2026-10-04T19:52:26.054412+00:00"
+        "admission_warnings": [
+          {
+            "id": "zero_improve_stall",
+            "severity": "high",
+            "summary": "Last 2 days improved nobody while filing gaps remain"
+          }
+        ],
+        "sprint_entered_at": "2026-10-05T10:53:43.196885+00:00"
       },
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
         "reason": null,
-        "market_id": "iseq20",
-        "source": "observe_sim",
+        "market_id": "ftse_smallcap",
+        "source": "paper_fund",
         "paper_instrument": "buy_tier_level",
-        "currency": "EUR",
-        "benchmark_ticker": "^IETP",
+        "currency": "GBP",
+        "benchmark_ticker": "^FTSC",
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
         "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
         "points": [
           {
-            "date": "2026-08-16",
-            "held": 998.25,
-            "nav": 998.25,
-            "held_stock": 998.25,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 998.25
-          },
-          {
-            "date": "2026-10-04",
-            "held": 977.6,
-            "nav": 977.6,
-            "held_stock": 977.6,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 952.29
-          },
-          {
-            "date": "2026-10-05",
-            "held": 976.92,
-            "nav": 976.92,
-            "held_stock": 976.92,
+            "date": "2026-09-09",
+            "held": 994.53,
+            "nav": 994.53,
+            "held_stock": 994.53,
             "cash": 0.0,
             "positions": 4,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": 953.88
+            "market": 994.53
+          },
+          {
+            "date": "2026-09-10",
+            "held": 745.28,
+            "nav": 993.91,
+            "held_stock": 745.28,
+            "cash": 248.63,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 994.53
+          },
+          {
+            "date": "2026-09-11",
+            "held": 986.41,
+            "nav": 986.41,
+            "held_stock": 986.41,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 979.69
+          },
+          {
+            "date": "2026-09-13",
+            "held": 990.0,
+            "nav": 990.0,
+            "held_stock": 990.0,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 979.69
+          },
+          {
+            "date": "2026-09-14",
+            "held": 997.97,
+            "nav": 997.97,
+            "held_stock": 997.97,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 984.03
+          },
+          {
+            "date": "2026-09-15",
+            "held": 990.58,
+            "nav": 990.58,
+            "held_stock": 990.58,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 980.4
+          },
+          {
+            "date": "2026-09-16",
+            "held": 992.19,
+            "nav": 992.19,
+            "held_stock": 992.19,
+            "cash": 0.0,
+            "positions": 3,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 980.4
+          },
+          {
+            "date": "2026-09-17",
+            "held": 1002.81,
+            "nav": 1002.81,
+            "held_stock": 1002.81,
+            "cash": 0.0,
+            "positions": 3,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 994.93
+          },
+          {
+            "date": "2026-09-18",
+            "held": 1030.83,
+            "nav": 1030.83,
+            "held_stock": 1030.83,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 980.49
+          },
+          {
+            "date": "2026-09-20",
+            "held": 1031.89,
+            "nav": 1031.89,
+            "held_stock": 1031.89,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 980.49
+          },
+          {
+            "date": "2026-09-21",
+            "held": 1029.55,
+            "nav": 1030.23,
+            "held_stock": 1029.55,
+            "cash": 0.68,
+            "positions": 2,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 980.49
+          },
+          {
+            "date": "2026-09-22",
+            "held": 1042.02,
+            "nav": 1042.02,
+            "held_stock": 1042.02,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 987.97
+          },
+          {
+            "date": "2026-09-23",
+            "held": 1047.25,
+            "nav": 1047.25,
+            "held_stock": 1047.25,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 989.41
+          },
+          {
+            "date": "2026-09-24",
+            "held": 1050.85,
+            "nav": 1050.85,
+            "held_stock": 1050.85,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 984.83
+          },
+          {
+            "date": "2026-09-25",
+            "held": 1008.61,
+            "nav": 1057.24,
+            "held_stock": 1008.61,
+            "cash": 48.63,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 983.82
+          },
+          {
+            "date": "2026-09-27",
+            "held": 1049.58,
+            "nav": 1049.58,
+            "held_stock": 1049.58,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 983.82
+          },
+          {
+            "date": "2026-09-28",
+            "held": 1042.72,
+            "nav": 1047.71,
+            "held_stock": 1042.72,
+            "cash": 4.99,
+            "positions": 2,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 986.05
+          },
+          {
+            "date": "2026-09-29",
+            "held": 1048.59,
+            "nav": 1053.58,
+            "held_stock": 1048.59,
+            "cash": 4.99,
+            "positions": 2,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 984.83
+          },
+          {
+            "date": "2026-09-30",
+            "held": 1074.79,
+            "nav": 1095.86,
+            "held_stock": 1074.79,
+            "cash": 21.07,
+            "positions": 2,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 983.93
+          },
+          {
+            "date": "2026-10-01",
+            "held": 1095.74,
+            "nav": 1095.74,
+            "held_stock": 1095.74,
+            "cash": 0.0,
+            "positions": 2,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 983.93
+          },
+          {
+            "date": "2026-10-02",
+            "held": 1095.74,
+            "nav": 1095.74,
+            "held_stock": 1095.74,
+            "cash": 0.0,
+            "positions": 2,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 962.36
+          },
+          {
+            "date": "2026-10-04",
+            "held": 1119.21,
+            "nav": 1119.21,
+            "held_stock": 1119.21,
+            "cash": 0.0,
+            "positions": 3,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 962.36
+          },
+          {
+            "date": "2026-10-05",
+            "held": 1118.09,
+            "nav": 1118.09,
+            "held_stock": 1118.09,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 965.29
           }
         ],
         "series": [
@@ -1166,7 +1449,7 @@
           },
           {
             "id": "market",
-            "label": "^IETP equivalent",
+            "label": "^FTSC equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -1174,30 +1457,30 @@
         "branches": [],
         "last": {
           "date": "2026-10-05",
-          "held": 976.92,
-          "market": 953.88,
-          "nav": 976.92,
+          "held": 1118.09,
+          "market": 965.29,
+          "nav": 1118.09,
           "positions": 4,
-          "excess_pct": 0.024154
+          "excess_pct": 0.158294
         }
       },
       "learning_depth": null,
       "learning_gate": {
         "schema_version": 2,
         "observe_only": true,
-        "current_id": "sprint_complete",
+        "current_id": "ftse_parity_learning",
         "start_complete": true,
         "bodies_complete": true,
-        "sprint_complete": false,
-        "admit_complete": false,
-        "epoch0_complete": false,
+        "sprint_complete": true,
+        "admit_complete": true,
+        "epoch0_complete": true,
         "trajectory_ready": false,
         "learning_ready": false,
         "live_ready": false,
-        "filing_ready": false,
+        "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 1,
+        "leftover": 71,
         "steps": [
           {
             "id": "start",
@@ -1215,25 +1498,25 @@
             "id": "sprint_complete",
             "label": "Sprint",
             "gate": "sprint_ingest_complete",
-            "status": "current"
+            "status": "done"
           },
           {
             "id": "admit",
             "label": "Admit",
             "gate": "l322_admit",
-            "status": "pending"
+            "status": "done"
           },
           {
             "id": "epoch0",
             "label": "Epoch-0",
             "gate": "epoch0_marks",
-            "status": "pending"
+            "status": "done"
           },
           {
             "id": "ftse_parity_learning",
             "label": "Parity",
             "gate": "learning_ready",
-            "status": "pending"
+            "status": "current"
           },
           {
             "id": "live_ready",
@@ -1243,13 +1526,13 @@
           }
         ],
         "next_gate": {
-          "id": "sprint_complete",
-          "name": "sprint_ingest_complete",
-          "gate": "sprint_ingest_complete",
-          "criteria": "sprint_ingest_complete / filing_ready: raw ingest_parity_met (all four gap counts zero) or leftover thin/IWB parked. Now via leftover thin/IWB parked or raw ingest_parity_met. Remaining unmeas 0, zero 0, thin 0, IWB 1.",
-          "timeframe": "Sprint until exhaustion or raw parity. Extra jobs do not create unique weeks. Fat slot serializes one head at a time."
+          "id": "ftse_parity_learning",
+          "name": "FTSE-parity learning",
+          "gate": "learning_ready",
+          "criteria": "learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json.",
+          "timeframe": "Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
         },
-        "annotation": "Next: sprint_ingest_complete — sprint_ingest_complete / filing_ready: raw ingest_parity_met (all four gap counts zero) or leftover thin/IWB parked. Now via leftover thin/IWB parked or raw ingest_parity_met. Remaining unmeas 0, zero 0, thin 0, IWB 1. Timeframe: Sprint until exhaustion or raw parity. Extra jobs do not create unique weeks. Fat slot serializes one head at a time."
+        "annotation": "Next: FTSE-parity learning — learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json. Timeframe: Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
       }
     },
     {
@@ -4447,490 +4730,6 @@
       }
     },
     {
-      "market_id": "ftse_smallcap",
-      "label": "FTSE SmallCap",
-      "exchange": "LSE",
-      "currency": "GBP",
-      "role": "admitted",
-      "is_live": false,
-      "is_focus": false,
-      "is_graduated": true,
-      "is_queue": true,
-      "is_admitted": true,
-      "is_ftse_equivalent": false,
-      "ingest": "maintenance",
-      "ingest_stream": null,
-      "ingest_reason": null,
-      "ingest_parity_met": null,
-      "ingest_exhausted": true,
-      "queue_rank": 3,
-      "shared_maintenance": true,
-      "health": "warn",
-      "coverage_pct": 0.8953,
-      "honest_coverage_pct": 0.8953,
-      "ticker_count": 77,
-      "stale": 0,
-      "fresh": 86,
-      "failed_fetch_count": 9,
-      "last_metrics_refresh": "2026-10-05T07:06:18.217393+00:00",
-      "last_constituents_refresh": "2026-10-05T07:04:43.448962+00:00",
-      "last_screen_at": "2026-10-05T06:52:37.710806+00:00",
-      "signal_counts": {
-        "hold": 40,
-        "avoid": 20,
-        "buy": 7,
-        "insufficient_data": 6,
-        "strong_buy": 4
-      },
-      "shortlist_count": 11,
-      "strong_buy": 4,
-      "buy": 7,
-      "learning_phase": 1,
-      "learning_phase_label": "Epoch-0 level",
-      "phase_blockers": [
-        "ftse_smallcap not in ladder.weekly_paper_shard_markets"
-      ],
-      "expected_epoch0_blockers": [
-        "ftse_smallcap not in ladder.weekly_paper_shard_markets"
-      ],
-      "learning": {
-        "current_phase": 1,
-        "next_phase": 1,
-        "phase1_ready": true,
-        "phase2_ready": false,
-        "phase3_ready": false,
-        "weekly_paper_enabled": false,
-        "weekday_paper_enabled": true,
-        "blockers": [
-          "ftse_smallcap not in ladder.weekly_paper_shard_markets"
-        ],
-        "phase1": {
-          "screen_archives": 36,
-          "observe_snapshot_count": 36
-        },
-        "phase2": {
-          "weekly_batch_count": 0,
-          "min_weekly_batches": 4
-        }
-      },
-      "filing_health": null,
-      "filing_gaps": null,
-      "paper_instrument": "buy_tier_level",
-      "ai_judgment": false,
-      "knob_apply": false,
-      "epoch0": {
-        "present": true,
-        "paper_instrument": "buy_tier_level",
-        "ai_judgment": false,
-        "knob_apply": false,
-        "acted": true,
-        "last_run_at": "2026-10-05T07:38:04.277328+00:00",
-        "holdings": 4,
-        "nav": 1118.09,
-        "cash": 0.0,
-        "contributed_capital": 1000.0,
-        "weekday_batch_count": 23,
-        "epoch0_batch_count": 20
-      },
-      "equal_support": {
-        "present": true,
-        "ai_judgment": false,
-        "knob_apply": false,
-        "paper_instrument": "buy_tier_level",
-        "timing_signal_present": false,
-        "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 16,
-        "not_buy_tier_count": 66,
-        "never_buy_tier_count": 61,
-        "rememo_eligible_count": 0,
-        "exclusion_ready_for_priors": null
-      },
-      "near_miss": {
-        "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 16,
-        "not_buy_tier_count": 66,
-        "never_buy_tier_count": 61,
-        "timing_signal_present": true,
-        "observe_only": true,
-        "watch_cut": "buy_not_now + hold_near_buy",
-        "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [],
-        "hold_near_buy_sample": [
-          "NRR.L",
-          "ZTF.L",
-          "LSL.L",
-          "CLIG.L",
-          "FORT.L",
-          "LUCE.L",
-          "SNWS.L",
-          "FSTA.L"
-        ]
-      },
-      "sprint_progress": null,
-      "held_vs_market": {
-        "schema_version": 1,
-        "status": "ok",
-        "reason": null,
-        "market_id": "ftse_smallcap",
-        "source": "paper_fund",
-        "paper_instrument": "buy_tier_level",
-        "currency": "GBP",
-        "benchmark_ticker": "^FTSC",
-        "held_path": "equity_marks",
-        "market_path": "index_levels",
-        "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
-        "points": [
-          {
-            "date": "2026-09-09",
-            "held": 994.53,
-            "nav": 994.53,
-            "held_stock": 994.53,
-            "cash": 0.0,
-            "positions": 4,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 994.53
-          },
-          {
-            "date": "2026-09-10",
-            "held": 745.28,
-            "nav": 993.91,
-            "held_stock": 745.28,
-            "cash": 248.63,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 994.53
-          },
-          {
-            "date": "2026-09-11",
-            "held": 986.41,
-            "nav": 986.41,
-            "held_stock": 986.41,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 979.69
-          },
-          {
-            "date": "2026-09-13",
-            "held": 990.0,
-            "nav": 990.0,
-            "held_stock": 990.0,
-            "cash": 0.0,
-            "positions": 4,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 979.69
-          },
-          {
-            "date": "2026-09-14",
-            "held": 997.97,
-            "nav": 997.97,
-            "held_stock": 997.97,
-            "cash": 0.0,
-            "positions": 4,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 984.03
-          },
-          {
-            "date": "2026-09-15",
-            "held": 990.58,
-            "nav": 990.58,
-            "held_stock": 990.58,
-            "cash": 0.0,
-            "positions": 4,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 980.4
-          },
-          {
-            "date": "2026-09-16",
-            "held": 992.19,
-            "nav": 992.19,
-            "held_stock": 992.19,
-            "cash": 0.0,
-            "positions": 3,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 980.4
-          },
-          {
-            "date": "2026-09-17",
-            "held": 1002.81,
-            "nav": 1002.81,
-            "held_stock": 1002.81,
-            "cash": 0.0,
-            "positions": 3,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 994.93
-          },
-          {
-            "date": "2026-09-18",
-            "held": 1030.83,
-            "nav": 1030.83,
-            "held_stock": 1030.83,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 980.49
-          },
-          {
-            "date": "2026-09-20",
-            "held": 1031.89,
-            "nav": 1031.89,
-            "held_stock": 1031.89,
-            "cash": 0.0,
-            "positions": 4,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 980.49
-          },
-          {
-            "date": "2026-09-21",
-            "held": 1029.55,
-            "nav": 1030.23,
-            "held_stock": 1029.55,
-            "cash": 0.68,
-            "positions": 2,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 980.49
-          },
-          {
-            "date": "2026-09-22",
-            "held": 1042.02,
-            "nav": 1042.02,
-            "held_stock": 1042.02,
-            "cash": 0.0,
-            "positions": 4,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 987.97
-          },
-          {
-            "date": "2026-09-23",
-            "held": 1047.25,
-            "nav": 1047.25,
-            "held_stock": 1047.25,
-            "cash": 0.0,
-            "positions": 4,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 989.41
-          },
-          {
-            "date": "2026-09-24",
-            "held": 1050.85,
-            "nav": 1050.85,
-            "held_stock": 1050.85,
-            "cash": 0.0,
-            "positions": 4,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 984.83
-          },
-          {
-            "date": "2026-09-25",
-            "held": 1008.61,
-            "nav": 1057.24,
-            "held_stock": 1008.61,
-            "cash": 48.63,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 983.82
-          },
-          {
-            "date": "2026-09-27",
-            "held": 1049.58,
-            "nav": 1049.58,
-            "held_stock": 1049.58,
-            "cash": 0.0,
-            "positions": 4,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 983.82
-          },
-          {
-            "date": "2026-09-28",
-            "held": 1042.72,
-            "nav": 1047.71,
-            "held_stock": 1042.72,
-            "cash": 4.99,
-            "positions": 2,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 986.05
-          },
-          {
-            "date": "2026-09-29",
-            "held": 1048.59,
-            "nav": 1053.58,
-            "held_stock": 1048.59,
-            "cash": 4.99,
-            "positions": 2,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 984.83
-          },
-          {
-            "date": "2026-09-30",
-            "held": 1074.79,
-            "nav": 1095.86,
-            "held_stock": 1074.79,
-            "cash": 21.07,
-            "positions": 2,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 983.93
-          },
-          {
-            "date": "2026-10-01",
-            "held": 1095.74,
-            "nav": 1095.74,
-            "held_stock": 1095.74,
-            "cash": 0.0,
-            "positions": 2,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 983.93
-          },
-          {
-            "date": "2026-10-02",
-            "held": 1095.74,
-            "nav": 1095.74,
-            "held_stock": 1095.74,
-            "cash": 0.0,
-            "positions": 2,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 962.36
-          },
-          {
-            "date": "2026-10-04",
-            "held": 1119.21,
-            "nav": 1119.21,
-            "held_stock": 1119.21,
-            "cash": 0.0,
-            "positions": 3,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 962.36
-          },
-          {
-            "date": "2026-10-05",
-            "held": 1118.09,
-            "nav": 1118.09,
-            "held_stock": 1118.09,
-            "cash": 0.0,
-            "positions": 4,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 965.29
-          }
-        ],
-        "series": [
-          {
-            "id": "held",
-            "label": "Held book",
-            "kind": "held",
-            "color": "#2b6cb0"
-          },
-          {
-            "id": "market",
-            "label": "^FTSC equivalent",
-            "kind": "market",
-            "color": "#64748b"
-          }
-        ],
-        "branches": [],
-        "last": {
-          "date": "2026-10-05",
-          "held": 1118.09,
-          "market": 965.29,
-          "nav": 1118.09,
-          "positions": 4,
-          "excess_pct": 0.158294
-        }
-      },
-      "learning_depth": null,
-      "learning_gate": {
-        "schema_version": 2,
-        "observe_only": true,
-        "current_id": "ftse_parity_learning",
-        "start_complete": true,
-        "bodies_complete": true,
-        "sprint_complete": true,
-        "admit_complete": true,
-        "epoch0_complete": true,
-        "trajectory_ready": false,
-        "learning_ready": false,
-        "live_ready": false,
-        "filing_ready": true,
-        "span_weeks": null,
-        "unique_days": null,
-        "leftover": 0,
-        "steps": [
-          {
-            "id": "start",
-            "label": "Start",
-            "gate": "ingest_clock",
-            "status": "done"
-          },
-          {
-            "id": "bodies",
-            "label": "Bodies",
-            "gate": "unmeasured_zero_clear",
-            "status": "done"
-          },
-          {
-            "id": "sprint_complete",
-            "label": "Sprint",
-            "gate": "sprint_ingest_complete",
-            "status": "done"
-          },
-          {
-            "id": "admit",
-            "label": "Admit",
-            "gate": "l322_admit",
-            "status": "done"
-          },
-          {
-            "id": "epoch0",
-            "label": "Epoch-0",
-            "gate": "epoch0_marks",
-            "status": "done"
-          },
-          {
-            "id": "ftse_parity_learning",
-            "label": "Parity",
-            "gate": "learning_ready",
-            "status": "current"
-          },
-          {
-            "id": "live_ready",
-            "label": "Live",
-            "gate": "phase_4_live_screen",
-            "status": "pending"
-          }
-        ],
-        "next_gate": {
-          "id": "ftse_parity_learning",
-          "name": "FTSE-parity learning",
-          "gate": "learning_ready",
-          "criteria": "learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json.",
-          "timeframe": "Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
-        },
-        "annotation": "Next: FTSE-parity learning — learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json. Timeframe: Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
-      }
-    },
-    {
       "market_id": "hang_seng",
       "label": "Hang Seng",
       "exchange": "HKEX",
@@ -5590,6 +5389,223 @@
           "timeframe": "Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
         },
         "annotation": "Next: FTSE-parity learning — learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json. Timeframe: Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
+      }
+    },
+    {
+      "market_id": "iseq20",
+      "label": "ISEQ 20",
+      "exchange": "Euronext Dublin",
+      "currency": "EUR",
+      "role": "admitted",
+      "is_live": false,
+      "is_focus": false,
+      "is_graduated": true,
+      "is_queue": true,
+      "is_admitted": true,
+      "is_ftse_equivalent": false,
+      "ingest": "maintenance",
+      "ingest_stream": null,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
+      "ingest_exhausted": false,
+      "queue_rank": 21,
+      "shared_maintenance": true,
+      "health": "warn",
+      "coverage_pct": 1.0,
+      "honest_coverage_pct": 1.0,
+      "ticker_count": 20,
+      "stale": 0,
+      "fresh": 20,
+      "failed_fetch_count": 0,
+      "last_metrics_refresh": "2026-10-05T07:21:08.382273+00:00",
+      "last_constituents_refresh": "2026-10-05T07:20:53.730064+00:00",
+      "last_screen_at": "2026-10-05T06:52:37.710806+00:00",
+      "signal_counts": {
+        "hold": 13,
+        "buy": 4,
+        "avoid": 3
+      },
+      "shortlist_count": 4,
+      "strong_buy": 0,
+      "buy": 4,
+      "learning_phase": 1,
+      "learning_phase_label": "Observe",
+      "phase_blockers": [
+        "need 4 screen archives (have 3)",
+        "need 4 observe snapshots (have 3)"
+      ],
+      "expected_epoch0_blockers": [],
+      "learning": {
+        "current_phase": 1,
+        "next_phase": 1,
+        "phase1_ready": false,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": true,
+        "blockers": [
+          "need 4 screen archives (have 3)",
+          "need 4 observe snapshots (have 3)"
+        ],
+        "phase1": {
+          "screen_archives": 3,
+          "observe_snapshot_count": 3
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 4
+        }
+      },
+      "filing_health": null,
+      "filing_gaps": null,
+      "paper_instrument": "buy_tier_level",
+      "ai_judgment": false,
+      "knob_apply": false,
+      "epoch0": null,
+      "equal_support": null,
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "ok",
+        "reason": null,
+        "market_id": "iseq20",
+        "source": "observe_sim",
+        "paper_instrument": "buy_tier_level",
+        "currency": "EUR",
+        "benchmark_ticker": "^IETP",
+        "held_path": "equity_marks",
+        "market_path": "index_levels",
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [
+          {
+            "date": "2026-08-16",
+            "held": 998.25,
+            "nav": 998.25,
+            "held_stock": 998.25,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 998.25
+          },
+          {
+            "date": "2026-10-04",
+            "held": 977.6,
+            "nav": 977.6,
+            "held_stock": 977.6,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 952.29
+          },
+          {
+            "date": "2026-10-05",
+            "held": 976.92,
+            "nav": 976.92,
+            "held_stock": 976.92,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 953.88
+          }
+        ],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^IETP equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": {
+          "date": "2026-10-05",
+          "held": 976.92,
+          "market": 953.88,
+          "nav": 976.92,
+          "positions": 4,
+          "excess_pct": 0.024154
+        }
+      },
+      "learning_depth": null,
+      "learning_gate": {
+        "schema_version": 2,
+        "observe_only": true,
+        "current_id": "epoch0",
+        "start_complete": true,
+        "bodies_complete": true,
+        "sprint_complete": true,
+        "admit_complete": true,
+        "epoch0_complete": false,
+        "trajectory_ready": false,
+        "learning_ready": false,
+        "live_ready": false,
+        "filing_ready": true,
+        "span_weeks": null,
+        "unique_days": null,
+        "leftover": 0,
+        "steps": [
+          {
+            "id": "start",
+            "label": "Start",
+            "gate": "ingest_clock",
+            "status": "done"
+          },
+          {
+            "id": "bodies",
+            "label": "Bodies",
+            "gate": "unmeasured_zero_clear",
+            "status": "done"
+          },
+          {
+            "id": "sprint_complete",
+            "label": "Sprint",
+            "gate": "sprint_ingest_complete",
+            "status": "done"
+          },
+          {
+            "id": "admit",
+            "label": "Admit",
+            "gate": "l322_admit",
+            "status": "done"
+          },
+          {
+            "id": "epoch0",
+            "label": "Epoch-0",
+            "gate": "epoch0_marks",
+            "status": "current"
+          },
+          {
+            "id": "ftse_parity_learning",
+            "label": "Parity",
+            "gate": "learning_ready",
+            "status": "pending"
+          },
+          {
+            "id": "live_ready",
+            "label": "Live",
+            "gate": "phase_4_live_screen",
+            "status": "pending"
+          }
+        ],
+        "next_gate": {
+          "id": "epoch0",
+          "name": "Epoch-0 marks",
+          "gate": "epoch0_marks",
+          "criteria": "Frozen buy_tier_level epoch-0 book with weekday local-open marks (no book yet; 0 epoch-0/weekday batches). Needs one current screen, prices, and a paper runner — not learning_ready.",
+          "timeframe": "Starts the same week as admit (Sunday stamp + weekday session). Do not wait 12 archives to open the book."
+        },
+        "annotation": "Next: Epoch-0 marks — Frozen buy_tier_level epoch-0 book with weekday local-open marks (no book yet; 0 epoch-0/weekday batches). Needs one current screen, prices, and a paper runner — not learning_ready. Timeframe: Starts the same week as admit (Sunday stamp + weekday session). Do not wait 12 archives to open the book."
       }
     },
     {
