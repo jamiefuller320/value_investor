@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-05T21:34:33.856510+00:00",
+  "generated_at": "2026-10-05T21:39:05.876983+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -72,7 +72,7 @@
       "1": "hang_seng",
       "2": "ftse_mib"
     },
-    "equal_support_generated_at": "2026-10-05T17:25:17.979798+00:00"
+    "equal_support_generated_at": "2026-10-05T21:29:38.776194+00:00"
   },
   "markets": [
     {
@@ -1104,18 +1104,18 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 28,
+        "hold_near_buy_count": 30,
         "not_buy_tier_count": 59,
         "never_buy_tier_count": 52,
-        "rememo_eligible_count": 9,
+        "rememo_eligible_count": 10,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 28,
+        "hold_near_buy_count": 30,
         "not_buy_tier_count": 59,
         "never_buy_tier_count": 52,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -1125,10 +1125,10 @@
           "6690.HK",
           "0027.HK",
           "0322.HK",
+          "0316.HK",
           "0300.HK",
           "2057.HK",
-          "0316.HK",
-          "0267.HK"
+          "1044.HK"
         ]
       },
       "sprint_progress": {
@@ -1505,7 +1505,7 @@
         "hold_near_buy_count": 15,
         "not_buy_tier_count": 29,
         "never_buy_tier_count": 24,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -1523,13 +1523,13 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 2,
-        "targets": 2,
+        "run_count": 3,
+        "targets": 3,
         "improved": 1,
         "improved_tickers": [
           "BZU.MI"
         ],
-        "last_run_at": "2026-10-05T10:47:23.141358+00:00",
+        "last_run_at": "2026-10-05T21:36:56.271498+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -2227,7 +2227,7 @@
         "hold_near_buy_count": 11,
         "not_buy_tier_count": 41,
         "never_buy_tier_count": 37,
-        "rememo_eligible_count": 0,
+        "rememo_eligible_count": 1,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
