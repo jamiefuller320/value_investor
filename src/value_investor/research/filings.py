@@ -556,9 +556,9 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     ],
     # asx200 IWB blocker — YAL.AX parked unfetchable_iwb; google_news Market Index HTML
     # shells lack embedded PDF links; Markit file URLs for the same documentKeys fetch.
+    # Cap at HUNTER_MAX_NEW_URLS (3): ASX PDF + two Markit statutory leftovers.
     "YAL.AX": [
         "https://announcements.asx.com.au/asxpdf/20250220/pdf/06frjf61kmrm39.pdf",
-        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03139235-2A1698934",
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03134565-2A1696707",
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03142935-2A1700926",
     ],

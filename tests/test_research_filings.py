@@ -9274,9 +9274,8 @@ def test_fetch_filings_ir_allowlist_yal_ax_asx200_iwb_builtin(tmp_path: Path):
 
     rows = fetch_filings_ir_allowlist("YAL.AX", path=allowlist_path)
     urls = {row["url"] for row in rows}
-    assert len(rows) >= 4
+    assert len(rows) == 3
     assert any("06frjf61kmrm39.pdf" in url for url in urls)
-    assert any("2A1698934" in url for url in urls)
     assert any("2A1696707" in url for url in urls)
     assert any("2A1700926" in url for url in urls)
     assert all(row["source"] == "ir_allowlist" for row in rows)
@@ -9287,9 +9286,8 @@ def test_parked_source_hunter_yal_ax_asx200_has_fetchable_ir():
     """eng-20261004-07: YAL.AX leftover IWB — Markit/ASX statutory PDFs in _BUILTIN_IR_URLS."""
     assert "YAL.AX" not in PARKED_SOURCE_HUNTER_SKIP
     urls = _BUILTIN_IR_URLS.get("YAL.AX") or []
-    assert len(urls) >= 4
+    assert len(urls) == 3
     assert any("06frjf61kmrm39.pdf" in url for url in urls)
-    assert any("2A1698934" in url for url in urls)
     assert any("2A1696707" in url for url in urls)
     assert any("2A1700926" in url for url in urls)
 
