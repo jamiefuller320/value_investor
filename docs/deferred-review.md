@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-04T17:30:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-05T08:51:15+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -237,6 +237,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N182 | **Promote P1 first-run pin to chronic EPS coverage soak** | After the 10-day #953 first-run window, do not keep warning on 0/n forever. A standing EPS-from-body coverage soak would be a different instrument. | First-run window expired and Sunday+Monday still 0/57 with an explicit soak request |
 | N183 | **Universal GHA failure autofix factory** | Do not auto-patch pytest/logic, soak every merge, or auto-merge YAML permission PRs. Dispatch 403 is allowlisted (hygiene + supervised YAML task); unmatched failures bundle on one Daily-hub item. | Thick closed marks show unmatched GHA hub bundles are noisy or 403 still recurs after hygiene is on main |
 | N184 | **Pages token guessing from GHA 403** | Do not infer or rotate GitHub Pages tokens from 403 logs. Pages #941 is a different class from workflow_dispatch actions:write. | Pages deploy fails twice consecutively on main for a permissions/token error with a named runbook |
+| N185 | **Raise Sunday FTSE --research-docs cap from 12** | Do not widen DEFAULT_RESEARCH_WEEKLY_CAP to drain admitted-book no_memo warns. Last Sunday created=2/updated=22; FTSE path-incomplete is 0; 17/19 flip-lag no_memo names already have a sibling-market memo. Cap 12 is the holdings rememo budget inside the 360-min Sunday job. | FTSE warn_open blocking_stage=no_memo on buy-effective names with index+key bodies after two prefer-first Sundays, or email-report regularly finishes with unused wall-clock while holdings memo_recent is red. |
 
 ---
 
