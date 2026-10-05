@@ -158,7 +158,10 @@ def _ok(verdict: str) -> dict:
 
 
 def test_finding_only_on_unsupported_claims():
-    payload = {"tracks": {"ai_judgment": _ok("positive")}, "pairs": {"ai_vs_rules": _ok("positive")}}
+    payload = {
+        "tracks": {"ai_judgment": _ok("positive")},
+        "pairs": {"ai_vs_rules": _ok("positive")},
+    }
     claims = {"beat_market": True, "beat_control": True}
     assert ops_finding_from_track_statistics(payload, claims) is None
 
