@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-05T14:23:27.227781+00:00",
+  "generated_at": "2026-10-05T16:30:47.655928+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -72,7 +72,7 @@
       "1": "ftse_smallcap",
       "2": "nasdaq100"
     },
-    "equal_support_generated_at": "2026-10-05T14:16:49.383968+00:00"
+    "equal_support_generated_at": "2026-10-05T15:16:35.666594+00:00"
   },
   "markets": [
     {
@@ -1122,8 +1122,8 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 4,
-        "targets": 5,
+        "run_count": 5,
+        "targets": 7,
         "improved": 4,
         "improved_tickers": [
           "ENQ.L",
@@ -1131,7 +1131,7 @@
           "APTD.L",
           "MER.L"
         ],
-        "last_run_at": "2026-10-05T13:55:11.282152+00:00",
+        "last_run_at": "2026-10-05T16:28:31.646016+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -1652,7 +1652,7 @@
         "hold_near_buy_count": 21,
         "not_buy_tier_count": 61,
         "never_buy_tier_count": 58,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -5404,7 +5404,7 @@
       "strong_buy": 0,
       "buy": 4,
       "learning_phase": 1,
-      "learning_phase_label": "Observe",
+      "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
         "need 4 screen archives (have 3)",
         "need 4 observe snapshots (have 3)"
@@ -5433,10 +5433,23 @@
       },
       "filing_health": null,
       "filing_gaps": null,
-      "paper_instrument": "buy_tier_level",
+      "paper_instrument": "buy_tier_level_native",
       "ai_judgment": false,
       "knob_apply": false,
-      "epoch0": null,
+      "epoch0": {
+        "present": true,
+        "paper_instrument": "buy_tier_level",
+        "ai_judgment": false,
+        "knob_apply": false,
+        "acted": true,
+        "last_run_at": "2026-10-05T14:16:47.177734+00:00",
+        "holdings": 4,
+        "nav": 846.01,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "weekday_batch_count": 1,
+        "epoch0_batch_count": 0
+      },
       "equal_support": {
         "present": true,
         "ai_judgment": false,
@@ -5455,7 +5468,7 @@
         "hold_near_buy_count": 7,
         "not_buy_tier_count": 16,
         "never_buy_tier_count": 13,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -5476,8 +5489,8 @@
         "status": "ok",
         "reason": null,
         "market_id": "iseq20",
-        "source": "observe_sim",
-        "paper_instrument": "buy_tier_level",
+        "source": "paper_fund",
+        "paper_instrument": "buy_tier_level_native",
         "currency": "EUR",
         "benchmark_ticker": "^IETP",
         "held_path": "equity_marks",
@@ -5486,37 +5499,17 @@
         "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
         "points": [
           {
-            "date": "2026-08-16",
-            "held": 998.25,
-            "nav": 998.25,
-            "held_stock": 998.25,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 998.25
-          },
-          {
-            "date": "2026-10-04",
-            "held": 977.6,
-            "nav": 977.6,
-            "held_stock": 977.6,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 952.29
-          },
-          {
             "date": "2026-10-05",
-            "held": 976.92,
-            "nav": 976.92,
-            "held_stock": 976.92,
+            "held": 999.75,
+            "nav": 999.75,
+            "held_stock": 999.75,
             "cash": 0.0,
             "positions": 4,
             "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 953.88
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 846.01
+            },
+            "market": 999.75
           }
         ],
         "series": [
@@ -5531,28 +5524,53 @@
             "label": "^IETP equivalent",
             "kind": "market",
             "color": "#64748b"
+          },
+          {
+            "id": "branch:buy_tier_level_gbp_fx_warped",
+            "label": "GBP book (FX-warped archive)",
+            "kind": "branch",
+            "status": "active",
+            "color": "#7c3aed",
+            "knobs": {
+              "reporting_currency": "GBP",
+              "capital_epoch": "contaminated_gbp_unit_mismatch",
+              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
+            }
           }
         ],
-        "branches": [],
+        "branches": [
+          {
+            "id": "buy_tier_level_gbp_fx_warped",
+            "label": "GBP book (FX-warped archive)",
+            "kind": "branch",
+            "status": "active",
+            "knobs": {
+              "reporting_currency": "GBP",
+              "capital_epoch": "contaminated_gbp_unit_mismatch",
+              "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
+            },
+            "point_count": 1
+          }
+        ],
         "last": {
           "date": "2026-10-05",
-          "held": 976.92,
-          "market": 953.88,
-          "nav": 976.92,
+          "held": 999.75,
+          "market": 999.75,
+          "nav": 999.75,
           "positions": 4,
-          "excess_pct": 0.024154
+          "excess_pct": 0.0
         }
       },
       "learning_depth": null,
       "learning_gate": {
         "schema_version": 2,
         "observe_only": true,
-        "current_id": "epoch0",
+        "current_id": "ftse_parity_learning",
         "start_complete": true,
         "bodies_complete": true,
         "sprint_complete": true,
         "admit_complete": true,
-        "epoch0_complete": false,
+        "epoch0_complete": true,
         "trajectory_ready": false,
         "learning_ready": false,
         "live_ready": false,
@@ -5589,13 +5607,13 @@
             "id": "epoch0",
             "label": "Epoch-0",
             "gate": "epoch0_marks",
-            "status": "current"
+            "status": "done"
           },
           {
             "id": "ftse_parity_learning",
             "label": "Parity",
             "gate": "learning_ready",
-            "status": "pending"
+            "status": "current"
           },
           {
             "id": "live_ready",
@@ -5605,13 +5623,13 @@
           }
         ],
         "next_gate": {
-          "id": "epoch0",
-          "name": "Epoch-0 marks",
-          "gate": "epoch0_marks",
-          "criteria": "Frozen buy_tier_level epoch-0 book with weekday local-open marks (no book yet; 0 epoch-0/weekday batches). Needs one current screen, prices, and a paper runner — not learning_ready.",
-          "timeframe": "Starts the same week as admit (Sunday stamp + weekday session). Do not wait 12 archives to open the book."
+          "id": "ftse_parity_learning",
+          "name": "FTSE-parity learning",
+          "gate": "learning_ready",
+          "criteria": "learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json.",
+          "timeframe": "Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
         },
-        "annotation": "Next: Epoch-0 marks — Frozen buy_tier_level epoch-0 book with weekday local-open marks (no book yet; 0 epoch-0/weekday batches). Needs one current screen, prices, and a paper runner — not learning_ready. Timeframe: Starts the same week as admit (Sunday stamp + weekday session). Do not wait 12 archives to open the book."
+        "annotation": "Next: FTSE-parity learning — learning_ready = filing_ready and ≥12 weeks / 12 unique screen days (canonical filings). Now span not yet published in learning_depth.json. Timeframe: Sunday archive clock: ~12w and 12 unique day(s) remaining. Extra deepen jobs do not shorten the calendar."
       }
     },
     {
