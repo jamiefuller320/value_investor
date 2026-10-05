@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-05T19:10:51+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-05T19:31:25+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -328,6 +328,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L531 | **Holding-period / turnover mismatch with value thesis** | Closed holdings on ai_judgment last 1-18 days (median ~4) with turnover ~14x capital in 2.5 months; exits fire on 'left target set' rank flips. Value premia accrue over 1-3 years and the learning horizon is 28d. Add a minimum holding period / rank hysteresis band and measure at 6-12 month horizons (extends L170). | With the decision-review ratchet fix, or at the next Suite A/B policy epoch |
 | L532 | **Value-factor control to separate value beta from selection alpha** | Beating ^FTSE says nothing about whether the AI/overlay adds skill over passive value exposure. Early marks show the unfiltered 60-name buy_tier_level book ahead of the 3-name AI books. Add a passive value control (UK value ETF or equal-weight cheapest-quintile basket) and report AI excess vs it. | When ai_judgment adoption criteria are next reviewed |
 | L535 | **Mirror paper fills onto T212 demo account for measured execution** | Place each paper-auto trade as a real order on the T212 demo account and record actual fill vs assumed price, replacing the flat stress/fair cost models with measured spread and slippage and fixing stale listed-price fills on shard books. Caveats: demo ignores market impact on illiquid names; per-account rate limits and 50 pending orders per ticker. | After total-return accounting (L528) and the knob ratchet fix (L527) land |
+| L537 | **Ken French / AQR UK value-factor returns as free passive value control** | Free regional value-factor series (Ken French Data Library, AQR datasets) give a passive value benchmark and long-run base rate for L532 without building a basket. Pair with OpenFIGI for free ISIN-to-ticker mapping alongside T212 ISINs (L534). | When L532 value-factor control is implemented |
 
 ### Universe & data
 
@@ -469,6 +470,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L474 | **Bollinger/stochastic/Ichimoku entry toolkit beyond RSI-MA-MACD** | Expand technical entry toolkit past the existing RSI-14 + SMA50/200 + MACD histogram composite. No held-book or chart evidence that another oscillator family is the binding gap versus DCA patience and P1 utilization. | MACD/accumulate observe twin concludes and component attribution shows the current composite is the bottleneck |
 | L503 | **Issuer-homepage IR PDF auto-discovery for empty allowlists** | OIZ.IR needed a curated _BUILTIN_IR_URLS seed because euro discovery never reached originenterprises.com PDFs. A bounded issuer-homepage IR crawler could reduce hand seeds for the next empty-allowlist unmeasured/zero-body, without replacing allowlist validation. | Next euro/DAX unmeasured or zero-body name fails ≥2 intensive 0-improve pins with ir_allowlist=0 after the missing-IR ops finding fires |
 | L530 | **Long-history PIT backtest of the value screen itself** | The core premise that the 20 value models rank FTSE 350 forward returns has never been tested beyond ~10 weekly archives since Aug 2026. Forward paper trading cannot validate it in reasonable time. Build a multi-year point-in-time backtest (PIT fundamentals + delisted names + TR prices) from a licensed or reconstructed source (ties to L11) to establish the base rate before tuning overlays. | When choosing the next foundation investment after P1, or when L11 data source is chosen |
+| L536 | **US PIT base-rate test of the 20 value models (Sharadar or EDGAR)** | Cheapest route to L530: run the existing value models on ~20 years of US as-reported fundamentals with filing dates and delisted names (Sharadar via Nasdaq Data Link, low hundreds USD/yr; or free SEC EDGAR companyfacts/frames with more cleaning). Answers whether the screen ranks forward returns at all before more UK overlay spend. UK equivalent from ESEF (filings.xbrl.org) + Companies House only reaches ~FY2020. | When L530 is scheduled, or before choosing a paid source for L11 |
 
 ### Ops / reliability
 
