@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-10-04T08:20:38.152880+00:00",
+  "updated_at": "2026-10-05T08:34:45.315744+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -19,7 +19,7 @@
   },
   "context": {
     "history_run_count": 23,
-    "backtest_run_count": 22,
+    "backtest_run_count": 23,
     "trajectory_labeled_events": 336,
     "exit_shadow_closed_total": 0,
     "experimental_track_count": 2,
@@ -27,10 +27,10 @@
     "entry_dca_ready": true
   },
   "summary": {
-    "fail": 5,
-    "proposed": 2,
     "recommend": 4,
+    "proposed": 2,
     "observing": 0,
+    "fail": 5,
     "continue": 5,
     "human_ack_pending": 2,
     "total": 16
@@ -54,10 +54,10 @@
         "sector_cap": 0.2,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 31,
-      "gate_excess_after_costs": -0.2143,
-      "excess_vs_primary": 0.1304,
-      "excess_vs_rules": 0.2024,
+      "gate_marks": 32,
+      "gate_excess_after_costs": -0.2182,
+      "excess_vs_primary": 0.1296,
+      "excess_vs_rules": 0.2017,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated/calibration_provenance.json"
     },
@@ -79,10 +79,10 @@
         "sector_cap": 0.25,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 28,
-      "gate_excess_after_costs": -0.1801,
-      "excess_vs_primary": 0.1646,
-      "excess_vs_rules": 0.2366,
+      "gate_marks": 29,
+      "gate_excess_after_costs": -0.1841,
+      "excess_vs_primary": 0.1637,
+      "excess_vs_rules": 0.2358,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r2/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -105,10 +105,10 @@
         "sector_cap": 0.3,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 28,
-      "gate_excess_after_costs": -0.1803,
+      "gate_marks": 29,
+      "gate_excess_after_costs": -0.1834,
       "excess_vs_primary": 0.1644,
-      "excess_vs_rules": 0.2364,
+      "excess_vs_rules": 0.2365,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r3/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -125,8 +125,8 @@
       "track_id": "ai_judgment_exclusion_u4",
       "exclusion_ladder_step_id": "u4",
       "parent_track_id": "ai_judgment",
-      "gate_marks": 18,
-      "gate_excess_after_costs": -0.1588,
+      "gate_marks": 19,
+      "gate_excess_after_costs": -0.1619,
       "excess_vs_parent": 0.1859,
       "gate_uses_post_seed": true,
       "evidence_path": "docs/data/paper_automation/ai_judgment_exclusion_u4/exclusion_provenance.json",
@@ -142,9 +142,9 @@
       "source_status": "surviving",
       "human_ack_required": false,
       "track_id": "graduated_allocation",
-      "gate_marks": 27,
-      "gate_excess_after_costs": 0.0104,
-      "excess_vs_primary": 0.3551,
+      "gate_marks": 29,
+      "gate_excess_after_costs": 0.01,
+      "excess_vs_primary": 0.3578,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": false,
@@ -166,8 +166,8 @@
       "source_status": "failed",
       "human_ack_required": false,
       "track_id": "momentum_grace",
-      "gate_marks": 39,
-      "gate_excess_after_costs": -0.0661,
+      "gate_marks": 40,
+      "gate_excess_after_costs": -0.0692,
       "excess_vs_primary": 0.2786,
       "forward_evidence": {
         "source": "learning_track_metrics",
@@ -280,7 +280,7 @@
         },
         "archive": {
           "history_run_count": 23,
-          "backtest_run_count": 22,
+          "backtest_run_count": 23,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -441,7 +441,7 @@
         },
         "archive": {
           "history_run_count": 23,
-          "backtest_run_count": 22,
+          "backtest_run_count": 23,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -587,7 +587,7 @@
         },
         "archive": {
           "history_run_count": 23,
-          "backtest_run_count": 22,
+          "backtest_run_count": 23,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -719,7 +719,7 @@
         "parent_id": "still_in_buy_set",
         "instrument": "twin_already_open",
         "graduation_signal": "twin_present",
-        "noted_at": "2026-10-04T08:20:38.152423+00:00",
+        "noted_at": "2026-10-05T08:34:45.314163+00:00",
         "title": "Sell-gate churn twin already open",
         "note": "still_in_buy_set Suite A twin is the capital-path churn instrument; do not spawn a duplicate sell-gate refinement book."
       }
@@ -757,7 +757,20 @@
     "lanes_path": "docs/data/refinement_lanes.json",
     "note": "On graduation/adoption success, auto-registers the next observe refinement child (parent_id / refinement_of). Never mid-flight rewrites live books; LLM challenger stays fail-closed without a disagreement theme."
   },
-  "task_sync": null,
+  "task_sync": {
+    "updated": [
+      "ana-20260728-04",
+      "ana-20260921-01",
+      "ana-20260921-03",
+      "ana-20260921-05",
+      "ldr-20260823-02",
+      "ldr-20260823-03"
+    ],
+    "skipped": [
+      "ana-20260921-02",
+      "ana-20260921-04"
+    ]
+  },
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
     "analysis_tasks": "docs/data/analysis_tasks.json",
