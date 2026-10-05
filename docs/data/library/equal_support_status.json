@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope": "library_equal_support",
-  "generated_at": "2026-10-05T08:46:39.658619+00:00",
+  "generated_at": "2026-10-05T14:16:49.383968+00:00",
   "admitted": [
     "sp500",
     "asx200",
@@ -23,7 +23,8 @@
     "atx",
     "psi20",
     "smi",
-    "omxs30"
+    "omxs30",
+    "iseq20"
   ],
   "ai_judgment": false,
   "knob_apply": false,
@@ -44,7 +45,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "sp500",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:37.153556+00:00",
+        "generated_at": "2026-10-05T14:16:47.967942+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
@@ -4139,43 +4140,27 @@
         "skipped": true
       },
       "rememo": {
-        "eligible_count": 2,
+        "eligible_count": 1,
         "body_lag_threshold": 10,
         "sample": [
           {
-            "ticker": "HAL",
-            "reason": "stale_missing_grade_body_lag_13"
-          },
-          {
-            "ticker": "MU",
+            "ticker": "GRMN",
             "reason": "stale_missing_grade_body_lag_12"
           }
         ],
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
-        "missing_count": 11,
-        "sample": [
-          "ROP",
-          "NXPI",
-          "GEHC",
-          "ADBE",
-          "ADP",
-          "BKNG",
-          "TMUS",
-          "PCAR",
-          "MU",
-          "FANG",
-          "PEP"
-        ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "missing_count": 0,
+        "sample": [],
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 358,
       "hold_near_buy_count": 157,
       "never_buy_tier_count": 328,
-      "rememo_eligible_count": 2,
-      "first_time_memo_count": 11,
+      "rememo_eligible_count": 1,
+      "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
     },
@@ -4195,1034 +4180,1027 @@
         "scope": "library_near_miss_watch",
         "market_id": "asx200",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:37.864645+00:00",
+        "generated_at": "2026-10-05T14:16:48.332064+00:00",
         "min_conviction": 0.28,
-        "timing_signal_present": true,
-        "buy_tier_not_now_count": 1,
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
         "not_buy_tier_count": 169,
-        "hold_near_buy_count": 64,
+        "hold_near_buy_count": 65,
         "never_buy_tier_count": 149,
-        "buy_tier_not_now": [
-          {
-            "ticker": "ANN.AX",
-            "signal": "buy",
-            "timing_signal": "wait",
-            "conviction_score": 0.5997
-          }
-        ],
+        "buy_tier_not_now": [],
         "not_buy_tier": [
           {
             "ticker": "GQG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5292
           },
           {
             "ticker": "PRU.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5
           },
           {
             "ticker": "QBE.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4993
           },
           {
             "ticker": "IMD.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4915
           },
           {
             "ticker": "DRR.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4874
           },
           {
             "ticker": "SPK.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4859
           },
           {
             "ticker": "ALK.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4848
           },
           {
             "ticker": "MTS.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4845
           },
           {
             "ticker": "RIO.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.483
           },
           {
             "ticker": "FLT.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.477
           },
           {
             "ticker": "GMD.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4757
           },
           {
             "ticker": "NEM.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4708
           },
           {
             "ticker": "NHF.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.467
           },
           {
             "ticker": "TLS.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4653
           },
           {
             "ticker": "AZJ.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4607
           },
           {
             "ticker": "LSF.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4576
           },
           {
             "ticker": "VAU.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4569
           },
           {
             "ticker": "HDN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4521
           },
           {
             "ticker": "ORG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4506
+          },
+          {
+            "ticker": "MND.AX",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.4486
           },
           {
             "ticker": "SUL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4362
           },
           {
             "ticker": "DOW.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4338
           },
           {
             "ticker": "AGL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4336
           },
           {
             "ticker": "BFL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4316
           },
           {
             "ticker": "REG.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.4172
           },
           {
             "ticker": "CEN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4153
           },
           {
             "ticker": "BHP.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.4121
           },
           {
             "ticker": "RDX.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.412
           },
           {
             "ticker": "CAR.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.3986
           },
           {
             "ticker": "SFR.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3956
           },
           {
             "ticker": "NHC.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3922
           },
           {
             "ticker": "TNE.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3915
           },
           {
             "ticker": "WOR.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3911
           },
           {
             "ticker": "L1G.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3908
           },
           {
             "ticker": "CDA.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.3897
           },
           {
             "ticker": "S32.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3895
           },
           {
             "ticker": "DXS.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3872
           },
           {
             "ticker": "A2M.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3863
           },
           {
             "ticker": "SOL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3863
           },
           {
             "ticker": "SDF.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.3859
-          },
-          {
-            "ticker": "MND.AX",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.3845
           },
           {
             "ticker": "MIN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3842
           },
           {
             "ticker": "FRW.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3812
           },
           {
             "ticker": "RSG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3677
           },
           {
             "ticker": "TPG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3621
           },
           {
             "ticker": "NST.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3575
           },
           {
             "ticker": "MPL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3548
           },
           {
             "ticker": "WTC.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.3515
           },
           {
             "ticker": "VGN.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.3496
           },
           {
             "ticker": "VNT.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.336
           },
           {
             "ticker": "SNZ.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3288
           },
           {
             "ticker": "PLS.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.328
           },
           {
             "ticker": "RHC.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.3229
           },
           {
             "ticker": "FPH.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3205
           },
           {
             "ticker": "GPT.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.32
           },
           {
             "ticker": "QAN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3195
           },
           {
             "ticker": "NWL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3055
           },
           {
             "ticker": "LNW.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3052
           },
           {
             "ticker": "BXB.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2986
+          },
+          {
+            "ticker": "CSC.AX",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.2962
           },
           {
             "ticker": "PNI.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.2947
           },
           {
             "ticker": "MFG.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.2932
           },
           {
             "ticker": "SUN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2903
           },
           {
             "ticker": "SIG.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.2899
           },
           {
             "ticker": "ALX.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2865
           },
           {
             "ticker": "SCG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.286
           },
           {
             "ticker": "VCX.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.2796
           },
           {
             "ticker": "TAH.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2788
           },
           {
             "ticker": "CPU.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.2784
           },
           {
             "ticker": "COL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2782
           },
           {
             "ticker": "CYL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2757
           },
           {
             "ticker": "CHC.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2733
           },
           {
             "ticker": "MGR.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2715
           },
           {
             "ticker": "SGM.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2709
           },
           {
             "ticker": "WBC.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2636
           },
           {
             "ticker": "EMR.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2633
           },
           {
             "ticker": "GNE.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2619
           },
           {
             "ticker": "REH.AX",
             "signal": "avoid",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.2523
           },
           {
             "ticker": "EVN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2501
           },
           {
             "ticker": "CIA.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2474
-          },
-          {
-            "ticker": "CSC.AX",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.2468
           },
           {
             "ticker": "OBM.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2446
           },
           {
             "ticker": "ALD.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.2438
           },
           {
             "ticker": "ASX.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2396
           },
           {
             "ticker": "ANZ.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2394
           },
           {
             "ticker": "GMG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2368
           },
           {
             "ticker": "APE.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2355
           },
           {
             "ticker": "RGN.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.2337
           },
           {
             "ticker": "SGP.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2323
           },
           {
             "ticker": "CMM.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2305
+          },
+          {
+            "ticker": "TUA.AX",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.2281
           },
           {
             "ticker": "ORA.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2266
           },
           {
             "ticker": "NWH.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2236
           },
           {
             "ticker": "BEN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.217
           },
           {
             "ticker": "ALQ.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.216
           },
           {
             "ticker": "ALL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2132
           },
           {
             "ticker": "CIP.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.212
           },
           {
             "ticker": "PPT.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2088
           },
           {
             "ticker": "VEA.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.2038
           },
           {
             "ticker": "SMR.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1987
           },
           {
             "ticker": "MCY.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1954
           },
           {
             "ticker": "PME.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1923
-          },
-          {
-            "ticker": "TUA.AX",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1901
           },
           {
             "ticker": "RMS.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1872
           },
           {
             "ticker": "BRG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1865
           },
           {
             "ticker": "CSL.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.1756
           },
           {
             "ticker": "LOV.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1741
           },
           {
             "ticker": "NWS.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1657
           },
           {
             "ticker": "IAG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1628
           },
           {
             "ticker": "WLE.AX",
             "signal": "insufficient_data",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1587
           },
           {
             "ticker": "MXT.AX",
             "signal": "insufficient_data",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1576
           },
           {
             "ticker": "RWC.AX",
             "signal": "avoid",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.155
           },
           {
             "ticker": "CNU.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1541
           },
           {
             "ticker": "DBI.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1539
           },
           {
             "ticker": "AUB.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1473
           },
           {
             "ticker": "ARG.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1452
           },
           {
             "ticker": "BOQ.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1443
           },
           {
             "ticker": "REA.AX",
             "signal": "avoid",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.1433
+          },
+          {
+            "ticker": "360.AX",
+            "signal": "avoid",
+            "timing_signal": "",
+            "conviction_score": 0.1322
           },
           {
             "ticker": "TCL.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1304
           },
           {
             "ticker": "QUB.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1295
+          },
+          {
+            "ticker": "STO.AX",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.1286
           },
           {
             "ticker": "MEZ.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1276
           },
           {
             "ticker": "JHX.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1258
           },
           {
             "ticker": "TLC.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1248
+          },
+          {
+            "ticker": "CGF.AX",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.1246
           },
           {
             "ticker": "AFI.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1204
           },
           {
             "ticker": "EVT.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1191
           },
           {
             "ticker": "NIC.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1189
           },
           {
             "ticker": "AMP.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1189
           },
           {
             "ticker": "APA.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1167
+          },
+          {
+            "ticker": "EOS.AX",
+            "signal": "avoid",
+            "timing_signal": "",
+            "conviction_score": 0.1166
           },
           {
             "ticker": "WOW.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1131
           },
           {
             "ticker": "ZIP.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1125
-          },
-          {
-            "ticker": "360.AX",
-            "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1102
           },
           {
             "ticker": "EDV.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1097
-          },
-          {
-            "ticker": "STO.AX",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1071
-          },
-          {
-            "ticker": "CGF.AX",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1038
           },
           {
             "ticker": "MFF.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1002
-          },
-          {
-            "ticker": "EOS.AX",
-            "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0972
           },
           {
             "ticker": "WES.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.097
           },
           {
             "ticker": "RYM.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0969
           },
           {
             "ticker": "SEK.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.0936
           },
           {
             "ticker": "FBU.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0902
           },
           {
             "ticker": "CTD.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.089
           },
           {
             "ticker": "CBA.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0865
           },
           {
             "ticker": "ORI.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0855
           },
           {
             "ticker": "WAM.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.0831
+          },
+          {
+            "ticker": "COH.AX",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.0774
           },
           {
             "ticker": "HUB.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0773
           },
           {
             "ticker": "BGA.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0767
           },
           {
             "ticker": "AIA.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0741
+          },
+          {
+            "ticker": "MQG.AX",
+            "signal": "avoid",
+            "timing_signal": "",
+            "conviction_score": 0.0738
           },
           {
             "ticker": "DYL.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0687
           },
           {
-            "ticker": "COH.AX",
+            "ticker": "CWY.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0663
+            "timing_signal": "",
+            "conviction_score": 0.0659
           },
           {
             "ticker": "IGO.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0643
           },
           {
             "ticker": "MSB.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0616
           },
           {
-            "ticker": "MQG.AX",
+            "ticker": "TWE.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
-            "conviction_score": 0.0615
+            "timing_signal": "",
+            "conviction_score": 0.0585
           },
           {
             "ticker": "NAB.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0563
-          },
-          {
-            "ticker": "CWY.AX",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0549
           },
           {
             "ticker": "GDG.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0543
           },
           {
             "ticker": "DRO.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0537
           },
           {
-            "ticker": "TWE.AX",
+            "ticker": "ASB.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0488
+            "timing_signal": "",
+            "conviction_score": 0.0529
           },
           {
             "ticker": "LTR.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0474
           },
           {
             "ticker": "NXG.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0443
-          },
-          {
-            "ticker": "ASB.AX",
-            "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.044
           },
           {
             "ticker": "BGL.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0386
           },
           {
             "ticker": "LYC.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0359
           },
           {
             "ticker": "PDN.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0312
           },
           {
             "ticker": "PDI.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0159
           },
           {
             "ticker": "SGH.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "XRO.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "LLC.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "IFT.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "ILU.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "NXT.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "4DX.AX",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "TLX.AX",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           }
         ],
@@ -5230,385 +5208,391 @@
           {
             "ticker": "GQG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5292
           },
           {
             "ticker": "PRU.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5
           },
           {
             "ticker": "QBE.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4993
           },
           {
             "ticker": "IMD.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4915
           },
           {
             "ticker": "DRR.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4874
           },
           {
             "ticker": "SPK.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4859
           },
           {
             "ticker": "ALK.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4848
           },
           {
             "ticker": "MTS.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4845
           },
           {
             "ticker": "RIO.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.483
           },
           {
             "ticker": "FLT.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.477
           },
           {
             "ticker": "GMD.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4757
           },
           {
             "ticker": "NEM.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4708
           },
           {
             "ticker": "NHF.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.467
           },
           {
             "ticker": "TLS.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4653
           },
           {
             "ticker": "AZJ.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4607
           },
           {
             "ticker": "LSF.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4576
           },
           {
             "ticker": "VAU.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4569
           },
           {
             "ticker": "HDN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4521
           },
           {
             "ticker": "ORG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4506
+          },
+          {
+            "ticker": "MND.AX",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.4486
           },
           {
             "ticker": "SUL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4362
           },
           {
             "ticker": "DOW.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4338
           },
           {
             "ticker": "AGL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4336
           },
           {
             "ticker": "BFL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4316
           },
           {
             "ticker": "REG.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.4172
           },
           {
             "ticker": "CEN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4153
           },
           {
             "ticker": "BHP.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.4121
           },
           {
             "ticker": "RDX.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.412
           },
           {
             "ticker": "CAR.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.3986
           },
           {
             "ticker": "SFR.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3956
           },
           {
             "ticker": "NHC.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3922
           },
           {
             "ticker": "TNE.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3915
           },
           {
             "ticker": "WOR.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3911
           },
           {
             "ticker": "L1G.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3908
           },
           {
             "ticker": "CDA.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.3897
           },
           {
             "ticker": "S32.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3895
           },
           {
             "ticker": "DXS.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3872
           },
           {
             "ticker": "A2M.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3863
           },
           {
             "ticker": "SOL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3863
           },
           {
             "ticker": "SDF.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.3859
-          },
-          {
-            "ticker": "MND.AX",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.3845
           },
           {
             "ticker": "MIN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3842
           },
           {
             "ticker": "FRW.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3812
           },
           {
             "ticker": "RSG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3677
           },
           {
             "ticker": "TPG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3621
           },
           {
             "ticker": "NST.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3575
           },
           {
             "ticker": "MPL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3548
           },
           {
             "ticker": "WTC.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.3515
           },
           {
             "ticker": "VGN.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.3496
           },
           {
             "ticker": "VNT.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.336
           },
           {
             "ticker": "SNZ.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3288
           },
           {
             "ticker": "PLS.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.328
           },
           {
             "ticker": "RHC.AX",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.3229
           },
           {
             "ticker": "FPH.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3205
           },
           {
             "ticker": "GPT.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.32
           },
           {
             "ticker": "QAN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3195
           },
           {
             "ticker": "NWL.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3055
           },
           {
             "ticker": "LNW.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3052
           },
           {
             "ticker": "BXB.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2986
+          },
+          {
+            "ticker": "CSC.AX",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.2962
           },
           {
             "ticker": "PNI.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.2947
           },
           {
             "ticker": "MFG.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.2932
           },
           {
             "ticker": "SUN.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2903
           },
           {
             "ticker": "SIG.AX",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.2899
           },
           {
             "ticker": "ALX.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2865
           },
           {
             "ticker": "SCG.AX",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.286
           }
         ],
@@ -6068,14 +6052,9 @@
         "skipped": true
       },
       "rememo": {
-        "eligible_count": 1,
+        "eligible_count": 0,
         "body_lag_threshold": 10,
-        "sample": [
-          {
-            "ticker": "ARB.AX",
-            "reason": "stale_adequate_grade_zero_body_catchup_51"
-          }
-        ],
+        "sample": [],
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
@@ -6084,13 +6063,13 @@
           "CLW.AX",
           "BWP.AX"
         ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
-      "buy_tier_not_now_count": 1,
+      "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 169,
-      "hold_near_buy_count": 64,
+      "hold_near_buy_count": 65,
       "never_buy_tier_count": 149,
-      "rememo_eligible_count": 1,
+      "rememo_eligible_count": 0,
       "first_time_memo_count": 2,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
@@ -6111,7 +6090,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "euro_depth",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:38.059955+00:00",
+        "generated_at": "2026-10-05T14:16:48.447148+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -7749,37 +7728,16 @@
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
-        "missing_count": 37,
-        "sample": [
-          "ERIC-B.ST",
-          "DG.PA",
-          "SGO.PA",
-          "SAN.PA",
-          "VOW.DE",
-          "UMI.BR",
-          "STR.VI",
-          "PHIA.AS",
-          "AD.AS",
-          "EVN.VI",
-          "LOGN.SW",
-          "TTE.PA",
-          "RAND.AS",
-          "ACKB.BR",
-          "DHL.DE",
-          "EG7.IR",
-          "APAM.AS",
-          "DQ7A.IR",
-          "DTE.DE",
-          "WKL.AS"
-        ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "missing_count": 0,
+        "sample": [],
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 141,
       "hold_near_buy_count": 65,
       "never_buy_tier_count": 125,
       "rememo_eligible_count": 0,
-      "first_time_memo_count": 37,
+      "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
     },
@@ -7799,9 +7757,9 @@
         "scope": "library_near_miss_watch",
         "market_id": "ftse_smallcap",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:38.261140+00:00",
+        "generated_at": "2026-10-05T14:16:48.559257+00:00",
         "min_conviction": 0.28,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "not_buy_tier_count": 66,
         "hold_near_buy_count": 16,
@@ -7811,397 +7769,397 @@
           {
             "ticker": "NRR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5439
           },
           {
             "ticker": "ZTF.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5333
           },
           {
             "ticker": "LSL.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5312
           },
           {
             "ticker": "CLIG.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5168
           },
           {
             "ticker": "FORT.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5167
           },
           {
             "ticker": "LUCE.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.515
           },
           {
             "ticker": "SNWS.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5083
           },
           {
             "ticker": "FSTA.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4562
           },
           {
             "ticker": "CABP.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4323
           },
           {
             "ticker": "HFD.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4177
           },
           {
             "ticker": "PRV.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3792
           },
           {
             "ticker": "LIO.L",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.3775
           },
           {
             "ticker": "OTB.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3641
           },
           {
             "ticker": "MARS.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.341
           },
           {
             "ticker": "MACF.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3344
           },
           {
             "ticker": "SUS.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3054
           },
           {
             "ticker": "STB.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2766
           },
           {
             "ticker": "CNE.L",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.2613
           },
           {
             "ticker": "CLI.L",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.2262
           },
           {
             "ticker": "NXR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2153
           },
           {
             "ticker": "TRI.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.2077
           },
           {
             "ticker": "HSW.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1865
           },
           {
             "ticker": "SDY.L",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.1634
           },
           {
             "ticker": "GLE.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1563
           },
           {
             "ticker": "PHAR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1455
+          },
+          {
+            "ticker": "BOOT.L",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.137
           },
           {
             "ticker": "MOTR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1355
+          },
+          {
+            "ticker": "XAR.L",
+            "signal": "avoid",
+            "timing_signal": "",
+            "conviction_score": 0.1298
           },
           {
             "ticker": "HLCL.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1268
           },
           {
             "ticker": "RCH.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1182
-          },
-          {
-            "ticker": "BOOT.L",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1142
-          },
-          {
-            "ticker": "XAR.L",
-            "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.1136
           },
           {
             "ticker": "GYM.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.1095
           },
           {
             "ticker": "SFR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.1007
           },
           {
             "ticker": "RWA.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.095
           },
           {
             "ticker": "HEAD.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0887
           },
           {
             "ticker": "TTG.L",
             "signal": "hold",
-            "timing_signal": "wait",
+            "timing_signal": "",
             "conviction_score": 0.0855
           },
           {
             "ticker": "STVG.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0789
           },
           {
             "ticker": "MMIT.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0763
           },
           {
             "ticker": "SCF.L",
             "signal": "insufficient_data",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0702
           },
           {
             "ticker": "CPI.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.064
           },
           {
             "ticker": "CTPE.L",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.063
           },
           {
             "ticker": "BGS.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0593
           },
           {
             "ticker": "CREI.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0581
           },
           {
             "ticker": "LWI.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0575
+          },
+          {
+            "ticker": "PCA.L",
+            "signal": "hold",
+            "timing_signal": "",
+            "conviction_score": 0.0574
+          },
+          {
+            "ticker": "SHI.L",
+            "signal": "avoid",
+            "timing_signal": "",
+            "conviction_score": 0.0565
+          },
+          {
+            "ticker": "VID.L",
+            "signal": "avoid",
+            "timing_signal": "",
+            "conviction_score": 0.0558
           },
           {
             "ticker": "CYN.L",
             "signal": "insufficient_data",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0557
+          },
+          {
+            "ticker": "SYNT.L",
+            "signal": "avoid",
+            "timing_signal": "",
+            "conviction_score": 0.0554
           },
           {
             "ticker": "GMS.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0554
           },
           {
             "ticker": "FSJ.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0545
-          },
-          {
-            "ticker": "KMR.L",
-            "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0496
-          },
-          {
-            "ticker": "PCA.L",
-            "signal": "hold",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0478
-          },
-          {
-            "ticker": "SHI.L",
-            "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0471
-          },
-          {
-            "ticker": "VID.L",
-            "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0465
-          },
-          {
-            "ticker": "SYNT.L",
-            "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0462
           },
           {
             "ticker": "EVOK.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.043
+            "timing_signal": "",
+            "conviction_score": 0.0517
+          },
+          {
+            "ticker": "KMR.L",
+            "signal": "avoid",
+            "timing_signal": "",
+            "conviction_score": 0.0496
           },
           {
             "ticker": "PSDL.L",
             "signal": "avoid",
-            "timing_signal": "accumulate",
-            "conviction_score": 0.0388
+            "timing_signal": "",
+            "conviction_score": 0.0466
           },
           {
             "ticker": "PDL.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0379
+            "timing_signal": "",
+            "conviction_score": 0.0455
           },
           {
             "ticker": "FAS.L",
             "signal": "insufficient_data",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0366
           },
           {
             "ticker": "MAJE.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
-            "conviction_score": 0.0233
+            "timing_signal": "",
+            "conviction_score": 0.028
           },
           {
             "ticker": "INOV.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "AEWU.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "VANQ.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "RSE.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "MWY.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "JZCP.L",
             "signal": "avoid",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "BGEU.L",
             "signal": "avoid",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "LTI.L",
             "signal": "insufficient_data",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "SEC.L",
             "signal": "insufficient_data",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.0
           },
           {
             "ticker": "DGI9.L",
             "signal": "insufficient_data",
-            "timing_signal": "insufficient_data",
+            "timing_signal": "",
             "conviction_score": 0.0
           }
         ],
@@ -8209,97 +8167,97 @@
           {
             "ticker": "NRR.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5439
           },
           {
             "ticker": "ZTF.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5333
           },
           {
             "ticker": "LSL.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5312
           },
           {
             "ticker": "CLIG.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5168
           },
           {
             "ticker": "FORT.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5167
           },
           {
             "ticker": "LUCE.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.515
           },
           {
             "ticker": "SNWS.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.5083
           },
           {
             "ticker": "FSTA.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4562
           },
           {
             "ticker": "CABP.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4323
           },
           {
             "ticker": "HFD.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.4177
           },
           {
             "ticker": "PRV.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3792
           },
           {
             "ticker": "LIO.L",
             "signal": "hold",
-            "timing_signal": "accumulate",
+            "timing_signal": "",
             "conviction_score": 0.3775
           },
           {
             "ticker": "OTB.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3641
           },
           {
             "ticker": "MARS.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.341
           },
           {
             "ticker": "MACF.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3344
           },
           {
             "ticker": "SUS.L",
             "signal": "hold",
-            "timing_signal": "neutral",
+            "timing_signal": "",
             "conviction_score": 0.3054
           }
         ],
@@ -8495,21 +8453,30 @@
         "skipped": true
       },
       "rememo": {
-        "eligible_count": 0,
+        "eligible_count": 2,
         "body_lag_threshold": 10,
-        "sample": [],
+        "sample": [
+          {
+            "ticker": "APTD.L",
+            "reason": "strong_grade_large_body_lag_27"
+          },
+          {
+            "ticker": "ENQ.L",
+            "reason": "stale_thin_grade_body_lag_30"
+          }
+        ],
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
         "missing_count": 0,
         "sample": [],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 66,
       "hold_near_buy_count": 16,
       "never_buy_tier_count": 61,
-      "rememo_eligible_count": 0,
+      "rememo_eligible_count": 2,
       "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
@@ -8530,7 +8497,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "tsx60",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:38.354415+00:00",
+        "generated_at": "2026-10-05T14:16:48.621967+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -9033,7 +9000,7 @@
       "first_time_memos": {
         "missing_count": 0,
         "sample": [],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 42,
@@ -9060,7 +9027,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "euro_stoxx50",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:38.495840+00:00",
+        "generated_at": "2026-10-05T14:16:48.702498+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -9507,19 +9474,16 @@
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
-        "missing_count": 2,
-        "sample": [
-          "BAS.DE",
-          "ADYEN.AS"
-        ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "missing_count": 0,
+        "sample": [],
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 35,
       "hold_near_buy_count": 18,
       "never_buy_tier_count": 34,
       "rememo_eligible_count": 0,
-      "first_time_memo_count": 2,
+      "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
     },
@@ -9539,7 +9503,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "nasdaq100",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:38.615412+00:00",
+        "generated_at": "2026-10-05T14:16:48.785378+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -10226,36 +10190,22 @@
         "skipped": true
       },
       "rememo": {
-        "eligible_count": 1,
+        "eligible_count": 0,
         "body_lag_threshold": 10,
-        "sample": [
-          {
-            "ticker": "MU",
-            "reason": "stale_missing_grade_body_lag_12"
-          }
-        ],
+        "sample": [],
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
-        "missing_count": 8,
-        "sample": [
-          "CMCSA",
-          "INTU",
-          "PYPL",
-          "PAYX",
-          "QCOM",
-          "REGN",
-          "CPRT",
-          "SNDK"
-        ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "missing_count": 0,
+        "sample": [],
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 61,
       "hold_near_buy_count": 21,
       "never_buy_tier_count": 58,
-      "rememo_eligible_count": 1,
-      "first_time_memo_count": 8,
+      "rememo_eligible_count": 0,
+      "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
     },
@@ -10275,7 +10225,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "cac40",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:38.797080+00:00",
+        "generated_at": "2026-10-05T14:16:48.881715+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -10599,22 +10549,16 @@
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
-        "missing_count": 5,
-        "sample": [
-          "SAN.PA",
-          "DG.PA",
-          "TTE.PA",
-          "SGO.PA",
-          "MC.PA"
-        ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "missing_count": 0,
+        "sample": [],
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 27,
       "hold_near_buy_count": 10,
       "never_buy_tier_count": 25,
       "rememo_eligible_count": 0,
-      "first_time_memo_count": 5,
+      "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
     },
@@ -10634,7 +10578,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "dax",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:38.867819+00:00",
+        "generated_at": "2026-10-05T14:16:48.927466+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -10979,20 +10923,16 @@
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
-        "missing_count": 3,
-        "sample": [
-          "DHL.DE",
-          "DTE.DE",
-          "MUV2.DE"
-        ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "missing_count": 0,
+        "sample": [],
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 28,
       "hold_near_buy_count": 12,
       "never_buy_tier_count": 26,
       "rememo_eligible_count": 0,
-      "first_time_memo_count": 3,
+      "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
     },
@@ -11012,7 +10952,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "aim",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:38.930455+00:00",
+        "generated_at": "2026-10-05T14:16:48.968643+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 2,
@@ -11479,7 +11419,7 @@
         "sample": [
           "CAM.L"
         ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 2,
       "not_buy_tier_count": 41,
@@ -11506,7 +11446,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "ibex35",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:38.985986+00:00",
+        "generated_at": "2026-10-05T14:16:49.006574+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -11886,7 +11826,7 @@
       "first_time_memos": {
         "missing_count": 0,
         "sample": [],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 30,
@@ -11913,7 +11853,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "ftse_mib",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:39.041233+00:00",
+        "generated_at": "2026-10-05T14:16:49.042638+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -12276,19 +12216,18 @@
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
-        "missing_count": 2,
+        "missing_count": 1,
         "sample": [
-          "ENI.MI",
           "TEN.MI"
         ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 29,
       "hold_near_buy_count": 15,
       "never_buy_tier_count": 24,
       "rememo_eligible_count": 0,
-      "first_time_memo_count": 2,
+      "first_time_memo_count": 1,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
     },
@@ -12308,7 +12247,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "aex",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:39.103216+00:00",
+        "generated_at": "2026-10-05T14:16:49.081717+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -12548,19 +12487,16 @@
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
-        "missing_count": 2,
-        "sample": [
-          "AD.AS",
-          "WKL.AS"
-        ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "missing_count": 0,
+        "sample": [],
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 17,
       "hold_near_buy_count": 10,
       "never_buy_tier_count": 17,
       "rememo_eligible_count": 0,
-      "first_time_memo_count": 2,
+      "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
     },
@@ -12580,7 +12516,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "bel20",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:39.141645+00:00",
+        "generated_at": "2026-10-05T14:16:49.109665+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -12772,19 +12708,16 @@
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
-        "missing_count": 2,
-        "sample": [
-          "AED.BR",
-          "ABI.BR"
-        ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "missing_count": 0,
+        "sample": [],
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 14,
       "hold_near_buy_count": 7,
       "never_buy_tier_count": 13,
       "rememo_eligible_count": 0,
-      "first_time_memo_count": 2,
+      "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
     },
@@ -12804,7 +12737,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "hang_seng",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:39.201582+00:00",
+        "generated_at": "2026-10-05T14:16:49.144155+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -13503,21 +13436,9 @@
         "skipped": true
       },
       "rememo": {
-        "eligible_count": 12,
+        "eligible_count": 9,
         "body_lag_threshold": 10,
         "sample": [
-          {
-            "ticker": "0941.HK",
-            "reason": "stale_adequate_grade_zero_body_catchup_2"
-          },
-          {
-            "ticker": "1093.HK",
-            "reason": "stale_missing_grade_zero_body_catchup_1"
-          },
-          {
-            "ticker": "1099.HK",
-            "reason": "missing_verdict"
-          },
           {
             "ticker": "1113.HK",
             "reason": "missing_verdict"
@@ -13536,7 +13457,7 @@
           },
           {
             "ticker": "2331.HK",
-            "reason": "stale_missing_grade_zero_body_catchup_4"
+            "reason": "stale_missing_grade_zero_body_catchup_10"
           },
           {
             "ticker": "2382.HK",
@@ -13560,13 +13481,13 @@
       "first_time_memos": {
         "missing_count": 0,
         "sample": [],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 59,
       "hold_near_buy_count": 28,
       "never_buy_tier_count": 52,
-      "rememo_eligible_count": 12,
+      "rememo_eligible_count": 9,
       "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
@@ -13587,7 +13508,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "us_adr_asia",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:39.306149+00:00",
+        "generated_at": "2026-10-05T14:16:49.198394+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -13794,34 +13715,21 @@
         "skipped": true
       },
       "rememo": {
-        "eligible_count": 3,
+        "eligible_count": 0,
         "body_lag_threshold": 10,
-        "sample": [
-          {
-            "ticker": "TME",
-            "reason": "missing_verdict"
-          },
-          {
-            "ticker": "UMC",
-            "reason": "missing_verdict"
-          },
-          {
-            "ticker": "WIT",
-            "reason": "stale_missing_grade_body_lag_22"
-          }
-        ],
+        "sample": [],
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
         "missing_count": 0,
         "sample": [],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 18,
       "hold_near_buy_count": 5,
       "never_buy_tier_count": 16,
-      "rememo_eligible_count": 3,
+      "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
@@ -13842,7 +13750,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "sti",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:39.384577+00:00",
+        "generated_at": "2026-10-05T14:16:49.236814+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -14169,21 +14077,9 @@
         "skipped": true
       },
       "rememo": {
-        "eligible_count": 4,
+        "eligible_count": 1,
         "body_lag_threshold": 10,
         "sample": [
-          {
-            "ticker": "BS6.SI",
-            "reason": "stale_missing_grade_zero_body_catchup_1"
-          },
-          {
-            "ticker": "BUOU.SI",
-            "reason": "stale_adequate_grade_zero_body_catchup_3"
-          },
-          {
-            "ticker": "J36.SI",
-            "reason": "missing_verdict"
-          },
           {
             "ticker": "U14.SI",
             "reason": "missing_verdict"
@@ -14194,13 +14090,13 @@
       "first_time_memos": {
         "missing_count": 0,
         "sample": [],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 25,
       "hold_near_buy_count": 15,
       "never_buy_tier_count": 22,
-      "rememo_eligible_count": 4,
+      "rememo_eligible_count": 1,
       "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
@@ -14221,7 +14117,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "atx",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:39.462851+00:00",
+        "generated_at": "2026-10-05T14:16:49.268994+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -14413,18 +14309,16 @@
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
-        "missing_count": 1,
-        "sample": [
-          "WIE.VI"
-        ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "missing_count": 0,
+        "sample": [],
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 14,
       "hold_near_buy_count": 7,
       "never_buy_tier_count": 13,
       "rememo_eligible_count": 0,
-      "first_time_memo_count": 1,
+      "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
     },
@@ -14444,7 +14338,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "psi20",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:39.508739+00:00",
+        "generated_at": "2026-10-05T14:16:49.289432+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -14656,18 +14550,16 @@
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
-        "missing_count": 1,
-        "sample": [
-          "COR.LS"
-        ],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "missing_count": 0,
+        "sample": [],
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 14,
       "hold_near_buy_count": 9,
       "never_buy_tier_count": 14,
       "rememo_eligible_count": 1,
-      "first_time_memo_count": 1,
+      "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
     },
@@ -14687,7 +14579,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "smi",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:39.557765+00:00",
+        "generated_at": "2026-10-05T14:16:49.311140+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -14873,30 +14765,21 @@
         "skipped": true
       },
       "rememo": {
-        "eligible_count": 2,
+        "eligible_count": 0,
         "body_lag_threshold": 10,
-        "sample": [
-          {
-            "ticker": "PGHN.SW",
-            "reason": "stale_adequate_grade_zero_body_catchup_2"
-          },
-          {
-            "ticker": "RO.SW",
-            "reason": "stale_adequate_grade_zero_body_catchup_2"
-          }
-        ],
+        "sample": [],
         "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
       },
       "first_time_memos": {
         "missing_count": 0,
         "sample": [],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 15,
       "hold_near_buy_count": 5,
       "never_buy_tier_count": 15,
-      "rememo_eligible_count": 2,
+      "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
@@ -14917,7 +14800,7 @@
         "scope": "library_near_miss_watch",
         "market_id": "omxs30",
         "observe_only": true,
-        "generated_at": "2026-10-05T08:46:39.612046+00:00",
+        "generated_at": "2026-10-05T14:16:49.336446+00:00",
         "min_conviction": 0.28,
         "timing_signal_present": true,
         "buy_tier_not_now_count": 0,
@@ -15160,21 +15043,9 @@
         "skipped": true
       },
       "rememo": {
-        "eligible_count": 4,
+        "eligible_count": 1,
         "body_lag_threshold": 10,
         "sample": [
-          {
-            "ticker": "SAND.ST",
-            "reason": "stale_thin_grade_zero_body_catchup_2"
-          },
-          {
-            "ticker": "SKF-B.ST",
-            "reason": "stale_thin_grade_zero_body_catchup_2"
-          },
-          {
-            "ticker": "TEL2-B.ST",
-            "reason": "stale_thin_grade_zero_body_catchup_1"
-          },
           {
             "ticker": "TELIA.ST",
             "reason": "stale_thin_grade_zero_body_catchup_1"
@@ -15185,13 +15056,246 @@
       "first_time_memos": {
         "missing_count": 0,
         "sample": [],
-        "note": "Buy-tier names with no research.md on this market. Sunday _research_markets prefers these before rememo; no weekday burst."
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
       },
       "buy_tier_not_now_count": 0,
       "not_buy_tier_count": 19,
       "hold_near_buy_count": 9,
       "never_buy_tier_count": 18,
-      "rememo_eligible_count": 4,
+      "rememo_eligible_count": 1,
+      "first_time_memo_count": 0,
+      "exclusion_ready_for_priors": null,
+      "timing_signal_present": null
+    },
+    "iseq20": {
+      "market_id": "iseq20",
+      "ingest_maintenance": true,
+      "screen_cadence": true,
+      "paper_instrument": "buy_tier_level",
+      "ai_judgment": false,
+      "knob_apply": false,
+      "timing": {
+        "skipped": true,
+        "reason": "stamp_timing off"
+      },
+      "near_miss": {
+        "schema_version": 2,
+        "scope": "library_near_miss_watch",
+        "market_id": "iseq20",
+        "observe_only": true,
+        "generated_at": "2026-10-05T14:16:49.369029+00:00",
+        "min_conviction": 0.28,
+        "timing_signal_present": true,
+        "buy_tier_not_now_count": 0,
+        "not_buy_tier_count": 16,
+        "hold_near_buy_count": 7,
+        "never_buy_tier_count": 13,
+        "buy_tier_not_now": [],
+        "not_buy_tier": [
+          {
+            "ticker": "IRES.IR",
+            "signal": "hold",
+            "timing_signal": "wait",
+            "conviction_score": 0.4592
+          },
+          {
+            "ticker": "KRZ.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.4375
+          },
+          {
+            "ticker": "GL9.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.4302
+          },
+          {
+            "ticker": "RYA.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.4156
+          },
+          {
+            "ticker": "IR5B.IR",
+            "signal": "hold",
+            "timing_signal": "wait",
+            "conviction_score": 0.3544
+          },
+          {
+            "ticker": "HMSO.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.3371
+          },
+          {
+            "ticker": "A5G.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.2948
+          },
+          {
+            "ticker": "KRX.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.2494
+          },
+          {
+            "ticker": "BIRG.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.1805
+          },
+          {
+            "ticker": "GVR.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.1382
+          },
+          {
+            "ticker": "DQ7A.IR",
+            "signal": "hold",
+            "timing_signal": "insufficient_data",
+            "conviction_score": 0.1375
+          },
+          {
+            "ticker": "UPR.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.1283
+          },
+          {
+            "ticker": "PTSB.IR",
+            "signal": "avoid",
+            "timing_signal": "insufficient_data",
+            "conviction_score": 0.0477
+          },
+          {
+            "ticker": "KMR.IR",
+            "signal": "avoid",
+            "timing_signal": "neutral",
+            "conviction_score": 0.0396
+          },
+          {
+            "ticker": "GRP.IR",
+            "signal": "hold",
+            "timing_signal": "insufficient_data",
+            "conviction_score": 0.0
+          },
+          {
+            "ticker": "MLC.IR",
+            "signal": "avoid",
+            "timing_signal": "insufficient_data",
+            "conviction_score": 0.0
+          }
+        ],
+        "hold_near_buy": [
+          {
+            "ticker": "IRES.IR",
+            "signal": "hold",
+            "timing_signal": "wait",
+            "conviction_score": 0.4592
+          },
+          {
+            "ticker": "KRZ.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.4375
+          },
+          {
+            "ticker": "GL9.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.4302
+          },
+          {
+            "ticker": "RYA.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.4156
+          },
+          {
+            "ticker": "IR5B.IR",
+            "signal": "hold",
+            "timing_signal": "wait",
+            "conviction_score": 0.3544
+          },
+          {
+            "ticker": "HMSO.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.3371
+          },
+          {
+            "ticker": "A5G.IR",
+            "signal": "hold",
+            "timing_signal": "neutral",
+            "conviction_score": 0.2948
+          }
+        ],
+        "never_buy_tier": [
+          {
+            "ticker": "A5G.IR"
+          },
+          {
+            "ticker": "BIRG.IR"
+          },
+          {
+            "ticker": "GL9.IR"
+          },
+          {
+            "ticker": "GRP.IR"
+          },
+          {
+            "ticker": "HMSO.IR"
+          },
+          {
+            "ticker": "IR5B.IR"
+          },
+          {
+            "ticker": "IRES.IR"
+          },
+          {
+            "ticker": "KRX.IR"
+          },
+          {
+            "ticker": "KRZ.IR"
+          },
+          {
+            "ticker": "MLC.IR"
+          },
+          {
+            "ticker": "PTSB.IR"
+          },
+          {
+            "ticker": "RYA.IR"
+          },
+          {
+            "ticker": "UPR.IR"
+          }
+        ],
+        "note": "Watch groups only — not an AI-judgment track. buy_tier_not_now is timing_signal=wait on buy/strong_buy; not_buy_tier is the current screen below buy-tier; hold_near_buy is hold names at or above the pre-buy conviction floor; never_buy_tier appeared in dated archives and never printed buy/strong_buy.",
+        "path": "docs/data/library/markets/iseq20/screen/near_miss_watch.json"
+      },
+      "archives": {
+        "skipped": true
+      },
+      "rememo": {
+        "eligible_count": 0,
+        "body_lag_threshold": 10,
+        "sample": [],
+        "note": "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed here; weekday `ftse-library rememo` executes the bounded 3/day cap. Not research_all_graduated / 21-market memo spray."
+      },
+      "first_time_memos": {
+        "missing_count": 0,
+        "sample": [],
+        "note": "Buy-tier names with no research.md on this market or a sibling library home (exact Yahoo ticker; dual-list suffixes stay distinct). Sunday _research_markets prefers true first-memos; no weekday burst."
+      },
+      "buy_tier_not_now_count": 0,
+      "not_buy_tier_count": 16,
+      "hold_near_buy_count": 7,
+      "never_buy_tier_count": 13,
+      "rememo_eligible_count": 0,
       "first_time_memo_count": 0,
       "exclusion_ready_for_priors": null,
       "timing_signal_present": null
