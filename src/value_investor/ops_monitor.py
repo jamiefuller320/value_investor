@@ -1827,6 +1827,61 @@ def check_combined_tagged_learning(
     ]
 
 
+def check_total_return_view(
+    *,
+    paper_root: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+    history_fetcher: Any = None,
+) -> list[OpsFinding]:
+    """Observe-only L528/L532/L533: total-return view next to price-only excess.
+
+    Writes ``docs/data/total_return_view.json``. Never changes books, knobs or
+    published adoption metrics (``auto_fixable=False``).
+    """
+    from value_investor.total_return_view import (
+        DEFAULT_PAPER_ROOT,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        fetch_ticker_history,
+        ops_finding_from_total_return_view,
+        refresh_total_return_view,
+    )
+
+    root = Path(paper_root) if paper_root is not None else DEFAULT_PAPER_ROOT
+    if not root.exists():
+        return []
+    try:
+        payload = refresh_total_return_view(
+            root,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            history_fetcher=history_fetcher or fetch_ticker_history,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_total_return_view(payload)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_lifecycle_maturity_trajectory(
     *,
     board_path: Path | None = None,
@@ -2661,6 +2716,7 @@ def collect_ops_findings(
     findings.extend(check_universe_filing_archive_pack_bottleneck())
     findings.extend(check_shard_nav_fx_warp())
     findings.extend(check_combined_tagged_learning())
+    findings.extend(check_total_return_view())
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_ui_state_reconciliation())
     findings.extend(check_gha_failure_triage())

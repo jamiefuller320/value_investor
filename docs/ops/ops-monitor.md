@@ -379,6 +379,7 @@ dry/apply, clash/`capacity_isolation` flags, next widen step). Written by the
 archive pack workflow and refreshed at end of ops-monitor. Dashboard: Automation → Ops.
 | `check_shard_nav_fx_warp` | **Shard NAV FX unit mismatch** | Non-GBP shard GBP book shows day-0 NAV≈FX and `buy_tier_level_native` is not yet active (N153) | `docs/data/shard_nav_fx_warp.json` | Live with N153 |
 | `check_combined_tagged_learning` | **Combined tagged learning store stale** | Observe store missing/stale. Zero closed N is **not** a warn. Tagged join only — no NAV blend / knob apply (N23) | `docs/data/combined_tagged_learning.json` | Live scaffold |
+| `check_total_return_view` | **Price-only excess misstates track performance** | Published excess vs `^FTSE` and total-return excess vs `FTAL.L` (dividends credited; clean epoch for fair-cost books) differ by sign or ≥5pp on a headline track. Observe-only — no metric/knob rewrite. See [total-return-view.md](total-return-view.md) | `docs/data/total_return_view.json` | Live |
 
 Isolation firewall + fail-open hydrate + **week-first gated dry pack** (no crawler): see
 [`universe-filing-archive-pack.md`](universe-filing-archive-pack.md).

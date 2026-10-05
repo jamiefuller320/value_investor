@@ -224,6 +224,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "daily_hub_history.json" in optional_line
     assert "shard_nav_fx_warp.json" in optional_line
     assert "combined_tagged_learning.json" in optional_line
+    assert "total_return_view.json" in optional_line
     owned_line = next(
         line for line in text.splitlines() if "GHA_COMMIT_OWNED" in line and ":-" in line
     )
@@ -236,3 +237,4 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "human_tasks_board.json" not in owned_line
     assert "shard_nav_fx_warp.json" not in owned_line
     assert "combined_tagged_learning.json" not in owned_line
+    assert "total_return_view.json" not in owned_line
