@@ -7,8 +7,11 @@ requires ``ai_track_buy_eligible`` (effective buy-tier +
 usable (index → key bodies → memo) only — AI eligibility stays FTSE-scoped.
 
 Universe: FTSE live ``latest.json`` ∪ ``ladder.admitted_learning_markets``.
-Does not deepen ingest, rememo, or dispatch engineering. Persists
-``docs/data/buy_tier_flip_lag.json`` so cohorts are comparable by ``market_id``.
+Does not deepen ingest, rememo, or dispatch engineering. Library shard
+``has_memo`` joins a sibling ``research_home_market`` (exact Yahoo ticker)
+when the local home is empty; FTSE live stays on ``docs/data/research``.
+Does not copy or symlink memos. Persists ``docs/data/buy_tier_flip_lag.json``
+so cohorts are comparable by ``market_id``.
 """
 
 from __future__ import annotations
@@ -243,6 +246,8 @@ class FlipMarketSource:
     memo_dir: Path
     usable_mode: UsableMode
     screen_source: str
+    # Library shards only: enable observe-only sibling ``research.md`` join.
+    library_root: Path | None = None
 
 
 @dataclass
@@ -272,6 +277,7 @@ class FlipLagSnapshot:
     hours_to_usable: float | None = None
     status: str = "open"  # open | usable
     stages: dict[str, bool] = field(default_factory=dict)
+    memo_home_market: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -286,6 +292,7 @@ class FlipLagSnapshot:
             "index_at": self.index_at,
             "key_bodies": self.key_bodies,
             "has_memo": self.has_memo,
+            "memo_home_market": self.memo_home_market,
             "first_memo_at": self.first_memo_at,
             "research_verdict": self.research_verdict,
             "ai_track_buy_eligible": self.ai_track_buy_eligible,
@@ -301,6 +308,47 @@ class FlipLagSnapshot:
             "status": self.status,
             "stages": dict(self.stages),
         }
+
+
+def _sibling_library_memo(
+    ticker: str,
+    *,
+    local_has_memo: bool,
+    market_id: str,
+    usable_mode: UsableMode,
+    sibling_memo_homes: dict[str, str] | None,
+    library_root: Path | None,
+) -> tuple[bool, str | None]:
+    """Observe-only: local memo else exact-ticker sibling library home.
+
+    FTSE live stays on ``docs/data/research`` (``usable_mode=ai_eligible``).
+    Dual-list suffixes stay distinct. Does not copy or symlink ``research.md``.
+    """
+    from value_investor.library_dedupe import (
+        canonical_library_ticker,
+        existing_library_research_tickers,
+        research_home_market,
+    )
+
+    mid = str(market_id or "").strip()
+    if local_has_memo:
+        return True, mid or None
+    if usable_mode != "factory_path":
+        return False, None
+    key = canonical_library_ticker(ticker)
+    if not key:
+        return False, None
+    home: str | None = None
+    if sibling_memo_homes is not None:
+        raw = sibling_memo_homes.get(key)
+        home = str(raw).strip() if raw else None
+    elif library_root is not None:
+        home = research_home_market(library_root, key)
+        if not home and key in existing_library_research_tickers(library_root):
+            return True, None
+    if home:
+        return True, home
+    return False, None
 
 
 def _blocking_stage(
@@ -421,6 +469,7 @@ def library_flip_source(
         memo_dir=research_root,
         usable_mode="factory_path",
         screen_source=str(Path(library_root) / "markets" / mid / "screen" / "latest_signals.csv"),
+        library_root=Path(library_root),
     )
 
 
@@ -479,6 +528,8 @@ def snapshot_flip_name(
     prior: dict[str, Any] | None = None,
     market_id: str = FTSE_MARKET_ID,
     usable_mode: UsableMode = "ai_eligible",
+    library_root: Path | None = None,
+    sibling_memo_homes: dict[str, str] | None = None,
 ) -> FlipLagSnapshot | None:
     """Build lag snapshot for one buy-tier report row, or None if not a flip cohort member."""
     now = now or datetime.now(UTC)
@@ -515,7 +566,22 @@ def snapshot_flip_name(
     )
     memo_md_flat = (Path(memo_dir) / f"{ticker}.md").is_file()
     memo_md_nested = (Path(research_root) / ticker / "research.md").is_file()
-    has_memo = has_disk_memo or memo_md_flat or memo_md_nested
+    local_has_memo = has_disk_memo or memo_md_flat or memo_md_nested
+    has_memo, memo_home_market = _sibling_library_memo(
+        ticker,
+        local_has_memo=local_has_memo,
+        market_id=mid,
+        usable_mode=mode,
+        sibling_memo_homes=sibling_memo_homes,
+        library_root=library_root,
+    )
+    if has_memo and not local_has_memo and memo_home_market and library_root is not None:
+        sibling_root = committed_research_dir(memo_home_market, library_root=library_root)
+        _sib_disk, sib_created, _, _sib_verdict = _research_doc_times(
+            ticker, research_root=sibling_root
+        )
+        if memo_created is None:
+            memo_created = sib_created
 
     screen_verdict = report.get("research_verdict")
     verdict_str = (
@@ -597,6 +663,7 @@ def snapshot_flip_name(
         hours_to_usable=_hours_between(flip_at, usable_at),
         status="usable" if usable else "open",
         stages=stages,
+        memo_home_market=memo_home_market,
     )
 
 
@@ -674,6 +741,7 @@ def update_buy_tier_flip_lag(
 
     snapshots: list[FlipLagSnapshot] = []
     market_meta: list[dict[str, Any]] = []
+    sibling_homes_cache: dict[str, dict[str, str]] = {}
 
     for source in active_sources:
         cohort_rows = select_flip_cohort(source.reports, lookback_days=lookback_days, now=now)
@@ -686,6 +754,15 @@ def update_buy_tier_flip_lag(
                 "cohort_count": len(cohort_rows),
             }
         )
+        source_library = source.library_root
+        sibling_homes: dict[str, str] | None = None
+        if source.usable_mode == "factory_path" and source_library is not None:
+            from value_investor.library_dedupe import library_research_homes
+
+            cache_key = str(Path(source_library))
+            if cache_key not in sibling_homes_cache:
+                sibling_homes_cache[cache_key] = library_research_homes(Path(source_library))
+            sibling_homes = sibling_homes_cache[cache_key]
         for row in cohort_rows:
             ticker = str(row.get("ticker") or "").strip().upper()
             key = name_key(source.market_id, ticker)
@@ -698,6 +775,8 @@ def update_buy_tier_flip_lag(
                 prior=prior,
                 market_id=source.market_id,
                 usable_mode=source.usable_mode,
+                library_root=source_library,
+                sibling_memo_homes=sibling_homes,
             )
             if snap is None:
                 continue

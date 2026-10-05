@@ -7,6 +7,7 @@ from pathlib import Path
 import pandas as pd
 
 from value_investor.library_equal_support import (
+    admitted_buy_tier_first_time_targets,
     ensure_buy_tier_timing_stamp,
     run_equal_support_package,
     stamp_library_timing_archives,
@@ -206,6 +207,31 @@ def test_equal_support_census_counts_first_time_and_flattens(tmp_path: Path):
     assert row["timing"]["skipped"] is True
     assert row["archives"]["skipped"] is True
     assert (tmp_path / "equal_support_status.json").exists()
+
+
+def test_equal_support_first_time_joins_sibling_and_misses_dual_suffix(tmp_path: Path):
+    _seed_market(tmp_path, "sp500")
+    _seed_market(tmp_path, "nasdaq100")
+    sibling = tmp_path / "markets" / "nasdaq100" / "screen" / "research" / "AAA"
+    sibling.mkdir(parents=True)
+    (sibling / "research.md").write_text("# nasdaq home\n", encoding="utf-8")
+    dual_screen = tmp_path / "markets" / "asx200" / "screen"
+    dual_screen.mkdir(parents=True)
+    pd.DataFrame(
+        [
+            {"ticker": "SHEL.L", "signal": "buy", "conviction_score": 0.8, "last_price": 10.0},
+            {"ticker": "BHP.AX", "signal": "hold", "conviction_score": 0.4, "last_price": 8.0},
+        ]
+    ).to_csv(dual_screen / "latest_signals.csv", index=False)
+    (tmp_path / "markets" / "sp500" / "screen" / "research" / "SHEL").mkdir(parents=True)
+    (tmp_path / "markets" / "sp500" / "screen" / "research" / "SHEL" / "research.md").write_text(
+        "# us listing\n", encoding="utf-8"
+    )
+    assert admitted_buy_tier_first_time_targets(tmp_path, market_id="sp500") == []
+    assert admitted_buy_tier_first_time_targets(tmp_path, market_id="asx200") == ["SHEL.L"]
+    assert not (
+        tmp_path / "markets" / "sp500" / "screen" / "research" / "AAA" / "research.md"
+    ).exists()
 
 
 def test_stamp_archives_is_point_in_time(tmp_path: Path):

@@ -8,8 +8,10 @@ from types import SimpleNamespace
 from value_investor.library_dedupe import (
     canonical_library_ticker,
     existing_library_research_tickers,
+    library_research_homes,
     prefer_first_time_reports,
     prefer_first_time_research_queues,
+    research_home_market,
     select_deduped_research_targets,
     summarize_ticker_overlaps,
 )
@@ -80,6 +82,24 @@ def test_select_skips_already_researched(tmp_path: Path):
     assert [r.ticker for _, r in selected] == ["MDB"]
     assert skipped[0]["ticker"] == "AAPL"
     assert skipped[0]["reason"] == "fresh_memo"
+
+
+def test_library_research_homes_lex_first_and_dual_suffix(tmp_path: Path):
+    nasdaq = tmp_path / "markets" / "nasdaq100" / "screen" / "research" / "SHEL"
+    euro = tmp_path / "markets" / "euro_depth" / "screen" / "research" / "SHEL"
+    euro.mkdir(parents=True)
+    nasdaq.mkdir(parents=True)
+    (euro / "research.md").write_text("# euro\n", encoding="utf-8")
+    (nasdaq / "research.md").write_text("# ndx\n", encoding="utf-8")
+    dual = tmp_path / "markets" / "ftse350" / "screen" / "research" / "SHEL.L"
+    dual.mkdir(parents=True)
+    (dual / "research.md").write_text("# ftse suffix\n", encoding="utf-8")
+    homes = library_research_homes(tmp_path)
+    assert homes["SHEL"] == "euro_depth"
+    assert homes["SHEL.L"] == "ftse350"
+    assert "SHEL" in existing_library_research_tickers(tmp_path)
+    assert research_home_market(tmp_path, "shel") == "euro_depth"
+    assert research_home_market(tmp_path, "SHEL.L") == "ftse350"
 
 
 def test_select_allows_stale_memo_when_not_in_already_researched():

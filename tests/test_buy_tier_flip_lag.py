@@ -535,3 +535,195 @@ def test_legacy_store_migrates_ticker_keys(tmp_path: Path):
     assert payload["schema_version"] == 2
     assert name_key(FTSE_MARKET_ID, "OLD.L") in payload["names"]
     assert payload["names"][name_key(FTSE_MARKET_ID, "OLD.L")]["market_id"] == FTSE_MARKET_ID
+
+
+def _library_research_md(
+    root: Path,
+    market_id: str,
+    ticker: str,
+    *,
+    created_at: str | None = None,
+) -> Path:
+    research = root / "markets" / market_id / "screen" / "research" / ticker
+    research.mkdir(parents=True, exist_ok=True)
+    path = research / "research.md"
+    path.write_text("# sibling memo\n", encoding="utf-8")
+    if created_at:
+        (research / "research.json").write_text(
+            json.dumps(
+                {
+                    "ticker": ticker,
+                    "created_at": created_at,
+                    "updated_at": created_at,
+                    "research_verdict": "hold",
+                }
+            ),
+            encoding="utf-8",
+        )
+    return research
+
+
+def test_factory_path_empty_local_joins_sibling_memo_home(tmp_path: Path):
+    library = tmp_path / "library"
+    local_research = library / "markets" / "nasdaq100" / "screen" / "research"
+    _write_index(
+        local_research,
+        "AAA",
+        fetched_at="2026-09-21T10:00:00+00:00",
+        annual_bodies=1,
+        interim_bodies=1,
+    )
+    _library_research_md(library, "euro_depth", "AAA", created_at="2026-09-22T08:00:00+00:00")
+    assert not (local_research / "AAA" / "research.md").exists()
+    store = tmp_path / "flip_lag.json"
+    now = datetime(2026, 9, 24, 12, 0, tzinfo=UTC)
+    sources = [
+        FlipMarketSource(
+            market_id="nasdaq100",
+            reports=[
+                {
+                    "ticker": "AAA",
+                    "name": "Empty Home Co",
+                    "signal": "buy",
+                    "signal_since": "2026-09-20",
+                }
+            ],
+            research_root=local_research,
+            memo_dir=local_research,
+            usable_mode="factory_path",
+            screen_source="test://nasdaq100",
+            library_root=library,
+        )
+    ]
+    payload = update_buy_tier_flip_lag(sources=sources, store_path=store, now=now, persist=True)
+    row = payload["recently_usable"][0]
+    assert row["has_memo"] is True
+    assert row["memo_home_market"] == "euro_depth"
+    assert row["usable"] is True
+    assert row["blocking_stage"] is None
+    assert not (local_research / "AAA" / "research.md").exists()
+    assert ops_finding_from_flip_lag(payload) is None
+
+
+def test_factory_path_local_memo_home_is_this_market(tmp_path: Path):
+    library = tmp_path / "library"
+    local_research = library / "markets" / "sp500" / "screen" / "research"
+    _write_index(
+        local_research,
+        "AAA",
+        fetched_at="2026-09-21T10:00:00+00:00",
+        annual_bodies=1,
+        interim_bodies=1,
+    )
+    _write_research_json(local_research, "AAA", created_at="2026-09-22T08:00:00+00:00")
+    (local_research / "AAA" / "research.md").write_text("# local\n", encoding="utf-8")
+    _library_research_md(library, "euro_depth", "AAA", created_at="2026-09-21T08:00:00+00:00")
+    store = tmp_path / "flip_lag.json"
+    now = datetime(2026, 9, 24, 12, 0, tzinfo=UTC)
+    sources = [
+        FlipMarketSource(
+            market_id="sp500",
+            reports=[
+                {
+                    "ticker": "AAA",
+                    "name": "Local Memo Co",
+                    "signal": "buy",
+                    "signal_since": "2026-09-20",
+                    "research_verdict": "hold",
+                }
+            ],
+            research_root=local_research,
+            memo_dir=local_research,
+            usable_mode="factory_path",
+            screen_source="test://sp500",
+            library_root=library,
+        )
+    ]
+    payload = update_buy_tier_flip_lag(sources=sources, store_path=store, now=now, persist=True)
+    row = payload["recently_usable"][0]
+    assert row["has_memo"] is True
+    assert row["memo_home_market"] == "sp500"
+    assert row["usable"] is True
+
+
+def test_factory_path_dual_suffix_does_not_join(tmp_path: Path):
+    library = tmp_path / "library"
+    local_research = library / "markets" / "ftse_smallcap" / "screen" / "research"
+    _write_index(
+        local_research,
+        "SHEL.L",
+        fetched_at="2026-09-21T10:00:00+00:00",
+        annual_bodies=1,
+        interim_bodies=1,
+    )
+    _library_research_md(library, "sp500", "SHEL", created_at="2026-09-22T08:00:00+00:00")
+    store = tmp_path / "flip_lag.json"
+    now = datetime(2026, 9, 24, 12, 0, tzinfo=UTC)
+    sources = [
+        FlipMarketSource(
+            market_id="ftse_smallcap",
+            reports=[
+                {
+                    "ticker": "SHEL.L",
+                    "name": "Shell UK",
+                    "signal": "buy",
+                    "signal_since": "2026-09-20",
+                }
+            ],
+            research_root=local_research,
+            memo_dir=local_research,
+            usable_mode="factory_path",
+            screen_source="test://ftse_smallcap",
+            library_root=library,
+        )
+    ]
+    payload = update_buy_tier_flip_lag(sources=sources, store_path=store, now=now, persist=True)
+    assert payload["summary"]["open_not_usable"] == 1
+    row = payload["open"][0]
+    assert row["ticker"] == "SHEL.L"
+    assert row["has_memo"] is False
+    assert row["memo_home_market"] is None
+    assert row["blocking_stage"] == "no_memo"
+    assert not (local_research / "SHEL.L" / "research.md").exists()
+
+
+def test_ftse_live_does_not_join_library_sibling(tmp_path: Path):
+    library = tmp_path / "library"
+    _library_research_md(library, "sp500", "LAG.L")
+    latest = tmp_path / "latest.json"
+    research = tmp_path / "research"
+    research.mkdir()
+    memo_dir = tmp_path / "memos"
+    memo_dir.mkdir()
+    store = tmp_path / "flip_lag.json"
+    flip_day = (datetime.now(UTC) - timedelta(days=3)).date().isoformat()
+    latest.write_text(
+        json.dumps(
+            {
+                "reports": [
+                    {
+                        "ticker": "LAG.L",
+                        "name": "Lagging plc",
+                        "signal": "buy",
+                        "signal_since": flip_day,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    findings = check_buy_tier_flip_lag(
+        latest_path=latest,
+        research_root=research,
+        memo_dir=memo_dir,
+        store_path=store,
+        library_root=library,
+        include_admitted=False,
+        persist=True,
+    )
+    assert len(findings) == 1
+    assert findings[0].auto_fixable is False
+    payload = json.loads(store.read_text(encoding="utf-8"))
+    row = payload["open"][0]
+    assert row["has_memo"] is False
+    assert row["blocking_stage"] == "no_index"
