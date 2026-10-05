@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-05T17:29:10.866455+00:00",
+  "generated_at": "2026-10-05T19:29:15.996722+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -72,7 +72,7 @@
       "1": "aim",
       "2": "ftse_mib"
     },
-    "equal_support_generated_at": "2026-10-05T15:16:35.666594+00:00"
+    "equal_support_generated_at": "2026-10-05T17:25:17.979798+00:00"
   },
   "markets": [
     {
@@ -677,13 +677,13 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 3,
-        "targets": 5,
-        "improved": 4,
+        "run_count": 2,
+        "targets": 4,
+        "improved": 3,
         "improved_tickers": [
-          "SHELL.AS",
           "COR.LS",
-          "HM-B.ST"
+          "HM-B.ST",
+          "SHELL.AS"
         ],
         "last_run_at": "2026-10-05T13:28:04.029565+00:00",
         "runtime_cutoff_runs": 0,
@@ -692,7 +692,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 15,
-          "indexed_without_body": 16,
+          "indexed_without_body": 32,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -706,7 +706,7 @@
           "unmeasured": 1,
           "zero_body": 0,
           "thin": -2,
-          "indexed_without_body": 0,
+          "indexed_without_body": -16,
           "filing_gaps": 1
         },
         "remaining": {
@@ -1086,7 +1086,7 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 2,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 11,
         "not_buy_tier_count": 41,
         "never_buy_tier_count": 37,
@@ -1094,18 +1094,15 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 2,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 11,
         "not_buy_tier_count": 41,
         "never_buy_tier_count": 37,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "MPE.L",
-          "RWS.L"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "DATA.L",
           "NICL.L",
@@ -1537,7 +1534,7 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 3,
+        "run_count": 2,
         "targets": 2,
         "improved": 1,
         "improved_tickers": [
@@ -5377,7 +5374,7 @@
         "hold_near_buy_count": 21,
         "not_buy_tier_count": 61,
         "never_buy_tier_count": 58,
-        "rememo_eligible_count": 0,
+        "rememo_eligible_count": 1,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
