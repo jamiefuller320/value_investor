@@ -9283,6 +9283,17 @@ def test_fetch_filings_ir_allowlist_yal_ax_asx200_iwb_builtin(tmp_path: Path):
     assert "YAL.AX" not in PARKED_SOURCE_HUNTER_SKIP
 
 
+def test_parked_source_hunter_yal_ax_asx200_has_fetchable_ir():
+    """eng-20261004-07: YAL.AX leftover IWB — Markit/ASX statutory PDFs in _BUILTIN_IR_URLS."""
+    assert "YAL.AX" not in PARKED_SOURCE_HUNTER_SKIP
+    urls = _BUILTIN_IR_URLS.get("YAL.AX") or []
+    assert len(urls) >= 4
+    assert any("06frjf61kmrm39.pdf" in url for url in urls)
+    assert any("2A1698934" in url for url in urls)
+    assert any("2A1696707" in url for url in urls)
+    assert any("2A1700926" in url for url in urls)
+
+
 def test_yal_ax_markit_leftover_pdfs_live_fetch():
     """eng-20261004-07: Markit PDFs for parked IWB documentKeys fetch substantive bodies."""
     cessation = "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03134565-2A1696707"
