@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T07:47:42.237582+00:00",
+  "generated_at": "2026-10-05T02:33:06.621146+00:00",
   "observe_only": true,
   "headline": "1 warn instrument(s); trajectory worsening on 1.",
   "surface_freshness": "fresh",
-  "ops_run_at": "2026-10-04T07:46:37.727007+00:00",
+  "ops_run_at": "2026-10-05T02:31:36.606439+00:00",
   "warn_instrument_count": 1,
   "trajectory_summary": {
-    "improving": 2,
+    "improving": 1,
     "worsening": 1,
-    "flat": 2,
+    "flat": 3,
     "unknown": 0,
-    "history_points": 16,
+    "history_points": 17,
     "note": "Deltas vs prior dashboard cycle (warn/gap counts; lower is better). Raw instrument stores commit with ops-monitor (L460)."
   },
   "instruments": [
@@ -22,38 +22,37 @@
       "observe_only": true,
       "warn_active": true,
       "severity": "warn",
-      "finding_summary": "21 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, bel20, cac40, euro_depth, hang_seng, nasdaq100 (+2 more): sp500/PEP (no_memo, 511.78h since flip), sp500/ADSK (no_memo, 439.78h since flip), tsx60/PPL.TO (no_key_bodies, 439.78h since flip), nasdaq100/PAYX (no_memo, 415.78h since flip), tsx60/SAP.TO (no_key_bodies, 415.78h since flip), sp500/FANG (no_memo, 391.78h since flip), cac40/TTE.PA (no_memo, 367.78h since flip), nasdaq100/SNDK (no_memo, 343.78h since flip), sp500/PCAR (no_memo, 295.78h since flip), aim/CAM.L (no_memo, 271.78h since flip) (+11 more). Blocking: no_key_bodies=8, no_memo=13.",
+      "finding_summary": "28 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, bel20, cac40, euro_depth, hang_seng (+5 more): sp500/ADSK (no_memo, 458.53h since flip), tsx60/PPL.TO (no_key_bodies, 458.53h since flip), nasdaq100/PAYX (no_memo, 434.53h since flip), tsx60/SAP.TO (no_key_bodies, 434.53h since flip), sp500/FANG (no_memo, 410.53h since flip), cac40/TTE.PA (no_memo, 386.53h since flip), nasdaq100/SNDK (no_memo, 362.53h since flip), sp500/PCAR (no_memo, 314.53h since flip), aim/CAM.L (no_memo, 290.53h since flip), aim/MPE.L (no_key_bodies, 290.53h since flip) (+18 more). Blocking: no_key_bodies=9, no_memo=19.",
       "metrics": {
-        "warn_not_usable": 21,
-        "open_not_usable": 42,
-        "cohort_count": 106,
-        "usable_in_window": 64,
-        "market_count": 20,
+        "warn_not_usable": 28,
+        "open_not_usable": 41,
+        "cohort_count": 103,
+        "usable_in_window": 62,
+        "market_count": 22,
         "blocking_stage_counts": {
-          "no_accumulate_verdict": 13,
-          "no_memo": 18,
+          "no_memo": 19,
           "no_key_bodies": 9,
-          "no_index": 2
+          "no_accumulate_verdict": 13
         }
       },
       "primary_metric": "warn_not_usable",
-      "primary_value": 21,
+      "primary_value": 28,
       "primary_label": "Warn cohort (≥24h path-incomplete)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-10-04T07:46:38.668437+00:00",
+        "as_of": "2026-10-05T02:31:37.870418+00:00",
         "age_hours": 0.02,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": -5,
-        "direction": "improving",
-        "label": "Better since last cycle",
-        "prior_value": 26,
-        "prior_at": "2026-10-04T02:33:08.462455+00:00"
+        "delta": 7,
+        "direction": "worsening",
+        "label": "Worse since last cycle",
+        "prior_value": 21,
+        "prior_at": "2026-10-04T07:47:42.237582+00:00"
       }
     },
     {
@@ -65,8 +64,8 @@
       "severity": "ok",
       "finding_summary": null,
       "metrics": {
-        "inventory_count": 57,
-        "fully_ready_count": 57,
+        "inventory_count": 60,
+        "fully_ready_count": 60,
         "names_with_any_gap": 0,
         "dominant_gap_field": "P1 green-enough",
         "dominant_gap_count": 0,
@@ -85,8 +84,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-10-04T07:47:08.357719+00:00",
-        "age_hours": 0.01,
+        "as_of": "2026-10-05T02:31:57.454263+00:00",
+        "age_hours": 0.02,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -95,7 +94,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-10-04T02:33:08.462455+00:00"
+        "prior_at": "2026-10-04T07:47:42.237582+00:00"
       }
     },
     {
@@ -107,16 +106,16 @@
       "severity": "ok",
       "finding_summary": null,
       "metrics": {
-        "miss_rate": 0.4969,
-        "enter_body_miss_count": 80,
-        "cohort_count": 161,
-        "open_still_missing_bodies": 15,
+        "miss_rate": 0.4847,
+        "enter_body_miss_count": 79,
+        "cohort_count": 163,
+        "open_still_missing_bodies": 13,
         "by_market": {
           "ftse350": {
-            "cohort_count": 30,
-            "enter_body_miss_count": 4,
+            "cohort_count": 32,
+            "enter_body_miss_count": 5,
             "open_still_missing_bodies": 0,
-            "miss_rate": 0.1333
+            "miss_rate": 0.1562
           },
           "sp500": {
             "cohort_count": 48,
@@ -180,9 +179,9 @@
           },
           "bel20": {
             "cohort_count": 3,
-            "enter_body_miss_count": 1,
-            "open_still_missing_bodies": 1,
-            "miss_rate": 0.3333
+            "enter_body_miss_count": 0,
+            "open_still_missing_bodies": 0,
+            "miss_rate": 0.0
           },
           "aex": {
             "cohort_count": 1,
@@ -210,30 +209,30 @@
           },
           "psi20": {
             "cohort_count": 1,
-            "enter_body_miss_count": 1,
-            "open_still_missing_bodies": 1,
-            "miss_rate": 1.0
+            "enter_body_miss_count": 0,
+            "open_still_missing_bodies": 0,
+            "miss_rate": 0.0
           }
         }
       },
       "primary_metric": "open_still_missing_bodies",
-      "primary_value": 15,
+      "primary_value": 13,
       "primary_label": "Open flips still missing key bodies (archive-miss proxy)",
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-10-04T07:47:08.523290+00:00",
-        "age_hours": 0.01,
+        "as_of": "2026-10-05T02:31:57.628002+00:00",
+        "age_hours": 0.02,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": 3,
-        "direction": "worsening",
-        "label": "Worse since last cycle",
-        "prior_value": 12,
-        "prior_at": "2026-10-04T02:33:08.462455+00:00"
+        "delta": -2,
+        "direction": "improving",
+        "label": "Better since last cycle",
+        "prior_value": 15,
+        "prior_at": "2026-10-04T07:47:42.237582+00:00"
       }
     },
     {
@@ -249,7 +248,7 @@
         "gbp_warp_count": 16,
         "native_twin_active": 17,
         "native_twin_pending": 0,
-        "market_count": 17,
+        "market_count": 19,
         "warn_markets": []
       },
       "primary_metric": "warn_count",
@@ -259,8 +258,8 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-10-04T07:47:08.630661+00:00",
-        "age_hours": 0.01,
+        "as_of": "2026-10-05T02:31:57.707758+00:00",
+        "age_hours": 0.02,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -269,7 +268,7 @@
         "direction": "flat",
         "label": "Unchanged vs last cycle",
         "prior_value": 0,
-        "prior_at": "2026-10-04T02:33:08.462455+00:00"
+        "prior_at": "2026-10-04T07:47:42.237582+00:00"
       }
     },
     {
@@ -281,8 +280,8 @@
       "severity": "ok",
       "finding_summary": null,
       "metrics": {
-        "market_count": 21,
-        "open_count": 310,
+        "market_count": 23,
+        "open_count": 312,
         "closed_count": 0,
         "first_episode_closed_count": 0,
         "source_records_missing_market_id": 171,
@@ -295,17 +294,17 @@
         "state": "fresh",
         "label": "Fresh",
         "detail": "Last refresh 0.0h ago.",
-        "as_of": "2026-10-04T07:47:08.634625+00:00",
-        "age_hours": 0.01,
+        "as_of": "2026-10-05T02:31:57.710987+00:00",
+        "age_hours": 0.02,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
       "trajectory": {
-        "delta": -106,
-        "direction": "improving",
-        "label": "Better since last cycle",
-        "prior_value": 277,
-        "prior_at": "2026-10-04T02:33:08.462455+00:00"
+        "delta": 0,
+        "direction": "flat",
+        "label": "Unchanged vs last cycle",
+        "prior_value": 171,
+        "prior_at": "2026-10-04T07:47:42.237582+00:00"
       }
     }
   ],
@@ -604,6 +603,34 @@
       },
       "universe_filing_archive_miss_rate": {
         "primary_value": 15,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "shard_nav_fx_warp": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "combined_tagged_learning": {
+        "primary_value": 171,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      }
+    },
+    {
+      "at": "2026-10-05T02:33:06.621146+00:00",
+      "buy_tier_flip_lag": {
+        "primary_value": 28,
+        "warn_active": true,
+        "freshness_state": "fresh"
+      },
+      "decision_input_inventory": {
+        "primary_value": 0,
+        "warn_active": false,
+        "freshness_state": "fresh"
+      },
+      "universe_filing_archive_miss_rate": {
+        "primary_value": 13,
         "warn_active": false,
         "freshness_state": "fresh"
       },
