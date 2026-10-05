@@ -639,6 +639,29 @@ def _cmd_unpark_task(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_cancel_task(args: argparse.Namespace) -> int:
+    from value_investor.engineering_recovery import cancel_agent_task
+
+    action = cancel_agent_task(
+        str(args.task_id).strip(),
+        reason=str(args.reason).strip(),
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+        cancelled_policy=str(getattr(args, "cancelled_policy", "") or "").strip() or None,
+        apply=not args.dry_run,
+    )
+    if action is None:
+        if args.json:
+            _print_json({"cancelled": False, "reason": "task not found or already terminal"})
+        else:
+            print("Task not found or already terminal", file=sys.stderr)
+        return 1
+    if args.json:
+        _print_json({"cancelled": True, **action.to_dict()})
+    else:
+        print(f"Cancelled {action.task_id}: {action.reason}")
+    return 0
+
+
 def _cmd_park_task(args: argparse.Namespace) -> int:
     from value_investor.engineering_recovery import park_agent_task
 
@@ -2318,6 +2341,29 @@ def main(argv: list[str] | None = None) -> int:
         help="Show the unpark action without writing the queue",
     )
     unpark_task_p.set_defaults(func=_cmd_unpark_task)
+
+    cancel_task_p = sub.add_parser(
+        "cancel-task",
+        parents=[common],
+        help="Cancel a parked or open engineering task (manual triage / superseded)",
+    )
+    cancel_task_p.add_argument("--task-id", required=True)
+    cancel_task_p.add_argument(
+        "--reason",
+        required=True,
+        help="Human-readable cancelled_reason stored on the task",
+    )
+    cancel_task_p.add_argument(
+        "--cancelled-policy",
+        default="manual",
+        help="cancelled_policy value (default: manual)",
+    )
+    cancel_task_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show the cancel action without writing the queue",
+    )
+    cancel_task_p.set_defaults(func=_cmd_cancel_task)
 
     record_spend_p = sub.add_parser(
         "record-spend",

@@ -637,7 +637,7 @@ cap-8 pause / warning still fires after self-heal.
 Human triage (oldest first) for parks that survive self-heal:
 
 1. `ftse-engineering list-parked`
-2. For each task: merge the PR, cancel stale work, or `ftse-engineering unpark-task --task-id … --reason …` when appropriate
+2. For each task: merge the PR, `ftse-engineering cancel-task --task-id … --reason …` for stale/superseded work, or `ftse-engineering unpark-task --task-id … --reason …` when appropriate
 3. Tier-1 trims resolved/superseded/healed parks automatically — do not re-triage those
 
 **Auto-resume:** dispatch restarts when attention-parked count drops **below 7** **and**

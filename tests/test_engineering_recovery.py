@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.engineering_recovery import (
+    cancel_agent_task,
     cancel_resolved_workflow_failure_tasks,
     count_attention_parked_tasks,
     evaluate_queue_clearing_pause,
@@ -109,6 +110,47 @@ def test_unpark_agent_task_reopens_and_clears_parked_fields(tmp_path: Path):
     assert row["status"] == "open"
     assert "parked_reason" not in row
     assert count_attention_parked_tasks(tasks_path=tasks_path) == 0
+
+
+def test_cancel_agent_task_cancels_parked_without_unparking(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    sibling = (
+        _task("eng-keep-parked", status="parked").to_dict()
+        | {
+            "parked_reason": "preflight blocked PR open — preflight failed",
+            "parked_policy": "preflight_clash",
+            "parked_at": datetime.now(UTC).isoformat(),
+        }
+    )
+    target = (
+        _task("eng-cancel-me", status="parked").to_dict()
+        | {
+            "parked_reason": "engineering-agent cannot push workflows",
+            "parked_policy": "workflow_permission",
+            "parked_at": datetime.now(UTC).isoformat(),
+        }
+    )
+    tasks_path.write_text(json.dumps({"tasks": [sibling, target]}), encoding="utf-8")
+
+    action = cancel_agent_task(
+        "eng-cancel-me",
+        reason="superseded by #960 / force re-run succeeded",
+        tasks_path=tasks_path,
+        cancelled_policy="workflow_recovered",
+        apply=True,
+    )
+    assert action is not None
+    assert action.action == "cancel"
+    assert action.from_status == "parked"
+    updated = load_engineering_tasks(tasks_path)
+    by_id = {str(row["id"]): row for row in updated["tasks"]}
+    cancelled = by_id["eng-cancel-me"]
+    assert cancelled["status"] == "cancelled"
+    assert cancelled.get("cancelled_reason") == "superseded by #960 / force re-run succeeded"
+    assert cancelled.get("cancelled_policy") == "workflow_recovered"
+    kept = by_id["eng-keep-parked"]
+    assert kept["status"] == "parked"
+    assert kept.get("parked_policy") == "preflight_clash"
 
 
 def test_retry_failed_tasks_does_not_mirror_isolated_fixture_to_committed(

@@ -786,6 +786,56 @@ def unpark_agent_task(
     return action
 
 
+def cancel_agent_task(
+    task_id: str,
+    *,
+    reason: str,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    cancelled_policy: str | None = None,
+    apply: bool = True,
+) -> RecoveryAction | None:
+    """Cancel a parked/open/failed/pr_open task (manual triage; does not unpark)."""
+    wanted = str(task_id or "").strip()
+    if not wanted:
+        return None
+    data = load_engineering_tasks(tasks_path)
+    row = next(
+        (item for item in (data.get("tasks") or []) if str(item.get("id") or "") == wanted),
+        None,
+    )
+    if row is None:
+        return None
+    from_status = str(row.get("status") or "")
+    if from_status in {"merged", "completed", "cancelled"}:
+        return None
+    policy = str(cancelled_policy or "").strip() or "manual"
+    action = RecoveryAction(
+        task_id=wanted,
+        action="cancel",
+        reason=reason,
+        from_status=from_status,
+        to_status="cancelled",
+    )
+    if not apply:
+        return action
+    mark_task_status(
+        wanted,
+        "cancelled",
+        path=tasks_path,
+        committed_path=tasks_path,
+        cancelled_reason=reason,
+        cancelled_policy=policy,
+    )
+    evaluate_queue_clearing_pause(tasks_path=tasks_path, apply=True)
+    try:
+        from value_investor.engineering_queue import refresh_engineering_queue_ui
+
+        refresh_engineering_queue_ui(tasks_path=tasks_path)
+    except OSError:
+        pass
+    return action
+
+
 def cancel_resolved_workflow_failure_tasks(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
