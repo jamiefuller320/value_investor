@@ -9267,6 +9267,32 @@ def test_fetch_filings_ir_allowlist_asx200_unmeasured_builtin(tmp_path: Path):
     assert all(row["source"] == "ir_allowlist" for row in cda + bsl + pxa)
 
 
+def test_fetch_filings_ir_allowlist_yal_ax_asx200_iwb_builtin(tmp_path: Path):
+    """eng-20261004-07: YAL.AX leftover IWB — seed Markit/ASX statutory PDFs (not Market Index HTML)."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("YAL.AX", path=allowlist_path)
+    urls = {row["url"] for row in rows}
+    assert len(rows) >= 4
+    assert any("06frjf61kmrm39.pdf" in url for url in urls)
+    assert any("2A1698934" in url for url in urls)
+    assert any("2A1696707" in url for url in urls)
+    assert any("2A1700926" in url for url in urls)
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert "YAL.AX" not in PARKED_SOURCE_HUNTER_SKIP
+
+
+def test_yal_ax_markit_leftover_pdfs_live_fetch():
+    """eng-20261004-07: Markit PDFs for parked IWB documentKeys fetch substantive bodies."""
+    cessation = "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03134565-2A1696707"
+    kestrel = "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03142935-2A1700926"
+    for url in (cessation, kestrel):
+        body = fetch_filing_body(url)
+        assert body and len(body) > 1000
+        assert "YANCOAL" in body.upper() or "Yancoal" in body
+
+
 def test_fetch_filings_ir_allowlist_jbh_dnl_thin_builtin(tmp_path: Path):
     """JBH.AX / DNL.AX thin buy-tier: seed statutory PDFs when Markit latest-five is noise."""
     allowlist_path = tmp_path / "empty_ir.json"

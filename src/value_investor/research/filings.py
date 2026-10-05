@@ -554,6 +554,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         # earnings-guidance cover PDF; IR refetch failed title_mismatch on the hash name).
         "https://investorpa.com/announcement-pdf/20260511/291611.pdf",
     ],
+    # asx200 IWB blocker — YAL.AX parked unfetchable_iwb; google_news Market Index HTML
+    # shells lack embedded PDF links; Markit file URLs for the same documentKeys fetch.
+    "YAL.AX": [
+        "https://announcements.asx.com.au/asxpdf/20250220/pdf/06frjf61kmrm39.pdf",
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03139235-2A1698934",
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03134565-2A1696707",
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03142935-2A1700926",
+    ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
     "GIB-A.TO": [
         "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm",
