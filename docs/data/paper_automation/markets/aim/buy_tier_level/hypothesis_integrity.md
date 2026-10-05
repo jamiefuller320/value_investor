@@ -1,21 +1,14 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-04T07:10:08.348528+00:00
+Track: `buy_tier_level` · updated 2026-10-05T07:38:10.527804+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **4** / 15 (27% count, 24% NAV)
+- Losers: **3** / 15 (20% count, 19% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
-
-### CREO.L — weakening / watch_review (-21.2%)
-- left buy tier (hold)
-- research verdict caution
-- conviction 10% below intact floor
-- cheapness family still passes
-- data_quality 0.90
 
 ### CAML.L — intact / hold_tolerate (-10.0%)
 - price drawdown alone does not invalidate value thesis
@@ -23,7 +16,7 @@ Track: `buy_tier_level` · updated 2026-10-04T07:10:08.348528+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 37%
+- conviction 42%
 
 ### PAF.L — intact / hold_tolerate (-7.5%)
 - price drawdown alone does not invalidate value thesis
@@ -60,7 +53,7 @@ Track: `buy_tier_level` · updated 2026-10-04T07:10:08.348528+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 66%
+- conviction 67%
 
 ### ASY.L — intact / hold_tolerate (-0.9%)
 - still buy
@@ -79,7 +72,14 @@ Track: `buy_tier_level` · updated 2026-10-04T07:10:08.348528+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 56%
+- conviction 57%
+
+### PEBB.L — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 41%
 
 ### YNGN.L — weakening / watch_review (+0.3%)
 - research verdict caution
@@ -88,7 +88,7 @@ Track: `buy_tier_level` · updated 2026-10-04T07:10:08.348528+00:00
 
 ### WJG.L — weakening / watch_review (+2.0%)
 - research verdict caution
-- conviction 22% below intact floor
+- conviction 18% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -97,11 +97,10 @@ Track: `buy_tier_level` · updated 2026-10-04T07:10:08.348528+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 46%
+- conviction 49%
 
 ### IGR.L — weakening / watch_review (+11.8%)
-- left buy tier (hold)
 - research verdict caution
-- conviction 17% below intact floor
+- conviction 20% below intact floor
+- still buy
 - cheapness family still passes
-- data_quality 1.00

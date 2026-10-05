@@ -112,19 +112,83 @@
       },
       "by_algo_action": {},
       "cards": []
+    },
+    {
+      "logged_at": "2026-10-05T03:38:05.019411-04:00",
+      "verdict_counts": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "sell": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "cards": [
+        {
+          "ticker": "TRI.TO",
+          "name": "Thomson Reuters Corporation",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-05T03:38:05.019411-04:00",
+          "proposal_id": "buy_tier_level:TRI.TO:sell:2026-10-05T03:38:05.019411-04:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        }
+      ]
     }
   ],
   "observe_only": true,
   "influences_live": false,
   "track_id": "buy_tier_level",
   "last_pass": {
-    "logged_at": "2026-10-04T03:10:04.238806-04:00",
-    "card_count": 0,
+    "logged_at": "2026-10-05T03:38:05.019411-04:00",
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 1,
       "veto": 0,
       "abstain": 0
     }
   },
-  "updated_at": "2026-10-04T07:10:04.382344+00:00"
+  "updated_at": "2026-10-05T07:38:05.177082+00:00"
 }

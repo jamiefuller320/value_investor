@@ -1,0 +1,1034 @@
+{
+  "schema_version": 1,
+  "scope": "archive_near_miss",
+  "track_id": "archive_near_miss",
+  "framework": {
+    "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+    "hold_recovery": {
+      "question": "When a position is stressed but still held, does it recover to breakeven?",
+      "episode_triggers": [
+        "unrealized below underwater_threshold",
+        "exit_streak >= 1 (hold buffer active)",
+        "momentum_grace on position",
+        "effective signal no longer buy-tier while still held"
+      ],
+      "outcomes": [
+        "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+        "sold_while_underwater",
+        "max_window_elapsed"
+      ],
+      "fields_for_later_analysis": [
+        "data_quality_score",
+        "conviction_score",
+        "screen_signal",
+        "effective_signal",
+        "exit_streak",
+        "stress_triggers",
+        "thesis_status_at_start",
+        "recommended_action_at_start",
+        "checkpoints"
+      ]
+    },
+    "swap_rotation": {
+      "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+      "pairing": "same rebalance pass sells vs buys on one track",
+      "outcomes": [
+        "replacement_outperformed",
+        "exit_outperformed",
+        "inconclusive"
+      ],
+      "fields_for_later_analysis": [
+        "sell_tickers",
+        "buy_tickers",
+        "sell_realized_pct",
+        "post_rotation_returns",
+        "trade_costs"
+      ]
+    },
+    "related_artifacts": [
+      "exit_shadow.json (post-exit path after sell)",
+      "rebalance_log.json (counterfactual replay)",
+      "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+      "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+      "learning_tracks_churn_health.json"
+    ],
+    "scope": "archive_near_miss",
+    "near_miss_gate": {
+      "below_buy_tier": true,
+      "held_book_from_rebalance_log": true,
+      "default_signals": [
+        "hold"
+      ],
+      "default_min_conviction": 0.28,
+      "default_max_episodes_per_week": 25,
+      "aligned_with": "trajectory_evidence.PRE_BUY_CONVICTION"
+    },
+    "note": "Observe-only priors from archived weekly screens plus rebalance_log held-ticker episodes. Does not replace live paper exit_timing cohorts."
+  },
+  "config": {
+    "min_conviction": 0.28,
+    "min_data_quality": 0.0,
+    "near_miss_signals": [
+      "hold"
+    ],
+    "max_episodes_per_week": 25,
+    "shadow_windows_days": [
+      7,
+      28,
+      56,
+      84
+    ],
+    "include_held_episodes": true,
+    "paper_root": null,
+    "track_ids": [
+      "rules",
+      "ai_judgment"
+    ]
+  },
+  "snapshot_count": 4,
+  "hold_episodes": [
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:INDU-C.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "INDU-C.ST",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 518.8,
+      "avg_cost": 518.8,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.85,
+      "conviction_score": 0.4086,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 7,
+          "price": 537.8,
+          "unrealized_pct": 0.0366,
+          "peak_unrealized_pct": 0.0366,
+          "trough_unrealized_pct": 0.0366
+        },
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 28,
+          "price": 537.8,
+          "unrealized_pct": 0.0366,
+          "peak_unrealized_pct": 0.0366,
+          "trough_unrealized_pct": 0.0366
+        }
+      ],
+      "peak_unrealized_pct": 0.0366,
+      "trough_unrealized_pct": -0.0008,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:EVO.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "EVO.ST",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 752.6,
+      "avg_cost": 752.6,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3467,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 7,
+          "price": 786.8,
+          "unrealized_pct": 0.0454,
+          "peak_unrealized_pct": 0.0454,
+          "trough_unrealized_pct": 0.0454
+        },
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 28,
+          "price": 786.8,
+          "unrealized_pct": 0.0454,
+          "peak_unrealized_pct": 0.0454,
+          "trough_unrealized_pct": 0.0454
+        }
+      ],
+      "peak_unrealized_pct": 0.0757,
+      "trough_unrealized_pct": 0.0454,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:EPI-A.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "EPI-A.ST",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 248.3,
+      "avg_cost": 248.3,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3087,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 7,
+          "price": 269.1,
+          "unrealized_pct": 0.0838,
+          "peak_unrealized_pct": 0.0838,
+          "trough_unrealized_pct": 0.0838
+        },
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 28,
+          "price": 269.1,
+          "unrealized_pct": 0.0838,
+          "peak_unrealized_pct": 0.0838,
+          "trough_unrealized_pct": 0.0838
+        }
+      ],
+      "peak_unrealized_pct": 0.0838,
+      "trough_unrealized_pct": 0.0596,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:ALFA.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ALFA.ST",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 557.2,
+      "avg_cost": 557.2,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3046,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 7,
+          "price": 567.2,
+          "unrealized_pct": 0.0179,
+          "peak_unrealized_pct": 0.0179,
+          "trough_unrealized_pct": 0.0179
+        },
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 28,
+          "price": 567.2,
+          "unrealized_pct": 0.0179,
+          "peak_unrealized_pct": 0.0179,
+          "trough_unrealized_pct": 0.0179
+        }
+      ],
+      "peak_unrealized_pct": 0.0179,
+      "trough_unrealized_pct": 0.0068,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:INVE-B.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "INVE-B.ST",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 412.65,
+      "avg_cost": 412.65,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.85,
+      "conviction_score": 0.2914,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 7,
+          "price": 410.85,
+          "unrealized_pct": -0.0044,
+          "peak_unrealized_pct": -0.0044,
+          "trough_unrealized_pct": -0.0044
+        },
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 28,
+          "price": 410.85,
+          "unrealized_pct": -0.0044,
+          "peak_unrealized_pct": -0.0044,
+          "trough_unrealized_pct": -0.0044
+        }
+      ],
+      "peak_unrealized_pct": -0.0044,
+      "trough_unrealized_pct": -0.0185,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:29:56+00:00:INDU-C.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "INDU-C.ST",
+      "name": "",
+      "started_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 537.8,
+      "avg_cost": 537.8,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.85,
+      "conviction_score": 0.4618,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0361,
+      "trough_unrealized_pct": -0.0361,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:29:56+00:00:EVO.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "EVO.ST",
+      "name": "",
+      "started_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 786.8,
+      "avg_cost": 786.8,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.4023,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.029,
+      "trough_unrealized_pct": 0.029,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:29:56+00:00:ALFA.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ALFA.ST",
+      "name": "",
+      "started_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 567.2,
+      "avg_cost": 567.2,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3513,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0109,
+      "trough_unrealized_pct": -0.0109,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:29:56+00:00:INVE-B.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "INVE-B.ST",
+      "name": "",
+      "started_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 410.85,
+      "avg_cost": 410.85,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.85,
+      "conviction_score": 0.34,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0142,
+      "trough_unrealized_pct": -0.0142,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:29:56+00:00:EPI-A.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "EPI-A.ST",
+      "name": "",
+      "started_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 269.1,
+      "avg_cost": 269.1,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3214,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0223,
+      "trough_unrealized_pct": -0.0223,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:29:56+00:00:ATCO-A.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ATCO-A.ST",
+      "name": "",
+      "started_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 210.0,
+      "avg_cost": 210.0,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3147,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0038,
+      "trough_unrealized_pct": -0.0038,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:29:56+00:00:NDA-SE.ST",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NDA-SE.ST",
+      "name": "",
+      "started_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 201.2,
+      "avg_cost": 201.2,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.7,
+      "conviction_score": 0.301,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.046,
+      "trough_unrealized_pct": -0.046,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    }
+  ],
+  "swap_rotations": [
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:INDU-C.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "INDU-C.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "INDU-C.ST",
+          "price": 518.8,
+          "shares": 1.0,
+          "gross": 518.8,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 340.2,
+          "shares": 1.0,
+          "gross": 340.2,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0366,
+          "avg_buy_return": -0.04,
+          "replacement_delta": -0.0766
+        },
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0366,
+          "avg_buy_return": -0.04,
+          "replacement_delta": -0.0766
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "INDU-C.ST": -0.0008
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.0755
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:EVO.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "EVO.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "EVO.ST",
+          "price": 752.6,
+          "shares": 1.0,
+          "gross": 752.6,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 340.2,
+          "shares": 1.0,
+          "gross": 340.2,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0454,
+          "avg_buy_return": -0.04,
+          "replacement_delta": -0.0854
+        },
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0454,
+          "avg_buy_return": -0.04,
+          "replacement_delta": -0.0854
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "EVO.ST": 0.0757
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.0755
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:EPI-A.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "EPI-A.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "EPI-A.ST",
+          "price": 248.3,
+          "shares": 1.0,
+          "gross": 248.3,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 340.2,
+          "shares": 1.0,
+          "gross": 340.2,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0838,
+          "avg_buy_return": -0.04,
+          "replacement_delta": -0.1237
+        },
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0838,
+          "avg_buy_return": -0.04,
+          "replacement_delta": -0.1237
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "EPI-A.ST": 0.0596
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.0755
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:ALFA.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ALFA.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "ALFA.ST",
+          "price": 557.2,
+          "shares": 1.0,
+          "gross": 557.2,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 340.2,
+          "shares": 1.0,
+          "gross": 340.2,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0179,
+          "avg_buy_return": -0.04,
+          "replacement_delta": -0.0579
+        },
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0179,
+          "avg_buy_return": -0.04,
+          "replacement_delta": -0.0579
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "ALFA.ST": 0.0068
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.0755
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:INVE-B.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "INVE-B.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "INVE-B.ST",
+          "price": 412.65,
+          "shares": 1.0,
+          "gross": 412.65,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 340.2,
+          "shares": 1.0,
+          "gross": 340.2,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0044,
+          "avg_buy_return": -0.04,
+          "replacement_delta": -0.0356
+        },
+        {
+          "scored_at": "2026-10-02T21:29:56+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0044,
+          "avg_buy_return": -0.04,
+          "replacement_delta": -0.0356
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "INVE-B.ST": -0.0185
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.0755
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:29:56+00:00:INDU-C.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "INDU-C.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "INDU-C.ST",
+          "price": 537.8,
+          "shares": 1.0,
+          "gross": 537.8,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 326.6,
+          "shares": 1.0,
+          "gross": 326.6,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "INDU-C.ST": -0.0361
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.037
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:29:56+00:00:EVO.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "EVO.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "EVO.ST",
+          "price": 786.8,
+          "shares": 1.0,
+          "gross": 786.8,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 326.6,
+          "shares": 1.0,
+          "gross": 326.6,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "EVO.ST": 0.029
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.037
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:29:56+00:00:ALFA.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ALFA.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "ALFA.ST",
+          "price": 567.2,
+          "shares": 1.0,
+          "gross": 567.2,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 326.6,
+          "shares": 1.0,
+          "gross": 326.6,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "ALFA.ST": -0.0109
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.037
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:29:56+00:00:INVE-B.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "INVE-B.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "INVE-B.ST",
+          "price": 410.85,
+          "shares": 1.0,
+          "gross": 410.85,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 326.6,
+          "shares": 1.0,
+          "gross": 326.6,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "INVE-B.ST": -0.0142
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.037
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:29:56+00:00:EPI-A.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "EPI-A.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "EPI-A.ST",
+          "price": 269.1,
+          "shares": 1.0,
+          "gross": 269.1,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 326.6,
+          "shares": 1.0,
+          "gross": 326.6,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "EPI-A.ST": -0.0223
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.037
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:29:56+00:00:ATCO-A.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ATCO-A.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "ATCO-A.ST",
+          "price": 210.0,
+          "shares": 1.0,
+          "gross": 210.0,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 326.6,
+          "shares": 1.0,
+          "gross": 326.6,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "ATCO-A.ST": -0.0038
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.037
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:29:56+00:00:NDA-SE.ST:VOLV-B.ST",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:29:56+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NDA-SE.ST",
+      "swap_ticker": "VOLV-B.ST",
+      "sells": [
+        {
+          "ticker": "NDA-SE.ST",
+          "price": 201.2,
+          "shares": 1.0,
+          "gross": 201.2,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "VOLV-B.ST",
+          "price": 326.6,
+          "shares": 1.0,
+          "gross": 326.6,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "NDA-SE.ST": -0.046
+      },
+      "buy_returns_since_rotation": {
+        "VOLV-B.ST": -0.037
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    }
+  ],
+  "updated_at": "2026-10-05T07:37:50.583097+00:00"
+}

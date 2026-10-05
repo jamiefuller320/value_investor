@@ -52,7 +52,7 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "updated_at": "2026-10-04T07:10:08.347212+00:00",
+  "updated_at": "2026-10-05T07:38:10.526377+00:00",
   "hold_episodes": [
     {
       "episode_id": "buy_tier_level:CAM.L:2026-09-24T20:14:20.113627+01:00",
@@ -477,7 +477,7 @@
       "ticker": "CREO.L",
       "name": "Creo Medical Group PLC",
       "started_at": "2026-09-25T08:28:47.373794+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -520,9 +520,9 @@
       "peak_unrealized_pct": -0.0306,
       "trough_unrealized_pct": -0.2122,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-05T08:38:10.518141+01:00",
+      "linked_sell_trade_id": "40465a9e-21e5-4b02-8550-b7dcca1b2b6d"
     },
     {
       "episode_id": "buy_tier_level:PMI.L:2026-09-25T08:28:47.373794+01:00",
@@ -718,6 +718,58 @@
       "linked_sell_trade_id": null
     }
   ],
-  "swap_rotations": [],
-  "hypothesis_outcome_link_updated_at": "2026-10-04T08:10:08.339680+01:00"
+  "swap_rotations": [
+    {
+      "rotation_id": "buy_tier_level:2026-10-05T08:38:10.518141+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-05T08:38:10.518141+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0032,
+      "sells": [
+        {
+          "ticker": "CREO.L",
+          "price": 9.65,
+          "shares": 5.411063,
+          "gross": 52.22,
+          "cost": 0.04,
+          "avg_cost_at_exit": 12.25,
+          "realized_pct": -0.2122,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "screen signal is avoid",
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": -0.2122
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "PEBB.L",
+          "price": 61.0,
+          "shares": 0.85048,
+          "gross": 51.88,
+          "cost": 0.3
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "CREO.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "PEBB.L": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    }
+  ],
+  "hypothesis_outcome_link_updated_at": "2026-10-05T08:38:10.518141+01:00"
 }

@@ -3,32 +3,40 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-04T07:09:58.492271+00:00",
+  "generated_at": "2026-10-05T07:37:57.515543+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 5,
+    "closed_total": 8,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 73,
+    "open_with_thesis": 72,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 5,
-        "recovery_rate": 0.6,
-        "sold_underwater_rate": 0.4,
-        "mean_peak_unrealized_pct": 0.0042,
-        "mean_trough_unrealized_pct": -0.0223,
+        "closed_count": 6,
+        "recovery_rate": 0.6667,
+        "sold_underwater_rate": 0.3333,
+        "mean_peak_unrealized_pct": 0.0053,
+        "mean_trough_unrealized_pct": -0.0284,
         "outcome_labels": {
-          "recovered": 3,
+          "recovered": 4,
           "sold_underwater": 2
         }
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 2,
+        "recovery_rate": 0.5,
+        "sold_underwater_rate": 0.5,
+        "mean_peak_unrealized_pct": 0.003,
+        "mean_trough_unrealized_pct": 0.003,
+        "outcome_labels": {
+          "recovered": 1,
+          "sold_underwater": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -56,10 +64,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 5,
+    "hold_closed_with_thesis": 8,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=5 (target >=8)",
+      "hold thesis buckets thin (broken=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -127,7 +135,7 @@
       "ticker": "NKE",
       "name": "NIKE, Inc.",
       "started_at": "2026-09-25T03:28:28.216398-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -170,9 +178,9 @@
       "peak_unrealized_pct": 0.0111,
       "trough_unrealized_pct": -0.0589,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-05T03:37:57.305649-04:00",
+      "linked_sell_trade_id": "0cdd108e-498a-432b-94b2-8f6743c355b6"
     },
     {
       "episode_id": "buy_tier_level_native:EXE:2026-09-27T03:04:04.453892-04:00",
@@ -3162,7 +3170,7 @@
       "ticker": "EXR",
       "name": "Extra Space Storage Inc.",
       "started_at": "2026-10-04T03:09:58.339459-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -3194,9 +3202,9 @@
       "peak_unrealized_pct": 0.0077,
       "trough_unrealized_pct": 0.0077,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-05T03:37:57.305649-04:00",
+      "linked_sell_trade_id": "966d0380-a498-45e3-b380-0c8aa2a17315"
     },
     {
       "episode_id": "buy_tier_level_native:DOC:2026-10-04T03:09:58.339459-04:00",
@@ -3419,7 +3427,7 @@
       "ticker": "DD",
       "name": "DuPont de Nemours, Inc.",
       "started_at": "2026-10-04T03:09:58.339459-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -3451,9 +3459,9 @@
       "peak_unrealized_pct": -0.0018,
       "trough_unrealized_pct": -0.0018,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-05T03:37:57.305649-04:00",
+      "linked_sell_trade_id": "127de899-a322-4286-968d-42233e3ecad5"
     },
     {
       "episode_id": "buy_tier_level_native:ACGL:2026-10-04T03:09:58.339459-04:00",
@@ -3583,6 +3591,94 @@
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level_native:PTC:2026-10-05T03:37:57.305649-04:00",
+      "track_id": "buy_tier_level_native",
+      "ticker": "PTC",
+      "name": "PTC Inc.",
+      "started_at": "2026-10-05T03:37:57.305649-04:00",
+      "status": "open",
+      "stress_triggers": [
+        "exit_streak"
+      ],
+      "entry_mark": 144.03,
+      "avg_cost": 137.41,
+      "unrealized_pct_at_start": 0.0482,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "conviction 30% below intact floor",
+        "still buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": 0.0482,
+      "screen_signal": "buy",
+      "effective_signal": "buy",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.2977,
+      "exit_streak_at_start": 1,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0482,
+      "trough_unrealized_pct": 0.0482,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level_native:CPRT:2026-10-05T03:37:57.305649-04:00",
+      "track_id": "buy_tier_level_native",
+      "ticker": "CPRT",
+      "name": "Copart, Inc.",
+      "started_at": "2026-10-05T03:37:57.305649-04:00",
+      "status": "open",
+      "stress_triggers": [
+        "exit_streak"
+      ],
+      "entry_mark": 27.22,
+      "avg_cost": 27.14,
+      "unrealized_pct_at_start": 0.0029,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "conviction 28% below intact floor",
+        "still buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": 0.0029,
+      "screen_signal": "buy",
+      "effective_signal": "buy",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.2775,
+      "exit_streak_at_start": 1,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0029,
+      "trough_unrealized_pct": 0.0029,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
     }
   ],
   "swap_rotations": [
@@ -3628,7 +3724,15 @@
           "cost": 0.0
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-05T03:37:57.305649-04:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0301,
+          "avg_buy_return": -0.0302,
+          "replacement_delta": -0.0001
+        }
+      ],
       "sell_returns_since_rotation": {
         "BKNG": -0.0301
       },
@@ -3686,6 +3790,126 @@
       },
       "buy_returns_since_rotation": {
         "GDDY": 0.0373
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-10-05T03:37:57.305649-04:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-10-05T03:37:57.305649-04:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "EXR",
+          "price": 133.25,
+          "shares": 0.063006,
+          "gross": 8.4,
+          "cost": 0.0,
+          "avg_cost_at_exit": 132.23,
+          "realized_pct": 0.0077,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0077
+        },
+        {
+          "ticker": "NKE",
+          "price": 33.87,
+          "shares": 0.231488,
+          "gross": 7.84,
+          "cost": 0.0,
+          "avg_cost_at_exit": 35.99,
+          "realized_pct": -0.0589,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "research verdict caution",
+            "cheapness family no longer passes",
+            "conviction 34% below intact floor",
+            "still buy"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": -0.0589
+        },
+        {
+          "ticker": "DD",
+          "price": 129.98,
+          "shares": 0.063978,
+          "gross": 8.32,
+          "cost": 0.0,
+          "avg_cost_at_exit": 130.22,
+          "realized_pct": -0.0018,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "conviction 35% below intact floor",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0018
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "LDOS",
+          "price": 117.74,
+          "shares": 0.070414,
+          "gross": 8.29,
+          "cost": 0.0
+        },
+        {
+          "ticker": "REGN",
+          "price": 735.2,
+          "shares": 0.011277,
+          "gross": 8.29,
+          "cost": 0.0
+        },
+        {
+          "ticker": "ZBH",
+          "price": 88.29,
+          "shares": 0.091954,
+          "gross": 8.12,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "EXR": 0.0,
+        "NKE": 0.0,
+        "DD": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "LDOS": 0.0,
+        "REGN": 0.0,
+        "ZBH": 0.0
       },
       "verdict": null,
       "closed_at": null

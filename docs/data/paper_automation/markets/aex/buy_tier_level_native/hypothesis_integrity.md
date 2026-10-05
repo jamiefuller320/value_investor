@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-04T07:10:09.564328+00:00
+Track: `buy_tier_level_native` · updated 2026-10-05T07:38:12.056605+00:00
 
 ## Portfolio loser feedback
 
@@ -10,19 +10,19 @@ Track: `buy_tier_level_native` · updated 2026-10-04T07:10:09.564328+00:00
 
 ## Holding reviews
 
-### RAND.AS — intact / hold_tolerate (-3.7%)
+### PHIA.AS — intact / hold_tolerate (-3.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 63%
+
+### RAND.AS — intact / hold_tolerate (-2.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
-
-### PHIA.AS — intact / hold_tolerate (-2.7%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 65%
 
 ### WKL.AS — intact / hold_tolerate (-1.2%)
 - still strong_buy
@@ -35,8 +35,8 @@ Track: `buy_tier_level_native` · updated 2026-10-04T07:10:09.564328+00:00
 - still buy
 - research accumulate
 - cheapness family still passes
-- data_quality 0.95
-- conviction 45%
+- data_quality 1.00
+- conviction 39%
 
 ### AD.AS — intact / hold_tolerate (-0.8%)
 - still strong_buy
@@ -45,23 +45,23 @@ Track: `buy_tier_level_native` · updated 2026-10-04T07:10:09.564328+00:00
 - data_quality 1.00
 - conviction 89%
 
-### AKZA.AS — intact / hold_tolerate (-0.3%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 81%
-
-### KPN.AS — intact / hold_tolerate (+0.0%)
+### KPN.AS — intact / hold_tolerate (+0.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 64%
+- conviction 62%
 
-### SHELL.AS — intact / hold_tolerate (+0.8%)
+### SHELL.AS — intact / hold_tolerate (+1.9%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 82%
+
+### AKZA.AS — intact / hold_tolerate (+2.2%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 81%

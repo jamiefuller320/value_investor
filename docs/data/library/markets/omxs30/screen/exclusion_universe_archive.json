@@ -1,0 +1,926 @@
+{
+  "schema_version": 1,
+  "scope": "exclusion_universe_archive",
+  "track_id": "exclusion_universe_archive",
+  "framework": {
+    "scope": "exclusion_universe_archive",
+    "observe_only": true,
+    "comparison": "equal_weight_universe vs equal_weight_universe_minus_exclusions",
+    "pit_exclusions": true,
+    "hindsight_quartiles": "evaluation_only",
+    "costs_included": false,
+    "note": "Archive exclusion-universe lab \u2014 graduated tightening ladders on weekly screen snapshots. Pair with rebalance_log replay before live knob promotion."
+  },
+  "generated_at": "2026-10-05T07:37:50.580443+00:00",
+  "snapshot_count": 4,
+  "universe_mode": "buy_tier_only",
+  "config": {
+    "use_adjusted_signal": false,
+    "resolve_research_pit": true,
+    "max_positions": 5,
+    "min_filtered_pool": 15,
+    "min_week_pairs": 4
+  },
+  "ladder": [
+    {
+      "step_id": "u0",
+      "label": "Baseline universe",
+      "exclude_signals": [],
+      "exclude_timing_wait": false,
+      "min_conviction": 0.0,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u1",
+      "label": "Exclude avoid",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": false,
+      "min_conviction": 0.0,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u2",
+      "label": "Exclude avoid + timing wait",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.0,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u3",
+      "label": "\u2026 + conviction >= 0.25",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.25,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u4",
+      "label": "\u2026 + conviction >= 0.35",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.35,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    },
+    {
+      "step_id": "u5",
+      "label": "\u2026 + conviction >= 0.45",
+      "exclude_signals": [
+        "avoid"
+      ],
+      "exclude_timing_wait": true,
+      "min_conviction": 0.45,
+      "require_effective_buy_tier": false,
+      "require_research_accumulate": false,
+      "min_data_quality": 0.0
+    }
+  ],
+  "ladder_results": [
+    {
+      "step_id": "u0",
+      "label": "Baseline universe",
+      "step": {
+        "step_id": "u0",
+        "label": "Baseline universe",
+        "exclude_signals": [],
+        "exclude_timing_wait": false,
+        "min_conviction": 0.0,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 3,
+        "mean_weekly_exclusion_alpha": 0.0,
+        "cumulative_exclusion_alpha": 0.0,
+        "positive_alpha_weeks": 0,
+        "positive_alpha_rate": 0.0,
+        "median_weekly_alpha": 0.0,
+        "avg_baseline_pool_size": 4.67,
+        "avg_filtered_pool_size": 4.67,
+        "min_filtered_pool_size": 4,
+        "pool_reduction_pct": 0.0
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 3,
+        "mean_bottom_quartile_exclude_rate": 0.0,
+        "mean_top_quartile_retain_rate": 1.0,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-08-14T15:46:25+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 5,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-10-02T21:29:56+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 5,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.000857,
+          "filtered_ew_return": 0.000857,
+          "book_top_n_return": 0.000857,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "NIBE-B.ST"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-10-02T21:29:56+00:00",
+          "exit_run_at": "2026-10-05T06:52:37+00:00",
+          "baseline_pool_size": 4,
+          "filtered_pool_size": 4,
+          "book_pool_size": 4,
+          "excluded_count": 0,
+          "baseline_ew_return": -0.006621,
+          "filtered_ew_return": -0.006621,
+          "book_top_n_return": -0.006621,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 4,
+            "bottom_quartile": [
+              "VOLV-B.ST"
+            ],
+            "top_quartile": [
+              "ERIC-B.ST"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "VOLV-B.ST"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    },
+    {
+      "step_id": "u1",
+      "label": "Exclude avoid",
+      "step": {
+        "step_id": "u1",
+        "label": "Exclude avoid",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": false,
+        "min_conviction": 0.0,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 3,
+        "mean_weekly_exclusion_alpha": 0.0,
+        "cumulative_exclusion_alpha": 0.0,
+        "positive_alpha_weeks": 0,
+        "positive_alpha_rate": 0.0,
+        "median_weekly_alpha": 0.0,
+        "avg_baseline_pool_size": 4.67,
+        "avg_filtered_pool_size": 4.67,
+        "min_filtered_pool_size": 4,
+        "pool_reduction_pct": 0.0
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 3,
+        "mean_bottom_quartile_exclude_rate": 0.0,
+        "mean_top_quartile_retain_rate": 1.0,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-08-14T15:46:25+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 5,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-10-02T21:29:56+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 5,
+          "book_pool_size": 5,
+          "excluded_count": 0,
+          "baseline_ew_return": 0.000857,
+          "filtered_ew_return": 0.000857,
+          "book_top_n_return": 0.000857,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "NIBE-B.ST"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-10-02T21:29:56+00:00",
+          "exit_run_at": "2026-10-05T06:52:37+00:00",
+          "baseline_pool_size": 4,
+          "filtered_pool_size": 4,
+          "book_pool_size": 4,
+          "excluded_count": 0,
+          "baseline_ew_return": -0.006621,
+          "filtered_ew_return": -0.006621,
+          "book_top_n_return": -0.006621,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 4,
+            "bottom_quartile": [
+              "VOLV-B.ST"
+            ],
+            "top_quartile": [
+              "ERIC-B.ST"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "VOLV-B.ST"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    },
+    {
+      "step_id": "u2",
+      "label": "Exclude avoid + timing wait",
+      "step": {
+        "step_id": "u2",
+        "label": "Exclude avoid + timing wait",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.0,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 3,
+        "mean_weekly_exclusion_alpha": 0.007472,
+        "cumulative_exclusion_alpha": 0.022416,
+        "positive_alpha_weeks": 1,
+        "positive_alpha_rate": 0.3333,
+        "median_weekly_alpha": 0.0,
+        "avg_baseline_pool_size": 4.67,
+        "avg_filtered_pool_size": 4.0,
+        "min_filtered_pool_size": 4,
+        "pool_reduction_pct": 0.1429
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 3,
+        "mean_bottom_quartile_exclude_rate": 0.6667,
+        "mean_top_quartile_retain_rate": 0.6667,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-08-14T15:46:25+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 4,
+          "book_pool_size": 4,
+          "excluded_count": 1,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": 0.0,
+          "book_top_n_return": 0.0,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_excluded": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-10-02T21:29:56+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 4,
+          "book_pool_size": 4,
+          "excluded_count": 1,
+          "baseline_ew_return": 0.000857,
+          "filtered_ew_return": 0.023273,
+          "book_top_n_return": 0.023273,
+          "exclusion_alpha": 0.022416,
+          "book_alpha_vs_baseline": 0.022416,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "NIBE-B.ST"
+            ],
+            "bottom_quartile_excluded": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-10-02T21:29:56+00:00",
+          "exit_run_at": "2026-10-05T06:52:37+00:00",
+          "baseline_pool_size": 4,
+          "filtered_pool_size": 4,
+          "book_pool_size": 4,
+          "excluded_count": 0,
+          "baseline_ew_return": -0.006621,
+          "filtered_ew_return": -0.006621,
+          "book_top_n_return": -0.006621,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 4,
+            "bottom_quartile": [
+              "VOLV-B.ST"
+            ],
+            "top_quartile": [
+              "ERIC-B.ST"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "VOLV-B.ST"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    },
+    {
+      "step_id": "u3",
+      "label": "\u2026 + conviction >= 0.25",
+      "step": {
+        "step_id": "u3",
+        "label": "\u2026 + conviction >= 0.25",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.25,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 2,
+        "mean_weekly_exclusion_alpha": 0.011208,
+        "cumulative_exclusion_alpha": 0.022416,
+        "positive_alpha_weeks": 1,
+        "positive_alpha_rate": 0.5,
+        "median_weekly_alpha": 0.011208,
+        "avg_baseline_pool_size": 4.5,
+        "avg_filtered_pool_size": 4.0,
+        "min_filtered_pool_size": 4,
+        "pool_reduction_pct": 0.1111
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 3,
+        "mean_bottom_quartile_exclude_rate": 0.6667,
+        "mean_top_quartile_retain_rate": 0.6667,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-08-14T15:46:25+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 0,
+          "book_pool_size": 0,
+          "excluded_count": 5,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": null,
+          "book_top_n_return": null,
+          "exclusion_alpha": null,
+          "book_alpha_vs_baseline": null,
+          "book_alpha_vs_filtered_ew": null,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_excluded": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-10-02T21:29:56+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 4,
+          "book_pool_size": 4,
+          "excluded_count": 1,
+          "baseline_ew_return": 0.000857,
+          "filtered_ew_return": 0.023273,
+          "book_top_n_return": 0.023273,
+          "exclusion_alpha": 0.022416,
+          "book_alpha_vs_baseline": 0.022416,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "NIBE-B.ST"
+            ],
+            "bottom_quartile_excluded": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-10-02T21:29:56+00:00",
+          "exit_run_at": "2026-10-05T06:52:37+00:00",
+          "baseline_pool_size": 4,
+          "filtered_pool_size": 4,
+          "book_pool_size": 4,
+          "excluded_count": 0,
+          "baseline_ew_return": -0.006621,
+          "filtered_ew_return": -0.006621,
+          "book_top_n_return": -0.006621,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 4,
+            "bottom_quartile": [
+              "VOLV-B.ST"
+            ],
+            "top_quartile": [
+              "ERIC-B.ST"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "VOLV-B.ST"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    },
+    {
+      "step_id": "u4",
+      "label": "\u2026 + conviction >= 0.35",
+      "step": {
+        "step_id": "u4",
+        "label": "\u2026 + conviction >= 0.35",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.35,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 2,
+        "mean_weekly_exclusion_alpha": -0.017437,
+        "cumulative_exclusion_alpha": -0.034873,
+        "positive_alpha_weeks": 0,
+        "positive_alpha_rate": 0.0,
+        "median_weekly_alpha": -0.017437,
+        "avg_baseline_pool_size": 4.5,
+        "avg_filtered_pool_size": 3.5,
+        "min_filtered_pool_size": 3,
+        "pool_reduction_pct": 0.2222
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 3,
+        "mean_bottom_quartile_exclude_rate": 0.6667,
+        "mean_top_quartile_retain_rate": 0.3333,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-08-14T15:46:25+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 0,
+          "book_pool_size": 0,
+          "excluded_count": 5,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": null,
+          "book_top_n_return": null,
+          "exclusion_alpha": null,
+          "book_alpha_vs_baseline": null,
+          "book_alpha_vs_filtered_ew": null,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_excluded": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-10-02T21:29:56+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 3,
+          "book_pool_size": 3,
+          "excluded_count": 2,
+          "baseline_ew_return": 0.000857,
+          "filtered_ew_return": -0.034016,
+          "book_top_n_return": -0.034016,
+          "exclusion_alpha": -0.034873,
+          "book_alpha_vs_baseline": -0.034873,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "NIBE-B.ST"
+            ],
+            "bottom_quartile_excluded": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-10-02T21:29:56+00:00",
+          "exit_run_at": "2026-10-05T06:52:37+00:00",
+          "baseline_pool_size": 4,
+          "filtered_pool_size": 4,
+          "book_pool_size": 4,
+          "excluded_count": 0,
+          "baseline_ew_return": -0.006621,
+          "filtered_ew_return": -0.006621,
+          "book_top_n_return": -0.006621,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 4,
+            "bottom_quartile": [
+              "VOLV-B.ST"
+            ],
+            "top_quartile": [
+              "ERIC-B.ST"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "VOLV-B.ST"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    },
+    {
+      "step_id": "u5",
+      "label": "\u2026 + conviction >= 0.45",
+      "step": {
+        "step_id": "u5",
+        "label": "\u2026 + conviction >= 0.45",
+        "exclude_signals": [
+          "avoid"
+        ],
+        "exclude_timing_wait": true,
+        "min_conviction": 0.45,
+        "require_effective_buy_tier": false,
+        "require_research_accumulate": false,
+        "min_data_quality": 0.0
+      },
+      "summary": {
+        "week_pairs": 2,
+        "mean_weekly_exclusion_alpha": -0.017437,
+        "cumulative_exclusion_alpha": -0.034873,
+        "positive_alpha_weeks": 0,
+        "positive_alpha_rate": 0.0,
+        "median_weekly_alpha": -0.017437,
+        "avg_baseline_pool_size": 4.5,
+        "avg_filtered_pool_size": 3.5,
+        "min_filtered_pool_size": 3,
+        "pool_reduction_pct": 0.2222
+      },
+      "book_summary": {
+        "week_pairs": 0,
+        "mean_book_alpha_vs_baseline": null,
+        "cumulative_book_alpha_vs_baseline": null,
+        "mean_book_alpha_vs_filtered_ew": null
+      },
+      "hindsight_summary": {
+        "week_pairs": 3,
+        "mean_bottom_quartile_exclude_rate": 0.6667,
+        "mean_top_quartile_retain_rate": 0.3333,
+        "note": "Evaluation only \u2014 quartiles from realized forward returns"
+      },
+      "weekly": [
+        {
+          "run_at": "2026-08-14T15:46:25+00:00",
+          "exit_run_at": "2026-08-16T11:58:34+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 0,
+          "book_pool_size": 0,
+          "excluded_count": 5,
+          "baseline_ew_return": 0.0,
+          "filtered_ew_return": null,
+          "book_top_n_return": null,
+          "exclusion_alpha": null,
+          "book_alpha_vs_baseline": null,
+          "book_alpha_vs_filtered_ew": null,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_excluded": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-08-16T11:58:34+00:00",
+          "exit_run_at": "2026-10-02T21:29:56+00:00",
+          "baseline_pool_size": 5,
+          "filtered_pool_size": 3,
+          "book_pool_size": 3,
+          "excluded_count": 2,
+          "baseline_ew_return": 0.000857,
+          "filtered_ew_return": -0.034016,
+          "book_top_n_return": -0.034016,
+          "exclusion_alpha": -0.034873,
+          "book_alpha_vs_baseline": -0.034873,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 5,
+            "bottom_quartile": [
+              "HM-B.ST"
+            ],
+            "top_quartile": [
+              "NIBE-B.ST"
+            ],
+            "bottom_quartile_excluded": [
+              "HM-B.ST"
+            ],
+            "bottom_quartile_retained": [],
+            "bottom_quartile_exclude_rate": 1.0,
+            "bottom_quartile_retained_rate": 0.0,
+            "top_quartile_retain_rate": 0.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        },
+        {
+          "run_at": "2026-10-02T21:29:56+00:00",
+          "exit_run_at": "2026-10-05T06:52:37+00:00",
+          "baseline_pool_size": 4,
+          "filtered_pool_size": 4,
+          "book_pool_size": 4,
+          "excluded_count": 0,
+          "baseline_ew_return": -0.006621,
+          "filtered_ew_return": -0.006621,
+          "book_top_n_return": -0.006621,
+          "exclusion_alpha": 0.0,
+          "book_alpha_vs_baseline": 0.0,
+          "book_alpha_vs_filtered_ew": 0.0,
+          "benchmark_return": null,
+          "hindsight": {
+            "observation_count": 4,
+            "bottom_quartile": [
+              "VOLV-B.ST"
+            ],
+            "top_quartile": [
+              "ERIC-B.ST"
+            ],
+            "bottom_quartile_excluded": [],
+            "bottom_quartile_retained": [
+              "VOLV-B.ST"
+            ],
+            "bottom_quartile_exclude_rate": 0.0,
+            "bottom_quartile_retained_rate": 1.0,
+            "top_quartile_retain_rate": 1.0,
+            "note": "Hindsight only \u2014 quartiles from forward returns, not used to define exclusions"
+          }
+        }
+      ]
+    }
+  ],
+  "recommended_step": null,
+  "updated_at": "2026-10-05T07:37:50.580456+00:00"
+}

@@ -1,0 +1,1189 @@
+{
+  "schema_version": 1,
+  "scope": "archive_near_miss",
+  "track_id": "archive_near_miss",
+  "framework": {
+    "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+    "hold_recovery": {
+      "question": "When a position is stressed but still held, does it recover to breakeven?",
+      "episode_triggers": [
+        "unrealized below underwater_threshold",
+        "exit_streak >= 1 (hold buffer active)",
+        "momentum_grace on position",
+        "effective signal no longer buy-tier while still held"
+      ],
+      "outcomes": [
+        "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+        "sold_while_underwater",
+        "max_window_elapsed"
+      ],
+      "fields_for_later_analysis": [
+        "data_quality_score",
+        "conviction_score",
+        "screen_signal",
+        "effective_signal",
+        "exit_streak",
+        "stress_triggers",
+        "thesis_status_at_start",
+        "recommended_action_at_start",
+        "checkpoints"
+      ]
+    },
+    "swap_rotation": {
+      "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+      "pairing": "same rebalance pass sells vs buys on one track",
+      "outcomes": [
+        "replacement_outperformed",
+        "exit_outperformed",
+        "inconclusive"
+      ],
+      "fields_for_later_analysis": [
+        "sell_tickers",
+        "buy_tickers",
+        "sell_realized_pct",
+        "post_rotation_returns",
+        "trade_costs"
+      ]
+    },
+    "related_artifacts": [
+      "exit_shadow.json (post-exit path after sell)",
+      "rebalance_log.json (counterfactual replay)",
+      "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+      "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+      "learning_tracks_churn_health.json"
+    ],
+    "scope": "archive_near_miss",
+    "near_miss_gate": {
+      "below_buy_tier": true,
+      "held_book_from_rebalance_log": true,
+      "default_signals": [
+        "hold"
+      ],
+      "default_min_conviction": 0.28,
+      "default_max_episodes_per_week": 25,
+      "aligned_with": "trajectory_evidence.PRE_BUY_CONVICTION"
+    },
+    "note": "Observe-only priors from archived weekly screens plus rebalance_log held-ticker episodes. Does not replace live paper exit_timing cohorts."
+  },
+  "config": {
+    "min_conviction": 0.28,
+    "min_data_quality": 0.0,
+    "near_miss_signals": [
+      "hold"
+    ],
+    "max_episodes_per_week": 25,
+    "shadow_windows_days": [
+      7,
+      28,
+      56,
+      84
+    ],
+    "include_held_episodes": true,
+    "paper_root": null,
+    "track_ids": [
+      "rules",
+      "ai_judgment"
+    ]
+  },
+  "snapshot_count": 5,
+  "hold_episodes": [
+    {
+      "episode_id": "archive_near_miss:2026-08-02T11:04:38+00:00:SREN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "SREN.SW",
+      "name": "",
+      "started_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 134.85,
+      "avg_cost": 134.85,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.4008,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 139.45,
+          "unrealized_pct": 0.0341,
+          "peak_unrealized_pct": 0.0341,
+          "trough_unrealized_pct": 0.0341
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "price": 141.5,
+          "unrealized_pct": 0.0493,
+          "peak_unrealized_pct": 0.0493,
+          "trough_unrealized_pct": 0.0341
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 56,
+          "price": 141.5,
+          "unrealized_pct": 0.0493,
+          "peak_unrealized_pct": 0.0493,
+          "trough_unrealized_pct": 0.0341
+        }
+      ],
+      "peak_unrealized_pct": 0.0493,
+      "trough_unrealized_pct": 0.0341,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-02T11:04:38+00:00:GEBN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "GEBN.SW",
+      "name": "",
+      "started_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 532.2,
+      "avg_cost": 532.2,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.3182,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 543.0,
+          "unrealized_pct": 0.0203,
+          "peak_unrealized_pct": 0.0203,
+          "trough_unrealized_pct": 0.0203
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "price": 555.8,
+          "unrealized_pct": 0.0443,
+          "peak_unrealized_pct": 0.0443,
+          "trough_unrealized_pct": 0.0203
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 56,
+          "price": 555.8,
+          "unrealized_pct": 0.0443,
+          "peak_unrealized_pct": 0.0443,
+          "trough_unrealized_pct": 0.0203
+        }
+      ],
+      "peak_unrealized_pct": 0.0443,
+      "trough_unrealized_pct": 0.0064,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-02T11:04:38+00:00:KNIN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "KNIN.SW",
+      "name": "",
+      "started_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 205.7,
+      "avg_cost": 205.7,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3075,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 211.3,
+          "unrealized_pct": 0.0272,
+          "peak_unrealized_pct": 0.0272,
+          "trough_unrealized_pct": 0.0272
+        }
+      ],
+      "peak_unrealized_pct": 0.0272,
+      "trough_unrealized_pct": 0.0272,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-02T11:04:38+00:00:ZURN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ZURN.SW",
+      "name": "",
+      "started_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 615.8,
+      "avg_cost": 615.8,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.2817,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "price": 592.8,
+          "unrealized_pct": -0.0373,
+          "peak_unrealized_pct": -0.0373,
+          "trough_unrealized_pct": -0.0373
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "price": 577.8,
+          "unrealized_pct": -0.0617,
+          "peak_unrealized_pct": -0.0373,
+          "trough_unrealized_pct": -0.0617
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 56,
+          "price": 577.8,
+          "unrealized_pct": -0.0617,
+          "peak_unrealized_pct": -0.0373,
+          "trough_unrealized_pct": -0.0617
+        }
+      ],
+      "peak_unrealized_pct": -0.0373,
+      "trough_unrealized_pct": -0.0679,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:SREN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "SREN.SW",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 139.45,
+      "avg_cost": 139.45,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.4613,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 7,
+          "price": 141.5,
+          "unrealized_pct": 0.0147,
+          "peak_unrealized_pct": 0.0147,
+          "trough_unrealized_pct": 0.0147
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "price": 141.5,
+          "unrealized_pct": 0.0147,
+          "peak_unrealized_pct": 0.0147,
+          "trough_unrealized_pct": 0.0147
+        }
+      ],
+      "peak_unrealized_pct": 0.0147,
+      "trough_unrealized_pct": 0.014,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:ZURN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ZURN.SW",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 592.8,
+      "avg_cost": 592.8,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.3774,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 7,
+          "price": 577.8,
+          "unrealized_pct": -0.0253,
+          "peak_unrealized_pct": -0.0253,
+          "trough_unrealized_pct": -0.0253
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "price": 577.8,
+          "unrealized_pct": -0.0253,
+          "peak_unrealized_pct": -0.0253,
+          "trough_unrealized_pct": -0.0253
+        }
+      ],
+      "peak_unrealized_pct": -0.0253,
+      "trough_unrealized_pct": -0.0317,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:GEBN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "GEBN.SW",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 543.0,
+      "avg_cost": 543.0,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.3712,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 7,
+          "price": 555.8,
+          "unrealized_pct": 0.0236,
+          "peak_unrealized_pct": 0.0236,
+          "trough_unrealized_pct": 0.0236
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "price": 555.8,
+          "unrealized_pct": 0.0236,
+          "peak_unrealized_pct": 0.0236,
+          "trough_unrealized_pct": 0.0236
+        }
+      ],
+      "peak_unrealized_pct": 0.0236,
+      "trough_unrealized_pct": -0.0136,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-08-16T11:58:34+00:00:KNIN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "KNIN.SW",
+      "name": "",
+      "started_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 211.3,
+      "avg_cost": 211.3,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3587,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:04:59+00:00:SREN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "SREN.SW",
+      "name": "",
+      "started_at": "2026-10-02T21:04:59+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 141.5,
+      "avg_cost": 141.5,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.5035,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0007,
+      "trough_unrealized_pct": -0.0007,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:04:59+00:00:ZURN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "ZURN.SW",
+      "name": "",
+      "started_at": "2026-10-02T21:04:59+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 577.8,
+      "avg_cost": 577.8,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.417,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0066,
+      "trough_unrealized_pct": -0.0066,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:04:59+00:00:GEBN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "GEBN.SW",
+      "name": "",
+      "started_at": "2026-10-02T21:04:59+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 555.8,
+      "avg_cost": 555.8,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3809,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0363,
+      "trough_unrealized_pct": -0.0363,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:04:59+00:00:LONN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "LONN.SW",
+      "name": "",
+      "started_at": "2026-10-02T21:04:59+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 589.0,
+      "avg_cost": 589.0,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3567,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0401,
+      "trough_unrealized_pct": -0.0401,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-02T21:04:59+00:00:NESN.SW",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "NESN.SW",
+      "name": "",
+      "started_at": "2026-10-02T21:04:59+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 76.52,
+      "avg_cost": 76.52,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.2991,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0238,
+      "trough_unrealized_pct": -0.0238,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-05T06:52:37+00:00",
+      "linked_sell_trade_id": null
+    }
+  ],
+  "swap_rotations": [
+    {
+      "rotation_id": "archive_near_miss:2026-08-02T11:04:38+00:00:SREN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "SREN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "SREN.SW",
+          "price": 134.85,
+          "shares": 1.0,
+          "gross": 134.85,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 126.6,
+          "shares": 1.0,
+          "gross": 126.6,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0341,
+          "avg_buy_return": -0.0329,
+          "replacement_delta": -0.067
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0493,
+          "avg_buy_return": -0.0403,
+          "replacement_delta": -0.0896
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0493,
+          "avg_buy_return": -0.0403,
+          "replacement_delta": -0.0896
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "SREN.SW": 0.0486
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0738
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-02T11:04:38+00:00:GEBN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "GEBN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "GEBN.SW",
+          "price": 532.2,
+          "shares": 1.0,
+          "gross": 532.2,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 126.6,
+          "shares": 1.0,
+          "gross": 126.6,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0203,
+          "avg_buy_return": -0.0329,
+          "replacement_delta": -0.0532
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0443,
+          "avg_buy_return": -0.0403,
+          "replacement_delta": -0.0846
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 56,
+          "avg_sell_return": 0.0443,
+          "avg_buy_return": -0.0403,
+          "replacement_delta": -0.0846
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "GEBN.SW": 0.0064
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0738
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-02T11:04:38+00:00:KNIN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "KNIN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "KNIN.SW",
+          "price": 205.7,
+          "shares": 1.0,
+          "gross": 205.7,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 126.6,
+          "shares": 1.0,
+          "gross": 126.6,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0272,
+          "avg_buy_return": -0.0329,
+          "replacement_delta": -0.0601
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "KNIN.SW": 0.0272
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0329
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-02T11:04:38+00:00:ZURN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-02T11:04:38+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ZURN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "ZURN.SW",
+          "price": 615.8,
+          "shares": 1.0,
+          "gross": 615.8,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 126.6,
+          "shares": 1.0,
+          "gross": 126.6,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-08-16T11:58:34+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0373,
+          "avg_buy_return": -0.0329,
+          "replacement_delta": 0.0045
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0617,
+          "avg_buy_return": -0.0403,
+          "replacement_delta": 0.0214
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 56,
+          "avg_sell_return": -0.0617,
+          "avg_buy_return": -0.0403,
+          "replacement_delta": 0.0214
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "ZURN.SW": -0.0679
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0738
+      },
+      "verdict": "replacement_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:SREN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "SREN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "SREN.SW",
+          "price": 139.45,
+          "shares": 1.0,
+          "gross": 139.45,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 122.44,
+          "shares": 1.0,
+          "gross": 122.44,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0147,
+          "avg_buy_return": -0.0077,
+          "replacement_delta": -0.0224
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0147,
+          "avg_buy_return": -0.0077,
+          "replacement_delta": -0.0224
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "SREN.SW": 0.014
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0423
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:ZURN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ZURN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "ZURN.SW",
+          "price": 592.8,
+          "shares": 1.0,
+          "gross": 592.8,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 122.44,
+          "shares": 1.0,
+          "gross": 122.44,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0253,
+          "avg_buy_return": -0.0077,
+          "replacement_delta": 0.0176
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "avg_sell_return": -0.0253,
+          "avg_buy_return": -0.0077,
+          "replacement_delta": 0.0176
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "ZURN.SW": -0.0317
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0423
+      },
+      "verdict": "replacement_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:GEBN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "GEBN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "GEBN.SW",
+          "price": 543.0,
+          "shares": 1.0,
+          "gross": 543.0,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 122.44,
+          "shares": 1.0,
+          "gross": 122.44,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0236,
+          "avg_buy_return": -0.0077,
+          "replacement_delta": -0.0312
+        },
+        {
+          "scored_at": "2026-10-02T21:04:59+00:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0236,
+          "avg_buy_return": -0.0077,
+          "replacement_delta": -0.0312
+        }
+      ],
+      "sell_returns_since_rotation": {
+        "GEBN.SW": -0.0136
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0423
+      },
+      "verdict": "exit_outperformed",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-08-16T11:58:34+00:00:KNIN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-08-16T11:58:34+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "KNIN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "KNIN.SW",
+          "price": 211.3,
+          "shares": 1.0,
+          "gross": 211.3,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 122.44,
+          "shares": 1.0,
+          "gross": 122.44,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {},
+      "buy_returns_since_rotation": {},
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:04:59+00:00:SREN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:04:59+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "SREN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "SREN.SW",
+          "price": 141.5,
+          "shares": 1.0,
+          "gross": 141.5,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 121.5,
+          "shares": 1.0,
+          "gross": 121.5,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "SREN.SW": -0.0007
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0349
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:04:59+00:00:ZURN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:04:59+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "ZURN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "ZURN.SW",
+          "price": 577.8,
+          "shares": 1.0,
+          "gross": 577.8,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 121.5,
+          "shares": 1.0,
+          "gross": 121.5,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "ZURN.SW": -0.0066
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0349
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:04:59+00:00:GEBN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:04:59+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "GEBN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "GEBN.SW",
+          "price": 555.8,
+          "shares": 1.0,
+          "gross": 555.8,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 121.5,
+          "shares": 1.0,
+          "gross": 121.5,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "GEBN.SW": -0.0363
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0349
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:04:59+00:00:LONN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:04:59+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "LONN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "LONN.SW",
+          "price": 589.0,
+          "shares": 1.0,
+          "gross": 589.0,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 121.5,
+          "shares": 1.0,
+          "gross": 121.5,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "LONN.SW": -0.0401
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0349
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-02T21:04:59+00:00:NESN.SW:NOVN.SW",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-02T21:04:59+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "NESN.SW",
+      "swap_ticker": "NOVN.SW",
+      "sells": [
+        {
+          "ticker": "NESN.SW",
+          "price": 76.52,
+          "shares": 1.0,
+          "gross": 76.52,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NOVN.SW",
+          "price": 121.5,
+          "shares": 1.0,
+          "gross": 121.5,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "NESN.SW": -0.0238
+      },
+      "buy_returns_since_rotation": {
+        "NOVN.SW": -0.0349
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-05T06:52:37+00:00"
+    }
+  ],
+  "updated_at": "2026-10-05T07:37:48.156822+00:00"
+}

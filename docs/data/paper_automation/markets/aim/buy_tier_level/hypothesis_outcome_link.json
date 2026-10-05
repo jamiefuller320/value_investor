@@ -3,21 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-04T07:10:08.350288+00:00",
+  "generated_at": "2026-10-05T07:38:10.529530+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 13,
+    "open_with_thesis": 12,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": -0.0306,
+        "mean_trough_unrealized_pct": -0.2122,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "broken": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (weakening=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -483,7 +491,7 @@
       "ticker": "CREO.L",
       "name": "Creo Medical Group PLC",
       "started_at": "2026-09-25T08:28:47.373794+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -526,9 +534,9 @@
       "peak_unrealized_pct": -0.0306,
       "trough_unrealized_pct": -0.2122,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-05T08:38:10.518141+01:00",
+      "linked_sell_trade_id": "40465a9e-21e5-4b02-8550-b7dcca1b2b6d"
     },
     {
       "episode_id": "buy_tier_level:PMI.L:2026-09-25T08:28:47.373794+01:00",
@@ -724,5 +732,57 @@
       "linked_sell_trade_id": null
     }
   ],
-  "swap_rotations": []
+  "swap_rotations": [
+    {
+      "rotation_id": "buy_tier_level:2026-10-05T08:38:10.518141+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-05T08:38:10.518141+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0032,
+      "sells": [
+        {
+          "ticker": "CREO.L",
+          "price": 9.65,
+          "shares": 5.411063,
+          "gross": 52.22,
+          "cost": 0.04,
+          "avg_cost_at_exit": 12.25,
+          "realized_pct": -0.2122,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "screen signal is avoid",
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": -0.2122
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "PEBB.L",
+          "price": 61.0,
+          "shares": 0.85048,
+          "gross": 51.88,
+          "cost": 0.3
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "CREO.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "PEBB.L": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    }
+  ]
 }
