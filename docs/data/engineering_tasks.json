@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-04T18:12:57.134757+00:00",
+  "compiled_at": "2026-10-05T07:26:55.030604+00:00",
   "run_at": null,
-  "task_count": 136,
+  "task_count": 145,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -8067,6 +8067,474 @@
       "merged_at": "2026-10-02T10:55:17.370432+00:00"
     },
     {
+      "id": "eng-20261005-01",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked tsx60 leftover PPL.TO",
+      "summary": "Library market tsx60 (S&P/TSX 60) buy-tier leftover PPL.TO already has a memo but is still blocking_stage=no_key_bodies (annual/interim bodies missing). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. priority=low leftover hunter; wait behind any in-flight filings.py hunter (clash-aware). Do no",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "tsx60",
+        "library_market": "tsx60",
+        "hunter_market_id": "tsx60",
+        "hunter_ticker": "PPL.TO",
+        "parked_reason": "buy_tier_no_key_bodies",
+        "parked_revisit_when": "Annual/interim key bodies land or an IR allowlist body fetches for this leftover",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "leftover_kind": "buy_tier_no_key_bodies",
+        "has_memo": true,
+        "wait_behind_task_id": "eng-20261004-07",
+        "clash_with": "filings.py in-flight hunter / PR"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for PPL.TO only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
+        "Do not unpark eng-20261004-03 or change N155 / Sunday research cap"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261005-02",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked tsx60 leftover SAP.TO",
+      "summary": "Library market tsx60 (S&P/TSX 60) buy-tier leftover SAP.TO already has a memo but is still blocking_stage=no_key_bodies (annual/interim bodies missing). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. priority=low leftover hunter; wait behind any in-flight filings.py hunter (clash-aware). Do no",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "tsx60",
+        "library_market": "tsx60",
+        "hunter_market_id": "tsx60",
+        "hunter_ticker": "SAP.TO",
+        "parked_reason": "buy_tier_no_key_bodies",
+        "parked_revisit_when": "Annual/interim key bodies land or an IR allowlist body fetches for this leftover",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "leftover_kind": "buy_tier_no_key_bodies",
+        "has_memo": true,
+        "wait_behind_task_id": "eng-20261004-07",
+        "clash_with": "filings.py in-flight hunter / PR"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for SAP.TO only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
+        "Do not unpark eng-20261004-03 or change N155 / Sunday research cap"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261005-03",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked aim leftover MPE.L",
+      "summary": "Library market aim (AIM (liquid Wikipedia slice)) buy-tier leftover MPE.L already has a memo but is still blocking_stage=no_key_bodies (annual/interim bodies missing). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. priority=low leftover hunter; wait behind any in-flight filings.py hunter (clas",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "aim",
+        "library_market": "aim",
+        "hunter_market_id": "aim",
+        "hunter_ticker": "MPE.L",
+        "parked_reason": "buy_tier_no_key_bodies",
+        "parked_revisit_when": "Annual/interim key bodies land or an IR allowlist body fetches for this leftover",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "leftover_kind": "buy_tier_no_key_bodies",
+        "has_memo": true,
+        "wait_behind_task_id": "eng-20261004-07",
+        "clash_with": "filings.py in-flight hunter / PR"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for MPE.L only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
+        "Do not unpark eng-20261004-03 or change N155 / Sunday research cap"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261005-04",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked aim leftover YNGN.L",
+      "summary": "Library market aim (AIM (liquid Wikipedia slice)) buy-tier leftover YNGN.L already has a memo but is still blocking_stage=no_key_bodies (annual/interim bodies missing). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. priority=low leftover hunter; wait behind any in-flight filings.py hunter (cla",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "aim",
+        "library_market": "aim",
+        "hunter_market_id": "aim",
+        "hunter_ticker": "YNGN.L",
+        "parked_reason": "buy_tier_no_key_bodies",
+        "parked_revisit_when": "Annual/interim key bodies land or an IR allowlist body fetches for this leftover",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "leftover_kind": "buy_tier_no_key_bodies",
+        "has_memo": true,
+        "wait_behind_task_id": "eng-20261004-07",
+        "clash_with": "filings.py in-flight hunter / PR"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for YNGN.L only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
+        "Do not unpark eng-20261004-03 or change N155 / Sunday research cap"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261005-05",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked aim leftover DOTD.L",
+      "summary": "Library market aim (AIM (liquid Wikipedia slice)) buy-tier leftover DOTD.L already has a memo but is still blocking_stage=no_key_bodies (annual/interim bodies missing). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. priority=low leftover hunter; wait behind any in-flight filings.py hunter (cla",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "aim",
+        "library_market": "aim",
+        "hunter_market_id": "aim",
+        "hunter_ticker": "DOTD.L",
+        "parked_reason": "buy_tier_no_key_bodies",
+        "parked_revisit_when": "Annual/interim key bodies land or an IR allowlist body fetches for this leftover",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "leftover_kind": "buy_tier_no_key_bodies",
+        "has_memo": true,
+        "wait_behind_task_id": "eng-20261004-07",
+        "clash_with": "filings.py in-flight hunter / PR"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for DOTD.L only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
+        "Do not unpark eng-20261004-03 or change N155 / Sunday research cap"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261005-06",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked hang_seng leftover 0883.HK",
+      "summary": "Library market hang_seng (Hang Seng) buy-tier leftover 0883.HK already has a memo but is still blocking_stage=no_key_bodies (annual/interim bodies missing). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. priority=low leftover hunter; wait behind any in-flight filings.py hunter (clash-aware). D",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "hang_seng",
+        "library_market": "hang_seng",
+        "hunter_market_id": "hang_seng",
+        "hunter_ticker": "0883.HK",
+        "parked_reason": "buy_tier_no_key_bodies",
+        "parked_revisit_when": "Annual/interim key bodies land or an IR allowlist body fetches for this leftover",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "leftover_kind": "buy_tier_no_key_bodies",
+        "has_memo": true,
+        "wait_behind_task_id": "eng-20261004-07",
+        "clash_with": "filings.py in-flight hunter / PR"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for 0883.HK only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
+        "Do not unpark eng-20261004-03 or change N155 / Sunday research cap"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261005-07",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked hang_seng leftover 2318.HK",
+      "summary": "Library market hang_seng (Hang Seng) buy-tier leftover 2318.HK already has a memo but is still blocking_stage=no_key_bodies (annual/interim bodies missing). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. priority=low leftover hunter; wait behind any in-flight filings.py hunter (clash-aware). D",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "hang_seng",
+        "library_market": "hang_seng",
+        "hunter_market_id": "hang_seng",
+        "hunter_ticker": "2318.HK",
+        "parked_reason": "buy_tier_no_key_bodies",
+        "parked_revisit_when": "Annual/interim key bodies land or an IR allowlist body fetches for this leftover",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "leftover_kind": "buy_tier_no_key_bodies",
+        "has_memo": true,
+        "wait_behind_task_id": "eng-20261004-07",
+        "clash_with": "filings.py in-flight hunter / PR"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for 2318.HK only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
+        "Do not unpark eng-20261004-03 or change N155 / Sunday research cap"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261005-08",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked aim leftover CAML.L",
+      "summary": "Library market aim (AIM (liquid Wikipedia slice)) buy-tier leftover CAML.L already has a memo but is still blocking_stage=no_key_bodies (annual/interim bodies missing). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. priority=low leftover hunter; wait behind any in-flight filings.py hunter (cla",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "aim",
+        "library_market": "aim",
+        "hunter_market_id": "aim",
+        "hunter_ticker": "CAML.L",
+        "parked_reason": "buy_tier_no_key_bodies",
+        "parked_revisit_when": "Annual/interim key bodies land or an IR allowlist body fetches for this leftover",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "leftover_kind": "buy_tier_no_key_bodies",
+        "has_memo": true,
+        "wait_behind_task_id": "eng-20261004-07",
+        "clash_with": "filings.py in-flight hunter / PR"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for CAML.L only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
+        "Do not unpark eng-20261004-03 or change N155 / Sunday research cap"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20261005-09",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked sti leftover Y92.SI",
+      "summary": "Library market sti (Straits Times Index) buy-tier leftover Y92.SI already has a memo but is still blocking_stage=no_key_bodies (annual/interim bodies missing). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. priority=low leftover hunter; wait behind any in-flight filings.py hunter (clash-aware)",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "sti",
+        "library_market": "sti",
+        "hunter_market_id": "sti",
+        "hunter_ticker": "Y92.SI",
+        "parked_reason": "buy_tier_no_key_bodies",
+        "parked_revisit_when": "Annual/interim key bodies land or an IR allowlist body fetches for this leftover",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "leftover_kind": "buy_tier_no_key_bodies",
+        "has_memo": true,
+        "wait_behind_task_id": "eng-20261004-07",
+        "clash_with": "filings.py in-flight hunter / PR"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for Y92.SI only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
+        "Do not unpark eng-20261004-03 or change N155 / Sunday research cap"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20261004-07",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked asx200 leftover YAL.AX",
@@ -8833,7 +9301,7 @@
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
   "micro_compile_source": "parked_source_hunter",
-  "library_market_id": "asx200",
-  "hunter_ticker": "YAL.AX",
+  "library_market_id": "tsx60",
+  "hunter_ticker": "PPL.TO",
   "workflow_failure_compiled": true
 }

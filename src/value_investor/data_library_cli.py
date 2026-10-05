@@ -709,6 +709,34 @@ def build_parser() -> argparse.ArgumentParser:
         help="Prefer parked leftovers from this library market (e.g. euro_depth)",
     )
     parked_hunter_p.add_argument(
+        "--leftover-key-bodies",
+        action="store_true",
+        help=(
+            "Queue flip-lag no_key_bodies names that already have memos "
+            "(spare leftover hunter path; not first-memo / N155)"
+        ),
+    )
+    parked_hunter_p.add_argument(
+        "--allow-behind-open",
+        action="store_true",
+        help=(
+            "Queue leftover hunters while another hunter is open/pr_open; "
+            "clash-aware dispatch waits on overlapping filings.py PRs"
+        ),
+    )
+    parked_hunter_p.add_argument(
+        "--max-hunters",
+        type=int,
+        default=1,
+        help="How many leftover hunters to queue this call (default 1)",
+    )
+    parked_hunter_p.add_argument(
+        "--flip-lag-path",
+        type=Path,
+        default=None,
+        help="buy_tier_flip_lag.json for --leftover-key-bodies (default: committed store)",
+    )
+    parked_hunter_p.add_argument(
         "--tasks-path",
         type=Path,
         default=Path("docs/data/engineering_tasks.json"),
@@ -2278,6 +2306,10 @@ def cmd_parked_hunter_compile(args: argparse.Namespace) -> int:
         tasks_path=args.tasks_path,
         committed_path=args.tasks_path,
         prefer_market_id=prefer_market,
+        leftover_key_bodies=bool(getattr(args, "leftover_key_bodies", False)),
+        flip_lag_path=getattr(args, "flip_lag_path", None),
+        allow_behind_open=bool(getattr(args, "allow_behind_open", False)),
+        max_tasks=int(getattr(args, "max_hunters", 1) or 1),
     )
     if args.json or args.json_path is not None:
         _emit_cli_json(payload, args)
@@ -2290,6 +2322,12 @@ def cmd_parked_hunter_compile(args: argparse.Namespace) -> int:
                 f"parked-hunter-compile: added {ids} "
                 f"({payload.get('market_id')} / {payload.get('hunter_ticker')})"
             )
+            wait_id = str(payload.get("wait_behind_task_id") or "")
+            if wait_id:
+                print(
+                    f"parked-hunter-compile: waiting behind {wait_id} "
+                    "(filings.py clash-aware; do not unpark eng-20261004-03)"
+                )
         else:
             print(f"parked-hunter-compile: skipped ({reason or 'no task'})")
     return 0

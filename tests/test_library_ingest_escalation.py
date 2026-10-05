@@ -262,3 +262,137 @@ def test_compile_parked_source_hunter_skips_tickers_already_on_main(tmp_path: Pa
     assert result["compiled_count"] == 0
     assert result["reason"] == "parked hunter candidates already resolved on main"
     assert result["skipped_resolved_tickers"] == ["FICO"]
+
+
+def test_leftover_no_key_body_candidates_skip_no_memo_and_ftse(tmp_path: Path):
+    from value_investor.library_ingest_escalation import leftover_no_key_body_hunter_candidates
+
+    flip = tmp_path / "buy_tier_flip_lag.json"
+    write_json(
+        flip,
+        {
+            "schema_version": 2,
+            "open": [
+                {
+                    "market_id": "tsx60",
+                    "ticker": "PPL.TO",
+                    "blocking_stage": "no_key_bodies",
+                    "has_memo": True,
+                    "hours_since_flip": 400,
+                },
+                {
+                    "market_id": "aim",
+                    "ticker": "MPE.L",
+                    "blocking_stage": "no_key_bodies",
+                    "has_memo": True,
+                    "hours_since_flip": 200,
+                },
+                {
+                    "market_id": "nasdaq100",
+                    "ticker": "ADSK",
+                    "blocking_stage": "no_memo",
+                    "has_memo": False,
+                    "hours_since_flip": 500,
+                },
+                {
+                    "market_id": "ftse350",
+                    "ticker": "ABC.L",
+                    "blocking_stage": "no_key_bodies",
+                    "has_memo": True,
+                    "hours_since_flip": 50,
+                },
+            ],
+        },
+        compact=False,
+    )
+    rows = leftover_no_key_body_hunter_candidates(flip_lag_path=flip)
+    assert [item[1] for item in rows] == ["PPL.TO", "MPE.L"]
+
+
+def test_compile_leftover_key_body_hunters_behind_open(tmp_path: Path, monkeypatch):
+    from value_investor.library_ingest_escalation import compile_parked_source_hunter_task
+    from value_investor.storage import read_json
+
+    monkeypatch.setattr(
+        "value_investor.hunter_auto_merge.hunter_ticker_already_resolved_on_main",
+        lambda ticker, **kwargs: (False, None, ""),
+    )
+    tasks_path = tmp_path / "engineering_tasks.json"
+    write_json(
+        tasks_path,
+        {
+            "tasks": [
+                {
+                    "id": "eng-20261004-07",
+                    "area": "ingest",
+                    "title": "Hunt fetchable IR source for parked asx200 leftover YAL.AX",
+                    "summary": "in flight",
+                    "priority": "low",
+                    "priority_score": 12.0,
+                    "source": "parked_source_hunter",
+                    "status": "pr_open",
+                    "evidence": {
+                        "market_id": "asx200",
+                        "hunter_ticker": "YAL.AX",
+                    },
+                    "allowed_paths": ["src/value_investor/research/filings.py"],
+                }
+            ]
+        },
+        compact=False,
+    )
+    blocked = compile_parked_source_hunter_task(
+        leftover_key_bodies=True,
+        flip_lag_path=tmp_path / "missing.json",
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+        allow_behind_open=False,
+    )
+    assert blocked["compiled_count"] == 0
+    assert blocked["reason"] == "open parked-source hunter already queued"
+
+    flip = tmp_path / "buy_tier_flip_lag.json"
+    write_json(
+        flip,
+        {
+            "schema_version": 2,
+            "open": [
+                {
+                    "market_id": "tsx60",
+                    "ticker": "PPL.TO",
+                    "blocking_stage": "no_key_bodies",
+                    "has_memo": True,
+                    "hours_since_flip": 459,
+                },
+                {
+                    "market_id": "sti",
+                    "ticker": "Y92.SI",
+                    "blocking_stage": "no_key_bodies",
+                    "has_memo": True,
+                    "hours_since_flip": 27,
+                },
+            ],
+        },
+        compact=False,
+    )
+    queued = compile_parked_source_hunter_task(
+        leftover_key_bodies=True,
+        flip_lag_path=flip,
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+        allow_behind_open=True,
+        max_tasks=9,
+    )
+    assert queued["compiled_count"] == 2
+    assert queued["hunter_tickers"] == ["PPL.TO", "Y92.SI"]
+    assert queued["wait_behind_task_id"] == "eng-20261004-07"
+    payload = read_json(tasks_path)
+    leftover = [
+        row
+        for row in payload["tasks"]
+        if str((row.get("evidence") or {}).get("leftover_kind") or "") == "buy_tier_no_key_bodies"
+    ]
+    assert len(leftover) == 2
+    assert leftover[0]["priority_score"] == 12.0
+    assert leftover[0]["status"] == "open"
+    assert leftover[0]["evidence"]["wait_behind_task_id"] == "eng-20261004-07"
