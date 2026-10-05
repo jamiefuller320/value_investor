@@ -1,9 +1,15 @@
 {
   "market_id": "ftse_smallcap",
-  "assessed_at": "2026-10-04T16:48:48.570814+00:00",
+  "assessed_at": "2026-10-05T13:33:54.947067+00:00",
   "unmeasured": [],
   "zero_body": [],
   "indexed_without_body": [
+    {
+      "ticker": "ENQ.L",
+      "indexed_without_body": 25,
+      "filings_total": 51,
+      "filings_with_body": 10
+    },
     {
       "ticker": "TPT.L",
       "indexed_without_body": 9,
@@ -37,8 +43,8 @@
     {
       "ticker": "REC.L",
       "indexed_without_body": 5,
-      "filings_total": 66,
-      "filings_with_body": 61
+      "filings_total": 64,
+      "filings_with_body": 59
     },
     {
       "ticker": "ULTP.L",
@@ -48,10 +54,13 @@
     }
   ],
   "thin_need_discovery": [],
-  "thin_need_bodies": [],
+  "thin_need_bodies": [
+    "ENQ.L"
+  ],
   "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
+    "ENQ.L",
     "TPT.L",
     "APTD.L",
     "DFS.L",
@@ -61,14 +70,15 @@
     "ULTP.L"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (7 tickers, top: TPT.L(9), APTD.L(8), DFS.L(6), FOXT.L(6), MER.L(6))"
+    "Prefer indexed-without-body body refetch (8 tickers, top: ENQ.L(25), TPT.L(9), APTD.L(8), DFS.L(6), FOXT.L(6))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 7,
-    "indexed_without_body_rows": 45,
+    "indexed_without_body_tickers": 8,
+    "indexed_without_body_rows": 70,
     "thin_need_discovery": 0,
-    "thin_need_bodies": 0
+    "thin_need_bodies": 1
   }
 }
