@@ -151,7 +151,9 @@ def admitted_buy_tier_first_time_targets(
     *,
     market_id: str,
 ) -> list[str]:
-    """Buy-tier tickers on this market with no ``research.md`` in its screen store."""
+    """Buy-tier tickers with no local or sibling-library ``research.md`` (exact ticker)."""
+    from value_investor.library_dedupe import library_research_homes
+
     screen_dir = screen_dir_for(Path(library_root), market_id)
     path = screen_dir / "latest_signals.csv"
     if not path.exists():
@@ -161,6 +163,7 @@ def admitted_buy_tier_first_time_targets(
         return []
     buy = frame.loc[frame["signal"].astype(str).str.lower().isin({"buy", "strong_buy"})]
     research = screen_dir / "research"
+    sibling_homes = library_research_homes(Path(library_root))
     missing: list[str] = []
     for raw in buy["ticker"].tolist():
         ticker = str(raw).strip()
@@ -175,6 +178,8 @@ def admitted_buy_tier_first_time_targets(
             and (entry / "research.md").exists()
             for entry in research.iterdir()
         ):
+            continue
+        if sibling_homes.get(key):
             continue
         missing.append(ticker)
     return missing
@@ -286,8 +291,9 @@ def run_equal_support_for_market(
         "missing_count": len(first_time),
         "sample": first_time[:20],
         "note": (
-            "Buy-tier names with no research.md on this market. "
-            "Sunday _research_markets prefers these before rememo; no weekday burst."
+            "Buy-tier names with no research.md on this market or a sibling "
+            "library home (exact Yahoo ticker; dual-list suffixes stay distinct). "
+            "Sunday _research_markets prefers true first-memos; no weekday burst."
         ),
     }
     return out
