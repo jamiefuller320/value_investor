@@ -251,6 +251,19 @@ at the back of the queue: ingest loop / `ftse-library parked-hunter-compile` /
 hourly `engineering-queue.yml` compile one parked ticker; after that task is
 merged, the next ticker compiles. Stall and gap-closure compile ignore this
 source so it cannot block higher-priority ingest work.
+
+Buy-tier flip-lag **`no_key_bodies` names that already have memos** use the same
+leftover hunter path (not weekday first-memo / N155, not Sunday research-cap
+changes):
+
+```bash
+ftse-library parked-hunter-compile --leftover-key-bodies --allow-behind-open \
+  --max-hunters 9 --json
+```
+
+`--allow-behind-open` queues them while another hunter is `pr_open` (today:
+YAL.AX / `filings.py`). Clash-aware dispatch waits on overlapping allowlists;
+priority 12 stays behind P1 Monday slim. Do not unpark `eng-20261004-03`.
 When the priority engineering queue is idle and role-coherence still shows a
 compile-cap backlog, `ftse-engineering try-compile-cap-drain` runs **before**
 hunter compile (score floor 25) and hunter defers until that backlog is empty —

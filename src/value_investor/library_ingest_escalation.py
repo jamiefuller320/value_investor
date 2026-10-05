@@ -308,6 +308,49 @@ def compile_library_ingest_engineering_tasks_micro(
     }
 
 
+LEFTOVER_KEY_BODY_REASON = "buy_tier_no_key_bodies"
+LEFTOVER_KEY_BODY_REVISIT = (
+    "Annual/interim key bodies land or an IR allowlist body fetches for this leftover"
+)
+
+
+def leftover_no_key_body_hunter_candidates(
+    *,
+    flip_lag_path: Path | None = None,
+    include_ftse: bool = False,
+) -> list[tuple[str, str, dict[str, Any]]]:
+    """Buy-tier ``no_key_bodies`` names that already have memos (not first-memo leftovers)."""
+    from value_investor.buy_tier_flip_lag import DEFAULT_STORE_PATH, load_flip_lag_store
+    from value_investor.research.market_store import FTSE_MARKET_ID
+
+    store = load_flip_lag_store(Path(flip_lag_path) if flip_lag_path else DEFAULT_STORE_PATH)
+    out: list[tuple[str, str, dict[str, Any]]] = []
+    for row in store.get("open") or []:
+        if not isinstance(row, dict):
+            continue
+        if str(row.get("blocking_stage") or "") != "no_key_bodies":
+            continue
+        if not bool(row.get("has_memo")):
+            continue
+        market_id = str(row.get("market_id") or "").strip()
+        ticker = str(row.get("ticker") or "").strip().upper()
+        if not market_id or not ticker:
+            continue
+        if not include_ftse and market_id == FTSE_MARKET_ID:
+            continue
+        parked = {
+            "ticker": ticker,
+            "reason": LEFTOVER_KEY_BODY_REASON,
+            "revisit_when": LEFTOVER_KEY_BODY_REVISIT,
+            "hours_since_flip": row.get("hours_since_flip"),
+            "has_memo": True,
+            "leftover_kind": LEFTOVER_KEY_BODY_REASON,
+        }
+        out.append((market_id, ticker, parked))
+    out.sort(key=lambda item: float((item[2] or {}).get("hours_since_flip") or 0.0), reverse=True)
+    return out
+
+
 def _open_parked_hunter_task(rows: list[dict[str, Any]]) -> dict[str, Any] | None:
     for row in rows:
         if str(row.get("source") or "") != PARKED_SOURCE_HUNTER_SOURCE:
@@ -332,6 +375,85 @@ def _tried_parked_hunter_keys(rows: list[dict[str, Any]]) -> set[tuple[str, str]
     return tried
 
 
+def _draft_parked_source_hunter_task(
+    *,
+    market_id: str,
+    ticker: str,
+    parked: dict[str, Any],
+    task_id: str,
+    wait_behind_task_id: str = "",
+) -> EngineeringTask:
+    from value_investor.data_library import MARKET_REGISTRY
+
+    spec = MARKET_REGISTRY.get(market_id)
+    label = spec.label if spec is not None else market_id
+    reason = str(parked.get("reason") or "leftover_thin_or_iwb")
+    revisit = str(parked.get("revisit_when") or "")
+    leftover_kind = str(parked.get("leftover_kind") or "")
+    title = f"Hunt fetchable IR source for parked {market_id} leftover {ticker}"[:160]
+    if leftover_kind == LEFTOVER_KEY_BODY_REASON:
+        summary = (
+            f"Library market {market_id} ({label}) buy-tier leftover {ticker} already has a "
+            "memo but is still blocking_stage=no_key_bodies (annual/interim bodies missing). "
+            "Look at this one ticker only: if a fetchable IR or statutory filing URL exists, "
+            "add an allowlist entry and a regression test. If nothing fetchable exists, record "
+            "a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not "
+            "invent URLs. priority=low leftover hunter; wait behind any in-flight filings.py "
+            "hunter (clash-aware). Do not unpark eng-20261004-03."
+        )
+    else:
+        summary = (
+            f"Library market {market_id} ({label}) parked {ticker} after ingest avenues "
+            f"were exhausted ({reason}). Look at this one ticker only: if a fetchable IR "
+            "or statutory filing URL exists, add an allowlist entry and a regression test. "
+            "If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in "
+            "tests/test_research_filings.py — do not invent URLs. auto_merge is off; this "
+            "task is priority=low so it sits at the back of the engineering queue."
+        )
+    if revisit:
+        summary += f" Revisit when: {revisit}."
+    evidence: dict[str, Any] = {
+        "market_id": market_id,
+        "library_market": market_id,
+        "hunter_market_id": market_id,
+        "hunter_ticker": ticker.upper(),
+        "parked_reason": reason,
+        "parked_revisit_when": revisit,
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md",
+    }
+    if leftover_kind:
+        evidence["leftover_kind"] = leftover_kind
+        evidence["has_memo"] = bool(parked.get("has_memo", True))
+    if wait_behind_task_id:
+        evidence["wait_behind_task_id"] = wait_behind_task_id
+        evidence["clash_with"] = "filings.py in-flight hunter / PR"
+    criteria = [
+        f"Inspect IR / exchange sources for {ticker} only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
+    ]
+    if leftover_kind == LEFTOVER_KEY_BODY_REASON:
+        criteria.append(
+            "Do not unpark eng-20261004-03 or change N155 / Sunday research cap"
+        )
+    return EngineeringTask(
+        id=task_id,
+        area="ingest",
+        title=title,
+        summary=summary[:500],
+        priority="low",
+        priority_score=PARKED_SOURCE_HUNTER_PRIORITY_SCORE,
+        source=PARKED_SOURCE_HUNTER_SOURCE,
+        auto_merge=False,
+        evidence=evidence,
+        acceptance_criteria=criteria,
+        allowed_paths=_allowed_paths_for_area("ingest"),
+        blocked_paths=list(BLOCKED_PATHS),
+    )
+
+
 def compile_parked_source_hunter_task(
     *,
     library_root: Path = DEFAULT_LIBRARY_ROOT,
@@ -339,12 +461,19 @@ def compile_parked_source_hunter_task(
     tasks_path: Path = COMMITTED_TASKS_PATH,
     committed_path: Path = COMMITTED_TASKS_PATH,
     prefer_market_id: str | None = None,
+    leftover_key_bodies: bool = False,
+    flip_lag_path: Path | None = None,
+    allow_behind_open: bool = False,
+    max_tasks: int = 1,
 ) -> dict[str, Any]:
-    """Queue one low-priority parked-ticker source hunt at the back of the queue.
+    """Queue low-priority parked-ticker source hunts at the back of the queue.
 
-    After the current hunter task is merged, call again to compile the next
-    parked ticker. Stall / gap-closure compile ignores this source so it cannot
-    block higher-priority ingest work.
+    Default: one exhaustion leftover after the current hunter is merged.
+    ``leftover_key_bodies`` queues flip-lag ``no_key_bodies`` names that already
+    have memos. ``allow_behind_open`` lets those sit as open/low-priority while
+    an in-flight hunter occupies ``filings.py`` (clash-aware dispatch waits).
+    Stall / gap-closure compile ignores this source so it cannot block
+    higher-priority ingest work.
     """
     from value_investor.library_ingest_exhaustion import iter_parked_hunter_candidates
 
@@ -359,7 +488,7 @@ def compile_parked_source_hunter_task(
     existing_payload = load_engineering_tasks(committed_path)
     existing_rows = list(existing_payload.get("tasks") or [])
     open_hunter = _open_parked_hunter_task(existing_rows)
-    if open_hunter is not None:
+    if open_hunter is not None and not allow_behind_open:
         return {
             "compiled_count": 0,
             "reason": "open parked-source hunter already queued",
@@ -367,7 +496,10 @@ def compile_parked_source_hunter_task(
         }
 
     tried = _tried_parked_hunter_keys(existing_rows)
-    candidates = iter_parked_hunter_candidates(library_root=library_root, policy=policy)
+    if leftover_key_bodies:
+        candidates = leftover_no_key_body_hunter_candidates(flip_lag_path=flip_lag_path)
+    else:
+        candidates = iter_parked_hunter_candidates(library_root=library_root, policy=policy)
     prefer = str(prefer_market_id or "").strip()
     if prefer:
         preferred = [row for row in candidates if row[0] == prefer]
@@ -375,8 +507,9 @@ def compile_parked_source_hunter_task(
             candidates = preferred + [row for row in candidates if row[0] != prefer]
     from value_investor.hunter_auto_merge import hunter_ticker_already_resolved_on_main
 
-    next_row: tuple[str, str, dict[str, Any]] | None = None
     skipped_resolved: list[str] = []
+    selected: list[tuple[str, str, dict[str, Any]]] = []
+    limit = max(1, int(max_tasks))
     for market_id, ticker, parked in candidates:
         if (market_id, ticker.upper()) in tried:
             continue
@@ -384,10 +517,13 @@ def compile_parked_source_hunter_task(
         if resolved:
             skipped_resolved.append(ticker.upper())
             continue
-        next_row = (market_id, ticker, parked)
-        break
-    if next_row is None:
+        selected.append((market_id, ticker, parked))
+        if len(selected) >= limit:
+            break
+    if not selected:
         reason = "no parked leftover tickers remaining for hunter"
+        if leftover_key_bodies:
+            reason = "no leftover no_key_bodies hunter candidates remaining"
         if skipped_resolved and not tried:
             reason = "parked hunter candidates already resolved on main"
         return {
@@ -396,57 +532,24 @@ def compile_parked_source_hunter_task(
             "tried_count": len(tried),
             "candidate_count": len(candidates),
             "skipped_resolved_tickers": skipped_resolved,
+            "wait_behind_task_id": str((open_hunter or {}).get("id") or ""),
         }
 
-    market_id, ticker, parked = next_row
-    from value_investor.data_library import MARKET_REGISTRY
-
-    spec = MARKET_REGISTRY.get(market_id)
-    label = spec.label if spec is not None else market_id
-    reason = str(parked.get("reason") or "leftover_thin_or_iwb")
-    revisit = str(parked.get("revisit_when") or "")
+    wait_behind = str((open_hunter or {}).get("id") or "")
     run_stamp = datetime.now(UTC).strftime("%Y%m%d")
     seq = _next_engineering_seq_from_rows(existing_rows, run_stamp)
-    title = f"Hunt fetchable IR source for parked {market_id} leftover {ticker}"[:160]
-    summary = (
-        f"Library market {market_id} ({label}) parked {ticker} after ingest avenues "
-        f"were exhausted ({reason}). Look at this one ticker only: if a fetchable IR "
-        "or statutory filing URL exists, add an allowlist entry and a regression test. "
-        "If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in "
-        "tests/test_research_filings.py — do not invent URLs. auto_merge is off; this "
-        "task is priority=low so it sits at the back of the engineering queue."
-    )
-    if revisit:
-        summary += f" Revisit when: {revisit}."
-    task = EngineeringTask(
-        id=f"eng-{run_stamp}-{seq:02d}",
-        area="ingest",
-        title=title,
-        summary=summary[:500],
-        priority="low",
-        priority_score=PARKED_SOURCE_HUNTER_PRIORITY_SCORE,
-        source=PARKED_SOURCE_HUNTER_SOURCE,
-        auto_merge=False,
-        evidence={
-            "market_id": market_id,
-            "library_market": market_id,
-            "hunter_market_id": market_id,
-            "hunter_ticker": ticker.upper(),
-            "parked_reason": reason,
-            "parked_revisit_when": revisit,
-            "universe": "library",
-            "doc": "docs/ops/library-ingest-escalation.md",
-        },
-        acceptance_criteria=[
-            f"Inspect IR / exchange sources for {ticker} only — do not invent URLs",
-            "If a fetchable statutory/IR body exists, add allowlist + regression test",
-            "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
-            "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
-        ],
-        allowed_paths=_allowed_paths_for_area("ingest"),
-        blocked_paths=list(BLOCKED_PATHS),
-    )
-    merged_rows = _merge_task_rows(existing_rows, [task])
+    drafted: list[EngineeringTask] = []
+    for offset, (market_id, ticker, parked) in enumerate(selected):
+        drafted.append(
+            _draft_parked_source_hunter_task(
+                market_id=market_id,
+                ticker=ticker,
+                parked=parked,
+                task_id=f"eng-{run_stamp}-{seq + offset:02d}",
+                wait_behind_task_id=wait_behind,
+            )
+        )
+    merged_rows = _merge_task_rows(existing_rows, drafted)
     open_ids_before = {
         str(row.get("id") or "")
         for row in existing_rows
@@ -458,14 +561,15 @@ def compile_parked_source_hunter_task(
         if str(row.get("status") or "open") == "open"
         and str(row.get("id") or "") not in open_ids_before
     ]
+    head_market, head_ticker, _parked = selected[0]
     payload = {
         **existing_payload,
         "compiled_at": datetime.now(UTC).isoformat(),
         "task_count": len(merged_rows),
         "tasks": merged_rows,
         "micro_compile_source": PARKED_SOURCE_HUNTER_SOURCE,
-        "library_market_id": market_id,
-        "hunter_ticker": ticker.upper(),
+        "library_market_id": head_market,
+        "hunter_ticker": head_ticker.upper(),
     }
     committed_path = Path(committed_path)
     tasks_path = Path(tasks_path)
@@ -477,9 +581,12 @@ def compile_parked_source_hunter_task(
         "compiled_count": len(newly_open),
         "task_ids": [str(row.get("id") or "") for row in newly_open],
         "task_count": len(merged_rows),
-        "market_id": market_id,
-        "hunter_ticker": ticker.upper(),
+        "market_id": head_market,
+        "hunter_ticker": head_ticker.upper(),
+        "hunter_tickers": [ticker.upper() for _mid, ticker, _p in selected],
         "priority_score": PARKED_SOURCE_HUNTER_PRIORITY_SCORE,
+        "wait_behind_task_id": wait_behind,
+        "leftover_key_bodies": bool(leftover_key_bodies),
     }
 
 
@@ -598,6 +705,7 @@ __all__ = [
     "DEFAULT_STALL_RUNS",
     "compile_library_ingest_engineering_tasks_micro",
     "compile_parked_source_hunter_task",
+    "leftover_no_key_body_hunter_candidates",
     "ftse_equivalent_markets",
     "has_open_library_ingest_task_for_market",
     "is_ftse_equivalent_market",
