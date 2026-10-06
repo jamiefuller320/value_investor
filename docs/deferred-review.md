@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-05T08:51:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T02:31:28+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -238,6 +238,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N183 | **Universal GHA failure autofix factory** | Do not auto-patch pytest/logic, soak every merge, or auto-merge YAML permission PRs. Dispatch 403 is allowlisted (hygiene + supervised YAML task); unmatched failures bundle on one Daily-hub item. | Thick closed marks show unmatched GHA hub bundles are noisy or 403 still recurs after hygiene is on main |
 | N184 | **Pages token guessing from GHA 403** | Do not infer or rotate GitHub Pages tokens from 403 logs. Pages #941 is a different class from workflow_dispatch actions:write. | Pages deploy fails twice consecutively on main for a permissions/token error with a named runbook |
 | N185 | **Raise Sunday FTSE --research-docs cap from 12** | Do not widen DEFAULT_RESEARCH_WEEKLY_CAP to drain admitted-book no_memo warns. Last Sunday created=2/updated=22; FTSE path-incomplete is 0; 17/19 flip-lag no_memo names already have a sibling-market memo. Cap 12 is the holdings rememo budget inside the 360-min Sunday job. | FTSE warn_open blocking_stage=no_memo on buy-effective names with index+key bodies after two prefer-first Sundays, or email-report regularly finishes with unused wall-clock while holdings memo_recent is red. |
+| N186 | **Calendar min_hold days capital-path twin** | A new live paper twin that blocks sells until N calendar days elapsed would duplicate still_in_buy_set and buffered_hold_counterfactual. Answer the longer-hold question via rebalance_log exit_confirm_screens replay first. | buffered_hold_counterfactual with screens>2 shows persistent after-cost excess lift on thick lookback and still_in_buy_set has multi-week closed sells vs rules |
 
 ---
 
@@ -608,6 +609,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L524 | **L461 observe-utilization card for P1 first-run pin** | Do not add a stability/utilization dashboard card for the thin #953 first-run observe pin. Ops-monitor finding + p1_first_run_pin.json is the approved surface. | Pin window has expired or a chronic EPS-from-body soak is explicitly approved |
 | L525 | **Investigate why PR ruff autofix skipped extra trailing newline** | CI validate on #960 failed ruff format (extra trailing newline in test_gha_secret_hygiene.py) and ci-pr-autofix did not apply. Diagnose skip gate (chore(ci) prefix, changed-file scope) without expanding autofix kinds. | Another cursor/* PR hits ruff_format and autofix does not push a chore(ci) commit |
 | L526 | **Pass current run_at into project_progress during publish** | build_project_progress reads on-disk latest.json before publish writes the new bundle, so evidence.screen_run_at and the 'confirm Sunday refresh' gap stay one week behind (e.g. 27 Sep inside a 4 Oct embed). Distinct from the Overview Updated line (sidecar generated_at). | After the Project progress tile overlay prefers newer generated_at, if the gaps line still says confirm Sunday refresh on a green Sunday screen. |
+| L527 | **churn_health median hold days and annual turnover** | learning_tracks_churn_health today rolls cost_drag and 7d trade counts but not median closed-position hold days or annualized turnover; useful diagnostic once min-hold instrument is pinned. | After buffered_hold_counterfactual longer-screen variants are the active observe instrument for the min-hold question |
 
 ---
 
