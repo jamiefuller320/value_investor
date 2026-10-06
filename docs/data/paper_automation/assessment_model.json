@@ -167,6 +167,30 @@
   },
   "note": "Frozen books keep their history and stop trading. Do not edit their configs or funds; start a twin instead.",
   "twins": {
+    "ai_judgment_graduated_fair": {
+      "started_at": "2026-10-06T23:50:52.810849+00:00",
+      "parent_track": "ai_judgment_fair",
+      "varied": {
+        "use_graduated_allocation": {
+          "parent": false,
+          "twin": true
+        }
+      },
+      "parent_knobs_at_start": {
+        "min_conviction": 0.6,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "max_positions": 3,
+        "sector_cap": 0.2,
+        "skip_timing_wait": true,
+        "require_research_accumulate": true,
+        "use_adjusted_signal": true,
+        "min_rebalance_notional_gbp": 10.0,
+        "use_graduated_allocation": false
+      },
+      "learning_question": "Does graduated allocation (trade-plan starter sizing + harvest skims) beat the primary's equal-weight sizing on total return at fair costs, holding every other primary knob fixed?",
+      "readiness_gate": "Promote only if the twin leads its parent on total return over >=26 weekly screens with parent knobs unchanged since start, and the twin-minus-parent 90% interval excludes zero; otherwise freeze the twin."
+    },
     "ai_judgment_hold5_fair": {
       "started_at": "2026-10-06T10:06:26.549738+00:00",
       "parent_track": "ai_judgment_fair",
