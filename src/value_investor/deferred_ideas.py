@@ -102,6 +102,7 @@ def add_idea(
     status: Status = "open",
     store_path: Path = DEFAULT_STORE,
     allow_duplicate: bool = False,
+    trigger: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], bool]:
     """
     Append an idea to the store.
@@ -115,6 +116,7 @@ def add_idea(
         raise ValueError("title and summary are required")
     if category not in {"not_now", "later", "security", "both"}:
         raise ValueError(f"Unknown category: {category}")
+    _require_valid_trigger(trigger)
 
     store = load_store(store_path)
     existing = find_idea_by_title(store, title)
@@ -133,6 +135,8 @@ def add_idea(
         "source": source.strip(),
         "added_at": _utcnow(),
     }
+    if trigger:
+        idea["trigger"] = trigger
     store.setdefault("ideas", []).append(idea)
     save_store(store, store_path)
     return idea, True
@@ -220,6 +224,40 @@ def set_idea_status(
     raise KeyError(f"Unknown idea id: {idea_id}")
 
 
+def _require_valid_trigger(trigger: dict[str, Any] | None) -> None:
+    if trigger is None:
+        return
+    from value_investor.deferred_triggers import validate_trigger
+
+    problems = validate_trigger(trigger)
+    if problems:
+        raise ValueError("Invalid trigger: " + "; ".join(problems))
+
+
+def set_idea_trigger(
+    idea_id: str,
+    trigger: dict[str, Any] | None,
+    *,
+    revisit_when: str | None = None,
+    store_path: Path = DEFAULT_STORE,
+) -> dict[str, Any]:
+    """Attach (or clear with ``None``) a machine-checkable trigger on an idea."""
+    _require_valid_trigger(trigger)
+    store = load_store(store_path)
+    for idea in store.get("ideas") or []:
+        if idea.get("id") == idea_id:
+            if trigger:
+                idea["trigger"] = trigger
+            else:
+                idea.pop("trigger", None)
+            if revisit_when is not None and revisit_when.strip():
+                idea["revisit_when"] = revisit_when.strip()
+            idea["updated_at"] = _utcnow()
+            save_store(store, store_path)
+            return idea
+    raise KeyError(f"Unknown idea id: {idea_id}")
+
+
 def render_markdown(
     store: dict[str, Any] | None = None, *, store_path: Path = DEFAULT_STORE
 ) -> str:
@@ -241,7 +279,9 @@ def render_markdown(
         "`ftse-defer render`.",
         "",
         "**How to use:** Review quarterly (or after ~8–12 weekly archives). "
-        "Move items to done/drop/now via `ftse-defer status`.",
+        "Move items to done/drop/now via `ftse-defer status`. "
+        "_(machine-checked)_ ideas carry a structured trigger that ops-monitor "
+        "evaluates daily (`ftse-defer triggers`).",
         "",
         "---",
         "",
@@ -289,9 +329,12 @@ def render_markdown(
                 "|---|------|------|--------------|",
             ]
         for idea in rows:
+            revisit = idea.get("revisit_when", "") or "—"
+            if idea.get("trigger"):
+                revisit += " _(machine-checked)_"
             out.append(
                 f"| {idea.get('id', '')} | **{idea.get('title', '')}** | "
-                f"{idea.get('summary', '')} | {idea.get('revisit_when', '') or '—'} |"
+                f"{idea.get('summary', '')} | {revisit} |"
             )
         return out
 

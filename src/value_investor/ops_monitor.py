@@ -2730,6 +2730,59 @@ def check_assessment_scoreboard(
     ]
 
 
+def check_deferred_triggers(
+    *,
+    store_path: Path | None = None,
+    result_path: Path | None = None,
+    repo_root: Path | None = None,
+    persist: bool = True,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Evaluate deferred ideas' structured triggers and frozen-book free-text triggers.
+
+    Writes ``docs/data/deferred_trigger_check.json``. Warn-only
+    (``auto_fixable=False``): a human picks up, retargets, or closes the idea.
+    """
+    from value_investor.deferred_ideas import DEFAULT_STORE
+    from value_investor.deferred_triggers import (
+        DEFAULT_RESULT_PATH,
+        ops_findings_from_trigger_check,
+        refresh_deferred_trigger_check,
+    )
+
+    store = Path(store_path) if store_path is not None else DEFAULT_STORE
+    if not store.exists():
+        return []
+    try:
+        payload = refresh_deferred_trigger_check(
+            store_path=store,
+            result_path=Path(result_path) if result_path is not None else DEFAULT_RESULT_PATH,
+            repo_root=Path(repo_root) if repo_root is not None else Path("."),
+            persist=persist,
+            now=now,
+        )
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="observe",
+                title="Deferred trigger check failed",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(row["severity"]),
+            category=str(row["category"]),
+            title=str(row["title"]),
+            summary=str(row["summary"]),
+            auto_fixable=False,
+        )
+        for row in ops_findings_from_trigger_check(payload, now=now)
+    ]
+
+
 def _next_engineering_seq(existing_rows: list[dict[str, Any]], run_stamp: str) -> int:
     prefix = f"eng-{run_stamp}-"
     used = [
@@ -3260,6 +3313,7 @@ def collect_ops_findings(
     findings.extend(check_screen_premise_backtest())
     findings.extend(check_assessment_scoreboard())
     findings.extend(check_paper_learning_tracks())
+    findings.extend(check_deferred_triggers())
 
     engineering_findings, queue_status = check_engineering_queue(
         open_prs=open_prs,
