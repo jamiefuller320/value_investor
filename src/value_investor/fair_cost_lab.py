@@ -449,6 +449,19 @@ HOLD_BUFFER_READINESS_GATE = (
     "excludes zero; otherwise freeze the twin."
 )
 
+GRADUATED_TWIN_TRACK_ID = "ai_judgment_graduated_fair"
+GRADUATED_PROVENANCE_FILENAME = "graduated_allocation_twin_provenance.json"
+GRADUATED_LEARNING_QUESTION = (
+    "Does graduated allocation (trade-plan starter sizing + harvest skims) beat the "
+    "primary's equal-weight sizing on total return at fair costs, holding every other "
+    "primary knob fixed?"
+)
+GRADUATED_READINESS_GATE = (
+    "Promote only if the twin leads its parent on total return over >=26 weekly screens "
+    "with parent knobs unchanged since start, and the twin-minus-parent 90% interval "
+    "excludes zero; otherwise freeze the twin."
+)
+
 
 def _comparable_knobs(cfg: AutomationConfig) -> dict[str, Any]:
     return {
@@ -461,27 +474,33 @@ def _comparable_knobs(cfg: AutomationConfig) -> dict[str, Any]:
         "require_research_accumulate": cfg.require_research_accumulate,
         "use_adjusted_signal": cfg.use_adjusted_signal,
         "min_rebalance_notional_gbp": cfg.min_rebalance_notional_gbp,
+        "use_graduated_allocation": cfg.use_graduated_allocation,
     }
 
 
-def spawn_hold_buffer_twin(
+def _spawn_primary_twin(
     paper_root: Path,
     *,
-    exit_confirm_screens: int = HOLD_BUFFER_EXIT_CONFIRM_SCREENS,
-    market_id: str = LIVE_PAPER_MARKET_ID,
-    dry_run: bool = False,
+    twin_id: str,
+    track_label: str,
+    knobs: dict[str, Any],
+    learning_question: str,
+    readiness_gate: str,
+    provenance_filename: str,
+    spawn_reason: str,
+    market_id: str,
+    dry_run: bool,
 ) -> dict[str, Any]:
-    """Cold-start a fair-cost twin of the primary book with a longer exit buffer (L541).
+    """Cold-start a fixed-knob, fair-cost twin of the assessment-model primary.
 
-    The twin copies the primary's knobs, changes only ``exit_confirm_screens``,
-    starts from fresh capital and is a churn-policy twin, so decision-review
-    never tunes it. Idempotent: an existing twin is left untouched.
+    The twin copies the primary's config, overrides only ``knobs``, starts from
+    fresh capital and is a churn-policy twin, so decision-review never tunes it.
+    Idempotent: an existing twin is left untouched.
     """
     from value_investor.assessment_model import is_track_frozen, primary_track_id, register_twin
 
     paper_root = Path(paper_root)
     parent_id = primary_track_id(paper_root)
-    twin_id = HOLD_BUFFER_TWIN_TRACK_ID
     twin_dir = paper_root / twin_id
     config_path = twin_dir / CONFIG_FILENAME
     result: dict[str, Any] = {
@@ -498,24 +517,27 @@ def spawn_hold_buffer_twin(
         return {**result, "spawned": True, "created": False, "reason": "already exists"}
 
     parent = _load_parent_config(paper_root, parent_id)
-    if int(parent.exit_confirm_screens) == int(exit_confirm_screens):
-        return {
-            **result,
-            "spawned": False,
-            "reason": f"parent already uses exit_confirm_screens={exit_confirm_screens}",
-        }
+    varied = {
+        key: {"parent": getattr(parent, key), "twin": value}
+        for key, value in knobs.items()
+        if getattr(parent, key) != value
+    }
+    if not varied:
+        already = ", ".join(f"{key}={value}" for key, value in knobs.items())
+        return {**result, "spawned": False, "reason": f"parent already uses {already}"}
     if dry_run:
         return {**result, "spawned": False, "dry_run": True, "would_spawn": True}
 
     cfg = AutomationConfig.from_dict(parent.to_dict())
     cfg.track_id = twin_id
-    cfg.track_label = f"AI judgment hold-buffer twin (exit after {exit_confirm_screens} screens)"
+    cfg.track_label = track_label
     cfg.is_primary_learning_track = False
     cfg.is_fair_cost_lab = True
     cfg.fair_cost_parent_track = parent_id
     cfg.is_churn_policy_twin = True
     cfg.churn_policy_parent_track = parent_id
-    cfg.exit_confirm_screens = int(exit_confirm_screens)
+    for key, value in knobs.items():
+        setattr(cfg, key, value)
     stamp_fair_costs(cfg, market_id=market_id)
 
     twin_dir.mkdir(parents=True, exist_ok=True)
@@ -526,20 +548,14 @@ def spawn_hold_buffer_twin(
     ensure_automated_fund(fund_path, cfg)
 
     parent_knobs = _comparable_knobs(parent)
-    varied = {
-        "exit_confirm_screens": {
-            "parent": int(parent.exit_confirm_screens),
-            "twin": int(exit_confirm_screens),
-        }
-    }
     registration = register_twin(
         paper_root,
         track_id=twin_id,
         parent_track_id=parent_id,
         varied=varied,
         parent_knobs_at_start=parent_knobs,
-        learning_question=HOLD_BUFFER_LEARNING_QUESTION,
-        readiness_gate=HOLD_BUFFER_READINESS_GATE,
+        learning_question=learning_question,
+        readiness_gate=readiness_gate,
     )
     provenance = {
         "schema_version": 1,
@@ -547,19 +563,67 @@ def spawn_hold_buffer_twin(
         "track_id": twin_id,
         "parent_track_id": parent_id,
         "market_id": market_id,
-        "spawn_reason": "L541 hold-buffer twin (cold start, fresh capital epoch)",
+        "spawn_reason": spawn_reason,
         "fair_costs": cost_fields_for_config(market_id),
         "varied": varied,
         "parent_knobs_at_spawn": parent_knobs,
-        "learning_question": HOLD_BUFFER_LEARNING_QUESTION,
-        "readiness_gate": HOLD_BUFFER_READINESS_GATE,
+        "learning_question": learning_question,
+        "readiness_gate": readiness_gate,
         "note": (
             "Knobs are fixed (churn-policy twin; decision-review --apply skips it). "
             "Do not edit mid-flight; freeze it and start a new twin instead."
         ),
     }
-    write_json(twin_dir / HOLD_BUFFER_PROVENANCE_FILENAME, provenance, compact=False)
+    write_json(twin_dir / provenance_filename, provenance, compact=False)
     return {**result, "spawned": True, "created": True, "registration": registration}
+
+
+def spawn_hold_buffer_twin(
+    paper_root: Path,
+    *,
+    exit_confirm_screens: int = HOLD_BUFFER_EXIT_CONFIRM_SCREENS,
+    market_id: str = LIVE_PAPER_MARKET_ID,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    """Cold-start a fair-cost twin of the primary book with a longer exit buffer (L541)."""
+    screens = int(exit_confirm_screens)
+    return _spawn_primary_twin(
+        paper_root,
+        twin_id=HOLD_BUFFER_TWIN_TRACK_ID,
+        track_label=f"AI judgment hold-buffer twin (exit after {screens} screens)",
+        knobs={"exit_confirm_screens": screens},
+        learning_question=HOLD_BUFFER_LEARNING_QUESTION,
+        readiness_gate=HOLD_BUFFER_READINESS_GATE,
+        provenance_filename=HOLD_BUFFER_PROVENANCE_FILENAME,
+        spawn_reason="L541 hold-buffer twin (cold start, fresh capital epoch)",
+        market_id=market_id,
+        dry_run=dry_run,
+    )
+
+
+def spawn_graduated_allocation_twin(
+    paper_root: Path,
+    *,
+    market_id: str = LIVE_PAPER_MARKET_ID,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    """Cold-start a fair-cost twin of the primary book that uses graduated allocation.
+
+    Replaces ``graduated_allocation`` (rules screen, 3% stress costs, outside the
+    assessment model) as the place to judge starter sizing + harvest skims.
+    """
+    return _spawn_primary_twin(
+        paper_root,
+        twin_id=GRADUATED_TWIN_TRACK_ID,
+        track_label="AI judgment graduated-allocation twin (starter sizing + harvest skims)",
+        knobs={"use_graduated_allocation": True},
+        learning_question=GRADUATED_LEARNING_QUESTION,
+        readiness_gate=GRADUATED_READINESS_GATE,
+        provenance_filename=GRADUATED_PROVENANCE_FILENAME,
+        spawn_reason="Fair-cost graduated-allocation twin (cold start, fresh capital epoch)",
+        market_id=market_id,
+        dry_run=dry_run,
+    )
 
 
 def recommend_rows_for_fair_twins(assessment: dict[str, Any]) -> list[dict[str, Any]]:
