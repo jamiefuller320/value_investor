@@ -17,6 +17,7 @@ from value_investor.ingest_discovery_scan import (
 )
 from value_investor.library_screen import screen_dir_for
 from value_investor.research.amf_direct import amf_eligible, fetch_filings_amf_direct
+from value_investor.research.cision_direct import cision_eligible, fetch_filings_cision_direct
 from value_investor.research.companies_house import fetch_filings_companies_house
 from value_investor.research.filings import (
     _base_symbol,
@@ -95,6 +96,13 @@ def list_regime_filings_index_only(
         )
         if amf_eligible(ticker):
             groups.append(fetch_filings_amf_direct(ticker=ticker, company_name=company_name))
+        if cision_eligible(ticker):
+            # Listing only: report PDFs are resolved from release pages at ingest.
+            groups.append(
+                fetch_filings_cision_direct(
+                    ticker=ticker, company_name=company_name, resolve_attachments=False
+                )
+            )
         if _sec_edgar_supplement_allowed(ticker, company_name):
             groups.append(
                 fetch_filings_sec_edgar(
