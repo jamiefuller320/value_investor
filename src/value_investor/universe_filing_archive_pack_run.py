@@ -559,6 +559,7 @@ def _finalize_and_persist(
                 bottleneck=review,
                 pack_run_path=Path(pack_run_path),
                 bottleneck_path=Path(bottleneck_path),
+                status_path=Path(pack_run_path).parent / "universe_filing_archive_status.json",
                 now=clock,
             )
         except Exception:  # noqa: BLE001 — status panel must not fail the lane

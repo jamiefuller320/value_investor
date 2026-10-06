@@ -298,21 +298,41 @@ def build_queue_health_snapshot(
 
 def refresh_queue_health_ui(
     *,
-    automation_path: Path = DEFAULT_AUTOMATION_PATH,
-    latest_path: Path = DEFAULT_LATEST_PATH,
-    queue_health_path: Path = DEFAULT_QUEUE_HEALTH_PATH,
-    tasks_path: Path = COMMITTED_TASKS_PATH,
-    ops_status_path: Path = DEFAULT_OPS_STATUS_PATH,
+    automation_path: Path | None = None,
+    latest_path: Path | None = None,
+    queue_health_path: Path | None = None,
+    tasks_path: Path | None = None,
+    ops_status_path: Path | None = None,
     open_prs: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Write queue_health.json and embed in automation.json / latest.json."""
+    """Write queue_health.json and embed in automation.json / latest.json.
+
+    Unset paths, including the observe-utilization and lifecycle-maturity
+    stores, sit beside the first explicit one (automation, queue health or
+    tasks), so a caller pointed at another data dir never writes docs/data.
+    """
     from value_investor.lifecycle_maturity_trajectory import (
         refresh_lifecycle_maturity_trajectory,
     )
     from value_investor.observe_utilization import refresh_observe_utilization
 
-    observe = refresh_observe_utilization(ops_status_path=ops_status_path)
-    maturity = refresh_lifecycle_maturity_trajectory(ops_status_path=ops_status_path)
+    anchor = automation_path or queue_health_path or tasks_path or DEFAULT_AUTOMATION_PATH
+    data_dir = Path(anchor).parent
+    automation_path = automation_path or data_dir / DEFAULT_AUTOMATION_PATH.name
+    latest_path = latest_path or data_dir / DEFAULT_LATEST_PATH.name
+    queue_health_path = queue_health_path or data_dir / DEFAULT_QUEUE_HEALTH_PATH.name
+    tasks_path = tasks_path or data_dir / COMMITTED_TASKS_PATH.name
+    ops_status_path = ops_status_path or data_dir / DEFAULT_OPS_STATUS_PATH.name
+
+    observe = refresh_observe_utilization(
+        ops_status_path=ops_status_path,
+        store_path=data_dir / "observe_utilization.json",
+    )
+    maturity = refresh_lifecycle_maturity_trajectory(
+        ops_status_path=ops_status_path,
+        store_path=data_dir / "lifecycle_maturity_trajectory.json",
+        board_path=data_dir / "lifecycle_board.json",
+    )
     snapshot = build_queue_health_snapshot(
         tasks_path=tasks_path,
         ops_status_path=ops_status_path,
