@@ -6,10 +6,14 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 from value_investor.research.gap_fill_sources import (
     deepen_thin_filings_if_needed,
     inspect_local_sources,
 )
+
+pytestmark = pytest.mark.usefixtures("isolated_cwd")
 
 
 def test_deepen_thin_filings_skips_when_sufficient(tmp_path: Path):

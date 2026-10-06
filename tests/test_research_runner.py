@@ -3,6 +3,7 @@
 from unittest.mock import patch
 
 import pandas as pd
+import pytest
 
 from value_investor.research.document import ResearchDocument
 from value_investor.research.runner import (
@@ -14,6 +15,8 @@ from value_investor.research.runner import (
 )
 from value_investor.research.store import ResearchStore
 from value_investor.summary import build_company_reports
+
+pytestmark = pytest.mark.usefixtures("isolated_cwd")
 
 
 def _report(

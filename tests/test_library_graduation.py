@@ -5,6 +5,8 @@ from __future__ import annotations
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
+import pytest
+
 from value_investor.agent_model_policy import load_policy, save_policy
 from value_investor.data_library import market_dir
 from value_investor.library_graduation import (
@@ -18,6 +20,8 @@ from value_investor.library_graduation import (
 )
 from value_investor.library_ladder import run_library_ladder
 from value_investor.storage import write_json
+
+pytestmark = pytest.mark.usefixtures("isolated_cwd")
 
 
 def _seed_market(

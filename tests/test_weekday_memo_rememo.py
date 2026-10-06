@@ -5,10 +5,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from value_investor.research.weekday_rememo import (
     run_weekday_memo_rememo_pass,
     select_weekday_rememo_targets,
 )
+
+pytestmark = pytest.mark.usefixtures("isolated_cwd")
 
 
 def _write_memo(

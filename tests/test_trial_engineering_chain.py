@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from value_investor.engineering_queue import ingest_trial_rerun_dispatch
 from value_investor.engineering_tasks import compile_ingest_engineering_task_from_trial
 from value_investor.ingest_trials import (
@@ -17,6 +19,8 @@ from value_investor.ingest_trials import (
 )
 from value_investor.research.ingest_improvement import select_ingest_improvement_targets
 from value_investor.summary import CompanyReport
+
+pytestmark = pytest.mark.usefixtures("isolated_cwd")
 
 
 def _report(ticker: str, name: str, signal: str = "strong_buy") -> CompanyReport:
@@ -294,9 +298,7 @@ def test_should_auto_compile_when_partial_improvement_leaves_gaps(tmp_path: Path
     assert reason == "zero_yield_refetch"
 
 
-def test_should_auto_compile_when_no_refetch_attempted_but_gaps_remain(
-    tmp_path: Path, monkeypatch
-):
+def test_should_auto_compile_when_no_refetch_attempted_but_gaps_remain(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(
         "value_investor.ingest_gap_closure.ticker_ir_allowlist_count",
         lambda ticker: 0,
