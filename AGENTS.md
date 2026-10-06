@@ -137,6 +137,7 @@ Rules:
 4. Do **not** hand-edit `docs/deferred-review.md` — it is generated from `docs/deferred-ideas.json`.
 5. If several ideas appear in one answer, add each separately.
 6. On a merge conflict in `docs/deferred-ideas.json` / `docs/deferred-review.md` or a failing CI `ftse-defer check-ids`, run `ftse-defer rebase-ids --base origin/main --apply` after `git merge origin/main` — never hand-renumber IDs (main's numbering wins; references in your added lines follow). See [`docs/ops/project-traffic.md`](docs/ops/project-traffic.md).
+7. When the revisit trigger is a committed number, flag or date (a scoreboard verdict, a metric threshold, a plan stage, a calendar date), also pass `--trigger '<json>'` (or `ftse-defer set-trigger <ID>` later) so ops-monitor flags it when met. Name active books (primary/control/twins), never frozen ones. See [`docs/ops/deferred-triggers.md`](docs/ops/deferred-triggers.md).
 
 For thoughts **not ready** for a full defer entry (no clear revisit trigger yet), use a scratch fragment:
 

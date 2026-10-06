@@ -16,8 +16,18 @@ from value_investor.deferred_ideas import (
     load_store,
     set_fragment_status,
     set_idea_status,
+    set_idea_trigger,
     write_markdown,
 )
+
+
+def _parse_trigger(raw: str) -> dict | None:
+    if not raw.strip():
+        return None
+    try:
+        return json.loads(raw)
+    except ValueError as exc:
+        raise SystemExit(f"--trigger must be JSON: {exc}") from exc
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -43,6 +53,11 @@ def main(argv: list[str] | None = None) -> int:
     add_p.add_argument("--tags", default="", help="Comma-separated tags")
     add_p.add_argument("--source", default="", help="Agent URL or bc-id")
     add_p.add_argument("--allow-duplicate", action="store_true")
+    add_p.add_argument(
+        "--trigger",
+        default="",
+        help='Machine-checkable trigger JSON, e.g. \'{"all":[{"on_or_after":"2026-12-01"}]}\'',
+    )
     add_p.add_argument("--json", action="store_true")
 
     sub.add_parser("render", help="Regenerate docs/deferred-review.md from JSON")
@@ -62,6 +77,20 @@ def main(argv: list[str] | None = None) -> int:
     status_p.add_argument("idea_id")
     status_p.add_argument("status", choices=["open", "done", "drop", "now"])
     status_p.add_argument("--note", default="", help="Why (stored as status_note)")
+
+    trig_p = sub.add_parser(
+        "set-trigger", help="Attach a machine-checkable trigger (docs/ops/deferred-triggers.md)"
+    )
+    trig_p.add_argument("idea_id")
+    trig_group = trig_p.add_mutually_exclusive_group(required=True)
+    trig_group.add_argument("--trigger", help="Trigger JSON ({'all'|'any': [conditions]})")
+    trig_group.add_argument("--clear", action="store_true")
+    trig_p.add_argument("--revisit-when", default=None, help="Also replace the free-text trigger")
+
+    triggers_p = sub.add_parser(
+        "triggers", help="Evaluate structured triggers and frozen-book mentions (read-only)"
+    )
+    triggers_p.add_argument("--json", action="store_true")
 
     fragment_p = sub.add_parser("fragment", help="Append a scratch-pad thought fragment")
     fragment_p.add_argument("--text", required=True)
@@ -107,6 +136,7 @@ def main(argv: list[str] | None = None) -> int:
             source=args.source,
             store_path=args.store,
             allow_duplicate=args.allow_duplicate,
+            trigger=_parse_trigger(args.trigger),
         )
         write_markdown(store_path=args.store, markdown_path=args.markdown)
         if args.json:
@@ -149,6 +179,31 @@ def main(argv: list[str] | None = None) -> int:
         idea = set_idea_status(args.idea_id, args.status, note=args.note, store_path=args.store)
         write_markdown(store_path=args.store, markdown_path=args.markdown)
         print(f"Set {idea['id']} -> {idea['status']}")
+        return 0
+
+    if args.command == "set-trigger":
+        trigger = None if args.clear else _parse_trigger(args.trigger)
+        idea = set_idea_trigger(
+            args.idea_id, trigger, revisit_when=args.revisit_when, store_path=args.store
+        )
+        write_markdown(store_path=args.store, markdown_path=args.markdown)
+        print(f"{'Cleared' if trigger is None else 'Set'} trigger on {idea['id']}")
+        return 0
+
+    if args.command == "triggers":
+        from value_investor.deferred_triggers import check_deferred_triggers
+
+        payload = check_deferred_triggers(load_store(args.store))
+        if args.json:
+            print(json.dumps(payload, indent=2, default=str))
+            return 0
+        print(f"{payload['with_trigger']} of {payload['open_ideas']} open ideas machine-checked")
+        for row in payload["met"]:
+            print(f"MET      {row['id']}\t{row['title']}")
+        for row in payload["unknown"]:
+            print(f"UNKNOWN  {row['id']}\t{'; '.join(row['reasons'])}")
+        for row in payload["frozen_mentions"]:
+            print(f"FROZEN   {row['id']}\tnames {', '.join(row['tracks'])}")
         return 0
 
     if args.command == "fragment":

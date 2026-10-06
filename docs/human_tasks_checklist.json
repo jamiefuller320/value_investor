@@ -195,6 +195,14 @@
           "doc_anchor": "assessment-scoreboard"
         },
         {
+          "id": "sunday-deferred-triggers",
+          "title": "Act on met deferred triggers",
+          "summary": "When ops-monitor reports Deferred idea triggers met / unreadable / name frozen books (docs/data/deferred_trigger_check.json), pick up (ftse-defer status <ID> now), retarget (ftse-defer set-trigger), or close (ftse-defer status done|drop --note) each named idea. ftse-defer triggers shows the current list.",
+          "automated": false,
+          "doc_path": "docs/ops/deferred-triggers.md",
+          "doc_anchor": "clearing-a-finding"
+        },
+        {
           "id": "sunday-hold-buffer-twin",
           "title": "Hold-buffer twin vs primary (L541)",
           "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_hold5_fair (exit_confirm_screens 5) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote the longer buffer only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Never edit either book mid-flight.",
