@@ -7,7 +7,7 @@ Regimes:
 - ``uk_rns`` (FTSE / ``.L``): Ticker.app RNS API + Investegate via Google News
 - ``sec_edgar`` (S&P 500 / bare US tickers): SEC EDGAR submissions + HTML bodies
 - ``asx_announcements`` (ASX 200 / ``.AX``): Markit Digital JSON feed (direct PDFs) + Google News fallback
-- ``euro_filings`` (EURO STOXX 50 / DAX / CAC): ESEF by LEI then name search, Belgium official / Euronext Brussels for ``.BR``, Google News, IR allowlist, SEC 20-F/6-K when dual-listed
+- ``euro_filings`` (EURO STOXX 50 / DAX / CAC): ESEF by LEI then name search, AMF open data (France OAM) for ``.PA`` / French LEIs, Belgium official / Euronext Brussels for ``.BR``, Google News, IR allowlist, SEC 20-F/6-K when dual-listed
 - ``tsx_announcements`` (TSX 60 / ``.TO``): SEDAR+ / issuer headlines via Google News
 
 UK RNS headlines are tagged ``period=annual|interim|trading_update|other`` via
@@ -37,6 +37,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import Any
 
+from value_investor.research.amf_direct import amf_eligible, fetch_filings_amf_direct
 from value_investor.research.belgium_official import fetch_filings_belgium_official
 from value_investor.research.hkex_direct import (
     drop_allowlist_rows_covered_by_hkex,
@@ -2414,6 +2415,10 @@ def _apply_headline_period(
         # HKEX headline category (Quarterly Results, Profit Warning) is the
         # regulator's own label; "RESULTS FOR THE THREE MONTHS ENDED…" is not.
         period = str(item["hkex_period"])
+    elif item.get("source") == "amf_direct" and item.get("amf_period"):
+        # AMF subtype code + bilingual headline cues; French titles
+        # ("Résultats du 1er semestre") do not classify via the RNS rules.
+        period = str(item["amf_period"])
     elif (
         period == "other"
         and body_snippet
@@ -3082,6 +3087,8 @@ def filing_source_surface(market: str | None, ticker: str) -> str:
     regime = resolve_filings_regime(market, ticker)
     if regime == "asia_filings" and is_hkex_ticker(ticker):
         return f"{regime}+hkex_direct"
+    if regime == "euro_filings" and amf_eligible(ticker):
+        return f"{regime}+amf_direct"
     return regime
 
 
@@ -5014,7 +5021,7 @@ def _source_bonus(source: str | None) -> int:
         return 30
     if source in {"investegate_direct", "investegate_resolved"}:
         return 28
-    if source in {"asx_direct", "hkex_direct"}:
+    if source in {"asx_direct", "hkex_direct", "amf_direct"}:
         return 27
     if source in {"esef_direct", "belgium_official"}:
         return 26
@@ -10495,6 +10502,8 @@ def ingest_filings(
                 identifier_map_path=DEFAULT_ISSUER_IDENTIFIERS_PATH,
             )
         )
+        if amf_eligible(ticker):
+            groups.append(fetch_filings_amf_direct(ticker=ticker, company_name=company_name))
         groups.append(fetch_filings_belgium_official(company_name=company_name, ticker=ticker))
         groups.append(
             fetch_filings_euro_news(company_name=company_name, ticker=ticker, market=market)
@@ -10624,6 +10633,8 @@ def ingest_filings(
     elif regime == "euro_filings":
         note = (
             "Euro-listed results discovery via ESEF (filings.xbrl.org when available), "
+            "AMF open data (info-financiere.gouv.fr, France OAM: half-year reports and "
+            "results releases with direct PDF URLs) for .PA names and French LEIs, "
             "Belgium official / Euronext Brussels regulated-information for .BR names, "
             "Google News, optional IR allowlist URLs, Investegate (when listed), "
             "plus SEC 20-F/6-K when the issuer is dual-listed. period=annual|interim|other. "

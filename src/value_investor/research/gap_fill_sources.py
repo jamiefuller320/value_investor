@@ -102,7 +102,11 @@ ALTERNATE_SOURCE_CATALOG: dict[str, list[dict[str, str]]] = {
         {
             "id": "exchange_filings_full",
             "label": "Euronext / national register filing full-text re-pull",
-            "why": "Euro memos often index headlines without bodies",
+            "why": (
+                "Euro memos often index headlines without bodies; .PA names and French "
+                "LEIs index AMF open-data half-year reports and results releases with "
+                "PDF bodies, other countries are still ESEF / Google News"
+            ),
         },
         {
             "id": "company_ir_presentation",
