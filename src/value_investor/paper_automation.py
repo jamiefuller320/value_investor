@@ -348,6 +348,8 @@ AI_JUDGMENT_SUBDIR = "ai_judgment"
 AI_JUDGMENT_CALIBRATED_SUBDIR = "ai_judgment_calibrated"
 MOMENTUM_GRACE_SUBDIR = "momentum_grace"
 GRADUATED_ALLOCATION_SUBDIR = "graduated_allocation"
+# Track sync and decision-review share this floor so they never fight over max_positions.
+GRADUATED_ALLOCATION_MIN_POSITIONS = 4
 TECHNICAL_SUBDIR = "technical"
 BUY_TIER_LEVEL_SUBDIR = "buy_tier_level"
 BUY_TIER_LEVEL_DCA_SUBDIR = "buy_tier_level_dca"
@@ -400,7 +402,7 @@ def default_graduated_allocation_config(base: AutomationConfig | None = None) ->
     cfg.track_label = "Screen rules + graduated allocation"
     cfg.is_primary_learning_track = False
     cfg.use_graduated_allocation = True
-    cfg.max_positions = max(int(cfg.max_positions), 4)
+    cfg.max_positions = max(int(cfg.max_positions), GRADUATED_ALLOCATION_MIN_POSITIONS)
     return cfg
 
 
@@ -1522,8 +1524,8 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         ga.weekdays_only = rules.weekdays_only
         _inherit_cost_fields(ga, rules)
         ga.initial_cash = rules.initial_cash
-        if int(ga.max_positions) < 4:
-            ga.max_positions = 4
+        if int(ga.max_positions) < GRADUATED_ALLOCATION_MIN_POSITIONS:
+            ga.max_positions = GRADUATED_ALLOCATION_MIN_POSITIONS
     else:
         ga = default_graduated_allocation_config(rules)
     ga_path.write_text(json.dumps(ga.to_dict(), indent=2), encoding="utf-8")

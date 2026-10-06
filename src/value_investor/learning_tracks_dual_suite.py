@@ -62,9 +62,23 @@ def _metrics(row: dict[str, Any] | None) -> dict[str, Any]:
     return metrics if isinstance(metrics, dict) else {}
 
 
+def _since_zero_datum(metrics: dict[str, Any]) -> dict[str, Any]:
+    zero = metrics.get("since_zero_datum")
+    return zero if isinstance(zero, dict) else {}
+
+
+def _adoption_excess(metrics: dict[str, Any]) -> tuple[float | None, str]:
+    """Forward-only excess for warm-started labs; seed P&L before the datum is diagnostic."""
+    zero = _since_zero_datum(metrics)
+    if zero:
+        return zero.get("excess_after_costs"), "since_zero_datum"
+    return metrics.get("excess_after_costs"), "lifetime"
+
+
 def _track_row_summary(track_id: str, row: dict[str, Any] | None) -> dict[str, Any]:
     metrics = _metrics(row)
     epoch = metrics.get("epoch") if isinstance(metrics.get("epoch"), dict) else {}
+    zero = _since_zero_datum(metrics)
     return {
         "track_id": track_id,
         "excess_after_costs": metrics.get("excess_after_costs"),
@@ -76,6 +90,9 @@ def _track_row_summary(track_id: str, row: dict[str, Any] | None) -> dict[str, A
         "portfolio_value": metrics.get("portfolio_value"),
         "epoch_excess_after_costs": epoch.get("excess_after_costs"),
         "epoch_total_return": epoch.get("total_return"),
+        "zero_datum_started_at": zero.get("started_at"),
+        "since_zero_datum_excess_after_costs": zero.get("excess_after_costs"),
+        "since_zero_datum_equity_marks": zero.get("equity_marks"),
         "is_primary_learning_track": bool((row or {}).get("is_primary_learning_track")),
         "beat_market": (row or {}).get("beat_market"),
         "beat_control": (row or {}).get("beat_control"),
@@ -193,8 +210,8 @@ def build_learning_tracks_dual_suite(
     fair_rules = reviews.get(RULES_FAIR_TRACK_ID)
     fair_ai_metrics = _metrics(fair_ai if isinstance(fair_ai, dict) else None)
     fair_rules_metrics = _metrics(fair_rules if isinstance(fair_rules, dict) else None)
-    fair_ai_excess = fair_ai_metrics.get("excess_after_costs")
-    fair_rules_excess = fair_rules_metrics.get("excess_after_costs")
+    fair_ai_excess, fair_ai_basis = _adoption_excess(fair_ai_metrics)
+    fair_rules_excess, fair_rules_basis = _adoption_excess(fair_rules_metrics)
     fair_beat_market = (
         bool(fair_ai_excess is not None and float(fair_ai_excess) > 0)
         if fair_ai_excess is not None
@@ -271,6 +288,19 @@ def build_learning_tracks_dual_suite(
             "control_track_id": RULES_FAIR_TRACK_ID,
             "ai_excess_after_costs": fair_ai_excess,
             "control_excess_after_costs": fair_rules_excess,
+            "excess_basis": {"ai": fair_ai_basis, "control": fair_rules_basis},
+            "zero_datum_started_at": {
+                "ai": _since_zero_datum(fair_ai_metrics).get("started_at"),
+                "control": _since_zero_datum(fair_rules_metrics).get("started_at"),
+            },
+            "lifetime_excess_diagnostic": {
+                "ai": fair_ai_metrics.get("excess_after_costs"),
+                "control": fair_rules_metrics.get("excess_after_costs"),
+                "note": (
+                    "Lifetime includes the warm-start seed replayed from the 3% stress "
+                    "parent before the zero datum (L533). Diagnostic only."
+                ),
+            },
             "beat_market": fair_beat_market,
             "beat_control": fair_beat_control,
             "available": bool(suite_b_ids),

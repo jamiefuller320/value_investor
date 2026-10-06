@@ -5803,7 +5803,11 @@ function renderLearningTracksPanel(data) {
   const suiteBHeadline = `
     <div class="learning-tracks-headline">
       <span><strong>Adoption truth (Suite B fair)</strong></span>
-      <span>AI fair excess vs ^FTSE: <strong>${fairExcess != null ? pct(fairExcess) : "—"}</strong></span>
+      <span>AI fair excess vs ^FTSE: <strong>${fairExcess != null ? pct(fairExcess) : "—"}</strong>${
+        (suiteBMeta.excess_basis || {}).ai === "since_zero_datum" && (suiteBMeta.zero_datum_started_at || {}).ai
+          ? ` <span class="small muted" title="Forward-only: warm-start seed before this date is diagnostic (L533)">since ${esc(String(suiteBMeta.zero_datum_started_at.ai).slice(0, 10))}</span>`
+          : ""
+      }</span>
       <span>Beat market: ${esc(yesNo(fairBeatMarket))}</span>
       <span>Beat fair rules: ${esc(yesNo(fairBeatControl))}</span>
     </div>`;

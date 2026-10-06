@@ -1967,6 +1967,61 @@ def check_total_return_view(
     ]
 
 
+def check_hold_period_counterfactual(
+    *,
+    paper_root: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+    history_fetcher: Any = None,
+) -> list[OpsFinding]:
+    """Observe-only L531: replay logged passes with longer exit buffers.
+
+    Writes ``docs/data/hold_period_counterfactual.json``. Never changes books or
+    knobs (``auto_fixable=False``).
+    """
+    from value_investor.hold_period_counterfactual import (
+        DEFAULT_PAPER_ROOT,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        fetch_ticker_history,
+        ops_finding_from_hold_period_counterfactual,
+        refresh_hold_period_counterfactual,
+    )
+
+    root = Path(paper_root) if paper_root is not None else DEFAULT_PAPER_ROOT
+    if not root.exists():
+        return []
+    try:
+        payload = refresh_hold_period_counterfactual(
+            root,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            history_fetcher=history_fetcher or fetch_ticker_history,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_hold_period_counterfactual(payload)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_lifecycle_maturity_trajectory(
     *,
     board_path: Path | None = None,
@@ -2855,6 +2910,7 @@ def collect_ops_findings(
     findings.extend(check_combined_tagged_learning())
     findings.extend(check_track_statistics())
     findings.extend(check_total_return_view())
+    findings.extend(check_hold_period_counterfactual())
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_ui_state_reconciliation())
     findings.extend(check_gha_failure_triage())

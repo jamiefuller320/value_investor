@@ -12,12 +12,17 @@ from value_investor.decision_review import (
     detect_saturated_knobs,
     ensure_knob_epoch,
     estimate_counterfactual_preview,
+    max_positions_bounds_for,
     metrics_for_review,
     propose_knob_updates,
     run_decision_review,
     start_knob_epoch,
 )
-from value_investor.paper_automation import AutomationConfig
+from value_investor.paper_automation import (
+    GRADUATED_ALLOCATION_MIN_POSITIONS,
+    AutomationConfig,
+    default_graduated_allocation_config,
+)
 from value_investor.paper_fund import (
     PaperFund,
     PaperFundConfig,
@@ -762,3 +767,90 @@ def test_run_decision_review_reports_saturation(tmp_path: Path):
     assert any("Saturated at bound" in r for r in result.reasons)
     payload = __import__("json").loads((out / "decision_review.json").read_text())
     assert payload["saturated_knobs"]
+
+
+def test_max_positions_floor_matches_graduated_allocation_sync():
+    assert max_positions_bounds_for(AutomationConfig())[0] == 3
+    ga = default_graduated_allocation_config(AutomationConfig(max_positions=3))
+    assert ga.max_positions == GRADUATED_ALLOCATION_MIN_POSITIONS
+    assert max_positions_bounds_for(ga)[0] == GRADUATED_ALLOCATION_MIN_POSITIONS
+
+
+def test_graduated_allocation_review_does_not_fight_track_sync(tmp_path: Path):
+    """Regression: review proposed max_positions 3, sync reset it to 4, every weekday."""
+    out = tmp_path / "graduated_allocation"
+    _write_churny_track(
+        out,
+        config=AutomationConfig(
+            max_positions=GRADUATED_ALLOCATION_MIN_POSITIONS,
+            skip_timing_wait=True,
+            min_conviction=0.6,
+            sector_cap=0.2,
+            use_graduated_allocation=True,
+        ),
+    )
+    result = run_decision_review(
+        output_dir=out, apply=True, fetch_benchmark=False, benchmark_return=0.05
+    )
+    assert "max_positions" not in result.proposed_changes
+    assert _read_config(out)["max_positions"] == GRADUATED_ALLOCATION_MIN_POSITIONS
+    by_knob = {row["knob"]: row for row in result.saturated_knobs}
+    assert by_knob["max_positions"]["bound"] == GRADUATED_ALLOCATION_MIN_POSITIONS
+
+
+def test_review_publishes_metrics_since_frozen_zero_datum(tmp_path: Path):
+    """L533: fair labs score forward from the warm-start datum, which knob applies never move."""
+    import json
+
+    from value_investor.decision_review import KnobEpoch, load_forward_zero_datum, save_knob_epoch
+
+    out = tmp_path / "ai_judgment_fair"
+    _write_churny_track(
+        out,
+        config=AutomationConfig(max_positions=5, skip_timing_wait=True, min_conviction=0.0),
+    )
+    zero_at = "2026-02-15T12:00:00+00:00"
+    (out / "fair_cost_lab_provenance.json").write_text(
+        json.dumps(
+            {
+                "suite": "B",
+                "endurance_zero_datum": {
+                    "started_at": zero_at,
+                    "baseline_nav": 400.0,
+                    "baseline_contributed_capital": 1000.0,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    later_epoch = "2026-03-02T00:00:00+00:00"
+    save_knob_epoch(
+        out,
+        KnobEpoch(
+            started_at=later_epoch,
+            baseline_nav=380.0,
+            baseline_contributed_capital=1000.0,
+            knobs={},
+        ),
+    )
+    assert load_forward_zero_datum(out)["started_at"] == zero_at
+
+    result = run_decision_review(
+        output_dir=out, apply=False, fetch_benchmark=False, benchmark_return=0.05
+    )
+    since = result.metrics["since_zero_datum"]
+    assert since["started_at"] == zero_at
+    assert since["source"] == "fair_cost_lab_provenance.json"
+    assert since["baseline_nav"] == 400.0
+    assert since["equity_marks"] > result.metrics["epoch"]["equity_marks"]
+    assert result.metrics["epoch"]["started_at"] == later_epoch
+    assert since["excess_after_costs"] == round(since["total_return"] - 0.05, 4)
+
+
+def test_review_omits_since_zero_datum_without_provenance(tmp_path: Path):
+    out = tmp_path / "rules"
+    _write_churny_track(out, config=AutomationConfig(max_positions=5))
+    result = run_decision_review(
+        output_dir=out, apply=False, fetch_benchmark=False, benchmark_return=0.05
+    )
+    assert "since_zero_datum" not in result.metrics
