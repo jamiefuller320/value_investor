@@ -30,6 +30,28 @@ from value_investor.paper_fund import (
 )
 
 
+def _significant_stats(
+    tmp_path: Path,
+    verdict: str = "negative",
+    *,
+    updated_at: datetime | None = None,
+    status: str = "ok",
+    benchmark_ticker: str = "^FTSE",
+) -> Path:
+    path = tmp_path / "track_statistics.json"
+    row = {"status": status, "verdict": verdict, "periods": 40}
+    payload = {
+        "updated_at": (updated_at or datetime.now(UTC)).isoformat(),
+        "benchmark_ticker": benchmark_ticker,
+        "tracks": {
+            track_id: dict(row)
+            for track_id in ("rules", "ai_judgment", "graduated_allocation", "buy_tier_level")
+        },
+    }
+    path.write_text(__import__("json").dumps(payload), encoding="utf-8")
+    return path
+
+
 def test_select_automated_targets_respects_conviction_and_sector_cap():
     candidates = [
         {
@@ -217,6 +239,7 @@ def test_run_decision_review_report_only_until_history_thick(tmp_path: Path):
     result = run_decision_review(
         output_dir=out,
         apply=True,
+        statistics_path=_significant_stats(tmp_path),
         fetch_benchmark=False,
         benchmark_return=0.0,
     )
@@ -288,6 +311,7 @@ def test_run_decision_review_applies_when_forced(tmp_path: Path):
     result = run_decision_review(
         output_dir=out,
         apply=True,
+        statistics_path=_significant_stats(tmp_path),
         fetch_benchmark=False,
         benchmark_return=0.05,
     )
@@ -465,6 +489,7 @@ def test_run_decision_review_starts_epoch_on_apply(tmp_path: Path):
     result = run_decision_review(
         output_dir=out,
         apply=True,
+        statistics_path=_significant_stats(tmp_path),
         fetch_benchmark=False,
         benchmark_return=0.05,
     )
@@ -548,6 +573,7 @@ def test_cohort_lab_is_frozen_against_apply(tmp_path: Path):
     result = run_decision_review(
         output_dir=out,
         apply=True,
+        statistics_path=_significant_stats(tmp_path),
         force=True,
         fetch_benchmark=False,
         benchmark_return=0.0,
@@ -620,13 +646,21 @@ def test_second_review_does_not_reapply_on_lifetime_metrics(tmp_path: Path):
         ),
     )
     first = run_decision_review(
-        output_dir=out, apply=True, fetch_benchmark=False, benchmark_return=0.05
+        output_dir=out,
+        apply=True,
+        statistics_path=_significant_stats(tmp_path),
+        fetch_benchmark=False,
+        benchmark_return=0.05,
     )
     assert first.applied is True
     after_first = _read_config(out)
 
     second = run_decision_review(
-        output_dir=out, apply=True, fetch_benchmark=False, benchmark_return=0.05
+        output_dir=out,
+        apply=True,
+        statistics_path=_significant_stats(tmp_path),
+        fetch_benchmark=False,
+        benchmark_return=0.05,
     )
     assert second.applied is False
     assert second.enough_history is False
@@ -689,7 +723,11 @@ def test_epoch_cooldown_blocks_apply_until_aged(tmp_path: Path):
     _seed_epoch(young, started_at=start.isoformat(), knobs=knobs)
     _add_epoch_activity(young, start)
     result = run_decision_review(
-        output_dir=young, apply=True, fetch_benchmark=False, benchmark_return=0.05
+        output_dir=young,
+        apply=True,
+        statistics_path=_significant_stats(tmp_path),
+        fetch_benchmark=False,
+        benchmark_return=0.05,
     )
     assert result.metrics["epoch"]["equity_marks"] >= 2
     assert result.metrics["epoch"]["trade_count"] >= 1
@@ -704,7 +742,11 @@ def test_epoch_cooldown_blocks_apply_until_aged(tmp_path: Path):
     _seed_epoch(aged, started_at=start.isoformat(), knobs=knobs)
     _add_epoch_activity(aged, start)
     result = run_decision_review(
-        output_dir=aged, apply=True, fetch_benchmark=False, benchmark_return=0.05
+        output_dir=aged,
+        apply=True,
+        statistics_path=_significant_stats(tmp_path),
+        fetch_benchmark=False,
+        benchmark_return=0.05,
     )
     assert result.enough_history is True
     assert result.proposed_changes
@@ -759,7 +801,11 @@ def test_run_decision_review_reports_saturation(tmp_path: Path):
         ),
     )
     result = run_decision_review(
-        output_dir=out, apply=True, fetch_benchmark=False, benchmark_return=0.05
+        output_dir=out,
+        apply=True,
+        statistics_path=_significant_stats(tmp_path),
+        fetch_benchmark=False,
+        benchmark_return=0.05,
     )
     assert result.applied is False
     knobs = {row["knob"] for row in result.saturated_knobs}
@@ -790,7 +836,11 @@ def test_graduated_allocation_review_does_not_fight_track_sync(tmp_path: Path):
         ),
     )
     result = run_decision_review(
-        output_dir=out, apply=True, fetch_benchmark=False, benchmark_return=0.05
+        output_dir=out,
+        apply=True,
+        statistics_path=_significant_stats(tmp_path),
+        fetch_benchmark=False,
+        benchmark_return=0.05,
     )
     assert "max_positions" not in result.proposed_changes
     assert _read_config(out)["max_positions"] == GRADUATED_ALLOCATION_MIN_POSITIONS

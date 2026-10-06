@@ -9,7 +9,8 @@ tracks reviewed together.
 
 Daily ops-monitor refreshes ``docs/data/track_statistics.json`` and warns only
 when the published learning-tracks verdict (``beat_market`` / ``beat_control``)
-claims a win that the statistics do not support. Never applies knobs or gates.
+claims a win that the statistics do not support. Never applies knobs itself;
+decision-review reads each track's verdict as its apply gate (significance_gate_v1).
 """
 
 from __future__ import annotations

@@ -318,6 +318,11 @@ def build_assessment_scoreboard(
             if track_id not in frozen
         ],
         "frozen_tracks": frozen_rows,
+        "policy_changes": [
+            {key: row.get(key) for key in ("id", "effective_at", "summary", "history_note")}
+            for row in model.get("policy_changes") or []
+            if isinstance(row, dict)
+        ],
     }
 
 

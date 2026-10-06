@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from value_investor.decision_review import (
+    DEFAULT_TRACK_STATISTICS_PATH,
     compare_learning_tracks,
     format_review_text,
     run_decision_review,
@@ -61,12 +62,24 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--apply",
         action="store_true",
-        help="Write clamped knob updates to config.json when history is thick enough",
+        help=(
+            "Write clamped knob updates to config.json when history is thick enough "
+            "and the significance gate passes (track_statistics verdict positive/negative)"
+        ),
+    )
+    parser.add_argument(
+        "--statistics-path",
+        type=Path,
+        default=DEFAULT_TRACK_STATISTICS_PATH,
+        help="track_statistics.json read by the apply significance gate",
     )
     parser.add_argument(
         "--force",
         action="store_true",
-        help="Propose/apply even when equity marks or trades are below the minimum",
+        help=(
+            "Propose/apply even when equity marks or trades are below the minimum "
+            "(does not bypass the significance gate)"
+        ),
     )
     parser.add_argument(
         "--no-benchmark",
@@ -89,6 +102,7 @@ def main(argv: list[str] | None = None) -> int:
             fetch_benchmark=not args.no_benchmark,
             counterfactual=not args.no_counterfactual,
             suite=args.suite,
+            statistics_path=Path(args.statistics_path),
         )
         if args.json:
             print(json.dumps(summary, indent=2))
@@ -144,6 +158,7 @@ def main(argv: list[str] | None = None) -> int:
         force=bool(args.force),
         fetch_benchmark=not args.no_benchmark,
         counterfactual=not args.no_counterfactual,
+        statistics_path=Path(args.statistics_path),
     )
 
     if args.json:

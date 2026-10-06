@@ -9,7 +9,10 @@ One committed file per paper root, ``assessment_model.json``, records:
   history; daily paper-auto and decision-review skip it and no new shadows spawn
   from a frozen parent;
 - ``twins``: cold-start books that vary one knob of an active parent, with the
-  parent's knobs at start so later parent tuning shows up as a confound.
+  parent's knobs at start so later parent tuning shows up as a confound;
+- ``policy_changes``: dated changes to how books are judged or tuned, with an
+  audit of what the old policy already did, so history either side can be told
+  apart without rewriting it.
 
 Roots without the file (market shards) keep the legacy AI-judgment primary and
 rules control.
@@ -99,6 +102,71 @@ def register_twin(
     return model["twins"][track_id]
 
 
+def policy_changes(base_dir: Path) -> list[dict[str, Any]]:
+    rows = load_assessment_model(base_dir).get("policy_changes") or []
+    return [dict(row) for row in rows if isinstance(row, dict)]
+
+
+def legacy_knob_apply_audit(base_dir: Path) -> dict[str, dict[str, Any]]:
+    """Per-track count of knob changes decision-review applied, from review history."""
+    from value_investor.decision_review import REVIEW_HISTORY_FILENAME
+    from value_investor.paper_automation import learning_track_dirs
+
+    audit: dict[str, dict[str, Any]] = {}
+    for track_id, track_dir in sorted(learning_track_dirs(Path(base_dir)).items()):
+        raw = _read_list(track_dir / REVIEW_HISTORY_FILENAME)
+        applied = [row for row in raw if row.get("applied") and (row.get("proposed_changes") or {})]
+        audit[track_id] = {
+            "reviews": len(raw),
+            "applied_knob_changes": len(applied),
+            "first_applied_at": applied[0].get("reviewed_at") if applied else None,
+            "last_applied_at": applied[-1].get("reviewed_at") if applied else None,
+        }
+    return audit
+
+
+def record_policy_change(
+    base_dir: Path,
+    *,
+    policy_id: str,
+    summary: str,
+    history_note: str,
+    audit: dict[str, Any] | None = None,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Mark a judging/tuning policy change (idempotent: first record per id wins)."""
+    base_dir = Path(base_dir)
+    model = load_assessment_model(base_dir)
+    rows = [dict(row) for row in model.get("policy_changes") or [] if isinstance(row, dict)]
+    for row in rows:
+        if row.get("id") == policy_id:
+            return row
+    row = {
+        "id": policy_id,
+        "effective_at": (now or datetime.now(UTC)).isoformat(),
+        "summary": summary,
+        "history_note": history_note,
+        "audit": dict(audit or {}),
+    }
+    rows.append(row)
+    model["policy_changes"] = rows
+    model.setdefault("schema_version", SCHEMA_VERSION)
+    (base_dir / ASSESSMENT_MODEL_FILENAME).write_text(
+        json.dumps(model, indent=2) + "\n", encoding="utf-8"
+    )
+    return row
+
+
+def _read_list(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    return [row for row in raw if isinstance(row, dict)] if isinstance(raw, list) else []
+
+
 def _final_record(track_dir: Path) -> dict[str, Any]:
     fund = _read(track_dir / "automated_fund.json")
     marks = [m for m in fund.get("equity_curve") or [] if isinstance(m, dict)]
@@ -171,6 +239,7 @@ def apply_assessment_model(
         "switches": switches,
         "frozen_tracks": dict(sorted(frozen.items())),
         "twins": dict(model.get("twins") or {}),
+        "policy_changes": list(model.get("policy_changes") or []),
         "note": (
             "Frozen books keep their history and stop trading. Do not edit their "
             "configs or funds; start a twin instead."
