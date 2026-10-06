@@ -61,6 +61,7 @@ def main(argv: list[str] | None = None) -> int:
     status_p = sub.add_parser("status", help="Set idea status (open|done|drop|now)")
     status_p.add_argument("idea_id")
     status_p.add_argument("status", choices=["open", "done", "drop", "now"])
+    status_p.add_argument("--note", default="", help="Why (stored as status_note)")
 
     fragment_p = sub.add_parser("fragment", help="Append a scratch-pad thought fragment")
     fragment_p.add_argument("--text", required=True)
@@ -145,7 +146,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "status":
-        idea = set_idea_status(args.idea_id, args.status, store_path=args.store)
+        idea = set_idea_status(args.idea_id, args.status, note=args.note, store_path=args.store)
         write_markdown(store_path=args.store, markdown_path=args.markdown)
         print(f"Set {idea['id']} -> {idea['status']}")
         return 0

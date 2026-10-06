@@ -205,6 +205,7 @@ def set_idea_status(
     idea_id: str,
     status: Status,
     *,
+    note: str = "",
     store_path: Path = DEFAULT_STORE,
 ) -> dict[str, Any]:
     store = load_store(store_path)
@@ -212,6 +213,8 @@ def set_idea_status(
         if idea.get("id") == idea_id:
             idea["status"] = status
             idea["updated_at"] = _utcnow()
+            if note.strip():
+                idea["status_note"] = note.strip()
             save_store(store, store_path)
             return idea
     raise KeyError(f"Unknown idea id: {idea_id}")

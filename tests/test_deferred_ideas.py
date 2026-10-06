@@ -51,3 +51,31 @@ def test_render_includes_not_now_and_security(tmp_path: Path):
     assert "Not relevant now" in text
     assert "Widen universe first" in text
     assert "Rotate API key" in text
+
+
+def test_status_note_is_stored(tmp_path: Path):
+    from value_investor.deferred_ideas_cli import main
+
+    store = tmp_path / "ideas.json"
+    md = tmp_path / "review.md"
+    idea, _ = add_idea(title="Old idea", summary="s", store_path=store)
+    assert (
+        main(
+            [
+                "--store",
+                str(store),
+                "--markdown",
+                str(md),
+                "status",
+                idea["id"],
+                "drop",
+                "--note",
+                "superseded by assessment model",
+            ]
+        )
+        == 0
+    )
+    row = load_store(store)["ideas"][0]
+    assert row["status"] == "drop"
+    assert row["status_note"] == "superseded by assessment model"
+    assert "Old idea" not in md.read_text(encoding="utf-8")
