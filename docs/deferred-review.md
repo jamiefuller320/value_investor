@@ -1,10 +1,6 @@
 # Parked & later ideas — periodic review
 
-<<<<<<< HEAD
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T08:23:41+00:00`).
-=======
 Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T09:49:55+00:00`).
->>>>>>> 69d3e5cbb9 (Defer: mark L544 done, park L546 promotion gate, recalibrate L543/L545 triggers)
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
