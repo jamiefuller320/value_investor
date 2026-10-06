@@ -90,6 +90,17 @@ Keep weekday paper-auto and decision-review on this suite uninterrupted. Stress 
 
 Use the existing warm-start pattern (`ftse-knob-calibrate warm-start-shadow`) so forward endurance is clean — do **not** re-warm every weekday.
 
+**Scoreboard basis (L533).** The warm-start seed replays the parent's log
+under the parent's 3% stress costs, so lifetime fair-book excess carries
+stress drag from before the books existed. Decision-review publishes
+`metrics.since_zero_datum` (excess, cost drag, marks since
+`endurance_zero_datum.started_at` in `fair_cost_lab_provenance.json`), and
+the Suite B scoreboard (`learning_tracks_dual_suite` → dashboard, analysis-review)
+uses it for `ai_excess_after_costs`, `beat_market` and `beat_control`.
+`excess_basis` names the basis; `lifetime_excess_diagnostic` keeps the
+lifetime figure for reference. The datum is frozen at spawn — knob applies move
+the knob epoch, never the datum.
+
 ### How the two interact
 
 ```text

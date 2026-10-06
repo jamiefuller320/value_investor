@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-06T02:17:45+00:00",
+  "updated_at": "2026-10-06T06:30:21+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12120,7 +12120,7 @@
       "status": "done",
       "source": "Project-wide gap review (agent, 2026-10-05)",
       "added_at": "2026-10-05T16:45:46+00:00",
-      "updated_at": "2026-10-06T02:17:45+00:00"
+      "updated_at": "2026-10-06T06:30:21+00:00"
     },
     {
       "id": "L528",
@@ -12153,7 +12153,7 @@
       "status": "done",
       "source": "Project-wide gap review (agent, 2026-10-05)",
       "added_at": "2026-10-05T16:45:46+00:00",
-      "updated_at": "2026-10-06T02:17:45+00:00"
+      "updated_at": "2026-10-06T06:30:21+00:00"
     },
     {
       "id": "L530",
@@ -12167,9 +12167,10 @@
         "pit",
         "value-premise"
       ],
-      "status": "open",
+      "status": "done",
       "source": "Project-wide gap review (agent, 2026-10-05)",
-      "added_at": "2026-10-05T16:45:46+00:00"
+      "added_at": "2026-10-05T16:45:46+00:00",
+      "updated_at": "2026-10-06T03:14:54+00:00"
     },
     {
       "id": "L531",
@@ -12183,9 +12184,10 @@
         "holding-period",
         "value-horizon"
       ],
-      "status": "open",
+      "status": "done",
       "source": "Project-wide gap review (agent, 2026-10-05)",
-      "added_at": "2026-10-05T16:45:46+00:00"
+      "added_at": "2026-10-05T16:45:46+00:00",
+      "updated_at": "2026-10-06T03:06:48+00:00"
     },
     {
       "id": "L532",
@@ -12322,7 +12324,56 @@
       "status": "done",
       "source": "Project gap review: ratchet fix PR #971",
       "added_at": "2026-10-05T20:58:27+00:00",
-      "updated_at": "2026-10-06T02:17:45+00:00"
+      "updated_at": "2026-10-06T06:30:21+00:00"
+    },
+    {
+      "id": "L540",
+      "category": "later",
+      "section": "learning",
+      "title": "Re-rank knob calibration after replay phantom-cash fix",
+      "summary": "fund_from_pre_state treated cash_before=0.0 as missing and seeded replays with initial cash. Walk-forward folds starting on fully invested passes (folds 2+) carried ~\u00a31000 phantom cash, so the fitness ranking behind ai_judgment_calibrated r1-r3 is not evidence. Re-run ftse-knob-calibrate rank and compare before citing calibrated shadows.",
+      "revisit_when": "After the replay phantom-cash fix merges, at the next Sunday/manual calibration pass",
+      "tags": [
+        "knob-calibration",
+        "replay",
+        "bug"
+      ],
+      "status": "open",
+      "source": "Project gap review follow-up: replay phantom cash fix",
+      "added_at": "2026-10-06T02:53:23+00:00"
+    },
+    {
+      "id": "L541",
+      "category": "later",
+      "section": "learning",
+      "title": "Cold-start hold-buffer twin (exit_confirm_screens 5) on fair-cost books",
+      "summary": "L531 replay: on faithful windows exit_confirm_screens 5 beats live 2 by +5.8pp (ai_judgment_fair) and +7.4pp (rules_fair) over 19 passes, mostly from avoided rank-flip exits rather than cost. Next step is a cold-start twin with a frozen epoch, not a live knob edit.",
+      "revisit_when": "Hold-period finding persists on both fair-cost books for 4+ weekly refreshes, or at the next Suite A/B policy epoch",
+      "tags": [
+        "turnover",
+        "holding-period",
+        "twin"
+      ],
+      "status": "open",
+      "source": "L531 hold-period counterfactual (agent, 2026-10-06)",
+      "added_at": "2026-10-06T03:06:48+00:00"
+    },
+    {
+      "id": "L542",
+      "category": "later",
+      "section": "research",
+      "title": "Multi-year PIT screen backtest on US names via SEC companyfacts",
+      "summary": "L530 first version (screen_premise_backtest) only covers weeks of frozen FTSE snapshots. A multi-year base rate for the value screen needs dated fundamentals and delisted names; SEC EDGAR companyfacts has filed dates for US issuers, and a US run would test the premise even though the live path is FTSE.",
+      "revisit_when": "When L11 (UK-primary fundamentals) source is chosen, or when the 7d screen-premise interval is still inconclusive after ~26 weekly cohorts",
+      "tags": [
+        "backtest",
+        "pit",
+        "value-premise",
+        "sec"
+      ],
+      "status": "open",
+      "source": "L530 screen premise backtest (agent, 2026-10-06)",
+      "added_at": "2026-10-06T03:13:59+00:00"
     }
   ],
   "fragments": [

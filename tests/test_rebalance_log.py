@@ -1053,3 +1053,160 @@ def test_extract_held_stress_and_log_swap_seeds():
     assert swaps[0]["rotation_id"] == "rules:2026-01-08T13:00:00+00:00"
     assert swaps[0]["sells"][0]["ticker"] == "HELD.L"
     assert swaps[0]["buys"][0]["ticker"] == "NEW.L"
+
+
+def test_fund_from_pre_state_keeps_zero_cash_of_fully_invested_book():
+    """Regression: cash_before=0.0 was treated as missing and replaced with initial cash."""
+    from value_investor.rebalance_log import fund_from_pre_state
+
+    entry = {
+        "contributed_capital_before": 1000.0,
+        "cash_before": 0.0,
+        "trade_cost_pct": 0.0,
+        "holdings_before": [{"ticker": "AAA.L", "shares": 2.0, "avg_cost": 300.0}],
+    }
+    fund = fund_from_pre_state(entry)
+    assert fund.cash == 0.0
+    assert fund.config.trade_cost_pct == 0.0
+    assert fund.holdings["AAA.L"].shares == 2.0
+
+    missing = fund_from_pre_state({"contributed_capital_before": 1000.0})
+    assert missing.cash == 1000.0
+    assert missing.config.trade_cost_pct == 0.03
+
+
+def test_replay_of_fully_invested_book_without_trades_matches_marks():
+    """A no-op replay of a fully invested book must not conjure phantom cash."""
+    from value_investor.rebalance_log import replay_counterfactual_from_log
+
+    holdings = [{"ticker": "AAA.L", "shares": 2.0, "avg_cost": 300.0, "sector": "Banks"}]
+    candidates = [
+        {
+            "ticker": "AAA.L",
+            "price": 330.0,
+            "signal": "buy",
+            "conviction_score": 0.9,
+            "sector": "Banks",
+        }
+    ]
+    entry = {
+        "acted": True,
+        "logged_at": "2026-09-29T08:27:00+00:00",
+        "strategy_mode": "automated",
+        "max_positions": 1,
+        "trade_cost_pct": 0.03,
+        "nav_before": 600.0,
+        "cash_before": 0.0,
+        "contributed_capital_before": 1000.0,
+        "holdings_before": holdings,
+        "holdings_after": holdings,
+        "candidates": candidates,
+        "selection": {"exit_confirm_screens": 2},
+        "trades": [],
+    }
+    preview = replay_counterfactual_from_log([entry], max_positions=1)
+    assert preview is not None
+    assert preview["simulated_trade_count"] == 0
+    assert preview["simulated_nav"] == 660.0
+    assert preview["simulated_return"] == 0.1
+
+
+def test_replay_keeps_logged_zero_exit_buffer_and_cooldown():
+    from value_investor.rebalance_log import _selection_kwargs_for_replay
+
+    kwargs = _selection_kwargs_for_replay(
+        {"selection": {"exit_confirm_screens": 0, "reentry_cooldown_screens": 0}},
+        max_positions=3,
+        skip_timing_wait=True,
+        min_conviction=0.0,
+        sector_cap=0.3,
+    )
+    assert kwargs["exit_confirm_screens"] == 0
+    assert kwargs["reentry_cooldown_screens"] == 0
+
+
+def _replay_pass(logged_at, *, holdings, cash, nav, candidates, max_positions=1, **extra):
+    return {
+        "acted": True,
+        "logged_at": logged_at,
+        "strategy_mode": "automated",
+        "max_positions": max_positions,
+        "trade_cost_pct": 0.0,
+        "nav_before": nav,
+        "cash_before": cash,
+        "contributed_capital_before": 1000.0,
+        "holdings_before": holdings,
+        "holdings_after": holdings,
+        "candidates": candidates,
+        "selection": {"skip_timing_wait": True, "exit_confirm_screens": 2},
+        "trades": [],
+        **extra,
+    }
+
+
+def _buy_candidate(ticker, price, conviction=0.9, sector="Banks"):
+    return {
+        "ticker": ticker,
+        "price": price,
+        "signal": "buy",
+        "conviction_score": conviction,
+        "sector": sector,
+    }
+
+
+def test_replay_use_logged_knobs_follows_per_pass_max_positions():
+    entry = _replay_pass(
+        "2026-09-01T08:00:00+00:00",
+        holdings=[],
+        cash=1000.0,
+        nav=1000.0,
+        candidates=[
+            _buy_candidate("AAA.L", 10.0, 0.95, "Banks"),
+            _buy_candidate("BBB.L", 10.0, 0.9, "Mining"),
+            _buy_candidate("CCC.L", 10.0, 0.85, "Tech"),
+        ],
+        max_positions=1,
+    )
+    default = replay_counterfactual_from_log([entry], max_positions=3, sector_cap=1.0)
+    logged = replay_counterfactual_from_log(
+        [entry], max_positions=3, sector_cap=1.0, use_logged_knobs=True
+    )
+    assert default is not None and logged is not None
+    assert default["simulated_trade_count"] == 3
+    assert logged["simulated_trade_count"] == 1
+    assert logged["used_logged_knobs"] is True
+
+
+def test_replay_marks_held_name_missing_from_candidates_with_price_ratio():
+    from datetime import date
+
+    held = [{"ticker": "AAA.L", "shares": 10.0, "avg_cost": 10.0, "sector": "Banks"}]
+    first = _replay_pass(
+        "2026-09-01T08:00:00+00:00",
+        holdings=held,
+        cash=0.0,
+        nav=100.0,
+        candidates=[_buy_candidate("AAA.L", 10.0)],
+    )
+    second = _replay_pass(
+        "2026-09-04T08:00:00+00:00",
+        holdings=[],
+        cash=100.0,
+        nav=100.0,
+        candidates=[_buy_candidate("BBB.L", 20.0)],
+    )
+    calls = []
+
+    def ratio(ticker, from_day, to_day):
+        calls.append((ticker, from_day, to_day))
+        return 1.5
+
+    kwargs = {"max_positions": 1, "exit_confirm_screens": 5, "use_logged_knobs": True}
+    scaled = replay_counterfactual_from_log([first, second], held_price_ratio=ratio, **kwargs)
+    at_cost = replay_counterfactual_from_log([first, second], **kwargs)
+    assert scaled is not None and at_cost is not None
+    assert scaled["simulated_nav"] == 150.0
+    assert scaled["held_price_fills"] >= 1
+    assert at_cost["simulated_nav"] == 100.0
+    assert at_cost["held_price_avg_cost_fallbacks"] >= 1
+    assert ("AAA.L", date(2026, 9, 1), date(2026, 9, 4)) in calls
