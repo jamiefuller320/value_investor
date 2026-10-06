@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T18:49:59+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T19:18:30+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -56,6 +56,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260923-01 | Internal screening formula from successful-sleeve traits: only useful with a substantial evidence body; park as a thought until filtered_cohort / sleeve-episode thickness and loser-pattern validation exist. Not a near-term idea. | screening, sleeves, thought, learning |
 | frag-20260923-02 | Library maintenance jobs under L323 (1 market/slot) finish in ~5–14 min wall vs 120 min timeout (2026-09-22/23 sample). Seven maintenance markets → ~1.75 day rotation. Headroom suggests MAX_MARKETS_WHEN_CROWDED=2 (sequential) or a 2-wide matrix is feasible before true N-wide parallel; watch artifact push races and ESEF/EDGAR/IR rate limits. | ingest, maintenance, L323, L454, capacity |
 | frag-20260923-03 | Maintenance 62-name cap is NOT binding: latest maint runs used 0–8 targets of 62, runtime_cutoff=false, budget_hits≈0. Binding limit is L323 one-market-per-slot (7 books). Option1 (MAX_MARKETS_WHEN_CROWDED=2) is the high-ROI step; option2 matrix is an upgrade after an automated review of job minutes / cutoff / artifact races. | ingest, maintenance, L323, L454, max_targets |
+| frag-20261006-02 | Oslo Bors newsreader API (api3.oslo.oslobors.no/v1/newsreader/list?issuer=) is public JSON with annual/half-year categories and attachments, but no project market lists .OL names today. | oslo, euro_filings |
+| frag-20261006-03 | SEC 20-F/6-K helps few euro names: most DAX/OMXS30 matches are unsponsored OTC ADRs with no SEC filings; real filers (TTE, SNY, SHEL, NVS, UL, GRFS, TS) are mostly already well covered. | sec, euro_filings |
 
 ---
 
@@ -247,6 +249,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N192 | **Do not work around Unternehmensregister / Bundesanzeiger captcha for dax** | German OAM search sits behind a captcha (Unternehmensregister) or a stateful session form (Bundesanzeiger). AMF shipped in L545; .DE names stay on ESEF, Google News and IR allowlist PDFs. | Germany publishes a public or keyed regulated-information API, or dax is fronted on a sprint stream with its thin leftovers mainly interim periods ESEF cannot close |
 | N193 | **Do not scrape 1Info / eMarket, CNMV or OeKB portals for euro OAM filings** | Italy (1Info / eMarket STORAGE) are HTML portals with undocumented internal endpoints; Spain CNMV is ASP.NET __VIEWSTATE forms (direct query URLs 400/403); Austria OeKB OAM is an Angular app behind an F5 bot-defence script. No documented open API in any of them. | One of CONSOB, CNMV or OeKB publishes an open-data or keyed filings API, or ftse_mib / ibex35 / atx thin buy-tier leftovers persist after a complete fat slot with IR seeds |
 | N194 | **Default-knob twin for graduated_allocation legacy tuning** | graduated_allocation took 16 knob applies under the legacy rule (Sep-Oct 2026). A cold-start twin on default knobs would show whether that tuning helped; not worth a live track until the book's own verdict is significant. | graduated_allocation gets a positive or negative verdict in track_statistics.json, or it is proposed as primary/control |
+| N195 | **Do not pull EQS News wp-json or MFN .json feeds without permission** | Both are public and ungated, with ISIN/LEI filters (EQS covers DAX; MFN covers OMXS30 with report tags and full text), but robots.txt disallows /wp-json/ (EQS) and *.json (MFN). Same principle as N187/N190: no workaround. EQS 'Advance financial reports' are publication-date notices, not reports. | EQS or MFN grants written permission or offers a licensed/documented feed we subscribe to |
 
 ---
 
@@ -359,6 +362,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L312 | **Add observe-sim benchmark if a sprint stream stays on a market without one** | Sprint-2 currently holds ftse_smallcap, which has no MARKET_BENCHMARKS entry, so Sunday observe-sim does not write a dated screen archive. Gap analysis correctly ignores it. If a no-benchmark market stays on a sprint stream for more than a couple of weeks, add a local index ticker so the archive clock can follow ingest effort. | A parallel sprint stream has held a market missing MARKET_BENCHMARKS for two Sunday ladders |
 | L346 | **Bootstrap CCL-B.TO zero-body leftover on TSX 60** | After GIB-A.TO left unmeasured, S&P/TSX 60 still has one zero-body buy-tier name (CCL Industries Class B). Same class-share discovery issues may apply; it cannot be parked and still blocks sprint_ingest_complete. | TSX 60 spare sprint is otherwise at leftover thin/IWB only, or the next ingest loop still reports zero_body_stuck on CCL-B.TO |
 | L499 | **Universe-wide filing archive / data-pack lane (cold store)** | Thin quiet --apply cold-store writers shipped (week-first plan, max_units=2, archive budgets, gitignored cold root). Miss-rate remains observe-only. Scale caps only after quiet nights prove isolation_ok; keep N180/N181 parked. | Several quiet apply nights with capacity_isolation.isolation_ok and no shared 429/runner collision vs euro maintenance or spare sprints — then raise max_units / fetch caps gradually |
+| L556 | **Cision per-company RSS feed for omxs30 / Swedish euro_depth filings** | news.cision.com/<slug>/ListItems?format=rss&pageSize=100 is public (robots allows all) and gives ~2.5y of releases incl. interim/annual reports for ~20 of 24 probed Swedish large caps (not H&M, Electrolux). Adapter would mirror amf_direct: slug map, report-title classification, release-page body. Sidesteps the Nasdaq Nordic gap (N191) without touching any gate. | omxs30 becomes the P2 fat-slot head, or omxs30 buy-tier thin stays above 5/11 after the next maintenance ingest |
+| L557 | **ESAP (EU single access point) adapter for euro regulated filings** | ESMA's European Single Access Point will expose Transparency Directive filings (annual, half-year, inside information) for all EU issuers through one API, replacing per-country OAM adapters for DE/ES/IT/AT/NL. | ESMA announces a public ESAP API covering Transparency Directive filings |
 
 ### Research & portfolio product
 
