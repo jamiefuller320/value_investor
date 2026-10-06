@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-06T06:30:21+00:00",
+  "updated_at": "2026-10-06T09:13:02+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12374,6 +12374,77 @@
       "status": "open",
       "source": "L530 screen premise backtest (agent, 2026-10-06)",
       "added_at": "2026-10-06T03:13:59+00:00"
+    },
+    {
+      "id": "L543",
+      "category": "later",
+      "section": "universe",
+      "title": "HKEX / SGX direct announcement feeds for asia_filings",
+      "summary": "hang_seng and sti index only Google News headlines today (fetch_filings_asia_news), with a hand-seeded hkexnews PDF list as the only direct path. An HKEXnews title-search and SGX announcements listing adapter would give FTSE-equivalent statutory discovery.",
+      "revisit_when": "More than two hang_seng/sti buy-tier names are thin_need_discovery after IR seeds, or Asia markets are next for epoch-0 buy_tier_level resource",
+      "tags": [
+        "ingest",
+        "asia",
+        "hkex",
+        "sgx",
+        "sources"
+      ],
+      "status": "open",
+      "source": "Agent Q&A: per-market filing-source parity vs FTSE (Oct 2026)",
+      "added_at": "2026-10-06T09:13:02+00:00"
+    },
+    {
+      "id": "L544",
+      "category": "later",
+      "section": "universe",
+      "title": "SEC companyfacts XBRL for US memo FCF basis",
+      "summary": "sp500/nasdaq100 ingest reads 10-K/10-Q HTML bodies only; EDGAR companyfacts gives tagged CFO, capex, debt and share counts per filing for free. That is the US analogue of CH iXBRL (L83) for memo FCF basis, separate from the backtest use in L542.",
+      "revisit_when": "US buy-tier memos still cite Yahoo-only FCF basis after sp500 epoch-0 marks exist, or L542 builds a companyfacts client that can be reused",
+      "tags": [
+        "ingest",
+        "sec",
+        "xbrl",
+        "fcf",
+        "us"
+      ],
+      "status": "open",
+      "source": "Agent Q&A: per-market filing-source parity vs FTSE (Oct 2026)",
+      "added_at": "2026-10-06T09:13:02+00:00"
+    },
+    {
+      "id": "L545",
+      "category": "later",
+      "section": "universe",
+      "title": "National OAM registers for euro_filings beyond ESEF and Belgium",
+      "summary": "Euro discovery is ESEF (filings.xbrl.org), Belgium official, Google News and Investegate. Interim/trading updates are not in ESEF; national OAMs (AMF info-financiere open data, CNMV, CONSOB eMarket, Bundesanzeiger) would cover them. Start with AMF which has an open-data feed.",
+      "revisit_when": "euro_depth graduates and euro buy-tier still shows interim-period body gaps that ESEF and IR seeds cannot close",
+      "tags": [
+        "ingest",
+        "euro",
+        "oam",
+        "esef",
+        "sources"
+      ],
+      "status": "open",
+      "source": "Agent Q&A: per-market filing-source parity vs FTSE (Oct 2026)",
+      "added_at": "2026-10-06T09:13:02+00:00"
+    },
+    {
+      "id": "N187",
+      "category": "not_now",
+      "section": "universe",
+      "title": "Do not scrape SEDAR+ for tsx_announcements",
+      "summary": "TSX discovery is Google News site:sedarplus.ca plus SEC 40-F/6-K for dual-listed names. SEDAR+ has no public API and bot protection; for TSX 60 most names are SEC dual-listed, so prefer the EDGAR supplement and IR allowlist seeds.",
+      "revisit_when": "SEDAR+ publishes a public API or bulk feed, or more than two non-SEC-listed TSX buy-tier names stay zero-body after IR seeds",
+      "tags": [
+        "ingest",
+        "tsx",
+        "sedar",
+        "sources"
+      ],
+      "status": "open",
+      "source": "Agent Q&A: per-market filing-source parity vs FTSE (Oct 2026)",
+      "added_at": "2026-10-06T09:13:02+00:00"
     }
   ],
   "fragments": [
