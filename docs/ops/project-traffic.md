@@ -106,9 +106,25 @@ Each occasion stores: timestamp, PR, branch, kind (`ci_check` / `merge_conflict`
 `common-issues` (and the EOD digest section) aggregates by reason.
 
 **Merge-conflict hot files:** parallel `ftse-defer` / deferred-ideas tasks often collide on
-`docs/data/deferred-ideas.json` and `docs/deferred-review.md`. Engineering preflight treats
+`docs/deferred-ideas.json` and `docs/deferred-review.md`. Engineering preflight treats
 those paths like `engineering_tasks.json` (`SHARED_MUTABLE_FILES`) so clash-aware dispatch
 does not start a second agent while an open PR already touches the deferred store.
+
+**Deferred-ID collisions:** `ftse-defer add` numbers on the branch's own copy, so two
+open branches can mint the same `L…`/`N…` ID. Resolve with one command instead of
+hand-merging (main's numbering always wins; only the branch's colliding new entries move):
+
+```bash
+git merge origin/main                      # conflicts in docs/deferred-*
+ftse-defer rebase-ids --base origin/main   # dry run: prints renames
+ftse-defer rebase-ids --base origin/main --apply
+git add docs/deferred-ideas.json docs/deferred-review.md <files it rewrote> && git commit
+```
+
+`--apply` rewrites the moved IDs only in lines the branch added (docs, checklist,
+code comments), regenerates the markdown and keeps newer branch status changes.
+CI `validate` runs `ftse-defer check-ids --base origin/main` on the PR merge commit
+and fails on duplicate IDs or a main ID whose title changed.
 
 ## Policy
 
