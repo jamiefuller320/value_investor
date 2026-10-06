@@ -114,7 +114,11 @@ ALTERNATE_SOURCE_CATALOG: dict[str, list[dict[str, str]]] = {
         {
             "id": "exchange_filings_full",
             "label": "HKEX / SGX announcement full-text re-pull",
-            "why": "Asia filing discovery is headline-only today",
+            "why": (
+                ".HK names index HKEXnews results announcements and annual/interim "
+                "reports with PDF bodies (full statements incl. cash flow); .SI names "
+                "are still Google News headline-only"
+            ),
         },
         {
             "id": "sec_exhibits",
