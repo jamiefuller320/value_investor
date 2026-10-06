@@ -160,6 +160,7 @@ def prospective_trade_plan_from_series(
     series: pd.Series,
     *,
     signal: str | None = None,
+    market: str | None = None,
 ) -> dict[str, Any] | None:
     """Buy / target levels for chart display on names not yet bought.
 
@@ -184,7 +185,7 @@ def prospective_trade_plan_from_series(
         return None
     # Hold prospects use buy math for chart entry levels only — does not change
     # live trade-plan attachment (still buy-tier gated in enrich_signals).
-    plan = compute_trade_plan(frame["Close"], tech, value_signal="buy")
+    plan = compute_trade_plan(frame["Close"], tech, value_signal="buy", market_id=market)
     return plan.to_dict() if plan is not None else None
 
 
@@ -194,6 +195,7 @@ def resolve_chart_trade_plan(
     trade_plan: dict[str, Any] | None,
     signal: str | None = None,
     held: bool = False,
+    market: str | None = None,
 ) -> tuple[dict[str, Any] | None, str]:
     """Return (plan, basis) where basis is trade_plan | prospective | none."""
     if trade_plan_has_entry_levels(trade_plan):
@@ -209,7 +211,7 @@ def resolve_chart_trade_plan(
     # Prospective buy/target only for names not yet bought (screen-side).
     if held:
         return trade_plan if isinstance(trade_plan, dict) else None, "none"
-    prospective = prospective_trade_plan_from_series(series, signal=signal)
+    prospective = prospective_trade_plan_from_series(series, signal=signal, market=market)
     if trade_plan_has_entry_levels(prospective):
         return prospective, "prospective"
     return trade_plan if isinstance(trade_plan, dict) else None, "none"
@@ -454,6 +456,7 @@ def build_price_chart_payload(
         trade_plan=trade_plan,
         signal=signal,
         held=held,
+        market=market,
     )
     current_levels = levels_from_trade_plan(
         resolved_plan,

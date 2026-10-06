@@ -429,7 +429,9 @@ def run_screen(
     ensure_signal_history(out_dir)
     history = load_signal_history(out_dir)
     signals = enrich_signals_with_stability(signals, history, run_at=run_at)
-    signals = enrich_signals_with_technicals(signals, chart_dir=out_dir / "charts")
+    signals = enrich_signals_with_technicals(
+        signals, chart_dir=out_dir / "charts", market_id=universe
+    )
 
     sort_cols = [
         "signal_rank",

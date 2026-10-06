@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
-from dataclasses import asdict, dataclass, field, fields
+from dataclasses import asdict, dataclass, field, fields, replace
 from enum import StrEnum
 from pathlib import Path
 from typing import Any
@@ -13,6 +13,7 @@ import pandas as pd
 import yfinance as yf
 
 from value_investor.fetch import resolve_yahoo_ticker, resolve_yahoo_ticker_for_market
+from value_investor.market_trading_costs import costs_for_market
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +27,9 @@ VOLUME_RATIO_WINDOW = 20
 class TradePlanConfig:
     """Tunable trade-plan thresholds (L5).
 
-    Target floors are stress-aware by default so chart / paper take-profits clear
-    Suite A ~6% round-trip friction plus a net edge, and reward outweighs stop
-    distance. Fair-cost books can lower ``assumed_round_trip_cost_pct`` via config.
+    A bare ``TradePlanConfig()`` keeps the legacy 6% stress round trip. Callers
+    that pass no config get ``trade_plan_config_for_market``: the market's fair
+    round trip from ``market_trading_costs`` (L405).
     """
 
     core_limit_below_spot: float = 0.99
@@ -38,7 +39,7 @@ class TradePlanConfig:
     # Structural multipliers (also enforced when SMA50 is used as a candidate).
     tactical_target_above_limit: float = 1.10
     tactical_target_above_spot: float = 1.08
-    # Cost-aware gross floor: limit × (1 + RT + min net edge). Suite A RT = 6%.
+    # Cost-aware gross floor: limit × (1 + RT + min net edge). Legacy stress RT = 6%.
     assumed_round_trip_cost_pct: float = 0.06
     min_net_edge_pct: float = 0.04
     # Upside vs stop distance (None disables).
@@ -76,6 +77,18 @@ SUPPORT_FLOOR_BELOW_SPOT = DEFAULT_TRADE_PLAN_CONFIG.support_floor_below_spot
 TACTICAL_TARGET_ABOVE_LIMIT = DEFAULT_TRADE_PLAN_CONFIG.tactical_target_above_limit
 TACTICAL_TARGET_ABOVE_SPOT = DEFAULT_TRADE_PLAN_CONFIG.tactical_target_above_spot
 EXTENDED_ABOVE_SMA200 = DEFAULT_TRADE_PLAN_CONFIG.extended_above_sma200
+
+
+def trade_plan_config_for_market(
+    market_id: str | None = None,
+    *,
+    base: TradePlanConfig | None = None,
+) -> TradePlanConfig:
+    """``base`` with the cost floor at the market's fair round trip (FTSE 350 when unset)."""
+    return replace(
+        base or DEFAULT_TRADE_PLAN_CONFIG,
+        assumed_round_trip_cost_pct=costs_for_market(market_id).round_trip_pct,
+    )
 
 
 def load_trade_plan_config(path: Path) -> TradePlanConfig:
@@ -185,9 +198,10 @@ def minimum_tactical_take_profit(
     tactical_stop_loss: float,
     spot: float,
     config: TradePlanConfig | None = None,
+    market_id: str | None = None,
 ) -> float:
     """Lowest take-profit that clears configured cost, multiplier, and R:R floors."""
-    cfg = config or DEFAULT_TRADE_PLAN_CONFIG
+    cfg = config or trade_plan_config_for_market(market_id)
     floors = [
         float(tactical_limit) * float(cfg.tactical_target_above_limit),
         float(spot) * float(cfg.tactical_target_above_spot),
@@ -206,6 +220,7 @@ def compute_trade_plan(
     *,
     value_signal: str,
     config: TradePlanConfig | None = None,
+    market_id: str | None = None,
 ) -> TradePlan | None:
     """
     Recommend core + tactical orders for strong buys and buys.
@@ -219,7 +234,7 @@ def compute_trade_plan(
     if value_signal not in ("strong_buy", "buy") or tech.close is None:
         return None
 
-    cfg = config or DEFAULT_TRADE_PLAN_CONFIG
+    cfg = config or trade_plan_config_for_market(market_id)
     price = tech.close
     sma50 = tech.sma_50
     sma200 = tech.sma_200
@@ -715,6 +730,7 @@ def enrich_signals_with_technicals(
     *,
     chart_dir: Path | None = None,
     trade_plan_config: TradePlanConfig | None = None,
+    market_id: str | None = None,
 ) -> pd.DataFrame:
     """Add technical indicators and timing signals to the signals DataFrame."""
     out = signals.copy()
@@ -744,6 +760,7 @@ def enrich_signals_with_technicals(
                     tech,
                     value_signal=value_signal,
                     config=trade_plan_config,
+                    market_id=market_id,
                 )
             rows.append({"ticker": ticker, **_technical_row_dict(tech)})
             continue
