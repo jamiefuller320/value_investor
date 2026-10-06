@@ -35,6 +35,11 @@ from value_investor.research.filings import (
     merge_filings,
     resolve_filings_regime,
 )
+from value_investor.research.hkex_direct import (
+    drop_allowlist_rows_covered_by_hkex,
+    fetch_filings_hkex_direct,
+    is_hkex_ticker,
+)
 from value_investor.research.store import ResearchStore
 from value_investor.storage import write_json
 from value_investor.summary import CompanyReport
@@ -56,6 +61,7 @@ def list_regime_filings_index_only(
     """Listing-only fetch for a ticker regime (no body download)."""
     regime = resolve_filings_regime(market, ticker)
     groups: list[list[dict[str, Any]]] = []
+    hkex_rows: list[dict[str, Any]] = []
 
     if regime == "uk_rns":
         groups.extend(
@@ -101,11 +107,16 @@ def list_regime_filings_index_only(
                 )
             )
     elif regime == "asia_filings":
+        if is_hkex_ticker(ticker):
+            hkex_rows = fetch_filings_hkex_direct(ticker=ticker, company_name=company_name)
+            groups.append(hkex_rows)
         groups.append(fetch_filings_asia_news(company_name=company_name, ticker=ticker))
     else:
         logger.debug("No listing regime for market=%s ticker=%s", market, ticker)
 
-    groups.append(fetch_filings_ir_allowlist(ticker))
+    groups.append(
+        drop_allowlist_rows_covered_by_hkex(fetch_filings_ir_allowlist(ticker), hkex_rows)
+    )
     return merge_filings(*groups) if groups else []
 
 

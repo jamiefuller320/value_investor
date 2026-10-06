@@ -26,6 +26,7 @@ from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
     fetch_filings_ticker_api,
     merge_filings,
+    resolve_filings_regime,
     summarize_filings,
 )
 from value_investor.research.ingest_bootstrap import (
@@ -52,6 +53,7 @@ KNOWN_FILING_SOURCES = frozenset(
         "sec_edgar",
         "asx_direct",
         "google_news_asx",
+        "hkex_direct",
         "esef_direct",
         "belgium_official",
         "google_news_euro",
@@ -67,6 +69,7 @@ KNOWN_URL_HOST_SUFFIXES = (
     "sec.gov",
     "xbrl.org",
     "euronext.com",
+    "hkexnews.hk",
     "google.com",
     "news.google.com",
 )
@@ -309,7 +312,7 @@ def merge_discovery_into_index(
         "ticker": ticker,
         "company_name": company_name,
         "market": market,
-        "regime": "uk_rns",
+        "regime": resolve_filings_regime(market, ticker),
         "fetched_at": datetime.now(UTC).isoformat(),
         "note": (
             "Scan-then-target listing merge (no body download). "
