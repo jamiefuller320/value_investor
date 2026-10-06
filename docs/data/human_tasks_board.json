@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-05T07:47:46.329179+00:00",
+  "generated_at": "2026-10-05T23:26:47.554861+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -28,14 +28,15 @@
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "2 attention-parked eng tasks",
-        "updated_at": "2026-10-05T07:47:42.673187+00:00",
-        "fingerprint": "e0feb3c4dc3b610c",
+        "headline": "3 attention-parked eng tasks",
+        "updated_at": "2026-10-05T23:21:13.227851+00:00",
+        "fingerprint": "c792c8e23d509b59",
         "bullets": [
-          "Parked tasks: 2 (attention ~2)",
-          "Queue-clearing pause active: False — evaluated 2026-10-05T07:47:42.673187+00:00",
+          "Parked tasks: 3 (attention ~3)",
+          "Queue-clearing pause active: False — evaluated 2026-10-05T23:21:13.227851+00:00",
           "Traffic pause active: False",
           "eng-20261004-05: Reconcile research index with committed overlays for the two `index_missing_committed_verdicts` names (AO.L, HOC.L) and add a CI check that `committed_count` eq",
+          "eng-20261004-06: Workflow fix: analysis review failure",
           "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo"
         ],
         "source_keys": [
@@ -57,47 +58,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "monthly-pr-fix-common-issues",
-      "title": "Review common PR check / merge fix-request reasons",
-      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
-      "automated": false,
-      "cadence": "monthly",
-      "section_id": "monthly",
-      "section_title": "Monthly",
-      "doc_path": "docs/ops/project-traffic.md",
-      "doc_anchor": "pr-fix-occasion-log",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "PR fix common issues",
-        "updated_at": "2026-10-05T06:43:19.467204+00:00",
-        "fingerprint": "5690df023d5ee2e9",
-        "bullets": [
-          "Occasions logged: 154",
-          "PR mergeable=CONFLICTING against main: 7",
-          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
-          "validate check failed: 3",
-          "deferred-ideas.json conflict after L516 merge: 3",
-          "Merge conflicts in deferred-ideas.json with main: 2"
-        ],
-        "source_keys": [
-          "pr_fix_occasions",
-          "project_traffic_digest"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-03T18:23:38.129460+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "05900a47b6870fbe"
-      },
-      "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "sunday-shard-epoch0-watch",
       "title": "Watch shard epoch-0 and near-miss before forking AI",
       "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
@@ -111,18 +71,18 @@
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "Admitted shard epoch-0 watch · 21",
-        "updated_at": "2026-10-04T20:17:03.078361+00:00",
-        "fingerprint": "f6a09476854cf089",
+        "headline": "Admitted shard epoch-0 watch · 22",
+        "updated_at": "2026-10-05T23:16:05.353858+00:00",
+        "fingerprint": "e5c5e0f26b0ef266",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=36",
+          "hang_seng: phase=0 ai=False knob=False holdings=6",
+          "ftse_mib: phase=0 ai=False knob=False holdings=5",
           "aex: phase=0 ai=False knob=False holdings=8",
           "aim: phase=0 ai=False knob=False holdings=15",
           "atx: phase=0 ai=False knob=False holdings=1",
           "bel20: phase=0 ai=False knob=False holdings=3",
-          "cac40: phase=1 ai=False knob=False holdings=5",
-          "dax: phase=1 ai=False knob=False holdings=2",
-          "euro_stoxx50: phase=1 ai=False knob=False holdings=8"
+          "cac40: phase=1 ai=False knob=False holdings=5"
         ],
         "source_keys": [
           "market_status"
@@ -154,7 +114,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · 0 blocking (review/continue)",
-        "updated_at": "2026-10-04T08:20:38.152880+00:00",
+        "updated_at": "2026-10-05T08:34:45.315744+00:00",
         "fingerprint": "77a2b495eeb70657",
         "bullets": [
           "Blocking recommend: 0 · acked: 2 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 4 / 16",
@@ -276,7 +236,7 @@
       "approval_label": "Approve knob promote",
       "analysis": {
         "headline": "Experiment assessment · 0 blocking (review/continue)",
-        "updated_at": "2026-10-04T08:20:38.152880+00:00",
+        "updated_at": "2026-10-05T08:34:45.315744+00:00",
         "fingerprint": "77a2b495eeb70657",
         "bullets": [
           "Blocking recommend: 0 · acked: 2 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 4 / 16",
@@ -398,7 +358,7 @@
       "approval_label": "Approve spawn fair twins",
       "analysis": {
         "headline": "Experiment assessment · 0 blocking (review/continue)",
-        "updated_at": "2026-10-04T08:20:38.152880+00:00",
+        "updated_at": "2026-10-05T08:34:45.315744+00:00",
         "fingerprint": "77a2b495eeb70657",
         "bullets": [
           "Blocking recommend: 0 · acked: 2 · capacity/eng: 2 · fail shadows: 4 · raw recommend: 4 / 16",
@@ -506,6 +466,47 @@
       "ack_sufficient": true
     },
     {
+      "id": "monthly-pr-fix-common-issues",
+      "title": "Review common PR check / merge fix-request reasons",
+      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/project-traffic.md",
+      "doc_anchor": "pr-fix-occasion-log",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "PR fix common issues",
+        "updated_at": "2026-10-05T07:30:04.758510+00:00",
+        "fingerprint": "a543d631cf12b542",
+        "bullets": [
+          "Occasions logged: 155",
+          "PR mergeable=CONFLICTING against main: 7",
+          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
+          "validate check failed: 3",
+          "deferred-ideas.json conflict after L516 merge: 3",
+          "Merge conflicts in deferred-ideas.json with main: 2"
+        ],
+        "source_keys": [
+          "pr_fix_occasions",
+          "project_traffic_digest"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-03T18:23:38.129460+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "05900a47b6870fbe"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
       "id": "sunday-shadow-endurance",
       "title": "Review unified experiment assessment",
       "summary": "Read fail/continue/recommend only — recommend ≠ do-now. Failed calibration/exclusion shadows close the promote path. Already-acked recommends (e.g. entry_dca_overlay) do not inflate urgency. Remaining ana-* recommends are eng/manual capacity, not this Sunday gate. Acknowledge when blocking unacked promote/overlay recommends are empty; never auto-promote. Do not reopen N58/N59. Verify live board; 2026-09-03 emptied then-open task recommends.",
@@ -520,7 +521,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-10-04T08:20:38.152880+00:00",
+        "updated_at": "2026-10-05T08:34:45.315744+00:00",
         "fingerprint": "96ba278f151caba7",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -980,7 +981,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-10-04T08:20:38.151767+00:00",
+        "updated_at": "2026-10-05T08:34:45.313545+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
@@ -1017,7 +1018,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Fair-cost Suite B lab",
-        "updated_at": "2026-10-04T08:20:38.152880+00:00",
+        "updated_at": "2026-10-05T08:34:45.315744+00:00",
         "fingerprint": "59730160636f429c",
         "bullets": [
           "Require fair-cost view before treating 3% stress excess as deployable."
@@ -1253,7 +1254,7 @@
       "approval_label": "Approve fair-cost view",
       "analysis": {
         "headline": "Fair-cost Suite B lab",
-        "updated_at": "2026-10-04T08:20:38.152880+00:00",
+        "updated_at": "2026-10-05T08:34:45.315744+00:00",
         "fingerprint": "59730160636f429c",
         "bullets": [
           "Require fair-cost view before treating 3% stress excess as deployable."
@@ -1522,7 +1523,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 0 open",
-        "updated_at": "2026-10-04T20:16:18.682162+00:00",
+        "updated_at": "2026-10-05T23:14:55.734182+00:00",
         "fingerprint": "750849fd9e662f70",
         "bullets": [
           "Open deviations: 0"

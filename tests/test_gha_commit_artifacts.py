@@ -191,6 +191,7 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "docs/data/p1_first_run_pin.json" in email
     assert "docs/data/observe_utilization.json" in email
     assert "docs/data/combined_tagged_learning.json" in email
+    assert "docs/data/total_return_view.json" in email
     assert "docs/data/lifecycle_maturity_trajectory.json" in email
     assert "docs/data/ui_state_reconciliation.json" in email
     assert "docs/data/daily_focus.json" in email
