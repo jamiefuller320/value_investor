@@ -83,7 +83,9 @@ OPTIONAL_MANIFEST="$WORKDIR/optional.txt"
 blob_at() {
   local rev="$1"
   local path="$2"
-  git rev-parse "${rev}:${path}" 2>/dev/null || true
+  # --verify --quiet prints nothing for a missing path; plain rev-parse echoes the
+  # unresolved "rev:path" spec, so a new file never matched across two revisions.
+  git rev-parse --verify --quiet "${rev}:${path}" 2>/dev/null || true
 }
 
 # Extract top-level JSON generated_at (ISO-8601). Empty if missing/unparseable.
