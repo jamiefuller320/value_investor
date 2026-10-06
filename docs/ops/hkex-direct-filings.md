@@ -34,8 +34,17 @@ classify reliably, so `_apply_headline_period` keeps the category value for
 | Profit Warning | `trading_update` |
 | ESG reports, Date of Board Meeting, dividend forms, everything else | dropped |
 
-The feed returns at most 16 rows, newest first, and always keeps the latest
-annual and interim. Document URLs use `https://www.hkexnews.hk`, the same host
+The feed keeps the newest rows per kind:
+
+- 2 final results
+- 2 annual reports
+- 3 interim or quarterly results
+- 2 interim reports
+- 1 profit warning
+
+That is at most 10 rows, under the 12-body ingest cap, so the feed never
+leaves its own rows indexed-without-body. Indexed-without-body rows block
+sprint graduation. Document URLs use `https://www.hkexnews.hk`, the same host
 as the IR allowlist. Allowlist rows whose PDF the feed already indexes are
 dropped, so one document never takes two body slots. In merges the source
 bonus is 27, the same as `asx_direct`.

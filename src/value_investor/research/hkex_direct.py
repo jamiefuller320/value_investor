@@ -41,7 +41,6 @@ HKEX_TITLE_SEARCH_URL = HKEXNEWS_SEARCH_BASE + "/titleSearchServlet.do"
 # Same host the hand-seeded IR allowlist uses, so URLs dedupe against it.
 HKEX_DOCUMENT_ORIGIN = "https://www.hkexnews.hk"
 HKEX_LOOKBACK_DAYS = 800
-HKEX_MAX_ITEMS = 16
 HKEX_ROW_RANGE = 100
 
 HKEX_CATEGORY_QUERIES: tuple[dict[str, str], ...] = (
@@ -49,18 +48,30 @@ HKEX_CATEGORY_QUERIES: tuple[dict[str, str], ...] = (
     {"t1code": "40000", "t2Gcode": "-2"},
 )
 
-# Ordered: first match wins. Values are (period, priority bonus). Results
-# announcements carry full statements in a few hundred KB; annual/interim
-# reports are multi-MB and truncated at the body cap, so rank them second.
-_CATEGORY_RULES: tuple[tuple[re.Pattern[str], str, int], ...] = (
-    (re.compile(r"environmental,\s*social|\besg report\b", re.I), "skip", 0),
-    (re.compile(r"\bfinal results\b", re.I), "annual", 120),
-    (re.compile(r"\binterim results\b", re.I), "interim", 100),
-    (re.compile(r"\bquarterly results\b", re.I), "interim", 95),
-    (re.compile(r"\bannual report\b", re.I), "annual", 110),
-    (re.compile(r"\binterim/half-year report\b", re.I), "interim", 90),
-    (re.compile(r"\bquarterly report\b", re.I), "interim", 85),
-    (re.compile(r"\bprofit warning\b", re.I), "trading_update", 70),
+# Newest rows kept per kind. Sum (10) stays under the 12-body ingest cap so
+# the feed never leaves its own rows indexed-without-body; older quarterlies
+# and profit alerts add little once the latest statements are in.
+HKEX_KIND_QUOTAS: dict[str, int] = {
+    "final_results": 2,
+    "annual_report": 2,
+    "interim_results": 3,
+    "interim_report": 2,
+    "profit_warning": 1,
+}
+HKEX_MAX_ITEMS = sum(HKEX_KIND_QUOTAS.values())
+
+# Ordered: first match wins → (kind, period, priority). Results announcements
+# carry full statements in a few hundred KB; annual/interim reports are
+# multi-MB and truncated at the body cap.
+_CATEGORY_RULES: tuple[tuple[re.Pattern[str], str, str, int], ...] = (
+    (re.compile(r"environmental,\s*social|\besg report\b", re.I), "skip", "skip", 0),
+    (re.compile(r"\bfinal results\b", re.I), "final_results", "annual", 120),
+    (re.compile(r"\binterim results\b", re.I), "interim_results", "interim", 100),
+    (re.compile(r"\bquarterly results\b", re.I), "interim_results", "interim", 95),
+    (re.compile(r"\bannual report\b", re.I), "annual_report", "annual", 110),
+    (re.compile(r"\binterim/half-year report\b", re.I), "interim_report", "interim", 90),
+    (re.compile(r"\bquarterly report\b", re.I), "interim_report", "interim", 85),
+    (re.compile(r"\bprofit warning\b", re.I), "profit_warning", "trading_update", 70),
 )
 
 _JSONP_RE = re.compile(r"^\s*\w+\((.*)\)\s*;?\s*$", re.S)
@@ -131,12 +142,12 @@ def resolve_hkex_stock_id(ticker: str, *, http_get: HttpGet | None = None) -> in
     return stock_id
 
 
-def classify_hkex_category(long_text: str) -> tuple[str, int] | None:
-    """Map an HKEX headline category to ``(period, priority)``; ``None`` drops the row."""
+def classify_hkex_category(long_text: str) -> tuple[str, str, int] | None:
+    """Map an HKEX headline category to ``(kind, period, priority)``; ``None`` drops it."""
     label = unescape(long_text or "")
-    for pattern, period, priority in _CATEGORY_RULES:
+    for pattern, kind, period, priority in _CATEGORY_RULES:
         if pattern.search(label):
-            return None if period == "skip" else (period, priority)
+            return None if kind == "skip" else (kind, period, priority)
     return None
 
 
@@ -198,7 +209,7 @@ def hkex_row_to_filing(
     classified = classify_hkex_category(str(raw.get("LONG_TEXT") or ""))
     if classified is None:
         return None
-    period, priority = classified
+    kind, period, priority = classified
     url = hkex_document_url(str(raw.get("FILE_LINK") or ""))
     headline = " ".join(unescape(str(raw.get("TITLE") or "")).split())
     if not url or not headline:
@@ -216,6 +227,7 @@ def hkex_row_to_filing(
         "url": url,
         "period": period,
         "hkex_period": period,
+        "hkex_kind": kind,
         "category": category or None,
         "summary": headline,
         "has_body": False,
@@ -257,26 +269,27 @@ def fetch_filings_hkex_direct(
                 continue
             seen.add(row["url"])
             rows.append(row)
-    rows.sort(key=lambda r: r.get("published_at") or "", reverse=True)
-    rows = _cap_rows(rows, max_items)
+    rows = select_rows_by_kind_quota(rows)[:max_items]
     if rows:
         logger.info("HKEX direct: %s → %d announcements", ticker, len(rows))
     return rows
 
 
-def _cap_rows(rows: list[dict[str, Any]], max_items: int) -> list[dict[str, Any]]:
-    """Keep the newest ``max_items`` rows, reserving the latest annual and interim."""
-    if len(rows) <= max_items:
-        return rows
-    reserved: list[dict[str, Any]] = []
-    for period in ("annual", "interim"):
-        latest = next((r for r in rows if r["period"] == period), None)
-        if latest is not None:
-            reserved.append(latest)
-    reserved = reserved[:max_items]
-    reserved_ids = {id(r) for r in reserved}
-    rest = [r for r in rows if id(r) not in reserved_ids][: max_items - len(reserved)]
-    return sorted(reserved + rest, key=lambda r: r.get("published_at") or "", reverse=True)
+def select_rows_by_kind_quota(
+    rows: list[dict[str, Any]], quotas: dict[str, int] | None = None
+) -> list[dict[str, Any]]:
+    """Newest rows per ``hkex_kind`` up to its quota, returned newest first."""
+    quotas = HKEX_KIND_QUOTAS if quotas is None else quotas
+    newest_first = sorted(rows, key=lambda r: r.get("published_at") or "", reverse=True)
+    taken: dict[str, int] = {}
+    kept: list[dict[str, Any]] = []
+    for row in newest_first:
+        kind = str(row.get("hkex_kind") or "")
+        if taken.get(kind, 0) >= int(quotas.get(kind, 0)):
+            continue
+        taken[kind] = taken.get(kind, 0) + 1
+        kept.append(row)
+    return kept
 
 
 def normalize_hkexnews_url(url: str) -> str:

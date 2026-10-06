@@ -28,12 +28,12 @@ from value_investor.research.filings import (
     merge_filings,
 )
 from value_investor.research.hkex_direct import (
-    _cap_rows,
     classify_hkex_category,
     drop_allowlist_rows_covered_by_hkex,
     fetch_filings_hkex_direct,
     hk_stock_code,
     parse_prefix_response,
+    select_rows_by_kind_quota,
 )
 from value_investor.storage import write_json
 
@@ -114,7 +114,7 @@ def test_parse_prefix_response_matches_exact_code_not_warrant():
 def test_classify_hkex_category_periods(label: str, expected: str):
     classified = classify_hkex_category(label)
     assert classified is not None
-    assert classified[0] == expected
+    assert classified[1] == expected
 
 
 @pytest.mark.parametrize(
@@ -211,17 +211,28 @@ def test_fetch_filings_hkex_direct_survives_network_errors():
     assert fetch_filings_hkex_direct(ticker="2382.HK", http_get=_boom) == []
 
 
-def test_cap_rows_reserves_latest_annual_and_interim():
+def test_kind_quota_keeps_newest_per_kind_within_body_budget():
+    from value_investor.research.hkex_direct import HKEX_KIND_QUOTAS, HKEX_MAX_ITEMS
+
     rows = [
-        {"period": "trading_update", "published_at": f"2026-09-{day:02d}"}
-        for day in range(20, 10, -1)
+        {"hkex_kind": kind, "published_at": f"20{year}-0{month}-01"}
+        for kind in HKEX_KIND_QUOTAS
+        for year in (24, 25, 26)
+        for month in (3, 8)
     ]
-    rows.append({"period": "interim", "published_at": "2026-08-01"})
-    rows.append({"period": "annual", "published_at": "2026-03-01"})
-    capped = _cap_rows(rows, 4)
-    assert len(capped) == 4
-    assert {r["period"] for r in capped} == {"trading_update", "interim", "annual"}
-    assert capped[0]["published_at"] == "2026-09-20"
+    rows.append({"hkex_kind": "unknown", "published_at": "2026-09-30"})
+    kept = select_rows_by_kind_quota(rows)
+    assert len(kept) == HKEX_MAX_ITEMS == 10
+    assert HKEX_MAX_ITEMS < 12  # ingest body cap; feed rows never left without bodies
+    by_kind: dict[str, list[str]] = {}
+    for row in kept:
+        by_kind.setdefault(row["hkex_kind"], []).append(row["published_at"])
+    assert by_kind["profit_warning"] == ["2026-08-01"]
+    assert by_kind["interim_results"] == ["2026-08-01", "2026-03-01", "2025-08-01"]
+    assert "unknown" not in by_kind
+    assert [r["published_at"] for r in kept] == sorted(
+        (r["published_at"] for r in kept), reverse=True
+    )
 
 
 def test_allowlist_rows_covered_by_hkex_are_dropped_host_insensitive():
