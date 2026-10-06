@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-05T15:44:43+00:00",
+  "updated_at": "2026-10-06T02:53:23+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12320,6 +12320,22 @@
       "status": "open",
       "source": "Project gap review: ratchet fix PR #971",
       "added_at": "2026-10-05T20:58:27+00:00"
+    },
+    {
+      "id": "L540",
+      "category": "later",
+      "section": "learning",
+      "title": "Re-rank knob calibration after replay phantom-cash fix",
+      "summary": "fund_from_pre_state treated cash_before=0.0 as missing and seeded replays with initial cash. Walk-forward folds starting on fully invested passes (folds 2+) carried ~\u00a31000 phantom cash, so the fitness ranking behind ai_judgment_calibrated r1-r3 is not evidence. Re-run ftse-knob-calibrate rank and compare before citing calibrated shadows.",
+      "revisit_when": "After the replay phantom-cash fix merges, at the next Sunday/manual calibration pass",
+      "tags": [
+        "knob-calibration",
+        "replay",
+        "bug"
+      ],
+      "status": "open",
+      "source": "Project gap review follow-up: replay phantom cash fix",
+      "added_at": "2026-10-06T02:53:23+00:00"
     }
   ],
   "fragments": [

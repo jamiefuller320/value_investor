@@ -692,6 +692,12 @@ def _price_map_from_candidates(candidates: list[dict[str, Any]]) -> dict[str, fl
     return prices
 
 
+def _logged_float(entry: dict[str, Any], key: str, default: float) -> float:
+    # 0.0 is a real logged value (fully invested book, cost-free market), not "missing".
+    value = entry.get(key)
+    return default if value is None else float(value)
+
+
 def fund_from_pre_state(entry: dict[str, Any]) -> PaperFund:
     mode = str(entry.get("strategy_mode") or "automated")
     if mode not in {"automated", "technical"}:
@@ -700,12 +706,12 @@ def fund_from_pre_state(entry: dict[str, Any]) -> PaperFund:
         name=str(entry.get("track_label") or "Replay"),
         mode=mode,  # type: ignore[arg-type]
         initial_cash=float(entry.get("contributed_capital_before") or 1000.0),
-        trade_cost_pct=float(entry.get("trade_cost_pct") or 0.03),
+        trade_cost_pct=_logged_float(entry, "trade_cost_pct", 0.03),
         max_positions=int(entry.get("max_positions") or 5),
     )
     fund = PaperFund(
         config=config,
-        cash=float(entry.get("cash_before") or config.initial_cash),
+        cash=_logged_float(entry, "cash_before", config.initial_cash),
         contributed_capital=float(entry.get("contributed_capital_before") or config.initial_cash),
     )
     for row in entry.get("holdings_before") or []:

@@ -1053,3 +1053,59 @@ def test_extract_held_stress_and_log_swap_seeds():
     assert swaps[0]["rotation_id"] == "rules:2026-01-08T13:00:00+00:00"
     assert swaps[0]["sells"][0]["ticker"] == "HELD.L"
     assert swaps[0]["buys"][0]["ticker"] == "NEW.L"
+
+
+def test_fund_from_pre_state_keeps_zero_cash_of_fully_invested_book():
+    """Regression: cash_before=0.0 was treated as missing and replaced with initial cash."""
+    from value_investor.rebalance_log import fund_from_pre_state
+
+    entry = {
+        "contributed_capital_before": 1000.0,
+        "cash_before": 0.0,
+        "trade_cost_pct": 0.0,
+        "holdings_before": [{"ticker": "AAA.L", "shares": 2.0, "avg_cost": 300.0}],
+    }
+    fund = fund_from_pre_state(entry)
+    assert fund.cash == 0.0
+    assert fund.config.trade_cost_pct == 0.0
+    assert fund.holdings["AAA.L"].shares == 2.0
+
+    missing = fund_from_pre_state({"contributed_capital_before": 1000.0})
+    assert missing.cash == 1000.0
+    assert missing.config.trade_cost_pct == 0.03
+
+
+def test_replay_of_fully_invested_book_without_trades_matches_marks():
+    """A no-op replay of a fully invested book must not conjure phantom cash."""
+    from value_investor.rebalance_log import replay_counterfactual_from_log
+
+    holdings = [{"ticker": "AAA.L", "shares": 2.0, "avg_cost": 300.0, "sector": "Banks"}]
+    candidates = [
+        {
+            "ticker": "AAA.L",
+            "price": 330.0,
+            "signal": "buy",
+            "conviction_score": 0.9,
+            "sector": "Banks",
+        }
+    ]
+    entry = {
+        "acted": True,
+        "logged_at": "2026-09-29T08:27:00+00:00",
+        "strategy_mode": "automated",
+        "max_positions": 1,
+        "trade_cost_pct": 0.03,
+        "nav_before": 600.0,
+        "cash_before": 0.0,
+        "contributed_capital_before": 1000.0,
+        "holdings_before": holdings,
+        "holdings_after": holdings,
+        "candidates": candidates,
+        "selection": {"exit_confirm_screens": 2},
+        "trades": [],
+    }
+    preview = replay_counterfactual_from_log([entry], max_positions=1)
+    assert preview is not None
+    assert preview["simulated_trade_count"] == 0
+    assert preview["simulated_nav"] == 660.0
+    assert preview["simulated_return"] == 0.1
