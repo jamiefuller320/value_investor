@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T03:06:48+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T03:13:59+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -474,6 +474,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L503 | **Issuer-homepage IR PDF auto-discovery for empty allowlists** | OIZ.IR needed a curated _BUILTIN_IR_URLS seed because euro discovery never reached originenterprises.com PDFs. A bounded issuer-homepage IR crawler could reduce hand seeds for the next empty-allowlist unmeasured/zero-body, without replacing allowlist validation. | Next euro/DAX unmeasured or zero-body name fails ≥2 intensive 0-improve pins with ir_allowlist=0 after the missing-IR ops finding fires |
 | L530 | **Long-history PIT backtest of the value screen itself** | The core premise that the 20 value models rank FTSE 350 forward returns has never been tested beyond ~10 weekly archives since Aug 2026. Forward paper trading cannot validate it in reasonable time. Build a multi-year point-in-time backtest (PIT fundamentals + delisted names + TR prices) from a licensed or reconstructed source (ties to L11) to establish the base rate before tuning overlays. | When choosing the next foundation investment after P1, or when L11 data source is chosen |
 | L536 | **US PIT base-rate test of the 20 value models (Sharadar or EDGAR)** | Cheapest route to L530: run the existing value models on ~20 years of US as-reported fundamentals with filing dates and delisted names (Sharadar via Nasdaq Data Link, low hundreds USD/yr; or free SEC EDGAR companyfacts/frames with more cleaning). Answers whether the screen ranks forward returns at all before more UK overlay spend. UK equivalent from ESEF (filings.xbrl.org) + Companies House only reaches ~FY2020. | When L530 is scheduled, or before choosing a paid source for L11 |
+| L542 | **Multi-year PIT screen backtest on US names via SEC companyfacts** | L530 first version (screen_premise_backtest) only covers weeks of frozen FTSE snapshots. A multi-year base rate for the value screen needs dated fundamentals and delisted names; SEC EDGAR companyfacts has filed dates for US issuers, and a US run would test the premise even though the live path is FTSE. | When L11 (UK-primary fundamentals) source is chosen, or when the 7d screen-premise interval is still inconclusive after ~26 weekly cohorts |
 
 ### Ops / reliability
 
