@@ -18,6 +18,7 @@ from value_investor.paper_automation import (
     CONFIG_FILENAME,
     DEFAULT_AUTOMATION_DIR,
     FUND_FILENAME,
+    GRADUATED_ALLOCATION_MIN_POSITIONS,
     AutomationConfig,
     ensure_automated_fund,
     save_automated_fund,
@@ -829,9 +830,19 @@ def _sector_pressure(metrics: BookMetrics, sector_cap: float) -> bool:
     return metrics.max_sector_weight > sector_cap + 1e-9 and metrics.positions >= 2
 
 
+def max_positions_bounds_for(config: AutomationConfig) -> tuple[int, int]:
+    """Clamp range for ``max_positions``, raised to the track-sync floor where one exists."""
+    low, high = MAX_POSITIONS_BOUNDS
+    if config.use_graduated_allocation:
+        low = max(low, GRADUATED_ALLOCATION_MIN_POSITIONS)
+    return low, high
+
+
 def detect_saturated_knobs(
     metrics: BookMetrics,
     knobs: LearningKnobs,
+    *,
+    max_positions_bounds: tuple[int, int] = MAX_POSITIONS_BOUNDS,
 ) -> list[dict[str, Any]]:
     """
     Knobs whose proposal rule still fires but which already sit at their clamp bound.
@@ -854,21 +865,21 @@ def detect_saturated_knobs(
                 "trigger": f"cost drag {metrics.cost_drag:.1%} ≥ {HIGH_COST_DRAG:.0%}",
             }
         )
-    if _weak_excess_pressure(metrics) and knobs.max_positions <= MAX_POSITIONS_BOUNDS[0]:
+    if _weak_excess_pressure(metrics) and knobs.max_positions <= max_positions_bounds[0]:
         saturated.append(
             {
                 "knob": "max_positions",
                 "pressure": "lower",
-                "bound": MAX_POSITIONS_BOUNDS[0],
+                "bound": max_positions_bounds[0],
                 "trigger": f"excess {metrics.excess_after_costs:+.1%} ≤ {WEAK_EXCESS:+.0%}",
             }
         )
-    if _strong_excess_pressure(metrics, knobs) and knobs.max_positions >= MAX_POSITIONS_BOUNDS[1]:
+    if _strong_excess_pressure(metrics, knobs) and knobs.max_positions >= max_positions_bounds[1]:
         saturated.append(
             {
                 "knob": "max_positions",
                 "pressure": "raise",
-                "bound": MAX_POSITIONS_BOUNDS[1],
+                "bound": max_positions_bounds[1],
                 "trigger": f"excess {metrics.excess_after_costs:+.1%} ≥ {STRONG_EXCESS:+.0%}",
             }
         )
@@ -893,6 +904,8 @@ def detect_saturated_knobs(
 def propose_knob_updates(
     metrics: BookMetrics,
     knobs: LearningKnobs,
+    *,
+    max_positions_bounds: tuple[int, int] = MAX_POSITIONS_BOUNDS,
 ) -> tuple[LearningKnobs, dict[str, Any], list[str]]:
     """
     Heuristic, small-step proposals from reviewed book outcomes.
@@ -932,7 +945,7 @@ def propose_knob_updates(
 
     # 2) Weak excess + costs → shrink book slightly.
     if _weak_excess_pressure(metrics):
-        new_max = int(_clamp(proposed.max_positions - MAX_POSITIONS_STEP, *MAX_POSITIONS_BOUNDS))
+        new_max = int(_clamp(proposed.max_positions - MAX_POSITIONS_STEP, *max_positions_bounds))
         if new_max < proposed.max_positions:
             proposed.max_positions = new_max
             changes["max_positions"] = new_max
@@ -940,7 +953,7 @@ def propose_knob_updates(
 
     # 3) Strong excess + tight cash use → allow one more sleeve.
     if _strong_excess_pressure(metrics, knobs):
-        new_max = int(_clamp(proposed.max_positions + MAX_POSITIONS_STEP, *MAX_POSITIONS_BOUNDS))
+        new_max = int(_clamp(proposed.max_positions + MAX_POSITIONS_STEP, *max_positions_bounds))
         if new_max > proposed.max_positions:
             proposed.max_positions = new_max
             changes["max_positions"] = new_max
@@ -1065,9 +1078,12 @@ def run_decision_review(
     else:
         review_metrics = metrics
         review_history_ok = history_ok
-    proposed, changes, reasons = propose_knob_updates(review_metrics, knobs_before)
+    position_bounds = max_positions_bounds_for(config)
+    proposed, changes, reasons = propose_knob_updates(
+        review_metrics, knobs_before, max_positions_bounds=position_bounds
+    )
     saturated = (
-        detect_saturated_knobs(review_metrics, knobs_before)
+        detect_saturated_knobs(review_metrics, knobs_before, max_positions_bounds=position_bounds)
         if review_history_ok and not frozen_lab
         else []
     )
