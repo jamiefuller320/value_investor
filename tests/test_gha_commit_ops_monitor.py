@@ -172,6 +172,18 @@ def test_ops_monitor_commit_keeps_queue_edits_when_main_unchanged(tmp_path: Path
     assert ids == ["eng-1", "eng-2"]
 
 
+def test_ops_monitor_commit_adds_new_optional_store(tmp_path: Path):
+    remote, work = _seed_repo(tmp_path)
+    _write_json(work / "docs" / "data" / "ops_status.json", {"run_at": "fresh", "overall": "ok"})
+    _write_json(work / "docs" / "data" / "track_statistics.json", {"tracks": {}})
+    result = _run_script(work)
+    assert result.returncode == 0, result.stderr
+    assert "Skipping docs/data/track_statistics.json" not in result.stderr
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    assert _read_json(latest / "docs" / "data" / "track_statistics.json") == {"tracks": {}}
+
+
 def test_ops_monitor_workflow_commits_after_monitor_exit() -> None:
     text = WORKFLOW.read_text(encoding="utf-8")
     assert "scripts/gha_commit_ops_monitor.sh" in text
