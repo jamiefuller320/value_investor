@@ -8,6 +8,8 @@ from pathlib import Path
 from value_investor.engineering_queue import evaluate_engineering_dispatch
 from value_investor.engineering_tasks import EngineeringTask
 from value_investor.project_traffic import (
+    ACTION_RESUME,
+    PAUSE_REASON_AUTOMATION_WASTE,
     QUEUE_MERGE_SYNC_FINDING_TITLE,
     RECTIFICATION_CANCEL_RECOVERED_WORKFLOW,
     RECTIFICATION_HUMAN_TRIAGE,
@@ -313,6 +315,61 @@ def test_run_project_traffic_dry_run(tmp_path: Path, monkeypatch):
     assert "pr_fix_common_issues" in report.digest
     # dry-run must not persist pause
     assert is_traffic_pause_active(tasks_path=tasks_path) is False
+
+
+def test_run_project_traffic_resumes_same_cycle_after_waste_clear(tmp_path: Path, monkeypatch):
+    """Ghost pause after waste clear (0 stuck PRs) must resume in this pass."""
+    tasks_path = tmp_path / "engineering_tasks.json"
+    _write_tasks(
+        tasks_path,
+        {
+            "tasks": [],
+            "traffic_control": {
+                "pause_active": True,
+                "pause_reasons": [PAUSE_REASON_AUTOMATION_WASTE],
+                "automation_waste_active": True,
+                "stuck_pr_count": 0,
+                "pause_started_at": "2026-10-06T02:34:18.857788+00:00",
+            },
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic._traffic_policy",
+        lambda: {
+            "enabled": True,
+            "stuck_pr_threshold": 2,
+            "min_fail_age_minutes": 0,
+            "resume_idle_minutes": 15,
+            "max_fix_requests_per_pr": 2,
+            "comment_cooldown_hours": 6,
+            "pause_on_stuck": True,
+            "monitor_cursor_prs": True,
+            "request_ci_fix_comments": False,
+            "request_conflict_resolve": False,
+            "digest_enabled": False,
+            "automation_waste_enabled": True,
+            "pause_on_automation_waste": True,
+            "park_on_automation_waste": True,
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic._enrich_pr_merge_state",
+        lambda row, **kwargs: row,
+    )
+    report = run_project_traffic(
+        tasks_path=tasks_path,
+        open_prs=[],
+        apply=True,
+        write_digest=False,
+        now=datetime(2026, 10, 6, 13, 15, tzinfo=UTC),
+        recent_agent_failures=[],
+        cursor_workflow_failure_counts={},
+    )
+    assert report.pause_active is False
+    assert is_traffic_pause_active(tasks_path=tasks_path) is False
+    assert any(a.kind == ACTION_RESUME for a in report.actions) or any(
+        "cleared" in (a.detail or "") for a in report.actions
+    )
 
 
 def test_daily_digest_marks_ungrounded_without_progress(tmp_path: Path):
