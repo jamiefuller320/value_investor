@@ -26,6 +26,34 @@ tracks, and the frozen books with their final record.
 there is no hard-coded "ahead of schedule" or "AI beats rules" claim; stage
 2b is only marked complete when the primary's verdict is `positive`.
 
+## Twins
+
+A twin is a cold-start book that copies an active parent's knobs and varies
+exactly one. It is registered under `twins` in `assessment_model.json` with the
+parent's knobs at start, the learning question and the readiness gate. Twins
+are churn-policy twins, so decision-review `--apply` never tunes them, and a
+frozen parent cannot get a new twin.
+
+The scoreboard's `twins` list compares each twin with its parent on the days
+both books were marked since the twin began (flow-adjusted price NAV):
+`twin_return`, `parent_return`, `difference`. `parent_knobs_changed` lists any
+parent knob that differs from the recorded start values; a non-empty list
+means the comparison is confounded by parent tuning.
+
+### Hold-buffer twin (L541)
+
+`ai_judgment_hold5_fair`, started 2026-10-06 from fresh capital: the primary
+`ai_judgment_fair` with `exit_confirm_screens` 5 instead of 2, fair costs.
+
+- **Question:** does holding through 5 confirming screens beat the primary on
+  total return? The L531 replay (`hold_period_counterfactual.json`) put it at
+  +5.8pp over 19 passes, mostly from avoided rank-flip exits.
+- **Gate:** promote the longer buffer to the primary only if the twin leads
+  over ≥26 weekly screens with the parent's knobs unchanged and the
+  twin-minus-parent interval excludes zero. Otherwise freeze the twin. Human
+  Sunday card `sunday-hold-buffer-twin`.
+- Spawned with `ftse-trading-costs spawn-hold-buffer-twin` (idempotent).
+
 ## Automation
 
 - **Trigger:** daily ops-monitor `check_assessment_scoreboard` (runs after

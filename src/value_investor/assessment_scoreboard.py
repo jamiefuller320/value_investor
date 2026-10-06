@@ -13,7 +13,9 @@ cost basis. For every active track it shows:
   stress cost, as a cost-sensitivity column;
 - whether the AI research gate binds (share of the buy tier it lets through,
   from ``screen_premise_backtest.json``);
-- the primary vs control difference on their common window.
+- the primary vs control difference on their common window;
+- each registered twin vs its parent on the days both were marked, with any
+  parent knob that changed since the twin started (a confound).
 
 Frozen books are listed with their final record from ``assessment_model.json``.
 Daily ops-monitor refreshes ``docs/data/assessment_scoreboard.json`` after the
@@ -126,12 +128,73 @@ def _statistics_row(stats: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _role(track_id: str, primary: str, control: str) -> str:
+def _role(track_id: str, primary: str, control: str, twins: dict[str, Any]) -> str:
     if track_id == primary:
         return "primary"
     if track_id == control:
         return "control"
+    if track_id in twins:
+        return "twin"
     return "active"
+
+
+def _compounded(returns: list[tuple[Any, float]], days: set[Any]) -> float:
+    growth = 1.0
+    for day, value in returns:
+        if day in days:
+            growth *= 1.0 + value
+    return growth - 1.0
+
+
+def twin_comparison(
+    twin_id: str,
+    record: dict[str, Any],
+    dirs: dict[str, Path],
+) -> dict[str, Any]:
+    """Twin minus parent NAV return on the dates both books were marked since the twin began."""
+    from value_investor.track_statistics import daily_marks, period_returns
+
+    parent_id = str(record.get("parent_track") or "")
+    row: dict[str, Any] = {
+        "track_id": twin_id,
+        "parent_track": parent_id,
+        "started_at": record.get("started_at"),
+        "varied": record.get("varied"),
+        "learning_question": record.get("learning_question"),
+        "readiness_gate": record.get("readiness_gate"),
+    }
+    if twin_id not in dirs or parent_id not in dirs:
+        return {**row, "status": "missing_track"}
+    twin_returns = period_returns(
+        daily_marks(_read(dirs[twin_id] / FUND_FILENAME).get("equity_curve") or [])
+    )
+    parent_returns = period_returns(
+        daily_marks(_read(dirs[parent_id] / FUND_FILENAME).get("equity_curve") or [])
+    )
+    common = {d for d, _ in twin_returns} & {d for d, _ in parent_returns}
+    parent_config = _read(dirs[parent_id] / CONFIG_FILENAME)
+    at_start = record.get("parent_knobs_at_start") or {}
+    drifted = sorted(
+        key
+        for key, value in at_start.items()
+        if key in parent_config and parent_config[key] != value
+    )
+    row["parent_knobs_changed"] = drifted
+    row["common_days"] = len(common)
+    if not common:
+        return {**row, "status": "no_common_marks"}
+    twin_return = _compounded(twin_returns, common)
+    parent_return = _compounded(parent_returns, common)
+    return {
+        **row,
+        "status": "ok",
+        "window_start": min(common).isoformat(),
+        "window_end": max(common).isoformat(),
+        "twin_return": round(twin_return, 4),
+        "parent_return": round(parent_return, 4),
+        "difference": round(twin_return - parent_return, 4),
+        "basis": "price NAV, flow-adjusted, common marked days",
+    }
 
 
 def build_assessment_scoreboard(
@@ -149,14 +212,16 @@ def build_assessment_scoreboard(
     primary = str(model.get("primary_track") or "ai_judgment")
     control = str(model.get("control_track") or "rules")
     frozen = model.get("frozen_tracks") or {}
+    twins = model.get("twins") or {}
     total_return = _read(data_dir / TOTAL_RETURN_VIEW_FILENAME)
     statistics = _read(data_dir / TRACK_STATISTICS_FILENAME)
     screen_premise = _read(data_dir / SCREEN_PREMISE_FILENAME)
     tr_tracks = total_return.get("tracks") or {}
     stat_tracks = statistics.get("tracks") or {}
 
+    dirs = {track_id: Path(track_dir) for track_id, track_dir in learning_track_dirs(root).items()}
     rows: list[dict[str, Any]] = []
-    for track_id, track_dir in sorted(learning_track_dirs(root).items()):
+    for track_id, track_dir in sorted(dirs.items()):
         if track_id in frozen:
             continue
         entry = tr_tracks.get(track_id) or {}
@@ -173,7 +238,7 @@ def build_assessment_scoreboard(
         rows.append(
             {
                 "track_id": track_id,
-                "role": _role(track_id, primary, control),
+                "role": _role(track_id, primary, control, twins),
                 "label": config.get("track_label"),
                 "basis": "clean_epoch" if entry.get("clean_epoch") else "lifetime",
                 "start": view.get("start"),
@@ -194,7 +259,7 @@ def build_assessment_scoreboard(
                 "configured_buy_cost_pct": config.get("buy_cost_pct"),
             }
         )
-    order = {"primary": 0, "control": 1, "active": 2}
+    order = {"primary": 0, "control": 1, "twin": 2, "active": 3}
     rows.sort(key=lambda row: (order[row["role"]], row["track_id"]))
 
     comparison = None
@@ -247,6 +312,11 @@ def build_assessment_scoreboard(
         "headline": headline(rows, comparison),
         "tracks": rows,
         "primary_vs_control": comparison,
+        "twins": [
+            twin_comparison(track_id, record, dirs)
+            for track_id, record in sorted(twins.items())
+            if track_id not in frozen
+        ],
         "frozen_tracks": frozen_rows,
     }
 
