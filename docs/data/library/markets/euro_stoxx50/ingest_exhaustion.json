@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "market_id": "euro_stoxx50",
-  "updated_at": "2026-10-06T07:36:23.375410+00:00",
-  "exhausted": true,
-  "complete_zero_improve_runs": 24,
+  "updated_at": "2026-10-06T21:20:58.142262+00:00",
+  "exhausted": false,
+  "complete_zero_improve_runs": 0,
   "min_zero_runs": 3,
   "parked": [
     {
@@ -14,7 +14,8 @@
       "filings_total": 1,
       "filings_with_body": 1,
       "indexed_without_body": 0,
-      "thin": true
+      "thin": true,
+      "source_surface": "euro_filings"
     },
     {
       "ticker": "MUV2.DE",
@@ -24,7 +25,8 @@
       "filings_total": 2,
       "filings_with_body": 2,
       "indexed_without_body": 0,
-      "thin": true
+      "thin": true,
+      "source_surface": "euro_filings"
     },
     {
       "ticker": "SAP.DE",
@@ -34,17 +36,8 @@
       "filings_total": 18,
       "filings_with_body": 17,
       "indexed_without_body": 1,
-      "thin": false
-    },
-    {
-      "ticker": "SGO.PA",
-      "reason": "unfetchable_iwb",
-      "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-      "parked_at": "2026-09-24T15:23:32.223873+00:00",
-      "filings_total": 3,
-      "filings_with_body": 1,
-      "indexed_without_body": 2,
-      "thin": true
+      "thin": false,
+      "source_surface": "euro_filings"
     },
     {
       "ticker": "ADYEN.AS",
@@ -54,53 +47,27 @@
       "filings_total": 3,
       "filings_with_body": 2,
       "indexed_without_body": 1,
-      "thin": true
-    },
-    {
-      "ticker": "DTE.DE",
-      "reason": "awaiting_periodic_report",
-      "revisit_when": "Next statutory annual or interim report is issued and indexed",
-      "parked_at": "2026-10-01T10:41:54.645418+00:00",
-      "filings_total": 2,
-      "filings_with_body": 1,
-      "indexed_without_body": 0,
-      "thin": true
-    },
-    {
-      "ticker": "MC.PA",
-      "reason": "awaiting_periodic_report",
-      "revisit_when": "Next statutory annual or interim report is issued and indexed",
-      "parked_at": "2026-10-01T13:48:53.982258+00:00",
-      "filings_total": 2,
-      "filings_with_body": 2,
-      "indexed_without_body": 0,
-      "thin": true
-    },
-    {
-      "ticker": "TTE.PA",
-      "reason": "unfetchable_iwb",
-      "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-      "parked_at": "2026-10-06T07:36:23.375410+00:00",
-      "park_via": "market_wide_zero_improve",
-      "filings_total": 111,
-      "filings_with_body": 100,
-      "indexed_without_body": 7,
-      "thin": false
+      "thin": true,
+      "source_surface": "euro_filings"
     }
   ],
   "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
   "straggler_max_leftovers": 3,
   "straggler_zero_runs": 2,
-  "had_complete_targets": true,
+  "had_complete_targets": false,
   "leftover_tickers": [
     "ADYEN.AS",
     "BAS.DE",
     "DTE.DE",
-    "MC.PA",
     "MUV2.DE",
-    "SAP.DE",
+    "SAP.DE"
+  ],
+  "unparked_leftover": [
+    "DTE.DE"
+  ],
+  "surface_released": [
+    "MC.PA",
     "SGO.PA",
     "TTE.PA"
-  ],
-  "unparked_leftover": []
+  ]
 }
