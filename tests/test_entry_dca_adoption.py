@@ -122,3 +122,104 @@ def test_plan_opens_graduated_execute_when_gates_clear(tmp_path: Path):
     assert by_id["paper_execute_graduated"]["status"] == "open"
     assert by_id["primary_or_live"]["ready"] is False
     assert plan["current_stage"] == "paper_execute_graduated"
+
+
+def _write_assessment_model(paper_root: Path, *, twins: tuple[str, ...] = ()) -> None:
+    (paper_root / "assessment_model.json").write_text(
+        json.dumps(
+            {
+                "primary_track": "ai_judgment_fair",
+                "control_track": "buy_tier_level",
+                "frozen_tracks": {"ai_judgment": {}, "rules": {}, "rules_fair": {}},
+                "twins": {track_id: {"parent_track": "ai_judgment_fair"} for track_id in twins},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def _set_track(paper_root: Path, track_id: str, *, first: int, winners: dict[str, int]) -> None:
+    path = paper_root / "learning_tracks_entry_dca.json"
+    rollup = json.loads(path.read_text(encoding="utf-8"))
+    rollup["tracks"][track_id] = {
+        "entry_kind_counts": {"first_entry": first},
+        "winning_cadence_counts": winners,
+    }
+    path.write_text(json.dumps(rollup), encoding="utf-8")
+
+
+def _ack_with_snapshot(data: Path) -> None:
+    record_ack(
+        data,
+        experiment_id="entry_dca_overlay",
+        finding={
+            "leading_cadence": "dca_4x_weekly",
+            "first_entry_by_track": {
+                "ai_judgment": 1,
+                "rules": 0,
+                "ai_judgment_fair": 1,
+                "buy_tier_level": 0,
+            },
+        },
+    )
+
+
+def test_frozen_books_no_longer_gate_out_of_sample(tmp_path: Path):
+    data = tmp_path / "data"
+    paper = data / "paper_automation"
+    _write_rollup(paper, ai_first=9, rules_first=9, graduated_marks=8)
+    _write_assessment_model(paper)
+    _set_track(paper, "buy_tier_level", first=0, winners={})
+    _ack_with_snapshot(data)
+
+    plan = evaluate_entry_dca_adoption_plan(data_dir=data, paper_root=paper)
+    stage = {row["id"]: row for row in plan["stages"]}["out_of_sample_first_entry"]
+    assert stage["ready"] is False
+    assert stage["evidence"]["live_books"] == {
+        "primary": "ai_judgment_fair",
+        "control": "buy_tier_level",
+    }
+    assert stage["evidence"]["first_entry_by_track"] == {
+        "ai_judgment_fair": 1,
+        "buy_tier_level": 0,
+    }
+    assert "ai_judgment_fair first_entry>=3" in stage["revisit_when"]
+    assert "rules_fair" not in stage["evidence"]["fair_winning_cadence"]
+
+
+def test_primary_and_control_first_entries_clear_out_of_sample(tmp_path: Path):
+    data = tmp_path / "data"
+    paper = data / "paper_automation"
+    _write_rollup(paper, ai_first=0, rules_first=0, graduated_marks=8)
+    _write_assessment_model(paper)
+    _set_track(paper, "ai_judgment_fair", first=3, winners={"dca_4x_weekly": 2})
+    _set_track(paper, "buy_tier_level", first=5, winners={"dca_2x_weekly": 3})
+    _ack_with_snapshot(data)
+
+    plan = evaluate_entry_dca_adoption_plan(data_dir=data, paper_root=paper)
+    stage = {row["id"]: row for row in plan["stages"]}["out_of_sample_first_entry"]
+    assert stage["ready"] is True
+    assert stage["evidence"]["live_winning_cadence"] == {
+        "ai_judgment_fair": "dca_4x_weekly",
+        "buy_tier_level": "dca_2x_weekly",
+    }
+    assert plan["current_stage"] == "paper_execute_graduated"
+
+
+def test_twin_disagreement_blocks_out_of_sample(tmp_path: Path):
+    data = tmp_path / "data"
+    paper = data / "paper_automation"
+    _write_rollup(paper, ai_first=0, rules_first=0, graduated_marks=8)
+    _write_assessment_model(paper, twins=("ai_judgment_hold5_fair",))
+    _set_track(paper, "ai_judgment_fair", first=3, winners={"dca_4x_weekly": 2})
+    _set_track(paper, "buy_tier_level", first=5, winners={"dca_4x_weekly": 3})
+    _set_track(paper, "ai_judgment_hold5_fair", first=2, winners={"dca_5x_weekday": 2})
+    _ack_with_snapshot(data)
+
+    plan = evaluate_entry_dca_adoption_plan(data_dir=data, paper_root=paper)
+    stage = {row["id"]: row for row in plan["stages"]}["out_of_sample_first_entry"]
+    assert stage["ready"] is False
+    assert stage["evidence"]["fair_winning_cadence"] == {
+        "ai_judgment_fair": "dca_4x_weekly",
+        "ai_judgment_hold5_fair": "dca_5x_weekday",
+    }

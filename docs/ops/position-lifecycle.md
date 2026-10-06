@@ -250,7 +250,7 @@ ftse-experiment-assess plan
 | Stage | Meaning | Open when |
 |-------|---------|-----------|
 | `acked` | Human read the overlay finding | `ftse-experiment-assess ack` recorded for current `leading_cadence` |
-| `out_of_sample_first_entry` | Confirm `dca_4x_weekly` on **new** first-entry closes | Live books: `ai_judgment` first-entry ≥ 3 and `rules` ≥ 1; fair tracks still agree |
+| `out_of_sample_first_entry` | Confirm `dca_4x_weekly` on **new** first-entry closes | Live books from `assessment_model.json`: primary (`ai_judgment_fair`) first-entry ≥ 3 and control (`buy_tier_level`) ≥ 1, each above its ack snapshot; the primary and its twins still agree on cadence. Frozen books never gate this stage |
 | `paper_execute_graduated` | Optional execute 4× weekly on `graduated_allocation` only | Previous stage ready **and** graduated `equity_marks` ≥ 8 |
 | `primary_or_live` | Primary / live size | Fair-cost primary `beat_market` true **and** graduated execute ready |
 
