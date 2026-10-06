@@ -38,6 +38,11 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.research.belgium_official import fetch_filings_belgium_official
+from value_investor.research.hkex_direct import (
+    drop_allowlist_rows_covered_by_hkex,
+    fetch_filings_hkex_direct,
+    is_hkex_ticker,
+)
 from value_investor.research.issuer_identifiers import resolve_lei
 
 logger = logging.getLogger(__name__)
@@ -2405,6 +2410,10 @@ def _apply_headline_period(
         # Curated allowlist URLs (RA25 / FY-2025) beat body H1/Q4 comparatives
         # and the synthetic "IR allowlist document" headline.
         period = url_period
+    elif item.get("source") == "hkex_direct" and item.get("hkex_period"):
+        # HKEX headline category (Quarterly Results, Profit Warning) is the
+        # regulator's own label; "RESULTS FOR THE THREE MONTHS ENDED…" is not.
+        period = str(item["hkex_period"])
     elif (
         period == "other"
         and body_snippet
@@ -3061,6 +3070,19 @@ def resolve_filings_regime(market: str | None, ticker: str) -> str:
     if re.fullmatch(r"[A-Z]{1,5}", _epic(t)):
         return "sec_edgar"
     return "uk_rns"
+
+
+def filing_source_surface(market: str | None, ticker: str) -> str:
+    """Fetch-surface label for a ticker: the regime plus any direct adapter it gains.
+
+    Parked ingest leftovers are stamped with this; when it changes (a new adapter
+    ships for the regime) the parked name is released for one retry. Bare regime
+    is the baseline for rows parked before stamping existed.
+    """
+    regime = resolve_filings_regime(market, ticker)
+    if regime == "asia_filings" and is_hkex_ticker(ticker):
+        return f"{regime}+hkex_direct"
+    return regime
 
 
 def _sec_user_agent() -> str:
@@ -4992,7 +5014,7 @@ def _source_bonus(source: str | None) -> int:
         return 30
     if source in {"investegate_direct", "investegate_resolved"}:
         return 28
-    if source == "asx_direct":
+    if source in {"asx_direct", "hkex_direct"}:
         return 27
     if source in {"esef_direct", "belgium_official"}:
         return 26
@@ -10420,6 +10442,7 @@ def ingest_filings(
 
     regime = resolve_filings_regime(market, ticker)
     groups: list[list[dict[str, Any]]] = []
+    hkex_rows: list[dict[str, Any]] = []
     prior_filings = _load_prior_filings_rows(filings_dir)
     if prior_filings:
         groups.append(prior_filings)
@@ -10499,6 +10522,9 @@ def ingest_filings(
                 )
             )
     elif regime == "asia_filings":
+        if is_hkex_ticker(ticker):
+            hkex_rows = fetch_filings_hkex_direct(ticker=ticker, company_name=company_name)
+            groups.append(hkex_rows)
         groups.append(fetch_filings_asia_news(company_name=company_name, ticker=ticker))
         if _sec_edgar_supplement_allowed(ticker, company_name):
             groups.append(
@@ -10515,7 +10541,9 @@ def ingest_filings(
         )
 
     # Optional manual IR/results PDFs (MVP until a generic IR crawler).
-    groups.append(fetch_filings_ir_allowlist(ticker))
+    groups.append(
+        drop_allowlist_rows_covered_by_hkex(fetch_filings_ir_allowlist(ticker), hkex_rows)
+    )
 
     merged = merge_filings(*groups) if groups else []
     merged = normalize_companies_house_index_rows(merged)
@@ -10609,8 +10637,12 @@ def ingest_filings(
         )
     elif regime == "asia_filings":
         note = (
-            "Hong Kong / Singapore results discovery via Google News, plus SEC "
-            "filings when dual-listed. period=annual|interim|other."
+            "Hong Kong results announcements and annual/interim reports via the "
+            "HKEXnews title-search feed (direct PDF URLs; period from the HKEX "
+            "headline category) for .HK names; Singapore via Google News and "
+            "optional IR allowlist URLs (SGX announcements API is token-gated). "
+            "Google News fallback for both, plus SEC filings when dual-listed. "
+            "period=annual|interim|trading_update|other."
         )
     else:
         note = (

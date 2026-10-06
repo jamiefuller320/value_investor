@@ -77,14 +77,43 @@ def load_ingest_exhaustion(
         return empty_exhaustion(market_id)
     if not isinstance(payload, dict):
         return empty_exhaustion(market_id)
-    parked = [row for row in (payload.get("parked") or []) if isinstance(row, dict)]
+    resolved_market = str(payload.get("market_id") or market_id)
+    parked: list[dict[str, Any]] = []
+    released: list[str] = []
+    for row in payload.get("parked") or []:
+        if not isinstance(row, dict):
+            continue
+        if parked_row_source_surface_changed(row, market_id=resolved_market):
+            released.append(str(row.get("ticker") or "").strip())
+            continue
+        parked.append(row)
     return {
         **empty_exhaustion(market_id),
         **payload,
-        "market_id": str(payload.get("market_id") or market_id),
+        "market_id": resolved_market,
         "parked": parked,
-        "exhausted": bool(payload.get("exhausted")),
+        "surface_released": [t for t in released if t],
+        "exhausted": bool(payload.get("exhausted")) and not released,
     }
+
+
+def current_source_surface(market_id: str, ticker: str) -> str:
+    from value_investor.research.filings import filing_source_surface
+
+    return filing_source_surface(market_id, ticker)
+
+
+def parked_row_source_surface_changed(row: dict[str, Any], *, market_id: str) -> bool:
+    """True when a parked name's fetch surface gained an adapter since it was parked."""
+    from value_investor.research.filings import resolve_filings_regime
+
+    ticker = str(row.get("ticker") or "").strip()
+    if not ticker:
+        return False
+    stamped = str(row.get("source_surface") or "").strip() or resolve_filings_regime(
+        market_id, ticker
+    )
+    return stamped != current_source_surface(market_id, ticker)
 
 
 def parked_tickers_from_exhaustion(exhaustion: dict[str, Any] | None) -> list[str]:
@@ -445,6 +474,10 @@ def refresh_library_ingest_exhaustion(
     }
     bootstrap = unmeasured | zero_body
     leftover = (thin | iwb) - bootstrap
+    # Released for a new fetch surface: one retry before they can park again.
+    surface_released = {
+        str(t).strip() for t in (existing.get("surface_released") or []) if str(t).strip()
+    }
 
     kept: list[dict[str, Any]] = []
     seen: set[str] = set()
@@ -466,6 +499,7 @@ def refresh_library_ingest_exhaustion(
                 "revisit_when": revisit,
                 **coverage,
                 "thin": ticker in thin,
+                "source_surface": current_source_surface(market_id, ticker),
             }
         )
         seen.add(ticker)
@@ -491,7 +525,7 @@ def refresh_library_ingest_exhaustion(
     if can_park_market_wide or can_consider_stragglers:
         candidates = sorted(leftover if can_park_market_wide else unparked_now)
         for ticker in candidates:
-            if ticker in seen:
+            if ticker in seen or ticker in surface_released:
                 continue
             if not can_park_market_wide and not _straggler_soft_park_eligible(
                 ticker,
@@ -514,6 +548,7 @@ def refresh_library_ingest_exhaustion(
                     "park_via": park_via,
                     **coverage,
                     "thin": ticker in thin,
+                    "source_surface": current_source_surface(market_id, ticker),
                 }
             )
             seen.add(ticker)
@@ -537,6 +572,7 @@ def refresh_library_ingest_exhaustion(
         "leftover_tickers": sorted(leftover),
         "parked": kept,
         "unparked_leftover": sorted(leftover - parked_set),
+        "surface_released": sorted(surface_released),
     }
     if write:
         path = ingest_exhaustion_path(library_root, market_id)
