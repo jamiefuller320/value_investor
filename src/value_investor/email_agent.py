@@ -742,6 +742,14 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     signals = enrich_signals_with_research(signals, args.output_dir, run_at=run_at)
+    from value_investor.scoring.snapshot import backfill_snapshot_research
+    from value_investor.storage import COMMITTED_HISTORY_DIR
+
+    snapshot_name = f"run_{run_at.strftime('%Y%m%d_%H%M%S')}.json"
+    for history_dir in (args.output_dir / "history", COMMITTED_HISTORY_DIR):
+        backfilled = backfill_snapshot_research(history_dir / snapshot_name, signals)
+        if backfilled:
+            print(f"Backfilled research verdicts into {history_dir / snapshot_name}: {backfilled}")
     signals_path = args.output_dir / "latest_signals.csv"
     signals.to_csv(signals_path, index=False)
 

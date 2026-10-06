@@ -3,11 +3,14 @@ from pathlib import Path
 
 from value_investor.backtest import BENCHMARK_TICKER, RunSnapshot
 from value_investor.screen_premise_backtest import (
+    AI_GATE_FINDING_TITLE,
     FINDING_TITLE,
     STORE_FAILED_TITLE,
+    ai_gate_finding_from_screen_premise_backtest,
     build_screen_premise_backtest,
     ops_finding_from_screen_premise_backtest,
     score_cohort,
+    snapshot_verdicts,
     spearman,
     summarise,
     weekly_cohorts,
@@ -73,6 +76,8 @@ def test_score_cohort_spreads_and_unit_flip_drop():
     assert scored["buy_tier_spread"] > 0
     assert scored["avoid_spread"] < 0
     assert scored["rank_ic"] > 0.5
+    assert scored["ai_gate_pass_share"] is None
+    assert scored["ai_gate_spread"] is None
 
 
 def test_summarise_withholds_interval_until_effective_n():
@@ -126,3 +131,148 @@ def test_check_screen_premise_backtest_persists_and_fails_closed(tmp_path: Path,
     monkeypatch.setattr(module, "build_screen_premise_backtest", boom)
     failed = check_screen_premise_backtest(data_dir=tmp_path, store_path=store)
     assert [f.title for f in failed] == [STORE_FAILED_TITLE]
+
+
+def _gate_snapshot(run_at: str, week: int, *, gate_growth: float, reject_growth: float) -> dict:
+    """Buy tier T00–T07: T00–T03 accumulate (higher conviction), T04–T07 neutral."""
+    payload = _snapshot(run_at, 0.0, 0.0, week=week)
+    for i, row in enumerate(payload["signals"]):
+        if i < 8:
+            row["signal"] = "buy"
+            row["research_verdict"] = "accumulate" if i < 4 else "neutral"
+            growth = gate_growth if i < 4 else reject_growth
+            payload["prices"][row["ticker"]] = round(100.0 * (1.0 + growth) ** week, 6)
+    return payload
+
+
+def test_score_cohort_ai_gate_and_conviction_half_spreads():
+    entry = _gate_snapshot("2026-08-02T07:00:00+00:00", 0, gate_growth=-0.02, reject_growth=0.02)
+    exit_snap = _gate_snapshot(
+        "2026-08-09T07:00:00+00:00", 1, gate_growth=-0.02, reject_growth=0.02
+    )
+    verdicts = {r["ticker"]: r.get("research_verdict") for r in entry["signals"][:8]}
+    verdicts["T07.L"] = None
+    scored = score_cohort(RunSnapshot(**entry), RunSnapshot(**exit_snap), verdicts)
+    assert scored["ai_gate_pass_names"] == 4
+    assert scored["ai_gate_reject_names"] == 4
+    assert scored["ai_gate_no_memo_names"] == 1
+    assert scored["ai_gate_pass_share"] == 0.5
+    assert scored["ai_gate_spread"] == -0.04
+    assert scored["conviction_half_spread"] == -0.04
+
+
+def test_ai_gate_spread_needs_names_on_both_sides():
+    entry = _gate_snapshot("2026-08-02T07:00:00+00:00", 0, gate_growth=0.01, reject_growth=0.0)
+    exit_snap = _gate_snapshot("2026-08-09T07:00:00+00:00", 1, gate_growth=0.01, reject_growth=0.0)
+    all_pass = {f"T{i:02d}.L": "accumulate" for i in range(8)}
+    scored = score_cohort(RunSnapshot(**entry), RunSnapshot(**exit_snap), all_pass)
+    assert scored["ai_gate_pass_share"] == 1.0
+    assert scored["ai_gate_spread"] is None
+
+
+def test_snapshot_verdicts_prefers_row_then_point_in_time_archive(tmp_path: Path, monkeypatch):
+    from value_investor import screen_premise_backtest as module
+
+    calls: list[tuple[str, str]] = []
+
+    class _Doc:
+        research_verdict = "neutral"
+
+    def fake_as_of(research_dir, ticker, as_of):
+        calls.append((ticker, as_of))
+        return _Doc() if ticker == "B.L" else None
+
+    monkeypatch.setattr(module, "get_research_as_of", fake_as_of)
+    snap = RunSnapshot(
+        run_at="2026-08-16T07:00:00+00:00",
+        prices={},
+        signals=[
+            {"ticker": "A.L", "signal": "buy", "research_verdict": "accumulate"},
+            {"ticker": "B.L", "signal": "strong_buy", "research_verdict": None},
+            {"ticker": "C.L", "signal": "buy"},
+            {"ticker": "D.L", "signal": "hold"},
+        ],
+    )
+    verdicts = snapshot_verdicts(snap, tmp_path)
+    assert verdicts == {"A.L": "accumulate", "B.L": "neutral", "C.L": None}
+    assert calls == [
+        ("B.L", "2026-08-16T07:00:00+00:00"),
+        ("C.L", "2026-08-16T07:00:00+00:00"),
+    ]
+    assert snapshot_verdicts(snap, None) == {"A.L": "accumulate", "B.L": None, "C.L": None}
+
+
+def test_build_and_ai_gate_finding_when_gate_picks_lose(tmp_path: Path):
+    history = tmp_path / "history"
+    history.mkdir()
+    for week in range(7):
+        day = 2 + 7 * week
+        month, dom = (8, day) if day <= 31 else (9, day - 31)
+        write_json(
+            history / f"run_2026{month:02d}{dom:02d}_070000.json.gz",
+            _gate_snapshot(
+                f"2026-{month:02d}-{dom:02d}T07:00:00+00:00",
+                week,
+                gate_growth=-0.01 - 0.001 * week,
+                reject_growth=0.01,
+            ),
+            compress=True,
+        )
+    payload = build_screen_premise_backtest(tmp_path)
+    weekly = payload["horizons"]["7"]
+    assert weekly["ai_gate_spread"]["mean"] < 0
+    assert weekly["ai_gate_pass_share"] == 0.5
+    assert weekly["conviction_half_spread"]["cohorts"] == 6
+    finding = ai_gate_finding_from_screen_premise_backtest(payload)
+    assert finding is not None
+    assert finding["title"] == AI_GATE_FINDING_TITLE
+    assert "50% of the buy tier" in finding["summary"]
+    assert finding["auto_fixable"] is False
+
+
+def test_backfill_snapshot_research_fills_only_empty_research_fields(tmp_path: Path):
+    import pandas as pd
+
+    from value_investor.scoring.snapshot import backfill_snapshot_research
+    from value_investor.storage import read_json
+
+    path = tmp_path / "run_20261004_072146.json"
+    write_json(
+        path,
+        {
+            "run_at": "2026-10-04T07:21:46+00:00",
+            "prices": {},
+            "signals": [
+                {
+                    "ticker": "A.L",
+                    "signal": "buy",
+                    "adjusted_signal": "hold",
+                    "research_verdict": None,
+                },
+                {"ticker": "B.L", "signal": "buy", "research_verdict": "neutral"},
+                {"ticker": "C.L", "signal": "hold", "research_verdict": None},
+            ],
+        },
+        compress=True,
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "A.L",
+                "research_verdict": "accumulate",
+                "research_confidence": 0.7,
+                "research_as_of": "2026-10-01",
+                "adjusted_signal": "buy",
+            },
+            {"ticker": "B.L", "research_verdict": "accumulate"},
+            {"ticker": "C.L", "research_verdict": None},
+        ]
+    )
+    assert backfill_snapshot_research(path, signals) == 1
+    rows = {r["ticker"]: r for r in read_json(path)["signals"]}
+    assert rows["A.L"]["research_verdict"] == "accumulate"
+    assert rows["A.L"]["research_confidence"] == 0.7
+    assert rows["A.L"]["adjusted_signal"] == "hold"
+    assert rows["B.L"]["research_verdict"] == "neutral"
+    assert rows["C.L"]["research_verdict"] is None
+    assert backfill_snapshot_research(tmp_path / "missing.json", signals) == 0
