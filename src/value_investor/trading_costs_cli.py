@@ -82,6 +82,24 @@ def main(argv: list[str] | None = None) -> int:
     spawn_p.add_argument("--json", action="store_true")
     spawn_p.set_defaults(func=_cmd_spawn_fair_lab)
 
+    hold_p = sub.add_parser(
+        "spawn-hold-buffer-twin",
+        help=(
+            "Cold-start the L541 hold-buffer twin of the assessment-model primary "
+            "(exit_confirm_screens 5, fair costs, fixed knobs)"
+        ),
+    )
+    hold_p.add_argument(
+        "--paper-root",
+        type=Path,
+        default=DEFAULT_PAPER_ROOT,
+        help="Paper automation root (default: docs/data/paper_automation)",
+    )
+    hold_p.add_argument("--exit-confirm-screens", type=int, default=5)
+    hold_p.add_argument("--dry-run", action="store_true")
+    hold_p.add_argument("--json", action="store_true")
+    hold_p.set_defaults(func=_cmd_spawn_hold_buffer_twin)
+
     warm_p = sub.add_parser(
         "warm-start-fair-lab",
         help="PIT warm-start Suite B tracks from Suite A parent rebalance logs",
@@ -252,6 +270,25 @@ def _cmd_spawn_fair_lab(args: argparse.Namespace) -> int:
             f"parent={row.get('parent_track_id')} dir={row.get('track_dir')}"
         )
     return 0
+
+
+def _cmd_spawn_hold_buffer_twin(args: argparse.Namespace) -> int:
+    from value_investor.fair_cost_lab import spawn_hold_buffer_twin
+
+    payload = spawn_hold_buffer_twin(
+        args.paper_root,
+        exit_confirm_screens=int(args.exit_confirm_screens),
+        dry_run=bool(args.dry_run),
+    )
+    if args.json:
+        print(json.dumps(payload, indent=2))
+    else:
+        print(
+            f"Hold-buffer twin {payload.get('track_id')} (parent {payload.get('parent_track_id')}): "
+            f"spawned={payload.get('spawned')} created={payload.get('created')} "
+            f"{payload.get('reason') or ''}".rstrip()
+        )
+    return 0 if payload.get("spawned") or payload.get("dry_run") else 1
 
 
 def _cmd_warm_start_fair_lab(args: argparse.Namespace) -> int:

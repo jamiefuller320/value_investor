@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-06T08:19:07.124306+00:00",
+  "run_at": "2026-10-06T11:20:31.447371+00:00",
   "market_id": "ftse_mib",
   "targets": [
     "TEN.MI"
@@ -99,7 +99,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-06T08:18:43.661030+00:00",
+    "snapshot_at": "2026-10-06T11:18:53.907681+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -142,7 +142,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-06T08:19:01.754699+00:00",
+    "snapshot_at": "2026-10-06T11:19:12.127185+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -173,16 +173,15 @@
       "INW.MI",
       "MONC.MI",
       "PST.MI",
+      "TEN.MI",
       "UNI.MI"
     ],
-    "parked_count": 6,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "TEN.MI"
-    ],
+    "parked_count": 7,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -193,10 +192,48 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "ftse_mib",
+    "to_market": "tsx60",
+    "stream_markets_after": [
+      "tsx60"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "ftse_mib",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "BC.MI",
+        "FCT.MI",
+        "INW.MI",
+        "MONC.MI",
+        "PST.MI",
+        "TEN.MI",
+        "UNI.MI"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": {
+      "refreshed": true,
+      "market_id": "tsx60",
+      "forced": true,
+      "prior_screen_at": "2026-10-05T06:52:37.710806+00:00",
+      "prior_age_days": 1,
+      "run_at": "2026-10-06T11:20:24.140173+00:00",
+      "shortlist_count": 17,
+      "ticker_count": 59
+    },
+    "at": "2026-10-06T11:19:24.620383+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-10-06T08:18:44.235873+00:00",
+    "assessed_at": "2026-10-06T11:18:54.491370+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -226,9 +263,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 16.915729048000003,
+  "used_seconds": 17.06054135299999,
   "budget_seconds": 525.0,
-  "leftover_seconds": 508.084270952,
+  "leftover_seconds": 507.93945864700004,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -236,9 +273,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-10-06T08:19:01.757821+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-10-06T11:19:12.130613+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -300,6 +337,17 @@
         "filings_with_body": 1,
         "indexed_without_body": 0,
         "thin": true
+      },
+      {
+        "ticker": "TEN.MI",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-06T11:19:12.130613+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0,
+        "thin": true
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -315,15 +363,37 @@
       "TEN.MI",
       "UNI.MI"
     ],
-    "unparked_leftover": [
-      "TEN.MI"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/ftse_mib/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "ftse_mib"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "ftse_mib",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,

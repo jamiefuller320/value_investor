@@ -213,10 +213,18 @@
         {
           "id": "sunday-suite-b-fair-lab",
           "title": "Review primary vs control on fair costs (assessment model)",
-          "summary": "Review the assessment-model primary ai_judgment_fair against the control buy_tier_level and ^FTSE on fair costs; confirm both are marking and endurance_zero_datum is set. Suite A books and rules_fair are frozen (assessment_model.json) — read their final records, do not restart them. Treat 'AI beats the screen' as unproven while the accumulate gate never binds (N187).",
+          "summary": "Review the assessment-model primary ai_judgment_fair against the control buy_tier_level and ^FTSE on fair costs; confirm both are marking and endurance_zero_datum is set. Suite A books and rules_fair are frozen (assessment_model.json) — read their final records, do not restart them. Treat 'AI beats the screen' as unproven while the accumulate gate never binds (N189).",
           "automated": false,
           "doc_path": "docs/ops/primary-learning-track.md",
           "doc_anchor": "assessment-model-and-frozen-tracks"
+        },
+        {
+          "id": "sunday-hold-buffer-twin",
+          "title": "Hold-buffer twin vs primary (L541)",
+          "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_hold5_fair (exit_confirm_screens 5) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote the longer buffer only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Never edit either book mid-flight.",
+          "automated": false,
+          "doc_path": "docs/ops/assessment-scoreboard.md",
+          "doc_anchor": "twins"
         },
         {
           "id": "sunday-spawn-fair-twins",
