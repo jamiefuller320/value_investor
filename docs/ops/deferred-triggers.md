@@ -4,7 +4,7 @@ Deferred ideas carry a free-text `revisit_when`. Free text cannot fire on its ow
 until now a met trigger was only noticed when someone happened to re-read the idea.
 Two kinds of drift went unseen:
 
-- **Met triggers.** For example, L556 was parked "until a fair book's epoch cost drag
+- **Met triggers.** For example, L558 was parked "until a fair book's epoch cost drag
   exceeds 1%" when `ai_judgment_fair` was already at 1.8%.
 - **Triggers that can never fire.** These wait on a book that has since frozen
   (`still_in_buy_set`, `ai_judgment`). The 2026-10-06 assessment-model triage closed or
@@ -42,8 +42,8 @@ or date. Qualitative triggers ("a human picks option 2") stay free text.
 
 ```bash
 ftse-defer add ... --trigger '{"all":[{"on_or_after":"2026-12-01"}]}'
-ftse-defer set-trigger L556 --trigger '{"any":[...]}' [--revisit-when "new text"]
-ftse-defer set-trigger L556 --clear
+ftse-defer set-trigger L558 --trigger '{"any":[...]}' [--revisit-when "new text"]
+ftse-defer set-trigger L558 --clear
 ftse-defer triggers            # evaluate now (read-only)
 ```
 
