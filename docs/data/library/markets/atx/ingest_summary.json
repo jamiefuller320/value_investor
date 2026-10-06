@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-05T22:55:06.559415+00:00",
+  "run_at": "2026-10-06T19:03:31.852810+00:00",
   "market_id": "atx",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-05T22:54:52.619037+00:00",
+    "snapshot_at": "2026-10-06T19:03:14.851492+00:00",
     "market_id": "atx",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -49,7 +49,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-05T22:55:06.550510+00:00",
+    "snapshot_at": "2026-10-06T19:03:28.734415+00:00",
     "market_id": "atx",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -125,7 +125,7 @@
   },
   "critical_path": {
     "market_id": "atx",
-    "assessed_at": "2026-10-05T22:54:52.819926+00:00",
+    "assessed_at": "2026-10-06T19:03:15.002820+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -169,9 +169,9 @@
       "thin_need_bodies": 2
     }
   },
-  "used_seconds": 13.524736335,
+  "used_seconds": 13.578621608000006,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3586.475263665,
+  "leftover_seconds": 3586.421378392,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -179,9 +179,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "atx",
-    "updated_at": "2026-10-05T22:55:06.551952+00:00",
+    "updated_at": "2026-10-06T19:03:28.736042+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 5,
+    "complete_zero_improve_runs": 6,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -193,7 +193,8 @@
         "filings_total": 3,
         "filings_with_body": 2,
         "indexed_without_body": 1,
-        "thin": true
+        "thin": true,
+        "source_surface": "euro_filings"
       },
       {
         "ticker": "WIE.VI",
@@ -204,7 +205,8 @@
         "filings_total": 3,
         "filings_with_body": 2,
         "indexed_without_body": 1,
-        "thin": true
+        "thin": true,
+        "source_surface": "euro_filings"
       },
       {
         "ticker": "CAI.VI",
@@ -215,7 +217,8 @@
         "filings_total": 2,
         "filings_with_body": 2,
         "indexed_without_body": 0,
-        "thin": true
+        "thin": true,
+        "source_surface": "euro_filings"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -228,6 +231,7 @@
       "WIE.VI"
     ],
     "unparked_leftover": [],
+    "surface_released": [],
     "path": "docs/data/library/markets/atx/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
@@ -261,7 +265,15 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261004-07"
+    "task_ids": [],
+    "task_count": 138,
+    "market_id": "nasdaq100",
+    "hunter_ticker": "PDD",
+    "hunter_tickers": [
+      "PDD"
+    ],
+    "priority_score": 12.0,
+    "wait_behind_task_id": "",
+    "leftover_key_bodies": false
   }
 }
