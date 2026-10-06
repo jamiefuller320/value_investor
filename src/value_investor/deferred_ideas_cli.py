@@ -76,6 +76,22 @@ def main(argv: list[str] | None = None) -> int:
     frag_status_p.add_argument("fragment_id")
     frag_status_p.add_argument("status", choices=["open", "done", "drop", "now"])
 
+    rebase_p = sub.add_parser(
+        "rebase-ids",
+        help=(
+            "After `git merge <base>`: keep base IDs, renumber this branch's colliding "
+            "new entries and rewrite their references in lines the branch added"
+        ),
+    )
+    rebase_p.add_argument("--base", default="origin/main")
+    rebase_p.add_argument("--apply", action="store_true", help="Write store, markdown, refs")
+    rebase_p.add_argument("--json", action="store_true")
+
+    check_p = sub.add_parser(
+        "check-ids", help="Fail on duplicate IDs or base IDs whose title changed (CI guard)"
+    )
+    check_p.add_argument("--base", default=None, help="Git ref to compare base IDs against")
+
     args = parser.parse_args(argv)
 
     if args.command == "add":
@@ -150,6 +166,46 @@ def main(argv: list[str] | None = None) -> int:
             verb = "Added" if created else "Already present"
             print(f"{verb} fragment {fragment['id']}")
             print(f"Updated {args.markdown}")
+        return 0
+
+    if args.command == "rebase-ids":
+        from value_investor.deferred_ideas_rebase import rebase_ids
+
+        result = rebase_ids(args.base, store_path=args.store, apply=args.apply)
+        if args.apply:
+            write_markdown(store_path=args.store, markdown_path=args.markdown)
+        if args.json:
+            print(json.dumps(result, indent=2))
+        else:
+            for old, new in sorted(result["renames"].items()):
+                print(f"{old} -> {new}")
+            if not result["renames"]:
+                print("No ID collisions with " + args.base)
+            for rel in result["rewritten_files"]:
+                print(f"Rewrote references in {rel}")
+            for problem in result["problems"]:
+                print(f"Problem: {problem}", file=sys.stderr)
+            if not args.apply:
+                print("Dry run — pass --apply to write.")
+        return 1 if result["problems"] else 0
+
+    if args.command == "check-ids":
+        from value_investor.deferred_ideas_rebase import check_store_ids, load_store_at
+
+        base = (
+            load_store_at(args.base, repo=Path("."), store_path=args.store) if args.base else None
+        )
+        problems = check_store_ids(load_store(args.store), base)
+        for problem in problems:
+            print(f"deferred-ideas: {problem}", file=sys.stderr)
+        if problems:
+            print(
+                f"Fix: git merge {args.base or 'origin/main'} && "
+                f"ftse-defer rebase-ids --base {args.base or 'origin/main'} --apply",
+                file=sys.stderr,
+            )
+            return 1
+        print("deferred-ideas IDs OK")
         return 0
 
     if args.command == "fragment-status":

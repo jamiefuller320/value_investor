@@ -35,6 +35,16 @@ jobs:
       - name: Check committed data JSON integrity
         run: python3 scripts/check_committed_data_json.py
 
+      # PR checkouts are the merge commit, so this sees the store as it would land.
+      - name: Deferred-ideas ID guard
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin "${{ github.base_ref }}"
+            ftse-defer check-ids --base "origin/${{ github.base_ref }}"
+          else
+            ftse-defer check-ids
+          fi
+
       - name: Ruff (changed Python only)
         env:
           BASE_REF: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || github.event.before }}

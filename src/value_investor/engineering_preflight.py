@@ -52,7 +52,7 @@ def engineering_branch_for_task_id(task_id: str) -> str | None:
 SHARED_MUTABLE_FILES: frozenset[str] = frozenset(
     {
         "docs/data/engineering_tasks.json",
-        "docs/data/deferred-ideas.json",
+        "docs/deferred-ideas.json",
         "docs/deferred-review.md",
         "docs/data/library/policy.json",
         "docs/data/automation.json",

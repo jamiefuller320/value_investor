@@ -98,7 +98,7 @@ def test_predict_task_clashes_file_overlap_on_open_pr():
     "hot_path",
     [
         "docs/data/engineering_tasks.json",
-        "docs/data/deferred-ideas.json",
+        "docs/deferred-ideas.json",
         "docs/deferred-review.md",
     ],
 )
@@ -125,7 +125,7 @@ def test_predict_task_clashes_shared_mutable(hot_path: str):
 
 
 def test_shared_mutable_includes_deferred_store():
-    assert "docs/data/deferred-ideas.json" in SHARED_MUTABLE_FILES
+    assert "docs/deferred-ideas.json" in SHARED_MUTABLE_FILES
     assert "docs/deferred-review.md" in SHARED_MUTABLE_FILES
 
 
@@ -342,7 +342,7 @@ def test_estimated_task_files_include_shared_mutable():
     files = estimated_task_files(task)
     for path in (
         "docs/data/engineering_tasks.json",
-        "docs/data/deferred-ideas.json",
+        "docs/deferred-ideas.json",
         "docs/deferred-review.md",
     ):
         assert path in files
