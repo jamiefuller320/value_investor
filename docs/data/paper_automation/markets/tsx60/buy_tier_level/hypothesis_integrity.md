@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-05T07:38:05.165555+00:00
+Track: `buy_tier_level` · updated 2026-10-06T14:18:43.010707+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **3** / 13 (23% count, 21% NAV)
+- Losers: **3** / 14 (21% count, 21% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
@@ -33,7 +33,7 @@ Track: `buy_tier_level` · updated 2026-10-05T07:38:05.165555+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 50%
+- conviction 58%
 
 ### ABX.TO — intact / hold_tolerate (-4.6%)
 - still strong_buy
@@ -75,6 +75,13 @@ Track: `buy_tier_level` · updated 2026-10-05T07:38:05.165555+00:00
 - data_quality 1.00
 - conviction 74%
 
+### SU.TO — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 82%
+
 ### MG.TO — weakening / watch_review (+1.0%)
 - research verdict neutral
 - still buy
@@ -92,4 +99,4 @@ Track: `buy_tier_level` · updated 2026-10-05T07:38:05.165555+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 54%
+- conviction 62%
