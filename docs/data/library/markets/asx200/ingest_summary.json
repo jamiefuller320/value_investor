@@ -1,47 +1,91 @@
 {
-  "run_at": "2026-10-05T21:41:33.913397+00:00",
+  "run_at": "2026-10-06T17:01:57.352304+00:00",
   "market_id": "asx200",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "YAL.AX"
+  ],
+  "target_details": [
+    {
+      "ticker": "YAL.AX",
+      "priority_score": 19.6854,
+      "filings_total": 40,
+      "filings_with_body": 32,
+      "indexed_without_body": 4,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "YAL.AX",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 40,
+        "filings_with_body": 32,
+        "indexed_without_body": 4
+      },
+      "after": {
+        "filings_total": 40,
+        "filings_with_body": 39,
+        "indexed_without_body": 1
+      },
+      "improved": true,
+      "regime": "asx_announcements",
+      "filings_summary": {
+        "total": 40,
+        "annual": 21,
+        "interim": 6,
+        "trading_update": 0,
+        "other": 13,
+        "with_body": 39,
+        "period_coverage": {
+          "annual": {
+            "total": 21,
+            "with_body": 21
+          },
+          "interim": {
+            "total": 6,
+            "with_body": 6
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 13,
+            "with_body": 12
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 39,
+        "with_body_after": 39,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 3,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "YAL.AX"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-05T21:41:08.017438+00:00",
-    "market_id": "asx200",
-    "buy_tier_count": 27,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 0,
-    "indexed_without_body": 2,
-    "bodies_min": 7,
-    "bodies_median": 28,
-    "bodies_max": 135,
-    "coverage_scope": "canonical_plus_shards",
-    "ftse_equivalent": false,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [],
-    "indexed_without_body_tickers": [
-      "YAL.AX"
-    ],
-    "indexed_without_body_by_ticker": {
-      "YAL.AX": 2
-    },
-    "parked_tickers": [
-      "YAL.AX"
-    ],
-    "parked_count": 1,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
-  },
-  "health_after": {
-    "snapshot_at": "2026-10-05T21:41:33.903556+00:00",
+    "snapshot_at": "2026-10-06T17:00:50.013339+00:00",
     "market_id": "asx200",
     "buy_tier_count": 27,
     "unmeasured_buy_tier": 0,
@@ -66,6 +110,38 @@
     "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": false
   },
+  "health_after": {
+    "snapshot_at": "2026-10-06T17:01:51.280972+00:00",
+    "market_id": "asx200",
+    "buy_tier_count": 27,
+    "unmeasured_buy_tier": 0,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 0,
+    "indexed_without_body": 1,
+    "bodies_min": 7,
+    "bodies_median": 28,
+    "bodies_max": 135,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [],
+    "indexed_without_body_tickers": [
+      "YAL.AX"
+    ],
+    "indexed_without_body_by_ticker": {
+      "YAL.AX": 1
+    },
+    "parked_tickers": [],
+    "parked_count": 0,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body_tickers": [
+      "YAL.AX"
+    ],
+    "ingest_exhausted": false
+  },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
@@ -74,9 +150,9 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 27,
-    "hits": 21,
-    "new_rows_total": 6,
-    "curiosity_total": 27,
+    "hits": 23,
+    "new_rows_total": 18,
+    "curiosity_total": 28,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -87,53 +163,38 @@
     },
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "YAL.AX"
-    ],
+    "prefer_tickers": [],
     "runtime_cutoff": false
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "asx200"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "asx200",
-    "assessed_at": "2026-10-05T21:41:09.917437+00:00",
+    "assessed_at": "2026-10-06T17:00:52.799121+00:00",
     "unmeasured": [],
     "zero_body": [],
-    "indexed_without_body": [
-      {
-        "ticker": "YAL.AX",
-        "indexed_without_body": 2,
-        "filings_total": 34,
-        "filings_with_body": 32
-      }
-    ],
+    "indexed_without_body": [],
     "thin_need_discovery": [],
     "thin_need_bodies": [],
-    "primary_blocker": "indexed_without_body",
+    "primary_blocker": "none",
     "force_discovery_scan": false,
-    "auto_pin_tickers": [
-      "YAL.AX"
-    ],
+    "auto_pin_tickers": [],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (1 tickers, top: YAL.AX(2))"
+      "Filing critical path clear — maintenance deepen only"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 1,
-      "indexed_without_body_rows": 2,
+      "indexed_without_body_tickers": 0,
+      "indexed_without_body_rows": 0,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 22.063254672000085,
+  "used_seconds": 55.63367356399999,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3577.936745328,
+  "leftover_seconds": 3544.3663264360002,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -141,27 +202,40 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "asx200",
-    "updated_at": "2026-10-05T21:41:33.908282+00:00",
+    "updated_at": "2026-10-06T17:01:51.286433+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
     "had_complete_targets": false,
-    "leftover_tickers": [],
-    "unparked_leftover": [],
+    "leftover_tickers": [
+      "YAL.AX"
+    ],
+    "unparked_leftover": [
+      "YAL.AX"
+    ],
+    "surface_released": [],
     "path": "docs/data/library/markets/asx200/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
     "skipped": true,
-    "reason": "true_parity",
+    "reason": "not_exhausted",
     "market_id": "asx200"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261004-07"
+    "task_ids": [],
+    "task_count": 138,
+    "market_id": "nasdaq100",
+    "hunter_ticker": "PDD",
+    "hunter_tickers": [
+      "PDD"
+    ],
+    "priority_score": 12.0,
+    "wait_behind_task_id": "",
+    "leftover_key_bodies": false
   }
 }

@@ -1,19 +1,10 @@
 {
-  "run_at": "2026-10-05T21:40:19.841005+00:00",
+  "run_at": "2026-10-06T16:59:40.482873+00:00",
   "market_id": "aim",
   "targets": [
-    "MPE.L",
     "CAML.L"
   ],
   "target_details": [
-    {
-      "ticker": "MPE.L",
-      "priority_score": 23.9972,
-      "filings_total": 51,
-      "filings_with_body": 50,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
-    },
     {
       "ticker": "CAML.L",
       "priority_score": 16.7727,
@@ -24,68 +15,6 @@
     }
   ],
   "results": [
-    {
-      "ticker": "MPE.L",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 51,
-        "filings_with_body": 50,
-        "indexed_without_body": 1
-      },
-      "after": {
-        "filings_total": 51,
-        "filings_with_body": 51,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "uk_rns",
-      "filings_summary": {
-        "total": 51,
-        "annual": 0,
-        "interim": 2,
-        "trading_update": 1,
-        "other": 48,
-        "with_body": 51,
-        "period_coverage": {
-          "annual": {
-            "total": 0,
-            "with_body": 0
-          },
-          "interim": {
-            "total": 2,
-            "with_body": 2
-          },
-          "trading_update": {
-            "total": 1,
-            "with_body": 1
-          },
-          "other": {
-            "total": 47,
-            "with_body": 47
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 51,
-        "with_body_after": 51,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    },
     {
       "ticker": "CAML.L",
       "reason": "indexed_without_body",
@@ -150,21 +79,20 @@
     }
   ],
   "improved": [
-    "MPE.L",
     "CAML.L"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-05T21:36:55.283341+00:00",
+    "snapshot_at": "2026-10-06T16:57:37.607074+00:00",
     "market_id": "aim",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 0,
-    "bodies_min": 30,
+    "bodies_min": 40,
     "bodies_median": 50,
     "bodies_max": 52,
     "coverage_scope": "canonical_plus_shards",
@@ -183,14 +111,14 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-05T21:40:19.832584+00:00",
+    "snapshot_at": "2026-10-06T16:59:34.766217+00:00",
     "market_id": "aim",
     "buy_tier_count": 17,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 0,
-    "bodies_min": 30,
+    "bodies_min": 38,
     "bodies_median": 50,
     "bodies_max": 52,
     "coverage_scope": "canonical_plus_shards",
@@ -216,8 +144,8 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 17,
-    "hits": 1,
-    "new_rows_total": 1,
+    "hits": 0,
+    "new_rows_total": 0,
     "curiosity_total": 0,
     "errors": 0,
     "prioritization_weights": {
@@ -241,7 +169,7 @@
   },
   "critical_path": {
     "market_id": "aim",
-    "assessed_at": "2026-10-05T21:36:56.570327+00:00",
+    "assessed_at": "2026-10-06T16:57:39.338810+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -262,9 +190,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 202.03902299800006,
+  "used_seconds": 113.717457411,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3397.9609770019997,
+  "leftover_seconds": 3486.282542589,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -272,7 +200,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "aim",
-    "updated_at": "2026-10-05T21:40:19.836035+00:00",
+    "updated_at": "2026-10-06T16:59:34.770229+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
@@ -283,6 +211,7 @@
     "had_complete_targets": false,
     "leftover_tickers": [],
     "unparked_leftover": [],
+    "surface_released": [],
     "path": "docs/data/library/markets/aim/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
@@ -292,7 +221,15 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261004-07"
+    "task_ids": [],
+    "task_count": 138,
+    "market_id": "nasdaq100",
+    "hunter_ticker": "PDD",
+    "hunter_tickers": [
+      "PDD"
+    ],
+    "priority_score": 12.0,
+    "wait_behind_task_id": "",
+    "leftover_key_bodies": false
   }
 }
