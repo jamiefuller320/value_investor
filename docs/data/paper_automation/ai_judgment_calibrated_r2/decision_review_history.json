@@ -3121,5 +3121,129 @@
     "track_label": "AI judgment calibrated shadow rank 2 (frozen priors)",
     "is_primary_learning_track": false,
     "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
+  },
+  {
+    "reviewed_at": "2026-10-06T08:40:23.380748+00:00",
+    "enough_history": true,
+    "applied": false,
+    "knobs_before": {
+      "max_positions": 5,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 0.25
+    },
+    "knobs_after": {
+      "max_positions": 5,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 0.25
+    },
+    "proposed_changes": {
+      "min_conviction": 0.05,
+      "max_positions": 4
+    },
+    "reasons": [
+      "High cost drag (20.7%) \u2014 raise min_conviction.",
+      "Weak excess after costs (-20.9%) \u2014 reduce max_positions."
+    ],
+    "metrics": {
+      "portfolio_value": 758.36,
+      "contributed_capital": 1000.0,
+      "total_return": -0.2416,
+      "total_costs": 206.92,
+      "cost_drag": 0.2069,
+      "trade_count": 50,
+      "buy_count": 27,
+      "sell_count": 23,
+      "positions": 5,
+      "cash_fraction": 0.0,
+      "equity_marks": 30,
+      "max_sector_weight": 0.2127,
+      "dominant_sector": "Basic Materials",
+      "benchmark_return": -0.0328,
+      "excess_after_costs": -0.2088,
+      "note": ""
+    },
+    "counterfactual_preview": {
+      "scope": "rebalance_log_replay",
+      "knobs": {
+        "max_positions": 4,
+        "skip_timing_wait": true,
+        "min_conviction": 0.05,
+        "sector_cap": 0.25,
+        "use_adjusted_signal": true,
+        "require_research_accumulate": true,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "candidate_source": "auto"
+      },
+      "used_screen_buy_tier_pool": false,
+      "log_entries_total": 29,
+      "log_entries_replayed": 29,
+      "lookback_days": null,
+      "replay_from": "2026-08-24T09:27:38.731726+01:00",
+      "replay_to": "2026-10-06T09:38:10.871567+01:00",
+      "simulated_nav": 764.94,
+      "baseline_nav": 1000.0,
+      "simulated_return": -0.2351,
+      "simulated_total_costs": 224.08,
+      "simulated_cost_drag": 0.2241,
+      "simulated_trade_count": 40,
+      "used_logged_knobs": false,
+      "held_price_fills": 0,
+      "held_price_avg_cost_fallbacks": 0,
+      "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+      "actual_nav": 757.04,
+      "actual_return_over_window": -0.243,
+      "actual_total_costs_over_window": 206.92,
+      "actual_cost_drag_over_window": 0.2069,
+      "return_delta_vs_actual": 0.0079,
+      "cost_drag_delta_vs_actual": -0.0172,
+      "archive_rebalance_replay": {
+        "scope": "archive_rebalance_replay",
+        "knobs": {
+          "max_positions": 4,
+          "skip_timing_wait": true,
+          "min_conviction": 0.05,
+          "sector_cap": 0.25,
+          "use_adjusted_signal": true,
+          "require_research_accumulate": true
+        },
+        "archive_passes_replayed": 11,
+        "archive_replay_from": "2026-08-30T06:43:33.462150+00:00",
+        "archive_replay_to": "2026-10-04T07:21:46.059744+00:00",
+        "log_replay_from": "2026-08-24T09:27:38.731726+01:00",
+        "log_replay_to": "2026-10-06T09:38:10.871567+01:00",
+        "log_entries_replayed": 29,
+        "simulated_nav": 795.72,
+        "baseline_nav": 1000.0,
+        "simulated_return": -0.2043,
+        "simulated_total_costs": 132.79,
+        "simulated_cost_drag": 0.1328,
+        "simulated_trade_count": 27,
+        "limitations": "Observe-only archive walk \u2014 one rebalance per archived weekly screen from first logged pass. Does not mutate live knobs. AI overlay gates use PIT research joins (L113) when a research timeline exists under the archive parent data_dir.",
+        "actual_nav": 754.82,
+        "actual_return_over_window": -0.2452,
+        "actual_total_costs_over_window": 206.92,
+        "actual_cost_drag_over_window": 0.2069,
+        "return_delta_vs_actual": 0.0409,
+        "cost_drag_delta_vs_actual": 0.0741
+      },
+      "archive_vs_log": {
+        "log_entries_replayed": 29,
+        "archive_passes_replayed": 11,
+        "log_return_delta_vs_actual": 0.0079,
+        "archive_return_delta_vs_actual": 0.0409,
+        "return_delta_gap_archive_minus_log": 0.033,
+        "log_simulated_return": -0.2351,
+        "archive_simulated_return": -0.2043
+      }
+    },
+    "note": "Frozen lab/shadow track \u2014 knobs fixed; decision-review apply skipped.",
+    "saturated_knobs": [],
+    "track_id": "ai_judgment_calibrated_r2",
+    "track_label": "AI judgment calibrated shadow rank 2 (frozen priors)",
+    "is_primary_learning_track": false,
+    "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
   }
 ]
