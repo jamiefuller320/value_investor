@@ -268,6 +268,7 @@ def test_straggler_soft_park_ignores_peer_improve_streak(tmp_path: Path):
                     "filings_with_body": 2,
                     "indexed_without_body": 0,
                     "thin": True,
+                    "source_surface": "euro_filings+amf_direct",
                 }
             ],
         },
