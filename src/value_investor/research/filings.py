@@ -10575,7 +10575,8 @@ def ingest_filings(
             "Primary regulatory filings via SEC EDGAR (separate from Yahoo). "
             "period=annual (10-K/20-F) | interim (10-Q) | other (8-K). "
             "Bodies are plain-text extracts from the primary HTML document "
-            f"(truncated at {FILINGS_BODY_MAX_CHARS:,} chars)."
+            f"(truncated at {FILINGS_BODY_MAX_CHARS:,} chars). Filed XBRL annual "
+            "cash-flow facts (OCF, capex, dividends) sit in ../sec_companyfacts.json."
         )
     elif regime == "uk_rns":
         note = (
@@ -10641,6 +10642,19 @@ def ingest_filings(
         sources_dir=sources_dir,
     )
 
+    companyfacts_refresh = None
+    if regime == "sec_edgar":
+        from value_investor.research.sec_companyfacts import refresh_sec_companyfacts_source
+
+        try:
+            companyfacts_refresh = refresh_sec_companyfacts_source(
+                ticker=ticker,
+                sources_dir=sources_dir,
+            )
+        except Exception as exc:  # noqa: BLE001 — filings index is already written
+            logger.warning("SEC companyfacts refresh failed for %s: %s", ticker, exc)
+            companyfacts_refresh = {"written": False, "note": str(exc)}
+
     return {
         "filings_index_path": str(written),
         "filings_dir": str(filings_dir),
@@ -10648,6 +10662,7 @@ def ingest_filings(
         "filings_sources": index["sources_used"],
         "filings_regime": regime,
         "yahoo_cashflow_metrics_refresh": cashflow_refresh,
+        "sec_companyfacts_refresh": companyfacts_refresh,
     }
 
 

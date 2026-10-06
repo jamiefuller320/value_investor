@@ -5886,6 +5886,10 @@ def test_ingest_filings_sec_edgar_writes_annual_interim_bodies(tmp_path: Path):
         patch("value_investor.research.filings.fetch_filing_body", return_value=body_text),
         patch("value_investor.research.filings.fetch_filings_ticker_api") as uk_api,
         patch("value_investor.research.filings.fetch_filings_google_news") as uk_news,
+        patch(
+            "value_investor.research.sec_companyfacts.refresh_sec_companyfacts_source",
+            return_value={"written": True, "ticker": "AOS"},
+        ) as companyfacts,
     ):
         meta = ingest_filings(
             ticker="AOS",
@@ -5896,6 +5900,8 @@ def test_ingest_filings_sec_edgar_writes_annual_interim_bodies(tmp_path: Path):
 
     uk_api.assert_not_called()
     uk_news.assert_not_called()
+    companyfacts.assert_called_once_with(ticker="AOS", sources_dir=tmp_path)
+    assert meta["sec_companyfacts_refresh"] == {"written": True, "ticker": "AOS"}
     assert meta["filings_regime"] == "sec_edgar"
     assert meta["filings_summary"]["annual"] == 1
     assert meta["filings_summary"]["interim"] == 1

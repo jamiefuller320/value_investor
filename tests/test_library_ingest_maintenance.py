@@ -210,12 +210,18 @@ def test_run_library_ingest_maintenance_runs_exhausted_market():
             return_value=exhausted_health,
         ),
         patch("value_investor.library_ingest_maintenance.run_library_ingest_loop") as run_loop,
+        patch(
+            "value_investor.library_ingest_maintenance.backfill_us_markets_sec_companyfacts",
+            return_value=[{"market_id": "sp500", "written": ["FICO"]}],
+        ) as backfill,
     ):
         run_loop.return_value.to_dict.return_value = {"market_id": "sp500"}
         outcome = run_library_ingest_maintenance()
     run_loop.assert_called_once()
+    assert backfill.call_args.args[0] == ["sp500"]
     assert outcome.errors == []
     assert outcome.markets == ["sp500"]
+    assert outcome.to_dict()["sec_companyfacts"][0]["written"] == ["FICO"]
 
 
 def test_run_library_ingest_maintenance_skips_market_when_parity_lost():

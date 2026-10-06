@@ -41,6 +41,7 @@ from value_investor.library_maintenance_stagger import (
     plan_maintenance_slot,
     write_maintenance_slot_cursor,
 )
+from value_investor.research.sec_companyfacts import backfill_us_markets_sec_companyfacts
 
 logger = logging.getLogger(__name__)
 
@@ -145,6 +146,7 @@ class LibraryIngestMaintenanceResult:
     errors: list[str] = field(default_factory=list)
     capacity_sample: dict[str, Any] | None = None
     capacity_review: dict[str, Any] | None = None
+    sec_companyfacts: list[dict[str, Any]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -157,6 +159,7 @@ class LibraryIngestMaintenanceResult:
             "errors": self.errors,
             "capacity_sample": self.capacity_sample,
             "capacity_review": self.capacity_review,
+            "sec_companyfacts": self.sec_companyfacts,
         }
 
 
@@ -286,6 +289,15 @@ def run_library_ingest_maintenance(
         except Exception as exc:  # noqa: BLE001
             logger.warning("Library maintenance failed for %s: %s", market_id, exc)
             outcome.errors.append(f"{market_id}: {exc}")
+
+    try:
+        outcome.sec_companyfacts = backfill_us_markets_sec_companyfacts(
+            market_list,
+            library_root=library_root,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("SEC companyfacts backfill failed: %s", exc)
+        outcome.errors.append(f"sec_companyfacts: {exc}")
 
     if stagger.get("staggered") and market_list:
         try:
