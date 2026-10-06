@@ -14,6 +14,7 @@ from value_investor.fetch import CompanyMetrics
 from value_investor.financials import extract_statement_metrics
 from value_investor.research.filings import (
     _BUILTIN_IR_URLS,
+    _BULK_IR_RESULTS_PRESENTATION_TICKERS,
     _PDF_DEPTH_LEAD_CHARS,
     PARKED_SOURCE_HUNTER_SKIP,
     _apply_headline_period,
@@ -32,11 +33,13 @@ from value_investor.research.filings import (
     _ir_allowlist_period_from_url,
     _ir_allowlist_row_needs_body_refetch,
     _ir_body_content_hash,
+    _ir_refetch_body_slot,
     _is_investegate_ai_summary_body,
     _is_other_results_rns_row,
     _is_statutory_results_headline,
     _issuer_matches_sec_name,
     _match_ir_row_to_investegate,
+    _resolve_ir_allowlist_canonical,
     _rns_row_needs_body_refetch,
     _scrub_misattributed_filing_rows,
     _sec_edgar_supplement_allowed,
@@ -46,6 +49,7 @@ from value_investor.research.filings import (
     _validate_rns_filing_body_content,
     _validate_rns_html_headline_match,
     asx_markit_file_url,
+    bulk_refetch_ir_results_presentation_bodies,
     classify_companies_house_period,
     classify_filing_entity_type,
     classify_filing_period,
@@ -3806,6 +3810,10 @@ def test_refetch_uk_primary_filing_bodies_orchestrates_ch_and_lse(tmp_path, monk
         "value_investor.research.filings.refetch_residual_filing_bodies",
         lambda *args, **kwargs: dict(residual_result),
     )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_ir_allowlist",
+        lambda *args, **kwargs: [],
+    )
     result = refetch_uk_primary_filing_bodies(
         filings_dir,
         ticker="FGP.L",
@@ -3876,6 +3884,16 @@ def test_uk_primary_pipeline_investegate_lse_pdf_persists_with_validation_gate(
     monkeypatch.setattr(
         "value_investor.research.filings._fetch_companies_house_body",
         lambda row: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_ir_presentation_sources",
+        lambda *args, **kwargs: {
+            "attempted": 0,
+            "fetched": 0,
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "note": "refetch_ir_presentation_sources",
+        },
     )
     result = refetch_uk_primary_filing_bodies(
         filings_dir,
@@ -4677,6 +4695,197 @@ def test_refetch_ir_allowlist_filing_bodies_prefers_unfilled_period(tmp_path, mo
     )
     assert result["fetched"] == 1
     assert fetched_ids == [_ir_id(interim_url)]
+
+
+def test_eng_20261004_03_ir_refetch_fetches_presentation_when_statutory_bodied(
+    tmp_path: Path, monkeypatch
+):
+    """Annual statutory body must not block the FY results presentation deck under a tight budget."""
+    import hashlib
+
+    allowlist_path = tmp_path / "ir_urls.json"
+    statutory_url = "https://example.com/itv-2026-half-year-report.pdf"
+    deck_url = "https://example.com/itv-2026-half-year-results-presentation.pdf"
+    allowlist_path.write_text(
+        json.dumps({"urls": {"ZZIT.L": [statutory_url, deck_url]}}),
+        encoding="utf-8",
+    )
+
+    def _ir_id(url: str) -> str:
+        return f"ir_{hashlib.sha256(url.encode()).hexdigest()[:16]}"
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    statutory_body = (
+        "ITV plc Interim results for the six months ended 30 June 2026. "
+        "Free cash flow £40 million with profit to cash conversion 63%." + ("x" * 220)
+    )
+    statutory_path = bodies_dir / f"{_ir_id(statutory_url)}.txt"
+    statutory_path.write_text(statutory_body, encoding="utf-8")
+    filings = [
+        {
+            "id": _ir_id(statutory_url),
+            "source": "ir_allowlist",
+            "headline": "IR allowlist document — half-year-report.pdf",
+            "url": statutory_url,
+            "period": "interim",
+            "has_body": True,
+            "body_path": str(statutory_path),
+            "body_content_hash": _ir_body_content_hash(statutory_body),
+            "priority": 140,
+        },
+        {
+            "id": _ir_id(deck_url),
+            "source": "ir_allowlist",
+            "headline": "IR allowlist document — half-year-results-presentation.pdf",
+            "url": deck_url,
+            "period": "interim",
+            "has_body": False,
+            "body_path": None,
+            "priority": 130,
+        },
+    ]
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"ticker": "ZZIT.L", "filings": filings}),
+        encoding="utf-8",
+    )
+    fetched_ids: list[str] = []
+
+    def _fake_ir_fetch(row, **kwargs):
+        fetched_ids.append(str(row.get("id") or ""))
+        return (
+            "ITV plc H1 2026 results presentation Studios revenue bridge free cash flow £40m "
+            + ("slide " * 120),
+            "pdf",
+        )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        _fake_ir_fetch,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+    assert _ir_refetch_body_slot(filings[0]) == "interim"
+    assert _ir_refetch_body_slot(filings[1]) == "interim:presentation"
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "ZZIT.L",
+        company_name="ITV plc",
+        max_bodies=1,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 1
+    assert fetched_ids == [_ir_id(deck_url)]
+
+
+def test_eng_20261004_03_photo_me_urls_canonicalize_to_me_group():
+    legacy = (
+        "https://www.photo-me.co.uk/wp-content/uploads/2026/07/"
+        "260713-ME-Group-2026-Interim-Results-Presentation.pdf"
+    )
+    live = (
+        "https://me-group.com/wp-content/uploads/2026/07/"
+        "260713-ME-Group-2026-Interim-Results-Presentation.pdf"
+    )
+    assert _resolve_ir_allowlist_canonical(legacy) == live
+
+
+def test_eng_20261004_03_bulk_refetch_ir_results_presentation_bodies(tmp_path: Path, monkeypatch):
+    """Bulk IR pipeline runs refetch_ir_presentation_sources per ticker spec."""
+    calls: list[str] = []
+
+    def _fake_presentation(filings_dir, ticker, **kwargs):
+        calls.append(ticker)
+        return {
+            "attempted": 2,
+            "fetched": 1,
+            "with_body_after": 3,
+            "note": "refetch_ir_presentation_sources",
+            "mandatory": True,
+        }
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_ir_presentation_sources",
+        _fake_presentation,
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    result = bulk_refetch_ir_results_presentation_bodies(
+        [
+            {"ticker": "HIK.L", "filings_dir": filings_dir, "company_name": "Hikma"},
+            {"ticker": "MEGP.L", "filings_dir": filings_dir, "company_name": "ME Group"},
+            {"ticker": "ITV.L", "filings_dir": filings_dir, "company_name": "ITV plc"},
+        ],
+        max_bodies_per_ticker=5,
+    )
+    assert result["note"] == "bulk_refetch_ir_results_presentation_bodies"
+    assert result["tickers"] == 3
+    assert result["attempted"] == 6
+    assert result["fetched"] == 3
+    assert calls == ["HIK.L", "MEGP.L", "ITV.L"]
+    assert _BULK_IR_RESULTS_PRESENTATION_TICKERS == ("HIK.L", "MEGP.L", "ITV.L")
+
+
+def test_eng_20261004_03_uk_primary_pipeline_includes_ir_presentations(tmp_path: Path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"with_body": 0}}),
+        encoding="utf-8",
+    )
+    empty = {"attempted": 0, "fetched": 0, "with_body_before": 0, "with_body_after": 0}
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_companies_house_filing_bodies",
+        lambda *args, **kwargs: dict(empty),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_indexed_without_body_filing_bodies",
+        lambda *args, **kwargs: dict(empty),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_residual_filing_bodies",
+        lambda *args, **kwargs: dict(empty),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.refresh_uk_filing_listings_into_index",
+        lambda *args, **kwargs: {"added": 0, "note": "unchanged"},
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.reconcile_filings_index_body_flags",
+        lambda *args, **kwargs: dict(empty),
+    )
+    ir_result = {
+        "attempted": 4,
+        "fetched": 2,
+        "with_body_before": 0,
+        "with_body_after": 2,
+        "note": "refetch_ir_presentation_sources",
+        "mandatory": True,
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_ir_allowlist",
+        lambda ticker, **kwargs: (
+            [{"id": "ir_test", "source": "ir_allowlist"}] if ticker == "ITV.L" else []
+        ),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.refetch_ir_presentation_sources",
+        lambda *args, **kwargs: dict(ir_result),
+    )
+    result = refetch_uk_primary_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=10,
+    )
+    assert result["ir_presentations"]["fetched"] == 2
+    assert result["fetched"] == 2
+    assert result["with_body_after"] == 2
 
 
 def test_fetch_document_bytes_skips_partial_download(monkeypatch):

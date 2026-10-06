@@ -4807,6 +4807,17 @@ def _ir_allowlist_statutory_rank(row: dict[str, Any]) -> int:
     return 1
 
 
+def _ir_refetch_body_slot(row: dict[str, Any]) -> str:
+    """Occupancy key — statutory vs results-presentation for the same ``period`` tag."""
+    period = str(row.get("period") or "other")
+    if period in {"annual", "interim"}:
+        url = str(row.get("url") or "").lower()
+        headline = str(row.get("headline") or "").lower()
+        if "presentation" in url or "presentation" in headline:
+            return f"{period}:presentation"
+    return period
+
+
 def _ir_refetch_rank_key(
     row: dict[str, Any],
     *,
@@ -4814,7 +4825,8 @@ def _ir_refetch_rank_key(
 ) -> tuple:
     """Prefer current-period IR docs; demote periods that already have a good body."""
     period = str(row.get("period") or "other")
-    occupied_penalty = 1 if period in {"annual", "interim"} and period in periods_with_body else 0
+    slot = _ir_refetch_body_slot(row)
+    occupied_penalty = 1 if period in {"annual", "interim"} and slot in periods_with_body else 0
     published = str(row.get("published_at") or "").strip()
     return (
         occupied_penalty,
@@ -4835,7 +4847,7 @@ def _rank_ir_refetch_candidates(
 ) -> list[dict[str, Any]]:
     """Rank IR allowlist refetch candidates; prefer periods without an existing body."""
     periods_with_body = {
-        str(row.get("period") or "other")
+        _ir_refetch_body_slot(row)
         for row in ir_rows
         if str(row.get("period") or "other") in {"annual", "interim"}
         and row.get("has_body")
@@ -5069,6 +5081,19 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     ),
     "https://www.saint-gobain.com/en/finance/regulated-information/": (
         "https://files.webdisclosure.com/1391369/CP_Resultats_2025_VA_t.pdf"
+    ),
+    # eng-20261004-03: legacy photo-me.co.uk investor PDFs redirect to me-group.com CDN slugs.
+    "https://photo-me.co.uk/wp-content/uploads/2026/03/ME-Group-2025-Annual-Results-Presentation.pdf": (
+        "https://me-group.com/wp-content/uploads/2026/03/ME-Group-2025-Annual-Results-Presentation.pdf"
+    ),
+    "https://www.photo-me.co.uk/wp-content/uploads/2026/03/ME-Group-2025-Annual-Results-Presentation.pdf": (
+        "https://me-group.com/wp-content/uploads/2026/03/ME-Group-2025-Annual-Results-Presentation.pdf"
+    ),
+    "https://photo-me.co.uk/wp-content/uploads/2026/07/260713-ME-Group-2026-Interim-Results-Presentation.pdf": (
+        "https://me-group.com/wp-content/uploads/2026/07/260713-ME-Group-2026-Interim-Results-Presentation.pdf"
+    ),
+    "https://www.photo-me.co.uk/wp-content/uploads/2026/07/260713-ME-Group-2026-Interim-Results-Presentation.pdf": (
+        "https://me-group.com/wp-content/uploads/2026/07/260713-ME-Group-2026-Interim-Results-Presentation.pdf"
     ),
 }
 
@@ -8550,6 +8575,60 @@ def _ir_presentation_metrics_summary(payload: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+# FTSE gap-fill pattern — eng-20261004-03: bulk IR results decks into ``filings/bodies/``.
+_BULK_IR_RESULTS_PRESENTATION_TICKERS: tuple[str, ...] = (
+    "HIK.L",
+    "MEGP.L",
+    "ITV.L",
+)
+
+
+def bulk_refetch_ir_results_presentation_bodies(
+    specs: list[dict[str, Any]],
+    *,
+    max_bodies_per_ticker: int = 20,
+    allowlist_path: Path | None = None,
+    **refetch_kwargs: Any,
+) -> dict[str, Any]:
+    """
+    Merge/refetch allowlisted IR results-presentation PDFs for multiple tickers.
+
+    Used by ingest-improvement dry runs for the HIK / MEGP / ITV backlog pattern.
+    """
+    by_ticker: dict[str, Any] = {}
+    attempted = 0
+    fetched = 0
+    tickers_run = 0
+    for spec in specs:
+        ticker = str(spec.get("ticker") or "").strip().upper()
+        filings_dir = spec.get("filings_dir")
+        if not ticker or not filings_dir:
+            continue
+        company_name = str(spec.get("company_name") or "")
+        sources_dir = spec.get("sources_dir")
+        sources_path = Path(sources_dir) if sources_dir else None
+        refetch = refetch_ir_presentation_sources(
+            Path(filings_dir),
+            ticker,
+            company_name=company_name,
+            sources_dir=sources_path,
+            max_bodies=max_bodies_per_ticker,
+            allowlist_path=allowlist_path,
+            **refetch_kwargs,
+        )
+        by_ticker[ticker] = refetch
+        tickers_run += 1
+        attempted += int(refetch.get("attempted") or 0)
+        fetched += int(refetch.get("fetched") or 0)
+    return {
+        "tickers": tickers_run,
+        "attempted": attempted,
+        "fetched": fetched,
+        "by_ticker": by_ticker,
+        "note": "bulk_refetch_ir_results_presentation_bodies",
+    }
+
+
 def refetch_ir_presentation_sources(
     filings_dir: Path,
     ticker: str,
@@ -9848,23 +9927,39 @@ def refetch_uk_primary_filing_bodies(
         max_bodies=max_bodies,
         prune_unfetchable_after_attempt=prune_failed_residual_fetches,
     )
+    ir_presentations: dict[str, Any] = {}
+    if fetch_filings_ir_allowlist(ticker):
+        ir_presentations = refetch_ir_presentation_sources(
+            filings_dir,
+            ticker,
+            company_name=company_name,
+            max_bodies=max_bodies,
+        )
     before = int(ch.get("with_body_before") or 0)
-    after = int(residual.get("with_body_after") or rns.get("with_body_after") or before)
+    after = int(
+        ir_presentations.get("with_body_after")
+        or residual.get("with_body_after")
+        or rns.get("with_body_after")
+        or before
+    )
     return {
         "companies_house": ch,
         "rns": rns,
         "residual": residual,
+        "ir_presentations": ir_presentations,
         "listing_refresh": listing_refresh,
         "body_reconcile": body_reconcile,
         "attempted": (
             int(ch.get("attempted") or 0)
             + int(rns.get("attempted") or 0)
             + int(residual.get("attempted") or 0)
+            + int(ir_presentations.get("attempted") or 0)
         ),
         "fetched": (
             int(ch.get("fetched") or 0)
             + int(rns.get("fetched") or 0)
             + int(residual.get("fetched") or 0)
+            + int(ir_presentations.get("fetched") or 0)
         ),
         "with_body_before": before,
         "with_body_after": after,
