@@ -1125,6 +1125,7 @@ def test_check_workflow_freshness_suppresses_failure_when_recovery_in_flight():
 @patch("value_investor.ops_monitor.check_phase_b_producer_progress", return_value=[])
 @patch("value_investor.ops_monitor.check_thin_memo_learning_gap", return_value=[])
 @patch("value_investor.ops_monitor.check_lifecycle_maturity_trajectory", return_value=[])
+@patch("value_investor.ops_monitor.check_cision_direct_coverage", return_value=[])
 @patch("value_investor.ops_monitor.check_amf_direct_coverage", return_value=[])
 @patch("value_investor.ops_monitor.check_hkex_direct_coverage", return_value=[])
 @patch("value_investor.ops_monitor.check_sec_companyfacts_coverage", return_value=[])
@@ -1156,6 +1157,7 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
     _sec_companyfacts,
     _hkex_direct,
     _amf_direct,
+    _cision_direct,
     _lifecycle,
     _thin_memo,
     _phase_b,
@@ -1228,6 +1230,7 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
 @patch("value_investor.ops_monitor.check_phase_b_producer_progress", return_value=[])
 @patch("value_investor.ops_monitor.check_thin_memo_learning_gap", return_value=[])
 @patch("value_investor.ops_monitor.check_lifecycle_maturity_trajectory", return_value=[])
+@patch("value_investor.ops_monitor.check_cision_direct_coverage", return_value=[])
 @patch("value_investor.ops_monitor.check_amf_direct_coverage", return_value=[])
 @patch("value_investor.ops_monitor.check_hkex_direct_coverage", return_value=[])
 @patch("value_investor.ops_monitor.check_sec_companyfacts_coverage", return_value=[])
@@ -1259,6 +1262,7 @@ def test_run_ops_monitor_writes_status(
     _sec_companyfacts,
     _hkex_direct,
     _amf_direct,
+    _cision_direct,
     _lifecycle,
     _thin_memo,
     _phase_b,
