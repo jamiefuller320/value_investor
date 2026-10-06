@@ -17,6 +17,8 @@ _TRACK_LAST_RUN_RELATIVE = (
     LAST_RUN_FILENAME,
     f"ai_judgment/{LAST_RUN_FILENAME}",
     f"momentum_grace/{LAST_RUN_FILENAME}",
+    f"ai_judgment_fair/{LAST_RUN_FILENAME}",
+    f"buy_tier_level/{LAST_RUN_FILENAME}",
 )
 
 
@@ -43,8 +45,14 @@ def paper_auto_artifacts_satisfied(base_dir: Path) -> bool:
     ``ftse-paper-auto`` writes the same gate to every track in a run, so any
     track's ``last_run.json`` with ``after_settle`` is sufficient.
     """
+    from value_investor.assessment_model import frozen_tracks
+
     base = Path(base_dir)
+    frozen = frozen_tracks(base)
     for relative in _TRACK_LAST_RUN_RELATIVE:
+        parent = Path(relative).parent.name
+        if parent and parent in frozen:
+            continue
         payload = load_last_run(base / relative)
         if payload is None:
             continue

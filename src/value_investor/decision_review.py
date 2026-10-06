@@ -1298,10 +1298,13 @@ def compare_learning_tracks(
     ``suite`` filters to Suite A (stress), Suite B (fair-cost lab), or all.
     Applies remain per-track (suite-local knobs) — never copy B knobs onto A.
     """
+    from value_investor.assessment_model import (
+        control_track_id,
+        frozen_tracks,
+        primary_track_id,
+    )
     from value_investor.fair_cost_lab import filter_track_ids_for_suite
     from value_investor.paper_automation import (
-        AI_JUDGMENT_TRACK_ID,
-        RULES_TRACK_ID,
         ensure_learning_track_configs,
         learning_track_dirs,
     )
@@ -1309,8 +1312,11 @@ def compare_learning_tracks(
     base_dir = Path(base_dir)
     ensure_learning_track_configs(base_dir)
     dirs = learning_track_dirs(base_dir)
+    primary_id = primary_track_id(base_dir)
+    control_id = control_track_id(base_dir)
+    frozen = frozen_tracks(base_dir)
     selected_ids = list(track_ids) if track_ids else list(dirs.keys())
-    selected_ids = filter_track_ids_for_suite(selected_ids, suite)
+    selected_ids = [t for t in filter_track_ids_for_suite(selected_ids, suite) if t not in frozen]
     bench_ticker = benchmark_ticker_for_dir(base_dir)
     reviews: dict[str, Any] = {}
     for track_id in selected_ids:
@@ -1327,8 +1333,8 @@ def compare_learning_tracks(
         )
         reviews[track_id] = result.to_dict()
 
-    primary = reviews.get(AI_JUDGMENT_TRACK_ID) or {}
-    control = reviews.get(RULES_TRACK_ID) or {}
+    primary = reviews.get(primary_id) or {}
+    control = reviews.get(control_id) or {}
     primary_excess = (primary.get("metrics") or {}).get("excess_after_costs")
     control_excess = (control.get("metrics") or {}).get("excess_after_costs")
     beat_market = primary_excess is not None and primary_excess > 0
@@ -1339,13 +1345,15 @@ def compare_learning_tracks(
     )
     summary = {
         "schema_version": 1,
-        "primary_learning_track": AI_JUDGMENT_TRACK_ID,
+        "primary_learning_track": primary_id,
+        "control_track": control_id,
         "suite_filter": suite or "all",
         "reviewed_track_ids": list(reviews.keys()),
+        "frozen_tracks": frozen,
         "success_criterion": (
-            f"Primary AI-judgment track outperforms {bench_ticker} after costs; "
-            "rules track is the control datum. Suite B fair-lab tracks learn "
-            "independently under T212-shaped costs."
+            f"Primary track ({primary_id}) outperforms {bench_ticker} after costs; "
+            f"{control_id} is the control datum. Frozen tracks keep their final "
+            "record and are not reviewed or tuned."
         ),
         "benchmark_ticker": bench_ticker,
         "primary_excess_after_costs": primary_excess,

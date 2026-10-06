@@ -1816,7 +1816,41 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
             encoding="utf-8",
         )
 
+    from value_investor.assessment_model import primary_track_id
+
+    primary = primary_track_id(base_dir)
+    for track_id, cfg in configs.items():
+        want = track_id == primary
+        if bool(cfg.is_primary_learning_track) == want:
+            continue
+        cfg.is_primary_learning_track = want
+        (dirs[track_id] / CONFIG_FILENAME).write_text(
+            json.dumps(cfg.to_dict(), indent=2), encoding="utf-8"
+        )
+
     return configs
+
+
+def _mirror_primary_last_run(base_dir: Path, dirs: dict[str, Path], primary: str) -> None:
+    """Keep root ``last_run.json`` fresh when the root (rules) book is frozen.
+
+    Schedulers, ops-monitor and publish read the root report as the
+    "paper-auto ran post-settle" marker.
+    """
+    source = dirs.get(primary)
+    if source is None or source == base_dir:
+        return
+    report_path = source / REPORT_FILENAME
+    if not report_path.exists():
+        return
+    try:
+        payload = json.loads(report_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    if not isinstance(payload, dict):
+        return
+    payload["mirrored_from_track"] = primary
+    (base_dir / REPORT_FILENAME).write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
 def run_learning_tracks(
@@ -1860,11 +1894,19 @@ def run_learning_tracks(
         if track_id not in default_tracks:
             default_tracks.insert(insert_at, track_id)
             insert_at += 1
+    from value_investor.assessment_model import (
+        control_track_id,
+        frozen_tracks,
+        primary_track_id,
+    )
+
+    primary = primary_track_id(base_dir)
+    frozen = frozen_tracks(base_dir)
     wanted = list(tracks) if tracks else default_tracks
     results: dict[str, Any] = {}
     market_id = market or infer_paper_market_id(base_dir, reports_path)
     for track_id in wanted:
-        if track_id not in configs:
+        if track_id not in configs or track_id in frozen:
             continue
         cfg = configs[track_id]
         if surveillance_only:
@@ -1886,12 +1928,17 @@ def run_learning_tracks(
             "is_primary_learning_track": cfg.is_primary_learning_track,
             "selection": cfg.selection_kwargs(),
         }
+    if RULES_TRACK_ID in frozen and primary in results:
+        _mirror_primary_last_run(base_dir, dirs, primary)
     summary = {
         "schema_version": 1,
-        "primary_learning_track": AI_JUDGMENT_TRACK_ID,
+        "primary_learning_track": primary,
+        "control_track": control_track_id(base_dir),
+        "frozen_tracks": sorted(frozen),
         "success_criterion": (
             "Outperformance after costs vs market benchmark (^FTSE) on the "
-            "primary AI-judgment track; rules track is the control; "
+            f"primary track ({primary}); {control_track_id(base_dir)} is the control; "
+            "frozen tracks keep history but no longer trade (assessment_model.json); "
             "technical track is the timing/levels baseline; "
             "momentum_grace is an experimental exit overlay; "
             "graduated_allocation tests trade-plan entry sizing and harvest skims; "

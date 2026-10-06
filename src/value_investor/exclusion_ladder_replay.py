@@ -343,7 +343,14 @@ def spawn_exclusion_shadow(
     force: bool = False,
 ) -> dict[str, Any]:
     """Create observe-only exclusion shadow track from archive recommended step."""
+    from value_investor.assessment_model import is_track_frozen
+
     paper_root = Path(paper_root)
+    if is_track_frozen(paper_root, parent_track_id):
+        return {
+            "spawned": False,
+            "reason": f"Parent {parent_track_id} is frozen (assessment_model.json)",
+        }
     data_dir = Path(data_dir or paper_root.parent)
     _, recommended = load_ladder_from_archive_review(data_dir)
     if step_id is None:

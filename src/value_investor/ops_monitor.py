@@ -705,6 +705,11 @@ def check_paper_learning_tracks(
     Suite B buy_tier_level cohort. Does **not** interpret excess vs ^FTSE —
     that stays the Sunday analysis-review / promotion gates.
     """
+    from value_investor.assessment_model import (
+        control_track_id,
+        frozen_tracks,
+        primary_track_id,
+    )
     from value_investor.knob_calibration import (
         calibrated_shadow_track_id,
         discover_calibration_shadow_ranks,
@@ -715,16 +720,17 @@ def check_paper_learning_tracks(
         load_last_run,
     )
     from value_investor.paper_automation import (
-        AI_JUDGMENT_TRACK_ID,
         BUY_TIER_LEVEL_SUBDIR,
         BUY_TIER_LEVEL_TRACK_ID,
         FUND_FILENAME,
-        RULES_TRACK_ID,
     )
 
     root = Path(paper_root)
     findings: list[OpsFinding] = []
-    core_track_ids = (RULES_TRACK_ID, AI_JUDGMENT_TRACK_ID, BUY_TIER_LEVEL_TRACK_ID)
+    core_track_ids = tuple(
+        dict.fromkeys((primary_track_id(root), control_track_id(root), BUY_TIER_LEVEL_TRACK_ID))
+    )
+    core_label = ", ".join(core_track_ids)
 
     if not root.exists():
         findings.append(
@@ -788,7 +794,7 @@ def check_paper_learning_tracks(
                     summary=(
                         "paper-auto rollup omitted "
                         + ", ".join(missing_summary)
-                        + " (need rules, ai_judgment, buy_tier_level)."
+                        + f" (need {core_label})."
                     ),
                 )
             )
@@ -839,13 +845,16 @@ def check_paper_learning_tracks(
                     summary=(
                         "decision-review omitted "
                         + ", ".join(missing_review)
-                        + " (need AI judgment, rules control, Suite B buy_tier_level)."
+                        + f" (need {core_label})."
                     ),
                 )
             )
 
+    frozen = frozen_tracks(root)
     shadow_ids = [
-        calibrated_shadow_track_id(rank) for rank in discover_calibration_shadow_ranks(root)
+        calibrated_shadow_track_id(rank)
+        for rank in discover_calibration_shadow_ranks(root)
+        if calibrated_shadow_track_id(rank) not in frozen
     ]
     missing_shadows = [
         track_id
@@ -915,7 +924,7 @@ def check_paper_learning_tracks(
     # Observe-only: algo→agree/veto shadow rollup should exist once core tracks act.
     core_acted = any(
         isinstance(summary_tracks.get(tid), dict) and summary_tracks[tid].get("acted")
-        for tid in (RULES_TRACK_ID, AI_JUDGMENT_TRACK_ID)
+        for tid in core_track_ids
     )
     agree_veto_rollup = root / "learning_tracks_llm_agree_veto.json"
     if core_acted and not agree_veto_rollup.exists():
