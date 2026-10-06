@@ -1523,8 +1523,13 @@ def run_automated_rebalance(
     still_in_buy_set_hold: bool = False,
     rank_drop_exit_min: int = DEFAULT_RANK_DROP_EXIT_MIN,
     block_rebuy_while_in_candidates: bool = False,
+    held_prices: dict[str, float] | None = None,
 ) -> list[PaperTrade]:
-    """Equal-weight rebalance into top buy-tier names, constrained by cash + max positions."""
+    """Equal-weight rebalance into top buy-tier names, constrained by cash + max positions.
+
+    ``held_prices`` marks holdings absent from ``candidates`` (replays that hold
+    names the live book had already sold); without it they fall back to avg cost.
+    """
     if fund.config.mode != "automated":
         raise ValueError("Automated rebalance requires an automated fund")
     when = acted_at or _utcnow_iso()
@@ -1549,6 +1554,9 @@ def run_automated_rebalance(
         for row in candidates
         if _candidate_price(row)
     }
+    for ticker, price in (held_prices or {}).items():
+        if ticker in fund.holdings and ticker not in price_map and price and price > 0:
+            price_map[ticker] = float(price)
     for ticker, position in fund.holdings.items():
         if ticker not in price_map and position.avg_cost > 0:
             price_map[ticker] = float(position.avg_cost)
