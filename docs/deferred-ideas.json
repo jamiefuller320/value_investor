@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-06T08:23:41+00:00",
+  "updated_at": "2026-10-06T09:49:55+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12381,7 +12381,7 @@
       "section": "universe",
       "title": "HKEX / SGX direct announcement feeds for asia_filings",
       "summary": "hang_seng and sti index only Google News headlines today (fetch_filings_asia_news), with a hand-seeded hkexnews PDF list as the only direct path. An HKEXnews title-search and SGX announcements listing adapter would give FTSE-equivalent statutory discovery.",
-      "revisit_when": "More than two hang_seng/sti buy-tier names are thin_need_discovery after IR seeds, or Asia markets are next for epoch-0 buy_tier_level resource",
+      "revisit_when": "hang_seng leaves the spare sprint slot (graduates via parked thin/IWB) and joins FTSE-volume maintenance, or before sti is fronted on a sprint stream. On 2026-10-06 hang_seng had 14 of 26 buy-tier names thin-bodied and 12 parked, so a count trigger is already met and does not discriminate.",
       "tags": [
         "ingest",
         "asia",
@@ -12407,9 +12407,10 @@
         "fcf",
         "us"
       ],
-      "status": "open",
+      "status": "done",
       "source": "Agent Q&A: per-market filing-source parity vs FTSE (Oct 2026)",
-      "added_at": "2026-10-06T09:13:02+00:00"
+      "added_at": "2026-10-06T09:13:02+00:00",
+      "updated_at": "2026-10-06T09:49:55+00:00"
     },
     {
       "id": "L545",
@@ -12417,7 +12418,7 @@
       "section": "universe",
       "title": "National OAM registers for euro_filings beyond ESEF and Belgium",
       "summary": "Euro discovery is ESEF (filings.xbrl.org), Belgium official, Google News and Investegate. Interim/trading updates are not in ESEF; national OAMs (AMF info-financiere open data, CNMV, CONSOB eMarket, Bundesanzeiger) would cover them. Start with AMF which has an open-data feed.",
-      "revisit_when": "euro_depth graduates and euro buy-tier still shows interim-period body gaps that ESEF and IR seeds cannot close",
+      "revisit_when": "euro_depth graduates from the fat slot and its parked thin/IWB leftovers are mainly interim or trading-update periods that ESEF annual packages and IR seeds cannot close.",
       "tags": [
         "ingest",
         "euro",
@@ -12477,6 +12478,24 @@
       "status": "open",
       "source": "Suite A vs B review (agent, 2026-10-06)",
       "added_at": "2026-10-06T08:23:41+00:00"
+    },
+    {
+      "id": "L546",
+      "category": "later",
+      "section": "research",
+      "title": "Promote SEC companyfacts into US filing_aligned FCF basis",
+      "summary": "L544 ships sec_companyfacts.json as a memo source plus an observe-only coverage/divergence store. Using SEC OCF \u2212 capex as the US filing_aligned basis in reconcile_fcf would change US shard buy-tier and epoch-0 books, so it needs a cold-start or epoch decision, not an edit.",
+      "revisit_when": "sec_companyfacts_coverage.json shows coverage \u226580% and the divergence finding lists US buy-tier names on four consecutive weekly ops snapshots",
+      "tags": [
+        "fcf",
+        "sec",
+        "xbrl",
+        "us",
+        "scoring"
+      ],
+      "status": "open",
+      "source": "Agent: L544 SEC companyfacts implementation (Oct 2026)",
+      "added_at": "2026-10-06T09:49:55+00:00"
     }
   ],
   "fragments": [
