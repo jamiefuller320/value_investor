@@ -105,7 +105,8 @@ ALTERNATE_SOURCE_CATALOG: dict[str, list[dict[str, str]]] = {
             "why": (
                 "Euro memos often index headlines without bodies; .PA names and French "
                 "LEIs index AMF open-data half-year reports and results releases with "
-                "PDF bodies, other countries are still ESEF / Google News"
+                "PDF bodies, mapped Stockholm issuers index Cision interim / year-end / "
+                "annual report PDFs, other countries are still ESEF / Google News"
             ),
         },
         {
