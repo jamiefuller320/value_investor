@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-05T15:44:43+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T02:53:23+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -331,6 +331,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L537 | **Ken French / AQR UK value-factor returns as free passive value control** | Free regional value-factor series (Ken French Data Library, AQR datasets) give a passive value benchmark and long-run base rate for L532 without building a basket. Pair with OpenFIGI for free ISIN-to-ticker mapping alongside T212 ISINs (L534). | When L532 value-factor control is implemented |
 | L538 | **Decision-review NAV marks holdings at avg cost** | decision_review._mark_prices values open holdings at avg_cost, so published portfolio_value / excess_after_costs is cost-basis, not marked to market. The total-return view (L528) uses equity-curve marks instead. | Before any track promotion or knob change cites published excess_after_costs, or when the live review is switched to total return |
 | L539 | **graduated_allocation max_positions re-applied daily** | decision-review applies max_positions: 3 to graduated_allocation every weekday, which suggests a config sync resets it to 4 each run. The ratchet fix (PR #971) adds a cooldown but does not resolve the config conflict. | After PR #971 merges, if graduated_allocation decision_review.json still shows a daily max_positions apply or the saturation finding fires for it |
+| L540 | **Re-rank knob calibration after replay phantom-cash fix** | fund_from_pre_state treated cash_before=0.0 as missing and seeded replays with initial cash. Walk-forward folds starting on fully invested passes (folds 2+) carried ~£1000 phantom cash, so the fitness ranking behind ai_judgment_calibrated r1-r3 is not evidence. Re-run ftse-knob-calibrate rank and compare before citing calibrated shadows. | After the replay phantom-cash fix merges, at the next Sunday/manual calibration pass |
 
 ### Universe & data
 
