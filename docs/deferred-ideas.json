@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-06T17:55:22+00:00",
+  "updated_at": "2026-10-06T18:24:04+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12686,6 +12686,53 @@
       "status": "open",
       "source": "L545 conversation (PR #994 rebase)",
       "added_at": "2026-10-06T17:55:22+00:00"
+    },
+    {
+      "id": "L554",
+      "category": "later",
+      "section": "learning",
+      "title": "Epoch-window significance for decision-review apply",
+      "summary": "significance_gate_v1 uses each track's whole-history verdict from track_statistics.json. Once books have several knob epochs, judge the apply on the active return since the current knob epoch so old regimes don't vote for new knobs.",
+      "revisit_when": "Any active book has a second knob epoch applied under significance_gate_v1, or an epoch reaches 60+ daily periods",
+      "tags": [
+        "decision-review",
+        "statistics",
+        "knobs"
+      ],
+      "status": "open",
+      "source": "decision-review significance gate (significance_gate_v1); PR #993 rebase",
+      "added_at": "2026-10-06T18:24:04+00:00"
+    },
+    {
+      "id": "L555",
+      "category": "later",
+      "section": "learning",
+      "title": "Bonferroni-corrected decision-review apply gate",
+      "summary": "Tighten significance_gate_v1 from the uncorrected 90% verdict to significant_after_correction across all tracks reviewed together, once more books share the gate and multiple-comparison false applies become likely.",
+      "revisit_when": "Gate first opens on any track, or 6+ active tracks are apply-eligible",
+      "tags": [
+        "decision-review",
+        "statistics"
+      ],
+      "status": "open",
+      "source": "decision-review significance gate (significance_gate_v1); PR #993 rebase",
+      "added_at": "2026-10-06T18:24:04+00:00"
+    },
+    {
+      "id": "N194",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Default-knob twin for graduated_allocation legacy tuning",
+      "summary": "graduated_allocation took 16 knob applies under the legacy rule (Sep-Oct 2026). A cold-start twin on default knobs would show whether that tuning helped; not worth a live track until the book's own verdict is significant.",
+      "revisit_when": "graduated_allocation gets a positive or negative verdict in track_statistics.json, or it is proposed as primary/control",
+      "tags": [
+        "decision-review",
+        "twins",
+        "graduated_allocation"
+      ],
+      "status": "open",
+      "source": "decision-review significance gate (significance_gate_v1); PR #993 rebase",
+      "added_at": "2026-10-06T18:24:04+00:00"
     }
   ],
   "fragments": [

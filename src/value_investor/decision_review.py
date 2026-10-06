@@ -54,6 +54,14 @@ HIGH_COST_DRAG = 0.04
 WEAK_EXCESS = -0.02
 STRONG_EXCESS = 0.02
 HIGH_CASH_FRACTION = 0.45
+
+APPLY_POLICY = "significance_gate_v1"
+DEFAULT_TRACK_STATISTICS_PATH = Path("docs/data/track_statistics.json")
+TRACK_STATISTICS_MAX_AGE_DAYS = 4.0
+SIGNIFICANT_VERDICTS = frozenset({"positive", "negative"})
+GATE_CLOSED_BY_STATISTICS = "statistics_unavailable"
+GATE_CLOSED_BY_EVIDENCE = "evidence"
+GATE_STARVED_TITLE = "Decision-review significance gate starved of statistics"
 HISTORY_KEEP = 52
 
 
@@ -200,9 +208,11 @@ class DecisionReviewResult:
     track_id: str = "rules"
     track_label: str = ""
     is_primary_learning_track: bool = False
+    apply_policy: str = APPLY_POLICY
+    significance_gate: dict[str, Any] = field(default_factory=dict)
     success_criterion: str = (
         "Outperformance after costs vs market benchmark (^FTSE); "
-        "knob updates only when excess persistently justifies them."
+        "knob updates only when the active return is statistically real."
     )
 
     def to_dict(self) -> dict[str, Any]:
@@ -210,6 +220,87 @@ class DecisionReviewResult:
         if payload.get("counterfactual_preview") is None:
             payload.pop("counterfactual_preview", None)
         return payload
+
+
+def significance_gate(
+    track_id: str,
+    *,
+    statistics_path: Path = DEFAULT_TRACK_STATISTICS_PATH,
+    benchmark_ticker: str | None = None,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """May decision-review change this book's knobs? Only on a statistically real result.
+
+    Reads ``track_statistics.json`` (daily ops-monitor). The book's annualised
+    active return vs the benchmark must have a 90% interval that excludes zero.
+    Missing, stale or thin statistics fail closed: the review stays a proposal.
+    Statistics for another benchmark also fail closed: market shards reuse FTSE
+    track ids. ``closed_by`` separates an unusable store (``statistics_unavailable``,
+    an ops problem) from a result that is not yet significant (``evidence``).
+    """
+    gate: dict[str, Any] = {
+        "policy": APPLY_POLICY,
+        "track_id": track_id,
+        "statistics_path": str(statistics_path),
+        "passed": False,
+        "closed_by": GATE_CLOSED_BY_STATISTICS,
+    }
+    path = Path(statistics_path)
+    if not path.exists():
+        return {**gate, "reason": "track_statistics.json missing"}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {**gate, "reason": "track_statistics.json unreadable"}
+    updated = payload.get("updated_at")
+    try:
+        updated_dt = datetime.fromisoformat(str(updated).replace("Z", "+00:00"))
+    except ValueError:
+        return {**gate, "reason": "track_statistics.json has no updated_at"}
+    if updated_dt.tzinfo is None:
+        updated_dt = updated_dt.replace(tzinfo=UTC)
+    age_days = ((now or datetime.now(UTC)) - updated_dt).total_seconds() / 86400
+    gate["statistics_updated_at"] = updated
+    if age_days > TRACK_STATISTICS_MAX_AGE_DAYS:
+        return {
+            **gate,
+            "reason": (
+                f"track_statistics.json is {age_days:.1f} days old "
+                f"(max {TRACK_STATISTICS_MAX_AGE_DAYS:.0f})"
+            ),
+        }
+    stats_ticker = payload.get("benchmark_ticker")
+    gate["statistics_benchmark_ticker"] = stats_ticker
+    if benchmark_ticker and stats_ticker != benchmark_ticker:
+        return {
+            **gate,
+            "reason": (
+                f"track_statistics.json measures vs {stats_ticker}, this book vs {benchmark_ticker}"
+            ),
+        }
+    stats = (payload.get("tracks") or {}).get(track_id) or {}
+    gate["closed_by"] = GATE_CLOSED_BY_EVIDENCE
+    gate["status"] = stats.get("status")
+    gate["verdict"] = stats.get("verdict")
+    gate["ci_annualized_active_return"] = stats.get("ci_annualized_active_return")
+    gate["periods"] = stats.get("periods")
+    gate["significant_after_correction"] = stats.get("significant_after_correction")
+    if stats.get("status") != "ok":
+        return {**gate, "reason": f"no usable statistics for {track_id} ({stats.get('status')})"}
+    if stats.get("verdict") not in SIGNIFICANT_VERDICTS:
+        return {
+            **gate,
+            "reason": (
+                "active return is indistinguishable from noise (90% interval includes zero); "
+                "knob changes would fit luck"
+            ),
+        }
+    return {
+        **gate,
+        "passed": True,
+        "closed_by": None,
+        "reason": f"active return verdict {stats['verdict']}",
+    }
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -1050,12 +1141,15 @@ def run_decision_review(
     fetch_benchmark: bool = True,
     benchmark_ticker: str | None = None,
     counterfactual: bool = True,
+    statistics_path: Path = DEFAULT_TRACK_STATISTICS_PATH,
 ) -> DecisionReviewResult:
     """
     Review the automated paper book and optionally write clamped knob updates.
 
-    Default is propose-only. When ``apply`` is true and history is thick enough
-    (or ``force``), updates ``config.json`` and syncs ``max_positions`` onto the fund.
+    Default is propose-only. ``apply`` writes ``config.json`` only when history
+    is thick enough (or ``force``) **and** the significance gate passes: the
+    book's active return must be statistically distinguishable from zero.
+    ``force`` does not bypass the gate.
     """
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1120,6 +1214,11 @@ def run_decision_review(
             + "."
         )
 
+    gate = significance_gate(
+        str(config.track_id or "rules"),
+        statistics_path=statistics_path,
+        benchmark_ticker=bench_ticker,
+    )
     reviewed_at = datetime.now(tz=UTC).isoformat()
     applied = False
     note = "Proposal only — history too thin to apply."
@@ -1132,7 +1231,10 @@ def run_decision_review(
         knobs_after = knobs_before
     else:
         knobs_after = proposed
-        if apply and changes:
+        if apply and changes and not frozen_lab and not gate["passed"]:
+            note = f"Proposal only — significance gate closed: {gate['reason']}."
+            knobs_after = knobs_before
+        elif apply and changes:
             knobs_after.apply_to_config(config)
             config_path.write_text(json.dumps(config.to_dict(), indent=2) + "\n", encoding="utf-8")
             from value_investor.paper_automation import sync_fund_from_automation_config
@@ -1200,6 +1302,7 @@ def run_decision_review(
         track_id=str(config.track_id or "rules"),
         track_label=str(config.track_label or ""),
         is_primary_learning_track=bool(config.is_primary_learning_track),
+        significance_gate=gate,
         success_criterion=(
             f"Outperformance after costs vs market benchmark ({bench_ticker}) on this track; "
             "AI-judgment is the primary learning track, rules is the control."
@@ -1233,6 +1336,11 @@ def format_review_text(result: DecisionReviewResult) -> str:
         f"  Status: {result.note}",
         f"  Enough history: {result.enough_history}",
         f"  Applied: {result.applied}",
+        (
+            f"  Significance gate ({result.apply_policy}): "
+            f"{'open' if (result.significance_gate or {}).get('passed') else 'closed'}"
+            f" — {(result.significance_gate or {}).get('reason', '—')}"
+        ),
         (
             f"  Book return: {m.get('total_return', 0):+.1%} | "
             f"cost drag: {m.get('cost_drag', 0):.1%} | "
@@ -1311,6 +1419,7 @@ def compare_learning_tracks(
     counterfactual: bool = True,
     suite: str | None = None,
     track_ids: list[str] | None = None,
+    statistics_path: Path = DEFAULT_TRACK_STATISTICS_PATH,
 ) -> dict[str, Any]:
     """
     Review rules (control) + AI judgment (primary) and summarize outperformance.
@@ -1353,6 +1462,7 @@ def compare_learning_tracks(
             fetch_benchmark=fetch_benchmark,
             benchmark_ticker=bench_ticker,
             counterfactual=counterfactual,
+            statistics_path=statistics_path,
         )
         reviews[track_id] = result.to_dict()
 
@@ -1373,6 +1483,7 @@ def compare_learning_tracks(
         "suite_filter": suite or "all",
         "reviewed_track_ids": list(reviews.keys()),
         "frozen_tracks": frozen,
+        "apply_policy": APPLY_POLICY,
         "success_criterion": (
             f"Primary track ({primary_id}) outperforms {bench_ticker} after costs; "
             f"{control_id} is the control datum. Frozen tracks keep their final "

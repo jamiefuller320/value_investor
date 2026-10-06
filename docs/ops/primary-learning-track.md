@@ -204,7 +204,8 @@ interpretation stays Sunday.
 # Run both tracks after open settle
 ftse-paper-auto --output-dir docs/data/paper_automation --reports docs/data/latest.json --tracks all
 
-# Review both vs market; apply knobs only when history is thick
+# Review both vs market; apply knobs only when history is thick and the
+# significance gate passes (decision-review.md#significance-gate-significance_gate_v1)
 ftse-decision-review --output-dir docs/data/paper_automation --tracks all --apply
 
 # Refresh overlay + force bootstrap (weekends / testing):

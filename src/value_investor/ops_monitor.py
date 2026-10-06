@@ -1874,7 +1874,8 @@ def check_track_statistics(
 ) -> list[OpsFinding]:
     """Observe-only L529: refresh track statistics; warn on unsupported verdict claims.
 
-    Writes ``docs/data/track_statistics.json``. Never applies knobs or gates
+    Writes ``docs/data/track_statistics.json``, which decision-review reads as
+    its apply gate (significance_gate_v1). Never applies knobs itself
     (``auto_fixable=False``).
     """
     from value_investor.track_statistics import (
@@ -1916,6 +1917,72 @@ def check_track_statistics(
             category=str(finding["category"]),
             title=str(finding["title"]),
             summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
+def check_decision_review_significance_gate(
+    *,
+    paper_root: Path | None = None,
+    statistics_path: Path | None = None,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Warn when decision-review applies are blocked by an unusable statistics store.
+
+    A gate closed on evidence (noise, thin history) is the policy working and is
+    not a finding. A gate closed because ``track_statistics.json`` is missing,
+    stale or on another benchmark silently stops all learning, so warn when the
+    store is still unusable now, i.e. the next paper-auto pass would be starved
+    too (``auto_fixable=False``).
+    """
+    from value_investor.decision_review import (
+        DEFAULT_TRACK_STATISTICS_PATH,
+        GATE_CLOSED_BY_STATISTICS,
+        GATE_STARVED_TITLE,
+        significance_gate,
+    )
+    from value_investor.track_statistics import DEFAULT_PAPER_ROOT
+
+    root = Path(paper_root) if paper_root is not None else DEFAULT_PAPER_ROOT
+    review_path = root / "learning_tracks_review.json"
+    try:
+        review = json.loads(review_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    reviews = review.get("reviews") if isinstance(review, dict) else None
+    if not isinstance(reviews, dict):
+        return []
+    stats_path = (
+        Path(statistics_path) if statistics_path is not None else DEFAULT_TRACK_STATISTICS_PATH
+    )
+    starved: dict[str, str] = {}
+    for track_id, row in sorted(reviews.items()):
+        gate = (row or {}).get("significance_gate") or {}
+        if gate.get("closed_by") != GATE_CLOSED_BY_STATISTICS:
+            continue
+        current = significance_gate(
+            str(track_id),
+            statistics_path=stats_path,
+            benchmark_ticker=review.get("benchmark_ticker"),
+            now=now,
+        )
+        if current.get("closed_by") == GATE_CLOSED_BY_STATISTICS:
+            starved[str(track_id)] = str(current.get("reason") or "")
+    if not starved:
+        return []
+    reasons = sorted(set(starved.values()))
+    return [
+        OpsFinding(
+            severity="warn",
+            category="paper",
+            title=GATE_STARVED_TITLE,
+            summary=(
+                f"{len(starved)} track(s) ({', '.join(sorted(starved))}) cannot apply knob "
+                f"changes: {'; '.join(reasons)}. Refresh {stats_path} via ops-monitor "
+                "check_track_statistics. See docs/ops/decision-review.md"
+                "#significance-gate-significance_gate_v1."
+            ),
             auto_fixable=False,
         )
     ]
@@ -3125,6 +3192,7 @@ def collect_ops_findings(
     findings.extend(check_shard_nav_fx_warp())
     findings.extend(check_combined_tagged_learning())
     findings.extend(check_track_statistics())
+    findings.extend(check_decision_review_significance_gate())
     findings.extend(check_total_return_view())
     findings.extend(check_hold_period_counterfactual())
     findings.extend(check_sec_companyfacts_coverage())

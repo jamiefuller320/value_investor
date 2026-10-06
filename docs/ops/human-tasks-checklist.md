@@ -23,7 +23,7 @@ ack stale. Automated weekday/Sunday CI rows stay in a collapsed list.
 | Task | Who | Doc |
 |------|-----|-----|
 | **Spot-check learning tracks** after paper-auto — post-settle last_run + decision-review coverage of the assessment-model primary (`ai_judgment_fair`) and control (`buy_tier_level`), active calibrated shadows; frozen tracks skipped (ops-monitor 13:15; excess interpretation stays Sunday) | CI | [ops-monitor.md](ops-monitor.md#paper-learning-tracks) |
-| Paper-auto + decision-review `--apply` (all active tracks; frozen tracks in `assessment_model.json` skipped; shadows + cohort lab observe-only; endurance ledger) | CI | [decision-review.md](decision-review.md#commands) |
+| Paper-auto + decision-review `--apply` (knob applies need a significant `track_statistics` verdict — `significance_gate_v1`; all active tracks; frozen tracks in `assessment_model.json` skipped; shadows + cohort lab observe-only; endurance ledger) | CI | [decision-review.md](decision-review.md#commands) |
 | Admitted epoch-0 **local-open marks** (ASX / EU / US settle; not FTSE paper-auto; census refresh) | CI | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | Epoch-0 weekday **cron upsert** on learning admit + `--sync-cron` (timezone buckets; residual human only for unmapped TZ) | CI | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | **GHA secret hygiene** scan (skips if no merges / workflow touches in 36h) | CI | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
