@@ -1,12 +1,15 @@
 """Tests for decision-review learning knobs and proposals."""
 
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
 from value_investor.decision_review import (
+    MIN_EPOCH_DAYS,
     BookMetrics,
     LearningKnobs,
     compute_book_metrics,
+    detect_saturated_knobs,
     ensure_knob_epoch,
     estimate_counterfactual_preview,
     metrics_for_review,
@@ -549,3 +552,213 @@ def test_cohort_lab_is_frozen_against_apply(tmp_path: Path):
     cfg = __import__("json").loads((out / "config.json").read_text(encoding="utf-8"))
     assert cfg["min_conviction"] == 0.0
     assert cfg["max_positions"] == 120
+
+
+def _write_churny_track(
+    out: Path,
+    *,
+    config: AutomationConfig,
+    trade_day: str = "2026-01-0",
+) -> PaperFund:
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Auto",
+            mode="automated",
+            initial_cash=1000,
+            trade_cost_pct=0.03,
+            max_positions=8,
+        )
+    )
+    for i, ticker in enumerate(["AAA.L", "BBB.L", "CCC.L", "DDD.L"]):
+        fund.buy(
+            ticker=ticker,
+            price=10,
+            sizing_mode="cash",
+            amount=200,
+            sector="Banks",
+            name=ticker,
+            acted_at=f"{trade_day}{i + 1}T12:00:00+00:00",
+        )
+    for ticker in ["AAA.L", "BBB.L"]:
+        fund.sell(
+            ticker=ticker,
+            price=9,
+            sizing_mode="shares",
+            amount=fund.holdings[ticker].shares,
+            acted_at="2026-02-01T12:00:00+00:00",
+        )
+    for i in range(4):
+        fund.record_mark(
+            {t: 9.5 for t in fund.holdings},
+            note=f"m{i}",
+            acted_at=f"2026-03-0{i + 1}T12:00:00+00:00",
+        )
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "config.json").write_text(__import__("json").dumps(config.to_dict()), encoding="utf-8")
+    (out / "automated_fund.json").write_text(
+        __import__("json").dumps(fund.to_dict()), encoding="utf-8"
+    )
+    return fund
+
+
+def _read_config(out: Path) -> dict:
+    return __import__("json").loads((out / "config.json").read_text(encoding="utf-8"))
+
+
+def test_second_review_does_not_reapply_on_lifetime_metrics(tmp_path: Path):
+    """Regression: the day after an apply, a thin new epoch must not fall back to lifetime."""
+    out = tmp_path / "paper"
+    _write_churny_track(
+        out,
+        config=AutomationConfig(
+            max_positions=5, skip_timing_wait=True, min_conviction=0.0, sector_cap=0.5
+        ),
+    )
+    first = run_decision_review(
+        output_dir=out, apply=True, fetch_benchmark=False, benchmark_return=0.05
+    )
+    assert first.applied is True
+    after_first = _read_config(out)
+
+    second = run_decision_review(
+        output_dir=out, apply=True, fetch_benchmark=False, benchmark_return=0.05
+    )
+    assert second.applied is False
+    assert second.enough_history is False
+    assert _read_config(out) == after_first
+    assert any("days since last knob apply" in r for r in second.reasons)
+
+
+def _seed_epoch(out: Path, *, started_at: str, knobs: LearningKnobs) -> None:
+    from value_investor.decision_review import KnobEpoch, save_knob_epoch
+
+    save_knob_epoch(
+        out,
+        KnobEpoch(
+            started_at=started_at,
+            baseline_nav=400.0,
+            baseline_contributed_capital=1000.0,
+            knobs=knobs.to_dict(),
+        ),
+    )
+
+
+def _add_epoch_activity(out: Path, since: datetime) -> None:
+    import json
+
+    fund = PaperFund.from_dict(json.loads((out / "automated_fund.json").read_text()))
+    stamp = since + timedelta(days=1)
+    for ticker in ["EEE.L", "FFF.L"]:
+        fund.buy(
+            ticker=ticker,
+            price=10,
+            sizing_mode="cash",
+            amount=200,
+            sector="Mining",
+            name=ticker,
+            acted_at=stamp.isoformat(),
+        )
+        fund.sell(
+            ticker=ticker,
+            price=9,
+            sizing_mode="shares",
+            amount=fund.holdings[ticker].shares,
+            acted_at=(stamp + timedelta(minutes=5)).isoformat(),
+        )
+    for i in range(3):
+        fund.record_mark(
+            {t: 9.0 for t in fund.holdings},
+            note=f"e{i}",
+            acted_at=(stamp + timedelta(hours=i + 1)).isoformat(),
+        )
+    (out / "automated_fund.json").write_text(json.dumps(fund.to_dict()), encoding="utf-8")
+
+
+def test_epoch_cooldown_blocks_apply_until_aged(tmp_path: Path):
+    knobs = LearningKnobs(max_positions=5, skip_timing_wait=True, min_conviction=0.0)
+    cfg = AutomationConfig(max_positions=5, skip_timing_wait=True, min_conviction=0.0)
+
+    young = tmp_path / "young"
+    _write_churny_track(young, config=cfg)
+    start = datetime.now(tz=UTC) - timedelta(days=5)
+    _seed_epoch(young, started_at=start.isoformat(), knobs=knobs)
+    _add_epoch_activity(young, start)
+    result = run_decision_review(
+        output_dir=young, apply=True, fetch_benchmark=False, benchmark_return=0.05
+    )
+    assert result.metrics["epoch"]["equity_marks"] >= 2
+    assert result.metrics["epoch"]["trade_count"] >= 1
+    assert 4.5 < result.metrics["epoch"]["age_days"] < 5.5
+    assert result.applied is False
+    assert "cooldown" in result.note
+    assert _read_config(young)["min_conviction"] == 0.0
+
+    aged = tmp_path / "aged"
+    _write_churny_track(aged, config=cfg)
+    start = datetime.now(tz=UTC) - timedelta(days=MIN_EPOCH_DAYS + 2)
+    _seed_epoch(aged, started_at=start.isoformat(), knobs=knobs)
+    _add_epoch_activity(aged, start)
+    result = run_decision_review(
+        output_dir=aged, apply=True, fetch_benchmark=False, benchmark_return=0.05
+    )
+    assert result.enough_history is True
+    assert result.proposed_changes
+    assert result.applied is True
+
+
+def _pressured_metrics() -> BookMetrics:
+    return BookMetrics(
+        portfolio_value=640,
+        contributed_capital=1000,
+        total_return=-0.36,
+        total_costs=400,
+        cost_drag=0.40,
+        trade_count=60,
+        buy_count=35,
+        sell_count=25,
+        positions=3,
+        cash_fraction=0.01,
+        equity_marks=40,
+        max_sector_weight=0.34,
+        dominant_sector="Banks",
+        benchmark_return=-0.02,
+        excess_after_costs=-0.34,
+    )
+
+
+def test_detect_saturated_knobs_at_bounds():
+    at_bounds = LearningKnobs(
+        max_positions=3, skip_timing_wait=True, min_conviction=0.6, sector_cap=0.2
+    )
+    saturated = detect_saturated_knobs(_pressured_metrics(), at_bounds)
+    by_knob = {row["knob"]: row for row in saturated}
+    assert set(by_knob) == {"min_conviction", "max_positions", "sector_cap"}
+    assert by_knob["min_conviction"]["pressure"] == "raise"
+    assert by_knob["max_positions"]["pressure"] == "lower"
+
+    _proposed, changes, _reasons = propose_knob_updates(_pressured_metrics(), at_bounds)
+    assert changes == {}
+
+
+def test_detect_saturated_knobs_empty_when_room_left():
+    knobs = LearningKnobs(max_positions=5, skip_timing_wait=True, min_conviction=0.2)
+    assert detect_saturated_knobs(_pressured_metrics(), knobs) == []
+
+
+def test_run_decision_review_reports_saturation(tmp_path: Path):
+    out = tmp_path / "paper"
+    _write_churny_track(
+        out,
+        config=AutomationConfig(
+            max_positions=3, skip_timing_wait=True, min_conviction=0.6, sector_cap=0.2
+        ),
+    )
+    result = run_decision_review(
+        output_dir=out, apply=True, fetch_benchmark=False, benchmark_return=0.05
+    )
+    assert result.applied is False
+    knobs = {row["knob"] for row in result.saturated_knobs}
+    assert {"max_positions", "sector_cap"} <= knobs
+    assert any("Saturated at bound" in r for r in result.reasons)
+    payload = __import__("json").loads((out / "decision_review.json").read_text())
+    assert payload["saturated_knobs"]

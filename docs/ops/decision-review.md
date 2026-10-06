@@ -32,7 +32,7 @@ ftse-paper-auto --output-dir docs/data/paper_automation --tracks all
 # Review both vs market (writes learning_tracks_review.json)
 ftse-decision-review --output-dir docs/data/paper_automation --tracks all
 
-# Apply clamped updates when ≥4 equity marks and ≥2 trades
+# Apply clamped updates (gate: see "Apply gate and cooldown")
 ftse-decision-review --output-dir docs/data/paper_automation --tracks all --apply
 ```
 
@@ -81,6 +81,33 @@ has ≥2 equity marks and ≥1 trade.
 
 Existing tracks backfill the active epoch from the last applied row in
 `decision_review_history.json` on the next review (marked `seeded_from_history`).
+
+## Apply gate and cooldown
+
+| Track state | Evidence used | Apply allowed when |
+|-------------|---------------|--------------------|
+| No knob epoch yet (cold start) | Lifetime metrics | ≥4 equity marks and ≥2 trades |
+| Knob epoch exists | Epoch metrics only | ≥2 epoch marks, ≥1 epoch trade **and** epoch age ≥ `MIN_EPOCH_DAYS` (28) |
+
+Once an epoch exists, a thin or young epoch **never** falls back to lifetime
+metrics. Before this gate, the day after each apply the new epoch had <2 marks,
+the review fell back to lifetime cost drag (monotone non-decreasing), and the
+same rule re-fired daily: `ai_judgment` raised `min_conviction` 15 times in 16
+days (11–26 Aug 2026) to its 0.6 bound with `max_positions` at the floor of 3.
+Proposals are still written during cooldown (`note` reports days remaining) but
+are not applied.
+
+`epoch.age_days` is published in `metrics.epoch`.
+
+### Saturated knobs
+
+When a proposal rule still fires but the knob already sits at its clamp bound,
+the review records it in `saturated_knobs` (knob, pressure direction, bound,
+trigger) and appends a reason line. Frozen labs/shadows never report saturation.
+Daily ops-monitor raises **Decision-review knobs saturated at bounds** (warn,
+`auto_fixable=False`) — the driver is outside the knob's reach (for example the
+3% stress cost model or rank-flip churn), so the fix is a policy change or a new
+cold-start epoch, not another knob step.
 
 ## Counterfactual preview
 

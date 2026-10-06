@@ -37,6 +37,9 @@ MIN_EQUITY_MARKS = 4
 MIN_TRADES = 2
 MIN_EPOCH_MARKS = 2
 MIN_EPOCH_TRADES = 1
+# Cooldown between applies: a fresh epoch must age this long before its metrics
+# can justify another knob step (one 28d learning horizon).
+MIN_EPOCH_DAYS = 28
 
 MAX_POSITIONS_BOUNDS = (3, 8)
 MIN_CONVICTION_BOUNDS = (0.0, 0.6)
@@ -189,6 +192,7 @@ class DecisionReviewResult:
     metrics: dict[str, Any] = field(default_factory=dict)
     counterfactual_preview: dict[str, Any] | None = None
     note: str = ""
+    saturated_knobs: list[dict[str, Any]] = field(default_factory=list)
     track_id: str = "rules"
     track_label: str = ""
     is_primary_learning_track: bool = False
@@ -351,12 +355,18 @@ def _compute_epoch_metrics(
     benchmark_return: float | None = None,
     fetch_benchmark: bool = True,
     benchmark_ticker: str | None = None,
+    as_of: datetime | None = None,
 ) -> dict[str, Any]:
     prices = _mark_prices(fund)
     perf = fund.performance(prices)
     nav = float(perf["portfolio_value"] or 0.0)
     baseline = float(epoch.baseline_nav or 0.0)
     epoch_trades, epoch_marks = _events_since(fund, epoch.started_at)
+    started_dt = _parse_iso_date(epoch.started_at)
+    now = as_of or datetime.now(tz=UTC)
+    age_days = (
+        max(0.0, (now - started_dt).total_seconds() / 86400.0) if started_dt is not None else None
+    )
     epoch_costs = sum(float(t.cost or 0.0) for t in epoch_trades)
     buys = sum(1 for t in epoch_trades if t.side == "buy")
     sells = sum(1 for t in epoch_trades if t.side == "sell")
@@ -386,6 +396,7 @@ def _compute_epoch_metrics(
         "started_at": epoch.started_at,
         "knobs": dict(epoch.knobs),
         "seeded_from_history": bool(epoch.seeded_from_history),
+        "age_days": None if age_days is None else round(age_days, 2),
         "baseline_nav": round(baseline, 2),
         "portfolio_value": round(nav, 2),
         "total_return": round(epoch_return, 4),
@@ -442,6 +453,16 @@ def enough_epoch_history(epoch: dict[str, Any] | None) -> bool:
         int(epoch.get("equity_marks") or 0) >= MIN_EPOCH_MARKS
         and int(epoch.get("trade_count") or 0) >= MIN_EPOCH_TRADES
     )
+
+
+def epoch_cooldown_remaining_days(epoch: dict[str, Any] | None) -> float:
+    """Days until the active epoch may justify another apply (0 when cooled down)."""
+    if not epoch:
+        return 0.0
+    age = epoch.get("age_days")
+    if age is None:
+        return float(MIN_EPOCH_DAYS)
+    return max(0.0, float(MIN_EPOCH_DAYS) - float(age))
 
 
 def _ticker_sector_map(fund: PaperFund) -> dict[str, str]:
@@ -742,6 +763,91 @@ def compute_book_metrics(
     )
 
 
+def _cost_pressure(metrics: BookMetrics) -> bool:
+    return metrics.cost_drag >= HIGH_COST_DRAG and metrics.trade_count >= 4
+
+
+def _weak_excess_pressure(metrics: BookMetrics) -> bool:
+    excess = metrics.excess_after_costs
+    return excess is not None and excess <= WEAK_EXCESS and metrics.cost_drag >= HIGH_COST_DRAG / 2
+
+
+def _strong_excess_pressure(metrics: BookMetrics, knobs: LearningKnobs) -> bool:
+    excess = metrics.excess_after_costs
+    return (
+        excess is not None
+        and excess >= STRONG_EXCESS
+        and metrics.cost_drag < HIGH_COST_DRAG
+        and metrics.cash_fraction < 0.15
+        and metrics.positions >= knobs.max_positions
+    )
+
+
+def _sector_pressure(metrics: BookMetrics, sector_cap: float) -> bool:
+    return metrics.max_sector_weight > sector_cap + 1e-9 and metrics.positions >= 2
+
+
+def detect_saturated_knobs(
+    metrics: BookMetrics,
+    knobs: LearningKnobs,
+) -> list[dict[str, Any]]:
+    """
+    Knobs whose proposal rule still fires but which already sit at their clamp bound.
+
+    A saturated knob can no longer respond to the evidence that drives it, so the
+    review loop has stopped learning on that axis — surface it instead of
+    re-proposing a no-op every pass.
+    """
+    saturated: list[dict[str, Any]] = []
+    if (
+        _cost_pressure(metrics)
+        and knobs.skip_timing_wait
+        and knobs.min_conviction >= MIN_CONVICTION_BOUNDS[1] - 1e-9
+    ):
+        saturated.append(
+            {
+                "knob": "min_conviction",
+                "pressure": "raise",
+                "bound": MIN_CONVICTION_BOUNDS[1],
+                "trigger": f"cost drag {metrics.cost_drag:.1%} ≥ {HIGH_COST_DRAG:.0%}",
+            }
+        )
+    if _weak_excess_pressure(metrics) and knobs.max_positions <= MAX_POSITIONS_BOUNDS[0]:
+        saturated.append(
+            {
+                "knob": "max_positions",
+                "pressure": "lower",
+                "bound": MAX_POSITIONS_BOUNDS[0],
+                "trigger": f"excess {metrics.excess_after_costs:+.1%} ≤ {WEAK_EXCESS:+.0%}",
+            }
+        )
+    if _strong_excess_pressure(metrics, knobs) and knobs.max_positions >= MAX_POSITIONS_BOUNDS[1]:
+        saturated.append(
+            {
+                "knob": "max_positions",
+                "pressure": "raise",
+                "bound": MAX_POSITIONS_BOUNDS[1],
+                "trigger": f"excess {metrics.excess_after_costs:+.1%} ≥ {STRONG_EXCESS:+.0%}",
+            }
+        )
+    if (
+        _sector_pressure(metrics, knobs.sector_cap)
+        and knobs.sector_cap <= SECTOR_CAP_BOUNDS[0] + 1e-9
+    ):
+        saturated.append(
+            {
+                "knob": "sector_cap",
+                "pressure": "lower",
+                "bound": SECTOR_CAP_BOUNDS[0],
+                "trigger": (
+                    f"max sector weight {metrics.max_sector_weight:.0%} "
+                    f"with {metrics.positions} positions"
+                ),
+            }
+        )
+    return saturated
+
+
 def propose_knob_updates(
     metrics: BookMetrics,
     knobs: LearningKnobs,
@@ -764,7 +870,7 @@ def propose_knob_updates(
 
     excess = metrics.excess_after_costs
     # 1) Cost drag / churn → raise conviction floor or enable timing skip.
-    if metrics.cost_drag >= HIGH_COST_DRAG and metrics.trade_count >= 4:
+    if _cost_pressure(metrics):
         if not proposed.skip_timing_wait:
             proposed.skip_timing_wait = True
             changes["skip_timing_wait"] = True
@@ -783,7 +889,7 @@ def propose_knob_updates(
                 reasons.append(f"High cost drag ({metrics.cost_drag:.1%}) — raise min_conviction.")
 
     # 2) Weak excess + costs → shrink book slightly.
-    if excess is not None and excess <= WEAK_EXCESS and metrics.cost_drag >= HIGH_COST_DRAG / 2:
+    if _weak_excess_pressure(metrics):
         new_max = int(_clamp(proposed.max_positions - MAX_POSITIONS_STEP, *MAX_POSITIONS_BOUNDS))
         if new_max < proposed.max_positions:
             proposed.max_positions = new_max
@@ -791,13 +897,7 @@ def propose_knob_updates(
             reasons.append(f"Weak excess after costs ({excess:+.1%}) — reduce max_positions.")
 
     # 3) Strong excess + tight cash use → allow one more sleeve.
-    if (
-        excess is not None
-        and excess >= STRONG_EXCESS
-        and metrics.cost_drag < HIGH_COST_DRAG
-        and metrics.cash_fraction < 0.15
-        and metrics.positions >= knobs.max_positions
-    ):
+    if _strong_excess_pressure(metrics, knobs):
         new_max = int(_clamp(proposed.max_positions + MAX_POSITIONS_STEP, *MAX_POSITIONS_BOUNDS))
         if new_max > proposed.max_positions:
             proposed.max_positions = new_max
@@ -805,7 +905,7 @@ def propose_knob_updates(
             reasons.append(f"Strong excess after costs ({excess:+.1%}) — raise max_positions.")
 
     # 4) Sector concentration above current cap → tighten.
-    if metrics.max_sector_weight > proposed.sector_cap + 1e-9 and metrics.positions >= 2:
+    if _sector_pressure(metrics, proposed.sector_cap):
         new_cap = round(
             _clamp(proposed.sector_cap - SECTOR_CAP_STEP, *SECTOR_CAP_BOUNDS),
             4,
@@ -910,18 +1010,41 @@ def run_decision_review(
         knob_epoch=knob_epoch,
     )
     epoch_ok = enough_epoch_history(metrics.epoch)
+    cooldown_days = epoch_cooldown_remaining_days(metrics.epoch)
     history_ok = enough_history(metrics)
-    if metrics.epoch and epoch_ok:
-        review_metrics = metrics_for_review(metrics)
-        review_history_ok = True
+    if metrics.epoch:
+        # Once an epoch exists, only post-apply evidence may justify the next step.
+        # Falling back to lifetime metrics here re-fires the same rule on the same
+        # cumulative cost drag every pass and ratchets knobs to their bounds.
+        review_metrics = metrics_for_review(metrics) if epoch_ok else metrics
+        review_history_ok = epoch_ok and cooldown_days <= 0
     else:
         review_metrics = metrics
         review_history_ok = history_ok
     proposed, changes, reasons = propose_knob_updates(review_metrics, knobs_before)
+    saturated = (
+        detect_saturated_knobs(review_metrics, knobs_before)
+        if review_history_ok and not frozen_lab
+        else []
+    )
+    if saturated:
+        reasons.append(
+            "Saturated at bound (rule still fires, no step left): "
+            + ", ".join(
+                f"{row['knob']} ({row['pressure']}, at {row['bound']}; {row['trigger']})"
+                for row in saturated
+            )
+            + "."
+        )
 
     reviewed_at = datetime.now(tz=UTC).isoformat()
     applied = False
     note = "Proposal only — history too thin to apply."
+    if metrics.epoch and epoch_ok and cooldown_days > 0:
+        note = (
+            f"Proposal only — knob epoch cooldown ({cooldown_days:.1f} of "
+            f"{MIN_EPOCH_DAYS} days remaining before the next apply)."
+        )
     if not review_history_ok and not force:
         knobs_after = knobs_before
     else:
@@ -957,11 +1080,13 @@ def run_decision_review(
     if not review_history_ok:
         reasons = [
             (
-                f"Need ≥{MIN_EPOCH_MARKS} epoch marks and ≥{MIN_EPOCH_TRADES} epoch trades "
-                f"since last knob apply (or ≥{MIN_EQUITY_MARKS} lifetime marks and "
-                f"≥{MIN_TRADES} trades when no epoch yet) — "
+                f"Need ≥{MIN_EPOCH_MARKS} epoch marks, ≥{MIN_EPOCH_TRADES} epoch trades and "
+                f"≥{MIN_EPOCH_DAYS} days since last knob apply (or ≥{MIN_EQUITY_MARKS} "
+                f"lifetime marks and ≥{MIN_TRADES} trades when no epoch yet) — "
                 f"epoch marks={((metrics.epoch or {}).get('equity_marks'))}, "
                 f"epoch trades={((metrics.epoch or {}).get('trade_count'))}, "
+                f"epoch age days={((metrics.epoch or {}).get('age_days'))}, "
+                f"cooldown days remaining={round(cooldown_days, 1)}, "
                 f"lifetime marks={metrics.equity_marks}, "
                 f"lifetime trades={metrics.trade_count}."
             ),
@@ -987,6 +1112,7 @@ def run_decision_review(
         metrics=metrics.to_dict(),
         counterfactual_preview=counterfactual_preview,
         note=note,
+        saturated_knobs=saturated,
         track_id=str(config.track_id or "rules"),
         track_label=str(config.track_label or ""),
         is_primary_learning_track=bool(config.is_primary_learning_track),
