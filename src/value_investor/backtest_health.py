@@ -514,7 +514,8 @@ def run_backtest_health(
     if apply_repairs and repairs:
         issues, stats = audit_history_dir(history_dir, now=now)
 
-    load_dir = output_dir or history_dir
+    # load_run_snapshots appends HISTORY_DIR, so pass the parent of the history folder.
+    load_dir = output_dir or history_dir.parent
     snapshots = load_run_snapshots(load_dir)
     backtest = compute_backtest(snapshots)
     readiness = assess_readiness(valid_runs=stats["valid_runs"], backtest=backtest)
