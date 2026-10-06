@@ -1109,3 +1109,17 @@ def test_replay_of_fully_invested_book_without_trades_matches_marks():
     assert preview["simulated_trade_count"] == 0
     assert preview["simulated_nav"] == 660.0
     assert preview["simulated_return"] == 0.1
+
+
+def test_replay_keeps_logged_zero_exit_buffer_and_cooldown():
+    from value_investor.rebalance_log import _selection_kwargs_for_replay
+
+    kwargs = _selection_kwargs_for_replay(
+        {"selection": {"exit_confirm_screens": 0, "reentry_cooldown_screens": 0}},
+        max_positions=3,
+        skip_timing_wait=True,
+        min_conviction=0.0,
+        sector_cap=0.3,
+    )
+    assert kwargs["exit_confirm_screens"] == 0
+    assert kwargs["reentry_cooldown_screens"] == 0

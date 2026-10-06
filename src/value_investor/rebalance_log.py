@@ -749,8 +749,8 @@ def _selection_kwargs_for_replay(
     selection = dict(entry.get("selection") or {})
     logged_use_adj = bool(selection.get("use_adjusted_signal", False))
     logged_req_acc = bool(selection.get("require_research_accumulate", False))
-    logged_exit_confirm = int(selection.get("exit_confirm_screens") or 2)
-    logged_reentry_cooldown = int(selection.get("reentry_cooldown_screens") or 1)
+    logged_exit_confirm = int(_logged_float(selection, "exit_confirm_screens", 2))
+    logged_reentry_cooldown = int(_logged_float(selection, "reentry_cooldown_screens", 1))
     return {
         "skip_timing_wait": bool(skip_timing_wait),
         "min_conviction": float(min_conviction),
@@ -937,12 +937,12 @@ def replay_counterfactual_from_log(
         else bool(require_research_accumulate)
     )
     effective_exit_confirm = (
-        int(selection.get("exit_confirm_screens") or 2)
+        int(_logged_float(selection, "exit_confirm_screens", 2))
         if exit_confirm_screens is None
         else int(exit_confirm_screens)
     )
     effective_reentry_cooldown = (
-        int(selection.get("reentry_cooldown_screens") or 1)
+        int(_logged_float(selection, "reentry_cooldown_screens", 1))
         if reentry_cooldown_screens is None
         else int(reentry_cooldown_screens)
     )
@@ -1237,8 +1237,10 @@ def replay_counterfactual_from_archive(
             "use_adjusted_signal": effective_use_adj,
             "require_research_accumulate": effective_req_acc,
             "use_momentum_grace": bool(selection.get("use_momentum_grace", False)),
-            "exit_confirm_screens": int(selection.get("exit_confirm_screens") or 2),
-            "reentry_cooldown_screens": int(selection.get("reentry_cooldown_screens") or 1),
+            "exit_confirm_screens": int(_logged_float(selection, "exit_confirm_screens", 2)),
+            "reentry_cooldown_screens": int(
+                _logged_float(selection, "reentry_cooldown_screens", 1)
+            ),
             "min_rebalance_notional_gbp": float(
                 selection.get("min_rebalance_notional_gbp") or 10.0
             ),
@@ -1865,8 +1867,10 @@ def bootstrap_rebalance_log(
                     selection.get("require_research_accumulate", False)
                 ),
                 use_momentum_grace=bool(selection.get("use_momentum_grace", False)),
-                exit_confirm_screens=int(selection.get("exit_confirm_screens") or 2),
-                reentry_cooldown_screens=int(selection.get("reentry_cooldown_screens") or 1),
+                exit_confirm_screens=int(_logged_float(selection, "exit_confirm_screens", 2)),
+                reentry_cooldown_screens=int(
+                    _logged_float(selection, "reentry_cooldown_screens", 1)
+                ),
                 min_rebalance_notional_gbp=float(
                     selection.get("min_rebalance_notional_gbp") or 10.0
                 ),
