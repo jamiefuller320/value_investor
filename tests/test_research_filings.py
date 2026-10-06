@@ -6886,6 +6886,53 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_bzu_mi_index(tmp_path: Path
     assert "ir_allowlist" in payload["sources_used"]
 
 
+def test_fetch_filings_ir_allowlist_ftse_mib_ten_mi_unmeasured_eng_20261005_01(
+    tmp_path: Path,
+):
+    """eng-20261005-01: TEN.MI unmeasured — IR allowlist when ESEF empty and SEC TEN homonym."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("TEN.MI", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert any(row["period"] == "annual" and "ts-20251231.htm" in row["url"] for row in rows)
+    assert any("f6k_050626fs.htm" in row["url"] for row in rows)
+    assert "TEN.MI" in _BUILTIN_IR_URLS
+    assert "TEN" not in _BUILTIN_IR_URLS
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_ten_mi_index(tmp_path: Path):
+    """Empty TEN.MI filings_index.json must gain IR rows for library ftse_mib measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("TEN.MI", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] >= 2
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 2
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_fetch_filings_ir_allowlist_ten_mi_live_sec_20f_eng_20261005_01():
+    """eng-20261005-01: TEN.MI FY2025 SEC 20-F body passes IR allowlist validation."""
+    rows = fetch_filings_ir_allowlist("TEN.MI")
+    annual = next(row for row in rows if row["period"] == "annual")
+    body = fetch_filing_body(annual["url"])
+    assert body and len(body) > 5000
+    assert "tenaris" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(annual, body, ticker="TEN.MI")
+    assert valid, reason
+
+
 def test_fetch_filings_ir_allowlist_bzu_mi_trading_update_live_eng_20261003_01():
     """eng-20261003-01: BZU.MI third IR PDF clears library thin_body (≥3 bodied filings)."""
     rows = fetch_filings_ir_allowlist("BZU.MI")

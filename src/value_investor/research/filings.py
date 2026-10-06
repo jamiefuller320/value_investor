@@ -412,6 +412,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.posteitaliane.it/files/1476646637138/Annual-Report-2025.pdf",
         "https://www.posteitaliane.it/files/1476642553365/Interim-Report-at-30-June-2025.pdf",
     ],
+    # ftse_mib buy-tier deepen — eng-20261005-01: TEN.MI unmeasured — Yahoo base TEN collides with
+    # Tsakos on SEC; pin Tenaris S.A. FY2025 20-F + Q1 2026 financial statements 6-K (CIK 1190723).
+    "TEN.MI": [
+        "https://www.sec.gov/Archives/edgar/data/1190723/000155485526000490/ts-20251231.htm",
+        "https://www.sec.gov/Archives/edgar/data/1190723/000117184326003164/f6k_050626fs.htm",
+    ],
     "TTE.PA": [
         "https://totalenergies.com/system/files/documents/totalenergies_universal-registration-document-2025_2026_en.pdf",
     ],
@@ -863,6 +869,7 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "HEN3": ("Henkel", "Henkel AG & Co. KGaA"),
     "BZU": ("Buzzi", "Buzzi SpA", "Buzzi S.p.A."),
     "PST": ("Poste Italiane", "Poste Italiane SpA", "Poste Italiane S.p.A."),
+    "TEN": ("Tenaris", "Tenaris S.A.", "Tenaris SA"),
     "ADYEN": ("Adyen N.V.", "Adyen"),
 }
 
