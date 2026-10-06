@@ -1365,9 +1365,7 @@ def preview_automated_plan(
             continue
         price = price_map.get(ticker) or position.avg_cost
         current_rank = int(buy_ranks.get(ticker) or 0)
-        entry_rank = int(
-            fund.rebalance_state.entry_candidate_rank.get(ticker) or current_rank
-        )
+        entry_rank = int(fund.rebalance_state.entry_candidate_rank.get(ticker) or current_rank)
         holds.append(
             {
                 "action": "hold",
@@ -1546,9 +1544,7 @@ def run_automated_rebalance(
     target_tickers = {str(row["ticker"]) for row in targets}
     buy_ranks = conviction_buy_ranks(candidates, use_adjusted_signal=use_adjusted_signal)
     if block_rebuy_while_in_candidates:
-        tick_still_in_candidates_block(
-            fund, candidates, use_adjusted_signal=use_adjusted_signal
-        )
+        tick_still_in_candidates_block(fund, candidates, use_adjusted_signal=use_adjusted_signal)
     price_map = {
         str(row["ticker"]): float(_candidate_price(row) or 0)
         for row in candidates
