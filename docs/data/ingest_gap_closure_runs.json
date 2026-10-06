@@ -19330,8 +19330,118 @@
       },
       "trigger": "stall_slowdown",
       "engineering_task_id": "eng-20261006-02"
+    },
+    {
+      "id": "igc-20261006-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "0968.HK",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "0968.HK",
+          "2331.HK"
+        ],
+        "market_id": "hang_seng",
+        "universe": "library",
+        "critical_path_blocker": "zero_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261006-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-06T14:45:50.346123+00:00",
+      "completed_at": "2026-10-06T14:46:52.315197+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 1,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "0968.HK"
+        ],
+        "results": [
+          {
+            "ticker": "0968.HK",
+            "reason": "zero_body",
+            "before": {
+              "filings_total": 1,
+              "filings_with_body": 0,
+              "indexed_without_body": 1
+            },
+            "after": {
+              "filings_total": 11,
+              "filings_with_body": 10,
+              "indexed_without_body": 1
+            },
+            "improved": false,
+            "regime": "asia_filings",
+            "filings_summary": {
+              "total": 11,
+              "annual": 4,
+              "interim": 6,
+              "trading_update": 1,
+              "other": 0,
+              "with_body": 10,
+              "period_coverage": {
+                "annual": {
+                  "total": 4,
+                  "with_body": 4
+                },
+                "interim": {
+                  "total": 6,
+                  "with_body": 5
+                },
+                "trading_update": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "other": {
+                  "total": 0,
+                  "with_body": 0
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 10,
+              "with_body_after": 10,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "0968.HK",
+            "with_body_before": 0,
+            "with_body_after": 10,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-10-06T07:56:43.362223+00:00",
+  "updated_at": "2026-10-06T14:46:52.315207+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
