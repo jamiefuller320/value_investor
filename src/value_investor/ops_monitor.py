@@ -2081,6 +2081,56 @@ def check_sec_companyfacts_coverage(
     ]
 
 
+def check_hkex_direct_coverage(
+    *,
+    library_root: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only L543: HKEX direct filings coverage on hang_seng memos.
+
+    Writes ``docs/data/hkex_direct_coverage.json``. Never fetches or edits
+    indexes, scoring or memos (``auto_fixable=False``).
+    """
+    from value_investor.hkex_direct_coverage import (
+        DEFAULT_LIBRARY_ROOT,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_hkex_direct_coverage,
+        refresh_hkex_direct_coverage,
+    )
+
+    root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
+    if not root.exists():
+        return []
+    try:
+        payload = refresh_hkex_direct_coverage(
+            root,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+        for finding in ops_findings_from_hkex_direct_coverage(payload)
+    ]
+
+
 def check_lifecycle_maturity_trajectory(
     *,
     board_path: Path | None = None,
@@ -2975,6 +3025,7 @@ def collect_ops_findings(
     findings.extend(check_total_return_view())
     findings.extend(check_hold_period_counterfactual())
     findings.extend(check_sec_companyfacts_coverage())
+    findings.extend(check_hkex_direct_coverage())
     findings.extend(check_lifecycle_maturity_trajectory())
     findings.extend(check_ui_state_reconciliation())
     findings.extend(check_gha_failure_triage())
