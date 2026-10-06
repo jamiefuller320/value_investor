@@ -190,5 +190,120 @@
       "learning_question": "Does holding through 5 confirming screens (vs the primary's 2) beat the primary on total return at fair costs, as the L531 replay suggested (+5.8pp over 19 passes)?",
       "readiness_gate": "Promote only if the twin leads its parent on total return over >=26 weekly screens with parent knobs unchanged since start, and the twin-minus-parent 90% interval excludes zero; otherwise freeze the twin."
     }
-  }
+  },
+  "policy_changes": [
+    {
+      "id": "significance_gate_v1",
+      "effective_at": "2026-10-06T15:24:00.100479+00:00",
+      "summary": "decision-review --apply changes a book's knobs only when track_statistics.json (at most 4 days old, same benchmark) gives that book a positive or negative verdict, i.e. a 90% interval on annualised active return that excludes zero. Missing, stale, thin or noise-level statistics keep the review a proposal; --force does not bypass it. Replaces the legacy rule (thick history + excess beyond +/-2% on the knob epoch), which tuned on noise.",
+      "history_note": "Knob epochs started before effective_at were applied under the legacy threshold rule; do not read their returns as evidence for the knobs they set. History is not rewritten. The primary (ai_judgment_fair) and control (buy_tier_level) never had a legacy apply, so the primary-vs-control comparison is unaffected. Review rows carry apply_policy from this date. Audit counts come from decision_review_history.json, which keeps the last 52 reviews, so they are lower bounds for older books.",
+      "audit": {
+        "ai_judgment": {
+          "reviews": 52,
+          "applied_knob_changes": 15,
+          "first_applied_at": "2026-07-29T07:21:40.797896+00:00",
+          "last_applied_at": "2026-08-26T08:28:55.552465+00:00",
+          "frozen": true
+        },
+        "ai_judgment_calibrated": {
+          "reviews": 32,
+          "applied_knob_changes": 0,
+          "first_applied_at": null,
+          "last_applied_at": null,
+          "frozen": true
+        },
+        "ai_judgment_calibrated_r2": {
+          "reviews": 29,
+          "applied_knob_changes": 0,
+          "first_applied_at": null,
+          "last_applied_at": null,
+          "frozen": true
+        },
+        "ai_judgment_calibrated_r3": {
+          "reviews": 29,
+          "applied_knob_changes": 0,
+          "first_applied_at": null,
+          "last_applied_at": null,
+          "frozen": true
+        },
+        "ai_judgment_exclusion_u4": {
+          "reviews": 20,
+          "applied_knob_changes": 0,
+          "first_applied_at": null,
+          "last_applied_at": null,
+          "frozen": true
+        },
+        "ai_judgment_fair": {
+          "reviews": 20,
+          "applied_knob_changes": 0,
+          "first_applied_at": null,
+          "last_applied_at": null,
+          "frozen": false
+        },
+        "ai_judgment_hold5_fair": {
+          "reviews": 0,
+          "applied_knob_changes": 0,
+          "first_applied_at": null,
+          "last_applied_at": null,
+          "frozen": false
+        },
+        "buy_tier_level": {
+          "reviews": 20,
+          "applied_knob_changes": 0,
+          "first_applied_at": null,
+          "last_applied_at": null,
+          "frozen": false
+        },
+        "buy_tier_level_dca": {
+          "reviews": 9,
+          "applied_knob_changes": 0,
+          "first_applied_at": null,
+          "last_applied_at": null,
+          "frozen": false
+        },
+        "graduated_allocation": {
+          "reviews": 20,
+          "applied_knob_changes": 16,
+          "first_applied_at": "2026-09-10T08:29:55.464805+00:00",
+          "last_applied_at": "2026-10-05T08:34:35.163787+00:00",
+          "frozen": false
+        },
+        "momentum_grace": {
+          "reviews": 48,
+          "applied_knob_changes": 10,
+          "first_applied_at": "2026-08-11T08:28:01.016476+00:00",
+          "last_applied_at": "2026-10-05T08:34:34.408577+00:00",
+          "frozen": true
+        },
+        "rules": {
+          "reviews": 52,
+          "applied_knob_changes": 12,
+          "first_applied_at": "2026-07-28T07:22:42.849665+00:00",
+          "last_applied_at": "2026-08-12T09:36:42.012926+00:00",
+          "frozen": true
+        },
+        "rules_fair": {
+          "reviews": 20,
+          "applied_knob_changes": 0,
+          "first_applied_at": null,
+          "last_applied_at": null,
+          "frozen": true
+        },
+        "still_in_buy_set": {
+          "reviews": 4,
+          "applied_knob_changes": 0,
+          "first_applied_at": null,
+          "last_applied_at": null,
+          "frozen": true
+        },
+        "technical": {
+          "reviews": 20,
+          "applied_knob_changes": 12,
+          "first_applied_at": "2026-09-10T08:29:55.700847+00:00",
+          "last_applied_at": "2026-10-02T08:29:49.290490+00:00",
+          "frozen": true
+        }
+      }
+    }
+  ]
 }
