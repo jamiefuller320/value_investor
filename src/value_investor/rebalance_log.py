@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import json
-from datetime import UTC, datetime, timedelta
+from collections.abc import Callable
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -813,6 +814,32 @@ def resolve_replay_candidates(
     return candidates
 
 
+HeldPriceRatio = Callable[[str, date, date], float | None]
+
+
+def _entry_day(entry: dict[str, Any]) -> date | None:
+    parsed = _parse_iso_datetime(_entry_sort_key(entry))
+    return parsed.date() if parsed is not None else None
+
+
+def _scaled_last_price(
+    ticker: str,
+    day: date | None,
+    last_seen: dict[str, tuple[date, float]],
+    ratio: HeldPriceRatio | None,
+) -> float | None:
+    seen = last_seen.get(ticker)
+    if ratio is None or seen is None or day is None:
+        return None
+    seen_day, seen_price = seen
+    if seen_day >= day:
+        return seen_price
+    scale = ratio(ticker, seen_day, day)
+    if scale is None or scale <= 0:
+        return None
+    return seen_price * float(scale)
+
+
 def _merge_candidate_price_maps(*pools: list[dict[str, Any]]) -> dict[str, float]:
     prices: dict[str, float] = {}
     for pool in pools:
@@ -835,9 +862,18 @@ def replay_counterfactual_from_log(
     lookback_days: int | None = None,
     as_of: datetime | None = None,
     actual_fund: PaperFund | None = None,
+    use_logged_knobs: bool = False,
+    held_price_ratio: HeldPriceRatio | None = None,
 ) -> dict[str, Any] | None:
     """
     Replay logged rebalance passes with alternate knobs on a shadow fund.
+
+    ``use_logged_knobs`` replays each pass with the max_positions / conviction /
+    sector / timing knobs logged for that pass (only explicit overrides such as
+    ``exit_confirm_screens`` differ), so the baseline reproduces the live book.
+    ``held_price_ratio(ticker, from_day, to_day)`` scales the last logged price of a
+    held name that is missing from a pass's candidates; otherwise it is marked
+    (and sold) at avg cost.
 
     When ``screen_buy_tier`` is present, AI-gate counterfactuals can widen the
     replay pool to raw screen buy-tier names (or force via ``candidate_source``).
@@ -866,9 +902,24 @@ def replay_counterfactual_from_log(
 
     replay_trades = 0
     used_screen_pool = False
+    last_seen: dict[str, tuple[date, float]] = {}
+    held_fills = 0
+    held_misses = 0
     for entry in acted:
         mode = str(entry.get("strategy_mode") or fund.config.mode)
         screen_pool = list(entry.get("screen_buy_tier") or [])
+        pass_day = _entry_day(entry)
+        pass_prices = _merge_candidate_price_maps(list(entry.get("candidates") or []), screen_pool)
+        held_prices: dict[str, float] = {}
+        for ticker in fund.holdings:
+            if ticker in pass_prices:
+                continue
+            filled = _scaled_last_price(ticker, pass_day, last_seen, held_price_ratio)
+            if filled is None:
+                held_misses += 1
+            else:
+                held_prices[ticker] = filled
+                held_fills += 1
         candidates = resolve_replay_candidates(
             entry,
             use_adjusted_signal=use_adjusted_signal,
@@ -889,12 +940,17 @@ def replay_counterfactual_from_log(
             if screen_tickers and replay_tickers == screen_tickers:
                 used_screen_pool = True
         when = str((entry.get("gate") or {}).get("local_time") or entry.get("logged_at") or "")
+        logged = dict(entry.get("selection") or {}) if use_logged_knobs else {}
         kwargs = _selection_kwargs_for_replay(
             entry,
-            max_positions=max_positions,
-            skip_timing_wait=skip_timing_wait,
-            min_conviction=min_conviction,
-            sector_cap=sector_cap,
+            max_positions=(
+                int(_logged_float(entry, "max_positions", max_positions))
+                if use_logged_knobs
+                else max_positions
+            ),
+            skip_timing_wait=bool(logged.get("skip_timing_wait", skip_timing_wait)),
+            min_conviction=_logged_float(logged, "min_conviction", min_conviction),
+            sector_cap=_logged_float(logged, "sector_cap", sector_cap),
             use_adjusted_signal=use_adjusted_signal,
             require_research_accumulate=require_research_accumulate,
             exit_confirm_screens=exit_confirm_screens,
@@ -904,13 +960,32 @@ def replay_counterfactual_from_log(
         if mode == "technical":
             executed = run_technical_pass(fund, candidates, acted_at=when or None)
         else:
-            executed = run_automated_rebalance(fund, candidates, acted_at=when or None, **kwargs)
+            executed = run_automated_rebalance(
+                fund,
+                candidates,
+                acted_at=when or None,
+                held_prices=held_prices or None,
+                **kwargs,
+            )
         replay_trades += len(executed)
+        if pass_day is not None:
+            for ticker, price in pass_prices.items():
+                last_seen[ticker] = (pass_day, price)
 
     prices = _merge_candidate_price_maps(
         list(last.get("candidates") or []),
         list(last.get("screen_buy_tier") or []),
     )
+    end_day = _entry_day(last)
+    for ticker in fund.holdings:
+        if ticker in prices:
+            continue
+        filled = _scaled_last_price(ticker, end_day, last_seen, held_price_ratio)
+        if filled is None:
+            held_misses += 1
+        else:
+            prices[ticker] = filled
+            held_fills += 1
     for row in last.get("holdings_after") or []:
         if isinstance(row, dict):
             ticker = str(row.get("ticker") or "")
@@ -971,6 +1046,9 @@ def replay_counterfactual_from_log(
         "simulated_total_costs": round(sim_costs, 2),
         "simulated_cost_drag": round(sim_drag, 4),
         "simulated_trade_count": replay_trades,
+        "used_logged_knobs": bool(use_logged_knobs),
+        "held_price_fills": held_fills,
+        "held_price_avg_cost_fallbacks": held_misses,
         "limitations": (
             "Replay covers logged rebalance passes only; pre-logging history "
             "needs archive lab (L111). Names never in screen_buy_tier (hold/avoid "

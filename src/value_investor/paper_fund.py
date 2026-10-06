@@ -1365,9 +1365,7 @@ def preview_automated_plan(
             continue
         price = price_map.get(ticker) or position.avg_cost
         current_rank = int(buy_ranks.get(ticker) or 0)
-        entry_rank = int(
-            fund.rebalance_state.entry_candidate_rank.get(ticker) or current_rank
-        )
+        entry_rank = int(fund.rebalance_state.entry_candidate_rank.get(ticker) or current_rank)
         holds.append(
             {
                 "action": "hold",
@@ -1523,8 +1521,13 @@ def run_automated_rebalance(
     still_in_buy_set_hold: bool = False,
     rank_drop_exit_min: int = DEFAULT_RANK_DROP_EXIT_MIN,
     block_rebuy_while_in_candidates: bool = False,
+    held_prices: dict[str, float] | None = None,
 ) -> list[PaperTrade]:
-    """Equal-weight rebalance into top buy-tier names, constrained by cash + max positions."""
+    """Equal-weight rebalance into top buy-tier names, constrained by cash + max positions.
+
+    ``held_prices`` marks holdings absent from ``candidates`` (replays that hold
+    names the live book had already sold); without it they fall back to avg cost.
+    """
     if fund.config.mode != "automated":
         raise ValueError("Automated rebalance requires an automated fund")
     when = acted_at or _utcnow_iso()
@@ -1541,14 +1544,15 @@ def run_automated_rebalance(
     target_tickers = {str(row["ticker"]) for row in targets}
     buy_ranks = conviction_buy_ranks(candidates, use_adjusted_signal=use_adjusted_signal)
     if block_rebuy_while_in_candidates:
-        tick_still_in_candidates_block(
-            fund, candidates, use_adjusted_signal=use_adjusted_signal
-        )
+        tick_still_in_candidates_block(fund, candidates, use_adjusted_signal=use_adjusted_signal)
     price_map = {
         str(row["ticker"]): float(_candidate_price(row) or 0)
         for row in candidates
         if _candidate_price(row)
     }
+    for ticker, price in (held_prices or {}).items():
+        if ticker in fund.holdings and ticker not in price_map and price and price > 0:
+            price_map[ticker] = float(price)
     for ticker, position in fund.holdings.items():
         if ticker not in price_map and position.avg_cost > 0:
             price_map[ticker] = float(position.avg_cost)
