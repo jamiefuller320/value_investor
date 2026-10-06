@@ -1,9 +1,8 @@
 {
-  "run_at": "2026-10-05T16:41:56.937398+00:00",
+  "run_at": "2026-10-06T14:28:41.605824+00:00",
   "market_id": "smi",
   "targets": [
-    "NOVN.SW",
-    "AMRZ.SW"
+    "NOVN.SW"
   ],
   "target_details": [
     {
@@ -11,14 +10,6 @@
       "priority_score": 19.137500000000003,
       "filings_total": 35,
       "filings_with_body": 34,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
-    },
-    {
-      "ticker": "AMRZ.SW",
-      "priority_score": 14.5344,
-      "filings_total": 5,
-      "filings_with_body": 4,
       "indexed_without_body": 1,
       "reason": "indexed_without_body"
     }
@@ -85,79 +76,16 @@
         "ir_metadata_reconciled": 0,
         "note": "no missing IR allowlist bodies"
       }
-    },
-    {
-      "ticker": "AMRZ.SW",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 5,
-        "filings_with_body": 4,
-        "indexed_without_body": 1
-      },
-      "after": {
-        "filings_total": 5,
-        "filings_with_body": 5,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 5,
-        "annual": 1,
-        "interim": 4,
-        "trading_update": 0,
-        "other": 0,
-        "with_body": 5,
-        "period_coverage": {
-          "annual": {
-            "total": 1,
-            "with_body": 1
-          },
-          "interim": {
-            "total": 4,
-            "with_body": 4
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 0,
-            "with_body": 0
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 5,
-        "with_body_after": 5,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
     }
   ],
   "improved": [
-    "NOVN.SW",
-    "AMRZ.SW"
+    "NOVN.SW"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-05T16:41:25.835795+00:00",
+    "snapshot_at": "2026-10-06T14:28:07.630038+00:00",
     "market_id": "smi",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -165,7 +93,7 @@
     "thin_body_buy_tier": 2,
     "indexed_without_body": 0,
     "bodies_min": 2,
-    "bodies_median": 4,
+    "bodies_median": 5,
     "bodies_max": 34,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -189,7 +117,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-05T16:41:56.927659+00:00",
+    "snapshot_at": "2026-10-06T14:28:36.128973+00:00",
     "market_id": "smi",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -256,7 +184,7 @@
   },
   "critical_path": {
     "market_id": "smi",
-    "assessed_at": "2026-10-05T16:41:26.166092+00:00",
+    "assessed_at": "2026-10-06T14:28:07.953532+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -281,9 +209,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 30.440448048999997,
+  "used_seconds": 27.82277406899999,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3569.559551951,
+  "leftover_seconds": 3572.177225931,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -291,7 +219,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "smi",
-    "updated_at": "2026-10-05T16:41:56.929145+00:00",
+    "updated_at": "2026-10-06T14:28:36.130518+00:00",
     "exhausted": true,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
@@ -305,7 +233,8 @@
         "filings_total": 2,
         "filings_with_body": 2,
         "indexed_without_body": 0,
-        "thin": true
+        "thin": true,
+        "source_surface": "euro_filings"
       },
       {
         "ticker": "RO.SW",
@@ -316,7 +245,8 @@
         "filings_total": 2,
         "filings_with_body": 2,
         "indexed_without_body": 0,
-        "thin": true
+        "thin": true,
+        "source_surface": "euro_filings"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -328,6 +258,7 @@
       "RO.SW"
     ],
     "unparked_leftover": [],
+    "surface_released": [],
     "path": "docs/data/library/markets/smi/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
@@ -361,7 +292,15 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261004-07"
+    "task_ids": [],
+    "task_count": 138,
+    "market_id": "nasdaq100",
+    "hunter_ticker": "PDD",
+    "hunter_tickers": [
+      "PDD"
+    ],
+    "priority_score": 12.0,
+    "wait_behind_task_id": "",
+    "leftover_key_bodies": false
   }
 }
