@@ -7,7 +7,9 @@ One committed file per paper root, ``assessment_model.json``, records:
 - ``frozen_tracks``: books that stopped trading, with the date, reason, the book
   that supersedes them and their final NAV. A frozen book keeps its files and
   history; daily paper-auto and decision-review skip it and no new shadows spawn
-  from a frozen parent.
+  from a frozen parent;
+- ``twins``: cold-start books that vary one knob of an active parent, with the
+  parent's knobs at start so later parent tuning shows up as a confound.
 
 Roots without the file (market shards) keep the legacy AI-judgment primary and
 rules control.
@@ -56,6 +58,45 @@ def frozen_tracks(base_dir: Path) -> dict[str, dict[str, Any]]:
 
 def is_track_frozen(base_dir: Path, track_id: str) -> bool:
     return str(track_id) in frozen_tracks(base_dir)
+
+
+def twins(base_dir: Path) -> dict[str, dict[str, Any]]:
+    rows = load_assessment_model(base_dir).get("twins") or {}
+    return {str(k): dict(v) for k, v in rows.items() if isinstance(v, dict)}
+
+
+def register_twin(
+    base_dir: Path,
+    *,
+    track_id: str,
+    parent_track_id: str,
+    varied: dict[str, Any],
+    parent_knobs_at_start: dict[str, Any],
+    learning_question: str,
+    readiness_gate: str,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Record a cold-start twin of an active book (idempotent: first record wins)."""
+    base_dir = Path(base_dir)
+    if is_track_frozen(base_dir, parent_track_id):
+        raise ValueError(f"Parent {parent_track_id!r} is frozen; twins need an active parent")
+    model = load_assessment_model(base_dir)
+    rows = dict(model.get("twins") or {})
+    if track_id not in rows:
+        rows[track_id] = {
+            "started_at": (now or datetime.now(UTC)).isoformat(),
+            "parent_track": parent_track_id,
+            "varied": dict(varied),
+            "parent_knobs_at_start": dict(parent_knobs_at_start),
+            "learning_question": learning_question,
+            "readiness_gate": readiness_gate,
+        }
+    model["twins"] = dict(sorted(rows.items()))
+    model.setdefault("schema_version", SCHEMA_VERSION)
+    (base_dir / ASSESSMENT_MODEL_FILENAME).write_text(
+        json.dumps(model, indent=2) + "\n", encoding="utf-8"
+    )
+    return model["twins"][track_id]
 
 
 def _final_record(track_dir: Path) -> dict[str, Any]:
@@ -129,6 +170,7 @@ def apply_assessment_model(
         "switched_at": switches[-1]["at"] if switches else model.get("switched_at"),
         "switches": switches,
         "frozen_tracks": dict(sorted(frozen.items())),
+        "twins": dict(model.get("twins") or {}),
         "note": (
             "Frozen books keep their history and stop trading. Do not edit their "
             "configs or funds; start a twin instead."

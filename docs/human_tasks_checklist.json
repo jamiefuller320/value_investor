@@ -219,6 +219,14 @@
           "doc_anchor": "assessment-model-and-frozen-tracks"
         },
         {
+          "id": "sunday-hold-buffer-twin",
+          "title": "Hold-buffer twin vs primary (L541)",
+          "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_hold5_fair (exit_confirm_screens 5) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote the longer buffer only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Never edit either book mid-flight.",
+          "automated": false,
+          "doc_path": "docs/ops/assessment-scoreboard.md",
+          "doc_anchor": "twins"
+        },
+        {
           "id": "sunday-spawn-fair-twins",
           "title": "Spawn Suite B twins only for recommend experiments",
           "summary": "If experiment_assessment has recommend calibration/exclusion/experimental tracks, dry-run then optionally apply ftse-trading-costs spawn-fair-twins (max 2). Never auto-fork every shadow (N53). Zero recommend rows is a no-op.",
