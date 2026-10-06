@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-05T07:37:59.923691+00:00
+Track: `buy_tier_level` · updated 2026-10-06T00:46:54.329877+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **14** / 27 (52% count, 48% NAV)
+- Losers: **14** / 25 (56% count, 52% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -129,19 +129,6 @@ Track: `buy_tier_level` · updated 2026-10-05T07:37:59.923691+00:00
 - data_quality 1.00
 - conviction 52%
 
-### TUA.AX — weakening / watch_review (-3.6%)
-- left buy tier (hold)
-- research verdict caution
-- conviction 16% below intact floor
-- cheapness family still passes
-- data_quality 0.95
-
-### CSC.AX — weakening / watch_review (-3.5%)
-- left buy tier (hold)
-- conviction 30% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### WDS.AX — intact / hold_tolerate (-3.4%)
 - still buy
 - research accumulate
@@ -160,17 +147,16 @@ Track: `buy_tier_level` · updated 2026-10-05T07:37:59.923691+00:00
 - still buy
 - cheapness family still passes
 - data_quality 0.90
-- conviction 38%
+- conviction 45%
 
-### ARB.AX — intact / hold_tolerate (+0.0%)
+### ARB.AX — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 34% below intact floor
 - still buy
-- research accumulate
 - cheapness family still passes
-- data_quality 0.95
-- conviction 38%
 
 ### PRN.AX — weakening / watch_review (+0.0%)
-- conviction 25% below intact floor
+- conviction 29% below intact floor
 - still buy
 - research accumulate
 
