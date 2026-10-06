@@ -11,7 +11,7 @@ Screen signals stay frozen (N3). Knobs nudge slowly when history is thick.
 
 | Knob | Default | Role |
 |------|---------|------|
-| `max_positions` | 5 | Hard sleeve cap (bounds 3–8) |
+| `max_positions` | 5 | Hard sleeve cap (bounds 3–8; floor 4 on `graduated_allocation`) |
 | `skip_timing_wait` | true | Drop `timing_signal=wait` from new buys |
 | `min_conviction` | 0.0 | Conviction floor (bounds 0–0.6) |
 | `sector_cap` | 0.30 | Max equal-weight sleeves per *known* sector |
@@ -108,6 +108,12 @@ Daily ops-monitor raises **Decision-review knobs saturated at bounds** (warn,
 `auto_fixable=False`) — the driver is outside the knob's reach (for example the
 3% stress cost model or rank-flip churn), so the fix is a policy change or a new
 cold-start epoch, not another knob step.
+
+Track-sync floors are clamp bounds too. Paper-auto track sync holds
+`graduated_allocation` at `max_positions` ≥ `GRADUATED_ALLOCATION_MIN_POSITIONS`
+(4), so decision-review clamps to the same floor (`max_positions_bounds_for`).
+Before this, the review applied 3 every weekday, the next sync reset it to 4,
+and each no-op apply restarted the knob epoch.
 
 ## Counterfactual preview
 
