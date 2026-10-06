@@ -1,6 +1,6 @@
 # Coca-Cola Europacific Partners PLC (CCEP) — Research memo
 
-_Version 1 · Updated 2026-09-18T17:28:41.575714+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-10-06T07:43:26.723215+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,6 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: Filings confirm FY25 earnings growth, H1 2026 trading in line with reaffirmed guidance and strong FCF targets, supporting the buy signal despite material net debt, regulatory or packaging pressures and macro or geopolitical uncertainty.
-RiskTags: regulatory, cyclical, leverage, customer_concentration, governance, pension, litigation, competitive
+Confidence: 0.70
+Rationale: FY25 20-F and H1 26 results show comparable EPS and revenue growth, FY26 comp FCF guidance ≥€1.7bn, and filing FCF comfortably covers dividends; the buy screen has no populated metrics and TTM FCF is unverified (Yahoo quarterly cash flow...
+RiskTags: leverage, regulatory, cyclical, competitive, customer_concentration

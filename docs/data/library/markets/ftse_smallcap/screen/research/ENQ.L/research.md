@@ -1,6 +1,6 @@
 # EnQuest PLC (ENQ.L) — Research memo
 
-_Version 1 · Updated 2026-10-05T07:24:26.926274+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-10-06T07:42:59.140896+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,6 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: caution
 Risk: high
-Confidence: 0.68
-Rationale: H1 2026 filings show stronger adjusted FCF ($71.3m) and ~1.0× net debt/EBITDA, supporting cheapness, but statutory losses, weak screen liquidity/leverage, NSTA sanctions, and pending Malaysia funding temper the buy signal.
-RiskTags: leverage, cyclical, regulatory, liquidity, other
+Confidence: 0.62
+Rationale: Filings show strong ops and H1 2026 adjusted FCF, but FY2025 adjusted FCF was $8.7m vs ~$35m dividends, net debt rose to $517m pre-Malaysia completion, and UK fiscal/NSTA issues temper the quantitative buy.
+RiskTags: cyclical, leverage, regulatory, liquidity, other
