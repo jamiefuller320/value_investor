@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T09:13:02+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T09:45:43+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -240,6 +240,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N185 | **Raise Sunday FTSE --research-docs cap from 12** | Do not widen DEFAULT_RESEARCH_WEEKLY_CAP to drain admitted-book no_memo warns. Last Sunday created=2/updated=22; FTSE path-incomplete is 0; 17/19 flip-lag no_memo names already have a sibling-market memo. Cap 12 is the holdings rememo budget inside the 360-min Sunday job. | FTSE warn_open blocking_stage=no_memo on buy-effective names with index+key bodies after two prefer-first Sundays, or email-report regularly finishes with unused wall-clock while holdings memo_recent is red. |
 | N186 | **AI-adjacent -4w first-memo prefer-first ramp** | Do not add a calendar trigger that boosts Layer C first-memo when a market is ~4 weeks from learning_ready/Phase 3/AI-fork. Those clocks diverge; euro (sole weekly AI paper) already has 0 true unique buy-tier first-memo debt after sibling join; N114 already prefers true misses. | Human euro_depth filing/memo parity review (monthly-euro-depth-parity) is imminent AND equal-support first_time_memo_count on the capacity-1 AI book stays above Layer C true-miss drain for >=2 prefer-first Sundays, or when flipping phase1_require_ai_beat_rules / opening shard AI-judgment. |
 | N187 | **Do not scrape SEDAR+ for tsx_announcements** | TSX discovery is Google News site:sedarplus.ca plus SEC 40-F/6-K for dual-listed names. SEDAR+ has no public API and bot protection; for TSX 60 most names are SEC dual-listed, so prefer the EDGAR supplement and IR allowlist seeds. | SEDAR+ publishes a public API or bulk feed, or more than two non-SEC-listed TSX buy-tier names stay zero-body after IR seeds |
+| N189 | **AI-gate twin book with a binding gate (no conviction floor)** | ai_judgment and rules held identical names on 31/31 logged days: min_conviction 0.6 leaves 5-12 names, all research 'accumulate', so the AI gate never binds. A twin where the gate binds would test it, but a cross-sectional accumulate-vs-not instrument on weekly snapshots answers the same question faster without another 3-name book. | Weekly snapshots carry research_verdict and the cross-sectional AI-gate spread shows a 90% interval above zero |
 
 ---
 
