@@ -1124,6 +1124,7 @@ def test_check_workflow_freshness_suppresses_failure_when_recovery_in_flight():
 @patch("value_investor.ops_monitor.check_phase_b_producer_progress", return_value=[])
 @patch("value_investor.ops_monitor.check_thin_memo_learning_gap", return_value=[])
 @patch("value_investor.ops_monitor.check_lifecycle_maturity_trajectory", return_value=[])
+@patch("value_investor.ops_monitor.check_hold_period_counterfactual", return_value=[])
 @patch("value_investor.ops_monitor.check_total_return_view", return_value=[])
 @patch("value_investor.ops_monitor.check_track_statistics", return_value=[])
 @patch("value_investor.ops_monitor.check_combined_tagged_learning", return_value=[])
@@ -1147,6 +1148,7 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
     _tagged,
     _track_stats,
     _total_return,
+    _hold_period,
     _lifecycle,
     _thin_memo,
     _phase_b,
@@ -1216,6 +1218,7 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
 @patch("value_investor.ops_monitor.check_phase_b_producer_progress", return_value=[])
 @patch("value_investor.ops_monitor.check_thin_memo_learning_gap", return_value=[])
 @patch("value_investor.ops_monitor.check_lifecycle_maturity_trajectory", return_value=[])
+@patch("value_investor.ops_monitor.check_hold_period_counterfactual", return_value=[])
 @patch("value_investor.ops_monitor.check_total_return_view", return_value=[])
 @patch("value_investor.ops_monitor.check_track_statistics", return_value=[])
 @patch("value_investor.ops_monitor.check_combined_tagged_learning", return_value=[])
@@ -1239,6 +1242,7 @@ def test_run_ops_monitor_writes_status(
     _tagged,
     _track_stats,
     _total_return,
+    _hold_period,
     _lifecycle,
     _thin_memo,
     _phase_b,

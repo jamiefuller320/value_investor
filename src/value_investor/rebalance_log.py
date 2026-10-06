@@ -976,12 +976,6 @@ def replay_counterfactual_from_log(
         list(last.get("candidates") or []),
         list(last.get("screen_buy_tier") or []),
     )
-    for row in last.get("holdings_after") or []:
-        if isinstance(row, dict):
-            ticker = str(row.get("ticker") or "")
-            avg = row.get("avg_cost")
-            if ticker and ticker not in prices and avg is not None and float(avg) > 0:
-                prices[ticker] = float(avg)
     end_day = _entry_day(last)
     for ticker in fund.holdings:
         if ticker in prices:
@@ -992,6 +986,12 @@ def replay_counterfactual_from_log(
         else:
             prices[ticker] = filled
             held_fills += 1
+    for row in last.get("holdings_after") or []:
+        if isinstance(row, dict):
+            ticker = str(row.get("ticker") or "")
+            avg = row.get("avg_cost")
+            if ticker and ticker not in prices and avg is not None and float(avg) > 0:
+                prices[ticker] = float(avg)
     sim_perf = fund.performance(prices)
     sim_costs = sum(float(t.cost or 0.0) for t in fund.trades)
     baseline_nav = float(first.get("nav_before") or 0.0)
