@@ -292,11 +292,14 @@ def remediate_automation_waste(
     apply: bool = True,
     now: datetime | None = None,
     policy: dict[str, Any] | None = None,
+    stuck_pr_count: int | None = None,
 ) -> tuple[list[dict[str, Any]], list[TrafficAction], dict[str, Any]]:
     """PM v1: pause eng dispatch and park tasks stuck in Composer reburn loops.
 
-    Also clears a prior automation-waste hold when no remediable signal remains,
-    so stuck-PR resume logic can proceed after the idle window.
+    Also clears a prior automation-waste hold when no remediable signal remains.
+    When that was the only pause reason and no stuck PRs remain, drop
+    ``pause_active`` in the same pass so leftover-hunter compile / eng dispatch
+    do not wait for a later controller cycle.
     """
     from value_investor.automation_waste import collect_automation_waste_signals
     from value_investor.engineering_recovery import (
@@ -340,6 +343,17 @@ def remediate_automation_waste(
                 state["pause_reasons"] = reasons
             else:
                 state.pop("pause_reasons", None)
+            live_stuck = int(
+                stuck_pr_count if stuck_pr_count is not None else (state.get("stuck_pr_count") or 0)
+            )
+            if not reasons and live_stuck == 0:
+                # Same-cycle resume: do not leave pause_active=true with empty
+                # reasons after waste clear (blocks hunters / HEI.DE dispatch).
+                state["pause_active"] = False
+                state["resumed_at"] = now.isoformat()
+                state.pop("pause_started_at", None)
+                state.pop("resume_pending", None)
+                state["last_change"] = {"resumed": True}
             state["last_action_at"] = now.isoformat()
             _save_traffic_control_state(state, tasks_path=tasks_path, apply=apply)
             actions.append(
@@ -1880,6 +1894,22 @@ def run_project_traffic(
         include_ci_followup=True,
     )
     prior_pause = is_traffic_pause_active(tasks_path=tasks_path)
+    actions: list[TrafficAction] = []
+
+    # Waste before stuck-PR pause so a cleared reburn hold can resume in this
+    # same pass (evaluate_traffic_pause used to run first and leave pause_active).
+    _waste_signals, waste_actions, _waste_state = remediate_automation_waste(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        recent_agent_failures=recent_agent_failures,
+        cursor_workflow_failure_counts=cursor_workflow_failure_counts,
+        apply=apply,
+        now=now,
+        policy=policy,
+        stuck_pr_count=len(stuck),
+    )
+    actions.extend(waste_actions)
+
     state = evaluate_traffic_pause(
         stuck_prs=stuck,
         tasks_path=tasks_path,
@@ -1887,7 +1917,6 @@ def run_project_traffic(
         now=now,
         policy=policy,
     )
-    actions: list[TrafficAction] = []
     if bool(state.get("pause_active")) and not prior_pause:
         actions.append(
             TrafficAction(
@@ -1935,19 +1964,6 @@ def run_project_traffic(
         apply=apply,
     )
     actions.extend(workflow_cancel_actions)
-
-    _waste_signals, waste_actions, waste_state = remediate_automation_waste(
-        tasks_path=tasks_path,
-        open_prs=open_prs,
-        recent_agent_failures=recent_agent_failures,
-        cursor_workflow_failure_counts=cursor_workflow_failure_counts,
-        apply=apply,
-        now=now,
-        policy=policy,
-    )
-    actions.extend(waste_actions)
-    if waste_state.get("pause_active") or waste_state.get("automation_waste_active") is False:
-        state = waste_state
 
     digest = None
     if write_digest and policy.get("digest_enabled", True):

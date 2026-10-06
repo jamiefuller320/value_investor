@@ -130,6 +130,13 @@ does not start a second agent while an open PR already touches the deferred stor
 | `pause_on_automation_waste` | true | Pause eng dispatch when remediable waste fires |
 | `park_on_automation_waste` | true | Park the burning open task (`parked_policy=reburn_loop`) |
 
+When remediable waste **clears** and no stuck monitored PRs remain, dispatch
+resumes **in the same traffic pass**. `run_project_traffic` remediates waste
+**before** `evaluate_traffic_pause`, and waste-clear itself drops `pause_active`
+if it was the only reason. Do not leave `pause_active=true` with empty
+`pause_reasons` (that blocks leftover-hunter compile and the next open task
+until a later cron).
+
 ## Schedule
 
 | Trigger | When |
@@ -254,7 +261,7 @@ project-traffic share a registry in `automation_waste.py`:
 
 | Signal | Trigger | PM v1 action |
 |--------|---------|--------------|
-| `eng_agent_reburn` | ≥3 `engineering-agent` failures in 6h while open tasks remain and no eng PR in flight | Pause dispatch + park burning task (`reburn_loop`) |
+| `eng_agent_reburn` | ≥3 `engineering-agent` failures in 6h while open tasks remain and no eng PR in flight | Pause dispatch + park burning task (`reburn_loop`). When the signal is gone and stuck PR count is 0, **resume same cycle**. |
 | `cursor_workflow_fail_loop` | ≥3 failures in 12h on other Cursor-spend workflows (analysis-review, paper-learning-review, …) | Record on handoff / digest (no auto-rerun from traffic) |
 
 Root-cause companion: `engineering-agent.yml` commits parks to `main` via

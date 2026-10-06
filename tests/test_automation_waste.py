@@ -168,7 +168,9 @@ def test_remediate_clears_waste_hold_when_queue_empty(tmp_path: Path):
     assert signals == []
     assert state.get("automation_waste_active") is False
     assert PAUSE_REASON_AUTOMATION_WASTE not in (state.get("pause_reasons") or [])
+    assert state.get("pause_active") is False
     assert any("cleared" in a.detail for a in actions)
+    assert is_traffic_pause_active(tasks_path=tasks_path) is False
 
 
 def test_planned_rectification_maps_waste_finding():
