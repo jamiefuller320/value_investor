@@ -22,7 +22,7 @@
         {
           "id": "weekday-paper-auto-runs",
           "title": "Paper-auto + decision-review apply",
-          "summary": "Runs all active learning tracks (frozen tracks in paper_automation/assessment_model.json are skipped), refreshes overlay, appends rebalance_log, applies clamped knobs when history is thick. Shadows and the cohort lab are observe-only (no --apply); endurance ledger refreshes after review.",
+          "summary": "Runs all active learning tracks (frozen tracks in paper_automation/assessment_model.json are skipped), refreshes overlay, appends rebalance_log, applies clamped knobs only when history is thick and the significance gate passes (significance_gate_v1: track_statistics verdict positive/negative; --force does not bypass). Shadows and the cohort lab are observe-only (no --apply); endurance ledger refreshes after review.",
           "automated": true,
           "doc_path": "docs/ops/decision-review.md",
           "doc_anchor": "commands"

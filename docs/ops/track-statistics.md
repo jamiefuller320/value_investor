@@ -52,6 +52,11 @@ books on common dates: `ai_vs_rules` (Suite A) and `ai_fair_vs_rules_fair`
 published win the interval does not back. Response: do not cite the claim in
 progress reports or analysis-review, and do not promote knobs or tracks on it.
 
+Decision-review uses each track's `verdict` here as its **apply gate**
+(`significance_gate_v1`): knobs change only on `positive` / `negative`, and a
+missing or stale (>4 days) file keeps every review a proposal. See
+[`decision-review.md`](decision-review.md#significance-gate-significance_gate_v1).
+
 ## Drill-down
 
 ```python

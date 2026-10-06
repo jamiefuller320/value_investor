@@ -5,7 +5,9 @@ at decision time; confirmation is **excess return after costs vs the market**
 (^FTSE), with a **rules** book as control. See
 [`primary-learning-track.md`](primary-learning-track.md).
 
-Screen signals stay frozen (N3). Knobs nudge slowly when history is thick.
+Screen signals stay frozen (N3). Knobs nudge slowly, and only when the book's
+active return is statistically real (see
+[Significance gate](#significance-gate-significance_gate_v1)).
 
 ## Knobs
 
@@ -38,7 +40,8 @@ ftse-decision-review --output-dir docs/data/paper_automation --tracks all --appl
 
 Weekday `paper-auto.yml` seeds prior state, refreshes research overlay on
 `docs/data/latest.json`, runs all three tracks, then
-`ftse-decision-review --tracks all --apply`. Thin history stays propose-only.
+`ftse-decision-review --tracks all --apply`. Thin history, or a result that
+does not pass the significance gate, stays propose-only.
 
 **Churn guards** (per-track `config.json`, not decision-review knobs yet):
 
@@ -100,6 +103,48 @@ Proposals are still written during cooldown (`note` reports days remaining) but
 are not applied.
 
 `epoch.age_days` is published in `metrics.epoch`.
+
+### Significance gate (`significance_gate_v1`)
+
+The thresholds above (excess beyond ±2%, cost drag, cash) decide **what** to
+propose. Since 2026-10-06 a second gate decides **whether** to apply it: the
+book's annualised active return vs its benchmark must be statistically
+distinguishable from zero. Before this, a few weeks of noise could move knobs:
+`graduated_allocation` applied 16 knob changes between 10 Sep and 5 Oct 2026.
+
+`significance_gate()` in `src/value_investor/decision_review.py` reads
+`docs/data/track_statistics.json` (daily ops-monitor, see
+[`track-statistics.md`](track-statistics.md)) and opens only when **all** hold:
+
+- the file exists, has `updated_at` and is at most 4 days old;
+- its `benchmark_ticker` matches the book's (market shards reuse FTSE track ids);
+- the book has `status: ok` (≥20 daily periods);
+- the verdict is `positive` or `negative` (90% block-bootstrap interval on
+  annualised active return excludes zero).
+
+Otherwise the review is written with `note: "Proposal only — significance gate
+closed: …"`, `config.json` is untouched and no knob epoch starts. **`--force`
+does not bypass the gate** (it only relaxes the history-thickness minimums).
+Frozen labs and shadows are skipped before the gate is consulted.
+
+Every `decision_review.json` / history row carries `apply_policy` and the
+`significance_gate` record (verdict, interval, statistics timestamp, reason);
+`learning_tracks_review.json` carries `apply_policy`. The gate uses the
+uncorrected 90% verdict, not the Bonferroni `significant_after_correction` flag.
+In practice it holds knobs still for months; that is intended. A book whose
+active return is noise has nothing to learn from yet.
+
+**History marker.** The switch is recorded in
+`docs/data/paper_automation/assessment_model.json` → `policy_changes`
+(`id: significance_gate_v1`, `effective_at`, `history_note`, and a per-track
+`audit` of legacy applies) and surfaced on the scoreboard
+(`assessment_scoreboard.json` → `policy_changes`). Knob epochs started before
+`effective_at` were applied under the legacy rule; their returns are not
+evidence for the knobs they set. History is not rewritten. The primary
+(`ai_judgment_fair`) and control (`buy_tier_level`) never had a legacy apply,
+so the primary-vs-control comparison is unaffected. Twin comparisons
+(`parent_knobs_changed`) stay clean because the parent can only move on a
+significant result.
 
 ### Saturated knobs
 
@@ -187,6 +232,7 @@ Pre-logging trade history still needs the archive lab (L111) for full inception 
 ## Safety
 
 - Steps are small (±1 position, ±0.05 conviction/sector).
+- Applies need a statistically real active return (`significance_gate_v1`).
 - No screen-signal or model-weight edits (those stay in archive weight learning).
 - Evolutionary genomes (L2) wait until this loop has thicker history.
 - Do not promote AI gates to live capital until the primary track shows persistent
