@@ -173,7 +173,7 @@
         {
           "id": "sunday-knob-calibration-priors",
           "title": "Review knob calibration priors",
-          "summary": "Confirm readiness signals in knob_calibration_priors.json (confidence, score_gap_vs_runner_up, ready_for_*). If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop — do not promote. Promotion is a separate gate (sunday-promote-knobs-gate).",
+          "summary": "Confirm readiness signals in knob_calibration_priors.json (confidence, score_gap_vs_runner_up, ready_for_*). If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop — do not promote. Promotion is a separate gate (sunday-assessment-scoreboard).",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "promoting-a-prior-human-gate"
@@ -187,36 +187,12 @@
           "doc_anchor": "human-gate"
         },
         {
-          "id": "sunday-shadow-vs-primary",
-          "title": "Calibrated shadows vs primary (frozen; acknowledge)",
-          "summary": "Calibrated shadows (r1–r3) and their parent ai_judgment were frozen on 2026-10-06 with the switch to one fair-cost assessment model, so there is nothing new to compare. Acknowledge as observe-only. Revisit only if a new calibration method spawns a fair-cost shadow of the primary ai_judgment_fair (N171 still applies; do not reopen N58/N59).",
+          "id": "sunday-assessment-scoreboard",
+          "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
+          "summary": "Read docs/data/assessment_scoreboard.json: primary ai_judgment_fair vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also twins, frozen books' final records and policy_changes (e.g. significance_gate_v1). Approve a promotion (knob prior, twin or primary/control switch) only when the primary verdict is positive on fair costs; 'AI beats the screen' stays unproven while the accumulate gate never binds (N189). Calibrated, exclusion and Suite A books are frozen: no spawns from them, never edit them. Survivors are starting priors — never auto-apply.",
           "automated": false,
-          "doc_path": "docs/ops/knob-calibration.md",
-          "doc_anchor": "competing-calibrated-shadows"
-        },
-        {
-          "id": "sunday-promote-knobs-gate",
-          "title": "Promote knob priors only when gates pass",
-          "summary": "Stays CLOSED while no calibrated shadow is surviving / adoptable (N171). Do not edit the primary ai_judgment_fair config until a shadow of it is surviving, ready_for_priors/score gap look sound, confidence is acceptable, and fair-cost excess supports adoption. Never edit frozen books. Survivors are starting priors — never auto-apply.",
-          "automated": false,
-          "doc_path": "docs/ops/knob-calibration.md",
-          "doc_anchor": "promoting-a-prior-human-gate"
-        },
-        {
-          "id": "sunday-fair-cost-promotion-gate",
-          "title": "Require fair-cost view before treating excess as deployable",
-          "summary": "Keep 3% stress books as the defensive/churn lab. Before promoting knobs or calling primary 'beating the market', check ftse-trading-costs assess and/or fair-cost warm-start shadows. Promote only when fair excess beats ^FTSE and the fair rules control (or explicitly accept stress-only churn wins).",
-          "automated": false,
-          "doc_path": "docs/ops/market-trading-costs.md",
-          "doc_anchor": "test-and-adoption-strategy-dual-suite"
-        },
-        {
-          "id": "sunday-suite-b-fair-lab",
-          "title": "Review primary vs control on fair costs (assessment model)",
-          "summary": "Review the assessment-model primary ai_judgment_fair against the control buy_tier_level and ^FTSE on fair costs; confirm both are marking and endurance_zero_datum is set. Suite A books and rules_fair are frozen (assessment_model.json) — read their final records, do not restart them. Treat 'AI beats the screen' as unproven while the accumulate gate never binds (N189).",
-          "automated": false,
-          "doc_path": "docs/ops/primary-learning-track.md",
-          "doc_anchor": "assessment-model-and-frozen-tracks"
+          "doc_path": "docs/ops/assessment-scoreboard.md",
+          "doc_anchor": "assessment-scoreboard"
         },
         {
           "id": "sunday-hold-buffer-twin",
@@ -225,14 +201,6 @@
           "automated": false,
           "doc_path": "docs/ops/assessment-scoreboard.md",
           "doc_anchor": "twins"
-        },
-        {
-          "id": "sunday-spawn-fair-twins",
-          "title": "Spawn Suite B twins only for recommend experiments",
-          "summary": "If experiment_assessment has recommend calibration/exclusion/experimental tracks, dry-run then optionally apply ftse-trading-costs spawn-fair-twins (max 2). Never auto-fork every shadow (N53). Zero recommend rows is a no-op.",
-          "automated": false,
-          "doc_path": "docs/ops/market-trading-costs.md",
-          "doc_anchor": "selective-a-to-b-fair-cost-twins"
         },
         {
           "id": "sunday-entry-dca-cadence",
@@ -265,14 +233,6 @@
           "automated": false,
           "doc_path": "docs/ops/analysis-review.md",
           "doc_anchor": "manual-promotion-to-engineering"
-        },
-        {
-          "id": "sunday-exclusion-shadow-spawn",
-          "title": "Exclusion ladder shadow spawn gate",
-          "summary": "If exclusion_ladder_replay readiness.ready_for_shadow_spawn is true, run ftse-exclusion-ladder-replay spawn-shadow manually against an active parent. Spawning from a frozen parent (ai_judgment) is refused. Never auto-spawn.",
-          "automated": false,
-          "doc_path": "docs/ops/exclusion-ladder-replay.md",
-          "doc_anchor": "promotion-workflow-human-gate"
         },
         {
           "id": "sunday-triage-plr-director-tasks",

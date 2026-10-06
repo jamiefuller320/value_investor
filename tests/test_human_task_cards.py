@@ -126,7 +126,7 @@ def test_write_board_auto_acks_knob_priors_observe_only(tmp_path: Path):
     # Promote gate must remain unacked even when review auto-acks.
     board = write_human_tasks_board(data_dir=data_dir)
     review = next(row for row in board["tasks"] if row["id"] == KNOB_PRIORS_REVIEW_TASK_ID)
-    promote = next(row for row in board["tasks"] if row["id"] == "sunday-promote-knobs-gate")
+    promote = next(row for row in board["tasks"] if row["id"] == "sunday-assessment-scoreboard")
     assert review["sort_bucket"] == "acked"
     assert review["ack"]["decision"] == "ack_observe"
     assert review["ack"]["stale"] is False
@@ -337,11 +337,11 @@ def test_board_sorts_new_info_before_acked(tmp_path: Path):
     assert human
     assert all(not row["automated"] for row in human)
     # Ack one task with matching fingerprint → goes to acked bucket
-    target = next(row for row in human if row["id"] == "sunday-promote-knobs-gate")
+    target = next(row for row in human if row["id"] == "sunday-assessment-scoreboard")
     fp = target["analysis"]["fingerprint"]
     record_human_task_ack(
         data_dir,
-        task_id="sunday-promote-knobs-gate",
+        task_id="sunday-assessment-scoreboard",
         decision="ack_observe",
         finding_fingerprint=fp,
     )
@@ -349,29 +349,32 @@ def test_board_sorts_new_info_before_acked(tmp_path: Path):
     buckets = [row["sort_bucket"] for row in board2["tasks"]]
     assert "acked" in buckets
     acked_ids = [row["id"] for row in board2["tasks"] if row["sort_bucket"] == "acked"]
-    assert acked_ids[-1] == "sunday-promote-knobs-gate" or "sunday-promote-knobs-gate" in acked_ids
+    assert (
+        acked_ids[-1] == "sunday-assessment-scoreboard"
+        or "sunday-assessment-scoreboard" in acked_ids
+    )
     # Last group should be acked
     assert board2["tasks"][-1]["sort_bucket"] == "acked"
 
     # Stale fingerprint → new_info rises
     record_human_task_ack(
         data_dir,
-        task_id="sunday-promote-knobs-gate",
+        task_id="sunday-assessment-scoreboard",
         decision="ack_observe",
         finding_fingerprint="stale-old-fp",
     )
     board3 = build_human_tasks_board(data_dir=data_dir)
-    promote = next(row for row in board3["tasks"] if row["id"] == "sunday-promote-knobs-gate")
+    promote = next(row for row in board3["tasks"] if row["id"] == "sunday-assessment-scoreboard")
     assert promote["sort_bucket"] == "new_info"
     assert board3["tasks"][0]["sort_bucket"] in {"new_info", "unacked"}
     assert promote["ack"]["stale"] is True
 
 
 def test_approval_gates_cover_promotion_ids():
-    assert "sunday-promote-knobs-gate" in APPROVAL_GATE_IDS
+    assert "sunday-assessment-scoreboard" in APPROVAL_GATE_IDS
     assert "adhoc-live-capital-pack" in APPROVAL_GATE_IDS
     board = build_human_tasks_board(data_dir=Path("docs/data"))
-    promote = next(row for row in board["tasks"] if row["id"] == "sunday-promote-knobs-gate")
+    promote = next(row for row in board["tasks"] if row["id"] == "sunday-assessment-scoreboard")
     assert promote["approval_gate"] is True
 
 
@@ -698,3 +701,65 @@ def test_parked_backlog_auto_ack_skips_when_not_quiet(tmp_path: Path):
     assert hit["auto_ackable"] is False
     assert hit["sort_bucket"] == "unacked"
     assert hit["ack_sufficient"] is False
+
+
+def test_assessment_scoreboard_card_reads_scoreboard(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    write_json(
+        data_dir / "assessment_scoreboard.json",
+        {
+            "generated_at": "2026-10-06T12:00:00+00:00",
+            "primary_track": "ai_judgment_fair",
+            "control_track": "buy_tier_level",
+            "headline": "ai_judgment_fair: total return +1.0% vs FTAL.L +2.0%",
+            "tracks": [
+                {
+                    "track_id": "ai_judgment_fair",
+                    "role": "primary",
+                    "statistics": {"status": "ok", "verdict": "indistinguishable_from_noise"},
+                    "ai_gate": {"binds": False},
+                }
+            ],
+            "primary_vs_control": {"control": "buy_tier_level", "difference": -0.01},
+            "twins": [
+                {
+                    "track_id": "ai_judgment_hold5_fair",
+                    "status": "ok",
+                    "difference": 0.002,
+                    "common_days": 5,
+                    "parent_knobs_changed": ["min_conviction"],
+                }
+            ],
+            "policy_changes": [
+                {"id": "significance_gate_v1", "effective_at": "2026-10-06T15:24:00+00:00"}
+            ],
+        },
+    )
+    board = build_human_tasks_board(data_dir=data_dir)
+    card = next(row for row in board["tasks"] if row["id"] == "sunday-assessment-scoreboard")
+    analysis = card["analysis"]
+    assert card["approval_gate"] is True
+    assert analysis["headline"] == "Assessment scoreboard · primary indistinguishable_from_noise"
+    text = " ".join(analysis["bullets"])
+    assert "CONFOUNDED" in text
+    assert "significance_gate_v1 (2026-10-06)" in text
+
+
+def test_retired_sunday_cards_are_gone():
+    ids = {
+        task["id"]
+        for section in load_human_tasks_checklist().get("sections") or []
+        for task in section.get("tasks") or []
+    }
+    assert "sunday-assessment-scoreboard" in ids
+    for retired in (
+        "sunday-shadow-vs-primary",
+        "sunday-promote-knobs-gate",
+        "sunday-fair-cost-promotion-gate",
+        "sunday-suite-b-fair-lab",
+        "sunday-spawn-fair-twins",
+        "sunday-exclusion-shadow-spawn",
+    ):
+        assert retired not in ids
+        assert retired not in APPROVAL_GATE_IDS
