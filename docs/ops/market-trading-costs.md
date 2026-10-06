@@ -130,7 +130,7 @@ Learning-director vision caps open experiments (~5). Fair lab should start as **
 | Now | Weekday paper-auto includes Suite B when present; decision-review `--suite B --apply` tunes fair-lab knobs only. |
 | Now | Sunday: `ftse-trading-costs assess` + compare Suite B excess vs ^FTSE / fair rules control before any promotion talk. Analysis-review payload `paper_track_buckets` cites A-stress / B-adoption / B-identity separately ([analysis-review.md](analysis-review.md#dual-suite-paper-track-buckets-observe-only)). |
 | Now | Dashboard **Automation → Learning tracks** dual-suite scoreboard (`learning_tracks_dual_suite` in publish JSON): Suite B fair = adoption headline; Suite A stress = churn lab. Does **not** flip `is_primary_learning_track` (**N145**) |
-| Now | If `experiment_assessment` has **recommend** calibration / exclusion / experimental rows, dry-run then optionally apply `ftse-trading-costs spawn-fair-twins` (max 2; human only — **N53**) |
+| Retired 2026-10-06 | Sunday `spawn-fair-twins` card: calibration / exclusion parents are frozen in `assessment_model.json`. New twins of the active primary go through `register_twin` and the scoreboard `twins` section ([assessment-scoreboard.md](assessment-scoreboard.md#twins)); the CLI stays for ad-hoc use (max 2; human only — **N53**) |
 | Later | Flip primary off 3% only after B has a thick forward window (**N48**) |
 
 ```bash

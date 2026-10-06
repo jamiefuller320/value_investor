@@ -350,7 +350,6 @@ per-track `llm_agree_veto_shadow.json` — see
 bind, and EPS-from-body onto reports → slim candidates → agree/veto cites
 (observe-only; does not enable Phase C `autopsy_freeze`). First-run observe pin:
 `check_p1_first_run_pin` (time-boxed; see table below).
-shadow-vs-primary / promotion gates.
 
 Weekday paper findings before **10:00 UTC** defer alert email (same ready time
 as `paper-auto.yml` workflow freshness). The 13:15 catch-up is the actionable

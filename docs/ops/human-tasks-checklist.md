@@ -48,17 +48,12 @@ ack stale. Automated weekday/Sunday CI rows stay in a collapsed list.
 | Read **buy-cross archive** review (`buy_cross_archive_review.json`) — cross vs level comparison; do not spawn a live cross book | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#cross-book-archive-only) |
 | Review **knob calibration priors** — confirm readiness signals; if confidence low and score gap ~0 (no discrimination), **Acknowledge and stop** (do not promote) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | Review **unified experiment assessment** (`experiment_assessment.json`) — read fail/continue/recommend; failed shadows close promote; acked overlays + ana-* capacity are not do-now; Acknowledge when blocking recommends empty (never auto-promote). Refresh vs live board without reopening N58/N59 | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
-| **Calibrated shadows vs primary** — shadows and parent `ai_judgment` frozen 2026-10-06; Acknowledge (observe-only; N171). Revisit only if a fair-cost shadow of `ai_judgment_fair` is spawned | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
-| **Promote knob priors** only when a survivor passes gates — stays **closed** while no calibrated shadow is surviving (do not edit the primary `ai_judgment_fair/config.json` without one; never edit frozen books) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
-| **Fair-cost gate** — keep 3% books as churn lab; require `ftse-trading-costs assess` / fair shadows before calling excess deployable | Human | [market-trading-costs.md](market-trading-costs.md#test-and-adoption-strategy-dual-suite) |
-| **Primary vs control on fair costs** — review `ai_judgment_fair` vs `buy_tier_level` and ^FTSE; frozen books (Suite A, `rules_fair`) keep final records only; "AI beats the screen" stays unproven while the accumulate gate never binds (N189) | Human | [primary-learning-track.md](primary-learning-track.md#assessment-model-and-frozen-tracks) |
+| Read the **assessment scoreboard** (`assessment_scoreboard.json`) — primary `ai_judgment_fair` vs control `buy_tier_level` and FTAL.L (total return, 90% interval, 3% stress-cost column, AI-gate binds), twins, frozen final records, `policy_changes`. **Approve a promotion** (knob prior, twin, primary/control switch) only when the primary verdict is positive on fair costs; "AI beats the screen" stays unproven while the accumulate gate never binds (N189); frozen calibrated / exclusion / Suite A books spawn nothing and are never edited | Human | [assessment-scoreboard.md](assessment-scoreboard.md#assessment-scoreboard) |
 | **Hold-buffer twin vs primary (L541)** — read the `twins` row in `assessment_scoreboard.json` (`ai_judgment_hold5_fair`, exit after 5 screens, vs `ai_judgment_fair`); non-empty `parent_knobs_changed` means confounded; promote only per the readiness gate (≥26 weekly screens, interval excludes zero), else freeze the twin; never edit either book mid-flight | Human | [assessment-scoreboard.md](assessment-scoreboard.md#twins) |
-| **Selective A→B fair twins** — if assessment has recommend calibration/exclusion/experimental rows, dry-run then optionally apply `ftse-trading-costs spawn-fair-twins` (max 2; never auto-fork) | Human | [market-trading-costs.md](market-trading-costs.md#selective-a-to-b-fair-cost-twins) |
 | Review **entry DCA cadence / adoption plan** — Acknowledge is observe-only (Do not execute DCA from ack); when `paper_execute_graduated` is ready, Lifecycle **Start** enables 4× weekly on `graduated_allocation` only; follow `entry_dca_adoption_plan.json`; do not change starter fraction or apply to primary | Human | [position-lifecycle.md](position-lifecycle.md#entry-dca-adoption-plan) |
 | Review **dual-path sleeve episodes** when tag cohorts mature (`ready_for_sleeve_timing_analysis`) — stratify by capital_status; do not mix into NAV vs ^FTSE | Human | [dual-path-sleeve-lab.md](dual-path-sleeve-lab.md#evidence-gathered-to-date--validity) |
 | Review **hypothesis integrity** when losers breach tolerance or theses break | Human | [hypothesis-integrity.md](hypothesis-integrity.md#human-gate) |
 | Triage **analysis_tasks** — persist/publish/apply `system_gaps` flags auto-queue as `eng-sgap-*` (no dispatch); promote remaining produce/clock flags by hand; Phase B rememo is body-lag slim — do **not** promote `thin_memo_counted_as_coverage` as rememo-eligibility widening; scoring stays `eng-20260903-02` / `eng-20260903-03` (observe-only; no `assign_signal()` edits); do not revive cancelled knob counterfactuals | Human | [analysis-review.md](analysis-review.md#manual-promotion-to-engineering) |
-| Check **exclusion ladder spawn gate** — if `ready_for_shadow_spawn`, run `ftse-exclusion-ladder-replay spawn-shadow` against an active parent (frozen parents refused; never auto) | Human | [exclusion-ladder-replay.md](exclusion-ladder-replay.md#promotion-workflow-human-gate) |
 | Triage **paper_learning_tasks** + **learning_director_tasks** — watch u4 + exit-shadow; leave L111 as continue; buffered-hold and IMB.L are done; no promote CLI | Human | [paper-learning-review.md](paper-learning-review.md#enacting-proposed-experiments) |
 | Full-period knob calibrate + shadow bootstrap + PIT warm-start + endurance (spawn skipped while parent `ai_judgment` is frozen) | CI | [knob-calibration.md](knob-calibration.md#warm-start-zero-datum-forward-only-endurance) |
 
@@ -70,7 +65,7 @@ readiness signals. When confidence is low/insufficient and
 review — board rebuild may auto-ack observe-only. That is **not** promotion.
 
 Do **not** promote calibration priors to `ai_judgment/config.json` until
-(`sunday-promote-knobs-gate`):
+(`sunday-assessment-scoreboard`):
 
 1. A shadow has status **recommend** in `experiment_assessment.json` (or **surviving** in `calibration_shadow_endurance.json`). Status **fail** closes this path — do not promote from failed shadows.
 2. `ready_for_priors: true` / `ready_for_shadow_bootstrap` look sound in `knob_calibration_priors.json`
@@ -80,11 +75,15 @@ Do **not** promote calibration priors to `ai_judgment/config.json` until
 
 **Fail-closed (2026-09-29, N171):** calibrated shadows are **not** a promotion
 path. While `ai_judgment_calibrated` (+r2/r3) are `experiment_assessment=fail`,
-Acknowledge the compare card (`sunday-shadow-vs-primary`) as observe-only and
-keep `sunday-promote-knobs-gate` closed. Do not spawn new calibrated ranks, do
+keep the promotion gate on `sunday-assessment-scoreboard` closed. Do not spawn new calibrated ranks, do
 not reopen N58/N59, and do not disable shadow dirs mid-week (keep cheap marks;
 retirement stays L275/L502). Revisit only after fair-cost Suite B evidence or a
 new calibration method — not Suite A stress green.
+
+**Pruned (2026-10-06):** the calibrated-shadow compare, fair-cost promotion,
+Suite B twin-spawn and exclusion-spawn cards were retired (their books are
+frozen, the scoreboard shows the 3% cost column); the promote gate and the
+fair-cost primary/control review merged into `sunday-assessment-scoreboard`.
 
 **Frozen (2026-10-06):** `ai_judgment` and its calibrated shadows are frozen in
 `paper_automation/assessment_model.json`. The steps above now apply to the

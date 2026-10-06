@@ -157,9 +157,9 @@ auto-applied.
 
 **Fail-closed as a promotion path (N171, 2026-09-29).** Competing calibrated
 shadows currently mark `experiment_assessment=fail`. That closes
-`sunday-promote-knobs-gate` — they are **not** an adoption ladder from Suite A
-stress. Human compare (`sunday-shadow-vs-primary`) is observe-only Acknowledge
-when reviewed. Do **not** spawn new calibrated ranks beyond existing top-3 GC,
+the promotion gate on `sunday-assessment-scoreboard` — they are **not** an
+adoption ladder from Suite A stress. The separate compare card was retired on
+2026-10-06 once the shadows froze. Do **not** spawn new calibrated ranks beyond existing top-3 GC,
 do **not** reopen N58/N59, and do **not** flip `enabled=false` mid-week just to
 hide hub cards (acks + fail status already stop promote urgency; dir retirement
 stays L275/L502). Reopen the promotion question only after fair-cost Suite B
@@ -207,7 +207,7 @@ Two separate Sunday checklist items — do **not** collapse them:
 | Gate | Checklist id | What “done” means |
 |------|--------------|-------------------|
 | **Review** knob calibration priors | `sunday-knob-calibration-priors` | Confirm readiness signals (`confidence`, `score_gap_vs_runner_up`, `ready_for_*`). |
-| **Promote** knob priors | `sunday-promote-knobs-gate` | Only when a survivor clears the promotion checklist below — still observe-only record. |
+| **Promote** knob priors | `sunday-assessment-scoreboard` (promotion gate) | Only when a survivor clears the promotion checklist below — still observe-only record. |
 
 ### Review gate (`sunday-knob-calibration-priors`)
 
@@ -224,9 +224,9 @@ Two separate Sunday checklist items — do **not** collapse them:
 Board rebuild (`ftse-human-tasks refresh` / ops-monitor) auto-records
 `ack_observe` for this review task when the no-discrimination condition holds
 (`source=board_auto_no_discrimination`). That never writes knobs, never records
-`approve`, and never touches `sunday-promote-knobs-gate`.
+`approve`, and never touches `sunday-assessment-scoreboard`.
 
-### Promote gate (`sunday-promote-knobs-gate`)
+### Promote gate (on `sunday-assessment-scoreboard`)
 
 1. Review `ready_for_shadow_bootstrap` / `ready_for_priors`, confidence, score gap
 2. Compare competing shadows in `calibration_shadow_endurance.json` (`surviving`)

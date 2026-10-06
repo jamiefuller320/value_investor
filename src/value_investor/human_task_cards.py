@@ -63,10 +63,7 @@ _CAPACITY_RECOMMEND_KINDS = frozenset(
 # Task ids that are capital / promotion gates — show Approve (observe record only).
 APPROVAL_GATE_IDS: dict[str, str] = {
     "sunday-phase-c-readiness-gate": "Approve Phase C start",
-    "sunday-promote-knobs-gate": "Approve knob promote",
-    "sunday-fair-cost-promotion-gate": "Approve fair-cost view",
-    "sunday-spawn-fair-twins": "Approve spawn fair twins",
-    "sunday-exclusion-shadow-spawn": "Approve spawn shadow",
+    "sunday-assessment-scoreboard": "Approve promotion",
     "monthly-euro-depth-parity": "Approve Phase 3 / AI gate",
     "monthly-cycle-budget-surplus": "Approve surplus bump",
     "adhoc-live-capital-pack": "Approve live capital",
@@ -679,7 +676,7 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             bullets.append(
                 _bullet(
                     "No discrimination → Acknowledge (observe-only); do not promote. "
-                    "Promotion is sunday-promote-knobs-gate."
+                    "Promotion is sunday-assessment-scoreboard."
                 )
             )
         fp = _fingerprint(
@@ -795,103 +792,68 @@ def _analysis_for_task(task_id: str, data_dir: Path) -> dict[str, Any]:
             "experiment_assessment_gate": status,
         }
 
-    if tid in {
-        "sunday-shadow-vs-primary",
-        "sunday-promote-knobs-gate",
-        "sunday-spawn-fair-twins",
-    }:
-        assessment = _read(data_dir, "experiment_assessment.json")
-        priors = _load_knob_calibration_priors(data_dir)
-        gate = experiment_assessment_gate_status(
-            assessment,
-            experiment_acks=load_experiment_acks(data_dir),
-        )
-        experiments = _experiment_rows(assessment)
-        blocking = list(gate.get("recommend_blocking") or [])
-        capacity = list(gate.get("recommend_capacity") or [])
-        acked = list(gate.get("recommend_acked") or [])
-        fail_n = len(gate.get("failed_shadows") or [])
+    if tid == "sunday-assessment-scoreboard":
+        board = _read(data_dir, "assessment_scoreboard.json")
+        rows = [r for r in board.get("tracks") or [] if isinstance(r, dict)]
+        primary = next((r for r in rows if r.get("role") == "primary"), {})
+        stats = _as_dict(primary.get("statistics"))
+        gate = _as_dict(primary.get("ai_gate"))
+        comparison = _as_dict(board.get("primary_vs_control"))
+        twins = [t for t in board.get("twins") or [] if isinstance(t, dict)]
+        policies = [p for p in board.get("policy_changes") or [] if isinstance(p, dict)]
         bullets = [
+            _bullet(str(board.get("headline") or "Scoreboard not built yet.")),
             _bullet(
-                f"Blocking recommend: {len(blocking)} · acked: {len(acked)} · "
-                f"capacity/eng: {len(capacity)} · fail shadows: {fail_n} · "
-                f"raw recommend: {gate.get('recommend_raw_count')} / {len(experiments)}"
+                f"Primary verdict: {stats.get('verdict') or stats.get('status') or '—'} "
+                f"· 90% interval {stats.get('ci90') or '—'} "
+                f"· excess at 3% stress {primary.get('excess_total_return_at_stress_cost')}"
             ),
             _bullet(
-                "Failed calibration/exclusion shadows close promote — not a do-now pile. "
-                "Already-acked overlays and ana-* capacity strands are not promote urgency."
+                f"vs control {comparison.get('control') or '—'}: "
+                f"difference {comparison.get('difference')} (common window, not significance)"
             ),
-            _bullet(
-                f"Priors ready_for_shadow_bootstrap="
-                f"{priors.get('ready_for_shadow_bootstrap')} "
-                f"ranking_mode={priors.get('ranking_mode')}"
-            ),
+            _bullet(f"AI gate binds: {gate.get('binds')} (N189 while it never binds)"),
         ]
-        for row in blocking[:3]:
-            bullets.append(_bullet(f"blocking: {row.get('experiment_id')} ({row.get('kind')})"))
-        for row in capacity[:2]:
-            bullets.append(
-                _bullet(f"capacity: {row.get('experiment_id')} area={row.get('area') or '—'}")
-            )
-        fp = _fingerprint(
-            {
-                "blocking": [r.get("experiment_id") for r in blocking],
-                "acked": [r.get("experiment_id") for r in acked],
-                "capacity": [r.get("experiment_id") for r in capacity],
-                "fail_shadows": [
-                    r.get("experiment_id") for r in (gate.get("failed_shadows") or [])
-                ],
-                "ready": priors.get("ready_for_shadow_bootstrap"),
-                "ranking_mode": priors.get("ranking_mode"),
-            }
-        )
-        n_block = len(blocking)
-        headline = (
-            f"Experiment assessment · {n_block} blocking recommend"
-            if n_block
-            else "Experiment assessment · 0 blocking (review/continue)"
-        )
-        return {
-            "headline": headline,
-            "updated_at": assessment.get("generated_at")
-            or assessment.get("updated_at")
-            or priors.get("generated_at"),
-            "fingerprint": fp,
-            "bullets": [b for b in bullets if b][:8],
-            "source_keys": ["experiment_assessment", "knob_calibration_priors"],
-            "ack_sufficient": bool(gate.get("ack_sufficient")),
-            "auto_ackable": False,
-            "experiment_assessment_gate": gate,
-        }
-
-    if tid in {"sunday-fair-cost-promotion-gate", "sunday-suite-b-fair-lab"}:
-        assessment = _read(data_dir, "experiment_assessment.json")
-        bullets = [
-            _bullet("Require fair-cost view before treating 3% stress excess as deployable.")
-        ]
-        fair = [
-            row
-            for row in (assessment.get("experiments") or [])
-            if isinstance(row, dict) and "fair" in str(row.get("experiment_id") or "").lower()
-        ]
-        for row in fair[:5]:
+        for twin in twins[:2]:
             bullets.append(
                 _bullet(
-                    f"{row.get('experiment_id')}: {row.get('status')} excess={row.get('excess_vs_ftse')}"
+                    f"twin {twin.get('track_id')}: difference {twin.get('difference')} "
+                    f"over {twin.get('common_days')} days"
+                    + (
+                        f" · CONFOUNDED by {twin.get('parent_knobs_changed')}"
+                        if twin.get("parent_knobs_changed")
+                        else ""
+                    )
+                )
+            )
+        if policies:
+            bullets.append(
+                _bullet(
+                    "Policy changes: "
+                    + ", ".join(
+                        f"{p.get('id')} ({str(p.get('effective_at'))[:10]})" for p in policies
+                    )
                 )
             )
         fp = _fingerprint(
             {
-                "fair_ids": [str(r.get("experiment_id")) for r in fair],
-                "fair_status": [str(r.get("status")) for r in fair],
+                "primary": board.get("primary_track"),
+                "control": board.get("control_track"),
+                "verdict": stats.get("verdict") or stats.get("status"),
+                "gate_binds": gate.get("binds"),
+                "twins": [
+                    (t.get("track_id"), t.get("status"), bool(t.get("parent_knobs_changed")))
+                    for t in twins
+                ],
+                "policies": [p.get("id") for p in policies],
             }
         )
         return {
-            "headline": "Fair-cost Suite B lab",
-            "updated_at": assessment.get("generated_at") or assessment.get("updated_at"),
+            "headline": f"Assessment scoreboard · primary {stats.get('verdict') or 'not scored'}",
+            "updated_at": board.get("generated_at"),
             "fingerprint": fp,
             "bullets": [b for b in bullets if b][:8],
-            "source_keys": ["experiment_assessment"],
+            "source_keys": ["assessment_scoreboard"],
         }
 
     if tid == "sunday-entry-dca-cadence":
