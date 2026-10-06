@@ -7,7 +7,7 @@ Regimes:
 - ``uk_rns`` (FTSE / ``.L``): Ticker.app RNS API + Investegate via Google News
 - ``sec_edgar`` (S&P 500 / bare US tickers): SEC EDGAR submissions + HTML bodies
 - ``asx_announcements`` (ASX 200 / ``.AX``): Markit Digital JSON feed (direct PDFs) + Google News fallback
-- ``euro_filings`` (EURO STOXX 50 / DAX / CAC): ESEF by LEI then name search, Belgium official / Euronext Brussels for ``.BR``, Google News, IR allowlist, SEC 20-F/6-K when dual-listed
+- ``euro_filings`` (EURO STOXX 50 / DAX / CAC): ESEF by LEI then name search, AMF open data (France OAM) for ``.PA`` / French LEIs, Belgium official / Euronext Brussels for ``.BR``, Google News, IR allowlist, SEC 20-F/6-K when dual-listed
 - ``tsx_announcements`` (TSX 60 / ``.TO``): SEDAR+ / issuer headlines via Google News
 
 UK RNS headlines are tagged ``period=annual|interim|trading_update|other`` via
@@ -37,6 +37,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import Any
 
+from value_investor.research.amf_direct import amf_eligible, fetch_filings_amf_direct
 from value_investor.research.belgium_official import fetch_filings_belgium_official
 from value_investor.research.hkex_direct import (
     drop_allowlist_rows_covered_by_hkex,
@@ -2414,6 +2415,10 @@ def _apply_headline_period(
         # HKEX headline category (Quarterly Results, Profit Warning) is the
         # regulator's own label; "RESULTS FOR THE THREE MONTHS ENDED…" is not.
         period = str(item["hkex_period"])
+    elif item.get("source") == "amf_direct" and item.get("amf_period"):
+        # AMF subtype code + bilingual headline cues; French titles
+        # ("Résultats du 1er semestre") do not classify via the RNS rules.
+        period = str(item["amf_period"])
     elif (
         period == "other"
         and body_snippet
@@ -3082,6 +3087,8 @@ def filing_source_surface(market: str | None, ticker: str) -> str:
     regime = resolve_filings_regime(market, ticker)
     if regime == "asia_filings" and is_hkex_ticker(ticker):
         return f"{regime}+hkex_direct"
+    if regime == "euro_filings" and amf_eligible(ticker):
+        return f"{regime}+amf_direct"
     return regime
 
 
@@ -5014,7 +5021,7 @@ def _source_bonus(source: str | None) -> int:
         return 30
     if source in {"investegate_direct", "investegate_resolved"}:
         return 28
-    if source in {"asx_direct", "hkex_direct"}:
+    if source in {"asx_direct", "hkex_direct", "amf_direct"}:
         return 27
     if source in {"esef_direct", "belgium_official"}:
         return 26
@@ -8861,6 +8868,80 @@ def _load_prior_filings_rows(filings_dir: Path) -> list[dict[str, Any]]:
     return list(filings) if isinstance(filings, list) else []
 
 
+# Direct-feed sources whose bodiless rows are dropped after a body attempt
+# (e.g. AMF PDFs with outlined text and no text layer); otherwise each
+# re-ingest or discovery merge would leave them as indexed-without-body.
+UNEXTRACTABLE_BODY_SOURCES = frozenset({"amf_direct"})
+UNEXTRACTABLE_BODY_RETRY_DAYS = 30
+UNEXTRACTABLE_BODY_URLS_KEY = "unextractable_body_urls"
+
+
+def load_unextractable_body_urls(
+    filings_dir: Path, *, now: datetime | None = None
+) -> dict[str, str]:
+    """``url → first-failed date`` from the prior index, minus entries due a retry."""
+    index_path = Path(filings_dir) / "filings_index.json"
+    if not index_path.exists():
+        return {}
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return {}
+    raw = payload.get(UNEXTRACTABLE_BODY_URLS_KEY) if isinstance(payload, dict) else None
+    if not isinstance(raw, dict):
+        return {}
+    cutoff = (now or datetime.now(UTC)) - timedelta(days=UNEXTRACTABLE_BODY_RETRY_DAYS)
+    kept: dict[str, str] = {}
+    for url, stamp in raw.items():
+        try:
+            when = datetime.fromisoformat(str(stamp))
+        except ValueError:
+            continue
+        if (when if when.tzinfo else when.replace(tzinfo=UTC)) >= cutoff:
+            kept[str(url)] = str(stamp)
+    return kept
+
+
+def drop_known_unextractable_rows(
+    rows: list[dict[str, Any]], known: dict[str, str]
+) -> list[dict[str, Any]]:
+    """Drop bodiless direct-feed rows whose URL already failed body extraction."""
+    if not known:
+        return rows
+    return [
+        row
+        for row in rows
+        if row.get("has_body")
+        or str(row.get("source") or "") not in UNEXTRACTABLE_BODY_SOURCES
+        or str(row.get("url") or "") not in known
+    ]
+
+
+def drop_attempted_unextractable_rows(
+    rows: list[dict[str, Any]],
+    attempted_ids: set[str],
+    known: dict[str, str],
+    *,
+    now: datetime | None = None,
+) -> tuple[list[dict[str, Any]], dict[str, str]]:
+    """Drop direct-feed rows still bodiless after a body attempt; record their URLs."""
+    stamp = (now or datetime.now(UTC)).isoformat()
+    updated = dict(known)
+    kept: list[dict[str, Any]] = []
+    for row in rows:
+        url = str(row.get("url") or "")
+        if (
+            not row.get("has_body")
+            and str(row.get("source") or "") in UNEXTRACTABLE_BODY_SOURCES
+            and str(row.get("id") or "") in attempted_ids
+            and url
+        ):
+            updated.setdefault(url, stamp)
+            continue
+        kept.append(row)
+    return kept, updated
+
+
 def refresh_uk_filing_listings_into_index(
     filings_dir: Path,
     *,
@@ -10444,6 +10525,7 @@ def ingest_filings(
     groups: list[list[dict[str, Any]]] = []
     hkex_rows: list[dict[str, Any]] = []
     prior_filings = _load_prior_filings_rows(filings_dir)
+    unextractable_urls = load_unextractable_body_urls(filings_dir)
     if prior_filings:
         groups.append(prior_filings)
     ch_accounts = max_ch_accounts
@@ -10495,6 +10577,8 @@ def ingest_filings(
                 identifier_map_path=DEFAULT_ISSUER_IDENTIFIERS_PATH,
             )
         )
+        if amf_eligible(ticker):
+            groups.append(fetch_filings_amf_direct(ticker=ticker, company_name=company_name))
         groups.append(fetch_filings_belgium_official(company_name=company_name, ticker=ticker))
         groups.append(
             fetch_filings_euro_news(company_name=company_name, ticker=ticker, market=market)
@@ -10567,12 +10651,15 @@ def ingest_filings(
     # durable indexed-without-body leftovers. Does not touch google_news wrappers
     # or company-news / PDF rows.
     merged, _ = drop_index_noise_filing_rows(merged)
+    merged = drop_known_unextractable_rows(merged, unextractable_urls)
     # Allow more bodies when deepening historical accounts for memo names.
     max_bodies = 20 if deepen_history else 12
+    body_attempted: set[str] = set()
     merged = _write_bodies(
         merged,
         bodies_dir,
         max_bodies=max_bodies,
+        attempted_ids=body_attempted,
         ticker=ticker,
         company_name=company_name,
     )
@@ -10587,6 +10674,9 @@ def ingest_filings(
         bodies_dir,
         company_name=company_name,
         ticker=ticker,
+    )
+    merged, unextractable_urls = drop_attempted_unextractable_rows(
+        merged, body_attempted, unextractable_urls
     )
     merged = [
         _apply_headline_period(
@@ -10624,6 +10714,8 @@ def ingest_filings(
     elif regime == "euro_filings":
         note = (
             "Euro-listed results discovery via ESEF (filings.xbrl.org when available), "
+            "AMF open data (info-financiere.gouv.fr, France OAM: half-year reports and "
+            "results releases with direct PDF URLs) for .PA names and French LEIs, "
             "Belgium official / Euronext Brussels regulated-information for .BR names, "
             "Google News, optional IR allowlist URLs, Investegate (when listed), "
             "plus SEC 20-F/6-K when the issuer is dual-listed. period=annual|interim|other. "
@@ -10661,6 +10753,8 @@ def ingest_filings(
         "summary": summarize_filings(merged),
         "filings": merged,
     }
+    if unextractable_urls:
+        index[UNEXTRACTABLE_BODY_URLS_KEY] = unextractable_urls
 
     from value_investor.storage import resolve_json_path, write_json
 

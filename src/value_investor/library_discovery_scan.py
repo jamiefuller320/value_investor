@@ -16,11 +16,13 @@ from value_investor.ingest_discovery_scan import (
     merge_discovery_into_index,
 )
 from value_investor.library_screen import screen_dir_for
+from value_investor.research.amf_direct import amf_eligible, fetch_filings_amf_direct
 from value_investor.research.companies_house import fetch_filings_companies_house
 from value_investor.research.filings import (
     _base_symbol,
     _load_prior_filings_rows,
     _sec_edgar_supplement_allowed,
+    drop_known_unextractable_rows,
     fetch_filings_asia_news,
     fetch_filings_asx_direct,
     fetch_filings_asx_news,
@@ -32,6 +34,7 @@ from value_investor.research.filings import (
     fetch_filings_sec_edgar,
     fetch_filings_ticker_api,
     fetch_filings_tsx_news,
+    load_unextractable_body_urls,
     merge_filings,
     resolve_filings_regime,
 )
@@ -90,6 +93,8 @@ def list_regime_filings_index_only(
                 fetch_filings_investegate_company(ticker=ticker, company_name=company_name),
             ]
         )
+        if amf_eligible(ticker):
+            groups.append(fetch_filings_amf_direct(ticker=ticker, company_name=company_name))
         if _sec_edgar_supplement_allowed(ticker, company_name):
             groups.append(
                 fetch_filings_sec_edgar(
@@ -170,6 +175,9 @@ def scan_library_ticker_for_new_filings(
         logger.warning("Library discovery scan failed for %s: %s", report.ticker, exc)
         return hit
 
+    discovered = drop_known_unextractable_rows(
+        discovered, load_unextractable_body_urls(filings_dir)
+    )
     hit.listed_count = len(discovered)
     new_rows: list[dict[str, Any]] = []
     for row in discovered:

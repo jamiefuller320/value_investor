@@ -7999,6 +7999,7 @@ def test_issuer_matches_sec_name_exact():
     assert _issuer_matches_sec_name("SAP SE", "SAP SE", "SAP.DE") is True
 
 
+@patch("value_investor.research.filings.fetch_filings_amf_direct", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_ir_allowlist", return_value=[])
 @patch("value_investor.research.filings._write_bodies")
 @patch("value_investor.research.filings.enrich_filing_rows")

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-06T17:14:28+00:00",
+  "updated_at": "2026-10-06T17:55:22+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12429,9 +12429,10 @@
         "esef",
         "sources"
       ],
-      "status": "open",
+      "status": "done",
       "source": "Agent Q&A: per-market filing-source parity vs FTSE (Oct 2026)",
-      "added_at": "2026-10-06T09:13:02+00:00"
+      "added_at": "2026-10-06T09:13:02+00:00",
+      "updated_at": "2026-10-06T17:55:22+00:00"
     },
     {
       "id": "N187",
@@ -12596,6 +12597,95 @@
       "status": "open",
       "source": "project re-review after single assessment model (Oct 2026); PR #992 rebase",
       "added_at": "2026-10-06T17:14:28+00:00"
+    },
+    {
+      "id": "N191",
+      "category": "not_now",
+      "section": "universe",
+      "title": "Do not build Nasdaq Nordic news feed for omxs30",
+      "summary": "api.news.eu.nasdaq.com query.action is public JSON and filters by exact company name, but only GlobeNewswire customers publish there: 1 of 11 OMXS30 buy-tier names (Skanska). Ericsson, H&M, Assa Abloy, Telia etc. use Cision / MFN; Finansinspektionen's OAM has no API.",
+      "revisit_when": "Finansinspektionen or Cision/MFN expose a public filings API, or omxs30 is fronted on a sprint stream with more than three buy-tier names thin after IR allowlist seeds",
+      "tags": [
+        "omxs30",
+        "filings",
+        "nasdaq_nordic",
+        "euro"
+      ],
+      "status": "open",
+      "source": "L545 AMF direct filings (PR #994 rebase)",
+      "added_at": "2026-10-06T17:55:22+00:00"
+    },
+    {
+      "id": "N192",
+      "category": "not_now",
+      "section": "universe",
+      "title": "Do not work around Unternehmensregister / Bundesanzeiger captcha for dax",
+      "summary": "German OAM search sits behind a captcha (Unternehmensregister) or a stateful session form (Bundesanzeiger). AMF shipped in L545; .DE names stay on ESEF, Google News and IR allowlist PDFs.",
+      "revisit_when": "Germany publishes a public or keyed regulated-information API, or dax is fronted on a sprint stream with its thin leftovers mainly interim periods ESEF cannot close",
+      "tags": [
+        "dax",
+        "filings",
+        "bundesanzeiger",
+        "captcha",
+        "euro"
+      ],
+      "status": "open",
+      "source": "L545 AMF direct filings (PR #994 rebase)",
+      "added_at": "2026-10-06T17:55:22+00:00"
+    },
+    {
+      "id": "N193",
+      "category": "not_now",
+      "section": "universe",
+      "title": "Do not scrape 1Info / eMarket, CNMV or OeKB portals for euro OAM filings",
+      "summary": "Italy (1Info / eMarket STORAGE) are HTML portals with undocumented internal endpoints; Spain CNMV is ASP.NET __VIEWSTATE forms (direct query URLs 400/403); Austria OeKB OAM is an Angular app behind an F5 bot-defence script. No documented open API in any of them.",
+      "revisit_when": "One of CONSOB, CNMV or OeKB publishes an open-data or keyed filings API, or ftse_mib / ibex35 / atx thin buy-tier leftovers persist after a complete fat slot with IR seeds",
+      "tags": [
+        "ftse_mib",
+        "ibex35",
+        "atx",
+        "filings",
+        "oam",
+        "euro"
+      ],
+      "status": "open",
+      "source": "L545 AMF direct filings (PR #994 rebase)",
+      "added_at": "2026-10-06T17:55:22+00:00"
+    },
+    {
+      "id": "L552",
+      "category": "later",
+      "section": "research",
+      "title": "Audit cached LEIs that resolve to a subsidiary or different entity",
+      "summary": "issuer_identifiers.json caches wrong-entity LEIs: VOLV-B.ST -> Volvo Car AB, SAND.ST -> Sandvik Financial Services, HM-B.ST -> H & M Finance AB, SKF-B.ST -> SKF Vertevo AB, SGO.PA -> Compagnie de Miraumont; DG.PA's LEI has no AMF filings. esef_direct queries by LEI, so these names may index nothing or another entity. AMF keys .PA on ticker to sidestep it.",
+      "revisit_when": "A euro buy-tier name stays thin with zero esef_direct rows while its cached lei_name does not match the company name, or before the next LEI-first ESEF change (L299)",
+      "tags": [
+        "lei",
+        "esef",
+        "issuer_identifiers",
+        "euro",
+        "data_quality"
+      ],
+      "status": "open",
+      "source": "L545 AMF direct filings (PR #994 rebase)",
+      "added_at": "2026-10-06T17:55:22+00:00"
+    },
+    {
+      "id": "L553",
+      "category": "later",
+      "section": "research",
+      "title": "OCR fallback for outlined-text filing PDFs (AMF unextractable URLs)",
+      "summary": "Some AMF PDFs (e.g. VINCI H1/Q3 2025) have no text layer, so they are dropped and listed under unextractable_body_urls with a 30-day retry. An OCR fallback could recover those bodies.",
+      "revisit_when": "unextractable_body_urls covers a buy-tier name's latest annual or interim results, or more than 3 French buy-tier names",
+      "tags": [
+        "amf",
+        "euro_filings",
+        "pdf",
+        "ocr"
+      ],
+      "status": "open",
+      "source": "L545 conversation (PR #994 rebase)",
+      "added_at": "2026-10-06T17:55:22+00:00"
     }
   ],
   "fragments": [
