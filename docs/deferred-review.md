@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T17:55:22+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T18:24:04+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -246,6 +246,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N191 | **Do not build Nasdaq Nordic news feed for omxs30** | api.news.eu.nasdaq.com query.action is public JSON and filters by exact company name, but only GlobeNewswire customers publish there: 1 of 11 OMXS30 buy-tier names (Skanska). Ericsson, H&M, Assa Abloy, Telia etc. use Cision / MFN; Finansinspektionen's OAM has no API. | Finansinspektionen or Cision/MFN expose a public filings API, or omxs30 is fronted on a sprint stream with more than three buy-tier names thin after IR allowlist seeds |
 | N192 | **Do not work around Unternehmensregister / Bundesanzeiger captcha for dax** | German OAM search sits behind a captcha (Unternehmensregister) or a stateful session form (Bundesanzeiger). AMF shipped in L545; .DE names stay on ESEF, Google News and IR allowlist PDFs. | Germany publishes a public or keyed regulated-information API, or dax is fronted on a sprint stream with its thin leftovers mainly interim periods ESEF cannot close |
 | N193 | **Do not scrape 1Info / eMarket, CNMV or OeKB portals for euro OAM filings** | Italy (1Info / eMarket STORAGE) are HTML portals with undocumented internal endpoints; Spain CNMV is ASP.NET __VIEWSTATE forms (direct query URLs 400/403); Austria OeKB OAM is an Angular app behind an F5 bot-defence script. No documented open API in any of them. | One of CONSOB, CNMV or OeKB publishes an open-data or keyed filings API, or ftse_mib / ibex35 / atx thin buy-tier leftovers persist after a complete fat slot with IR seeds |
+| N194 | **Default-knob twin for graduated_allocation legacy tuning** | graduated_allocation took 16 knob applies under the legacy rule (Sep-Oct 2026). A cold-start twin on default knobs would show whether that tuning helped; not worth a live track until the book's own verdict is significant. | graduated_allocation gets a positive or negative verdict in track_statistics.json, or it is proposed as primary/control |
 
 ---
 
@@ -336,6 +337,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L538 | **Decision-review NAV marks holdings at avg cost** | decision_review._mark_prices values open holdings at avg_cost, so published portfolio_value / excess_after_costs is cost-basis, not marked to market. The total-return view (L528) uses equity-curve marks instead. | Before any track promotion or knob change cites published excess_after_costs, or when the live review is switched to total return |
 | L540 | **Re-rank knob calibration after replay phantom-cash fix** | fund_from_pre_state treated cash_before=0.0 as missing and seeded replays with initial cash. Walk-forward folds starting on fully invested passes (folds 2+) carried ~£1000 phantom cash, so the fitness ranking behind ai_judgment_calibrated r1-r3 is not evidence. Re-run ftse-knob-calibrate rank and compare before citing calibrated shadows. | After the replay phantom-cash fix merges, at the next Sunday/manual calibration pass |
 | L547 | **Significance interval on primary-vs-control and twin-vs-parent gaps** | The assessment scoreboard reports primary minus control and twin minus parent as point differences on common windows. Add a block-bootstrap 90% interval on the daily difference (as track_statistics does for ai_vs_rules) so the twin readiness gate and the primary/control warn are testable. | Primary/control or hold-buffer twin/parent share >=60 common daily marks |
+| L554 | **Epoch-window significance for decision-review apply** | significance_gate_v1 uses each track's whole-history verdict from track_statistics.json. Once books have several knob epochs, judge the apply on the active return since the current knob epoch so old regimes don't vote for new knobs. | Any active book has a second knob epoch applied under significance_gate_v1, or an epoch reaches 60+ daily periods |
+| L555 | **Bonferroni-corrected decision-review apply gate** | Tighten significance_gate_v1 from the uncorrected 90% verdict to significant_after_correction across all tracks reviewed together, once more books share the gate and multiple-comparison false applies become likely. | Gate first opens on any track, or 6+ active tracks are apply-eligible |
 
 ### Universe & data
 
