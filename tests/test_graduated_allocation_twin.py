@@ -70,9 +70,7 @@ def test_spawn_varies_only_graduated_allocation(tmp_path: Path):
     assert record["varied"] == {"use_graduated_allocation": {"parent": False, "twin": True}}
     assert record["parent_knobs_at_start"]["use_graduated_allocation"] is False
     provenance = json.loads(
-        (base / GRADUATED_TWIN_TRACK_ID / GRADUATED_PROVENANCE_FILENAME).read_text(
-            encoding="utf-8"
-        )
+        (base / GRADUATED_TWIN_TRACK_ID / GRADUATED_PROVENANCE_FILENAME).read_text(encoding="utf-8")
     )
     assert provenance["varied"] == record["varied"]
     assert GRADUATED_TWIN_TRACK_ID in learning_track_dirs(base)
