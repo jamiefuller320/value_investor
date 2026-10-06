@@ -127,6 +127,49 @@ def save_run_snapshot(
     return path
 
 
+_SNAPSHOT_RESEARCH_FIELDS = ("research_verdict", "research_confidence", "research_as_of")
+
+
+def backfill_snapshot_research(snapshot_path: Path, signals: pd.DataFrame) -> int:
+    """Fill empty research fields of a saved run snapshot from enriched ``signals``.
+
+    The screen saves its snapshot before the email agent seeds committed memos into
+    ``output/research``, so the pipeline's research columns are empty on CI. Only
+    research fields are filled; ``adjusted_signal`` keeps the screen's overlay chain.
+    Returns the number of rows updated.
+    """
+    from value_investor.storage import read_json, resolve_json_path
+
+    if "ticker" not in signals.columns or "research_verdict" not in signals.columns:
+        return 0
+    resolved = resolve_json_path(Path(snapshot_path))
+    if resolved is None:
+        return 0
+    payload = read_json(resolved)
+    by_ticker: dict[str, dict[str, Any]] = {}
+    for row in signals.to_dict(orient="records"):
+        verdict = row.get("research_verdict")
+        if verdict is None or (isinstance(verdict, float) and pd.isna(verdict)) or not verdict:
+            continue
+        by_ticker[str(row.get("ticker") or "")] = {
+            field: row.get(field)
+            for field in _SNAPSHOT_RESEARCH_FIELDS
+            if field in row and not (isinstance(row.get(field), float) and pd.isna(row.get(field)))
+        }
+    updated = 0
+    for row in payload.get("signals") or []:
+        if row.get("research_verdict"):
+            continue
+        fields = by_ticker.get(str(row.get("ticker") or ""))
+        if not fields:
+            continue
+        row.update(fields)
+        updated += 1
+    if updated:
+        write_json(resolved, payload, compact=True, compress=resolved.suffix == ".gz")
+    return updated
+
+
 def _piotroski_f_score_int(value: Any) -> int | None:
     """Coerce a Piotroski payload to an int score.
 

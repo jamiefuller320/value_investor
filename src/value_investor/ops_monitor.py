@@ -2360,6 +2360,7 @@ def check_screen_premise_backtest(
         DEFAULT_DATA_DIR,
         DEFAULT_STORE_PATH,
         STORE_FAILED_TITLE,
+        ai_gate_finding_from_screen_premise_backtest,
         ops_finding_from_screen_premise_backtest,
         refresh_screen_premise_backtest,
     )
@@ -2383,9 +2384,10 @@ def check_screen_premise_backtest(
                 auto_fixable=False,
             )
         ]
-    finding = ops_finding_from_screen_premise_backtest(payload)
-    if not finding:
-        return []
+    findings = (
+        ops_finding_from_screen_premise_backtest(payload),
+        ai_gate_finding_from_screen_premise_backtest(payload),
+    )
     return [
         OpsFinding(
             severity=str(finding["severity"]),
@@ -2394,6 +2396,8 @@ def check_screen_premise_backtest(
             summary=str(finding["summary"]),
             auto_fixable=False,
         )
+        for finding in findings
+        if finding
     ]
 
 

@@ -14,7 +14,16 @@ after the horizon):
 - ``buy_tier_spread``: equal-weight buy-tier forward return minus the
   equal-weight screened-universe return;
 - ``avoid_spread``: same for ``avoid`` names (should be negative if the screen works);
-- ``rank_ic``: Spearman correlation of ``conviction_score`` with forward return.
+- ``rank_ic``: Spearman correlation of ``conviction_score`` with forward return;
+- ``ai_gate_spread``: buy-tier names the live AI gate would take
+  (``research_verdict == accumulate``) minus buy-tier names it would reject;
+- ``conviction_half_spread``: top half of the buy tier by ``conviction_score``
+  minus the bottom half (scale-free, so the 2026-09 conviction rescale does not
+  bias it).
+
+Research verdicts come from the snapshot row when present, otherwise from the
+memo revision archive strictly as of the run (``get_research_as_of``), so no
+later memo leaks into an earlier cohort.
 
 Cohort means get a 90% interval using an effective sample size that discounts
 overlapping windows (cohorts × 7 / horizon); intervals and ``weeks_to_detect``
@@ -36,6 +45,7 @@ from statistics import mean, stdev
 from typing import Any
 
 from value_investor.backtest import RunSnapshot, _find_exit_snapshot, load_run_snapshots
+from value_investor.research.timeline import get_research_as_of
 
 DEFAULT_DATA_DIR = Path("docs/data")
 DEFAULT_STORE_PATH = Path("docs/data/screen_premise_backtest.json")
@@ -44,6 +54,8 @@ HORIZON_DAYS = (7, 28)
 BUY_TIER = frozenset({"buy", "strong_buy"})
 MAX_ABS_RETURN = 0.5
 MIN_COHORT_NAMES = 5
+MIN_GATE_SIDE_NAMES = 3
+AI_GATE_VERDICT = "accumulate"
 MIN_COHORT_GAP_DAYS = 6
 MIN_EFFECTIVE_N = 4.0
 Z90 = 1.645
@@ -54,6 +66,7 @@ LEARNING_QUESTION = (
     "over the following weeks?"
 )
 FINDING_TITLE = "Value screen buy tier trails screened universe"
+AI_GATE_FINDING_TITLE = "AI research gate picks trail rejected buy-tier names"
 STORE_FAILED_TITLE = "Screen premise backtest observe failed"
 
 
@@ -100,8 +113,33 @@ def spearman(xs: list[float], ys: list[float]) -> float | None:
     return cov / math.sqrt(vx * vy)
 
 
-def score_cohort(entry: RunSnapshot, exit_snap: RunSnapshot) -> dict[str, Any] | None:
-    rows: list[tuple[str, float, float]] = []
+def snapshot_verdicts(snap: RunSnapshot, research_dir: Path | None) -> dict[str, str | None]:
+    """Buy-tier ``research_verdict`` per ticker as known at the run."""
+    out: dict[str, str | None] = {}
+    for row in snap.signals:
+        if str(row.get("signal") or "") not in BUY_TIER:
+            continue
+        ticker = str(row.get("ticker") or "")
+        verdict = row.get("research_verdict")
+        if not verdict and research_dir is not None:
+            doc = get_research_as_of(research_dir, ticker.upper(), snap.run_at)
+            verdict = doc.research_verdict if doc is not None else None
+        out[ticker] = str(verdict) if verdict else None
+    return out
+
+
+def _spread(a: list[float], b: list[float]) -> float | None:
+    if len(a) < MIN_GATE_SIDE_NAMES or len(b) < MIN_GATE_SIDE_NAMES:
+        return None
+    return round(mean(a) - mean(b), 4)
+
+
+def score_cohort(
+    entry: RunSnapshot,
+    exit_snap: RunSnapshot,
+    verdicts: dict[str, str | None] | None = None,
+) -> dict[str, Any] | None:
+    rows: list[tuple[str, str, float, float]] = []
     dropped = 0
     for row in entry.signals:
         ticker = str(row.get("ticker") or "")
@@ -113,12 +151,28 @@ def score_cohort(entry: RunSnapshot, exit_snap: RunSnapshot) -> dict[str, Any] |
         if abs(ret) > MAX_ABS_RETURN:
             dropped += 1
             continue
-        rows.append((str(row.get("signal") or ""), float(row.get("conviction_score") or 0.0), ret))
-    buy = [r for s, _, r in rows if s in BUY_TIER]
-    avoid = [r for s, _, r in rows if s == "avoid"]
+        rows.append(
+            (
+                ticker,
+                str(row.get("signal") or ""),
+                float(row.get("conviction_score") or 0.0),
+                ret,
+            )
+        )
+    buy_rows = [(t, c, r) for t, s, c, r in rows if s in BUY_TIER]
+    buy = [r for _, _, r in buy_rows]
+    avoid = [r for _, s, _, r in rows if s == "avoid"]
     if len(rows) < MIN_COHORT_NAMES or len(buy) < MIN_COHORT_NAMES:
         return None
-    universe = mean(r for _, _, r in rows)
+    universe = mean(r for _, _, _, r in rows)
+    verdicts = verdicts or {}
+    gate_pass = [r for t, _, r in buy_rows if verdicts.get(t) == AI_GATE_VERDICT]
+    gate_fail = [r for t, _, r in buy_rows if verdicts.get(t) != AI_GATE_VERDICT]
+    no_memo = sum(1 for t, _, _ in buy_rows if not verdicts.get(t))
+    by_conviction = sorted(buy_rows, key=lambda row: row[1], reverse=True)
+    half = len(by_conviction) // 2
+    top = [r for _, _, r in by_conviction[:half]]
+    bottom = [r for _, _, r in by_conviction[len(by_conviction) - half :]]
     return {
         "entry": entry.run_at,
         "exit": exit_snap.run_at,
@@ -127,7 +181,15 @@ def score_cohort(entry: RunSnapshot, exit_snap: RunSnapshot) -> dict[str, Any] |
         "universe_return": round(universe, 4),
         "buy_tier_spread": round(mean(buy) - universe, 4),
         "avoid_spread": round(mean(avoid) - universe, 4) if avoid else None,
-        "rank_ic": _round(spearman([c for _, c, _ in rows], [r for _, _, r in rows])),
+        "rank_ic": _round(spearman([c for _, _, c, _ in rows], [r for _, _, _, r in rows])),
+        "ai_gate_pass_names": len(gate_pass),
+        "ai_gate_reject_names": len(gate_fail),
+        "ai_gate_no_memo_names": no_memo,
+        "ai_gate_pass_share": (
+            round(len(gate_pass) / len(buy), 4) if no_memo < len(buy_rows) else None
+        ),
+        "ai_gate_spread": _spread(gate_pass, gate_fail) if no_memo < len(buy_rows) else None,
+        "conviction_half_spread": _spread(top, bottom),
         "dropped_unit_flips": dropped,
     }
 
@@ -164,8 +226,11 @@ def weeks_to_detect(stdev_per_cohort: float | None, horizon_days: int) -> float 
 
 
 def build_screen_premise_backtest(data_dir: Path = DEFAULT_DATA_DIR) -> dict[str, Any]:
-    snapshots = load_run_snapshots(Path(data_dir))
+    data_dir = Path(data_dir)
+    snapshots = load_run_snapshots(data_dir)
     cohorts = weekly_cohorts(snapshots)
+    research_dir = data_dir if (data_dir / "research").is_dir() else None
+    verdicts = {snap.run_at: snapshot_verdicts(snap, research_dir) for snap in cohorts}
     horizons: dict[str, Any] = {}
     for horizon in HORIZON_DAYS:
         rows = []
@@ -173,7 +238,7 @@ def build_screen_premise_backtest(data_dir: Path = DEFAULT_DATA_DIR) -> dict[str
             exit_snap = _find_exit_snapshot(entry, snapshots, horizon)
             if exit_snap is None:
                 continue
-            scored = score_cohort(entry, exit_snap)
+            scored = score_cohort(entry, exit_snap, verdicts.get(entry.run_at))
             if scored is not None:
                 rows.append(scored)
         spread = summarise([r["buy_tier_spread"] for r in rows], horizon)
@@ -184,6 +249,26 @@ def build_screen_premise_backtest(data_dir: Path = DEFAULT_DATA_DIR) -> dict[str
                 [r["avoid_spread"] for r in rows if r["avoid_spread"] is not None], horizon
             ),
             "rank_ic": summarise([r["rank_ic"] for r in rows if r["rank_ic"] is not None], horizon),
+            "ai_gate_spread": summarise(
+                [r["ai_gate_spread"] for r in rows if r["ai_gate_spread"] is not None], horizon
+            ),
+            "conviction_half_spread": summarise(
+                [
+                    r["conviction_half_spread"]
+                    for r in rows
+                    if r["conviction_half_spread"] is not None
+                ],
+                horizon,
+            ),
+            "ai_gate_pass_share": _round(
+                mean(shares)
+                if (
+                    shares := [
+                        r["ai_gate_pass_share"] for r in rows if r["ai_gate_pass_share"] is not None
+                    ]
+                )
+                else None
+            ),
             "weeks_to_detect_3pct_annual": (
                 weeks_to_detect(spread.get("stdev"), horizon)
                 if spread.get("ci90_low") is not None
@@ -244,6 +329,36 @@ def ops_finding_from_screen_premise_backtest(payload: dict[str, Any]) -> dict[st
             "universe with a 90% interval below zero — "
             + "; ".join(lines)
             + ". Observe-only: question the screen before tuning overlays. "
+            "See docs/ops/screen-premise-backtest.md."
+        ),
+        "auto_fixable": False,
+    }
+
+
+def ai_gate_finding_from_screen_premise_backtest(payload: dict[str, Any]) -> dict[str, Any] | None:
+    """Warn when names the AI gate takes trail the buy-tier names it rejects."""
+    lines: list[str] = []
+    for horizon in (payload.get("horizons") or {}).values():
+        spread = horizon.get("ai_gate_spread") or {}
+        high = spread.get("ci90_high")
+        if high is None or high >= 0:
+            continue
+        lines.append(
+            f"{horizon['horizon_days']}d: mean {spread['mean']:+.2%} per cohort "
+            f"(90% CI {spread['ci90_low']:+.2%} to {high:+.2%}, {spread['cohorts']} cohorts; "
+            f"gate passes {horizon.get('ai_gate_pass_share') or 0:.0%} of the buy tier)"
+        )
+    if not lines:
+        return None
+    return {
+        "severity": "warn",
+        "category": "backtest",
+        "title": AI_GATE_FINDING_TITLE,
+        "summary": (
+            "Frozen-signal backtest: buy-tier names with research_verdict=accumulate trail "
+            "the buy-tier names the gate rejects, with a 90% interval below zero — "
+            + "; ".join(lines)
+            + ". Observe-only: the gate is not adding value; do not tighten it from this alone. "
             "See docs/ops/screen-premise-backtest.md."
         ),
         "auto_fixable": False,
