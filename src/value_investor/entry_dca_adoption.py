@@ -11,6 +11,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.assessment_model import control_track_id, primary_track_id, twins
 from value_investor.experiment_acks import load_acks, matching_ack
 from value_investor.experiment_starts import load_starts, matching_start
 from value_investor.storage import read_json, write_json
@@ -18,10 +19,18 @@ from value_investor.storage import read_json, write_json
 PLAN_FILENAME = "entry_dca_adoption_plan.json"
 TARGET_CADENCE = "dca_4x_weekly"
 GRADUATED_MARKS_MIN = 8
-AI_JUDGMENT_FIRST_ENTRY_MIN = 3
-RULES_FIRST_ENTRY_MIN = 1
-FAIR_TRACKS = ("ai_judgment_fair", "rules_fair")
-LIVE_BOOKS = ("ai_judgment", "rules")
+PRIMARY_FIRST_ENTRY_MIN = 3
+CONTROL_FIRST_ENTRY_MIN = 1
+
+
+def live_books(paper_root: Path) -> tuple[str, str]:
+    """(primary, control) from the assessment model; frozen books never gate the plan."""
+    return primary_track_id(paper_root), control_track_id(paper_root)
+
+
+def cadence_check_tracks(paper_root: Path) -> tuple[str, ...]:
+    """Fair-cost AI books whose winning cadence must agree: the primary and its twins."""
+    return (primary_track_id(paper_root), *sorted(twins(paper_root)))
 
 
 def _as_dict(raw: Any) -> dict[str, Any]:
@@ -116,14 +125,15 @@ def evaluate_entry_dca_adoption_plan(
 
     acked = ack is not None and ready_cadence
     cadence_stable = leading == TARGET_CADENCE and bool(rollup.get("model_independent_hint"))
-    ai_first = first_entry.get("ai_judgment", 0)
-    rules_first = first_entry.get("rules", 0)
-    ai_needed = max(AI_JUDGMENT_FIRST_ENTRY_MIN, int(snapshot.get("ai_judgment") or 0) + 1)
-    rules_needed = max(RULES_FIRST_ENTRY_MIN, int(snapshot.get("rules") or 0) + 1)
-    live_first_entry_ok = ai_first >= ai_needed and rules_first >= rules_needed
+    primary, control = live_books(paper_root)
+    primary_first = first_entry.get(primary, 0)
+    control_first = first_entry.get(control, 0)
+    primary_needed = max(PRIMARY_FIRST_ENTRY_MIN, int(snapshot.get(primary) or 0) + 1)
+    control_needed = max(CONTROL_FIRST_ENTRY_MIN, int(snapshot.get(control) or 0) + 1)
+    live_first_entry_ok = primary_first >= primary_needed and control_first >= control_needed
     fair_ok = True
     fair_winners: dict[str, str | None] = {}
-    for track_id in FAIR_TRACKS:
+    for track_id in cadence_check_tracks(paper_root):
         count = first_entry.get(track_id, 0)
         winner = winners.get(track_id)
         fair_winners[track_id] = winner
@@ -135,9 +145,7 @@ def evaluate_entry_dca_adoption_plan(
     graduated_marks = int(graduated.get("equity_marks") or 0)
     execute_ready = out_of_sample_ready and graduated_marks >= GRADUATED_MARKS_MIN
 
-    fair_primary = _track_metrics(review, "ai_judgment_fair") or _track_metrics(
-        review, "ai_judgment"
-    )
+    fair_primary = _track_metrics(review, primary)
     beat_market = fair_primary.get("beat_market")
     if beat_market is None:
         beat_market = _as_dict(review).get("beat_market")
@@ -164,13 +172,17 @@ def evaluate_entry_dca_adoption_plan(
             status="done" if out_of_sample_ready else ("open" if acked else "blocked"),
             ready=out_of_sample_ready,
             revisit_when=(
-                f"ai_judgment first_entry>={ai_needed}, rules first_entry>={rules_needed}, "
-                f"leading still {TARGET_CADENCE}, fair tracks still agree"
+                f"{primary} first_entry>={primary_needed}, {control} first_entry>="
+                f"{control_needed}, leading still {TARGET_CADENCE}, fair tracks still agree"
             ),
-            do_not="Do not treat failing calibration shadows as live-book confirmation",
+            do_not="Do not treat frozen or calibration books as live-book confirmation",
             evidence={
-                "first_entry_by_track": {key: first_entry.get(key, 0) for key in LIVE_BOOKS},
-                "ack_snapshot": {key: snapshot.get(key, 0) for key in LIVE_BOOKS},
+                "live_books": {"primary": primary, "control": control},
+                "first_entry_by_track": {
+                    key: first_entry.get(key, 0) for key in (primary, control)
+                },
+                "ack_snapshot": {key: snapshot.get(key, 0) for key in (primary, control)},
+                "live_winning_cadence": {key: winners.get(key) for key in (primary, control)},
                 "leading_cadence": leading,
                 "fair_winning_cadence": fair_winners,
                 "cadence_stable": cadence_stable,
