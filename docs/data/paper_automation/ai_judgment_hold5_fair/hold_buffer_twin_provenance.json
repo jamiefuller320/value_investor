@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "spawned_at": "2026-10-06T10:06:26.549738+00:00",
+  "track_id": "ai_judgment_hold5_fair",
+  "parent_track_id": "ai_judgment_fair",
+  "market_id": "ftse350",
+  "spawn_reason": "L541 hold-buffer twin (cold start, fresh capital epoch)",
+  "fair_costs": {
+    "trade_cost_pct": 0.0027500000000000003,
+    "buy_cost_pct": 0.00525,
+    "sell_cost_pct": 0.00025
+  },
+  "varied": {
+    "exit_confirm_screens": {
+      "parent": 2,
+      "twin": 5
+    }
+  },
+  "parent_knobs_at_spawn": {
+    "min_conviction": 0.6,
+    "exit_confirm_screens": 2,
+    "reentry_cooldown_screens": 1,
+    "max_positions": 3,
+    "sector_cap": 0.2,
+    "skip_timing_wait": true,
+    "require_research_accumulate": true,
+    "use_adjusted_signal": true,
+    "min_rebalance_notional_gbp": 10.0
+  },
+  "learning_question": "Does holding through 5 confirming screens (vs the primary's 2) beat the primary on total return at fair costs, as the L531 replay suggested (+5.8pp over 19 passes)?",
+  "readiness_gate": "Promote only if the twin leads its parent on total return over >=26 weekly screens with parent knobs unchanged since start, and the twin-minus-parent 90% interval excludes zero; otherwise freeze the twin.",
+  "note": "Knobs are fixed (churn-policy twin; decision-review --apply skips it). Do not edit mid-flight; freeze it and start a new twin instead."
+}

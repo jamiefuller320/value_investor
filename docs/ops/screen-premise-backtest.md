@@ -81,7 +81,7 @@ gate from these findings alone.
 
 - The gate passes about 92% of the buy tier (3–8 names rejected a week), so
   `ai_gate_spread` is noise so far: 7d mean +0.81%, 90% CI −0.74% to +2.35%.
-  A binding gate is parked as N187.
+  A binding gate is parked as N189.
 - `conviction_half_spread` is negative: the higher-conviction half of the buy
   tier trailed the lower half by 0.46% a week (90% CI −0.96% to +0.03%) and by
   1.7% over 28 days (interval not yet shown). Conviction ranking inside the buy

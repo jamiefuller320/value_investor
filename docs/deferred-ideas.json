@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-06T09:49:55+00:00",
+  "updated_at": "2026-10-06T10:45:01+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7443,9 +7443,10 @@
         "suite-b",
         "dashboard"
       ],
-      "status": "open",
+      "status": "done",
       "source": "conversation: suite B primary timing",
-      "added_at": "2026-09-22T11:01:25+00:00"
+      "added_at": "2026-09-22T11:01:25+00:00",
+      "updated_at": "2026-10-06T10:45:01+00:00"
     },
     {
       "id": "L440",
@@ -12354,9 +12355,10 @@
         "holding-period",
         "twin"
       ],
-      "status": "open",
+      "status": "now",
       "source": "L531 hold-period counterfactual (agent, 2026-10-06)",
-      "added_at": "2026-10-06T03:06:48+00:00"
+      "added_at": "2026-10-06T03:06:48+00:00",
+      "updated_at": "2026-10-06T10:45:01+00:00"
     },
     {
       "id": "L542",
@@ -12496,6 +12498,38 @@
       "status": "open",
       "source": "Agent: L544 SEC companyfacts implementation (Oct 2026)",
       "added_at": "2026-10-06T09:49:55+00:00"
+    },
+    {
+      "id": "L547",
+      "category": "later",
+      "section": "learning",
+      "title": "Significance interval on primary-vs-control and twin-vs-parent gaps",
+      "summary": "The assessment scoreboard reports primary minus control and twin minus parent as point differences on common windows. Add a block-bootstrap 90% interval on the daily difference (as track_statistics does for ai_vs_rules) so the twin readiness gate and the primary/control warn are testable.",
+      "revisit_when": "Primary/control or hold-buffer twin/parent share >=60 common daily marks",
+      "tags": [
+        "scoreboard",
+        "statistics",
+        "twin"
+      ],
+      "status": "open",
+      "source": "single assessment model restructure (scoreboard + hold-buffer twin PR)",
+      "added_at": "2026-10-06T10:45:01+00:00"
+    },
+    {
+      "id": "L548",
+      "category": "later",
+      "section": "ops",
+      "title": "Render assessment scoreboard on dashboard and retire dual-suite rollup",
+      "summary": "assessment_scoreboard.json feeds ops-monitor and the progress headline but has no dashboard panel; the Suite A/B dual-suite rollup (learning_tracks_dual_suite, L487 republish bridge) still renders. Add a scoreboard panel, then retire the dual-suite view.",
+      "revisit_when": "Scoreboard has refreshed cleanly for 4 Sundays after the scoreboard PR merges",
+      "tags": [
+        "dashboard",
+        "scoreboard",
+        "dual-suite"
+      ],
+      "status": "open",
+      "source": "single assessment model restructure (scoreboard + hold-buffer twin PR)",
+      "added_at": "2026-10-06T10:45:01+00:00"
     }
   ],
   "fragments": [
