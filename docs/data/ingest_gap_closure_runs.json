@@ -19477,8 +19477,117 @@
         "per_ticker": []
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261006-04",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "UMC",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "UMC"
+        ],
+        "market_id": "us_adr_asia",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261006-04",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-06T19:40:02.686134+00:00",
+      "completed_at": "2026-10-06T19:41:22.029760+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "UMC"
+        ],
+        "results": [
+          {
+            "ticker": "UMC",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 50,
+              "filings_with_body": 33,
+              "indexed_without_body": 17
+            },
+            "after": {
+              "filings_total": 50,
+              "filings_with_body": 33,
+              "indexed_without_body": 17
+            },
+            "improved": false,
+            "regime": "sec_edgar",
+            "filings_summary": {
+              "total": 50,
+              "annual": 1,
+              "interim": 49,
+              "trading_update": 0,
+              "other": 0,
+              "with_body": 33,
+              "period_coverage": {
+                "annual": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "interim": {
+                  "total": 49,
+                  "with_body": 32
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 0,
+                  "with_body": 0
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 33,
+              "with_body_after": 33,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "UMC",
+            "with_body_before": 33,
+            "with_body_after": 33,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-10-06T17:07:15.231872+00:00",
+  "updated_at": "2026-10-06T19:41:22.029770+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
