@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-06T19:42:54+00:00",
+  "updated_at": "2026-10-06T20:13:22+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -1417,9 +1417,11 @@
         "exit-shadow",
         "auto-tune"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "momentum-exit-shadow-build",
-      "added_at": "2026-07-25T06:30:01+00:00"
+      "added_at": "2026-07-25T06:30:01+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: momentum_grace is frozen; the open grace question is carried by N188."
     },
     {
       "id": "L86",
@@ -1502,9 +1504,11 @@
         "paper-auto",
         "promotion"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "momentum-exit-shadow-progression-pathway",
-      "added_at": "2026-07-25T06:54:29+00:00"
+      "added_at": "2026-07-25T06:54:29+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: momentum_grace is frozen; the open grace question is carried by N188."
     },
     {
       "id": "L91",
@@ -1938,7 +1942,7 @@
       "section": "learning",
       "title": "Hold-to-breakeven vs swap-success exit cohorts",
       "summary": "Track underwater/downgraded positions: P(recovery to breakeven within N weeks) vs P(rotation improves excess vs replacement). Split by data_quality and exit_kind; observe-only until cohorts mature; feed counterfactual replay priors for hold buffer and grace knobs.",
-      "revisit_when": "exit_shadow has \u226515 closed exits per track AND rules counterfactual replay shows material churn on high data_quality names",
+      "revisit_when": "exit_shadow has >=15 closed exits on the primary ai_judgment_fair and counterfactual replay shows material churn on high data_quality names",
       "tags": [
         "exit-timing",
         "churn",
@@ -1947,7 +1951,9 @@
       ],
       "status": "open",
       "source": "exit-timing-strategy-discussion",
-      "added_at": "2026-08-10T22:50:33+00:00"
+      "added_at": "2026-08-10T22:50:33+00:00",
+      "revisit_when_before_triage": "exit_shadow has \u226515 closed exits per track AND rules counterfactual replay shows material churn on high data_quality names",
+      "triage_note": "2026-10-06 assessment-model triage: trigger named a frozen book; retargeted to the primary/control."
     },
     {
       "id": "L118",
@@ -2754,9 +2760,11 @@
         "dashboard",
         "GC"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "system architecture review",
-      "added_at": "2026-08-20T16:35:52+00:00"
+      "added_at": "2026-08-20T16:35:52+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: calibrated shadows r1-r3 and parent ai_judgment are frozen; no ranks spawn from a frozen parent."
     },
     {
       "id": "L166",
@@ -3720,9 +3728,11 @@
         "cost-drag",
         "decision-review"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "sunday-review conviction vs suite costs discussion",
-      "added_at": "2026-09-01T14:40:27+00:00"
+      "added_at": "2026-09-01T14:40:27+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: no suites to split; replaced by a fair-cost threshold recalibration idea."
     },
     {
       "id": "L222",
@@ -4076,9 +4086,11 @@
         "learning",
         "trajectory"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "threshold crossing vs model analysis question",
-      "added_at": "2026-09-03T06:53:01+00:00"
+      "added_at": "2026-09-03T06:53:01+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: technical is frozen; its stops/targets question is carried by N188."
     },
     {
       "id": "L243",
@@ -4634,9 +4646,11 @@
         "budget",
         "hygiene"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
-      "added_at": "2026-09-04T12:29:50+00:00"
+      "added_at": "2026-09-04T12:29:50+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: calibrated r1-r3 and momentum_grace frozen in assessment_model.json."
     },
     {
       "id": "L276",
@@ -4822,9 +4836,11 @@
         "suite-b",
         "warm-start"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-01a06c88-8992-77c8-80c4-37a6d1561a6f",
-      "added_at": "2026-09-04T13:29:10+00:00"
+      "added_at": "2026-09-04T13:29:10+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: Suite A/B split retired; one fair-cost assessment model (rules_fair and Suite A books frozen)."
     },
     {
       "id": "L287",
@@ -6159,7 +6175,7 @@
       "section": "research",
       "title": "Reallocate memo spend into filing-derived machine features first",
       "summary": "Feeder for L367 Phase C / L368: prefer P1 work that thickens the PIT information set paper-auto and autopsy can see without narrative \u2014 filing bodies, FCF basis bridges, EPS overlays, overlay bind freshness. These features matter because they improve decision inputs and gap attribution, not as memo substitutes for humans.",
-      "revisit_when": "FTSE buy-tier filing-body parity is green and FCF/EPS overlays are bound on weekday reports, yet AI-judgment still lacks edge vs rules",
+      "revisit_when": "FTSE buy-tier filing-body parity is green and FCF/EPS overlays are bound on weekday reports, yet the primary ai_judgment_fair still lacks edge vs the buy_tier_level control on the assessment scoreboard",
       "tags": [
         "P1",
         "filings",
@@ -6172,7 +6188,9 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a09991-8a40-709a-afd1-b32b7a411341",
-      "added_at": "2026-09-13T07:13:56+00:00"
+      "added_at": "2026-09-13T07:13:56+00:00",
+      "revisit_when_before_triage": "FTSE buy-tier filing-body parity is green and FCF/EPS overlays are bound on weekday reports, yet AI-judgment still lacks edge vs rules",
+      "triage_note": "2026-10-06 assessment-model triage: trigger named a frozen book; retargeted to the primary/control."
     },
     {
       "id": "L366",
@@ -6867,7 +6885,7 @@
       "section": "learning",
       "title": "Market-specific fair RT for trade-plan target floors",
       "summary": "Trade-plan take-profit floors default to Suite A 6% round-trip + 4% net edge. Optionally bind assumed_round_trip_cost_pct from ftse-trading-costs per market so Suite B / shards use fair UK/US/EU friction instead of stress.",
-      "revisit_when": "Suite B fair-cost books are the primary lens for chart/decision-pack target quality, or a saved TradePlanConfig is wired per market shard",
+      "revisit_when": "Trigger met 2026-10-06 (every active FTSE book runs fair costs): next trade-plan or decision-pack target-quality pass",
       "tags": [
         "trade-plan",
         "costs",
@@ -6876,7 +6894,9 @@
       ],
       "status": "open",
       "source": "trade-plan target spread conversation",
-      "added_at": "2026-09-16T10:20:52+00:00"
+      "added_at": "2026-09-16T10:20:52+00:00",
+      "revisit_when_before_triage": "Suite B fair-cost books are the primary lens for chart/decision-pack target quality, or a saved TradePlanConfig is wired per market shard",
+      "triage_note": "2026-10-06 assessment-model triage: trigger named a frozen book; retargeted to the primary/control."
     },
     {
       "id": "L406",
@@ -7490,7 +7510,7 @@
       "section": "learning",
       "title": "Opportunity-cost rotation instead of always exiting demoted buy-tier",
       "summary": "Softer than always exit_confirm on off-target buy-tier: only free capital when higher-conviction buys are skipped for cash. Preserves long holds for lifecycle experiments when the buy pipeline is idle; still unblocks sleeves when targets need funding. Ranked books vs buy_tier_level remain the dual instrument.",
-      "revisit_when": "After momentum_grace rank-rotation fix merges and Sunday review shows exit cohorts thickening or over-churn on demoted buy-tier names",
+      "revisit_when": "Hold-buffer twin (L541) or primary ai_judgment_fair exit cohorts show over-churn on demoted buy-tier names",
       "tags": [
         "rotation",
         "lifecycle",
@@ -7499,7 +7519,9 @@
       ],
       "status": "open",
       "source": "conversation: demotion curtails experiments",
-      "added_at": "2026-09-22T11:26:26+00:00"
+      "added_at": "2026-09-22T11:26:26+00:00",
+      "revisit_when_before_triage": "After momentum_grace rank-rotation fix merges and Sunday review shows exit cohorts thickening or over-churn on demoted buy-tier names",
+      "triage_note": "2026-10-06 assessment-model triage: trigger named a frozen book; retargeted to the primary/control."
     },
     {
       "id": "L443",
@@ -7544,7 +7566,7 @@
       "section": "learning",
       "title": "Cash buffer sleeve after rank-rotation works",
       "summary": "Prefer fixing blocked exits (done L440) so fully-invested books recycle into better sleeves. A 5-10% dry-powder buffer remains optional capital-allocation v2 \u2014 do not use idle cash as a substitute for broken rotation.",
-      "revisit_when": "capital_rotation_coordinator / cash buffer target phase activates and rank rotation is healthy on momentum_grace",
+      "revisit_when": "capital_rotation_coordinator cash buffer target phase activates and rank rotation is healthy on the primary ai_judgment_fair",
       "tags": [
         "cash-buffer",
         "capital-allocation",
@@ -7552,7 +7574,9 @@
       ],
       "status": "open",
       "source": "conversation: 0 cash buy pipeline",
-      "added_at": "2026-09-22T11:19:58+00:00"
+      "added_at": "2026-09-22T11:19:58+00:00",
+      "revisit_when_before_triage": "capital_rotation_coordinator / cash buffer target phase activates and rank rotation is healthy on momentum_grace",
+      "triage_note": "2026-10-06 assessment-model triage: trigger named a frozen book; retargeted to the primary/control."
     },
     {
       "id": "L446",
@@ -8063,7 +8087,7 @@
       "section": "learning",
       "title": "Paper-exit model-score quintile attribution (observe)",
       "summary": "Observe-only rollup: join closed position_closed/exit_shadow sells to entry buy and nearest models_*.json scores; report Q5 vs Q1 realized return, hit rate, and FTSE excess when ready. Do not auto-tune weights until n\u226530 joined closes on primary track.",
-      "revisit_when": "\u226530 closed paper exits on ai_judgment with joinable entry scores after buy-tier FTSE-excess panel ships",
+      "revisit_when": ">=30 closed paper exits on the primary ai_judgment_fair with joinable entry scores after buy-tier FTSE-excess panel ships",
       "tags": [
         "model-attribution",
         "exit-quintile",
@@ -8072,7 +8096,9 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-dd55d010-e06a-5951-baf3-c36422034abd",
-      "added_at": "2026-09-27T12:27:58+00:00"
+      "added_at": "2026-09-27T12:27:58+00:00",
+      "revisit_when_before_triage": "\u226530 closed paper exits on ai_judgment with joinable entry scores after buy-tier FTSE-excess panel ships",
+      "triage_note": "2026-10-06 assessment-model triage: trigger named a frozen book; retargeted to the primary/control."
     },
     {
       "id": "L476",
@@ -8246,9 +8272,11 @@
         "presentation",
         "analysis-tab"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-c3fd0260-e48e-5f38-b3db-b3cc542851c4",
-      "added_at": "2026-09-28T08:55:55+00:00"
+      "added_at": "2026-09-28T08:55:55+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: dual-suite rollup is being retired in favour of the scoreboard panel (L548)."
     },
     {
       "id": "L486",
@@ -8279,9 +8307,11 @@
         "dual-suite",
         "bridge"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-6a823b72-2260-5c86-811f-36eb5b11decf",
-      "added_at": "2026-09-28T09:41:19+00:00"
+      "added_at": "2026-09-28T09:41:19+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: dual-suite rollup is being retired in favour of the scoreboard panel (L548)."
     },
     {
       "id": "L488",
@@ -8542,9 +8572,11 @@
         "N59",
         "L275"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-6798a685-db63-5092-ab19-48d489a0d9cb",
-      "added_at": "2026-09-29T15:11:58+00:00"
+      "added_at": "2026-09-29T15:11:58+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: calibrated shadows r1-r3 and parent ai_judgment are frozen; no ranks spawn from a frozen parent."
     },
     {
       "id": "L503",
@@ -9282,9 +9314,11 @@
         "epoch",
         "eow"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-01a0b580-7a75-7585-a700-91fa2c6ac474",
-      "added_at": "2026-09-18T17:15:28+00:00"
+      "added_at": "2026-09-18T17:15:28+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: exit-buffer question now runs as the hold-buffer twin ai_judgment_hold5_fair (L541) with a readiness gate."
     },
     {
       "id": "N135",
@@ -9444,7 +9478,7 @@
       "section": "universe",
       "title": "Live universe expansion before stage 2b edge",
       "summary": "Stage 4 live non-UK screen should wait until primary learning track shows after-cost edge; offline library growth (P2) continues.",
-      "revisit_when": "Stage 2b exit: AI judgment persistent excess after fair costs vs ^FTSE and vs rules",
+      "revisit_when": "Stage 2b exit: primary ai_judgment_fair has a positive scoreboard verdict vs FTAL.L after fair costs and beats the buy_tier_level control",
       "tags": [
         "stage4",
         "live-screen",
@@ -9452,7 +9486,9 @@
       ],
       "status": "open",
       "source": "conversation: improve scores advice",
-      "added_at": "2026-09-22T10:49:43+00:00"
+      "added_at": "2026-09-22T10:49:43+00:00",
+      "revisit_when_before_triage": "Stage 2b exit: AI judgment persistent excess after fair costs vs ^FTSE and vs rules",
+      "triage_note": "2026-10-06 assessment-model triage: trigger named a frozen book; retargeted to the primary/control."
     },
     {
       "id": "N144",
@@ -9466,9 +9502,11 @@
         "knobs",
         "score-lift"
       ],
-      "status": "open",
+      "status": "done",
       "source": "conversation: improve scores advice",
-      "added_at": "2026-09-22T10:49:43+00:00"
+      "added_at": "2026-09-22T10:49:43+00:00",
+      "updated_at": "2026-10-06T20:13:02+00:00",
+      "status_note": "2026-10-06 assessment-model triage: significance_gate_v1 (#993) blocks applies until active return is statistically real."
     },
     {
       "id": "N145",
@@ -9483,9 +9521,11 @@
         "N48",
         "scoreboard"
       ],
-      "status": "open",
+      "status": "done",
       "source": "conversation: suite B primary timing",
-      "added_at": "2026-09-22T11:01:09+00:00"
+      "added_at": "2026-09-22T11:01:09+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: primary switched to ai_judgment_fair (control buy_tier_level)."
     },
     {
       "id": "N146",
@@ -9500,9 +9540,11 @@
         "primary",
         "scoreboard"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "conversation: does primary suite matter",
-      "added_at": "2026-09-22T11:08:15+00:00"
+      "added_at": "2026-09-22T11:08:15+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: Suite A/B split retired; one fair-cost assessment model (rules_fair and Suite A books frozen)."
     },
     {
       "id": "N147",
@@ -9979,9 +10021,11 @@
         "promotion",
         "suite-b"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-6798a685-db63-5092-ab19-48d489a0d9cb",
-      "added_at": "2026-09-29T15:11:57+00:00"
+      "added_at": "2026-09-29T15:11:57+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: calibrated shadows r1-r3 and parent ai_judgment are frozen; no ranks spawn from a frozen parent."
     },
     {
       "id": "N172",
@@ -10006,7 +10050,7 @@
       "section": "not_now",
       "title": "Do not let AI judgment own live capital path yet",
       "summary": "Primary learning track is paper-only. Keep live broker automation and any promotion of AI gates to real capital off until the AI-judgment book shows persistent excess vs ^FTSE and vs the rules control in walk-forward review.",
-      "revisit_when": "AI judgment paper track shows persistent excess vs screen-only and FTSE in walk-forward review",
+      "revisit_when": "Primary ai_judgment_fair shows a positive scoreboard verdict vs FTAL.L and beats the buy_tier_level control in walk-forward review",
       "tags": [
         "self-learning",
         "N3",
@@ -10014,7 +10058,9 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-c047381e-3b37-4467-bcb8-680b7688f2df",
-      "added_at": "2026-07-22T09:14:16+00:00"
+      "added_at": "2026-07-22T09:14:16+00:00",
+      "revisit_when_before_triage": "AI judgment paper track shows persistent excess vs screen-only and FTSE in walk-forward review",
+      "triage_note": "2026-10-06 assessment-model triage: trigger named a frozen book; retargeted to the primary/control."
     },
     {
       "id": "N19",
@@ -10160,9 +10206,11 @@
         "paper-auto",
         "self-learning"
       ],
-      "status": "open",
+      "status": "done",
       "source": "momentum-exit-shadow-progression-pathway",
-      "added_at": "2026-07-25T06:54:29+00:00"
+      "added_at": "2026-07-25T06:54:29+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: history floor is MIN_EQUITY_MARKS/MIN_TRADES in decision_review; applies also need significance_gate_v1."
     },
     {
       "id": "N27",
@@ -10335,7 +10383,7 @@
       "section": "not_now",
       "title": "Do not auto-promote surviving shadows into ai_judgment",
       "summary": "Keep human gate between endurance survivors and primary config; auto-promotion would couple lab noise to live epochs before history is thick enough.",
-      "revisit_when": "Multiple shadows have multi-month surviving status and primary still beats rules+market with human-seeded priors",
+      "revisit_when": "Twins of ai_judgment_fair have multi-month surviving status and the primary has a positive scoreboard verdict with human-seeded priors",
       "tags": [
         "promotion",
         "automation",
@@ -10343,7 +10391,9 @@
       ],
       "status": "open",
       "source": "system architecture review",
-      "added_at": "2026-08-20T16:35:52+00:00"
+      "added_at": "2026-08-20T16:35:52+00:00",
+      "revisit_when_before_triage": "Multiple shadows have multi-month surviving status and primary still beats rules+market with human-seeded priors",
+      "triage_note": "2026-10-06 assessment-model triage: trigger named a frozen book; retargeted to the primary/control."
     },
     {
       "id": "N37",
@@ -10424,9 +10474,11 @@
         "human_gate",
         "info_action_gap"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-d4c657b8-0b79-5674-860b-d3be752df9f8",
-      "added_at": "2026-08-24T08:33:58+00:00"
+      "added_at": "2026-08-24T08:33:58+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: exclusion ladder parent ai_judgment is frozen; the Sunday spawn card was retired (#998)."
     },
     {
       "id": "N41",
@@ -10440,9 +10492,11 @@
         "shadow",
         "automation"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-01a032a9-501d-71fd-9ae1-66179169fd25",
-      "added_at": "2026-08-24T08:36:00+00:00"
+      "added_at": "2026-08-24T08:36:00+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: exclusion ladder parent ai_judgment is frozen; the Sunday spawn card was retired (#998)."
     },
     {
       "id": "N42",
@@ -10474,9 +10528,11 @@
         "technical",
         "exits"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-01a03829-44b3-7644-9ee1-c260474dda69",
-      "added_at": "2026-08-25T09:14:49+00:00"
+      "added_at": "2026-08-25T09:14:49+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: technical is frozen; its stops/targets question is carried by N188."
     },
     {
       "id": "N44",
@@ -10556,9 +10612,11 @@
         "learning",
         "not_now"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-01a046dd-77de-761d-86ba-fc1b0a02f5f1",
-      "added_at": "2026-08-28T16:10:06+00:00"
+      "added_at": "2026-08-28T16:10:06+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: primary and control run fair T212 costs; 3% stress books frozen."
     },
     {
       "id": "N49",
@@ -10636,9 +10694,11 @@
         "rules",
         "suite-a"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-01a05d37-6943-7cdb-a519-ea81652721fc",
-      "added_at": "2026-09-01T13:56:19+00:00"
+      "added_at": "2026-09-01T13:56:19+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: Suite A/B split retired; one fair-cost assessment model (rules_fair and Suite A books frozen)."
     },
     {
       "id": "N53",
@@ -10652,9 +10712,11 @@
         "capacity",
         "shadows"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-01a05d37-6943-7cdb-a519-ea81652721fc",
-      "added_at": "2026-09-01T14:03:21+00:00"
+      "added_at": "2026-09-01T14:03:21+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: Suite A/B split retired; one fair-cost assessment model (rules_fair and Suite A books frozen)."
     },
     {
       "id": "N54",
@@ -11027,9 +11089,11 @@
         "scoreboard",
         "stage-2b"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
-      "added_at": "2026-09-04T12:29:50+00:00"
+      "added_at": "2026-09-04T12:29:50+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: Suite A/B split retired; one fair-cost assessment model (rules_fair and Suite A books frozen)."
     },
     {
       "id": "N75",
@@ -11528,7 +11592,7 @@
       "section": "not_now",
       "title": "Live LLM sell overlay without evidence trail",
       "summary": "Do not give LLM hard veto / sell authority on Suite A live books without durable exit_reason + citations. Observe-only llm_agree_veto_shadow is wired; prefer still_in_buy_set twin for capital-path churn. Promote hard veto only via cold-start/epoch after disagreement marks.",
-      "revisit_when": "still_in_buy_set twin has thick marks AND llm_agree_veto_shadow disagreement cohort justifies hard veto (evidence schema already wired 2026-10-01)",
+      "revisit_when": "llm_agree_veto_shadow disagreement cohort on the primary justifies hard veto (evidence schema wired 2026-10-01; still_in_buy_set twin frozen 2026-10-06)",
       "tags": [
         "llm",
         "sell",
@@ -11538,7 +11602,9 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-bbb1dd0e-b47c-56d6-bab4-93f84fa54576",
-      "added_at": "2026-09-30T18:17:41+00:00"
+      "added_at": "2026-09-30T18:17:41+00:00",
+      "revisit_when_before_triage": "still_in_buy_set twin has thick marks AND llm_agree_veto_shadow disagreement cohort justifies hard veto (evidence schema already wired 2026-10-01)",
+      "triage_note": "2026-10-06 assessment-model triage: trigger named a frozen book; retargeted to the primary/control."
     },
     {
       "id": "L507",
@@ -11554,9 +11620,11 @@
         "observe",
         "L507"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-bbb1dd0e-b47c-56d6-bab4-93f84fa54576",
-      "added_at": "2026-09-30T18:17:41+00:00"
+      "added_at": "2026-09-30T18:17:41+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: still_in_buy_set twin is frozen; exit-churn is tested by the hold-buffer twin (L541)."
     },
     {
       "id": "N174",
@@ -11588,9 +11656,11 @@
         "suite-a",
         "not-mid-flight"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-bbb1dd0e-b47c-56d6-bab4-93f84fa54576",
-      "added_at": "2026-09-30T18:27:25+00:00"
+      "added_at": "2026-09-30T18:27:25+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: still_in_buy_set twin is frozen; exit-churn is tested by the hold-buffer twin (L541)."
     },
     {
       "id": "L508",
@@ -11605,9 +11675,11 @@
         "twin",
         "churn"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-58e09d40-7764-52c7-a03f-7a191bfc6fb2",
-      "added_at": "2026-09-30T19:19:33+00:00"
+      "added_at": "2026-09-30T19:19:33+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: still_in_buy_set twin is frozen; exit-churn is tested by the hold-buffer twin (L541)."
     },
     {
       "id": "L509",
@@ -11622,9 +11694,11 @@
         "twin",
         "churn"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-58e09d40-7764-52c7-a03f-7a191bfc6fb2",
-      "added_at": "2026-09-30T19:19:33+00:00"
+      "added_at": "2026-09-30T19:19:33+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: still_in_buy_set twin is frozen; exit-churn is tested by the hold-buffer twin (L541)."
     },
     {
       "id": "N176",
@@ -11639,9 +11713,11 @@
         "not-mid-flight",
         "N175"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "https://cursor.com/agents/bc-58e09d40-7764-52c7-a03f-7a191bfc6fb2",
-      "added_at": "2026-09-30T19:19:33+00:00"
+      "added_at": "2026-09-30T19:19:33+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: still_in_buy_set twin is frozen; exit-churn is tested by the hold-buffer twin (L541)."
     },
     {
       "id": "L510",
@@ -11649,7 +11725,7 @@
       "section": "learning",
       "title": "Promote LLM agree/veto shadow to hard veto",
       "summary": "Observe-only llm_agree_veto_shadow is live. Promote to hard veto on live capital only after thick disagreement marks vs still_in_buy_set twin, fail-closed evidence on every live-bound card, and an explicit cold-start/epoch \u2014 never mid-flight Suite A edit.",
-      "revisit_when": "still_in_buy_set twin multi-week marks show material shadow veto-on-sell agreement AND authorize_live_llm_influence gate is reviewed",
+      "revisit_when": "llm_agree_veto_shadow multi-week marks on the primary show material veto-on-sell agreement AND authorize_live_llm_influence gate is reviewed (still_in_buy_set twin frozen 2026-10-06)",
       "tags": [
         "llm",
         "agree-veto",
@@ -11659,7 +11735,9 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-45805248-ee8b-5645-b7aa-cc5d6a743a6b",
-      "added_at": "2026-10-01T06:32:31+00:00"
+      "added_at": "2026-10-01T06:32:31+00:00",
+      "revisit_when_before_triage": "still_in_buy_set twin multi-week marks show material shadow veto-on-sell agreement AND authorize_live_llm_influence gate is reviewed",
+      "triage_note": "2026-10-06 assessment-model triage: trigger named a frozen book; retargeted to the primary/control."
     },
     {
       "id": "L511",
@@ -11862,9 +11940,11 @@
         "L86",
         "learning"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "momentum experiment audit follow-up",
-      "added_at": "2026-10-01T21:37:34+00:00"
+      "added_at": "2026-10-01T21:37:34+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: momentum_grace is frozen; the open grace question is carried by N188."
     },
     {
       "id": "L518",
@@ -12218,9 +12298,11 @@
         "contamination",
         "suite-b"
       ],
-      "status": "open",
+      "status": "done",
       "source": "Project-wide gap review (agent, 2026-10-05)",
-      "added_at": "2026-10-05T16:45:46+00:00"
+      "added_at": "2026-10-05T16:45:46+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: #976 scores fair books from a clean epoch; the scoreboard uses it."
     },
     {
       "id": "L534",
@@ -12339,9 +12421,11 @@
         "replay",
         "bug"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "Project gap review follow-up: replay phantom cash fix",
-      "added_at": "2026-10-06T02:53:23+00:00"
+      "added_at": "2026-10-06T02:53:23+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "2026-10-06 assessment-model triage: calibrated shadows r1-r3 and parent ai_judgment are frozen; no ranks spawn from a frozen parent."
     },
     {
       "id": "L541",
@@ -12579,9 +12663,11 @@
         "autonomy",
         "ops-load"
       ],
-      "status": "open",
+      "status": "done",
       "source": "project re-review after single assessment model (Oct 2026); PR #992 rebase",
-      "added_at": "2026-10-06T17:14:28+00:00"
+      "added_at": "2026-10-06T17:14:28+00:00",
+      "updated_at": "2026-10-06T20:13:03+00:00",
+      "status_note": "#998 pruned Sunday manual cards 18 -> 13 (35 -> 30 overall) after the assessment-model restructure."
     },
     {
       "id": "L551",
@@ -12597,7 +12683,8 @@
       ],
       "status": "open",
       "source": "project re-review after single assessment model (Oct 2026); PR #992 rebase",
-      "added_at": "2026-10-06T17:14:28+00:00"
+      "added_at": "2026-10-06T17:14:28+00:00",
+      "triage_note": "2026-10-06: frozen-book / Suite A subset triaged (31 closed with status_note, 11 triggers retargeted, L556 added). Remaining open backlog untouched."
     },
     {
       "id": "N191",
@@ -12787,6 +12874,22 @@
       "status": "open",
       "source": "L545 follow-up: alternatives to gated euro registers; PR #997 rebase",
       "added_at": "2026-10-06T19:18:30+00:00"
+    },
+    {
+      "id": "L558",
+      "category": "later",
+      "section": "learning",
+      "title": "Recalibrate decision-review cost-drag thresholds for fair costs",
+      "summary": "HIGH_COST_DRAG (4%) and the auto-raise min_conviction rule were tuned on 3% stress books. On fair T212 costs (~0.55% round trip) they rarely fire, so cost-driven proposals are effectively off. Re-derive the thresholds from fair-cost turnover before applies start happening. Replaces L221.",
+      "revisit_when": "significance_gate_v1 first opens on a fair-cost book, or a fair book's cost_drag exceeds 1% on an epoch",
+      "tags": [
+        "decision-review",
+        "costs",
+        "thresholds"
+      ],
+      "status": "open",
+      "source": "2026-10-06 assessment-model triage (PR #1000 rebase; reminted \u2014 L556 is Cision)",
+      "added_at": "2026-10-06T20:13:22+00:00"
     }
   ],
   "fragments": [
