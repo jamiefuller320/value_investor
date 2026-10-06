@@ -1187,6 +1187,7 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
         ),
         patch("value_investor.ops_monitor.check_committed_json", return_value=[]),
         patch("value_investor.ops_monitor.check_backtest_history", return_value=[]),
+        patch("value_investor.ops_monitor.check_screen_premise_backtest", return_value=[]),
         patch("value_investor.ops_monitor.check_latest_bundle", return_value=[]),
         patch(
             "value_investor.ops_monitor.check_engineering_queue",
@@ -1264,13 +1265,14 @@ def test_run_ops_monitor_writes_status(
     )
     status_path = tmp_path / "ops_status.json"
 
-    report = run_ops_monitor(
-        latest_path=latest,
-        health_log_path=health,
-        status_path=status_path,
-        apply_fixes=False,
-        draft_tasks=False,
-    )
+    with patch("value_investor.ops_monitor.check_screen_premise_backtest", return_value=[]):
+        report = run_ops_monitor(
+            latest_path=latest,
+            health_log_path=health,
+            status_path=status_path,
+            apply_fixes=False,
+            draft_tasks=False,
+        )
     assert status_path.exists()
     assert report.overall in {"ok", "warn", "fail"}
 

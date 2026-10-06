@@ -140,3 +140,23 @@ def test_run_backtest_health_writes_status(tmp_path: Path):
     assert status.exists()
     assert report.valid_runs == 1
     assert report.readiness["backtest_ready"] is False
+
+
+def test_run_backtest_health_loads_snapshots_from_history_dir(tmp_path: Path):
+    """Regression: snapshots were looked up in history/history, so horizons stayed empty."""
+    history = tmp_path / "history"
+    history.mkdir()
+    for stamp, run_at in (
+        ("20260802_123417", "2026-08-02T12:34:17+00:00"),
+        ("20260810_123417", "2026-08-10T12:34:17+00:00"),
+    ):
+        write_json(history / f"run_{stamp}.json.gz", _good_snapshot(run_at), compress=True)
+        write_json(
+            history / f"models_{stamp}.json.gz",
+            {"run_at": run_at, "models": []},
+            compress=True,
+        )
+    status = tmp_path / "backtest_health.json"
+    report = run_backtest_health(history_dir=history, status_path=status, apply_repairs=False)
+    assert report.backtest["run_count"] == 2
+    assert report.readiness["horizons_computed"] > 0

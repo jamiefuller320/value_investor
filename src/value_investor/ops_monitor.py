@@ -2345,6 +2345,58 @@ def check_backtest_history(
     return findings
 
 
+def check_screen_premise_backtest(
+    *,
+    data_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only L530: frozen-signal buy-tier vs screened-universe forward returns.
+
+    Writes ``docs/data/screen_premise_backtest.json``. Never changes signals or
+    books (``auto_fixable=False``).
+    """
+    from value_investor.screen_premise_backtest import (
+        DEFAULT_DATA_DIR,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_finding_from_screen_premise_backtest,
+        refresh_screen_premise_backtest,
+    )
+
+    root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
+    if not root.exists():
+        return []
+    try:
+        payload = refresh_screen_premise_backtest(
+            root,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="backtest",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_screen_premise_backtest(payload)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
 def _next_engineering_seq(existing_rows: list[dict[str, Any]], run_stamp: str) -> int:
     prefix = f"eng-{run_stamp}-"
     used = [
@@ -2867,6 +2919,7 @@ def collect_ops_findings(
     findings.extend(check_phase_b_producer_progress())
     findings.extend(check_indicator_integrity())
     findings.extend(check_backtest_history())
+    findings.extend(check_screen_premise_backtest())
     findings.extend(check_paper_learning_tracks())
 
     engineering_findings, queue_status = check_engineering_queue(
