@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-06T14:05:17+00:00",
+  "updated_at": "2026-10-06T17:14:28+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12548,6 +12548,54 @@
       "status": "open",
       "source": "L543 implementation (HKEX direct feed), Oct 2026",
       "added_at": "2026-10-06T13:03:10+00:00"
+    },
+    {
+      "id": "L549",
+      "category": "later",
+      "section": "ops",
+      "title": "Race-free IDs for the deferred-ideas store",
+      "summary": "_next_id allocates max+1 per category, so concurrent branches mint the same ID and merges renumber. Seen 2026-10-06: L543/L544 collided and N187 became N189 after docs already cited N187. Allocate IDs at merge time or use date-based IDs like fragments.",
+      "revisit_when": "Next deferred-store merge conflict or renumbered cross-reference",
+      "tags": [
+        "deferred",
+        "concurrency",
+        "merge-conflicts"
+      ],
+      "status": "open",
+      "source": "project re-review after single assessment model (Oct 2026); PR #992 rebase",
+      "added_at": "2026-10-06T17:14:28+00:00"
+    },
+    {
+      "id": "L550",
+      "category": "later",
+      "section": "ops",
+      "title": "Prune human gates toward the autonomy goal",
+      "summary": "The checklist has 35 manual tasks (18 on Sunday), and every new instrument adds one. Classify each by whether a human decision changes capital or policy; fold read-only review cards into one weekly digest; retire cards whose instrument is frozen.",
+      "revisit_when": "Monthly ops review cadence, or when Sunday manual tasks exceed 20",
+      "tags": [
+        "human-tasks",
+        "autonomy",
+        "ops-load"
+      ],
+      "status": "open",
+      "source": "project re-review after single assessment model (Oct 2026); PR #992 rebase",
+      "added_at": "2026-10-06T17:14:28+00:00"
+    },
+    {
+      "id": "L551",
+      "category": "later",
+      "section": "ops",
+      "title": "Triage the deferred-ideas backlog (544 open)",
+      "summary": "Parking is cheap, so the store holds 544 open ideas and 27 open fragments; revisit triggers are rarely evaluated automatically. Add an automated trigger check (e.g. ops-monitor or horizon-scan) and drop ideas superseded by the single assessment model.",
+      "revisit_when": "Next monthly horizon scan",
+      "tags": [
+        "deferred",
+        "backlog",
+        "horizon-scan"
+      ],
+      "status": "open",
+      "source": "project re-review after single assessment model (Oct 2026); PR #992 rebase",
+      "added_at": "2026-10-06T17:14:28+00:00"
     }
   ],
   "fragments": [
