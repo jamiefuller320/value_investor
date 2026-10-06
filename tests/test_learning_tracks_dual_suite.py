@@ -174,3 +174,58 @@ def test_paper_track_analysis_buckets_split_identity_from_adoption() -> None:
 def test_paper_track_analysis_buckets_none_without_dual() -> None:
     assert build_paper_track_analysis_buckets(None) is None
     assert slim_dual_suite_for_analysis(None) is None
+
+
+def test_suite_b_adoption_scores_forward_from_zero_datum() -> None:
+    """L533: warm-start seed (replayed at 3% stress) must not drive Suite B adoption."""
+    review = {
+        "primary_learning_track": "ai_judgment",
+        "reviews": {
+            "ai_judgment": {"metrics": {"excess_after_costs": -0.35}},
+            "rules": {"metrics": {"excess_after_costs": -0.42}},
+            "ai_judgment_fair": {
+                "metrics": {
+                    "excess_after_costs": -0.135,
+                    "since_zero_datum": {
+                        "started_at": "2026-09-01T09:27:42+01:00",
+                        "excess_after_costs": 0.012,
+                        "equity_marks": 20,
+                    },
+                }
+            },
+            "rules_fair": {
+                "metrics": {
+                    "excess_after_costs": -0.108,
+                    "since_zero_datum": {
+                        "started_at": "2026-09-01T09:27:27+01:00",
+                        "excess_after_costs": 0.02,
+                    },
+                }
+            },
+        },
+    }
+    out = build_learning_tracks_dual_suite(review, include_fair_assess=False)
+    assert out is not None
+    suite_b = out["suite_b"]
+    assert suite_b["ai_excess_after_costs"] == 0.012
+    assert suite_b["control_excess_after_costs"] == 0.02
+    assert suite_b["excess_basis"] == {"ai": "since_zero_datum", "control": "since_zero_datum"}
+    assert suite_b["beat_market"] is True
+    assert suite_b["beat_control"] is False
+    assert suite_b["lifetime_excess_diagnostic"]["ai"] == -0.135
+    row = suite_b["tracks"]["ai_judgment_fair"]
+    assert row["since_zero_datum_excess_after_costs"] == 0.012
+    assert row["excess_after_costs"] == -0.135
+
+
+def test_suite_b_falls_back_to_lifetime_without_zero_datum() -> None:
+    review = {
+        "reviews": {
+            "ai_judgment_fair": {"metrics": {"excess_after_costs": -0.05}},
+            "rules_fair": {"metrics": {"excess_after_costs": -0.07}},
+        },
+    }
+    out = build_learning_tracks_dual_suite(review, include_fair_assess=False)
+    assert out is not None
+    assert out["suite_b"]["ai_excess_after_costs"] == -0.05
+    assert out["suite_b"]["excess_basis"] == {"ai": "lifetime", "control": "lifetime"}

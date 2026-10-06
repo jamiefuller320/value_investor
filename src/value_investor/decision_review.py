@@ -151,6 +151,7 @@ class BookMetrics:
     excess_after_costs: float | None
     note: str = ""
     epoch: dict[str, Any] | None = None
+    since_zero_datum: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         payload = {
@@ -177,6 +178,8 @@ class BookMetrics:
         }
         if self.epoch:
             payload["epoch"] = self.epoch
+        if self.since_zero_datum:
+            payload["since_zero_datum"] = self.since_zero_datum
         return payload
 
 
@@ -414,6 +417,30 @@ def _compute_epoch_metrics(
         "excess_after_costs": None if excess is None else round(excess, 4),
         "note": note,
     }
+
+
+def load_forward_zero_datum(output_dir: Path) -> dict[str, Any] | None:
+    """Frozen forward-only start of a warm-started lab (fair-cost or calibration shadow).
+
+    Everything before ``started_at`` is replayed seed history, diagnostic only.
+    Unlike the knob epoch, this datum never moves when knobs are applied.
+    """
+    from value_investor.calibration_warm_start import ENDURANCE_ZERO_DATUM_KEY
+    from value_investor.fair_cost_lab import FAIR_COST_LAB_PROVENANCE_FILENAME
+    from value_investor.knob_calibration import CALIBRATION_PROVENANCE_FILENAME
+
+    for filename in (FAIR_COST_LAB_PROVENANCE_FILENAME, CALIBRATION_PROVENANCE_FILENAME):
+        path = Path(output_dir) / filename
+        if not path.exists():
+            continue
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        zero = raw.get(ENDURANCE_ZERO_DATUM_KEY) if isinstance(raw, dict) else None
+        if isinstance(zero, dict) and str(zero.get("started_at") or "").strip():
+            return {**zero, "provenance_file": filename}
+    return None
 
 
 def metrics_for_review(metrics: BookMetrics) -> BookMetrics:
@@ -702,6 +729,7 @@ def compute_book_metrics(
     fetch_benchmark: bool = True,
     benchmark_ticker: str | None = None,
     knob_epoch: KnobEpoch | None = None,
+    zero_datum: dict[str, Any] | None = None,
 ) -> BookMetrics:
     prices = _mark_prices(fund)
     perf = fund.performance(prices)
@@ -742,6 +770,19 @@ def compute_book_metrics(
             benchmark_ticker=benchmark_ticker,
         )
 
+    since_zero = None
+    zero_epoch = KnobEpoch.from_dict(zero_datum)
+    if zero_epoch is not None:
+        since_zero = _compute_epoch_metrics(
+            fund,
+            zero_epoch,
+            benchmark_return=benchmark_return,
+            fetch_benchmark=fetch_benchmark,
+            benchmark_ticker=benchmark_ticker,
+        )
+        since_zero.pop("knobs", None)
+        since_zero["source"] = str((zero_datum or {}).get("provenance_file") or "")
+
     return BookMetrics(
         portfolio_value=nav,
         contributed_capital=contributed,
@@ -760,6 +801,7 @@ def compute_book_metrics(
         excess_after_costs=excess,
         note=note,
         epoch=epoch_metrics,
+        since_zero_datum=since_zero,
     )
 
 
@@ -1002,12 +1044,14 @@ def run_decision_review(
     fund = ensure_automated_fund(fund_path, config)
     knobs_before = LearningKnobs.from_config(config)
     knob_epoch = ensure_knob_epoch(output_dir)
+    zero_datum = load_forward_zero_datum(output_dir)
     metrics = compute_book_metrics(
         fund,
         benchmark_return=benchmark_return,
         fetch_benchmark=fetch_benchmark,
         benchmark_ticker=bench_ticker,
         knob_epoch=knob_epoch,
+        zero_datum=zero_datum,
     )
     epoch_ok = enough_epoch_history(metrics.epoch)
     cooldown_days = epoch_cooldown_remaining_days(metrics.epoch)
@@ -1065,6 +1109,7 @@ def run_decision_review(
                 fetch_benchmark=fetch_benchmark,
                 benchmark_ticker=bench_ticker,
                 knob_epoch=load_knob_epoch(output_dir),
+                zero_datum=zero_datum,
             )
         elif apply and not changes:
             note = "Reviewed; no knob changes to apply."
