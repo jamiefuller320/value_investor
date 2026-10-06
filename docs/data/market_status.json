@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-06T19:20:04.072138+00:00",
+  "generated_at": "2026-10-06T19:37:19.881512+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -72,7 +72,7 @@
       "1": "hang_seng",
       "2": "us_adr_asia"
     },
-    "equal_support_generated_at": "2026-10-06T15:27:43.680168+00:00"
+    "equal_support_generated_at": "2026-10-06T19:31:33.712573+00:00"
   },
   "markets": [
     {
@@ -1129,8 +1129,8 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 10,
-        "targets": 49,
+        "run_count": 11,
+        "targets": 57,
         "improved": 8,
         "improved_tickers": [
           "2020.HK",
@@ -1142,7 +1142,7 @@
           "0291.HK",
           "2618.HK"
         ],
-        "last_run_at": "2026-10-06T17:04:42.270665+00:00",
+        "last_run_at": "2026-10-06T19:14:02.586763+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -1504,7 +1504,7 @@
         "hold_near_buy_count": 5,
         "not_buy_tier_count": 18,
         "never_buy_tier_count": 16,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -1519,14 +1519,14 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 2,
-        "targets": 2,
+        "run_count": 3,
+        "targets": 3,
         "improved": 2,
         "improved_tickers": [
           "SONY",
           "UMC"
         ],
-        "last_run_at": "2026-10-06T16:37:50.416039+00:00",
+        "last_run_at": "2026-10-06T19:35:04.990795+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -7196,13 +7196,13 @@
         "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "GQG.AX",
+          "MND.AX",
           "PRU.AX",
           "QBE.AX",
           "IMD.AX",
           "DRR.AX",
           "SPK.AX",
-          "ALK.AX",
-          "MTS.AX"
+          "ALK.AX"
         ]
       },
       "sprint_progress": null,
