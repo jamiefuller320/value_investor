@@ -239,7 +239,7 @@ def build_learning_tracks_dual_suite(
         "success_definition": SUCCESS_DEFINITION_FAIR_ADOPTION,
         "adoption_suite": "B",
         "stress_lab_suite": "A",
-        "primary_learning_track_unchanged": True,
+        "primary_learning_track_unchanged": primary_id == AI_JUDGMENT_TRACK_ID,
         "primary_learning_track": primary_id,
         "note": (
             "Suite B fair excess is adoption truth for promotion talk. "

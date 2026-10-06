@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-28",
+  "updated_at": "2026-10-06",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -14,7 +14,7 @@
         {
           "id": "weekday-verify-paper-auto",
           "title": "Spot-check learning tracks after paper-auto",
-          "summary": "ops-monitor (13:15 catch-up) checks post-settle last_run, decision-review coverage of AI judgment vs rules, competing calibrated shadows, and Suite B buy_tier_level. Workflow freshness covers CI acted. Excess vs ^FTSE comparison stays Sunday — do not promote on weekday marks.",
+          "summary": "ops-monitor (13:15 catch-up) checks post-settle last_run, decision-review coverage of the assessment-model primary (ai_judgment_fair) and control (buy_tier_level), active calibrated shadows, and buy_tier_level fill. Frozen tracks are skipped. Workflow freshness covers CI acted. Excess vs ^FTSE comparison stays Sunday — do not promote on weekday marks.",
           "automated": true,
           "doc_path": "docs/ops/ops-monitor.md",
           "doc_anchor": "paper-learning-tracks"
@@ -22,7 +22,7 @@
         {
           "id": "weekday-paper-auto-runs",
           "title": "Paper-auto + decision-review apply",
-          "summary": "Runs all learning tracks (including competing calibrated shadows and the Suite B buy_tier_level cohort), refreshes overlay, appends rebalance_log, applies clamped knobs when history is thick. Shadows and the cohort lab are observe-only (no --apply); endurance ledger refreshes after review.",
+          "summary": "Runs all active learning tracks (frozen tracks in paper_automation/assessment_model.json are skipped), refreshes overlay, appends rebalance_log, applies clamped knobs when history is thick. Shadows and the cohort lab are observe-only (no --apply); endurance ledger refreshes after review.",
           "automated": true,
           "doc_path": "docs/ops/decision-review.md",
           "doc_anchor": "commands"
@@ -188,8 +188,8 @@
         },
         {
           "id": "sunday-shadow-vs-primary",
-          "title": "Compare calibrated shadows vs primary AI judgment",
-          "summary": "Observe-only: compare forward marks for ai_judgment vs competing calibrated shadows. Fail-closed as a promotion path (N171) — status fail closes promote; do not spawn new calibrated ranks or reopen N58/N59. Acknowledge when reviewed; revisit only after fair-cost Suite B evidence or a new calibration method (not Suite A stress green).",
+          "title": "Calibrated shadows vs primary (frozen; acknowledge)",
+          "summary": "Calibrated shadows (r1–r3) and their parent ai_judgment were frozen on 2026-10-06 with the switch to one fair-cost assessment model, so there is nothing new to compare. Acknowledge as observe-only. Revisit only if a new calibration method spawns a fair-cost shadow of the primary ai_judgment_fair (N171 still applies; do not reopen N58/N59).",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "competing-calibrated-shadows"
@@ -197,7 +197,7 @@
         {
           "id": "sunday-promote-knobs-gate",
           "title": "Promote knob priors only when gates pass",
-          "summary": "Stays CLOSED while calibrated shadows are fail / not adoptable (N171). Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, confidence is acceptable, and fair-cost Suite B supports adoption. Survivors are starting priors — never auto-apply. Suite A stress excess vs ^FTSE alone is not sufficient.",
+          "summary": "Stays CLOSED while no calibrated shadow is surviving / adoptable (N171). Do not edit the primary ai_judgment_fair config until a shadow of it is surviving, ready_for_priors/score gap look sound, confidence is acceptable, and fair-cost excess supports adoption. Never edit frozen books. Survivors are starting priors — never auto-apply.",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "promoting-a-prior-human-gate"
@@ -212,11 +212,11 @@
         },
         {
           "id": "sunday-suite-b-fair-lab",
-          "title": "Review Suite B fair-cost lab vs stress Suite A",
-          "summary": "Confirm ai_judgment_fair / rules_fair are marking under T212-shaped costs, endurance_zero_datum is set, and decision-review --suite B applies stay suite-local. Do not flip primary off 3% (N48) until B excess beats ^FTSE and fair rules control with a thick forward window.",
+          "title": "Review primary vs control on fair costs (assessment model)",
+          "summary": "Review the assessment-model primary ai_judgment_fair against the control buy_tier_level and ^FTSE on fair costs; confirm both are marking and endurance_zero_datum is set. Suite A books and rules_fair are frozen (assessment_model.json) — read their final records, do not restart them. Treat 'AI beats the screen' as unproven while the accumulate gate never binds (N187).",
           "automated": false,
-          "doc_path": "docs/ops/market-trading-costs.md",
-          "doc_anchor": "near-term-actions"
+          "doc_path": "docs/ops/primary-learning-track.md",
+          "doc_anchor": "assessment-model-and-frozen-tracks"
         },
         {
           "id": "sunday-spawn-fair-twins",
@@ -261,7 +261,7 @@
         {
           "id": "sunday-exclusion-shadow-spawn",
           "title": "Exclusion ladder shadow spawn gate",
-          "summary": "If exclusion_ladder_replay readiness.ready_for_shadow_spawn is true, run ftse-exclusion-ladder-replay spawn-shadow manually. Never auto-spawn.",
+          "summary": "If exclusion_ladder_replay readiness.ready_for_shadow_spawn is true, run ftse-exclusion-ladder-replay spawn-shadow manually against an active parent. Spawning from a frozen parent (ai_judgment) is refused. Never auto-spawn.",
           "automated": false,
           "doc_path": "docs/ops/exclusion-ladder-replay.md",
           "doc_anchor": "promotion-workflow-human-gate"
@@ -277,7 +277,7 @@
         {
           "id": "sunday-knob-calibrate-runs",
           "title": "Full-period knob calibrate + shadow bootstrap",
-          "summary": "analysis-review.yml runs ftse-knob-calibrate with full_period_retrospective, writes bootstrap_priors, spawns competing shadows, PIT warm-starts them from parent rebalance_log (forward-only endurance zero datum), and refreshes endurance.",
+          "summary": "analysis-review.yml runs ftse-knob-calibrate with full_period_retrospective, writes bootstrap_priors and refreshes endurance. Shadow spawn is skipped while the phase-1 parent ai_judgment is frozen (assessment_model.json).",
           "automated": true,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "warm-start-zero-datum-forward-only-endurance"
@@ -374,6 +374,14 @@
           "automated": false,
           "doc_path": "docs/ops/paper-learning-review.md",
           "doc_anchor": null
+        },
+        {
+          "id": "adhoc-assessment-model-change",
+          "title": "Change primary/control or freeze a learning track",
+          "summary": "Human decision. Record it with apply_assessment_model() (src/value_investor/assessment_model.py) so the switch or freeze lands in paper_automation/assessment_model.json with date, reason, superseded_by and final NAV. Never edit or unfreeze a frozen book to test an idea — start a twin with its own cold start. Market shards keep the legacy ai_judgment/rules pair.",
+          "automated": false,
+          "doc_path": "docs/ops/primary-learning-track.md",
+          "doc_anchor": "assessment-model-and-frozen-tracks"
         },
         {
           "id": "adhoc-epoch0-cron-unmapped-timezone",

@@ -325,8 +325,8 @@ human glance.
 | Check | Severity | Notes |
 |-------|----------|-------|
 | `last_run.json` missing or `gate.after_settle=false` | warn | Orchestrator should re-dispatch a post-settle pass |
-| `learning_tracks_summary.json` / `learning_tracks_review.json` missing, or missing `rules` / `ai_judgment` / `buy_tier_level` | fail | Weekday paper-auto + decision-review did not publish the comparison |
-| Competing calibrated shadows present in the paper-auto rollup but omitted from decision-review | fail | Shadows spawned after the last paper-auto (Sunday calibrate) are ignored until they appear in the summary |
+| `learning_tracks_summary.json` / `learning_tracks_review.json` missing, or missing the assessment-model primary / control / `buy_tier_level` | fail | Weekday paper-auto + decision-review did not publish the comparison. Core ids come from `paper_automation/assessment_model.json` (legacy roots: `ai_judgment` / `rules`) — see [`primary-learning-track.md`](primary-learning-track.md#assessment-model-and-frozen-tracks) |
+| Competing calibrated shadows present in the paper-auto rollup but omitted from decision-review | fail | Shadows spawned after the last paper-auto (Sunday calibrate) are ignored until they appear in the summary; frozen shadows are skipped |
 | `buy_tier_level` acted with empty `automated_fund.json` holdings | fail | Monday cold-start fill; do not treat NAV as promotion truth |
 | Core track `acted=false` after a post-settle last_run | warn | Track skipped |
 | `learning_tracks_llm_agree_veto.json` missing after core tracks acted | warn | Observe-only algo→agree/veto shadow; never blocks fills — see [`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md) |

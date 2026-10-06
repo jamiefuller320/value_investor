@@ -132,6 +132,11 @@ def main(argv: list[str] | None = None) -> int:
     if track_id not in dirs:
         print(f"Track {track_id} not found under {args.output_dir}", file=sys.stderr)
         return 1
+    from value_investor.assessment_model import is_track_frozen
+
+    if args.apply and is_track_frozen(Path(args.output_dir), track_id):
+        print(f"Track {track_id} is frozen (assessment_model.json); not applying", file=sys.stderr)
+        return 1
     track_dir = dirs[track_id]
     result = run_decision_review(
         output_dir=track_dir,

@@ -1064,6 +1064,15 @@ def spawn_calibration_shadow_tracks(
             "shadows": [],
         }
 
+    from value_investor.assessment_model import is_track_frozen
+
+    if is_track_frozen(paper_root, parent_track_id):
+        return {
+            "spawned": False,
+            "reason": f"Parent {parent_track_id} is frozen (assessment_model.json)",
+            "shadows": [],
+        }
+
     priors_file = priors_path or (paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
     if not priors_file.exists():
         return {

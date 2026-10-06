@@ -122,6 +122,7 @@ jobs:
               "review_policy.json",
               "knob_calibration_priors.json",
               "calibration_shadow_endurance.json",
+              "assessment_model.json",
           )
           for name in root_names:
               path = src / name
@@ -169,14 +170,18 @@ jobs:
               if path.exists():
                   shutil.copy2(path, dest / "momentum_grace" / name)
 
+          from value_investor.assessment_model import primary_track_id
+          from value_investor.paper_automation import learning_track_dirs
+
           latest = Path("docs/data/latest.json")
-          report = src / "ai_judgment" / "last_run.json"
+          primary_dir = learning_track_dirs(src).get(primary_track_id(src), src / "ai_judgment")
+          report = primary_dir / "last_run.json"
           if not report.exists():
               report = src / "last_run.json"
           if latest.exists() and report.exists():
               bundle = json.loads(latest.read_text(encoding="utf-8"))
               bundle["paper_automation"] = json.loads(report.read_text(encoding="utf-8"))
-              fund = src / "ai_judgment" / "automated_fund.json"
+              fund = primary_dir / "automated_fund.json"
               if not fund.exists():
                   fund = src / "automated_fund.json"
               if fund.exists():

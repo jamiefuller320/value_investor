@@ -7,19 +7,72 @@ research/overlay is available at decision time. Confirmation is **not** a human
 trade checklist — it is a performance comparison to market datums. Success =
 **outperformance after costs** in that market.
 
+## Assessment model and frozen tracks
+
+Since **2026-10-06** the live FTSE paper root is judged by **one assessment
+model** on a single fair (T212-shaped) cost basis instead of two suites. The
+committed file `docs/data/paper_automation/assessment_model.json` records:
+
+- `primary_track` = **`ai_judgment_fair`** — the book judged against the market;
+- `control_track` = **`buy_tier_level`** — the unfiltered buy-tier book the
+  primary must beat (does the AI/conviction filter add value over the screen?);
+- `switches` — every primary/control change with its date and reason;
+- `frozen_tracks` — books that stopped trading, each with `frozen_at`, `reason`,
+  `superseded_by` and its final NAV, contributed capital, holdings and trade count.
+
+Frozen on 2026-10-06 (history kept, nothing rewritten):
+
+| Frozen track | Why | Superseded by |
+|--------------|-----|---------------|
+| `rules`, `ai_judgment`, `momentum_grace`, `technical`, `still_in_buy_set` | Suite A 3% stress-cost books. `rules` and `ai_judgment` held identical names 31/31 days; the research gate never binds at `min_conviction` 0.6 | `ai_judgment_fair` / `buy_tier_level` |
+| `rules_fair` | Identical holdings to `ai_judgment_fair` 19/19 days | `ai_judgment_fair` |
+| `ai_judgment_calibrated`, `_r2`, `_r3` | Shadows of a frozen parent; near-identical to each other and ranked on pre-L540 replays | `ai_judgment_fair` |
+| `ai_judgment_exclusion_u4` | Shadow of a frozen parent; same holdings as `ai_judgment` | `ai_judgment_fair` |
+
+Still trading: `ai_judgment_fair` (primary), `buy_tier_level` (control),
+`buy_tier_level_dca` (deposit realism) and `graduated_allocation` (still on the
+3% stress cost; fair twin parked with **N188**).
+
+What freezing does:
+
+- `ftse-paper-auto --tracks all` and `ftse-decision-review --tracks all` skip
+  frozen books (no marks, no fills, no knob applies). Single-track CLI runs of a
+  frozen book exit with an error.
+- Calibrated and exclusion shadows do not spawn from a frozen parent.
+- When `rules` (the root book) is frozen, paper-auto mirrors the primary's
+  `last_run.json` to the root (`mirrored_from_track`) so schedulers, ops-monitor
+  and publish keep their "ran post-settle" marker. The rules fund itself stays
+  at the root untouched.
+- `is_primary_learning_track` follows `primary_track` on every config pass.
+- Market shards have no `assessment_model.json` and keep the legacy
+  `ai_judgment` primary / `rules` control.
+
+**Do not** unfreeze or edit a frozen book to test an idea — start a twin with
+its own cold start and add it to the model. Switching primary/control again
+needs a new `switches` entry via `apply_assessment_model()` in
+`src/value_investor/assessment_model.py`, with the reason recorded.
+
+Known limit: `ai_judgment_fair` copies `min_conviction` 0.6 and the accumulate
+gate from `ai_judgment`, so its AI gate does not bind either; the binding-gate
+twin is parked as **N187**.
+
 ## Tracks
 
 | Track | Directory | Decision policy | Role |
 |-------|-----------|-----------------|------|
-| **AI judgment** *(primary)* | `docs/data/paper_automation/ai_judgment/` | `adjusted_signal` + `research_verdict=accumulate` | Learning book |
-| **Technical** *(baseline)* | `docs/data/paper_automation/technical/` | Stops/targets from `trade_plan`, tactical entries | Timing/levels floor vs stock-picking |
-| **Screen rules** *(control)* | `docs/data/paper_automation/` | Raw buy-tier screen signal | Baseline datum |
-| **Momentum grace** *(experimental)* | `docs/data/paper_automation/momentum_grace/` | Screen rules + bounded hold on value downgrade when price trend stays strong | Exit-overlay experiment |
-| **Graduated allocation** *(experimental)* | `docs/data/paper_automation/graduated_allocation/` | Screen rules + trade-plan starter sizing + harvest skims (`max_positions=4`) | Capital recycling experiment |
-| **Exclusion ladder** *(experimental)* | `docs/data/paper_automation/ai_judgment_exclusion_u4/` | AI judgment + frozen archive ladder `u4` knobs (spawned shadow) | Loser-filter ladder experiment |
-| **Buy-tier level** *(cohort lab)* | `docs/data/paper_automation/buy_tier_level/` | Raw screen buy-tier, no conviction/sector cap, Suite B T212 costs, frozen knobs | Unfiltered cohort baseline (Monday cold start) |
+| **AI judgment fair** *(primary)* | `docs/data/paper_automation/ai_judgment_fair/` | `adjusted_signal` + `research_verdict=accumulate`, fair costs | Learning book |
+| **Buy-tier level** *(control)* | `docs/data/paper_automation/buy_tier_level/` | Raw screen buy-tier, no conviction/sector cap, fair T212 costs, frozen knobs | Unfiltered buy-tier baseline |
 | **Buy-tier level DCA** *(realism)* | `docs/data/paper_automation/buy_tier_level_dca/` | Same level-book policy + £500/mo deposits (cold-start capital epoch) | Household DCA realism; overlays FTSE held-vs-market |
-| **Still-in-buy-set** *(churn twin)* | `docs/data/paper_automation/still_in_buy_set/` | Screen rules + rank-gated still-in-buy-set hold (`rank_drop < 3`) + never-left-candidates rebuy block + `reentry_cooldown_screens=2` | Suite A cold-start churn twin; frozen; do not mid-flight edit live rules / ai_judgment |
+| **Graduated allocation** *(experimental)* | `docs/data/paper_automation/graduated_allocation/` | Screen rules + trade-plan starter sizing + harvest skims (`max_positions=4`) | Capital recycling experiment (3% stress cost) |
+| AI judgment *(frozen)* | `docs/data/paper_automation/ai_judgment/` | `adjusted_signal` + `research_verdict=accumulate`, 3% stress | Former primary |
+| Screen rules *(frozen)* | `docs/data/paper_automation/` | Raw buy-tier screen signal, 3% stress | Former control |
+| Technical *(frozen)* | `docs/data/paper_automation/technical/` | Stops/targets from `trade_plan`, tactical entries | Former timing/levels floor |
+| Momentum grace *(frozen)* | `docs/data/paper_automation/momentum_grace/` | Screen rules + bounded hold on value downgrade when price trend stays strong | Former exit-overlay experiment |
+| Exclusion ladder *(frozen)* | `docs/data/paper_automation/ai_judgment_exclusion_u4/` | AI judgment + frozen archive ladder `u4` knobs | Former loser-filter experiment |
+| Still-in-buy-set *(frozen)* | `docs/data/paper_automation/still_in_buy_set/` | Screen rules + rank-gated still-in-buy-set hold | Former Suite A churn twin |
+
+The sections below describe the pre-2026-10-06 dual-suite setup where they
+mention Suite A; they still apply to market shards.
 
 Both primary books use the same costs, position caps, and weekday paper-auto schedule.
 Live FTSE configs keep the **3% per-side stress** cost by default (Suite A —

@@ -22,8 +22,8 @@ ack stale. Automated weekday/Sunday CI rows stay in a collapsed list.
 
 | Task | Who | Doc |
 |------|-----|-----|
-| **Spot-check learning tracks** after paper-auto — post-settle last_run + decision-review coverage of AI vs rules, calibrated shadows, Suite B `buy_tier_level` (ops-monitor 13:15; excess interpretation stays Sunday) | CI | [ops-monitor.md](ops-monitor.md#paper-learning-tracks) |
-| Paper-auto + decision-review `--apply` (all tracks including `buy_tier_level`; shadows + cohort lab observe-only; endurance ledger) | CI | [decision-review.md](decision-review.md#commands) |
+| **Spot-check learning tracks** after paper-auto — post-settle last_run + decision-review coverage of the assessment-model primary (`ai_judgment_fair`) and control (`buy_tier_level`), active calibrated shadows; frozen tracks skipped (ops-monitor 13:15; excess interpretation stays Sunday) | CI | [ops-monitor.md](ops-monitor.md#paper-learning-tracks) |
+| Paper-auto + decision-review `--apply` (all active tracks; frozen tracks in `assessment_model.json` skipped; shadows + cohort lab observe-only; endurance ledger) | CI | [decision-review.md](decision-review.md#commands) |
 | Admitted epoch-0 **local-open marks** (ASX / EU / US settle; not FTSE paper-auto; census refresh) | CI | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | Epoch-0 weekday **cron upsert** on learning admit + `--sync-cron` (timezone buckets; residual human only for unmapped TZ) | CI | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | **GHA secret hygiene** scan (skips if no merges / workflow touches in 36h) | CI | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
@@ -48,18 +48,18 @@ ack stale. Automated weekday/Sunday CI rows stay in a collapsed list.
 | Read **buy-cross archive** review (`buy_cross_archive_review.json`) — cross vs level comparison; do not spawn a live cross book | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#cross-book-archive-only) |
 | Review **knob calibration priors** — confirm readiness signals; if confidence low and score gap ~0 (no discrimination), **Acknowledge and stop** (do not promote) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | Review **unified experiment assessment** (`experiment_assessment.json`) — read fail/continue/recommend; failed shadows close promote; acked overlays + ana-* capacity are not do-now; Acknowledge when blocking recommends empty (never auto-promote). Refresh vs live board without reopening N58/N59 | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
-| Compare **calibrated shadows vs primary** AI judgment (observe-only; fail-closed as promotion path — N171; Acknowledge when reviewed) | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
-| **Promote knob priors** only when a survivor passes gates — stays **closed** while calibrated shadows are fail / not adoptable (do not edit `ai_judgment/config.json` from Suite A stress green) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
+| **Calibrated shadows vs primary** — shadows and parent `ai_judgment` frozen 2026-10-06; Acknowledge (observe-only; N171). Revisit only if a fair-cost shadow of `ai_judgment_fair` is spawned | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
+| **Promote knob priors** only when a survivor passes gates — stays **closed** while no calibrated shadow is surviving (do not edit the primary `ai_judgment_fair/config.json` without one; never edit frozen books) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | **Fair-cost gate** — keep 3% books as churn lab; require `ftse-trading-costs assess` / fair shadows before calling excess deployable | Human | [market-trading-costs.md](market-trading-costs.md#test-and-adoption-strategy-dual-suite) |
-| **Suite B fair-cost lab** — review `ai_judgment_fair` / `rules_fair` marks; keep `--suite B` applies suite-local; no primary flip until B clears gates | Human | [market-trading-costs.md](market-trading-costs.md#near-term-actions) |
+| **Primary vs control on fair costs** — review `ai_judgment_fair` vs `buy_tier_level` and ^FTSE; frozen books (Suite A, `rules_fair`) keep final records only; "AI beats the screen" stays unproven while the accumulate gate never binds (N187) | Human | [primary-learning-track.md](primary-learning-track.md#assessment-model-and-frozen-tracks) |
 | **Selective A→B fair twins** — if assessment has recommend calibration/exclusion/experimental rows, dry-run then optionally apply `ftse-trading-costs spawn-fair-twins` (max 2; never auto-fork) | Human | [market-trading-costs.md](market-trading-costs.md#selective-a-to-b-fair-cost-twins) |
 | Review **entry DCA cadence / adoption plan** — Acknowledge is observe-only (Do not execute DCA from ack); when `paper_execute_graduated` is ready, Lifecycle **Start** enables 4× weekly on `graduated_allocation` only; follow `entry_dca_adoption_plan.json`; do not change starter fraction or apply to primary | Human | [position-lifecycle.md](position-lifecycle.md#entry-dca-adoption-plan) |
 | Review **dual-path sleeve episodes** when tag cohorts mature (`ready_for_sleeve_timing_analysis`) — stratify by capital_status; do not mix into NAV vs ^FTSE | Human | [dual-path-sleeve-lab.md](dual-path-sleeve-lab.md#evidence-gathered-to-date--validity) |
 | Review **hypothesis integrity** when losers breach tolerance or theses break | Human | [hypothesis-integrity.md](hypothesis-integrity.md#human-gate) |
 | Triage **analysis_tasks** — persist/publish/apply `system_gaps` flags auto-queue as `eng-sgap-*` (no dispatch); promote remaining produce/clock flags by hand; Phase B rememo is body-lag slim — do **not** promote `thin_memo_counted_as_coverage` as rememo-eligibility widening; scoring stays `eng-20260903-02` / `eng-20260903-03` (observe-only; no `assign_signal()` edits); do not revive cancelled knob counterfactuals | Human | [analysis-review.md](analysis-review.md#manual-promotion-to-engineering) |
-| Check **exclusion ladder spawn gate** — if `ready_for_shadow_spawn`, run `ftse-exclusion-ladder-replay spawn-shadow` (never auto) | Human | [exclusion-ladder-replay.md](exclusion-ladder-replay.md#promotion-workflow-human-gate) |
+| Check **exclusion ladder spawn gate** — if `ready_for_shadow_spawn`, run `ftse-exclusion-ladder-replay spawn-shadow` against an active parent (frozen parents refused; never auto) | Human | [exclusion-ladder-replay.md](exclusion-ladder-replay.md#promotion-workflow-human-gate) |
 | Triage **paper_learning_tasks** + **learning_director_tasks** — watch u4 + exit-shadow; leave L111 as continue; buffered-hold and IMB.L are done; no promote CLI | Human | [paper-learning-review.md](paper-learning-review.md#enacting-proposed-experiments) |
-| Full-period knob calibrate + shadow bootstrap + PIT warm-start + endurance | CI | [knob-calibration.md](knob-calibration.md#warm-start-zero-datum-forward-only-endurance) |
+| Full-period knob calibrate + shadow bootstrap + PIT warm-start + endurance (spawn skipped while parent `ai_judgment` is frozen) | CI | [knob-calibration.md](knob-calibration.md#warm-start-zero-datum-forward-only-endurance) |
 
 ### Promotion gate (AI judgment knobs)
 
@@ -84,6 +84,11 @@ keep `sunday-promote-knobs-gate` closed. Do not spawn new calibrated ranks, do
 not reopen N58/N59, and do not disable shadow dirs mid-week (keep cheap marks;
 retirement stays L275/L502). Revisit only after fair-cost Suite B evidence or a
 new calibration method — not Suite A stress green.
+
+**Frozen (2026-10-06):** `ai_judgment` and its calibrated shadows are frozen in
+`paper_automation/assessment_model.json`. The steps above now apply to the
+primary `ai_judgment_fair/config.json` and any future shadow of it — see
+[primary-learning-track.md](primary-learning-track.md#assessment-model-and-frozen-tracks).
 
 Survivors are **starting priors for learning-loop refinement** — never auto-apply.
 Raw `summary.recommend` (including acked overlays and capacity `ana-*` rows) is **not** a promote signal; see [experiment-assessment.md](experiment-assessment.md#human-gate).
@@ -111,6 +116,7 @@ Raw `summary.recommend` (including acked overlays and capacity `ana-*` rows) is 
 | **Lock recording plan** before new learning strands — four freeze questions + `ftse-decision-recording validate`; preview-freeze OK; Phase C writer stays readiness-gated | Human | [decision-recording-checklist.md](decision-recording-checklist.md#the-four-questions) |
 | **Decision packs** before live capital (verify checklist) | Human | [primary-learning-track.md](primary-learning-track.md#success-datums) |
 | **Paper-learning review** when churn / exit-timing cohorts mature | Human | [paper-learning-review.md](paper-learning-review.md) |
+| **Change primary/control or freeze a learning track** — record via `apply_assessment_model()` (date, reason, `superseded_by`, final NAV in `assessment_model.json`); never edit or unfreeze a frozen book — start a twin | Human | [primary-learning-track.md](primary-learning-track.md#assessment-model-and-frozen-tracks) |
 | **Extend epoch-0 cron timezone map** when admitting a market whose session TZ has no ASX/EU/US bucket (`EPOCH0_WEEKDAY_SLOTS`) | Human (residual) | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | **Re-import library ingest crons** after cadence changes — `import-ingest-crons.yml` on main path changes (soft-skip if secrets missing; manual only if deleted) | CI | [euro-depth-sprint.md](euro-depth-sprint.md#register-euro-ingest-crons-after-cadence-changes) |
 | **ops-monitor 02:30 early hub** on cron-job.org (live; re-import only if deleted) | CI | [ops-monitor.md](ops-monitor.md#cron-joborg-setup-one-time) |

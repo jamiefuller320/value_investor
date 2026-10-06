@@ -159,6 +159,11 @@ def main(argv: list[str] | None = None) -> int:
         "buy_tier_level_dca": BUY_TIER_LEVEL_DCA_TRACK_ID,
         "still_in_buy_set": STILL_IN_BUY_SET_TRACK_ID,
     }[args.tracks]
+    from value_investor.assessment_model import is_track_frozen, primary_track_id
+
+    if is_track_frozen(output_dir, track_id):
+        print(f"Track {track_id} is frozen (assessment_model.json); not running", file=sys.stderr)
+        return 1
     dirs = learning_track_dirs(output_dir)
     if track_id not in dirs:
         # Ensure discovery after spawn.
@@ -217,6 +222,7 @@ def main(argv: list[str] | None = None) -> int:
         config.use_adjusted_signal = False
         config.require_research_accumulate = False
         config.strategy_mode = "automated"
+    config.is_primary_learning_track = track_id == primary_track_id(output_dir)
     if args.settle_minutes is not None:
         config.settle_minutes_after_open = args.settle_minutes
     if args.surveillance_only:
