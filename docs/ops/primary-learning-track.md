@@ -54,7 +54,7 @@ needs a new `switches` entry via `apply_assessment_model()` in
 
 Known limit: `ai_judgment_fair` copies `min_conviction` 0.6 and the accumulate
 gate from `ai_judgment`, so its AI gate does not bind either; the binding-gate
-twin is parked as **N187**.
+twin is parked as **N189**.
 
 ## Tracks
 

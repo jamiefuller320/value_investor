@@ -73,7 +73,8 @@ def test_build_project_progress_includes_stages_and_ingest(tmp_path: Path, monke
     assert len(payload["stages"]) >= 5
     assert payload["ingest_bottleneck"]["stalled"] is True
     assert payload["ingest_bottleneck"]["zero_body_buy_tier"] == 1
-    assert any("AI-judgment" in row for row in payload["appraisal"]["strengths"])
+    assert not any("beating rules" in row for row in payload["appraisal"]["strengths"])
+    assert "ahead of schedule" not in payload["headline"]
     assert any("buy-tier filing depth" in row for row in payload["appraisal"]["next_actions"])
 
 
@@ -143,3 +144,54 @@ def test_write_project_progress(tmp_path: Path):
     saved = json.loads(out.read_text(encoding="utf-8"))
     assert saved["schema_version"] == payload["schema_version"]
     assert saved["headline"]
+
+
+def test_build_project_progress_reads_assessment_scoreboard(tmp_path: Path):
+    data_dir = tmp_path / "docs/data"
+    data_dir.mkdir(parents=True)
+    write_json(data_dir / "latest.json", {"run_at": "2026-10-04T18:00:00+00:00", "meta": {}})
+    write_json(
+        data_dir / "ingest_health_log.json",
+        {"entries": [{"delta_zero_body": 0, "health_after": {"zero_body_buy_tier": 0}}]},
+    )
+    write_json(
+        data_dir / "assessment_scoreboard.json",
+        {
+            "primary_track": "ai_judgment_fair",
+            "headline": "Primary ai_judgment_fair: -1.0% vs FTAL.L +2.0%; inconclusive.",
+            "tracks": [
+                {
+                    "track_id": "ai_judgment_fair",
+                    "role": "primary",
+                    "total_return": -0.01,
+                    "benchmark_total_return": 0.02,
+                    "excess_total_return": -0.03,
+                    "statistics": {
+                        "status": "ok",
+                        "verdict": "inconclusive",
+                        "ci90": [-0.2, 0.1],
+                        "years_to_detect_3pct_edge": 125.0,
+                    },
+                }
+            ],
+        },
+    )
+
+    payload = build_project_progress(
+        latest_path=data_dir / "latest.json",
+        automation_path=data_dir / "automation.json",
+        ops_path=data_dir / "ops_status.json",
+        ai_review_path=data_dir / "missing.json",
+        rules_review_path=data_dir / "missing.json",
+        ingest_log_path=data_dir / "ingest_health_log.json",
+        decision_input_path=data_dir / "decision_input_inventory.json",
+        scoreboard_path=data_dir / "assessment_scoreboard.json",
+    )
+
+    assert payload["headline"].startswith("Primary ai_judgment_fair")
+    assert payload["evidence"]["primary_verdict"] == "inconclusive"
+    stage_2b = next(row for row in payload["stages"] if row["id"] == "2b")
+    assert stage_2b["status"] == "in_progress"
+    assert any(
+        "ai_judgment_fair" in row and "125 years" in row for row in payload["appraisal"]["gaps"]
+    )

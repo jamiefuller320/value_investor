@@ -2460,6 +2460,59 @@ def check_screen_premise_backtest(
     ]
 
 
+def check_assessment_scoreboard(
+    *,
+    data_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only single scoreboard for the assessment model's paper tracks.
+
+    Reads the stores refreshed earlier in the same pass (total-return view, track
+    statistics, screen premise backtest) and writes
+    ``docs/data/assessment_scoreboard.json``. ``auto_fixable=False``.
+    """
+    from value_investor.assessment_scoreboard import (
+        DEFAULT_DATA_DIR,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_finding_from_assessment_scoreboard,
+        refresh_assessment_scoreboard,
+    )
+
+    root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
+    if not (root / "paper_automation").exists():
+        return []
+    try:
+        payload = refresh_assessment_scoreboard(
+            root,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_assessment_scoreboard(payload)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
 def _next_engineering_seq(existing_rows: list[dict[str, Any]], run_stamp: str) -> int:
     prefix = f"eng-{run_stamp}-"
     used = [
@@ -2984,6 +3037,7 @@ def collect_ops_findings(
     findings.extend(check_indicator_integrity())
     findings.extend(check_backtest_history())
     findings.extend(check_screen_premise_backtest())
+    findings.extend(check_assessment_scoreboard())
     findings.extend(check_paper_learning_tracks())
 
     engineering_findings, queue_status = check_engineering_queue(
