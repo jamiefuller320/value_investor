@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T10:47:21+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T13:07:31+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -56,7 +56,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260923-01 | Internal screening formula from successful-sleeve traits: only useful with a substantial evidence body; park as a thought until filtered_cohort / sleeve-episode thickness and loser-pattern validation exist. Not a near-term idea. | screening, sleeves, thought, learning |
 | frag-20260923-02 | Library maintenance jobs under L323 (1 market/slot) finish in ~5–14 min wall vs 120 min timeout (2026-09-22/23 sample). Seven maintenance markets → ~1.75 day rotation. Headroom suggests MAX_MARKETS_WHEN_CROWDED=2 (sequential) or a 2-wide matrix is feasible before true N-wide parallel; watch artifact push races and ESEF/EDGAR/IR rate limits. | ingest, maintenance, L323, L454, capacity |
 | frag-20260923-03 | Maintenance 62-name cap is NOT binding: latest maint runs used 0–8 targets of 62, runtime_cutoff=false, budget_hits≈0. Binding limit is L323 one-market-per-slot (7 books). Option1 (MAX_MARKETS_WHEN_CROWDED=2) is the high-ROI step; option2 matrix is an upgrade after an automated review of job minutes / cutoff / artifact races. | ingest, maintenance, L323, L454, max_targets |
-| frag-20261006-01 | tests/test_ops_monitor.py and test_publish.py write into the real docs/data (automation.json, daily_focus.json, human_tasks_board.json, latest.json ...) when run from the repo root; a local run then a 'git add -A' commits dashboard state. Pin data paths to tmp_path or chdir in a fixture. | tests, isolation, docs-data |
 
 ---
 
