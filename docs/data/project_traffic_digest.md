@@ -1,8 +1,8 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-06T17:31:59.418835+00:00`
+Generated: `2026-10-06T18:33:35.364088+00:00`
 Trajectory: **blocked_by_pr_queue**
-Dispatch pause: **active** (stuck PRs: 2)
+Dispatch pause: **active** (stuck PRs: 0)
 
 ## Achieved (grounded)
 - Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
@@ -16,7 +16,7 @@ Dispatch pause: **active** (stuck PRs: 2)
 - Published screen bundle dated 2026-09-27 — confirm Sunday refresh.
 
 ## Checkpoint probe
-- Grounded rows: 13; ungrounded: 0
+- Grounded rows: 11; ungrounded: 0
 - [ok] Stage 0 (UK quant core): complete _(source: docs/data/project_progress.json)_
 - [ok] Stage 1 (Decision-review learning): in_progress _(source: docs/data/project_progress.json)_
 - [ok] Stage 2b (Primary learning track): in_progress _(source: docs/data/project_progress.json)_
@@ -25,21 +25,18 @@ Dispatch pause: **active** (stuck PRs: 2)
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=blocked; headline=Traffic pause — 0 stuck PR(s). project traffic pause (0 stuck PR(s); stuck_prs) — clear CI failures / merge conflicts before new PR generation _(source: docs/data/queue_health.json)_
+- [ok] Queue health overall=blocked; headline=Traffic pause — 2 stuck PR(s). project traffic pause (2 stuck PR(s); merge_conflict) — clear CI failures / merge conflicts before new PR generation _(source: docs/data/queue_health.json)_
 - [ok] Ops monitor overall=warn at 2026-10-06T09:09:00.529194+00:00 _(source: docs/data/ops_status.json)_
-- [ok] Traffic pause_active=True; stuck_pr_count=2 _(source: docs/data/engineering_tasks.json#traffic_control)_
-- [ok] Stuck PR #994 `cursor/euro-national-oam-filings-de1b` reasons=['merge_conflict'] mergeable_state=dirty _(source: github.pulls + check-runs)_
+- [ok] Traffic pause_active=True; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `pause_dispatch` — paused — 2 stuck PR(s); reasons=['merge_conflict'] (applied)
-- `request_conflict_resolve` PR #994 — comment posted (applied)
-- `request_conflict_resolve` PR #993 — comment posted (applied)
+- `stop_automation_waste` — signals=1; parked=eng-20261004-05; pause=True (applied)
 
 ## Merges today (monitor independent verify)
 - `human`/human PR #974 `eng-20261005-01` — Close library ingest filing gaps for FTSE MIB (ftse_mib): 1 buy-tier gaps after stalled weekday loop
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 164
+- Occasion count: 166
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 3×
