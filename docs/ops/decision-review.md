@@ -65,7 +65,9 @@ auto-tune is deferred until closed cohorts thicken (see `learning_tracks_exit_sh
 
 - `learning_tracks_summary.json` / `learning_tracks_review.json` — dual-track rollup
 - `decision_review.json` — per-track metrics, proposed changes, reasons
-- `decision_review_history.json` — last 52 reviews per track
+- `decision_review_history.json` — per track: the last 52 reviews, plus the
+  first-ever row (inception `knobs_before`) and every applied knob change, so
+  rebalance-log replay keeps the full knob timeline (`retain_review_history`)
 - `knob_epoch.json` — active performance baseline after the latest knob apply
 - `knob_epochs.json` — history of knob-epoch snapshots (last 52)
 - `rebalance_log.json` — append-only decision log (candidates, knobs, trades per pass)
