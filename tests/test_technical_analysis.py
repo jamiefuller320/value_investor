@@ -2,7 +2,9 @@
 
 import numpy as np
 import pandas as pd
+import pytest
 
+from value_investor.market_trading_costs import costs_for_market
 from value_investor.technical_analysis import (
     TechnicalIndicators,
     TimingSignal,
@@ -14,6 +16,7 @@ from value_investor.technical_analysis import (
     format_timing_summary,
     format_trade_plan_summary,
     minimum_tactical_take_profit,
+    trade_plan_config_for_market,
     trade_plan_from_row,
 )
 
@@ -229,6 +232,50 @@ def test_minimum_tactical_take_profit_clears_cost_and_reward_risk():
         config=cfg,
     )
     assert floor == 105.0
+
+
+def test_trade_plan_config_for_market_binds_fair_round_trip():
+    uk = trade_plan_config_for_market("ftse350")
+    us = trade_plan_config_for_market("sp500")
+    assert uk.assumed_round_trip_cost_pct == costs_for_market("ftse350").round_trip_pct
+    assert us.assumed_round_trip_cost_pct == costs_for_market("sp500").round_trip_pct
+    assert uk.assumed_round_trip_cost_pct > us.assumed_round_trip_cost_pct
+    assert trade_plan_config_for_market(None) == uk
+
+    base = TradePlanConfig(core_limit_below_spot=0.9, min_net_edge_pct=0.05)
+    bound = trade_plan_config_for_market("sp500", base=base)
+    assert bound.core_limit_below_spot == 0.9
+    assert bound.min_net_edge_pct == 0.05
+    assert TradePlanConfig().assumed_round_trip_cost_pct == 0.06
+
+
+def test_cost_floor_uses_market_round_trip_when_unconfigured():
+    structural_off = TradePlanConfig(
+        tactical_target_above_limit=1.0,
+        tactical_target_above_spot=1.0,
+        min_reward_risk_ratio=None,
+    )
+    for market in ("ftse350", "sp500"):
+        floor = minimum_tactical_take_profit(
+            tactical_limit=100.0,
+            tactical_stop_loss=90.0,
+            spot=100.0,
+            config=trade_plan_config_for_market(market, base=structural_off),
+        )
+        expected = 100.0 * (1 + costs_for_market(market).round_trip_pct + 0.04)
+        assert floor == pytest.approx(expected)
+
+
+def test_fair_cost_floor_leaves_default_targets_unchanged():
+    """6% stress RT + 4% edge equals the 10%-above-limit floor, so it never bound alone."""
+    for trend, noise in ((0.0, 0.5), (-0.002, 1.5), (0.002, 2.5)):
+        close = _synthetic_closes(trend=trend, noise=noise)
+        tech = compute_indicators(close.to_frame(name="Close"))
+        stress = compute_trade_plan(close, tech, value_signal="buy", config=TradePlanConfig())
+        fair = compute_trade_plan(close, tech, value_signal="buy")
+        assert stress is not None and fair is not None
+        assert fair.tactical_take_profit == stress.tactical_take_profit
+        assert fair.tactical_limit == stress.tactical_limit
 
 
 def test_sma50_candidate_does_not_override_target_floors():
