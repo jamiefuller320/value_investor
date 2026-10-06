@@ -75,6 +75,14 @@ ALTERNATE_SOURCE_CATALOG: dict[str, list[dict[str, str]]] = {
     ],
     "us": [
         {
+            "id": "sec_companyfacts",
+            "label": "SEC XBRL companyfacts (sec_companyfacts.json)",
+            "why": (
+                "Filed annual OCF, PP&E capex and dividends paid per 10-K with accession and "
+                "filed date; statutory FCF and dividend cover without Yahoo"
+            ),
+        },
+        {
             "id": "sec_exhibits",
             "label": "SEC EDGAR 10-K/10-Q exhibits and MD&A deeper extract",
             "why": "Risk factors and liquidity notes may be truncated in short bodies",
@@ -266,6 +274,9 @@ def inspect_local_sources(sources_dir: Path) -> dict[str, Any]:
         "macro_context": resolve_json_path(sources_dir / "macro_context.json") is not None,
         "alternate_news": resolve_json_path(sources_dir / "alternate_news.json") is not None,
     }
+    # Listed only when present so non-US names do not report it as thin.
+    if resolve_json_path(sources_dir / "sec_companyfacts.json") is not None:
+        available["sec_companyfacts"] = True
     thin = [key for key, ok in available.items() if not ok]
     return {
         "available": available,
@@ -314,6 +325,8 @@ def suggest_alternate_sources(
         if any(token in question_blob for token in ("fcf", "cash", "dividend", "working capital")):
             if item["id"] == "company_ir_presentation":
                 score += 2
+            if item["id"] == "sec_companyfacts":
+                score += 3
         if score == 0 and "filings_bodies" in thin:
             score = 1
         if score > 0:
@@ -631,6 +644,8 @@ def prepare_gap_fill_source_pack(
             "segment revenue splits, and IFRS 16 lease maturity tables. "
             "Use ch_annual_year_in_numbers.json for CH annual revenue, adjusted operating "
             "profit, secured workload, and margin/backlog ratios when present. "
+            "Use sec_companyfacts.json (US names) for filed annual OCF, capex and "
+            "dividends paid before falling back to Yahoo. "
             "If still unresolved, pick from planned_alternate_sources and emit "
             "RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
         ),

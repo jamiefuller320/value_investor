@@ -54,6 +54,22 @@ def screen_filing_reconciliation_discipline() -> str:
 - If the snapshot shows `adjusted_signal` below the raw screen signal, explain which overlay tensions remain open after your review."""
 
 
+def sec_companyfacts_source_line(sources_dir: Path, *, bullet: bool = True) -> str:
+    """Prompt line for ``sec_companyfacts.json`` (empty when the file is absent)."""
+    from value_investor.research.sec_companyfacts import SOURCE_FILENAME
+
+    path = sources_dir / SOURCE_FILENAME
+    if not path.exists():
+        return ""
+    if bullet:
+        return (
+            f"\n- `{path.resolve()}` — SEC XBRL annual cash-flow facts as filed "
+            "(operating cash flow, PP&E capex, dividends paid, with form and filed date). "
+            "Cite these over Yahoo for statutory OCF−CapEx and dividend cover."
+        )
+    return f"\nSEC filed cash-flow facts (XBRL; prefer over Yahoo): {path.resolve()}"
+
+
 def news_extraction_discipline(*, ticker: str, company_name: str) -> str:
     """Mandatory news-manifest digest rules for director–worker news tasks."""
     lines = [
@@ -210,7 +226,7 @@ Read the source files in: {sources_dir.resolve()}
 
 Primary regulatory filings:
 - `{filings_index.resolve()}`
-- `{filings_bodies.resolve()}/`
+- `{filings_bodies.resolve()}/`{sec_companyfacts_source_line(sources_dir)}
 
 Secondary / context only:
 - `financials_annual.json` (Yahoo fallback — say when used)
@@ -302,7 +318,7 @@ Screen signal: {signal_label}
 Existing memo: {existing_markdown_path.resolve()}
 Source map: {source_map.resolve()}
 Filings index: {(sources_dir / "filings" / "filings_index.json").resolve()}
-Filing bodies: {(sources_dir / "filings" / "bodies").resolve()}
+Filing bodies: {(sources_dir / "filings" / "bodies").resolve()}{sec_companyfacts_source_line(sources_dir, bullet=False)}
 
 Open questions:
 {numbered or "1. Resolve the qualitative risks highlighted for this name."}
@@ -353,7 +369,7 @@ Primary regulatory filings (preferred for FINANCIAL REVIEW — keep separate fro
 - `{filings_index.resolve()}` — catalog with period labels: annual, interim, or other
   (UK RNS, US SEC EDGAR 10-K/10-Q/8-K, ASX announcements, or Euro results discovery —
   see `regime` in the index)
-- `{filings_bodies.resolve()}/` — plain-text extracts of filing bodies when downloadable
+- `{filings_bodies.resolve()}/` — plain-text extracts of filing bodies when downloadable{sec_companyfacts_source_line(sources_dir)}
 
 Secondary / context only (do not mix into a blended number set):
 - `financials_annual.json` — Yahoo annual statements (and cached quarterly income). Use only when filing bodies lack the figure you need, and say you fell back to Yahoo.
@@ -436,7 +452,7 @@ Existing memo: {existing_markdown_path.resolve()}
 New news batch since last update: {news_batch_path.resolve()}
 Full news archive: {(sources_dir / "news_manifest.json").resolve()}
 Primary filings index (annual + interim; RNS / SEC / ASX / Euro): {(sources_dir / "filings" / "filings_index.json").resolve()}
-Filing body extracts (if any): {(sources_dir / "filings" / "bodies").resolve()}
+Filing body extracts (if any): {(sources_dir / "filings" / "bodies").resolve()}{sec_companyfacts_source_line(sources_dir, bullet=False)}
 Yahoo financials (secondary only): {(sources_dir / "financials_annual.json").resolve()}
 Macro regime context (optional colour only — not a scoring input): {(sources_dir / "macro_context.json").resolve()}
 
@@ -617,7 +633,7 @@ The quantitative screen currently rates this name as a {signal_label}.
 Existing memo: {existing_markdown_path.resolve()}
 Source map (inventory + alternate plan): {source_map.resolve()}
 Primary filings index: {(sources_dir / "filings" / "filings_index.json").resolve()}
-Filing body extracts: {(sources_dir / "filings" / "bodies").resolve()}
+Filing body extracts: {(sources_dir / "filings" / "bodies").resolve()}{sec_companyfacts_source_line(sources_dir, bullet=False)}
 Yahoo financials (secondary): {(sources_dir / "financials_annual.json").resolve()}
 News archive (includes alternate themed pulls): {(sources_dir / "news_manifest.json").resolve()}
 Alternate news batch: {(sources_dir / "alternate_news.json").resolve()}
