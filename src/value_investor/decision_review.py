@@ -1014,8 +1014,31 @@ def _append_history(path: Path, payload: dict[str, Any]) -> None:
         except (json.JSONDecodeError, OSError):
             history = []
     history.append(payload)
-    history = history[-HISTORY_KEEP:]
-    path.write_text(json.dumps(history, indent=2) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(retain_review_history(history), indent=2) + "\n", encoding="utf-8")
+
+
+def _is_knob_change(row: dict[str, Any]) -> bool:
+    return bool(row.get("applied")) and bool(row.get("proposed_changes"))
+
+
+def retain_review_history(
+    history: list[dict[str, Any]], *, keep: int = HISTORY_KEEP
+) -> list[dict[str, Any]]:
+    """Trim review history without losing the book's knob timeline.
+
+    Keeps the oldest row (its ``knobs_before`` are the inception knobs), every
+    applied knob change, and the latest ``keep`` rows; order is preserved.
+    Rebalance-log replay rebuilds knobs-as-of-pass from these rows, so applies
+    must outlive the rolling window once knobs sit still for months.
+    """
+    if len(history) <= keep:
+        return list(history)
+    cutoff = len(history) - keep
+    return [
+        row
+        for index, row in enumerate(history)
+        if index == 0 or index >= cutoff or _is_knob_change(row)
+    ]
 
 
 def run_decision_review(
