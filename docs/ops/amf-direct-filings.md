@@ -75,7 +75,7 @@ Each register was checked during L545 and parked with `ftse-defer`:
 
 | Country / market | Register | Why not now |
 |------------------|----------|-------------|
-| Sweden (`omxs30`) | Nasdaq Nordic company news JSON | Public, but only Nasdaq GlobeNewswire customers publish there: 1 of 11 OMXS30 buy-tier names (Skanska). The others use Cision / MFN. Finansinspektionen's OAM has no API |
+| Sweden (`omxs30`) | Nasdaq Nordic company news JSON | Public, but only Nasdaq GlobeNewswire customers publish there: 1 of 11 OMXS30 buy-tier names (Skanska). The others use Cision / MFN. Finansinspektionen's OAM has no API. Sweden is now covered by the Cision newsroom feed instead, see [cision-direct-filings.md](cision-direct-filings.md) |
 | Germany (`dax`) | Unternehmensregister / Bundesanzeiger | Search sits behind a captcha (Unternehmensregister) or a stateful session form (Bundesanzeiger). Not worked around |
 | Italy (`ftse_mib`) | eMarket STORAGE / 1Info | HTML portals with no documented API. 1Info's tables load from internal endpoints of an ASP.NET app |
 | Spain (`ibex35`) | CNMV regulated information | ASP.NET `__VIEWSTATE` forms. Direct query URLs return 400/403 error pages |
