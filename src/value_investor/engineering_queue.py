@@ -760,8 +760,8 @@ def build_engineering_queue_dashboard(
 
 def refresh_engineering_queue_ui(
     *,
-    automation_path: Path = DEFAULT_AUTOMATION_PATH,
-    latest_path: Path = DEFAULT_LATEST_PATH,
+    automation_path: Path | None = None,
+    latest_path: Path | None = None,
     tasks_path: Path = COMMITTED_TASKS_PATH,
     open_prs: list[dict[str, Any]] | None = None,
     repo: str | None = None,
@@ -770,8 +770,12 @@ def refresh_engineering_queue_ui(
     Publish engineering queue status to automation.json and embed in latest.json.
 
     Called when task status changes so the dashboard Automation tab stays current
-    without a full screen republish.
+    without a full screen republish. Unset dashboard paths sit beside
+    ``tasks_path``.
     """
+    data_dir = Path(tasks_path).parent
+    automation_path = automation_path or data_dir / DEFAULT_AUTOMATION_PATH.name
+    latest_path = latest_path or data_dir / DEFAULT_LATEST_PATH.name
     dashboard_slice = build_engineering_queue_dashboard(
         tasks_path=tasks_path,
         open_prs=open_prs,
@@ -821,6 +825,8 @@ def refresh_engineering_queue_ui(
         automation_path=automation_path,
         latest_path=latest_path,
         tasks_path=tasks_path,
+        queue_health_path=data_dir / "queue_health.json",
+        ops_status_path=data_dir / "ops_status.json",
         open_prs=open_prs,
     )
 

@@ -725,7 +725,8 @@ def test_check_backtest_history_flags_corrupt_snapshot(tmp_path: Path):
     assert corrupt[0].auto_fixable is True
 
 
-def test_apply_auto_fixes_quarantines_corrupt_backtest_history(tmp_path: Path):
+def test_apply_auto_fixes_quarantines_corrupt_backtest_history(tmp_path: Path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
     history = tmp_path / "history"
     history.mkdir()
     bad = history / "run_20260802_123417.json.gz"
@@ -1160,7 +1161,9 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
     _workflows,
     _prs,
     tmp_path: Path,
+    monkeypatch,
 ):
+    monkeypatch.chdir(tmp_path)
     latest = tmp_path / "latest.json"
     latest.write_text(
         json.dumps(
@@ -1259,7 +1262,9 @@ def test_run_ops_monitor_writes_status(
     _workflows,
     _prs,
     tmp_path: Path,
+    monkeypatch,
 ):
+    monkeypatch.chdir(tmp_path)
     latest = tmp_path / "latest.json"
     latest.write_text(
         json.dumps(
@@ -1701,7 +1706,8 @@ def test_parse_published_research_mode_from_structured_memo_header():
     assert parsed == ("2026-09-14T09:48:32+00:00", "structured_verdict")
 
 
-def test_apply_auto_fixes_lands_phase_b_from_published_memos(tmp_path: Path):
+def test_apply_auto_fixes_lands_phase_b_from_published_memos(tmp_path: Path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
     research_root = tmp_path / "research"
     ticker = research_root / "AAA.L"
     ticker.mkdir(parents=True)

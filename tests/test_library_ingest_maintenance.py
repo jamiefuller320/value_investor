@@ -5,6 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 from value_investor.library_graduation import (
     evaluate_ingest_parity_handoff,
     maybe_record_ingest_parity,
@@ -14,6 +16,8 @@ from value_investor.library_ingest_maintenance import (
     maybe_handoff_focus_on_ingest_parity,
     run_library_ingest_maintenance,
 )
+
+pytestmark = pytest.mark.usefixtures("isolated_cwd")
 
 
 def test_list_library_ingest_maintenance_markets_includes_focus_at_parity():

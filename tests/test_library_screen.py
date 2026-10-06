@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from value_investor.agent_model_policy import load_policy, save_policy
 from value_investor.data_library import market_dir
@@ -16,6 +17,8 @@ from value_investor.library_screen import (
     run_library_screen,
 )
 from value_investor.storage import read_json, write_json
+
+pytestmark = pytest.mark.usefixtures("isolated_cwd")
 
 
 def _seed_metrics(root: Path, market: str = "sp500", n: int = 30) -> None:

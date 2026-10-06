@@ -24,6 +24,8 @@ from value_investor.research.ingest import (
     resolve_cma_ofcom_merger_deal,
 )
 
+pytestmark = pytest.mark.usefixtures("board_not_written")
+
 
 def _write_sample_output(output_dir: Path) -> None:
     signals = pd.DataFrame(

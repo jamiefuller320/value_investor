@@ -7,6 +7,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from value_investor.market_status import (
     INGEST_LIVE,
@@ -22,6 +23,8 @@ from value_investor.market_status import (
 )
 from value_investor.publish import build_dashboard_bundle, publish_dashboard
 from value_investor.storage import write_json
+
+pytestmark = pytest.mark.usefixtures("board_not_written")
 
 
 def _write_sample_output(output_dir: Path) -> None:

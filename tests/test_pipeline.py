@@ -88,6 +88,8 @@ from value_investor.summary import (
     honour_fcf_action_note_enforcement,
 )
 
+pytestmark = pytest.mark.usefixtures("board_not_written")
+
 
 def _minimal_report(**overrides) -> CompanyReport:
     base = dict(

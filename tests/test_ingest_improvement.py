@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 from value_investor.research.filings import sanitize_filings_index
 from value_investor.research.format import format_ingest_improvement_text
 from value_investor.research.ingest_improvement import (
@@ -26,6 +28,20 @@ from value_investor.research.ingest_improvement import (
 )
 from value_investor.research.store import ResearchStore
 from value_investor.summary import CompanyReport
+
+
+@pytest.fixture(autouse=True)
+def _discovery_stores_in_tmp(tmp_path, monkeypatch):
+    from value_investor import ingest_discovery_scan
+
+    real = ingest_discovery_scan.run_buy_tier_discovery_scan
+
+    def scan(*args, **kwargs):
+        kwargs.setdefault("summary_path", tmp_path / "ingest_discovery_scan_summary.json")
+        kwargs.setdefault("curiosity_path", tmp_path / "ingest_discovery_curiosity.json")
+        return real(*args, **kwargs)
+
+    monkeypatch.setattr(ingest_discovery_scan, "run_buy_tier_discovery_scan", scan)
 
 
 def test_sunday_ingest_cap_matches_weekday_learning_phase():

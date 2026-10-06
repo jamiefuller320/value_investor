@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 from value_investor.data_library_cli import main as library_main
 from value_investor.library_ingest_loop import (
     LibraryIngestLoopResult,
@@ -20,6 +22,8 @@ from value_investor.library_ingest_loop import (
 )
 from value_investor.storage import write_json
 from value_investor.summary import CompanyReport
+
+pytestmark = pytest.mark.usefixtures("isolated_cwd")
 
 
 def _report(ticker: str, signal: str = "buy", conviction: float = 0.5) -> CompanyReport:
