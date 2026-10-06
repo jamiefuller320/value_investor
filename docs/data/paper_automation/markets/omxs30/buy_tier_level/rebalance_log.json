@@ -775,5 +775,381 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-06T08:47:39.145089+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/omxs30/screen_latest.json",
+      "run_at": "2026-10-05T06:52:37.710806+00:00",
+      "generated_at": "2026-10-06T08:47:39.028003+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-06T09:47:39.041061+01:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-10-06T08:00:00+01:00",
+      "settle_at": "2026-10-06T09:15:00+01:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (0 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "VOLV-B.ST",
+        "name": "AB Volvo (publ)",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.8731000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 314.5,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.8057000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Technology",
+        "price": 94.26,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "BOL.ST",
+        "name": "Boliden AB (publ)",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7163,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 519.2,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "HM-B.ST",
+        "name": "H & M Hennes & Mauritz AB (publ)",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7029000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Consumer Cyclical",
+        "price": 158.5,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "VOLV-B.ST",
+        "name": "AB Volvo (publ)",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.8731000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 314.5,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.8057000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Technology",
+        "price": 94.26,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "BOL.ST",
+        "name": "Boliden AB (publ)",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7163,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 519.2,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "HM-B.ST",
+        "name": "H & M Hennes & Mauritz AB (publ)",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7029000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Consumer Cyclical",
+        "price": 158.5,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 998.25,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 249.56,
+      "targets": [
+        {
+          "ticker": "VOLV-B.ST",
+          "name": "AB Volvo (publ)",
+          "signal": "strong_buy",
+          "conviction_score": 0.8731000000000001,
+          "price": 314.5
+        },
+        {
+          "ticker": "ERIC-B.ST",
+          "name": "Telefonaktiebolaget LM Ericsson (publ)",
+          "signal": "strong_buy",
+          "conviction_score": 0.8057000000000001,
+          "price": 94.26
+        },
+        {
+          "ticker": "BOL.ST",
+          "name": "Boliden AB (publ)",
+          "signal": "buy",
+          "conviction_score": 0.7163,
+          "price": 519.2
+        },
+        {
+          "ticker": "HM-B.ST",
+          "name": "H & M Hennes & Mauritz AB (publ)",
+          "signal": "buy",
+          "conviction_score": 0.7029000000000001,
+          "price": 158.5
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "VOLV-B.ST",
+          "name": "AB Volvo (publ)",
+          "reason": "Already near equal-weight target",
+          "value": 249.56,
+          "target_value": 249.56,
+          "conviction_score": 0.8731000000000001,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "ERIC-B.ST",
+          "name": "Telefonaktiebolaget LM Ericsson (publ)",
+          "reason": "Already near equal-weight target",
+          "value": 249.56,
+          "target_value": 249.56,
+          "conviction_score": 0.8057000000000001,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "BOL.ST",
+          "name": "Boliden AB (publ)",
+          "reason": "Already near equal-weight target",
+          "value": 249.56,
+          "target_value": 249.56,
+          "conviction_score": 0.7163,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "HM-B.ST",
+          "name": "H & M Hennes & Mauritz AB (publ)",
+          "reason": "Already near equal-weight target",
+          "value": 249.56,
+          "target_value": 249.56,
+          "conviction_score": 0.7029000000000001,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
+    },
+    "trades": [],
+    "nav_before": 998.25,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "VOLV-B.ST",
+        "shares": 0.793524,
+        "avg_cost": 314.5,
+        "sector": "Industrials",
+        "name": "AB Volvo (publ)",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ERIC-B.ST",
+        "shares": 2.647605,
+        "avg_cost": 94.26,
+        "sector": "Technology",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BOL.ST",
+        "shares": 0.480669,
+        "avg_cost": 519.2,
+        "sector": "Basic Materials",
+        "name": "Boliden AB (publ)",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "HM-B.ST",
+        "shares": 1.574532,
+        "avg_cost": 158.5,
+        "sector": "Consumer Cyclical",
+        "name": "H & M Hennes & Mauritz AB (publ)",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 998.25,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "VOLV-B.ST",
+        "shares": 0.793524,
+        "avg_cost": 314.5,
+        "sector": "Industrials",
+        "name": "AB Volvo (publ)",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ERIC-B.ST",
+        "shares": 2.647605,
+        "avg_cost": 94.26,
+        "sector": "Technology",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BOL.ST",
+        "shares": 0.480669,
+        "avg_cost": 519.2,
+        "sector": "Basic Materials",
+        "name": "Boliden AB (publ)",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "HM-B.ST",
+        "shares": 1.574532,
+        "avg_cost": 158.5,
+        "sector": "Consumer Cyclical",
+        "name": "H & M Hennes & Mauritz AB (publ)",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": []
+    }
   }
 ]

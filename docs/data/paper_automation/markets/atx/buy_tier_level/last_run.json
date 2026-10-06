@@ -1,30 +1,29 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-05T08:38:15.042991+01:00",
+    "local_time": "2026-10-06T09:47:37.193558+01:00",
     "trading_day": true,
-    "after_settle": false,
-    "market_open_at": "2026-10-05T08:00:00+01:00",
-    "settle_at": "2026-10-05T09:15:00+01:00",
-    "can_act": false,
-    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    "after_settle": true,
+    "market_open_at": "2026-10-06T08:00:00+01:00",
+    "settle_at": "2026-10-06T09:15:00+01:00",
+    "can_act": true,
+    "reason": "ok"
   },
   "trades": [
     {
-      "id": "88c863a8-cba4-4d71-8a88-4854023869d9",
+      "id": "91c23ed5-a29b-49ba-9dac-46e69ce21be0",
       "fund_id": "4fccad73-35ea-4c28-9c2b-6a42c72f3a4d",
-      "acted_at": "2026-10-05T08:38:15.042991+01:00",
-      "ticker": "OMV.VI",
-      "side": "sell",
+      "acted_at": "2026-10-06T09:47:37.193558+01:00",
+      "ticker": "STR.VI",
+      "side": "buy",
       "sizing_mode": "cash",
-      "shares": 7.00773,
-      "price": 71.5,
-      "gross": 501.05,
-      "cost": 0.88,
-      "net_cash": 500.18,
-      "note": "Automated trim",
-      "name": "OMV Aktiengesellschaft",
-      "avg_cost_at_exit": 71.35
+      "shares": 4.900457,
+      "price": 101.8,
+      "gross": 498.87,
+      "cost": 0.87,
+      "net_cash": -499.74,
+      "note": "Automated buy",
+      "name": "Strabag SE"
     }
   ],
   "plan": {
@@ -40,8 +39,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 999.47,
-    "cash": 500.18,
+    "nav": 998.61,
+    "cash": 0.44,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -53,7 +52,7 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 499.74,
+    "target_sleeve_value": 499.3,
     "targets": [
       {
         "ticker": "STR.VI",
@@ -73,34 +72,32 @@
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
+    "anticipated_buys": [],
+    "anticipated_holds": [
       {
-        "action": "buy",
+        "action": "hold",
         "ticker": "STR.VI",
         "name": "Strabag SE",
-        "reason": "New sleeve",
-        "value": 499.74,
-        "price": 101.8,
-        "target_value": 499.74,
+        "reason": "Already near equal-weight target",
+        "value": 498.87,
+        "target_value": 499.3,
         "conviction_score": 0.75,
         "signal": "strong_buy"
-      }
-    ],
-    "anticipated_holds": [
+      },
       {
         "action": "hold",
         "ticker": "OMV.VI",
         "name": "OMV Aktiengesellschaft",
         "reason": "Already near equal-weight target",
         "value": 499.3,
-        "target_value": 499.74,
+        "target_value": 499.3,
         "conviction_score": 0.3994,
         "signal": "buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -110,6 +107,17 @@
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
       "mark": 71.5,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "STR.VI",
+      "name": "Strabag SE",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 101.8,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -130,7 +138,7 @@
       "id": "4fccad73-35ea-4c28-9c2b-6a42c72f3a4d",
       "created_at": "2026-10-02T19:58:56.465993+00:00"
     },
-    "cash": 500.18,
+    "cash": 0.44,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -144,6 +152,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-02T20:58:56.465874+01:00"
+      },
+      "STR.VI": {
+        "ticker": "STR.VI",
+        "shares": 4.900457,
+        "avg_cost": 101.8,
+        "name": "Strabag SE",
+        "sector": "Industrials",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-10-06T09:47:37.193558+01:00"
       }
     },
     "trades": [
@@ -177,6 +196,21 @@
         "note": "Automated trim",
         "name": "OMV Aktiengesellschaft",
         "avg_cost_at_exit": 71.35
+      },
+      {
+        "id": "91c23ed5-a29b-49ba-9dac-46e69ce21be0",
+        "fund_id": "4fccad73-35ea-4c28-9c2b-6a42c72f3a4d",
+        "acted_at": "2026-10-06T09:47:37.193558+01:00",
+        "ticker": "STR.VI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 4.900457,
+        "price": 101.8,
+        "gross": 498.87,
+        "cost": 0.87,
+        "net_cash": -499.74,
+        "note": "Automated buy",
+        "name": "Strabag SE"
       }
     ],
     "equity_curve": [
@@ -254,9 +288,26 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-06T09:47:37.193558+01:00",
+        "portfolio_value": 847.93,
+        "cash": 0.44,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.84905
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-05T08:38:15.042991+01:00",
+    "last_mark_at": "2026-10-06T09:47:37.193558+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -267,7 +318,7 @@
     "schema_version": 2,
     "market_id": "atx",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-05T07:38:15.114380+00:00",
+    "generated_at": "2026-10-06T08:47:37.299898+00:00",
     "observe_only": true,
     "open_count": 0,
     "closed_count": 0,
@@ -346,7 +397,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-05T07:38:15.115106+00:00",
+    "generated_at": "2026-10-06T08:47:37.300650+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -444,8 +495,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-05T07:38:15.115808+00:00",
-    "as_of": "2026-10-05T08:38:15.042991+01:00",
+    "updated_at": "2026-10-06T08:47:37.301366+00:00",
+    "as_of": "2026-10-06T09:47:37.193558+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -457,16 +508,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 1,
+    "holding_count": 2,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 1,
+      "intact": 2,
       "weakening": 0,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 1,
+      "holding_count": 2,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -485,7 +536,7 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 1.0,
+        "quality": 0.5,
         "dividend": 0.0,
         "garp": 0.0,
         "risk": 0.0
@@ -495,6 +546,46 @@
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
+      {
+        "ticker": "STR.VI",
+        "name": "Strabag SE",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 101.8,
+        "avg_cost": 101.8,
+        "signal": "strong_buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.75,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 75%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 75%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
       {
         "ticker": "OMV.VI",
         "name": "OMV Aktiengesellschaft",
@@ -544,7 +635,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-05T07:38:15.116725+00:00",
+    "generated_at": "2026-10-06T08:47:37.302383+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -604,8 +695,8 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-05T07:38:15.117902+00:00",
-    "open_count": 1,
+    "generated_at": "2026-10-06T08:47:37.303719+00:00",
+    "open_count": 2,
     "closed_count": 0,
     "scored_count": 0,
     "scored_count_all": 0,
@@ -661,14 +752,14 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 1,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-05T08:38:15.042991+01:00",
+    "generated_at": "2026-10-06T09:47:37.193558+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -695,9 +786,9 @@
     "open_count": 2,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 1,
+      "on_book": 2,
       "off_book": 0,
-      "never_funded": 1
+      "never_funded": 0
     },
     "closed_by_capital_status": {
       "on_book": 0,
@@ -718,14 +809,14 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 0,
+      "tagged_on_book": 1,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-05T08:38:15.042991+01:00",
+    "generated_at": "2026-10-06T09:47:37.193558+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -733,33 +824,141 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 1,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
-    "cards": [],
+    "by_algo_action": {
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
+    "cards": [
+      {
+        "ticker": "STR.VI",
+        "name": "Strabag SE",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy into buyish target set \u2014 agree with algo selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 1
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 1
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.75
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-06T09:47:37.193558+01:00",
+        "proposal_id": "buy_tier_level:STR.VI:buy:2026-10-06T09:47:37.193558+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-05T08:38:15.042991+01:00",
+      "generated_at": "2026-10-06T09:47:37.193558+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 1,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -775,7 +974,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-05T07:38:15.119694+00:00",
+  "generated_at": "2026-10-06T08:47:37.305781+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

@@ -2058,5 +2058,316 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-06T08:47:14.780293+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ibex35/screen_latest.json",
+      "run_at": "2026-10-05T06:52:37.710806+00:00",
+      "generated_at": "2026-10-06T08:47:14.603284+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-06T09:47:14.617964+01:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-10-06T08:00:00+01:00",
+      "settle_at": "2026-10-06T09:15:00+01:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (0 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "SCYR.MC",
+        "name": "Sacyr, S.A.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.43877,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 3.99,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "GRF.MC",
+        "name": "Grifols, S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5112,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 9.578,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "AENA.MC",
+        "name": "Aena S.M.E., S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4153,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 25.6,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "SCYR.MC",
+        "name": "Sacyr, S.A.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.43877,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 3.99,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "GRF.MC",
+        "name": "Grifols, S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5112,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 9.578,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "AENA.MC",
+        "name": "Aena S.M.E., S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4153,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 25.6,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 997.27,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 332.42,
+      "targets": [
+        {
+          "ticker": "GRF.MC",
+          "name": "Grifols, S.A.",
+          "signal": "buy",
+          "conviction_score": 0.5112,
+          "price": 9.578
+        },
+        {
+          "ticker": "SCYR.MC",
+          "name": "Sacyr, S.A.",
+          "signal": "buy",
+          "conviction_score": 0.43877,
+          "price": 3.99
+        },
+        {
+          "ticker": "AENA.MC",
+          "name": "Aena S.M.E., S.A.",
+          "signal": "buy",
+          "conviction_score": 0.4153,
+          "price": 25.6
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "GRF.MC",
+          "name": "Grifols, S.A.",
+          "reason": "Already near equal-weight target",
+          "value": 332.52,
+          "target_value": 332.42,
+          "conviction_score": 0.5112,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "SCYR.MC",
+          "name": "Sacyr, S.A.",
+          "reason": "Already near equal-weight target",
+          "value": 332.52,
+          "target_value": 332.42,
+          "conviction_score": 0.43877,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "AENA.MC",
+          "name": "Aena S.M.E., S.A.",
+          "reason": "Already near equal-weight target",
+          "value": 332.23,
+          "target_value": 332.42,
+          "conviction_score": 0.4153,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    },
+    "trades": [],
+    "nav_before": 997.27,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "GRF.MC",
+        "shares": 34.717325,
+        "avg_cost": 9.594,
+        "sector": "Healthcare",
+        "name": "Grifols, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "SCYR.MC",
+        "shares": 83.337404,
+        "avg_cost": 4.04,
+        "sector": "Industrials",
+        "name": "Sacyr, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AENA.MC",
+        "shares": 12.977723,
+        "avg_cost": 25.6,
+        "sector": "Industrials",
+        "name": "Aena S.M.E., S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 997.27,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "GRF.MC",
+        "shares": 34.717325,
+        "avg_cost": 9.594,
+        "sector": "Healthcare",
+        "name": "Grifols, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "SCYR.MC",
+        "shares": 83.337404,
+        "avg_cost": 4.04,
+        "sector": "Industrials",
+        "name": "Sacyr, S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AENA.MC",
+        "shares": 12.977723,
+        "avg_cost": 25.6,
+        "sector": "Industrials",
+        "name": "Aena S.M.E., S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": []
+    }
   }
 ]

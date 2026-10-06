@@ -1,14 +1,21 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-05T07:38:15.115808+00:00
+Track: `buy_tier_level` · updated 2026-10-06T08:47:37.301366+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 1 (0% count, 0% NAV)
+- Losers: **0** / 2 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
 ## Holding reviews
+
+### STR.VI — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 75%
 
 ### OMV.VI — intact / hold_tolerate (+0.2%)
 - still buy
