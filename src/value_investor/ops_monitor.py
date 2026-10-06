@@ -2254,7 +2254,7 @@ def check_cision_direct_coverage(
     store_path: Path | None = None,
     persist: bool = True,
 ) -> list[OpsFinding]:
-    """Observe-only L554: Cision newsroom filings coverage on Swedish euro memos.
+    """Observe-only L556: Cision newsroom filings coverage on Swedish euro memos.
 
     Writes ``docs/data/cision_direct_coverage.json``. Never fetches or edits
     indexes, scoring or memos (``auto_fixable=False``).

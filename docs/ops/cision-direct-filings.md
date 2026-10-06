@@ -1,4 +1,4 @@
-# Cision direct filings for Swedish euro memos (L554)
+# Cision direct filings for Swedish euro memos (L556)
 
 Mapped Stockholm names (OMXS30 constituents, and the same `.ST` names in
 `euro_depth`) in the `euro_filings` regime now get interim, year-end and
@@ -62,11 +62,11 @@ The feed keeps the newest 2 rows per kind, so at most 8 rows, under the
 
 ## Why not EQS, MFN or other feeds
 
-Checked during L554 and parked (N194): EQS News (Germany) and MFN (Sweden)
+Checked during L556 and parked (N195): EQS News (Germany) and MFN (Sweden)
 both have ungated JSON feeds with ISIN / LEI filters, but `robots.txt`
 disallows those paths (`/wp-json/`, `*.json`). The Oslo Børs newsreader API is
 open, but no project market lists Oslo names. ESAP, the EU single access
-point, is the long-term route for the other countries (L555).
+point, is the long-term route for the other countries (L557).
 
 ## How it is populated
 
