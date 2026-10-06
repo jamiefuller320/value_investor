@@ -16,6 +16,7 @@ DEFAULT_AI_REVIEW_PATH = Path("docs/data/paper_automation/ai_judgment/decision_r
 DEFAULT_RULES_REVIEW_PATH = Path("docs/data/paper_automation/decision_review.json")
 DEFAULT_INGEST_LOG_PATH = Path("docs/data/ingest_health_log.json")
 DEFAULT_DECISION_INPUT_PATH = Path("docs/data/decision_input_inventory.json")
+DEFAULT_SCOREBOARD_PATH = Path("docs/data/assessment_scoreboard.json")
 
 STAGE_DEFINITIONS: tuple[dict[str, str], ...] = (
     {
@@ -31,7 +32,7 @@ STAGE_DEFINITIONS: tuple[dict[str, str], ...] = (
     {
         "id": "2b",
         "name": "Primary learning track",
-        "focus": "AI-judgment paper book vs ^FTSE and rules control",
+        "focus": "Primary paper book vs FTAL.L total return and its control (assessment model)",
     },
     {
         "id": "3",
@@ -66,6 +67,8 @@ def _stage_status(stage_id: str, evidence: dict[str, Any]) -> str:
     if stage_id == "1":
         return "complete" if evidence.get("decision_review_applied") else "in_progress"
     if stage_id == "2b":
+        if evidence.get("primary_verdict") is not None:
+            return "complete" if evidence["primary_verdict"] == "positive" else "in_progress"
         if evidence.get("ai_excess_after_costs") is None:
             return "in_progress"
         return "in_progress" if evidence.get("ai_excess_after_costs", 0) < 0 else "complete"
@@ -92,6 +95,7 @@ def build_project_progress(
     rules_review_path: Path = DEFAULT_RULES_REVIEW_PATH,
     ingest_log_path: Path = DEFAULT_INGEST_LOG_PATH,
     decision_input_path: Path = DEFAULT_DECISION_INPUT_PATH,
+    scoreboard_path: Path = DEFAULT_SCOREBOARD_PATH,
 ) -> dict[str, Any]:
     latest = _safe_read(latest_path) or {}
     automation = _safe_read(automation_path) or {}
@@ -100,6 +104,11 @@ def build_project_progress(
     rules_review = _safe_read(rules_review_path) or {}
     ingest_log = _safe_read(ingest_log_path) or {}
     decision_input = _safe_read(decision_input_path) or {}
+    scoreboard = _safe_read(scoreboard_path) or {}
+    primary_row = next(
+        (row for row in scoreboard.get("tracks") or [] if row.get("role") == "primary"), {}
+    )
+    primary_stats = primary_row.get("statistics") or {}
 
     meta = latest.get("meta") or {}
     library = (automation.get("settings") or {}).get("library") or {}
@@ -148,6 +157,15 @@ def build_project_progress(
         "key_filing_body_gaps": body_gaps,
         "sunday_bind_field": inventory_summary.get("sunday_bind_field"),
         "bodies_green": bodies_green,
+        "primary_track": scoreboard.get("primary_track"),
+        "primary_total_return": primary_row.get("total_return"),
+        "primary_benchmark_total_return": primary_row.get("benchmark_total_return"),
+        "primary_excess_total_return": primary_row.get("excess_total_return"),
+        "primary_verdict": (
+            primary_stats.get("verdict") if primary_stats.get("status") == "ok" else None
+        ),
+        "primary_ci90": primary_stats.get("ci90"),
+        "primary_years_to_detect_3pct_edge": primary_stats.get("years_to_detect_3pct_edge"),
     }
 
     stages = []
@@ -156,7 +174,6 @@ def build_project_progress(
         stages.append({**stage, "status": status})
 
     ai_excess = evidence.get("ai_excess_after_costs")
-    rules_excess = evidence.get("rules_excess_after_costs")
     tasks_path = Path("docs/data/engineering_tasks.json")
     tasks_data = _safe_read(tasks_path) or {}
     merged_task_count = sum(
@@ -174,13 +191,26 @@ def build_project_progress(
         "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
         f"Engineering queue: {open_task_count} open, {merged_task_count} merged supervised tasks.",
     ]
-    if ai_excess is not None and rules_excess is not None and ai_excess > rules_excess:
+    primary_verdict = evidence.get("primary_verdict")
+    if primary_verdict == "positive":
         strengths.append(
-            f"AI-judgment track beating rules control ({_fmt_pct(ai_excess)} vs {_fmt_pct(rules_excess)} excess)."
+            f"Primary book {evidence['primary_track']} ahead of FTAL.L with 90% confidence "
+            f"({_fmt_pct(evidence['primary_excess_total_return'])} total-return excess)."
         )
 
     gaps = []
-    if ai_excess is not None and ai_excess < 0:
+    if primary_row:
+        ci = evidence.get("primary_ci90") or [None, None]
+        years = evidence.get("primary_years_to_detect_3pct_edge")
+        if primary_verdict != "positive":
+            gaps.append(
+                f"Primary book {evidence['primary_track']}: total return "
+                f"{_fmt_pct(evidence['primary_total_return'])} vs FTAL.L "
+                f"{_fmt_pct(evidence['primary_benchmark_total_return'])}; annualised active "
+                f"return 90% CI {_fmt_pct(ci[0])} to {_fmt_pct(ci[1])}"
+                + (f"; ~{years:.0f} years of marks to detect a 3%/yr edge." if years else ".")
+            )
+    elif ai_excess is not None and ai_excess < 0:
         gaps.append(
             f"Primary AI track still below ^FTSE after costs ({_fmt_pct(ai_excess)} excess; history still thin)."
         )
@@ -257,9 +287,10 @@ def build_project_progress(
         "schema_version": 1,
         "generated_at": datetime.now(UTC).isoformat(),
         "current_focus": "stage_2b",
-        "headline": (
-            "Infrastructure and offline library are ahead of schedule; "
-            "the primary AI learning track is running but not yet beating the market."
+        "headline": scoreboard.get("headline")
+        or (
+            "Live screen, paper automation and offline library are running; "
+            "no paper book has shown an edge over the market yet."
         ),
         "stages": stages,
         "evidence": evidence,
