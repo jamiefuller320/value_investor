@@ -95,6 +95,17 @@ retry, recorded in `surface_released` (same mechanism as L543, see
 Parked names that are not eligible keep their bare `euro_filings` surface and
 stay parked.
 
+### PDFs without a text layer
+
+Some issuers file PDFs with outlined text: VINCI's H1 2025 and Q3 2025
+releases have 25 pages but only about 200 extractable characters. If an AMF row
+is still bodiless after a body attempt, ingest drops it and records its URL
+under `unextractable_body_urls` in `filings_index.json` (URL mapped to the
+first-failure timestamp). Re-ingest, the discovery merge and the library scan
+diff skip those URLs, so the rows don't come back as indexed-without-body or
+as false discovery hits. Entries expire after 30 days
+(`UNEXTRACTABLE_BODY_RETRY_DAYS`) and get one more fetch. OCR is out of scope.
+
 ## Ops findings
 
 Daily ops-monitor (`check_amf_direct_coverage`) writes

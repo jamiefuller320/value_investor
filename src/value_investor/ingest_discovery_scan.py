@@ -21,10 +21,13 @@ from urllib.parse import urlparse
 
 from value_investor.research.companies_house import fetch_filings_companies_house
 from value_investor.research.filings import (
+    UNEXTRACTABLE_BODY_URLS_KEY,
     _load_prior_filings_rows,
+    drop_known_unextractable_rows,
     fetch_filings_investegate_company,
     fetch_filings_ir_allowlist,
     fetch_filings_ticker_api,
+    load_unextractable_body_urls,
     merge_filings,
     resolve_filings_regime,
     summarize_filings,
@@ -301,10 +304,11 @@ def merge_discovery_into_index(
     filings_dir = Path(filings_dir)
     filings_dir.mkdir(parents=True, exist_ok=True)
     prior = _load_prior_filings_rows(filings_dir)
+    unextractable = load_unextractable_body_urls(filings_dir)
     # Ensure discovered rows stay body-less so we do not clobber existing bodies
     # unless merge prefers prior body-bearing rows (it does via +50 has_body score).
     cleaned_discovered = []
-    for row in discovered:
+    for row in drop_known_unextractable_rows(discovered, unextractable):
         item = dict(row)
         if not item.get("has_body"):
             item["has_body"] = False
@@ -326,6 +330,8 @@ def merge_discovery_into_index(
         "filings": merged,
         "discovery_scan_at": datetime.now(UTC).isoformat(),
     }
+    if unextractable:
+        index[UNEXTRACTABLE_BODY_URLS_KEY] = unextractable
     write_json(filings_dir / "filings_index.json", index, compact=True, compress=False)
     return {
         "prior_count": len(prior),

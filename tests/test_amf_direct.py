@@ -29,10 +29,14 @@ from value_investor.research.amf_direct import (
     select_rows_by_kind_quota,
 )
 from value_investor.research.filings import (
+    UNEXTRACTABLE_BODY_URLS_KEY,
     _apply_headline_period,
     _source_bonus,
+    drop_attempted_unextractable_rows,
+    drop_known_unextractable_rows,
     filing_source_surface,
     ingest_filings,
+    load_unextractable_body_urls,
 )
 from value_investor.storage import write_json
 
@@ -432,6 +436,120 @@ def test_ingest_filings_euro_non_french_skips_amf(tmp_path: Path):
             market="dax",
         )
     amf.assert_not_called()
+
+
+def test_load_unextractable_body_urls_expires_entries_for_retry(tmp_path: Path):
+    now = datetime(2026, 10, 6, tzinfo=UTC)
+    write_json(
+        tmp_path / "filings_index.json",
+        {
+            "filings": [],
+            UNEXTRACTABLE_BODY_URLS_KEY: {
+                "https://x/fresh.pdf": (now - timedelta(days=3)).isoformat(),
+                "https://x/stale.pdf": (now - timedelta(days=45)).isoformat(),
+                "https://x/bad.pdf": "not-a-date",
+            },
+        },
+        compact=False,
+    )
+    assert load_unextractable_body_urls(tmp_path, now=now) == {
+        "https://x/fresh.pdf": (now - timedelta(days=3)).isoformat()
+    }
+    assert load_unextractable_body_urls(tmp_path / "missing", now=now) == {}
+
+
+def test_drop_unextractable_helpers_only_touch_bodiless_amf_rows():
+    known = {"https://x/known.pdf": "2026-10-01T00:00:00+00:00"}
+    rows = [
+        _amf_row("interim", "https://x/known.pdf", "H1"),
+        {**_amf_row("annual", "https://x/known.pdf", "FY"), "has_body": True},
+        {"id": "esef-1", "source": "esef_direct", "url": "https://x/known.pdf"},
+        _amf_row("annual", "https://x/new.pdf", "FY 2025"),
+    ]
+    kept = drop_known_unextractable_rows(rows, known)
+    assert [r["id"] for r in kept] == ["amf-annual", "esef-1", "amf-annual"]
+    assert kept[0]["has_body"] is True
+
+    now = datetime(2026, 10, 6, tzinfo=UTC)
+    remaining, updated = drop_attempted_unextractable_rows(
+        kept, {"amf-annual", "esef-1"}, known, now=now
+    )
+    assert [r["id"] for r in remaining] == ["amf-annual", "esef-1"]
+    assert remaining[0]["has_body"] is True
+    assert updated == {**known, "https://x/new.pdf": now.isoformat()}
+
+
+def _euro_ingest_patches(amf_rows: list[dict], body: str | None):
+    return (
+        patch("value_investor.research.filings.fetch_filings_amf_direct", return_value=amf_rows),
+        patch("value_investor.research.filings.fetch_filings_esef_direct", return_value=[]),
+        patch("value_investor.research.filings.fetch_filings_belgium_official", return_value=[]),
+        patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[]),
+        patch("value_investor.research.filings.fetch_filings_investegate_company", return_value=[]),
+        patch("value_investor.research.filings.fetch_filings_ir_allowlist", return_value=[]),
+        patch("value_investor.research.filings.fetch_filing_body", return_value=body),
+        patch("value_investor.research.filings.fetch_filings_sec_edgar", return_value=[]),
+        patch(
+            "value_investor.research.filings.refresh_sources_yahoo_cashflow_metrics",
+            return_value=None,
+        ),
+    )
+
+
+def test_ingest_filings_drops_amf_rows_without_text_layer(tmp_path: Path):
+    url = "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/07/outlined.pdf"
+    rows = [_amf_row("interim", url, "VINCI H1 2025 results")]
+    patches = _euro_ingest_patches(rows, None)
+    with patches[0] as amf, patches[1], patches[2], patches[3], patches[4], patches[5]:
+        with patches[6] as body_fetch, patches[7], patches[8]:
+            meta = ingest_filings(
+                ticker="DG.PA", company_name="Vinci SA", sources_dir=tmp_path, market="cac40"
+            )
+            assert any(c.args[0] == url for c in body_fetch.call_args_list)
+    amf.assert_called_once()
+    index_path = Path(meta["filings_index_path"])
+    index = json.loads(index_path.read_text(encoding="utf-8"))
+    assert not [r for r in index["filings"] if r["source"] == "amf_direct"]
+    assert url in index[UNEXTRACTABLE_BODY_URLS_KEY]
+
+    patches = _euro_ingest_patches(rows, None)
+    with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5]:
+        with patches[6] as body_fetch, patches[7], patches[8]:
+            ingest_filings(
+                ticker="DG.PA", company_name="Vinci SA", sources_dir=tmp_path, market="cac40"
+            )
+            assert all(c.args[0] != url for c in body_fetch.call_args_list)
+    index = json.loads(index_path.read_text(encoding="utf-8"))
+    assert not [r for r in index["filings"] if r["source"] == "amf_direct"]
+    assert url in index[UNEXTRACTABLE_BODY_URLS_KEY]
+
+
+def test_discovery_merge_filters_unextractable_amf_urls_and_keeps_key(tmp_path: Path):
+    from value_investor.ingest_discovery_scan import merge_discovery_into_index
+
+    stamp = datetime.now(UTC).isoformat()
+    write_json(
+        tmp_path / "filings_index.json",
+        {
+            "ticker": "DG.PA",
+            "filings": [],
+            UNEXTRACTABLE_BODY_URLS_KEY: {"https://x/outlined.pdf": stamp},
+        },
+        compact=False,
+    )
+    merge_discovery_into_index(
+        filings_dir=tmp_path,
+        discovered=[
+            _amf_row("interim", "https://x/outlined.pdf", "H1 2025"),
+            _amf_row("annual", "https://x/fresh.pdf", "FY 2025"),
+        ],
+        ticker="DG.PA",
+        company_name="Vinci SA",
+        market="cac40",
+    )
+    index = json.loads((tmp_path / "filings_index.json").read_text(encoding="utf-8"))
+    assert [r["url"] for r in index["filings"]] == ["https://x/fresh.pdf"]
+    assert index[UNEXTRACTABLE_BODY_URLS_KEY] == {"https://x/outlined.pdf": stamp}
 
 
 def test_filing_source_surface_marks_amf_adapter():

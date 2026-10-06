@@ -8868,6 +8868,80 @@ def _load_prior_filings_rows(filings_dir: Path) -> list[dict[str, Any]]:
     return list(filings) if isinstance(filings, list) else []
 
 
+# Direct-feed sources whose bodiless rows are dropped after a body attempt
+# (e.g. AMF PDFs with outlined text and no text layer); otherwise each
+# re-ingest or discovery merge would leave them as indexed-without-body.
+UNEXTRACTABLE_BODY_SOURCES = frozenset({"amf_direct"})
+UNEXTRACTABLE_BODY_RETRY_DAYS = 30
+UNEXTRACTABLE_BODY_URLS_KEY = "unextractable_body_urls"
+
+
+def load_unextractable_body_urls(
+    filings_dir: Path, *, now: datetime | None = None
+) -> dict[str, str]:
+    """``url → first-failed date`` from the prior index, minus entries due a retry."""
+    index_path = Path(filings_dir) / "filings_index.json"
+    if not index_path.exists():
+        return {}
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return {}
+    raw = payload.get(UNEXTRACTABLE_BODY_URLS_KEY) if isinstance(payload, dict) else None
+    if not isinstance(raw, dict):
+        return {}
+    cutoff = (now or datetime.now(UTC)) - timedelta(days=UNEXTRACTABLE_BODY_RETRY_DAYS)
+    kept: dict[str, str] = {}
+    for url, stamp in raw.items():
+        try:
+            when = datetime.fromisoformat(str(stamp))
+        except ValueError:
+            continue
+        if (when if when.tzinfo else when.replace(tzinfo=UTC)) >= cutoff:
+            kept[str(url)] = str(stamp)
+    return kept
+
+
+def drop_known_unextractable_rows(
+    rows: list[dict[str, Any]], known: dict[str, str]
+) -> list[dict[str, Any]]:
+    """Drop bodiless direct-feed rows whose URL already failed body extraction."""
+    if not known:
+        return rows
+    return [
+        row
+        for row in rows
+        if row.get("has_body")
+        or str(row.get("source") or "") not in UNEXTRACTABLE_BODY_SOURCES
+        or str(row.get("url") or "") not in known
+    ]
+
+
+def drop_attempted_unextractable_rows(
+    rows: list[dict[str, Any]],
+    attempted_ids: set[str],
+    known: dict[str, str],
+    *,
+    now: datetime | None = None,
+) -> tuple[list[dict[str, Any]], dict[str, str]]:
+    """Drop direct-feed rows still bodiless after a body attempt; record their URLs."""
+    stamp = (now or datetime.now(UTC)).isoformat()
+    updated = dict(known)
+    kept: list[dict[str, Any]] = []
+    for row in rows:
+        url = str(row.get("url") or "")
+        if (
+            not row.get("has_body")
+            and str(row.get("source") or "") in UNEXTRACTABLE_BODY_SOURCES
+            and str(row.get("id") or "") in attempted_ids
+            and url
+        ):
+            updated.setdefault(url, stamp)
+            continue
+        kept.append(row)
+    return kept, updated
+
+
 def refresh_uk_filing_listings_into_index(
     filings_dir: Path,
     *,
@@ -10451,6 +10525,7 @@ def ingest_filings(
     groups: list[list[dict[str, Any]]] = []
     hkex_rows: list[dict[str, Any]] = []
     prior_filings = _load_prior_filings_rows(filings_dir)
+    unextractable_urls = load_unextractable_body_urls(filings_dir)
     if prior_filings:
         groups.append(prior_filings)
     ch_accounts = max_ch_accounts
@@ -10576,12 +10651,15 @@ def ingest_filings(
     # durable indexed-without-body leftovers. Does not touch google_news wrappers
     # or company-news / PDF rows.
     merged, _ = drop_index_noise_filing_rows(merged)
+    merged = drop_known_unextractable_rows(merged, unextractable_urls)
     # Allow more bodies when deepening historical accounts for memo names.
     max_bodies = 20 if deepen_history else 12
+    body_attempted: set[str] = set()
     merged = _write_bodies(
         merged,
         bodies_dir,
         max_bodies=max_bodies,
+        attempted_ids=body_attempted,
         ticker=ticker,
         company_name=company_name,
     )
@@ -10596,6 +10674,9 @@ def ingest_filings(
         bodies_dir,
         company_name=company_name,
         ticker=ticker,
+    )
+    merged, unextractable_urls = drop_attempted_unextractable_rows(
+        merged, body_attempted, unextractable_urls
     )
     merged = [
         _apply_headline_period(
@@ -10672,6 +10753,8 @@ def ingest_filings(
         "summary": summarize_filings(merged),
         "filings": merged,
     }
+    if unextractable_urls:
+        index[UNEXTRACTABLE_BODY_URLS_KEY] = unextractable_urls
 
     from value_investor.storage import resolve_json_path, write_json
 

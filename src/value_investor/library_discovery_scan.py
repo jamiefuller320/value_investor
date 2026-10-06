@@ -22,6 +22,7 @@ from value_investor.research.filings import (
     _base_symbol,
     _load_prior_filings_rows,
     _sec_edgar_supplement_allowed,
+    drop_known_unextractable_rows,
     fetch_filings_asia_news,
     fetch_filings_asx_direct,
     fetch_filings_asx_news,
@@ -33,6 +34,7 @@ from value_investor.research.filings import (
     fetch_filings_sec_edgar,
     fetch_filings_ticker_api,
     fetch_filings_tsx_news,
+    load_unextractable_body_urls,
     merge_filings,
     resolve_filings_regime,
 )
@@ -173,6 +175,9 @@ def scan_library_ticker_for_new_filings(
         logger.warning("Library discovery scan failed for %s: %s", report.ticker, exc)
         return hit
 
+    discovered = drop_known_unextractable_rows(
+        discovered, load_unextractable_body_urls(filings_dir)
+    )
     hit.listed_count = len(discovered)
     new_rows: list[dict[str, Any]] = []
     for row in discovered:
