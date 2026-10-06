@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T18:24:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-06T18:49:59+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -633,7 +633,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L533 | **Suite B fair books contain legacy 3% stress-cost trades** | ai_judgment_fair's first trades were charged 3% per side before switching to ~0.53%/0.03%, so its -13% excess (the adoption headline) is partly cost-model contamination. Cold-start a clean fair epoch or restate excess from the clean epoch only. | Before Suite B excess is cited as adoption evidence |
 | L534 | **T212 catalogue as ISIN identifier master and currency cross-check** | T212 has no quotes, candles or fundamentals, but fetch_instruments() returns ISIN, currency (GBX vs GBP), exchange and addedOn. Use ISIN as the join key across Yahoo/library tickers and the T212 currency code to validate yahoo_price_units pence/pound corrections; use fetch_exchanges() schedules as the per-market trading calendar. | Next ticker-mapping or price-unit bug, or when a second market goes live (stage 4) |
 | L548 | **Render assessment scoreboard on dashboard and retire dual-suite rollup** | assessment_scoreboard.json feeds ops-monitor and the progress headline but has no dashboard panel; the Suite A/B dual-suite rollup (learning_tracks_dual_suite, L487 republish bridge) still renders. Add a scoreboard panel, then retire the dual-suite view. | Scoreboard has refreshed cleanly for 4 Sundays after the scoreboard PR merges |
-| L549 | **Race-free IDs for the deferred-ideas store** | _next_id allocates max+1 per category, so concurrent branches mint the same ID and merges renumber. Seen 2026-10-06: L543/L544 collided and N187 became N189 after docs already cited N187. Allocate IDs at merge time or use date-based IDs like fragments. | Next deferred-store merge conflict or renumbered cross-reference |
 | L550 | **Prune human gates toward the autonomy goal** | The checklist has 35 manual tasks (18 on Sunday), and every new instrument adds one. Classify each by whether a human decision changes capital or policy; fold read-only review cards into one weekly digest; retire cards whose instrument is frozen. | Monthly ops review cadence, or when Sunday manual tasks exceed 20 |
 | L551 | **Triage the deferred-ideas backlog (544 open)** | Parking is cheap, so the store holds 544 open ideas and 27 open fragments; revisit triggers are rarely evaluated automatically. Add an automated trigger check (e.g. ops-monitor or horizon-scan) and drop ideas superseded by the single assessment model. | Next monthly horizon scan |
 
