@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-06T23:52:00+00:00",
+  "updated_at": "2026-10-07T05:54:21+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9333,7 +9333,7 @@
       "section": "learning",
       "title": "Do not execute primary or epoch-0 DCA from EOW cadence agreement alone",
       "summary": "dca_4x_weekly remains the leading overlay cadence and will likely help entry drag, but adoption plan still needs ai_judgment first_entry>=3 (now 2) before any paper execute, and execute is graduated_allocation-only then; primary stays blocked while beat_market is false. Ack is not adopt.",
-      "revisit_when": "entry_dca_adoption_plan out_of_sample_first_entry ready AND paper_execute_graduated unlocked AND dca_4x_weekly is also the control (buy_tier_level) winning cadence, not just the primary's; when met, execute on the fair-cost twin ai_judgment_graduated_fair, not the 3% stress graduated_allocation book",
+      "revisit_when": "entry_dca_adoption_plan out_of_sample_first_entry ready AND dca_4x_weekly is also the control (buy_tier_level) winning cadence, not just the primary's. The execute target graduated_allocation is frozen (2026-10-07), so paper_execute_graduated stays blocked; when met, repoint entry-DCA execute to the fair-cost twin ai_judgment_graduated_fair once it has >=8 marks",
       "tags": [
         "dca",
         "entry_dca",
@@ -9352,19 +9352,13 @@
           },
           {
             "file": "docs/data/entry_dca_adoption_plan.json",
-            "path": "stages[id=paper_execute_graduated].ready",
-            "op": "==",
-            "value": true
-          },
-          {
-            "file": "docs/data/entry_dca_adoption_plan.json",
             "path": "stages[id=out_of_sample_first_entry].evidence.live_winning_cadence.buy_tier_level",
             "op": "==",
             "value": "dca_4x_weekly"
           }
         ]
       },
-      "updated_at": "2026-10-06T23:52:00+00:00"
+      "updated_at": "2026-10-07T05:54:21+00:00"
     },
     {
       "id": "N136",
@@ -12917,9 +12911,11 @@
         "twins",
         "graduated_allocation"
       ],
-      "status": "open",
+      "status": "drop",
       "source": "decision-review significance gate (significance_gate_v1); PR #993 rebase",
-      "added_at": "2026-10-06T18:24:04+00:00"
+      "added_at": "2026-10-06T18:24:04+00:00",
+      "updated_at": "2026-10-07T05:54:21+00:00",
+      "status_note": "graduated_allocation frozen 2026-10-07 (stress-cost, outside the assessment model); graduated sizing is now judged by the fair-cost twin ai_judgment_graduated_fair, which starts from the primary's knobs with no legacy apply"
     },
     {
       "id": "L556",

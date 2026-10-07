@@ -11,7 +11,12 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from value_investor.assessment_model import control_track_id, primary_track_id, twins
+from value_investor.assessment_model import (
+    control_track_id,
+    is_track_frozen,
+    primary_track_id,
+    twins,
+)
 from value_investor.experiment_acks import load_acks, matching_ack
 from value_investor.experiment_starts import load_starts, matching_start
 from value_investor.storage import read_json, write_json
@@ -143,7 +148,10 @@ def evaluate_entry_dca_adoption_plan(
 
     graduated = _track_metrics(review, "graduated_allocation")
     graduated_marks = int(graduated.get("equity_marks") or 0)
-    execute_ready = out_of_sample_ready and graduated_marks >= GRADUATED_MARKS_MIN
+    graduated_frozen = is_track_frozen(paper_root, "graduated_allocation")
+    execute_ready = (
+        out_of_sample_ready and graduated_marks >= GRADUATED_MARKS_MIN and not graduated_frozen
+    )
 
     fair_primary = _track_metrics(review, primary)
     beat_market = fair_primary.get("beat_market")
@@ -195,13 +203,14 @@ def evaluate_entry_dca_adoption_plan(
             ready=execute_ready,
             revisit_when=(
                 "out_of_sample_first_entry ready AND graduated_allocation "
-                f"equity_marks>={GRADUATED_MARKS_MIN}"
+                f"equity_marks>={GRADUATED_MARKS_MIN} AND graduated_allocation not frozen"
             ),
             do_not="Do not execute on primary, rules, or a new DCA paper book",
             evidence={
                 "graduated_equity_marks": graduated_marks,
                 "graduated_marks_min": GRADUATED_MARKS_MIN,
                 "graduated_cost_drag": graduated.get("cost_drag"),
+                "graduated_frozen": graduated_frozen,
             },
         ),
         _stage(

@@ -132,6 +132,12 @@ def run_lifecycle_experiment_start(
         raise ValueError(
             f"Start execute is allowed only on {DEFAULT_EXECUTE_TRACK!r}; got {track_key!r}"
         )
+    from value_investor.assessment_model import is_track_frozen
+
+    if is_track_frozen(paper_root, track_key):
+        raise ValueError(
+            f"{track_key!r} is frozen (assessment_model.json); Start execute is blocked"
+        )
 
     finding = _finding_for_experiment(data_dir, paper_root, experiment_id)
     cadence_key = (

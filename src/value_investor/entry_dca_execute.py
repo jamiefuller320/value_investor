@@ -156,6 +156,12 @@ def enable_graduated_entry_dca_execute(
         raise ValueError(
             f"Entry DCA execute is allowed only on {DEFAULT_EXECUTE_TRACK!r}; got {track_id!r}"
         )
+    from value_investor.assessment_model import is_track_frozen
+
+    if is_track_frozen(Path(paper_root), track_id):
+        raise ValueError(
+            f"{track_id!r} is frozen (assessment_model.json); entry DCA execute is blocked"
+        )
     config_path = Path(paper_root) / track_id / "config.json"
     try:
         config = read_json(config_path)

@@ -213,7 +213,9 @@ de-risk, `model_independent_hint`) and the adoption plan. Record ack with
 or the Lifecycle card **Acknowledge** button (Supabase dashboard bridge).
 Do **not** execute DCA or change starter fraction from Acknowledge.
 When adoption reaches `paper_execute_graduated` ready, use **Start** to authorize
-and enable 4× weekly entry DCA on `graduated_allocation` only.
+and enable 4× weekly entry DCA on `graduated_allocation` only. That book was
+frozen on 2026-10-07, so the stage stays blocked and Start / enable refuse it;
+repointing execute to `ai_judgment_graduated_fair` is the work parked in N135.
 
 ### Factor chips vs shared experiment (Start)
 
@@ -251,7 +253,7 @@ ftse-experiment-assess plan
 |-------|---------|-----------|
 | `acked` | Human read the overlay finding | `ftse-experiment-assess ack` recorded for current `leading_cadence` |
 | `out_of_sample_first_entry` | Confirm `dca_4x_weekly` on **new** first-entry closes | Live books from `assessment_model.json`: primary (`ai_judgment_fair`) first-entry ≥ 3 and control (`buy_tier_level`) ≥ 1, each above its ack snapshot; the primary and its twins still agree on cadence. Frozen books never gate this stage |
-| `paper_execute_graduated` | Optional execute 4× weekly on `graduated_allocation` only | Previous stage ready **and** graduated `equity_marks` ≥ 8 |
+| `paper_execute_graduated` | Optional execute 4× weekly on `graduated_allocation` only | Previous stage ready **and** graduated `equity_marks` ≥ 8 **and** `graduated_allocation` not frozen (it is, since 2026-10-07) |
 | `primary_or_live` | Primary / live size | Fair-cost primary `beat_market` true **and** graduated execute ready |
 
 A new leading cadence re-opens ack. Do not spawn a per-model DCA paper book.
