@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07T17:17:42.952076+00:00",
+  "generated_at": "2026-10-07T18:23:49.669390+00:00",
   "learning_question": "On the wide fair-cost buy-tier book, after costs, does keeping a core lot and recycling only a tactical slice beat selling the whole position when it leaves the buy tier?",
   "track_id": "buy_tier_level",
   "observe_only": true,
@@ -12,7 +12,8 @@
     "dip_reopen": 0.95,
     "scored_against": "full_exit inside this engine",
     "fidelity_tolerance": 0.02,
-    "edge_min": 0.01
+    "edge_min": 0.01,
+    "core_sell": "hard screen avoid, or research verdict pass/sell/avoid/exit, held for exit_confirm_screens; rank and cheapness do not sell the core"
   },
   "status": "ok",
   "passes": 21,
@@ -45,6 +46,9 @@
       "stop_sales": 0,
       "skims": 0,
       "residual_donations": 0,
+      "core_thesis_exits": 0,
+      "screen_avoid_exits": 0,
+      "research_failed_exits": 0,
       "external_fills": 0,
       "delta_vs_full_exit": 0.0
     },
@@ -64,6 +68,9 @@
       "stop_sales": 13,
       "skims": 0,
       "residual_donations": 0,
+      "core_thesis_exits": 0,
+      "screen_avoid_exits": 0,
+      "research_failed_exits": 0,
       "external_fills": 128,
       "delta_vs_full_exit": 0.0035
     },
@@ -83,6 +90,9 @@
       "stop_sales": 0,
       "skims": 2,
       "residual_donations": 0,
+      "core_thesis_exits": 0,
+      "screen_avoid_exits": 0,
+      "research_failed_exits": 0,
       "external_fills": 6,
       "delta_vs_full_exit": 0.0003
     },
@@ -102,13 +112,59 @@
       "stop_sales": 0,
       "skims": 0,
       "residual_donations": 2,
+      "core_thesis_exits": 0,
+      "screen_avoid_exits": 0,
+      "research_failed_exits": 0,
       "external_fills": 6,
       "delta_vs_full_exit": 0.001
+    },
+    "core_thesis_exit": {
+      "policy": "core_thesis_exit",
+      "nav": 982.54,
+      "return": -0.0175,
+      "cost_drag": 0.0061,
+      "cash": 45.18,
+      "core_value": 743.19,
+      "tactical_value": 194.16,
+      "names_with_core": 71,
+      "buys": 146,
+      "sells": 37,
+      "rank_exits": 14,
+      "target_sales": 9,
+      "stop_sales": 13,
+      "skims": 0,
+      "residual_donations": 0,
+      "core_thesis_exits": 1,
+      "screen_avoid_exits": 1,
+      "research_failed_exits": 0,
+      "external_fills": 128,
+      "delta_vs_full_exit": 0.0034
     }
   },
   "best_variant": {
     "policy": "core_kept",
     "delta_vs_full_exit": 0.0035
   },
-  "limitations": "Price-only marks from the rebalance log, fair buy and sell costs, no dividends. The core lot is never sold: the log has no thesis-break flag. A positive delta is a hypothesis, not a change to buy_tier_level. Weeks of passes are not a multi-year value test."
+  "core_sell": {
+    "policy": "core_thesis_exit",
+    "confirm_screens": 2,
+    "sells_on": [
+      "screen signal avoid",
+      "research verdict pass, sell, avoid, or exit"
+    ],
+    "does_not_sell_on": [
+      "left the buy tier",
+      "cheapness family failed",
+      "research caution or neutral",
+      "price drop"
+    ],
+    "core_thesis_exits": 1,
+    "screen_avoid_exits": 1,
+    "research_failed_exits": 0,
+    "core_value": 743.19,
+    "nav": 982.54,
+    "delta_vs_core_kept": -0.0001,
+    "delta_vs_full_exit": 0.0034
+  },
+  "limitations": "Price-only marks from the rebalance log, fair buy and sell costs, no dividends. core_kept never sells its core. core_thesis_exit sells the core only after a hard avoid or a failed research verdict has lasted the book's exit-confirm screens. Rank and a lost cheapness screen do not sell it. A positive delta is a hypothesis, not a change to buy_tier_level. Weeks of passes are not a multi-year value test."
 }

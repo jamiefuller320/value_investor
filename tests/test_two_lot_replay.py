@@ -4,25 +4,36 @@ import json
 from pathlib import Path
 
 from value_investor.two_lot_replay import (
+    CORE_SELL_FINDING_TITLE,
     EDGE_MIN,
     FINDING_TITLE,
     STORE_FAILED_TITLE,
     build_two_lot_replay,
+    ops_finding_from_core_sell,
     ops_finding_from_two_lot_replay,
     replay_policy,
 )
 
 
-def _pass(day: int, price: float, *, in_set: bool = True) -> dict:
-    candidates = [
-        {
-            "ticker": "AAA.L",
-            "price": price,
-            "signal": "buy" if in_set else "hold",
-            "timing_signal": "neutral",
-            "trade_plan": {},
-        }
-    ]
+def _pass(
+    day: int,
+    price: float,
+    *,
+    in_set: bool = True,
+    signal: str | None = None,
+    verdict: str | None = None,
+    include: bool = True,
+) -> dict:
+    row = {
+        "ticker": "AAA.L",
+        "price": price,
+        "signal": signal if signal is not None else ("buy" if in_set else "hold"),
+        "timing_signal": "neutral",
+        "trade_plan": {},
+    }
+    if verdict is not None:
+        row["research_verdict"] = verdict
+    candidates = [row] if include else []
     return {
         "acted": True,
         "logged_at": f"2026-09-{day:02d}T09:00:00+00:00",
@@ -67,6 +78,84 @@ def test_core_kept_holds_through_a_rank_exit_and_later_rally():
     assert kept["core_value"] == 97.5
     assert kept["nav"] > full["nav"]
     assert kept["rank_exits"] == 1
+
+
+def test_rank_exit_does_not_sell_the_core():
+    passes = [
+        _pass(1, 100.0, in_set=True),
+        _pass(2, 100.0, in_set=False),
+        _pass(3, 100.0, in_set=False),
+        _pass(4, 150.0, in_set=False),
+    ]
+    kept = _replay(passes, "core_kept")
+    thesis = _replay(passes, "core_thesis_exit")
+    assert thesis["core_thesis_exits"] == 0
+    assert thesis["core_value"] == kept["core_value"] == 97.5
+    assert thesis["nav"] == kept["nav"]
+
+
+def test_two_hard_avoids_sell_the_core_and_a_single_avoid_does_not():
+    confirmed = [
+        _pass(1, 100.0),
+        _pass(2, 100.0, signal="avoid", verdict="accumulate"),
+        _pass(3, 100.0, signal="avoid", verdict="accumulate"),
+        _pass(4, 150.0, signal="hold"),
+    ]
+    kept = _replay(confirmed, "core_kept")
+    thesis = _replay(confirmed, "core_thesis_exit")
+    assert kept["core_value"] == 97.5
+    assert thesis["core_thesis_exits"] == 1
+    assert thesis["screen_avoid_exits"] == 1
+    assert thesis["research_failed_exits"] == 0
+    assert thesis["names_with_core"] == 0
+    assert thesis["nav"] == 100.0
+
+    flicker = [
+        _pass(1, 100.0),
+        _pass(2, 100.0, signal="avoid"),
+        _pass(3, 150.0, signal="hold"),
+        _pass(4, 150.0, signal="hold"),
+    ]
+    once = _replay(flicker, "core_thesis_exit")
+    assert once["core_thesis_exits"] == 0
+    assert once["core_value"] == 97.5
+
+
+def test_failed_research_sells_the_core_without_refilling_it():
+    passes = [
+        _pass(1, 100.0, verdict="accumulate"),
+        _pass(2, 100.0, verdict="pass"),
+        _pass(3, 100.0, verdict="pass"),
+    ]
+    thesis = _replay(passes, "core_thesis_exit")
+    assert thesis["core_thesis_exits"] == 1
+    assert thesis["research_failed_exits"] == 1
+    assert thesis["names_with_core"] == 0
+    assert thesis["core_value"] == 0.0
+    assert thesis["cash"] == 65.0
+    assert thesis["tactical_value"] == 35.0
+
+
+def test_caution_and_a_gap_do_not_confirm_a_core_sell():
+    caution = [
+        _pass(1, 100.0, verdict="accumulate"),
+        _pass(2, 100.0, verdict="caution"),
+        _pass(3, 100.0, verdict="caution"),
+    ]
+    assert _replay(caution, "core_thesis_exit")["core_thesis_exits"] == 0
+    assert _replay(caution, "core_thesis_exit")["core_value"] == 65.0
+
+    gapped = [
+        _pass(1, 100.0),
+        _pass(2, 100.0, signal="avoid"),
+        _pass(3, 100.0, include=False),
+    ]
+    assert _replay(gapped, "core_thesis_exit")["core_thesis_exits"] == 0
+    assert _replay(gapped, "core_thesis_exit")["core_value"] == 65.0
+    gapped.append(_pass(4, 100.0, signal="avoid"))
+    sold = _replay(gapped, "core_thesis_exit")
+    assert sold["core_thesis_exits"] == 1
+    assert sold["core_value"] == 0.0
 
 
 def test_profit_residual_keeps_only_the_gain_and_misses_a_further_rally():
@@ -128,6 +217,27 @@ def test_finding_requires_a_faithful_window_and_a_one_point_edge():
     assert finding is not None
     assert finding["title"] == FINDING_TITLE
     assert finding["auto_fixable"] is False
+    quiet_core = {
+        "status": "ok",
+        "track_id": "buy_tier_level",
+        "passes": 8,
+        "window": quiet["window"],
+        "core_sell": {"core_thesis_exits": 0, "delta_vs_core_kept": 0.02},
+    }
+    assert ops_finding_from_core_sell(quiet_core) is None
+    moved = {
+        **quiet_core,
+        "core_sell": {
+            "core_thesis_exits": 1,
+            "screen_avoid_exits": 1,
+            "research_failed_exits": 0,
+            "delta_vs_core_kept": -0.02,
+        },
+    }
+    core_finding = ops_finding_from_core_sell(moved)
+    assert core_finding is not None
+    assert core_finding["title"] == CORE_SELL_FINDING_TITLE
+    assert core_finding["auto_fixable"] is False
 
 
 def test_build_marks_a_short_log_thin(tmp_path: Path):
@@ -173,7 +283,10 @@ def test_check_persists_store(tmp_path: Path):
         "core_kept",
         "harvest_skim",
         "profit_residual",
+        "core_thesis_exit",
     }
+    assert payload["core_sell"]["core_thesis_exits"] == 0
+    assert payload["core_sell"]["does_not_sell_on"][0] == "left the buy tier"
     assert findings == []
 
 

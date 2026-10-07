@@ -16,7 +16,7 @@ test of that split. It does not change the book, its knobs, or any fill.
 | Question | Answer |
 |----------|--------|
 | Unit | One logged `buy_tier_level` rebalance pass, applied to each open lot |
-| Frozen at *t* | Candidate ticker, signal, timing, price, and trade-plan stop/target when the pass logged them; the pass's exit buffer and cost knobs |
+| Frozen at *t* | Candidate ticker, signal, research verdict, timing, price, and trade-plan stop/target when the pass logged them; the pass's exit buffer and cost knobs |
 | Joined later | Yahoo closes for a held name missing from that pass's candidates |
 | Never backfilled into *t* | A later thesis label, a later trade plan, or a decision to edit the live book |
 
@@ -36,6 +36,7 @@ buy/sell costs. They are scored against `full_exit` inside this engine.
 | `core_kept` | 65% of each new stake. That core is not sold on rank, target, or stop | The other 35%. Sold at the logged tactical target, or 10% above the fill if the pass logged none; at the logged stop, or 8% below the fill; or on the rank exit |
 | `harvest_skim` | After the first 15% gain, the unsold shares stay through later rank exits | Half of that gain, once per holding episode |
 | `profit_residual` | After the first 15% gain (or a logged target hit that is actually in profit), only the gain remains as core | Shares worth the cost basis. Until that donation, a rank exit still sells the whole tactical lot |
+| `core_thesis_exit` | The same 65% core as `core_kept`, until the reason for owning the name has failed | That core, after the failure has lasted `exit_confirm_screens` (live value: 2). The tactical slice still uses the `core_kept` exits |
 
 Cash from a tactical sale is not put back into the same name on that pass.
 The tactical sleeve reopens on a later pass at or below 95% of the sale
@@ -43,14 +44,34 @@ price, or when the name leaves the buy tier and comes back. The £10 minimum
 applies to a sleeve's total buy, not to each lot, so a wide book's small
 line can still be split.
 
-There is no thesis-break flag on the log, so a core lot is not sold inside
-this replay. Marks are price-only. Dividends are not credited.
+## Core sell
+
+`core_kept` still never sells its core. `core_thesis_exit` is that rule plus
+one sell. The trigger reads only the row logged on that pass.
+
+| Fails the reason for owning | Does not |
+|----------------------------|----------|
+| Screen signal is `avoid` | The name left the buy tier (`hold`, blank, or missing from the target set) |
+| Research verdict is `pass`, `sell`, `avoid`, or `exit` | Research `caution` or `neutral`. A lost cheapness family. A price drop |
+
+`pass` is the research verdict this project uses for do-not-own. A hard
+`avoid` counts even when research still says `accumulate`. One screen is not
+enough: the same failure has to last the book's exit-confirm screens. A pass
+that does not log the name leaves the streak where it is. While the current
+row is a failure, the replay does not add more shares to the core. It does
+not refill the core on the pass that sells it.
+
+The retention finding still scores `core_kept`, `harvest_skim`, and
+`profit_residual` against `full_exit`. The core-sell finding compares
+`core_thesis_exit` with `core_kept`. Marks are price-only. Dividends are not
+credited.
 
 ## Ops finding
 
 | Title | Severity | Fires when |
 |-------|----------|------------|
 | **Two-lot retention beats full exit in replay** | warn | `status` is `ok` and the best retention rule beats `full_exit` by ≥1 percentage point |
+| **Core thesis exit changes the kept-core replay** | warn | `status` is `ok`, at least one core was sold on a persisted thesis break, and that variant differs from `core_kept` by ≥1 percentage point |
 | **Two-lot replay observe failed** | warn | The refresh raised |
 
 `auto_fixable=False`. A positive delta is a hypothesis. It does not edit
@@ -62,4 +83,6 @@ harvest twins are separate questions on the 3-name primary.
 The current window is a few weeks. `core_kept` can show a small gap just
 because tactical stops fired, not because a multi-year value stake has been
 earned. `profit_residual` only donates after a name is already up 15%, so on
-a flat window it stays close to `full_exit`.
+a flat window it stays close to `full_exit`. A core sell fires only when a
+logged row actually fails the reason for owning the name twice in a row, so a
+window with no hard avoid and no `pass` verdict stays identical to `core_kept`.
