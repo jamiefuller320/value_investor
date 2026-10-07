@@ -591,6 +591,26 @@ def test_warm_start_shadow_materializes_fund_and_zero_datum(tmp_path: Path):
     assert again.get("skipped") is True
 
 
+def test_warm_start_refuses_frozen_shadow_even_with_force(tmp_path: Path):
+    from value_investor.calibration_warm_start import warm_start_calibration_shadow
+
+    paper_root = _seed_ai_judgment_parent(tmp_path)
+    spawn_calibrated_shadow_track(paper_root)
+    shadow_fund = paper_root / "ai_judgment_calibrated" / "automated_fund.json"
+    before = shadow_fund.read_text(encoding="utf-8") if shadow_fund.exists() else None
+    (paper_root / "assessment_model.json").write_text(
+        json.dumps({"frozen_tracks": {"ai_judgment_calibrated": {"reason": "stress"}}}),
+        encoding="utf-8",
+    )
+
+    result = warm_start_calibration_shadow(paper_root, rank=1, force=True)
+
+    assert result["warm_started"] is False
+    assert "frozen" in result["reason"]
+    after = shadow_fund.read_text(encoding="utf-8") if shadow_fund.exists() else None
+    assert after == before
+
+
 def test_endurance_gates_on_post_seed_not_seed_pnl(tmp_path: Path):
     """Seed lifetime excess must not alone make a shadow surviving."""
     from value_investor.calibration_warm_start import warm_start_calibration_shadow

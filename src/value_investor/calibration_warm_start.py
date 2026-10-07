@@ -106,6 +106,17 @@ def warm_start_calibration_shadow(
             "reason": f"Shadow config missing at {config_path} — spawn first",
         }
 
+    from value_investor.assessment_model import is_track_frozen
+
+    if is_track_frozen(paper_root, track_id):
+        return {
+            "warm_started": False,
+            "rank": int(rank),
+            "shadow_track_id": track_id,
+            "skipped": True,
+            "reason": f"{track_id} is frozen (assessment_model.json); never re-seeded",
+        }
+
     provenance = load_calibration_provenance(shadow_dir) or {}
     existing_zero = provenance.get(ENDURANCE_ZERO_DATUM_KEY)
     if isinstance(existing_zero, dict) and existing_zero.get("started_at") and not force:
