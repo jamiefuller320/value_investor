@@ -35,7 +35,7 @@ our extra machinery adds anything over textbook value.
 
 | Item | Registered value |
 |------|------------------|
-| Screen | Code fingerprint over `models/`, `scoring/__init__.py`, `model_families.py`, `model_weights.py`, `signals.py`, `sector_scoring.py`, `data_quality.py`, `signal_stability.py`. Default model weights; the 28-day learner is not run (N197) |
+| Screen | Code fingerprint over `models/`, `scoring/__init__.py`, `model_families.py`, `model_weights.py`, `signals.py`, `sector_scoring.py`, `data_quality.py`, `signal_stability.py`, `library_screen.py`. Default model weights; the 28-day learner is not run (N197) |
 | Universe | S&P 500 members on each date, active and delisted (Sharadar `sp500`) |
 | Fundamentals | Sharadar `fundamentals`, dimension `ART` (as reported, trailing twelve months), latest row filed at least 2 days before the date. As-reported, so later restatements cannot leak. Filings over 456 days old and non-USD reporters are dropped and counted |
 | Prices | `closeadj` (splits, dividends, spinoffs) for total return. Market cap is the filing-date `marketcap` rolled forward by the split-adjusted close |
@@ -47,7 +47,7 @@ our extra machinery adds anything over textbook value.
 | Primary metric | 30-day buy tier minus universe, net of costs |
 | Secondary metric | Buy tier minus the plain earnings-yield sort |
 | Pass bar | Holdout 90% interval on the primary wholly above zero, and the 365-day net spread not wholly below zero |
-| Costs | 0.53% per side (base) and 3% (stress), charged on measured buy-tier turnover |
+| Costs | 0.175% per side (base: the fair GBP-funded US cost in `market_trading_costs`, FX plus half-spread) and 3% (stress), charged on measured buy-tier turnover |
 | Delistings | Exit at the last adjusted close; sensitivity −30% for non-merger delistings |
 | Forbidden | Threshold, weight, or model search on any window (N33). Per-model rank IC is report-only |
 
@@ -78,6 +78,14 @@ revealed opens a new `registration_id`, and its results are exploratory.
   dividend yield in percent while the dividend models' floors (0.02–0.04) read
   as fractions, so those floors pass almost any payer. The replay feeds percent
   too, so it tests the screen as it actually runs (see the deferred store).
+- Sector is today's classification from the `tickers` table, not the sector on
+  each date (Sharadar keeps no sector history). Sector-relative ranks therefore
+  carry a little look-ahead, mostly around the 2018 GICS move of media and
+  internet names into Communication Services.
+- The windows fall in different value regimes. Value did well for much of
+  2000–2012 and poorly for much of 2013–2025, especially 2017–2020. A holdout
+  failure against the universe can be the regime; the plain earnings-yield
+  comparator separates "our extras add nothing" from "value lagged".
 
 ## Phases
 

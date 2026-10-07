@@ -128,14 +128,16 @@
   "selection_rule": "Score every rule set on the development window only. Choose the highest plateau score: the median objective over the rule set and its one-step neighbours in each grid dimension. Ties go to core only, then to the fewest departures from frozen_config. Report the probability of backtest overfitting (CSCV) across all rule sets and the deflated Sharpe ratio of the chosen set.",
   "reveal_order": "Commit docs/data/historical_rule_search.json with the selection before any holdout reveal, including hsr-v1's (ftse-historical-replay run --reveal-holdout refuses until then). Reveal hrs-v1 once: frozen and chosen, each with and without the tactical slice, at base and stress costs.",
   "costs": {
-    "base_per_side": 0.0053,
+    "base_per_side": 0.00175,
     "stress_per_side": 0.03,
-    "model": "Core: cost x one-way turnover at each monthly rebalance. Slice: cost on each fill and each exit, plus cost on monthly resizing while the slice is in position."
+    "model": "Core: cost x one-way turnover at each monthly rebalance. Slice: cost on each fill and each exit, plus cost on monthly resizing while the slice is in position.",
+    "source": "Base is the fair S&P 500 cost for this GBP-funded investor from market_trading_costs (sp500, t212_invest_fair_v1): about 0.15% FX per conversion plus a 0.025% half-spread, 0.175% per side. Stress is 3% per side."
   },
   "pass_bars": {
     "holdout_p_lower_min": 0.5,
     "verdict_vs_market": "pass when the holdout 36-month p_lower >= 0.5 at base cost; fail when p < 0.5; otherwise inconclusive.",
-    "tactical_verdict": "adds when the holdout 95% interval of (combined minus core-only) monthly return is wholly above zero; costs when wholly below; otherwise inconclusive."
+    "tactical_verdict": "adds when the holdout 95% interval of (combined minus core-only) monthly return is wholly above zero; costs when wholly below; otherwise inconclusive.",
+    "chosen_vs_frozen": "chosen beats frozen when the holdout 95% interval of the paired monthly difference (chosen minus frozen, same months) is wholly above zero at base cost."
   },
   "overfitting": {
     "cscv_blocks": 16
@@ -156,15 +158,16 @@
     "Only config-level aggregates are committed. Signals, panels, prices and per-name trades stay with the licensed build outside the repository."
   ],
   "decisions": {
-    "chosen_passes_and_beats_frozen": "Propose the chosen selection and tactical variant as a cold-start paper twin (L572 path) with a frozen epoch; no live book changes on backtest evidence alone.",
+    "chosen_passes_and_beats_frozen": "Chosen passes verdict_vs_market and chosen_minus_frozen is 'adds': propose the chosen selection and tactical variant as a cold-start paper twin (L572 path) with a frozen epoch; no live book changes on backtest evidence alone.",
     "frozen_passes_chosen_does_not": "Keep the live rules; the search found noise.",
     "tactical_costs_or_inconclusive": "Treat the tactical slice as unproven: keep alerts only and do not build a cycling slice into paper books until a forward twin shows an increment.",
     "neither_passes": "The selection rules do not rescue the screen; follow the hsr-v1 decision.",
-    "patient_exit_chosen": "If the chosen rule set uses rerate or thesis and passes the holdout, propose that exit for the core sell trigger (core_sell_trigger.py) through a cold-start twin; the replayed thresholds are the starting values, not a live edit."
+    "patient_exit_chosen": "If the chosen rule set uses rerate or thesis and passes the holdout, propose that exit for the core sell trigger (core_sell_trigger.py) through a cold-start twin; the replayed thresholds are the starting values, not a live edit.",
+    "chosen_not_better_than_frozen": "chosen_minus_frozen is inconclusive or costs: the search did not beat the live rules out of sample; keep them."
   },
-  "screen_code_fingerprint": "ae06fd503417beba5200858ceea9419e65b72e466568f434ecd508b6401a8a4e",
-  "rule_code_fingerprint": "f9f4e2e32694068ee3216c54767e8b5eb186b4e46391a32b18e970bd28ade2ed",
-  "registered_at": "2026-10-07T20:19:40.581189+00:00",
+  "screen_code_fingerprint": "5442bfcc1933ec862db97332417fe2498e5806cef2604ab9c4b2a5b88f14063d",
+  "rule_code_fingerprint": "314c62b1a37911e2ec0c6e718730bf1f1689130458a2f8ee753ed30c4dbc6c48",
+  "registered_at": "2026-10-07T23:27:29.532578+00:00",
   "exit_rules": {
     "order": "Ordered from quickest to most patient sell; the plateau steps along this order.",
     "tier1": {
@@ -207,6 +210,12 @@
       "before_data": true,
       "change": "Replaced exit_after_months [1, 3] with exit_rule [tier1, tier3, rerate50, rerate30, thesis] to test the PR #1021 core sell trigger and a re-rating exit that bounds open-ended holding. Grid 336 -> 840. Added holding-period and sell-reason reporting.",
       "reason": "A core sell rule was defined (PR #1021) after registration; the search would otherwise only test churn-style exits. No search has run and no holdout has been revealed."
+    },
+    {
+      "at": "2026-10-07",
+      "before_data": true,
+      "change": "Base cost 0.53% -> 0.175% per side (stress 3% unchanged). The holdout reports chosen minus frozen as a paired monthly difference with a 95% interval; 'beats frozen' is defined by it. library_screen.py joins the screen fingerprint.",
+      "reason": "0.53% is the FTSE 350 round trip, not a US per-side cost, and overstated turnover and tactical-slice costs about threefold. 'Chosen beats frozen' had no registered test. No search has run."
     }
   ]
 }

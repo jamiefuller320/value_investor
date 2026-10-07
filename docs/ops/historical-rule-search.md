@@ -79,7 +79,7 @@ holdout then tests the chosen one once.
   re-arms only on a newer plan, so **one holding can run several buy/sell
   cycles**. An open slice closes with the core, or at a delisting with the
   haircut.
-* **Costs.** 0.53% per side (3% stress) on core turnover, on every slice fill
+* **Costs.** 0.175% per side, the fair GBP-funded US cost (3% stress), on core turnover, on every slice fill
   and exit, and on monthly slice resizing while the slice is in position.
 * **Benchmarks.** The screened universe on each date, cap-weighted (primary) and
   equal-weighted.
@@ -119,14 +119,15 @@ the deflated Sharpe ratio of the chosen rule set.
    until the selection is committed beside its store.
 3. Reveal hsr-v1, then `ftse-rule-search reveal`. The reveal covers frozen and
    chosen rules, each with and without the tactical slice, at base and stress
-   costs. Only the first reveal is evidence.
+   costs, plus the paired monthly difference chosen minus frozen with its 95%
+   interval. Only the first reveal is evidence.
 
 ## Decisions (agreed before the run)
 
 | Holdout result | Action |
 |---|---|
-| Chosen passes and beats frozen | Propose a cold-start paper twin with a frozen epoch (L572 path); no live book changes on backtest evidence alone |
-| Frozen passes, chosen does not | Keep the live rules; the search found noise |
+| Chosen passes and chosen minus frozen is wholly above zero | Propose a cold-start paper twin with a frozen epoch (L572 path); no live book changes on backtest evidence alone |
+| Chosen minus frozen is inconclusive or below zero | Keep the live rules; the search found noise |
 | Chosen uses a `rerate` or `thesis` exit and passes | Propose that exit for the core sell trigger (`core_sell_trigger.py`) through a cold-start twin; the replayed thresholds are starting values, not a live edit |
 | Tactical increment costs or is inconclusive | Keep tactical levels as alerts only; do not build a cycling slice into paper books |
 | Neither passes | Follow the hsr-v1 decision |
@@ -134,6 +135,17 @@ the deflated Sharpe ratio of the chosen rule set.
 Pass bar: holdout 36-month `p_lower` ≥ 0.5 at base cost. A high PBO (above 0.5)
 or a low deflated Sharpe means the development ranking should not be trusted
 even if the holdout passes.
+
+### Reading the result
+
+* The holdout (2013–2025) was a poor period for value, especially 2017–2020.
+  A market verdict of `fail` for both frozen and chosen points at the regime
+  and the hsr-v1 plain-value comparator; chosen minus frozen still answers
+  whether the search added anything.
+* Every rule set holds equal weights and has no position cap. The live
+  `buy_tier_level` book caps at 120 names and has a one-screen re-entry
+  cooldown; the median names held per rule set shows how far that matters.
+* Sector is today's classification (see the hsr-v1 limits).
 
 ## Running it (inside the Phase 2 month)
 

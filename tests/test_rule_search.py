@@ -305,6 +305,11 @@ def test_search_reveal_and_holdout_order(built, tmp_path: Path):
     holdout = revealed["holdout"]
     assert holdout["frozen"]["base"]["metrics"]["months"] == 12
     assert "tactical_increment_monthly" in holdout["frozen"]["stress"]
+    for cost in ("base", "stress"):
+        paired = holdout["chosen_minus_frozen"][cost]
+        assert paired["monthly"]["low"] <= paired["monthly"]["mean"] <= paired["monthly"]["high"]
+        same = holdout["chosen"]["config_id"] == holdout["frozen"]["config_id"]
+        assert (paired["verdict"] == "same_rules") == same
     assert holdout["frozen"]["base"]["verdict_vs_market"] in {
         "pass",
         "fail",

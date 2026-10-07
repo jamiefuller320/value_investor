@@ -50,6 +50,7 @@ SCREEN_CODE_PATHS = (
     "sector_scoring.py",
     "data_quality.py",
     "signal_stability.py",
+    "library_screen.py",
 )
 BUY_TIER = frozenset({"buy", "strong_buy"})
 Z90 = 1.645

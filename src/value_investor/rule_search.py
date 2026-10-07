@@ -849,10 +849,12 @@ def run_reveal(
     chosen = RuleConfig(**selection["params"])
     frozen = frozen_config(registration)
     out: dict[str, Any] = {"run_at": datetime.now(UTC).isoformat(), "window": dict(window)}
+    portfolios: dict[tuple[str, str], np.ndarray] = {}
     for label, config in (("frozen", frozen), ("chosen", chosen)):
         entry: dict[str, Any] = {"config_id": config.id}
         for cost_label, cost in (("base", s["cost"]), ("stress", s["stress_cost"])):
             run = simulate(data, config, window, cost_per_side=cost)
+            portfolios[(label, cost_label)] = run.portfolio
             metrics = window_metrics(run, horizons=s["horizons"], lag=s["lag"], z=s["z_holdout"])
             block: dict[str, Any] = {"metrics": metrics}
             if config.tactical is not None:
@@ -866,6 +868,15 @@ def run_reveal(
             block["verdict_vs_market"] = _verdict_vs_market(metrics, registration)
             entry[cost_label] = block
         out[label] = entry
+    # Did the search add anything over the live rules? Same months, so a paired difference.
+    out["chosen_minus_frozen"] = {}
+    for cost_label in ("base", "stress"):
+        diff = portfolios[("chosen", cost_label)] - portfolios[("frozen", cost_label)]
+        ci = mean_ci(diff, lag=s["lag"], z=s["z_holdout"])
+        out["chosen_minus_frozen"][cost_label] = {
+            "monthly": ci,
+            "verdict": "same_rules" if chosen.id == frozen.id else _verdict_increment(ci),
+        }
     return out
 
 
