@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T20:16:49+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T20:20:01+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -324,6 +324,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L564 | **Autonomous drawdown and concentration halt** | Stage 6 has no pre-committed stop. Hypothesis integrity tolerates a large share of names underwater and does not sell. Before any book can trade unattended, define a halt on peak-to-trough drawdown, single-name weight, sector weight, and factor or FX concentration, with the action being flatten-to-cash or freeze-new-buys and a human reopen. | Stage 6 live-capital design starts (N13 revisit) |
 | L566 | **Cross-sectional rank IC as the primary learning signal** | Book NAV gives one noisy observation per mark; weekly cross-sectional spreads/rank IC across ~250 FTSE names (plus admitted library markets) give far more independent observations. Make screen_premise spreads, not book excess, the gate for decision-review and knob changes, with book NAV as confirmation. | When screen_premise_backtest reaches 26 weekly cohorts at the 28-day horizon, or when the significance gate has blocked every apply for 8 consecutive weeks |
 | L572 | **Core-plus-tactical paper twin measuring the tactical increment** | No paper book runs the two-prong strategy as defined: rules/AI/graduated books hold whole positions and only alert on tactical levels; the frozen technical book sells whole positions at them. Cold-start twin of ai_judgment_fair that splits each position per trade_plan core/tactical pct, trades only the tactical slice on its limit/stop/target, and reports tactical increment = twin NAV minus parent NAV after fair costs (stamp on each rebuy), plus upside forgone by tactical exits. | User approves building it (proposed in the two-prong reassessment), or the hsr-v1 replay passes and the tactical prong becomes the next premise to test |
+| L578 | **Re-rating exit for the core sell trigger** | The PR #1021 core sell trigger sells only on a confirmed thesis break (hard avoid or failed research), so a name that re-rates to fair value can be held indefinitely. Add a valuation exit: sell after 2 consecutive screens outside the buy tier with the earnings yield below a percentile of the universe, with the threshold taken from the hrs-v1 search (rerate50 / rerate30), via a cold-start twin rather than a live edit. | hrs-v1 holdout revealed and the chosen rule set uses a rerate or thesis exit that passes |
 
 ### Universe & data
 

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-07T20:16:49+00:00",
+  "updated_at": "2026-10-07T20:20:01+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13334,6 +13334,23 @@
       "added_at": "2026-10-07T13:21:08+00:00",
       "updated_at": "2026-10-07T18:47:01+00:00",
       "status_note": "Screen-premise buy-tier, sector and AI-gate spreads add capped ex-date dividends. price_buy_tier_spread keeps the price-only figure. A missing history adds nothing and is counted."
+    },
+    {
+      "id": "L578",
+      "category": "later",
+      "section": "learning",
+      "title": "Re-rating exit for the core sell trigger",
+      "summary": "The PR #1021 core sell trigger sells only on a confirmed thesis break (hard avoid or failed research), so a name that re-rates to fair value can be held indefinitely. Add a valuation exit: sell after 2 consecutive screens outside the buy tier with the earnings yield below a percentile of the universe, with the threshold taken from the hrs-v1 search (rerate50 / rerate30), via a cold-start twin rather than a live edit.",
+      "revisit_when": "hrs-v1 holdout revealed and the chosen rule set uses a rerate or thesis exit that passes",
+      "tags": [
+        "core-sell",
+        "exit-rule",
+        "rule-search",
+        "hrs-v1"
+      ],
+      "status": "open",
+      "source": "PR #1021 / #1022 exit-rule discussion",
+      "added_at": "2026-10-07T20:20:01+00:00"
     }
   ],
   "fragments": [
