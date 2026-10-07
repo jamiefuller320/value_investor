@@ -6236,6 +6236,22 @@ def test_builtin_ir_allowlist_includes_oiz_ir():
     assert len(fetch_filings_ir_allowlist("OIZ")) >= 4
 
 
+def test_builtin_ir_allowlist_includes_hoc_l():
+    """eng-20261007-02: ftse350 HOC.L intensive pin had empty IR allowlist (0 refetch)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("HOC.L") or []
+    assert any("hm-plc-2025-ara-for-website.pdf" in url for url in urls)
+    assert any("2b_h1-2026_final.pdf" in url for url in urls)
+    assert all("hochschildmining.com" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("HOC.L")
+    assert len(rows) >= 4
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    periods = {row.get("period") for row in rows}
+    assert "annual" in periods
+    assert "interim" in periods
+
+
 def test_builtin_ir_allowlist_includes_g1a_de():
     """DAX spare unmeasured G1A.DE needs GEA Group IR seeds (empty discovery)."""
     from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
