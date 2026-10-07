@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-07T13:18:42+00:00",
+  "updated_at": "2026-10-07T15:24:53+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13183,6 +13183,39 @@
       "status": "open",
       "source": "Conversation: is the project capable of meeting its objective (2026-10-07)",
       "added_at": "2026-10-07T13:18:42+00:00"
+    },
+    {
+      "id": "N198",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not make rolling profit-taking the value capital path",
+      "summary": "Value selection stays the aim. Live books already turn over about 30x a year because rank exits fire after 2 screens (median hold 4 days). L531 replays prefer longer holds, and harvest skims already sit on ai_judgment_graduated_fair. Treating rolling clips as the strategy waits until those twins finish their gates.",
+      "revisit_when": "ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair on the assessment scoreboard (weekday proxy for their >=26 weekly-screen gates).",
+      "tags": [
+        "value",
+        "turnover",
+        "harvest",
+        "hold-buffer"
+      ],
+      "status": "open",
+      "source": "value strategy vs rolling profit-taking",
+      "added_at": "2026-10-07T15:24:53+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_hold5_fair].common_days",
+            "op": ">=",
+            "value": 130
+          },
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_graduated_fair].common_days",
+            "op": ">=",
+            "value": 130
+          }
+        ]
+      }
     }
   ],
   "fragments": [
