@@ -1,0 +1,77 @@
+{
+  "registration_id": "hsr-v1",
+  "registered_at": "2026-10-07T15:30:00+00:00",
+  "status": "registered_holdout_sealed",
+  "learning_question": "In a survivorship-free point-in-time US universe, does the frozen value screen's buy tier (buy + strong_buy) beat (a) the equal-weight universe and (b) a plain top-30% earnings-yield sort of the same names, on total return after costs?",
+  "closes": ["L536", "L542"],
+  "supersedes": ["L565"],
+  "screen_code_fingerprint": "ae06fd503417beba5200858ceea9419e65b72e466568f434ecd508b6401a8a4e",
+  "screen_code_paths": [
+    "src/value_investor/models/",
+    "src/value_investor/scoring/__init__.py",
+    "src/value_investor/model_families.py",
+    "src/value_investor/model_weights.py",
+    "src/value_investor/signals.py",
+    "src/value_investor/sector_scoring.py",
+    "src/value_investor/data_quality.py",
+    "src/value_investor/signal_stability.py"
+  ],
+  "market_id": "sp500",
+  "universe": "S&P 500 members on each rebalance date (Sharadar sp500 table), common stock, active and delisted. Financials and real estate included, as in the live screen; reported split by sector.",
+  "data_source": {
+    "vendor": "Sharadar personal-use licence (sharadar.com), Core US Equities Bundle, full history",
+    "fundamentals": "fundamentals table, dimension ART (as-reported trailing twelve months), latest row with datekey (SEC filing date) at least 2 days before the rebalance date",
+    "prices": "stocks table closeadj (split, dividend and spinoff adjusted) for total return; close (unadjusted) times sharesbas for market cap",
+    "sector": "tickers table sector",
+    "delistings": "actions table",
+    "licence_handling": "Raw tables stay outside the repository and are deleted within 30 days of cancelling. Only cohort-level aggregates are committed."
+  },
+  "rebalance": {
+    "cadence": "last trading day of each month",
+    "step_days": 30
+  },
+  "windows": {
+    "development": {
+      "first_entry": "2000-01-31",
+      "last_entry": "2012-12-31"
+    },
+    "holdout": {
+      "first_entry": "2013-01-31",
+      "last_entry": "2025-09-30",
+      "reveal_rule": "Revealed once, after the development window is reviewed and nothing in this file has changed. Later reveals are exploratory."
+    }
+  },
+  "horizons_days": [30, 91, 365],
+  "primary": {
+    "horizon_days": 30,
+    "metric": "buy_tier_spread_net",
+    "secondary_metric": "buy_minus_plain_value",
+    "confirmation_horizon_days": 365,
+    "pass_bar": "Holdout 90% interval on the primary metric lies wholly above zero, and the 365-day holdout net spread is not wholly below zero (the monthly edge does not reverse over a year)."
+  },
+  "comparators": {
+    "universe": "equal-weight return of every name with entry and exit prices",
+    "plain_value": "equal-weight top 30% by positive earnings yield (earnings_yield_pe) among the same names"
+  },
+  "costs": {
+    "base_per_side": 0.0053,
+    "stress_per_side": 0.03,
+    "model": "net spread = gross buy-tier spread - 2 x cost x buy-tier turnover versus the entry one horizon earlier; the universe comparator is costless"
+  },
+  "delisting": {
+    "baseline_haircut": 0.0,
+    "sensitivity_haircut_non_merger": -0.3,
+    "rule": "A name whose prices end before the exit date exits at its last adjusted close times (1 + haircut). Baseline 0; sensitivity -30% for delistings that were not mergers or acquisitions."
+  },
+  "fixed_rules": [
+    "No threshold, weight, or model search on any window (N33).",
+    "Model weights stay at defaults; the 28-day learner is not run (N197).",
+    "Per-model rank IC may be reported but never tunes the screen.",
+    "Any change to this file or to the fingerprinted screen code after the holdout is revealed opens a new registration_id; its results are exploratory."
+  ],
+  "decisions": {
+    "pass_both": "Buy tier beats the universe and the plain value sort: keep the screen's machinery; multi-year total return becomes the fitness test N197 asks for.",
+    "pass_universe_only": "Beats the universe but not the plain sort: our extras add nothing over textbook value; simplify toward the published sorts.",
+    "fail_universe": "Does not beat the universe: stop building forward machinery on this screen and rethink before stage 4."
+  }
+}
