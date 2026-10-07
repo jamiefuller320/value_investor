@@ -9,8 +9,10 @@ unfrozen tracks plus the primary-minus-control pair (``assessment_model.json``).
 
 Daily ops-monitor refreshes ``docs/data/track_statistics.json`` and warns only
 when the published learning-tracks verdict (``beat_market`` / ``beat_control``)
-claims a win that the statistics do not support. Never applies knobs itself;
-decision-review reads each track's verdict as its apply gate (significance_gate_v1).
+claims a win that the statistics do not support. Never applies knobs itself.
+Non-FTSE decision-review reads each track's verdict as its apply gate
+(significance_gate_v1). FTSE books apply on the total-return proposal window
+versus FTAL.L, so this price series cannot open their gate.
 """
 
 from __future__ import annotations
