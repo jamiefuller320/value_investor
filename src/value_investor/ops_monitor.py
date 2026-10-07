@@ -2132,6 +2132,7 @@ def check_two_lot_replay(
         DEFAULT_PAPER_ROOT,
         DEFAULT_STORE_PATH,
         STORE_FAILED_TITLE,
+        ops_finding_from_core_sell,
         ops_finding_from_two_lot_replay,
         refresh_two_lot_replay,
     )
@@ -2163,18 +2164,23 @@ def check_two_lot_replay(
                 auto_fixable=False,
             )
         ]
-    finding = ops_finding_from_two_lot_replay(payload)
-    if not finding:
-        return []
-    return [
-        OpsFinding(
-            severity=str(finding["severity"]),
-            category=str(finding["category"]),
-            title=str(finding["title"]),
-            summary=str(finding["summary"]),
-            auto_fixable=False,
+    findings: list[OpsFinding] = []
+    for finding in (
+        ops_finding_from_two_lot_replay(payload),
+        ops_finding_from_core_sell(payload),
+    ):
+        if not finding:
+            continue
+        findings.append(
+            OpsFinding(
+                severity=str(finding["severity"]),
+                category=str(finding["category"]),
+                title=str(finding["title"]),
+                summary=str(finding["summary"]),
+                auto_fixable=False,
+            )
         )
-    ]
+    return findings
 
 
 def check_sec_companyfacts_coverage(

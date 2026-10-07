@@ -15,6 +15,9 @@ inside one engine:
   keep the remaining shares through later rank exits.
 - ``profit_residual`` — the first time a lot is up 15%, sell shares worth the
   cost basis and keep only the profit as the core.
+- ``core_thesis_exit`` — the same split as ``core_kept``. The core is sold
+  only after a persisted thesis break (hard avoid, or a research verdict that
+  the business case is gone). Rank, cheapness, and price do not sell it.
 
 Tactical cash is not put back into the same name on the same pass. A target or
 stop sale reopens the tactical sleeve only after a later pass trades at or
@@ -28,6 +31,12 @@ from collections.abc import Callable
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
+
+from value_investor.core_sell_trigger import (
+    core_sell_reason,
+    note_thesis_streak,
+    thesis_break_confirmed,
+)
 
 DEFAULT_PAPER_ROOT = Path("docs/data/paper_automation")
 DEFAULT_STORE_PATH = Path("docs/data/two_lot_replay.json")
@@ -44,7 +53,8 @@ EDGE_MIN = 0.01
 FIDELITY_TOLERANCE = 0.02
 MIN_PASSES = 8
 BUY_SIGNALS = frozenset({"buy", "strong_buy"})
-POLICIES = ("full_exit", "core_kept", "harvest_skim", "profit_residual")
+RETENTION_POLICIES = ("full_exit", "core_kept", "harvest_skim", "profit_residual")
+POLICIES = (*RETENTION_POLICIES, "core_thesis_exit")
 
 LEARNING_QUESTION = (
     "On the wide fair-cost buy-tier book, after costs, does keeping a core lot "
@@ -52,6 +62,7 @@ LEARNING_QUESTION = (
     "leaves the buy tier?"
 )
 FINDING_TITLE = "Two-lot retention beats full exit in replay"
+CORE_SELL_FINDING_TITLE = "Core thesis exit changes the kept-core replay"
 STORE_FAILED_TITLE = "Two-lot replay observe failed"
 
 
@@ -243,12 +254,46 @@ def _drop_flat(book: dict[str, Any]) -> None:
             book["positions"].pop(ticker, None)
 
 
+def _candidate_rows(entry: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    rows: dict[str, dict[str, Any]] = {}
+    for row in entry.get("candidates") or []:
+        if not isinstance(row, dict):
+            continue
+        ticker = str(row.get("ticker") or "").strip()
+        if ticker:
+            rows[ticker] = row
+    return rows
+
+
+def _sell_core_on_thesis(
+    book: dict[str, Any],
+    ticker: str,
+    pos: dict[str, Any],
+    row: dict[str, Any] | None,
+    price: float,
+    sell_cost: float,
+    *,
+    confirmed: bool,
+) -> None:
+    if not confirmed or float(pos["shares_core"]) <= 0:
+        return
+    _sell(book, ticker, "core", pos["shares_core"], price, sell_cost)
+    book["core_thesis_exits"] += 1
+    reason = core_sell_reason(row)
+    if reason == "screen_avoid":
+        book["screen_avoid_exits"] += 1
+    elif reason == "research_failed":
+        book["research_failed_exits"] += 1
+
+
 def _apply_sells(
     book: dict[str, Any],
     policy: str,
     targets: dict[str, dict[str, Any]],
     prices: dict[str, float],
     streaks: dict[str, int],
+    thesis_streaks: dict[str, int],
+    candidate_rows: dict[str, dict[str, Any]],
     *,
     exit_confirm: int,
     sell_cost: float,
@@ -258,11 +303,13 @@ def _apply_sells(
         if price is None or price <= 0:
             continue
         row = targets.get(ticker)
+        logged = candidate_rows.get(ticker)
         in_set = row is not None
         if in_set and streaks.get(ticker, 0) > 0:
             pos["reopen_below"] = None
         streak = 0 if in_set else streaks.get(ticker, 0)
         rank_exit = streak >= exit_confirm
+        thesis_exit = thesis_break_confirmed(thesis_streaks.get(ticker, 0), exit_confirm)
 
         if policy == "full_exit":
             if rank_exit and _shares(pos) > 0:
@@ -272,7 +319,7 @@ def _apply_sells(
                 book["cooldown"][ticker] = int(book["reentry_cooldown"])
             continue
 
-        if policy == "core_kept":
+        if policy in {"core_kept", "core_thesis_exit"}:
             tactical = float(pos["shares_tactical"])
             if tactical > 0:
                 fill = _avg_fill(pos, "tactical") or price
@@ -287,6 +334,16 @@ def _apply_sells(
                         book["stop_sales"] += 1
                     else:
                         book["rank_exits"] += 1
+            if policy == "core_thesis_exit":
+                _sell_core_on_thesis(
+                    book,
+                    ticker,
+                    pos,
+                    logged,
+                    price,
+                    sell_cost,
+                    confirmed=thesis_exit,
+                )
             continue
 
         if policy == "harvest_skim":
@@ -338,6 +395,7 @@ def _desired_budget(
     slot: float,
     price: float,
     in_cooldown: bool,
+    thesis_blocked: bool = False,
 ) -> tuple[float, float]:
     """Return (core budget, tactical budget) still to buy. Never negative."""
     if in_cooldown or slot <= 0 or price <= 0:
@@ -350,8 +408,10 @@ def _desired_budget(
 
     if policy == "full_exit":
         return 0.0, max(0.0, slot - core_value - tactical_value)
-    if policy == "core_kept":
+    if policy in {"core_kept", "core_thesis_exit"}:
         core_budget = max(0.0, CORE_PCT * slot - core_value)
+        if policy == "core_thesis_exit" and thesis_blocked:
+            core_budget = 0.0
         tactical_slot = 0.0 if tactical_closed else (1.0 - CORE_PCT) * slot
         return core_budget, max(0.0, tactical_slot - tactical_value)
     if policy in {"harvest_skim", "profit_residual"}:
@@ -389,12 +449,16 @@ def replay_policy(
         "stop_sales": 0,
         "skims": 0,
         "residual_donations": 0,
+        "core_thesis_exits": 0,
+        "screen_avoid_exits": 0,
+        "research_failed_exits": 0,
         "external_fills": 0,
         "positions": {},
         "cooldown": {},
         "reentry_cooldown": int(reentry_cooldown),
     }
     streaks: dict[str, int] = {}
+    thesis_streaks: dict[str, int] = {}
     last_price: dict[str, float] = {}
     if not passes:
         return _result(book, policy, last_price, starting_cash)
@@ -415,6 +479,7 @@ def replay_policy(
         last_price = prices
         target_rows = _targets(entry)[: int(max_positions)]
         targets = {str(row["ticker"]): row for row in target_rows}
+        logged_rows = _candidate_rows(entry)
         held = list(book["positions"])
         reentered: set[str] = set()
         for ticker in set(held) | set(targets):
@@ -424,6 +489,8 @@ def replay_policy(
                 streaks[ticker] = 0
             elif ticker in book["positions"]:
                 streaks[ticker] = streaks.get(ticker, 0) + 1
+        for ticker in held:
+            note_thesis_streak(thesis_streaks, ticker, logged_rows.get(ticker))
         for ticker in reentered:
             pos = book["positions"].get(ticker)
             if pos is not None:
@@ -434,6 +501,8 @@ def replay_policy(
             targets,
             prices,
             streaks,
+            thesis_streaks,
+            logged_rows,
             exit_confirm=int(exit_confirm),
             sell_cost=float(sell_cost),
         )
@@ -460,6 +529,7 @@ def replay_policy(
                 slot=slot,
                 price=price,
                 in_cooldown=False,
+                thesis_blocked=core_sell_reason(logged_rows.get(ticker)) is not None,
             )
             need = core_budget + tactical_budget
             is_new = pos is None or _shares(pos) <= 1e-12
@@ -520,6 +590,9 @@ def _result(
         "stop_sales": int(book["stop_sales"]),
         "skims": int(book["skims"]),
         "residual_donations": int(book["residual_donations"]),
+        "core_thesis_exits": int(book["core_thesis_exits"]),
+        "screen_avoid_exits": int(book["screen_avoid_exits"]),
+        "research_failed_exits": int(book["research_failed_exits"]),
         "external_fills": int(book["external_fills"]),
     }
 
@@ -572,6 +645,29 @@ def _lazy_external(
     return lookup
 
 
+def _core_sell_summary(variants: dict[str, dict[str, Any]], confirm_screens: int) -> dict[str, Any]:
+    thesis = variants["core_thesis_exit"]
+    kept = variants["core_kept"]
+    return {
+        "policy": "core_thesis_exit",
+        "confirm_screens": int(confirm_screens),
+        "sells_on": ["screen signal avoid", "research verdict pass, sell, avoid, or exit"],
+        "does_not_sell_on": [
+            "left the buy tier",
+            "cheapness family failed",
+            "research caution or neutral",
+            "price drop",
+        ],
+        "core_thesis_exits": int(thesis["core_thesis_exits"]),
+        "screen_avoid_exits": int(thesis["screen_avoid_exits"]),
+        "research_failed_exits": int(thesis["research_failed_exits"]),
+        "core_value": thesis["core_value"],
+        "nav": thesis["nav"],
+        "delta_vs_core_kept": _round(float(thesis["return"]) - float(kept["return"])),
+        "delta_vs_full_exit": thesis["delta_vs_full_exit"],
+    }
+
+
 def build_two_lot_replay(
     paper_root: Path = DEFAULT_PAPER_ROOT,
     *,
@@ -595,6 +691,10 @@ def build_two_lot_replay(
             "scored_against": "full_exit inside this engine",
             "fidelity_tolerance": FIDELITY_TOLERANCE,
             "edge_min": EDGE_MIN,
+            "core_sell": (
+                "hard screen avoid, or research verdict pass/sell/avoid/exit, "
+                "held for exit_confirm_screens; rank and cheapness do not sell the core"
+            ),
         },
         "status": "missing",
     }
@@ -646,7 +746,7 @@ def build_two_lot_replay(
         else:
             row["delta_vs_full_exit"] = _round(float(row["return"]) - float(baseline["return"]))
     best_name = max(
-        (name for name in variants if name != "full_exit"),
+        (name for name in RETENTION_POLICIES if name != "full_exit"),
         key=lambda name: float(variants[name]["delta_vs_full_exit"]),
     )
     best = variants[best_name]
@@ -669,11 +769,14 @@ def build_two_lot_replay(
                 "policy": best_name,
                 "delta_vs_full_exit": best["delta_vs_full_exit"],
             },
+            "core_sell": _core_sell_summary(variants, knobs["exit_confirm"]),
             "limitations": (
                 "Price-only marks from the rebalance log, fair buy and sell costs, "
-                "no dividends. The core lot is never sold: the log has no thesis-break "
-                "flag. A positive delta is a hypothesis, not a change to buy_tier_level. "
-                "Weeks of passes are not a multi-year value test."
+                "no dividends. core_kept never sells its core. core_thesis_exit sells "
+                "the core only after a hard avoid or a failed research verdict has "
+                "lasted the book's exit-confirm screens. Rank and a lost cheapness "
+                "screen do not sell it. A positive delta is a hypothesis, not a change "
+                "to buy_tier_level. Weeks of passes are not a multi-year value test."
             ),
         }
     )
@@ -716,6 +819,35 @@ def ops_finding_from_two_lot_replay(payload: dict[str, Any]) -> dict[str, Any] |
             f"({window.get('from', '')[:10]} to {window.get('to', '')[:10]}; "
             f"core value £{row.get('core_value')}, "
             f"rank exits {row.get('rank_exits')} vs full exit). "
+            "Observe-only. Do not edit buy_tier_level. "
+            "See docs/ops/two-lot-replay.md."
+        ),
+        "auto_fixable": False,
+    }
+
+
+def ops_finding_from_core_sell(payload: dict[str, Any]) -> dict[str, Any] | None:
+    """Warn when a persisted thesis break moves the kept-core replay by ≥1pp."""
+    if payload.get("status") != "ok":
+        return None
+    core_sell = payload.get("core_sell") or {}
+    exits = int(core_sell.get("core_thesis_exits") or 0)
+    delta = float(core_sell.get("delta_vs_core_kept") or 0.0)
+    if exits < 1 or abs(delta) < EDGE_MIN:
+        return None
+    window = payload.get("window") or {}
+    return {
+        "severity": "warn",
+        "category": "paper",
+        "title": CORE_SELL_FINDING_TITLE,
+        "summary": (
+            f"{payload.get('track_id')}: selling the core after a persisted thesis "
+            f"break ({exits} exit(s), {core_sell.get('screen_avoid_exits', 0)} hard "
+            f"avoid, {core_sell.get('research_failed_exits', 0)} failed research) "
+            f"changes the kept-core replay by {delta:+.1%} "
+            f"over {payload.get('passes')} passes "
+            f"({window.get('from', '')[:10]} to {window.get('to', '')[:10]}). "
+            "Rank and a lost cheapness screen do not sell the core. "
             "Observe-only. Do not edit buy_tier_level. "
             "See docs/ops/two-lot-replay.md."
         ),
