@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-07T17:28:44+00:00",
+  "updated_at": "2026-10-07T17:35:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13224,6 +13224,41 @@
       "status": "open",
       "source": "historical screen replay Phase 2 adapter (PR #1019)",
       "added_at": "2026-10-07T17:28:44+00:00"
+    },
+    {
+      "id": "L572",
+      "category": "later",
+      "section": "learning",
+      "title": "Core-plus-tactical paper twin measuring the tactical increment",
+      "summary": "No paper book runs the two-prong strategy as defined: rules/AI/graduated books hold whole positions and only alert on tactical levels; the frozen technical book sells whole positions at them. Cold-start twin of ai_judgment_fair that splits each position per trade_plan core/tactical pct, trades only the tactical slice on its limit/stop/target, and reports tactical increment = twin NAV minus parent NAV after fair costs (stamp on each rebuy), plus upside forgone by tactical exits.",
+      "revisit_when": "User approves building it (proposed in the two-prong reassessment), or the hsr-v1 replay passes and the tactical prong becomes the next premise to test",
+      "tags": [
+        "tactical",
+        "core",
+        "two-prong",
+        "paper-twin",
+        "exit-timing"
+      ],
+      "status": "open",
+      "source": "two-prong strategy reassessment (PR #1019 chat)",
+      "added_at": "2026-10-07T17:35:00+00:00"
+    },
+    {
+      "id": "L573",
+      "category": "later",
+      "section": "research",
+      "title": "Pre-register a tactical-slice replay in the same Sharadar month",
+      "summary": "Trade-plan levels are mechanical from daily prices, so the tactical prong can be replayed on Sharadar SEP without LLM look-ahead: core-only vs core-plus-tactical on the hsr-v1 buy tier, daily path, stamp and spread costs, primary = tactical increment per tactical-capital-year net. Must be registered and coded before subscribing, because raw data must be deleted within 30 days of cancelling.",
+      "revisit_when": "Before buying the Sharadar month for hsr-v1 (decide include now or accept a second subscription later)",
+      "tags": [
+        "tactical",
+        "historical-replay",
+        "sharadar",
+        "pre-registration"
+      ],
+      "status": "open",
+      "source": "two-prong strategy reassessment (PR #1019 chat)",
+      "added_at": "2026-10-07T17:35:00+00:00"
     }
   ],
   "fragments": [
