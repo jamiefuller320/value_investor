@@ -241,6 +241,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "track_statistics.json" in optional_line
     assert "total_return_view.json" in optional_line
     assert "hold_period_counterfactual.json" in optional_line
+    assert "two_lot_replay.json" in optional_line
     assert "sec_companyfacts_coverage.json" in optional_line
     assert "hkex_direct_coverage.json" in optional_line
     assert "amf_direct_coverage.json" in optional_line
@@ -263,6 +264,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "track_statistics.json" not in owned_line
     assert "total_return_view.json" not in owned_line
     assert "hold_period_counterfactual.json" not in owned_line
+    assert "two_lot_replay.json" not in owned_line
     assert "sec_companyfacts_coverage.json" not in owned_line
     assert "hkex_direct_coverage.json" not in owned_line
     assert "amf_direct_coverage.json" not in owned_line
