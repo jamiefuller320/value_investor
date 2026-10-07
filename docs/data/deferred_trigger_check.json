@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-07T02:32:44.418539+00:00",
+  "observe_only": true,
+  "open_ideas": 524,
+  "with_trigger": 6,
+  "met": [
+    {
+      "id": "N135",
+      "title": "Do not execute primary or epoch-0 DCA from EOW cadence agreement alone",
+      "status": "open",
+      "first_met_at": "2026-10-07T02:32:44.418539+00:00",
+      "conditions": [
+        {
+          "condition": {
+            "file": "docs/data/entry_dca_adoption_plan.json",
+            "path": "stages[id=out_of_sample_first_entry].ready",
+            "op": "==",
+            "value": true
+          },
+          "state": "met",
+          "actual": true
+        },
+        {
+          "condition": {
+            "file": "docs/data/entry_dca_adoption_plan.json",
+            "path": "stages[id=paper_execute_graduated].ready",
+            "op": "==",
+            "value": true
+          },
+          "state": "met",
+          "actual": true
+        }
+      ]
+    },
+    {
+      "id": "L558",
+      "title": "Recalibrate decision-review cost-drag thresholds for fair costs",
+      "status": "open",
+      "first_met_at": "2026-10-07T02:32:44.418539+00:00",
+      "conditions": [
+        {
+          "condition": {
+            "file": "docs/data/paper_automation/learning_tracks_review.json",
+            "path": "reviews.ai_judgment_fair.significance_gate.passed",
+            "op": "==",
+            "value": true
+          },
+          "state": "unknown",
+          "reason": "reviews.ai_judgment_fair.significance_gate.passed not in docs/data/paper_automation/learning_tracks_review.json"
+        },
+        {
+          "condition": {
+            "file": "docs/data/paper_automation/learning_tracks_review.json",
+            "path": "reviews.ai_judgment_hold5_fair.significance_gate.passed",
+            "op": "==",
+            "value": true
+          },
+          "state": "unknown",
+          "reason": "reviews.ai_judgment_hold5_fair.significance_gate.passed not in docs/data/paper_automation/learning_tracks_review.json"
+        },
+        {
+          "condition": {
+            "file": "docs/data/paper_automation/learning_tracks_review.json",
+            "path": "reviews.ai_judgment_fair.metrics.epoch.cost_drag",
+            "op": ">",
+            "value": 0.01
+          },
+          "state": "met",
+          "actual": 0.018
+        },
+        {
+          "condition": {
+            "file": "docs/data/paper_automation/learning_tracks_review.json",
+            "path": "reviews.ai_judgment_hold5_fair.metrics.epoch.cost_drag",
+            "op": ">",
+            "value": 0.01
+          },
+          "state": "unknown",
+          "reason": "reviews.ai_judgment_hold5_fair.metrics.epoch.cost_drag not in docs/data/paper_automation/learning_tracks_review.json"
+        }
+      ]
+    }
+  ],
+  "unknown": [],
+  "unmet": [
+    "N143",
+    "N18",
+    "L548",
+    "L551"
+  ],
+  "frozen_mentions": [],
+  "unknown_grace_days": 7
+}

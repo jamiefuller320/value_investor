@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-07T02:32:44.404081+00:00",
+  "observe_only": true,
+  "primary_track": "ai_judgment_fair",
+  "control_track": "buy_tier_level",
+  "benchmark": "FTAL.L",
+  "stress_cost_per_side": 0.03,
+  "sources": {
+    "total_return_view_updated_at": "2026-10-07T02:32:33.118428+00:00",
+    "track_statistics_updated_at": "2026-10-07T02:32:20.598685+00:00",
+    "screen_premise_generated_at": "2026-10-07T02:32:44.386408+00:00"
+  },
+  "headline": "ai_judgment_fair: total return -5.9% vs FTAL.L -3.1% since 2026-08-26 \u2014 behind the market with 90% confidence. vs buy_tier_level: -3.3% on the common window.",
+  "tracks": [
+    {
+      "track_id": "ai_judgment_fair",
+      "role": "primary",
+      "label": "AI judgment fair-cost lab (Suite B)",
+      "basis": "clean_epoch",
+      "start": "2026-08-26T09:27:36.177488+01:00",
+      "end": "2026-10-06T09:38:58.488349+01:00",
+      "marks": 24,
+      "total_return": -0.059,
+      "benchmark_total_return": -0.0314,
+      "excess_total_return": -0.0276,
+      "dividends_gbp": 0.0,
+      "excess_total_return_at_stress_cost": -0.2023,
+      "cost_sensitivity": {
+        "trades": 24,
+        "turnover": 6.41,
+        "costs_paid_pct": 0.0176,
+        "costs_at_stress_pct": 0.1923,
+        "extra_drag_at_stress": 0.1747
+      },
+      "statistics": {
+        "status": "ok",
+        "vs": "^FTSE",
+        "annualized_active_return": -0.8924,
+        "ci90": [
+          -1.7616,
+          -0.0231
+        ],
+        "verdict": "negative",
+        "years_to_detect_3pct_edge": 224.94
+      },
+      "ai_gate": {
+        "gate": "research_verdict == accumulate",
+        "min_conviction": 0.6,
+        "buy_tier_pass_share": 0.9224,
+        "binds": false
+      },
+      "configured_buy_cost_pct": 0.00525
+    },
+    {
+      "track_id": "buy_tier_level",
+      "role": "control",
+      "label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+      "basis": "lifetime",
+      "start": "2026-09-07T09:29:59.366533+01:00",
+      "end": "2026-10-06T09:39:31.133975+01:00",
+      "marks": 21,
+      "total_return": -0.0124,
+      "benchmark_total_return": -0.0264,
+      "excess_total_return": 0.014,
+      "dividends_gbp": 2.15,
+      "excess_total_return_at_stress_cost": -0.0011,
+      "cost_sensitivity": {
+        "trades": 35,
+        "turnover": 0.549,
+        "costs_paid_pct": 0.0014,
+        "costs_at_stress_pct": 0.0165,
+        "extra_drag_at_stress": 0.0151
+      },
+      "statistics": {
+        "status": "insufficient_data",
+        "periods": 19
+      },
+      "ai_gate": {
+        "gate": null,
+        "binds": null
+      },
+      "configured_buy_cost_pct": 0.00525
+    },
+    {
+      "track_id": "ai_judgment_hold5_fair",
+      "role": "twin",
+      "label": "AI judgment hold-buffer twin (exit after 5 screens)",
+      "basis": "lifetime",
+      "start": null,
+      "end": null,
+      "marks": null,
+      "total_return": null,
+      "benchmark_total_return": null,
+      "excess_total_return": null,
+      "dividends_gbp": null,
+      "excess_total_return_at_stress_cost": null,
+      "cost_sensitivity": null,
+      "statistics": {
+        "status": "missing",
+        "periods": null
+      },
+      "ai_gate": {
+        "gate": "research_verdict == accumulate",
+        "min_conviction": 0.6,
+        "buy_tier_pass_share": 0.9224,
+        "binds": false
+      },
+      "configured_buy_cost_pct": 0.00525
+    },
+    {
+      "track_id": "buy_tier_level_dca",
+      "role": "active",
+      "label": "Buy-tier level DCA realism (\u00a3500/mo, Suite B costs, cold-start capital epoch)",
+      "basis": "lifetime",
+      "start": "2026-09-24T09:30:04.654856+01:00",
+      "end": "2026-10-06T09:39:46.892621+01:00",
+      "marks": 10,
+      "total_return": 0.002,
+      "benchmark_total_return": -0.0161,
+      "excess_total_return": 0.0181,
+      "dividends_gbp": 1.06,
+      "excess_total_return_at_stress_cost": 0.0152,
+      "cost_sensitivity": {
+        "trades": 8,
+        "turnover": 0.114,
+        "costs_paid_pct": 0.0005,
+        "costs_at_stress_pct": 0.0034,
+        "extra_drag_at_stress": 0.0029
+      },
+      "statistics": {
+        "status": "insufficient_data",
+        "periods": 8
+      },
+      "ai_gate": {
+        "gate": null,
+        "binds": null
+      },
+      "configured_buy_cost_pct": 0.00525
+    },
+    {
+      "track_id": "graduated_allocation",
+      "role": "active",
+      "label": "Screen rules + graduated allocation",
+      "basis": "lifetime",
+      "start": "2026-09-07T09:27:50.446012+01:00",
+      "end": "2026-10-06T09:37:23.732083+01:00",
+      "marks": 21,
+      "total_return": -0.1275,
+      "benchmark_total_return": -0.0264,
+      "excess_total_return": -0.1011,
+      "dividends_gbp": 0.0,
+      "excess_total_return_at_stress_cost": -0.1011,
+      "cost_sensitivity": {
+        "trades": 40,
+        "turnover": 3.879,
+        "costs_paid_pct": 0.1164,
+        "costs_at_stress_pct": 0.1164,
+        "extra_drag_at_stress": 0.0
+      },
+      "statistics": {
+        "status": "insufficient_data",
+        "periods": 19
+      },
+      "ai_gate": {
+        "gate": null,
+        "binds": null
+      },
+      "configured_buy_cost_pct": null
+    }
+  ],
+  "primary_vs_control": {
+    "primary": "ai_judgment_fair",
+    "control": "buy_tier_level",
+    "start": "2026-09-07T09:29:59.366533+01:00",
+    "primary_total_return": -0.0455,
+    "control_total_return": -0.0124,
+    "difference": -0.0331,
+    "note": "Common window, total return. Positive means the primary's filter added value over the unfiltered buy tier. Not yet tested for significance."
+  },
+  "twins": [
+    {
+      "track_id": "ai_judgment_hold5_fair",
+      "parent_track": "ai_judgment_fair",
+      "started_at": "2026-10-06T10:06:26.549738+00:00",
+      "varied": {
+        "exit_confirm_screens": {
+          "parent": 2,
+          "twin": 5
+        }
+      },
+      "learning_question": "Does holding through 5 confirming screens (vs the primary's 2) beat the primary on total return at fair costs, as the L531 replay suggested (+5.8pp over 19 passes)?",
+      "readiness_gate": "Promote only if the twin leads its parent on total return over >=26 weekly screens with parent knobs unchanged since start, and the twin-minus-parent 90% interval excludes zero; otherwise freeze the twin.",
+      "parent_knobs_changed": [],
+      "common_days": 0,
+      "status": "no_common_marks"
+    }
+  ],
+  "frozen_tracks": [
+    {
+      "track_id": "ai_judgment",
+      "frozen_at": "2026-10-06T08:56:59.116671+00:00",
+      "reason": "Suite A stress-cost book (3% round trip); retired in favour of one fair-cost assessment model; research gate never binds at min_conviction 0.6 (all candidates accumulate)",
+      "superseded_by": "ai_judgment_fair",
+      "final_nav": 644.76,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 62,
+      "lifetime_total_return": -0.3508,
+      "lifetime_excess_total_return": -0.3422
+    },
+    {
+      "track_id": "ai_judgment_calibrated",
+      "frozen_at": "2026-10-06T08:56:59.116671+00:00",
+      "reason": "Calibrated shadow of a frozen parent; r1/r2/r3 identical (TE 0.9-2.5%) and ranked on pre-L540 replays",
+      "superseded_by": "ai_judgment_fair",
+      "final_nav": 734.87,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 55,
+      "lifetime_total_return": -0.2598,
+      "lifetime_excess_total_return": -0.2428
+    },
+    {
+      "track_id": "ai_judgment_calibrated_r2",
+      "frozen_at": "2026-10-06T08:56:59.116671+00:00",
+      "reason": "Calibrated shadow of a frozen parent; identical to r1",
+      "superseded_by": "ai_judgment_fair",
+      "final_nav": 757.04,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 50,
+      "lifetime_total_return": -0.243,
+      "lifetime_excess_total_return": -0.2167
+    },
+    {
+      "track_id": "ai_judgment_calibrated_r3",
+      "frozen_at": "2026-10-06T08:56:59.116671+00:00",
+      "reason": "Calibrated shadow of a frozen parent; identical to r1",
+      "superseded_by": "ai_judgment_fair",
+      "final_nav": 756.9,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 49,
+      "lifetime_total_return": -0.2431,
+      "lifetime_excess_total_return": -0.2168
+    },
+    {
+      "track_id": "ai_judgment_exclusion_u4",
+      "frozen_at": "2026-10-06T08:56:59.116671+00:00",
+      "reason": "Exclusion shadow of a frozen parent; holdings identical to ai_judgment",
+      "superseded_by": "ai_judgment_fair",
+      "final_nav": 729.09,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 39,
+      "lifetime_total_return": -0.2377,
+      "lifetime_excess_total_return": -0.227
+    },
+    {
+      "track_id": "momentum_grace",
+      "frozen_at": "2026-10-06T08:56:59.116671+00:00",
+      "reason": "Suite A stress-cost book (3% round trip); retired in favour of one fair-cost assessment model; fair twin parked as N188",
+      "superseded_by": "ai_judgment_fair",
+      "final_nav": 885.54,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 16,
+      "lifetime_total_return": -0.1111,
+      "lifetime_excess_total_return": -0.098
+    },
+    {
+      "track_id": "rules",
+      "frozen_at": "2026-10-06T08:56:59.116671+00:00",
+      "reason": "Suite A stress-cost book (3% round trip); retired in favour of one fair-cost assessment model; holdings identical to ai_judgment 31/31 days",
+      "superseded_by": "buy_tier_level",
+      "final_nav": 582.51,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 80,
+      "lifetime_total_return": -0.3956,
+      "lifetime_excess_total_return": -0.3985
+    },
+    {
+      "track_id": "rules_fair",
+      "frozen_at": "2026-10-06T08:56:59.116671+00:00",
+      "reason": "Duplicate of ai_judgment_fair (identical holdings 19/19 days)",
+      "superseded_by": "ai_judgment_fair",
+      "final_nav": 900.38,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 34,
+      "lifetime_total_return": -0.0943,
+      "lifetime_excess_total_return": -0.0971
+    },
+    {
+      "track_id": "still_in_buy_set",
+      "frozen_at": "2026-10-06T08:56:59.116671+00:00",
+      "reason": "Suite A stress-cost book (3% round trip); retired in favour of one fair-cost assessment model; churn twin superseded by the fair-cost hold-buffer twin (L541)",
+      "superseded_by": "ai_judgment_fair",
+      "final_nav": 967.17,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 3,
+      "lifetime_total_return": -0.0038,
+      "lifetime_excess_total_return": 0.0059
+    },
+    {
+      "track_id": "technical",
+      "frozen_at": "2026-10-06T08:56:59.116671+00:00",
+      "reason": "Suite A stress-cost book (3% round trip); retired in favour of one fair-cost assessment model; 0 trades since 2026-09-08; fair twin parked as N188",
+      "superseded_by": "buy_tier_level",
+      "final_nav": 998.7,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 3,
+      "lifetime_total_return": 0.0088,
+      "lifetime_excess_total_return": 0.0351
+    }
+  ],
+  "policy_changes": [
+    {
+      "id": "significance_gate_v1",
+      "effective_at": "2026-10-06T15:24:00.100479+00:00",
+      "summary": "decision-review --apply changes a book's knobs only when track_statistics.json (at most 4 days old, same benchmark) gives that book a positive or negative verdict, i.e. a 90% interval on annualised active return that excludes zero. Missing, stale, thin or noise-level statistics keep the review a proposal; --force does not bypass it. Replaces the legacy rule (thick history + excess beyond +/-2% on the knob epoch), which tuned on noise.",
+      "history_note": "Knob epochs started before effective_at were applied under the legacy threshold rule; do not read their returns as evidence for the knobs they set. History is not rewritten. The primary (ai_judgment_fair) and control (buy_tier_level) never had a legacy apply, so the primary-vs-control comparison is unaffected. Review rows carry apply_policy from this date. Audit counts come from decision_review_history.json, which keeps the last 52 reviews, so they are lower bounds for older books."
+    }
+  ]
+}

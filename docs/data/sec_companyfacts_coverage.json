@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-07T02:32:33.320860+00:00",
+  "learning_question": "Does SEC-filed OCF \u2212 capex agree with the Yahoo-derived filing_aligned FCF basis on US memo names?",
+  "observe_only": true,
+  "method": {
+    "divergence": "|sec \u2212 yahoo| / max(|sec|, |yahoo|) on the same fiscal-year label",
+    "divergence_threshold": 0.25,
+    "coverage_target": 0.8,
+    "fresh_within_days": 30
+  },
+  "summary": {
+    "memos": 232,
+    "with_companyfacts": 91,
+    "coverage": 0.3922,
+    "compared": 79,
+    "diverged": 7,
+    "diverged_share": 0.0886,
+    "diverged_buy_tier": 7
+  },
+  "markets": {
+    "sp500": {
+      "memos": 179,
+      "with_companyfacts": 42,
+      "fresh": 42,
+      "compared": 36,
+      "diverged": 2,
+      "diverged_buy_tier": 2
+    },
+    "nasdaq100": {
+      "memos": 45,
+      "with_companyfacts": 41,
+      "fresh": 41,
+      "compared": 38,
+      "diverged": 1,
+      "diverged_buy_tier": 1
+    },
+    "us_adr_asia": {
+      "memos": 8,
+      "with_companyfacts": 8,
+      "fresh": 8,
+      "compared": 5,
+      "diverged": 4,
+      "diverged_buy_tier": 4
+    }
+  },
+  "diverged": [
+    {
+      "ticker": "FANG",
+      "signal": "strong_buy",
+      "age_days": 0.5,
+      "status": "fresh",
+      "period_end": "2025-12-31",
+      "currency": "USD",
+      "sec_fcf": 2820000000.0,
+      "sec_filed": "2026-02-25",
+      "yahoo_filing_aligned": -703000000.0,
+      "divergence": 1.2493,
+      "comparison": "diverged",
+      "market_id": "nasdaq100"
+    },
+    {
+      "ticker": "WIT",
+      "signal": "strong_buy",
+      "age_days": 0.4,
+      "status": "fresh",
+      "period_end": "2025-03-31",
+      "currency": "USD",
+      "sec_fcf": 1810000000.0,
+      "sec_filed": "2025-05-22",
+      "yahoo_filing_aligned": 154389000000.0,
+      "divergence": 0.9883,
+      "comparison": "diverged",
+      "market_id": "us_adr_asia"
+    },
+    {
+      "ticker": "UMC",
+      "signal": "buy",
+      "age_days": 0.2,
+      "status": "fresh",
+      "period_end": "2024-12-31",
+      "currency": "USD",
+      "sec_fcf": 162502000.0,
+      "sec_filed": "2025-04-24",
+      "yahoo_filing_aligned": 2529027000.0,
+      "divergence": 0.9357,
+      "comparison": "diverged",
+      "market_id": "us_adr_asia"
+    },
+    {
+      "ticker": "BIDU",
+      "signal": "buy",
+      "age_days": 0.4,
+      "status": "fresh",
+      "period_end": "2025-12-31",
+      "currency": "USD",
+      "sec_fcf": -2157000000.0,
+      "sec_filed": "2026-03-17",
+      "yahoo_filing_aligned": -16430000000.0,
+      "divergence": 0.8687,
+      "comparison": "diverged",
+      "market_id": "us_adr_asia"
+    },
+    {
+      "ticker": "JD",
+      "signal": "buy",
+      "age_days": 0.4,
+      "status": "fresh",
+      "period_end": "2025-12-31",
+      "currency": "USD",
+      "sec_fcf": 1598000000.0,
+      "sec_filed": "2026-04-16",
+      "yahoo_filing_aligned": 4807000000.0,
+      "divergence": 0.6676,
+      "comparison": "diverged",
+      "market_id": "us_adr_asia"
+    },
+    {
+      "ticker": "EOG",
+      "signal": "strong_buy",
+      "age_days": 0.5,
+      "status": "fresh",
+      "period_end": "2025-12-31",
+      "currency": "USD",
+      "sec_fcf": 9565000000.0,
+      "sec_filed": "2026-02-24",
+      "yahoo_filing_aligned": 3450000000.0,
+      "divergence": 0.6393,
+      "comparison": "diverged",
+      "market_id": "sp500"
+    },
+    {
+      "ticker": "FIS",
+      "signal": "strong_buy",
+      "age_days": 0.5,
+      "status": "fresh",
+      "period_end": "2025-12-31",
+      "currency": "USD",
+      "sec_fcf": 2454000000.0,
+      "sec_filed": "2026-02-24",
+      "yahoo_filing_aligned": 1827000000.0,
+      "divergence": 0.2555,
+      "comparison": "diverged",
+      "market_id": "sp500"
+    }
+  ],
+  "limitations": "Yahoo capex can include capitalised software or intangibles while SEC capex here is PP&E only, so some divergence is definitional. Scoring still reads the Yahoo basis; this store is evidence for a promotion decision, not a fix."
+}

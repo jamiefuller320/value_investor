@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-06T21:48:06.858409+00:00",
+  "generated_at": "2026-10-07T02:34:26.804963+00:00",
   "role": "end_of_day_project_traffic",
   "trajectory": "on_track",
   "pause_active": false,
@@ -22,22 +22,7 @@
     "Keep buy-tier filing bodies green; watch memo_recent on holdings∪buy-tier.",
     "Keep library growing offline; defer live universe expansion until stage 2b shows edge."
   ],
-  "actions_taken": [
-    {
-      "kind": "stop_automation_waste",
-      "detail": "cleared automation-waste hold — no remediable signal",
-      "pr_number": null,
-      "branch": null,
-      "applied": true
-    },
-    {
-      "kind": "resume_dispatch",
-      "detail": "resumed — no stuck monitored PRs and idle window elapsed",
-      "pr_number": null,
-      "branch": null,
-      "applied": true
-    }
-  ],
+  "actions_taken": [],
   "checkpoint_probe": {
     "evidence_rows": [
       {
@@ -112,20 +97,32 @@
   },
   "merges_today": [
     {
-      "task_id": "eng-20261005-01",
-      "title": "Close library ingest filing gaps for FTSE MIB (ftse_mib): 1 buy-tier gaps after stalled weekday loop",
+      "task_id": "eng-20261006-01",
+      "title": "Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260920-03)",
       "area": "ingest",
-      "pr_number": 974,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/974",
-      "merged_at": "2026-10-06T00:04:10.032945+00:00",
-      "merge_class": "human",
+      "pr_number": 1005,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1005",
+      "merged_at": "2026-10-07T00:56:43.256122+00:00",
+      "merge_class": "ingest_narrow",
       "auto_merge": false,
-      "independently_verified": false
+      "independently_verified": true
     }
   ],
-  "verified_merges_today": [],
+  "verified_merges_today": [
+    {
+      "task_id": "eng-20261006-01",
+      "title": "Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260920-03)",
+      "area": "ingest",
+      "pr_number": 1005,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1005",
+      "merged_at": "2026-10-07T00:56:43.256122+00:00",
+      "merge_class": "ingest_narrow",
+      "auto_merge": false,
+      "independently_verified": true
+    }
+  ],
   "pr_fix_common_issues": {
-    "occasion_count": 171,
+    "occasion_count": 172,
     "by_reason": [
       {
         "failure_reason": "PR mergeable=CONFLICTING against main",
@@ -246,7 +243,7 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 94
+        "count": 95
       },
       {
         "kind": "ci_check",
@@ -256,7 +253,7 @@
     "by_source": [
       {
         "source": "human_request",
-        "count": 169
+        "count": 170
       },
       {
         "source": "traffic_controller",
@@ -268,7 +265,128 @@
     "status": "scoped_auto_merge",
     "note": "Traffic controller does not merge. Scoped auto-merge may merge ci_fix, ingest_narrow / scoring_narrow (independent deterministic verify), and parked_hunter PRs. EOD lists today's merges for monitoring."
   },
-  "ops_email_handoff": null,
+  "ops_email_handoff": {
+    "schema_version": 1,
+    "generated_at": "2026-10-07T02:34:26.804963+00:00",
+    "email_subject": "FTSE Ops Monitor — WARN",
+    "email_text": "FTSE Ops Monitor — 2026-10-07T02:31:46.244608+00:00\nOverall: WARN\n\nNEEDS INVESTIGATION\n----------------------------------------\n[WARN] New buy-tier not yet usable\n  15 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, euro_depth, hang_seng, sti, tsx60: tsx60/PPL.TO (no_key_bodies, 506.53h since flip), tsx60/SAP.TO (no_key_bodies, 482.53h since flip), aim/CAM.L (no_memo, 338.53h since flip), aim/MPE.L (no_key_bodies, 338.53h since flip), aim/YNGN.L (no_key_bodies, 290.53h since flip), aim/DOTD.L (no_key_bodies, 242.53h since flip), hang_seng/0883.HK (no_key_bodies, 194.53h since flip), hang_seng/2318.HK (no_key_bodies, 194.53h since flip), hang_seng/2628.HK (no_key_bodies, 194.53h since flip), aim/CAML.L (no_key_bodies, 170.53h since flip) (+5 more). Blocking: no_key_bodies=13, no_memo=2.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Universe archive body-miss rate elevated\n  Archive body-miss proxy 59% of 214 recent buy-tier flips; 19 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/YNGN.L). Observe-only outcome signal — not a cold-store start gate; do not eng-spray or add a second live crawler / fourth sprint stream (N180/N181).\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Learning-track verdict not statistically supported\n  learning_tracks_review claims beat_control — ai_judgment minus rules: annualised +47.8%, 90% CI [-0.8%, +120.4%], min detectable edge 82.1%/yr. The confidence interval does not show a positive edge, so do not cite this as outperformance or promote knobs/tracks on it. See docs/ops/track-statistics.md.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Price-only excess misstates track performance\n  Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -13.8% vs total-return -2.8% (clean epoch, dividends £0.00); rules_fair: published -11.1% vs total-return -2.7% (clean epoch, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Longer holds beat live exit buffer in replay\n  Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: ai_judgment: exit_confirm_screens 20 vs live 2 +25.3% over 34 passes (7 vs 41 trades; realised median hold 4.0d); rules: exit_confirm_screens 20 vs live 2 +20.8% over 32 passes (9 vs 37 trades; realised median hold 4.0d); ai_judgment_fair: exit_confirm_screens 10 vs live 2 +5.8% over 20 passes (14 vs 23 trades; realised median hold 4.0d); rules_fair: exit_confirm_screens 5 vs live 2 +7.3% over 20 passes (16 vs 24 trades; realised median hold 4.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] SEC filed FCF diverges from Yahoo basis on US buy-tier\n  7 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (7 of 79 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%); JD (us_adr_asia) FY2025 SEC 1,598M vs Yahoo 4,807M (67%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Decision-review knobs saturated at bounds\n  Proposal rules still fire but these knobs sit at their clamp bound, so decision-review can no longer respond on that axis — ai_judgment: min_conviction raise at 0.6, max_positions lower at 3, sector_cap lower at 0.2; ai_judgment_fair: sector_cap lower at 0.2; rules: min_conviction raise at 0.6, max_positions lower at 3, sector_cap lower at 0.2; rules_fair: sector_cap lower at 0.2. Human review: the driver (cost model, churn, or concentration) is outside the knob's reach. See docs/ops/decision-review.md.\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Deferred idea triggers met\n  2 open deferred idea(s) have met their structured trigger: N135 (2026-10-07), L558 (2026-10-07). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\n[WARN] Parked engineering tasks need manual review\n  3 parked task(s): eng-20261004-03, eng-20261004-05, eng-20261004-06\n  Planned rectification: human_triage — Surface in PM digest for human / eng follow-up\n\nAUTO-FIXES APPLIED\n----------------------------------------\n  • market_eng_gap_burndown: gap_closure_compile for hang_seng → eng-20261007-01\n\nENGINEERING MERGES TODAY (independent verify monitor)\n----------------------------------------\n  • [ingest_narrow/verified] PR #1005 eng-20261006-01: Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260920-03)\n\nDRAFTED ENGINEERING TASKS\n----------------------------------------\n  eng-20261007-01\n\nWORKFLOW FRESHNESS\n----------------------------------------\n  [OK] FTSE Ingest Loop: last success 2026-10-07T02:17:52+00:00, age 0.2h\n  [OK] Automation Orchestrator: last success 2026-10-06T17:19:09+00:00, age 9.2h\n  [OK] FTSE Engineering Queue: last success 2026-10-07T02:15:25+00:00, age 0.3h\n  [OK] Dashboard bridge worker: last success 2026-10-07T02:31:11+00:00, age 0.0h\n  [OK] CI main nightly: last success 2026-10-06T14:18:48+00:00, age 12.2h\n  [OK] Modelling analysis review: last success 2026-10-04T14:10:20+00:00, age 60.4h (not scheduled today)\n  [OK] FTSE Library Ladder: last success 2026-10-05T06:51:44+00:00, age 43.7h (not scheduled today)\n  [OK] Library model review: last success 2026-10-04T07:20:39+00:00, age 67.2h (not scheduled today)\n  [OK] Email report: last success 2026-10-04T07:20:40+00:00, age 67.2h (not scheduled today)\n  [OK] FTSE Data Backup: last success 2026-10-04T16:54:12+00:00, age 57.6h (not scheduled today)\n  [OK] FTSE Paper Automation: last success 2026-10-06T08:35:39+00:00, age 18.0h\n  [OK] FTSE Ops Monitor: last success 2026-10-06T18:53:49+00:00, age 7.6h\n\nEngineering queue ready to dispatch the next supervised PR.\n",
+    "email_html": "<!DOCTYPE html>\n<html><body style=\"font-family:Arial,sans-serif;color:#222;max-width:720px\">\n  <h2>FTSE Ops Monitor</h2>\n  <p style=\"color:#666\">2026-10-07T02:31:46.244608+00:00</p>\n  <p><strong>Overall:</strong> WARN</p>\n  \n  <h3>Needs investigation</h3><ul><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> New buy-tier not yet usable<br><span style='color:#555'>15 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, euro_depth, hang_seng, sti, tsx60: tsx60/PPL.TO (no_key_bodies, 506.53h since flip), tsx60/SAP.TO (no_key_bodies, 482.53h since flip), aim/CAM.L (no_memo, 338.53h since flip), aim/MPE.L (no_key_bodies, 338.53h since flip), aim/YNGN.L (no_key_bodies, 290.53h since flip), aim/DOTD.L (no_key_bodies, 242.53h since flip), hang_seng/0883.HK (no_key_bodies, 194.53h since flip), hang_seng/2318.HK (no_key_bodies, 194.53h since flip), hang_seng/2628.HK (no_key_bodies, 194.53h since flip), aim/CAML.L (no_key_bodies, 170.53h since flip) (+5 more). Blocking: no_key_bodies=13, no_memo=2.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Universe archive body-miss rate elevated<br><span style='color:#555'>Archive body-miss proxy 59% of 214 recent buy-tier flips; 19 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/YNGN.L). Observe-only outcome signal — not a cold-store start gate; do not eng-spray or add a second live crawler / fourth sprint stream (N180/N181).</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Learning-track verdict not statistically supported<br><span style='color:#555'>learning_tracks_review claims beat_control — ai_judgment minus rules: annualised +47.8%, 90% CI [-0.8%, +120.4%], min detectable edge 82.1%/yr. The confidence interval does not show a positive edge, so do not cite this as outperformance or promote knobs/tracks on it. See docs/ops/track-statistics.md.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Price-only excess misstates track performance<br><span style='color:#555'>Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -13.8% vs total-return -2.8% (clean epoch, dividends £0.00); rules_fair: published -11.1% vs total-return -2.7% (clean epoch, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Longer holds beat live exit buffer in replay<br><span style='color:#555'>Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: ai_judgment: exit_confirm_screens 20 vs live 2 +25.3% over 34 passes (7 vs 41 trades; realised median hold 4.0d); rules: exit_confirm_screens 20 vs live 2 +20.8% over 32 passes (9 vs 37 trades; realised median hold 4.0d); ai_judgment_fair: exit_confirm_screens 10 vs live 2 +5.8% over 20 passes (14 vs 23 trades; realised median hold 4.0d); rules_fair: exit_confirm_screens 5 vs live 2 +7.3% over 20 passes (16 vs 24 trades; realised median hold 4.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> SEC filed FCF diverges from Yahoo basis on US buy-tier<br><span style='color:#555'>7 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (7 of 79 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%); JD (us_adr_asia) FY2025 SEC 1,598M vs Yahoo 4,807M (67%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Decision-review knobs saturated at bounds<br><span style='color:#555'>Proposal rules still fire but these knobs sit at their clamp bound, so decision-review can no longer respond on that axis — ai_judgment: min_conviction raise at 0.6, max_positions lower at 3, sector_cap lower at 0.2; ai_judgment_fair: sector_cap lower at 0.2; rules: min_conviction raise at 0.6, max_positions lower at 3, sector_cap lower at 0.2; rules_fair: sector_cap lower at 0.2. Human review: the driver (cost model, churn, or concentration) is outside the knob's reach. See docs/ops/decision-review.md.</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Deferred idea triggers met<br><span style='color:#555'>2 open deferred idea(s) have met their structured trigger: N135 (2026-10-07), L558 (2026-10-07). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Parked engineering tasks need manual review<br><span style='color:#555'>3 parked task(s): eng-20261004-03, eng-20261004-05, eng-20261004-06</span><br><span style='color:#666;font-size:12px'>Planned rectification: human_triage — Surface in PM digest for human / eng follow-up</span></li></ul>\n  \n  <h3>Auto-fixes</h3><ul><li>market_eng_gap_burndown: gap_closure_compile for hang_seng → eng-20261007-01</li></ul>\n  <h3>Engineering merges today (independent verify monitor)</h3><ul><li><code>ingest_narrow/verified</code> PR #1005 — eng-20261006-01: Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260920-03)</li></ul>\n  <h3>Workflow freshness</h3><table style='border-collapse:collapse;width:100%;font-size:13px;margin-top:8px'><thead><tr style='background:#f0f0f0;text-align:left'><th style='padding:6px 8px;border:1px solid #ddd'>Status</th><th style='padding:6px 8px;border:1px solid #ddd'>Workflow</th><th style='padding:6px 8px;border:1px solid #ddd'>Last success</th><th style='padding:6px 8px;border:1px solid #ddd'>Age</th><th style='padding:6px 8px;border:1px solid #ddd'>Limit</th><th style='padding:6px 8px;border:1px solid #ddd'>Notes</th></tr></thead><tbody><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Ingest Loop</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-10-07T02:17:52+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.2h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>30h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>Automation Orchestrator</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-10-06T17:19:09+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>9.2h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Engineering Queue</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-10-07T02:15:25+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.3h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>26h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>Dashboard bridge worker</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-10-07T02:31:11+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.0h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>1h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>CI main nightly</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-10-06T14:18:48+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>12.2h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Modelling analysis review</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-10-04T14:10:20+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>60.4h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>FTSE Library Ladder</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-10-05T06:51:44+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>43.7h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Library model review</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-10-04T07:20:39+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>67.2h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Email report</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-10-04T07:20:40+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>67.2h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>FTSE Data Backup</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-10-04T16:54:12+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>57.6h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Paper Automation</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-10-06T08:35:39+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>18.0h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Ops Monitor</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-10-06T18:53:49+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>7.6h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr></tbody></table>\n  <p><strong>Engineering queue ready</strong> for next supervised PR.</p>\n</body></html>",
+    "drafted_task_ids": [
+      "eng-20261007-01"
+    ],
+    "items": [
+      {
+        "severity": "warn",
+        "category": "ingest",
+        "title": "New buy-tier not yet usable",
+        "summary": "15 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, euro_depth, hang_seng, sti, tsx60: tsx60/PPL.TO (no_key_bodies, 506.53h since flip), tsx60/SAP.TO (no_key_bodies, 482.53h since flip), aim/CAM.L (no_memo, 338.53h since flip), aim/MPE.L (no_key_bodies, 338.53h since flip), aim/YNGN.L (no_key_bodies, 290.53h since flip), aim/DOTD.L (no_key_bodies, 242.53h since flip), hang_seng/0883.HK (no_key_bodies, 194.53h since flip), hang_seng/2318.HK (no_key_bodies, 194.53h since flip), hang_seng/2628.HK (no_key_bodies, 194.53h since flip), aim/CAML.L (no_key_bodies, 170.53h since flip) (+5 more). Blocking: no_key_bodies=13, no_memo=2.",
+        "planned_rectification": "human_triage",
+        "rectification_detail": "Surface in PM digest for human / eng follow-up",
+        "auto_attempted": false,
+        "auto_resolved": false,
+        "status": "open"
+      },
+      {
+        "severity": "warn",
+        "category": "ingest",
+        "title": "Universe archive body-miss rate elevated",
+        "summary": "Archive body-miss proxy 59% of 214 recent buy-tier flips; 19 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/YNGN.L). Observe-only outcome signal — not a cold-store start gate; do not eng-spray or add a second live crawler / fourth sprint stream (N180/N181).",
+        "planned_rectification": "human_triage",
+        "rectification_detail": "Surface in PM digest for human / eng follow-up",
+        "auto_attempted": false,
+        "auto_resolved": false,
+        "status": "open"
+      },
+      {
+        "severity": "warn",
+        "category": "paper",
+        "title": "Learning-track verdict not statistically supported",
+        "summary": "learning_tracks_review claims beat_control — ai_judgment minus rules: annualised +47.8%, 90% CI [-0.8%, +120.4%], min detectable edge 82.1%/yr. The confidence interval does not show a positive edge, so do not cite this as outperformance or promote knobs/tracks on it. See docs/ops/track-statistics.md.",
+        "planned_rectification": "human_triage",
+        "rectification_detail": "Surface in PM digest for human / eng follow-up",
+        "auto_attempted": false,
+        "auto_resolved": false,
+        "status": "open"
+      },
+      {
+        "severity": "warn",
+        "category": "paper",
+        "title": "Price-only excess misstates track performance",
+        "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -13.8% vs total-return -2.8% (clean epoch, dividends £0.00); rules_fair: published -11.1% vs total-return -2.7% (clean epoch, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
+        "planned_rectification": "human_triage",
+        "rectification_detail": "Surface in PM digest for human / eng follow-up",
+        "auto_attempted": false,
+        "auto_resolved": false,
+        "status": "open"
+      },
+      {
+        "severity": "warn",
+        "category": "paper",
+        "title": "Longer holds beat live exit buffer in replay",
+        "summary": "Faithful replay of logged passes with a longer exit buffer beats the live knob by ≥1%: ai_judgment: exit_confirm_screens 20 vs live 2 +25.3% over 34 passes (7 vs 41 trades; realised median hold 4.0d); rules: exit_confirm_screens 20 vs live 2 +20.8% over 32 passes (9 vs 37 trades; realised median hold 4.0d); ai_judgment_fair: exit_confirm_screens 10 vs live 2 +5.8% over 20 passes (14 vs 23 trades; realised median hold 4.0d); rules_fair: exit_confirm_screens 5 vs live 2 +7.3% over 20 passes (16 vs 24 trades; realised median hold 4.0d). Observe-only: candidate for a cold-start hold-buffer twin, not a knob edit. See docs/ops/hold-period-counterfactual.md.",
+        "planned_rectification": "human_triage",
+        "rectification_detail": "Surface in PM digest for human / eng follow-up",
+        "auto_attempted": false,
+        "auto_resolved": false,
+        "status": "open"
+      },
+      {
+        "severity": "warn",
+        "category": "research",
+        "title": "SEC filed FCF diverges from Yahoo basis on US buy-tier",
+        "summary": "7 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (7 of 79 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%); JD (us_adr_asia) FY2025 SEC 1,598M vs Yahoo 4,807M (67%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.",
+        "planned_rectification": "human_triage",
+        "rectification_detail": "Surface in PM digest for human / eng follow-up",
+        "auto_attempted": false,
+        "auto_resolved": false,
+        "status": "open"
+      },
+      {
+        "severity": "warn",
+        "category": "paper",
+        "title": "Decision-review knobs saturated at bounds",
+        "summary": "Proposal rules still fire but these knobs sit at their clamp bound, so decision-review can no longer respond on that axis — ai_judgment: min_conviction raise at 0.6, max_positions lower at 3, sector_cap lower at 0.2; ai_judgment_fair: sector_cap lower at 0.2; rules: min_conviction raise at 0.6, max_positions lower at 3, sector_cap lower at 0.2; rules_fair: sector_cap lower at 0.2. Human review: the driver (cost model, churn, or concentration) is outside the knob's reach. See docs/ops/decision-review.md.",
+        "planned_rectification": "human_triage",
+        "rectification_detail": "Surface in PM digest for human / eng follow-up",
+        "auto_attempted": false,
+        "auto_resolved": false,
+        "status": "open"
+      },
+      {
+        "severity": "warn",
+        "category": "observe",
+        "title": "Deferred idea triggers met",
+        "summary": "2 open deferred idea(s) have met their structured trigger: N135 (2026-10-07), L558 (2026-10-07). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).",
+        "planned_rectification": "human_triage",
+        "rectification_detail": "Surface in PM digest for human / eng follow-up",
+        "auto_attempted": false,
+        "auto_resolved": false,
+        "status": "open"
+      },
+      {
+        "severity": "warn",
+        "category": "engineering",
+        "title": "Parked engineering tasks need manual review",
+        "summary": "3 parked task(s): eng-20261004-03, eng-20261004-05, eng-20261004-06",
+        "planned_rectification": "human_triage",
+        "rectification_detail": "Surface in PM digest for human / eng follow-up",
+        "auto_attempted": false,
+        "auto_resolved": false,
+        "status": "open"
+      }
+    ],
+    "actions": [
+      {
+        "kind": "ops_email_handoff",
+        "detail": "handed 9 ops email finding(s) to PM (open=9, resolved=0)",
+        "pr_number": null,
+        "branch": null,
+        "applied": true
+      }
+    ],
+    "open_count": 9,
+    "resolved_count": 0
+  },
   "sources": {
     "progress_report": "docs/data/progress_report.json",
     "project_progress": "docs/data/project_progress.json",

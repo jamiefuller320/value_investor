@@ -1,21 +1,12 @@
 {
-  "run_at": "2026-10-06T09:09:00.529194+00:00",
+  "run_at": "2026-10-07T02:31:46.244608+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
-      "title": "Ingest loop hit runtime cutoff",
-      "summary": "Last run deferred 37 ticker(s) after completing 11 (per_ticker_budget) — backlog resume or chained chunk should drain remainder.",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "20 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, euro_depth, ftse_mib, hang_seng, ibex35 (+2 more): tsx60/PPL.TO (no_key_bodies, 489.15h since flip), tsx60/SAP.TO (no_key_bodies, 465.15h since flip), aim/CAM.L (no_memo, 321.15h since flip), aim/MPE.L (no_key_bodies, 321.15h since flip), aim/YNGN.L (no_key_bodies, 273.15h since flip), aim/DOTD.L (no_key_bodies, 225.15h since flip), hang_seng/0883.HK (no_key_bodies, 177.15h since flip), hang_seng/1093.HK (no_key_bodies, 177.15h since flip), hang_seng/1109.HK (no_key_bodies, 177.15h since flip), hang_seng/2318.HK (no_key_bodies, 177.15h since flip) (+10 more). Blocking: no_key_bodies=17, no_memo=3.",
+      "summary": "15 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, euro_depth, hang_seng, sti, tsx60: tsx60/PPL.TO (no_key_bodies, 506.53h since flip), tsx60/SAP.TO (no_key_bodies, 482.53h since flip), aim/CAM.L (no_memo, 338.53h since flip), aim/MPE.L (no_key_bodies, 338.53h since flip), aim/YNGN.L (no_key_bodies, 290.53h since flip), aim/DOTD.L (no_key_bodies, 242.53h since flip), hang_seng/0883.HK (no_key_bodies, 194.53h since flip), hang_seng/2318.HK (no_key_bodies, 194.53h since flip), hang_seng/2628.HK (no_key_bodies, 194.53h since flip), aim/CAML.L (no_key_bodies, 170.53h since flip) (+5 more). Blocking: no_key_bodies=13, no_memo=2.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -24,7 +15,7 @@
       "severity": "warn",
       "category": "ingest",
       "title": "Universe archive body-miss rate elevated",
-      "summary": "Archive body-miss proxy 57% of 205 recent buy-tier flips; 21 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/YNGN.L). Observe-only outcome signal — not a cold-store start gate; do not eng-spray or add a second live crawler / fourth sprint stream (N180/N181).",
+      "summary": "Archive body-miss proxy 59% of 214 recent buy-tier flips; 19 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/YNGN.L). Observe-only outcome signal — not a cold-store start gate; do not eng-spray or add a second live crawler / fourth sprint stream (N180/N181).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -42,7 +33,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Price-only excess misstates track performance",
-      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -13.8% vs total-return -2.5% (clean epoch, dividends £0.00); rules_fair: published -11.1% vs total-return -2.4% (clean epoch, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
+      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -13.8% vs total-return -2.8% (clean epoch, dividends £0.00); rules_fair: published -11.1% vs total-return -2.7% (clean epoch, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -58,6 +49,42 @@
     },
     {
       "severity": "warn",
+      "category": "research",
+      "title": "SEC filed FCF diverges from Yahoo basis on US buy-tier",
+      "summary": "7 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (7 of 79 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%); JD (us_adr_asia) FY2025 SEC 1,598M vs Yahoo 4,807M (67%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "SEC companyfacts coverage below target on US memos",
+      "summary": "91 of 232 US memo names have sec_companyfacts.json (39%, target 80%). Library ingest maintenance hydrates up to 40 names per US market per run; persisting after a week means the backfill is not running or CIKs are unresolved. See docs/ops/sec-companyfacts.md.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "HKEX direct filings not yet on hang_seng buy-tier memos",
+      "summary": "17 of 26 hang_seng buy-tier memos have HKEX annual + interim bodies (65%, target 80%). Pending: 0175.HK, 0762.HK, 0883.HK, 1024.HK, 1099.HK, 1109.HK, 2318.HK, 2628.HK, 6862.HK. Names fill as the ingest loop re-ingests them; persisting past two weeks means targets are not reaching these names. See docs/ops/hkex-direct-filings.md.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "Cision direct filings not yet on Swedish buy-tier memos",
+      "summary": "0 of 10 Swedish buy-tier memos have Cision annual + interim bodies (0%, target 80%). Pending: ASSA-B.ST, BOL.ST, ERIC-B.ST, ESSITY-B.ST, SAND.ST, SKA-B.ST, SKF-B.ST, TEL2-B.ST, TELIA.ST, VOLV-B.ST. Names fill as the ingest loop re-ingests them; persisting past two weeks means targets are not reaching these names. See docs/ops/cision-direct-filings.md.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
       "category": "paper",
       "title": "Decision-review knobs saturated at bounds",
       "summary": "Proposal rules still fire but these knobs sit at their clamp bound, so decision-review can no longer respond on that axis — ai_judgment: min_conviction raise at 0.6, max_positions lower at 3, sector_cap lower at 0.2; ai_judgment_fair: sector_cap lower at 0.2; rules: min_conviction raise at 0.6, max_positions lower at 3, sector_cap lower at 0.2; rules_fair: sector_cap lower at 0.2. Human review: the driver (cost model, churn, or concentration) is outside the knob's reach. See docs/ops/decision-review.md.",
@@ -67,21 +94,12 @@
     },
     {
       "severity": "warn",
-      "category": "workflows",
-      "title": "Recent workflow failure: FTSE Library Ladder",
-      "summary": "1 unresolved failure(s) since last success (runs: 37426169706).",
+      "category": "observe",
+      "title": "Deferred idea triggers met",
+      "summary": "2 open deferred idea(s) have met their structured trigger: N135 (2026-10-07), L558 (2026-10-07). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "workflows",
-      "title": "Recent workflow failure: FTSE Ops Monitor",
-      "summary": "2 unresolved failure(s) since last success (runs: 37431690175, 37404475768).",
-      "auto_fixable": false,
-      "fixed": true,
-      "action_taken": "Recovery run in flight (#37440854692); suppressed from alert"
     },
     {
       "severity": "warn",
@@ -91,40 +109,27 @@
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "engineering",
-      "title": "Project traffic pause active",
-      "summary": "Dispatch pause still active (reasons=['traffic_hold']) but no stuck monitored PRs on this run — project-traffic should resume on the next controller pass unless automation-waste hold applies.",
-      "auto_fixable": false,
-      "fixed": false,
-      "action_taken": null
     }
   ],
   "auto_fixes": [
     {
-      "action": "traffic_stop_automation_waste",
-      "detail": "cleared automation-waste hold — no remediable signal"
-    },
-    {
-      "action": "traffic_stop_automation_waste",
-      "detail": "cleared automation-waste hold — no remediable signal",
-      "pr_number": null,
-      "branch": null
+      "action": "market_eng_gap_burndown",
+      "detail": "gap_closure_compile for hang_seng → eng-20261007-01"
     }
   ],
-  "drafted_task_ids": [],
+  "drafted_task_ids": [
+    "eng-20261007-01"
+  ],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": false,
-      "past_email_ready": true,
+      "expected_today": true,
+      "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-10-06T08:03:49+00:00",
-      "last_success_run_id": 37433619199,
-      "age_hours": 1.1,
+      "last_success_at": "2026-10-07T02:17:52+00:00",
+      "last_success_run_id": 37561305594,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -133,11 +138,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-06T08:25:18+00:00",
-      "last_success_run_id": 37435987304,
-      "age_hours": 0.7,
+      "last_success_at": "2026-10-06T17:19:09+00:00",
+      "last_success_run_id": 37502612961,
+      "age_hours": 9.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -146,11 +151,11 @@
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
       "expected_today": true,
-      "past_email_ready": true,
-      "max_age_hours": 3,
-      "last_success_at": "2026-10-06T08:25:19+00:00",
-      "last_success_run_id": 37435990124,
-      "age_hours": 0.7,
+      "past_email_ready": false,
+      "max_age_hours": 26,
+      "last_success_at": "2026-10-07T02:15:25+00:00",
+      "last_success_run_id": 37561108282,
+      "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -161,22 +166,22 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-10-06T09:01:22+00:00",
-      "last_success_run_id": 37440079618,
-      "age_hours": 0.1,
+      "last_success_at": "2026-10-07T02:31:11+00:00",
+      "last_success_run_id": 37562368815,
+      "age_hours": 0.0,
       "stale": false,
-      "recent_failures_24h": 0,
+      "recent_failures_24h": 1,
       "unresolved_failures_12h": 0
     },
     {
       "workflow": "ci-main-nightly.yml",
       "name": "CI main nightly",
       "expected_today": true,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-06T07:31:01+00:00",
-      "last_success_run_id": 37430146441,
-      "age_hours": 1.6,
+      "last_success_at": "2026-10-06T14:18:48+00:00",
+      "last_success_run_id": 37477902342,
+      "age_hours": 12.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -189,7 +194,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-04T14:10:20+00:00",
       "last_success_run_id": 37208269690,
-      "age_hours": 43.0,
+      "age_hours": 60.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -198,24 +203,24 @@
       "workflow": "library-grow.yml",
       "name": "FTSE Library Ladder",
       "expected_today": false,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 36,
       "last_success_at": "2026-10-05T06:51:44+00:00",
       "last_success_run_id": 37274572734,
-      "age_hours": 26.3,
+      "age_hours": 43.7,
       "stale": false,
-      "recent_failures_24h": 1,
-      "unresolved_failures_12h": 1
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
     },
     {
       "workflow": "library-model-review.yml",
       "name": "Library model review",
       "expected_today": false,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 36,
       "last_success_at": "2026-10-04T07:20:39+00:00",
       "last_success_run_id": 37185492808,
-      "age_hours": 49.8,
+      "age_hours": 67.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -224,11 +229,11 @@
       "workflow": "email-report.yml",
       "name": "Email report",
       "expected_today": false,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 36,
       "last_success_at": "2026-10-04T07:20:40+00:00",
       "last_success_run_id": 37185494033,
-      "age_hours": 49.8,
+      "age_hours": 67.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -241,7 +246,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-04T16:54:12+00:00",
       "last_success_run_id": 37218476834,
-      "age_hours": 40.3,
+      "age_hours": 57.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -254,7 +259,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-10-06T08:35:39+00:00",
       "last_success_run_id": 37437149858,
-      "age_hours": 0.6,
+      "age_hours": 18.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -263,30 +268,30 @@
       "workflow": "ops-monitor.yml",
       "name": "FTSE Ops Monitor",
       "expected_today": true,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-05T21:05:36+00:00",
-      "last_success_run_id": 37373743993,
-      "age_hours": 12.1,
+      "last_success_at": "2026-10-06T18:53:49+00:00",
+      "last_success_run_id": 37514819622,
+      "age_hours": 7.6,
       "stale": false,
-      "recent_failures_24h": 2,
-      "unresolved_failures_12h": 2
+      "recent_failures_24h": 0,
+      "unresolved_failures_12h": 0
     }
   ],
   "queue_status": {
-    "open_count": 1,
+    "open_count": 0,
     "pr_open_count": 0,
     "parked_count": 3,
-    "merged_count": 109,
+    "merged_count": 110,
     "failed_count": 0,
-    "next_task_id": "eng-20261006-01",
+    "next_task_id": null,
     "in_flight_branch": null,
     "in_flight_pr": null,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": false,
+  "should_dispatch_engineering": true,
   "email_deferred": false,
   "email_defer_reasons": []
 }
