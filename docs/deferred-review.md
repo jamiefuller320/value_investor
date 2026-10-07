@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T15:26:57+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T15:50:32+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -325,6 +325,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L564 | **Autonomous drawdown and concentration halt** | Stage 6 has no pre-committed stop. Hypothesis integrity tolerates a large share of names underwater and does not sell. Before any book can trade unattended, define a halt on peak-to-trough drawdown, single-name weight, sector weight, and factor or FX concentration, with the action being flatten-to-cash or freeze-new-buys and a human reopen. | Stage 6 live-capital design starts (N13 revisit) |
 | L566 | **Cross-sectional rank IC as the primary learning signal** | Book NAV gives one noisy observation per mark; weekly cross-sectional spreads/rank IC across ~250 FTSE names (plus admitted library markets) give far more independent observations. Make screen_premise spreads, not book excess, the gate for decision-review and knob changes, with book NAV as confirmation. | When screen_premise_backtest reaches 26 weekly cohorts at the 28-day horizon, or when the significance gate has blocked every apply for 8 consecutive weeks |
 | L567 | **Test core sleeve plus tactical slice as two lots** | compute_trade_plan already splits a buy into a long-term core (about 50-75%) and a tactical dip slice with its own stop and target. The simulator and the frozen technical book apply that stop and target to every share. A later cold start should keep the core through the value thesis and turn only the tactical lot. | ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair. Then one cold start can fund the original core/tactical split as two lots, without editing the primary. _(machine-checked)_ |
+| L568 | **Score a profit-residual core on the wide buy-tier book** | A two-lot replay can keep a core and recycle a tactical slice. Donating only the profit into the core, by selling the principal, is one variant to score observe-only on buy_tier_level against keeping the shares. It is not the definition of the core. Fair costs and the wide book are the right setting. Do not edit buy_tier_level or open a live twin while the hold-buffer and harvest twins are unmarked. | ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair. Then score the profit-residual rule as an observe-only replay on buy_tier_level, not as a new paper book. _(machine-checked)_ |
 
 ### Universe & data
 

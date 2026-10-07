@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-07T15:26:57+00:00",
+  "updated_at": "2026-10-07T15:50:32+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13233,6 +13233,40 @@
       "status": "open",
       "source": "value strategy vs rolling profit-taking",
       "added_at": "2026-10-07T15:26:57+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_hold5_fair].common_days",
+            "op": ">=",
+            "value": 130
+          },
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_graduated_fair].common_days",
+            "op": ">=",
+            "value": 130
+          }
+        ]
+      }
+    },
+    {
+      "id": "L568",
+      "category": "later",
+      "section": "learning",
+      "title": "Score a profit-residual core on the wide buy-tier book",
+      "summary": "A two-lot replay can keep a core and recycle a tactical slice. Donating only the profit into the core, by selling the principal, is one variant to score observe-only on buy_tier_level against keeping the shares. It is not the definition of the core. Fair costs and the wide book are the right setting. Do not edit buy_tier_level or open a live twin while the hold-buffer and harvest twins are unmarked.",
+      "revisit_when": "ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair. Then score the profit-residual rule as an observe-only replay on buy_tier_level, not as a new paper book.",
+      "tags": [
+        "trade-plan",
+        "core",
+        "tactical",
+        "buy-tier",
+        "suite-b"
+      ],
+      "status": "open",
+      "source": "value strategy vs rolling profit-taking",
+      "added_at": "2026-10-07T15:50:32+00:00",
       "trigger": {
         "all": [
           {
