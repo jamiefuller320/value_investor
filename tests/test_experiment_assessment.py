@@ -401,3 +401,42 @@ def test_ack_cli_records_and_refreshes(tmp_path: Path):
     assert ledger["summary"]["human_ack_pending"] == 0
     plan = json.loads((data_dir / "entry_dca_adoption_plan.json").read_text(encoding="utf-8"))
     assert plan["current_stage"] == "out_of_sample_first_entry"
+
+
+def test_refresh_skips_frozen_books_and_churn_policy_twins(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    paper_root = data_dir / "paper_automation"
+    books = {
+        "graduated_allocation": {"use_graduated_allocation": True},
+        "ai_judgment_graduated_fair": {
+            "use_graduated_allocation": True,
+            "is_churn_policy_twin": True,
+            "is_fair_cost_lab": True,
+        },
+        "momentum_grace": {"use_momentum_grace": True},
+    }
+    for track_id, flags in books.items():
+        track_dir = paper_root / track_id
+        track_dir.mkdir(parents=True)
+        (track_dir / "config.json").write_text(
+            json.dumps({"track_id": track_id, **flags}), encoding="utf-8"
+        )
+    (paper_root / "assessment_model.json").write_text(
+        json.dumps(
+            {
+                "primary_track": "ai_judgment_fair",
+                "control_track": "buy_tier_level",
+                "frozen_tracks": {"graduated_allocation": {"reason": "stress"}},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
+
+    paper_rows = {
+        row["track_id"]
+        for row in payload["experiments"]
+        if row["kind"] == "experimental_paper_track"
+    }
+    assert paper_rows == {"momentum_grace"}
