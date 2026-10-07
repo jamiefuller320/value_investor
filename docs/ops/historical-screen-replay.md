@@ -94,7 +94,10 @@ code. `forward_returns` and `score_cohorts` use the same exit rule as
 
 Parity: ops-monitor re-scores the committed FTSE run-snapshot cohorts with the
 harness and diffs buy-tier spread, avoid spread, and rank IC against
-`screen_premise_backtest.json`. At registration all 42 values matched exactly.
+`screen_premise_backtest.json`. At registration all 42 values matched exactly. The harness
+scores snapshot closes, so when the premise store credits dividends
+(`return_basis: price_plus_dividends`) parity rebuilds the premise cohorts
+price-only from the same snapshots, with no fetch, and compares those.
 
 ### Phase 2 — licensed data (human gate)
 

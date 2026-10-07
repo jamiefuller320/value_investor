@@ -484,7 +484,25 @@ def panels_from_run_snapshots(data_dir: Path) -> tuple[pd.DataFrame, pd.DataFram
 
 
 def parity_with_screen_premise(data_dir: Path, premise: Mapping[str, Any]) -> dict[str, Any]:
-    """Re-score the FTSE snapshot cohorts with this harness and diff against the premise store."""
+    """Re-score the FTSE snapshot cohorts with this harness and diff against the premise store.
+
+    The harness scores snapshot closes (price only). When the committed premise
+    store credits dividends, the premise cohorts are rebuilt price-only from the
+    same snapshots (no fetch), so the comparison stays like for like.
+    """
+    basis = str(premise.get("return_basis") or "price")
+    if premise.get("horizons") and basis != "price":
+        from value_investor.screen_premise_backtest import build_screen_premise_backtest
+
+        premise = build_screen_premise_backtest(data_dir)
+    result = _parity(data_dir, premise)
+    result["premise_basis"] = (
+        "price" if basis == "price" else f"price (rebuilt; committed store is {basis})"
+    )
+    return result
+
+
+def _parity(data_dir: Path, premise: Mapping[str, Any]) -> dict[str, Any]:
     signals, prices, entries = panels_from_run_snapshots(data_dir)
     if signals.empty or not premise.get("horizons"):
         return {"status": "skipped", "reason": "no run snapshots or premise store"}

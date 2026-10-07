@@ -231,6 +231,12 @@ def test_parity_with_screen_premise_backtest(tmp_path: Path):
     titles = [f["title"] for f in hsr.findings_from_store({"parity": broken})]
     assert hsr.PARITY_FINDING_TITLE in titles
 
+    with_dividends = json.loads(json.dumps(premise))
+    with_dividends["return_basis"] = "price_plus_dividends"
+    rebuilt = hsr.parity_with_screen_premise(data_dir, with_dividends)
+    assert rebuilt["status"] == "ok" and rebuilt["max_abs_diff"] == 0.0
+    assert rebuilt["premise_basis"].startswith("price (rebuilt")
+
 
 def _registration() -> dict:
     return {
