@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-07T11:39:58.408683+00:00",
+  "generated_at": "2026-10-07T12:04:26.011882+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1199,18 +1199,18 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-10-07T11:39:21.492912+00:00",
-    "queue_ui_updated_at": "2026-10-07T11:39:58.104279+00:00",
+    "compiled_at": "2026-10-07T12:03:41.450550+00:00",
+    "queue_ui_updated_at": "2026-10-07T12:04:25.671218+00:00",
     "task_count": 142,
     "status": {
-      "open_count": 1,
-      "pr_open_count": 0,
+      "open_count": 0,
+      "pr_open_count": 1,
       "parked_count": 3,
       "merged_count": 113,
       "failed_count": 0,
-      "next_task_id": "eng-20261007-04",
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "next_task_id": null,
+      "in_flight_branch": "cursor/eng-20261007-04-1de3",
+      "in_flight_pr": 1014,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1222,15 +1222,11 @@
         "title": "Allowlisted IR results-presentation PDF ingest (cash bridges, segments, dividend policy)",
         "priority": "high",
         "priority_score": 96.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "post_run_review",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "full"
+        "branch_name": "cursor/eng-20261007-04-1de3"
       }
     ],
     "attention_tasks": [
@@ -1272,8 +1268,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_task_count": 0,
+      "dispatch_eligible_count": 0,
       "blocked_count": 0
     }
   },
@@ -1391,40 +1387,46 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-10-07T11:39:58.408683+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
+    "generated_at": "2026-10-07T12:04:26.011882+00:00",
+    "overall": "blocked",
+    "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
-    },
-    "agent_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "should_dispatch": true,
+      "pr_open_count": 1,
+      "open_engineering_prs": [
+        {
+          "number": 1014,
+          "branch": "cursor/eng-20261007-04-1de3",
+          "draft": false
+        }
+      ],
+      "in_flight_pr": 1014,
+      "detail": "Open engineering PR(s) #1014 — merge fires on CI success."
+    },
+    "agent_lane": {
+      "state": "blocked",
+      "idle": false,
+      "running": false,
+      "blocked": true,
+      "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 3,
-      "open_count": 1,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 1,
+      "open_count": 0,
+      "pr_open_count": 1,
+      "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20261007-04",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "next_task_id": null,
+      "reason": "no open engineering tasks in queue",
+      "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 3,
-      "evaluated_at": "2026-10-07T11:39:57.184992+00:00"
+      "evaluated_at": "2026-10-07T12:04:24.484512+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1728,7 +1730,7 @@
     "library_stall_parks": [],
     "observe_utilization": {
       "schema_version": 1,
-      "generated_at": "2026-10-07T11:39:58.298673+00:00",
+      "generated_at": "2026-10-07T12:04:25.899824+00:00",
       "observe_only": true,
       "headline": "2 observe utilization warn(s) — cohorts need attention.",
       "surface_freshness": "fresh",
@@ -1769,9 +1771,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 3.9h ago.",
+            "detail": "Last refresh 4.3h ago.",
             "as_of": "2026-10-07T07:46:47.852609+00:00",
-            "age_hours": 3.89,
+            "age_hours": 4.29,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1811,9 +1813,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 3.9h ago.",
+            "detail": "Last refresh 4.3h ago.",
             "as_of": "2026-10-07T07:47:19.360382+00:00",
-            "age_hours": 3.88,
+            "age_hours": 4.29,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -1985,9 +1987,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 3.9h ago.",
+            "detail": "Last refresh 4.3h ago.",
             "as_of": "2026-10-07T07:47:19.597264+00:00",
-            "age_hours": 3.88,
+            "age_hours": 4.29,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2021,9 +2023,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 3.9h ago.",
+            "detail": "Last refresh 4.3h ago.",
             "as_of": "2026-10-07T07:47:19.706180+00:00",
-            "age_hours": 3.88,
+            "age_hours": 4.29,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2057,9 +2059,9 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Last refresh 3.9h ago.",
+            "detail": "Last refresh 4.3h ago.",
             "as_of": "2026-10-07T07:47:19.709941+00:00",
-            "age_hours": 3.88,
+            "age_hours": 4.29,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2522,7 +2524,7 @@
           }
         },
         {
-          "at": "2026-10-07T11:39:58.298673+00:00",
+          "at": "2026-10-07T12:04:25.899824+00:00",
           "buy_tier_flip_lag": {
             "primary_value": 15,
             "warn_active": true,
@@ -2553,7 +2555,7 @@
     },
     "lifecycle_maturity_trajectory": {
       "schema_version": 1,
-      "generated_at": "2026-10-07T11:39:58.305264+00:00",
+      "generated_at": "2026-10-07T12:04:25.907327+00:00",
       "observe_only": true,
       "instrument_id": "lifecycle_maturity_trajectory",
       "separation": {
@@ -2665,10 +2667,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2768,10 +2770,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2871,10 +2873,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -2974,10 +2976,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3077,10 +3079,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3180,10 +3182,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3283,10 +3285,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3386,10 +3388,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3489,10 +3491,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3592,10 +3594,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3695,10 +3697,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3798,10 +3800,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -3901,10 +3903,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4004,10 +4006,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4107,10 +4109,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4210,10 +4212,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4313,10 +4315,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4416,10 +4418,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4519,10 +4521,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4622,10 +4624,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4725,10 +4727,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4828,10 +4830,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -4931,10 +4933,10 @@
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
-            "detail": "Board last refresh 0.4h ago.",
+            "detail": "Board last refresh 0.8h ago.",
             "as_of": "2026-10-07T11:17:37.028458+00:00",
-            "store_as_of": "2026-10-07T11:39:58.305264+00:00",
-            "age_hours": 0.37,
+            "store_as_of": "2026-10-07T12:04:25.907327+00:00",
+            "age_hours": 0.78,
             "store_lag_hours": null,
             "stale_after_hours": 30.0
           },
@@ -7573,7 +7575,7 @@
           }
         },
         {
-          "at": "2026-10-07T11:39:58.305264+00:00",
+          "at": "2026-10-07T12:04:25.907327+00:00",
           "ftse350": {
             "primary_value": 30.0,
             "early_share": 0.3,
