@@ -64,6 +64,17 @@ STALE_REGISTRATION_TITLE = "Historical screen replay registration predates scree
 STALE_VERDICT_TITLE = "Historical screen replay verdict no longer describes the live screen"
 HOLDOUT_REUSED_TITLE = "Historical screen replay holdout revealed more than once"
 VARIANTS = ("baseline", "delisting_sensitivity")
+SIGNAL_CACHE_NAME = "signals_cache.csv.gz"
+SIGNAL_COLUMNS = (
+    "as_of",
+    "ticker",
+    "signal",
+    "conviction_score",
+    "sector",
+    "earnings_yield",
+    "composite_score",
+    "data_quality_score",
+)
 
 
 def screen_code_fingerprint(package_dir: Path = PACKAGE_DIR) -> str:
@@ -143,12 +154,42 @@ def replay_screen(panel: pd.DataFrame, *, market_id: str, scratch_root: Path) ->
         frame["earnings_yield"] = pd.to_numeric(
             frame["ticker"].map(earnings_yield), errors="coerce"
         )
+        for col in ("composite_score", "data_quality_score"):
+            frame[col] = pd.to_numeric(signals.get(col, blank), errors="coerce")
         frames.append(frame)
     if not frames:
-        return pd.DataFrame(
-            columns=["as_of", "ticker", "signal", "conviction_score", "sector", "earnings_yield"]
-        )
+        return pd.DataFrame(columns=list(SIGNAL_COLUMNS))
     return pd.concat(frames, ignore_index=True)
+
+
+def cached_replay_signals(
+    panel: pd.DataFrame,
+    *,
+    market_id: str,
+    cache_path: Path,
+    scratch_root: Path | None = None,
+) -> pd.DataFrame:
+    """``replay_screen`` once per (screen code, panel); later runs read ``cache_path``.
+
+    The cache sits beside the licensed panel, outside the repository, and is
+    deleted with it.
+    """
+    cache_path = Path(cache_path)
+    if _inside_repo(cache_path):
+        raise ValueError(f"{cache_path} is inside the repository; keep the cache with the panel.")
+    key = {"screen_code": screen_code_fingerprint(), "panel": _data_fingerprint(panel)}
+    key_path = cache_path.with_name(cache_path.name + ".key.json")
+    if cache_path.exists() and _read_json(key_path) == key:
+        cached = pd.read_csv(cache_path)
+        cached["as_of"] = cached["as_of"].map(_utc)
+        return cached
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(scratch_root) if scratch_root is not None else Path(tmp)
+        signals = replay_screen(panel, market_id=market_id, scratch_root=root)
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    signals.to_csv(cache_path, index=False)
+    key_path.write_text(json.dumps(key), encoding="utf-8")
+    return signals
 
 
 def plain_value_tickers(cohort: pd.DataFrame, top_share: float = 0.3) -> set[str]:
@@ -630,7 +671,9 @@ def _read_table(path: Path) -> pd.DataFrame:
 def _data_fingerprint(*frames: pd.DataFrame) -> str:
     digest = hashlib.sha256()
     for frame in frames:
-        digest.update(pd.util.hash_pandas_object(frame, index=False).values.tobytes())
+        hashable = frame.map(lambda v: repr(v) if isinstance(v, list | dict) else v)
+        digest.update(",".join(map(str, frame.columns)).encode())
+        digest.update(pd.util.hash_pandas_object(hashable, index=False).values.tobytes())
     return digest.hexdigest()
 
 
@@ -676,9 +719,12 @@ def run_replay(
         haircuts = dict(
             zip(terminal["ticker"].astype(str), terminal["haircut"].astype(float), strict=True)
         )
-    with tempfile.TemporaryDirectory() as tmp:
-        root = Path(scratch_root) if scratch_root is not None else Path(tmp)
-        signals = replay_screen(panel, market_id=registration["market_id"], scratch_root=root)
+    signals = cached_replay_signals(
+        panel,
+        market_id=registration["market_id"],
+        cache_path=Path(panel_path).parent / SIGNAL_CACHE_NAME,
+        scratch_root=scratch_root,
+    )
     results = build_replay_results(
         signals,
         prices,

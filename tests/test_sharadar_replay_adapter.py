@@ -46,6 +46,8 @@ def _stocks() -> pd.DataFrame:
                     "ticker": t,
                     "date": d.date().isoformat(),
                     "open": close,
+                    "high": close * 1.01,
+                    "low": close * 0.99,
                     "close": close,
                     "closeadj": close * 1.00001**k,
                     "closeunadj": unadj,
@@ -327,6 +329,12 @@ def test_build_writes_point_in_time_panel(sharadar_dir: Path, tmp_path: Path):
         "delisted_via_merger": 1,
         "delisted_other": 1,
     }
+
+    daily = pd.read_csv(out / "daily.csv.gz")
+    a05 = daily.loc[daily["ticker"] == "A05"].set_index("date")
+    assert a05.index.min() < "1999-01-01"
+    assert a05["high"].div(a05["close"]).round(6).eq(1.01).all()
+    assert "EURCO" in set(daily["ticker"])
 
     prices = pd.read_csv(out / "prices.csv.gz")
     assert prices["date"].nunique() < len(CALENDAR) / 4
