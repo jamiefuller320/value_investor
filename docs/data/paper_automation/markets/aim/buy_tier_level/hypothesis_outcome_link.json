@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-06T08:47:13.928969+00:00",
+  "generated_at": "2026-10-07T08:47:21.847937+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 1,
+    "closed_total": 2,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 12,
     "by_thesis_status": {
@@ -17,13 +17,13 @@
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 1,
+        "closed_count": 2,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": -0.0306,
-        "mean_trough_unrealized_pct": -0.2122,
+        "mean_peak_unrealized_pct": 0.0435,
+        "mean_trough_unrealized_pct": -0.0796,
         "outcome_labels": {
-          "recovered": 1
+          "recovered": 2
         }
       },
       "broken": {
@@ -55,11 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 1,
+    "hold_closed_with_thesis": 2,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=1 (target >=8)",
-      "hold thesis buckets thin (weakening=1; target >=3 each)",
+      "hold closed with thesis=2 (target >=8)",
+      "hold thesis buckets thin (weakening=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -649,7 +649,7 @@
       "ticker": "IGR.L",
       "name": "IG Design Group plc",
       "started_at": "2026-09-29T08:24:21.355911+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -692,9 +692,9 @@
       "peak_unrealized_pct": 0.1176,
       "trough_unrealized_pct": 0.0529,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-07T09:47:21.835036+01:00",
+      "linked_sell_trade_id": "9a0bb939-e07e-4b3e-aab9-edbe5d360db8"
     },
     {
       "episode_id": "buy_tier_level:WJG.L:2026-10-01T09:47:01.141631+01:00",
@@ -735,6 +735,50 @@
       "checkpoints": [],
       "peak_unrealized_pct": 0.0342,
       "trough_unrealized_pct": 0.0197,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level:RWS.L:2026-10-07T09:47:21.835036+01:00",
+      "track_id": "buy_tier_level",
+      "ticker": "RWS.L",
+      "name": "RWS Holdings plc",
+      "started_at": "2026-10-07T09:47:21.835036+01:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 139.4,
+      "avg_cost": 139.4,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "research verdict caution",
+        "cheapness family no longer passes",
+        "conviction 26% below intact floor",
+        "still buy"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "caution",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.25839999999999996,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -789,6 +833,67 @@
       },
       "buy_returns_since_rotation": {
         "PEBB.L": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-07T09:47:21.835036+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-07T09:47:21.835036+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0032,
+      "sells": [
+        {
+          "ticker": "IGR.L",
+          "price": 95.0,
+          "shares": 0.77983,
+          "gross": 74.08,
+          "cost": 0.06,
+          "avg_cost_at_exit": 85.0,
+          "realized_pct": 0.1176,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "research verdict caution",
+            "cheapness family no longer passes",
+            "conviction 23% below intact floor",
+            "still buy"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.1176
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "PEBB.L",
+          "price": 61.0,
+          "shares": 0.209697,
+          "gross": 12.79,
+          "cost": 0.07
+        },
+        {
+          "ticker": "RWS.L",
+          "price": 139.4,
+          "shares": 0.436252,
+          "gross": 60.81,
+          "cost": 0.35
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "IGR.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "PEBB.L": 0.0,
+        "RWS.L": 0.0
       },
       "verdict": null,
       "closed_at": null

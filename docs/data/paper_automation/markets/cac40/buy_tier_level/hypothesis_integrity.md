@@ -1,14 +1,14 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-06T08:47:02.331359+00:00
+Track: `buy_tier_level` · updated 2026-10-07T08:47:11.927100+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 5 (20% count, 20% NAV)
+- Losers: **1** / 13 (8% count, 8% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 - Selection feedback:
-  - garp fails more often among losers (100% vs 0%)
+  - garp fails more often among losers (100% vs 8%)
 
 ## Holding reviews
 
@@ -44,3 +44,52 @@ Track: `buy_tier_level` · updated 2026-10-06T08:47:02.331359+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 76%
+
+### CAP.PA — weakening / watch_review (+0.0%)
+- research verdict neutral
+- still strong_buy
+- cheapness family still passes
+
+### URW.PA — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 74%
+
+### MC.PA — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 67%
+
+### SGO.PA — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 66%
+
+### VIE.PA — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 66%
+
+### EN.PA — weakening / watch_review (+0.0%)
+- research verdict neutral
+- still strong_buy
+- cheapness family still passes
+
+### RI.PA — weakening / watch_review (+0.0%)
+- research verdict caution
+- still strong_buy
+- cheapness family still passes
+
+### CA.PA — weakening / watch_review (+0.0%)
+- research verdict neutral
+- conviction 35% below intact floor
+- still strong_buy
+- cheapness family still passes

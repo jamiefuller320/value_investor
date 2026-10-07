@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-06T08:47:36.718050+00:00
+Track: `buy_tier_level` · updated 2026-10-07T08:47:46.512308+00:00
 
 ## Portfolio loser feedback
 
@@ -10,10 +10,11 @@ Track: `buy_tier_level` · updated 2026-10-06T08:47:36.718050+00:00
 
 ## Holding reviews
 
-### U14.SI — weakening / watch_review (-1.8%)
-- research verdict caution
-- still buy
-- cheapness family still passes
+### U14.SI — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### BS6.SI — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### Y92.SI — intact / hold_tolerate (-1.2%)
 - still buy
@@ -23,11 +24,6 @@ Track: `buy_tier_level` · updated 2026-10-06T08:47:36.718050+00:00
 - conviction 57%
 
 ### BUOU.SI — weakening / watch_review (-1.1%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
-### BS6.SI — weakening / watch_review (+0.0%)
 - research verdict caution
 - still buy
 - cheapness family still passes

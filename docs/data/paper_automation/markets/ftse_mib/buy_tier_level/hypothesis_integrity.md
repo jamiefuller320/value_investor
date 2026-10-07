@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-06T08:47:22.039682+00:00
+Track: `buy_tier_level` · updated 2026-10-07T08:47:32.123613+00:00
 
 ## Portfolio loser feedback
 
@@ -9,6 +9,9 @@ Track: `buy_tier_level` · updated 2026-10-06T08:47:22.039682+00:00
 - Balancing hint: `maintain`
 
 ## Holding reviews
+
+### TEN.MI — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### REC.MI — intact / hold_tolerate (-1.2%)
 - still buy
@@ -23,12 +26,6 @@ Track: `buy_tier_level` · updated 2026-10-06T08:47:22.039682+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
-
-### TEN.MI — intact / hold_tolerate (+0.0%)
-- still buy
-- cheapness family still passes
-- data_quality 1.00
-- conviction 42%
 
 ### ENI.MI — intact / hold_tolerate (+0.4%)
 - still buy

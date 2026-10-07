@@ -1753,5 +1753,315 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-07T08:47:46.538131+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (SGD reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/sti/screen_latest.json",
+      "run_at": "2026-10-05T06:52:37.710806+00:00",
+      "generated_at": "2026-10-07T08:47:46.313976+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-07T09:47:46.523464+01:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-10-07T08:00:00+01:00",
+      "settle_at": "2026-10-07T09:15:00+01:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (0 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0003,
+    "candidates": [
+      {
+        "ticker": "Y92.SI",
+        "name": "Thai Beverage Public Company Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5688000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Defensive",
+        "price": 0.425,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "BUOU.SI",
+        "name": "Frasers Logistics & Commercial Trust",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.5607449999999999,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Real Estate",
+        "price": 0.865,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "Y92.SI",
+        "name": "Thai Beverage Public Company Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5688000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Defensive",
+        "price": 0.425,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "BUOU.SI",
+        "name": "Frasers Logistics & Commercial Trust",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.5607449999999999,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Real Estate",
+        "price": 0.865,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 990.44,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 495.16,
+      "targets": [
+        {
+          "ticker": "Y92.SI",
+          "name": "Thai Beverage Public Company Limited",
+          "signal": "buy",
+          "conviction_score": 0.5688000000000001,
+          "price": 0.425
+        },
+        {
+          "ticker": "BUOU.SI",
+          "name": "Frasers Logistics & Commercial Trust",
+          "signal": "buy",
+          "conviction_score": 0.5607449999999999,
+          "price": 0.865
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "U14.SI",
+          "name": "UOL Group Limited",
+          "reason": "No longer in the top conviction target set",
+          "shares": 30.617695,
+          "price": 8.2,
+          "value": 251.07
+        },
+        {
+          "action": "sell",
+          "ticker": "BS6.SI",
+          "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+          "reason": "No longer in the top conviction target set",
+          "shares": 48.70178,
+          "price": 5.06,
+          "value": 246.43
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "Y92.SI",
+          "name": "Thai Beverage Public Company Limited",
+          "reason": "Top-up to equal weight",
+          "value": 248.69,
+          "price": 0.425,
+          "target_value": 495.16,
+          "conviction_score": 0.5688000000000001,
+          "signal": "buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "BUOU.SI",
+          "name": "Frasers Logistics & Commercial Trust",
+          "reason": "Top-up to equal weight",
+          "value": 248.69,
+          "price": 0.865,
+          "target_value": 495.16,
+          "conviction_score": 0.5607449999999999,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 2 buy(s)."
+    },
+    "trades": [],
+    "nav_before": 990.44,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "Y92.SI",
+        "shares": 579.933851,
+        "avg_cost": 0.43,
+        "sector": "Consumer Defensive",
+        "name": "Thai Beverage Public Company Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BUOU.SI",
+        "shares": 284.938578,
+        "avg_cost": 0.875,
+        "sector": "Real Estate",
+        "name": "Frasers Logistics & Commercial Trust",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "U14.SI",
+        "shares": 30.617695,
+        "avg_cost": 8.2,
+        "sector": "Real Estate",
+        "name": "UOL Group Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BS6.SI",
+        "shares": 48.70178,
+        "avg_cost": 5.06,
+        "sector": "Industrials",
+        "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 990.44,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "Y92.SI",
+        "shares": 579.933851,
+        "avg_cost": 0.43,
+        "sector": "Consumer Defensive",
+        "name": "Thai Beverage Public Company Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BUOU.SI",
+        "shares": 284.938578,
+        "avg_cost": 0.875,
+        "sector": "Real Estate",
+        "name": "Frasers Logistics & Commercial Trust",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "U14.SI",
+        "shares": 30.617695,
+        "avg_cost": 8.2,
+        "sector": "Real Estate",
+        "name": "UOL Group Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BS6.SI",
+        "shares": 48.70178,
+        "avg_cost": 5.06,
+        "sector": "Industrials",
+        "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {
+        "U14.SI": 1,
+        "BS6.SI": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": []
+    }
   }
 ]

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-06T08:47:35.754636+00:00
+Track: `buy_tier_level` · updated 2026-10-07T08:47:45.944897+00:00
 
 ## Portfolio loser feedback
 
@@ -10,21 +10,17 @@ Track: `buy_tier_level` · updated 2026-10-06T08:47:35.754636+00:00
 
 ## Holding reviews
 
-### UMC — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 62%
+### UMC — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### SONY — intact / hold_tolerate (+1.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 56%
+- conviction 63%
 
-### WIT — weakening / watch_review (+6.8%)
+### WIT — weakening / watch_review (+4.5%)
 - research verdict neutral
 - still strong_buy
 - cheapness family still passes

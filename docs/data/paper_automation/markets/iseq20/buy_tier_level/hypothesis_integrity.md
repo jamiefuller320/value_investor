@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-06T08:47:41.651465+00:00
+Track: `buy_tier_level` · updated 2026-10-07T08:47:52.059120+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 4 (0% count, 0% NAV)
+- Losers: **0** / 3 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
@@ -30,8 +30,3 @@ Track: `buy_tier_level` · updated 2026-10-06T08:47:41.651465+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 45%
-
-### MIO.IR — weakening / watch_review (+0.0%)
-- research verdict caution
-- still buy
-- cheapness family still passes

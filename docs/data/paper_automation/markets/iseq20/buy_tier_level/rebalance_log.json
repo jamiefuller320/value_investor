@@ -1157,5 +1157,810 @@
       },
       "cards": []
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-07T08:47:52.066941+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/iseq20/screen_latest.json",
+      "run_at": "2026-10-05T06:52:37.710806+00:00",
+      "generated_at": "2026-10-07T08:47:51.967047+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-07T09:47:51.974277+01:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-10-07T08:00:00+01:00",
+      "settle_at": "2026-10-07T09:15:00+01:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (4 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "OIZ.IR",
+        "name": "Origin Enterprises plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4497,
+        "data_quality_score": 0.9,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 3.9,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "C5H.IR",
+        "name": "Cairn Homes plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5603,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 2.64,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "MIO.IR",
+        "name": "Mincon Group plc",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.394485,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Industrials",
+        "price": 0.855,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "EG7.IR",
+        "name": "FBD Holdings plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5384,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 19.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "OIZ.IR",
+        "name": "Origin Enterprises plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4497,
+        "data_quality_score": 0.9,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 3.9,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "C5H.IR",
+        "name": "Cairn Homes plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5603,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 2.64,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "MIO.IR",
+        "name": "Mincon Group plc",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.394485,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Industrials",
+        "price": 0.855,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "EG7.IR",
+        "name": "FBD Holdings plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5384,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 19.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 997.38,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 332.46,
+      "targets": [
+        {
+          "ticker": "C5H.IR",
+          "name": "Cairn Homes plc",
+          "signal": "buy",
+          "conviction_score": 0.5603,
+          "price": 2.64
+        },
+        {
+          "ticker": "EG7.IR",
+          "name": "FBD Holdings plc",
+          "signal": "buy",
+          "conviction_score": 0.5384,
+          "price": 19.0
+        },
+        {
+          "ticker": "OIZ.IR",
+          "name": "Origin Enterprises plc",
+          "signal": "buy",
+          "conviction_score": 0.4497,
+          "price": 3.9
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "C5H.IR",
+          "name": "Cairn Homes plc",
+          "reason": "Already near equal-weight target",
+          "value": 332.46,
+          "target_value": 332.46,
+          "conviction_score": 0.5603,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "EG7.IR",
+          "name": "FBD Holdings plc",
+          "reason": "Already near equal-weight target",
+          "value": 332.46,
+          "target_value": 332.46,
+          "conviction_score": 0.5384,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "OIZ.IR",
+          "name": "Origin Enterprises plc",
+          "reason": "Already near equal-weight target",
+          "value": 332.46,
+          "target_value": 332.46,
+          "conviction_score": 0.4497,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [
+        {
+          "ticker": "MIO.IR",
+          "name": "Mincon Group plc",
+          "signal": "buy",
+          "conviction_score": 0.394485,
+          "reason": "timing_signal=wait \u2014 skipped until timing improves"
+        }
+      ],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "46760198-a236-4fae-a940-49e859cfa04d",
+        "fund_id": "65aa3829-0214-45f6-84e5-cca8e7a524b1",
+        "acted_at": "2026-10-07T09:47:51.974277+01:00",
+        "ticker": "MIO.IR",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 291.886859,
+        "price": 0.855,
+        "gross": 249.56,
+        "cost": 0.44,
+        "net_cash": 249.13,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Mincon Group plc",
+        "avg_cost_at_exit": 0.855,
+        "position_closed": true
+      },
+      {
+        "id": "aaaf4e55-43a3-4c80-bdcb-d20e715fe79c",
+        "fund_id": "65aa3829-0214-45f6-84e5-cca8e7a524b1",
+        "acted_at": "2026-10-07T09:47:51.974277+01:00",
+        "ticker": "C5H.IR",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 31.40042,
+        "price": 2.64,
+        "gross": 82.9,
+        "cost": 0.15,
+        "net_cash": -83.04,
+        "note": "Automated buy",
+        "name": "Cairn Homes plc"
+      },
+      {
+        "id": "5d445ecf-2cda-4a99-8004-3110cbc171c7",
+        "fund_id": "65aa3829-0214-45f6-84e5-cca8e7a524b1",
+        "acted_at": "2026-10-07T09:47:51.974277+01:00",
+        "ticker": "EG7.IR",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 4.363005,
+        "price": 19.0,
+        "gross": 82.9,
+        "cost": 0.15,
+        "net_cash": -83.04,
+        "note": "Automated buy",
+        "name": "FBD Holdings plc"
+      },
+      {
+        "id": "7947db23-c2fd-406b-9d5b-48add5dd3a64",
+        "fund_id": "65aa3829-0214-45f6-84e5-cca8e7a524b1",
+        "acted_at": "2026-10-07T09:47:51.974277+01:00",
+        "ticker": "OIZ.IR",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 21.255669,
+        "price": 3.9,
+        "gross": 82.9,
+        "cost": 0.15,
+        "net_cash": -83.04,
+        "note": "Automated buy",
+        "name": "Origin Enterprises plc"
+      }
+    ],
+    "nav_before": 998.25,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "C5H.IR",
+        "shares": 94.53154,
+        "avg_cost": 2.64,
+        "sector": "Consumer Cyclical",
+        "name": "Cairn Homes plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "EG7.IR",
+        "shares": 13.134909,
+        "avg_cost": 19.0,
+        "sector": "Financial Services",
+        "name": "FBD Holdings plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "OIZ.IR",
+        "shares": 63.990581,
+        "avg_cost": 3.9,
+        "sector": "Basic Materials",
+        "name": "Origin Enterprises plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "MIO.IR",
+        "shares": 291.886859,
+        "avg_cost": 0.855,
+        "sector": "Industrials",
+        "name": "Mincon Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "MIO.IR": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "nav_after": 997.38,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "C5H.IR",
+        "shares": 125.93196,
+        "avg_cost": 2.64,
+        "sector": "Consumer Cyclical",
+        "name": "Cairn Homes plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "EG7.IR",
+        "shares": 17.497914,
+        "avg_cost": 19.0,
+        "sector": "Financial Services",
+        "name": "FBD Holdings plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "OIZ.IR",
+        "shares": 85.24625,
+        "avg_cost": 3.9,
+        "sector": "Basic Materials",
+        "name": "Origin Enterprises plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "MIO.IR": 1
+      }
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 4,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "MIO.IR",
+          "name": "Mincon Group plc",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 4
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 4
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.394485
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-07T09:47:51.974277+01:00",
+          "proposal_id": "buy_tier_level:MIO.IR:sell:2026-10-07T09:47:51.974277+01:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "C5H.IR",
+          "name": "Cairn Homes plc",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 1
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 1
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.5603
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-07T09:47:51.974277+01:00",
+          "proposal_id": "buy_tier_level:C5H.IR:buy:2026-10-07T09:47:51.974277+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "EG7.IR",
+          "name": "FBD Holdings plc",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 2
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 2
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.5384
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-07T09:47:51.974277+01:00",
+          "proposal_id": "buy_tier_level:EG7.IR:buy:2026-10-07T09:47:51.974277+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "OIZ.IR",
+          "name": "Origin Enterprises plc",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.4497
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-07T09:47:51.974277+01:00",
+          "proposal_id": "buy_tier_level:OIZ.IR:buy:2026-10-07T09:47:51.974277+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        }
+      ]
+    }
   }
 ]

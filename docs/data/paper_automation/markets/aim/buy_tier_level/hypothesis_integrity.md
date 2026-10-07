@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-06T08:47:13.926931+00:00
+Track: `buy_tier_level` · updated 2026-10-07T08:47:21.846107+00:00
 
 ## Portfolio loser feedback
 
@@ -79,6 +79,12 @@ Track: `buy_tier_level` · updated 2026-10-06T08:47:13.926931+00:00
 - still buy
 - cheapness family still passes
 
+### RWS.L — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 26% below intact floor
+- still buy
+- cheapness family still passes
+
 ### YNGN.L — weakening / watch_review (+0.3%)
 - research verdict caution
 - still strong_buy
@@ -96,9 +102,3 @@ Track: `buy_tier_level` · updated 2026-10-06T08:47:13.926931+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 49%
-
-### IGR.L — weakening / watch_review (+11.8%)
-- research verdict caution
-- conviction 23% below intact floor
-- still buy
-- cheapness family still passes
