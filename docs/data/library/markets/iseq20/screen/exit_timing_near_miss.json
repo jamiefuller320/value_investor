@@ -1,0 +1,1134 @@
+{
+  "schema_version": 1,
+  "scope": "archive_near_miss",
+  "track_id": "archive_near_miss",
+  "framework": {
+    "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+    "hold_recovery": {
+      "question": "When a position is stressed but still held, does it recover to breakeven?",
+      "episode_triggers": [
+        "unrealized below underwater_threshold",
+        "exit_streak >= 1 (hold buffer active)",
+        "momentum_grace on position",
+        "effective signal no longer buy-tier while still held"
+      ],
+      "outcomes": [
+        "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+        "sold_while_underwater",
+        "max_window_elapsed"
+      ],
+      "fields_for_later_analysis": [
+        "data_quality_score",
+        "conviction_score",
+        "screen_signal",
+        "effective_signal",
+        "exit_streak",
+        "stress_triggers",
+        "thesis_status_at_start",
+        "recommended_action_at_start",
+        "checkpoints"
+      ]
+    },
+    "swap_rotation": {
+      "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+      "pairing": "same rebalance pass sells vs buys on one track",
+      "outcomes": [
+        "replacement_outperformed",
+        "exit_outperformed",
+        "inconclusive"
+      ],
+      "fields_for_later_analysis": [
+        "sell_tickers",
+        "buy_tickers",
+        "sell_realized_pct",
+        "post_rotation_returns",
+        "trade_costs"
+      ]
+    },
+    "related_artifacts": [
+      "exit_shadow.json (post-exit path after sell)",
+      "rebalance_log.json (counterfactual replay)",
+      "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+      "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+      "learning_tracks_churn_health.json"
+    ],
+    "scope": "archive_near_miss",
+    "near_miss_gate": {
+      "below_buy_tier": true,
+      "held_book_from_rebalance_log": true,
+      "default_signals": [
+        "hold"
+      ],
+      "default_min_conviction": 0.28,
+      "default_max_episodes_per_week": 25,
+      "aligned_with": "trajectory_evidence.PRE_BUY_CONVICTION"
+    },
+    "note": "Observe-only priors from archived weekly screens plus rebalance_log held-ticker episodes. Does not replace live paper exit_timing cohorts."
+  },
+  "config": {
+    "min_conviction": 0.28,
+    "min_data_quality": 0.0,
+    "near_miss_signals": [
+      "hold"
+    ],
+    "max_episodes_per_week": 25,
+    "shadow_windows_days": [
+      7,
+      28,
+      56,
+      84
+    ],
+    "include_held_episodes": true,
+    "paper_root": null,
+    "track_ids": [
+      "rules",
+      "ai_judgment"
+    ]
+  },
+  "snapshot_count": 4,
+  "hold_episodes": [
+    {
+      "episode_id": "archive_near_miss:2026-10-04T19:53:20+00:00:MIO.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "MIO.IR",
+      "name": "",
+      "started_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 0.855,
+      "avg_cost": 0.855,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3867,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0994,
+      "trough_unrealized_pct": 0.0994,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-04T19:53:20+00:00:IRES.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "IRES.IR",
+      "name": "",
+      "started_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 1.28,
+      "avg_cost": 1.28,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3804,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0156,
+      "trough_unrealized_pct": 0.0156,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-04T19:53:20+00:00:RYA.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "RYA.IR",
+      "name": "",
+      "started_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 23.79,
+      "avg_cost": 23.79,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3563,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.008,
+      "trough_unrealized_pct": 0.008,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-04T19:53:20+00:00:KRZ.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "KRZ.IR",
+      "name": "",
+      "started_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 86.15,
+      "avg_cost": 86.15,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3312,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0145,
+      "trough_unrealized_pct": 0.0145,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-04T19:53:20+00:00:GL9.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "GL9.IR",
+      "name": "",
+      "started_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 18.97,
+      "avg_cost": 18.97,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.325,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0148,
+      "trough_unrealized_pct": 0.0148,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-04T19:53:20+00:00:DQ7A.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "DQ7A.IR",
+      "name": "",
+      "started_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 10.0,
+      "avg_cost": 10.0,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.3105,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.1,
+      "trough_unrealized_pct": -0.1,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-04T19:53:20+00:00:IR5B.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "IR5B.IR",
+      "name": "",
+      "started_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 7.96,
+      "avg_cost": 7.96,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3038,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0025,
+      "trough_unrealized_pct": -0.0025,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-04T19:53:20+00:00:HMSO.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "HMSO.IR",
+      "name": "",
+      "started_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 3.5,
+      "avg_cost": 3.5,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.2866,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-05T06:52:37+00:00:MIO.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "MIO.IR",
+      "name": "",
+      "started_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 0.855,
+      "avg_cost": 0.855,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.4641,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0994,
+      "trough_unrealized_pct": 0.0994,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-05T06:52:37+00:00:IRES.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "IRES.IR",
+      "name": "",
+      "started_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 1.28,
+      "avg_cost": 1.28,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.4592,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0156,
+      "trough_unrealized_pct": 0.0156,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-05T06:52:37+00:00:KRZ.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "KRZ.IR",
+      "name": "",
+      "started_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 86.15,
+      "avg_cost": 86.15,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.4375,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0145,
+      "trough_unrealized_pct": 0.0145,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-05T06:52:37+00:00:GL9.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "GL9.IR",
+      "name": "",
+      "started_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 18.97,
+      "avg_cost": 18.97,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.4302,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0148,
+      "trough_unrealized_pct": 0.0148,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-05T06:52:37+00:00:RYA.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "RYA.IR",
+      "name": "",
+      "started_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 23.79,
+      "avg_cost": 23.79,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.4156,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.008,
+      "trough_unrealized_pct": 0.008,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-05T06:52:37+00:00:IR5B.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "IR5B.IR",
+      "name": "",
+      "started_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 7.96,
+      "avg_cost": 7.96,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3544,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0025,
+      "trough_unrealized_pct": -0.0025,
+      "recovered_to_breakeven": null,
+      "close_reason": "underwater_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-05T06:52:37+00:00:HMSO.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "HMSO.IR",
+      "name": "",
+      "started_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 3.5,
+      "avg_cost": 3.5,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.3371,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "archive_near_miss:2026-10-05T06:52:37+00:00:A5G.IR",
+      "episode_kind": "near_miss_observe",
+      "track_id": "archive_near_miss",
+      "ticker": "A5G.IR",
+      "name": "",
+      "started_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "stress_triggers": [
+        "near_miss_below_buy_tier"
+      ],
+      "entry_mark": 11.05,
+      "avg_cost": 11.05,
+      "unrealized_pct_at_start": 0.0,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.7,
+      "conviction_score": 0.2948,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0235,
+      "trough_unrealized_pct": 0.0235,
+      "recovered_to_breakeven": true,
+      "close_reason": "recovered_archive_end",
+      "closed_at": "2026-10-07T15:40:13+00:00",
+      "linked_sell_trade_id": null
+    }
+  ],
+  "swap_rotations": [
+    {
+      "rotation_id": "archive_near_miss:2026-10-04T19:53:20+00:00:MIO.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "MIO.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "MIO.IR",
+          "price": 0.855,
+          "shares": 1.0,
+          "gross": 0.85,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "MIO.IR": 0.0994
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-04T19:53:20+00:00:IRES.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "IRES.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "IRES.IR",
+          "price": 1.28,
+          "shares": 1.0,
+          "gross": 1.28,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "IRES.IR": 0.0156
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-04T19:53:20+00:00:RYA.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "RYA.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "RYA.IR",
+          "price": 23.79,
+          "shares": 1.0,
+          "gross": 23.79,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "RYA.IR": 0.008
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-04T19:53:20+00:00:KRZ.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "KRZ.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "KRZ.IR",
+          "price": 86.15,
+          "shares": 1.0,
+          "gross": 86.15,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "KRZ.IR": 0.0145
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-04T19:53:20+00:00:GL9.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "GL9.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "GL9.IR",
+          "price": 18.97,
+          "shares": 1.0,
+          "gross": 18.97,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "GL9.IR": 0.0148
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-04T19:53:20+00:00:DQ7A.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "DQ7A.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "DQ7A.IR",
+          "price": 10.0,
+          "shares": 1.0,
+          "gross": 10.0,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "DQ7A.IR": -0.1
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-04T19:53:20+00:00:IR5B.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "IR5B.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "IR5B.IR",
+          "price": 7.96,
+          "shares": 1.0,
+          "gross": 7.96,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "IR5B.IR": -0.0025
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-04T19:53:20+00:00:HMSO.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-04T19:53:20+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "HMSO.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "HMSO.IR",
+          "price": 3.5,
+          "shares": 1.0,
+          "gross": 3.5,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "HMSO.IR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-05T06:52:37+00:00:MIO.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "MIO.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "MIO.IR",
+          "price": 0.855,
+          "shares": 1.0,
+          "gross": 0.85,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "MIO.IR": 0.0994
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-05T06:52:37+00:00:IRES.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "IRES.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "IRES.IR",
+          "price": 1.28,
+          "shares": 1.0,
+          "gross": 1.28,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "IRES.IR": 0.0156
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-05T06:52:37+00:00:KRZ.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "KRZ.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "KRZ.IR",
+          "price": 86.15,
+          "shares": 1.0,
+          "gross": 86.15,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "KRZ.IR": 0.0145
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-05T06:52:37+00:00:GL9.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "GL9.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "GL9.IR",
+          "price": 18.97,
+          "shares": 1.0,
+          "gross": 18.97,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "GL9.IR": 0.0148
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-05T06:52:37+00:00:RYA.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "RYA.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "RYA.IR",
+          "price": 23.79,
+          "shares": 1.0,
+          "gross": 23.79,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "RYA.IR": 0.008
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-05T06:52:37+00:00:IR5B.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "IR5B.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "IR5B.IR",
+          "price": 7.96,
+          "shares": 1.0,
+          "gross": 7.96,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "IR5B.IR": -0.0025
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-05T06:52:37+00:00:HMSO.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "HMSO.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "HMSO.IR",
+          "price": 3.5,
+          "shares": 1.0,
+          "gross": 3.5,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "HMSO.IR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    },
+    {
+      "rotation_id": "archive_near_miss:2026-10-05T06:52:37+00:00:A5G.IR:C5H.IR",
+      "rotation_kind": "near_miss_swap_observe",
+      "track_id": "archive_near_miss",
+      "logged_at": "2026-10-05T06:52:37+00:00",
+      "status": "closed",
+      "trade_cost_pct": 0.0,
+      "near_miss_ticker": "A5G.IR",
+      "swap_ticker": "C5H.IR",
+      "sells": [
+        {
+          "ticker": "A5G.IR",
+          "price": 11.05,
+          "shares": 1.0,
+          "gross": 11.05,
+          "cost": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.64,
+          "shares": 1.0,
+          "gross": 2.64,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "A5G.IR": 0.0235
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0114
+      },
+      "verdict": "inconclusive",
+      "closed_at": "2026-10-07T15:40:13+00:00"
+    }
+  ],
+  "updated_at": "2026-10-07T16:34:18.162902+00:00"
+}

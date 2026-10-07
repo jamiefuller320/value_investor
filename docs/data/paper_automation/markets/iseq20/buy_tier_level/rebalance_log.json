@@ -1962,5 +1962,414 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-07T16:34:55.561227+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/iseq20/screen_latest.json",
+      "run_at": "2026-10-07T15:40:13.981146+00:00",
+      "generated_at": "2026-10-07T16:34:55.519618+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-07T17:34:55.530643+01:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-10-07T08:00:00+01:00",
+      "settle_at": "2026-10-07T09:15:00+01:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (3 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "OIZ.IR",
+        "name": "Origin Enterprises plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5308,
+        "data_quality_score": 0.9,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 3.84,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "C5H.IR",
+        "name": "Cairn Homes plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6374000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 2.67,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "EG7.IR",
+        "name": "FBD Holdings plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6081000000000001,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 18.85,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "MIO.IR",
+        "name": "Mincon Group plc",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.338385,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 0.94,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "OIZ.IR",
+        "name": "Origin Enterprises plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5308,
+        "data_quality_score": 0.9,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 3.84,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "C5H.IR",
+        "name": "Cairn Homes plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6374000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 2.67,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "EG7.IR",
+        "name": "FBD Holdings plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6081000000000001,
+        "data_quality_score": 0.95,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 18.85,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "MIO.IR",
+        "name": "Mincon Group plc",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.338385,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Industrials",
+        "price": 0.94,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 992.98,
+      "cash": 248.35,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 248.25,
+      "targets": [
+        {
+          "ticker": "C5H.IR",
+          "name": "Cairn Homes plc",
+          "signal": "buy",
+          "conviction_score": 0.6374000000000001,
+          "price": 2.67
+        },
+        {
+          "ticker": "EG7.IR",
+          "name": "FBD Holdings plc",
+          "signal": "buy",
+          "conviction_score": 0.6081000000000001,
+          "price": 18.85
+        },
+        {
+          "ticker": "OIZ.IR",
+          "name": "Origin Enterprises plc",
+          "signal": "buy",
+          "conviction_score": 0.5308,
+          "price": 3.84
+        },
+        {
+          "ticker": "MIO.IR",
+          "name": "Mincon Group plc",
+          "signal": "buy",
+          "conviction_score": 0.338385,
+          "price": 0.94
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "MIO.IR",
+          "name": "Mincon Group plc",
+          "reason": "New sleeve",
+          "value": 248.25,
+          "price": 0.94,
+          "target_value": 248.25,
+          "conviction_score": 0.338385,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "C5H.IR",
+          "name": "Cairn Homes plc",
+          "reason": "Already near equal-weight target",
+          "value": 248.2,
+          "target_value": 248.25,
+          "conviction_score": 0.6374000000000001,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "EG7.IR",
+          "name": "FBD Holdings plc",
+          "reason": "Already near equal-weight target",
+          "value": 248.21,
+          "target_value": 248.25,
+          "conviction_score": 0.6081000000000001,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "OIZ.IR",
+          "name": "Origin Enterprises plc",
+          "reason": "Already near equal-weight target",
+          "value": 248.22,
+          "target_value": 248.25,
+          "conviction_score": 0.5308,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); deploy cash into 1 buy(s); leave 3 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "ab3eaa0c-0158-437e-b234-daf3d859fe1a",
+        "fund_id": "65aa3829-0214-45f6-84e5-cca8e7a524b1",
+        "acted_at": "2026-10-07T17:34:55.530643+01:00",
+        "ticker": "C5H.IR",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 32.972845,
+        "price": 2.67,
+        "gross": 88.04,
+        "cost": 0.15,
+        "net_cash": 87.88,
+        "note": "Automated trim",
+        "name": "Cairn Homes plc",
+        "avg_cost_at_exit": 2.64
+      },
+      {
+        "id": "2e621eb1-8c13-4a53-b287-471664754b95",
+        "fund_id": "65aa3829-0214-45f6-84e5-cca8e7a524b1",
+        "acted_at": "2026-10-07T17:34:55.530643+01:00",
+        "ticker": "EG7.IR",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 4.330165,
+        "price": 18.85,
+        "gross": 81.62,
+        "cost": 0.14,
+        "net_cash": 81.48,
+        "note": "Automated trim",
+        "name": "FBD Holdings plc",
+        "avg_cost_at_exit": 19.0
+      },
+      {
+        "id": "8b5f7355-5a38-4939-ae94-1270c78e815b",
+        "fund_id": "65aa3829-0214-45f6-84e5-cca8e7a524b1",
+        "acted_at": "2026-10-07T17:34:55.530643+01:00",
+        "ticker": "OIZ.IR",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 20.606555,
+        "price": 3.84,
+        "gross": 79.13,
+        "cost": 0.14,
+        "net_cash": 78.99,
+        "note": "Automated trim",
+        "name": "Origin Enterprises plc",
+        "avg_cost_at_exit": 3.9
+      }
+    ],
+    "nav_before": 993.42,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "C5H.IR",
+        "shares": 125.93196,
+        "avg_cost": 2.64,
+        "sector": "Consumer Cyclical",
+        "name": "Cairn Homes plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "EG7.IR",
+        "shares": 17.497914,
+        "avg_cost": 19.0,
+        "sector": "Financial Services",
+        "name": "FBD Holdings plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "OIZ.IR",
+        "shares": 85.24625,
+        "avg_cost": 3.9,
+        "sector": "Basic Materials",
+        "name": "Origin Enterprises plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "MIO.IR": 1
+      }
+    },
+    "nav_after": 992.98,
+    "cash_after": 248.35,
+    "holdings_after": [
+      {
+        "ticker": "C5H.IR",
+        "shares": 92.959115,
+        "avg_cost": 2.64,
+        "sector": "Consumer Cyclical",
+        "name": "Cairn Homes plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "EG7.IR",
+        "shares": 13.167749,
+        "avg_cost": 19.0,
+        "sector": "Financial Services",
+        "name": "FBD Holdings plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "OIZ.IR",
+        "shares": 64.639695,
+        "avg_cost": 3.9,
+        "sector": "Basic Materials",
+        "name": "Origin Enterprises plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": []
+    }
   }
 ]

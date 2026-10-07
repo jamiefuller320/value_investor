@@ -2063,5 +2063,792 @@
       },
       "cards": []
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-07T16:34:52.789850+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/sti/screen_latest.json",
+      "run_at": "2026-10-07T15:40:13.981146+00:00",
+      "generated_at": "2026-10-07T16:34:52.637295+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-07T17:34:52.647857+01:00",
+      "trading_day": true,
+      "after_settle": true,
+      "market_open_at": "2026-10-07T08:00:00+01:00",
+      "settle_at": "2026-10-07T09:15:00+01:00",
+      "can_act": true,
+      "reason": "ok"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (5 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0018,
+    "candidates": [
+      {
+        "ticker": "Y92.SI",
+        "name": "Thai Beverage Public Company Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.5344,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Defensive",
+        "price": 0.43,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "BUOU.SI",
+        "name": "Frasers Logistics & Commercial Trust",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.5607449999999999,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Real Estate",
+        "price": 0.875,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "A17U.SI",
+        "name": "CapitaLand Ascendas REIT",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.222955,
+        "data_quality_score": 0.95,
+        "timing_signal": "accumulate",
+        "sector": "Real Estate",
+        "price": 2.21,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "Y92.SI",
+        "name": "Thai Beverage Public Company Limited",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.5344,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Defensive",
+        "price": 0.43,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "BUOU.SI",
+        "name": "Frasers Logistics & Commercial Trust",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.5607449999999999,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Real Estate",
+        "price": 0.875,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "A17U.SI",
+        "name": "CapitaLand Ascendas REIT",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.222955,
+        "data_quality_score": 0.95,
+        "timing_signal": "accumulate",
+        "sector": "Real Estate",
+        "price": 2.21,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.18% / sell 0.18% (legacy symmetric slot 0.18%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 992.22,
+      "cash": -0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 330.74,
+      "targets": [
+        {
+          "ticker": "BUOU.SI",
+          "name": "Frasers Logistics & Commercial Trust",
+          "signal": "buy",
+          "conviction_score": 0.5607449999999999,
+          "price": 0.875
+        },
+        {
+          "ticker": "Y92.SI",
+          "name": "Thai Beverage Public Company Limited",
+          "signal": "strong_buy",
+          "conviction_score": 0.5344,
+          "price": 0.43
+        },
+        {
+          "ticker": "A17U.SI",
+          "name": "CapitaLand Ascendas REIT",
+          "signal": "buy",
+          "conviction_score": 0.222955,
+          "price": 2.21
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "BUOU.SI",
+          "name": "Frasers Logistics & Commercial Trust",
+          "reason": "Already near equal-weight target",
+          "value": 330.88,
+          "target_value": 330.74,
+          "conviction_score": 0.5607449999999999,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "Y92.SI",
+          "name": "Thai Beverage Public Company Limited",
+          "reason": "Already near equal-weight target",
+          "value": 330.88,
+          "target_value": 330.74,
+          "conviction_score": 0.5344,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "A17U.SI",
+          "name": "CapitaLand Ascendas REIT",
+          "reason": "Already near equal-weight target",
+          "value": 330.45,
+          "target_value": 330.74,
+          "conviction_score": 0.222955,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "bb8c1362-0dd6-44b2-acff-80b98dfc630d",
+        "fund_id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
+        "acted_at": "2026-10-07T17:34:52.647857+01:00",
+        "ticker": "U14.SI",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 30.556811,
+        "price": 8.2,
+        "gross": 250.57,
+        "cost": 0.44,
+        "net_cash": 250.13,
+        "note": "Automated exit \u2014 left target set",
+        "name": "UOL Group Limited",
+        "avg_cost_at_exit": 8.2,
+        "position_closed": true
+      },
+      {
+        "id": "3a09b44a-0d9e-4d09-aaac-30bff14bb908",
+        "fund_id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
+        "acted_at": "2026-10-07T17:34:52.647857+01:00",
+        "ticker": "BS6.SI",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 48.556039,
+        "price": 5.06,
+        "gross": 245.69,
+        "cost": 0.43,
+        "net_cash": 245.26,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+        "avg_cost_at_exit": 5.06,
+        "position_closed": true
+      },
+      {
+        "id": "91e493f0-c596-4a09-8131-79e5f14bea37",
+        "fund_id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
+        "acted_at": "2026-10-07T17:34:52.647857+01:00",
+        "ticker": "BUOU.SI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 93.786065,
+        "price": 0.875,
+        "gross": 82.06,
+        "cost": 0.14,
+        "net_cash": -82.21,
+        "note": "Automated buy",
+        "name": "Frasers Logistics & Commercial Trust"
+      },
+      {
+        "id": "f567f86f-bf05-4e6c-95f3-546736db29a5",
+        "fund_id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
+        "acted_at": "2026-10-07T17:34:52.647857+01:00",
+        "ticker": "Y92.SI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 190.726964,
+        "price": 0.43,
+        "gross": 82.01,
+        "cost": 0.14,
+        "net_cash": -82.16,
+        "note": "Automated buy",
+        "name": "Thai Beverage Public Company Limited"
+      },
+      {
+        "id": "12948857-0826-4b52-8315-adc10f03484d",
+        "fund_id": "48f57b59-59c4-46ca-9a0d-43ee63c1d27c",
+        "acted_at": "2026-10-07T17:34:52.647857+01:00",
+        "ticker": "A17U.SI",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 149.524947,
+        "price": 2.21,
+        "gross": 330.45,
+        "cost": 0.58,
+        "net_cash": -331.03,
+        "note": "Automated buy",
+        "name": "CapitaLand Ascendas REIT"
+      }
+    ],
+    "nav_before": 993.95,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "Y92.SI",
+        "shares": 578.772801,
+        "avg_cost": 0.43,
+        "sector": "Consumer Defensive",
+        "name": "Thai Beverage Public Company Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BUOU.SI",
+        "shares": 284.368005,
+        "avg_cost": 0.875,
+        "sector": "Real Estate",
+        "name": "Frasers Logistics & Commercial Trust",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "U14.SI",
+        "shares": 30.556811,
+        "avg_cost": 8.2,
+        "sector": "Real Estate",
+        "name": "UOL Group Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BS6.SI",
+        "shares": 48.556039,
+        "avg_cost": 5.06,
+        "sector": "Industrials",
+        "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "U14.SI": 1,
+        "BS6.SI": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "nav_after": 992.22,
+    "cash_after": -0.0,
+    "holdings_after": [
+      {
+        "ticker": "Y92.SI",
+        "shares": 769.499765,
+        "avg_cost": 0.43,
+        "sector": "Consumer Defensive",
+        "name": "Thai Beverage Public Company Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BUOU.SI",
+        "shares": 378.15407,
+        "avg_cost": 0.875,
+        "sector": "Real Estate",
+        "name": "Frasers Logistics & Commercial Trust",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "A17U.SI",
+        "shares": 149.524947,
+        "avg_cost": 2.21,
+        "sector": "Real Estate",
+        "name": "CapitaLand Ascendas REIT",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "U14.SI": 1,
+        "BS6.SI": 1
+      }
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "evidence_heuristic",
+      "judge_spec_id": "heuristic.v1",
+      "parent_spec_id": null,
+      "verdict_counts": {
+        "agree": 3,
+        "veto": 0,
+        "abstain": 2
+      },
+      "cards": [
+        {
+          "ticker": "U14.SI",
+          "name": "UOL Group Limited",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-07T17:34:52.647857+01:00",
+          "proposal_id": "buy_tier_level:U14.SI:sell:2026-10-07T17:34:52.647857+01:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "BS6.SI",
+          "name": "Yangzijiang Shipbuilding (Holdings) Ltd.",
+          "algo_action": "sell",
+          "algo_reason": "Automated exit \u2014 left target set",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated exit \u2014 left target set"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-07T17:34:52.647857+01:00",
+          "proposal_id": "buy_tier_level:BS6.SI:sell:2026-10-07T17:34:52.647857+01:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": null,
+            "rank_drop_exit_min": 3,
+            "research_verdict": null,
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": null,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": null,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "BUOU.SI",
+          "name": "Frasers Logistics & Commercial Trust",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "abstain",
+          "reasons": [
+            "Buy while not buyish \u2014 abstain."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 1
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 1
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.5607449999999999
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-07T17:34:52.647857+01:00",
+          "proposal_id": "buy_tier_level:BUOU.SI:buy:2026-10-07T17:34:52.647857+01:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "Y92.SI",
+          "name": "Thai Beverage Public Company Limited",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Buy into buyish target set \u2014 agree with algo selection."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 2
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 2
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.5344
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-07T17:34:52.647857+01:00",
+          "proposal_id": "buy_tier_level:Y92.SI:buy:2026-10-07T17:34:52.647857+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        },
+        {
+          "ticker": "A17U.SI",
+          "name": "CapitaLand Ascendas REIT",
+          "algo_action": "buy",
+          "algo_reason": "Automated buy",
+          "shadow_verdict": "abstain",
+          "reasons": [
+            "Buy while not buyish \u2014 abstain."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Automated buy"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "hold"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "caution"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.222955
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": false
+            },
+            {
+              "kind": "fcf_basis_overlay",
+              "source": "candidates",
+              "detail": "FCF basis overlay flag bound on the live report at decision time",
+              "value": false
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "evidence_heuristic",
+          "judge_spec_id": "heuristic.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level",
+          "logged_at": "2026-10-07T17:34:52.647857+01:00",
+          "proposal_id": "buy_tier_level:A17U.SI:buy:2026-10-07T17:34:52.647857+01:00",
+          "meta": {
+            "still_buyish": false,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "caution",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            }
+          },
+          "schema_version": 1
+        }
+      ]
+    }
   }
 ]
