@@ -26,7 +26,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-07T08:08:17.412939+00:00",
+    "snapshot_at": "2026-10-07T08:27:02.293415+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 52,
     "unmeasured_buy_tier": 1,
@@ -99,7 +99,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-07T08:08:17.417989+00:00",
+  "evaluated_at": "2026-10-07T08:27:02.297812+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -145,17 +145,108 @@
     "tsx60",
     "us_adr_asia"
   ],
-  "parallel_sprint_markets": [],
-  "parallel_sprint_status": [],
+  "parallel_sprint_markets": [
+    "ftse_smallcap"
+  ],
+  "parallel_sprint_status": [
+    {
+      "market_id": "ftse_smallcap",
+      "focus_market": "euro_depth",
+      "mode": "sprint",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=42)",
+      "ingest_parity_met": false,
+      "ingest_exhausted": false,
+      "ingest_sprint_complete": false,
+      "parked_tickers": [
+        "DFS.L",
+        "FOXT.L",
+        "MER.L",
+        "REC.L",
+        "TPT.L",
+        "ULTP.L"
+      ],
+      "phase3_ready": false,
+      "current_phase": 1,
+      "next_phase": 1,
+      "phase_blockers": [
+        "ftse_smallcap not in ladder.weekly_paper_shard_markets"
+      ],
+      "filing_health": {
+        "snapshot_at": "2026-10-07T08:27:32.251494+00:00",
+        "market_id": "ftse_smallcap",
+        "buy_tier_count": 11,
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 42,
+        "bodies_min": 46,
+        "bodies_median": 55,
+        "bodies_max": 96,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "unmeasured_tickers": [],
+        "zero_body_tickers": [],
+        "thin_body_tickers": [],
+        "indexed_without_body_tickers": [
+          "ULTP.L",
+          "MER.L",
+          "APTD.L",
+          "FOXT.L",
+          "DFS.L",
+          "TPT.L",
+          "REC.L"
+        ],
+        "indexed_without_body_by_ticker": {
+          "ULTP.L": 5,
+          "MER.L": 5,
+          "APTD.L": 6,
+          "FOXT.L": 6,
+          "DFS.L": 6,
+          "TPT.L": 9,
+          "REC.L": 5
+        },
+        "parked_tickers": [
+          "DFS.L",
+          "FOXT.L",
+          "MER.L",
+          "REC.L",
+          "TPT.L",
+          "ULTP.L"
+        ],
+        "parked_count": 6,
+        "effective_thin_body_buy_tier": 0,
+        "effective_thin_body_tickers": [],
+        "effective_indexed_without_body": 6,
+        "effective_indexed_without_body_tickers": [
+          "APTD.L"
+        ],
+        "ingest_exhausted": false
+      },
+      "filing_gaps": 0,
+      "max_daily_successes": 4,
+      "max_targets": 24,
+      "cron_morning": true,
+      "cron_afternoon": true,
+      "cron_midafternoon": true,
+      "cron_evening": true,
+      "cron_ladder_weekday": true,
+      "cron_maintenance": false,
+      "should_run_sprint_ingest": true,
+      "should_run_maintenance_ingest": false,
+      "should_run_ingest": true,
+      "evaluated_at": "2026-10-07T08:27:32.252083+00:00",
+      "should_run_parallel_ingest": true
+    }
+  ],
   "parallel_sprint_2_markets": [
-    "omxs30"
+    "ibex35"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "omxs30",
+      "market_id": "ibex35",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=7, indexed_without_body=0)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=2, indexed_without_body=0)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
@@ -164,45 +255,35 @@
       "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "no benchmark configured for omxs30"
+        "no benchmark configured for ibex35"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-07T08:08:49.081612+00:00",
-        "market_id": "omxs30",
-        "buy_tier_count": 11,
+        "snapshot_at": "2026-10-07T08:27:32.750076+00:00",
+        "market_id": "ibex35",
+        "buy_tier_count": 5,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 7,
+        "thin_body_buy_tier": 2,
         "indexed_without_body": 0,
-        "bodies_min": 1,
-        "bodies_median": 2,
-        "bodies_max": 8,
+        "bodies_min": 2,
+        "bodies_median": 3,
+        "bodies_max": 7,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [
-          "ASSA-B.ST",
-          "TEL2-B.ST",
-          "SKA-B.ST",
-          "ESSITY-B.ST",
-          "SAND.ST",
-          "TELIA.ST",
-          "SKF-B.ST"
+          "NTGY.MC",
+          "REP.MC"
         ],
         "indexed_without_body_tickers": [],
         "indexed_without_body_by_ticker": {},
         "parked_tickers": [],
         "parked_count": 0,
-        "effective_thin_body_buy_tier": 7,
+        "effective_thin_body_buy_tier": 2,
         "effective_thin_body_tickers": [
-          "ASSA-B.ST",
-          "TEL2-B.ST",
-          "SKA-B.ST",
-          "ESSITY-B.ST",
-          "SAND.ST",
-          "TELIA.ST",
-          "SKF-B.ST"
+          "NTGY.MC",
+          "REP.MC"
         ],
         "effective_indexed_without_body": 0,
         "effective_indexed_without_body_tickers": [],
@@ -220,13 +301,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-07T08:08:49.083936+00:00",
+      "evaluated_at": "2026-10-07T08:27:32.750395+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
-    "omxs30"
+    "ftse_smallcap",
+    "ibex35"
   ],
   "market_queue": [
     "sp500",
@@ -278,9 +360,11 @@
       "scheduler_enabled": true
     }
   },
-  "scheduler_stream_1_markets": [],
+  "scheduler_stream_1_markets": [
+    "ftse_smallcap"
+  ],
   "scheduler_stream_2_markets": [
-    "omxs30"
+    "ibex35"
   ],
   "should_run_library_maintenance": true
 }

@@ -549,20 +549,21 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-07T08:08:22.312298+00:00",
+  "updated_at": "2026-10-07T08:24:46.288391+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
     "asx200",
     "euro_depth",
     "iseq20",
+    "omxs30",
     "psi20"
   ],
   "ingest_parallel_sprint": [
-    "euro_stoxx50"
+    "ftse_smallcap"
   ],
   "ingest_parallel_sprint_2": [
-    "omxs30"
+    "ibex35"
   ],
   "ladder": {
     "enabled": true,
@@ -901,26 +902,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-09-22T08:20:02.333015+00:00",
-        "parallel_stream": 2,
-        "from_market": "asx200",
-        "to_market": "sp500",
-        "stream_markets_after": [
-          "sp500"
-        ],
-        "ingest_parity_recorded": true
-      },
-      {
-        "at": "2026-09-22T11:19:15.227175+00:00",
-        "parallel_stream": 2,
-        "from_market": "sp500",
-        "to_market": "ftse_smallcap",
-        "stream_markets_after": [
-          "ftse_smallcap"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-09-22T18:12:20.835547+00:00",
         "parallel_stream": 2,
@@ -1410,6 +1391,26 @@
           "omxs30"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-10-07T08:18:42.367839+00:00",
+        "parallel_stream": 1,
+        "from_market": "euro_stoxx50",
+        "to_market": "ftse_smallcap",
+        "stream_markets_after": [
+          "ftse_smallcap"
+        ],
+        "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-10-07T08:24:46.288381+00:00",
+        "parallel_stream": 2,
+        "from_market": "omxs30",
+        "to_market": "ibex35",
+        "stream_markets_after": [
+          "ibex35"
+        ],
+        "ingest_parity_recorded": true
       }
     ]
   },
