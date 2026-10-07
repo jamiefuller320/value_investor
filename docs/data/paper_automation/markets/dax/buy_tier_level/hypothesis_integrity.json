@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-10-07T08:47:13.590162+00:00",
-  "as_of": "2026-10-07T09:47:13.544915+01:00",
+  "updated_at": "2026-10-07T16:34:44.745678+00:00",
+  "as_of": "2026-10-07T17:34:44.725367+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -17,23 +17,23 @@
     "skip_underwater_urgency_when_intact": true
   },
   "holding_count": 2,
-  "underwater_count": 0,
+  "underwater_count": 1,
   "thesis_status_counts": {
-    "intact": 1,
-    "weakening": 1,
+    "intact": 0,
+    "weakening": 2,
     "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
     "holding_count": 2,
-    "loser_count": 0,
-    "loser_share": 0.0,
-    "loser_nav_share": 0.0,
+    "loser_count": 1,
+    "loser_share": 0.5,
+    "loser_nav_share": 0.4817,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
-    "within_tolerance": true,
+    "within_tolerance": false,
     "intact_loser_count": 0,
-    "weakening_loser_count": 0,
+    "weakening_loser_count": 1,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
@@ -50,7 +50,7 @@
       "risk": 0.0
     },
     "selection_feedback_flags": [],
-    "balancing_hint": "maintain",
+    "balancing_hint": "trim_weakening_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
@@ -59,10 +59,10 @@
       "name": "Fresenius Medical Care AG",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": 0.0001,
-      "mark": 39.55,
+      "unrealized_pct": -0.0538,
+      "mark": 37.42,
       "avg_cost": 39.5472,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -96,16 +96,16 @@
     {
       "ticker": "G1A.DE",
       "name": "GEA Group Aktiengesellschaft",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0018,
-      "mark": 66.45,
+      "unrealized_pct": 0.0229,
+      "mark": 67.85,
       "avg_cost": 66.3336,
-      "signal": "buy",
+      "signal": "hold",
       "timing_signal": "neutral",
-      "conviction_score": 0.6437,
+      "conviction_score": 0.3723,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -117,20 +117,19 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
-        "still buy",
+        "left buy tier (hold)",
         "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 64%"
+        "cheapness family still passes"
       ],
       "intact_reasons": [
-        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 64%"
+        "conviction 37%"
       ],
-      "weaken_reasons": [],
+      "weaken_reasons": [
+        "left buy tier (hold)"
+      ],
       "broken_reasons": []
     }
   ],

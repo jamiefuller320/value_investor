@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-05T07:38:14.184519+00:00
+Track: `buy_tier_level_native` · updated 2026-10-07T16:34:52.058987+00:00
 
 ## Portfolio loser feedback
 
@@ -10,16 +10,14 @@ Track: `buy_tier_level_native` · updated 2026-10-05T07:38:14.184519+00:00
 
 ## Holding reviews
 
-### SONY — intact / hold_tolerate (+1.9%)
+### SONY — intact / hold_tolerate (+0.2%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 56%
+- conviction 63%
 
-### WIT — intact / hold_tolerate (+6.8%)
+### WIT — weakening / watch_review (+1.4%)
+- research verdict neutral
 - still strong_buy
-- research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 91%

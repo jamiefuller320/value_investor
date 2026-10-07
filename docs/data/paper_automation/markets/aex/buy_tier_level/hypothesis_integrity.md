@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-07T08:47:32.548690+00:00
+Track: `buy_tier_level` · updated 2026-10-07T16:34:49.114744+00:00
 
 ## Portfolio loser feedback
 
@@ -10,58 +10,58 @@ Track: `buy_tier_level` · updated 2026-10-07T08:47:32.548690+00:00
 
 ## Holding reviews
 
-### PHIA.AS — intact / hold_tolerate (-3.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 63%
-
-### RAND.AS — intact / hold_tolerate (-2.5%)
+### RAND.AS — intact / hold_tolerate (-3.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
 
-### WKL.AS — intact / hold_tolerate (-1.2%)
-- still strong_buy
+### PHIA.AS — intact / hold_tolerate (-1.6%)
+- still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 78%
+- conviction 63%
 
-### ADYEN.AS — intact / hold_tolerate (-1.2%)
+### ADYEN.AS — intact / hold_tolerate (-0.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 39%
 
-### AD.AS — intact / hold_tolerate (-0.8%)
+### AD.AS — intact / hold_tolerate (+0.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 89%
 
-### KPN.AS — intact / hold_tolerate (+0.3%)
+### KPN.AS — intact / hold_tolerate (+0.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 62%
 
-### SHELL.AS — intact / hold_tolerate (+1.9%)
+### AKZA.AS — intact / hold_tolerate (+1.6%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 81%
+
+### SHELL.AS — intact / hold_tolerate (+2.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 82%
 
-### AKZA.AS — intact / hold_tolerate (+2.2%)
+### WKL.AS — intact / hold_tolerate (+3.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 81%
+- conviction 78%

@@ -2882,6 +2882,56 @@ def check_screen_premise_backtest(
     ]
 
 
+def check_historical_screen_replay(
+    *,
+    data_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only L536/L542 replay status: registration fingerprint and harness parity.
+
+    Runs after ``check_screen_premise_backtest`` so parity compares against the
+    store it just wrote. Writes ``docs/data/historical_screen_replay.json``.
+    """
+    from value_investor.historical_screen_replay import (
+        DEFAULT_DATA_DIR,
+        DEFAULT_STORE_PATH,
+        findings_from_store,
+        refresh_historical_screen_replay,
+    )
+
+    root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
+    if not root.exists():
+        return []
+    try:
+        payload = refresh_historical_screen_replay(
+            root,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            premise_store_path=root / "screen_premise_backtest.json",
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="backtest",
+                title="Historical screen replay status failed",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+        for finding in findings_from_store(payload)
+    ]
+
+
 def check_assessment_scoreboard(
     *,
     data_dir: Path | None = None,
@@ -3517,6 +3567,7 @@ def collect_ops_findings(
     findings.extend(check_indicator_integrity())
     findings.extend(check_backtest_history())
     findings.extend(check_screen_premise_backtest())
+    findings.extend(check_historical_screen_replay())
     findings.extend(check_value_factor_base_rate())
     findings.extend(check_assessment_scoreboard())
     findings.extend(check_paper_learning_tracks())
