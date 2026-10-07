@@ -7507,6 +7507,20 @@ _OCF_HIGHLIGHT_PAIR_RE = re.compile(
     r"Operating cash flow\s+([\d,]+)\s+([\d,]+)",
     re.IGNORECASE,
 )
+_OCF_ACTIVITIES_HIGHLIGHTS_RE = re.compile(
+    r"Cashflow from operating activities\s+([\d,]+)\s+([\d,]+)",
+    re.IGNORECASE,
+)
+_OCF_PROSE_MILLIONS_RE = re.compile(
+    r"(?:The Group generated )?operating cash flow of \$?\s*([\d,]+(?:\.\d+)?)\s*million\s*"
+    r"\(\s*2024:\s*\$?\s*([\d,]+(?:\.\d+)?)\s*million\)",
+    re.IGNORECASE,
+)
+_OCF_ACTIVITIES_PROSE_RE = re.compile(
+    r"Cashflow from operating activities of \$?\s*([\d,]+(?:\.\d+)?)\s*million\s*"
+    r"\(\s*2024:\s*\$?\s*([\d,]+(?:\.\d+)?)\s*million\)",
+    re.IGNORECASE,
+)
 _SEGMENT_MARGIN_BLOCK_RE = re.compile(
     r"Core\s+operating\s+margin\s+((?:\d+(?:\.\d+)?%\s*){3,8})",
     re.IGNORECASE | re.DOTALL,
@@ -7640,6 +7654,36 @@ _FINANCIAL_HIGHLIGHTS_ORDINARY_DIVIDEND_RE = re.compile(
     r"Ordinary dividend\s+([\d.]+)\s*p\s+([\d.]+)\s*p",
     re.IGNORECASE,
 )
+_FINAL_DIVIDEND_CENTS_RE = re.compile(
+    r"(?:recommending )?(?:a )?final dividend of\s+([\d.]+)\s+cents per share",
+    re.IGNORECASE,
+)
+_PROPOSED_FINAL_DIVIDEND_CENTS_RE = re.compile(
+    r"proposed final dividend for the year ended[^.]{0,40}?is\s+([\d.]+)\s+cents",
+    re.IGNORECASE,
+)
+_TOTAL_DIVIDEND_FULL_YEAR_CENTS_RE = re.compile(
+    r"total dividend for the full year to\s+([\d.]+)\s+cents per share\s*"
+    r"\(\s*2024:\s*([\d.]+)\s+cents per share\)",
+    re.IGNORECASE,
+)
+_TOTAL_DIVIDEND_PER_SHARE_CENTS_TABLE_RE = re.compile(
+    r"Total dividend per share\s*\(cents\)\s+([\d.]+)\s+([\d.]+)",
+    re.IGNORECASE,
+)
+_TOTAL_DIVIDEND_CENTS_HEADLINE_RE = re.compile(
+    r"Total dividend of\s+([\d.]+)\s+cents per share",
+    re.IGNORECASE,
+)
+_INTERIM_DIVIDEND_CENTS_RE = re.compile(
+    r"interim dividend of\s+([\d.]+)\s+cents(?: per share)?",
+    re.IGNORECASE,
+)
+_INTERIM_DIVIDEND_DURING_YEAR_CENTS_RE = re.compile(
+    r"Interim dividend during the year[^.]{0,80}?of\s+([\d.]+)\s+cents\s*"
+    r"\(\s*31 December 2024:\s*([\d.]+)\s+cents\)",
+    re.IGNORECASE,
+)
 
 
 def parse_ir_profit_to_cash_bridge(body_text: str) -> dict[str, Any] | None:
@@ -7736,7 +7780,8 @@ def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
     if not body_text or not body_text.strip():
         return None
     policy: dict[str, Any] = {"currency": "GBP", "parse_confidence": "medium"}
-    window = body_text[:48000]
+    # FY combined press releases (e.g. HIK.L) place dividend policy after financial statements.
+    window = body_text[: min(len(body_text), 120_000)]
     for match in _ORDINARY_DIVIDEND_POLICY_RE.finditer(window):
         policy["ordinary_dividend_pence"] = float(match.group(1))
         tail = window[match.start() : match.end() + 120]
@@ -7779,6 +7824,37 @@ def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
     if highlights and "ordinary_dividend_pence" not in policy:
         policy["ordinary_dividend_pence"] = float(highlights.group(1))
         policy["prior_ordinary_dividend_pence"] = float(highlights.group(2))
+    final_cents = _FINAL_DIVIDEND_CENTS_RE.search(window)
+    if final_cents:
+        policy["currency"] = "USD"
+        policy["final_dividend_cents"] = float(final_cents.group(1))
+    proposed_final_cents = _PROPOSED_FINAL_DIVIDEND_CENTS_RE.search(window)
+    if proposed_final_cents and "final_dividend_cents" not in policy:
+        policy["currency"] = "USD"
+        policy["final_dividend_cents"] = float(proposed_final_cents.group(1))
+    total_fy_cents = _TOTAL_DIVIDEND_FULL_YEAR_CENTS_RE.search(window)
+    if total_fy_cents:
+        policy["currency"] = "USD"
+        policy["full_year_dividend_cents"] = float(total_fy_cents.group(1))
+        policy["prior_full_year_dividend_cents"] = float(total_fy_cents.group(2))
+    total_table_cents = _TOTAL_DIVIDEND_PER_SHARE_CENTS_TABLE_RE.search(window)
+    if total_table_cents and "full_year_dividend_cents" not in policy:
+        policy["currency"] = "USD"
+        policy["full_year_dividend_cents"] = float(total_table_cents.group(1))
+        policy["prior_full_year_dividend_cents"] = float(total_table_cents.group(2))
+    total_headline_cents = _TOTAL_DIVIDEND_CENTS_HEADLINE_RE.search(window)
+    if total_headline_cents and "full_year_dividend_cents" not in policy:
+        policy["currency"] = "USD"
+        policy["full_year_dividend_cents"] = float(total_headline_cents.group(1))
+    interim_cents = _INTERIM_DIVIDEND_CENTS_RE.search(window)
+    if interim_cents:
+        policy["currency"] = "USD"
+        policy["interim_dividend_cents"] = float(interim_cents.group(1))
+    interim_year_cents = _INTERIM_DIVIDEND_DURING_YEAR_CENTS_RE.search(window)
+    if interim_year_cents:
+        policy["currency"] = "USD"
+        policy["interim_dividend_cents"] = float(interim_year_cents.group(1))
+        policy["prior_interim_dividend_cents"] = float(interim_year_cents.group(2))
     if (
         "ordinary_dividend_pence" not in policy
         and "final_dividend_pence" not in policy
@@ -7786,6 +7862,9 @@ def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
         and "total_dividend_pence" not in policy
         and "dividend_cover_min" not in policy
         and "interim_dividend_pence" not in policy
+        and "full_year_dividend_cents" not in policy
+        and "final_dividend_cents" not in policy
+        and "interim_dividend_cents" not in policy
     ):
         return None
     if policy.get("proposed_cash_millions") and policy.get("ordinary_dividend_pence"):
@@ -7793,6 +7872,10 @@ def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
     elif policy.get("interim_cash_millions") and policy.get("interim_dividend_pence"):
         policy["parse_confidence"] = "high"
     elif policy.get("total_dividend_pence") or policy.get("full_year_dividend_pence"):
+        policy["parse_confidence"] = "high"
+    elif policy.get("full_year_dividend_cents") and policy.get("final_dividend_cents"):
+        policy["parse_confidence"] = "high"
+    elif policy.get("full_year_dividend_cents"):
         policy["parse_confidence"] = "high"
     return policy
 
@@ -8349,18 +8432,39 @@ def parse_ir_operating_cash_flow_highlights(body_text: str) -> dict[str, Any] | 
     """Parse USD/GBP IR deck operating-cash-flow period pairs (e.g. Hikma H1 slides)."""
     if not body_text or not body_text.strip():
         return None
+    prior: float | None = None
+    current: float | None = None
+    currency = "GBP"
     section_match = _OCF_HIGHLIGHT_SECTION_RE.search(body_text)
-    if section_match is None:
-        return None
-    section = body_text[section_match.start() : section_match.start() + 1200]
-    pair_match = _OCF_HIGHLIGHT_PAIR_RE.search(section)
-    if pair_match is None:
-        return None
-    prior = _parse_table_number(pair_match.group(1))
-    current = _parse_table_number(pair_match.group(2))
+    if section_match is not None:
+        section = body_text[section_match.start() : section_match.start() + 1200]
+        pair_match = _OCF_HIGHLIGHT_PAIR_RE.search(section)
+        if pair_match is not None:
+            prior = _parse_table_number(pair_match.group(1))
+            current = _parse_table_number(pair_match.group(2))
+            currency = "USD" if "$" in section[:400] else "GBP"
+    if prior is None or current is None:
+        window = body_text[:48000]
+        for pattern in (
+            _OCF_PROSE_MILLIONS_RE,
+            _OCF_ACTIVITIES_PROSE_RE,
+            _OCF_ACTIVITIES_HIGHLIGHTS_RE,
+        ):
+            match = pattern.search(window)
+            if match is None:
+                continue
+            current = _parse_table_number(match.group(1))
+            prior = _parse_table_number(match.group(2))
+            if current is not None and prior is not None:
+                snippet = match.group(0)
+                currency = (
+                    "USD"
+                    if "$" in snippet or "cents per share" in window[:12000].lower()
+                    else "GBP"
+                )
+                break
     if prior is None or current is None:
         return None
-    currency = "USD" if "$" in section[:400] else "GBP"
     lines = [
         {"label": "operating_cash_flow_prior", "amount_millions": prior},
         {"label": "operating_cash_flow_current", "amount_millions": current},

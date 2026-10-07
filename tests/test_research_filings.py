@@ -10076,6 +10076,66 @@ def test_eng_20260923_04_extract_ir_presentation_metrics_fgp_megp_hik(tmp_path: 
         assert saved["bridge_count"] == metrics["bridge_count"]
 
 
+def test_eng_20261007_04_hik_fy_ir_press_release_dividend_and_ocf_metrics(tmp_path: Path):
+    """eng-20261007-04: HIK.L FY combined IR PDF yields USD dividend policy + OCF bridge."""
+    from value_investor.research.filings import (
+        extract_ir_presentation_metrics,
+        parse_ir_dividend_policy,
+        parse_ir_operating_cash_flow_highlights,
+    )
+
+    fixture = Path("docs/data/research/HIK.L/sources/filings/bodies/ir_0e40d9707e30c3b7.txt")
+    if not fixture.is_file():
+        pytest.skip("HIK FY2025 combined press release body fixture not present")
+    body = fixture.read_text(encoding="utf-8")
+
+    dividend = parse_ir_dividend_policy(body)
+    assert dividend is not None
+    assert dividend["currency"] == "USD"
+    assert dividend["full_year_dividend_cents"] == 84.0
+    assert dividend["final_dividend_cents"] == 48.0
+    assert dividend["interim_dividend_cents"] == 36.0
+
+    ocf = parse_ir_operating_cash_flow_highlights(body)
+    assert ocf is not None
+    assert ocf["currency"] == "USD"
+    by_label = {line["label"]: line["amount_millions"] for line in ocf["lines"]}
+    assert by_label["operating_cash_flow_current"] == 436.0
+    assert by_label["operating_cash_flow_prior"] == 564.0
+
+    body_id = "ir_0e40d9707e30c3b7"
+    filings_dir = tmp_path / "HIK.L" / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_path = bodies_dir / f"{body_id}.txt"
+    body_path.write_text(body, encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": body_id,
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — hikma-pharmaceuticals-plc-2025-full-year-results-combined-press-release-vfinal.pdf",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    sources_dir = tmp_path / "HIK.L" / "sources"
+    sources_dir.mkdir()
+    metrics = extract_ir_presentation_metrics(filings_dir, "HIK.L", sources_dir=sources_dir)
+    assert metrics["dividend_policy_count"] >= 1
+    assert metrics["bridge_count"] >= 1
+    assert any(b.get("bridge_type") == "operating_cash_flow_highlight" for b in metrics["bridges"])
+    saved = json.loads((sources_dir / "ir_presentation_metrics.json").read_text(encoding="utf-8"))
+    assert saved["dividend_policy"][0]["full_year_dividend_cents"] == 84.0
+
+
 def test_eng_20260919_04_refetch_ir_allowlist_fetches_fgp_fy2026_body(tmp_path, monkeypatch):
     """FGP FY2026 results deck merges into filings index and accepts fetched PDF body."""
     from value_investor.research.filings import refetch_ir_allowlist_filing_bodies
