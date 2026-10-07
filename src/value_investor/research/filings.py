@@ -73,6 +73,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.hikma.com/media/5nyls5gx/hikma-2025-interim-results-presentation-07-aug-2025.pdf",
         "https://www.hikma.com/media/1u2besjf/april-2026-trading-update-vfinal.pdf",
     ],
+    # eng-20261007-02: ftse350 HOC.L gap-closure had 0/0 refetch (empty IR allowlist); hochschildmining.com PDFs.
+    "HOC.L": [
+        "https://www.hochschildmining.com/media/ntek4iun/hm-plc-2025-ara-for-website.pdf",
+        "https://www.hochschildmining.com/media/g15je1zy/1i_annual-results_-final-better-pdf.pdf",
+        "https://www.hochschildmining.com/media/mfdmgodd/1b_annual-results_final.pdf",
+        "https://www.hochschildmining.com/media/mzal0lnt/2b_h1-2026_final.pdf",
+        "https://www.hochschildmining.com/media/zdejiy4h/1f_h1-2026_final.pdf",
+    ],
     "ITV.L": [
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%202025%20FY%20Results%20Presentation.pdf",
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%20_%202025%20Interim%20Results%20Presentation.pdf",
