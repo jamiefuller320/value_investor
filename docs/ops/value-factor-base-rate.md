@@ -121,6 +121,9 @@ and not as a new paper book.
 excess next to those two UK premia. Refresh this JSON when the French cut
 is more than 18 months old (`check_value_factor_base_rate`).
 
+Shipped: `value_hurdle` on the assessment scoreboard. See
+[`assessment-scoreboard.md`](assessment-scoreboard.md).
+
 ### 3. Test only the part French did not already run
 
 **Closes the observe half of L561. Leaves L536 and L542 as the residual.**

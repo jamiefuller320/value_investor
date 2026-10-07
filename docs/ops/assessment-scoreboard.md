@@ -21,6 +21,7 @@ tracks, and the frozen books with their final record.
 | `excess_total_return_at_stress_cost` | trade log in each book's `automated_fund.json` | Every buy and sell in the window re-priced at 3% per side, as a share of starting capital. Shows how much of the excess survives a harsh cost world without running duplicate stress books. |
 | `ai_gate` | track `config.json` + [`screen_premise_backtest.json`](screen-premise-backtest.md) | Whether the AI research gate is on and how much of the buy tier it lets through. `binds: false` means the gate passes ≥80% of the buy tier, so the "AI" book is mostly the buy tier. |
 | `primary_vs_control` | `total_return_view.json` | Primary minus control total return on their common window. |
+| `value_hurdle` | `value_factor_base_rate.json` | Published UK high earnings/price and cash-earnings/price premia (full sample, annualised arithmetic percent, high minus the market) next to the primary book's window total-return excess. Not a paper book. A shortfall against this hurdle does not move knobs. |
 
 `headline` feeds the dashboard progress headline (`project_progress.py`):
 there is no hard-coded "ahead of schedule" or "AI beats rules" claim; stage
