@@ -392,9 +392,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.infineon.com/assets/row/public/documents/corporate/investors/annual-reports/2025/2025-annual-report-v01-00-en.pdf",
     ],
     # dax buy-tier deepen — eng-20260922-05: ESEF index empty; IR PDF seeds unmeasured names.
+    # eng-20261006-01: igc-20260920-03 0/0 — add H1 statutory report so library deepen clears thin_body (≥3).
     "HEI.DE": [
         "https://www.heidelbergmaterials.com/system/files/2026-03/HM_Annual_Financial_Statements_2025.pdf",
         "https://www.eqs-news.com/media/document/86940b2a-a5f1-41b6-8b27-6ee13543a147/assets/DE0006047004-JA-2025-EQ-D-00.pdf",
+        "https://www.heidelbergmaterials.com/system/files/2025-07/Heidelberg_Materials_Half-year_financial_report_2025.pdf",
     ],
     "DTG.DE": [
         "https://www.eqs-news.com/media/document/b1126fe6-ed3f-4d89-8d25-6c6d0e5aef50/assets/DE000DTR0CK8-JA-2025-EQ-E-00.pdf",
