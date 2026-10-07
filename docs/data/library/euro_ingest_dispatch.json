@@ -26,7 +26,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-07T10:51:57.596881+00:00",
+    "snapshot_at": "2026-10-07T11:20:58.874245+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 52,
     "unmeasured_buy_tier": 1,
@@ -99,7 +99,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-07T10:51:57.601278+00:00",
+  "evaluated_at": "2026-10-07T11:20:58.877972+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -172,7 +172,7 @@
         "ftse_smallcap not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-07T10:52:27.557566+00:00",
+        "snapshot_at": "2026-10-07T11:21:19.470689+00:00",
         "market_id": "ftse_smallcap",
         "buy_tier_count": 11,
         "unmeasured_buy_tier": 0,
@@ -234,59 +234,103 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-07T10:52:27.558032+00:00",
+      "evaluated_at": "2026-10-07T11:21:19.471161+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "ibex35"
+    "hang_seng"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "ibex35",
+      "market_id": "hang_seng",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=2, indexed_without_body=0)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=23)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
-      "parked_tickers": [],
+      "parked_tickers": [
+        "0285.HK",
+        "0288.HK",
+        "0857.HK",
+        "0868.HK",
+        "0968.HK",
+        "1109.HK",
+        "1113.HK",
+        "2020.HK",
+        "2331.HK",
+        "9961.HK"
+      ],
       "phase3_ready": false,
       "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "no benchmark configured for ibex35"
+        "no benchmark configured for hang_seng"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-07T10:52:28.048385+00:00",
-        "market_id": "ibex35",
-        "buy_tier_count": 5,
+        "snapshot_at": "2026-10-07T11:21:20.422042+00:00",
+        "market_id": "hang_seng",
+        "buy_tier_count": 26,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 2,
-        "indexed_without_body": 0,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 23,
         "bodies_min": 2,
-        "bodies_median": 3,
-        "bodies_max": 7,
+        "bodies_median": 12.0,
+        "bodies_max": 19,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [
-          "NTGY.MC",
-          "REP.MC"
+          "1109.HK"
         ],
-        "indexed_without_body_tickers": [],
-        "indexed_without_body_by_ticker": {},
-        "parked_tickers": [],
-        "parked_count": 0,
-        "effective_thin_body_buy_tier": 2,
-        "effective_thin_body_tickers": [
-          "NTGY.MC",
-          "REP.MC"
+        "indexed_without_body_tickers": [
+          "1024.HK",
+          "2331.HK",
+          "1113.HK",
+          "0288.HK",
+          "1109.HK",
+          "0857.HK",
+          "2020.HK",
+          "0868.HK",
+          "0285.HK",
+          "9961.HK",
+          "0968.HK"
         ],
-        "effective_indexed_without_body": 0,
-        "effective_indexed_without_body_tickers": [],
+        "indexed_without_body_by_ticker": {
+          "1024.HK": 1,
+          "2331.HK": 1,
+          "1113.HK": 1,
+          "0288.HK": 2,
+          "1109.HK": 9,
+          "0857.HK": 2,
+          "2020.HK": 1,
+          "0868.HK": 2,
+          "0285.HK": 1,
+          "9961.HK": 2,
+          "0968.HK": 1
+        },
+        "parked_tickers": [
+          "0285.HK",
+          "0288.HK",
+          "0857.HK",
+          "0868.HK",
+          "0968.HK",
+          "1109.HK",
+          "1113.HK",
+          "2020.HK",
+          "2331.HK",
+          "9961.HK"
+        ],
+        "parked_count": 10,
+        "effective_thin_body_buy_tier": 0,
+        "effective_thin_body_tickers": [],
+        "effective_indexed_without_body": 1,
+        "effective_indexed_without_body_tickers": [
+          "1024.HK"
+        ],
         "ingest_exhausted": false
       },
       "filing_gaps": 0,
@@ -301,14 +345,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-07T10:52:28.048616+00:00",
+      "evaluated_at": "2026-10-07T11:21:20.422885+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "ftse_smallcap",
-    "ibex35"
+    "hang_seng"
   ],
   "market_queue": [
     "sp500",
@@ -338,11 +382,11 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 10,
-    "skip_stream_2_now": false,
+    "hour_utc": 11,
+    "skip_stream_2_now": true,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
-    "reason": "Head euro_depth still has filing gaps; stream 1/2 run spare fractions (0.50/0.25).",
+    "reason": "Head euro_depth still has filing gaps; stream 2 yields hour 11:00 UTC to the fat slot.",
     "config": {
       "enabled": true,
       "stream_1_target_fraction": 0.5,
@@ -364,7 +408,7 @@
     "ftse_smallcap"
   ],
   "scheduler_stream_2_markets": [
-    "ibex35"
+    "hang_seng"
   ],
   "should_run_library_maintenance": true
 }
