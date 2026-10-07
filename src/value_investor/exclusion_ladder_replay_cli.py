@@ -9,7 +9,6 @@ from pathlib import Path
 
 from value_investor.exclusion_ladder_replay import (
     DEFAULT_PARENT_TRACK,
-    DEFAULT_TRACKS,
     format_exclusion_ladder_replay_text,
     run_exclusion_ladder_replay,
     spawn_exclusion_shadow,
@@ -41,8 +40,8 @@ def main(argv: list[str] | None = None) -> int:
     run_p.add_argument(
         "--tracks",
         type=str,
-        default=",".join(DEFAULT_TRACKS),
-        help="Comma-separated track ids (default: ai_judgment,rules)",
+        default="",
+        help="Comma-separated track ids (default: unfrozen assessment-model primary,control)",
     )
     run_p.add_argument("--json", action="store_true")
 
@@ -67,7 +66,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.command == "run":
-        tracks = tuple(t.strip() for t in args.tracks.split(",") if t.strip()) or DEFAULT_TRACKS
+        tracks = tuple(t.strip() for t in args.tracks.split(",") if t.strip()) or None
         review = run_exclusion_ladder_replay(
             args.paper_root,
             data_dir=args.data_dir,

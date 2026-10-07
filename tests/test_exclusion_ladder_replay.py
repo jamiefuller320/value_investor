@@ -180,3 +180,40 @@ def test_spawn_exclusion_shadow_creates_config(tmp_path: Path):
     assert shadow.is_exclusion_shadow is True
     assert shadow.min_conviction == 0.35
     assert shadow.skip_timing_wait is True
+
+
+def test_replay_defaults_to_model_books_and_blocks_unsupported_spawn(tmp_path: Path, monkeypatch):
+    from value_investor import exclusion_ladder_replay as mod
+
+    paper = tmp_path / "paper_automation"
+    paper.mkdir()
+    (paper / "assessment_model.json").write_text(
+        json.dumps(
+            {
+                "primary_track": "ai_judgment_fair",
+                "control_track": "buy_tier_level",
+                "frozen_tracks": {"ai_judgment": {}, "rules": {}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    seen: list[str] = []
+
+    def _fake_replay(track_dir, **kwargs):
+        seen.append(Path(track_dir).name)
+        return {
+            "ladder_steps": [
+                {
+                    "step_id": kwargs["recommended_step_id"],
+                    "replay": {"log_entries_replayed": 5, "return_delta_vs_actual": 0.02},
+                }
+            ]
+        }
+
+    monkeypatch.setattr(mod, "replay_track_exclusion_ladder", _fake_replay)
+    review = run_exclusion_ladder_replay(paper, data_dir=tmp_path, recommended_step_id="u4")
+    assert seen == ["ai_judgment_fair", "buy_tier_level"]
+    readiness = review["readiness"]
+    assert readiness["primary_track_id"] == "ai_judgment_fair"
+    assert readiness["replay_beats_actual"] is True
+    assert readiness["ready_for_shadow_spawn"] is False

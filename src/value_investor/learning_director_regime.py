@@ -269,7 +269,7 @@ def build_regime_summary(
     rec_summary = (rec_row or {}).get("summary") or {}
     rec_hindsight = (rec_row or {}).get("hindsight_summary") or {}
 
-    primary_track = (ladder_replay.get("tracks") or {}).get("ai_judgment") or {}
+    primary_track = (ladder_replay.get("tracks") or {}).get(primary_track_id(paper_root)) or {}
     rec_replay = None
     for step in primary_track.get("ladder_steps") or []:
         if step.get("is_recommended"):

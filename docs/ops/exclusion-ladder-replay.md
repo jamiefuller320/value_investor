@@ -17,10 +17,16 @@ Complements [exclusion-universe-archive-sim.md](exclusion-universe-archive-sim.m
 
 Requires acted `rebalance_log` entries on target tracks (≥2 for meaningful replay).
 
+**Assessment model (2026-10-06).** `run` defaults to the unfrozen primary and control in
+`paper_automation/assessment_model.json` (today `ai_judgment_fair`, `buy_tier_level`).
+Exclusion shadows only support the `ai_judgment` parent, which is frozen, so
+`readiness.ready_for_shadow_spawn` stays false; `replay_beats_actual` still reports
+whether the recommended rung beats the primary's actual book (observe-only).
+
 ## Commands
 
 ```bash
-# Replay default ladder on ai_judgment + rules
+# Replay default ladder on the assessment-model primary + control
 ftse-exclusion-ladder-replay run \
   --paper-root docs/data/paper_automation \
   --data-dir docs/data
