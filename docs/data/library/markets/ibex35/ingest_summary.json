@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-06T10:41:50.017229+00:00",
+  "run_at": "2026-10-07T07:55:38.637100+00:00",
   "market_id": "ibex35",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-06T10:41:24.031501+00:00",
+    "snapshot_at": "2026-10-07T07:55:11.850445+00:00",
     "market_id": "ibex35",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -41,7 +41,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-06T10:41:43.997836+00:00",
+    "snapshot_at": "2026-10-07T07:55:34.316163+00:00",
     "market_id": "ibex35",
     "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
@@ -61,16 +61,16 @@
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
-    "parked_tickers": [
+    "parked_tickers": [],
+    "parked_count": 0,
+    "effective_thin_body_buy_tier": 2,
+    "effective_thin_body_tickers": [
       "NTGY.MC",
       "REP.MC"
     ],
-    "parked_count": 2,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -101,14 +101,10 @@
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "ibex35"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "ibex35",
-    "assessed_at": "2026-10-06T10:41:24.520589+00:00",
+    "assessed_at": "2026-10-07T07:55:12.331516+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -133,9 +129,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 18.98667595099994,
+  "used_seconds": 21.501343067000107,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3581.013324049,
+  "leftover_seconds": 3578.498656933,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -143,32 +139,11 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ibex35",
-    "updated_at": "2026-10-06T10:41:44.000208+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-10-07T07:55:34.318841+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
-    "parked": [
-      {
-        "ticker": "NTGY.MC",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-25T20:32:38.061856+00:00",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true
-      },
-      {
-        "ticker": "REP.MC",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-25T20:32:38.061856+00:00",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true
-      }
-    ],
+    "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
@@ -177,42 +152,22 @@
       "NTGY.MC",
       "REP.MC"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "NTGY.MC",
+      "REP.MC"
+    ],
+    "surface_released": [],
     "path": "docs/data/library/markets/ibex35/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "ibex35",
-    "ingest_exhausted_markets": [
-      "aex",
-      "asx200",
-      "atx",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "hang_seng",
-      "ibex35",
-      "nasdaq100",
-      "omxs30",
-      "psi20",
-      "smi",
-      "sp500",
-      "sti",
-      "tsx60",
-      "us_adr_asia"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "ibex35"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 138,
+    "task_count": 141,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "hunter_tickers": [
