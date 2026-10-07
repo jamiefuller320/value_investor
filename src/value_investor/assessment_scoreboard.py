@@ -35,6 +35,7 @@ DEFAULT_STORE_PATH = Path("docs/data/assessment_scoreboard.json")
 TOTAL_RETURN_VIEW_FILENAME = "total_return_view.json"
 TRACK_STATISTICS_FILENAME = "track_statistics.json"
 SCREEN_PREMISE_FILENAME = "screen_premise_backtest.json"
+VALUE_FACTOR_BASE_RATE_FILENAME = "value_factor_base_rate.json"
 FUND_FILENAME = "automated_fund.json"
 CONFIG_FILENAME = "config.json"
 
@@ -216,6 +217,7 @@ def build_assessment_scoreboard(
     total_return = _read(data_dir / TOTAL_RETURN_VIEW_FILENAME)
     statistics = _read(data_dir / TRACK_STATISTICS_FILENAME)
     screen_premise = _read(data_dir / SCREEN_PREMISE_FILENAME)
+    base_rate = _read(data_dir / VALUE_FACTOR_BASE_RATE_FILENAME)
     tr_tracks = total_return.get("tracks") or {}
     stat_tracks = statistics.get("tracks") or {}
 
@@ -261,6 +263,17 @@ def build_assessment_scoreboard(
         )
     order = {"primary": 0, "control": 1, "twin": 2, "active": 3}
     rows.sort(key=lambda row: (order[row["role"]], row["track_id"]))
+    hurdle = published_value_hurdle(base_rate)
+    if hurdle is not None:
+        primary_row = next((row for row in rows if row["role"] == "primary"), None)
+        hurdle["primary_track"] = primary
+        hurdle["primary_excess_total_return"] = (
+            None if primary_row is None else primary_row.get("excess_total_return")
+        )
+        hurdle["primary_excess_is_window"] = (
+            "The primary figure is total-return excess over its scored window, not an "
+            "annualised rate. The premia are full-sample annualised arithmetic percent."
+        )
 
     comparison = None
     for pair in (total_return.get("pairs") or {}).values():
@@ -308,8 +321,10 @@ def build_assessment_scoreboard(
             "total_return_view_updated_at": total_return.get("updated_at"),
             "track_statistics_updated_at": statistics.get("updated_at"),
             "screen_premise_generated_at": screen_premise.get("generated_at"),
+            "value_factor_base_rate_built_at": base_rate.get("built_at"),
         },
-        "headline": headline(rows, comparison),
+        "headline": headline(rows, comparison, hurdle),
+        "value_hurdle": hurdle,
         "tracks": rows,
         "primary_vs_control": comparison,
         "twins": [
@@ -326,11 +341,83 @@ def build_assessment_scoreboard(
     }
 
 
+def _annualised_leg(store: dict[str, Any], sort_key: str, label: str) -> dict[str, Any] | None:
+    pair = ((store.get("uk_local_value_weight") or {}).get(sort_key) or {}).get(
+        "high_minus_market"
+    ) or {}
+    full = (pair.get("windows") or {}).get("full") or {}
+    premium = full.get("annualised_arithmetic_pct")
+    if not isinstance(premium, (int, float)):
+        return None
+    return {
+        "label": label,
+        "annualised_arithmetic_pct": premium,
+        "t_stat": full.get("t_stat"),
+        "months": full.get("months"),
+        "start": pair.get("start"),
+        "end": pair.get("end"),
+    }
+
+
+def published_value_hurdle(base_rate: dict[str, Any]) -> dict[str, Any] | None:
+    """UK high earnings and cash-earnings premia, as a published hurdle.
+
+    This is not a paper book and not a reason to move knobs. The figures are
+    full-sample annualised arithmetic percent, high portfolio minus the market.
+    """
+    earnings = _annualised_leg(
+        base_rate, "earnings_price", "UK high earnings/price minus the market"
+    )
+    cash = _annualised_leg(
+        base_rate, "cash_earnings_price", "UK high cash earnings/price minus the market"
+    )
+    if earnings is None and cash is None:
+        return None
+    source = base_rate.get("source") or {}
+    return {
+        "kind": "published_base_rate",
+        "not_a_book": True,
+        "source": VALUE_FACTOR_BASE_RATE_FILENAME,
+        "us_data_cut": source.get("us_data_cut"),
+        "note": (
+            "Ken French UK local value-weight high-minus-market, full sample. "
+            "A hurdle beside the primary book. Not a holding and not evidence "
+            "that this screen earned the premium."
+        ),
+        "earnings_price": earnings,
+        "cash_earnings_price": cash,
+    }
+
+
 def _pct(value: Any) -> str:
     return "—" if value is None else f"{float(value):+.1%}"
 
 
-def headline(rows: list[dict[str, Any]], comparison: dict[str, Any] | None) -> str:
+def _hurdle_clause(hurdle: dict[str, Any] | None) -> str:
+    if not hurdle:
+        return ""
+    parts: list[str] = []
+    for key, short in (
+        ("earnings_price", "earnings/price"),
+        ("cash_earnings_price", "cash earnings/price"),
+    ):
+        leg = hurdle.get(key) or {}
+        premium = leg.get("annualised_arithmetic_pct")
+        if not isinstance(premium, (int, float)):
+            continue
+        t_stat = leg.get("t_stat")
+        t_bit = "" if not isinstance(t_stat, (int, float)) else f" (t={t_stat:g})"
+        parts.append(f"{short} {premium:+.2f}%/yr{t_bit}")
+    if not parts:
+        return ""
+    return " Published hurdle, not this book: UK high " + ", ".join(parts) + "."
+
+
+def headline(
+    rows: list[dict[str, Any]],
+    comparison: dict[str, Any] | None,
+    hurdle: dict[str, Any] | None = None,
+) -> str:
     primary = next((row for row in rows if row["role"] == "primary"), None)
     if primary is None or primary.get("total_return") is None:
         return "Primary book has no scored window yet."
@@ -349,7 +436,7 @@ def headline(rows: list[dict[str, Any]], comparison: dict[str, Any] | None) -> s
         text += (
             f" vs {comparison['control']}: {_pct(comparison['difference'])} on the common window."
         )
-    return text
+    return text + _hurdle_clause(hurdle)
 
 
 def refresh_assessment_scoreboard(

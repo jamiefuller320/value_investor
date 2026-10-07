@@ -13,6 +13,7 @@ from value_investor.assessment_scoreboard import (
     build_assessment_scoreboard,
     gate_status,
     ops_finding_from_assessment_scoreboard,
+    published_value_hurdle,
     stress_cost_sensitivity,
 )
 from value_investor.paper_automation import ensure_learning_track_configs
@@ -160,6 +161,56 @@ def test_build_scoreboard_orders_roles_and_lists_frozen(tmp_path: Path):
     assert board["frozen_tracks"][0]["lifetime_excess_total_return"] == -0.29
     assert "not yet distinguishable from the market" in board["headline"]
     assert "buy_tier_level_dca: -1.0%" in board["headline"]
+    assert board["value_hurdle"] is None
+
+
+def test_value_hurdle_sits_beside_the_primary_and_does_not_warn(tmp_path: Path):
+    data = _seed(tmp_path)
+    _write(
+        data / "value_factor_base_rate.json",
+        {
+            "built_at": "2026-10-07T00:00:00+00:00",
+            "source": {"us_data_cut": "202608"},
+            "uk_local_value_weight": {
+                "earnings_price": {
+                    "high_minus_market": {
+                        "start": 197501,
+                        "end": 202512,
+                        "windows": {
+                            "full": {
+                                "months": 612,
+                                "annualised_arithmetic_pct": 2.72,
+                                "t_stat": 2.55,
+                            }
+                        },
+                    }
+                },
+                "cash_earnings_price": {
+                    "high_minus_market": {
+                        "start": 197501,
+                        "end": 202512,
+                        "windows": {
+                            "full": {
+                                "months": 612,
+                                "annualised_arithmetic_pct": 3.24,
+                                "t_stat": 2.73,
+                            }
+                        },
+                    }
+                },
+            },
+        },
+    )
+    board = build_assessment_scoreboard(data, now=WHEN)
+    hurdle = board["value_hurdle"]
+    assert hurdle["not_a_book"] is True
+    assert hurdle["earnings_price"]["annualised_arithmetic_pct"] == 2.72
+    assert hurdle["cash_earnings_price"]["annualised_arithmetic_pct"] == 3.24
+    assert hurdle["primary_excess_total_return"] == board["tracks"][0]["excess_total_return"]
+    assert "UK high earnings/price +2.72%/yr (t=2.55)" in board["headline"]
+    assert "cash earnings/price +3.24%/yr (t=2.73)" in board["headline"]
+    assert ops_finding_from_assessment_scoreboard(board) is None
+    assert published_value_hurdle({}) is None
 
 
 def test_finding_fires_when_primary_trails_control_by_five_points(tmp_path: Path):

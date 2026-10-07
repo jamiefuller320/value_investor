@@ -79,6 +79,23 @@ def assessed_track_ids(base_dir: Path) -> list[str]:
     return out
 
 
+BINDING_AI_GATE_TRACK_ID = "ai_judgment_binding_gate"
+
+
+def binding_ai_gate_refusal(track_id: str, varied: dict[str, Any] | None = None) -> str | None:
+    """N189. Do not open a book whose only change is a binding AI research gate.
+
+    The instrument is ``ai_gate_spread`` on the screen-premise backtest.
+    """
+    varied = varied or {}
+    if track_id == BINDING_AI_GATE_TRACK_ID or varied.get("binding_ai_gate"):
+        return (
+            "N189: do not open a binding AI-gate book. The instrument is "
+            "ai_gate_spread on the screen-premise backtest."
+        )
+    return None
+
+
 def register_twin(
     base_dir: Path,
     *,
@@ -92,6 +109,9 @@ def register_twin(
 ) -> dict[str, Any]:
     """Record a cold-start twin of an active book (idempotent: first record wins)."""
     base_dir = Path(base_dir)
+    refusal = binding_ai_gate_refusal(track_id, varied)
+    if refusal:
+        raise ValueError(refusal)
     if is_track_frozen(base_dir, parent_track_id):
         raise ValueError(f"Parent {parent_track_id!r} is frozen; twins need an active parent")
     model = load_assessment_model(base_dir)

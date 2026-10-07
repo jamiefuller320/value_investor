@@ -104,6 +104,9 @@ epoch**. Leave published history as it is.
 **Exit:** a knob proposal cites total-return excess versus the All-Share
 total-return proxy. The price-only figure stays context. No live-signal edit.
 
+Shipped: `proposal_basis.json` plus `metrics.proposal` on FTSE decision reviews.
+See [`decision-review.md`](decision-review.md#proposal-basis-total-return-vs-all-share).
+
 ### 2. Report the French hurdle beside the books
 
 **Closes the measurement half of L532 and L537.** Does not close "our screen
@@ -117,6 +120,9 @@ and not as a new paper book.
 **Exit:** the assessment scoreboard shows the primary book's total-return
 excess next to those two UK premia. Refresh this JSON when the French cut
 is more than 18 months old (`check_value_factor_base_rate`).
+
+Shipped: `value_hurdle` on the assessment scoreboard. See
+[`assessment-scoreboard.md`](assessment-scoreboard.md).
 
 ### 3. Test only the part French did not already run
 
@@ -137,6 +143,13 @@ and REITs from the industrial models only if the split shows those ratios
 moving the buy tier. A paid CRSP or Sharadar replay of `assign_signal` waits
 until steps 1 and 2 are the adoption metric, and only to test that residual.
 
+Shipped: `sector_splits` and `financials_real_estate_split`. The exclusion
+flag is true only when those sectors are ≥15% of the 28-day buy tier and
+move its spread by ≥1pp. Otherwise industrial models stay inclusive. On the
+snapshots in this store they are about 2% of the buy tier and move the
+28-day spread by less than 0.1pp, so the flag is false and the industrial
+models are unchanged. See [`screen-premise-backtest.md`](screen-premise-backtest.md).
+
 ### 4. Leave the 28-day weight learner disconnected
 
 **Holds N197.**
@@ -146,6 +159,10 @@ return. The US ex-dividend result says that is the part of value with no
 premium. `assign_signal` and `conviction_score` already ignore the weight.
 Keep it that way until a multi-year total-return score survives a holdout.
 
+Shipped as a lock: `LIVE_SIGNAL_IGNORES_MODEL_WEIGHTS_WHEN_COMPOSITE_PRESENT`.
+`assign_signal` keeps the same verdict when `composite_score` is present and
+the learned weight swings from 0 to 1. The learner still runs.
+
 ### 5. Do not open a binding AI-gate book for this question
 
 **Holds N189.**
@@ -154,6 +171,9 @@ The research gate passes about 92% of the buy tier. The faster test is the
 cross-sectional accumulate-versus-reject spread already on the screen-premise
 backtest. It is still noise. It becomes interesting after the buy tier itself
 is scored on total return against the hurdle in step 2.
+
+Shipped: `register_twin` refuses `ai_judgment_binding_gate` and any twin that
+sets `binding_ai_gate`. No such book is opened.
 
 ### 6. Teach the paper ledger terminal corporate events
 
@@ -165,6 +185,11 @@ evidence. Do this at the first holding that leaves the screened universe for
 one of those reasons. Until then, a longer paper history is not stronger
 evidence.
 
+Shipped: `settle_fund_corporate_actions` on the daily paper pass. Explicit
+feed only. A terminal event with no cash amount stays open and ops-monitor
+warns. The equity curve is not rewritten. See
+[`corporate-actions.md`](corporate-actions.md).
+
 ### 7. Net investor tax into yield before any non-UK judgement
 
 **Closes L563.**
@@ -173,6 +198,10 @@ After step 1, and before a non-UK shard is judged on total return or any
 stage-6 allocation, rank foreign yield after withholding and after the ISA
 versus taxable dividend treatment. Gross yield is the wrong cheapness input
 for this investor.
+
+Shipped as observe columns on non-UK library screens
+(`investor_net_yield_isa`, `investor_net_yield_taxable`). Live FTSE signals
+still use gross yield. See [`investor-yield.md`](investor-yield.md).
 
 ### 8. Write the halt on the paper books before unattended capital
 
@@ -183,6 +212,10 @@ sector weight, and currency concentration. The action is freeze new buys or
 flatten to cash, then wait for a human. Hypothesis integrity can keep
 tolerating underwater names inside that bound. Ship the halt as an observe
 rule first. Live capital does not start without it.
+
+Shipped observe-only: `docs/data/paper_halt.json`. Thresholds are 20%
+drawdown, 40% of NAV in one name, 50% in one sector, and the currency rules
+in [`paper-halt.md`](paper-halt.md). A breach warns. The book is not frozen.
 
 ## Refresh
 

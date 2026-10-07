@@ -245,6 +245,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "amf_direct_coverage.json" in optional_line
     assert "cision_direct_coverage.json" in optional_line
     assert "assessment_scoreboard.json" in optional_line
+    assert "paper_halt.json" in optional_line
     owned_line = next(
         line for line in text.splitlines() if "GHA_COMMIT_OWNED" in line and ":-" in line
     )
@@ -266,3 +267,4 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "amf_direct_coverage.json" not in owned_line
     assert "cision_direct_coverage.json" not in owned_line
     assert "assessment_scoreboard.json" not in owned_line
+    assert "paper_halt.json" not in owned_line

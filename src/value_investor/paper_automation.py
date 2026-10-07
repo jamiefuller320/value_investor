@@ -1174,6 +1174,11 @@ def run_daily_automation(
     gate = session_gate_status(config, now)
     fund_path = output_dir / FUND_FILENAME
     fund = ensure_automated_fund(fund_path, config)
+    from value_investor.corporate_actions import settle_fund_corporate_actions
+
+    settlement = settle_fund_corporate_actions(fund, output_dir, as_of=gate.get("local_time"))
+    if settlement.get("changed"):
+        save_automated_fund(fund_path, fund)
     watchlist = load_watchlist(output_dir / WATCHLIST_FILENAME)
 
     screen_rows = load_screen_candidates(reports_path)

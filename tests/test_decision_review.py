@@ -6,12 +6,14 @@ from unittest.mock import patch
 
 from value_investor.decision_review import (
     MIN_EPOCH_DAYS,
+    PROPOSAL_BASIS_FILENAME,
     BookMetrics,
     LearningKnobs,
     compute_book_metrics,
     detect_saturated_knobs,
     ensure_knob_epoch,
     estimate_counterfactual_preview,
+    format_review_text,
     max_positions_bounds_for,
     metrics_for_review,
     propose_knob_updates,
@@ -28,6 +30,7 @@ from value_investor.paper_fund import (
     PaperFundConfig,
     select_automated_targets,
 )
+from value_investor.total_return_view import TickerHistory, total_return_excess_since
 
 
 def _significant_stats(
@@ -904,3 +907,167 @@ def test_review_omits_since_zero_datum_without_provenance(tmp_path: Path):
         output_dir=out, apply=False, fetch_benchmark=False, benchmark_return=0.05
     )
     assert "since_zero_datum" not in result.metrics
+
+
+def _write_invested_book(out: Path) -> None:
+    """Five sleeves, cost drag between the weak and strong thresholds, cash tight."""
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Auto",
+            mode="automated",
+            initial_cash=1000,
+            trade_cost_pct=0.03,
+            max_positions=5,
+        )
+    )
+    for i, ticker in enumerate(["AAA.L", "BBB.L", "CCC.L", "DDD.L", "EEE.L"]):
+        fund.buy(
+            ticker=ticker,
+            price=10,
+            sizing_mode="cash",
+            amount=190,
+            sector="Industrials",
+            name=ticker,
+            acted_at=f"2026-01-0{i + 1}T12:00:00+00:00",
+        )
+    for i in range(4):
+        fund.record_mark(
+            {t: 10.0 for t in fund.holdings},
+            note=f"m{i}",
+            acted_at=f"2026-03-0{i + 1}T12:00:00+00:00",
+        )
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "config.json").write_text(
+        __import__("json").dumps(
+            AutomationConfig(max_positions=5, sector_cap=1.0, min_conviction=0.0).to_dict()
+        ),
+        encoding="utf-8",
+    )
+    (out / "automated_fund.json").write_text(
+        __import__("json").dumps(fund.to_dict()),
+        encoding="utf-8",
+    )
+
+
+def test_total_return_excess_since_ignores_marks_before_the_epoch():
+    start = datetime(2026, 6, 1, tzinfo=UTC)
+    days = [start + timedelta(days=i) for i in range(6)]
+    navs = [1000.0, 1100.0, 1000.0, 1000.0, 1010.0, 1020.0]
+    fund = {
+        "equity_curve": [
+            {
+                "at": day.isoformat(),
+                "portfolio_value": nav,
+                "contributed_capital": 1000.0,
+            }
+            for day, nav in zip(days, navs, strict=True)
+        ],
+        "trades": [],
+    }
+
+    def _fetch(ticker: str, first, last) -> TickerHistory:
+        del ticker, first, last
+        closes = {(start - timedelta(days=10) + timedelta(days=i)).date(): 100.0 for i in range(40)}
+        return TickerHistory(closes=closes, dividends={})
+
+    scored = total_return_excess_since(fund, days[2], history_fetcher=_fetch)
+    assert scored is not None
+    assert scored["marks"] == 4
+    assert scored["price_return"] == 0.02
+    assert scored["excess_total_return"] == 0.02
+    assert total_return_excess_since(fund, days[5], history_fetcher=_fetch) is None
+
+
+def test_price_only_review_does_not_open_total_return_epoch(tmp_path: Path):
+    out = tmp_path / "rules"
+    _write_invested_book(out)
+    result = run_decision_review(
+        output_dir=out,
+        apply=False,
+        fetch_benchmark=False,
+        benchmark_return=-0.05,
+        statistics_path=_significant_stats(tmp_path),
+    )
+    assert "proposal" not in result.metrics
+    assert not (out / PROPOSAL_BASIS_FILENAME).exists()
+    assert "total-return excess" not in " ".join(result.reasons)
+
+
+def test_non_ftse_book_keeps_price_excess_for_proposals(tmp_path: Path):
+    out = tmp_path / "sp500"
+    _write_invested_book(out)
+    result = run_decision_review(
+        output_dir=out,
+        apply=False,
+        fetch_benchmark=True,
+        benchmark_ticker="^GSPC",
+        benchmark_return=-0.05,
+        statistics_path=_significant_stats(tmp_path, benchmark_ticker="^GSPC"),
+    )
+    assert "proposal" not in result.metrics
+    assert not (out / PROPOSAL_BASIS_FILENAME).exists()
+
+
+def test_thin_total_return_epoch_does_not_reuse_price_excess(tmp_path: Path):
+    out = tmp_path / "rules"
+    _write_invested_book(out)
+    with patch(
+        "value_investor.decision_review.total_return_excess_since",
+        return_value=None,
+    ):
+        first = run_decision_review(
+            output_dir=out,
+            apply=False,
+            fetch_benchmark=True,
+            benchmark_return=0.20,
+            statistics_path=_significant_stats(tmp_path),
+        )
+        second = run_decision_review(
+            output_dir=out,
+            apply=False,
+            fetch_benchmark=True,
+            benchmark_return=0.20,
+            statistics_path=_significant_stats(tmp_path),
+        )
+    assert first.metrics["excess_after_costs"] < 0
+    proposal = first.metrics["proposal"]
+    assert proposal["used_for_proposals"] is False
+    assert proposal["excess"] is None
+    assert proposal["price_excess_after_costs"] == first.metrics["excess_after_costs"]
+    assert proposal["benchmark"] == "FTAL.L"
+    assert "max_positions" not in first.proposed_changes
+    assert any("not used for proposals" in reason for reason in first.reasons)
+    assert "waiting for two total-return marks" in format_review_text(first)
+    basis = __import__("json").loads((out / PROPOSAL_BASIS_FILENAME).read_text(encoding="utf-8"))
+    assert basis["started_at"] == proposal["started_at"] == second.metrics["proposal"]["started_at"]
+
+
+def test_knob_proposal_follows_total_return_excess_not_price(tmp_path: Path):
+    out = tmp_path / "rules"
+    _write_invested_book(out)
+    window = {
+        "excess_total_return": 0.05,
+        "marks": 3,
+        "benchmark_total_return": 0.01,
+        "total_return": 0.06,
+    }
+    with patch(
+        "value_investor.decision_review.total_return_excess_since",
+        return_value=window,
+    ):
+        result = run_decision_review(
+            output_dir=out,
+            apply=False,
+            fetch_benchmark=True,
+            benchmark_return=0.20,
+            statistics_path=_significant_stats(tmp_path),
+        )
+    assert result.metrics["excess_after_costs"] < 0
+    assert result.metrics["proposal"]["used_for_proposals"] is True
+    assert result.metrics["proposal"]["excess"] == 0.05
+    assert result.proposed_changes["max_positions"] == 6
+    assert any("Strong total-return excess vs FTAL.L" in reason for reason in result.reasons)
+    assert not any(reason.startswith("Weak ") for reason in result.reasons)
+    text = format_review_text(result)
+    assert "Proposal excess (total return vs FTAL.L" in text
+    assert "+5.0%" in text

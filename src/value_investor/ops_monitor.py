@@ -2638,6 +2638,103 @@ def check_backtest_history(
     return findings
 
 
+def check_paper_halt(
+    *,
+    paper_root: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only drawdown and concentration halt. Does not change books."""
+    from value_investor.paper_halt import DEFAULT_STORE_PATH, finding_for_halt, refresh_paper_halt
+
+    root = Path(paper_root) if paper_root is not None else Path("docs/data/paper_automation")
+    if not root.exists():
+        return []
+    payload = refresh_paper_halt(
+        root,
+        store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+        persist=persist,
+    )
+    finding = finding_for_halt(payload)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
+def check_investor_yield(
+    *,
+    library_root: Path | None = None,
+) -> list[OpsFinding]:
+    """Warn when a non-UK library screen has no investor net-yield column.
+
+    Observe-only. Does not change live FTSE signals or re-rank a book.
+    """
+    from value_investor.investor_yield import finding_for_library
+
+    root = Path(library_root) if library_root is not None else Path("docs/data/library")
+    if not root.exists():
+        return []
+    finding = finding_for_library(root)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
+def check_unsettled_corporate_actions(
+    *,
+    paper_root: Path | None = None,
+) -> list[OpsFinding]:
+    """Warn when a terminal corporate action has no cash amount.
+
+    Observe-only. Does not zero the position or rewrite the equity curve.
+    """
+    from value_investor.corporate_actions import finding_for_funds
+    from value_investor.paper_automation import FUND_FILENAME, learning_track_dirs
+    from value_investor.paper_fund import PaperFund
+
+    root = Path(paper_root) if paper_root is not None else Path("docs/data/paper_automation")
+    if not root.exists():
+        return []
+    funds: list[tuple[str, PaperFund]] = []
+    for track_id, track_dir in learning_track_dirs(root).items():
+        path = Path(track_dir) / FUND_FILENAME
+        if not path.exists():
+            continue
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            funds.append((track_id, PaperFund.from_dict(payload)))
+        except (OSError, json.JSONDecodeError, TypeError, ValueError):
+            continue
+    finding = finding_for_funds(funds)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_value_factor_base_rate(
     *,
     store_path: Path | None = None,
@@ -3360,6 +3457,9 @@ def collect_ops_findings(
     findings.extend(check_value_factor_base_rate())
     findings.extend(check_assessment_scoreboard())
     findings.extend(check_paper_learning_tracks())
+    findings.extend(check_unsettled_corporate_actions())
+    findings.extend(check_investor_yield())
+    findings.extend(check_paper_halt())
     findings.extend(check_deferred_triggers())
 
     engineering_findings, queue_status = check_engineering_queue(

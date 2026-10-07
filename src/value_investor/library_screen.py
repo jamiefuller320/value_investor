@@ -324,6 +324,9 @@ def run_library_screen(
     model_results = evaluate_universe(universe)
     summary = summarize_by_ticker(model_results, weights=weight_state.weights)
     signals = build_signals(universe, model_results, summary)
+    from value_investor.investor_yield import attach_investor_yield
+
+    signals = attach_investor_yield(signals, market_id)
 
     history = load_signal_history(screen_dir)
     if history is not None and not history.empty:

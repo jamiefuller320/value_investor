@@ -34,6 +34,12 @@ def _min_passes(model_count: int, fraction: float, floor: int) -> int:
     return max(floor, int(model_count * fraction))
 
 
+# N197. update_model_weights may write weighted_model_score from 28-day price
+# correlation. Once composite_score is present, the live signal uses that
+# composite and the sector composite only.
+LIVE_SIGNAL_IGNORES_MODEL_WEIGHTS_WHEN_COMPOSITE_PRESENT = True
+
+
 def assign_signal(
     *,
     models_passed: int,

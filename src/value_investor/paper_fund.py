@@ -379,6 +379,8 @@ class PaperFund:
     equity_curve: list[dict[str, Any]] = field(default_factory=list)
     last_mark_at: str | None = None
     rebalance_state: RebalanceState = field(default_factory=RebalanceState)
+    settled_corporate_actions: list[str] = field(default_factory=list)
+    unsettled_corporate_actions: list[dict[str, Any]] = field(default_factory=list)
 
     @classmethod
     def create(cls, config: PaperFundConfig) -> PaperFund:
@@ -679,6 +681,8 @@ class PaperFund:
             "equity_curve": list(self.equity_curve),
             "last_mark_at": self.last_mark_at,
             "rebalance_state": self.rebalance_state.to_dict(),
+            "settled_corporate_actions": list(self.settled_corporate_actions),
+            "unsettled_corporate_actions": list(self.unsettled_corporate_actions),
         }
 
     @classmethod
@@ -720,6 +724,14 @@ class PaperFund:
             equity_curve=list(data.get("equity_curve") or []),
             last_mark_at=data.get("last_mark_at"),
             rebalance_state=RebalanceState.from_dict(data.get("rebalance_state")),
+            settled_corporate_actions=[
+                str(item) for item in (data.get("settled_corporate_actions") or [])
+            ],
+            unsettled_corporate_actions=[
+                dict(item)
+                for item in (data.get("unsettled_corporate_actions") or [])
+                if isinstance(item, dict)
+            ],
         )
 
 

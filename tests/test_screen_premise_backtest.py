@@ -8,6 +8,7 @@ from value_investor.screen_premise_backtest import (
     STORE_FAILED_TITLE,
     ai_gate_finding_from_screen_premise_backtest,
     build_screen_premise_backtest,
+    financials_move_the_buy_tier,
     ops_finding_from_screen_premise_backtest,
     score_cohort,
     snapshot_verdicts,
@@ -143,6 +144,58 @@ def _gate_snapshot(run_at: str, week: int, *, gate_growth: float, reject_growth:
             growth = gate_growth if i < 4 else reject_growth
             payload["prices"][row["ticker"]] = round(100.0 * (1.0 + growth) ** week, 6)
     return payload
+
+
+def test_sector_split_separates_financials_real_estate_and_the_rest():
+    entry = _snapshot("2026-08-02T07:00:00+00:00", 0.0, 0.0, week=0)
+    exit_snap = _snapshot("2026-08-09T07:00:00+00:00", 0.0, 0.0, week=1)
+    for i, row in enumerate(entry["signals"]):
+        if i < 3:
+            row["sector"] = "Financial Services"
+            exit_snap["prices"][row["ticker"]] = 100.0
+        elif i == 3:
+            row["sector"] = "Real Estate"
+        else:
+            row["sector"] = "Industrials"
+            if row["signal"] == "buy":
+                exit_snap["prices"][row["ticker"]] = 110.0
+    scored = score_cohort(RunSnapshot(**entry), RunSnapshot(**exit_snap))
+    splits = scored["sector_splits"]
+    assert splits["financial_services"]["buy_tier_names"] == 3
+    assert splits["real_estate"]["buy_tier_names"] == 1
+    assert splits["rest"]["buy_tier_names"] == 2
+    assert splits["financials_and_real_estate_share"] == round(4 / 6, 4)
+    assert splits["financial_services"]["spread_vs_universe"] is not None
+    assert splits["rest"]["spread_vs_universe"] is None
+
+
+def test_financials_exclusion_needs_both_share_and_spread_move():
+    quiet = financials_move_the_buy_tier(
+        {
+            "buy_tier_spread": {"mean": 0.01},
+            "sector_splits": {"rest": {"mean": 0.012}},
+            "financials_and_real_estate_share": 0.4,
+        }
+    )
+    assert quiet["exclude_from_industrial_models"] is False
+    moved = financials_move_the_buy_tier(
+        {
+            "buy_tier_spread": {"mean": 0.0},
+            "sector_splits": {"rest": {"mean": 0.02}},
+            "financials_and_real_estate_share": 0.4,
+        }
+    )
+    assert moved["exclude_from_industrial_models"] is True
+    assert moved["spread_gap_rest_minus_full"] == 0.02
+    thin = financials_move_the_buy_tier(
+        {
+            "buy_tier_spread": {"mean": 0.0},
+            "sector_splits": {"rest": {"mean": 0.02}},
+            "financials_and_real_estate_share": 0.05,
+        }
+    )
+    assert thin["exclude_from_industrial_models"] is False
+    assert financials_move_the_buy_tier({})["exclude_from_industrial_models"] is False
 
 
 def test_score_cohort_ai_gate_and_conviction_half_spreads():

@@ -31,6 +31,9 @@ each cohort with an exit run at or after the horizon:
 | `ai_gate_pass_share` | Share of the buy tier the gate takes. Close to 100% means the gate barely binds and the spread cannot be measured well |
 | `conviction_half_spread` | Top half of the buy tier by `conviction_score` minus the bottom half. Within-cohort halves, so the 2026-09 conviction rescale does not bias it |
 | `dropped_unit_flips` | Names dropped because the forward return exceeded ±50% (pence/pound flips in frozen prices) |
+| `sector_splits` | Buy-tier forward return minus the screened universe, split into Financial Services, Real Estate, and the rest. A slice needs 3 names |
+
+`financials_real_estate_split` is the 28-day decision. Industrial models stay inclusive unless those two sectors are at least 15% of the buy tier **and** dropping them moves the buy-tier spread by at least 1 percentage point. A shortfall on either bar leaves `exclude_from_industrial_models` false. The backtest does not edit the models.
 
 Research verdicts come from the snapshot row when present. Older snapshots
 (before the 2026-10 fix) have empty research fields, so the verdict is looked up
