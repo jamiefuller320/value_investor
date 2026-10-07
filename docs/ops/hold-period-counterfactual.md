@@ -4,7 +4,7 @@ Observe-only instrument for one learning question:
 **would holding positions longer (fewer rank-driven "left target set" exits)
 improve after-cost return on the live books?**
 
-Closed holdings on the headline tracks last a median of about 4 days. Value
+Closed holdings on the live books last a median of about 4 days. Value
 premia are expected to accrue over years. The hold-buffer knob is
 `exit_confirm_screens`: the number of consecutive weekday screens a holding must
 sit outside the target set before it is sold (live value: 2). There is no
@@ -15,11 +15,13 @@ This instrument never changes books, knobs, gates or published metrics.
 ## What it computes
 
 Daily ops-monitor (`check_hold_period_counterfactual` in `collect_ops_findings`)
-reads each headline track's `rebalance_log.json` and `automated_fund.json`
+reads the `rebalance_log.json` and `automated_fund.json`
 under `docs/data/paper_automation/` and writes
 `docs/data/hold_period_counterfactual.json`.
 
-For `ai_judgment`, `rules`, `ai_judgment_fair` and `rules_fair`:
+For the primary and control in `assessment_model.json` (now `ai_judgment_fair`
+and `buy_tier_level`; frozen books are not replayed). `exit_buffer_twins` maps
+a book to its running twin that varies `exit_confirm_screens`.
 
 | Field | Meaning |
 |-------|---------|
@@ -63,10 +65,13 @@ sides share the same prices.
 
 | Title | Severity | Fires when |
 |-------|----------|------------|
-| **Longer holds beat live exit buffer in replay** | warn | For a track with `status: ok`, the best variant beats the baseline replay by ≥1 percentage point |
+| **Longer holds beat live exit buffer in replay** | warn | For a book with `status: ok` and no running exit-buffer twin, the best variant beats the baseline replay by ≥1 percentage point |
 | **Hold-period counterfactual observe failed** | warn | The refresh raised (bad JSON, unreadable files) |
 
 `auto_fixable=False`. Response: do **not** edit `exit_confirm_screens` on a live
-book. If the finding persists on the fair-cost books across several weeks, the
-next step is a cold-start hold-buffer twin with a frozen epoch ("twins over
-edits"). Decision-review knob proposals stay as they are.
+book. If the finding persists across several weeks, the next step is a
+cold-start hold-buffer twin with a frozen epoch ("twins over edits"). The
+primary already has one (`ai_judgment_hold5_fair`, L541), so the primary stays
+in the store but no longer raises the finding; its twin's readiness gate on the
+[assessment scoreboard](assessment-scoreboard.md#twins) decides. Decision-review
+knob proposals stay as they are.

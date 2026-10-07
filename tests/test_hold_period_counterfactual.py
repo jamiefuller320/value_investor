@@ -151,6 +151,57 @@ def test_ops_finding_only_for_faithful_edge():
     assert ops_finding_from_hold_period_counterfactual(_payload(0.05, "unreliable")) is None
 
 
+def test_ops_finding_skips_book_with_running_exit_buffer_twin():
+    payload = {**_payload(0.05), "exit_buffer_twins": {"rules_fair": "rules_hold5_fair"}}
+    assert ops_finding_from_hold_period_counterfactual(payload) is None
+
+
+def test_build_scores_primary_and_control_only(tmp_path: Path, monkeypatch):
+    from value_investor import hold_period_counterfactual as module
+
+    root = tmp_path / "paper"
+    for track_id in ("", "ai_judgment", "ai_judgment_fair", "buy_tier_level"):
+        path = root / track_id if track_id else root
+        path.mkdir(parents=True, exist_ok=True)
+        (path / "automated_fund.json").write_text("{}", encoding="utf-8")
+    for track_id, flag in (
+        ("ai_judgment_fair", "is_fair_cost_lab"),
+        ("buy_tier_level", "is_cohort_lab"),
+    ):
+        (root / track_id / "config.json").write_text(
+            json.dumps({"track_id": track_id, flag: True}), encoding="utf-8"
+        )
+    (root / "assessment_model.json").write_text(
+        json.dumps(
+            {
+                "primary_track": "ai_judgment_fair",
+                "control_track": "buy_tier_level",
+                "frozen_tracks": {"rules": {}, "ai_judgment": {}},
+                "twins": {
+                    "ai_judgment_hold5_fair": {
+                        "parent_track": "ai_judgment_fair",
+                        "varied": {"exit_confirm_screens": {"parent": 2, "twin": 5}},
+                    },
+                    "ai_judgment_graduated_fair": {
+                        "parent_track": "ai_judgment_fair",
+                        "varied": {"use_graduated_allocation": {"parent": False, "twin": True}},
+                    },
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    scored: list[str] = []
+    monkeypatch.setattr(
+        module, "score_track", lambda track_id, *_a: scored.append(track_id) or {"status": "ok"}
+    )
+
+    payload = module.build_hold_period_counterfactual(root, history_fetcher=_no_ratio)
+
+    assert scored == ["ai_judgment_fair", "buy_tier_level"]
+    assert payload["exit_buffer_twins"] == {"ai_judgment_fair": "ai_judgment_hold5_fair"}
+
+
 def test_check_hold_period_counterfactual_persists_and_reports(tmp_path: Path, monkeypatch):
     from value_investor import hold_period_counterfactual as module
     from value_investor.ops_monitor import check_hold_period_counterfactual
