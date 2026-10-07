@@ -7001,11 +7001,69 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_hei_de_index(tmp_path: Path
 
     meta = merge_ir_allowlist_filings("HEI.DE", filings_dir)
     assert meta["added"] >= 1
-    assert meta["total_allowlist"] >= 1
+    assert meta["total_allowlist"] >= 3
 
     payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
-    assert int(payload["summary"]["total"]) >= 1
+    assert int(payload["summary"]["total"]) >= 3
     assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_fetch_filings_ir_allowlist_hei_de_unmeasured_eng_20261006_01(tmp_path: Path):
+    """eng-20261006-01: HEI.DE unmeasured — IR allowlist when ESEF index is empty."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("HEI.DE", path=allowlist_path)
+    assert len(rows) >= 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert any(row["period"] == "annual" for row in rows)
+    assert any(row["period"] == "interim" for row in rows)
+    assert any("heidelbergmaterials.com" in row["url"] for row in rows)
+    assert "HEI.DE" in _BUILTIN_IR_URLS
+
+
+def test_fetch_filings_ir_allowlist_hei_de_h1_live_eng_20261006_01():
+    """eng-20261006-01: HEI.DE H1 2025 statutory PDF passes IR allowlist validation."""
+    rows = fetch_filings_ir_allowlist("HEI.DE")
+    interim = next(
+        row
+        for row in rows
+        if row["period"] == "interim" and "Half-year_financial_report_2025" in row["url"]
+    )
+    body = fetch_filing_body(interim["url"])
+    assert body and len(body) > 5000
+    assert "heidelberg" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(interim, body, ticker="HEI.DE")
+    assert valid, reason
+
+
+@patch("value_investor.research.filings.fetch_filing_body")
+def test_refetch_euro_filings_primary_bodies_hei_de_eng_20261006_01(mock_fetch, tmp_path: Path):
+    """eng-20261006-01: euro primary pipeline bootstraps empty HEI.DE index from IR allowlist."""
+    from value_investor.research.filings import refetch_euro_filings_primary_bodies
+
+    mock_fetch.return_value = (
+        "Heidelberg Materials consolidated financial statements revenue operating margin "
+        "half year interim report " * 40
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"with_body": 0, "total": 0}}),
+        encoding="utf-8",
+    )
+    result = refetch_euro_filings_primary_bodies(
+        filings_dir,
+        ticker="HEI.DE",
+        company_name="Heidelberg Materials AG",
+        max_bodies=5,
+    )
+    assert result["with_body_after"] >= 1
+    assert result["fetched"] >= 1
+    assert result["ir_allowlist"].get("allowlist_count", 0) >= 3
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 3
+    assert any(row.get("has_body") for row in payload.get("filings") or [])
 
 
 def test_fetch_filings_ir_allowlist_hang_seng_unmeasured_builtins_eng_20260930_03(
