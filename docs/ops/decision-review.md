@@ -136,6 +136,17 @@ closed: …"`, `config.json` is untouched and no knob epoch starts. **`--force`
 does not bypass the gate** (it only relaxes the history-thickness minimums).
 Frozen labs and shadows are skipped before the gate is consulted.
 
+FTSE books (`^FTSE` or `FTAL.L`) do not use this price file to open the gate.
+`total_return_significance_gate` scores daily active total return versus
+`FTAL.L` from `proposal_basis.started_at`: equity-curve marks, with dividend
+cash added on the ex-date as pounds divided by the prior mark's NAV. It opens
+only when that window has at least 20 daily periods and the 90% interval
+excludes zero. A thinner window, or a missing `FTAL.L` history, fails closed.
+The reason says price statistics are not used. Two marks are enough to propose
+a knob change and are not enough to apply it. Non-FTSE books, and reviews that
+skip the benchmark fetch, still use `significance_gate()` and
+`track_statistics.json`. The published price series in that file is unchanged.
+
 Every `decision_review.json` / history row carries `apply_policy` and the
 `significance_gate` record (verdict, interval, statistics timestamp, reason);
 `learning_tracks_review.json` carries `apply_policy`. The gate uses the
