@@ -33,6 +33,9 @@ def test_a_missing_row_does_not_advance_or_clear_the_streak():
     streaks: dict[str, int] = {}
     assert note_thesis_streak(streaks, "AAA.L", {"signal": "avoid"}) == 1
     assert note_thesis_streak(streaks, "AAA.L", None) == 1
-    assert note_thesis_streak(streaks, "AAA.L", {"signal": "buy", "research_verdict": "accumulate"}) == 0
+    assert (
+        note_thesis_streak(streaks, "AAA.L", {"signal": "buy", "research_verdict": "accumulate"})
+        == 0
+    )
     assert thesis_break_confirmed(1, 2) is False
     assert thesis_break_confirmed(2, 2) is True
