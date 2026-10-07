@@ -64,6 +64,43 @@ def test_piotroski_scores_financial_strength():
     assert result.score >= 0.75
 
 
+def test_assign_signal_ignores_weight_learner_when_composite_present():
+    from value_investor.signals import LIVE_SIGNAL_IGNORES_MODEL_WEIGHTS_WHEN_COMPOSITE_PRESENT
+
+    assert LIVE_SIGNAL_IGNORES_MODEL_WEIGHTS_WHEN_COMPOSITE_PRESENT
+    common = dict(
+        models_passed=2,
+        model_count=20,
+        mean_model_score=0.4,
+        families_passed=1,
+        family_count=5,
+        data_quality_score=0.85,
+        risk_family_passed=True,
+        risk_mean_score=0.7,
+        has_errors=False,
+    )
+    ignored = assign_signal(
+        **common,
+        weighted_model_score=1.0,
+        composite_score=0.4,
+        sector_composite_score=0.4,
+    )
+    also_ignored = assign_signal(
+        **common,
+        weighted_model_score=0.0,
+        composite_score=0.4,
+        sector_composite_score=0.4,
+    )
+    fallback = assign_signal(
+        **common,
+        weighted_model_score=1.0,
+        composite_score=None,
+        sector_composite_score=None,
+    )
+    assert ignored == also_ignored == Signal.AVOID
+    assert fallback == Signal.HOLD
+
+
 def test_assign_signal_strong_buy_scales_with_model_count():
     signal = assign_signal(
         models_passed=7,

@@ -159,6 +159,10 @@ return. The US ex-dividend result says that is the part of value with no
 premium. `assign_signal` and `conviction_score` already ignore the weight.
 Keep it that way until a multi-year total-return score survives a holdout.
 
+Shipped as a lock: `LIVE_SIGNAL_IGNORES_MODEL_WEIGHTS_WHEN_COMPOSITE_PRESENT`.
+`assign_signal` keeps the same verdict when `composite_score` is present and
+the learned weight swings from 0 to 1. The learner still runs.
+
 ### 5. Do not open a binding AI-gate book for this question
 
 **Holds N189.**
