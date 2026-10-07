@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import json
 from datetime import date
 from pathlib import Path
+
+import pytest
 
 from value_investor.entry_dca_execute import (
     PENDING_FILENAME,
@@ -43,3 +46,18 @@ def test_enable_writes_graduated_config_only(tmp_path: Path):
     cfg = (track / "config.json").read_text()
     assert "entry_dca_execute_cadence" in cfg
     assert (track / PENDING_FILENAME).exists()
+
+
+def test_enable_refuses_frozen_graduated_book(tmp_path: Path):
+    track = tmp_path / "graduated_allocation"
+    track.mkdir()
+    config = {"track_id": "graduated_allocation", "use_graduated_allocation": True}
+    write_json(track / "config.json", config)
+    (tmp_path / "assessment_model.json").write_text(
+        json.dumps({"frozen_tracks": {"graduated_allocation": {"reason": "stress"}}}),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="frozen"):
+        enable_graduated_entry_dca_execute(tmp_path, cadence="dca_4x_weekly")
+    assert "entry_dca_execute_cadence" not in (track / "config.json").read_text()
+    assert not (track / PENDING_FILENAME).exists()

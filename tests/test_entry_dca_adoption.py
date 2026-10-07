@@ -223,3 +223,26 @@ def test_twin_disagreement_blocks_out_of_sample(tmp_path: Path):
         "ai_judgment_fair": "dca_4x_weekly",
         "ai_judgment_hold5_fair": "dca_5x_weekday",
     }
+
+
+def test_frozen_graduated_book_blocks_execute_stage(tmp_path: Path):
+    data = tmp_path / "data"
+    paper = data / "paper_automation"
+    _write_rollup(paper, ai_first=3, rules_first=1, graduated_marks=8)
+    (paper / "assessment_model.json").write_text(
+        json.dumps({"frozen_tracks": {"graduated_allocation": {"reason": "stress"}}}),
+        encoding="utf-8",
+    )
+    record_ack(
+        data,
+        experiment_id="entry_dca_overlay",
+        finding={
+            "leading_cadence": "dca_4x_weekly",
+            "first_entry_by_track": {"ai_judgment": 1, "rules": 0},
+        },
+    )
+    plan = evaluate_entry_dca_adoption_plan(data_dir=data, paper_root=paper)
+    stage = {row["id"]: row for row in plan["stages"]}["paper_execute_graduated"]
+    assert stage["ready"] is False
+    assert stage["status"] == "blocked"
+    assert stage["evidence"]["graduated_frozen"] is True
