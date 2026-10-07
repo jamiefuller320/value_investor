@@ -104,6 +104,9 @@ epoch**. Leave published history as it is.
 **Exit:** a knob proposal cites total-return excess versus the All-Share
 total-return proxy. The price-only figure stays context. No live-signal edit.
 
+Shipped: `proposal_basis.json` plus `metrics.proposal` on FTSE decision reviews.
+See [`decision-review.md`](decision-review.md#proposal-basis-total-return-vs-all-share).
+
 ### 2. Report the French hurdle beside the books
 
 **Closes the measurement half of L532 and L537.** Does not close "our screen

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -25,6 +25,7 @@ from value_investor.paper_automation import (
 )
 from value_investor.paper_fund import PaperFund
 from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
+from value_investor.total_return_view import total_return_excess_since
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +34,9 @@ REVIEW_HISTORY_FILENAME = "decision_review_history.json"
 SHARD_META_FILENAME = "shard_meta.json"
 KNOB_EPOCH_FILENAME = "knob_epoch.json"
 KNOB_EPOCHS_HISTORY_FILENAME = "knob_epochs.json"
+PROPOSAL_BASIS_FILENAME = "proposal_basis.json"
+TOTAL_RETURN_PROPOSAL_BASIS = "total_return_vs_ftal"
+TOTAL_RETURN_PROPOSAL_BENCHMARK = "FTAL.L"
 
 MIN_EQUITY_MARKS = 4
 MIN_TRADES = 2
@@ -997,6 +1001,7 @@ def propose_knob_updates(
     knobs: LearningKnobs,
     *,
     max_positions_bounds: tuple[int, int] = MAX_POSITIONS_BOUNDS,
+    excess_label: str = "excess after costs",
 ) -> tuple[LearningKnobs, dict[str, Any], list[str]]:
     """
     Heuristic, small-step proposals from reviewed book outcomes.
@@ -1040,7 +1045,7 @@ def propose_knob_updates(
         if new_max < proposed.max_positions:
             proposed.max_positions = new_max
             changes["max_positions"] = new_max
-            reasons.append(f"Weak excess after costs ({excess:+.1%}) — reduce max_positions.")
+            reasons.append(f"Weak {excess_label} ({excess:+.1%}) — reduce max_positions.")
 
     # 3) Strong excess + tight cash use → allow one more sleeve.
     if _strong_excess_pressure(metrics, knobs):
@@ -1048,7 +1053,7 @@ def propose_knob_updates(
         if new_max > proposed.max_positions:
             proposed.max_positions = new_max
             changes["max_positions"] = new_max
-            reasons.append(f"Strong excess after costs ({excess:+.1%}) — raise max_positions.")
+            reasons.append(f"Strong {excess_label} ({excess:+.1%}) — raise max_positions.")
 
     # 4) Sector concentration above current cap → tighten.
     if _sector_pressure(metrics, proposed.sector_cap):
@@ -1089,6 +1094,100 @@ def propose_knob_updates(
         reasons.append("No knob change warranted from current reviewed outcomes.")
 
     return proposed, changes, reasons
+
+
+def _ftse_proposal_book(benchmark_ticker: str | None) -> bool:
+    ticker = benchmark_ticker or BENCHMARK_TICKER
+    return ticker in {BENCHMARK_TICKER, TOTAL_RETURN_PROPOSAL_BENCHMARK}
+
+
+def load_proposal_basis(output_dir: Path) -> dict[str, Any] | None:
+    path = Path(output_dir) / PROPOSAL_BASIS_FILENAME
+    if not path.exists():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError, TypeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def ensure_proposal_basis(output_dir: Path, *, reviewed_at: str) -> dict[str, Any]:
+    """Open the total-return measurement epoch once. Does not move knobs."""
+    existing = load_proposal_basis(output_dir)
+    if existing and existing.get("started_at"):
+        return existing
+    payload = {
+        "basis": TOTAL_RETURN_PROPOSAL_BASIS,
+        "benchmark": TOTAL_RETURN_PROPOSAL_BENCHMARK,
+        "started_at": reviewed_at,
+        "note": (
+            "Knob proposals use total-return excess versus FTAL.L from started_at. "
+            "excess_after_costs stays the price-only figure."
+        ),
+    }
+    path = Path(output_dir) / PROPOSAL_BASIS_FILENAME
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return payload
+
+
+def proposal_metrics_for_review(
+    metrics: BookMetrics,
+    *,
+    excess: float | None,
+    excess_label: str,
+) -> BookMetrics:
+    """Copy used only for knob proposals. Published metrics stay on the original."""
+    return replace(
+        metrics,
+        excess_after_costs=excess,
+        note=f"{metrics.note} Proposal excess is {excess_label}.".strip(),
+    )
+
+
+def total_return_proposal(
+    output_dir: Path,
+    fund: PaperFund,
+    review_metrics: BookMetrics,
+    *,
+    reviewed_at: str,
+    fetch_benchmark: bool,
+    benchmark_ticker: str | None,
+) -> tuple[BookMetrics, str, dict[str, Any] | None]:
+    """FTSE knob proposals use total-return excess vs FTAL.L from a new epoch.
+
+    Published ``excess_after_costs`` stays on ``review_metrics``. A thin window
+    fails closed: excess rules see None rather than the price-only figure.
+    Non-FTSE books, and reviews that skip the benchmark fetch, are unchanged.
+    """
+    if not fetch_benchmark or not _ftse_proposal_book(benchmark_ticker):
+        return review_metrics, "excess after costs", None
+    basis = ensure_proposal_basis(output_dir, reviewed_at=reviewed_at)
+    started = _parse_iso_date(str(basis.get("started_at") or ""))
+    if started is not None and started.tzinfo is None:
+        started = started.replace(tzinfo=UTC)
+    window = total_return_excess_since(fund.to_dict(), started) if started is not None else None
+    raw_excess = None if not window else window.get("excess_total_return")
+    excess = float(raw_excess) if isinstance(raw_excess, (int, float)) else None
+    label = "total-return excess vs FTAL.L"
+    record = {
+        "basis": basis.get("basis") or TOTAL_RETURN_PROPOSAL_BASIS,
+        "benchmark": basis.get("benchmark") or TOTAL_RETURN_PROPOSAL_BENCHMARK,
+        "started_at": basis.get("started_at"),
+        "excess": None if excess is None else round(excess, 4),
+        "price_excess_after_costs": (
+            None
+            if review_metrics.excess_after_costs is None
+            else round(float(review_metrics.excess_after_costs), 4)
+        ),
+        "used_for_proposals": excess is not None,
+        "marks": None if not window else window.get("marks"),
+    }
+    return (
+        proposal_metrics_for_review(review_metrics, excess=excess, excess_label=label),
+        label,
+        record,
+    )
 
 
 def enough_history(metrics: BookMetrics) -> bool:
@@ -1196,11 +1295,28 @@ def run_decision_review(
         review_metrics = metrics
         review_history_ok = history_ok
     position_bounds = max_positions_bounds_for(config)
-    proposed, changes, reasons = propose_knob_updates(
-        review_metrics, knobs_before, max_positions_bounds=position_bounds
+    reviewed_at = datetime.now(tz=UTC).isoformat()
+    proposal_metrics, excess_label, proposal = total_return_proposal(
+        output_dir,
+        fund,
+        review_metrics,
+        reviewed_at=reviewed_at,
+        fetch_benchmark=fetch_benchmark,
+        benchmark_ticker=bench_ticker,
     )
+    proposed, changes, reasons = propose_knob_updates(
+        proposal_metrics,
+        knobs_before,
+        max_positions_bounds=position_bounds,
+        excess_label=excess_label,
+    )
+    if proposal is not None and not proposal["used_for_proposals"]:
+        reasons.append(
+            "Total-return epoch vs FTAL.L needs two marks since "
+            f"{proposal.get('started_at')}; price excess is recorded and not used for proposals."
+        )
     saturated = (
-        detect_saturated_knobs(review_metrics, knobs_before, max_positions_bounds=position_bounds)
+        detect_saturated_knobs(proposal_metrics, knobs_before, max_positions_bounds=position_bounds)
         if review_history_ok and not frozen_lab
         else []
     )
@@ -1219,7 +1335,6 @@ def run_decision_review(
         statistics_path=statistics_path,
         benchmark_ticker=bench_ticker,
     )
-    reviewed_at = datetime.now(tz=UTC).isoformat()
     applied = False
     note = "Proposal only — history too thin to apply."
     if metrics.epoch and epoch_ok and cooldown_days > 0:
@@ -1287,6 +1402,20 @@ def run_decision_review(
             knobs=proposed if (changes or force) else knobs_after,
         )
 
+    metrics_payload = metrics.to_dict()
+    if proposal is not None:
+        metrics_payload["proposal"] = proposal
+    proposal_clause = ""
+    if proposal is not None and proposal.get("used_for_proposals"):
+        proposal_clause = (
+            " Knob proposals use total-return excess vs FTAL.L from the measurement epoch; "
+            "published excess_after_costs stays price-only."
+        )
+    elif proposal is not None:
+        proposal_clause = (
+            " Knob proposals wait for two total-return marks vs FTAL.L; "
+            "price excess is recorded and not used."
+        )
     result = DecisionReviewResult(
         reviewed_at=reviewed_at,
         enough_history=review_history_ok,
@@ -1295,7 +1424,7 @@ def run_decision_review(
         knobs_after=knobs_after.to_dict(),
         proposed_changes=changes if review_history_ok or force else {},
         reasons=reasons,
-        metrics=metrics.to_dict(),
+        metrics=metrics_payload,
         counterfactual_preview=counterfactual_preview,
         note=note,
         saturated_knobs=saturated,
@@ -1304,18 +1433,21 @@ def run_decision_review(
         is_primary_learning_track=bool(config.is_primary_learning_track),
         significance_gate=gate,
         success_criterion=(
-            f"Outperformance after costs vs market benchmark ({bench_ticker}) on this track; "
-            "AI-judgment is the primary learning track, rules is the control."
-            if config.is_primary_learning_track
-            else (
-                "Timing/levels baseline — stock-picking tracks should beat this "
-                "after costs; uses trade_plan stops/targets, not conviction rebalance."
-                if str(config.track_id or "") == "technical"
+            (
+                f"Outperformance after costs vs market benchmark ({bench_ticker}) on this track; "
+                "AI-judgment is the primary learning track, rules is the control."
+                if config.is_primary_learning_track
                 else (
-                    "Control track — compare excess_after_costs to the primary AI-judgment "
-                    "book; do not treat rules outperformance alone as learning success."
+                    "Timing/levels baseline — stock-picking tracks should beat this "
+                    "after costs; uses trade_plan stops/targets, not conviction rebalance."
+                    if str(config.track_id or "") == "technical"
+                    else (
+                        "Control track — compare excess_after_costs to the primary AI-judgment "
+                        "book; do not treat rules outperformance alone as learning success."
+                    )
                 )
             )
+            + proposal_clause
         ),
     )
     payload = result.to_dict()
@@ -1369,6 +1501,21 @@ def format_review_text(result: DecisionReviewResult) -> str:
             f"  Epoch excess vs benchmark: {epoch_excess:+.1%} "
             f"(benchmark {epoch.get('benchmark_return'):+.1%})"
         )
+    proposal = m.get("proposal") or {}
+    if proposal:
+        proposal_excess = proposal.get("excess")
+        if proposal.get("used_for_proposals") and isinstance(proposal_excess, (int, float)):
+            lines.append(
+                "  Proposal excess (total return vs "
+                f"{proposal.get('benchmark')} since {proposal.get('started_at')}): "
+                f"{proposal_excess:+.1%}"
+            )
+        else:
+            lines.append(
+                "  Proposal excess: waiting for two total-return marks vs "
+                f"{proposal.get('benchmark') or TOTAL_RETURN_PROPOSAL_BENCHMARK} "
+                f"since {proposal.get('started_at')}"
+            )
     if result.proposed_changes:
         lines.append(f"  Proposed: {result.proposed_changes}")
     preview = result.counterfactual_preview or {}
@@ -1486,7 +1633,8 @@ def compare_learning_tracks(
         "apply_policy": APPLY_POLICY,
         "success_criterion": (
             f"Primary track ({primary_id}) outperforms {bench_ticker} after costs; "
-            f"{control_id} is the control datum. Frozen tracks keep their final "
+            f"{control_id} is the control datum. FTSE knob proposals use total-return "
+            "excess vs FTAL.L from proposal_basis.json. Frozen tracks keep their final "
             "record and are not reviewed or tuned."
         ),
         "benchmark_ticker": bench_ticker,

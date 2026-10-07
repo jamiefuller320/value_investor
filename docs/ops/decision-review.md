@@ -73,6 +73,7 @@ auto-tune is deferred until closed cohorts thicken (see `learning_tracks_exit_sh
   rebalance-log replay keeps the full knob timeline (`retain_review_history`)
 - `knob_epoch.json` — active performance baseline after the latest knob apply
 - `knob_epochs.json` — history of knob-epoch snapshots (last 52)
+- `proposal_basis.json` — measurement epoch for FTSE knob proposals (total return vs `FTAL.L`)
 - `rebalance_log.json` — append-only decision log (candidates, knobs, trades per pass)
 
 ## Knob epochs
@@ -103,6 +104,14 @@ Proposals are still written during cooldown (`note` reports days remaining) but
 are not applied.
 
 `epoch.age_days` is published in `metrics.epoch`.
+
+## Proposal basis (total return vs All-Share)
+
+FTSE books (`^FTSE` or `FTAL.L`) open `proposal_basis.json` on the first review that fetches a benchmark. From `started_at`, knob proposals use total-return excess versus `FTAL.L` (equity-curve marks plus dividend credits), not price excess versus `^FTSE`.
+
+`metrics.excess_after_costs` stays the price-only figure, including history already written. `metrics.proposal` records the basis, the total-return excess, and the price excess it did not use. A window with fewer than two marks fails closed: excess rules see no excess, so a weak price figure cannot shrink the book. Cost and sector rules still use the reviewed book. Non-FTSE shards keep price excess until they have a local total-return proxy.
+
+This measurement epoch does not reset knobs and is not a `knob_epoch`.
 
 ### Significance gate (`significance_gate_v1`)
 

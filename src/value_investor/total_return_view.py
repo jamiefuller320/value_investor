@@ -280,6 +280,35 @@ def score_window(
     }
 
 
+def total_return_excess_since(
+    fund: dict[str, Any],
+    started_at: datetime,
+    *,
+    history_fetcher: HistoryFetcher = fetch_ticker_history,
+    tr_benchmark: str = TR_BENCHMARK,
+) -> dict[str, Any] | None:
+    """Total-return excess versus ``tr_benchmark`` using marks on or after ``started_at``.
+
+    Needs two equity-curve marks in the window. Returns None when the window
+    is thinner than that, so a new measurement epoch does not reuse lifetime
+    price excess.
+    """
+    marks = _marks(fund)
+    index = next((i for i, mark in enumerate(marks) if mark[0] >= started_at), None)
+    if index is None or len(marks) - index < 2:
+        return None
+    window = marks[index:]
+    trades = _trades(fund)
+    first, last = window[0][0].date(), window[-1][0].date()
+    tickers = sorted({str(trade["ticker"]) for trade in trades})
+    histories = {ticker: history_fetcher(ticker, first, last) for ticker in tickers}
+    benchmarks = {
+        PRICE_BENCHMARK: history_fetcher(PRICE_BENCHMARK, first, last),
+        TR_BENCHMARK: history_fetcher(tr_benchmark, first, last),
+    }
+    return score_window(marks, trades, histories, benchmarks, start_index=index)
+
+
 def stress_cost_contamination(
     config: dict[str, Any] | None,
     trades: list[dict[str, Any]],
