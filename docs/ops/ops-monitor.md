@@ -339,7 +339,7 @@ they do not emit a separate ops finding (fail-closed / observe-only marks).
 Does **not** alert on `beat_market` / excess vs ^FTSE. Underperformance on the
 3% stress books is expected; interpretation stays Sunday analysis-review /
 `paper_track_buckets` (Suite A drag, Suite B fair excess, identity floor — not
-one NAV line). See [`analysis-review.md`](analysis-review.md#dual-suite-paper-track-buckets-observe-only).
+one NAV line). See [`analysis-review.md`](analysis-review.md#dual-suite-paper-track-buckets-legacy-context).
 
 LLM live-path evidence principle (any LLM influence requires durable trail
 evidence; shadow first): [`llm-live-path-evidence.md`](llm-live-path-evidence.md).

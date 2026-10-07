@@ -103,15 +103,15 @@ block fills (`influences_live=false`). See
 principle [`llm-live-path-evidence.md`](llm-live-path-evidence.md). Hard veto
 stays parked until the promotion gate in that doc (N173).
 
-The dashboard **Automation → Learning tracks** panel publishes a dual-suite
-scoreboard (`learning_tracks_dual_suite` in the dashboard bundle): Suite B fair
-excess is the adoption headline; Suite A remains the primary-flag churn lab.
-Presentation only — does not flip `is_primary_learning_track` (**N145**).
+Since 2026-10-06 `is_primary_learning_track` follows `paper_automation/assessment_model.json`
+(primary `ai_judgment_fair`, control `buy_tier_level`); the config pass stamps it every run
+and never rewrites frozen books. The single scoreboard is `assessment_scoreboard.json`.
+The dashboard **Automation → Learning tracks** panel still publishes the legacy dual-suite
+view (`learning_tracks_dual_suite`); its Suite B pair is the model's primary vs control and
+Suite A books are frozen final records.
 
-Sunday **analysis-review** cites the same split as three payload buckets
-(`paper_track_buckets`: Suite A stress, Suite B fair adoption, Suite B identity
-floor). Identity greens (`buy_tier_level` / DCA) are not the adoption series.
-See [`analysis-review.md`](analysis-review.md#dual-suite-paper-track-buckets-observe-only).
+Sunday **analysis-review** leads with `assessment_scoreboard`; `paper_track_buckets`
+remain as legacy context. See [`analysis-review.md`](analysis-review.md#assessment-scoreboard-leads-the-paper-track-sections).
 
 ## Post-exit shadow learning (observe-only)
 

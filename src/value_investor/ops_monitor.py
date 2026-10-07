@@ -701,8 +701,8 @@ def check_paper_learning_tracks(
     Structural weekday spot-check formerly done on the Automation tab.
 
     Confirms post-settle paper-auto artifacts and that decision-review covered
-    the primary AI book, rules control, competing calibrated shadows, and the
-    Suite B buy_tier_level cohort. Does **not** interpret excess vs ^FTSE —
+    the assessment-model primary and control plus any unfrozen calibrated shadows
+    (frozen books are skipped). Does **not** interpret excess vs ^FTSE —
     that stays the Sunday analysis-review / promotion gates.
     """
     from value_investor.assessment_model import (
