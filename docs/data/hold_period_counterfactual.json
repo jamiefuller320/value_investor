@@ -1,0 +1,270 @@
+{
+  "generated_at": "2026-10-07T02:32:33.313269+00:00",
+  "learning_question": "Would holding positions longer (fewer rank-driven exits) improve after-cost return on the live books?",
+  "method": {
+    "variants": "exit_confirm_screens 5/10/20",
+    "scored_against": "baseline replay with logged per-pass knobs",
+    "fidelity_tolerance": 0.01,
+    "min_faithful_passes": 8,
+    "hold_edge_min": 0.01
+  },
+  "tracks": {
+    "ai_judgment": {
+      "track_id": "ai_judgment",
+      "acted_passes": 38,
+      "live_exit_confirm_screens": 2,
+      "realised": {
+        "closed_lots": 27,
+        "median_hold_days": 4.0,
+        "p75_hold_days": 13.0,
+        "max_hold_days": 27.0,
+        "annualised_sell_turnover": 39.91,
+        "window_days": 73.1
+      },
+      "status": "ok",
+      "window": {
+        "from": "2026-08-17T09:27:20.569663+01:00",
+        "to": "2026-10-06T09:36:52.459185+01:00",
+        "passes": 34,
+        "skipped_passes": 4,
+        "fidelity_gap": -0.0002
+      },
+      "baseline": {
+        "simulated_return": -0.2765,
+        "trade_count": 41,
+        "cost_drag": 0.2461
+      },
+      "variants": [
+        {
+          "exit_confirm_screens": 5,
+          "simulated_return": -0.1186,
+          "delta_vs_baseline": 0.1579,
+          "trade_count": 25,
+          "cost_drag": 0.1537,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        },
+        {
+          "exit_confirm_screens": 10,
+          "simulated_return": -0.0653,
+          "delta_vs_baseline": 0.2112,
+          "trade_count": 20,
+          "cost_drag": 0.1174,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        },
+        {
+          "exit_confirm_screens": 20,
+          "simulated_return": -0.0231,
+          "delta_vs_baseline": 0.2534,
+          "trade_count": 7,
+          "cost_drag": 0.0523,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        }
+      ],
+      "best_variant": {
+        "exit_confirm_screens": 20,
+        "simulated_return": -0.0231,
+        "delta_vs_baseline": 0.2534,
+        "trade_count": 7,
+        "cost_drag": 0.0523,
+        "held_price_fills": 0,
+        "held_price_avg_cost_fallbacks": 0
+      }
+    },
+    "rules": {
+      "track_id": "rules",
+      "acted_passes": 36,
+      "live_exit_confirm_screens": 2,
+      "realised": {
+        "closed_lots": 36,
+        "median_hold_days": 4.0,
+        "p75_hold_days": 10.0,
+        "max_hold_days": 27.0,
+        "annualised_sell_turnover": 47.41,
+        "window_days": 77.5
+      },
+      "status": "ok",
+      "window": {
+        "from": "2026-08-19T10:00:03.657336+01:00",
+        "to": "2026-10-06T09:36:37.370612+01:00",
+        "passes": 32,
+        "skipped_passes": 4,
+        "fidelity_gap": 0.0
+      },
+      "baseline": {
+        "simulated_return": -0.2682,
+        "trade_count": 37,
+        "cost_drag": 0.2068
+      },
+      "variants": [
+        {
+          "exit_confirm_screens": 5,
+          "simulated_return": -0.0901,
+          "delta_vs_baseline": 0.1781,
+          "trade_count": 22,
+          "cost_drag": 0.1086,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        },
+        {
+          "exit_confirm_screens": 10,
+          "simulated_return": -0.0818,
+          "delta_vs_baseline": 0.1864,
+          "trade_count": 18,
+          "cost_drag": 0.0866,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        },
+        {
+          "exit_confirm_screens": 20,
+          "simulated_return": -0.0606,
+          "delta_vs_baseline": 0.2076,
+          "trade_count": 9,
+          "cost_drag": 0.0468,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        }
+      ],
+      "best_variant": {
+        "exit_confirm_screens": 20,
+        "simulated_return": -0.0606,
+        "delta_vs_baseline": 0.2076,
+        "trade_count": 9,
+        "cost_drag": 0.0468,
+        "held_price_fills": 0,
+        "held_price_avg_cost_fallbacks": 0
+      }
+    },
+    "ai_judgment_fair": {
+      "track_id": "ai_judgment_fair",
+      "acted_passes": 20,
+      "live_exit_confirm_screens": 2,
+      "realised": {
+        "closed_lots": 13,
+        "median_hold_days": 4.0,
+        "p75_hold_days": 13.0,
+        "max_hold_days": 20.0,
+        "annualised_sell_turnover": 32.2,
+        "window_days": 57.0
+      },
+      "status": "ok",
+      "window": {
+        "from": "2026-09-07T09:29:26.606028+01:00",
+        "to": "2026-10-06T09:38:58.488349+01:00",
+        "passes": 20,
+        "skipped_passes": 0,
+        "fidelity_gap": -0.0002
+      },
+      "baseline": {
+        "simulated_return": -0.0583,
+        "trade_count": 23,
+        "cost_drag": 0.0162
+      },
+      "variants": [
+        {
+          "exit_confirm_screens": 5,
+          "simulated_return": -0.0011,
+          "delta_vs_baseline": 0.0572,
+          "trade_count": 17,
+          "cost_drag": 0.0102,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        },
+        {
+          "exit_confirm_screens": 10,
+          "simulated_return": -0.0008,
+          "delta_vs_baseline": 0.0575,
+          "trade_count": 14,
+          "cost_drag": 0.0077,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        },
+        {
+          "exit_confirm_screens": 20,
+          "simulated_return": -0.0259,
+          "delta_vs_baseline": 0.0324,
+          "trade_count": 4,
+          "cost_drag": 0.0033,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        }
+      ],
+      "best_variant": {
+        "exit_confirm_screens": 10,
+        "simulated_return": -0.0008,
+        "delta_vs_baseline": 0.0575,
+        "trade_count": 14,
+        "cost_drag": 0.0077,
+        "held_price_fills": 0,
+        "held_price_avg_cost_fallbacks": 0
+      }
+    },
+    "rules_fair": {
+      "track_id": "rules_fair",
+      "acted_passes": 20,
+      "live_exit_confirm_screens": 2,
+      "realised": {
+        "closed_lots": 12,
+        "median_hold_days": 4.0,
+        "p75_hold_days": 7.0,
+        "max_hold_days": 20.0,
+        "annualised_sell_turnover": 30.34,
+        "window_days": 48.0
+      },
+      "status": "ok",
+      "window": {
+        "from": "2026-09-07T09:29:42.597750+01:00",
+        "to": "2026-10-06T09:39:14.721236+01:00",
+        "passes": 20,
+        "skipped_passes": 0,
+        "fidelity_gap": -0.0002
+      },
+      "baseline": {
+        "simulated_return": -0.058,
+        "trade_count": 24,
+        "cost_drag": 0.0172
+      },
+      "variants": [
+        {
+          "exit_confirm_screens": 5,
+          "simulated_return": 0.015,
+          "delta_vs_baseline": 0.073,
+          "trade_count": 16,
+          "cost_drag": 0.0108,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        },
+        {
+          "exit_confirm_screens": 10,
+          "simulated_return": -0.0008,
+          "delta_vs_baseline": 0.0572,
+          "trade_count": 14,
+          "cost_drag": 0.0082,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        },
+        {
+          "exit_confirm_screens": 20,
+          "simulated_return": -0.0259,
+          "delta_vs_baseline": 0.0321,
+          "trade_count": 4,
+          "cost_drag": 0.0035,
+          "held_price_fills": 0,
+          "held_price_avg_cost_fallbacks": 0
+        }
+      ],
+      "best_variant": {
+        "exit_confirm_screens": 5,
+        "simulated_return": 0.015,
+        "delta_vs_baseline": 0.073,
+        "trade_count": 16,
+        "cost_drag": 0.0108,
+        "held_price_fills": 0,
+        "held_price_avg_cost_fallbacks": 0
+      }
+    }
+  },
+  "limitations": "Weeks of passes on 3-name books: a positive delta is a hypothesis for a cold-start twin, not adoption evidence. Replays only see names in logged candidates; held names missing from a pass are marked from Yahoo closes."
+}

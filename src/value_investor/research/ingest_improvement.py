@@ -1129,12 +1129,17 @@ def _execute_ingest_improvement_pass(
             )
             sources_dir = _resolve_sources_dir(store, target.ticker, output_dir)
             sources_dir.mkdir(parents=True, exist_ok=True)
+            from value_investor.research.filings import (
+                reconcile_filings_index_body_flags,
+                resolve_filings_regime,
+            )
+
             sanitize_filings_index(
                 sources_dir / "filings",
                 company_name=target.name,
                 ticker=target.ticker,
+                regime=resolve_filings_regime(market, target.ticker),
             )
-            from value_investor.research.filings import reconcile_filings_index_body_flags
 
             reconcile_filings_index_body_flags(
                 sources_dir / "filings",

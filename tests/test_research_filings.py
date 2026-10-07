@@ -7001,11 +7001,69 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_hei_de_index(tmp_path: Path
 
     meta = merge_ir_allowlist_filings("HEI.DE", filings_dir)
     assert meta["added"] >= 1
-    assert meta["total_allowlist"] >= 1
+    assert meta["total_allowlist"] >= 3
 
     payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
-    assert int(payload["summary"]["total"]) >= 1
+    assert int(payload["summary"]["total"]) >= 3
     assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_fetch_filings_ir_allowlist_hei_de_unmeasured_eng_20261006_01(tmp_path: Path):
+    """eng-20261006-01: HEI.DE unmeasured — IR allowlist when ESEF index is empty."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("HEI.DE", path=allowlist_path)
+    assert len(rows) >= 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert any(row["period"] == "annual" for row in rows)
+    assert any(row["period"] == "interim" for row in rows)
+    assert any("heidelbergmaterials.com" in row["url"] for row in rows)
+    assert "HEI.DE" in _BUILTIN_IR_URLS
+
+
+def test_fetch_filings_ir_allowlist_hei_de_h1_live_eng_20261006_01():
+    """eng-20261006-01: HEI.DE H1 2025 statutory PDF passes IR allowlist validation."""
+    rows = fetch_filings_ir_allowlist("HEI.DE")
+    interim = next(
+        row
+        for row in rows
+        if row["period"] == "interim" and "Half-year_financial_report_2025" in row["url"]
+    )
+    body = fetch_filing_body(interim["url"])
+    assert body and len(body) > 5000
+    assert "heidelberg" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(interim, body, ticker="HEI.DE")
+    assert valid, reason
+
+
+@patch("value_investor.research.filings.fetch_filing_body")
+def test_refetch_euro_filings_primary_bodies_hei_de_eng_20261006_01(mock_fetch, tmp_path: Path):
+    """eng-20261006-01: euro primary pipeline bootstraps empty HEI.DE index from IR allowlist."""
+    from value_investor.research.filings import refetch_euro_filings_primary_bodies
+
+    mock_fetch.return_value = (
+        "Heidelberg Materials consolidated financial statements revenue operating margin "
+        "half year interim report " * 40
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"with_body": 0, "total": 0}}),
+        encoding="utf-8",
+    )
+    result = refetch_euro_filings_primary_bodies(
+        filings_dir,
+        ticker="HEI.DE",
+        company_name="Heidelberg Materials AG",
+        max_bodies=5,
+    )
+    assert result["with_body_after"] >= 1
+    assert result["fetched"] >= 1
+    assert result["ir_allowlist"].get("allowlist_count", 0) >= 3
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 3
+    assert any(row.get("has_body") for row in payload.get("filings") or [])
 
 
 def test_fetch_filings_ir_allowlist_hang_seng_unmeasured_builtins_eng_20260930_03(
@@ -7253,12 +7311,77 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_6618_hk_index(tmp_path: Pat
     )
 
     meta = merge_ir_allowlist_filings("6618.HK", filings_dir)
-    assert meta["added"] >= 1
-    assert meta["total_allowlist"] >= 1
+    assert meta["added"] >= 3
+    assert meta["total_allowlist"] >= 3
 
     payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
-    assert int(payload["summary"]["total"]) >= 1
+    assert int(payload["summary"]["total"]) >= 3
     assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_fetch_filings_ir_allowlist_6618_hk_interim_seeds_eng_20261007_01(tmp_path: Path):
+    """eng-20261007-01: 6618.HK IR allowlist must seed interim HKEX PDFs for thin library memos."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("6618.HK", path=allowlist_path)
+    assert len(rows) >= 3
+    assert any(row["period"] == "annual" for row in rows)
+    assert sum(1 for row in rows if row["period"] == "interim") >= 2
+    assert all("hkexnews.hk" in row["url"] for row in rows)
+
+
+def test_filings_index_hkex_direct_gap_detects_6618_stale_discovery_index():
+    """eng-20261007-01: listing-only merge without hkex_direct is a library gap."""
+    from value_investor.research.filings import filings_index_hkex_direct_gap
+
+    stale = {
+        "sources_used": ["google_news_asia", "ir_allowlist"],
+        "summary": {"total": 2, "with_body": 1},
+    }
+    assert filings_index_hkex_direct_gap(stale)
+
+    healthy = {
+        "sources_used": ["hkex_direct", "ir_allowlist"],
+        "summary": {"total": 11, "with_body": 11},
+    }
+    assert not filings_index_hkex_direct_gap(healthy)
+
+
+@patch("value_investor.research.filings.ingest_filings")
+def test_ensure_hkex_direct_filings_ingested_runs_for_stale_6618_index(mock_ingest, tmp_path: Path):
+    """eng-20261007-01: ensure_hkex re-ingests when HKEX direct feed never merged."""
+    from value_investor.research.filings import ensure_hkex_direct_filings_ingested
+
+    mock_ingest.return_value = {
+        "filings_summary": {"total": 11, "with_body": 11},
+        "filings_sources": ["hkex_direct", "ir_allowlist"],
+    }
+    sources_dir = tmp_path / "sources"
+    filings_dir = sources_dir / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "6618.HK",
+                "sources_used": ["ir_allowlist"],
+                "summary": {"total": 1, "with_body": 1},
+                "filings": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    out = ensure_hkex_direct_filings_ingested(
+        sources_dir,
+        ticker="6618.HK",
+        company_name="JD Health International Inc.",
+        market="hang_seng",
+        deepen_history=True,
+    )
+    assert not out.get("skipped")
+    assert out["with_body_after"] == 11
+    mock_ingest.assert_called_once()
 
 
 def test_merge_ir_allowlist_filings_bootstraps_empty_1099_hk_index(tmp_path: Path):
