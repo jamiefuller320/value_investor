@@ -215,7 +215,20 @@ rule first. Live capital does not start without it.
 
 Shipped observe-only: `docs/data/paper_halt.json`. Thresholds are 20%
 drawdown, 40% of NAV in one name, 50% in one sector, and the currency rules
-in [`paper-halt.md`](paper-halt.md). A breach warns. The book is not frozen.
+in [`paper-halt.md`](paper-halt.md). Weights use marked prices. A breach
+warns. The book is not frozen.
+
+## Follow-ons
+
+The apply gate for FTSE books uses the same total-return window versus
+`FTAL.L` and stays closed until that window has 20 daily periods and a 90%
+interval that excludes zero. Price `track_statistics.json` cannot open it.
+
+Paper-halt name, sector and currency weights use the latest marked prices.
+A missing mark does not fall back to average cost.
+
+The screen-premise buy-tier spread, including the sector split and the AI-gate
+spread, adds ex-date dividends. `price_buy_tier_spread` keeps the price figure.
 
 ## Refresh
 

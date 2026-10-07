@@ -30,7 +30,11 @@ from value_investor.paper_fund import (
     PaperFundConfig,
     select_automated_targets,
 )
-from value_investor.total_return_view import TickerHistory, total_return_excess_since
+from value_investor.total_return_view import (
+    TickerHistory,
+    proposal_window_active_returns,
+    total_return_excess_since,
+)
 
 
 def _significant_stats(
@@ -991,6 +995,8 @@ def test_price_only_review_does_not_open_total_return_epoch(tmp_path: Path):
     assert "proposal" not in result.metrics
     assert not (out / PROPOSAL_BASIS_FILENAME).exists()
     assert "total-return excess" not in " ".join(result.reasons)
+    assert result.significance_gate["passed"] is True
+    assert "return_basis" not in result.significance_gate
 
 
 def test_non_ftse_book_keeps_price_excess_for_proposals(tmp_path: Path):
@@ -1006,6 +1012,8 @@ def test_non_ftse_book_keeps_price_excess_for_proposals(tmp_path: Path):
     )
     assert "proposal" not in result.metrics
     assert not (out / PROPOSAL_BASIS_FILENAME).exists()
+    assert result.significance_gate["passed"] is True
+    assert "return_basis" not in result.significance_gate
 
 
 def test_thin_total_return_epoch_does_not_reuse_price_excess(tmp_path: Path):
@@ -1071,3 +1079,127 @@ def test_knob_proposal_follows_total_return_excess_not_price(tmp_path: Path):
     text = format_review_text(result)
     assert "Proposal excess (total return vs FTAL.L" in text
     assert "+5.0%" in text
+
+
+def _flat_closes(start, end, *, dividend_on=None, dividend=0.0) -> TickerHistory:
+    history = TickerHistory()
+    day = start
+    while day <= end:
+        history.closes[day] = 100.0
+        day += timedelta(days=1)
+    if dividend_on is not None and dividend > 0:
+        history.dividends[dividend_on] = dividend
+    return history
+
+
+def _marked_book(days: int = 30, *, price_step: float = 0.05) -> PaperFund:
+    fund = PaperFund.create(
+        PaperFundConfig(name="Auto", mode="automated", initial_cash=1000, trade_cost_pct=0)
+    )
+    fund.buy(
+        ticker="AAA.L",
+        price=10,
+        sizing_mode="shares",
+        amount=10,
+        acted_at="2025-12-15T12:00:00+00:00",
+    )
+    start = datetime(2026, 1, 1, 12, tzinfo=UTC)
+    for i in range(days):
+        at = start + timedelta(days=i)
+        fund.record_mark(
+            {"AAA.L": 10 + i * price_step},
+            acted_at=at.isoformat(),
+        )
+    # PaperFund.create writes an inception mark at "now", outside this window.
+    fund.equity_curve = [
+        mark for mark in fund.equity_curve if str(mark.get("at", "")).startswith("2026-01-")
+    ]
+    return fund
+
+
+def test_proposal_window_adds_the_ex_date_dividend_to_that_days_return():
+    fund = _marked_book(days=8, price_step=0.0)
+    started = datetime(2026, 1, 1, tzinfo=UTC)
+    ex_day = datetime(2026, 1, 4, tzinfo=UTC).date()
+
+    def fetcher(ticker, start, end):
+        history = _flat_closes(start, end)
+        if ticker == "AAA.L":
+            history.dividends[ex_day] = 2.0
+        return history
+
+    window = proposal_window_active_returns(
+        fund.to_dict(),
+        started,
+        history_fetcher=fetcher,
+    )
+    by_day = dict(window["active_returns"])
+    assert window["dividends_gbp"] == 2.0
+    assert by_day[ex_day] == round(2.0 / 1000.0, 10) or abs(by_day[ex_day] - 0.002) < 1e-9
+    quiet = [day for day, value in by_day.items() if day != ex_day]
+    assert quiet
+    assert all(abs(by_day[day]) < 1e-9 for day in quiet)
+
+
+def test_ftse_apply_gate_stays_closed_when_price_statistics_are_significant(tmp_path: Path):
+    out = tmp_path / "rules"
+    _write_invested_book(out)
+    result = run_decision_review(
+        output_dir=out,
+        apply=True,
+        force=True,
+        fetch_benchmark=True,
+        benchmark_return=0.20,
+        statistics_path=_significant_stats(tmp_path, verdict="positive"),
+        history_fetcher=lambda ticker, start, end: TickerHistory(),
+    )
+    gate = result.significance_gate
+    assert gate["passed"] is False
+    assert gate["price_statistics_used"] is False
+    assert gate["return_basis"] == "total_return_vs_ftal"
+    assert "price statistics are not used" in gate["reason"]
+    assert "too thin" in gate["reason"]
+    assert result.applied is False
+    assert "Apply basis: total_return_vs_ftal vs FTAL.L" in format_review_text(result)
+
+
+def test_ftse_apply_gate_opens_on_a_thick_total_return_window(tmp_path: Path):
+    out = tmp_path / "rules"
+    fund = _marked_book(days=30, price_step=0.2)
+    out.mkdir()
+    (out / "config.json").write_text(
+        __import__("json").dumps(AutomationConfig(max_positions=5).to_dict()),
+        encoding="utf-8",
+    )
+    (out / "automated_fund.json").write_text(
+        __import__("json").dumps(fund.to_dict()),
+        encoding="utf-8",
+    )
+    (out / PROPOSAL_BASIS_FILENAME).write_text(
+        __import__("json").dumps(
+            {
+                "basis": "total_return_vs_ftal",
+                "benchmark": "FTAL.L",
+                "started_at": "2026-01-01T00:00:00+00:00",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fetcher(ticker, start, end):
+        return _flat_closes(start, end)
+
+    result = run_decision_review(
+        output_dir=out,
+        apply=False,
+        fetch_benchmark=True,
+        benchmark_return=0.0,
+        statistics_path=_significant_stats(tmp_path, verdict="", status="insufficient_data"),
+        history_fetcher=fetcher,
+    )
+    gate = result.significance_gate
+    assert gate["price_statistics_used"] is False
+    assert gate["passed"] is True
+    assert gate["verdict"] == "positive"
+    assert gate["periods"] >= 20
+    assert "total-return active return vs FTAL.L verdict positive" in gate["reason"]

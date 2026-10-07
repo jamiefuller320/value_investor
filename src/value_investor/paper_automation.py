@@ -1190,6 +1190,13 @@ def run_daily_automation(
         market=market_id,
         prefer_listed_prices=prefer_listed_prices,
     )
+    from value_investor.paper_halt import market_prices_from_rows, save_marked_prices
+
+    save_marked_prices(
+        output_dir,
+        market_prices_from_rows(marked),
+        as_of=str(gate.get("local_time") or ""),
+    )
     select_kwargs = config.selection_kwargs()
     rebalance_kwargs = _rebalance_kwargs(select_kwargs)
 

@@ -12,7 +12,10 @@ Per horizon and cohort (runs at least 6 days apart, each with an exit run at or
 after the horizon):
 
 - ``buy_tier_spread``: equal-weight buy-tier forward return minus the
-  equal-weight screened-universe return;
+  equal-weight screened-universe return. When a dividend history is supplied,
+  each name's return adds ex-date dividends (dividend ÷ prior close, capped)
+  between the entry and exit runs. ``price_buy_tier_spread`` keeps the
+  price-only figure;
 - ``avoid_spread``: same for ``avoid`` names (should be negative if the screen works);
 - ``rank_ic``: Spearman correlation of ``conviction_score`` with forward return;
 - ``ai_gate_spread``: buy-tier names the live AI gate would take
@@ -38,14 +41,22 @@ needs dated fundamentals (L11). Daily ops-monitor refreshes
 from __future__ import annotations
 
 import json
+import logging
 import math
-from datetime import UTC, datetime
+from collections.abc import Callable
+from datetime import UTC, date, datetime
 from pathlib import Path
 from statistics import mean, stdev
 from typing import Any
 
 from value_investor.backtest import RunSnapshot, _find_exit_snapshot, load_run_snapshots
 from value_investor.research.timeline import get_research_as_of
+from value_investor.total_return_view import MAX_PLAUSIBLE_YIELD, TickerHistory
+
+logger = logging.getLogger(__name__)
+
+DividendFetcher = Callable[[str, date, date], TickerHistory]
+DIVIDEND_CACHE_FILENAME = "screen_premise_dividend_cache.json"
 
 DEFAULT_DATA_DIR = Path("docs/data")
 DEFAULT_STORE_PATH = Path("docs/data/screen_premise_backtest.json")
@@ -218,21 +229,150 @@ def financials_move_the_buy_tier(horizon: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _prior_close(closes: dict[date, float], day: date) -> float | None:
+    found: float | None = None
+    for close_day in sorted(closes):
+        if close_day >= day:
+            break
+        found = closes[close_day]
+    return found
+
+
+def _dividend_yield_between(history: TickerHistory, start: datetime, end: datetime) -> float:
+    """Sum of plausible ex-date yields in ``(start, end]``. Implausible yields add nothing."""
+    added = 0.0
+    start_day = start.date()
+    end_day = end.date()
+    for ex_day, dividend in history.dividends.items():
+        if ex_day <= start_day or ex_day > end_day:
+            continue
+        close = _prior_close(history.closes, ex_day)
+        if not close or close <= 0:
+            continue
+        dividend_yield = float(dividend) / close
+        if 0 < dividend_yield <= MAX_PLAUSIBLE_YIELD:
+            added += dividend_yield
+    return added
+
+
+def _history_from_cache(entry: dict[str, Any]) -> TickerHistory:
+    history = TickerHistory()
+    for key, value in (entry.get("closes") or {}).items():
+        history.closes[date.fromisoformat(str(key))] = float(value)
+    for key, value in (entry.get("dividends") or {}).items():
+        history.dividends[date.fromisoformat(str(key))] = float(value)
+    return history
+
+
+def _cache_covers(entry: dict[str, Any], start: date, end: date) -> bool:
+    try:
+        cached_start = date.fromisoformat(str(entry.get("start")))
+        cached_end = date.fromisoformat(str(entry.get("end")))
+    except (TypeError, ValueError):
+        return False
+    return cached_start <= start and cached_end >= end and bool(entry.get("closes"))
+
+
+def _read_dividend_cache(path: Path | None) -> dict[str, Any]:
+    if path is None or not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    entries = payload.get("entries") if isinstance(payload, dict) else None
+    return entries if isinstance(entries, dict) else {}
+
+
+def _write_dividend_cache(path: Path | None, entries: dict[str, Any]) -> None:
+    if path is None:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {"schema": "screen_premise_dividend_cache.v1", "entries": entries}
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def load_dividend_histories(
+    snapshots: list[RunSnapshot],
+    fetcher: DividendFetcher,
+    *,
+    cache_path: Path | None = None,
+) -> tuple[dict[str, TickerHistory], list[str]]:
+    """One history per ticker over the snapshot span. A Yahoo miss is an empty history.
+
+    Successful fetches (closes present, dividends optional) are cached. An empty
+    response is not cached, so the next refresh retries it.
+    """
+    if not snapshots:
+        return {}, []
+    start = min(_run_dt(snap) for snap in snapshots).date()
+    end = max(_run_dt(snap) for snap in snapshots).date()
+    tickers = sorted(
+        {
+            str(row.get("ticker") or "")
+            for snap in snapshots
+            for row in snap.signals
+            if row.get("ticker")
+        }
+    )
+    cache = _read_dividend_cache(cache_path)
+    histories: dict[str, TickerHistory] = {}
+    skipped: list[str] = []
+    for ticker in tickers:
+        entry = cache.get(ticker) if isinstance(cache.get(ticker), dict) else None
+        if entry is not None and _cache_covers(entry, start, end):
+            histories[ticker] = _history_from_cache(entry)
+            continue
+        try:
+            history = fetcher(ticker, start, end)
+        except Exception as exc:  # noqa: BLE001 — a miss adds no dividend
+            logger.info("Dividend history unavailable for %s: %s", ticker, exc)
+            history = TickerHistory()
+        if history is None or not history.closes:
+            histories[ticker] = TickerHistory()
+            skipped.append(ticker)
+            continue
+        cache[ticker] = {
+            "start": start.isoformat(),
+            "end": end.isoformat(),
+            "closes": {day.isoformat(): price for day, price in sorted(history.closes.items())},
+            "dividends": {
+                day.isoformat(): amount for day, amount in sorted(history.dividends.items())
+            },
+        }
+        histories[ticker] = history
+    if cache_path is not None:
+        _write_dividend_cache(cache_path, cache)
+    return histories, skipped
+
+
 def score_cohort(
     entry: RunSnapshot,
     exit_snap: RunSnapshot,
     verdicts: dict[str, str | None] | None = None,
+    dividend_histories: dict[str, TickerHistory] | None = None,
 ) -> dict[str, Any] | None:
-    rows: list[tuple[str, str, float, float, str]] = []
+    rows: list[tuple[str, str, float, float, str, float]] = []
     dropped = 0
+    dividends_skipped = 0
+    entry_at = _run_dt(entry)
+    exit_at = _run_dt(exit_snap)
     for row in entry.signals:
         ticker = str(row.get("ticker") or "")
         p0 = entry.prices.get(ticker)
         p1 = exit_snap.prices.get(ticker)
         if not p0 or not p1 or p0 <= 0:
             continue
-        ret = p1 / p0 - 1.0
-        if abs(ret) > MAX_ABS_RETURN:
+        price_ret = p1 / p0 - 1.0
+        div_add = 0.0
+        if dividend_histories is not None:
+            history = dividend_histories.get(ticker)
+            if history is None or not history.closes:
+                dividends_skipped += 1
+            else:
+                div_add = _dividend_yield_between(history, entry_at, exit_at)
+        ret = price_ret + div_add
+        if abs(price_ret) > MAX_ABS_RETURN or abs(ret) > MAX_ABS_RETURN:
             dropped += 1
             continue
         rows.append(
@@ -242,14 +382,17 @@ def score_cohort(
                 float(row.get("conviction_score") or 0.0),
                 ret,
                 str(row.get("sector") or ""),
+                price_ret,
             )
         )
-    buy_rows = [(t, c, r, sector) for t, s, c, r, sector in rows if s in BUY_TIER]
+    buy_rows = [(t, c, r, sector) for t, s, c, r, sector, _price in rows if s in BUY_TIER]
     buy = [r for _, _, r, _ in buy_rows]
-    avoid = [r for _, s, _, r, _ in rows if s == "avoid"]
+    price_buy = [price for _t, s, _c, _r, _sector, price in rows if s in BUY_TIER]
+    avoid = [r for _, s, _, r, _, _price in rows if s == "avoid"]
     if len(rows) < MIN_COHORT_NAMES or len(buy) < MIN_COHORT_NAMES:
         return None
-    universe = mean(r for _, _, _, r, _ in rows)
+    universe = mean(r for _, _, _, r, _, _price in rows)
+    price_universe = mean(price for _, _, _, _, _, price in rows)
     verdicts = verdicts or {}
     gate_pass = [r for t, _, r, _ in buy_rows if verdicts.get(t) == AI_GATE_VERDICT]
     gate_fail = [r for t, _, r, _ in buy_rows if verdicts.get(t) != AI_GATE_VERDICT]
@@ -266,8 +409,14 @@ def score_cohort(
         "buy_tier_names": len(buy),
         "universe_return": round(universe, 4),
         "buy_tier_spread": round(mean(buy) - universe, 4),
+        "price_buy_tier_spread": round(mean(price_buy) - price_universe, 4),
         "avoid_spread": round(mean(avoid) - universe, 4) if avoid else None,
-        "rank_ic": _round(spearman([c for _, _, c, _, _ in rows], [r for _, _, _, r, _ in rows])),
+        "rank_ic": _round(
+            spearman(
+                [c for _, _, c, _, _, _price in rows],
+                [r for _, _, _, r, _, _price in rows],
+            )
+        ),
         "ai_gate_pass_names": len(gate_pass),
         "ai_gate_reject_names": len(gate_fail),
         "ai_gate_no_memo_names": no_memo,
@@ -277,6 +426,7 @@ def score_cohort(
         "ai_gate_spread": _spread(gate_pass, gate_fail) if no_memo < len(buy_rows) else None,
         "conviction_half_spread": _spread(top, bottom),
         "dropped_unit_flips": dropped,
+        "dividends_skipped": dividends_skipped,
         "sector_splits": splits,
     }
 
@@ -312,12 +462,26 @@ def weeks_to_detect(stdev_per_cohort: float | None, horizon_days: int) -> float 
     return round(eff_needed * horizon_days / 7.0, 0)
 
 
-def build_screen_premise_backtest(data_dir: Path = DEFAULT_DATA_DIR) -> dict[str, Any]:
+def build_screen_premise_backtest(
+    data_dir: Path = DEFAULT_DATA_DIR,
+    *,
+    dividend_fetcher: DividendFetcher | None = None,
+    dividend_cache_path: Path | None = None,
+) -> dict[str, Any]:
     data_dir = Path(data_dir)
     snapshots = load_run_snapshots(data_dir)
     cohorts = weekly_cohorts(snapshots)
     research_dir = data_dir if (data_dir / "research").is_dir() else None
     verdicts = {snap.run_at: snapshot_verdicts(snap, research_dir) for snap in cohorts}
+    dividend_histories = None
+    dividends_skipped_tickers: list[str] = []
+    if dividend_fetcher is not None:
+        dividend_histories, dividends_skipped_tickers = load_dividend_histories(
+            snapshots,
+            dividend_fetcher,
+            cache_path=dividend_cache_path,
+        )
+    return_basis = "price_plus_dividends" if dividend_fetcher is not None else "price"
     horizons: dict[str, Any] = {}
     for horizon in HORIZON_DAYS:
         rows = []
@@ -325,13 +489,20 @@ def build_screen_premise_backtest(data_dir: Path = DEFAULT_DATA_DIR) -> dict[str
             exit_snap = _find_exit_snapshot(entry, snapshots, horizon)
             if exit_snap is None:
                 continue
-            scored = score_cohort(entry, exit_snap, verdicts.get(entry.run_at))
+            scored = score_cohort(
+                entry,
+                exit_snap,
+                verdicts.get(entry.run_at),
+                dividend_histories,
+            )
             if scored is not None:
                 rows.append(scored)
         spread = summarise([r["buy_tier_spread"] for r in rows], horizon)
+        price_spread = summarise([r["price_buy_tier_spread"] for r in rows], horizon)
         horizons[str(horizon)] = {
             "horizon_days": horizon,
             "buy_tier_spread": spread,
+            "price_buy_tier_spread": price_spread,
             "avoid_spread": summarise(
                 [r["avoid_spread"] for r in rows if r["avoid_spread"] is not None], horizon
             ),
@@ -395,10 +566,20 @@ def build_screen_premise_backtest(data_dir: Path = DEFAULT_DATA_DIR) -> dict[str
         "last_run": snapshots[-1].run_at if snapshots else None,
         "horizons": horizons,
         "financials_real_estate_split": financials_move_the_buy_tier(decision_horizon),
+        "return_basis": return_basis,
+        "dividends_skipped_tickers": dividends_skipped_tickers,
         "limitations": (
-            "Weeks of frozen FTSE snapshots, price return only (no dividends), FTSE 350 "
-            "names that were screened at the time. Not the multi-year PIT test: that "
-            "needs dated fundamentals and delisted names (L11)."
+            "Weeks of frozen FTSE snapshots. The spread that judges the screen "
+            + (
+                "adds ex-date dividends (dividend ÷ prior close, capped at 15%) between "
+                "the entry and exit runs; price_buy_tier_spread is the price-only figure. "
+                "A name with no dividend history keeps its price return and is counted in "
+                "dividends_skipped. "
+                if return_basis == "price_plus_dividends"
+                else "is price return only. "
+            )
+            + "FTSE 350 names that were screened at the time. Not the multi-year PIT test: "
+            "that needs dated fundamentals and delisted names (L11)."
         ),
     }
 
@@ -408,8 +589,14 @@ def refresh_screen_premise_backtest(
     *,
     store_path: Path = DEFAULT_STORE_PATH,
     persist: bool = True,
+    dividend_fetcher: DividendFetcher | None = None,
+    dividend_cache_path: Path | None = None,
 ) -> dict[str, Any]:
-    payload = build_screen_premise_backtest(data_dir)
+    payload = build_screen_premise_backtest(
+        data_dir,
+        dividend_fetcher=dividend_fetcher,
+        dividend_cache_path=dividend_cache_path,
+    )
     if persist:
         path = Path(store_path)
         path.parent.mkdir(parents=True, exist_ok=True)

@@ -100,6 +100,12 @@ def test_run_daily_automation_force_rebalances_without_network(tmp_path, monkeyp
     assert len(result.trades) >= 1
     assert (tmp_path / "auto" / "automated_fund.json").exists()
     assert (tmp_path / "auto" / "last_run.json").exists()
+    marks = __import__("json").loads(
+        (tmp_path / "auto" / "marked_prices.json").read_text(encoding="utf-8")
+    )
+    assert marks["prices"]["AAA.L"] == 10
+    assert marks["prices"]["BBB.L"] == 20
+    assert marks["source"] == "refresh_candidate_marks"
 
     fund = PaperFund.from_dict(
         __import__("json").loads((tmp_path / "auto" / "automated_fund.json").read_text())

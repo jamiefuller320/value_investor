@@ -2769,6 +2769,8 @@ def check_screen_premise_backtest(
     data_dir: Path | None = None,
     store_path: Path | None = None,
     persist: bool = True,
+    dividend_fetcher: Any = None,
+    dividend_cache_path: Path | None = None,
 ) -> list[OpsFinding]:
     """Observe-only L530: frozen-signal buy-tier vs screened-universe forward returns.
 
@@ -2783,15 +2785,24 @@ def check_screen_premise_backtest(
         ops_finding_from_screen_premise_backtest,
         refresh_screen_premise_backtest,
     )
+    from value_investor.total_return_view import fetch_ticker_history
 
     root = Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR
     if not root.exists():
         return []
+    store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+    cache = (
+        Path(dividend_cache_path)
+        if dividend_cache_path is not None
+        else store.with_name("screen_premise_dividend_cache.json")
+    )
     try:
         payload = refresh_screen_premise_backtest(
             root,
-            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            store_path=store,
             persist=persist,
+            dividend_fetcher=fetch_ticker_history if dividend_fetcher is None else dividend_fetcher,
+            dividend_cache_path=cache,
         )
     except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
         return [
