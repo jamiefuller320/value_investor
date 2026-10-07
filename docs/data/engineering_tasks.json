@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-07T07:50:58.621935+00:00",
+  "compiled_at": "2026-10-07T07:51:30.406378+00:00",
   "run_at": null,
-  "task_count": 142,
+  "task_count": 141,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1885,91 +1885,6 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
-    },
-    {
-      "id": "eng-20261007-04",
-      "area": "ingest",
-      "title": "Close library ingest gaps for hang_seng / 6618.HK (chain 2/3: 0/0 improved, run igc-20260930-10)",
-      "summary": "Ingest gap-closure run igc-20260930-10 (chain root igc-20260930-10, round 2) targeted 6618.HK with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
-      "priority": "high",
-      "priority_score": 88.0,
-      "source": "ingest_gap_closure",
-      "evidence": {
-        "gap_closure_run_id": "igc-20260930-10",
-        "trial_id": "igc-20260930-10",
-        "chain_root_id": "igc-20260930-10",
-        "chain_round": 2,
-        "tickers": [
-          "6618.HK"
-        ],
-        "ticker": "6618.HK",
-        "market_id": "hang_seng",
-        "library_market": "hang_seng",
-        "universe": "library",
-        "rerun_ingest_gap_closure": true,
-        "rerun_ingest_trial": true,
-        "rerun_library_ingest_loop": true,
-        "refetch_attempted": 0,
-        "refetch_fetched": 0,
-        "gap_closure_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "6618.HK",
-            "0101.HK",
-            "0291.HK"
-          ],
-          "market_id": "hang_seng",
-          "universe": "library",
-          "critical_path_blocker": "unmeasured"
-        },
-        "trial_params": {
-          "max_targets": 1,
-          "max_bodies": 40,
-          "max_runtime_seconds": 2100.0,
-          "require_outstanding_gaps": true,
-          "intensive_gap_closure": true,
-          "pin_tickers": [
-            "6618.HK",
-            "0101.HK",
-            "0291.HK"
-          ],
-          "market_id": "hang_seng",
-          "universe": "library",
-          "critical_path_blocker": "unmeasured"
-        },
-        "compile_reason": "gaps_remain_without_refetch"
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for 6618.HK",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
     },
     {
       "id": "eng-20261007-03",
@@ -9372,7 +9287,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-07T07:48:41.992294+00:00",
+    "evaluated_at": "2026-10-07T02:33:46.729202+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -9421,7 +9336,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 3,
-    "evaluated_at": "2026-10-07T07:51:25.956517+00:00",
+    "evaluated_at": "2026-10-07T07:45:00.783568+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -9480,8 +9395,8 @@
     "last_sent_at": "2026-10-06T18:50:49.994582+00:00",
     "cooldown_hours": 12.0
   },
-  "source_gap_closure_run_id": "igc-20260930-10",
-  "source_trial_id": "igc-20260930-10",
-  "source_chain_root_id": "igc-20260930-10",
+  "source_gap_closure_run_id": "igc-20261007-01",
+  "source_trial_id": "igc-20261007-01",
+  "source_chain_root_id": "igc-20261007-01",
   "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download"
 }
