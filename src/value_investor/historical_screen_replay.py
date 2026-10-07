@@ -63,6 +63,7 @@ PARITY_FINDING_TITLE = "Historical screen replay harness disagrees with screen-p
 STALE_REGISTRATION_TITLE = "Historical screen replay registration predates screen code"
 STALE_VERDICT_TITLE = "Historical screen replay verdict no longer describes the live screen"
 HOLDOUT_REUSED_TITLE = "Historical screen replay holdout revealed more than once"
+VARIANTS = ("baseline", "delisting_sensitivity")
 
 
 def screen_code_fingerprint(package_dir: Path = PACKAGE_DIR) -> str:
@@ -103,7 +104,10 @@ def replay_screen(panel: pd.DataFrame, *, market_id: str, scratch_root: Path) ->
     root = Path(scratch_root)
     for as_of, rows in sorted(panel.groupby("as_of"), key=lambda item: _utc(item[0])):
         run_at = _utc(as_of)
-        records = rows.drop(columns=["as_of"]).to_dict(orient="records")
+        records = [
+            {k: (None if isinstance(v, float) and v != v else v) for k, v in r.items()}
+            for r in rows.drop(columns=["as_of"]).to_dict(orient="records")
+        ]
         tickers = [str(r["ticker"]) for r in records]
         mdir = market_dir(root, market_id)
         write_json(mdir / "metrics" / "latest.json.gz", records, compact=True, compress=True)
@@ -529,6 +533,11 @@ def refresh_historical_screen_replay(
         },
         "parity": parity_with_screen_premise(data_dir, premise),
         "results": previous.get("results"),
+        **{
+            f"results_{v}": previous[f"results_{v}"]
+            for v in VARIANTS[1:]
+            if previous.get(f"results_{v}") is not None
+        },
         "holdout_reveals": list(previous.get("holdout_reveals") or []),
     }
     if persist:
@@ -634,8 +643,16 @@ def run_replay(
     store_path: Path = DEFAULT_STORE_PATH,
     reveal_holdout: bool = False,
     scratch_root: Path | None = None,
+    variant: str = "baseline",
 ) -> dict[str, Any]:
-    """Replay the registered screen on a local point-in-time panel and commit aggregates only."""
+    """Replay the registered screen on a local point-in-time panel and commit aggregates only.
+
+    ``variant="delisting_sensitivity"`` re-scores with the sensitivity terminal
+    file into ``results_delisting_sensitivity``. It never counts as a reveal: its
+    holdout opens only once the baseline holdout has been revealed.
+    """
+    if variant not in VARIANTS:
+        raise ValueError(f"Unknown variant {variant!r}; expected one of {VARIANTS}")
     for path in (panel_path, prices_path, terminal_path, scratch_root):
         if path is not None and _inside_repo(path):
             raise ValueError(
@@ -645,7 +662,11 @@ def run_replay(
     if registration.get("screen_code_fingerprint") != screen_code_fingerprint():
         raise ValueError("Screen code changed since registration; run `register` first.")
     previous = _read_json(store_path) or {}
-    if reveal_holdout and previous.get("holdout_reveals"):
+    if variant != "baseline":
+        if reveal_holdout:
+            raise ValueError("Only the baseline run reveals the holdout.")
+        reveal_holdout = bool(previous.get("holdout_reveals"))
+    elif reveal_holdout and previous.get("holdout_reveals"):
         print("Holdout already revealed; this reveal is recorded as exploratory.")
     panel = _read_table(panel_path)
     prices = _read_table(prices_path)
@@ -667,12 +688,13 @@ def run_replay(
     )
     now = datetime.now(UTC).isoformat()
     reveals = list(previous.get("holdout_reveals") or [])
-    if reveal_holdout:
+    if reveal_holdout and variant == "baseline":
         reveals.append({"at": now, "evidence": not reveals})
+    results_key = "results" if variant == "baseline" else f"results_{variant}"
     payload = {
         **previous,
         "registration_id": registration.get("registration_id"),
-        "results": {
+        results_key: {
             "run_at": now,
             "data_fingerprint": _data_fingerprint(panel, prices),
             "rebalance_dates": int(signals["as_of"].nunique()),
@@ -683,6 +705,20 @@ def run_replay(
     }
     _write_store(store_path, payload)
     return payload
+
+
+def build_panel_files(
+    sharadar_dir: Path, out_dir: Path, registration_path: Path = DEFAULT_REGISTRATION_PATH
+) -> dict[str, Any]:
+    """Run the Sharadar adapter; both directories must sit outside the repository."""
+    from value_investor.sharadar_replay_adapter import build_replay_inputs
+
+    for path in (sharadar_dir, out_dir):
+        if _inside_repo(path):
+            raise ValueError(
+                f"{path} is inside the repository. Licensed data must stay outside this public repo."
+            )
+    return build_replay_inputs(sharadar_dir, out_dir, load_registration(registration_path))
 
 
 def register(
@@ -712,12 +748,20 @@ def main(argv: list[str] | None = None) -> int:
     run_p.add_argument("--terminal", type=Path, help="CSV of ticker,haircut for delistings")
     run_p.add_argument("--scratch", type=Path)
     run_p.add_argument("--reveal-holdout", action="store_true")
+    run_p.add_argument("--variant", choices=VARIANTS, default="baseline")
+    build_p = sub.add_parser(
+        "build-panel", help="Build panel/prices/terminal files from Sharadar bulk exports"
+    )
+    build_p.add_argument("--sharadar-dir", type=Path, required=True)
+    build_p.add_argument("--out", type=Path, required=True)
     args = parser.parse_args(argv)
     if args.command == "status":
         payload = refresh_historical_screen_replay()
         print(json.dumps({k: payload[k] for k in ("registration", "parity")}, indent=2))
     elif args.command == "register":
         print(register())
+    elif args.command == "build-panel":
+        print(json.dumps(build_panel_files(args.sharadar_dir, args.out), indent=2))
     else:
         payload = run_replay(
             args.panel,
@@ -725,8 +769,10 @@ def main(argv: list[str] | None = None) -> int:
             terminal_path=args.terminal,
             scratch_root=args.scratch,
             reveal_holdout=args.reveal_holdout,
+            variant=args.variant,
         )
-        print(json.dumps(payload["results"]["horizons"], indent=2))
+        key = "results" if args.variant == "baseline" else f"results_{args.variant}"
+        print(json.dumps(payload[key]["horizons"], indent=2))
     return 0
 
 

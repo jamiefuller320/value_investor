@@ -20,10 +20,11 @@
   "universe": "S&P 500 members on each rebalance date (Sharadar sp500 table), common stock, active and delisted. Financials and real estate included, as in the live screen; reported split by sector.",
   "data_source": {
     "vendor": "Sharadar personal-use licence (sharadar.com), Core US Equities Bundle, full history",
-    "fundamentals": "fundamentals table, dimension ART (as-reported trailing twelve months), latest row with datekey (SEC filing date) at least 2 days before the rebalance date",
-    "prices": "stocks table closeadj (split, dividend and spinoff adjusted) for total return; close (unadjusted) times sharesbas for market cap",
+    "fundamentals": "fundamentals table, dimension ART (as-reported trailing twelve months), latest row with filing date (datekey, or date in newer exports) at least 2 days before the rebalance date. Rows filed more than 456 days before the rebalance, and non-USD reporters, are dropped and counted.",
+    "prices": "stocks table closeadj (split, dividend and spinoff adjusted) for total return. Market cap is the filing-date marketcap rolled to the rebalance by the split-adjusted close ratio, so splits between filing and rebalance cancel.",
+    "metric_mapping": "Yahoo conventions as the live library screen receives them: dividend_yield and debt_to_equity in percent (2.5 = 2.5%), margins, returns and growth as fractions. revenue_growth and earnings_growth are quarterly year-on-year from ARQ (Yahoo's definition), falling back to ART year-on-year. *_prev fields come from the ART row one year earlier. Implemented in src/value_investor/sharadar_replay_adapter.py.",
     "sector": "tickers table sector",
-    "delistings": "actions table",
+    "delistings": "tickers isdelisted = Y. Merger exits for the sensitivity variant: actions acquisitionby or mergerto (ticker) and mergerfrom or acquisitionof (contraticker).",
     "licence_handling": "Raw tables stay outside the repository and are deleted within 30 days of cancelling. Only cohort-level aggregates are committed."
   },
   "rebalance": {
@@ -73,5 +74,12 @@
     "pass_both": "Buy tier beats the universe and the plain value sort: keep the screen's machinery; multi-year total return becomes the fitness test N197 asks for.",
     "pass_universe_only": "Beats the universe but not the plain sort: our extras add nothing over textbook value; simplify toward the published sorts.",
     "fail_universe": "Does not beat the universe: stop building forward machinery on this screen and rethink before stage 4."
-  }
+  },
+  "amendments": [
+    {
+      "at": "2026-10-07",
+      "before_any_data": true,
+      "change": "data_source spelled out to match the Phase 2 adapter: market cap rolled by split-adjusted close (replaces close x sharesbas, which breaks across splits), Yahoo unit conventions including percent dividend yield, quarterly growth, staleness and currency exclusions, merger classification."
+    }
+  ]
 }

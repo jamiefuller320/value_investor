@@ -37,8 +37,9 @@ our extra machinery adds anything over textbook value.
 |------|------------------|
 | Screen | Code fingerprint over `models/`, `scoring/__init__.py`, `model_families.py`, `model_weights.py`, `signals.py`, `sector_scoring.py`, `data_quality.py`, `signal_stability.py`. Default model weights; the 28-day learner is not run (N197) |
 | Universe | S&P 500 members on each date, active and delisted (Sharadar `sp500`) |
-| Fundamentals | Sharadar `fundamentals`, dimension `ART` (as reported, trailing twelve months), latest row filed at least 2 days before the date. As-reported, so later restatements cannot leak |
-| Prices | `closeadj` (splits, dividends, spinoffs) for total return |
+| Fundamentals | Sharadar `fundamentals`, dimension `ART` (as reported, trailing twelve months), latest row filed at least 2 days before the date. As-reported, so later restatements cannot leak. Filings over 456 days old and non-USD reporters are dropped and counted |
+| Prices | `closeadj` (splits, dividends, spinoffs) for total return. Market cap is the filing-date `marketcap` rolled forward by the split-adjusted close |
+| Metric units | Yahoo conventions, as the live screen receives them: dividend yield and debt/equity in percent; margins, returns, and growth as fractions. Growth is quarterly year-on-year (`ARQ`); `*_prev` fields come from the `ART` row a year earlier |
 | Rebalance | Last trading day of each month |
 | Development window | Entries 2000-01 to 2012-12 |
 | Holdout window | Entries 2013-01 to 2025-09, sealed until revealed once |
@@ -73,6 +74,10 @@ revealed opens a new `registration_id`, and its results are exploratory.
   out. It stays forward-tested only (N39).
 - The plain earnings-yield sort and the universe are costless comparators, so
   the net spread is conservative.
+- The replay reproduces the live screen, quirks included. Live rows carry
+  dividend yield in percent while the dividend models' floors (0.02–0.04) read
+  as fractions, so those floors pass almost any payer. The replay feeds percent
+  too, so it tests the screen as it actually runs (see the deferred store).
 
 ## Phases
 
@@ -96,16 +101,41 @@ harness and diffs buy-tier spread, avoid spread, and rank IC against
 Human checklist: `adhoc-historical-replay-data`. Personal-use licence only.
 
 1. Subscribe to the Sharadar Core US Equities Bundle, full history, for **one
-   month** (monthly plan). Bulk-download `fundamentals`, `stocks`, `actions`,
-   `tickers`, `sp500` to a directory **outside the repository**.
-2. Build the panel with the Phase 2 adapter (to be written against the
-   registered mapping): one row per month-end and S&P 500 member with `as_of`,
-   `ticker`, `sector`, and the Yahoo-style metric columns the models read.
-3. `ftse-historical-replay run --panel … --prices … --terminal …` (development
-   only). Review the development window. Do not change anything registered.
-4. `ftse-historical-replay run … --reveal-holdout` once. Commit the store.
-5. Cancel the subscription and delete every raw table and derived panel within
-   30 days (licence). Keep `docs/data/historical_screen_replay.json`.
+   month** (monthly plan). Bulk-download `fundamentals` (SF1), `stocks` (SEP),
+   `actions`, `tickers`, `sp500` to a directory **outside the repository**
+   (`.csv`, `.csv.gz`, or the vendor `.zip` files as downloaded).
+2. Build the inputs:
+
+   ```bash
+   ftse-historical-replay build-panel --sharadar-dir ~/sharadar --out ~/hsr-build
+   ```
+
+   This writes `panel.csv.gz`, `prices.csv.gz`, `terminal_baseline.csv`,
+   `terminal_sensitivity.csv`, and `build_report.json` (counts only). Check the
+   report before running: about 500 members per date, `panel_coverage` above
+   0.9, and the drop counts small. The adapter is
+   `src/value_investor/sharadar_replay_adapter.py`; it is tested on synthetic
+   tables with Sharadar's column names.
+3. Development run, holdout sealed:
+
+   ```bash
+   ftse-historical-replay run --panel ~/hsr-build/panel.csv.gz \
+     --prices ~/hsr-build/prices.csv.gz --terminal ~/hsr-build/terminal_baseline.csv
+   ```
+
+   Review the development window. Do not change anything registered.
+4. Reveal once: the same command with `--reveal-holdout`. Then the delisting
+   sensitivity, which opens the holdout only because the baseline already did
+   and never counts as a reveal:
+
+   ```bash
+   ftse-historical-replay run … --terminal ~/hsr-build/terminal_sensitivity.csv \
+     --variant delisting_sensitivity
+   ```
+
+   Commit `docs/data/historical_screen_replay.json`.
+5. Cancel the subscription and delete every raw table and derived file
+   (`~/sharadar`, `~/hsr-build`) within 30 days (licence). Keep the store.
 
 `run` refuses inputs inside the repository: the repo is public, and the licence
 forbids sharing the data or anything that reproduces it. The committed store
