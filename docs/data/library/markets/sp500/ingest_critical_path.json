@@ -1,13 +1,21 @@
 {
   "market_id": "sp500",
-  "assessed_at": "2026-10-06T14:30:11.699985+00:00",
-  "unmeasured": [],
+  "assessed_at": "2026-10-07T17:51:19.122779+00:00",
+  "unmeasured": [
+    "WDC"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "FICO",
-      "indexed_without_body": 5,
+      "ticker": "EXPE",
+      "indexed_without_body": 9,
       "filings_total": 19,
+      "filings_with_body": 10
+    },
+    {
+      "ticker": "FICO",
+      "indexed_without_body": 6,
+      "filings_total": 20,
       "filings_with_body": 14
     },
     {
@@ -23,6 +31,12 @@
       "filings_with_body": 63
     },
     {
+      "ticker": "DGX",
+      "indexed_without_body": 1,
+      "filings_total": 19,
+      "filings_with_body": 18
+    },
+    {
       "ticker": "LMT",
       "indexed_without_body": 1,
       "filings_total": 20,
@@ -31,22 +45,27 @@
   ],
   "thin_need_discovery": [],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
+    "WDC",
+    "EXPE",
     "FICO",
     "BXP",
     "CRH",
+    "DGX",
     "LMT"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (4 tickers, top: FICO(5), BXP(2), CRH(2), LMT(1))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (6 tickers, top: EXPE(9), FICO(6), BXP(2), CRH(2), DGX(1))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 4,
-    "indexed_without_body_rows": 10,
+    "indexed_without_body_tickers": 6,
+    "indexed_without_body_rows": 21,
     "thin_need_discovery": 0,
     "thin_need_bodies": 0
   }
