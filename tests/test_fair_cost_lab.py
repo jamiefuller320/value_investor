@@ -258,3 +258,31 @@ def test_spawn_fair_twins_dry_run_empty_and_apply(tmp_path: Path, capsys):
     cli = json.loads(capsys.readouterr().out)
     assert cli["dry_run"] is True
     assert cli["recommend_count"] == 3
+
+
+def test_spawn_refuses_frozen_parent_and_frozen_fair_book(tmp_path: Path):
+    from value_investor.fair_cost_lab import spawn_fair_cost_twin_for_parent
+
+    root = tmp_path / "paper"
+    _write_parent_shadow(root, "ai_judgment_calibrated")
+    (root / "assessment_model.json").write_text(
+        json.dumps(
+            {
+                "primary_track": "ai_judgment_fair",
+                "control_track": "buy_tier_level",
+                "frozen_tracks": {
+                    "ai_judgment_calibrated": {"reason": "x"},
+                    RULES_FAIR_TRACK_ID: {"reason": "x"},
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    twin = spawn_fair_cost_twin_for_parent(root, "ai_judgment_calibrated")
+    assert twin["spawned"] is False
+    assert "frozen" in twin["reason"]
+    assert not (root / "ai_judgment_calibrated_fair").exists()
+
+    pair = spawn_fair_cost_lab(root, force=True, track_ids=[RULES_FAIR_TRACK_ID])
+    assert pair["tracks"][0]["spawned"] is False
+    assert not (root / RULES_FAIR_TRACK_ID).exists()
