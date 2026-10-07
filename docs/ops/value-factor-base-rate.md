@@ -199,6 +199,10 @@ stage-6 allocation, rank foreign yield after withholding and after the ISA
 versus taxable dividend treatment. Gross yield is the wrong cheapness input
 for this investor.
 
+Shipped as observe columns on non-UK library screens
+(`investor_net_yield_isa`, `investor_net_yield_taxable`). Live FTSE signals
+still use gross yield. See [`investor-yield.md`](investor-yield.md).
+
 ### 8. Write the halt on the paper books before unattended capital
 
 **Closes the design half of L564. N13 stays: no live broker.**

@@ -2638,6 +2638,33 @@ def check_backtest_history(
     return findings
 
 
+def check_investor_yield(
+    *,
+    library_root: Path | None = None,
+) -> list[OpsFinding]:
+    """Warn when a non-UK library screen has no investor net-yield column.
+
+    Observe-only. Does not change live FTSE signals or re-rank a book.
+    """
+    from value_investor.investor_yield import finding_for_library
+
+    root = Path(library_root) if library_root is not None else Path("docs/data/library")
+    if not root.exists():
+        return []
+    finding = finding_for_library(root)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_unsettled_corporate_actions(
     *,
     paper_root: Path | None = None,
@@ -3400,6 +3427,7 @@ def collect_ops_findings(
     findings.extend(check_assessment_scoreboard())
     findings.extend(check_paper_learning_tracks())
     findings.extend(check_unsettled_corporate_actions())
+    findings.extend(check_investor_yield())
     findings.extend(check_deferred_triggers())
 
     engineering_findings, queue_status = check_engineering_queue(

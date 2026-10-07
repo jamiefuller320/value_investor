@@ -83,6 +83,9 @@ def test_run_library_screen_writes_artifacts(tmp_path: Path):
     signals = pd.read_csv(result.screen_dir / "latest_signals.csv")
     assert "signal" in signals.columns
     assert len(signals) == 30
+    assert "investor_net_yield_isa" in signals.columns
+    gap = (signals["investor_net_yield_isa"] - signals["dividend_yield"] * 0.85).abs()
+    assert gap.max() < 1e-6
 
 
 def test_run_library_screen_iseq20_tail_market(tmp_path: Path):
