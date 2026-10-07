@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-07T17:18:24+00:00",
+  "updated_at": "2026-10-07T17:28:16+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13285,6 +13285,34 @@
       },
       "updated_at": "2026-10-07T17:18:24+00:00",
       "status_note": "Observe-only two-lot replay is on buy_tier_level (docs/ops/two-lot-replay.md). It does not edit the book. A live twin stays L567."
+    },
+    {
+      "id": "L569",
+      "category": "later",
+      "section": "learning",
+      "title": "Score entry and exit timing on the tactical lot only",
+      "summary": "DCA cadences, trade-plan dip limits, exit-shadow and the high-water envelope answer when a slice is bought and sold. The two-lot replay still buys the tactical sleeve with the equal-weight slot and sells it on a fixed target, stop, or rank exit. Re-score those existing overlays on the tactical fraction. Do not let them delay or sell the core lot.",
+      "revisit_when": "two_lot_replay.json passes on buy_tier_level is at least 60. Then attach timing overlays to the tactical lot in that observe-only replay, not as a new paper book and not on the core lot.",
+      "tags": [
+        "tactical",
+        "dca",
+        "exit-timing",
+        "hwm",
+        "two-lot"
+      ],
+      "status": "open",
+      "source": "value strategy vs rolling profit-taking",
+      "added_at": "2026-10-07T17:28:16+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/two_lot_replay.json",
+            "path": "passes",
+            "op": ">=",
+            "value": 60
+          }
+        ]
+      }
     }
   ],
   "fragments": [
