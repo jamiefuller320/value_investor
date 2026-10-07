@@ -172,6 +172,9 @@ cross-sectional accumulate-versus-reject spread already on the screen-premise
 backtest. It is still noise. It becomes interesting after the buy tier itself
 is scored on total return against the hurdle in step 2.
 
+Shipped: `register_twin` refuses `ai_judgment_binding_gate` and any twin that
+sets `binding_ai_gate`. No such book is opened.
+
 ### 6. Teach the paper ledger terminal corporate events
 
 **Closes L562, when the trigger hits.**

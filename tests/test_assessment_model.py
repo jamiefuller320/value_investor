@@ -10,11 +10,14 @@ import pytest
 
 from value_investor.assessment_model import (
     ASSESSMENT_MODEL_FILENAME,
+    BINDING_AI_GATE_TRACK_ID,
     apply_assessment_model,
+    binding_ai_gate_refusal,
     control_track_id,
     frozen_tracks,
     is_track_frozen,
     primary_track_id,
+    register_twin,
 )
 from value_investor.paper_automation import ensure_learning_track_configs
 
@@ -262,6 +265,23 @@ def test_scheduler_ignores_frozen_track_last_run(tmp_path: Path):
         '{"gate": {"after_settle": true}}', encoding="utf-8"
     )
     assert paper_auto_artifacts_satisfied(base) is True
+
+
+def test_binding_ai_gate_book_is_refused(tmp_path: Path):
+    assert binding_ai_gate_refusal("ai_judgment_hold5_fair", {"exit_confirm_screens": 5}) is None
+    assert "N189" in (binding_ai_gate_refusal(BINDING_AI_GATE_TRACK_ID, {}) or "")
+    base = tmp_path / "auto"
+    ensure_learning_track_configs(base)
+    with pytest.raises(ValueError, match="N189"):
+        register_twin(
+            base,
+            track_id="custom_gate",
+            parent_track_id="ai_judgment",
+            varied={"binding_ai_gate": True, "min_conviction": 0.9},
+            parent_knobs_at_start={},
+            learning_question="does a binding research gate help?",
+            readiness_gate="not applicable",
+        )
 
 
 def test_shadow_spawns_refuse_frozen_parent(tmp_path: Path):
