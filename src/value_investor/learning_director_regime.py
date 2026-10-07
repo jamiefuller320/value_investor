@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.assessment_model import primary_track_id
 from value_investor.storage import read_json
 
 VISION_PATH = Path("docs/data/learning_director_vision.json")
@@ -317,7 +318,7 @@ def build_regime_summary(
         "windows": windows,
         "recommended_exclusion_step": rec_step_id,
         "knob_calibration_ready": (knob.get("tracks") or {})
-        .get("ai_judgment", {})
+        .get(primary_track_id(paper_root), {})
         .get("readiness", {})
         .get("ready_for_priors"),
         "ladder_replay_readiness": ladder_replay.get("readiness"),
@@ -347,7 +348,7 @@ def build_convergence_summary(
     exclusion = _safe_read(data_dir / "exclusion_universe_review.json") or {}
     inventory = build_experiment_inventory(data_dir, paper_root=paper_root)
 
-    primary_id = str(learning.get("primary_learning_track") or "ai_judgment")
+    primary_id = str(learning.get("primary_learning_track") or primary_track_id(paper_root))
     primary_review = (learning.get("reviews") or {}).get(primary_id) or {}
     live_knobs = dict(primary_review.get("knobs_after") or {})
 

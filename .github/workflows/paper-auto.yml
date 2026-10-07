@@ -48,11 +48,6 @@ jobs:
           print(f"Seeded {len(copied)} paper-auto json file(s)")
           PY
 
-      - name: Ensure calibrated AI-judgment shadow tracks
-        run: |
-          # Idempotent: keep existing competing shadows; create rank-1 if priors exist.
-          ftse-knob-calibrate spawn-shadow --paper-root output/paper_automation --top-n 3 || true
-
       - name: Refresh research overlay on dashboard reports
         run: |
           python3 - <<'PY'
@@ -66,7 +61,7 @@ jobs:
           print(f"Refreshed research overlay for paper-auto: {path}")
           PY
 
-      - name: Run paper automation (AI judgment primary + rules control + momentum grace)
+      - name: Run paper automation (active books in assessment_model.json; frozen books skip)
         env:
           FORCE_RUN: ${{ github.event.inputs.force }}
           SURVEILLANCE_ONLY: ${{ github.event.inputs.surveillance_only }}
@@ -80,7 +75,7 @@ jobs:
           fi
           ftse-paper-auto "${ARGS[@]}"
 
-      - name: Decision-review learning (both tracks vs market)
+      - name: Decision-review learning (active books vs market)
         if: ${{ github.event.inputs.surveillance_only != 'true' }}
         run: |
           # Propose always; apply only when enough equity marks/trades exist.

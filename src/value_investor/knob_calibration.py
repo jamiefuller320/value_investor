@@ -850,13 +850,21 @@ def calibrate_track(
 def calibrate_learning_tracks(
     paper_root: Path,
     *,
-    track_ids: tuple[str, ...] = ("rules", "ai_judgment"),
+    track_ids: tuple[str, ...] | None = None,
     **kwargs: Any,
 ) -> dict[str, Any]:
+    """Calibrate priors per book; defaults to the assessment-model primary, never frozen books."""
+    from value_investor.assessment_model import frozen_tracks, primary_track_id
+
     paper_root = Path(paper_root)
     dirs = learning_track_dirs(paper_root)
+    frozen = frozen_tracks(paper_root)
+    wanted = tuple(track_ids) if track_ids else (primary_track_id(paper_root),)
+    excluded_frozen = [track_id for track_id in wanted if track_id in frozen]
     tracks: dict[str, Any] = {}
-    for track_id in track_ids:
+    for track_id in wanted:
+        if track_id in frozen:
+            continue
         track_dir = dirs.get(track_id)
         if track_dir is None or not track_dir.exists():
             continue
@@ -870,6 +878,7 @@ def calibrate_learning_tracks(
         "observe_only": True,
         "calibrated_at": datetime.now(UTC).isoformat(),
         "tracks": tracks,
+        "excluded_frozen_tracks": excluded_frozen,
         "limitations": (
             "Observe-only multi-track knob calibration. Human gate required before "
             "seeding live config.json or decision-review starting points."

@@ -178,6 +178,9 @@ def refresh_calibration_endurance(
     primary_excess = primary_metrics.get("excess_after_costs")
     rules_excess = rules_metrics.get("excess_after_costs")
 
+    from value_investor.assessment_model import frozen_tracks
+
+    frozen = frozen_tracks(paper_root)
     ranks = discover_calibration_shadow_ranks(paper_root)
     shadows: list[dict[str, Any]] = []
     for rank in ranks:
@@ -203,13 +206,17 @@ def refresh_calibration_endurance(
             vs_primary = round(float(gate_excess) - float(primary_excess), 4)
         if gate_excess is not None and rules_excess is not None:
             vs_rules = round(float(gate_excess) - float(rules_excess), 4)
-        status = _classify_status(
-            marks=int(gate_marks) if gate_marks is not None else None,
-            excess=float(gate_excess) if gate_excess is not None else None,
-            vs_primary=vs_primary,
-            vs_rules=vs_rules,
-            min_marks=min_marks_for_survivor,
-            min_excess=min_excess_vs_market,
+        status = (
+            "frozen"
+            if track_id in frozen
+            else _classify_status(
+                marks=int(gate_marks) if gate_marks is not None else None,
+                excess=float(gate_excess) if gate_excess is not None else None,
+                vs_primary=vs_primary,
+                vs_rules=vs_rules,
+                min_marks=min_marks_for_survivor,
+                min_excess=min_excess_vs_market,
+            )
         )
         config_path = track_dir / CONFIG_FILENAME
         knobs = {}
