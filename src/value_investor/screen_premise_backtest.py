@@ -60,6 +60,13 @@ MIN_COHORT_GAP_DAYS = 6
 MIN_EFFECTIVE_N = 4.0
 Z90 = 1.645
 TARGET_ANNUAL_EDGE = 0.03
+FINANCIAL_SERVICES_SECTOR = "Financial Services"
+REAL_ESTATE_SECTOR = "Real Estate"
+# Precommitted rule (L561). Industrial models stay inclusive unless both hold
+# on the 28-day horizon: those sectors are at least this share of the buy tier,
+# and dropping them moves the buy-tier spread by at least this much.
+FINANCIALS_SHARE_MATERIAL = 0.15
+FINANCIALS_SPREAD_MOVE = 0.01
 
 LEARNING_QUESTION = (
     "Do the screen's buy-tier names out-earn the rest of the screened FTSE universe "
@@ -134,12 +141,89 @@ def _spread(a: list[float], b: list[float]) -> float | None:
     return round(mean(a) - mean(b), 4)
 
 
+def _sector_bucket(sector: str) -> str:
+    if sector == FINANCIAL_SERVICES_SECTOR:
+        return "financial_services"
+    if sector == REAL_ESTATE_SECTOR:
+        return "real_estate"
+    return "rest"
+
+
+def sector_buy_tier_splits(
+    buy_rows: list[tuple[str, float, float, str]],
+    universe: float,
+) -> dict[str, Any]:
+    """Buy-tier forward returns split into Financial Services, Real Estate, and the rest.
+
+    Each spread is that slice's equal-weight return minus the full screened universe,
+    so the slices are comparable with ``buy_tier_spread``.
+    """
+    buckets: dict[str, list[float]] = {
+        "financial_services": [],
+        "real_estate": [],
+        "rest": [],
+    }
+    for _ticker, _conviction, ret, sector in buy_rows:
+        buckets[_sector_bucket(sector)].append(ret)
+    splits: dict[str, Any] = {}
+    for key, returns in buckets.items():
+        splits[key] = {
+            "buy_tier_names": len(returns),
+            "buy_tier_share": round(len(returns) / len(buy_rows), 4) if buy_rows else None,
+            "spread_vs_universe": (
+                round(mean(returns) - universe, 4) if len(returns) >= MIN_GATE_SIDE_NAMES else None
+            ),
+        }
+    financial_names = len(buckets["financial_services"]) + len(buckets["real_estate"])
+    splits["financials_and_real_estate_share"] = (
+        round(financial_names / len(buy_rows), 4) if buy_rows else None
+    )
+    return splits
+
+
+def financials_move_the_buy_tier(horizon: dict[str, Any]) -> dict[str, Any]:
+    """Whether banks, insurers and REITs are moving the 28-day buy tier.
+
+    False leaves industrial models unchanged. True is the only result that
+    authorises excluding those sectors from the industrial ensemble.
+    """
+    full = (horizon.get("buy_tier_spread") or {}).get("mean")
+    rest = ((horizon.get("sector_splits") or {}).get("rest") or {}).get("mean")
+    share = horizon.get("financials_and_real_estate_share")
+    if not isinstance(full, (int, float)) or not isinstance(rest, (int, float)):
+        return {
+            "horizon_days": 28,
+            "exclude_from_industrial_models": False,
+            "reason": "28-day sector split is too thin to judge. Industrial models stay inclusive.",
+        }
+    gap = round(float(rest) - float(full), 4)
+    material_share = isinstance(share, (int, float)) and float(share) >= FINANCIALS_SHARE_MATERIAL
+    moves = material_share and abs(gap) >= FINANCIALS_SPREAD_MOVE
+    return {
+        "horizon_days": 28,
+        "buy_tier_spread_mean": full,
+        "rest_spread_mean": rest,
+        "spread_gap_rest_minus_full": gap,
+        "financials_and_real_estate_share": share,
+        "share_threshold": FINANCIALS_SHARE_MATERIAL,
+        "spread_move_threshold": FINANCIALS_SPREAD_MOVE,
+        "exclude_from_industrial_models": moves,
+        "reason": (
+            "Financial Services and Real Estate are at least 15% of the 28-day buy tier "
+            "and move its spread by at least 1pp. Exclude them from industrial models."
+            if moves
+            else "The 28-day split does not show Financial Services and Real Estate "
+            "moving the buy tier. Industrial models stay inclusive."
+        ),
+    }
+
+
 def score_cohort(
     entry: RunSnapshot,
     exit_snap: RunSnapshot,
     verdicts: dict[str, str | None] | None = None,
 ) -> dict[str, Any] | None:
-    rows: list[tuple[str, str, float, float]] = []
+    rows: list[tuple[str, str, float, float, str]] = []
     dropped = 0
     for row in entry.signals:
         ticker = str(row.get("ticker") or "")
@@ -157,22 +241,24 @@ def score_cohort(
                 str(row.get("signal") or ""),
                 float(row.get("conviction_score") or 0.0),
                 ret,
+                str(row.get("sector") or ""),
             )
         )
-    buy_rows = [(t, c, r) for t, s, c, r in rows if s in BUY_TIER]
-    buy = [r for _, _, r in buy_rows]
-    avoid = [r for _, s, _, r in rows if s == "avoid"]
+    buy_rows = [(t, c, r, sector) for t, s, c, r, sector in rows if s in BUY_TIER]
+    buy = [r for _, _, r, _ in buy_rows]
+    avoid = [r for _, s, _, r, _ in rows if s == "avoid"]
     if len(rows) < MIN_COHORT_NAMES or len(buy) < MIN_COHORT_NAMES:
         return None
-    universe = mean(r for _, _, _, r in rows)
+    universe = mean(r for _, _, _, r, _ in rows)
     verdicts = verdicts or {}
-    gate_pass = [r for t, _, r in buy_rows if verdicts.get(t) == AI_GATE_VERDICT]
-    gate_fail = [r for t, _, r in buy_rows if verdicts.get(t) != AI_GATE_VERDICT]
-    no_memo = sum(1 for t, _, _ in buy_rows if not verdicts.get(t))
+    gate_pass = [r for t, _, r, _ in buy_rows if verdicts.get(t) == AI_GATE_VERDICT]
+    gate_fail = [r for t, _, r, _ in buy_rows if verdicts.get(t) != AI_GATE_VERDICT]
+    no_memo = sum(1 for t, _, _, _ in buy_rows if not verdicts.get(t))
     by_conviction = sorted(buy_rows, key=lambda row: row[1], reverse=True)
     half = len(by_conviction) // 2
-    top = [r for _, _, r in by_conviction[:half]]
-    bottom = [r for _, _, r in by_conviction[len(by_conviction) - half :]]
+    top = [r for _, _, r, _ in by_conviction[:half]]
+    bottom = [r for _, _, r, _ in by_conviction[len(by_conviction) - half :]]
+    splits = sector_buy_tier_splits(buy_rows, universe)
     return {
         "entry": entry.run_at,
         "exit": exit_snap.run_at,
@@ -181,7 +267,7 @@ def score_cohort(
         "universe_return": round(universe, 4),
         "buy_tier_spread": round(mean(buy) - universe, 4),
         "avoid_spread": round(mean(avoid) - universe, 4) if avoid else None,
-        "rank_ic": _round(spearman([c for _, _, c, _ in rows], [r for _, _, _, r in rows])),
+        "rank_ic": _round(spearman([c for _, _, c, _, _ in rows], [r for _, _, _, r, _ in rows])),
         "ai_gate_pass_names": len(gate_pass),
         "ai_gate_reject_names": len(gate_fail),
         "ai_gate_no_memo_names": no_memo,
@@ -191,6 +277,7 @@ def score_cohort(
         "ai_gate_spread": _spread(gate_pass, gate_fail) if no_memo < len(buy_rows) else None,
         "conviction_half_spread": _spread(top, bottom),
         "dropped_unit_flips": dropped,
+        "sector_splits": splits,
     }
 
 
@@ -274,8 +361,31 @@ def build_screen_premise_backtest(data_dir: Path = DEFAULT_DATA_DIR) -> dict[str
                 if spread.get("ci90_low") is not None
                 else None
             ),
+            "sector_splits": {
+                key: summarise(
+                    [
+                        r["sector_splits"][key]["spread_vs_universe"]
+                        for r in rows
+                        if r["sector_splits"][key]["spread_vs_universe"] is not None
+                    ],
+                    horizon,
+                )
+                for key in ("financial_services", "real_estate", "rest")
+            },
+            "financials_and_real_estate_share": _round(
+                mean(shares)
+                if (
+                    shares := [
+                        r["sector_splits"]["financials_and_real_estate_share"]
+                        for r in rows
+                        if r["sector_splits"]["financials_and_real_estate_share"] is not None
+                    ]
+                )
+                else None
+            ),
             "cohorts": rows,
         }
+    decision_horizon = horizons.get("28") or {}
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "learning_question": LEARNING_QUESTION,
@@ -284,6 +394,7 @@ def build_screen_premise_backtest(data_dir: Path = DEFAULT_DATA_DIR) -> dict[str
         "first_run": snapshots[0].run_at if snapshots else None,
         "last_run": snapshots[-1].run_at if snapshots else None,
         "horizons": horizons,
+        "financials_real_estate_split": financials_move_the_buy_tier(decision_horizon),
         "limitations": (
             "Weeks of frozen FTSE snapshots, price return only (no dividends), FTSE 350 "
             "names that were screened at the time. Not the multi-year PIT test: that "

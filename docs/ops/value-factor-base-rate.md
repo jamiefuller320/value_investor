@@ -143,6 +143,13 @@ and REITs from the industrial models only if the split shows those ratios
 moving the buy tier. A paid CRSP or Sharadar replay of `assign_signal` waits
 until steps 1 and 2 are the adoption metric, and only to test that residual.
 
+Shipped: `sector_splits` and `financials_real_estate_split`. The exclusion
+flag is true only when those sectors are ≥15% of the 28-day buy tier and
+move its spread by ≥1pp. Otherwise industrial models stay inclusive. On the
+snapshots in this store they are about 2% of the buy tier and move the
+28-day spread by less than 0.1pp, so the flag is false and the industrial
+models are unchanged. See [`screen-premise-backtest.md`](screen-premise-backtest.md).
+
 ### 4. Leave the 28-day weight learner disconnected
 
 **Holds N197.**
