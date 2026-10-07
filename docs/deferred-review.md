@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T17:35:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T17:44:14+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -472,6 +472,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L570 | **Re-run historical screen replay on a fresh holdout** | The hsr-v1 holdout (2013-2025) can be spent once. New out-of-sample evidence only comes from years after 2025: re-register under a new registration_id and buy another one-month data window to score them. | At least 5 calendar years after the hsr-v1 holdout reveal, or when the screen code changes materially and the stale-verdict warning fires |
 | L571 | **Dividend yield unit mismatch in company screen models** | Live and library rows carry Yahoo dividend_yield in percent (median 2.5 = 2.5%), but DividendModel/DividendGrowth/LowPEHighYield floors (0.02-0.04) and Neff PEGY (growth fraction + yield) treat it as a fraction, so the yield floors pass almost any payer and PEGY is inflated ~100x on yield. Percentile ranks are unaffected. Trusts already normalise via trust_metrics.normalize_yield. Fix = normalise at fetch/library load; changes the screen fingerprint. | User decides: either fix and run ftse-historical-replay register before the hsr-v1 holdout is revealed, or fix after the reveal as a new epoch so the replay tests the screen as it ran |
 | L573 | **Pre-register a tactical-slice replay in the same Sharadar month** | Trade-plan levels are mechanical from daily prices, so the tactical prong can be replayed on Sharadar SEP without LLM look-ahead: core-only vs core-plus-tactical on the hsr-v1 buy tier, daily path, stamp and spread costs, primary = tactical increment per tactical-capital-year net. Must be registered and coded before subscribing, because raw data must be deleted within 30 days of cancelling. | Before buying the Sharadar month for hsr-v1 (decide include now or accept a second subscription later) |
+| L574 | **Pre-registered screen and tactical rule search on the replay development window** | Search a small pre-declared grid of screen settings x tactical settings on the 2000-2012 window only, objective = lower bound of P(excess after costs > 0 over set horizons) via block bootstrap of monthly cohort excess, chosen on a robust plateau, with CSCV probability-of-backtest-overfitting and deflated Sharpe reported. Holdout revealed once for frozen and chosen together. Needs signal caching, screen config injection (no code edits), the tactical daily simulator (L573), and a new registration id, because hsr-v1 forbids search (N33). | Before buying the Sharadar month: user decides whether the search runs in the same month (all derived data must be deleted within 30 days of cancelling) |
 
 ### Ops / reliability
 
