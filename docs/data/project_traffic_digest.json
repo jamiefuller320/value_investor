@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-07T12:32:02.864522+00:00",
+  "generated_at": "2026-10-07T17:32:58.259221+00:00",
   "role": "end_of_day_project_traffic",
-  "trajectory": "on_track",
+  "trajectory": "blocked_by_pr_queue",
   "pause_active": false,
-  "stuck_pr_count": 0,
+  "stuck_pr_count": 1,
   "achieved": [
     "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "FTSE 350 live screen and published dashboard are operational.",
@@ -22,7 +22,15 @@
     "Keep buy-tier filing bodies green; watch memo_recent on holdings∪buy-tier.",
     "Keep library growing offline; defer live universe expansion until stage 2b shows edge."
   ],
-  "actions_taken": [],
+  "actions_taken": [
+    {
+      "kind": "request_conflict_resolve",
+      "detail": "comment posted",
+      "pr_number": 1017,
+      "branch": "cursor/strategy-gap-review-1266",
+      "applied": true
+    }
+  ],
   "checkpoint_probe": {
     "evidence_rows": [
       {
@@ -86,14 +94,20 @@
         "probe": "ops_status.run_at required for same-day claims"
       },
       {
-        "claim": "Traffic pause_active=False; stuck_pr_count=0",
+        "claim": "Traffic pause_active=False; stuck_pr_count=1",
         "source": "docs/data/engineering_tasks.json#traffic_control",
         "grounded": true,
         "probe": "pause state must match stuck PR classification on this run"
+      },
+      {
+        "claim": "Stuck PR #1017 `cursor/strategy-gap-review-1266` reasons=['merge_conflict'] mergeable_state=dirty",
+        "source": "github.pulls + check-runs",
+        "grounded": true,
+        "probe": "reasons must be ci_failing and/or merge_conflict"
       }
     ],
     "ungrounded_count": 0,
-    "grounded_count": 11
+    "grounded_count": 12
   },
   "merges_today": [
     {
@@ -177,7 +191,7 @@
     }
   ],
   "pr_fix_common_issues": {
-    "occasion_count": 172,
+    "occasion_count": 173,
     "by_reason": [
       {
         "failure_reason": "PR mergeable=CONFLICTING against main",
@@ -232,6 +246,18 @@
         ]
       },
       {
+        "failure_reason": "merge_conflict:dirty",
+        "count": 3,
+        "sources": {
+          "traffic_controller": 3
+        },
+        "recent_prs": [
+          994,
+          993,
+          1017
+        ]
+      },
+      {
         "failure_reason": "Merge conflicts in deferred-ideas.json with main",
         "count": 2,
         "sources": {
@@ -264,17 +290,6 @@
         ]
       },
       {
-        "failure_reason": "merge_conflict:dirty",
-        "count": 2,
-        "sources": {
-          "traffic_controller": 2
-        },
-        "recent_prs": [
-          994,
-          993
-        ]
-      },
-      {
         "failure_reason": "ruff_format",
         "count": 1,
         "sources": {
@@ -298,7 +313,7 @@
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 95
+        "count": 96
       },
       {
         "kind": "ci_check",
@@ -312,7 +327,7 @@
       },
       {
         "source": "traffic_controller",
-        "count": 2
+        "count": 3
       }
     ]
   },

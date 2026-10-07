@@ -1,8 +1,8 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-07T12:32:02.864522+00:00`
-Trajectory: **on_track**
-Dispatch pause: **inactive** (stuck PRs: 0)
+Generated: `2026-10-07T17:32:58.259221+00:00`
+Trajectory: **blocked_by_pr_queue**
+Dispatch pause: **inactive** (stuck PRs: 1)
 
 ## Achieved (grounded)
 - Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
@@ -16,7 +16,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - Published screen bundle dated 2026-09-27 — confirm Sunday refresh.
 
 ## Checkpoint probe
-- Grounded rows: 11; ungrounded: 0
+- Grounded rows: 12; ungrounded: 0
 - [ok] Stage 0 (UK quant core): complete _(source: docs/data/project_progress.json)_
 - [ok] Stage 1 (Decision-review learning): in_progress _(source: docs/data/project_progress.json)_
 - [ok] Stage 2b (Primary learning track): in_progress _(source: docs/data/project_progress.json)_
@@ -27,10 +27,11 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
 - [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
 - [ok] Ops monitor overall=warn at 2026-10-07T07:46:46.532227+00:00 _(source: docs/data/ops_status.json)_
-- [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
+- [ok] Traffic pause_active=False; stuck_pr_count=1 _(source: docs/data/engineering_tasks.json#traffic_control)_
+- [ok] Stuck PR #1017 `cursor/strategy-gap-review-1266` reasons=['merge_conflict'] mergeable_state=dirty _(source: github.pulls + check-runs)_
 
 ## Traffic actions
-- _(none)_
+- `request_conflict_resolve` PR #1017 — comment posted (applied)
 
 ## Merges today (monitor independent verify)
 - `ingest_narrow`/verified PR #1014 `eng-20261007-04` — Allowlisted IR results-presentation PDF ingest (cash bridges, segments, dividend policy)
@@ -40,15 +41,15 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `ingest_narrow`/verified PR #1005 `eng-20261006-01` — Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260920-03)
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 172
+- Occasion count: 173
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
+- `merge_conflict:dirty` — 3×
 - `Merge conflicts in deferred-ideas.json with main` — 2×
 - `validate job failed` — 2×
 - `Ruff F841 unused dismissable in market_warning_triage.propose_triage` — 2×
-- `merge_conflict:dirty` — 2×
 
 ## Merge authority
 - Status: **scoped_auto_merge**
