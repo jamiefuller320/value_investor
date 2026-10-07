@@ -185,6 +185,11 @@ evidence. Do this at the first holding that leaves the screened universe for
 one of those reasons. Until then, a longer paper history is not stronger
 evidence.
 
+Shipped: `settle_fund_corporate_actions` on the daily paper pass. Explicit
+feed only. A terminal event with no cash amount stays open and ops-monitor
+warns. The equity curve is not rewritten. See
+[`corporate-actions.md`](corporate-actions.md).
+
 ### 7. Net investor tax into yield before any non-UK judgement
 
 **Closes L563.**

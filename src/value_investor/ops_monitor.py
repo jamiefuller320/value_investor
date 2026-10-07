@@ -2638,6 +2638,45 @@ def check_backtest_history(
     return findings
 
 
+def check_unsettled_corporate_actions(
+    *,
+    paper_root: Path | None = None,
+) -> list[OpsFinding]:
+    """Warn when a terminal corporate action has no cash amount.
+
+    Observe-only. Does not zero the position or rewrite the equity curve.
+    """
+    from value_investor.corporate_actions import finding_for_funds
+    from value_investor.paper_automation import FUND_FILENAME, learning_track_dirs
+    from value_investor.paper_fund import PaperFund
+
+    root = Path(paper_root) if paper_root is not None else Path("docs/data/paper_automation")
+    if not root.exists():
+        return []
+    funds: list[tuple[str, PaperFund]] = []
+    for track_id, track_dir in learning_track_dirs(root).items():
+        path = Path(track_dir) / FUND_FILENAME
+        if not path.exists():
+            continue
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            funds.append((track_id, PaperFund.from_dict(payload)))
+        except (OSError, json.JSONDecodeError, TypeError, ValueError):
+            continue
+    finding = finding_for_funds(funds)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_value_factor_base_rate(
     *,
     store_path: Path | None = None,
@@ -3360,6 +3399,7 @@ def collect_ops_findings(
     findings.extend(check_value_factor_base_rate())
     findings.extend(check_assessment_scoreboard())
     findings.extend(check_paper_learning_tracks())
+    findings.extend(check_unsettled_corporate_actions())
     findings.extend(check_deferred_triggers())
 
     engineering_findings, queue_status = check_engineering_queue(
