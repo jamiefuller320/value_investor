@@ -2115,6 +2115,68 @@ def check_hold_period_counterfactual(
     ]
 
 
+def check_two_lot_replay(
+    *,
+    paper_root: Path | None = None,
+    store_path: Path | None = None,
+    history_fetcher: Any = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only two-lot retention replay on the wide buy-tier book.
+
+    Writes ``docs/data/two_lot_replay.json``. Never changes books or knobs
+    (``auto_fixable=False``).
+    """
+    from value_investor.total_return_view import fetch_ticker_history
+    from value_investor.two_lot_replay import (
+        DEFAULT_PAPER_ROOT,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_finding_from_two_lot_replay,
+        refresh_two_lot_replay,
+    )
+
+    root = Path(paper_root) if paper_root is not None else DEFAULT_PAPER_ROOT
+    if not root.exists():
+        return []
+    try:
+        payload = refresh_two_lot_replay(
+            root,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            history_fetcher=history_fetcher or fetch_ticker_history,
+            persist=persist,
+        )
+    except (
+        OSError,
+        ValueError,
+        TypeError,
+        KeyError,
+        ZeroDivisionError,
+        json.JSONDecodeError,
+    ) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    finding = ops_finding_from_two_lot_replay(payload)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_sec_companyfacts_coverage(
     *,
     library_root: Path | None = None,
@@ -3441,6 +3503,7 @@ def collect_ops_findings(
     findings.extend(check_decision_review_significance_gate())
     findings.extend(check_total_return_view())
     findings.extend(check_hold_period_counterfactual())
+    findings.extend(check_two_lot_replay())
     findings.extend(check_sec_companyfacts_coverage())
     findings.extend(check_hkex_direct_coverage())
     findings.extend(check_amf_direct_coverage())
