@@ -5445,7 +5445,13 @@ _IR_ROW_TOKEN_SKIP = frozenset(
 _IR_PERIOD_HEADLINE_CUES: dict[str, tuple[str, ...]] = {
     "annual": ("full year", "final results", "annual results", "annual report", "fy "),
     "interim": ("half year", "interim", "h1 ", "h2 "),
-    "trading_update": ("trading update", "trading statement", "trading"),
+    "trading_update": (
+        "trading update",
+        "trading statement",
+        "trading",
+        "production report",
+        "production",
+    ),
 }
 _IR_WRONG_PERIOD_MARKERS: dict[str, tuple[str, ...]] = {
     "trading_update": (
@@ -5560,6 +5566,12 @@ def _validate_filing_body_period_content(row: dict[str, Any], body: str) -> tupl
     """Reject bodies whose period cues clearly mismatch the indexed row tag."""
     expected = _infer_filing_period_from_row(row)
     if expected not in ("annual", "interim", "trading_update"):
+        return True, None
+    headline_blob = str(row.get("headline") or "").lower()
+    if expected == "trading_update" and any(
+        re.search(pat, headline_blob) for pat in _OPERATIONS_PRODUCTION_UPDATE_PATTERNS
+    ):
+        # Mining production reports (HOC.L Q2) cite upcoming interim results in narrative.
         return True, None
     sample = (body or "")[:4000].lower()
     wrong_markers = _IR_WRONG_PERIOD_MARKERS.get(expected, ())
