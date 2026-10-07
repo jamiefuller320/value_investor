@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T20:48:06+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T23:46:11+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -328,6 +328,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L567 | **Test core sleeve plus tactical slice as two lots** | compute_trade_plan already splits a buy into a long-term core (about 50-75%) and a tactical dip slice with its own stop and target. The simulator and the frozen technical book apply that stop and target to every share. A later cold start should keep the core through the value thesis and turn only the tactical lot. | ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair. Then one cold start can fund the original core/tactical split as two lots, without editing the primary. _(machine-checked)_ |
 | L569 | **Score entry and exit timing on the tactical lot only** | DCA cadences, trade-plan dip limits, exit-shadow and the high-water envelope answer when a slice is bought and sold. The two-lot replay still buys the tactical sleeve with the equal-weight slot and sells it on a fixed target, stop, or rank exit. Re-score those existing overlays on the tactical fraction. Do not let them delay or sell the core lot. | two_lot_replay.json passes on buy_tier_level is at least 60. Then attach timing overlays to the tactical lot in that observe-only replay, not as a new paper book and not on the core lot. _(machine-checked)_ |
 | L578 | **Re-rating exit for the core sell trigger** | The PR #1021 core sell trigger sells only on a confirmed thesis break (hard avoid or failed research), so a name that re-rates to fair value can be held indefinitely. Add a valuation exit: sell after 2 consecutive screens outside the buy tier with the earnings yield below a percentile of the universe, with the threshold taken from the hrs-v1 search (rerate50 / rerate30), via a cold-start twin rather than a live edit. | hrs-v1 holdout revealed and the chosen rule set uses a rerate or thesis exit that passes |
+| L579 | **Position sizing and cap in a later rule-search registration** | hrs-v1 holds equal weights with no position cap; the live buy_tier_level book caps at 120 names with a one-screen re-entry cooldown, and the graduated-allocation book sizes by conviction. Add sizing (equal vs conviction-graduated) and the cap as grid dimensions in a new registration, run on years after the hrs-v1 holdout or a fresh market. | hrs-v1 holdout revealed and median names held for the chosen rule set exceeds 120, or graduated allocation is proposed for promotion |
 
 ### Universe & data
 
