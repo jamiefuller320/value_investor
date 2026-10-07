@@ -61,6 +61,44 @@ def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
     session.exitstatus = pytest.ExitCode.TESTS_FAILED
 
 
+_REPO_DOCS = (REPO_ROOT / "docs").resolve()
+
+
+def _is_repo_docs_path(path: Path | str) -> bool:
+    return Path(path).resolve().is_relative_to(_REPO_DOCS)
+
+
+@pytest.fixture(autouse=True)
+def _forbid_library_screen_into_repo_docs(monkeypatch, request):
+    """Fail the offending test when a real library screen targets committed docs/.
+
+    Callers bind ``run_library_screen`` at import time, so every loaded module
+    holding the original is patched; tests that mock it themselves still win.
+    """
+    import sys
+
+    from value_investor import library_screen
+
+    original = library_screen.run_library_screen
+
+    def guarded(root, market_id, *args, **kwargs):
+        if _is_repo_docs_path(root):
+            raise AssertionError(
+                f"{request.node.nodeid} ran run_library_screen({market_id!r}) against "
+                f"committed {root}; pass a tmp_path library root"
+            )
+        return original(root, market_id, *args, **kwargs)
+
+    for name, module in list(sys.modules.items()):
+        owned = (
+            name == "value_investor"
+            or name.startswith("value_investor.")
+            or name.rpartition(".")[2].startswith("test_")
+        )
+        if owned and getattr(module, "run_library_screen", None) is original:
+            monkeypatch.setattr(module, "run_library_screen", guarded)
+
+
 @pytest.fixture
 def pinned_weekday_noon_utc() -> datetime:
     return weekday_noon_utc()
