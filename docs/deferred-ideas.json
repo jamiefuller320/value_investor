@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-07T15:24:53+00:00",
+  "updated_at": "2026-10-07T15:26:57+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13200,6 +13200,39 @@
       "status": "open",
       "source": "value strategy vs rolling profit-taking",
       "added_at": "2026-10-07T15:24:53+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_hold5_fair].common_days",
+            "op": ">=",
+            "value": 130
+          },
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_graduated_fair].common_days",
+            "op": ">=",
+            "value": 130
+          }
+        ]
+      }
+    },
+    {
+      "id": "L567",
+      "category": "later",
+      "section": "learning",
+      "title": "Test core sleeve plus tactical slice as two lots",
+      "summary": "compute_trade_plan already splits a buy into a long-term core (about 50-75%) and a tactical dip slice with its own stop and target. The simulator and the frozen technical book apply that stop and target to every share. A later cold start should keep the core through the value thesis and turn only the tactical lot.",
+      "revisit_when": "ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair. Then one cold start can fund the original core/tactical split as two lots, without editing the primary.",
+      "tags": [
+        "trade-plan",
+        "core",
+        "tactical",
+        "hold-buffer"
+      ],
+      "status": "open",
+      "source": "value strategy vs rolling profit-taking",
+      "added_at": "2026-10-07T15:26:57+00:00",
       "trigger": {
         "all": [
           {

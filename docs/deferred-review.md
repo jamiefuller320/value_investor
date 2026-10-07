@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T15:24:53+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T15:26:57+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -324,6 +324,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L562 | **Paper ledger for splits, cash bids, and delistings** | Paper marks are shares times the latest price. Filings can note corporate actions, but the fund does not convert a split, pay a cash bid, or close a delisted name into cash. A multi-year book will treat a terminal event as a price gap and learn from it. | A paper holding leaves the screened universe because of a split, scheme of arrangement, or delisting |
 | L564 | **Autonomous drawdown and concentration halt** | Stage 6 has no pre-committed stop. Hypothesis integrity tolerates a large share of names underwater and does not sell. Before any book can trade unattended, define a halt on peak-to-trough drawdown, single-name weight, sector weight, and factor or FX concentration, with the action being flatten-to-cash or freeze-new-buys and a human reopen. | Stage 6 live-capital design starts (N13 revisit) |
 | L566 | **Cross-sectional rank IC as the primary learning signal** | Book NAV gives one noisy observation per mark; weekly cross-sectional spreads/rank IC across ~250 FTSE names (plus admitted library markets) give far more independent observations. Make screen_premise spreads, not book excess, the gate for decision-review and knob changes, with book NAV as confirmation. | When screen_premise_backtest reaches 26 weekly cohorts at the 28-day horizon, or when the significance gate has blocked every apply for 8 consecutive weeks |
+| L567 | **Test core sleeve plus tactical slice as two lots** | compute_trade_plan already splits a buy into a long-term core (about 50-75%) and a tactical dip slice with its own stop and target. The simulator and the frozen technical book apply that stop and target to every share. A later cold start should keep the core through the value thesis and turn only the tactical lot. | ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair. Then one cold start can fund the original core/tactical split as two lots, without editing the primary. _(machine-checked)_ |
 
 ### Universe & data
 
