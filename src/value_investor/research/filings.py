@@ -661,8 +661,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0327/2026032702072.pdf",
     ],
     # hang_seng buy-tier deepen — eng-20261001-01: remaining unmeasured (6618/0101/0291).
+    # eng-20261007-01: igc-20260930-10 0/0 — add interim HKEX PDFs so IR merge/refetch clears
+    # library thin_body (≥3) when HKEX direct ingest is skipped by slot budget.
     "6618.HK": [
         "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042401364.pdf",
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0904/2026090400644.pdf",
+        "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0813/2026081300236.pdf",
     ],
     "0101.HK": [
         "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0326/2026032600824.pdf",
@@ -5325,6 +5329,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0327/2026032702072.pdf": "annual",
     # eng-20261001-01: hang_seng unmeasured — opaque HKEX annual report slugs.
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042401364.pdf": "annual",
+    # eng-20261007-01: 6618.HK interim HKEX slugs (opaque listconews paths).
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0904/2026090400644.pdf": "interim",
+    "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0813/2026081300236.pdf": "interim",
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0326/2026032600824.pdf": "annual",
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0423/2026042300830.pdf": "annual",
     # eng-20261002-14: BUOU.SI — 2HFY25 slug reads interim but is full-year condensed FS.
@@ -10496,6 +10503,77 @@ def sanitize_filings_index(
         "with_body_before": before,
         "with_body_after": after,
         "note": "sanitize_filings_index",
+    }
+
+
+def filings_index_hkex_direct_gap(payload: dict[str, Any]) -> bool:
+    """True when a ``.HK`` index lacks HKEX direct coverage or library body parity."""
+    summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+    with_body = int(summary.get("with_body") or 0)
+    total = int(summary.get("total") or 0)
+    sources = {str(item).strip() for item in (payload.get("sources_used") or []) if item}
+    if "hkex_direct" not in sources:
+        return True
+    if total == 0 or with_body == 0:
+        return True
+    return with_body < max(3, total // 2)
+
+
+def ensure_hkex_direct_filings_ingested(
+    sources_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    market: str | None,
+    deepen_history: bool = False,
+) -> dict[str, Any]:
+    """
+    Re-run ``ingest_filings`` when a HKEX ticker index is still thin or missing ``hkex_direct``.
+
+    Listing-only discovery merges can leave ``.HK`` memos on a hand-seeded IR row without
+    pulling the HKEXnews title-search feed; library gap closure then reports 0/0 refetch.
+    """
+    from value_investor.research.hkex_direct import is_hkex_ticker
+
+    if not is_hkex_ticker(ticker):
+        return {"skipped": True, "reason": "not_hk_ticker"}
+    if resolve_filings_regime(market, ticker) != "asia_filings":
+        return {"skipped": True, "reason": "not_asia_filings"}
+
+    sources_dir = Path(sources_dir)
+    filings_dir = sources_dir / "filings"
+    index_path = filings_dir / "filings_index.json"
+    before = 0
+    if index_path.exists():
+        try:
+            payload = json.loads(index_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            payload = {}
+        if isinstance(payload, dict):
+            before = int((payload.get("summary") or {}).get("with_body") or 0)
+            if not filings_index_hkex_direct_gap(payload):
+                return {
+                    "skipped": True,
+                    "reason": "hkex_sufficient",
+                    "with_body_before": before,
+                    "with_body_after": before,
+                }
+
+    ingest_meta = ingest_filings(
+        ticker=ticker,
+        company_name=company_name,
+        sources_dir=sources_dir,
+        market=market,
+        deepen_history=deepen_history,
+    )
+    after = int((ingest_meta.get("filings_summary") or {}).get("with_body") or 0)
+    return {
+        "skipped": False,
+        "with_body_before": before,
+        "with_body_after": after,
+        "fetched": max(0, after - before),
+        "ingest": ingest_meta,
+        "note": "ensure_hkex_direct_filings_ingested",
     }
 
 

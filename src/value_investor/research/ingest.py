@@ -1494,6 +1494,26 @@ def ingest_research_sources(
                     "mandatory": metrics.get("mandatory", False),
                 }
 
+        from value_investor.library_ingest_budget import deadline_reached
+        from value_investor.research.filings import ensure_hkex_direct_filings_ingested
+
+        if not deadline_reached(deadline_monotonic):
+            hkex_ensure = ensure_hkex_direct_filings_ingested(
+                sources_dir,
+                ticker=ticker,
+                company_name=company_name,
+                market=market,
+                deepen_history=deepen_history,
+            )
+            filings_meta["hkex_ensure"] = hkex_ensure
+            ingest_payload = hkex_ensure.get("ingest") or {}
+            if ingest_payload.get("filings_summary"):
+                filings_meta["filings_summary"] = dict(ingest_payload["filings_summary"])
+            if ingest_payload.get("filings_sources"):
+                filings_meta["filings_sources"] = list(ingest_payload["filings_sources"])
+            if ingest_payload.get("filings_index_path"):
+                filings_meta["filings_index_path"] = ingest_payload["filings_index_path"]
+
         if deepen_history:
             from value_investor.research.gap_fill_sources import deepen_thin_filings_if_needed
 

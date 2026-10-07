@@ -502,7 +502,20 @@ def prepare_gap_fill_source_pack(
 
     # Re-attempt PDF / direct RNS bodies before the agent answers.
     filings_dir = sources_dir / "filings"
+    hkex_ensure: dict[str, Any] = {}
+    if _market_bucket(market, ticker) == "asia":
+        from value_investor.research.filings import ensure_hkex_direct_filings_ingested
+
+        hkex_ensure = ensure_hkex_direct_filings_ingested(
+            sources_dir,
+            ticker=ticker,
+            company_name=company_name,
+            market=market,
+            deepen_history=True,
+        )
     body_refetch = refetch_missing_filing_bodies(filings_dir)
+    if int(hkex_ensure.get("fetched") or 0) > 0:
+        body_refetch = hkex_ensure
     ch_refetch: dict[str, Any] = {}
     investegate_refetch: dict[str, Any] = {}
     ticker_rns_refetch: dict[str, Any] = {}
@@ -752,6 +765,16 @@ def execute_planned_alternate_sources(
                     ticker=ticker,
                     company_name=company_name,
                     max_bodies=20,
+                )
+            elif source_id == "exchange_filings_full" and _market_bucket(market, ticker) == "asia":
+                from value_investor.research.filings import ensure_hkex_direct_filings_ingested
+
+                last_refetch = ensure_hkex_direct_filings_ingested(
+                    sources_dir,
+                    ticker=ticker,
+                    company_name=company_name,
+                    market=market,
+                    deepen_history=True,
                 )
             else:
                 last_refetch = refetch_missing_filing_bodies(filings_dir, max_bodies=20)

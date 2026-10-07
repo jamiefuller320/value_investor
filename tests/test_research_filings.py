@@ -7311,12 +7311,77 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_6618_hk_index(tmp_path: Pat
     )
 
     meta = merge_ir_allowlist_filings("6618.HK", filings_dir)
-    assert meta["added"] >= 1
-    assert meta["total_allowlist"] >= 1
+    assert meta["added"] >= 3
+    assert meta["total_allowlist"] >= 3
 
     payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
-    assert int(payload["summary"]["total"]) >= 1
+    assert int(payload["summary"]["total"]) >= 3
     assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_fetch_filings_ir_allowlist_6618_hk_interim_seeds_eng_20261007_01(tmp_path: Path):
+    """eng-20261007-01: 6618.HK IR allowlist must seed interim HKEX PDFs for thin library memos."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("6618.HK", path=allowlist_path)
+    assert len(rows) >= 3
+    assert any(row["period"] == "annual" for row in rows)
+    assert sum(1 for row in rows if row["period"] == "interim") >= 2
+    assert all("hkexnews.hk" in row["url"] for row in rows)
+
+
+def test_filings_index_hkex_direct_gap_detects_6618_stale_discovery_index():
+    """eng-20261007-01: listing-only merge without hkex_direct is a library gap."""
+    from value_investor.research.filings import filings_index_hkex_direct_gap
+
+    stale = {
+        "sources_used": ["google_news_asia", "ir_allowlist"],
+        "summary": {"total": 2, "with_body": 1},
+    }
+    assert filings_index_hkex_direct_gap(stale)
+
+    healthy = {
+        "sources_used": ["hkex_direct", "ir_allowlist"],
+        "summary": {"total": 11, "with_body": 11},
+    }
+    assert not filings_index_hkex_direct_gap(healthy)
+
+
+@patch("value_investor.research.filings.ingest_filings")
+def test_ensure_hkex_direct_filings_ingested_runs_for_stale_6618_index(mock_ingest, tmp_path: Path):
+    """eng-20261007-01: ensure_hkex re-ingests when HKEX direct feed never merged."""
+    from value_investor.research.filings import ensure_hkex_direct_filings_ingested
+
+    mock_ingest.return_value = {
+        "filings_summary": {"total": 11, "with_body": 11},
+        "filings_sources": ["hkex_direct", "ir_allowlist"],
+    }
+    sources_dir = tmp_path / "sources"
+    filings_dir = sources_dir / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "6618.HK",
+                "sources_used": ["ir_allowlist"],
+                "summary": {"total": 1, "with_body": 1},
+                "filings": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    out = ensure_hkex_direct_filings_ingested(
+        sources_dir,
+        ticker="6618.HK",
+        company_name="JD Health International Inc.",
+        market="hang_seng",
+        deepen_history=True,
+    )
+    assert not out.get("skipped")
+    assert out["with_body_after"] == 11
+    mock_ingest.assert_called_once()
 
 
 def test_merge_ir_allowlist_filings_bootstraps_empty_1099_hk_index(tmp_path: Path):
