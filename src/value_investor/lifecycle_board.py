@@ -824,12 +824,23 @@ def _load_tracks(
     root = _paper_root_for_market(market_id, paper_root=paper_root, shard_root=shard_root)
     if not root.exists():
         return []
+    from value_investor.assessment_model import (
+        assessed_track_ids,
+        frozen_tracks,
+        primary_track_id,
+    )
+
     tracks: list[dict[str, Any]] = []
     try:
         dirs = learning_track_dirs(root)
     except Exception:  # noqa: BLE001
         dirs = {}
+    frozen = frozen_tracks(root)
+    primary = primary_track_id(root)
+    assessed = set(assessed_track_ids(root))
     for track_id, track_dir in dirs.items():
+        if track_id in frozen:
+            continue
         fund_path = Path(track_dir) / FUND_FILENAME
         if not fund_path.exists():
             continue
@@ -839,14 +850,14 @@ def _load_tracks(
         config = _as_dict(_safe_read(Path(track_dir) / CONFIG_FILENAME))
         if not config:
             config = _as_dict(fund.get("config"))
-        if not _is_main_track(str(track_id), config):
+        if str(track_id) not in assessed and not _is_main_track(str(track_id), config):
             continue
         holdings = fund.get("holdings") if isinstance(fund.get("holdings"), dict) else {}
         tracks.append(
             {
                 "track_id": str(track_id),
                 "track_label": config.get("track_label") or str(track_id),
-                "is_primary": bool(config.get("is_primary_learning_track")),
+                "is_primary": str(track_id) == primary,
                 "is_cohort_lab": bool(config.get("is_cohort_lab")),
                 "holdings_count": len(holdings),
                 "fund": fund,
@@ -865,12 +876,13 @@ def _load_tracks(
 def _default_track_id(tracks: list[dict[str, Any]]) -> str | None:
     if not tracks:
         return None
-    for preferred in (BUY_TIER_LEVEL_TRACK_ID, "ai_judgment", "rules"):
-        if any(row.get("track_id") == preferred for row in tracks):
-            return preferred
+    if any(row.get("track_id") == BUY_TIER_LEVEL_TRACK_ID for row in tracks):
+        return BUY_TIER_LEVEL_TRACK_ID
     primary = next((row for row in tracks if row.get("is_primary")), None)
     if primary:
         return str(primary["track_id"])
+    if any(row.get("track_id") == "rules" for row in tracks):
+        return "rules"
     return str(tracks[0]["track_id"])
 
 

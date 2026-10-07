@@ -678,3 +678,29 @@ def test_ftse_board_accepts_price_alias_keys(tmp_path: Path):
     cols = merge_track_columns(ftse["screen_columns"], ftse["tracks"][0])
     card = next(row for row in cols["growth"]["shown"] if row["ticker"] == "ALIAS.L")
     assert card["unrealized_pnl_pct"] == 0.1
+
+
+def test_live_board_tracks_follow_assessment_model(tmp_path: Path):
+    from value_investor.lifecycle_board import _default_track_id, _load_tracks
+
+    paper = tmp_path / "paper_automation"
+    for track_id, config in (
+        ("ai_judgment", {"is_primary_learning_track": True}),
+        ("ai_judgment_fair", {"is_fair_cost_lab": True}),
+        ("buy_tier_level", {"is_cohort_lab": True}),
+    ):
+        (paper / track_id).mkdir(parents=True)
+        write_json(paper / track_id / "config.json", {"track_id": track_id, **config})
+        write_json(paper / track_id / "automated_fund.json", {"holdings": {}, "trades": []})
+    write_json(
+        paper / "assessment_model.json",
+        {
+            "primary_track": "ai_judgment_fair",
+            "control_track": "buy_tier_level",
+            "frozen_tracks": {"ai_judgment": {"reason": "x"}},
+        },
+    )
+    tracks = _load_tracks("ftse350", paper_root=paper, shard_root=tmp_path / "shards")
+    assert {row["track_id"] for row in tracks} == {"ai_judgment_fair", "buy_tier_level"}
+    assert [row["track_id"] for row in tracks if row["is_primary"]] == ["ai_judgment_fair"]
+    assert _default_track_id(tracks) == "buy_tier_level"
