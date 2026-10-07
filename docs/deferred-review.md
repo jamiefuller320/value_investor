@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T15:15:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T17:28:44+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -469,6 +469,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L552 | **Audit cached LEIs that resolve to a subsidiary or different entity** | issuer_identifiers.json caches wrong-entity LEIs: VOLV-B.ST -> Volvo Car AB, SAND.ST -> Sandvik Financial Services, HM-B.ST -> H & M Finance AB, SKF-B.ST -> SKF Vertevo AB, SGO.PA -> Compagnie de Miraumont; DG.PA's LEI has no AMF filings. esef_direct queries by LEI, so these names may index nothing or another entity. AMF keys .PA on ticker to sidestep it. | A euro buy-tier name stays thin with zero esef_direct rows while its cached lei_name does not match the company name, or before the next LEI-first ESEF change (L299) |
 | L553 | **OCR fallback for outlined-text filing PDFs (AMF unextractable URLs)** | Some AMF PDFs (e.g. VINCI H1/Q3 2025) have no text layer, so they are dropped and listed under unextractable_body_urls with a 30-day retry. An OCR fallback could recover those bodies. | unextractable_body_urls covers a buy-tier name's latest annual or interim results, or more than 3 French buy-tier names |
 | L570 | **Re-run historical screen replay on a fresh holdout** | The hsr-v1 holdout (2013-2025) can be spent once. New out-of-sample evidence only comes from years after 2025: re-register under a new registration_id and buy another one-month data window to score them. | At least 5 calendar years after the hsr-v1 holdout reveal, or when the screen code changes materially and the stale-verdict warning fires |
+| L571 | **Dividend yield unit mismatch in company screen models** | Live and library rows carry Yahoo dividend_yield in percent (median 2.5 = 2.5%), but DividendModel/DividendGrowth/LowPEHighYield floors (0.02-0.04) and Neff PEGY (growth fraction + yield) treat it as a fraction, so the yield floors pass almost any payer and PEGY is inflated ~100x on yield. Percentile ranks are unaffected. Trusts already normalise via trust_metrics.normalize_yield. Fix = normalise at fetch/library load; changes the screen fingerprint. | User decides: either fix and run ftse-historical-replay register before the hsr-v1 holdout is revealed, or fix after the reveal as a new epoch so the replay tests the screen as it ran |
 
 ### Ops / reliability
 
