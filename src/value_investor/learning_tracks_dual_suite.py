@@ -206,8 +206,18 @@ def build_learning_tracks_dual_suite(
     suite_b_ids = _ordered_ids(SUITE_B_CORE_ORDER, suite_b_ids)
 
     primary_id = str(learning_tracks_review.get("primary_learning_track") or AI_JUDGMENT_TRACK_ID)
-    fair_ai = reviews.get(AI_JUDGMENT_FAIR_TRACK_ID)
-    fair_rules = reviews.get(RULES_FAIR_TRACK_ID)
+    adoption_ai_id, adoption_control_id = AI_JUDGMENT_FAIR_TRACK_ID, RULES_FAIR_TRACK_ID
+    frozen_ids: list[str] = []
+    if paper_root is not None:
+        from value_investor.assessment_model import load_assessment_model
+
+        model = load_assessment_model(Path(paper_root))
+        if model.get("primary_track"):
+            adoption_ai_id = str(model["primary_track"])
+            adoption_control_id = str(model.get("control_track") or adoption_control_id)
+        frozen_ids = sorted(str(k) for k in (model.get("frozen_tracks") or {}))
+    fair_ai = reviews.get(adoption_ai_id)
+    fair_rules = reviews.get(adoption_control_id)
     fair_ai_metrics = _metrics(fair_ai if isinstance(fair_ai, dict) else None)
     fair_rules_metrics = _metrics(fair_rules if isinstance(fair_rules, dict) else None)
     fair_ai_excess, fair_ai_basis = _adoption_excess(fair_ai_metrics)
@@ -241,8 +251,13 @@ def build_learning_tracks_dual_suite(
         "stress_lab_suite": "A",
         "primary_learning_track_unchanged": primary_id == AI_JUDGMENT_TRACK_ID,
         "primary_learning_track": primary_id,
+        "frozen_tracks": frozen_ids,
         "note": (
-            "Suite B fair excess is adoption truth for promotion talk. "
+            "Legacy dual-suite view. assessment_scoreboard.json is the single assessment "
+            "model; Suite B adoption compares its primary and control. Suite A 3% stress "
+            "books are frozen final records (assessment_model.json)."
+            if frozen_ids
+            else "Suite B fair excess is adoption truth for promotion talk. "
             "Suite A 3% stress books stay the primary learning track and churn lab "
             "(N145 / N48) — do not promote on stress excess alone."
         ),
@@ -284,8 +299,8 @@ def build_learning_tracks_dual_suite(
                 )
                 for tid in suite_b_ids
             },
-            "ai_track_id": AI_JUDGMENT_FAIR_TRACK_ID,
-            "control_track_id": RULES_FAIR_TRACK_ID,
+            "ai_track_id": adoption_ai_id,
+            "control_track_id": adoption_control_id,
             "ai_excess_after_costs": fair_ai_excess,
             "control_excess_after_costs": fair_rules_excess,
             "excess_basis": {"ai": fair_ai_basis, "control": fair_rules_basis},

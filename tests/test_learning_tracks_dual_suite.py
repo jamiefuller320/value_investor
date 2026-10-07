@@ -105,6 +105,26 @@ def test_build_dual_suite_scoreboard_fair_adoption(tmp_path: Path) -> None:
     assert "ai_judgment" in assess["tracks"]
     assert assess["tracks"]["ai_judgment"]["cost_drag_relief"] is not None
 
+    (tmp_path / "assessment_model.json").write_text(
+        json.dumps(
+            {
+                "primary_track": "ai_judgment_fair",
+                "control_track": "buy_tier_level",
+                "frozen_tracks": {"ai_judgment": {}, "rules": {}, "rules_fair": {}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    modelled = build_learning_tracks_dual_suite(
+        review, paper_root=tmp_path, include_fair_assess=False
+    )
+    assert modelled["suite_b"]["ai_track_id"] == "ai_judgment_fair"
+    assert modelled["suite_b"]["control_track_id"] == "buy_tier_level"
+    assert modelled["suite_b"]["control_excess_after_costs"] == 0.01
+    assert modelled["suite_b"]["beat_control"] is False
+    assert modelled["frozen_tracks"] == ["ai_judgment", "rules", "rules_fair"]
+    assert "frozen final records" in modelled["note"]
+
 
 def test_build_dual_suite_without_fair_twins() -> None:
     review = {
