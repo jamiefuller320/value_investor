@@ -1440,10 +1440,32 @@ def _inherit_cost_fields(dst: AutomationConfig, src: AutomationConfig) -> None:
 
 
 def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]:
-    """Ensure rules (control) + AI judgment (primary) configs exist under base_dir."""
+    """Ensure every learning-track config exists under base_dir and carries its track metadata.
+
+    ``is_primary_learning_track`` follows ``assessment_model.json``. Frozen books keep their
+    on-disk config untouched (final record); only a stale primary flag is cleared.
+    """
+    from value_investor.assessment_model import frozen_tracks, primary_track_id
+
     base_dir = Path(base_dir)
     dirs = learning_track_dirs(base_dir)
     configs: dict[str, AutomationConfig] = {}
+    frozen = frozen_tracks(base_dir)
+    primary = primary_track_id(base_dir)
+
+    def _persist(path: Path, cfg: AutomationConfig) -> AutomationConfig:
+        if cfg.track_id in frozen:
+            if not path.exists():
+                return cfg
+            on_disk = AutomationConfig.from_dict(json.loads(path.read_text(encoding="utf-8")))
+            if on_disk.is_primary_learning_track and cfg.track_id != primary:
+                on_disk.is_primary_learning_track = False
+                path.write_text(json.dumps(on_disk.to_dict(), indent=2), encoding="utf-8")
+            return on_disk
+        cfg.is_primary_learning_track = cfg.track_id == primary
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(cfg.to_dict(), indent=2), encoding="utf-8")
+        return cfg
 
     rules_path = dirs[RULES_TRACK_ID] / CONFIG_FILENAME
     if rules_path.exists():
@@ -1459,7 +1481,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
     else:
         rules = default_rules_config()
     rules_path.parent.mkdir(parents=True, exist_ok=True)
-    rules_path.write_text(json.dumps(rules.to_dict(), indent=2), encoding="utf-8")
+    rules = _persist(rules_path, rules)
     configs[RULES_TRACK_ID] = rules
 
     ai_dir = dirs[AI_JUDGMENT_TRACK_ID]
@@ -1481,7 +1503,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         ai.initial_cash = rules.initial_cash
     else:
         ai = default_ai_judgment_config(rules)
-    ai_path.write_text(json.dumps(ai.to_dict(), indent=2), encoding="utf-8")
+    ai = _persist(ai_path, ai)
     configs[AI_JUDGMENT_TRACK_ID] = ai
 
     mg_dir = dirs[MOMENTUM_GRACE_TRACK_ID]
@@ -1503,7 +1525,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         mg.initial_cash = rules.initial_cash
     else:
         mg = default_momentum_grace_config(rules)
-    mg_path.write_text(json.dumps(mg.to_dict(), indent=2), encoding="utf-8")
+    mg = _persist(mg_path, mg)
     configs[MOMENTUM_GRACE_TRACK_ID] = mg
 
     ga_dir = dirs[GRADUATED_ALLOCATION_TRACK_ID]
@@ -1528,7 +1550,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
             ga.max_positions = GRADUATED_ALLOCATION_MIN_POSITIONS
     else:
         ga = default_graduated_allocation_config(rules)
-    ga_path.write_text(json.dumps(ga.to_dict(), indent=2), encoding="utf-8")
+    ga = _persist(ga_path, ga)
     configs[GRADUATED_ALLOCATION_TRACK_ID] = ga
 
     tech_dir = dirs[TECHNICAL_TRACK_ID]
@@ -1551,7 +1573,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         tech.initial_cash = rules.initial_cash
     else:
         tech = default_technical_config(rules)
-    tech_path.write_text(json.dumps(tech.to_dict(), indent=2), encoding="utf-8")
+    tech = _persist(tech_path, tech)
     configs[TECHNICAL_TRACK_ID] = tech
 
     calibrated_dir = base_dir / AI_JUDGMENT_CALIBRATED_SUBDIR
@@ -1577,7 +1599,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         calibrated.weekdays_only = rules.weekdays_only
         _inherit_cost_fields(calibrated, rules)
         calibrated.initial_cash = rules.initial_cash
-        calibrated_path.write_text(json.dumps(calibrated.to_dict(), indent=2), encoding="utf-8")
+        calibrated = _persist(calibrated_path, calibrated)
         configs[AI_JUDGMENT_CALIBRATED_TRACK_ID] = calibrated
 
     # Competing calibrated shadows (rank 2+)
@@ -1611,7 +1633,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         shadow.weekdays_only = rules.weekdays_only
         _inherit_cost_fields(shadow, rules)
         shadow.initial_cash = rules.initial_cash
-        shadow_path.write_text(json.dumps(shadow.to_dict(), indent=2), encoding="utf-8")
+        shadow = _persist(shadow_path, shadow)
         configs[track_id] = shadow
 
     from value_investor.exclusion_ladder_replay import (
@@ -1644,7 +1666,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         shadow.weekdays_only = rules.weekdays_only
         _inherit_cost_fields(shadow, rules)
         shadow.initial_cash = rules.initial_cash
-        shadow_path.write_text(json.dumps(shadow.to_dict(), indent=2), encoding="utf-8")
+        shadow = _persist(shadow_path, shadow)
         configs[track_id] = shadow
 
     from value_investor.fair_cost_lab import (
@@ -1675,7 +1697,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         shadow.initial_cash = rules.initial_cash
         # Keep Suite B fair costs — do NOT inherit Suite A 3% stress.
         stamp_fair_costs(shadow)
-        shadow_path.write_text(json.dumps(shadow.to_dict(), indent=2), encoding="utf-8")
+        shadow = _persist(shadow_path, shadow)
         configs[track_id] = shadow
 
     btl_dir = dirs[BUY_TIER_LEVEL_TRACK_ID]
@@ -1709,7 +1731,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         stamp_fair_costs(btl)
     else:
         btl = default_buy_tier_level_config(rules)
-    btl_path.write_text(json.dumps(btl.to_dict(), indent=2), encoding="utf-8")
+    btl = _persist(btl_path, btl)
     configs[BUY_TIER_LEVEL_TRACK_ID] = btl
 
     dca_dir = dirs[BUY_TIER_LEVEL_DCA_TRACK_ID]
@@ -1743,7 +1765,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         stamp_fair_costs(dca)
     else:
         dca = default_buy_tier_level_dca_config(rules)
-    dca_path.write_text(json.dumps(dca.to_dict(), indent=2), encoding="utf-8")
+    dca = _persist(dca_path, dca)
     configs[BUY_TIER_LEVEL_DCA_TRACK_ID] = dca
 
     sibs_dir = dirs[STILL_IN_BUY_SET_TRACK_ID]
@@ -1785,7 +1807,7 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         sibs.exit_confirm_screens = int(rules.exit_confirm_screens)
     else:
         sibs = default_still_in_buy_set_config(rules)
-    sibs_path.write_text(json.dumps(sibs.to_dict(), indent=2), encoding="utf-8")
+    sibs = _persist(sibs_path, sibs)
     configs[STILL_IN_BUY_SET_TRACK_ID] = sibs
     provenance_path = sibs_dir / STILL_IN_BUY_SET_PROVENANCE_FILENAME
     if not provenance_path.exists():
@@ -1814,18 +1836,6 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
             )
             + "\n",
             encoding="utf-8",
-        )
-
-    from value_investor.assessment_model import primary_track_id
-
-    primary = primary_track_id(base_dir)
-    for track_id, cfg in configs.items():
-        want = track_id == primary
-        if bool(cfg.is_primary_learning_track) == want:
-            continue
-        cfg.is_primary_learning_track = want
-        (dirs[track_id] / CONFIG_FILENAME).write_text(
-            json.dumps(cfg.to_dict(), indent=2), encoding="utf-8"
         )
 
     return configs
