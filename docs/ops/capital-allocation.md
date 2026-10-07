@@ -86,7 +86,7 @@ state machine), **N38** (no live capital promotion before paper evidence).
 |----------|----------|
 | `rebalance_log.json` (graduated_allocation) | Do starter sizes reduce churn vs equal-weight? |
 | `exit_timing_cohorts.json` | Do harvest skims improve swap-rotation outcomes? |
-| `learning_tracks_churn_health.json` | Cost drag vs rules / momentum_grace |
+| `learning_tracks_churn_health.json` | Cost drag and flips on unfrozen books; primary/control alerts follow `assessment_model.json` |
 | `knob_calibration` replay | Sensitivity of `max_positions` 4–5 |
 
 ## Safety
