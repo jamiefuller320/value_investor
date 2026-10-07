@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-06T00:46:54.329877+00:00
+Track: `buy_tier_level` · updated 2026-10-07T00:47:18.489193+00:00
 
 ## Portfolio loser feedback
 
@@ -147,16 +147,15 @@ Track: `buy_tier_level` · updated 2026-10-06T00:46:54.329877+00:00
 - still buy
 - cheapness family still passes
 - data_quality 0.90
-- conviction 45%
+- conviction 51%
 
 ### ARB.AX — weakening / watch_review (+0.0%)
 - research verdict caution
-- conviction 34% below intact floor
 - still buy
 - cheapness family still passes
 
 ### PRN.AX — weakening / watch_review (+0.0%)
-- conviction 29% below intact floor
+- conviction 33% below intact floor
 - still buy
 - research accumulate
 
