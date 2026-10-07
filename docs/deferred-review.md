@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T11:00:33+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T13:18:42+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -58,6 +58,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260923-03 | Maintenance 62-name cap is NOT binding: latest maint runs used 0–8 targets of 62, runtime_cutoff=false, budget_hits≈0. Binding limit is L323 one-market-per-slot (7 books). Option1 (MAX_MARKETS_WHEN_CROWDED=2) is the high-ROI step; option2 matrix is an upgrade after an automated review of job minutes / cutoff / artifact races. | ingest, maintenance, L323, L454, max_targets |
 | frag-20261006-02 | Oslo Bors newsreader API (api3.oslo.oslobors.no/v1/newsreader/list?issuer=) is public JSON with annual/half-year categories and attachments, but no project market lists .OL names today. | oslo, euro_filings |
 | frag-20261006-03 | SEC 20-F/6-K helps few euro names: most DAX/OMXS30 matches are unsponsored OTC ADRs with no SEC filings; real filers (TTE, SNY, SHEL, NVS, UL, GRFS, TS) are mostly already well covered. | sec, euro_filings |
+| frag-20261007-01 | Machinery is outpacing evidence: ~6,900 commits since Sept 1, 14 tracks (11 frozen), primary re-based several times, while the oldest book has 41 marks. Each restart resets the evidence clock. Consider an explicit evidence-clock budget: no primary/control restart for 26+ weeks. | evidence, complexity, epochs |
 
 ---
 
@@ -321,6 +322,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L561 | **Industry statement models for banks, insurers, and REITs** | Operating-company screens (FCF yield, EV/EBIT, Magic Formula ROIC, Piotroski accruals) still score Financial Services and real-estate names. Investment trusts are partitioned; sector overrides are a plantation special case. Those ratios are not the models' stated domain, so a financial can look cheap or fail data-quality for an accounting reason. Exclude them from the industrial ensemble or score them on capital ratios, combined ratio, and tangible book. | Screen-premise or buy-tier attribution is reported separately for Financial Services and Real Estate |
 | L562 | **Paper ledger for splits, cash bids, and delistings** | Paper marks are shares times the latest price. Filings can note corporate actions, but the fund does not convert a split, pay a cash bid, or close a delisted name into cash. A multi-year book will treat a terminal event as a price gap and learn from it. | A paper holding leaves the screened universe because of a split, scheme of arrangement, or delisting |
 | L564 | **Autonomous drawdown and concentration halt** | Stage 6 has no pre-committed stop. Hypothesis integrity tolerates a large share of names underwater and does not sell. Before any book can trade unattended, define a halt on peak-to-trough drawdown, single-name weight, sector weight, and factor or FX concentration, with the action being flatten-to-cash or freeze-new-buys and a human reopen. | Stage 6 live-capital design starts (N13 revisit) |
+| L566 | **Cross-sectional rank IC as the primary learning signal** | Book NAV gives one noisy observation per mark; weekly cross-sectional spreads/rank IC across ~250 FTSE names (plus admitted library markets) give far more independent observations. Make screen_premise spreads, not book excess, the gate for decision-review and knob changes, with book NAV as confirmation. | When screen_premise_backtest reaches 26 weekly cohorts at the 28-day horizon, or when the significance gate has blocked every apply for 8 consecutive weeks |
 
 ### Universe & data
 
@@ -468,6 +470,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L546 | **Promote SEC companyfacts into US filing_aligned FCF basis** | L544 ships sec_companyfacts.json as a memo source plus an observe-only coverage/divergence store. Using SEC OCF − capex as the US filing_aligned basis in reconcile_fcf would change US shard buy-tier and epoch-0 books, so it needs a cold-start or epoch decision, not an edit. | sec_companyfacts_coverage.json shows coverage ≥80% and the divergence finding lists US buy-tier names on four consecutive weekly ops snapshots |
 | L552 | **Audit cached LEIs that resolve to a subsidiary or different entity** | issuer_identifiers.json caches wrong-entity LEIs: VOLV-B.ST -> Volvo Car AB, SAND.ST -> Sandvik Financial Services, HM-B.ST -> H & M Finance AB, SKF-B.ST -> SKF Vertevo AB, SGO.PA -> Compagnie de Miraumont; DG.PA's LEI has no AMF filings. esef_direct queries by LEI, so these names may index nothing or another entity. AMF keys .PA on ticker to sidestep it. | A euro buy-tier name stays thin with zero esef_direct rows while its cached lei_name does not match the company name, or before the next LEI-first ESEF change (L299) |
 | L553 | **OCR fallback for outlined-text filing PDFs (AMF unextractable URLs)** | Some AMF PDFs (e.g. VINCI H1/Q3 2025) have no text layer, so they are dropped and listed under unextractable_body_urls with a 30-day retry. An OCR fallback could recover those bodies. | unextractable_body_urls covers a buy-tier name's latest annual or interim results, or more than 3 French buy-tier names |
+| L565 | **Long-history PIT backtest of the fixed value screen premise** | Forward paper evidence cannot resolve a ~3%/yr value edge for years (track_statistics years_to_detect 125-900; screen_premise ~95 weeks at 7d). Test the frozen screen (no threshold search, per N33) on a licensed point-in-time fundamentals history (10-20y, survivorship-free FTSE constituents) to establish whether the quant premise has an edge before more forward machinery is built on it. | Before adding any new paper track or knob family, or when screen_premise_backtest still has a buy-tier spread interval spanning zero at 26 weekly cohorts |
 
 ### Ops / reliability
 
