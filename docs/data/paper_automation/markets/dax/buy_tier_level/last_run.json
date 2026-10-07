@@ -1,7 +1,7 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-07T09:47:13.544915+01:00",
+    "local_time": "2026-10-07T17:34:44.725367+01:00",
     "trading_day": true,
     "after_settle": true,
     "market_open_at": "2026-10-07T08:00:00+01:00",
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 993.08,
+    "nav": 976.74,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,61 +36,55 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 496.54,
+    "target_sleeve_value": 975.86,
     "targets": [
       {
         "ticker": "FME.DE",
         "name": "Fresenius Medical Care AG",
         "signal": "strong_buy",
         "conviction_score": 0.757945,
-        "price": 39.55
-      },
-      {
-        "ticker": "G1A.DE",
-        "name": "GEA Group Aktiengesellschaft",
-        "signal": "buy",
-        "conviction_score": 0.6437,
-        "price": 66.45
+        "price": 37.42
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "G1A.DE",
+        "name": "GEA Group Aktiengesellschaft",
+        "reason": "No longer in the top conviction target set",
+        "shares": 7.461304,
+        "price": 67.85,
+        "value": 506.25
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
+        "action": "buy",
         "ticker": "FME.DE",
         "name": "Fresenius Medical Care AG",
-        "reason": "Already near equal-weight target",
-        "value": 497.27,
-        "target_value": 496.54,
+        "reason": "Top-up to equal weight",
+        "value": 505.36,
+        "price": 37.42,
+        "target_value": 975.86,
         "conviction_score": 0.757945,
         "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "G1A.DE",
-        "name": "GEA Group Aktiengesellschaft",
-        "reason": "Already near equal-weight target",
-        "value": 495.8,
-        "target_value": 496.54,
-        "conviction_score": 0.6437,
-        "signal": "buy"
       }
     ],
+    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 1 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s)."
   },
   "alerts": [
     {
       "ticker": "FME.DE",
       "name": "Fresenius Medical Care AG",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 39.55,
+      "severity": "watch",
+      "message": "Underwater \u2014 re-check hypothesis: research verdict caution; still strong_buy",
+      "mark": 37.42,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -99,9 +93,9 @@
       "ticker": "G1A.DE",
       "name": "GEA Group Aktiengesellschaft",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 66.45,
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 67.85,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -503,20 +497,41 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-07T17:34:44.725367+01:00",
+        "portfolio_value": 827.54,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.84725
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-07T09:47:13.544915+01:00",
+    "last_mark_at": "2026-10-07T17:34:44.725367+01:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "G1A.DE": 1
+      },
       "reentry_cooldown": {}
-    }
+    },
+    "settled_corporate_actions": [],
+    "unsettled_corporate_actions": []
   },
   "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "dax",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-07T08:47:13.588703+00:00",
+    "generated_at": "2026-10-07T16:34:44.743939+00:00",
     "observe_only": true,
     "open_count": 1,
     "closed_count": 0,
@@ -595,7 +610,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-07T08:47:13.589430+00:00",
+    "generated_at": "2026-10-07T16:34:44.744772+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -651,7 +666,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 1,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 1,
+      "hold_with_data_quality_count": 3,
       "gaps": [
         "hold_recovery closed episodes=1 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -660,7 +675,11 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 0
+        "count": 2,
+        "recovered_to_breakeven": 1,
+        "close_reasons": {
+          "open": 2
+        }
       },
       "closed": {
         "count": 1,
@@ -683,7 +702,7 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 2,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
@@ -696,8 +715,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-07T08:47:13.590162+00:00",
-    "as_of": "2026-10-07T09:47:13.544915+01:00",
+    "updated_at": "2026-10-07T16:34:44.745678+00:00",
+    "as_of": "2026-10-07T17:34:44.725367+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -710,23 +729,23 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 2,
-    "underwater_count": 0,
+    "underwater_count": 1,
     "thesis_status_counts": {
-      "intact": 1,
-      "weakening": 1,
+      "intact": 0,
+      "weakening": 2,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
       "holding_count": 2,
-      "loser_count": 0,
-      "loser_share": 0.0,
-      "loser_nav_share": 0.0,
+      "loser_count": 1,
+      "loser_share": 0.5,
+      "loser_nav_share": 0.4817,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
-      "within_tolerance": true,
+      "within_tolerance": false,
       "intact_loser_count": 0,
-      "weakening_loser_count": 0,
+      "weakening_loser_count": 1,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
@@ -743,7 +762,7 @@
         "risk": 0.0
       },
       "selection_feedback_flags": [],
-      "balancing_hint": "maintain",
+      "balancing_hint": "trim_weakening_losers",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
@@ -752,10 +771,10 @@
         "name": "Fresenius Medical Care AG",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
-        "underwater": false,
+        "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": 0.0001,
-        "mark": 39.55,
+        "unrealized_pct": -0.0538,
+        "mark": 37.42,
         "avg_cost": 39.5472,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -789,16 +808,16 @@
       {
         "ticker": "G1A.DE",
         "name": "GEA Group Aktiengesellschaft",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0018,
-        "mark": 66.45,
+        "unrealized_pct": 0.0229,
+        "mark": 67.85,
         "avg_cost": 66.3336,
-        "signal": "buy",
+        "signal": "hold",
         "timing_signal": "neutral",
-        "conviction_score": 0.6437,
+        "conviction_score": 0.3723,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -810,20 +829,19 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "left buy tier (hold)",
           "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 64%"
+          "cheapness family still passes"
         ],
         "intact_reasons": [
-          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 64%"
+          "conviction 37%"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "left buy tier (hold)"
+        ],
         "broken_reasons": []
       }
     ],
@@ -834,7 +852,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-07T08:47:13.591187+00:00",
+    "generated_at": "2026-10-07T16:34:44.746852+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -842,7 +860,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 1,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 0,
+      "open_with_thesis": 2,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -902,7 +920,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-07T08:47:13.592686+00:00",
+    "generated_at": "2026-10-07T16:34:44.748618+00:00",
     "open_count": 2,
     "closed_count": 1,
     "scored_count": 1,
@@ -968,7 +986,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-07T09:47:13.544915+01:00",
+    "generated_at": "2026-10-07T17:34:44.725367+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1025,7 +1043,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-07T09:47:13.544915+01:00",
+    "generated_at": "2026-10-07T17:34:44.725367+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -1046,7 +1064,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-07T09:47:13.544915+01:00",
+      "generated_at": "2026-10-07T17:34:44.725367+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
@@ -1075,7 +1093,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-07T08:47:13.594529+00:00",
+  "generated_at": "2026-10-07T16:34:44.750853+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

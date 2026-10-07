@@ -1,7 +1,9 @@
 {
   "schema_version": 1,
   "primary_learning_track": "ai_judgment",
-  "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on the primary AI-judgment track; rules track is the control; technical track is the timing/levels baseline; momentum_grace is an experimental exit overlay; graduated_allocation tests trade-plan entry sizing and harvest skims; buy_tier_level is a Suite B unfiltered buy-tier cohort (frozen knobs); buy_tier_level_dca is the FTSE \u00a3500/mo realism capital epoch (same policy); still_in_buy_set is a Suite A cold-start churn twin (rank-gated hold + never-left-candidates + CD2); entry_dca_overlay scores counterfactual entry cadences on every track; sleeve_episodes records widest near-buy\u2192grace-end+~1m lifecycles tagged on_book/off_book/never_funded (observe-only); llm_agree_veto_shadow records algo\u2192agree/veto cards with evidence (observe-only; never blocks fills); hypothesis_integrity reviews underwater holdings before crude stops.",
+  "control_track": "rules",
+  "frozen_tracks": [],
+  "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on the primary track (ai_judgment); rules is the control; frozen tracks keep history but no longer trade (assessment_model.json); technical track is the timing/levels baseline; momentum_grace is an experimental exit overlay; graduated_allocation tests trade-plan entry sizing and harvest skims; buy_tier_level is a Suite B unfiltered buy-tier cohort (frozen knobs); buy_tier_level_dca is the FTSE \u00a3500/mo realism capital epoch (same policy); still_in_buy_set is a Suite A cold-start churn twin (rank-gated hold + never-left-candidates + CD2); entry_dca_overlay scores counterfactual entry cadences on every track; sleeve_episodes records widest near-buy\u2192grace-end+~1m lifecycles tagged on_book/off_book/never_funded (observe-only); llm_agree_veto_shadow records algo\u2192agree/veto cards with evidence (observe-only; never blocks fills); hypothesis_integrity reviews underwater holdings before crude stops.",
   "tracks": {
     "technical": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/technical",
@@ -28,8 +30,8 @@
     "rules": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth",
       "acted": true,
-      "trades": 2,
-      "note": "Rebalanced after open settle (2 trade(s)).",
+      "trades": 0,
+      "note": "Rebalanced after open settle (0 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -50,8 +52,8 @@
     "ai_judgment": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/ai_judgment",
       "acted": true,
-      "trades": 2,
-      "note": "Rebalanced after open settle (2 trade(s)).",
+      "trades": 0,
+      "note": "Rebalanced after open settle (0 trade(s)).",
       "is_primary_learning_track": true,
       "selection": {
         "skip_timing_wait": true,
@@ -72,8 +74,8 @@
     "buy_tier_level_dca": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/buy_tier_level_dca",
       "acted": true,
-      "trades": 3,
-      "note": "Rebalanced after open settle (3 trade(s)).",
+      "trades": 6,
+      "note": "Rebalanced after open settle (6 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -94,8 +96,8 @@
     "still_in_buy_set": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/still_in_buy_set",
       "acted": true,
-      "trades": 0,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "trades": 2,
+      "note": "Rebalanced after open settle (2 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -116,8 +118,8 @@
     "momentum_grace": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/momentum_grace",
       "acted": true,
-      "trades": 2,
-      "note": "Rebalanced after open settle (2 trade(s)).",
+      "trades": 0,
+      "note": "Rebalanced after open settle (0 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -138,8 +140,8 @@
     "graduated_allocation": {
       "output_dir": "docs/data/paper_automation/markets/euro_depth/graduated_allocation",
       "acted": true,
-      "trades": 2,
-      "note": "Rebalanced after open settle (2 trade(s)).",
+      "trades": 0,
+      "note": "Rebalanced after open settle (0 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
