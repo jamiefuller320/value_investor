@@ -63,6 +63,7 @@ PARITY_FINDING_TITLE = "Historical screen replay harness disagrees with screen-p
 STALE_REGISTRATION_TITLE = "Historical screen replay registration predates screen code"
 STALE_VERDICT_TITLE = "Historical screen replay verdict no longer describes the live screen"
 HOLDOUT_REUSED_TITLE = "Historical screen replay holdout revealed more than once"
+RULE_SEARCH_STORE_NAME = "historical_rule_search.json"
 VARIANTS = ("baseline", "delisting_sensitivity")
 SIGNAL_CACHE_NAME = "signals_cache.csv.gz"
 SIGNAL_COLUMNS = (
@@ -556,9 +557,16 @@ def refresh_historical_screen_replay(
     store_path: Path = DEFAULT_STORE_PATH,
     registration_path: Path = DEFAULT_REGISTRATION_PATH,
     premise_store_path: Path = DEFAULT_PREMISE_STORE_PATH,
+    rule_search_registration_path: Path | None = None,
     persist: bool = True,
 ) -> dict[str, Any]:
-    """Daily status: registration fingerprint, harness parity, and any committed results."""
+    """Daily status: registration fingerprint, harness parity, and any committed results.
+
+    Also carries the rule search (``hrs-v1``) status, read from its store beside
+    ``store_path``.
+    """
+    from value_investor import rule_search
+
     previous = _read_json(store_path) or {}
     registration = load_registration(registration_path)
     current = screen_code_fingerprint()
@@ -580,6 +588,10 @@ def refresh_historical_screen_replay(
             if previous.get(f"results_{v}") is not None
         },
         "holdout_reveals": list(previous.get("holdout_reveals") or []),
+        "rule_search": rule_search.status_block(
+            rule_search_registration_path or rule_search.DEFAULT_REGISTRATION_PATH,
+            Path(store_path).parent / RULE_SEARCH_STORE_NAME,
+        ),
     }
     if persist:
         _write_store(store_path, payload)
@@ -593,6 +605,8 @@ def _write_store(path: Path, payload: Mapping[str, Any]) -> None:
 
 
 def findings_from_store(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
+    from value_investor import rule_search
+
     findings: list[dict[str, Any]] = []
     parity = payload.get("parity") or {}
     if parity.get("status") == "mismatch":
@@ -654,6 +668,7 @@ def findings_from_store(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
                 "auto_fixable": False,
             }
         )
+    findings.extend(rule_search.findings_from_block(payload.get("rule_search")))
     return findings
 
 
@@ -687,13 +702,19 @@ def run_replay(
     reveal_holdout: bool = False,
     scratch_root: Path | None = None,
     variant: str = "baseline",
+    rule_search_registration_path: Path | None = None,
 ) -> dict[str, Any]:
     """Replay the registered screen on a local point-in-time panel and commit aggregates only.
 
     ``variant="delisting_sensitivity"`` re-scores with the sensitivity terminal
     file into ``results_delisting_sensitivity``. It never counts as a reveal: its
     holdout opens only once the baseline holdout has been revealed.
+
+    While a rule search is registered, the baseline holdout stays sealed until
+    the search selection is committed beside ``store_path``.
     """
+    from value_investor import rule_search
+
     if variant not in VARIANTS:
         raise ValueError(f"Unknown variant {variant!r}; expected one of {VARIANTS}")
     for path in (panel_path, prices_path, terminal_path, scratch_root):
@@ -711,6 +732,14 @@ def run_replay(
         reveal_holdout = bool(previous.get("holdout_reveals"))
     elif reveal_holdout and previous.get("holdout_reveals"):
         print("Holdout already revealed; this reveal is recorded as exploratory.")
+    elif reveal_holdout:
+        search_registration = rule_search_registration_path or rule_search.DEFAULT_REGISTRATION_PATH
+        search_store = Path(store_path).parent / RULE_SEARCH_STORE_NAME
+        if Path(search_registration).exists() and not rule_search.selection_committed(search_store):
+            raise ValueError(
+                "The rule search (hrs-v1) has no committed selection. Run `ftse-rule-search "
+                "search` and commit its store before revealing any holdout."
+            )
     panel = _read_table(panel_path)
     prices = _read_table(prices_path)
     haircuts: dict[str, float] = {}

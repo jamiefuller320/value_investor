@@ -2829,7 +2829,8 @@ def check_historical_screen_replay(
     """Observe-only L536/L542 replay status: registration fingerprint and harness parity.
 
     Runs after ``check_screen_premise_backtest`` so parity compares against the
-    store it just wrote. Writes ``docs/data/historical_screen_replay.json``.
+    store it just wrote. Writes ``docs/data/historical_screen_replay.json``,
+    including the rule search (hrs-v1) fingerprints, selection, and reveals.
     """
     from value_investor.historical_screen_replay import (
         DEFAULT_DATA_DIR,

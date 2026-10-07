@@ -355,3 +355,5 @@ def test_ops_monitor_check_writes_store_without_parity_finding(tmp_path: Path):
     payload = json.loads(store.read_text())
     assert payload["parity"]["status"] == "ok"
     assert payload["results"] is None
+    assert payload["rule_search"]["registration_id"] == "hrs-v1"
+    assert payload["rule_search"]["selection"] is None
