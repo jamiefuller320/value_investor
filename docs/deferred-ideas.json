@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-07T08:00:22+00:00",
+  "updated_at": "2026-10-07T11:00:33+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13064,6 +13064,90 @@
       "status": "open",
       "source": "assessment-model alignment audit (PR cursor/assessment-model-alignment-9155)",
       "added_at": "2026-10-07T08:00:22+00:00"
+    },
+    {
+      "id": "N197",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not connect 28-day price-correlation weights to the live signal",
+      "summary": "update_model_weights runs on every screen and maps Pearson correlation of model score to 28-day price return into a weight. assign_signal and conviction_score ignore that weight and use the fixed composite_value blend plus an unweighted pass count. Wiring the current learner into the buy tier would teach a short, dividend-blind, overlapping-window objective. Leave it disconnected until fitness is multi-year total return with a holdout.",
+      "revisit_when": "L536 or L542 reports a model-level score that predicts multi-year total return out of sample",
+      "tags": [
+        "model-weights",
+        "assign-signal",
+        "false-premise",
+        "value-horizon"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a115ff-8b0f-76f6-b1a0-aa43cae11266",
+      "added_at": "2026-10-07T11:00:33+00:00"
+    },
+    {
+      "id": "L561",
+      "category": "later",
+      "section": "learning",
+      "title": "Industry statement models for banks, insurers, and REITs",
+      "summary": "Operating-company screens (FCF yield, EV/EBIT, Magic Formula ROIC, Piotroski accruals) still score Financial Services and real-estate names. Investment trusts are partitioned; sector overrides are a plantation special case. Those ratios are not the models' stated domain, so a financial can look cheap or fail data-quality for an accounting reason. Exclude them from the industrial ensemble or score them on capital ratios, combined ratio, and tangible book.",
+      "revisit_when": "Screen-premise or buy-tier attribution is reported separately for Financial Services and Real Estate",
+      "tags": [
+        "financials",
+        "banks",
+        "reits",
+        "screen-premise"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a115ff-8b0f-76f6-b1a0-aa43cae11266",
+      "added_at": "2026-10-07T11:00:33+00:00"
+    },
+    {
+      "id": "L562",
+      "category": "later",
+      "section": "learning",
+      "title": "Paper ledger for splits, cash bids, and delistings",
+      "summary": "Paper marks are shares times the latest price. Filings can note corporate actions, but the fund does not convert a split, pay a cash bid, or close a delisted name into cash. A multi-year book will treat a terminal event as a price gap and learn from it.",
+      "revisit_when": "A paper holding leaves the screened universe because of a split, scheme of arrangement, or delisting",
+      "tags": [
+        "paper-fund",
+        "corporate-actions",
+        "delisting"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a115ff-8b0f-76f6-b1a0-aa43cae11266",
+      "added_at": "2026-10-07T11:00:33+00:00"
+    },
+    {
+      "id": "L563",
+      "category": "later",
+      "section": "universe",
+      "title": "Investor withholding and wrapper drag in multi-market yield",
+      "summary": "A value book's edge is often the dividend. Cross-market rankings use gross yield. Withholding tax, UK dividend tax outside an ISA, and ETF fee drag change which foreign name is cheap to this investor. Net it into expected return before a non-UK book is judged on total return or any live capital is allocated.",
+      "revisit_when": "A non-UK shard is scored on total return, or stage 6 capital allocation is designed",
+      "tags": [
+        "tax",
+        "withholding",
+        "dividends",
+        "multi-market"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a115ff-8b0f-76f6-b1a0-aa43cae11266",
+      "added_at": "2026-10-07T11:00:33+00:00"
+    },
+    {
+      "id": "L564",
+      "category": "later",
+      "section": "learning",
+      "title": "Autonomous drawdown and concentration halt",
+      "summary": "Stage 6 has no pre-committed stop. Hypothesis integrity tolerates a large share of names underwater and does not sell. Before any book can trade unattended, define a halt on peak-to-trough drawdown, single-name weight, sector weight, and factor or FX concentration, with the action being flatten-to-cash or freeze-new-buys and a human reopen.",
+      "revisit_when": "Stage 6 live-capital design starts (N13 revisit)",
+      "tags": [
+        "risk",
+        "drawdown",
+        "stage-6",
+        "autonomy"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a115ff-8b0f-76f6-b1a0-aa43cae11266",
+      "added_at": "2026-10-07T11:00:33+00:00"
     }
   ],
   "fragments": [

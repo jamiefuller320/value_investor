@@ -2638,6 +2638,35 @@ def check_backtest_history(
     return findings
 
 
+def check_value_factor_base_rate(
+    *,
+    store_path: Path | None = None,
+) -> list[OpsFinding]:
+    """Observe-only freshness check for the Ken French value-factor summary.
+
+    Does not download French files and does not change signals, books, or knobs.
+    A missing or stale summary warns. A small premium does not.
+    """
+    from value_investor.value_factor_base_rate import (
+        DEFAULT_STORE_PATH,
+        finding_for_store,
+    )
+
+    path = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+    finding = finding_for_store(path)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_screen_premise_backtest(
     *,
     data_dir: Path | None = None,
@@ -3328,6 +3357,7 @@ def collect_ops_findings(
     findings.extend(check_indicator_integrity())
     findings.extend(check_backtest_history())
     findings.extend(check_screen_premise_backtest())
+    findings.extend(check_value_factor_base_rate())
     findings.extend(check_assessment_scoreboard())
     findings.extend(check_paper_learning_tracks())
     findings.extend(check_deferred_triggers())
