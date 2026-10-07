@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-07T02:32:44.404081+00:00",
+  "generated_at": "2026-10-07T07:47:40.250304+00:00",
   "observe_only": true,
   "primary_track": "ai_judgment_fair",
   "control_track": "buy_tier_level",
   "benchmark": "FTAL.L",
   "stress_cost_per_side": 0.03,
   "sources": {
-    "total_return_view_updated_at": "2026-10-07T02:32:33.118428+00:00",
-    "track_statistics_updated_at": "2026-10-07T02:32:20.598685+00:00",
-    "screen_premise_generated_at": "2026-10-07T02:32:44.386408+00:00"
+    "total_return_view_updated_at": "2026-10-07T07:47:29.277845+00:00",
+    "track_statistics_updated_at": "2026-10-07T07:47:20.336623+00:00",
+    "screen_premise_generated_at": "2026-10-07T07:47:40.234126+00:00"
   },
   "headline": "ai_judgment_fair: total return -5.9% vs FTAL.L -3.1% since 2026-08-26 \u2014 behind the market with 90% confidence. vs buy_tier_level: -3.3% on the common window.",
   "tracks": [
@@ -83,6 +83,32 @@
       "configured_buy_cost_pct": 0.00525
     },
     {
+      "track_id": "ai_judgment_graduated_fair",
+      "role": "twin",
+      "label": "AI judgment graduated-allocation twin (starter sizing + harvest skims)",
+      "basis": "lifetime",
+      "start": null,
+      "end": null,
+      "marks": null,
+      "total_return": null,
+      "benchmark_total_return": null,
+      "excess_total_return": null,
+      "dividends_gbp": null,
+      "excess_total_return_at_stress_cost": null,
+      "cost_sensitivity": null,
+      "statistics": {
+        "status": "missing",
+        "periods": null
+      },
+      "ai_gate": {
+        "gate": "research_verdict == accumulate",
+        "min_conviction": 0.6,
+        "buy_tier_pass_share": 0.9224,
+        "binds": false
+      },
+      "configured_buy_cost_pct": 0.00525
+    },
+    {
       "track_id": "ai_judgment_hold5_fair",
       "role": "twin",
       "label": "AI judgment hold-buffer twin (exit after 5 screens)",
@@ -137,36 +163,6 @@
         "binds": null
       },
       "configured_buy_cost_pct": 0.00525
-    },
-    {
-      "track_id": "graduated_allocation",
-      "role": "active",
-      "label": "Screen rules + graduated allocation",
-      "basis": "lifetime",
-      "start": "2026-09-07T09:27:50.446012+01:00",
-      "end": "2026-10-06T09:37:23.732083+01:00",
-      "marks": 21,
-      "total_return": -0.1275,
-      "benchmark_total_return": -0.0264,
-      "excess_total_return": -0.1011,
-      "dividends_gbp": 0.0,
-      "excess_total_return_at_stress_cost": -0.1011,
-      "cost_sensitivity": {
-        "trades": 40,
-        "turnover": 3.879,
-        "costs_paid_pct": 0.1164,
-        "costs_at_stress_pct": 0.1164,
-        "extra_drag_at_stress": 0.0
-      },
-      "statistics": {
-        "status": "insufficient_data",
-        "periods": 19
-      },
-      "ai_gate": {
-        "gate": null,
-        "binds": null
-      },
-      "configured_buy_cost_pct": null
     }
   ],
   "primary_vs_control": {
@@ -179,6 +175,22 @@
     "note": "Common window, total return. Positive means the primary's filter added value over the unfiltered buy tier. Not yet tested for significance."
   },
   "twins": [
+    {
+      "track_id": "ai_judgment_graduated_fair",
+      "parent_track": "ai_judgment_fair",
+      "started_at": "2026-10-06T23:50:52.810849+00:00",
+      "varied": {
+        "use_graduated_allocation": {
+          "parent": false,
+          "twin": true
+        }
+      },
+      "learning_question": "Does graduated allocation (trade-plan starter sizing + harvest skims) beat the primary's equal-weight sizing on total return at fair costs, holding every other primary knob fixed?",
+      "readiness_gate": "Promote only if the twin leads its parent on total return over >=26 weekly screens with parent knobs unchanged since start, and the twin-minus-parent 90% interval excludes zero; otherwise freeze the twin.",
+      "parent_knobs_changed": [],
+      "common_days": 0,
+      "status": "no_common_marks"
+    },
     {
       "track_id": "ai_judgment_hold5_fair",
       "parent_track": "ai_judgment_fair",
@@ -251,6 +263,17 @@
       "trade_count": 39,
       "lifetime_total_return": -0.2377,
       "lifetime_excess_total_return": -0.227
+    },
+    {
+      "track_id": "graduated_allocation",
+      "frozen_at": "2026-10-07T05:53:45.290906+00:00",
+      "reason": "Suite A stress-cost book (3% round trip) on the rules screen, outside the assessment model; graduated sizing is now judged by the fair-cost twin ai_judgment_graduated_fair",
+      "superseded_by": "ai_judgment_graduated_fair",
+      "final_nav": 858.78,
+      "final_contributed_capital": 1000.0,
+      "trade_count": 44,
+      "lifetime_total_return": -0.1275,
+      "lifetime_excess_total_return": -0.1011
     },
     {
       "track_id": "momentum_grace",

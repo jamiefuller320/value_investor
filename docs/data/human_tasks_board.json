@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-07T02:34:26.563446+00:00",
+  "generated_at": "2026-10-07T07:49:21.106605+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,10 +8,10 @@
   "checklist_updated_at": "2026-10-06",
   "counts": {
     "new_info": 4,
-    "unacked": 4,
+    "unacked": 5,
     "acked": 23,
     "automated": 20,
-    "human": 31
+    "human": 32
   },
   "tasks": [
     {
@@ -29,11 +29,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "3 attention-parked eng tasks",
-        "updated_at": "2026-10-07T02:33:46.354940+00:00",
+        "updated_at": "2026-10-07T07:48:41.599770+00:00",
         "fingerprint": "59caf08e4199223b",
         "bullets": [
           "Parked tasks: 3 (attention ~3)",
-          "Queue-clearing pause active: False — evaluated 2026-10-07T02:33:46.354940+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-10-07T07:48:41.599770+00:00",
           "Traffic pause active: False",
           "eng-20261004-06: Workflow fix: analysis review failure",
           "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo",
@@ -72,7 +72,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-06T21:43:44.401204+00:00",
+        "updated_at": "2026-10-07T07:44:13.229843+00:00",
         "fingerprint": "841ad86cb5e77a52",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=36",
@@ -114,7 +114,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-10-06T21:42:48.439465+00:00",
+        "updated_at": "2026-10-07T07:42:13.321231+00:00",
         "fingerprint": "f765d60144146672",
         "bullets": [
           "Open deviations: 1",
@@ -191,13 +191,14 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary negative",
-        "updated_at": "2026-10-07T02:32:44.404081+00:00",
-        "fingerprint": "c936b2cc0521ed2a",
+        "updated_at": "2026-10-07T07:47:40.250304+00:00",
+        "fingerprint": "ed39a3f5851a286d",
         "bullets": [
           "ai_judgment_fair: total return -5.9% vs FTAL.L -3.1% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -3.3% on the common window.",
           "Primary verdict: negative · 90% interval [-1.7616, -0.0231] · excess at 3% stress -0.2023",
           "vs control buy_tier_level: difference -0.0331 (common window, not significance)",
           "AI gate binds: False (N189 while it never binds)",
+          "twin ai_judgment_graduated_fair: difference None over 0 days",
           "twin ai_judgment_hold5_fair: difference None over 0 days",
           "Policy changes: significance_gate_v1 (2026-10-06)"
         ],
@@ -264,6 +265,37 @@
         "headline": "See runbook for analysis inputs",
         "updated_at": null,
         "fingerprint": "11c988254f384628",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-graduated-twin",
+      "title": "Graduated-allocation twin vs primary",
+      "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_graduated_fair (use_graduated_allocation on) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote graduated sizing only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Do not read the 3% stress graduated_allocation book as evidence. Never edit either book mid-flight.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/assessment-scoreboard.md",
+      "doc_anchor": "graduated-allocation-twin",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#graduated-allocation-twin",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "c7c95a1157a741ed",
         "bullets": [],
         "source_keys": []
       },
@@ -741,7 +773,7 @@
     {
       "id": "sunday-entry-dca-cadence",
       "title": "Review entry DCA cadence when overlay readiness fires",
-      "summary": "Ack via CLI or Lifecycle Acknowledge (observe-only — Do not execute DCA from ack). Review docs/data/entry_dca_adoption_plan.json. When paper_execute_graduated is ready, Lifecycle Start enables 4× weekly entry DCA on graduated_allocation only. Do not change starter fraction or apply to primary/live while beat_market is false.",
+      "summary": "Ack via CLI or Lifecycle Acknowledge (observe-only — Do not execute DCA from ack). Review docs/data/entry_dca_adoption_plan.json. Lifecycle Start enables 4× weekly entry DCA on graduated_allocation only; that book is frozen (2026-10-07), so paper_execute_graduated stays blocked until execute is repointed to ai_judgment_graduated_fair (N135). Do not change starter fraction or apply to primary/live while beat_market is false.",
       "automated": false,
       "cadence": "sunday",
       "section_id": "sunday",
