@@ -454,6 +454,14 @@
           "automated": false,
           "doc_path": "docs/ops/fcf-basis-bridges.md",
           "doc_anchor": "when-to-review-residual"
+        },
+        {
+          "id": "adhoc-historical-replay-data",
+          "title": "Buy one month of point-in-time US data and run the registered screen replay",
+          "summary": "Phase 2 of the historical screen replay (L536/L542). Personal-use Sharadar Core US Equities Bundle, full history, monthly plan. Bulk-download to a directory outside the repo, build the inputs (ftse-historical-replay build-panel) and check build_report.json, run the development window, reveal the holdout once (run --reveal-holdout), then run the delisting sensitivity variant. Commit only docs/data/historical_screen_replay.json. Cancel and delete all raw tables and panels within 30 days. Never change the registration after the reveal.",
+          "automated": false,
+          "doc_path": "docs/ops/historical-screen-replay.md",
+          "doc_anchor": "phase-2--licensed-data-human-gate"
         }
       ]
     }
