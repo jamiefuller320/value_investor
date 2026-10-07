@@ -446,7 +446,11 @@ def replay_policy(
             if price is None:
                 continue
             pos = book["positions"].get(ticker)
-            if pos is not None and pos.get("reopen_below") is not None and price <= float(pos["reopen_below"]):
+            if (
+                pos is not None
+                and pos.get("reopen_below") is not None
+                and price <= float(pos["reopen_below"])
+            ):
                 pos["reopen_below"] = None
             if int(book["cooldown"].get(ticker) or 0) > 0:
                 continue
