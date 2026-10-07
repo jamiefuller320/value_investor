@@ -64,6 +64,9 @@ PARITY_FINDING_TITLE = "Historical screen replay harness disagrees with screen-p
 STALE_REGISTRATION_TITLE = "Historical screen replay registration predates screen code"
 STALE_VERDICT_TITLE = "Historical screen replay verdict no longer describes the live screen"
 HOLDOUT_REUSED_TITLE = "Historical screen replay holdout revealed more than once"
+DELETION_DUE_TITLE = "Licensed replay data deletion not confirmed"
+# One paid month plus the licence's 30 days to delete after cancelling.
+DELETION_DUE_DAYS = 60
 RULE_SEARCH_STORE_NAME = "historical_rule_search.json"
 VARIANTS = ("baseline", "delisting_sensitivity")
 SIGNAL_CACHE_NAME = "signals_cache.csv.gz"
@@ -607,6 +610,7 @@ def refresh_historical_screen_replay(
             if previous.get(f"results_{v}") is not None
         },
         "holdout_reveals": list(previous.get("holdout_reveals") or []),
+        "licensed_data": previous.get("licensed_data"),
         "rule_search": rule_search.status_block(
             rule_search_registration_path or rule_search.DEFAULT_REGISTRATION_PATH,
             Path(store_path).parent / RULE_SEARCH_STORE_NAME,
@@ -688,7 +692,42 @@ def findings_from_store(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
             }
         )
     findings.extend(rule_search.findings_from_block(payload.get("rule_search")))
+    findings.extend(_deletion_findings(payload.get("licensed_data")))
     return findings
+
+
+def _deletion_findings(
+    licensed: Mapping[str, Any] | None, *, now: datetime | None = None
+) -> list[dict[str, Any]]:
+    if not licensed or licensed.get("deleted_at") or not licensed.get("first_used_at"):
+        return []
+    days = ((now or datetime.now(UTC)) - _utc(licensed["first_used_at"])).days
+    if days < DELETION_DUE_DAYS:
+        return []
+    return [
+        {
+            "severity": "warn",
+            "category": "backtest",
+            "title": DELETION_DUE_TITLE,
+            "summary": (
+                f"Licensed Sharadar data was first used {days} days ago and its deletion is not "
+                "confirmed. The personal-use licence requires deleting raw tables and every derived "
+                "file (build directory, signal cache, daily prices) within 30 days of cancelling. "
+                "Delete them, then run `ftse-historical-replay confirm-deleted`."
+            ),
+            "auto_fixable": False,
+        }
+    ]
+
+
+def confirm_deleted(store_path: Path = DEFAULT_STORE_PATH) -> dict[str, Any]:
+    """Record that every licensed raw and derived file has been deleted."""
+    store = _read_json(store_path) or {}
+    licensed = dict(store.get("licensed_data") or {})
+    licensed["deleted_at"] = datetime.now(UTC).isoformat()
+    store["licensed_data"] = licensed
+    _write_store(store_path, store)
+    return licensed
 
 
 def _inside_repo(path: Path) -> bool:
@@ -782,6 +821,8 @@ def run_replay(
     )
     now = datetime.now(UTC).isoformat()
     reveals = list(previous.get("holdout_reveals") or [])
+    licensed = dict(previous.get("licensed_data") or {})
+    licensed.setdefault("first_used_at", now)
     if reveal_holdout and variant == "baseline":
         reveals.append({"at": now, "evidence": not reveals})
     results_key = "results" if variant == "baseline" else f"results_{variant}"
@@ -796,6 +837,7 @@ def run_replay(
             "horizons": results,
         },
         "holdout_reveals": reveals,
+        "licensed_data": licensed,
     }
     _write_store(store_path, payload)
     return payload
@@ -848,12 +890,18 @@ def main(argv: list[str] | None = None) -> int:
     )
     build_p.add_argument("--sharadar-dir", type=Path, required=True)
     build_p.add_argument("--out", type=Path, required=True)
+    sub.add_parser(
+        "confirm-deleted",
+        help="Record that all licensed raw and derived files were deleted (licence)",
+    )
     args = parser.parse_args(argv)
     if args.command == "status":
         payload = refresh_historical_screen_replay()
         print(json.dumps({k: payload[k] for k in ("registration", "parity")}, indent=2))
     elif args.command == "register":
         print(register())
+    elif args.command == "confirm-deleted":
+        print(json.dumps(confirm_deleted(), indent=2))
     elif args.command == "build-panel":
         print(json.dumps(build_panel_files(args.sharadar_dir, args.out), indent=2))
     else:

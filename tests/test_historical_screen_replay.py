@@ -363,3 +363,32 @@ def test_ops_monitor_check_writes_store_without_parity_finding(tmp_path: Path):
     assert payload["results"] is None
     assert payload["rule_search"]["registration_id"] == "hrs-v1"
     assert payload["rule_search"]["selection"] is None
+
+
+def test_licensed_data_deletion_reminder(tmp_path: Path):
+    used = datetime(2026, 11, 1, tzinfo=UTC)
+    licensed = {"first_used_at": used.isoformat()}
+    assert hsr._deletion_findings(licensed, now=used + timedelta(days=59)) == []
+    (finding,) = hsr._deletion_findings(licensed, now=used + timedelta(days=60))
+    assert finding["title"] == hsr.DELETION_DUE_TITLE and finding["severity"] == "warn"
+    assert finding["auto_fixable"] is False
+    assert hsr._deletion_findings(None) == []
+
+    store = tmp_path / "replay.json"
+    store.write_text(json.dumps({"licensed_data": licensed, "holdout_reveals": []}))
+    assert hsr.confirm_deleted(store)["deleted_at"]
+    payload = json.loads(store.read_text())
+    assert hsr._deletion_findings(payload["licensed_data"], now=used + timedelta(days=90)) == []
+
+
+def test_status_refresh_keeps_licensed_data(tmp_path: Path):
+    data_dir = _snapshot_dir(tmp_path)
+    (data_dir / "screen_premise_backtest.json").write_text(
+        json.dumps(build_screen_premise_backtest(data_dir))
+    )
+    store = tmp_path / "replay.json"
+    store.write_text(json.dumps({"licensed_data": {"first_used_at": "2026-11-01T00:00:00+00:00"}}))
+    payload = hsr.refresh_historical_screen_replay(
+        data_dir, store_path=store, premise_store_path=data_dir / "screen_premise_backtest.json"
+    )
+    assert payload["licensed_data"]["first_used_at"].startswith("2026-11-01")

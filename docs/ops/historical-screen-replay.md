@@ -111,6 +111,11 @@ price-only from the same snapshots, with no fetch, and compares those.
 
 Human checklist: `adhoc-historical-replay-data`. Personal-use licence only.
 
+0. Dry run before paying. Download the vendor's free sample tables (if
+   offered) to a directory outside the repository and run `build-panel` on
+   them. The sample is too small for results, but it shows whether the column
+   names, date formats, and table layouts match the adapter. Fix any mismatch
+   before subscribing. The sample is licensed too: never commit it.
 1. Subscribe to the Sharadar Core US Equities Bundle, full history, for **one
    month** (monthly plan). Bulk-download `fundamentals` (SF1), `stocks` (SEP),
    `actions`, `tickers`, `sp500` to a directory **outside the repository**
@@ -153,7 +158,9 @@ Human checklist: `adhoc-historical-replay-data`. Personal-use licence only.
    Commit `docs/data/historical_screen_replay.json`. Then `ftse-rule-search
    reveal --build ~/hsr-build` and commit `docs/data/historical_rule_search.json`.
 6. Cancel the subscription and delete every raw table and derived file
-   (`~/sharadar`, `~/hsr-build`) within 30 days (licence). Keep the store.
+   (`~/sharadar`, `~/hsr-build`, including `signals_cache.csv.gz` and
+   `daily.csv.gz`) within 30 days (licence). Then run
+   `ftse-historical-replay confirm-deleted`. Keep the stores.
 
 `run` refuses inputs inside the repository: the repo is public, and the licence
 forbids sharing the data or anything that reproduces it. The committed store
@@ -188,6 +195,7 @@ years after a change is a search over history (N33, N35). Re-run only when:
 | Historical screen replay registration predates screen code | info | Screen code changed while the holdout is sealed; run `ftse-historical-replay register` |
 | Historical screen replay verdict no longer describes the live screen | warn | Screen code changed after the holdout reveal |
 | Historical screen replay holdout revealed more than once | warn | Only the first reveal is evidence |
+| Licensed replay data deletion not confirmed | warn | 60 days after the first licensed run (one paid month plus the licence's 30 days) with no `confirm-deleted` |
 
 The same check carries the rule search's findings
 ([historical-rule-search.md](historical-rule-search.md#ops-monitor-findings)).
