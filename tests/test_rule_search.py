@@ -14,7 +14,7 @@ from value_investor import rule_search as rs
 from value_investor.technical_analysis import TradePlanConfig
 
 TICKERS = [f"S{i:02d}" for i in range(24)]
-DELISTED = "S23"
+DELISTED = "S11"
 
 
 def _registration() -> dict:
@@ -27,7 +27,7 @@ def _registration() -> dict:
     reg["grid"]["selection"] = {
         "tier": ["buy_tier", "strong_buy"],
         "top_n": [None, 4],
-        "exit_after_months": [1, 3],
+        "exit_rule": ["tier1", "tier3", "rerate50", "thesis"],
     }
     reg["grid"]["tactical"].update(limit=["default", "deep"], stop=["default"], target=["default"])
     reg["overfitting"]["cscv_blocks"] = 4
@@ -41,6 +41,8 @@ def _registration() -> dict:
 def _signal(i: int, month: int) -> str:
     if i == 5 and month % 4 == 2:
         return "hold"  # a buy name that dips out of the tier for one screen
+    if 12 <= i < 16:
+        return "buy" if month < 8 else "hold"  # re-rated: left the tier for good
     if i < 4:
         return "strong_buy"
     if i < 12:
@@ -76,7 +78,7 @@ def _build(root: Path) -> Path:
                     "signal": _signal(i, m),
                     "conviction_score": float(100 - i),
                     "sector": "Industrials",
-                    "earnings_yield": 0.1,
+                    "earnings_yield": 0.01 if 12 <= i < 16 and m >= 8 else 0.12 - 0.004 * i,
                     "composite_score": 0.5,
                     "data_quality_score": 1.0,
                 }
@@ -115,7 +117,9 @@ def built(tmp_path: Path):
 def test_committed_registration_grid():
     reg = rs.load_registration()
     configs = rs.grid_configs(reg)
-    assert len(configs) == 336
+    assert len(configs) == 840
+    for key in reg["grid"]["selection"]["exit_rule"]:
+        assert reg["exit_rules"][key]["kind"] in {"tier", "thesis"}
     assert rs.frozen_config(reg).id in {c.id for c in configs}
     fields = set(TradePlanConfig.__dataclass_fields__)
     for dim in ("limit", "stop", "target"):
@@ -139,7 +143,7 @@ def test_neighbours_step_one_dimension():
     assert all(n.id != frozen.id for n in near)
 
 
-def test_selection_top_n_exit_after_and_avoid(built):
+def test_selection_top_n_and_exit_rules(built):
     build, reg_path, _ = built
     reg = json.loads(reg_path.read_text())
     data = rs.load_search_data(build, reg)
@@ -151,11 +155,63 @@ def test_selection_top_n_exit_after_and_avoid(built):
     strong = rs.select(data.screens[1], rs.RuleConfig("strong_buy", None, 1, None))
     assert strong == ["S00", "S01", "S02", "S03"]
 
-    quick = rs.holdings_by_month(data, rs.RuleConfig("buy_tier", None, 1, None), dates)
-    patient = rs.holdings_by_month(data, rs.RuleConfig("buy_tier", None, 3, None), dates)
+    quick, quick_exits = rs.holdings_by_month(
+        data, rs.RuleConfig("buy_tier", None, "tier1", None), dates
+    )
+    patient, _ = rs.holdings_by_month(data, rs.RuleConfig("buy_tier", None, "tier3", None), dates)
     dip = [k for k, d in enumerate(dates[:-1]) if "S05" not in quick[k]]
     assert dip and all("S05" in patient[k] for k in dip)
     assert all(not ({"S20", "S21"} & set(h)) for h in quick)
+    assert quick_exits["left_selection"] >= 4
+
+    rerate, rerate_exits = rs.holdings_by_month(
+        data, rs.RuleConfig("buy_tier", None, "rerate50", None), dates
+    )
+    thesis, thesis_exits = rs.holdings_by_month(
+        data, rs.RuleConfig("buy_tier", None, "thesis", None), dates
+    )
+    assert "S12" in quick[6] and "S12" not in quick[7]  # dev month k is synthetic month k + 1
+    assert "S12" in rerate[7] and "S12" not in rerate[8]
+    assert rerate_exits["rerated"] == 4
+    assert all("S12" in h for h in thesis[1:])
+    assert "rerated" not in thesis_exits and "left_selection" not in thesis_exits
+    assert all("S05" in h for h in thesis[1:])
+    assert thesis_exits.get("left_universe") == 1  # the delisted name
+
+
+def _screen(signal: str, ey_pct: float | None) -> rs.ScreenDate:
+    return rs.ScreenDate(
+        date=pd.Timestamp("2005-01-31"),
+        signal={"A": signal},
+        conviction={"A": 1.0},
+        market_cap={"A": 1.0},
+        ey_pct={} if ey_pct is None else {"A": ey_pct},
+    )
+
+
+def test_thesis_exit_needs_confirmed_avoid_and_rerate_needs_a_streak():
+    reg = rs.load_registration()
+    thesis, rerate = reg["exit_rules"]["thesis"], reg["exit_rules"]["rerate50"]
+    st = rs._Streaks()
+    assert rs.exit_reason(thesis, st, _screen("avoid", 0.1), "A", False) is None
+    assert rs.exit_reason(thesis, st, _screen("hold", 0.1), "A", False) is None
+    assert rs.exit_reason(thesis, st, _screen("avoid", 0.1), "A", False) is None
+    assert rs.exit_reason(thesis, st, _screen("avoid", 0.1), "A", False) == "thesis_break"
+
+    st = rs._Streaks()
+    assert rs.exit_reason(rerate, st, _screen("hold", 0.2), "A", False) is None
+    assert rs.exit_reason(rerate, st, _screen("hold", None), "A", False) is None
+    assert st.rerated == 1  # a missing yield leaves the streak
+    assert rs.exit_reason(rerate, st, _screen("hold", 0.3), "A", False) == "rerated"
+
+    st = rs._Streaks()
+    rs.exit_reason(rerate, st, _screen("hold", 0.2), "A", False)
+    assert rs.exit_reason(rerate, st, _screen("buy", 0.2), "A", True) is None
+    assert st.rerated == 0  # back in the selection: still cheap by the screen
+    assert rs.exit_reason(rerate, st, _screen("hold", 0.7), "A", False) is None
+
+    tier = reg["exit_rules"]["tier3"]
+    assert rs.exit_reason(tier, rs._Streaks(), _screen("avoid", 0.9), "A", False) == "avoid"
 
 
 def test_horizon_probability_tracks_drift():
@@ -194,8 +250,8 @@ def test_choose_prefers_plateau_then_core_only():
     chosen, _ = rs.choose(flat, configs, reg)
     assert chosen.tactical is None and chosen.id == rs.frozen_config(reg).core_only().id
 
-    spike = rs.RuleConfig("strong_buy", 20, 3, "limit=deep|stop=tight|target=far")
-    centre = rs.RuleConfig("buy_tier", 40, 1, "limit=default|stop=default|target=default")
+    spike = rs.RuleConfig("strong_buy", 20, "thesis", "limit=deep|stop=tight|target=far")
+    centre = rs.RuleConfig("buy_tier", 40, "rerate50", "limit=default|stop=default|target=default")
     scores = dict(flat)
     scores[spike.id] = 0.95
     for c in [centre, *rs.neighbours(centre, reg)]:
@@ -221,7 +277,7 @@ def test_search_reveal_and_holdout_order(built, tmp_path: Path):
 
     payload = rs.search(build, registration_path=reg_path, store_path=store)
     result = payload["search"]
-    assert result["configs_tested"] == 24
+    assert result["configs_tested"] == 48
     assert set(result["overfitting"]) == {"pbo_cscv", "deflated_sharpe_chosen"}
     rows = {r["id"]: r["development"] for r in result["configs"]}
     tactical = [d for i, d in rows.items() if not i.endswith("tac=off")]
@@ -229,6 +285,11 @@ def test_search_reveal_and_holdout_order(built, tmp_path: Path):
     assert all("tactical_increment_monthly" in d for d in tactical)
     assert max(d["tactical"]["round_trips_per_holding_year"] or 0 for d in tactical) > 0
     assert all(d["months"] == 24 for d in rows.values())
+    quick = rows["buy_tier|top=all|exit=tier1|tac=off"]["holding"]
+    patient = rows["buy_tier|top=all|exit=thesis|tac=off"]["holding"]
+    assert patient["median_months"] > quick["median_months"]
+    assert patient["open_at_window_end"] > quick["open_at_window_end"]
+    assert rows["buy_tier|top=all|exit=rerate50|tac=off"]["holding"]["exits"]["rerated"] == 4
     assert "S0" not in json.dumps(result)  # aggregates only, no per-name rows
 
     with pytest.raises(FileNotFoundError):
@@ -271,7 +332,7 @@ def test_tactical_off_matches_core_only_and_costs_lower_returns(built):
     reg = json.loads(reg_path.read_text())
     data = rs.load_search_data(build, reg)
     window = reg["windows"]["development"]
-    core = rs.RuleConfig("buy_tier", None, 1, None)
+    core = rs.RuleConfig("buy_tier", None, "tier1", None)
     cheap = rs.simulate(data, core, window, cost_per_side=0.0)
     dear = rs.simulate(data, core, window, cost_per_side=0.03)
     assert np.all(dear.portfolio <= cheap.portfolio + 1e-12)

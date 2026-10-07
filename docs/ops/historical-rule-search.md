@@ -13,10 +13,13 @@ L574. Observe-only: no book, signal, or knob reads it.
 
 ## Learning question
 
-On the frozen screen's output, which selection rule and tactical variant gives
-the highest probability of beating the cap-weighted universe over 36 months,
-and does the tactical slice add anything to the core once its idle cash and
-costs are counted?
+On the frozen screen's output, which selection rule, core exit rule, and
+tactical variant gives the highest probability of beating the cap-weighted
+universe over 36 months? Does holding the core until a thesis break (the PR
+#1021 core sell trigger) beat selling on leaving the selection, and does a
+re-rating exit stop open-ended holding without giving that up? Does the
+tactical slice add anything to the core once its idle cash and costs are
+counted?
 
 The objective is not maximum profit. It is the lower confidence bound of the
 probability that the book is ahead of the market after a set holding period.
@@ -27,15 +30,39 @@ probability that the book is ahead of the market after a set holding period.
 |-----------|--------|
 | Tier | `buy_tier` (buy + strong_buy), `strong_buy` |
 | Top N by conviction | all, 40, 20 |
-| Exit after N monthly screens outside the selection | 1, 3 (avoid, delisting, or leaving the S&P 500 exits at once) |
+| Core exit rule | `tier1`, `tier3`, `rerate50`, `rerate30`, `thesis` (see below) |
 | Tactical limit | shallow 0.97, default 0.95, deep 0.92 × spot |
 | Tactical stop | tight (0.99 support, 1.5 ATR), default (0.97, 2.0), wide (0.94, 3.0) |
 | Tactical target | near (1.06 / 1.05 / R:R 1.0), default (1.10 / 1.08 / 1.5), far (1.15 / 1.12 / 2.0) |
 | Tactical off | core only (the whole position is core) |
 
-336 rule sets. The screen itself (thresholds, weights, models) is frozen and not
-searched (N33). The frozen live rules are `buy_tier`, all names, exit after 1,
+840 rule sets. The screen itself (thresholds, weights, models) is frozen and not
+searched (N33). The frozen live rules are `buy_tier`, all names, `tier1`,
 default tactical.
+
+### Core exit rules
+
+Ordered from quickest to most patient sell. The plateau steps along this order.
+
+| Rule | Sells the core when |
+|------|---------------------|
+| `tier1` | 1 monthly screen outside the selection, or a single `avoid` (the live `buy_tier_level` rule; its 2 weekly confirm screens are closest to 1 monthly screen) |
+| `tier3` | 3 screens outside the selection, or a single `avoid` |
+| `rerate50` | `thesis`, or 2 consecutive screens outside the selection with the earnings yield below the median of the names screened that date |
+| `rerate30` | The same with the 30th percentile: sells only once the name is clearly dear |
+| `thesis` | 2 consecutive `avoid` screens (PR #1021). Leaving the selection is not a sell |
+
+Every rule also sells a name that leaves the screened universe (left the S&P
+500, or no fresh price): no later screen could confirm a sell, so holding it
+would be open-ended. These are counted as `left_universe`.
+
+`thesis` replays only the screen leg of the PR #1021 trigger. The research
+verdict leg (`pass` / `sell` / `avoid` / `exit`) comes from the AI layer, which
+cannot be replayed (N39), so the replayed rule sells less often than the live
+one would. The `rerate` rules are the candidate fix for open-ended holding: a
+value thesis ends when the name is no longer cheap, not only when it breaks.
+Their thresholds are tuned by this search on the development window; the
+holdout then tests the chosen one once.
 
 ## How a rule set is simulated
 
@@ -71,6 +98,9 @@ Per rule set, on each window:
   search, 1.96 at the holdout).
 * The empirical overlapping hit rate (reported, not optimised), annualised
   return and excess, and the information ratio.
+* Holding: median, 90th percentile, and longest holding in months, episodes
+  still open at the window end, and sells by reason (`avoid`, `left_selection`,
+  `thesis_break`, `rerated`, `left_universe`).
 * Tactical: round trips, round trips per holding-year, win rate, exits by kind,
   and the **tactical increment** (combined minus core-only monthly return) with
   its interval.
@@ -97,6 +127,7 @@ the deflated Sharpe ratio of the chosen rule set.
 |---|---|
 | Chosen passes and beats frozen | Propose a cold-start paper twin with a frozen epoch (L572 path); no live book changes on backtest evidence alone |
 | Frozen passes, chosen does not | Keep the live rules; the search found noise |
+| Chosen uses a `rerate` or `thesis` exit and passes | Propose that exit for the core sell trigger (`core_sell_trigger.py`) through a cold-start twin; the replayed thresholds are starting values, not a live edit |
 | Tactical increment costs or is inconclusive | Keep tactical levels as alerts only; do not build a cycling slice into paper books |
 | Neither passes | Follow the hsr-v1 decision |
 

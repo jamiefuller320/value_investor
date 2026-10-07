@@ -5,8 +5,9 @@ Runs on the licensed replay inputs built by ``ftse-historical-replay build-panel
 set is a combination of:
 
 * **selection** applied to the frozen screen's output: which tier, optionally
-  only the top N by conviction, and how many monthly screens a name may sit
-  outside the selection before the core is sold;
+  only the top N by conviction, and the registered **exit rule** that sells the
+  core (leaving the selection, a confirmed thesis break, or a confirmed
+  re-rating to no longer cheap);
 * **tactical**: off (core only), or a trade-plan variant whose dip slice is
   replayed on daily prices by ``tactical_replay``.
 
@@ -30,7 +31,7 @@ import itertools
 import json
 import math
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from statistics import NormalDist
@@ -82,13 +83,13 @@ def load_registration(path: Path = DEFAULT_REGISTRATION_PATH) -> dict[str, Any]:
 class RuleConfig:
     tier: str
     top_n: int | None
-    exit_after_months: int
+    exit_rule: str  # key into the registered exit_rules
     tactical: str | None  # key into the registered tactical variants; None = core only
 
     @property
     def id(self) -> str:
         top = "all" if self.top_n is None else str(self.top_n)
-        return f"{self.tier}|top={top}|exit={self.exit_after_months}|tac={self.tactical or 'off'}"
+        return f"{self.tier}|top={top}|exit={self.exit_rule}|tac={self.tactical or 'off'}"
 
     def core_only(self) -> RuleConfig:
         return replace(self, tactical=None)
@@ -97,7 +98,7 @@ class RuleConfig:
         return {
             "tier": self.tier,
             "top_n": self.top_n,
-            "exit_after_months": self.exit_after_months,
+            "exit_rule": self.exit_rule,
             "tactical": self.tactical,
         }
 
@@ -115,17 +116,17 @@ def grid_configs(registration: Mapping[str, Any]) -> list[RuleConfig]:
     sel = grid["selection"]
     tacticals: list[str | None] = [None, *tactical_keys(grid)]
     return [
-        RuleConfig(tier, top_n, exit_after, tac)
+        RuleConfig(tier, top_n, exit_rule, tac)
         for tier in sel["tier"]
         for top_n in sel["top_n"]
-        for exit_after in sel["exit_after_months"]
+        for exit_rule in sel["exit_rule"]
         for tac in tacticals
     ]
 
 
 def frozen_config(registration: Mapping[str, Any]) -> RuleConfig:
     f = registration["frozen_config"]
-    return RuleConfig(f["tier"], f["top_n"], f["exit_after_months"], f["tactical"])
+    return RuleConfig(f["tier"], f["top_n"], f["exit_rule"], f["tactical"])
 
 
 def trade_plan_config(registration: Mapping[str, Any], key: str):
@@ -153,8 +154,8 @@ def neighbours(config: RuleConfig, registration: Mapping[str, Any]) -> list[Rule
         out.append(replace(config, tier=tier))
     for top_n in step(sel["top_n"], config.top_n):
         out.append(replace(config, top_n=top_n))
-    for exit_after in step(sel["exit_after_months"], config.exit_after_months):
-        out.append(replace(config, exit_after_months=exit_after))
+    for exit_rule in step(sel["exit_rule"], config.exit_rule):
+        out.append(replace(config, exit_rule=exit_rule))
     if config.tactical is not None:
         parts = dict(part.split("=", 1) for part in config.tactical.split("|"))
         tac = grid["tactical"]
@@ -187,6 +188,8 @@ class ScreenDate:
     signal: dict[str, str]
     conviction: dict[str, float]
     market_cap: dict[str, float]
+    # Earnings-yield percentile among names screened that date (0 = dearest).
+    ey_pct: dict[str, float] = field(default_factory=dict)
 
 
 class SearchData:
@@ -212,6 +215,15 @@ class SearchData:
         self.screens: list[ScreenDate] = []
         for d, g in sorted(sig.groupby("as_of"), key=lambda item: item[0]):
             tickers = g["ticker"].astype(str)
+            ey = (
+                pd.to_numeric(g["earnings_yield"], errors="coerce")
+                if "earnings_yield" in g
+                else None
+            )
+            ey_pct: dict[str, float] = {}
+            if ey is not None and ey.notna().any():
+                pct = ey.rank(pct=True, method="average")
+                ey_pct = {t: float(v) for t, v in zip(tickers, pct, strict=True) if not pd.isna(v)}
             self.screens.append(
                 ScreenDate(
                     date=d,
@@ -220,6 +232,7 @@ class SearchData:
                         zip(tickers, g["conviction_score"].fillna(0.0).astype(float), strict=True)
                     ),
                     market_cap=cap_by_date.get(d, {}),
+                    ey_pct=ey_pct,
                 )
             )
         tier_rows: dict[str, list[tuple[np.datetime64, bool]]] = {}
@@ -287,31 +300,77 @@ def select(screen: ScreenDate, config: RuleConfig) -> list[str]:
     return names if config.top_n is None else names[: config.top_n]
 
 
+@dataclass
+class _Streaks:
+    outside: int = 0
+    avoid: int = 0
+    rerated: int = 0
+
+
+def exit_reason(
+    rule: Mapping[str, Any], streaks: _Streaks, screen: ScreenDate, ticker: str, chosen: bool
+) -> str | None:
+    """Advance one held name's streaks on a screen; the sell reason, or None to keep.
+
+    ``tier``: sell after ``screens_outside`` screens outside the selection; a
+    single ``avoid`` sells at once.
+
+    ``thesis`` (the core sell trigger): leaving the selection is not a sell. Sell
+    after ``avoid_confirm`` consecutive ``avoid`` screens, or, when
+    ``rerate_below_pct`` is set, after ``rerate_confirm`` consecutive screens
+    outside the selection with the earnings yield below that percentile of the
+    screened names (re-rated: no longer cheap). A missing earnings yield leaves
+    the re-rating streak where it was.
+    """
+    signal = screen.signal.get(ticker)
+    if rule["kind"] == "tier":
+        if signal == "avoid":
+            return "avoid"
+        streaks.outside = 0 if chosen else streaks.outside + 1
+        return "left_selection" if streaks.outside >= int(rule["screens_outside"]) else None
+    streaks.avoid = streaks.avoid + 1 if signal == "avoid" else 0
+    if streaks.avoid >= int(rule["avoid_confirm"]):
+        return "thesis_break"
+    threshold = rule.get("rerate_below_pct")
+    if threshold is None or chosen:
+        streaks.rerated = 0
+        return None
+    pct = screen.ey_pct.get(ticker)
+    if pct is not None:
+        streaks.rerated = streaks.rerated + 1 if pct < float(threshold) else 0
+    return "rerated" if streaks.rerated >= int(rule["rerate_confirm"]) else None
+
+
 def holdings_by_month(
     data: SearchData, config: RuleConfig, dates: Sequence[pd.Timestamp]
-) -> list[list[str]]:
-    """Names held over each month (rebalance date k to k+1); independent of returns."""
+) -> tuple[list[list[str]], dict[str, int]]:
+    """Names held over each month (rebalance date k to k+1), and sells by reason.
+
+    Every rule sells a name that leaves the screened universe (left the index,
+    or no fresh price): no later screen could ever confirm a sell, so holding it
+    would be open-ended.
+    """
+    rule = data.registration["exit_rules"][config.exit_rule]
     screens = {s.date: s for s in data.screens}
-    held: dict[str, int] = {}
+    held: dict[str, _Streaks] = {}
+    exits: dict[str, int] = {}
     out: list[list[str]] = []
     for day in dates[:-1]:
         screen = screens[day]
         chosen = set(select(screen, config))
         for ticker in list(held):
-            signal = screen.signal.get(ticker)
-            if signal is None or signal == "avoid" or data.bar_at(ticker, day) is None:
-                del held[ticker]
-            elif ticker in chosen:
-                held[ticker] = 0
+            if screen.signal.get(ticker) is None or data.bar_at(ticker, day) is None:
+                reason: str | None = "left_universe"
             else:
-                held[ticker] += 1
-                if held[ticker] >= config.exit_after_months:
-                    del held[ticker]
+                reason = exit_reason(rule, held[ticker], screen, ticker, ticker in chosen)
+            if reason:
+                del held[ticker]
+                exits[reason] = exits.get(reason, 0) + 1
         for ticker in sorted(chosen):
             if ticker not in held and data.bar_at(ticker, day) is not None:
-                held[ticker] = 0
+                held[ticker] = _Streaks()
         out.append(sorted(held))
-    return out
+    return out, exits
 
 
 def _month_return(
@@ -341,6 +400,9 @@ class WindowRun:
     names_held: list[int]
     tactical_trades: list[dict[str, Any]]
     holding_months: int
+    episode_months: list[int] = field(default_factory=list)
+    open_at_end: int = 0
+    exits: dict[str, int] = field(default_factory=dict)
 
 
 def simulate(
@@ -352,7 +414,7 @@ def simulate(
 ) -> WindowRun:
     """Monthly book: equal weight per held name, each split core : tactical slice."""
     dates = data.window_dates(window)
-    holdings = holdings_by_month(data, config, dates)
+    holdings, exits = holdings_by_month(data, config, dates)
     months = len(holdings)
 
     # Episodes: contiguous months held.
@@ -451,6 +513,9 @@ def simulate(
         names_held=[len(h) for h in holdings],
         tactical_trades=trades,
         holding_months=sum(len(h) for h in holdings),
+        episode_months=[k1 - k0 for _, k0, k1 in episodes],
+        open_at_end=sum(1 for _, _, k1 in episodes if k1 == months),
+        exits=exits,
     )
 
 
@@ -559,6 +624,7 @@ def window_metrics(
         else None,
         "horizons": {str(h): horizon_probability(log_ex, h, lag=lag, z=z) for h in horizons},
         "median_names_held": float(np.median(run.names_held)) if run.names_held else 0.0,
+        "holding": _holding_summary(run),
         "tactical": {
             "round_trips": len(trades),
             "round_trips_per_holding_year": round(len(trades) / years, 3) if years else None,
@@ -570,6 +636,21 @@ def window_metrics(
                 for kind in ("target", "stop", "core_exit", "delisted")
             },
         },
+    }
+
+
+def _holding_summary(run: WindowRun) -> dict[str, Any]:
+    """Holding periods in months; episodes still open at the window end are censored."""
+    lengths = np.asarray(run.episode_months, dtype=float)
+    if not len(lengths):
+        return {"episodes": 0}
+    return {
+        "episodes": len(lengths),
+        "median_months": float(np.median(lengths)),
+        "p90_months": float(np.percentile(lengths, 90)),
+        "max_months": int(lengths.max()),
+        "open_at_window_end": run.open_at_end,
+        "exits": dict(sorted(run.exits.items())),
     }
 
 
