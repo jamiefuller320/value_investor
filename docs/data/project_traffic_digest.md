@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-07T07:49:21.348720+00:00`
+Generated: `2026-10-07T12:32:02.864522+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -26,16 +26,17 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
 - [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-10-07T02:31:46.244608+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Ops monitor overall=warn at 2026-10-07T07:46:46.532227+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `ingest_narrow`/verified PR #1009 `eng-20261007-03` — Close stubborn ingest gaps for HOC.L (chain 2/3: 0/0 bodies, run igc-20261007-01)
-- `ingest_narrow`/verified PR #1007 `eng-20261007-02` — Seed IR allowlist for unmeasured/zero-body HOC.L — empty allowlist after 0-improve pin (igc-20261007-01)
-- `ingest_narrow`/verified PR #1006 `eng-20261007-01` — Close library ingest gaps for hang_seng / 6618.HK (chain 1/3: 0/0 improved, run igc-20260930-10)
+- `ingest_narrow`/verified PR #1014 `eng-20261007-04` — Allowlisted IR results-presentation PDF ingest (cash bridges, segments, dividend policy)
+- `human`/human PR #1009 `eng-20261007-03` — Central FCF basis registry
+- `human`/human PR #1007 `eng-20261007-02` — Populate `CompanyMetrics.operating_cashflow` (and aligned cash-flow fields) from Yahoo/`financials_annual.json` when fetch returns null
+- `human`/human PR #1006 `eng-20261007-01` — Shared RNS body pipeline
 - `ingest_narrow`/verified PR #1005 `eng-20261006-01` — Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260920-03)
 
 ## PR fix occasions — common failure reasons
@@ -48,19 +49,6 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `validate job failed` — 2×
 - `Ruff F841 unused dismissable in market_warning_triage.propose_triage` — 2×
 - `merge_conflict:dirty` — 2×
-
-## Ops-monitor email handoff
-- Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 9 (open=9, resolved=0)
-- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Universe archive body-miss rate elevated — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Learning-track verdict not statistically supported — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Price-only excess misstates track performance — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Decision-review knobs saturated at bounds — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Deferred idea triggers met — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
