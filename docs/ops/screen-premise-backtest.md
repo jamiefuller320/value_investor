@@ -24,7 +24,8 @@ each cohort with an exit run at or after the horizon:
 
 | Field | Meaning |
 |-------|---------|
-| `buy_tier_spread` | Equal-weight buy-tier forward return minus the equal-weight screened-universe return |
+| `buy_tier_spread` | Equal-weight buy-tier forward return minus the equal-weight screened-universe return. This is the spread that judges the screen. The daily refresh adds ex-date dividends (dividend ÷ prior close, capped at 15%) between the entry and exit runs |
+| `price_buy_tier_spread` | The same spread on price return only |
 | `avoid_spread` | Same for `avoid` names; negative if the screen works |
 | `rank_ic` | Spearman correlation of `conviction_score` with forward return |
 | `ai_gate_spread` | Buy-tier names the live AI gate would take (`research_verdict == accumulate`) minus buy-tier names it would reject (other verdicts or no memo). Needs at least 3 names on each side |
@@ -62,8 +63,11 @@ edge needs before its 90% interval excludes zero, at the observed volatility.
 
 ### Limits
 
-- Weeks of history (first snapshot 2026-08-02), price return only (no
-  dividends), and only names that were screened at the time.
+- Weeks of history (first snapshot 2026-08-02), and only names that were
+  screened at the time. The judging spread adds ex-date dividends when Yahoo
+  has them. A name with no dividend history keeps its price return and is
+  listed in `dividends_skipped_tickers`. `price_buy_tier_spread` is the
+  price-only figure.
 - Not the multi-year test L530 asks for. That needs dated fundamentals and
   delisted names (L11 / L542), which the project does not have.
 - The 28-day view needs about 16 weekly cohorts before its interval is shown.
