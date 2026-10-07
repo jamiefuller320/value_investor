@@ -330,7 +330,7 @@ human glance.
 | `buy_tier_level` acted with empty `automated_fund.json` holdings | fail | Monday cold-start fill; do not treat NAV as promotion truth |
 | Core track `acted=false` after a post-settle last_run | warn | Track skipped |
 | `learning_tracks_llm_agree_veto.json` missing after core tracks acted | warn | Observe-only algo→agree/veto shadow; never blocks fills — see [`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md) |
-| Any review row with non-empty `saturated_knobs` | warn | **Decision-review knobs saturated at bounds** — a proposal rule still fires but the knob is at its clamp bound, so the loop can no longer respond on that axis. `auto_fixable=False`; human decides whether the driver (cost model, churn, concentration) needs a policy change or new epoch — see [`decision-review.md`](decision-review.md#apply-gate-and-cooldown) |
+| Any tunable review row (not frozen, not a fixed-knob lab) with non-empty `saturated_knobs` | warn | **Decision-review knobs saturated at bounds** — a proposal rule still fires but the knob is at its clamp bound, so the loop can no longer respond on that axis. `auto_fixable=False`; human decides whether the driver (cost model, churn, concentration) needs a policy change or new epoch — see [`decision-review.md`](decision-review.md#apply-gate-and-cooldown) |
 
 Graduation → observe refinement children (lineage on experiment assessment) are
 documented in [`refinement-learning-loops.md`](refinement-learning-loops.md);

@@ -722,7 +722,9 @@ def check_paper_learning_tracks(
     from value_investor.paper_automation import (
         BUY_TIER_LEVEL_SUBDIR,
         BUY_TIER_LEVEL_TRACK_ID,
+        CONFIG_FILENAME,
         FUND_FILENAME,
+        learning_track_dirs,
     )
 
     root = Path(paper_root)
@@ -874,8 +876,32 @@ def check_paper_learning_tracks(
             )
         )
 
+    track_dirs = learning_track_dirs(root) if root.exists() else {}
+
+    def _tunable(track_id: str) -> bool:
+        if track_id in frozen:
+            return False
+        track_dir = track_dirs.get(track_id)
+        if track_dir is None:
+            return True
+        try:
+            config = json.loads((Path(track_dir) / CONFIG_FILENAME).read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return True
+        return not any(
+            config.get(flag)
+            for flag in (
+                "is_calibration_shadow",
+                "is_exclusion_shadow",
+                "is_cohort_lab",
+                "is_churn_policy_twin",
+            )
+        )
+
     saturated_lines: list[str] = []
     for track_id, row in sorted(reviews.items()):
+        if not _tunable(track_id):
+            continue
         saturated = row.get("saturated_knobs") if isinstance(row, dict) else None
         if not isinstance(saturated, list) or not saturated:
             continue
