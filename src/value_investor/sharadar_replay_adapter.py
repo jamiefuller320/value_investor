@@ -10,6 +10,8 @@ from a local directory outside the repository and writes the three files that
 * ``prices.csv.gz`` — total-return closes (``closeadj``) on rebalance dates, on
   each horizon's exit dates, and on every delisted name's last trading date.
 * ``terminal_baseline.csv`` / ``terminal_sensitivity.csv`` — delisting haircuts.
+* ``daily.csv.gz`` — adjusted daily OHLC for every member, for the tactical
+  slice replay and the rule search (``rule_search``).
 
 ``build_report.json`` holds coverage counts only (no per-ticker data), so it can
 be pasted into the PR or runbook. Nothing here is part of the fingerprinted
@@ -30,6 +32,7 @@ import pandas as pd
 FILING_LAG_DAYS = 2
 STALE_FILING_DAYS = 456
 STOCKS_CHUNK_ROWS = 2_000_000
+DAILY_HISTORY_DAYS = 420
 
 TABLE_ALIASES: dict[str, tuple[str, ...]] = {
     "fundamentals": ("fundamentals", "sf1"),
@@ -162,8 +165,8 @@ def load_fundamentals(path: Path, tickers: set[str]) -> pd.DataFrame:
 
 
 def load_stocks(path: Path, tickers: set[str]) -> pd.DataFrame:
-    """Daily ``close`` (split-adjusted), ``closeadj`` and ``closeunadj`` for ``tickers``."""
-    cols = {"ticker", "date", "close", "closeadj", "closeunadj"}
+    """Daily split-adjusted OHLC plus ``closeadj`` and ``closeunadj`` for ``tickers``."""
+    cols = {"ticker", "date", "open", "high", "low", "close", "closeadj", "closeunadj"}
     chunks = []
     for chunk in pd.read_csv(path, usecols=lambda c: c in cols, chunksize=STOCKS_CHUNK_ROWS):
         chunk = chunk.loc[chunk["ticker"].isin(tickers)]
@@ -171,8 +174,9 @@ def load_stocks(path: Path, tickers: set[str]) -> pd.DataFrame:
             chunks.append(chunk)
     frame = pd.concat(chunks, ignore_index=True) if chunks else pd.DataFrame(columns=list(cols))
     frame["date"] = _dates(frame["date"])
-    if "closeunadj" not in frame.columns:
-        frame["closeunadj"] = frame["close"]
+    for col in ("open", "high", "low", "closeunadj"):
+        if col not in frame.columns:
+            frame[col] = frame["close"]
     return frame.dropna(subset=["date"]).sort_values(["ticker", "date"]).reset_index(drop=True)
 
 
@@ -467,6 +471,24 @@ def sparse_prices(
     return out.reset_index(drop=True)
 
 
+def daily_adjusted_ohlc(stocks: pd.DataFrame, first: pd.Timestamp) -> pd.DataFrame:
+    """Dividend- and split-adjusted daily OHLC (what Yahoo ``auto_adjust`` gives the live
+    trade plan), from ``DAILY_HISTORY_DAYS`` before ``first`` so indicators are warm."""
+    frame = stocks.loc[stocks["date"] >= first - pd.Timedelta(days=DAILY_HISTORY_DAYS)]
+    factor = (frame["closeadj"] / frame["close"]).where(frame["close"] > 0)
+    out = pd.DataFrame(
+        {
+            "date": frame["date"].dt.strftime("%Y-%m-%d"),
+            "ticker": frame["ticker"],
+            "open": frame["open"] * factor,
+            "high": frame["high"] * factor,
+            "low": frame["low"] * factor,
+            "close": frame["closeadj"],
+        }
+    )
+    return out.dropna(subset=["close"]).sort_values(["ticker", "date"]).reset_index(drop=True)
+
+
 def merger_exits(actions: pd.DataFrame) -> set[str]:
     self_rows = actions.loc[actions["action"].isin(MERGER_SELF_ACTIONS), "ticker"]
     contra_rows = actions.loc[actions["action"].isin(MERGER_CONTRA_ACTIONS), "contraticker"]
@@ -528,7 +550,9 @@ def build_replay_inputs(
     panel, counts = build_panel(
         members, fundamentals, stocks.loc[stocks["ticker"].isin(universe)], tickers
     )
-    prices = sparse_prices(stocks.loc[stocks["ticker"].isin(universe)], rebalances, horizons)
+    member_stocks = stocks.loc[stocks["ticker"].isin(universe)]
+    prices = sparse_prices(member_stocks, rebalances, horizons)
+    daily = daily_adjusted_ohlc(member_stocks, first)
     delisting = registration.get("delisting") or {}
     base, sens, delist_counts = terminal_haircuts(
         tickers,
@@ -541,6 +565,7 @@ def build_replay_inputs(
     out_dir.mkdir(parents=True, exist_ok=True)
     panel.to_csv(out_dir / "panel.csv.gz", index=False)
     prices.to_csv(out_dir / "prices.csv.gz", index=False)
+    daily.to_csv(out_dir / "daily.csv.gz", index=False)
     base.to_csv(out_dir / "terminal_baseline.csv", index=False)
     sens.to_csv(out_dir / "terminal_sensitivity.csv", index=False)
 
@@ -561,6 +586,7 @@ def build_replay_inputs(
         "counts": counts,
         "delisting": delist_counts,
         "price_rows": int(len(prices)),
+        "daily_rows": int(len(daily)),
         "metric_fill_rates": {
             col: round(float(panel[col].notna().mean()), 4)
             for col in PANEL_COLUMNS

@@ -111,6 +111,35 @@ def test_replay_screen_matches_direct_library_screen(tmp_path: Path):
     assert last["earnings_yield"].notna().all()
 
 
+def test_signal_cache_reused_until_panel_changes(tmp_path: Path, monkeypatch):
+    rows = _metric_rows()
+    panel = pd.DataFrame([{**r, "as_of": datetime(2010, 1, 29, tzinfo=UTC)} for r in rows])
+    cache = tmp_path / "build" / hsr.SIGNAL_CACHE_NAME
+    calls = []
+    real = hsr.replay_screen
+
+    def counting(*args, **kwargs):
+        calls.append(1)
+        return real(*args, **kwargs)
+
+    monkeypatch.setattr(hsr, "replay_screen", counting)
+    first = hsr.cached_replay_signals(panel, market_id="sp500", cache_path=cache)
+    again = hsr.cached_replay_signals(panel, market_id="sp500", cache_path=cache)
+    assert len(calls) == 1
+    assert list(again.columns) == list(hsr.SIGNAL_COLUMNS)
+    assert again["signal"].tolist() == first["signal"].tolist()
+    assert again["as_of"].iloc[0] == pd.Timestamp("2010-01-29", tz="UTC")
+
+    changed = panel.assign(trailing_pe=panel["trailing_pe"] * 2)
+    hsr.cached_replay_signals(changed, market_id="sp500", cache_path=cache)
+    assert len(calls) == 2
+
+    with pytest.raises(ValueError, match="inside the repository"):
+        hsr.cached_replay_signals(
+            panel, market_id="sp500", cache_path=hsr.REPO_ROOT / "docs/data/x.csv.gz"
+        )
+
+
 def _prices(rows: list[tuple[str, str, float]]) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=["date", "ticker", "close"])
 
@@ -326,3 +355,5 @@ def test_ops_monitor_check_writes_store_without_parity_finding(tmp_path: Path):
     payload = json.loads(store.read_text())
     assert payload["parity"]["status"] == "ok"
     assert payload["results"] is None
+    assert payload["rule_search"]["registration_id"] == "hrs-v1"
+    assert payload["rule_search"]["selection"] is None

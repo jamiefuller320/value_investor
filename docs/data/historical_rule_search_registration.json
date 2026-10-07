@@ -1,0 +1,212 @@
+{
+  "registration_id": "hrs-v1",
+  "status": "registered_holdout_sealed",
+  "learning_question": "On the frozen screen's output in the survivorship-free S&P 500 replay, which selection rule, core exit rule, and trade-plan tactical variant gives the highest probability (lower confidence bound) of beating the cap-weighted universe over 36 months? Does holding the core until a thesis break (PR #1021) beat selling on leaving the selection, and does a re-rating exit bound open-ended holding without giving that up? Does the tactical slice add to the core once its idle cash and costs are counted?",
+  "closes": [
+    "L573",
+    "L574"
+  ],
+  "related": [
+    "hsr-v1",
+    "L572",
+    "N33"
+  ],
+  "market_id": "sp500",
+  "inputs": "The hsr-v1 build (ftse-historical-replay build-panel): panel.csv.gz, daily.csv.gz (adjusted daily OHLC), terminal_baseline.csv, and the screen signals cached by the replay. All outside the repository.",
+  "windows": {
+    "development": {
+      "first_entry": "2000-01-31",
+      "last_entry": "2012-12-31"
+    },
+    "holdout": {
+      "first_entry": "2013-01-31",
+      "last_entry": "2025-09-30",
+      "reveal_rule": "Revealed once, after the search selection is committed and nothing in this file has changed. Later reveals are exploratory."
+    }
+  },
+  "grid": {
+    "selection": {
+      "tier": [
+        "buy_tier",
+        "strong_buy"
+      ],
+      "top_n": [
+        null,
+        40,
+        20
+      ],
+      "exit_rule": [
+        "tier1",
+        "tier3",
+        "rerate50",
+        "rerate30",
+        "thesis"
+      ]
+    },
+    "tactical": {
+      "limit": [
+        "shallow",
+        "default",
+        "deep"
+      ],
+      "stop": [
+        "tight",
+        "default",
+        "wide"
+      ],
+      "target": [
+        "near",
+        "default",
+        "far"
+      ],
+      "variants": {
+        "limit": {
+          "shallow": {
+            "tactical_limit_below_spot": 0.97
+          },
+          "default": {
+            "tactical_limit_below_spot": 0.95
+          },
+          "deep": {
+            "tactical_limit_below_spot": 0.92
+          }
+        },
+        "stop": {
+          "tight": {
+            "tactical_stop_below_support": 0.99,
+            "atr_stop_multiplier": 1.5
+          },
+          "default": {
+            "tactical_stop_below_support": 0.97,
+            "atr_stop_multiplier": 2.0
+          },
+          "wide": {
+            "tactical_stop_below_support": 0.94,
+            "atr_stop_multiplier": 3.0
+          }
+        },
+        "target": {
+          "near": {
+            "tactical_target_above_limit": 1.06,
+            "tactical_target_above_spot": 1.05,
+            "min_reward_risk_ratio": 1.0
+          },
+          "default": {
+            "tactical_target_above_limit": 1.1,
+            "tactical_target_above_spot": 1.08,
+            "min_reward_risk_ratio": 1.5
+          },
+          "far": {
+            "tactical_target_above_limit": 1.15,
+            "tactical_target_above_spot": 1.12,
+            "min_reward_risk_ratio": 2.0
+          }
+        }
+      }
+    },
+    "size": "2 tiers x 3 top_n x 5 exit rules x (27 tactical variants + core only) = 840 rule sets"
+  },
+  "frozen_config": {
+    "tier": "buy_tier",
+    "top_n": null,
+    "exit_rule": "tier1",
+    "tactical": "limit=default|stop=default|target=default"
+  },
+  "objective": {
+    "metric": "p_lower",
+    "horizon_months": 36,
+    "report_horizons_months": [
+      12,
+      36,
+      60
+    ],
+    "long_run_lag_months": 12,
+    "z_search": 1.645,
+    "z_holdout": 1.96,
+    "definition": "P(cumulative monthly log excess over the cap-weighted screened universe, summed over H months, > 0) = Phi(mu * sqrt(H) / sigma_LR), sigma_LR the Newey-West long-run standard deviation. p_lower replaces mu with mu - z * sigma_LR / sqrt(T). The empirical overlapping H-month hit rate is reported beside it, not optimised."
+  },
+  "selection_rule": "Score every rule set on the development window only. Choose the highest plateau score: the median objective over the rule set and its one-step neighbours in each grid dimension. Ties go to core only, then to the fewest departures from frozen_config. Report the probability of backtest overfitting (CSCV) across all rule sets and the deflated Sharpe ratio of the chosen set.",
+  "reveal_order": "Commit docs/data/historical_rule_search.json with the selection before any holdout reveal, including hsr-v1's (ftse-historical-replay run --reveal-holdout refuses until then). Reveal hrs-v1 once: frozen and chosen, each with and without the tactical slice, at base and stress costs.",
+  "costs": {
+    "base_per_side": 0.0053,
+    "stress_per_side": 0.03,
+    "model": "Core: cost x one-way turnover at each monthly rebalance. Slice: cost on each fill and each exit, plus cost on monthly resizing while the slice is in position."
+  },
+  "pass_bars": {
+    "holdout_p_lower_min": 0.5,
+    "verdict_vs_market": "pass when the holdout 36-month p_lower >= 0.5 at base cost; fail when p < 0.5; otherwise inconclusive.",
+    "tactical_verdict": "adds when the holdout 95% interval of (combined minus core-only) monthly return is wholly above zero; costs when wholly below; otherwise inconclusive."
+  },
+  "overfitting": {
+    "cscv_blocks": 16
+  },
+  "simplifications": [
+    "The core enters and exits at the month-end close, also when the live plan would place a core limit order.",
+    "Monthly re-equalisation restores each name's core : slice split from the plan active at entry.",
+    "Idle slice cash earns zero.",
+    "Plans are rebuilt on the last trading day of each ISO week (live recomputes on every screen run); a plan stays live until the next weekly date.",
+    "Within a day the stop is checked before the target; gaps fill at the open; no exit on the fill day; no fill on the core's exit day.",
+    "After a slice exit it re-arms only on a newer plan, so one holding can run several buy/sell cycles.",
+    "Benchmarks are the screened panel universe (S&P 500 members with fundamentals), cap-weighted primary and equal-weighted secondary.",
+    "Exit rules run on monthly screens; the live rules confirm on weekly screens."
+  ],
+  "fixed_rules": [
+    "The screen (assign_signal thresholds, model weights, scoring) is frozen and not searched (N33). Only rules applied after the screen are in the grid.",
+    "No grid point, metric, horizon, or window changes after the search runs; changes open a new registration_id.",
+    "Only config-level aggregates are committed. Signals, panels, prices and per-name trades stay with the licensed build outside the repository."
+  ],
+  "decisions": {
+    "chosen_passes_and_beats_frozen": "Propose the chosen selection and tactical variant as a cold-start paper twin (L572 path) with a frozen epoch; no live book changes on backtest evidence alone.",
+    "frozen_passes_chosen_does_not": "Keep the live rules; the search found noise.",
+    "tactical_costs_or_inconclusive": "Treat the tactical slice as unproven: keep alerts only and do not build a cycling slice into paper books until a forward twin shows an increment.",
+    "neither_passes": "The selection rules do not rescue the screen; follow the hsr-v1 decision.",
+    "patient_exit_chosen": "If the chosen rule set uses rerate or thesis and passes the holdout, propose that exit for the core sell trigger (core_sell_trigger.py) through a cold-start twin; the replayed thresholds are the starting values, not a live edit."
+  },
+  "screen_code_fingerprint": "ae06fd503417beba5200858ceea9419e65b72e466568f434ecd508b6401a8a4e",
+  "rule_code_fingerprint": "f9f4e2e32694068ee3216c54767e8b5eb186b4e46391a32b18e970bd28ade2ed",
+  "registered_at": "2026-10-07T20:19:40.581189+00:00",
+  "exit_rules": {
+    "order": "Ordered from quickest to most patient sell; the plateau steps along this order.",
+    "tier1": {
+      "kind": "tier",
+      "screens_outside": 1
+    },
+    "tier3": {
+      "kind": "tier",
+      "screens_outside": 3
+    },
+    "rerate50": {
+      "kind": "thesis",
+      "avoid_confirm": 2,
+      "rerate_below_pct": 0.5,
+      "rerate_confirm": 2
+    },
+    "rerate30": {
+      "kind": "thesis",
+      "avoid_confirm": 2,
+      "rerate_below_pct": 0.3,
+      "rerate_confirm": 2
+    },
+    "thesis": {
+      "kind": "thesis",
+      "avoid_confirm": 2,
+      "rerate_below_pct": null,
+      "rerate_confirm": 2
+    },
+    "definitions": {
+      "tier": "Sell after screens_outside monthly screens outside the selection; a single avoid sells at once (the live buy_tier_level rule; 2 weekly confirm screens are closest to 1 monthly screen).",
+      "thesis": "The PR #1021 core sell trigger, screen leg only: leaving the selection is not a sell; sell after avoid_confirm consecutive avoid screens. The research-verdict leg (pass/sell/avoid/exit) cannot be replayed (N39), so the replay sells less often than the live rule would.",
+      "rerate": "thesis plus a valuation exit: sell after rerate_confirm consecutive screens outside the selection with the earnings yield below rerate_below_pct of the names screened that date (re-rated: no longer cheap). A missing earnings yield leaves the streak unchanged.",
+      "all_rules": "A name that leaves the screened universe (left the S&P 500, or no price within 7 days) is sold at that month-end: no later screen could confirm a sell. Counted as left_universe."
+    }
+  },
+  "reporting": "Per rule set and window: holding-period median, 90th percentile and maximum in months, episodes still open at the window end, and sells by reason (avoid, left_selection, thesis_break, rerated, left_universe).",
+  "amendments": [
+    {
+      "at": "2026-10-07",
+      "before_data": true,
+      "change": "Replaced exit_after_months [1, 3] with exit_rule [tier1, tier3, rerate50, rerate30, thesis] to test the PR #1021 core sell trigger and a re-rating exit that bounds open-ended holding. Grid 336 -> 840. Added holding-period and sell-reason reporting.",
+      "reason": "A core sell rule was defined (PR #1021) after registration; the search would otherwise only test churn-style exits. No search has run and no holdout has been revealed."
+    }
+  ]
+}

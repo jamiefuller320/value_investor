@@ -110,7 +110,8 @@ Human checklist: `adhoc-historical-replay-data`. Personal-use licence only.
    ftse-historical-replay build-panel --sharadar-dir ~/sharadar --out ~/hsr-build
    ```
 
-   This writes `panel.csv.gz`, `prices.csv.gz`, `terminal_baseline.csv`,
+   This writes `panel.csv.gz`, `prices.csv.gz`, `daily.csv.gz` (adjusted daily
+   OHLC for the tactical replay), `terminal_baseline.csv`,
    `terminal_sensitivity.csv`, and `build_report.json` (counts only). Check the
    report before running: about 500 members per date, `panel_coverage` above
    0.9, and the drop counts small. The adapter is
@@ -123,8 +124,13 @@ Human checklist: `adhoc-historical-replay-data`. Personal-use licence only.
      --prices ~/hsr-build/prices.csv.gz --terminal ~/hsr-build/terminal_baseline.csv
    ```
 
+   The first run screens every date once (about 25 minutes) and caches the
+   signals beside the panel; later runs and the rule search reuse the cache.
    Review the development window. Do not change anything registered.
-4. Reveal once: the same command with `--reveal-holdout`. Then the delisting
+4. Run the rule search on the development window and commit its selection
+   ([historical-rule-search.md](historical-rule-search.md)). `--reveal-holdout`
+   refuses until that selection is committed.
+5. Reveal once: the same command with `--reveal-holdout`. Then the delisting
    sensitivity, which opens the holdout only because the baseline already did
    and never counts as a reveal:
 
@@ -133,8 +139,9 @@ Human checklist: `adhoc-historical-replay-data`. Personal-use licence only.
      --variant delisting_sensitivity
    ```
 
-   Commit `docs/data/historical_screen_replay.json`.
-5. Cancel the subscription and delete every raw table and derived file
+   Commit `docs/data/historical_screen_replay.json`. Then `ftse-rule-search
+   reveal --build ~/hsr-build` and commit `docs/data/historical_rule_search.json`.
+6. Cancel the subscription and delete every raw table and derived file
    (`~/sharadar`, `~/hsr-build`) within 30 days (licence). Keep the store.
 
 `run` refuses inputs inside the repository: the repo is public, and the licence
@@ -171,4 +178,6 @@ years after a change is a search over history (N33, N35). Re-run only when:
 | Historical screen replay verdict no longer describes the live screen | warn | Screen code changed after the holdout reveal |
 | Historical screen replay holdout revealed more than once | warn | Only the first reveal is evidence |
 
+The same check carries the rule search's findings
+([historical-rule-search.md](historical-rule-search.md#ops-monitor-findings)).
 All `auto_fixable=False`.
