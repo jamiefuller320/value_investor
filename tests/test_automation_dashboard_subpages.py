@@ -336,7 +336,7 @@ def test_daily_hub_accept_passes_focus_ack_decision() -> None:
     assert "no dismiss" in card
     assert "badge-sell" in card
     html = Path("docs/index.html").read_text(encoding="utf-8")
-    assert "app.js?v=daily-hub-inline-detail1" in html
+    assert "app.js?v=ui-measure-align-20261007" in html
     assert "Market warning triage" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "zero_body_stuck" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "Expansive assessment" in OPS_MONITOR.read_text(encoding="utf-8")

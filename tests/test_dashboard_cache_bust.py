@@ -21,6 +21,8 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     assert '["progress_report", "data/progress_report.json"]' in text
     assert '["queue_health", "data/queue_health.json"]' in text
     assert '["observe_utilization", "data/observe_utilization.json"]' in text
+    assert '["assessment_scoreboard", "data/assessment_scoreboard.json"]' in text
+    assert '["total_return_view", "data/total_return_view.json"]' in text
     assert '["lifecycle_maturity_trajectory", "data/lifecycle_maturity_trajectory.json"]' in text
     assert '["market_status", "data/market_status.json"]' in text
     assert '["system_gaps", "data/system_gaps.json"]' in text
@@ -442,19 +444,28 @@ console.log(JSON.stringify({ improving, lagging, thin, empty }));
 
 
 def test_learning_tracks_panel_dual_suite_contract() -> None:
-    """Automation learning tracks: Suite B fair adoption truth; Suite A stress lab."""
+    """Automation tracks: assessment scoreboard is canonical; Suite A/B is legacy."""
     text = APP_JS.read_text(encoding="utf-8")
     assert "function renderLearningTracksPanel(data)" in text
     assert "function learningTrackIsSuiteB(trackId, trackConfigs)" in text
+    assert "function renderAssessmentScoreboardPanel(data)" in text
+    assert "function renderTotalReturnVsPricePanel(data)" in text
     fn = text.split("function renderLearningTracksPanel(data)", 1)[1].split(
         "\nfunction renderAutomation(", 1
     )[0]
-    assert "Adoption truth (Suite B fair)" in fn
-    assert "Churn lab (Suite A stress)" in fn
+    assert "Legacy Suite B pair" in fn
+    assert "Suite A stress / churn lab" in fn
     assert "do not promote on stress excess alone" in fn
+    assert "total return vs FTAL.L" in fn
     assert "Primary success = AI judgment excess vs ^FTSE after costs" not in fn
+    assert "Adoption truth (Suite B fair)" not in fn
     assert "learning_tracks_dual_suite" in fn
     assert "N145" in fn
+    board = text.split("function renderAssessmentScoreboardPanel(data)", 1)[1].split(
+        "\nfunction renderTotalReturnVsPricePanel(data)", 1
+    )[0]
+    assert "significance_gate_v1" in board
+    assert "Price-only 90% band" in board
 
 
 def test_historical_siblings_prefer_28d_primary() -> None:
