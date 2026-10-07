@@ -156,8 +156,41 @@ def test_build_analysis_payload_includes_paper_track_buckets(tmp_path: Path):
     assert "fair_assess_suite_a" not in (payload["learning_tracks_dual_suite"] or {})
     prompt = _build_analysis_prompt(tmp_path / "payload.json")
     assert "paper_track_buckets" in prompt
-    assert "membership floor" in prompt
-    assert "suite_b_identity" in prompt
+    assert "legacy Suite A/B context" in prompt
+    assert payload["assessment_scoreboard"] is None
+
+
+def test_build_analysis_payload_leads_with_assessment_scoreboard(tmp_path: Path):
+    data_dir = tmp_path / "docs" / "data"
+    (data_dir / "paper_automation").mkdir(parents=True)
+    (data_dir / "assessment_scoreboard.json").write_text(
+        json.dumps(
+            {
+                "primary_track": "ai_judgment_fair",
+                "control_track": "buy_tier_level",
+                "headline": "ai_judgment_fair: total return +1.0%",
+                "tracks": [
+                    {
+                        "track_id": "ai_judgment_fair",
+                        "role": "primary",
+                        "total_return": 0.01,
+                        "cost_sensitivity": {"extra_drag_at_stress": 0.02},
+                    }
+                ],
+                "frozen_tracks": [{"track_id": "ai_judgment"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = build_analysis_payload(data_dir=data_dir, output_dir=tmp_path / "output")
+    board = payload["assessment_scoreboard"]
+    assert board["primary_track"] == "ai_judgment_fair"
+    assert board["control_track"] == "buy_tier_level"
+    assert "cost_sensitivity" not in board["tracks"][0]
+    (tmp_path / "payload.json").write_text(json.dumps(payload), encoding="utf-8")
+    prompt = _build_analysis_prompt(tmp_path / "payload.json")
+    assert "lead with it" in prompt
+    assert "frozen_tracks are final records" in prompt
 
 
 def test_build_analysis_payload_includes_ingest_trials_for_analysis_trigger(tmp_path: Path):

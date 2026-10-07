@@ -163,7 +163,7 @@ def _cmd_buffered_hold(args: argparse.Namespace) -> int:
     if args.paper_root is not None:
         comparison = compare_buffered_hold_across_tracks(
             Path(args.paper_root),
-            track_ids=tuple(args.tracks.split(",")),
+            track_ids=tuple(args.tracks.split(",")) if args.tracks else None,
             lookback_days=int(args.lookback_days),
             exit_confirm_variants=tuple(int(v) for v in args.exit_confirm_variants.split(",")),
         )
@@ -305,12 +305,12 @@ def main(argv: list[str] | None = None) -> int:
         "--paper-root",
         type=Path,
         default=None,
-        help="Paper automation root — compare rules and ai_judgment tracks",
+        help="Paper automation root — compare the assessment-model primary and control",
     )
     buffered_hold.add_argument(
         "--tracks",
-        default="rules,ai_judgment",
-        help="Comma-separated track ids when --paper-root is set",
+        default=None,
+        help="Comma-separated track ids when --paper-root is set (default: primary,control)",
     )
     buffered_hold.add_argument("--lookback-days", type=int, default=7)
     buffered_hold.add_argument(

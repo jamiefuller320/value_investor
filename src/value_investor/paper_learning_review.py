@@ -216,7 +216,8 @@ CHURN SUMMARY
 single biggest operational learning gap.
 
 PER-TRACK DIAGNOSIS
-Bullets per track (rules, ai_judgment, momentum_grace): cost_drag, trade_count,
+Bullets per active book in churn_health (the assessment-model primary, control and running
+twins; frozen books are excluded by design — never diagnose or retune them): cost_drag, trade_count,
 exit_streak / reentry_cooldown, adjacent flips, duplicate-day skip notes, and
 buffered-hold comparison (screens=1 vs 2) when present. Cite JSON only.
 
