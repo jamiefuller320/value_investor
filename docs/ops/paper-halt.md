@@ -7,8 +7,11 @@ Books, knobs, and orders stay as they are. There is no live broker (N13).
 
 ## Thresholds
 
-Weights use average cost, because the fund file does not store a last mark
-per name. Drawdown uses the equity curve, which is the marked NAV.
+Name, sector and currency weights use the latest marked prices in
+`<track>/marked_prices.json`, written by the daily paper pass from the mark
+refresh. Average cost is not a fallback: if any holding has no positive mark,
+those three rules do not fire (`weight_basis` is `marks_unavailable`) and
+drawdown still uses the equity curve. The equity curve is not rewritten.
 
 | Rule | Fires when |
 |------|------------|
@@ -25,5 +28,6 @@ currency rules.
 
 - **Trigger:** daily ops-monitor `check_paper_halt`.
 - **Store:** `docs/data/paper_halt.json` (optional ops-monitor commit).
+  Marked prices sit beside each fund as `marked_prices.json`.
 - **Finding:** **Paper book would halt on drawdown or concentration**.
   `auto_fixable` is false. The summary says the book was not frozen.

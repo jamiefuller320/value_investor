@@ -25,7 +25,7 @@ from value_investor.paper_automation import (
 )
 from value_investor.paper_fund import PaperFund
 from value_investor.portfolio_diversity import DEFAULT_TARGET_SECTOR_CAP
-from value_investor.total_return_view import total_return_excess_since
+from value_investor.total_return_view import fetch_ticker_history, total_return_excess_since
 
 logger = logging.getLogger(__name__)
 
@@ -304,6 +304,122 @@ def significance_gate(
         "passed": True,
         "closed_by": None,
         "reason": f"active return verdict {stats['verdict']}",
+    }
+
+
+def total_return_significance_gate(
+    fund: PaperFund,
+    proposal: dict[str, Any],
+    *,
+    history_fetcher=None,
+) -> dict[str, Any]:
+    """Apply gate for an FTSE book: total-return active return vs FTAL.L.
+
+    Uses marks on or after ``proposal_basis.started_at``. Dividends are credited
+    on the ex-date. Fewer than 20 daily periods, or a missing benchmark history,
+    fails closed. Price ``track_statistics.json`` is not consulted and cannot
+    open this gate.
+    """
+    from statistics import StatisticsError
+
+    from value_investor.total_return_view import proposal_window_active_returns
+    from value_investor.track_statistics import MIN_PERIODS, summarize_active_returns
+
+    benchmark = str(proposal.get("benchmark") or TOTAL_RETURN_PROPOSAL_BENCHMARK)
+    started_text = proposal.get("started_at")
+    gate: dict[str, Any] = {
+        "policy": APPLY_POLICY,
+        "return_basis": TOTAL_RETURN_PROPOSAL_BASIS,
+        "benchmark": benchmark,
+        "started_at": started_text,
+        "passed": False,
+        "closed_by": GATE_CLOSED_BY_EVIDENCE,
+        "price_statistics_used": False,
+    }
+    started = _parse_iso_date(str(started_text or ""))
+    if started is None:
+        return {
+            **gate,
+            "reason": (
+                f"total-return proposal window vs {benchmark} has no started_at; "
+                "price statistics are not used"
+            ),
+        }
+    if started.tzinfo is None:
+        started = started.replace(tzinfo=UTC)
+    window = proposal_window_active_returns(
+        fund.to_dict(),
+        started,
+        history_fetcher=history_fetcher or fetch_ticker_history,
+        tr_benchmark=benchmark,
+    )
+    rows = list(window["active_returns"])
+    gate["periods"] = len(rows)
+    gate["fund_periods"] = window["fund_periods"]
+    gate["dividends_gbp"] = window["dividends_gbp"]
+    gate["dividends_skipped"] = window["dividends_skipped"]
+    thin = (
+        f"total-return proposal window vs {benchmark} is too thin "
+        f"({len(rows)} daily periods, need {MIN_PERIODS}); price statistics are not used"
+    )
+    if int(window["fund_periods"]) >= MIN_PERIODS and len(rows) < MIN_PERIODS:
+        return {
+            **gate,
+            "reason": (
+                f"total-return proposal window vs {benchmark} has no usable benchmark history "
+                f"({len(rows)} paired periods, need {MIN_PERIODS}); price statistics are not used"
+            ),
+        }
+    if len(rows) < MIN_PERIODS:
+        return {**gate, "reason": thin}
+    try:
+        summary = summarize_active_returns(rows, z_crit=2.0)
+    except StatisticsError:
+        from statistics import fmean
+
+        mean = fmean(value for _day, value in rows)
+        if mean > 0:
+            verdict = "positive"
+        elif mean < 0:
+            verdict = "negative"
+        else:
+            verdict = "indistinguishable_from_noise"
+        passed = verdict in SIGNIFICANT_VERDICTS
+        return {
+            **gate,
+            "status": "ok",
+            "verdict": verdict,
+            "passed": passed,
+            "closed_by": None if passed else GATE_CLOSED_BY_EVIDENCE,
+            "reason": (
+                f"total-return active return vs {benchmark} verdict {verdict}"
+                if passed
+                else (
+                    f"total-return active return vs {benchmark} is indistinguishable from noise "
+                    "(no variation); price statistics are not used"
+                )
+            ),
+        }
+    gate["status"] = summary.get("status")
+    gate["verdict"] = summary.get("verdict")
+    gate["ci_annualized_active_return"] = summary.get("ci_annualized_active_return")
+    gate["significant_after_correction"] = summary.get("significant_after_correction")
+    gate["periods"] = summary.get("periods", len(rows))
+    if summary.get("status") != "ok":
+        return {**gate, "reason": thin}
+    if summary.get("verdict") not in SIGNIFICANT_VERDICTS:
+        return {
+            **gate,
+            "reason": (
+                f"total-return active return vs {benchmark} is indistinguishable from noise "
+                "(90% interval includes zero); price statistics are not used"
+            ),
+        }
+    return {
+        **gate,
+        "passed": True,
+        "closed_by": None,
+        "reason": f"total-return active return vs {benchmark} verdict {summary['verdict']}",
     }
 
 
@@ -1153,6 +1269,7 @@ def total_return_proposal(
     reviewed_at: str,
     fetch_benchmark: bool,
     benchmark_ticker: str | None,
+    history_fetcher=None,
 ) -> tuple[BookMetrics, str, dict[str, Any] | None]:
     """FTSE knob proposals use total-return excess vs FTAL.L from a new epoch.
 
@@ -1166,7 +1283,12 @@ def total_return_proposal(
     started = _parse_iso_date(str(basis.get("started_at") or ""))
     if started is not None and started.tzinfo is None:
         started = started.replace(tzinfo=UTC)
-    window = total_return_excess_since(fund.to_dict(), started) if started is not None else None
+    excess_kwargs = {} if history_fetcher is None else {"history_fetcher": history_fetcher}
+    window = (
+        total_return_excess_since(fund.to_dict(), started, **excess_kwargs)
+        if started is not None
+        else None
+    )
     raw_excess = None if not window else window.get("excess_total_return")
     excess = float(raw_excess) if isinstance(raw_excess, (int, float)) else None
     label = "total-return excess vs FTAL.L"
@@ -1241,6 +1363,7 @@ def run_decision_review(
     benchmark_ticker: str | None = None,
     counterfactual: bool = True,
     statistics_path: Path = DEFAULT_TRACK_STATISTICS_PATH,
+    history_fetcher=None,
 ) -> DecisionReviewResult:
     """
     Review the automated paper book and optionally write clamped knob updates.
@@ -1303,6 +1426,7 @@ def run_decision_review(
         reviewed_at=reviewed_at,
         fetch_benchmark=fetch_benchmark,
         benchmark_ticker=bench_ticker,
+        history_fetcher=history_fetcher,
     )
     proposed, changes, reasons = propose_knob_updates(
         proposal_metrics,
@@ -1330,11 +1454,18 @@ def run_decision_review(
             + "."
         )
 
-    gate = significance_gate(
-        str(config.track_id or "rules"),
-        statistics_path=statistics_path,
-        benchmark_ticker=bench_ticker,
-    )
+    if proposal is not None:
+        gate = total_return_significance_gate(
+            fund,
+            proposal,
+            history_fetcher=history_fetcher,
+        )
+    else:
+        gate = significance_gate(
+            str(config.track_id or "rules"),
+            statistics_path=statistics_path,
+            benchmark_ticker=bench_ticker,
+        )
     applied = False
     note = "Proposal only — history too thin to apply."
     if metrics.epoch and epoch_ok and cooldown_days > 0:
@@ -1479,6 +1610,11 @@ def format_review_text(result: DecisionReviewResult) -> str:
             f"trades: {m.get('trade_count', 0)}"
         ),
     ]
+    apply_basis = (result.significance_gate or {}).get("return_basis")
+    if apply_basis:
+        lines.append(
+            f"  Apply basis: {apply_basis} vs {(result.significance_gate or {}).get('benchmark')}"
+        )
     epoch = m.get("epoch") or {}
     if epoch:
         lines.append(
