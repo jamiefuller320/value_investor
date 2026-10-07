@@ -1,6 +1,6 @@
 # Dunelm Group plc (DNLM.L) — Research memo
 
-_Version 3 · Updated 2026-09-21T17:51:27.243573+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-10-07T10:51:54.123878+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Research is neutral on the buy case: no disclosures since FY26 prelims; valuation screen still cheap but FY27 flat PBT, restructuring and analyst target cuts are unchanged.
+Rationale: Research stays neutral on the buy case: cheapness on screen persists, but only routine RNS since prelims and FY27 flat PBT plus restructuring risks are unchanged pending Q1.
 RiskTags: cyclical, competitive, key_person, leverage, governance
 
 ## Weekly updates
@@ -22,3 +22,8 @@ Outlook cites significantly softer trading in the first six weeks of FY27 on hot
 ### 2026-09-21T17:51:27.243573+00:00
 No new RNS since 8 Sep prelims; headlines are post-results commentary (price stabilisation, some target cuts, strategy debate).  
 Q1 FY27 trading update still due 15 October; FY27 flat adjusted PBT and £30–40m restructuring narrative unchanged.
+
+### 2026-10-07T10:51:54.123878+00:00
+Since 21 Sep, RNS is limited to a 1 Oct Director Declaration (LR 6.4.9: NED Dan Taylor’s external CEO role at Flutter), total voting rights, and PDMR notices.  
+Q1 FY27 trading update is not out yet (prior guidance ~15 October); press is mostly strategy replay and split analyst fair-value views.  
+FY27 broadly flat adjusted PBT and the restructuring narrative are unchanged.

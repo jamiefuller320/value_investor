@@ -1,6 +1,6 @@
 # Galliford Try Holdings plc (GFRD.L) — Research memo
 
-_Version 7 · Updated 2026-09-27T07:30:56.143818+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-10-07T10:35:16.510828+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.77
-Rationale: FY26 audited results still confirm the buy screen; no RNS, filings or news since 23 Sep alters the thesis; rectification and fire-safety contingencies keep risk medium.
+Confidence: 0.78
+Rationale: Oct framework RNS and FY26 annual report filing reinforce backlog behind the buy screen; FY26 provision risks unchanged, so conviction stays medium not higher.
 RiskTags: cyclical, regulatory, litigation, accounting, competitive
 
 ## Weekly updates
@@ -43,3 +43,8 @@ Quantitative **buy** unchanged (10/22, stable); timing **neutral** (RSI ~74, ext
 News pull since 23 Sep is empty; no RNS or regulatory filings after 17 Sep FY2026 results and the £15m buyback launch.  
 Quantitative **buy** unchanged (10/22 models, stable); timing **wait** (RSI ~71, extended vs 200-day MA).  
 Thesis unchanged: net cash, backlog and capital returns vs rectification provisions and fire-safety contingencies.
+
+### 2026-10-07T10:35:16.510828+00:00
+6 Oct RNS: FY2026 annual report filed to NSM with AGM materials; 1–7 Oct contract RNS for Pagabo, Constructing West Midlands and Oxford Inspire frameworks.  
+29 Sep–1 Oct routine PDMR/LTIP tax-related sales; buyback own-share transactions continue.  
+Quantitative **buy** unchanged (9/22 models, stable); timing **wait** (RSI ~62, still extended vs 200-day MA).

@@ -1,6 +1,6 @@
 # Keller Group plc (KLR.L) — Research memo
 
-_Version 8 · Updated 2026-10-04T07:42:04.605903+00:00 · Mode: structured_verdict_update_
+_Version 9 · Updated 2026-10-07T10:27:25.737216+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.75
-Rationale: Research confirms the buy screen on unchanged H1 fundamentals; the I-40 variation adds backlog visibility without altering 2026 guidance; cyclical and neutral-timing caveats unchanged.
+Rationale: Research confirms the buy screen on unchanged H1 fundamentals; routine buyback continues and Capital Markets Day is 14 October; cyclical and wait-for-pullback timing caveats unchanged.
 RiskTags: cyclical, competitive, liquidity, leverage, pension, regulatory, governance, key_person, litigation, accounting
 
 ## Weekly updates
@@ -48,3 +48,8 @@ Buy screen is nine weeks and stable; RSI ~71 with wait-for-pullback timing; Capi
 No trading update or results since the 4 August H1 interim results.  
 28 September RNS: further I-40 contract variation (order book ~£2.4bn; no change to 2026 full-year expectations); routine buyback and 1 October total voting rights.  
 Buy screen is ten weeks and stable; RSI ~64, neutral timing; Capital Markets Day remains 14 October 2026.
+
+### 2026-10-07T10:27:25.737216+00:00
+No trading update or results since the 4 August H1 interim results.  
+Since 4 October: no new RNS beyond routine buyback (6 October) and prior 1 October total voting rights; news is buyback and I-40 commentary only.  
+Buy screen is eleven weeks and stable; RSI ~57, wait-for-pullback timing; Capital Markets Day remains 14 October 2026.

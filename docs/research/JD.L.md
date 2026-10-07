@@ -1,6 +1,6 @@
 # JD Sports Fashion Plc (JD.L) — Research memo
 
-_Version 6 · Updated 2026-09-23T17:33:58.301651+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-10-07T10:28:51.516145+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.71
-Rationale: First-half profit modestly beat expectations and full-year guidance was unchanged, slightly confirming the buy screen; weak sales and North America still cap conviction amid leverage and cyclicality.
+Confidence: 0.72
+Rationale: Strong Buy valuation fits the screen, but thin new disclosures, soft trading and North America plus leverage keep research at accumulate rather than a full Strong Buy endorsement.
 RiskTags: cyclical, competitive, leverage, customer_concentration, governance, other
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Persistent Buy screen (20 weeks; timing accumulate; P/E ~8.4); automated filings
 No material change since the 23 Sep morning H1 press recap (modest adjusted PBT beat; £700–800m full-year guidance unchanged).  
 Afternoon coverage is CEO wellness/running commentary and a generic UK market roundup only.  
 Persistent Buy screen (21 weeks; P/E ~8.2); filings index still has no tagged interim/H1 RNS.
+
+### 2026-10-07T10:28:51.516145+00:00
+No material change since the 23 Sep H1 press recap (modest adjusted PBT beat; £700–800m full-year guidance unchanged).  
+3 Oct press noted a ~£246k insider purchase; the filings index still has no tagged interim/H1 RNS.  
+Screen moved to Strong Buy (7 Oct; P/E ~7.5, improving); FCF definition overlay unchanged.

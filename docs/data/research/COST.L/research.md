@@ -1,6 +1,6 @@
 # Costain Group PLC (COST.L) — Research memo
 
-_Version 7 · Updated 2026-09-27T07:35:43.640943+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-10-07T10:38:29.378094+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Research confirms the buy screen on unchanged H1 filing evidence; no new RNS since 23 September, while RSI ~72 and wait timing favour limit orders over chasing.
+Rationale: Research confirms the buy screen on unchanged H1 evidence; Pagabo framework RNS supports pipeline but does not re-rate fundamentals; RSI ~56 eases wait timing—still favour limit orders.
 RiskTags: cyclical, regulatory, pension, competitive, customer_concentration, other
 
 ## Weekly updates
@@ -43,3 +43,8 @@ Buy signal is stable at nine weeks (10/22 models); screen timing eased to neutra
 No material change in company disclosures since 23 September (holdings and share buyback RNS).
 News batch since the last refresh is empty; no Costain-specific items.
 Buy signal is stable at ten weeks (10/22 models); timing is back to wait with RSI ~72; H1 filing thesis unchanged.
+
+### 2026-10-07T10:38:29.378094+00:00
+No new results or trading update since H1; post-27 September RNS is mostly buybacks, holdings and voting rights.  
+2 October Pagabo civil-engineering framework appointment adds pipeline optionality but does not change the H1 filing picture.  
+Buy signal stable at twelve weeks (10/22 models); RSI ~56 (was ~72); news is false-positive ticker noise only.

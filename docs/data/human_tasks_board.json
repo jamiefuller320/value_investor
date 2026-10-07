@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-07T07:49:21.106605+00:00",
+  "generated_at": "2026-10-07T11:17:36.902035+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -29,11 +29,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "3 attention-parked eng tasks",
-        "updated_at": "2026-10-07T07:48:41.599770+00:00",
+        "updated_at": "2026-10-07T10:05:16.368442+00:00",
         "fingerprint": "59caf08e4199223b",
         "bullets": [
           "Parked tasks: 3 (attention ~3)",
-          "Queue-clearing pause active: False — evaluated 2026-10-07T07:48:41.599770+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-10-07T10:05:16.368442+00:00",
           "Traffic pause active: False",
           "eng-20261004-06: Workflow fix: analysis review failure",
           "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo",
@@ -72,12 +72,12 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-07T07:44:13.229843+00:00",
-        "fingerprint": "841ad86cb5e77a52",
+        "updated_at": "2026-10-07T08:28:01.585906+00:00",
+        "fingerprint": "f6b139f4bdb0ff3f",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=36",
-          "euro_stoxx50: phase=1 ai=False knob=False holdings=7",
-          "omxs30: phase=0 ai=False knob=False holdings=4",
+          "ftse_smallcap: phase=1 ai=False knob=False holdings=4",
+          "ibex35: phase=0 ai=False knob=False holdings=3",
           "aex: phase=0 ai=False knob=False holdings=8",
           "aim: phase=0 ai=False knob=False holdings=15",
           "atx: phase=0 ai=False knob=False holdings=2",
@@ -114,7 +114,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-10-07T07:42:13.321231+00:00",
+        "updated_at": "2026-10-07T08:26:57.458745+00:00",
         "fingerprint": "f765d60144146672",
         "bullets": [
           "Open deviations: 1",
@@ -356,7 +356,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-10-06T08:40:31.490623+00:00",
+        "updated_at": "2026-10-07T08:28:57.532618+00:00",
         "fingerprint": "96ba278f151caba7",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -452,7 +452,7 @@
           "human_ack_pending": 2,
           "summary_recommend": 4,
           "summary_fail": 5,
-          "total_experiments": 16
+          "total_experiments": 17
         }
       },
       "ack": {
@@ -785,7 +785,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-10-06T08:40:31.488416+00:00",
+        "updated_at": "2026-10-07T08:28:57.531039+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
@@ -1144,7 +1144,7 @@
     {
       "id": "sunday-knob-calibration-priors",
       "title": "Review knob calibration priors",
-      "summary": "Confirm readiness signals in knob_calibration_priors.json (confidence, score_gap_vs_runner_up, ready_for_*). If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop — do not promote. Promotion is a separate gate (sunday-assessment-scoreboard).",
+      "summary": "Confirm readiness signals in knob_calibration_priors.json for the primary book (ai_judgment_fair; frozen books are listed under excluded_frozen_tracks) — confidence, score_gap_vs_runner_up, ready_for_*. If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop — do not promote. Promotion is a separate gate (sunday-assessment-scoreboard).",
       "automated": false,
       "cadence": "sunday",
       "section_id": "sunday",
@@ -1649,8 +1649,8 @@
     },
     {
       "id": "sunday-knob-calibrate-runs",
-      "title": "Full-period knob calibrate + shadow bootstrap",
-      "summary": "analysis-review.yml runs ftse-knob-calibrate with full_period_retrospective, writes bootstrap_priors and refreshes endurance. Shadow spawn is skipped while the phase-1 parent ai_judgment is frozen (assessment_model.json).",
+      "title": "Full-period knob calibrate on the primary",
+      "summary": "analysis-review.yml runs ftse-knob-calibrate with full_period_retrospective on the assessment-model primary (ai_judgment_fair; frozen books excluded), writes priors and refreshes endurance. Shadow spawn / warm-start are not scheduled while the phase-1 parent ai_judgment is frozen; frozen shadows show status frozen.",
       "automated": true,
       "cadence": "sunday",
       "section_id": "sunday",
@@ -1864,5 +1864,6 @@
       "auto_ackable": false,
       "ack_sufficient": false
     }
-  ]
+  ],
+  "path": "docs/data/human_tasks_board.json"
 }

@@ -201,6 +201,28 @@ def _flip_lag_instrument(
     warn_active = finding is not None or (
         isinstance(warn_count, (int, float)) and int(warn_count) > 0
     )
+    open_rows = [row for row in ((store or {}).get("open") or []) if isinstance(row, dict)]
+    warn_rows = [row for row in ((store or {}).get("warn_open") or []) if isinstance(row, dict)]
+    sibling_home_open = 0
+    true_no_memo_open = 0
+    for row in open_rows:
+        home = str(row.get("memo_home_market") or "").strip()
+        market = str(row.get("market_id") or "").strip()
+        if row.get("has_memo") and home and home != market:
+            sibling_home_open += 1
+        if not row.get("has_memo"):
+            true_no_memo_open += 1
+
+    def _slim_flip_row(row: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "ticker": row.get("ticker"),
+            "market_id": row.get("market_id"),
+            "blocking_stage": row.get("blocking_stage"),
+            "has_memo": row.get("has_memo"),
+            "memo_home_market": row.get("memo_home_market"),
+            "hours_since_flip": row.get("hours_since_flip"),
+        }
+
     return {
         "id": "buy_tier_flip_lag",
         "title": "Buy-tier flip → usable",
@@ -218,6 +240,9 @@ def _flip_lag_instrument(
             "usable_in_window": summary.get("usable_in_window"),
             "market_count": summary.get("market_count"),
             "blocking_stage_counts": summary.get("blocking_stage_counts") or {},
+            "sibling_home_open_count": sibling_home_open,
+            "true_no_memo_open_count": true_no_memo_open,
+            "warn_sample": [_slim_flip_row(row) for row in (warn_rows or open_rows)[:8]],
         },
         "primary_metric": "warn_not_usable",
         "primary_value": int(warn_count) if warn_count is not None else None,
