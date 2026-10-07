@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-06T19:04:38.671291+00:00",
+  "run_at": "2026-10-07T21:35:18.918468+00:00",
   "market_id": "bel20",
   "targets": [
     "ABI.BR"
@@ -7,7 +7,7 @@
   "target_details": [
     {
       "ticker": "ABI.BR",
-      "priority_score": 15.126999999999999,
+      "priority_score": 15.1829,
       "filings_total": 35,
       "filings_with_body": 33,
       "indexed_without_body": 2,
@@ -94,24 +94,23 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-06T19:04:03.542720+00:00",
+    "snapshot_at": "2026-10-07T21:34:51.117920+00:00",
     "market_id": "bel20",
-    "buy_tier_count": 6,
+    "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 3,
+    "thin_body_buy_tier": 2,
     "indexed_without_body": 0,
     "bodies_min": 1,
-    "bodies_median": 2.5,
+    "bodies_median": 3,
     "bodies_max": 33,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [
-      "ACKB.BR",
       "APAM.AS",
-      "SOLB.BR"
+      "ACKB.BR"
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
@@ -128,33 +127,31 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-06T19:04:35.263548+00:00",
+    "snapshot_at": "2026-10-07T21:35:14.285720+00:00",
     "market_id": "bel20",
-    "buy_tier_count": 6,
+    "buy_tier_count": 5,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 3,
+    "thin_body_buy_tier": 2,
     "indexed_without_body": 0,
     "bodies_min": 1,
-    "bodies_median": 2.5,
+    "bodies_median": 3,
     "bodies_max": 33,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [
-      "ACKB.BR",
       "APAM.AS",
-      "SOLB.BR"
+      "ACKB.BR"
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
     "parked_tickers": [
       "ACKB.BR",
-      "APAM.AS",
-      "SOLB.BR"
+      "APAM.AS"
     ],
-    "parked_count": 3,
+    "parked_count": 2,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -168,7 +165,7 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 6,
+    "scanned": 5,
     "hits": 4,
     "new_rows_total": 0,
     "curiosity_total": 5,
@@ -183,9 +180,8 @@
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
-      "ACKB.BR",
       "APAM.AS",
-      "SOLB.BR"
+      "ACKB.BR"
     ],
     "runtime_cutoff": false
   },
@@ -198,21 +194,20 @@
   },
   "critical_path": {
     "market_id": "bel20",
-    "assessed_at": "2026-10-06T19:04:03.723626+00:00",
+    "assessed_at": "2026-10-07T21:34:51.442494+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
     "thin_need_discovery": [
-      "ACKB.BR",
       "APAM.AS",
-      "SOLB.BR"
+      "ACKB.BR"
     ],
     "thin_need_bodies": [],
     "primary_blocker": "thin_need_discovery",
     "force_discovery_scan": true,
     "auto_pin_tickers": [],
     "recommended_actions": [
-      "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
+      "Discovery/IR seed for 2 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
@@ -220,13 +215,13 @@
       "zero_body": 0,
       "indexed_without_body_tickers": 0,
       "indexed_without_body_rows": 0,
-      "thin_need_discovery": 3,
+      "thin_need_discovery": 2,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 31.37305139700001,
+  "used_seconds": 22.515918401999983,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3568.626948603,
+  "leftover_seconds": 3577.484081598,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -234,7 +229,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "bel20",
-    "updated_at": "2026-10-06T19:04:35.265060+00:00",
+    "updated_at": "2026-10-07T21:35:14.288457+00:00",
     "exhausted": true,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
@@ -260,17 +255,6 @@
         "indexed_without_body": 0,
         "thin": true,
         "source_surface": "euro_filings"
-      },
-      {
-        "ticker": "SOLB.BR",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-01T16:36:43.723951+00:00",
-        "filings_total": 1,
-        "filings_with_body": 1,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -279,8 +263,7 @@
     "had_complete_targets": false,
     "leftover_tickers": [
       "ACKB.BR",
-      "APAM.AS",
-      "SOLB.BR"
+      "APAM.AS"
     ],
     "unparked_leftover": [],
     "surface_released": [],
@@ -318,7 +301,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 138,
+    "task_count": 142,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "hunter_tickers": [
