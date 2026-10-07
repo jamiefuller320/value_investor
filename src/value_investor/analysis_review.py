@@ -200,6 +200,18 @@ def parse_analysis_review(text: str) -> AnalysisReview:
     return AnalysisReview(**sections)
 
 
+def _slim_assessment_scoreboard(board: Any) -> dict[str, Any] | None:
+    if not isinstance(board, dict) or not board:
+        return None
+    out = dict(board)
+    out["tracks"] = [
+        {key: value for key, value in row.items() if key != "cost_sensitivity"}
+        for row in board.get("tracks") or []
+        if isinstance(row, dict)
+    ]
+    return out
+
+
 def _safe_read(path: Path) -> dict[str, Any] | list[Any] | None:
     if not path.exists():
         return None
@@ -257,7 +269,7 @@ def build_analysis_payload(
     live_timing_review = resolve_live_exit_timing_review(paper_root)
     exit_timing = _slim_exit_timing(
         live_timing_review,
-        label="Live exit-timing cohorts (primary rules track)",
+        label="Live exit-timing cohorts (assessment-model primary)",
     )
     exit_timing_near_miss = _slim_exit_timing(
         _safe_read(data_dir / "exit_timing_near_miss_review.json"),
@@ -328,6 +340,9 @@ def build_analysis_payload(
         "historical_analysis": historical,
         "learning_tracks_review": learning_review,
         "learning_tracks_summary": learning_summary,
+        "assessment_scoreboard": _slim_assessment_scoreboard(
+            _safe_read(data_dir / "assessment_scoreboard.json")
+        ),
         "learning_tracks_dual_suite": learning_dual_suite,
         "paper_track_buckets": paper_track_buckets,
         "exit_shadow": exit_shadow,
@@ -878,17 +893,18 @@ EXECUTIVE SUMMARY
 biggest modelling/analysis gap this week. Prefer naming a concrete focus from
 trajectory_evidence.model_focus_candidates, loser_snapshot_cards.top_failed_families,
 or exclusion readiness when present.
-When paper_track_buckets is present, name all three buckets explicitly:
-(1) Suite A stress — score on cost_drag / trade_count, not beat-^FTSE adoption;
-(2) Suite B adoption — ai_judgment_fair / rules_fair excess vs ^FTSE and vs each other;
-(3) Suite B identity — buy_tier_level / buy_tier_level_dca membership floor, not adoption.
-Do not describe identity greens as “Suite B beating the market.” Do not treat Suite A
-beat_control as Suite B green.
+When assessment_scoreboard is present, lead with it: it is the single assessment model.
+Name primary_track and control_track (the control is the unfiltered buy tier, so
+primary_vs_control.difference is whether the AI filter added value), quote headline,
+each active row's total_return vs benchmark_total_return and statistics.verdict, and
+the running twins. frozen_tracks are final records — cite them only as history; never
+compare against them, propose knobs for them, or call them primary/control.
+learning_tracks_dual_suite / paper_track_buckets are legacy Suite A/B context only.
 
 PERFORMANCE DIAGNOSIS
-Bullets on primary vs control vs market excess after costs, cost drag, and whether marks
-are thick enough to trust. Label stress vs fair. Do NOT recommend auto-applying
-decision-review knobs. Do not promote from suite_b_identity excess.
+Bullets on primary vs control vs market total return, cost drag, and whether marks
+are thick enough to trust (statistics.verdict, marks). Do NOT recommend auto-applying
+decision-review knobs. Do not promote on a verdict other than "positive".
 
 SIGNAL & BACKTEST FINDINGS
 What archived signal backtest / historical analysis / offline sim tracks show — cite
@@ -905,10 +921,9 @@ When exclusion_universe is present, cite recommended_step and readiness.ready_fo
 plus cumulative_exclusion_alpha on the recommended rung.
 
 PAPER TRACK COMPARISON
-When paper_track_buckets / learning_tracks_dual_suite is present, lead with the three
-buckets (stress lab, fair adoption twins, identity floor) and cite the JSON numbers —
-then compare ai_judgment, rules, and momentum_grace using learning_tracks_review,
-knob_calibration_priors (recommended_prior per track, confidence, changed_vs_current),
+Lead with assessment_scoreboard (primary, control, twins) and cite the JSON numbers —
+then compare the active books in learning_tracks_review (frozen books are absent by design)
+using knob_calibration_priors (recommended_prior for the primary, confidence, changed_vs_current),
 and exit_shadow when present. Cite exit_timing_cohorts.readiness (hold/swap closed counts)
 and exit_timing_reconciliation.comparability before comparing live vs archive hold/swap rates
 (do not average rates across sources when hold_recovery_rates_directly_comparable is false).

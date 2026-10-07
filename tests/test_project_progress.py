@@ -195,3 +195,32 @@ def test_build_project_progress_reads_assessment_scoreboard(tmp_path: Path):
     assert any(
         "ai_judgment_fair" in row and "125 years" in row for row in payload["appraisal"]["gaps"]
     )
+
+
+def test_default_review_paths_follow_assessment_model(tmp_path: Path):
+    paper = tmp_path / "paper_automation"
+    for sub, excess in (
+        ("ai_judgment", -0.5),
+        ("ai_judgment_fair", 0.02),
+        ("buy_tier_level", 0.01),
+    ):
+        (paper / sub).mkdir(parents=True)
+        (paper / sub / "decision_review.json").write_text(
+            json.dumps({"metrics": {"excess_after_costs": excess}}), encoding="utf-8"
+        )
+    (paper / "assessment_model.json").write_text(
+        json.dumps({"primary_track": "ai_judgment_fair", "control_track": "buy_tier_level"}),
+        encoding="utf-8",
+    )
+    missing = tmp_path / "missing.json"
+    payload = build_project_progress(
+        latest_path=missing,
+        automation_path=missing,
+        ops_path=missing,
+        ingest_log_path=missing,
+        decision_input_path=missing,
+        scoreboard_path=missing,
+        paper_root=paper,
+    )
+    assert payload["evidence"]["ai_excess_after_costs"] == 0.02
+    assert payload["evidence"]["rules_excess_after_costs"] == 0.01

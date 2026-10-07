@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T05:54:21+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T08:00:22+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -233,6 +233,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N192 | **Do not work around Unternehmensregister / Bundesanzeiger captcha for dax** | German OAM search sits behind a captcha (Unternehmensregister) or a stateful session form (Bundesanzeiger). AMF shipped in L545; .DE names stay on ESEF, Google News and IR allowlist PDFs. | Germany publishes a public or keyed regulated-information API, or dax is fronted on a sprint stream with its thin leftovers mainly interim periods ESEF cannot close |
 | N193 | **Do not scrape 1Info / eMarket, CNMV or OeKB portals for euro OAM filings** | Italy (1Info / eMarket STORAGE) are HTML portals with undocumented internal endpoints; Spain CNMV is ASP.NET __VIEWSTATE forms (direct query URLs 400/403); Austria OeKB OAM is an Angular app behind an F5 bot-defence script. No documented open API in any of them. | One of CONSOB, CNMV or OeKB publishes an open-data or keyed filings API, or ftse_mib / ibex35 / atx thin buy-tier leftovers persist after a complete fat slot with IR seeds |
 | N195 | **Do not pull EQS News wp-json or MFN .json feeds without permission** | Both are public and ungated, with ISIN/LEI filters (EQS covers DAX; MFN covers OMXS30 with report tags and full text), but robots.txt disallows /wp-json/ (EQS) and *.json (MFN). Same principle as N187/N190: no workaround. EQS 'Advance financial reports' are publication-date notices, not reports. | EQS or MFN grants written permission or offers a licensed/documented feed we subscribe to |
+| N196 | **Calibrated / exclusion shadows of the fair primary** | Knob-calibration and exclusion-ladder shadows only support the ai_judgment parent, which is frozen. Priors and ladder replay now run on ai_judgment_fair observe-only; spawning fair-parent shadows would add new live tracks (factory, not P1). | knob_calibration_priors for ai_judgment_fair reports ready_for_shadow_bootstrap with confidence above low, or exclusion replay_beats_actual is true on the primary for 3 consecutive Sundays |
 
 ---
 
@@ -315,6 +316,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L555 | **Bonferroni-corrected decision-review apply gate** | Tighten significance_gate_v1 from the uncorrected 90% verdict to significant_after_correction across all tracks reviewed together, once more books share the gate and multiple-comparison false applies become likely. | Gate first opens on any track, or 6+ active tracks are apply-eligible |
 | L558 | **Recalibrate decision-review cost-drag thresholds for fair costs** | HIGH_COST_DRAG (4%) and the auto-raise min_conviction rule were tuned on 3% stress books. On fair T212 costs (~0.55% round trip) they rarely fire, so cost-driven proposals are effectively off. Re-derive the thresholds from fair-cost turnover before applies start happening. Replaces L221. | significance_gate_v1 first opens on a fair-cost book, or a fair book's cost_drag exceeds 1% on an epoch _(machine-checked)_ |
 | L559 | **Lower trade-plan structural take-profit floors on a fair-cost twin** | With fair round trips (~0.5%) bound in L405, take-profit is set by structural floors (10% above buy, 8% above spot, 1.5x reward:risk) sized for 6% stress. Lowering them changes sell urgency in capital_allocation, so test on a cold-start twin of ai_judgment_fair rather than editing the live config. | Hold-buffer twin (L541) has its first readiness read on the assessment scoreboard, or take-profit hits become a material share of primary exits in exit_shadow |
+| L560 | **Exit-timing archive held-book ingest after the assessment-model freeze** | ftse-exit-timing-archive still ingests held-book hold/swap episodes from frozen rules/ai_judgment rebalance logs, so that pool stops growing. Switching to primary/control drops the older frozen episodes; a union double-counts overlapping picks. Decide: switch with a dated cutover, or union with dedupe by ticker/open date. | exit_timing_near_miss or live hold/swap readiness nears its closed-count target, or the archive closed counts stay flat for 4 Sundays |
 
 ### Universe & data
 

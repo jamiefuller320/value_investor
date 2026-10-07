@@ -1,5 +1,6 @@
 """Tests for per-rebalance decision logging and log-based replay."""
 
+import json
 from pathlib import Path
 
 from value_investor.decision_review import LearningKnobs, estimate_counterfactual_with_log
@@ -971,6 +972,29 @@ def test_compare_buffered_hold_across_tracks(tmp_path: Path):
     assert comparison is not None
     assert comparison["scope"] == "buffered_hold_counterfactual_multi"
     assert set(comparison["tracks"]) == {"rules", "ai_judgment"}
+
+    fair = paper / "ai_judgment_fair"
+    fair.mkdir()
+    (fair / "config.json").write_text(json.dumps({"track_id": "ai_judgment_fair"}))
+    append_rebalance_log(
+        fair,
+        _buffered_hold_base_entry(
+            track_id="ai_judgment_fair",
+            gate={"local_time": "2026-08-10T12:00:00+00:00"},
+        ),
+    )
+    (paper / "assessment_model.json").write_text(
+        json.dumps(
+            {
+                "primary_track": "ai_judgment_fair",
+                "control_track": "rules",
+                "frozen_tracks": {"rules": {}, "ai_judgment": {}},
+            }
+        )
+    )
+    modelled = compare_buffered_hold_across_tracks(paper, lookback_days=7, as_of=as_of)
+    assert modelled is not None
+    assert set(modelled["tracks"]) == {"ai_judgment_fair"}
 
 
 def test_write_buffered_hold_counterfactual(tmp_path: Path):

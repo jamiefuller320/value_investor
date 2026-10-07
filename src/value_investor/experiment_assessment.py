@@ -160,6 +160,8 @@ def _load_experimental_tracks(paper_root: Path) -> dict[str, dict[str, Any]]:
             continue
         if cfg.get("is_calibration_shadow") or cfg.get("is_exclusion_shadow"):
             continue
+        if cfg.get("is_churn_policy_twin"):
+            continue
         if not (cfg.get("use_momentum_grace") or cfg.get("use_graduated_allocation")):
             continue
         track_id = str(cfg.get("track_id") or config_path.parent.name)
@@ -415,8 +417,11 @@ def _experiments_from_experimental_tracks(
     *,
     fetch_benchmark: bool = False,
 ) -> list[dict[str, Any]]:
+    from value_investor.assessment_model import primary_track_id
+    from value_investor.rebalance_log import resolve_track_dir
+
     rows: list[dict[str, Any]] = []
-    primary_dir = ctx.paper_root / AI_JUDGMENT_TRACK_ID
+    primary_dir = resolve_track_dir(ctx.paper_root, primary_track_id(ctx.paper_root))
     primary_metrics = _fund_metrics_snapshot(primary_dir) if primary_dir.exists() else {}
     primary_excess = primary_metrics.get("excess_after_costs")
 
@@ -747,6 +752,10 @@ def refresh_experiment_assessment(
         )
     )
     experiments.extend(_experiments_from_experimental_tracks(ctx, fetch_benchmark=fetch_benchmark))
+    from value_investor.assessment_model import frozen_tracks
+
+    frozen = frozen_tracks(paper_root)
+    experiments = [row for row in experiments if row.get("track_id") not in frozen]
     experiments.extend(_experiments_from_entry_dca(ctx))
     experiments.extend(_experiments_from_task_queues(ctx))
 

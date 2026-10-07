@@ -243,7 +243,7 @@ def _memo_at_by_ticker_from_docs(docs: list) -> dict[str, str]:
 
 
 def _default_paper_holdings() -> set[str]:
-    """AI-judgment paper holdings for Sunday rememo ranking (empty if unavailable)."""
+    """Primary-track paper holdings for Sunday rememo ranking (empty if unavailable)."""
     try:
         from value_investor.decision_input_inventory import load_paper_holdings
 

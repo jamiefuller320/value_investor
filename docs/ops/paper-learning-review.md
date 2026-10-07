@@ -16,7 +16,7 @@ Disable before live capital cutover:
 | Layer | Artifact | When |
 |-------|----------|------|
 | Deterministic rollup | `learning_tracks_churn_health.json` | After weekday `ftse-decision-review --tracks all` |
-| Buffered-hold counterfactual | `buffered_hold_counterfactual.json` | After weekday `ftse-decision-review --tracks all` |
+| Buffered-hold counterfactual | `buffered_hold_counterfactual.json` (unfrozen assessment-model primary + control) | After weekday `ftse-decision-review --tracks all` |
 | Rule-based knobs | `decision_review.json` | Weekday paper-auto (`--apply`) |
 | Broad modelling review | `analysis_review.md` | Sunday `analysis-review.yml` (includes `churn_health` in payload) |
 | **This module** | `paper_learning_review.md` | Sunday `paper-learning-review.yml` (if enabled) |

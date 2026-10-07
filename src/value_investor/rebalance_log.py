@@ -1528,12 +1528,17 @@ def compare_buffered_hold_counterfactual(
 def compare_buffered_hold_across_tracks(
     paper_root: Path,
     *,
-    track_ids: tuple[str, ...] = ("rules", "ai_judgment"),
+    track_ids: tuple[str, ...] | None = None,
     lookback_days: int = 7,
     exit_confirm_variants: tuple[int, ...] = (1, 2),
     as_of: datetime | None = None,
 ) -> dict[str, Any] | None:
-    """Run buffered-hold counterfactual on rules and ai_judgment learning tracks."""
+    """Run buffered-hold counterfactual per book (default: unfrozen primary and control)."""
+    from value_investor.assessment_model import (
+        control_track_id,
+        is_track_frozen,
+        primary_track_id,
+    )
     from value_investor.paper_automation import (
         CONFIG_FILENAME,
         FUND_FILENAME,
@@ -1543,6 +1548,14 @@ def compare_buffered_hold_across_tracks(
     )
 
     paper_root = Path(paper_root)
+    if track_ids is None:
+        track_ids = tuple(
+            dict.fromkeys(
+                track_id
+                for track_id in (primary_track_id(paper_root), control_track_id(paper_root))
+                if not is_track_frozen(paper_root, track_id)
+            )
+        )
     dirs = learning_track_dirs(paper_root)
     tracks: dict[str, Any] = {}
     for track_id in track_ids:

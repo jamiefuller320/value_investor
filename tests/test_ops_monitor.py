@@ -1664,6 +1664,36 @@ def test_check_paper_learning_tracks_warns_on_saturated_knobs(tmp_path: Path):
     )
 
 
+def test_saturated_knobs_skip_frozen_books_and_fixed_knob_labs(tmp_path: Path):
+    paper = _write_paper_learning_root(tmp_path)
+    review_path = paper / "learning_tracks_review.json"
+    review = json.loads(review_path.read_text(encoding="utf-8"))
+    pressure = [{"knob": "sector_cap", "pressure": "lower", "bound": 0.2, "trigger": "x"}]
+    for track_id in ("ai_judgment", "rules", "ai_judgment_hold5_fair"):
+        review["reviews"][track_id] = {"saturated_knobs": pressure}
+    review_path.write_text(json.dumps(review), encoding="utf-8")
+    (paper / "assessment_model.json").write_text(
+        json.dumps({"frozen_tracks": {"rules": {"reason": "stress"}}}), encoding="utf-8"
+    )
+    twin_dir = paper / "ai_judgment_hold5_fair"
+    twin_dir.mkdir()
+    (twin_dir / "config.json").write_text(
+        json.dumps({"track_id": "ai_judgment_hold5_fair", "is_churn_policy_twin": True}),
+        encoding="utf-8",
+    )
+
+    saturated = [
+        row
+        for row in check_paper_learning_tracks(paper)
+        if row.title == "Decision-review knobs saturated at bounds"
+    ]
+
+    assert len(saturated) == 1
+    assert "ai_judgment: sector_cap lower at 0.2" in saturated[0].summary
+    assert "rules:" not in saturated[0].summary
+    assert "ai_judgment_hold5_fair" not in saturated[0].summary
+
+
 def test_committed_paper_learning_tracks_are_complete():
     # Saturation is a data-dependent observe finding, not a structural gap.
     structural = [

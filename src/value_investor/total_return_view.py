@@ -44,8 +44,7 @@ PRICE_BENCHMARK = "^FTSE"
 TR_BENCHMARK = "FTAL.L"
 STRESS_COST_RATE = 0.02
 MAX_PLAUSIBLE_YIELD = 0.15
-HEADLINE_TRACKS = ("ai_judgment", "rules", "ai_judgment_fair", "rules_fair")
-VALUE_CONTROL_PAIR = ("ai_judgment_fair", "buy_tier_level")
+PRIMARY_VS_CONTROL = "primary_vs_control"
 MISSTATEMENT_GAP = 0.05
 
 FINDING_TITLE = "Price-only excess misstates track performance"
@@ -304,9 +303,15 @@ def build_total_return_view(
     history_fetcher: HistoryFetcher = fetch_ticker_history,
     now: datetime | None = None,
 ) -> dict[str, Any]:
+    from value_investor.assessment_model import (
+        assessed_track_ids,
+        control_track_id,
+        primary_track_id,
+    )
     from value_investor.paper_automation import learning_track_dirs
 
     root = Path(paper_root)
+    assessed = assessed_track_ids(root)
     loaded: dict[str, dict[str, Any]] = {}
     for track_id, track_dir in learning_track_dirs(root).items():
         fund = _read_json(Path(track_dir) / FUND_FILENAME)
@@ -327,6 +332,7 @@ def build_total_return_view(
             "schema_version": 1,
             "updated_at": (now or datetime.now(UTC)).isoformat(),
             "observe_only": True,
+            "assessed_tracks": assessed,
             "tracks": {},
             "pairs": {},
         }
@@ -367,7 +373,7 @@ def build_total_return_view(
         tracks[track_id] = entry
 
     pairs: dict[str, Any] = {}
-    left_id, right_id = VALUE_CONTROL_PAIR
+    left_id, right_id = primary_track_id(root), control_track_id(root)
     if left_id in loaded and right_id in loaded:
         common_start = max(loaded[left_id]["marks"][0][0], loaded[right_id]["marks"][0][0])
         scored = {}
@@ -383,7 +389,7 @@ def build_total_return_view(
             )
         left, right = scored[left_id], scored[right_id]
         if left and right:
-            pairs["ai_fair_vs_buy_tier_level"] = {
+            pairs[PRIMARY_VS_CONTROL] = {
                 "left": left_id,
                 "right": right_id,
                 "start": common_start.isoformat(),
@@ -391,8 +397,8 @@ def build_total_return_view(
                 "right_total_return": right["total_return"],
                 "difference": round(left["total_return"] - right["total_return"], 4),
                 "note": (
-                    "Value-beta control: same universe and fair costs, AI/overlay filter "
-                    "vs unfiltered buy tier. Positive means the filter added value."
+                    "Primary minus control (assessment_model.json) on their common window. "
+                    "Positive means the primary's filter added value."
                 ),
             }
 
@@ -414,6 +420,7 @@ def build_total_return_view(
             "benchmark_alignment": "close before each mark date",
             "misstatement_gap": MISSTATEMENT_GAP,
         },
+        "assessed_tracks": assessed,
         "tracks": tracks,
         "pairs": pairs,
     }
@@ -435,9 +442,13 @@ def refresh_total_return_view(
 
 
 def ops_finding_from_total_return_view(payload: dict[str, Any]) -> dict[str, Any] | None:
-    """Warn when a headline track's published excess is off by sign or ≥5pp."""
+    """Warn when an assessed book's published excess is off by sign or ≥5pp.
+
+    Frozen books keep their rows in ``tracks`` (the scoreboard's final records
+    read them) but no longer raise this finding.
+    """
     lines: list[str] = []
-    for track_id in HEADLINE_TRACKS:
+    for track_id in payload.get("assessed_tracks") or []:
         entry = (payload.get("tracks") or {}).get(track_id) or {}
         published = entry.get("published_excess_after_costs")
         view = entry.get("clean_epoch") or entry.get("lifetime") or {}

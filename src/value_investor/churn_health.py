@@ -6,12 +6,8 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from value_investor.paper_automation import (
-    AI_JUDGMENT_TRACK_ID,
-    MOMENTUM_GRACE_TRACK_ID,
-    RULES_TRACK_ID,
-    learning_track_dirs,
-)
+from value_investor.assessment_model import control_track_id, frozen_tracks, primary_track_id
+from value_investor.paper_automation import learning_track_dirs
 from value_investor.storage import read_json, write_json
 
 CHURN_HEALTH_FILENAME = "learning_tracks_churn_health.json"
@@ -192,13 +188,16 @@ def build_churn_health(
     as_of: datetime | None = None,
     lookback_days: int = DEFAULT_LOOKBACK_DAYS,
 ) -> dict[str, Any]:
-    """Aggregate churn health across all paper learning tracks."""
+    """Aggregate churn health across the unfrozen paper learning tracks."""
     paper_root = Path(paper_root)
     when = as_of or datetime.now(UTC)
     dirs = learning_track_dirs(paper_root)
+    frozen = frozen_tracks(paper_root)
+    primary_id = primary_track_id(paper_root)
+    control_id = control_track_id(paper_root)
     tracks: dict[str, Any] = {}
     for track_id, track_dir in dirs.items():
-        if track_dir.exists():
+        if track_id not in frozen and track_dir.exists():
             tracks[track_id] = summarize_track_churn_health(
                 track_dir,
                 track_id=track_id,
@@ -206,8 +205,8 @@ def build_churn_health(
                 lookback_days=lookback_days,
             )
 
-    primary = tracks.get(AI_JUDGMENT_TRACK_ID) or {}
-    control = tracks.get(RULES_TRACK_ID) or {}
+    primary = tracks.get(primary_id) or {}
+    control = tracks.get(control_id) or {}
     primary_drag = (primary.get("decision_review") or {}).get("cost_drag")
     control_drag = (control.get("decision_review") or {}).get("cost_drag")
 
@@ -216,8 +215,8 @@ def build_churn_health(
         alerts.append(
             {
                 "severity": "watch",
-                "track": RULES_TRACK_ID,
-                "title": "Elevated rules-track cost drag",
+                "track": control_id,
+                "title": "Elevated control-track cost drag",
                 "summary": f"cost_drag={control_drag:.1%} — review churn guards and conviction floor.",
             }
         )
@@ -225,8 +224,8 @@ def build_churn_health(
         alerts.append(
             {
                 "severity": "watch",
-                "track": AI_JUDGMENT_TRACK_ID,
-                "title": "Elevated AI-judgment cost drag",
+                "track": primary_id,
+                "title": "Elevated primary-track cost drag",
                 "summary": f"cost_drag={primary_drag:.1%} — review churn guards and selectivity.",
             }
         )
@@ -259,9 +258,9 @@ def build_churn_health(
         "schema_version": 1,
         "generated_at": when.isoformat(),
         "lookback_days": int(lookback_days),
-        "primary_learning_track": AI_JUDGMENT_TRACK_ID,
-        "control_track": RULES_TRACK_ID,
-        "experimental_track": MOMENTUM_GRACE_TRACK_ID,
+        "primary_learning_track": primary_id,
+        "control_track": control_id,
+        "excluded_frozen_tracks": sorted(frozen),
         "tracks": tracks,
         "alerts": alerts,
     }

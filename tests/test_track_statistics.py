@@ -131,11 +131,49 @@ def test_build_track_statistics_tracks_and_pair(tmp_path: Path):
     assert tracks["rules"]["status"] == "ok"
     assert tracks["ai_judgment"]["verdict"] == "positive"
     assert tracks["technical"]["status"] == "insufficient_data"
-    pair = payload["pairs"]["ai_vs_rules"]
+    pair = payload["pairs"]["primary_vs_control"]
+    assert (pair["left"], pair["right"]) == ("ai_judgment", "rules")
     assert pair["status"] == "ok"
     assert pair["annualized_active_return"] > 0
-    assert payload["tests_corrected_for"] == 2 + 2
+    assert payload["tests_corrected_for"] == 2 + 1
     assert payload["observe_only"] is True
+
+
+def test_build_uses_model_pair_and_skips_frozen_books(tmp_path: Path):
+    root = tmp_path / "paper"
+    n = MIN_PERIODS + 10
+    for track_id, rate, flag in (
+        ("ai_judgment_fair", 1.002, "is_fair_cost_lab"),
+        ("buy_tier_level", 1.001, "is_cohort_lab"),
+    ):
+        _write_track(root, track_id, [1000.0 * (rate**i) for i in range(n)])
+        (root / track_id / "config.json").write_text(
+            json.dumps({"track_id": track_id, flag: True}), encoding="utf-8"
+        )
+    _write_track(root, "", [1000.0 * (1.003**i) for i in range(n)])
+    _write_track(root, "ai_judgment", [1000.0 * (1.004**i) for i in range(n)])
+    (root / "assessment_model.json").write_text(
+        json.dumps(
+            {
+                "primary_track": "ai_judgment_fair",
+                "control_track": "buy_tier_level",
+                "frozen_tracks": {"rules": {}, "ai_judgment": {}},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    payload = build_track_statistics(root, benchmark_fetcher=_flat_benchmark)
+
+    assert "rules" not in payload["tracks"] and "ai_judgment" not in payload["tracks"]
+    assert payload["excluded_frozen_tracks"] == ["ai_judgment", "rules"]
+    pair = payload["pairs"]["primary_vs_control"]
+    assert (pair["left"], pair["right"]) == ("ai_judgment_fair", "buy_tier_level")
+    assert payload["tests_corrected_for"] == 2 + 1
+
+    noisy = {**payload, "pairs": {"primary_vs_control": _ok("indistinguishable_from_noise")}}
+    finding = ops_finding_from_track_statistics(noisy, {"beat_control": True})
+    assert "ai_judgment_fair minus buy_tier_level" in finding["summary"]
 
 
 def test_build_handles_missing_benchmark(tmp_path: Path):
@@ -160,14 +198,14 @@ def _ok(verdict: str) -> dict:
 def test_finding_only_on_unsupported_claims():
     payload = {
         "tracks": {"ai_judgment": _ok("positive")},
-        "pairs": {"ai_vs_rules": _ok("positive")},
+        "pairs": {"primary_vs_control": _ok("positive")},
     }
     claims = {"beat_market": True, "beat_control": True}
     assert ops_finding_from_track_statistics(payload, claims) is None
 
     noisy = {
         "tracks": {"ai_judgment": _ok("indistinguishable_from_noise")},
-        "pairs": {"ai_vs_rules": _ok("indistinguishable_from_noise")},
+        "pairs": {"primary_vs_control": _ok("indistinguishable_from_noise")},
     }
     assert ops_finding_from_track_statistics(noisy, {"beat_market": False}) is None
     finding = ops_finding_from_track_statistics(noisy, {"beat_control": True})

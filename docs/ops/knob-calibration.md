@@ -16,9 +16,17 @@ Complements:
 
 | Trigger | Command |
 |---------|---------|
-| **Sunday analysis-review** | `analysis-review.yml` runs full-period retrospective + shadow spawn |
-| **Weekday paper-auto** | Idempotent `spawn-shadow --top-n 3` + endurance ledger refresh |
+| **Sunday analysis-review** | `analysis-review.yml` runs full-period retrospective priors on the assessment-model primary (no shadow spawn) |
+| **Weekday paper-auto** | Endurance ledger refresh only |
 | **Manual** | `ftse-knob-calibrate run --paper-root docs/data/paper_automation --write` |
+
+**Assessment model (2026-10-06).** `run` defaults to the primary book in
+`paper_automation/assessment_model.json` (today `ai_judgment_fair`) and skips
+frozen books, listing them under `excluded_frozen_tracks`. The control
+(`buy_tier_level`) is a fixed-knob cohort lab, so it is not calibrated. Calibrated
+shadows only support the `ai_judgment` parent, which is frozen, so scheduled
+`spawn-shadow` / `warm-start-shadow` were removed; both commands also refuse a
+frozen parent or shadow. Endurance marks frozen shadows `frozen` (never survivors).
 
 Requires **≥2 acted** `rebalance_log` entries per track. Confidence stays **low**
 until ≥4 entries. Shadow bootstrap prefers **≥8 acted** (ideal ≥12).
@@ -103,18 +111,16 @@ without `bootstrap_pit_research` are still flagged.
 ## Commands
 
 ```bash
-# Sunday-style full-period bootstrap + competing shadows
+# Sunday-style full-period priors (default track: assessment-model primary)
 ftse-knob-calibrate run \
   --paper-root docs/data/paper_automation \
-  --tracks rules,ai_judgment \
   --ranking-mode full_period_retrospective \
   --bootstrap-top-n 3 \
-  --write --spawn-shadow --json
+  --write --json
 
 # Walk-forward only (legacy default)
 ftse-knob-calibrate run \
   --paper-root docs/data/paper_automation \
-  --tracks rules,ai_judgment \
   --write --json
 
 # Spawn / refresh competing shadows from last priors
@@ -167,11 +173,11 @@ evidence or a new calibration method — not Suite A stress green alone.
 
 | Step | Command / trigger |
 |------|-------------------|
-| **Retrospective + spawn** | Sunday `analysis-review.yml` (`full_period_retrospective`, `--spawn-shadow`) |
-| **PIT warm-start** | Sunday `warm-start-shadow` — replay parent `rebalance_log` into the shadow fund, freeze `endurance_zero_datum` at seed end |
-| **Persist** | Sunday commits priors, endurance, and `ai_judgment_calibrated*` even if the modelling agent is skipped |
-| **Weekday** | Idempotent `spawn-shadow --top-n 3` (GC drops stale ranks) + `endurance` — does **not** re-warm-start |
-| **Manual** | `ftse-knob-calibrate spawn-shadow --top-n 3` then `warm-start-shadow` |
+| **Retrospective** | Sunday `analysis-review.yml` (`full_period_retrospective`) on the primary — no spawn while the `ai_judgment` parent is frozen |
+| **PIT warm-start** | Manual only; refuses frozen shadows (all current ranks froze 2026-10-06) |
+| **Persist** | Sunday commits priors and endurance even if the modelling agent is skipped |
+| **Weekday** | `endurance` only |
+| **Manual** | `ftse-knob-calibrate spawn-shadow --top-n 3` then `warm-start-shadow` (fail-closed on a frozen parent) |
 
 Each shadow: `is_calibration_shadow: true`, parent AI gates, frozen knobs,
 `calibration_provenance.json`. Decision-review `--apply` is disabled.

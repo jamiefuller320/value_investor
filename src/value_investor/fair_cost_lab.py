@@ -214,6 +214,10 @@ def spawn_fair_cost_lab_track(
     if tid not in FAIR_COST_LAB_TRACK_IDS:
         return {"spawned": False, "track_id": tid, "reason": f"unknown track_id {tid!r}"}
 
+    from value_investor.assessment_model import is_track_frozen
+
+    if is_track_frozen(paper_root, tid):
+        return {"spawned": False, "track_id": tid, "reason": f"{tid} is frozen"}
     parent_track_id = fair_cost_lab_parent_track_id(tid)
     parent = _load_parent_config(paper_root, parent_track_id)
     shadow_dir = paper_root / fair_cost_lab_subdir(tid)
@@ -342,6 +346,14 @@ def spawn_fair_cost_twin_for_parent(
             "spawned": False,
             "parent_track_id": parent_id,
             "reason": "base AI/rules fair books already exist — use spawn-fair-lab",
+        }
+    from value_investor.assessment_model import is_track_frozen
+
+    if is_track_frozen(paper_root, parent_id):
+        return {
+            "spawned": False,
+            "parent_track_id": parent_id,
+            "reason": f"parent {parent_id} is frozen (assessment_model.json)",
         }
 
     try:

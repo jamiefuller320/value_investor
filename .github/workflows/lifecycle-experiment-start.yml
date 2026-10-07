@@ -2,6 +2,8 @@ name: Lifecycle experiment start
 
 # Human Start from the Lifecycle recommend card when paper_execute_graduated is ready.
 # Authorizes and enables 4× weekly entry DCA on graduated_allocation only.
+# graduated_allocation is frozen (assessment_model.json), so execute is blocked
+# fail-closed until N135 retargets it.
 # Never auto-applies on Sunday refresh; never touches primary/live or starter fraction.
 on:
   repository_dispatch:

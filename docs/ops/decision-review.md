@@ -151,7 +151,10 @@ significant result.
 When a proposal rule still fires but the knob already sits at its clamp bound,
 the review records it in `saturated_knobs` (knob, pressure direction, bound,
 trigger) and appends a reason line. Frozen labs/shadows never report saturation.
-Daily ops-monitor raises **Decision-review knobs saturated at bounds** (warn,
+Daily ops-monitor raises **Decision-review knobs saturated at bounds** only for
+books decision-review can tune: not frozen in `assessment_model.json` and not a
+fixed-knob lab (calibration/exclusion shadow, cohort lab such as the control
+`buy_tier_level`, or churn-policy twin). The finding is a warn,
 `auto_fixable=False`) — the driver is outside the knob's reach (for example the
 3% stress cost model or rank-flip churn), so the fix is a policy change or a new
 cold-start epoch, not another knob step.

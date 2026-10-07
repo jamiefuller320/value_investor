@@ -173,7 +173,7 @@
         {
           "id": "sunday-knob-calibration-priors",
           "title": "Review knob calibration priors",
-          "summary": "Confirm readiness signals in knob_calibration_priors.json (confidence, score_gap_vs_runner_up, ready_for_*). If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop — do not promote. Promotion is a separate gate (sunday-assessment-scoreboard).",
+          "summary": "Confirm readiness signals in knob_calibration_priors.json for the primary book (ai_judgment_fair; frozen books are listed under excluded_frozen_tracks) — confidence, score_gap_vs_runner_up, ready_for_*. If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop — do not promote. Promotion is a separate gate (sunday-assessment-scoreboard).",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "promoting-a-prior-human-gate"
@@ -260,8 +260,8 @@
         },
         {
           "id": "sunday-knob-calibrate-runs",
-          "title": "Full-period knob calibrate + shadow bootstrap",
-          "summary": "analysis-review.yml runs ftse-knob-calibrate with full_period_retrospective, writes bootstrap_priors and refreshes endurance. Shadow spawn is skipped while the phase-1 parent ai_judgment is frozen (assessment_model.json).",
+          "title": "Full-period knob calibrate on the primary",
+          "summary": "analysis-review.yml runs ftse-knob-calibrate with full_period_retrospective on the assessment-model primary (ai_judgment_fair; frozen books excluded), writes priors and refreshes endurance. Shadow spawn / warm-start are not scheduled while the phase-1 parent ai_judgment is frozen; frozen shadows show status frozen.",
           "automated": true,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "warm-start-zero-datum-forward-only-endurance"

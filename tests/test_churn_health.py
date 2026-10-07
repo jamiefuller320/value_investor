@@ -123,3 +123,27 @@ def test_write_churn_health_for_learning_tracks(tmp_path: Path):
     assert (paper / "learning_tracks_churn_health.json").exists()
     assert set(payload["tracks"]) == {"rules", "ai_judgment", "momentum_grace", "technical"}
     assert any("cost drag" in alert["title"].lower() for alert in payload["alerts"])
+
+
+def test_churn_health_follows_assessment_model(tmp_path: Path):
+    paper = tmp_path / "paper_automation"
+    _write_track(paper, trades=[], cost_drag=0.08)
+    for track_id, drag in (("ai_judgment", 0.09), ("ai_judgment_fair", 0.07)):
+        (paper / track_id).mkdir()
+        _write_track(paper / track_id, trades=[], cost_drag=drag)
+    (paper / "ai_judgment_fair" / "config.json").write_text(
+        '{"track_id": "ai_judgment_fair", "is_fair_cost_lab": true}', encoding="utf-8"
+    )
+    (paper / "assessment_model.json").write_text(
+        '{"primary_track": "ai_judgment_fair", "control_track": "buy_tier_level",'
+        ' "frozen_tracks": {"rules": {}, "ai_judgment": {}}}',
+        encoding="utf-8",
+    )
+
+    payload = write_churn_health(paper)
+
+    assert set(payload["tracks"]) == {"ai_judgment_fair"}
+    assert payload["primary_learning_track"] == "ai_judgment_fair"
+    assert payload["excluded_frozen_tracks"] == ["ai_judgment", "rules"]
+    tracks_alerted = {alert["track"] for alert in payload["alerts"]}
+    assert tracks_alerted == {"ai_judgment_fair"}

@@ -231,8 +231,10 @@ def _promotion_readiness(
     track_results: dict[str, Any],
     *,
     recommended_step_id: str | None,
+    primary_track_id: str = DEFAULT_PARENT_TRACK,
+    spawn_supported: bool = True,
 ) -> dict[str, Any]:
-    primary = track_results.get(DEFAULT_PARENT_TRACK) or {}
+    primary = track_results.get(primary_track_id) or {}
     steps = primary.get("ladder_steps") or []
     recommended = next(
         (row for row in steps if row.get("step_id") == recommended_step_id),
@@ -241,14 +243,17 @@ def _promotion_readiness(
     replay = (recommended or {}).get("replay") or {}
     log_entries = int(replay.get("log_entries_replayed") or 0)
     delta = replay.get("return_delta_vs_actual")
-    ready = (
+    replay_beats_actual = (
         recommended_step_id is not None
         and log_entries >= 2
         and delta is not None
         and float(delta) > 0
     )
     return {
-        "ready_for_shadow_spawn": ready,
+        "ready_for_shadow_spawn": bool(replay_beats_actual and spawn_supported),
+        "replay_beats_actual": bool(replay_beats_actual),
+        "primary_track_id": primary_track_id,
+        "shadow_spawn_supported": spawn_supported,
         "recommended_step_id": recommended_step_id,
         "primary_log_entries_replayed": log_entries,
         "primary_return_delta_vs_actual": delta,
@@ -263,13 +268,32 @@ def run_exclusion_ladder_replay(
     paper_root: Path,
     *,
     data_dir: Path | None = None,
-    tracks: tuple[str, ...] = DEFAULT_TRACKS,
+    tracks: tuple[str, ...] | None = None,
     archive_dir: Path | None = None,
     ladder: tuple[ExclusionStep, ...] | None = None,
     recommended_step_id: str | None = None,
 ) -> dict[str, Any]:
-    """Replay exclusion ladder across paper tracks; write observe-only artifacts."""
+    """Replay exclusion ladder across paper tracks; write observe-only artifacts.
+
+    Defaults to the unfrozen assessment-model primary and control. Shadow spawn is
+    only supported for the ``ai_judgment`` parent, so readiness stays false otherwise.
+    """
+    from value_investor.assessment_model import (
+        control_track_id,
+        is_track_frozen,
+        primary_track_id,
+    )
+
     paper_root = Path(paper_root)
+    primary_id = primary_track_id(paper_root)
+    if tracks is None:
+        tracks = tuple(
+            dict.fromkeys(
+                track_id
+                for track_id in (primary_id, control_track_id(paper_root))
+                if not is_track_frozen(paper_root, track_id)
+            )
+        )
     data_dir = Path(data_dir or paper_root.parent)
     archive_dir = Path(archive_dir or data_dir)
 
@@ -292,7 +316,13 @@ def run_exclusion_ladder_replay(
         if result is not None:
             track_results[track_id] = result
 
-    readiness = _promotion_readiness(track_results, recommended_step_id=recommended_step_id)
+    readiness = _promotion_readiness(
+        track_results,
+        recommended_step_id=recommended_step_id,
+        primary_track_id=primary_id,
+        spawn_supported=primary_id == DEFAULT_PARENT_TRACK
+        and not is_track_frozen(paper_root, DEFAULT_PARENT_TRACK),
+    )
     review = {
         "schema_version": 1,
         "scope": "exclusion_ladder_replay",

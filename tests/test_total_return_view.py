@@ -163,6 +163,17 @@ def _fetcher(dividend_day: date):
 def _seed_paper_root(root: Path) -> None:
     days = _days(10)
     flat = [1000.0] * 10
+    root.mkdir(parents=True, exist_ok=True)
+    (root / "assessment_model.json").write_text(
+        json.dumps(
+            {
+                "primary_track": "ai_judgment_fair",
+                "control_track": "buy_tier_level",
+                "frozen_tracks": {"rules": {"reason": "stress"}},
+            }
+        ),
+        encoding="utf-8",
+    )
     _write_book(root, "", navs=flat, trades=[], published=0.0)
     _write_book(
         root,
@@ -192,7 +203,8 @@ def test_build_total_return_view_tracks_clean_epoch_and_value_control(tmp_path: 
     assert fair["stress_cost_trades_until"] == _at(START).isoformat()
     assert fair["clean_epoch"]["start"] == _at(START + timedelta(days=1)).isoformat()
     assert fair["lifetime"]["dividends_gbp"] == 110 * 5.0 * 0.05
-    pair = payload["pairs"]["ai_fair_vs_buy_tier_level"]
+    pair = payload["pairs"]["primary_vs_control"]
+    assert payload["assessed_tracks"] == ["ai_judgment_fair", "buy_tier_level"]
     assert pair["left"] == "ai_judgment_fair"
     assert pair["difference"] > 0
 
@@ -209,14 +221,24 @@ def test_finding_fires_on_large_gap_and_names_track(tmp_path: Path):
     assert "rules:" not in finding["summary"]
 
 
+def test_frozen_book_gap_does_not_raise_finding():
+    row = {
+        "published_excess_after_costs": -0.14,
+        "lifetime": {"excess_total_return": -0.03, "dividends_gbp": 0.0},
+    }
+    payload = {"assessed_tracks": ["ai_judgment_fair"], "tracks": {"rules_fair": row}}
+    assert ops_finding_from_total_return_view(payload) is None
+
+
 def test_no_finding_when_published_close_to_total_return():
     payload = {
+        "assessed_tracks": ["rules"],
         "tracks": {
             "rules": {
                 "published_excess_after_costs": 0.03,
                 "lifetime": {"excess_total_return": 0.01, "dividends_gbp": 4.0},
             }
-        }
+        },
     }
     assert ops_finding_from_total_return_view(payload) is None
 

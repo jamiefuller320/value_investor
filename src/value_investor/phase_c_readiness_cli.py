@@ -8,7 +8,6 @@ import sys
 from pathlib import Path
 
 from value_investor.phase_c_readiness import (
-    DEFAULT_AI_JUDGMENT_DIR,
     DEFAULT_LATEST_PATH,
     DEFAULT_RESEARCH_ROOT,
     assess_phase_c_readiness,
@@ -27,8 +26,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--ai-judgment-dir",
         type=Path,
-        default=DEFAULT_AI_JUDGMENT_DIR,
-        help="Paper-auto AI-judgment directory containing rebalance_log.json",
+        default=None,
+        help=(
+            "Paper-auto book directory containing rebalance_log.json "
+            "(default: assessment-model primary)"
+        ),
     )
     parser.add_argument(
         "--research-root",

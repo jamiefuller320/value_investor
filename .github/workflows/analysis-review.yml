@@ -88,20 +88,15 @@ jobs:
             cp -f docs/data/history/models_* output/history/ 2>/dev/null || true
           fi
 
-      - name: Knob calibration priors + shadow bootstrap (observe-only)
+      - name: Knob calibration priors on the primary book (observe-only)
         run: |
+          # Defaults to the assessment-model primary; frozen books are skipped.
+          # Calibrated shadows are frozen with their ai_judgment parent — no spawn / warm-start.
           ftse-knob-calibrate run \
             --paper-root docs/data/paper_automation \
-            --tracks rules,ai_judgment \
             --ranking-mode full_period_retrospective \
             --bootstrap-top-n 3 \
-            --write --allow-empty \
-            --spawn-shadow || true
-          # PIT warm-start: populate shadows from parent log replay, freeze
-          # forward-only endurance zero datum (skip if already seeded).
-          ftse-knob-calibrate warm-start-shadow \
-            --paper-root docs/data/paper_automation \
-            --parent-track ai_judgment || true
+            --write --allow-empty || true
           ftse-knob-calibrate endurance --paper-root docs/data/paper_automation || true
           ftse-experiment-assess refresh --data-dir docs/data \
             --paper-root docs/data/paper_automation \

@@ -121,6 +121,13 @@ ftse-experiment-assess plan
 | `paper_learning_task` | `paper_learning_tasks.json` | Same |
 | `learning_director_task` | `learning_director_tasks.json` | Same |
 
+Paper-book rows (shadow and experimental track kinds) skip books frozen in
+`assessment_model.json`; their final records live on the
+[assessment scoreboard](assessment-scoreboard.md). "Primary" means the model's
+primary (`ai_judgment_fair`). Churn-policy twins (`ai_judgment_hold5_fair`,
+`ai_judgment_graduated_fair`) are not experimental tracks here: their readiness
+gate on the scoreboard decides them.
+
 ### Task evidence hooks (phase 2)
 
 | Area | Evidence attached | Status progression |
@@ -194,7 +201,7 @@ Canonical posture (as of 2026-09-23 assessment discuss; verify live ledger):
 | Status | Examples | Action |
 |--------|----------|--------|
 | `fail` | `ai_judgment_calibrated` (+r2/r3), exclusion u4, (deep negative excess after costs) | Close promote / knob path — watch only |
-| `recommend` acked | `entry_dca_overlay` (human_acked 2026-09-13), `graduated_allocation` | No Sunday urgency inflation |
+| `recommend` acked | `entry_dca_overlay` (human_acked 2026-09-13); `graduated_allocation` until frozen 2026-10-07 | No Sunday urgency inflation |
 | `recommend` capacity | `ana-20260921-02` (scoring→eng), `ana-20260921-04` (hold-vs-swap→manual) | Eng / manual capacity — not this gate's do-now |
 | `proposed` | euro body-lag | Ingest / P2 — not Sunday promote |
 

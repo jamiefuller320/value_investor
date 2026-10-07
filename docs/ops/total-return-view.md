@@ -32,7 +32,8 @@ under `docs/data/paper_automation/` and writes `docs/data/total_return_view.json
 | `lifetime.excess_total_return` | Book total return minus `FTAL.L` |
 | `published_excess_after_costs` | Copied from `decision_review.json` for comparison |
 | `stress_cost_trades_until` / `clean_epoch` | Fair-cost books only: last trade charged at ≥2% and the same scores from the first mark after it |
-| `pairs.ai_fair_vs_buy_tier_level` | Value-beta control (L532): `ai_judgment_fair` minus the unfiltered `buy_tier_level` book on their common window. Positive means the AI/overlay filter added value beyond holding the buy tier |
+| `pairs.primary_vs_control` | Value-beta control (L532): the primary minus the control from `assessment_model.json` (now `ai_judgment_fair` minus the unfiltered `buy_tier_level`) on their common window. Positive means the primary's filter added value beyond holding the buy tier |
+| `assessed_tracks` | Primary, control and unfrozen twins. Only these raise the misstatement finding; frozen books keep their rows for the scoreboard's final records |
 
 ### Method notes
 
@@ -53,7 +54,7 @@ under `docs/data/paper_automation/` and writes `docs/data/total_return_view.json
 
 | Title | Severity | Fires when |
 |-------|----------|------------|
-| **Price-only excess misstates track performance** | warn | For `ai_judgment`, `rules`, `ai_judgment_fair` or `rules_fair`, the published excess and the total-return excess differ in sign or by ≥5 percentage points. Fair-cost books use the clean epoch when one exists |
+| **Price-only excess misstates track performance** | warn | For an assessed book (primary, control or an unfrozen twin; `assessed_tracks`), the published excess and the total-return excess differ in sign or by ≥5 percentage points. Fair-cost books use the clean epoch when one exists |
 | **Total-return view observe failed** | warn | The refresh raised (bad JSON, unreadable files) |
 
 `auto_fixable=False`. Response: cite the total-return figure (and the clean

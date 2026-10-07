@@ -50,7 +50,6 @@ DEFAULT_PAPER_ROOT = Path("docs/data/paper_automation")
 DEFAULT_STORE_PATH = Path("docs/data/hold_period_counterfactual.json")
 FUND_FILENAME = "automated_fund.json"
 
-HEADLINE_TRACKS = ("ai_judgment", "rules", "ai_judgment_fair", "rules_fair")
 EXIT_CONFIRM_VARIANTS = (5, 10, 20)
 FIDELITY_TOLERANCE = 0.01
 MIN_FAITHFUL_PASSES = 8
@@ -248,11 +247,30 @@ def build_hold_period_counterfactual(
     paper_root: Path = DEFAULT_PAPER_ROOT,
     *,
     history_fetcher: HistoryFetcher = fetch_ticker_history,
-    tracks: tuple[str, ...] = HEADLINE_TRACKS,
+    tracks: tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
+    from value_investor.assessment_model import (
+        control_track_id,
+        frozen_tracks,
+        primary_track_id,
+        twins,
+    )
     from value_investor.paper_automation import learning_track_dirs
 
-    dirs = learning_track_dirs(Path(paper_root))
+    root = Path(paper_root)
+    frozen = frozen_tracks(root)
+    if tracks is None:
+        tracks = tuple(
+            t
+            for t in dict.fromkeys((primary_track_id(root), control_track_id(root)))
+            if t not in frozen
+        )
+    exit_buffer_twins = {
+        str(record.get("parent_track")): twin_id
+        for twin_id, record in sorted(twins(root).items())
+        if twin_id not in frozen and "exit_confirm_screens" in (record.get("varied") or {})
+    }
+    dirs = learning_track_dirs(root)
     ratio = price_ratio_from_history(history_fetcher)
     rows = {
         track_id: score_track(track_id, dirs[track_id], ratio)
@@ -270,6 +288,7 @@ def build_hold_period_counterfactual(
             "hold_edge_min": HOLD_EDGE_MIN,
         },
         "tracks": rows,
+        "exit_buffer_twins": exit_buffer_twins,
         "limitations": (
             "Weeks of passes on 3-name books: a positive delta is a hypothesis for a "
             "cold-start twin, not adoption evidence. Replays only see names in logged "
@@ -294,9 +313,16 @@ def refresh_hold_period_counterfactual(
 
 
 def ops_finding_from_hold_period_counterfactual(payload: dict[str, Any]) -> dict[str, Any] | None:
-    """Warn when a faithful replay shows a longer exit buffer beating live by ≥1pp."""
+    """Warn when a faithful replay shows a longer exit buffer beating live by ≥1pp.
+
+    Books whose exit-buffer twin is already running are skipped: the twin's
+    readiness gate, not this replay, decides the question for them.
+    """
+    running = payload.get("exit_buffer_twins") or {}
     lines: list[str] = []
     for track_id, row in (payload.get("tracks") or {}).items():
+        if track_id in running:
+            continue
         best = row.get("best_variant") or {}
         if row.get("status") != "ok" or float(best.get("delta_vs_baseline") or 0.0) < HOLD_EDGE_MIN:
             continue

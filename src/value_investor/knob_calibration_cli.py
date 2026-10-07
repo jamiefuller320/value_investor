@@ -65,7 +65,8 @@ def _cmd_run(args: argparse.Namespace) -> int:
     else:
         payload = calibrate_learning_tracks(
             Path(args.paper_root),
-            track_ids=tuple(part.strip() for part in args.tracks.split(",") if part.strip()),
+            track_ids=tuple(part.strip() for part in (args.tracks or "").split(",") if part.strip())
+            or None,
             **kwargs,
         )
     if args.write:
@@ -331,8 +332,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     run.add_argument(
         "--tracks",
-        default="rules,ai_judgment",
-        help="Comma-separated track ids when calibrating from --paper-root",
+        default=None,
+        help=(
+            "Comma-separated track ids when calibrating from --paper-root "
+            "(default: assessment-model primary; frozen books are skipped)"
+        ),
     )
     run.add_argument("--max-positions-grid", default=None)
     run.add_argument("--min-conviction-grid", default=None)

@@ -44,7 +44,7 @@ def test_canonicalize_hold_close_reasons_maps_live_and_archive_labels():
 
 def test_build_reconciliation_flags_non_comparable_hold_populations(tmp_path: Path):
     paper = tmp_path / "paper_automation"
-    rules = paper / "rules"
+    rules = paper
     rules.mkdir(parents=True)
     (rules / "exit_timing_cohorts_review.json").write_text(
         json.dumps(
@@ -115,3 +115,25 @@ def test_build_reconciliation_flags_non_comparable_hold_populations(tmp_path: Pa
     slim = slim_exit_timing_reconciliation(written)
     assert slim is not None
     assert slim["comparability"]["blended_rate_narrative_allowed"] is True
+
+
+def test_primary_live_review_follows_assessment_model(tmp_path: Path):
+    paper = tmp_path / "paper_automation"
+    (paper / "ai_judgment_fair").mkdir(parents=True)
+    (paper / "exit_timing_cohorts_review.json").write_text(
+        json.dumps({"track_id": "rules", "readiness": {"hold_closed_count": 9}}),
+        encoding="utf-8",
+    )
+    (paper / "ai_judgment_fair" / "exit_timing_cohorts_review.json").write_text(
+        json.dumps({"track_id": "ai_judgment_fair", "readiness": {"hold_closed_count": 4}}),
+        encoding="utf-8",
+    )
+    assert resolve_live_exit_timing_review(paper)["track_id"] == "rules"
+    (paper / "assessment_model.json").write_text(
+        json.dumps({"primary_track": "ai_judgment_fair", "control_track": "buy_tier_level"}),
+        encoding="utf-8",
+    )
+    assert resolve_live_exit_timing_review(paper)["track_id"] == "ai_judgment_fair"
+    data_dir = tmp_path / "data"
+    rec = build_exit_timing_reconciliation(paper_root=paper, data_dir=data_dir)
+    assert rec["primary_live_track_id"] == "ai_judgment_fair"

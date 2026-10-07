@@ -12,8 +12,7 @@ DEFAULT_PROGRESS_PATH = Path("docs/data/project_progress.json")
 DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 DEFAULT_OPS_PATH = Path("docs/data/ops_status.json")
 DEFAULT_AUTOMATION_PATH = Path("docs/data/automation.json")
-DEFAULT_AI_REVIEW_PATH = Path("docs/data/paper_automation/ai_judgment/decision_review.json")
-DEFAULT_RULES_REVIEW_PATH = Path("docs/data/paper_automation/decision_review.json")
+DEFAULT_PAPER_ROOT = Path("docs/data/paper_automation")
 DEFAULT_INGEST_LOG_PATH = Path("docs/data/ingest_health_log.json")
 DEFAULT_DECISION_INPUT_PATH = Path("docs/data/decision_input_inventory.json")
 DEFAULT_SCOREBOARD_PATH = Path("docs/data/assessment_scoreboard.json")
@@ -91,12 +90,25 @@ def build_project_progress(
     latest_path: Path = DEFAULT_LATEST_PATH,
     automation_path: Path = DEFAULT_AUTOMATION_PATH,
     ops_path: Path = DEFAULT_OPS_PATH,
-    ai_review_path: Path = DEFAULT_AI_REVIEW_PATH,
-    rules_review_path: Path = DEFAULT_RULES_REVIEW_PATH,
+    ai_review_path: Path | None = None,
+    rules_review_path: Path | None = None,
+    paper_root: Path = DEFAULT_PAPER_ROOT,
     ingest_log_path: Path = DEFAULT_INGEST_LOG_PATH,
     decision_input_path: Path = DEFAULT_DECISION_INPUT_PATH,
     scoreboard_path: Path = DEFAULT_SCOREBOARD_PATH,
 ) -> dict[str, Any]:
+    from value_investor.assessment_model import control_track_id, primary_track_id
+    from value_investor.rebalance_log import resolve_track_dir
+
+    paper_root = Path(paper_root)
+    if ai_review_path is None:
+        ai_review_path = (
+            resolve_track_dir(paper_root, primary_track_id(paper_root)) / "decision_review.json"
+        )
+    if rules_review_path is None:
+        rules_review_path = (
+            resolve_track_dir(paper_root, control_track_id(paper_root)) / "decision_review.json"
+        )
     latest = _safe_read(latest_path) or {}
     automation = _safe_read(automation_path) or {}
     ops = _safe_read(ops_path) or {}

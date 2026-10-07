@@ -16,14 +16,16 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from value_investor.decision_input_inventory import load_paper_holdings
+from value_investor.decision_input_inventory import (
+    load_paper_holdings,
+    primary_paper_fund_path,
+    primary_paper_track_dir,
+)
 from value_investor.paper_fund import BUY_SIGNALS
 from value_investor.rebalance_log import load_rebalance_log
 from value_investor.storage import read_json, write_json
 
 DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
-DEFAULT_PAPER_FUND_PATH = Path("docs/data/paper_automation/ai_judgment/automated_fund.json")
-DEFAULT_PAPER_TRACK_DIR = Path("docs/data/paper_automation/ai_judgment")
 DEFAULT_STORE_PATH = Path("docs/data/p1_first_run_pin.json")
 
 SCHEMA_VERSION = 1
@@ -178,8 +180,8 @@ def _surface_status(
 def run_p1_first_run_pin(
     *,
     latest_path: Path = DEFAULT_LATEST_PATH,
-    paper_fund_path: Path = DEFAULT_PAPER_FUND_PATH,
-    paper_track_dir: Path = DEFAULT_PAPER_TRACK_DIR,
+    paper_fund_path: Path | None = None,
+    paper_track_dir: Path | None = None,
     store_path: Path = DEFAULT_STORE_PATH,
     pin_started_at: datetime = PIN_STARTED_AT,
     window_days: float = DEFAULT_WINDOW_DAYS,
@@ -199,8 +201,14 @@ def run_p1_first_run_pin(
     if first_monday < first_sunday:
         first_monday = first_sunday + timedelta(days=1)
 
+    paper_fund_path = (
+        Path(paper_fund_path) if paper_fund_path is not None else primary_paper_fund_path()
+    )
+    paper_track_dir = (
+        Path(paper_track_dir) if paper_track_dir is not None else primary_paper_track_dir()
+    )
     latest_payload = _load_latest(Path(latest_path))
-    holdings = load_paper_holdings(Path(paper_fund_path))
+    holdings = load_paper_holdings(paper_fund_path)
     reports = inventory_reports(latest_payload, holdings)
     inventory_count = len(reports)
     sunday_eps = sum(1 for row in reports if has_eps_from_body(row))

@@ -176,6 +176,41 @@ def test_run_learning_tracks_skips_frozen_and_mirrors_root_last_run(tmp_path, mo
     assert ai_cfg["is_primary_learning_track"] is False
 
 
+def test_ensure_configs_leaves_frozen_books_untouched_except_stale_primary(tmp_path: Path):
+    base = tmp_path / "auto"
+    ensure_learning_track_configs(base)
+    _freeze_suite_a(base)
+    ga_path = base / "graduated_allocation" / "config.json"
+    apply_assessment_model(
+        base,
+        primary="buy_tier_level",
+        control="buy_tier_level_dca",
+        freeze={"graduated_allocation": {"reason": "frozen"}},
+        reason="freeze ga",
+        now=WHEN,
+    )
+    ga = json.loads(ga_path.read_text(encoding="utf-8"))
+    ga["max_positions"] = 1
+    ga["commission_bps"] = 999
+    ga_path.write_text(json.dumps(ga, indent=2), encoding="utf-8")
+    ai_path = base / "ai_judgment" / "config.json"
+    ai = json.loads(ai_path.read_text(encoding="utf-8"))
+    ai["is_primary_learning_track"] = True
+    ai["min_conviction"] = 0.42
+    ai_path.write_text(json.dumps(ai, indent=2), encoding="utf-8")
+    frozen_ga_text = ga_path.read_text(encoding="utf-8")
+
+    configs = ensure_learning_track_configs(base)
+
+    assert ga_path.read_text(encoding="utf-8") == frozen_ga_text
+    assert configs["graduated_allocation"].max_positions == 1
+    ai_after = json.loads(ai_path.read_text(encoding="utf-8"))
+    assert ai_after["is_primary_learning_track"] is False
+    assert ai_after["min_conviction"] == 0.42
+    assert configs["buy_tier_level"].is_primary_learning_track is True
+    assert [k for k, c in configs.items() if c.is_primary_learning_track] == ["buy_tier_level"]
+
+
 def test_compare_learning_tracks_uses_model_primary_and_skips_frozen(tmp_path: Path):
     from value_investor.decision_review import compare_learning_tracks
 

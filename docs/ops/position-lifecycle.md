@@ -153,7 +153,10 @@ state machine.
 | Post sale monitor | Cooldown or sold within 84 days | recommit |
 
 Switch market (and paper track) rather than stacking every universe on one
-page. Payload: `docs/data/lifecycle_board.json` (rebuilt by email-report
+page. On the live FTSE board the track picker lists the unfrozen books in
+`paper_automation/assessment_model.json` (primary, control, twins) plus any other
+active main track; frozen books are omitted (their final record lives on the
+assessment scoreboard). Payload: `docs/data/lifecycle_board.json` (rebuilt by email-report
 publish, weekday ops-monitor light refresh **L468**, local `POST /api/refresh`,
 and lifecycle experiment start/ack).
 
@@ -198,7 +201,7 @@ Held, sold, and screen name cards use a green→red **time-in-stage** heatmap:
 
 | Piece | Status |
 |-------|--------|
-| Graduated allocation paper track | **Live** — starter sizing + harvest on one rules book |
+| Graduated allocation paper track | **Frozen** (2026-10-06) — continues as the `ai_judgment_graduated_fair` twin |
 | Lifecycle *labels* on rebalance logs | **Live** — now includes `starter` when sleeve &lt; 40% of target |
 | Full per-holding state machine | **Deferred (L177)** — catalog is the experiment inventory, not the executor |
 | DCA executed on paper books | **Not now** — overlay evidence first; see [adoption plan](#entry-dca-adoption-plan) |

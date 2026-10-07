@@ -701,8 +701,8 @@ def check_paper_learning_tracks(
     Structural weekday spot-check formerly done on the Automation tab.
 
     Confirms post-settle paper-auto artifacts and that decision-review covered
-    the primary AI book, rules control, competing calibrated shadows, and the
-    Suite B buy_tier_level cohort. Does **not** interpret excess vs ^FTSE —
+    the assessment-model primary and control plus any unfrozen calibrated shadows
+    (frozen books are skipped). Does **not** interpret excess vs ^FTSE —
     that stays the Sunday analysis-review / promotion gates.
     """
     from value_investor.assessment_model import (
@@ -722,7 +722,9 @@ def check_paper_learning_tracks(
     from value_investor.paper_automation import (
         BUY_TIER_LEVEL_SUBDIR,
         BUY_TIER_LEVEL_TRACK_ID,
+        CONFIG_FILENAME,
         FUND_FILENAME,
+        learning_track_dirs,
     )
 
     root = Path(paper_root)
@@ -874,8 +876,32 @@ def check_paper_learning_tracks(
             )
         )
 
+    track_dirs = learning_track_dirs(root) if root.exists() else {}
+
+    def _tunable(track_id: str) -> bool:
+        if track_id in frozen:
+            return False
+        track_dir = track_dirs.get(track_id)
+        if track_dir is None:
+            return True
+        try:
+            config = json.loads((Path(track_dir) / CONFIG_FILENAME).read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return True
+        return not any(
+            config.get(flag)
+            for flag in (
+                "is_calibration_shadow",
+                "is_exclusion_shadow",
+                "is_cohort_lab",
+                "is_churn_policy_twin",
+            )
+        )
+
     saturated_lines: list[str] = []
     for track_id, row in sorted(reviews.items()):
+        if not _tunable(track_id):
+            continue
         saturated = row.get("saturated_knobs") if isinstance(row, dict) else None
         if not isinstance(saturated, list) or not saturated:
             continue
@@ -1652,7 +1678,6 @@ def check_decision_input_inventory(
     """
     from value_investor.decision_input_inventory import (
         DEFAULT_MEMO_DIR,
-        DEFAULT_PAPER_FUND_PATH,
         DEFAULT_RESEARCH_ROOT,
         DEFAULT_STORE_PATH,
         ops_finding_from_decision_input_inventory,
@@ -1667,9 +1692,7 @@ def check_decision_input_inventory(
             if research_root is not None
             else DEFAULT_RESEARCH_ROOT,
             memo_dir=Path(memo_dir) if memo_dir is not None else DEFAULT_MEMO_DIR,
-            paper_fund_path=Path(paper_fund_path)
-            if paper_fund_path is not None
-            else DEFAULT_PAPER_FUND_PATH,
+            paper_fund_path=Path(paper_fund_path) if paper_fund_path is not None else None,
             store_path=path,
             persist=persist,
         )
@@ -1714,8 +1737,6 @@ def check_p1_first_run_pin(
     fills.
     """
     from value_investor.p1_first_run_pin import (
-        DEFAULT_PAPER_FUND_PATH,
-        DEFAULT_PAPER_TRACK_DIR,
         DEFAULT_STORE_PATH,
         ops_findings_from_p1_first_run_pin,
         run_p1_first_run_pin,
@@ -1725,12 +1746,8 @@ def check_p1_first_run_pin(
     try:
         payload = run_p1_first_run_pin(
             latest_path=Path(latest_path),
-            paper_fund_path=Path(paper_fund_path)
-            if paper_fund_path is not None
-            else DEFAULT_PAPER_FUND_PATH,
-            paper_track_dir=Path(paper_track_dir)
-            if paper_track_dir is not None
-            else DEFAULT_PAPER_TRACK_DIR,
+            paper_fund_path=Path(paper_fund_path) if paper_fund_path is not None else None,
+            paper_track_dir=Path(paper_track_dir) if paper_track_dir is not None else None,
             store_path=path,
             persist=persist,
             now=now,

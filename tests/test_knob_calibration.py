@@ -495,6 +495,55 @@ def test_endurance_ledger_lists_competing_shadows(tmp_path: Path):
     assert rank1["status"] == "surviving"
     assert payload["survivors"]
 
+    (paper_root / "assessment_model.json").write_text(
+        json.dumps({"frozen_tracks": {"ai_judgment_calibrated": {"reason": "parent frozen"}}}),
+        encoding="utf-8",
+    )
+    frozen_payload = refresh_calibration_endurance(paper_root)
+    rank1 = next(row for row in frozen_payload["shadows"] if row["rank"] == 1)
+    assert rank1["status"] == "frozen"
+    assert all(row["rank"] != 1 for row in frozen_payload["survivors"])
+
+
+def test_calibrate_learning_tracks_defaults_to_primary_and_skips_frozen(
+    tmp_path: Path, monkeypatch
+):
+    from value_investor import knob_calibration
+
+    called: list[str] = []
+
+    def _fake_calibrate(track_dir, **_kwargs):
+        called.append(Path(track_dir).name)
+        return {"candidates_ranked": [{}]}
+
+    monkeypatch.setattr(knob_calibration, "calibrate_track", _fake_calibrate)
+    calibrate_learning_tracks = knob_calibration.calibrate_learning_tracks
+
+    paper_root = _seed_ai_judgment_parent(tmp_path)
+    (paper_root / "ai_judgment_fair").mkdir()
+    (paper_root / "ai_judgment_fair" / "config.json").write_text("{}", encoding="utf-8")
+    legacy = calibrate_learning_tracks(paper_root)
+    assert list(legacy["tracks"]) == ["ai_judgment"]
+    assert legacy["excluded_frozen_tracks"] == []
+
+    (paper_root / "assessment_model.json").write_text(
+        json.dumps(
+            {
+                "primary_track": "ai_judgment_fair",
+                "control_track": "buy_tier_level",
+                "frozen_tracks": {"ai_judgment": {"reason": "x"}, "rules": {"reason": "x"}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    called.clear()
+    primary = calibrate_learning_tracks(paper_root)
+    assert list(primary["tracks"]) == ["ai_judgment_fair"]
+    assert called == ["ai_judgment_fair"]
+    explicit = calibrate_learning_tracks(paper_root, track_ids=("rules", "ai_judgment"))
+    assert explicit["tracks"] == {}
+    assert explicit["excluded_frozen_tracks"] == ["rules", "ai_judgment"]
+
 
 def _parent_acted_log_entry(*, when: str, tickers: list[tuple[str, str, float]]) -> dict:
     """Minimal acted ai_judgment log pass for warm-start materialize tests."""
@@ -589,6 +638,26 @@ def test_warm_start_shadow_materializes_fund_and_zero_datum(tmp_path: Path):
     again = warm_start_calibration_shadow(paper_root, rank=1, force=False)
     assert again["warm_started"] is False
     assert again.get("skipped") is True
+
+
+def test_warm_start_refuses_frozen_shadow_even_with_force(tmp_path: Path):
+    from value_investor.calibration_warm_start import warm_start_calibration_shadow
+
+    paper_root = _seed_ai_judgment_parent(tmp_path)
+    spawn_calibrated_shadow_track(paper_root)
+    shadow_fund = paper_root / "ai_judgment_calibrated" / "automated_fund.json"
+    before = shadow_fund.read_text(encoding="utf-8") if shadow_fund.exists() else None
+    (paper_root / "assessment_model.json").write_text(
+        json.dumps({"frozen_tracks": {"ai_judgment_calibrated": {"reason": "stress"}}}),
+        encoding="utf-8",
+    )
+
+    result = warm_start_calibration_shadow(paper_root, rank=1, force=True)
+
+    assert result["warm_started"] is False
+    assert "frozen" in result["reason"]
+    after = shadow_fund.read_text(encoding="utf-8") if shadow_fund.exists() else None
+    assert after == before
 
 
 def test_endurance_gates_on_post_seed_not_seed_pnl(tmp_path: Path):

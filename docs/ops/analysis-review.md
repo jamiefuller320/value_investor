@@ -80,11 +80,21 @@ stay off-limits (N3).
 
 See [trajectory-evidence.md](trajectory-evidence.md).
 
-## Dual-suite paper-track buckets (observe-only)
+## Assessment scoreboard (leads the paper-track sections)
 
-Sunday payload includes a deterministic `paper_track_buckets` object (plus a slim
+Since the 2026-10-06 assessment-model switch the payload carries
+`assessment_scoreboard` (from `docs/data/assessment_scoreboard.json`, per-row
+`cost_sensitivity` detail dropped). The prompt leads with it: primary
+(`ai_judgment_fair`) vs control (`buy_tier_level`, the unfiltered buy tier) vs
+FTAL.L total return, `statistics.verdict`, and running twins. Frozen books are
+final records only — never compared against, retuned, or called primary/control.
+
+## Dual-suite paper-track buckets (legacy context)
+
+Sunday payload still includes a deterministic `paper_track_buckets` object (plus a slim
 `learning_tracks_dual_suite`, without fair-assess replay) built from
-`learning_tracks_review.json`. The modelling agent **must cite all three**:
+`learning_tracks_review.json`. The prompt treats it as legacy Suite A/B context
+behind the assessment scoreboard. Bucket meanings:
 
 | Bucket | Score on | Adoption truth? |
 |--------|----------|-----------------|
