@@ -3,9 +3,9 @@
   "last_run": {
     "schema_version": 1,
     "trigger": "post_run_review_email",
-    "evaluated_at": "2026-10-04T08:27:13.870938+00:00",
+    "evaluated_at": "2026-10-07T11:23:35.795595+00:00",
     "review_source": "output/post_run_review.md",
-    "fingerprint": "85c832ddf946a38d61df",
+    "fingerprint": "7d7290dddb37af5f35e0",
     "skipped": false,
     "skip_reason": null,
     "applied": true,
@@ -16,25 +16,32 @@
     "lane_c_recommended": false,
     "actions": [],
     "queue_before": {
-      "open_count": 4,
-      "pr_open_count": 1
+      "open_count": 1,
+      "pr_open_count": 0
     },
     "compile_cap_audit": {
-      "candidate_count": 5,
+      "candidate_count": 4,
       "truncated_count": 0,
       "post_run_plan_beyond_cap": []
     },
     "plan_alignment": {
       "unlinked_plan_titles": [
-        "Pipeline job to download and text-extract bodies for all `indexed_without_body` rows on buy-tier indexes (prioritise IMB.L, GFRD.L, DNLM.L, COST.L from `filing_coverage`) via Investegate/LSE direct URLs and CH document-api PDFs"
+        "Shared RNS body pipeline",
+        "Companies House filed-accounts PDF download + extract when RNS bodies insufficient",
+        "Populate `CompanyMetrics.operating_cashflow` (and aligned cash-flow fields) from Yahoo/`financials_annual.json` when fetch returns null",
+        "Central FCF basis registry"
       ],
-      "terminal_only_titles": []
+      "terminal_only_titles": [
+        "Shared RNS body pipeline",
+        "Populate `CompanyMetrics.operating_cashflow` (and aligned cash-flow fields) from Yahoo/`financials_annual.json` when fetch returns null",
+        "Central FCF basis registry"
+      ]
     },
     "compile_cap_drain_skipped": "priority engineering queue not empty",
     "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
     "queue_after": {
-      "open_count": 4,
-      "pr_open_count": 1
+      "open_count": 1,
+      "pr_open_count": 0
     },
     "tasks_added_estimate": 0,
     "dispatch_reason": "queue ready — dispatch next open task"
@@ -272,6 +279,52 @@
       "queue_after": {
         "open_count": 4,
         "pr_open_count": 1
+      },
+      "tasks_added_estimate": 0,
+      "dispatch_reason": "queue ready — dispatch next open task"
+    },
+    {
+      "schema_version": 1,
+      "trigger": "post_run_review_email",
+      "evaluated_at": "2026-10-07T11:23:35.795595+00:00",
+      "review_source": "output/post_run_review.md",
+      "fingerprint": "7d7290dddb37af5f35e0",
+      "skipped": false,
+      "skip_reason": null,
+      "applied": true,
+      "lanes": {
+        "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
+      },
+      "should_dispatch_engineering": true,
+      "lane_c_recommended": false,
+      "actions": [],
+      "queue_before": {
+        "open_count": 1,
+        "pr_open_count": 0
+      },
+      "compile_cap_audit": {
+        "candidate_count": 4,
+        "truncated_count": 0,
+        "post_run_plan_beyond_cap": []
+      },
+      "plan_alignment": {
+        "unlinked_plan_titles": [
+          "Shared RNS body pipeline",
+          "Companies House filed-accounts PDF download + extract when RNS bodies insufficient",
+          "Populate `CompanyMetrics.operating_cashflow` (and aligned cash-flow fields) from Yahoo/`financials_annual.json` when fetch returns null",
+          "Central FCF basis registry"
+        ],
+        "terminal_only_titles": [
+          "Shared RNS body pipeline",
+          "Populate `CompanyMetrics.operating_cashflow` (and aligned cash-flow fields) from Yahoo/`financials_annual.json` when fetch returns null",
+          "Central FCF basis registry"
+        ]
+      },
+      "compile_cap_drain_skipped": "priority engineering queue not empty",
+      "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+      "queue_after": {
+        "open_count": 1,
+        "pr_open_count": 0
       },
       "tasks_added_estimate": 0,
       "dispatch_reason": "queue ready — dispatch next open task"

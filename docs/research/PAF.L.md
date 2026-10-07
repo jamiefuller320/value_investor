@@ -1,6 +1,6 @@
 # Pan African Resources PLC (PAF.L) — Research memo
 
-_Version 7 · Updated 2026-10-04T07:35:54.443773+00:00 · Mode: structured_verdict_update_
+_Version 8 · Updated 2026-10-07T10:22:44.417761+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.76
-Rationale: Filing-aligned FY26 FCF and net cash still support the strong-buy screen; no new disclosures since results, while FY27 cost guide, gold cyclicality and chair succession keep the overlay at accumulate.
+Confidence: 0.75
+Rationale: Filing-aligned FY26 FCF and net cash still support the buy screen; no new disclosures, while softer model trend and Oct/Nov chair succession keep the overlay at accumulate.
 RiskTags: regulatory, cyclical, governance, pension, competitive, leverage, accounting, key_person
 
 ## Weekly updates
@@ -43,3 +43,8 @@ FY27 AISC guidance, gold cyclicality and Oct/Nov chair succession are unchanged 
 No company RNS since the 16 Sep audited FY26 results; news flow is thin (1 Oct third-party stock analysis only).  
 2 Oct TR-1: Allan Gray increased its stake to ~6.04% (threshold crossed 30 Sep)—routine holder notification, not a trading update.  
 Strong buy screen unchanged (15/22, filing-aligned FCF ~£341m, neutral timing); Oct/Nov chair succession remains the main live governance overlay.
+
+### 2026-10-07T10:22:44.417761+00:00
+Quantitative screen is **buy** (15/22, neutral timing), down from strong buy with a new, deteriorating one-week label; filing-aligned FCF ~£341m is unchanged.  
+No company RNS and an empty news batch since 4 Oct; last filing remains 16 Sep audited FY26.  
+Oct/Nov chair succession and the October ZAR500m buy-back window are unchanged live overlay context.

@@ -1,6 +1,6 @@
 # FirstGroup plc (FGP.L) — Research memo
 
-_Version 6 · Updated 2026-09-27T07:37:24.527668+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-10-07T10:40:37.498987+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Screen cheapness holds (P/E 8.9, ~£138m adj. net debt), but unresolved FCF bases (£73.8m company-adj vs £362.6m filing) and DfT/rail exposure keep research below a full strong-buy endorsement.
+Rationale: Persistent screen cheapness and active buybacks modestly support the case, but unresolved FCF bases and DfT/rail, leverage and pension risks still stop research from fully endorsing strong buy.
 RiskTags: regulatory, cyclical, leverage, pension
 
 ## Weekly updates
@@ -36,3 +36,8 @@ Strong buy screen unchanged (21 weeks, stable); neutral timing, RSI ~45.
 
 ### 2026-09-27T07:37:24.527668+00:00
 No material change. Empty news batch since 23 Sep; no new filings or headlines. Strong buy screen unchanged (22 weeks, stable); neutral timing, RSI ~56.
+
+### 2026-10-07T10:40:37.498987+00:00
+Headlines since 27 Sep: buyback extended with higher treasury holdings; ~1.7m shares repurchased 21–25 Sep and routine “transaction in own shares” notices; six-month block listing noted no employee-scheme issuance Apr–Sep 2026.
+Strong buy screen still stable (24 weeks); RSI ~71 (was ~56)—timing less favourable; no new filings.
+FCF triple-basis mismatch and DfT/rail overlay unchanged; buybacks support capital return but do not resolve cash-flow definition risk.

@@ -1,6 +1,6 @@
 # Inchcape plc (INCH.L) — Research memo
 
-_Version 3 · Updated 2026-09-23T17:47:03.685623+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-10-07T10:32:47.748740+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: Filing-backed cheapness, buyback and FY26 guidance still support accumulate on the buy screen; thin weekly flow and persistent EPS/FCF basis gaps keep conviction below full alignment.
+Rationale: Strong buy screen adds model breadth; filing-backed cheapness, buyback and guidance still support accumulate, but EPS/FCF basis gaps keep research below full strong-buy alignment.
 RiskTags: cyclical, competitive, leverage, customer_concentration, accounting, regulatory
 
 ## Weekly updates
@@ -23,3 +23,8 @@ H1 2026 results, the £250m buyback and FY26 >10% adjusted EPS guidance remain t
 Since 15 Sep, RNS is routine only: 17 Sep “In the Driving Seat” webinar date, continued buyback transactions, and 22 Sep PDMR/DRIP holdings (plus syndicated CFO DRIP coverage).  
 No trading update or guidance change; H1 2026, the £250m buyback and FY26 >10% adjusted EPS guidance remain the anchor.  
 Screen still **buy** (8/22 models) with unchanged statutory vs adjusted EPS and FCF-basis overlays.
+
+### 2026-10-07T10:32:47.748740+00:00
+Quant screen upgraded to **strong buy** (11/22, improving); statutory vs adjusted EPS and FCF-basis overlays unchanged.  
+Since 23 Sep: routine buyback/PDMR/voting-rights RNS; 1 Oct agreed bolt-on Volvo/JLR acquisitions in Peru and Costa Rica (c.£49m FY25 revenue, Q1 2027 completion).  
+No trading update or guidance change; H1 2026, £250m buyback and FY26 >10% adjusted EPS guidance remain the anchor.
