@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-07T05:54:21+00:00",
+  "updated_at": "2026-10-07T08:00:22+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13032,6 +13032,38 @@
       "status": "open",
       "source": "PR #1003 rebase (reminted; L557 is ESAP on main)",
       "added_at": "2026-10-06T20:39:21+00:00"
+    },
+    {
+      "id": "L560",
+      "category": "later",
+      "section": "learning",
+      "title": "Exit-timing archive held-book ingest after the assessment-model freeze",
+      "summary": "ftse-exit-timing-archive still ingests held-book hold/swap episodes from frozen rules/ai_judgment rebalance logs, so that pool stops growing. Switching to primary/control drops the older frozen episodes; a union double-counts overlapping picks. Decide: switch with a dated cutover, or union with dedupe by ticker/open date.",
+      "revisit_when": "exit_timing_near_miss or live hold/swap readiness nears its closed-count target, or the archive closed counts stay flat for 4 Sundays",
+      "tags": [
+        "exit_timing",
+        "assessment_model",
+        "frozen_books"
+      ],
+      "status": "open",
+      "source": "assessment-model alignment audit (PR cursor/assessment-model-alignment-9155)",
+      "added_at": "2026-10-07T08:00:22+00:00"
+    },
+    {
+      "id": "N196",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Calibrated / exclusion shadows of the fair primary",
+      "summary": "Knob-calibration and exclusion-ladder shadows only support the ai_judgment parent, which is frozen. Priors and ladder replay now run on ai_judgment_fair observe-only; spawning fair-parent shadows would add new live tracks (factory, not P1).",
+      "revisit_when": "knob_calibration_priors for ai_judgment_fair reports ready_for_shadow_bootstrap with confidence above low, or exclusion replay_beats_actual is true on the primary for 3 consecutive Sundays",
+      "tags": [
+        "knob_calibration",
+        "exclusion_ladder",
+        "assessment_model"
+      ],
+      "status": "open",
+      "source": "assessment-model alignment audit (PR cursor/assessment-model-alignment-9155)",
+      "added_at": "2026-10-07T08:00:22+00:00"
     }
   ],
   "fragments": [
