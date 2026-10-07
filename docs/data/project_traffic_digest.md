@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-07T19:03:23.838723+00:00`
+Generated: `2026-10-07T22:11:07.414016+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -40,7 +40,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `ingest_narrow`/verified PR #1005 `eng-20261006-01` — Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260920-03)
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 173
+- Occasion count: 177
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 3×
