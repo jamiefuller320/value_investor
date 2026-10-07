@@ -30,6 +30,11 @@ Defaults vs rules control:
 Compare vs `rules`, `momentum_grace`, and `ai_judgment` in
 `learning_tracks_review.json` after a few weeks of marks.
 
+`graduated_allocation` runs on 3% stress costs and sits outside the assessment
+model, so its marks cannot answer whether graduated sizing helps the primary.
+That question belongs to the fair-cost twin `ai_judgment_graduated_fair`; see
+[assessment-scoreboard.md](assessment-scoreboard.md#graduated-allocation-twin).
+
 ## Algorithm vs agent — division of labour
 
 | Layer | Owner | Cadence | What it does |

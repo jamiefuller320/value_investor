@@ -100,6 +100,23 @@ def main(argv: list[str] | None = None) -> int:
     hold_p.add_argument("--json", action="store_true")
     hold_p.set_defaults(func=_cmd_spawn_hold_buffer_twin)
 
+    grad_p = sub.add_parser(
+        "spawn-graduated-twin",
+        help=(
+            "Cold-start the graduated-allocation twin of the assessment-model primary "
+            "(use_graduated_allocation, fair costs, fixed knobs)"
+        ),
+    )
+    grad_p.add_argument(
+        "--paper-root",
+        type=Path,
+        default=DEFAULT_PAPER_ROOT,
+        help="Paper automation root (default: docs/data/paper_automation)",
+    )
+    grad_p.add_argument("--dry-run", action="store_true")
+    grad_p.add_argument("--json", action="store_true")
+    grad_p.set_defaults(func=_cmd_spawn_graduated_twin)
+
     warm_p = sub.add_parser(
         "warm-start-fair-lab",
         help="PIT warm-start Suite B tracks from Suite A parent rebalance logs",
@@ -285,6 +302,21 @@ def _cmd_spawn_hold_buffer_twin(args: argparse.Namespace) -> int:
     else:
         print(
             f"Hold-buffer twin {payload.get('track_id')} (parent {payload.get('parent_track_id')}): "
+            f"spawned={payload.get('spawned')} created={payload.get('created')} "
+            f"{payload.get('reason') or ''}".rstrip()
+        )
+    return 0 if payload.get("spawned") or payload.get("dry_run") else 1
+
+
+def _cmd_spawn_graduated_twin(args: argparse.Namespace) -> int:
+    from value_investor.fair_cost_lab import spawn_graduated_allocation_twin
+
+    payload = spawn_graduated_allocation_twin(args.paper_root, dry_run=bool(args.dry_run))
+    if args.json:
+        print(json.dumps(payload, indent=2))
+    else:
+        print(
+            f"Graduated twin {payload.get('track_id')} (parent {payload.get('parent_track_id')}): "
             f"spawned={payload.get('spawned')} created={payload.get('created')} "
             f"{payload.get('reason') or ''}".rstrip()
         )
