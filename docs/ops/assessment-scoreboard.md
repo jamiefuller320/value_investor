@@ -62,14 +62,14 @@ starter sizing + harvest skims via `run_graduated_rebalance`), fair costs. Every
 other knob, including `max_positions` 3 and the AI gates, matches the primary.
 
 - **Question:** does graduated sizing beat the primary's equal-weight sizing on
-  total return at fair costs? The older `graduated_allocation` book cannot
-  answer this: it trades the rules screen at 3% stress costs and is not in the
-  assessment model.
+  total return at fair costs? The older `graduated_allocation` book could not
+  answer this (rules screen, 3% stress costs, outside the assessment model);
+  it was frozen on 2026-10-07 with this twin as `superseded_by`.
 - **Gate:** same as the hold-buffer twin (≥26 weekly screens, parent knobs
   unchanged, interval excludes zero; otherwise freeze). Human Sunday card
   `sunday-graduated-twin`.
-- Entry-DCA execute (N135) is still wired to `graduated_allocation` only; when
-  N135's trigger is met, point it at this twin rather than the stress book.
+- Entry-DCA execute is still wired to `graduated_allocation`, which is frozen,
+  so execute stays blocked. When N135's trigger is met, repoint it at this twin.
 - Spawned with `ftse-trading-costs spawn-graduated-twin` (idempotent).
 
 ## Automation

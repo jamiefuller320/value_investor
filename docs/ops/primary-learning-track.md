@@ -29,9 +29,16 @@ Frozen on 2026-10-06 (history kept, nothing rewritten):
 | `ai_judgment_calibrated`, `_r2`, `_r3` | Shadows of a frozen parent; near-identical to each other and ranked on pre-L540 replays | `ai_judgment_fair` |
 | `ai_judgment_exclusion_u4` | Shadow of a frozen parent; same holdings as `ai_judgment` | `ai_judgment_fair` |
 
+Frozen on 2026-10-07:
+
+| Frozen track | Why | Superseded by |
+|--------------|-----|---------------|
+| `graduated_allocation` | 3% stress-cost book on the rules screen, outside the assessment model | `ai_judgment_graduated_fair` |
+
 Still trading: `ai_judgment_fair` (primary), `buy_tier_level` (control),
-`buy_tier_level_dca` (deposit realism) and `graduated_allocation` (still on the
-3% stress cost; fair twin parked with **N188**).
+`buy_tier_level_dca` (deposit realism) and the primary's fair-cost twins
+`ai_judgment_hold5_fair` and `ai_judgment_graduated_fair`
+([assessment-scoreboard.md](assessment-scoreboard.md#twins)).
 
 What freezing does:
 
@@ -63,7 +70,7 @@ twin is parked as **N189**.
 | **AI judgment fair** *(primary)* | `docs/data/paper_automation/ai_judgment_fair/` | `adjusted_signal` + `research_verdict=accumulate`, fair costs | Learning book |
 | **Buy-tier level** *(control)* | `docs/data/paper_automation/buy_tier_level/` | Raw screen buy-tier, no conviction/sector cap, fair T212 costs, frozen knobs | Unfiltered buy-tier baseline |
 | **Buy-tier level DCA** *(realism)* | `docs/data/paper_automation/buy_tier_level_dca/` | Same level-book policy + £500/mo deposits (cold-start capital epoch) | Household DCA realism; overlays FTSE held-vs-market |
-| **Graduated allocation** *(experimental)* | `docs/data/paper_automation/graduated_allocation/` | Screen rules + trade-plan starter sizing + harvest skims (`max_positions=4`) | Capital recycling experiment (3% stress cost) |
+| Graduated allocation *(frozen)* | `docs/data/paper_automation/graduated_allocation/` | Screen rules + trade-plan starter sizing + harvest skims (`max_positions=4`), 3% stress | Superseded by `ai_judgment_graduated_fair` |
 | AI judgment *(frozen)* | `docs/data/paper_automation/ai_judgment/` | `adjusted_signal` + `research_verdict=accumulate`, 3% stress | Former primary |
 | Screen rules *(frozen)* | `docs/data/paper_automation/` | Raw buy-tier screen signal, 3% stress | Former control |
 | Technical *(frozen)* | `docs/data/paper_automation/technical/` | Stops/targets from `trade_plan`, tactical entries | Former timing/levels floor |

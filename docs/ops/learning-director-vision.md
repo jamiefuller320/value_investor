@@ -57,7 +57,7 @@ builds; it proposes activation with explicit triggers cited from JSON.
 
 | Phase | What | Activate when |
 |-------|------|----------------|
-| `graduated_allocation_track` | Trade-plan starter sizing + harvest skims (v1 shadow) | **Active** — compare vs rules after ≥8 marks |
+| `graduated_allocation_track` | Trade-plan starter sizing + harvest skims (v1 shadow) | **Frozen** 2026-10-07 — judged by fair-cost twin `ai_judgment_graduated_fair` |
 | `entry_lifecycle_experiments` | Stage catalog + model-independent DCA overlay | **Active** — collect until cadence readiness |
 | `experiment_lineage_and_park` | Evolve winners; park losers with cheap marks until one trade lifecycle | Soft budget triage for 3 Sundays, or cadence ready |
 | `hypothesis_first_exit` | Underwater thesis cards + loser-tolerance feedback | **Active** — observe-only; pair with exit-timing |

@@ -8,7 +8,8 @@ widens beyond hero 3-position sleeves.
 | Component | Status | Role |
 |-----------|--------|------|
 | `capital_allocation.py` | **Implemented** | Deterministic `entry_appetite`, `exit_urgency`, `swap_score`, lifecycle labels (`starter` when sleeve &lt; 40% of target) |
-| `graduated_allocation` paper track | **Implemented** | Screen-rules book with trade-plan starter sizing + harvest skims |
+| `graduated_allocation` paper track | **Frozen** 2026-10-07 | Screen-rules book with trade-plan starter sizing + harvest skims, 3% stress costs |
+| `ai_judgment_graduated_fair` twin | **Running** | Primary knobs + graduated sizing at fair costs |
 | `run_graduated_rebalance()` | **Implemented** | Weekday paper-auto when `use_graduated_allocation=true` |
 | Equal-weight primary / AI tracks | Unchanged | Control path stays equal-weight |
 
@@ -30,9 +31,11 @@ Defaults vs rules control:
 Compare vs `rules`, `momentum_grace`, and `ai_judgment` in
 `learning_tracks_review.json` after a few weeks of marks.
 
-`graduated_allocation` runs on 3% stress costs and sits outside the assessment
-model, so its marks cannot answer whether graduated sizing helps the primary.
-That question belongs to the fair-cost twin `ai_judgment_graduated_fair`; see
+`graduated_allocation` ran on 3% stress costs outside the assessment model, so
+its marks cannot answer whether graduated sizing helps the primary. It was
+frozen on 2026-10-07 (final NAV £858.78 on £1,000, 44 trades); paper-auto no
+longer runs it. That question belongs to the fair-cost twin
+`ai_judgment_graduated_fair`; see
 [assessment-scoreboard.md](assessment-scoreboard.md#graduated-allocation-twin).
 
 ## Algorithm vs agent — division of labour
