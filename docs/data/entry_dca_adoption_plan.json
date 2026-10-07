@@ -3,7 +3,7 @@
   "observe_only": false,
   "experiment_id": "entry_dca_overlay",
   "target_cadence": "dca_4x_weekly",
-  "updated_at": "2026-10-06T08:40:31.488416+00:00",
+  "updated_at": "2026-10-07T08:28:57.531039+00:00",
   "acked": true,
   "execute_started": true,
   "execute_started_at": "2026-09-25T17:56:08.074645+00:00",
@@ -36,21 +36,30 @@
       "title": "Confirm 4× weekly on new first-entry closes (live books)",
       "status": "done",
       "ready": true,
-      "revisit_when": "ai_judgment first_entry>=3, rules first_entry>=1, leading still dca_4x_weekly, fair tracks still agree",
-      "do_not": "Do not treat failing calibration shadows as live-book confirmation",
+      "revisit_when": "ai_judgment_fair first_entry>=3, buy_tier_level first_entry>=1, leading still dca_4x_weekly, fair tracks still agree",
+      "do_not": "Do not treat frozen or calibration books as live-book confirmation",
       "evidence": {
+        "live_books": {
+          "primary": "ai_judgment_fair",
+          "control": "buy_tier_level"
+        },
         "first_entry_by_track": {
-          "ai_judgment": 7,
-          "rules": 6
+          "ai_judgment_fair": 7,
+          "buy_tier_level": 67
         },
         "ack_snapshot": {
-          "ai_judgment": 1,
-          "rules": 0
+          "ai_judgment_fair": 1,
+          "buy_tier_level": 0
+        },
+        "live_winning_cadence": {
+          "ai_judgment_fair": "dca_4x_weekly",
+          "buy_tier_level": "dca_2x_weekly"
         },
         "leading_cadence": "dca_4x_weekly",
         "fair_winning_cadence": {
           "ai_judgment_fair": "dca_4x_weekly",
-          "rules_fair": "dca_4x_weekly"
+          "ai_judgment_graduated_fair": null,
+          "ai_judgment_hold5_fair": null
         },
         "cadence_stable": true
       }
@@ -58,14 +67,15 @@
     {
       "id": "paper_execute_graduated",
       "title": "Optional: execute 4× weekly on graduated_allocation only",
-      "status": "open",
-      "ready": true,
-      "revisit_when": "out_of_sample_first_entry ready AND graduated_allocation equity_marks>=8",
+      "status": "blocked",
+      "ready": false,
+      "revisit_when": "out_of_sample_first_entry ready AND graduated_allocation equity_marks>=8 AND graduated_allocation not frozen",
       "do_not": "Do not execute on primary, rules, or a new DCA paper book",
       "evidence": {
-        "graduated_equity_marks": 21,
+        "graduated_equity_marks": 0,
         "graduated_marks_min": 8,
-        "graduated_cost_drag": 0.1302
+        "graduated_cost_drag": null,
+        "graduated_frozen": true
       }
     },
     {
@@ -77,14 +87,14 @@
       "do_not": "Overlay end-value vs lump-sum is not adoption truth vs ^FTSE",
       "evidence": {
         "beat_market": false,
-        "fair_or_primary_excess_after_costs": -0.1383
+        "fair_or_primary_excess_after_costs": -0.1423
       }
     }
   ],
   "finding": {
     "leading_cadence": "dca_4x_weekly",
     "ready_for_cadence_analysis": true,
-    "scored_count": 150,
+    "scored_count": 153,
     "tracks_with_closed": 13,
     "model_independent_hint": true,
     "first_entry_by_track": {
@@ -93,7 +103,7 @@
       "momentum_grace": 1,
       "graduated_allocation": 14,
       "technical": 5,
-      "buy_tier_level": 64,
+      "buy_tier_level": 67,
       "buy_tier_level_dca": 2,
       "still_in_buy_set": 0,
       "ai_judgment_calibrated": 10,
@@ -101,7 +111,9 @@
       "ai_judgment_calibrated_r3": 10,
       "ai_judgment_exclusion_u4": 7,
       "ai_judgment_fair": 7,
-      "rules_fair": 7
+      "rules_fair": 7,
+      "ai_judgment_graduated_fair": 0,
+      "ai_judgment_hold5_fair": 0
     }
   },
   "note": "Human review/implementation plan for the 2026-09-13 overlay recommend. Never auto-apply. Revisit on Sunday or when first-entry windows close."

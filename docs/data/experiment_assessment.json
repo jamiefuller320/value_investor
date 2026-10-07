@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-10-06T08:40:31.490623+00:00",
+  "updated_at": "2026-10-07T08:28:57.532618+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -22,18 +22,18 @@
     "backtest_run_count": 23,
     "trajectory_labeled_events": 336,
     "exit_shadow_closed_total": 0,
-    "experimental_track_count": 2,
-    "entry_dca_scored": 150,
+    "experimental_track_count": 3,
+    "entry_dca_scored": 153,
     "entry_dca_ready": true
   },
   "summary": {
+    "observing": 1,
     "continue": 5,
-    "observing": 0,
     "recommend": 4,
     "fail": 5,
     "proposed": 2,
     "human_ack_pending": 2,
-    "total": 16
+    "total": 17
   },
   "experiments": [
     {
@@ -133,6 +133,27 @@
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
     },
     {
+      "experiment_id": "ai_judgment_graduated_fair",
+      "kind": "experimental_paper_track",
+      "title": "AI judgment graduated-allocation twin (starter sizing + harvest skims)",
+      "area": "paper_knobs",
+      "pipeline": "paper_automation",
+      "status": "observing",
+      "source_status": "observing",
+      "human_ack_required": false,
+      "track_id": "ai_judgment_graduated_fair",
+      "gate_marks": 2,
+      "gate_excess_after_costs": null,
+      "excess_vs_primary": null,
+      "forward_evidence": {
+        "source": "learning_track_metrics",
+        "use_momentum_grace": false,
+        "use_graduated_allocation": true
+      },
+      "evidence_path": "docs/data/paper_automation/ai_judgment_graduated_fair/config.json",
+      "initiated_at": "2026-10-07T08:28:57.530268+00:00"
+    },
+    {
       "experiment_id": "graduated_allocation",
       "kind": "experimental_paper_track",
       "title": "Screen rules + graduated allocation",
@@ -188,7 +209,7 @@
       "human_ack_required": false,
       "forward_evidence": {
         "source": "learning_tracks_entry_dca.json",
-        "scored_count": 150,
+        "scored_count": 153,
         "tracks_with_closed": 13,
         "ready_for_cadence_analysis": true,
         "leading_cadence": "dca_4x_weekly",
@@ -220,7 +241,7 @@
         "entry_dca": {
           "ready_for_cadence_analysis": true,
           "leading_cadence": "dca_4x_weekly",
-          "scored_count": 150
+          "scored_count": 153
         },
         "human_disposition": "watch"
       },
@@ -487,7 +508,7 @@
         "entry_dca": {
           "ready_for_cadence_analysis": true,
           "leading_cadence": "dca_4x_weekly",
-          "scored_count": 150
+          "scored_count": 153
         }
       },
       "evidence_path": "docs/data/analysis_tasks.json",
@@ -527,7 +548,7 @@
         "entry_dca": {
           "ready_for_cadence_analysis": true,
           "leading_cadence": "dca_4x_weekly",
-          "scored_count": 150
+          "scored_count": 153
         },
         "human_disposition": "watch"
       },
@@ -689,14 +710,14 @@
         "id": "out_of_sample_first_entry",
         "status": "done",
         "ready": true,
-        "revisit_when": "ai_judgment first_entry>=3, rules first_entry>=1, leading still dca_4x_weekly, fair tracks still agree",
-        "do_not": "Do not treat failing calibration shadows as live-book confirmation"
+        "revisit_when": "ai_judgment_fair first_entry>=3, buy_tier_level first_entry>=1, leading still dca_4x_weekly, fair tracks still agree",
+        "do_not": "Do not treat frozen or calibration books as live-book confirmation"
       },
       {
         "id": "paper_execute_graduated",
-        "status": "open",
-        "ready": true,
-        "revisit_when": "out_of_sample_first_entry ready AND graduated_allocation equity_marks>=8",
+        "status": "blocked",
+        "ready": false,
+        "revisit_when": "out_of_sample_first_entry ready AND graduated_allocation equity_marks>=8 AND graduated_allocation not frozen",
         "do_not": "Do not execute on primary, rules, or a new DCA paper book"
       },
       {
@@ -719,7 +740,7 @@
         "parent_id": "still_in_buy_set",
         "instrument": "twin_already_open",
         "graduation_signal": "twin_present",
-        "noted_at": "2026-10-06T08:40:31.489071+00:00",
+        "noted_at": "2026-10-07T08:28:57.531538+00:00",
         "title": "Sell-gate churn twin already open",
         "note": "still_in_buy_set Suite A twin is the capital-path churn instrument; do not spawn a duplicate sell-gate refinement book."
       }

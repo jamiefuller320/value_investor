@@ -1,0 +1,64 @@
+[
+  {
+    "reviewed_at": "2026-10-07T08:28:55.128806+00:00",
+    "enough_history": false,
+    "applied": false,
+    "knobs_before": {
+      "max_positions": 3,
+      "skip_timing_wait": true,
+      "min_conviction": 0.6,
+      "sector_cap": 0.2
+    },
+    "knobs_after": {
+      "max_positions": 3,
+      "skip_timing_wait": true,
+      "min_conviction": 0.6,
+      "sector_cap": 0.2
+    },
+    "proposed_changes": {},
+    "reasons": [
+      "Need \u22652 epoch marks, \u22651 epoch trades and \u226528 days since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, epoch age days=None, cooldown days remaining=0.0, lifetime marks=2, lifetime trades=3.",
+      "No knob change warranted from current reviewed outcomes."
+    ],
+    "metrics": {
+      "portfolio_value": 994.78,
+      "contributed_capital": 1000.0,
+      "total_return": -0.0052,
+      "total_costs": 5.22,
+      "cost_drag": 0.0052,
+      "trade_count": 3,
+      "buy_count": 3,
+      "sell_count": 0,
+      "positions": 3,
+      "cash_fraction": 0.0,
+      "equity_marks": 2,
+      "max_sector_weight": 0.3333,
+      "dominant_sector": "Industrials",
+      "benchmark_return": null,
+      "excess_after_costs": null,
+      "note": "Benchmark unavailable; excess_after_costs omitted."
+    },
+    "note": "Proposal only \u2014 history too thin to apply.",
+    "saturated_knobs": [],
+    "track_id": "ai_judgment_hold5_fair",
+    "track_label": "AI judgment hold-buffer twin (exit after 5 screens)",
+    "is_primary_learning_track": false,
+    "apply_policy": "significance_gate_v1",
+    "significance_gate": {
+      "policy": "significance_gate_v1",
+      "track_id": "ai_judgment_hold5_fair",
+      "statistics_path": "docs/data/track_statistics.json",
+      "passed": false,
+      "closed_by": "evidence",
+      "statistics_updated_at": "2026-10-07T07:47:20.336623+00:00",
+      "statistics_benchmark_ticker": "^FTSE",
+      "status": null,
+      "verdict": null,
+      "ci_annualized_active_return": null,
+      "periods": null,
+      "significant_after_correction": null,
+      "reason": "no usable statistics for ai_judgment_hold5_fair (None)"
+    },
+    "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
+  }
+]
