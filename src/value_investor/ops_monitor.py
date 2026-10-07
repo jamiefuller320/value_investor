@@ -2638,6 +2638,37 @@ def check_backtest_history(
     return findings
 
 
+def check_paper_halt(
+    *,
+    paper_root: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only drawdown and concentration halt. Does not change books."""
+    from value_investor.paper_halt import DEFAULT_STORE_PATH, finding_for_halt, refresh_paper_halt
+
+    root = Path(paper_root) if paper_root is not None else Path("docs/data/paper_automation")
+    if not root.exists():
+        return []
+    payload = refresh_paper_halt(
+        root,
+        store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+        persist=persist,
+    )
+    finding = finding_for_halt(payload)
+    if not finding:
+        return []
+    return [
+        OpsFinding(
+            severity=str(finding["severity"]),
+            category=str(finding["category"]),
+            title=str(finding["title"]),
+            summary=str(finding["summary"]),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_investor_yield(
     *,
     library_root: Path | None = None,
@@ -3428,6 +3459,7 @@ def collect_ops_findings(
     findings.extend(check_paper_learning_tracks())
     findings.extend(check_unsettled_corporate_actions())
     findings.extend(check_investor_yield())
+    findings.extend(check_paper_halt())
     findings.extend(check_deferred_triggers())
 
     engineering_findings, queue_status = check_engineering_queue(

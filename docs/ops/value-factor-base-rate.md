@@ -213,6 +213,10 @@ flatten to cash, then wait for a human. Hypothesis integrity can keep
 tolerating underwater names inside that bound. Ship the halt as an observe
 rule first. Live capital does not start without it.
 
+Shipped observe-only: `docs/data/paper_halt.json`. Thresholds are 20%
+drawdown, 40% of NAV in one name, 50% in one sector, and the currency rules
+in [`paper-halt.md`](paper-halt.md). A breach warns. The book is not frozen.
+
 ## Refresh
 
 ```bash
