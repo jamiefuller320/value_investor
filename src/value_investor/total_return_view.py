@@ -280,6 +280,79 @@ def score_window(
     }
 
 
+def proposal_window_active_returns(
+    fund: dict[str, Any],
+    started_at: datetime,
+    *,
+    history_fetcher: HistoryFetcher | None = None,
+    tr_benchmark: str = TR_BENCHMARK,
+) -> dict[str, Any]:
+    """Daily active total returns versus ``tr_benchmark`` from ``started_at``.
+
+    Marks before the measurement epoch are ignored. Dividend cash on an ex-date
+    is added to that day's fund return as pounds divided by the prior mark's
+    NAV. A missing price history adds no dividend and is counted. The equity
+    curve is not rewritten.
+    """
+    from value_investor.track_statistics import (
+        benchmark_period_returns,
+        daily_marks,
+        period_returns,
+    )
+
+    fetcher = history_fetcher or fetch_ticker_history
+    empty: dict[str, Any] = {
+        "active_returns": [],
+        "fund_periods": 0,
+        "benchmark_points": 0,
+        "dividends_gbp": 0.0,
+        "dividends_skipped": 0,
+    }
+    marks = [mark for mark in _marks(fund) if mark[0] >= started_at]
+    if len(marks) < 2:
+        return empty
+    curve = [
+        {
+            "at": at.isoformat(),
+            "portfolio_value": nav,
+            "contributed_capital": contributed,
+        }
+        for at, nav, contributed in marks
+    ]
+    daily = daily_marks(curve)
+    fund_returns = period_returns(daily)
+    if not fund_returns:
+        return {**empty, "fund_periods": 0}
+    first, last = daily[0][0], daily[-1][0]
+    trades = _trades(fund)
+    trade_days = [trade["_at"].date() for trade in trades]
+    fetch_start = min([first, *trade_days]) if trade_days else first
+    tickers = sorted({str(trade["ticker"]) for trade in trades})
+    histories = {ticker: fetcher(ticker, fetch_start, last) for ticker in tickers}
+    benchmark = fetcher(tr_benchmark, first - timedelta(days=10), last)
+    _total, credited, skipped = dividend_credits(
+        trades, histories, start=marks[0][0], end=marks[-1][0]
+    )
+    div_by_day: dict[date, float] = {}
+    for row in credited:
+        day = date.fromisoformat(str(row["ex_date"]))
+        div_by_day[day] = div_by_day.get(day, 0.0) + float(row["gbp"])
+    total_returns: list[tuple[date, float]] = []
+    for (day0, nav0, _contrib), (day1, price_ret) in zip(daily, fund_returns, strict=False):
+        dividend = sum(amount for day, amount in div_by_day.items() if day0 < day <= day1)
+        extra = (dividend / nav0) if nav0 > 0 else 0.0
+        total_returns.append((day1, price_ret + extra))
+    bench = benchmark_period_returns([day for day, _nav, _contrib in daily], benchmark.closes)
+    active = [(day, fund_ret - bench[day]) for day, fund_ret in total_returns if day in bench]
+    return {
+        "active_returns": active,
+        "fund_periods": len(fund_returns),
+        "benchmark_points": len(benchmark.closes),
+        "dividends_gbp": round(sum(div_by_day.values()), 2),
+        "dividends_skipped": len(skipped),
+    }
+
+
 def total_return_excess_since(
     fund: dict[str, Any],
     started_at: datetime,

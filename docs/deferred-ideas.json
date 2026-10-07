@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-07T17:44:14+00:00",
+  "updated_at": "2026-10-07T18:47:01+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13277,6 +13277,59 @@
       "status": "open",
       "source": "replay runtime and rule-search question (PR #1019 chat)",
       "added_at": "2026-10-07T17:44:14+00:00"
+    },
+    {
+      "id": "L575",
+      "category": "later",
+      "section": "learning",
+      "title": "Score the significance gate on the total-return proposal window",
+      "summary": "Knob proposals for FTSE books now use total-return excess versus FTAL.L from proposal_basis.json. Apply still opens only when track_statistics.json shows a significant price-NAV active return versus the price index, and that store still does not credit dividends. Point the gate at the same proposal window, and keep it closed until that window is thick enough.",
+      "revisit_when": "Primary track decision_review.json metrics.proposal.used_for_proposals is true",
+      "tags": [
+        "decision-review",
+        "total-return",
+        "significance-gate"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a115ff-8b0f-76f6-b1a0-aa43cae11266",
+      "added_at": "2026-10-07T13:21:08+00:00",
+      "updated_at": "2026-10-07T14:01:06+00:00",
+      "status_note": "FTSE significance gate uses total-return active returns versus FTAL.L from proposal_basis.started_at and stays closed below 20 daily periods. Price track_statistics cannot open it."
+    },
+    {
+      "id": "L576",
+      "category": "later",
+      "section": "ops",
+      "title": "Paper halt weights from marked prices rather than average cost",
+      "summary": "check_paper_halt measures name, sector, and currency weights at average cost, so a name that has rallied is understated and a name that has fallen is overstated. Drawdown already uses the equity curve. Use the latest marked prices from the paper pass for the weights, and leave the equity curve unchanged.",
+      "revisit_when": "check_paper_halt first warns, or before a paper_halt breach is treated as evidence",
+      "tags": [
+        "paper-halt",
+        "concentration"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a115ff-8b0f-76f6-b1a0-aa43cae11266",
+      "added_at": "2026-10-07T13:21:08+00:00",
+      "updated_at": "2026-10-07T14:01:06+00:00",
+      "status_note": "Paper halt name, sector and currency weights use marked_prices.json. Missing marks fail closed and do not fall back to average cost. The equity curve is not rewritten."
+    },
+    {
+      "id": "L577",
+      "category": "later",
+      "section": "learning",
+      "title": "Credit dividends in the screen-premise buy-tier spread",
+      "summary": "The sector split and the accumulate-versus-reject spread are still price returns on frozen FTSE snapshots. The US book-to-market premium over the market was the dividend. Credit dividends in that spread once the significance gate itself uses total return, so the higher-N test and the apply decision are on the same return.",
+      "revisit_when": "The significance gate applies on total-return excess versus FTAL.L",
+      "tags": [
+        "screen-premise",
+        "dividends",
+        "total-return"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a115ff-8b0f-76f6-b1a0-aa43cae11266",
+      "added_at": "2026-10-07T13:21:08+00:00",
+      "updated_at": "2026-10-07T18:47:01+00:00",
+      "status_note": "Screen-premise buy-tier, sector and AI-gate spreads add capped ex-date dividends. price_buy_tier_spread keeps the price-only figure. A missing history adds nothing and is counted."
     },
     {
       "id": "N198",

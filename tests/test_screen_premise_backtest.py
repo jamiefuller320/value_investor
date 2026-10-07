@@ -1,4 +1,5 @@
 import json
+from datetime import date
 from pathlib import Path
 
 from value_investor.backtest import BENCHMARK_TICKER, RunSnapshot
@@ -119,10 +120,15 @@ def test_finding_silent_when_buy_tier_wins(tmp_path: Path):
 def test_check_screen_premise_backtest_persists_and_fails_closed(tmp_path: Path, monkeypatch):
     from value_investor import screen_premise_backtest as module
     from value_investor.ops_monitor import check_screen_premise_backtest
+    from value_investor.total_return_view import TickerHistory
 
     _write_history(tmp_path, weeks=7, buy_growth=-0.02, other_growth=0.01)
     store = tmp_path / "screen_premise_backtest.json"
-    findings = check_screen_premise_backtest(data_dir=tmp_path, store_path=store)
+    findings = check_screen_premise_backtest(
+        data_dir=tmp_path,
+        store_path=store,
+        dividend_fetcher=lambda ticker, start, end: TickerHistory(),
+    )
     assert [f.title for f in findings] == [FINDING_TITLE]
     assert json.loads(store.read_text())["weekly_cohorts"] == 7
 
@@ -329,3 +335,84 @@ def test_backfill_snapshot_research_fills_only_empty_research_fields(tmp_path: P
     assert rows["B.L"]["research_verdict"] == "neutral"
     assert rows["C.L"]["research_verdict"] is None
     assert backfill_snapshot_research(tmp_path / "missing.json", signals) == 0
+
+
+def _flat_history(ticker: str, start: date, end: date, *, dividend: float = 0.0) -> object:
+    from datetime import timedelta
+
+    from value_investor.total_return_view import TickerHistory
+
+    history = TickerHistory()
+    day = start
+    while day <= end:
+        history.closes[day] = 100.0
+        day += timedelta(days=1)
+    if dividend > 0 and ticker == "T00.L":
+        history.dividends[date(2026, 8, 5)] = dividend
+    return history
+
+
+def test_ex_date_dividend_lifts_the_judging_spread_and_keeps_the_price_spread(tmp_path: Path):
+    _write_history(tmp_path, weeks=3, buy_growth=0.0, other_growth=0.0)
+    price = build_screen_premise_backtest(tmp_path)
+    credited = build_screen_premise_backtest(
+        tmp_path,
+        dividend_fetcher=lambda ticker, start, end: _flat_history(ticker, start, end, dividend=5.0),
+    )
+    price_mean = price["horizons"]["7"]["buy_tier_spread"]["mean"]
+    weekly = credited["horizons"]["7"]
+    assert credited["return_basis"] == "price_plus_dividends"
+    assert weekly["price_buy_tier_spread"]["mean"] == price_mean
+    assert weekly["buy_tier_spread"]["mean"] > price_mean
+    cohort = weekly["cohorts"][0]
+    assert cohort["price_buy_tier_spread"] == 0
+    assert cohort["buy_tier_spread"] > 0
+
+
+def test_implausible_yield_and_entry_day_dividend_are_not_credited(tmp_path: Path):
+    _write_history(tmp_path, weeks=3, buy_growth=0.0, other_growth=0.0)
+
+    def fetcher(ticker, start, end):
+        history = _flat_history(ticker, start, end)
+        if ticker == "T00.L":
+            history.dividends[date(2026, 8, 2)] = 5.0
+            history.dividends[date(2026, 8, 6)] = 50.0
+        return history
+
+    payload = build_screen_premise_backtest(tmp_path, dividend_fetcher=fetcher)
+    cohort = payload["horizons"]["7"]["cohorts"][0]
+    assert cohort["buy_tier_spread"] == cohort["price_buy_tier_spread"]
+
+
+def test_a_missing_dividend_history_adds_nothing_and_is_counted(tmp_path: Path):
+    from value_investor.total_return_view import TickerHistory
+
+    _write_history(tmp_path, weeks=3, buy_growth=0.0, other_growth=0.0)
+
+    def fetcher(ticker, start, end):
+        if ticker == "T01.L":
+            return TickerHistory()
+        return _flat_history(ticker, start, end, dividend=5.0)
+
+    payload = build_screen_premise_backtest(tmp_path, dividend_fetcher=fetcher)
+    assert "T01.L" in payload["dividends_skipped_tickers"]
+    cohort = payload["horizons"]["7"]["cohorts"][0]
+    assert cohort["dividends_skipped"] >= 1
+    assert cohort["buy_tier_spread"] > cohort["price_buy_tier_spread"]
+
+
+def test_dividend_cache_skips_a_second_fetch(tmp_path: Path):
+    _write_history(tmp_path, weeks=3, buy_growth=0.0, other_growth=0.0)
+    calls = {"n": 0}
+
+    def fetcher(ticker, start, end):
+        calls["n"] += 1
+        return _flat_history(ticker, start, end, dividend=1.0)
+
+    cache = tmp_path / "screen_premise_dividend_cache.json"
+    build_screen_premise_backtest(tmp_path, dividend_fetcher=fetcher, dividend_cache_path=cache)
+    first = calls["n"]
+    assert first > 0
+    assert cache.exists()
+    build_screen_premise_backtest(tmp_path, dividend_fetcher=fetcher, dividend_cache_path=cache)
+    assert calls["n"] == first

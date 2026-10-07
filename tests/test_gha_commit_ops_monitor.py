@@ -237,6 +237,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "shard_nav_fx_warp.json" in optional_line
     assert "combined_tagged_learning.json" in optional_line
     assert "screen_premise_backtest.json" in optional_line
+    assert "screen_premise_dividend_cache.json" in optional_line
     assert "track_statistics.json" in optional_line
     assert "total_return_view.json" in optional_line
     assert "hold_period_counterfactual.json" in optional_line
