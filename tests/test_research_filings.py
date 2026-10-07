@@ -2709,6 +2709,32 @@ def test_extract_filing_interim_financials_itv_l(tmp_path: Path):
     assert (sources_dir / "filing_interim_financials.json").is_file()
 
 
+def test_validate_rns_filing_body_accepts_hoc_production_report_eng_20261007_03():
+    """eng-20261007-03: HOC.L Q2 production RNS cites interim results; must persist as trading_update."""
+    row = {
+        "headline": "Q2 2025 Production Report",
+        "period": "trading_update",
+        "source": "investegate_direct",
+        "url": (
+            "https://www.investegate.co.uk/announcement/rns/"
+            "hochschild-mining--hoc/q2-2025-production-report-/8993243"
+        ),
+    }
+    body = (
+        "Q2 2025 Production Report Hochschild Mining plc 23 July 2025. "
+        "Operational highlights. Revised guidance for 2025 at our interim results in late August. "
+        "Q2 2025 attributable production of 115,666 ounces of gold." + ("x" * 220)
+    )
+    valid, reason = _validate_rns_filing_body_content(
+        row,
+        body,
+        company_name="Hochschild Mining plc",
+        ticker="HOC.L",
+    )
+    assert valid is True
+    assert reason is None
+
+
 def test_validate_rns_filing_body_rejects_period_mismatch():
     row = {
         "headline": "ITV plc Full Year Results 2025",
