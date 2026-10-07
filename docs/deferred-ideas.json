@@ -13330,6 +13330,136 @@
       "added_at": "2026-10-07T13:21:08+00:00",
       "updated_at": "2026-10-07T18:47:01+00:00",
       "status_note": "Screen-premise buy-tier, sector and AI-gate spreads add capped ex-date dividends. price_buy_tier_spread keeps the price-only figure. A missing history adds nothing and is counted."
+    },
+    {
+      "id": "N198",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not make rolling profit-taking the value capital path",
+      "summary": "Value selection stays the aim. Live books already turn over about 30x a year because rank exits fire after 2 screens (median hold 4 days). L531 replays prefer longer holds, and harvest skims already sit on ai_judgment_graduated_fair. Treating rolling clips as the strategy waits until those twins finish their gates.",
+      "revisit_when": "ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair on the assessment scoreboard (weekday proxy for their >=26 weekly-screen gates).",
+      "tags": [
+        "value",
+        "turnover",
+        "harvest",
+        "hold-buffer"
+      ],
+      "status": "open",
+      "source": "value strategy vs rolling profit-taking",
+      "added_at": "2026-10-07T15:24:53+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_hold5_fair].common_days",
+            "op": ">=",
+            "value": 130
+          },
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_graduated_fair].common_days",
+            "op": ">=",
+            "value": 130
+          }
+        ]
+      }
+    },
+    {
+      "id": "L567",
+      "category": "later",
+      "section": "learning",
+      "title": "Test core sleeve plus tactical slice as two lots",
+      "summary": "compute_trade_plan already splits a buy into a long-term core (about 50-75%) and a tactical dip slice with its own stop and target. The simulator and the frozen technical book apply that stop and target to every share. A later cold start should keep the core through the value thesis and turn only the tactical lot.",
+      "revisit_when": "ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair. Then one cold start can fund the original core/tactical split as two lots, without editing the primary.",
+      "tags": [
+        "trade-plan",
+        "core",
+        "tactical",
+        "hold-buffer"
+      ],
+      "status": "open",
+      "source": "value strategy vs rolling profit-taking",
+      "added_at": "2026-10-07T15:26:57+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_hold5_fair].common_days",
+            "op": ">=",
+            "value": 130
+          },
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_graduated_fair].common_days",
+            "op": ">=",
+            "value": 130
+          }
+        ]
+      }
+    },
+    {
+      "id": "L568",
+      "category": "later",
+      "section": "learning",
+      "title": "Score a profit-residual core on the wide buy-tier book",
+      "summary": "A two-lot replay can keep a core and recycle a tactical slice. Donating only the profit into the core, by selling the principal, is one variant to score observe-only on buy_tier_level against keeping the shares. It is not the definition of the core. Fair costs and the wide book are the right setting. Do not edit buy_tier_level or open a live twin while the hold-buffer and harvest twins are unmarked.",
+      "revisit_when": "ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair. Then score the profit-residual rule as an observe-only replay on buy_tier_level, not as a new paper book.",
+      "tags": [
+        "trade-plan",
+        "core",
+        "tactical",
+        "buy-tier",
+        "suite-b"
+      ],
+      "status": "done",
+      "source": "value strategy vs rolling profit-taking",
+      "added_at": "2026-10-07T15:50:32+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_hold5_fair].common_days",
+            "op": ">=",
+            "value": 130
+          },
+          {
+            "file": "docs/data/assessment_scoreboard.json",
+            "path": "twins[track_id=ai_judgment_graduated_fair].common_days",
+            "op": ">=",
+            "value": 130
+          }
+        ]
+      },
+      "updated_at": "2026-10-07T17:18:24+00:00",
+      "status_note": "Observe-only two-lot replay is on buy_tier_level (docs/ops/two-lot-replay.md). It does not edit the book. A live twin stays L567."
+    },
+    {
+      "id": "L569",
+      "category": "later",
+      "section": "learning",
+      "title": "Score entry and exit timing on the tactical lot only",
+      "summary": "DCA cadences, trade-plan dip limits, exit-shadow and the high-water envelope answer when a slice is bought and sold. The two-lot replay still buys the tactical sleeve with the equal-weight slot and sells it on a fixed target, stop, or rank exit. Re-score those existing overlays on the tactical fraction. Do not let them delay or sell the core lot.",
+      "revisit_when": "two_lot_replay.json passes on buy_tier_level is at least 60. Then attach timing overlays to the tactical lot in that observe-only replay, not as a new paper book and not on the core lot.",
+      "tags": [
+        "tactical",
+        "dca",
+        "exit-timing",
+        "hwm",
+        "two-lot"
+      ],
+      "status": "open",
+      "source": "value strategy vs rolling profit-taking",
+      "added_at": "2026-10-07T17:28:16+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/two_lot_replay.json",
+            "path": "passes",
+            "op": ">=",
+            "value": 60
+          }
+        ]
+      }
     }
   ],
   "fragments": [

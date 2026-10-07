@@ -162,6 +162,12 @@ Human verify-before-trade packs remain useful for live capital, but they are
 [`dual-path-sleeve-lab.md`](dual-path-sleeve-lab.md). Sleeve timing is stratified
 by tag; NAV vs ^FTSE stays on the capital books.
 
+**Two-lot replay (observe-only):** on `buy_tier_level`, compare keeping a core
+lot (or a harvested / profit-only residual) with selling the whole position on
+a rank exit. A separate variant sells that core only after a hard avoid or a
+failed research verdict has lasted the book's exit-confirm screens. See
+[`two-lot-replay.md`](two-lot-replay.md). It does not edit the book.
+
 ## Decision learning loop (target)
 
 Track excess vs ^FTSE / rules is necessary but not sufficient. The intended
