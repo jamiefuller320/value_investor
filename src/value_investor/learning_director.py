@@ -255,7 +255,7 @@ def build_learning_director_payload(
         ),
         "exit_timing_cohorts": slim_exit_timing(
             resolve_live_exit_timing_review(paper_root),
-            label="Live exit-timing cohorts (primary rules track)",
+            label="Live exit-timing cohorts (assessment-model primary)",
         ),
         "exit_timing_near_miss": slim_exit_timing(
             _safe_read(data_dir / "exit_timing_near_miss_review.json"),

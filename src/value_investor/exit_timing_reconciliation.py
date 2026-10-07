@@ -19,6 +19,7 @@ from value_investor.exit_timing_cohorts import (
 )
 
 RECONCILIATION_FILENAME = "exit_timing_reconciliation.json"
+# Legacy default for roots without assessment_model.json; otherwise the model primary.
 PRIMARY_LIVE_TRACK_ID = "rules"
 ARCHIVE_REVIEW_FILENAME = "exit_timing_near_miss_review.json"
 
@@ -125,14 +126,23 @@ def swap_rotation_metrics(review: dict[str, Any] | None) -> dict[str, Any]:
     }
 
 
+def _default_primary(paper_root: Path) -> str:
+    from value_investor.assessment_model import load_assessment_model
+
+    return str(load_assessment_model(paper_root).get("primary_track") or PRIMARY_LIVE_TRACK_ID)
+
+
 def resolve_live_exit_timing_review(
     paper_root: Path,
     *,
-    primary_track_id: str = PRIMARY_LIVE_TRACK_ID,
+    primary_track_id: str | None = None,
 ) -> dict[str, Any] | None:
-    """Primary live review for analysis payloads (rules track by default)."""
+    """Primary live review for analysis payloads (assessment-model primary by default)."""
+    from value_investor.rebalance_log import resolve_track_dir
+
     paper_root = Path(paper_root)
-    primary_path = paper_root / primary_track_id / REVIEW_FILENAME
+    primary_track_id = primary_track_id or _default_primary(paper_root)
+    primary_path = resolve_track_dir(paper_root, primary_track_id) / REVIEW_FILENAME
     primary = _load_json(primary_path)
     if primary:
         return primary
@@ -275,10 +285,11 @@ def build_exit_timing_reconciliation(
     *,
     paper_root: Path,
     data_dir: Path,
-    primary_track_id: str = PRIMARY_LIVE_TRACK_ID,
+    primary_track_id: str | None = None,
 ) -> dict[str, Any]:
     paper_root = Path(paper_root)
     data_dir = Path(data_dir)
+    primary_track_id = primary_track_id or _default_primary(paper_root)
 
     live_reviews: list[dict[str, Any]] = []
     rollup = _load_json(paper_root / "learning_tracks_exit_timing.json")
@@ -341,7 +352,7 @@ def write_exit_timing_reconciliation(
     *,
     paper_root: Path,
     data_dir: Path,
-    primary_track_id: str = PRIMARY_LIVE_TRACK_ID,
+    primary_track_id: str | None = None,
 ) -> dict[str, Any]:
     reconciliation = build_exit_timing_reconciliation(
         paper_root=paper_root,

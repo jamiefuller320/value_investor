@@ -257,7 +257,7 @@ def build_analysis_payload(
     live_timing_review = resolve_live_exit_timing_review(paper_root)
     exit_timing = _slim_exit_timing(
         live_timing_review,
-        label="Live exit-timing cohorts (primary rules track)",
+        label="Live exit-timing cohorts (assessment-model primary)",
     )
     exit_timing_near_miss = _slim_exit_timing(
         _safe_read(data_dir / "exit_timing_near_miss_review.json"),
