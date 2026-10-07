@@ -596,6 +596,8 @@ const DASHBOARD_SIDECARS = [
   ["progress_report", "data/progress_report.json"],
   ["queue_health", "data/queue_health.json"],
   ["observe_utilization", "data/observe_utilization.json"],
+  ["assessment_scoreboard", "data/assessment_scoreboard.json"],
+  ["total_return_view", "data/total_return_view.json"],
   ["lifecycle_maturity_trajectory", "data/lifecycle_maturity_trajectory.json"],
   ["chart_outcome_review", "data/chart_outcome_review.json"],
   ["engineering_tasks", "data/engineering_tasks.json"],
@@ -2179,6 +2181,16 @@ function renderMarketStatusCard(row) {
         : ""
     }
     ${
+      row.equal_support && row.equal_support.first_time_memo_count != null
+        ? settingRow(
+            "First-time memos",
+            `<span title="True unique-ticker misses after sibling-home join (exact Yahoo ticker). Empty local screen/research is not unresearched when memo_home_market already holds research.md.">${esc(
+              String(row.equal_support.first_time_memo_count)
+            )} missing (sibling homes already count)</span>`
+          )
+        : ""
+    }
+    ${
       row.shared_maintenance
         ? settingRow(
             "Shared maintenance cron",
@@ -2259,6 +2271,10 @@ function renderMarketStatusGrid(data) {
         }${
           row.epoch0 && row.epoch0.present
             ? ` · epoch-0 ${esc(String(row.epoch0.holdings ?? "—"))} pos`
+            : ""
+        }${
+          row.equal_support && row.equal_support.first_time_memo_count != null
+            ? ` · first-memo ${esc(String(row.equal_support.first_time_memo_count))}`
             : ""
         }</div>
         ${sprintProgressLine(row.sprint_progress)}
@@ -3926,7 +3942,7 @@ function renderSundayReview(data) {
       </details>
 
       <h3>Paper tracks by week</h3>
-      <p class="small muted">One summary row per track (story from excess trajectory / cost / marks). Expand a track for week-by-week detail — weeks oldest→newest. Canonical learning scoreboard stays on Automation (dual-suite).</p>
+      <p class="small muted">One summary row per track (story from <strong>price-only</strong> excess vs ^FTSE / cost / marks). Expand a track for week-by-week detail — weeks oldest→newest. Canonical assessment is <strong>total return vs FTAL.L</strong> on Observe (not this price-only table, not dual-suite A/B).</p>
       ${paperTrackTable}
 
       <details class="analysis-block overview-secondary">
@@ -3971,8 +3987,9 @@ function renderAnalysisSubnav(activeId) {
     ).join("")}
   </nav>
   <p class="small muted analysis-ia-contract" style="margin:0.35rem 0 0.75rem">
-    Analysis is a review surface — dense Sunday tables default-collapsed; observe instruments live on Automation;
-    dual-suite learning scoreboard stays on Automation (not duplicated here).
+    Analysis is a review surface — assessment scoreboard (total return vs FTAL.L) leads Observe;
+    dense Sunday tables default-collapsed; full observe cards live on Automation.
+    Dual-suite A/B buckets are legacy context, not the promotion scoreboard.
   </p>`;
 }
 
@@ -4124,7 +4141,12 @@ function renderAnalysis(data) {
 
   panel.innerHTML = `
     ${renderAnalysisSubnav(analysisSectionId)}
-    ${renderObserveUtilizationSection(data, { compact: true })}
+    <section class="analysis-section" id="analysis-observe">
+      ${renderAssessmentScoreboardPanel(data)}
+      ${renderTotalReturnVsPricePanel(data)}
+      ${renderPaperTrackBucketsPanel(data)}
+      ${renderObserveUtilizationSection(data, { compact: true })}
+    </section>
     ${renderSundayReview(data)}
     <section class="analysis-section" id="analysis-charts">
       <h2>Buy-tier chart outcomes</h2>
@@ -4261,6 +4283,11 @@ function pctOrDash(value, digits = 1) {
   return `${(Number(value) * 100).toFixed(digits)}%`;
 }
 
+function signedReturnClass(value) {
+  if (value == null || Number.isNaN(Number(value))) return "";
+  return Number(value) >= 0 ? "text-positive" : "text-negative";
+}
+
 function numOrDash(value, digits = 2) {
   if (value == null || Number.isNaN(Number(value))) return "—";
   return Number(value).toFixed(digits);
@@ -4389,7 +4416,7 @@ function renderChurnCounterfactualPanel(data) {
       <h2>Churn &amp; counterfactual</h2>
       <p class="small muted" style="margin-top:0">
         <strong>Churn ops window</strong> (${lookback}d) — not an investment thesis horizon.
-        Cost-drag tint uses Suite A stress-native thresholds (~6% round-trip); fair Suite B adoption truth lives on Learning tracks.
+        Cost-drag tint uses Suite A stress-native thresholds (~6% round-trip); canonical performance is the assessment scoreboard (total return vs FTAL.L), not Suite B price-only excess.
         Observe-only rollups from weekday decision-review.
         ${asOf ? `Updated ${esc(fmtDate(asOf))}.` : ""}
         ${docChurn ? `<a href="${esc(docChurn)}" target="_blank" rel="noopener">Paper learning review</a>` : ""}
@@ -4914,10 +4941,62 @@ function renderObserveInstrumentCard(inst, history) {
     : `<span class="badge badge-ii-ok">quiet</span>`;
   let metricRows = "";
   if (inst.id === "buy_tier_flip_lag") {
+    const stages = metrics.blocking_stage_counts || {};
+    const stageBits = Object.keys(stages)
+      .sort()
+      .map((key) => `${key}=${stages[key]}`)
+      .join(" · ");
+    const sample = Array.isArray(metrics.warn_sample) ? metrics.warn_sample : [];
+    const sampleHtml = sample.length
+      ? `<ul class="list-plain small observe-flip-sample">${sample
+          .map((row) => {
+            const home = row.memo_home_market;
+            const local = row.market_id;
+            const sibling =
+              row.has_memo && home && local && home !== local
+                ? ` · sibling memo @ ${home}`
+                : row.has_memo
+                  ? ` · memo @ ${home || local || "home"}`
+                  : " · no memo";
+            return `<li><code>${esc(row.ticker || "—")}</code> ${esc(
+              row.market_id || ""
+            )} · ${esc(row.blocking_stage || "—")} (${esc(
+              String(row.hours_since_flip ?? "—")
+            )}h)${esc(sibling)}</li>`;
+          })
+          .join("")}</ul>`
+      : "";
     metricRows = `
       ${settingRow("Warn cohort", esc(String(metrics.warn_not_usable ?? "—")))}
       ${settingRow("Open / cohort", esc(`${metrics.open_not_usable ?? "—"} / ${metrics.cohort_count ?? "—"}`))}
-      ${settingRow("Usable in window", esc(String(metrics.usable_in_window ?? "—")))}`;
+      ${settingRow("Usable in window", esc(String(metrics.usable_in_window ?? "—")))}
+      ${settingRow(
+        "Blocking stages",
+        esc(stageBits || "—")
+      )}
+      ${settingRow(
+        "Sibling vs true no-memo",
+        `<span title="Factory has_memo joins research_home_market (exact Yahoo ticker). Empty local home is not unresearched when a sibling holds the essay. Dual-list suffixes stay distinct.">${esc(
+          String(metrics.sibling_home_open_count ?? "—")
+        )} sibling-home open · ${esc(String(metrics.true_no_memo_open_count ?? "—"))} true no-memo</span>`
+      )}
+      ${sampleHtml}`;
+  } else if (inst.id === "decision_input_inventory") {
+    const gaps = metrics.gap_counts || {};
+    const gapBits = ["key_filing_bodies", "fcf_basis_bound", "overlay_bound", "memo_recent"]
+      .map((key) => (gaps[key] != null ? `${key.replace(/_/g, " ")} ${gaps[key]}` : ""))
+      .filter(Boolean)
+      .join(" · ");
+    metricRows = `
+      ${settingRow("Dominant gap", esc(`${metrics.dominant_gap_field || "—"} · ${metrics.dominant_gap_count ?? "—"}`))}
+      ${settingRow("Fully ready / inventory", esc(`${metrics.fully_ready_count ?? "—"} / ${metrics.inventory_count ?? "—"}`))}
+      ${settingRow(
+        "P1 slim flags",
+        `<span title="Live-path bind fields weekday paper-auto can see: key filing bodies, FCF overlay, overlay bind, memo recency.">${esc(
+          gapBits || "—"
+        )}</span>`
+      )}
+      ${settingRow("Verdict", esc(String(metrics.verdict || "—")))}`;
   } else {
     metricRows = `
       ${settingRow("Dominant gap", esc(`${metrics.dominant_gap_field || "—"} · ${metrics.dominant_gap_count ?? "—"}`))}
@@ -4949,7 +5028,7 @@ function renderObserveUtilizationSection(data, { compact = false } = {}) {
   const payload = resolveObserveUtilization(data);
   const runbookUrl = githubOpsDocUrl("docs/ops/ops-monitor.md");
   const sectionAttrs = compact
-    ? ' class="automation-section automation-section-full observe-utilization-section analysis-section analysis-observe-compact" id="analysis-observe"'
+    ? ' class="automation-section automation-section-full observe-utilization-section analysis-observe-compact"'
     : ' class="automation-section automation-section-full observe-utilization-section"';
   if (!payload) {
     return `
@@ -4994,7 +5073,7 @@ function renderObserveUtilizationSection(data, { compact = false } = {}) {
       <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
       ${metaLine}
       ${staleBanner}
-      <p class="small muted">Observe-only P1 instruments (flip-lag + decision-input). Trajectory = delta vs last dashboard cycle (lower warn/gap is better). ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>
+      <p class="small muted">Observe-only P1 instruments (flip-lag + decision-input). Flip-lag factory <code>has_memo</code> joins sibling <code>memo_home_market</code> — empty local home is not unresearched. Trajectory = delta vs last dashboard cycle (lower warn/gap is better). ${runbookUrl ? `<a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Ops runbook</a>` : ""}</p>
       <div class="grid observe-instrument-grid" style="margin-top:0.75rem">
         ${cards || '<p class="muted">No instruments in snapshot.</p>'}
       </div>
@@ -5604,7 +5683,227 @@ function renderKnobBootstrapPanel(data) {
     </section>`;
 }
 
-/** Dual-suite scoreboard: Suite B fair = adoption truth; Suite A stress = churn lab (N145). */
+function statsVerdictLabel(verdict) {
+  const key = String(verdict || "");
+  if (key === "positive") return "ahead of market (90%)";
+  if (key === "negative") return "behind market (90%)";
+  if (key === "indistinguishable_from_noise") return "not distinguishable from noise";
+  return key || "—";
+}
+
+function formatCi90(ci) {
+  if (!Array.isArray(ci) || ci.length < 2) return "—";
+  const lo = ci[0];
+  const hi = ci[1];
+  if (lo == null || hi == null) return "—";
+  return `${pctOrDash(lo)} … ${pctOrDash(hi)}`;
+}
+
+function renderAssessmentScoreboardPanel(data) {
+  const board = data.assessment_scoreboard;
+  const docUrl = githubOpsDocUrl("docs/ops/assessment-scoreboard.md");
+  if (!board || !Array.isArray(board.tracks) || !board.tracks.length) {
+    return `
+      <section class="automation-section assessment-scoreboard-section">
+        <h2>Assessment scoreboard</h2>
+        <p class="muted">No assessment_scoreboard.json yet — ops-monitor writes total return vs FTAL.L plus track-statistics intervals.</p>
+      </section>`;
+  }
+  const cmp = board.primary_vs_control || {};
+  const tracks = board.tracks || [];
+  const frozen = board.frozen_tracks || [];
+  const twins = board.twins || [];
+  const trackRows = tracks
+    .map((row) => {
+      const stats = row.statistics || {};
+      const role = row.role || "";
+      const roleBadge =
+        role === "primary"
+          ? ' <span class="badge badge-buy">primary</span>'
+          : role === "control"
+            ? ' <span class="badge badge-info">control</span>'
+            : role === "twin"
+              ? ' <span class="badge badge-hold">twin</span>'
+              : "";
+      const gate = row.ai_gate || {};
+      const gateBit =
+        gate.binds == null
+          ? "—"
+          : gate.binds
+            ? "binds"
+            : "does not bind";
+      return `<tr>
+        <td><strong>${esc(row.label || row.track_id || "—")}</strong>${roleBadge}<br><span class="small muted">${esc(row.track_id || "")} · ${esc(row.basis || "")}</span></td>
+        <td>${pctOrDash(row.total_return)}</td>
+        <td>${pctOrDash(row.benchmark_total_return)}</td>
+        <td class="${signedReturnClass(row.excess_total_return)}">${pctOrDash(row.excess_total_return)}</td>
+        <td>${pctOrDash(row.excess_total_return_at_stress_cost)}</td>
+        <td><span class="small">${esc(statsVerdictLabel(stats.verdict))}</span><br><span class="small muted" title="Price-NAV vs price index; uncertainty band, not the total-return level">${esc(formatCi90(stats.ci90))}</span></td>
+        <td class="small">${esc(gateBit)}</td>
+      </tr>`;
+    })
+    .join("");
+  const frozenHtml = frozen.length
+    ? `<details class="overview-secondary" style="margin-top:0.75rem">
+        <summary>Frozen Suite A stress books (final records)</summary>
+        <p class="small muted">assessment_model.json frozen tracks — not scored as adoption truth.</p>
+        <ul class="list-plain small">${frozen
+          .map(
+            (row) =>
+              `<li><code>${esc(row.track_id || "—")}</code> · lifetime TR ${pctOrDash(
+                row.lifetime_total_return
+              )} · frozen ${esc(fmtDate(row.frozen_at))}</li>`
+          )
+          .join("")}</ul>
+      </details>`
+    : "";
+  const twinHtml = twins.length
+    ? `<details class="overview-secondary" style="margin-top:0.75rem">
+        <summary>Twins vs parent (${esc(String(twins.length))})</summary>
+        <ul class="list-plain small">${twins
+          .map((row) => {
+            const confound = (row.parent_knobs_changed || []).length
+              ? ` · CONFOUNDED (${(row.parent_knobs_changed || []).join(", ")})`
+              : "";
+            return `<li><code>${esc(row.track_id || "—")}</code> vs ${esc(
+              row.parent_track || "—"
+            )} · Δ ${pctOrDash(row.difference)}${esc(confound)}</li>`;
+          })
+          .join("")}</ul>
+      </details>`
+    : "";
+  return `
+    <section class="automation-section assessment-scoreboard-section">
+      <h2>Assessment scoreboard</h2>
+      <p class="small muted" style="margin-top:0">
+        Single fair-cost table. <strong>Level</strong> = total return (dividends credited) vs ${esc(
+          board.benchmark || "FTAL.L"
+        )}.
+        <strong>Interval</strong> = 90% band on annualised <em>price-only</em> active return (track statistics) — knob apply needs a significant verdict (significance_gate_v1).
+        Dual-suite A/B excess vs ^FTSE is legacy context.
+        ${docUrl ? `<a href="${esc(docUrl)}" target="_blank" rel="noopener">Scoreboard runbook</a>` : ""}
+        ${board.generated_at ? ` · Updated ${esc(fmtDate(board.generated_at))}` : ""}
+      </p>
+      <p>${esc(board.headline || "")}</p>
+      <div class="learning-tracks-headline">
+        <span>Primary <code>${esc(board.primary_track || "—")}</code></span>
+        <span>Control <code>${esc(board.control_track || "—")}</code></span>
+        <span>Common-window Δ ${pctOrDash(cmp.difference)}</span>
+      </div>
+      <div class="table-wrap">
+        <table class="learning-tracks-table assessment-scoreboard-table">
+          <thead>
+            <tr>
+              <th>Track</th>
+              <th>Total return</th>
+              <th>${esc(board.benchmark || "FTAL.L")}</th>
+              <th>TR excess</th>
+              <th>TR @ 3% stress</th>
+              <th>Price-only 90% band</th>
+              <th>AI gate</th>
+            </tr>
+          </thead>
+          <tbody>${trackRows}</tbody>
+        </table>
+      </div>
+      ${twinHtml}
+      ${frozenHtml}
+    </section>`;
+}
+
+function renderTotalReturnVsPricePanel(data) {
+  const view = data.total_return_view;
+  if (!view || !view.tracks || typeof view.tracks !== "object") return "";
+  const assessed = Array.isArray(view.assessed_tracks) ? view.assessed_tracks : Object.keys(view.tracks);
+  const rows = assessed
+    .map((tid) => {
+      const entry = view.tracks[tid] || {};
+      const scored = entry.clean_epoch || entry.lifetime || {};
+      const published = entry.published_excess_after_costs;
+      const tr = scored.excess_total_return;
+      return `<tr>
+        <td><code>${esc(tid)}</code></td>
+        <td>${pctOrDash(published)}</td>
+        <td>${pctOrDash(tr)}</td>
+        <td>${pctOrDash(scored.total_return)}</td>
+        <td class="small muted">${esc(entry.clean_epoch ? "clean epoch" : "lifetime")}</td>
+      </tr>`;
+    })
+    .join("");
+  if (!rows) return "";
+  return `
+    <section class="automation-section total-return-view-section">
+      <h3>Total return vs price-only excess</h3>
+      <p class="small muted" style="margin-top:0">
+        Published paper excess is price NAV vs ^FTSE. Total-return excess credits dividends vs ${esc(
+          (view.benchmarks || {}).total_return || "FTAL.L"
+        )}. Cite the total-return column for performance; the price-only column is the statistics/significance input.
+      </p>
+      <div class="table-wrap">
+        <table class="learning-tracks-table">
+          <thead>
+            <tr>
+              <th>Track</th>
+              <th>Published excess (price)</th>
+              <th>TR excess</th>
+              <th>Total return</th>
+              <th>Window</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </section>`;
+}
+
+function renderPaperTrackBucketsPanel(data) {
+  const dual = data.learning_tracks_dual_suite || {};
+  const buckets = data.paper_track_buckets || {
+    note: dual.note,
+    suite_a_stress: {
+      label: (dual.suite_a || {}).label,
+      score_on: "cost_drag_and_trade_count",
+      is_adoption_truth: false,
+      primary_excess_after_costs: (dual.suite_a || {}).primary_excess_after_costs,
+    },
+    suite_b_adoption: {
+      label: (dual.suite_b || {}).label,
+      score_on: "fair_excess_vs_ftse_and_fair_rules",
+      ai_excess_after_costs: (dual.suite_b || {}).ai_excess_after_costs,
+    },
+    suite_b_identity: {
+      label: "Suite B — identity / membership floor",
+      warning:
+        "Positive buy_tier_level excess is the unfiltered membership floor, not fair-policy adoption.",
+    },
+  };
+  if (!dual.suite_a && !data.paper_track_buckets) return "";
+  const a = buckets.suite_a_stress || {};
+  const b = buckets.suite_b_adoption || {};
+  const ident = buckets.suite_b_identity || {};
+  return `
+    <details class="overview-secondary analysis-block" style="margin-top:0.75rem">
+      <summary><strong>Legacy Suite A/B buckets</strong> — not the assessment scoreboard</summary>
+      <p class="small muted">${esc(buckets.note || "")}</p>
+      <ul class="list-plain small">
+        <li><strong>${esc(a.label || "Suite A")}</strong> — score on ${esc(
+          a.score_on || "cost_drag"
+        )}; adoption=${a.is_adoption_truth ? "yes" : "no"}; stress excess ${pctOrDash(
+          a.primary_excess_after_costs
+        )}</li>
+        <li><strong>${esc(b.label || "Suite B adoption")}</strong> — score on ${esc(
+          b.score_on || "fair excess"
+        )}; pair ${esc((data.learning_tracks_dual_suite || {}).suite_b?.ai_track_id || "primary")} vs ${esc(
+          (data.learning_tracks_dual_suite || {}).suite_b?.control_track_id || "control"
+        )}; excess ${pctOrDash(b.ai_excess_after_costs)} (price-only vs ^FTSE)</li>
+        <li><strong>${esc(ident.label || "Identity floor")}</strong> — ${esc(
+          ident.warning || "membership floor, not adoption"
+        )}</li>
+      </ul>
+    </details>`;
+}
+
+/** Dual-suite scoreboard: Suite B pair follows the assessment model; Suite A is the frozen churn lab. */
 function learningTrackIsSuiteB(trackId, trackConfigs) {
   const cfg = (trackConfigs || {})[trackId] || {};
   if (cfg.is_suite_b || cfg.is_fair_cost_lab || cfg.is_cohort_lab) return true;
@@ -5743,8 +6042,8 @@ function renderLearningTracksSuiteTable(title, blurb, headlineHtml, rowsHtml) {
           <tr>
             <th>Track</th>
             <th>NAV</th>
-            <th>Return</th>
-            <th>Excess vs ^FTSE</th>
+            <th>Return (price)</th>
+            <th>Excess vs ^FTSE (price)</th>
             <th>Epoch return</th>
             <th>Epoch excess</th>
             <th>Trades</th>
@@ -5800,30 +6099,35 @@ function renderLearningTracksPanel(data) {
         })();
   const yesNo = (v) => (v == null ? "—" : v ? "Yes" : "No");
 
+  const suiteBPair = `${suiteBMeta.ai_track_id || "primary"} vs ${suiteBMeta.control_track_id || "control"}`;
   const suiteBHeadline = `
     <div class="learning-tracks-headline">
-      <span><strong>Adoption truth (Suite B fair)</strong></span>
-      <span>AI fair excess vs ^FTSE: <strong>${fairExcess != null ? pct(fairExcess) : "—"}</strong>${
+      <span><strong>Legacy Suite B pair</strong> (assessment model: ${esc(suiteBPair)})</span>
+      <span>Price-only excess vs ^FTSE: <strong>${fairExcess != null ? pct(fairExcess) : "—"}</strong>${
         (suiteBMeta.excess_basis || {}).ai === "since_zero_datum" && (suiteBMeta.zero_datum_started_at || {}).ai
           ? ` <span class="small muted" title="Forward-only: warm-start seed before this date is diagnostic (L533)">since ${esc(String(suiteBMeta.zero_datum_started_at.ai).slice(0, 10))}</span>`
           : ""
-      }</span>
-      <span>Beat market: ${esc(yesNo(fairBeatMarket))}</span>
-      <span>Beat fair rules: ${esc(yesNo(fairBeatControl))}</span>
+      } — not total-return vs FTAL.L</span>
+      <span>Beat ^FTSE: ${esc(yesNo(fairBeatMarket))}</span>
+      <span>Beat control (price-only): ${esc(yesNo(fairBeatControl))}</span>
     </div>`;
 
   const stressExcess =
     suiteAMeta.primary_excess_after_costs != null
       ? suiteAMeta.primary_excess_after_costs
       : review.primary_excess_after_costs;
+  const frozenNote = (dual.frozen_tracks || []).length
+    ? ` Frozen: ${(dual.frozen_tracks || []).join(", ")}.`
+    : "";
   const suiteAHeadline = `
     <div class="learning-tracks-headline">
-      <span><strong>Churn lab (Suite A stress)</strong> — not promotion truth</span>
+      <span><strong>Suite A stress / churn lab</strong> — frozen final records, not promotion truth</span>
       <span>Primary AI excess (3%): <strong>${stressExcess != null ? pct(stressExcess) : "—"}</strong></span>
       <span>Stress beat market: ${esc(yesNo(review.beat_market))}</span>
       <span>Stress beat rules: ${esc(yesNo(review.beat_control))}</span>
       <span>Verdict: <strong>${esc(review.verdict || "—")}</strong></span>
-    </div>`;
+    </div>
+    ${frozenNote ? `<p class="small muted">${esc(dual.note || "")}${esc(frozenNote)}</p>` : ""}`;
 
   const assess = dual.fair_assess_suite_a;
   const assessTracks = (assess && assess.tracks) || {};
@@ -5862,8 +6166,10 @@ function renderLearningTracksPanel(data) {
     <h2>Learning tracks (server)</h2>
     <p class="small muted" style="margin-top:0">
       Weekday paper-auto books from CI — not the browser local sandbox.
-      <strong>Adoption success</strong> = Suite B fair AI excess vs ^FTSE and vs fair rules control.
-      Suite A keeps the primary learning-track flag and 3% stress churn lab — do not promote on stress excess alone (N145).
+      <strong>Canonical assessment</strong> is the scoreboard above (total return vs FTAL.L + statistics interval).
+      These Suite A/B tables are legacy dual-suite context: columns are <strong>price-only</strong> return / excess vs ^FTSE.
+      Suite A 3% stress books are frozen final records — do not promote on stress excess alone (N145).
+      Suite B pair follows the assessment model.
       ${docDual ? `<a href="${esc(docDual)}" target="_blank" rel="noopener">Dual-suite costs</a>` : ""}
       ${docPrimary ? ` · <a href="${esc(docPrimary)}" target="_blank" rel="noopener">Primary learning track</a>` : ""}
     </p>
@@ -5875,7 +6181,7 @@ function renderLearningTracksPanel(data) {
     ${renderLearningTracksSuiteTable(
       suiteBMeta.label || "Suite B — fair adoption scoreboard",
       suiteBMeta.blurb ||
-        "Fair T212-shaped twins and cohort labs. This is the promotion / adoption scoreboard.",
+        "Fair T212-shaped twins and cohort labs. Price-only excess vs ^FTSE — promotion cites the assessment scoreboard (total return vs FTAL.L).",
       suiteBHeadline,
       rowsB ||
         '<tr><td colspan="9" class="muted">No Suite B fair / cohort tracks published yet.</td></tr>'
@@ -5883,7 +6189,7 @@ function renderLearningTracksPanel(data) {
     ${renderLearningTracksSuiteTable(
       suiteAMeta.label || "Suite A — stress / churn lab",
       suiteAMeta.blurb ||
-        "Live FTSE books at 3% per-side stress. Use for cost drag / trade count / hold stability — not absolute beat-^FTSE promotion.",
+        "Live FTSE books at 3% per-side stress (frozen final records). Use for cost drag / trade count / hold stability — not promotion.",
       suiteAHeadline,
       rowsA
     )}
@@ -5919,8 +6225,9 @@ function automationIlluminationFor(sectionId, data) {
     return { new_info: newInfo, attention: attn };
   }
   if (sectionId === "tracks") {
+    const board = data && data.assessment_scoreboard;
     const dual = data && data.learning_tracks_dual_suite;
-    const attn = !dual || !!hint.attention;
+    const attn = !(board && board.tracks) || !dual || !!hint.attention;
     return { new_info: false, attention: attn };
   }
   if (sectionId === "queue") {
@@ -7442,6 +7749,8 @@ function renderAutomation(data) {
     <div class="automation-section-pane" data-automation-pane="tracks" ${
       section === "tracks" ? "" : "hidden"
     }>
+      ${renderAssessmentScoreboardPanel(data)}
+      ${renderTotalReturnVsPricePanel(data)}
       ${renderLearningTracksPanel(data)}
       ${renderKnobBootstrapPanel(data)}
       ${renderChurnCounterfactualPanel(data)}

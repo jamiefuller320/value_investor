@@ -396,6 +396,10 @@ def test_dashboard_assets_include_market_status_grid():
     assert "row.is_admitted" in app
     assert "Epoch-0 book" in app
     assert "Near-miss watch" in app
+    assert "First-time memos" in app
+    assert "first-memo" in app
+    assert "memo_home_market" in app
+    assert "function renderAssessmentScoreboardPanel(data)" in app
     assert "function bindDashboardAutoRefresh()" in app
     assert "async function applyDashboardSidecars(data)" in app
     assert "function marketIngestBadge(ingest, stream)" in app
@@ -528,6 +532,7 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
                     "not_buy_tier_count": 363,
                     "never_buy_tier_count": 336,
                     "rememo_eligible_count": 54,
+                    "first_time_memo_count": 0,
                     "timing_signal_present": True,
                 }
             },
@@ -624,6 +629,7 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
     assert sp500["near_miss"]["buy_tier_not_now_count"] == 12
     assert sp500["near_miss"]["hold_near_buy_sample"] == ["ABC"]
     assert sp500["equal_support"]["rememo_eligible_count"] == 54
+    assert sp500["equal_support"]["first_time_memo_count"] == 0
     assert payload["admitted_markets"] == ["sp500", "asx200"]
     assert payload["summary"]["should_run_library_maintenance"] is True
     assert payload["summary"]["spare_sprint"] == {"1": "tsx60", "2": "ftse_smallcap"}

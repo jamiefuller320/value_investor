@@ -1133,6 +1133,14 @@ def _slim_equal_support_row(raw: Any) -> dict[str, Any] | None:
     timing = _as_dict(row.get("timing")) if isinstance(row.get("timing"), dict) else {}
     archives = _as_dict(row.get("archives")) if isinstance(row.get("archives"), dict) else {}
     exclusion = _as_dict(archives.get("exclusion"))
+    first_nested = (
+        (row.get("first_time_memos") or {}).get("missing_count")
+        if isinstance(row.get("first_time_memos"), dict)
+        else None
+    )
+    first_time_raw = (
+        row.get("first_time_memo_count") if "first_time_memo_count" in row else first_nested
+    )
     return {
         "present": True,
         "ai_judgment": bool(row.get("ai_judgment", False)),
@@ -1156,6 +1164,7 @@ def _slim_equal_support_row(raw: Any) -> dict[str, Any] | None:
         "rememo_eligible_count": _int(
             row.get("rememo_eligible_count", rememo.get("eligible_count"))
         ),
+        "first_time_memo_count": _optional_int(first_time_raw),
         "exclusion_ready_for_priors": (
             row.get("exclusion_ready_for_priors")
             if "exclusion_ready_for_priors" in row

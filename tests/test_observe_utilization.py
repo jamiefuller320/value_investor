@@ -84,8 +84,36 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
                 "warn_not_usable": 10,
                 "usable_in_window": 60,
                 "market_count": 3,
-                "blocking_stage_counts": {"no_memo": 8},
+                "blocking_stage_counts": {"no_key_bodies": 2, "no_memo": 1},
             },
+            "open": [
+                {
+                    "ticker": "AAA.L",
+                    "market_id": "sp500",
+                    "blocking_stage": "no_key_bodies",
+                    "has_memo": True,
+                    "memo_home_market": "euro_depth",
+                    "hours_since_flip": 30,
+                },
+                {
+                    "ticker": "CAM.L",
+                    "market_id": "ftse350",
+                    "blocking_stage": "no_memo",
+                    "has_memo": False,
+                    "memo_home_market": None,
+                    "hours_since_flip": 40,
+                },
+            ],
+            "warn_open": [
+                {
+                    "ticker": "AAA.L",
+                    "market_id": "sp500",
+                    "blocking_stage": "no_key_bodies",
+                    "has_memo": True,
+                    "memo_home_market": "euro_depth",
+                    "hours_since_flip": 30,
+                }
+            ],
         },
     )
     _write(
@@ -190,6 +218,9 @@ def test_observe_utilization_fresh_warn_and_trajectory(tmp_path: Path):
     assert by_id["universe_filing_archive_miss_rate"]["warn_active"] is False
     assert flip["warn_active"] is True
     assert flip["primary_value"] == 10
+    assert flip["metrics"]["sibling_home_open_count"] == 1
+    assert flip["metrics"]["true_no_memo_open_count"] == 1
+    assert flip["metrics"]["warn_sample"][0]["memo_home_market"] == "euro_depth"
     assert flip["trajectory"]["direction"] == "improving"
     assert flip["trajectory"]["delta"] == -10
     assert decision["primary_value"] == 40
