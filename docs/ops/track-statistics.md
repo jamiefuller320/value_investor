@@ -25,9 +25,13 @@ each track's committed `automated_fund.json` equity curve under
 | `min_detectable_annual_edge` | 2 × tracking error ÷ √years — the smallest edge the current history could tell apart from zero |
 | `years_to_detect_target_edge` | Years of similar marks needed to detect a 3%/yr edge at 2 standard errors |
 
-`pairs` repeat the same statistics on the daily return difference between two
-books on common dates: `ai_vs_rules` (Suite A) and `ai_fair_vs_rules_fair`
-(Suite B). Tracks need ≥20 daily periods before statistics are reported.
+`pairs.primary_vs_control` repeats the same statistics on the daily return
+difference between the primary and the control named in
+`assessment_model.json` (now `ai_judgment_fair` minus `buy_tier_level`), on
+common dates. Frozen books are left out (`excluded_frozen_tracks`), so they no
+longer widen the Bonferroni correction; their final records live in the
+assessment scoreboard. Tracks need ≥20 daily periods before statistics are
+reported.
 
 ### Method notes
 
@@ -45,7 +49,7 @@ books on common dates: `ai_vs_rules` (Suite A) and `ai_fair_vs_rules_fair`
 
 | Title | Severity | Fires when |
 |-------|----------|------------|
-| **Learning-track verdict not statistically supported** | warn | `learning_tracks_review.json` has `beat_market=true` and `ai_judgment` is not `positive`, or `beat_control=true` and `ai_vs_rules` is not `positive` |
+| **Learning-track verdict not statistically supported** | warn | `learning_tracks_review.json` has `beat_market=true` and the primary is not `positive`, or `beat_control=true` and `primary_vs_control` is not `positive` |
 | **Track statistics observe failed** | warn | The refresh raised (bad JSON, unreadable files) |
 
 `auto_fixable=False`. Noisy tracks alone never warn; the finding only flags a

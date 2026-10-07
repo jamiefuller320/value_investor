@@ -4,8 +4,8 @@ Observe-only. Turns each track's committed equity curve into period returns,
 compares them with the track benchmark, and reports how much of the measured
 excess could be noise: tracking error, information ratio, a block-bootstrap
 confidence interval on annualised active return, the minimum edge the current
-history could detect, and a Bonferroni-corrected significance flag across all
-tracks reviewed together.
+history could detect, and a Bonferroni-corrected significance flag across the
+unfrozen tracks plus the primary-minus-control pair (``assessment_model.json``).
 
 Daily ops-monitor refreshes ``docs/data/track_statistics.json`` and warns only
 when the published learning-tracks verdict (``beat_market`` / ``beat_control``)
@@ -44,10 +44,7 @@ FAMILY_ALPHA = 0.05
 DETECTION_Z = 2.0
 TARGET_EDGE_ANNUAL = 0.03
 
-PAIRS: tuple[tuple[str, str, str], ...] = (
-    ("ai_vs_rules", "ai_judgment", "rules"),
-    ("ai_fair_vs_rules_fair", "ai_judgment_fair", "rules_fair"),
-)
+PRIMARY_VS_CONTROL = "primary_vs_control"
 
 BenchmarkFetcher = Callable[[str, date, date], dict[date, float]]
 
@@ -248,14 +245,21 @@ def build_track_statistics(
     benchmark_fetcher: BenchmarkFetcher = fetch_benchmark_closes,
     now: datetime | None = None,
 ) -> dict[str, Any]:
+    from value_investor.assessment_model import control_track_id, frozen_tracks, primary_track_id
     from value_investor.decision_review import benchmark_ticker_for_dir
     from value_investor.paper_automation import learning_track_dirs
 
     root = Path(paper_root)
     bench_ticker = benchmark_ticker_for_dir(root)
+    primary = primary_track_id(root)
+    control = control_track_id(root)
+    frozen = frozen_tracks(root)
+    pair_specs = [(PRIMARY_VS_CONTROL, primary, control)]
     track_returns: dict[str, list[tuple[date, float]]] = {}
     track_days: dict[str, list[date]] = {}
     for track_id, track_dir in learning_track_dirs(root).items():
+        if track_id in frozen:
+            continue
         marks = daily_marks(_load_curve(track_dir))
         if len(marks) < 2:
             continue
@@ -266,7 +270,7 @@ def build_track_statistics(
     closes = benchmark_fetcher(bench_ticker, all_days[0], all_days[-1]) if all_days else {}
 
     eligible = [tid for tid, rows in track_returns.items() if len(rows) >= MIN_PERIODS]
-    tests = max(1, len(eligible) + len(PAIRS))
+    tests = max(1, len(eligible) + len(pair_specs))
     z_crit = NormalDist().inv_cdf(1.0 - FAMILY_ALPHA / (2.0 * tests))
 
     tracks: dict[str, Any] = {}
@@ -280,7 +284,7 @@ def build_track_statistics(
         tracks[track_id] = stats
 
     pairs: dict[str, Any] = {}
-    for pair_id, left, right in PAIRS:
+    for pair_id, left, right in pair_specs:
         if left not in track_returns or right not in track_returns:
             continue
         right_by_day = dict(track_returns[right])
@@ -310,6 +314,9 @@ def build_track_statistics(
             "nav_basis": "equity_curve marks (market prices), not decision-review cost-basis NAV",
             "dividends": "not credited in paper NAV (see L528)",
         },
+        "primary_track": primary,
+        "control_track": control,
+        "excluded_frozen_tracks": sorted(frozen),
         "tests_corrected_for": tests,
         "z_critical": round(z_crit, 3),
         "tracks": tracks,
@@ -362,13 +369,17 @@ def ops_finding_from_track_statistics(
     """Warn when beat_market / beat_control is claimed without a positive CI."""
     if not review:
         return None
+    from value_investor.assessment_model import LEGACY_CONTROL_TRACK_ID, LEGACY_PRIMARY_TRACK_ID
+
+    primary_id = str(payload.get("primary_track") or LEGACY_PRIMARY_TRACK_ID)
+    control_id = str(payload.get("control_track") or LEGACY_CONTROL_TRACK_ID)
     unsupported: list[str] = []
-    ai = (payload.get("tracks") or {}).get("ai_judgment")
-    if review.get("beat_market") and (ai or {}).get("verdict") != "positive":
-        unsupported.append("beat_market — " + _describe("ai_judgment vs benchmark", ai))
-    pair = (payload.get("pairs") or {}).get("ai_vs_rules")
+    primary = (payload.get("tracks") or {}).get(primary_id)
+    if review.get("beat_market") and (primary or {}).get("verdict") != "positive":
+        unsupported.append("beat_market — " + _describe(f"{primary_id} vs benchmark", primary))
+    pair = (payload.get("pairs") or {}).get(PRIMARY_VS_CONTROL)
     if review.get("beat_control") and (pair or {}).get("verdict") != "positive":
-        unsupported.append("beat_control — " + _describe("ai_judgment minus rules", pair))
+        unsupported.append("beat_control — " + _describe(f"{primary_id} minus {control_id}", pair))
     if not unsupported:
         return None
     return {

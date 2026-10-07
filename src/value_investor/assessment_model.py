@@ -68,6 +68,17 @@ def twins(base_dir: Path) -> dict[str, dict[str, Any]]:
     return {str(k): dict(v) for k, v in rows.items() if isinstance(v, dict)}
 
 
+def assessed_track_ids(base_dir: Path) -> list[str]:
+    """Primary, control, then unfrozen twins: the books daily findings report on."""
+    frozen = frozen_tracks(base_dir)
+    ordered = [primary_track_id(base_dir), control_track_id(base_dir), *sorted(twins(base_dir))]
+    out: list[str] = []
+    for track_id in ordered:
+        if track_id not in frozen and track_id not in out:
+            out.append(track_id)
+    return out
+
+
 def register_twin(
     base_dir: Path,
     *,
