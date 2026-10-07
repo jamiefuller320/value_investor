@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-07T07:36:50.839144+00:00",
+  "generated_at": "2026-10-07T07:44:13.229843+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -537,7 +537,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=9, indexed_without_body=16)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=13, indexed_without_body=16)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
@@ -591,23 +591,23 @@
         "buy_tier_count": 52,
         "unmeasured_buy_tier": 1,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 9,
+        "thin_body_buy_tier": 13,
         "indexed_without_body": 16,
         "bodies_median": 4.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
-        "parked_count": 10,
+        "parked_count": 11,
         "zero_body_tickers": [],
         "thin_body_tickers": [
+          "SGO.PA",
           "ACKB.BR",
           "EVN.VI",
           "WIE.VI",
           "APAM.AS",
           "DTE.DE",
           "UCB.BR",
-          "MUV2.DE",
-          "BAS.DE"
+          "SKA-B.ST"
         ],
         "unmeasured_tickers": [
           "UNA.AS"
@@ -618,9 +618,9 @@
           "APAM.AS",
           "BAS.DE",
           "DQ7A.IR",
+          "DTE.DE",
           "EVN.VI",
-          "MUV2.DE",
-          "SAP.DE"
+          "MUV2.DE"
         ]
       },
       "filing_gaps": 1,
@@ -678,23 +678,12 @@
       "sprint_progress": {
         "window_days": 2,
         "run_count": 5,
-        "targets": 20,
-        "improved": 15,
+        "targets": 8,
+        "improved": 3,
         "improved_tickers": [
-          "SHELL.AS",
-          "SGO.PA",
-          "MC.PA",
-          "TTE.PA",
-          "DG.PA",
-          "SAN.PA",
-          "ERIC-B.ST",
-          "ESSITY-B.ST",
-          "VOLV-B.ST",
-          "SKA-B.ST",
-          "EL.PA",
-          "BOL.ST"
+          "SHELL.AS"
         ],
-        "last_run_at": "2026-10-07T07:34:13.262557+00:00",
+        "last_run_at": "2026-10-07T07:41:13.332154+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -707,21 +696,21 @@
         "gaps_after": {
           "unmeasured": 1,
           "zero_body": 0,
-          "thin": 9,
+          "thin": 13,
           "indexed_without_body": 16,
           "filing_gaps": 1
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": -4,
+          "thin": 0,
           "indexed_without_body": 0,
           "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 1,
           "zero_body": 0,
-          "thin": 9,
+          "thin": 13,
           "indexed_without_body": 16,
           "filing_gaps": 1
         },
@@ -946,7 +935,7 @@
         "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 25,
+        "leftover": 29,
         "steps": [
           {
             "id": "start",
