@@ -14,8 +14,6 @@ from value_investor.decision_recording import (
     validate_recording_plan,
 )
 
-DEFAULT_REBALANCE_LOG = Path("docs/data/paper_automation/ai_judgment/rebalance_log.json")
-
 
 def _cmd_show_primary(_: argparse.Namespace) -> int:
     print(json.dumps(primary_recording_answers().to_dict(), indent=2))
@@ -37,7 +35,12 @@ def _cmd_validate(args: argparse.Namespace) -> int:
 
 
 def _cmd_preview_freeze(args: argparse.Namespace) -> int:
-    path = Path(args.rebalance_log)
+    if args.rebalance_log:
+        path = Path(args.rebalance_log)
+    else:
+        from value_investor.decision_input_inventory import primary_paper_track_dir
+
+        path = primary_paper_track_dir() / "rebalance_log.json"
     if not path.is_file():
         print(f"rebalance log not found: {path}", file=sys.stderr)
         return 2
@@ -92,8 +95,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     preview.add_argument(
         "--rebalance-log",
-        default=str(DEFAULT_REBALANCE_LOG),
-        help=f"Path to rebalance_log.json (default: {DEFAULT_REBALANCE_LOG})",
+        default=None,
+        help="Path to rebalance_log.json (default: assessment-model primary book)",
     )
     preview.add_argument(
         "--limit",

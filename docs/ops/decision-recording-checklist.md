@@ -14,9 +14,9 @@ ftse-decision-recording validate --plan path/to/plan.json
 # Show the locked primary-track answers + freeze field catalog
 ftse-decision-recording show-primary
 
-# Observe-only: preview what current AI-judgment rebalance rows can freeze today
-ftse-decision-recording preview-freeze \
-  --rebalance-log docs/data/paper_automation/ai_judgment/rebalance_log.json
+# Observe-only: preview what the primary book's rebalance rows can freeze today
+# (default log: assessment-model primary, docs/data/paper_automation/assessment_model.json)
+ftse-decision-recording preview-freeze
 ```
 
 Do **not** enable the Phase C freeze writer until `ftse-phase-c-readiness` exits 0

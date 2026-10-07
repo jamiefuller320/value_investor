@@ -202,7 +202,8 @@ ftse-phase-c-readiness --json-out docs/data/phase_c_readiness.json
 ```
 
 Exit code `0` only when all required checks pass (Phase B slim evidenced,
-≥8 weeks AI-judgment `rebalance_log` with buy-tier/candidates, non-trivial
+≥8 weeks of the assessment-model primary's `rebalance_log` (today
+`ai_judgment_fair`; frozen books stop logging) with buy-tier/candidates, non-trivial
 feature coverage). Use `--force-phase-b-done` only as an operator override for
 dry-runs — it does not invent rebalance history or feature coverage. Do **not**
 start the freeze writer until exit `0` (human gate).
@@ -211,7 +212,8 @@ start the freeze writer until exit `0` (human gate).
 
 - L367 Phase B structured-verdict slim in flight or done (N119 / N120 path;
   design locked in [`structured-verdict-slim.md`](structured-verdict-slim.md)).
-- ≥ **8 weeks** stable `screen_buy_tier` / `candidates` on AI-judgment `rebalance_log`.
+- ≥ **8 weeks** stable `screen_buy_tier` / `candidates` on the primary book's `rebalance_log`
+  (assessment model; `ai_judgment_fair` since the 2026-10-06 switch).
 - L365 feeder progress far enough that `feature_flags` are not almost always false
   on FTSE holdings / buy-tier (otherwise attribution collapses to trivial data_gaps).
 

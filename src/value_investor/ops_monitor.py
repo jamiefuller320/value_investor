@@ -1678,7 +1678,6 @@ def check_decision_input_inventory(
     """
     from value_investor.decision_input_inventory import (
         DEFAULT_MEMO_DIR,
-        DEFAULT_PAPER_FUND_PATH,
         DEFAULT_RESEARCH_ROOT,
         DEFAULT_STORE_PATH,
         ops_finding_from_decision_input_inventory,
@@ -1693,9 +1692,7 @@ def check_decision_input_inventory(
             if research_root is not None
             else DEFAULT_RESEARCH_ROOT,
             memo_dir=Path(memo_dir) if memo_dir is not None else DEFAULT_MEMO_DIR,
-            paper_fund_path=Path(paper_fund_path)
-            if paper_fund_path is not None
-            else DEFAULT_PAPER_FUND_PATH,
+            paper_fund_path=Path(paper_fund_path) if paper_fund_path is not None else None,
             store_path=path,
             persist=persist,
         )
@@ -1740,8 +1737,6 @@ def check_p1_first_run_pin(
     fills.
     """
     from value_investor.p1_first_run_pin import (
-        DEFAULT_PAPER_FUND_PATH,
-        DEFAULT_PAPER_TRACK_DIR,
         DEFAULT_STORE_PATH,
         ops_findings_from_p1_first_run_pin,
         run_p1_first_run_pin,
@@ -1751,12 +1746,8 @@ def check_p1_first_run_pin(
     try:
         payload = run_p1_first_run_pin(
             latest_path=Path(latest_path),
-            paper_fund_path=Path(paper_fund_path)
-            if paper_fund_path is not None
-            else DEFAULT_PAPER_FUND_PATH,
-            paper_track_dir=Path(paper_track_dir)
-            if paper_track_dir is not None
-            else DEFAULT_PAPER_TRACK_DIR,
+            paper_fund_path=Path(paper_fund_path) if paper_fund_path is not None else None,
+            paper_track_dir=Path(paper_track_dir) if paper_track_dir is not None else None,
             store_path=path,
             persist=persist,
             now=now,

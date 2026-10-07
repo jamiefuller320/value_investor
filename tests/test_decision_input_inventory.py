@@ -412,3 +412,25 @@ def test_memo_recent_uses_updated_at_after_rememo(tmp_path: Path):
     assert row["memo_recent"] is True
     assert row["memo_at"] == rememo_recent
     assert row["memo_age_days"] == 2.0
+
+
+def test_default_holdings_follow_assessment_model_primary(tmp_path: Path):
+    from value_investor.decision_input_inventory import (
+        load_paper_holdings,
+        primary_paper_fund_path,
+        primary_paper_track_dir,
+    )
+
+    root = tmp_path / "paper_automation"
+    for track, ticker in (("ai_judgment", "OLD.L"), ("ai_judgment_fair", "NEW.L")):
+        (root / track).mkdir(parents=True)
+        (root / track / "automated_fund.json").write_text(
+            json.dumps({"holdings": {ticker: {}}}), encoding="utf-8"
+        )
+    assert primary_paper_track_dir(root) == root / "ai_judgment"
+    (root / "assessment_model.json").write_text(
+        json.dumps({"primary_track": "ai_judgment_fair", "control_track": "buy_tier_level"}),
+        encoding="utf-8",
+    )
+    assert primary_paper_track_dir(root) == root / "ai_judgment_fair"
+    assert load_paper_holdings(primary_paper_fund_path(root)) == {"NEW.L"}

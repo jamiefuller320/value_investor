@@ -33,7 +33,6 @@ STRUCTURED_VERDICT_MODES = frozenset(
     }
 )
 
-DEFAULT_AI_JUDGMENT_DIR = Path("docs/data/paper_automation/ai_judgment")
 DEFAULT_RESEARCH_ROOT = Path("docs/data/research")
 DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 MIN_REBALANCE_SPAN_DAYS = 56  # 8 weeks
@@ -173,7 +172,7 @@ def check_phase_b_slim(
 
 
 def check_rebalance_log_span(ai_judgment_dir: Path) -> ReadinessCheck:
-    title = "AI-judgment rebalance_log ≥8 weeks with buy-tier/candidates"
+    title = "Primary-track rebalance_log ≥8 weeks with buy-tier/candidates"
     log_path = ai_judgment_dir / "rebalance_log.json"
     payload = _load_json(log_path)
     entries = _rebalance_entries(payload)
@@ -333,13 +332,17 @@ def check_feature_flag_coverage(latest_path: Path) -> ReadinessCheck:
 
 def assess_phase_c_readiness(
     *,
-    ai_judgment_dir: Path = DEFAULT_AI_JUDGMENT_DIR,
+    ai_judgment_dir: Path | None = None,
     research_root: Path = DEFAULT_RESEARCH_ROOT,
     latest_path: Path = DEFAULT_LATEST_PATH,
     force_phase_b_done: bool = False,
     now: datetime | None = None,
 ) -> PhaseCReadinessReport:
     assessed_at = (now or datetime.now(UTC)).isoformat()
+    if ai_judgment_dir is None:
+        from value_investor.decision_input_inventory import primary_paper_track_dir
+
+        ai_judgment_dir = primary_paper_track_dir()
     checks = [
         check_phase_b_slim(research_root, force_phase_b_done=force_phase_b_done),
         check_rebalance_log_span(ai_judgment_dir),

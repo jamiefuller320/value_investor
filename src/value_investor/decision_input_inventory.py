@@ -31,7 +31,7 @@ from value_investor.storage import read_json, write_json
 DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 DEFAULT_RESEARCH_ROOT = Path("docs/data/research")
 DEFAULT_MEMO_DIR = Path("docs/research")
-DEFAULT_PAPER_FUND_PATH = Path("docs/data/paper_automation/ai_judgment/automated_fund.json")
+DEFAULT_PAPER_ROOT = Path("docs/data/paper_automation")
 DEFAULT_STORE_PATH = Path("docs/data/decision_input_inventory.json")
 
 SCHEMA_VERSION = 1
@@ -70,9 +70,22 @@ def _overlay_bound(report: dict[str, Any], *, research_verdict: str | None) -> b
     return bool(str(verdict or "").strip()) and bool(str(adjusted or "").strip())
 
 
-def load_paper_holdings(path: Path = DEFAULT_PAPER_FUND_PATH) -> set[str]:
-    """Tickers held in the AI-judgment (primary) paper fund."""
-    path = Path(path)
+def primary_paper_track_dir(paper_root: Path = DEFAULT_PAPER_ROOT) -> Path:
+    """Book directory of the assessment-model primary (frozen books stop trading)."""
+    from value_investor.assessment_model import primary_track_id
+    from value_investor.rebalance_log import resolve_track_dir
+
+    root = Path(paper_root)
+    return resolve_track_dir(root, primary_track_id(root))
+
+
+def primary_paper_fund_path(paper_root: Path = DEFAULT_PAPER_ROOT) -> Path:
+    return primary_paper_track_dir(paper_root) / "automated_fund.json"
+
+
+def load_paper_holdings(path: Path | None = None) -> set[str]:
+    """Tickers held in the primary paper fund (assessment model) unless ``path`` is given."""
+    path = Path(path) if path is not None else primary_paper_fund_path()
     if not path.exists():
         return set()
     try:
@@ -305,7 +318,7 @@ def run_decision_input_inventory(
     latest_path: Path = DEFAULT_LATEST_PATH,
     research_root: Path = DEFAULT_RESEARCH_ROOT,
     memo_dir: Path = DEFAULT_MEMO_DIR,
-    paper_fund_path: Path = DEFAULT_PAPER_FUND_PATH,
+    paper_fund_path: Path | None = None,
     store_path: Path = DEFAULT_STORE_PATH,
     memo_max_age_days: float = DEFAULT_MEMO_MAX_AGE_DAYS,
     green_enough_max_gaps: int = DEFAULT_GREEN_ENOUGH_MAX_GAPS,
@@ -315,6 +328,9 @@ def run_decision_input_inventory(
     """Build holdings ∪ buy-tier decision-input inventory; optionally persist."""
     now = now or datetime.now(UTC)
     reports = _load_latest_reports(latest_path)
+    paper_fund_path = (
+        Path(paper_fund_path) if paper_fund_path is not None else primary_paper_fund_path()
+    )
     holdings = load_paper_holdings(paper_fund_path)
 
     by_ticker: dict[str, dict[str, Any]] = {}
@@ -472,13 +488,15 @@ __all__ = [
     "BIND_FIELDS",
     "DEFAULT_GREEN_ENOUGH_MAX_GAPS",
     "DEFAULT_MEMO_MAX_AGE_DAYS",
-    "DEFAULT_PAPER_FUND_PATH",
+    "DEFAULT_PAPER_ROOT",
     "DEFAULT_STORE_PATH",
     "DEFAULT_WARN_MIN_GAPS",
     "LEARNING_QUESTION",
     "VERDICT_GREEN",
     "format_decision_input_summary",
     "load_paper_holdings",
+    "primary_paper_fund_path",
+    "primary_paper_track_dir",
     "ops_finding_from_decision_input_inventory",
     "run_decision_input_inventory",
     "snapshot_decision_input",

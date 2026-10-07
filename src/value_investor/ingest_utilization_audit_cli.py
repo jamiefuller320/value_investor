@@ -25,7 +25,6 @@ from value_investor.buy_tier_flip_lag import (
 from value_investor.decision_input_inventory import (
     DEFAULT_GREEN_ENOUGH_MAX_GAPS,
     DEFAULT_MEMO_MAX_AGE_DAYS,
-    DEFAULT_PAPER_FUND_PATH,
     format_decision_input_summary,
     run_decision_input_inventory,
 )
@@ -42,12 +41,11 @@ from value_investor.ingest_utilization_audit import (
     write_ingest_utilization_audit,
 )
 from value_investor.p1_first_run_pin import (
-    DEFAULT_PAPER_TRACK_DIR,
-    format_p1_first_run_summary,
-    run_p1_first_run_pin,
+    DEFAULT_STORE_PATH as DEFAULT_P1_FIRST_RUN_STORE,
 )
 from value_investor.p1_first_run_pin import (
-    DEFAULT_STORE_PATH as DEFAULT_P1_FIRST_RUN_STORE,
+    format_p1_first_run_summary,
+    run_p1_first_run_pin,
 )
 from value_investor.universe_filing_archive_miss_rate import (
     DEFAULT_FLIP_LAG_PATH as DEFAULT_ARCHIVE_FLIP_LAG_PATH,
@@ -180,14 +178,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--p1-paper-track",
         type=Path,
-        default=DEFAULT_PAPER_TRACK_DIR,
-        help=f"AI-judgment rebalance_log directory (default: {DEFAULT_PAPER_TRACK_DIR})",
+        default=None,
+        help="Primary-track rebalance_log directory (default: assessment-model primary)",
     )
     parser.add_argument(
         "--paper-fund",
         type=Path,
-        default=DEFAULT_PAPER_FUND_PATH,
-        help=f"AI-judgment paper fund path (default: {DEFAULT_PAPER_FUND_PATH})",
+        default=None,
+        help="Primary-track paper fund path (default: assessment-model primary)",
     )
     parser.add_argument(
         "--memo-max-age-days",
