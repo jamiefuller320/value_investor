@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-08T16:41:42.769009+00:00",
+  "compiled_at": "2026-10-08T17:23:41.654042+00:00",
   "run_at": null,
-  "task_count": 145,
+  "task_count": 146,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -8810,6 +8810,55 @@
       "status": "cancelled"
     },
     {
+      "id": "eng-20261008-04",
+      "area": "ingest",
+      "title": "Repair dead hunter allowlist URL for MC.PA",
+      "summary": "Monitor detected live-fetch failure for https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440/press-release-lvmh-2025-annual-results.pdf (MC.PA, euro_depth). Inspect whether the URL rot is fixable via a known canonical replacement, a fresh allowlist entry, or a PARKED_SOURCE_HUNTER_SKIP update. Do not invent URLs.",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "hunter_url_repair",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "MC.PA",
+        "failed_url": "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440/press-release-lvmh-2025-annual-results.pdf",
+        "monitor_reason": "live-fetch failed or body too short for https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440/press-release-lvmh-2025-annual-results.pdf",
+        "parent_task_id": "eng-20260930-02",
+        "parent_merged_at": "2026-09-30T14:39:53.542738+00:00",
+        "universe": "library",
+        "doc": "docs/ops/ops-monitor.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for MC.PA only — do not invent URLs",
+        "Repair or replace the dead URL recorded for MC.PA",
+        "Add/adjust regression coverage in tests/test_research_filings.py",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20261002-13",
       "area": "ingest",
       "title": "Repair dead hunter allowlist URL for ADYEN.AS",
@@ -8991,7 +9040,21 @@
         "parked_reason": "unfetchable_iwb",
         "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
         "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260930-02",
+        "verified_at": "2026-10-08T17:23:09.099160+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_research_ingest.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py"
+          ],
+          "output_tail": "........................................................................ [ 12%]\n........................................................................ [ 25%]\n........................................................................ [ 38%]\n....sss................................................................. [ 51%]\n........................................................................ [ 64%]\n........................................................................ [ 76%]\n........................................................................ [ 89%]\n..........................................................               [100%]\n559 passed, 3 skipped in 396.26s (0:06:36)"
+        }
       },
       "acceptance_criteria": [
         "Inspect IR / exchange sources for MC.PA only — do not invent URLs",
@@ -9027,7 +9090,7 @@
       "completed_at": "2026-09-30T08:40:50.398099+00:00",
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/912",
       "pr_number": 912,
-      "merged_at": "2026-09-30T14:39:53.542738+00:00"
+      "merged_at": "2026-10-08T17:23:09.101034+00:00"
     },
     {
       "id": "eng-20260930-01",
@@ -9538,7 +9601,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 3,
-    "evaluated_at": "2026-10-08T16:18:09.579227+00:00",
+    "evaluated_at": "2026-10-08T17:24:16.055416+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -9551,5 +9614,6 @@
   "hunter_ticker": "PDD",
   "source_gap_closure_run_id": "igc-20261008-02",
   "source_trial_id": "igc-20261008-02",
-  "source_chain_root_id": "igc-20261008-02"
+  "source_chain_root_id": "igc-20261008-02",
+  "failed_url": "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440/press-release-lvmh-2025-annual-results.pdf"
 }
