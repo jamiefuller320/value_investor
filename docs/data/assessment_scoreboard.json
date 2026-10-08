@@ -1,17 +1,44 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-07T07:47:40.250304+00:00",
+  "generated_at": "2026-10-08T02:32:43.949633+00:00",
   "observe_only": true,
   "primary_track": "ai_judgment_fair",
   "control_track": "buy_tier_level",
   "benchmark": "FTAL.L",
   "stress_cost_per_side": 0.03,
   "sources": {
-    "total_return_view_updated_at": "2026-10-07T07:47:29.277845+00:00",
-    "track_statistics_updated_at": "2026-10-07T07:47:20.336623+00:00",
-    "screen_premise_generated_at": "2026-10-07T07:47:40.234126+00:00"
+    "total_return_view_updated_at": "2026-10-08T02:32:29.968407+00:00",
+    "track_statistics_updated_at": "2026-10-08T02:32:20.547989+00:00",
+    "screen_premise_generated_at": "2026-10-08T02:32:43.525631+00:00",
+    "value_factor_base_rate_built_at": "2026-10-07T11:23:16+00:00"
   },
-  "headline": "ai_judgment_fair: total return -5.9% vs FTAL.L -3.1% since 2026-08-26 \u2014 behind the market with 90% confidence. vs buy_tier_level: -3.3% on the common window.",
+  "headline": "ai_judgment_fair: total return -7.1% vs FTAL.L -2.7% since 2026-08-26 \u2014 behind the market with 90% confidence. vs buy_tier_level: -4.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+  "value_hurdle": {
+    "kind": "published_base_rate",
+    "not_a_book": true,
+    "source": "value_factor_base_rate.json",
+    "us_data_cut": "202608",
+    "note": "Ken French UK local value-weight high-minus-market, full sample. A hurdle beside the primary book. Not a holding and not evidence that this screen earned the premium.",
+    "earnings_price": {
+      "label": "UK high earnings/price minus the market",
+      "annualised_arithmetic_pct": 2.72,
+      "t_stat": 2.55,
+      "months": 612,
+      "start": 197501,
+      "end": 202512
+    },
+    "cash_earnings_price": {
+      "label": "UK high cash earnings/price minus the market",
+      "annualised_arithmetic_pct": 3.24,
+      "t_stat": 2.73,
+      "months": 612,
+      "start": 197501,
+      "end": 202512
+    },
+    "primary_track": "ai_judgment_fair",
+    "primary_excess_total_return": -0.0444,
+    "primary_excess_is_window": "The primary figure is total-return excess over its scored window, not an annualised rate. The premia are full-sample annualised arithmetic percent."
+  },
   "tracks": [
     {
       "track_id": "ai_judgment_fair",
@@ -19,13 +46,13 @@
       "label": "AI judgment fair-cost lab (Suite B)",
       "basis": "clean_epoch",
       "start": "2026-08-26T09:27:36.177488+01:00",
-      "end": "2026-10-06T09:38:58.488349+01:00",
-      "marks": 24,
-      "total_return": -0.059,
-      "benchmark_total_return": -0.0314,
-      "excess_total_return": -0.0276,
+      "end": "2026-10-07T09:27:59.653817+01:00",
+      "marks": 25,
+      "total_return": -0.0712,
+      "benchmark_total_return": -0.0268,
+      "excess_total_return": -0.0444,
       "dividends_gbp": 0.0,
-      "excess_total_return_at_stress_cost": -0.2023,
+      "excess_total_return_at_stress_cost": -0.2191,
       "cost_sensitivity": {
         "trades": 24,
         "turnover": 6.41,
@@ -36,13 +63,13 @@
       "statistics": {
         "status": "ok",
         "vs": "^FTSE",
-        "annualized_active_return": -0.8924,
+        "annualized_active_return": -0.9847,
         "ci90": [
-          -1.7616,
-          -0.0231
+          -1.9118,
+          -0.0608
         ],
         "verdict": "negative",
-        "years_to_detect_3pct_edge": 224.94
+        "years_to_detect_3pct_edge": 225.62
       },
       "ai_gate": {
         "gate": "research_verdict == accumulate",
@@ -58,13 +85,13 @@
       "label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
       "basis": "lifetime",
       "start": "2026-09-07T09:29:59.366533+01:00",
-      "end": "2026-10-06T09:39:31.133975+01:00",
-      "marks": 21,
-      "total_return": -0.0124,
-      "benchmark_total_return": -0.0264,
-      "excess_total_return": 0.014,
-      "dividends_gbp": 2.15,
-      "excess_total_return_at_stress_cost": -0.0011,
+      "end": "2026-10-07T09:28:34.622809+01:00",
+      "marks": 22,
+      "total_return": -0.0135,
+      "benchmark_total_return": -0.0217,
+      "excess_total_return": 0.0082,
+      "dividends_gbp": 2.16,
+      "excess_total_return_at_stress_cost": -0.0069,
       "cost_sensitivity": {
         "trades": 35,
         "turnover": 0.549,
@@ -73,8 +100,15 @@
         "extra_drag_at_stress": 0.0151
       },
       "statistics": {
-        "status": "insufficient_data",
-        "periods": 19
+        "status": "ok",
+        "vs": "^FTSE",
+        "annualized_active_return": 0.083,
+        "ci90": [
+          -0.6484,
+          0.6947
+        ],
+        "verdict": "indistinguishable_from_noise",
+        "years_to_detect_3pct_edge": 137.5
       },
       "ai_gate": {
         "gate": null,
@@ -87,18 +121,24 @@
       "role": "twin",
       "label": "AI judgment graduated-allocation twin (starter sizing + harvest skims)",
       "basis": "lifetime",
-      "start": null,
-      "end": null,
-      "marks": null,
-      "total_return": null,
-      "benchmark_total_return": null,
-      "excess_total_return": null,
-      "dividends_gbp": null,
-      "excess_total_return_at_stress_cost": null,
-      "cost_sensitivity": null,
+      "start": "2026-10-06T23:50:52.235541+00:00",
+      "end": "2026-10-07T09:28:15.103601+01:00",
+      "marks": 2,
+      "total_return": -0.0031,
+      "benchmark_total_return": 0.0048,
+      "excess_total_return": -0.0079,
+      "dividends_gbp": 0.0,
+      "excess_total_return_at_stress_cost": -0.0227,
+      "cost_sensitivity": {
+        "trades": 3,
+        "turnover": 0.597,
+        "costs_paid_pct": 0.0031,
+        "costs_at_stress_pct": 0.0179,
+        "extra_drag_at_stress": 0.0148
+      },
       "statistics": {
-        "status": "missing",
-        "periods": null
+        "status": "insufficient_data",
+        "periods": 1
       },
       "ai_gate": {
         "gate": "research_verdict == accumulate",
@@ -113,18 +153,24 @@
       "role": "twin",
       "label": "AI judgment hold-buffer twin (exit after 5 screens)",
       "basis": "lifetime",
-      "start": null,
-      "end": null,
-      "marks": null,
-      "total_return": null,
-      "benchmark_total_return": null,
-      "excess_total_return": null,
-      "dividends_gbp": null,
-      "excess_total_return_at_stress_cost": null,
-      "cost_sensitivity": null,
+      "start": "2026-10-06T10:06:26.076782+00:00",
+      "end": "2026-10-07T09:28:24.794938+01:00",
+      "marks": 2,
+      "total_return": -0.0052,
+      "benchmark_total_return": 0.0048,
+      "excess_total_return": -0.01,
+      "dividends_gbp": 0.0,
+      "excess_total_return_at_stress_cost": -0.0346,
+      "cost_sensitivity": {
+        "trades": 3,
+        "turnover": 0.995,
+        "costs_paid_pct": 0.0052,
+        "costs_at_stress_pct": 0.0298,
+        "extra_drag_at_stress": 0.0246
+      },
       "statistics": {
-        "status": "missing",
-        "periods": null
+        "status": "insufficient_data",
+        "periods": 1
       },
       "ai_gate": {
         "gate": "research_verdict == accumulate",
@@ -140,23 +186,23 @@
       "label": "Buy-tier level DCA realism (\u00a3500/mo, Suite B costs, cold-start capital epoch)",
       "basis": "lifetime",
       "start": "2026-09-24T09:30:04.654856+01:00",
-      "end": "2026-10-06T09:39:46.892621+01:00",
-      "marks": 10,
-      "total_return": 0.002,
-      "benchmark_total_return": -0.0161,
-      "excess_total_return": 0.0181,
+      "end": "2026-10-07T09:28:44.258846+01:00",
+      "marks": 11,
+      "total_return": 0.0008,
+      "benchmark_total_return": -0.0114,
+      "excess_total_return": 0.0122,
       "dividends_gbp": 1.06,
-      "excess_total_return_at_stress_cost": 0.0152,
+      "excess_total_return_at_stress_cost": 0.0091,
       "cost_sensitivity": {
-        "trades": 8,
-        "turnover": 0.114,
+        "trades": 9,
+        "turnover": 0.121,
         "costs_paid_pct": 0.0005,
-        "costs_at_stress_pct": 0.0034,
-        "extra_drag_at_stress": 0.0029
+        "costs_at_stress_pct": 0.0036,
+        "extra_drag_at_stress": 0.0031
       },
       "statistics": {
         "status": "insufficient_data",
-        "periods": 8
+        "periods": 9
       },
       "ai_gate": {
         "gate": null,
@@ -169,9 +215,9 @@
     "primary": "ai_judgment_fair",
     "control": "buy_tier_level",
     "start": "2026-09-07T09:29:59.366533+01:00",
-    "primary_total_return": -0.0455,
-    "control_total_return": -0.0124,
-    "difference": -0.0331,
+    "primary_total_return": -0.0579,
+    "control_total_return": -0.0135,
+    "difference": -0.0444,
     "note": "Common window, total return. Positive means the primary's filter added value over the unfiltered buy tier. Not yet tested for significance."
   },
   "twins": [
@@ -188,8 +234,14 @@
       "learning_question": "Does graduated allocation (trade-plan starter sizing + harvest skims) beat the primary's equal-weight sizing on total return at fair costs, holding every other primary knob fixed?",
       "readiness_gate": "Promote only if the twin leads its parent on total return over >=26 weekly screens with parent knobs unchanged since start, and the twin-minus-parent 90% interval excludes zero; otherwise freeze the twin.",
       "parent_knobs_changed": [],
-      "common_days": 0,
-      "status": "no_common_marks"
+      "common_days": 1,
+      "status": "ok",
+      "window_start": "2026-10-07",
+      "window_end": "2026-10-07",
+      "twin_return": -0.0031,
+      "parent_return": -0.0129,
+      "difference": 0.0098,
+      "basis": "price NAV, flow-adjusted, common marked days"
     },
     {
       "track_id": "ai_judgment_hold5_fair",
@@ -204,8 +256,14 @@
       "learning_question": "Does holding through 5 confirming screens (vs the primary's 2) beat the primary on total return at fair costs, as the L531 replay suggested (+5.8pp over 19 passes)?",
       "readiness_gate": "Promote only if the twin leads its parent on total return over >=26 weekly screens with parent knobs unchanged since start, and the twin-minus-parent 90% interval excludes zero; otherwise freeze the twin.",
       "parent_knobs_changed": [],
-      "common_days": 0,
-      "status": "no_common_marks"
+      "common_days": 1,
+      "status": "ok",
+      "window_start": "2026-10-07",
+      "window_end": "2026-10-07",
+      "twin_return": -0.0052,
+      "parent_return": -0.0129,
+      "difference": 0.0077,
+      "basis": "price NAV, flow-adjusted, common marked days"
     }
   ],
   "frozen_tracks": [

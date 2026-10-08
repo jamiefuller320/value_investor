@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-07T11:17:36.902035+00:00",
+  "generated_at": "2026-10-08T02:34:16.316059+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,10 +8,10 @@
   "checklist_updated_at": "2026-10-06",
   "counts": {
     "new_info": 4,
-    "unacked": 5,
+    "unacked": 6,
     "acked": 23,
     "automated": 20,
-    "human": 32
+    "human": 33
   },
   "tasks": [
     {
@@ -29,11 +29,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "3 attention-parked eng tasks",
-        "updated_at": "2026-10-07T10:05:16.368442+00:00",
+        "updated_at": "2026-10-08T02:33:43.177505+00:00",
         "fingerprint": "59caf08e4199223b",
         "bullets": [
           "Parked tasks: 3 (attention ~3)",
-          "Queue-clearing pause active: False — evaluated 2026-10-07T10:05:16.368442+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-10-08T02:33:43.177505+00:00",
           "Traffic pause active: False",
           "eng-20261004-06: Workflow fix: analysis review failure",
           "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo",
@@ -72,17 +72,17 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-07T08:28:01.585906+00:00",
-        "fingerprint": "f6b139f4bdb0ff3f",
+        "updated_at": "2026-10-07T21:41:47.517721+00:00",
+        "fingerprint": "445acb0f9a3f9032",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=36",
-          "ftse_smallcap: phase=1 ai=False knob=False holdings=4",
-          "ibex35: phase=0 ai=False knob=False holdings=3",
           "aex: phase=0 ai=False knob=False holdings=8",
           "aim: phase=0 ai=False knob=False holdings=15",
           "atx: phase=0 ai=False knob=False holdings=2",
           "bel20: phase=0 ai=False knob=False holdings=3",
-          "cac40: phase=1 ai=False knob=False holdings=5"
+          "cac40: phase=1 ai=False knob=False holdings=13",
+          "dax: phase=1 ai=False knob=False holdings=2",
+          "euro_stoxx50: phase=1 ai=False knob=False holdings=11"
         ],
         "source_keys": [
           "market_status"
@@ -114,7 +114,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-10-07T08:26:57.458745+00:00",
+        "updated_at": "2026-10-07T21:39:49.611951+00:00",
         "fingerprint": "f765d60144146672",
         "bullets": [
           "Open deviations: 1",
@@ -150,15 +150,15 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-10-06T20:39:59.892039+00:00",
-        "fingerprint": "8bbf4bfaa1a26d3b",
+        "updated_at": "2026-10-07T20:48:06.696715+00:00",
+        "fingerprint": "60b8d9c867bdc2c5",
         "bullets": [
-          "Occasions logged: 172",
+          "Occasions logged: 180",
           "PR mergeable=CONFLICTING against main: 7",
           "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
           "validate check failed: 3",
           "deferred-ideas.json conflict after L516 merge: 3",
-          "Merge conflicts in deferred-ideas.json with main: 2"
+          "merge_conflict:dirty: 3"
         ],
         "source_keys": [
           "pr_fix_occasions",
@@ -191,15 +191,15 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary negative",
-        "updated_at": "2026-10-07T07:47:40.250304+00:00",
-        "fingerprint": "ed39a3f5851a286d",
+        "updated_at": "2026-10-08T02:32:43.949633+00:00",
+        "fingerprint": "782b2addb6782b0b",
         "bullets": [
-          "ai_judgment_fair: total return -5.9% vs FTAL.L -3.1% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -3.3% on the common window.",
-          "Primary verdict: negative · 90% interval [-1.7616, -0.0231] · excess at 3% stress -0.2023",
-          "vs control buy_tier_level: difference -0.0331 (common window, not significance)",
+          "ai_judgment_fair: total return -7.1% vs FTAL.L -2.7% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -4.4% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: negative · 90% interval [-1.9118, -0.0608] · excess at 3% stress -0.2191",
+          "vs control buy_tier_level: difference -0.0444 (common window, not significance)",
           "AI gate binds: False (N189 while it never binds)",
-          "twin ai_judgment_graduated_fair: difference None over 0 days",
-          "twin ai_judgment_hold5_fair: difference None over 0 days",
+          "twin ai_judgment_graduated_fair: difference 0.0098 over 1 days",
+          "twin ai_judgment_hold5_fair: difference 0.0077 over 1 days",
           "Policy changes: significance_gate_v1 (2026-10-06)"
         ],
         "source_keys": [
@@ -234,6 +234,37 @@
         "headline": "See runbook for analysis inputs",
         "updated_at": null,
         "fingerprint": "605f59d80f400708",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-historical-replay-data",
+      "title": "Buy one month of point-in-time US data and run the registered screen replay",
+      "summary": "Phase 2 of the historical screen replay (L536/L542). Personal-use Sharadar Core US Equities Bundle, full history, monthly plan. Bulk-download to a directory outside the repo, build the inputs (ftse-historical-replay build-panel) and check build_report.json, run the development window, run the rule search (ftse-rule-search search) and commit its selection, reveal the holdout once (run --reveal-holdout), run the delisting sensitivity variant, then ftse-rule-search reveal. Commit only docs/data/historical_screen_replay.json and docs/data/historical_rule_search.json. Cancel and delete all raw tables and panels within 30 days. Never change the registration after the reveal.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/historical-screen-replay.md",
+      "doc_anchor": "phase-2--licensed-data-human-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/historical-screen-replay.md#phase-2--licensed-data-human-gate",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "61359ff81f6d57b1",
         "bullets": [],
         "source_keys": []
       },
@@ -356,13 +387,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-10-07T08:28:57.532618+00:00",
-        "fingerprint": "96ba278f151caba7",
+        "updated_at": "2026-10-07T11:18:12.097145+00:00",
+        "fingerprint": "1d374ee9ad0e2d3b",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
-          "ack_sufficient=True reason=failed_shadows_close_promote_no_blocking_recommend blocking=0 acked_recommend=2 capacity=2 fail_shadows=4 raw_recommend=4",
-          "Failed shadows (close knob path, not promote): ai_judgment_calibrated, ai_judgment_calibrated_r2, ai_judgment_calibrated_r3, ai_judgment_exclusion_u4",
-          "acked: graduated_allocation at=2026-09-22",
+          "ack_sufficient=True reason=acked_and_capacity_only blocking=0 acked_recommend=1 capacity=2 fail_shadows=0 raw_recommend=3",
           "acked: entry_dca_overlay at=2026-09-13",
           "capacity/eng|manual: ana-20260921-02 area=scoring",
           "capacity/eng|manual: ana-20260921-04 area=paper_churn",
@@ -376,51 +405,10 @@
         "auto_ackable": true,
         "experiment_assessment_gate": {
           "ack_sufficient": true,
-          "reason": "failed_shadows_close_promote_no_blocking_recommend",
-          "failed_shadows": [
-            {
-              "experiment_id": "ai_judgment_calibrated",
-              "kind": "calibration_shadow",
-              "status": "fail",
-              "area": "paper_knobs",
-              "human_acked": false,
-              "acked_at": null
-            },
-            {
-              "experiment_id": "ai_judgment_calibrated_r2",
-              "kind": "calibration_shadow",
-              "status": "fail",
-              "area": "paper_knobs",
-              "human_acked": false,
-              "acked_at": null
-            },
-            {
-              "experiment_id": "ai_judgment_calibrated_r3",
-              "kind": "calibration_shadow",
-              "status": "fail",
-              "area": "paper_knobs",
-              "human_acked": false,
-              "acked_at": null
-            },
-            {
-              "experiment_id": "ai_judgment_exclusion_u4",
-              "kind": "exclusion_shadow",
-              "status": "fail",
-              "area": "paper_knobs",
-              "human_acked": false,
-              "acked_at": null
-            }
-          ],
-          "recommend_raw_count": 4,
+          "reason": "acked_and_capacity_only",
+          "failed_shadows": [],
+          "recommend_raw_count": 3,
           "recommend_acked": [
-            {
-              "experiment_id": "graduated_allocation",
-              "kind": "experimental_paper_track",
-              "status": "recommend",
-              "area": "paper_knobs",
-              "human_acked": true,
-              "acked_at": "2026-09-22T08:14:45.342024+00:00"
-            },
             {
               "experiment_id": "entry_dca_overlay",
               "kind": "lifecycle_overlay",
@@ -450,17 +438,17 @@
             }
           ],
           "human_ack_pending": 2,
-          "summary_recommend": 4,
-          "summary_fail": 5,
-          "total_experiments": 17
+          "summary_recommend": 3,
+          "summary_fail": 0,
+          "total_experiments": 10
         }
       },
       "ack": {
         "acked": true,
         "stale": false,
-        "acked_at": "2026-10-05T02:33:07.393157+00:00",
+        "acked_at": "2026-10-08T02:34:16.296683+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "96ba278f151caba7"
+        "finding_fingerprint": "1d374ee9ad0e2d3b"
       },
       "sort_bucket": "acked",
       "auto_ackable": true,
@@ -785,7 +773,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-10-07T08:28:57.531039+00:00",
+        "updated_at": "2026-10-07T11:18:12.095745+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
@@ -1223,7 +1211,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Sunday analysis review synthesis",
-        "updated_at": "2026-10-04T08:27:13.669831+00:00",
+        "updated_at": "2026-10-07T11:23:35.635933+00:00",
         "fingerprint": "489f92d878371fa0",
         "bullets": [],
         "source_keys": [
@@ -1864,6 +1852,5 @@
       "auto_ackable": false,
       "ack_sufficient": false
     }
-  ],
-  "path": "docs/data/human_tasks_board.json"
+  ]
 }
