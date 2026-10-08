@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-07T16:34:49.114744+00:00
+Track: `buy_tier_level` · updated 2026-10-08T08:50:27.715680+00:00
 
 ## Portfolio loser feedback
 
@@ -10,14 +10,14 @@ Track: `buy_tier_level` · updated 2026-10-07T16:34:49.114744+00:00
 
 ## Holding reviews
 
-### RAND.AS — intact / hold_tolerate (-3.3%)
+### RAND.AS — intact / hold_tolerate (-2.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
 
-### PHIA.AS — intact / hold_tolerate (-1.6%)
+### PHIA.AS — intact / hold_tolerate (-1.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
@@ -38,26 +38,19 @@ Track: `buy_tier_level` · updated 2026-10-07T16:34:49.114744+00:00
 - data_quality 1.00
 - conviction 89%
 
-### KPN.AS — intact / hold_tolerate (+0.4%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 62%
-
-### AKZA.AS — intact / hold_tolerate (+1.6%)
+### AKZA.AS — intact / hold_tolerate (+0.9%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 81%
 
-### SHELL.AS — intact / hold_tolerate (+2.8%)
-- still strong_buy
+### KPN.AS — intact / hold_tolerate (+1.1%)
+- still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 82%
+- conviction 62%
 
 ### WKL.AS — intact / hold_tolerate (+3.3%)
 - still strong_buy
@@ -65,3 +58,10 @@ Track: `buy_tier_level` · updated 2026-10-07T16:34:49.114744+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 78%
+
+### SHELL.AS — intact / hold_tolerate (+3.9%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 81%

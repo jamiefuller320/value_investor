@@ -60,5 +60,76 @@
       "reason": "no usable statistics for ai_judgment_graduated_fair (None)"
     },
     "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
+  },
+  {
+    "reviewed_at": "2026-10-08T09:12:51.485760+00:00",
+    "enough_history": false,
+    "applied": false,
+    "knobs_before": {
+      "max_positions": 3,
+      "skip_timing_wait": true,
+      "min_conviction": 0.6,
+      "sector_cap": 0.2
+    },
+    "knobs_after": {
+      "max_positions": 3,
+      "skip_timing_wait": true,
+      "min_conviction": 0.6,
+      "sector_cap": 0.2
+    },
+    "proposed_changes": {},
+    "reasons": [
+      "Need \u22652 epoch marks, \u22651 epoch trades and \u226528 days since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, epoch age days=None, cooldown days remaining=0.0, lifetime marks=3, lifetime trades=4.",
+      "No knob change warranted from current reviewed outcomes.",
+      "Total-return epoch vs FTAL.L needs two marks since 2026-10-08T09:12:51.485760+00:00; price excess is recorded and not used for proposals."
+    ],
+    "metrics": {
+      "portfolio_value": 995.83,
+      "contributed_capital": 1000.0,
+      "total_return": -0.0042,
+      "total_costs": 3.13,
+      "cost_drag": 0.0031,
+      "trade_count": 4,
+      "buy_count": 3,
+      "sell_count": 1,
+      "positions": 3,
+      "cash_fraction": 0.4299,
+      "equity_marks": 3,
+      "max_sector_weight": 0.3504,
+      "dominant_sector": "Consumer Cyclical",
+      "benchmark_return": -0.0079,
+      "excess_after_costs": 0.0037,
+      "note": "",
+      "proposal": {
+        "basis": "total_return_vs_ftal",
+        "benchmark": "FTAL.L",
+        "started_at": "2026-10-08T09:12:51.485760+00:00",
+        "excess": null,
+        "price_excess_after_costs": 0.0037,
+        "used_for_proposals": false,
+        "marks": null
+      }
+    },
+    "note": "Proposal only \u2014 history too thin to apply.",
+    "saturated_knobs": [],
+    "track_id": "ai_judgment_graduated_fair",
+    "track_label": "AI judgment graduated-allocation twin (starter sizing + harvest skims)",
+    "is_primary_learning_track": false,
+    "apply_policy": "significance_gate_v1",
+    "significance_gate": {
+      "policy": "significance_gate_v1",
+      "return_basis": "total_return_vs_ftal",
+      "benchmark": "FTAL.L",
+      "started_at": "2026-10-08T09:12:51.485760+00:00",
+      "passed": false,
+      "closed_by": "evidence",
+      "price_statistics_used": false,
+      "periods": 0,
+      "fund_periods": 0,
+      "dividends_gbp": 0.0,
+      "dividends_skipped": 0,
+      "reason": "total-return proposal window vs FTAL.L is too thin (0 daily periods, need 20); price statistics are not used"
+    },
+    "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success. Knob proposals wait for two total-return marks vs FTAL.L; price excess is recorded and not used."
   }
 ]

@@ -1,22 +1,38 @@
 {
   "schema_version": 1,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-07T12:34:27.775530-04:00",
+  "generated_at": "2026-10-08T04:50:06.247269-04:00",
   "observe_only": true,
   "influences_live": false,
   "judge_backend": "evidence_heuristic",
   "judge_spec_id": "heuristic.v1",
   "parent_spec_id": null,
   "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-  "card_count": 0,
+  "card_count": 10,
   "verdict_counts": {
-    "agree": 0,
-    "veto": 0,
-    "abstain": 0
+    "agree": 5,
+    "veto": 4,
+    "abstain": 1
   },
-  "by_algo_action": {},
-  "veto_sell_count": 0,
-  "veto_sell_tickers": [],
+  "by_algo_action": {
+    "sell": {
+      "agree": 1,
+      "veto": 4,
+      "abstain": 0
+    },
+    "buy": {
+      "agree": 4,
+      "veto": 0,
+      "abstain": 1
+    }
+  },
+  "veto_sell_count": 4,
+  "veto_sell_tickers": [
+    "LOW",
+    "ACGL",
+    "MCK",
+    "COP"
+  ],
   "promotion_gate": {
     "ready_for_hard_veto": false,
     "requires": [

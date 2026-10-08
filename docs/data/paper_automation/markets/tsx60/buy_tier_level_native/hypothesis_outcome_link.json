@@ -3,21 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-07T16:34:39.503979+00:00",
+  "generated_at": "2026-10-08T08:50:18.011284+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 11,
+    "open_with_thesis": 10,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0209,
+        "mean_trough_unrealized_pct": -0.0162,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "broken": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (weakening=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -106,7 +114,7 @@
         }
       ],
       "peak_unrealized_pct": 0.045,
-      "trough_unrealized_pct": -0.0104,
+      "trough_unrealized_pct": -0.0133,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -118,7 +126,7 @@
       "ticker": "PPL.TO",
       "name": "Pembina Pipeline Corporation",
       "started_at": "2026-09-27T03:04:14.754943-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -157,12 +165,12 @@
           "trough_unrealized_pct": -0.0162
         }
       ],
-      "peak_unrealized_pct": 0.019,
+      "peak_unrealized_pct": 0.0209,
       "trough_unrealized_pct": -0.0162,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-08T04:50:17.997790-04:00",
+      "linked_sell_trade_id": "0646bae2-df73-4cc6-8471-5582c48cc902"
     },
     {
       "episode_id": "buy_tier_level_native:OTEX.TO:2026-09-29T03:24:17.529968-04:00",
@@ -262,7 +270,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0224,
-      "trough_unrealized_pct": -0.0584,
+      "trough_unrealized_pct": -0.0664,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -568,7 +576,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0392,
-      "trough_unrealized_pct": -0.0415,
+      "trough_unrealized_pct": -0.0437,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -611,12 +619,103 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0214,
-      "trough_unrealized_pct": -0.0214,
+      "trough_unrealized_pct": -0.027,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
     }
   ],
-  "swap_rotations": []
+  "swap_rotations": [
+    {
+      "rotation_id": "buy_tier_level_native:2026-10-08T04:50:17.997790-04:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-10-08T04:50:17.997790-04:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "PPL.TO",
+          "price": 65.58,
+          "shares": 1.197133,
+          "gross": 78.51,
+          "cost": 0.02,
+          "avg_cost_at_exit": 64.24,
+          "realized_pct": 0.0209,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0209
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "WSP.TO",
+          "price": 162.45,
+          "shares": 0.119723,
+          "gross": 19.45,
+          "cost": 0.0
+        },
+        {
+          "ticker": "ABX.TO",
+          "price": 55.84,
+          "shares": 0.307244,
+          "gross": 17.16,
+          "cost": 0.0
+        },
+        {
+          "ticker": "K.TO",
+          "price": 33.04,
+          "shares": 0.463282,
+          "gross": 15.31,
+          "cost": 0.0
+        },
+        {
+          "ticker": "CNQ.TO",
+          "price": 67.8,
+          "shares": 0.178109,
+          "gross": 12.08,
+          "cost": 0.0
+        },
+        {
+          "ticker": "CNR.TO",
+          "price": 164.99,
+          "shares": 0.08564,
+          "gross": 14.13,
+          "cost": 0.0
+        },
+        {
+          "ticker": "MRU.TO",
+          "price": 89.51,
+          "shares": 0.00392,
+          "gross": 0.35,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "PPL.TO": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "WSP.TO": 0.0,
+        "ABX.TO": 0.0,
+        "K.TO": 0.0,
+        "CNQ.TO": 0.0,
+        "CNR.TO": 0.0,
+        "MRU.TO": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    }
+  ]
 }

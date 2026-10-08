@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-10-07T16:34:38.030914+00:00",
-  "as_of": "2026-10-07T17:34:38.016694+01:00",
+  "updated_at": "2026-10-08T08:50:16.492872+00:00",
+  "as_of": "2026-10-08T09:50:16.478089+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,16 +16,16 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 5,
+  "holding_count": 6,
   "underwater_count": 0,
   "thesis_status_counts": {
-    "intact": 2,
-    "weakening": 3,
-    "broken": 0,
+    "intact": 4,
+    "weakening": 1,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 5,
+    "holding_count": 6,
     "loser_count": 0,
     "loser_share": 0.0,
     "loser_nav_share": 0.0,
@@ -43,11 +43,11 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
-      "quality": 0.2,
-      "dividend": 0.0,
-      "garp": 0.2,
-      "risk": 0.0
+      "cheapness": 0.1667,
+      "quality": 0.3333,
+      "dividend": 0.1667,
+      "garp": 0.3333,
+      "risk": 0.1667
     },
     "selection_feedback_flags": [],
     "balancing_hint": "maintain",
@@ -56,57 +56,50 @@
   "holdings": [
     {
       "ticker": "APTD.L",
-      "name": "Aptitude Software Group plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
+      "name": "APTD.L",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0347,
-      "mark": 250.0,
+      "unrealized_pct": 0.0,
+      "mark": 259.0,
       "avg_cost": 259.0,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6813,
-      "data_quality_score": 1.0,
-      "passed_families": [
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
         "cheapness",
         "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [],
-      "research_verdict": "neutral",
+      "research_verdict": null,
       "reasons": [
-        "research verdict neutral",
-        "still buy",
-        "cheapness family still passes"
+        "cheapness lost and not in buy tier"
       ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 68%"
-      ],
-      "weaken_reasons": [
-        "research verdict neutral"
-      ],
-      "broken_reasons": []
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
     },
     {
-      "ticker": "SBRE.L",
-      "name": "Sabre Insurance Group plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
+      "ticker": "REC.L",
+      "name": "Record plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.008,
-      "mark": 175.4,
-      "avg_cost": 174.0,
-      "signal": "hold",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.34,
-      "data_quality_score": 0.85,
+      "unrealized_pct": 0.0,
+      "mark": 43.6,
+      "avg_cost": 43.6,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4036,
+      "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
@@ -117,60 +110,20 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
-        "left buy tier (hold)",
-        "conviction 34% below intact floor",
-        "research accumulate",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.85"
-      ],
-      "weaken_reasons": [
-        "left buy tier (hold)",
-        "conviction 34% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "ENQ.L",
-      "name": "EnQuest PLC",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0149,
-      "mark": 27.2,
-      "avg_cost": 26.8,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.3995,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
         "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
+        "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
         "conviction 40%"
       ],
-      "weaken_reasons": [
-        "research verdict caution"
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 40%"
       ],
+      "weaken_reasons": [],
       "broken_reasons": []
     },
     {
@@ -180,8 +133,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0193,
-      "mark": 121.0,
+      "unrealized_pct": 0.0151,
+      "mark": 120.5,
       "avg_cost": 118.7109,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -214,17 +167,97 @@
       "broken_reasons": []
     },
     {
+      "ticker": "ENQ.L",
+      "name": "EnQuest PLC",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0224,
+      "mark": 27.4,
+      "avg_cost": 26.8,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3995,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 40%"
+      ],
+      "weaken_reasons": [
+        "research verdict caution"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "SBRE.L",
+      "name": "Sabre Insurance Group plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.023,
+      "mark": 178.0,
+      "avg_cost": 174.0,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3558,
+      "data_quality_score": 0.85,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.85",
+        "conviction 36%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.85",
+        "conviction 36%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "CARD.L",
       "name": "Card Factory plc",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.2219,
-      "mark": 85.8,
+      "unrealized_pct": 0.2131,
+      "mark": 85.182,
       "avg_cost": 70.2187,
       "signal": "strong_buy",
-      "timing_signal": "wait",
+      "timing_signal": "neutral",
       "conviction_score": 0.7003,
       "data_quality_score": 1.0,
       "passed_families": [
