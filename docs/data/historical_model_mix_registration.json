@@ -1,0 +1,179 @@
+{
+  "registration_id": "hms-v1",
+  "status": "registered_holdout_sealed",
+  "learning_question": "Which of the screen's 22 models, and five published signals they do not cover, rank next month's total returns reliably in both US universes (the hsr-v1 S&P 500 build and the hsr-mid-v1 mid-cap build) over 2000-2012? Does an equal-weight mix of only those beat the frozen screen's own model mix (its composite score) at the same breadth over 2013-2025, after costs?",
+  "closes": [],
+  "related": [
+    "hsr-v1",
+    "hsr-mid-v1",
+    "hrs-v1",
+    "N33",
+    "N197",
+    "L571"
+  ],
+  "n33_basis": "N33 forbids tuning the frozen screen on history unless there is an explicit decision to run a controlled research experiment. The user asked for one on 2026-10-08 (test a much larger range of screening models and tailor the mix to the most reliable). This registration is that experiment: research only, fixed before data, never writes assign_signal, model weights, or any live knob.",
+  "market_id": "sp500",
+  "universes": {
+    "sp500": {
+      "replay_registration": "docs/data/historical_screen_replay_registration.json",
+      "build": "ftse-historical-replay build-panel (default universe)",
+      "cost_base_per_side": 0.00175
+    },
+    "midcap": {
+      "replay_registration": "docs/data/historical_screen_replay_midcap_registration.json",
+      "build": "ftse-historical-replay build-panel --universe midcap",
+      "cost_base_per_side": 0.00225
+    }
+  },
+  "inputs": "Per universe: panel.csv.gz, daily.csv.gz, terminal_baseline.csv, the baseline signal cache (frozen composite score, plain value sort, screened names) and the dividend_units_fixed signal cache (model scores). All outside the repository.",
+  "windows": {
+    "development": {
+      "first_entry": "2000-01-31",
+      "last_entry": "2012-12-31"
+    },
+    "holdout": {
+      "first_entry": "2013-01-31",
+      "last_entry": "2025-09-30",
+      "reveal_rule": "Revealed once, after the selection is committed and nothing in this file has changed. Later reveals are exploratory."
+    }
+  },
+  "candidates": {
+    "models": {
+      "ids": [
+        "graham_defensive",
+        "graham_enterprising",
+        "graham_net_net",
+        "schloss",
+        "deep_value",
+        "earnings_yield",
+        "fcf_yield",
+        "low_pe_high_yield",
+        "lynch_peg",
+        "neff_pegy",
+        "quality_value",
+        "buffett_quality",
+        "economic_moat",
+        "high_dividend",
+        "dividend_growth",
+        "magic_formula",
+        "acquirers_multiple",
+        "dreman_contrarian",
+        "piotroski_f",
+        "composite_value",
+        "earnings_quality",
+        "financial_health"
+      ],
+      "score": "Each model's own score (0-1, higher is better) from the dividend_units_fixed signal cache: the models as the next screen epoch will score them once L571 is fixed. Scored with the frozen screen code; no model is edited."
+    },
+    "published": [
+      {
+        "id": "gross_profitability",
+        "kind": "panel",
+        "direction": 1,
+        "definition": "gross_margin x total_revenue / total_assets (latest trailing-twelve-month filing)",
+        "reference": "Novy-Marx (2013), The other side of value"
+      },
+      {
+        "id": "accruals",
+        "kind": "panel",
+        "direction": -1,
+        "definition": "(net_income - operating_cashflow) / total_assets; lower is better",
+        "reference": "Sloan (1996)"
+      },
+      {
+        "id": "net_share_issuance",
+        "kind": "panel",
+        "direction": -1,
+        "definition": "shares_outstanding / shares_outstanding_prev - 1 (filing a year earlier); lower is better",
+        "reference": "Pontiff and Woodgate (2008); Daniel and Titman (2006)"
+      },
+      {
+        "id": "asset_growth",
+        "kind": "panel",
+        "direction": -1,
+        "definition": "total_assets / total_assets_prev - 1 (filing a year earlier); lower is better",
+        "reference": "Cooper, Gulen and Schill (2008)"
+      },
+      {
+        "id": "momentum_12_1",
+        "kind": "price",
+        "direction": 1,
+        "definition": "adjusted close one month before the rebalance / adjusted close twelve months before - 1; each bar within 7 days of its date",
+        "reference": "Jegadeesh and Titman (1993); value with momentum: Asness, Moskowitz and Pedersen (2013)"
+      }
+    ],
+    "size": "22 models + 5 published signals = 27 candidates; no others are added after data"
+  },
+  "eligibility": {
+    "statistic": "Monthly rank IC: Spearman correlation, across the names screened that month with a fresh price, between the candidate's score and the total return to the next month-end (delisting exits at the last close, baseline haircut).",
+    "min_names_per_month": 50,
+    "min_months": 60,
+    "min_median_coverage": 0.5,
+    "rule": "Kept only if, in every universe on the development window: the median share of names scored is at least min_median_coverage; at least min_months months have an IC; the lower bound of the mean IC (Newey-West, long_run_lag_months, z_search) is above zero; and the mean IC is above zero in each half of the window (first and second half of the months with an IC)."
+  },
+  "redundancy": {
+    "max_mean_rank_correlation": 0.8,
+    "rule": "Order eligible candidates by mean IC averaged over universes (ties by id). Keep each in turn unless its mean monthly cross-sectional rank correlation with an already-kept candidate, averaged over universes, exceeds max_mean_rank_correlation."
+  },
+  "mix": {
+    "combine": "Equal-weight mean of the kept candidates' cross-sectional percentile ranks. No fitted weights.",
+    "min_share_of_kept_scored": 0.5,
+    "top_share": 0.3,
+    "book": "Top top_share of names by mix score, equal weight, rebalanced monthly, charged the universe's cost per side on its turnover. A month with no names holds the equal-weight universe and is counted."
+  },
+  "references": {
+    "frozen_composite": "The frozen screen's composite_score (baseline cache: the screen as it runs today), top 30%, built like the mix. The decision comparator: the same breadth isolates the mix from the tiering that hsr-v1 tests.",
+    "plain_value": "The hsr-v1 plain value book (top 30% by positive earnings yield, equal weight, monthly, same costs), as in hrs-v1.",
+    "all_candidates": "Equal-weight mix of every candidate that meets the coverage bar in every universe, without the IC filter. Context: does the selection beat averaging everything?",
+    "market": "Cap- and equal-weighted screened universe. Context only."
+  },
+  "costs": {
+    "base_per_side": "per universe (universes.*.cost_base_per_side): the hsr-v1 and hsr-mid-v1 base costs",
+    "stress_per_side": 0.03,
+    "model": "Each book pays cost x one-way turnover at each monthly rebalance, as the plain value book."
+  },
+  "objective": {
+    "horizon_months": 36,
+    "report_horizons_months": [
+      12,
+      36,
+      60
+    ],
+    "long_run_lag_months": 12,
+    "z_search": 1.645,
+    "z_holdout": 1.96,
+    "definition": "As hrs-v1: P(cumulative monthly log excess over the plain value book over H months > 0), with its lower bound."
+  },
+  "pass_bars": {
+    "holdout_p_lower_min": 0.5,
+    "mix_vs_frozen_composite": "adds when the holdout 95% interval of the paired monthly difference (mix minus frozen composite, same months) is wholly above zero at base cost; costs when wholly below; otherwise inconclusive. Per universe.",
+    "verdict_vs_plain_value": "pass when the holdout 36-month p_lower against the plain value book >= 0.5 at base cost; fail when p < 0.5; otherwise inconclusive."
+  },
+  "overfitting": {
+    "cscv_blocks": 16,
+    "report": "Per universe on the development window: PBO (CSCV) across the single-candidate top-30% books' excess over the plain value book, and the deflated Sharpe ratio of the mix against those trials."
+  },
+  "reveal_order": "Commit docs/data/historical_model_mix.json with the selection before any replay holdout is revealed: the replay's committed holdout series carry per-model holdout results. ftse-historical-replay run --reveal-holdout refuses until the selection is committed, and ftse-model-mix search refuses once either replay holdout is revealed. Reveal hms-v1 once, for both universes at base and stress cost.",
+  "decisions": {
+    "mix_adds_in_both": "mix_minus_frozen_composite is 'adds' in both universes at base cost and the mix does not fail against the plain value book in either: propose the kept candidates as the composite of a cold-start FTSE 350 library-screen paper twin with a frozen epoch (screen-code change, new replay registration). No live book changes on backtest evidence alone.",
+    "partial": "Adds in one universe only, or adds but fails against the plain value book: no change. Record which size, and read FTSE 250 evidence separately before stage 4.",
+    "no_gain_over_frozen_mix": "The tailored mix does not beat the frozen mix out of sample: keep the frozen mix. The development ranking was noise.",
+    "no_reliable_candidates": "No candidate passes the development bar in both universes: keep the frozen mix; nothing is revealed but the references.",
+    "per_candidate_holdout": "Holdout ICs per candidate are reported after the reveal, never used to re-select. A model that is reliably negative in both holdouts is a candidate for removal in the next simplification review, through the same twin path."
+  },
+  "fixed_rules": [
+    "Research only: no result here writes assign_signal, model weights, conviction, or any live knob (N33, N197).",
+    "No candidate, threshold, window, or rule changes after the search runs; changes open a new registration_id.",
+    "Selection uses the development window only and requires every universe; there are no fitted weights.",
+    "Only aggregates are committed: per-candidate IC summaries and monthly IC means, book-level monthly returns, and correlations between candidates. No per-name rows."
+  ],
+  "simplifications": [
+    "Candidates are scored on the screened panel (names with fundamentals and a price), the same names as the plain value book.",
+    "Sector is today's classification (as in hsr-v1); models that rank within sector carry that small look-ahead.",
+    "The panel signals use the latest trailing-twelve-month filing and the filing a year earlier, filed at least 2 days before the rebalance."
+  ],
+  "amendments": [],
+  "screen_code_fingerprint": "5442bfcc1933ec862db97332417fe2498e5806cef2604ab9c4b2a5b88f14063d",
+  "mix_code_fingerprint": "9ec1c3a845f7651a53e73a64af42e5095bca9d6add413d3a0144c22ecac0a10a",
+  "registered_at": "2026-10-08T10:09:52.354560+00:00"
+}

@@ -105,12 +105,16 @@ month. Beyond the verdicts, each run commits:
   plain-sort and avoid spreads, rank IC, both turnovers, and per-model
   `[pass_spread, rank_ic]`. Cohort-level means only, never a per-name value.
   Enough for the factor regression (L580), the value ETF comparison (L581),
-  regime re-cuts, and a model-mix study without the licensed data.
+  and regime re-cuts without the licensed data.
 - `per_model` per window and horizon: each model's passers' spread over the
   universe, its score rank IC, and its pass share. Report-only: it never tunes
   the screen (N33). The cache keeps every model's pass flag and score.
 - The rule search keeps book-level monthly returns for the frozen and chosen
   rules ([historical-rule-search.md](historical-rule-search.md)).
+- The model-mix search (hms-v1) tests which models to combine, as its own
+  pre-registered experiment, and keeps per-candidate monthly ICs and book
+  returns ([historical-model-mix.md](historical-model-mix.md)). The replay
+  itself still never tunes the screen.
 
 ### Exploratory: dividend units (L571)
 
@@ -132,7 +136,8 @@ caps:
   by the split-adjusted close). Active and delisted. The `exchange` field is
   not used because it is today's listing.
 - Base cost 0.225% per side (FX plus a wider mid-cap half-spread); stress 3%.
-- Its holdout also waits for the committed rule-search selection.
+- Its holdout also waits for the committed rule-search and model-mix
+  selections.
 - Decisions: both sizes beat the plain sort → the machinery works across
   size; one size only → no live change, but FTSE 250 evidence is read
   separately before stage 4; neither → follow hsr-v1.
@@ -195,10 +200,10 @@ ask. Hence this order:
 | Before paying | Both PRs merged; ops-monitor shows no replay findings; dry run on the free sample (step 0, passed 2026-10-08) |
 | Day 1 | Subscribe. Bulk-download **every** table in the bundle, not only the five the adapter reads, to `~/sharadar` |
 | Day 1–2 | `build-panel` for both universes; check both build reports |
-| Day 2 | Development runs for both universes (caches the signals). Review; change nothing registered. Fix adapter bugs only here, and log them as amendments |
-| Day 3 | Rule search; commit its selection |
-| Day 3 | Reveal hsr-v1, then hsr-mid-v1; delisting sensitivity for both; rule-search reveal; commit the stores |
-| Day 4 | Exploratory `dividend_units_fixed` on both universes; commit |
+| Day 2 | Development runs for both universes, baseline and `--variant dividend_units_fixed` (caches both sets of signals; the variant's holdout stays sealed). Review; change nothing registered. Fix adapter bugs only here, and log them as amendments |
+| Day 3 | Rule search and model-mix search; commit both selections |
+| Day 3 | Reveal hsr-v1, then hsr-mid-v1; delisting sensitivity for both; rule-search and model-mix reveals; commit the stores |
+| Day 4 | Re-run the exploratory `dividend_units_fixed` on both universes (its holdout is open now); commit |
 | Day 4–5 | Check the stores hold the series and per-model blocks. Run any other question that needs the raw data now |
 | Before renewal | Cancel |
 | Within 30 days of cancelling | Delete `~/sharadar`, `~/hsr-build`, `~/hsr-mid-build` (caches included); `confirm-deleted` |
@@ -267,9 +272,13 @@ this workflow:
    The first run screens every date once (about 25 minutes) and caches the
    signals beside the panel; later runs and the rule search reuse the cache.
    Review the development window. Do not change anything registered.
-4. Run the rule search on the development window and commit its selection
-   ([historical-rule-search.md](historical-rule-search.md)). `--reveal-holdout`
-   refuses until that selection is committed.
+4. Run the development `--variant dividend_units_fixed` on both universes
+   (model scores for the model-mix search). Run the rule search
+   ([historical-rule-search.md](historical-rule-search.md)) and the model-mix
+   search ([historical-model-mix.md](historical-model-mix.md)) on the
+   development window and commit both selections. `--reveal-holdout` refuses
+   until both are committed: the holdout series carry per-model results the
+   model-mix search must not see.
 5. Reveal once: the same command with `--reveal-holdout`. Then the delisting
    sensitivity, which opens the holdout only because the baseline already did
    and never counts as a reveal:
@@ -282,8 +291,11 @@ this workflow:
    Repeat the development run, reveal, and sensitivity with `--universe
    midcap` on `~/hsr-mid-build`. Commit `docs/data/historical_screen_replay.json`
    and `docs/data/historical_screen_replay_midcap.json`. Then `ftse-rule-search
-   reveal --build ~/hsr-build` and commit `docs/data/historical_rule_search.json`.
-   Last, `--variant dividend_units_fixed` on both universes (exploratory).
+   reveal --build ~/hsr-build` and `ftse-model-mix reveal --build ~/hsr-build
+   --midcap-build ~/hsr-mid-build`, and commit
+   `docs/data/historical_rule_search.json` and
+   `docs/data/historical_model_mix.json`. Last, re-run `--variant
+   dividend_units_fixed` on both universes (exploratory; now with the holdout).
 6. Cancel the subscription and delete every raw table and derived file
    (`~/sharadar`, `~/hsr-build`, `~/hsr-mid-build`, including every
    `signals_cache*.csv.gz` and `daily.csv.gz`) within 30 days (licence). Then run
@@ -328,5 +340,7 @@ years after a change is a search over history (N33, N35). Re-run only when:
 | Historical mid-cap replay holdout revealed more than once | warn | Only the first hsr-mid-v1 reveal is evidence |
 
 The same check carries the rule search's findings
-([historical-rule-search.md](historical-rule-search.md#ops-monitor-findings)).
+([historical-rule-search.md](historical-rule-search.md#ops-monitor-findings))
+and the model-mix search's
+([historical-model-mix.md](historical-model-mix.md#ops-monitor-findings)).
 All `auto_fixable=False`.

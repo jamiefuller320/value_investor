@@ -45,7 +45,8 @@ the rules add. Market-relative results are still reported as context.
 | Tactical off | core only (the whole position is core) |
 
 840 rule sets. The screen itself (thresholds, weights, models) is frozen and not
-searched (N33). The frozen live rules are `buy_tier`, all names, `tier1`,
+searched (N33); which models to combine is a separate pre-registered test
+([historical-model-mix.md](historical-model-mix.md)). The frozen live rules are `buy_tier`, all names, `tier1`,
 default tactical.
 
 ### Core exit rules

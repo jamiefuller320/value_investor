@@ -76,6 +76,7 @@ MIDCAP_HOLDOUT_REUSED_TITLE = "Historical mid-cap replay holdout revealed more t
 # One paid month plus the licence's 30 days to delete after cancelling.
 DELETION_DUE_DAYS = 60
 RULE_SEARCH_STORE_NAME = "historical_rule_search.json"
+MODEL_MIX_STORE_NAME = "historical_model_mix.json"
 VARIANTS = ("baseline", "delisting_sensitivity", "dividend_units_fixed")
 # Variants that change what the screen sees; exploratory, never evidence.
 PANEL_TRANSFORM_VARIANTS = frozenset({"dividend_units_fixed"})
@@ -781,14 +782,15 @@ def refresh_historical_screen_replay(
     premise_store_path: Path = DEFAULT_PREMISE_STORE_PATH,
     rule_search_registration_path: Path | None = None,
     midcap_registration_path: Path = MIDCAP_REGISTRATION_PATH,
+    model_mix_registration_path: Path | None = None,
     persist: bool = True,
 ) -> dict[str, Any]:
     """Daily status: registration fingerprint, harness parity, and any committed results.
 
-    Also carries the rule search (``hrs-v1``) status, read from its store beside
-    ``store_path``.
+    Also carries the rule search (``hrs-v1``) and model-mix search (``hms-v1``)
+    status, read from their stores beside ``store_path``.
     """
-    from value_investor import rule_search
+    from value_investor import model_mix_search, rule_search
 
     previous = _read_json(store_path) or {}
     registration = load_registration(registration_path)
@@ -819,6 +821,10 @@ def refresh_historical_screen_replay(
         "midcap": midcap_status_block(
             midcap_registration_path, Path(store_path).parent / MIDCAP_STORE_PATH.name
         ),
+        "model_mix": model_mix_search.status_block(
+            model_mix_registration_path or model_mix_search.DEFAULT_REGISTRATION_PATH,
+            Path(store_path).parent / MODEL_MIX_STORE_NAME,
+        ),
     }
     if persist:
         _write_store(store_path, payload)
@@ -832,7 +838,7 @@ def _write_store(path: Path, payload: Mapping[str, Any]) -> None:
 
 
 def findings_from_store(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
-    from value_investor import rule_search
+    from value_investor import model_mix_search, rule_search
 
     findings: list[dict[str, Any]] = []
     parity = payload.get("parity") or {}
@@ -876,6 +882,7 @@ def findings_from_store(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
             )
         )
     findings.extend(rule_search.findings_from_block(payload.get("rule_search")))
+    findings.extend(model_mix_search.findings_from_block(payload.get("model_mix")))
     findings.extend(
         _deletion_findings(
             _earliest_licensed(payload.get("licensed_data"), midcap.get("licensed_data"))
@@ -1044,6 +1051,7 @@ def run_replay(
     scratch_root: Path | None = None,
     variant: str = "baseline",
     rule_search_registration_path: Path | None = None,
+    model_mix_registration_path: Path | None = None,
 ) -> dict[str, Any]:
     """Replay the registered screen on a local point-in-time panel and commit aggregates only.
 
@@ -1053,10 +1061,12 @@ def run_replay(
     signal cache and is marked exploratory. Neither counts as a reveal: their
     holdouts open only once the baseline holdout has been revealed.
 
-    While a rule search is registered, the baseline holdout stays sealed until
-    the search selection is committed beside ``store_path``.
+    While a rule search or a model-mix search is registered, the baseline
+    holdout stays sealed until its selection is committed beside ``store_path``:
+    the committed holdout series carry per-model results the mix search must
+    not see.
     """
-    from value_investor import rule_search
+    from value_investor import model_mix_search, rule_search
 
     if variant not in VARIANTS:
         raise ValueError(f"Unknown variant {variant!r}; expected one of {VARIANTS}")
@@ -1081,6 +1091,13 @@ def run_replay(
         if Path(search_registration).exists() and not rule_search.selection_committed(search_store):
             raise ValueError(
                 "The rule search (hrs-v1) has no committed selection. Run `ftse-rule-search "
+                "search` and commit its store before revealing any holdout."
+            )
+        mix_registration = model_mix_registration_path or model_mix_search.DEFAULT_REGISTRATION_PATH
+        mix_store = Path(store_path).parent / MODEL_MIX_STORE_NAME
+        if Path(mix_registration).exists() and not model_mix_search.selection_committed(mix_store):
+            raise ValueError(
+                "The model-mix search (hms-v1) has no committed selection. Run `ftse-model-mix "
                 "search` and commit its store before revealing any holdout."
             )
     panel = _read_table(panel_path)
