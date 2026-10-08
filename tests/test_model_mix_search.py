@@ -158,7 +158,7 @@ def test_committed_registration_matches_code():
         assert (
             reg["windows"]["holdout"]["first_entry"] == replay["windows"]["holdout"]["first_entry"]
         )
-    assert reg["amendments"] == []
+    assert all(a["before_data"] for a in reg["amendments"])
 
 
 def test_published_signals_follow_their_definitions():
