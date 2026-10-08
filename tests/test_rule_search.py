@@ -98,10 +98,7 @@ def _build(root: Path) -> Path:
     )
     cache = build / hsr.SIGNAL_CACHE_NAME
     pd.DataFrame(sig_rows).to_csv(cache, index=False)
-    key = {
-        "screen_code": hsr.screen_code_fingerprint(),
-        "panel": hsr._data_fingerprint(pd.read_csv(build / "panel.csv.gz")),
-    }
+    key = hsr.signal_cache_key(pd.read_csv(build / "panel.csv.gz"))
     cache.with_name(cache.name + ".key.json").write_text(json.dumps(key))
     return build
 

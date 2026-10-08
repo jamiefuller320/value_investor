@@ -111,6 +111,13 @@ def test_replay_screen_matches_direct_library_screen(tmp_path: Path):
     )
     assert last["earnings_yield"].notna().all()
 
+    models = direct.model_results
+    assert set(hsr.model_ids(replayed)) == set(models["model_id"])
+    for model, group in models.groupby("model_id"):
+        passed = group.set_index("ticker")["passed"].astype(int)
+        got = last[f"{hsr.MODEL_PASS_PREFIX}{model}"].astype(int)
+        assert got.to_dict() == passed.loc[got.index].to_dict()
+
 
 def test_signal_cache_reused_until_panel_changes(tmp_path: Path, monkeypatch):
     rows = _metric_rows()
@@ -127,13 +134,28 @@ def test_signal_cache_reused_until_panel_changes(tmp_path: Path, monkeypatch):
     first = hsr.cached_replay_signals(panel, market_id="sp500", cache_path=cache)
     again = hsr.cached_replay_signals(panel, market_id="sp500", cache_path=cache)
     assert len(calls) == 1
-    assert list(again.columns) == list(hsr.SIGNAL_COLUMNS)
+    assert list(again.columns)[: len(hsr.SIGNAL_COLUMNS)] == list(hsr.SIGNAL_COLUMNS)
+    assert hsr.model_ids(again)
     assert again["signal"].tolist() == first["signal"].tolist()
     assert again["as_of"].iloc[0] == pd.Timestamp("2010-01-29", tz="UTC")
 
     changed = panel.assign(trailing_pe=panel["trailing_pe"] * 2)
     hsr.cached_replay_signals(changed, market_id="sp500", cache_path=cache)
     assert len(calls) == 2
+
+    seen = []
+    monkeypatch.setattr(
+        hsr, "replay_screen", lambda frame, **kw: seen.append(frame) or real(frame, **kw)
+    )
+    fixed_cache = cache.with_name(hsr.signal_cache_name("dividend_units_fixed"))
+    hsr.cached_replay_signals(
+        panel, market_id="sp500", cache_path=fixed_cache, transform="dividend_units_fixed"
+    )
+    assert seen[0]["dividend_yield"].tolist() == pytest.approx(
+        (panel["dividend_yield"] / 100.0).tolist()
+    )
+    hsr.cached_replay_signals(changed, market_id="sp500", cache_path=cache)
+    assert len(seen) == 1  # the baseline cache is untouched by the variant
 
     with pytest.raises(ValueError, match="inside the repository"):
         hsr.cached_replay_signals(
@@ -438,3 +460,88 @@ def test_status_refresh_keeps_licensed_data(tmp_path: Path):
         data_dir, store_path=store, premise_store_path=data_dir / "screen_premise_backtest.json"
     )
     assert payload["licensed_data"]["first_used_at"].startswith("2026-11-01")
+
+
+def _with_models(signals: pd.DataFrame) -> pd.DataFrame:
+    rank = signals["ticker"].str[1:].astype(int)
+    return signals.assign(
+        **{
+            "pass__good": (rank < 6).astype(int),
+            "score__good": (20 - rank).astype(float),
+            "pass__bad": (rank >= 14).astype(int),
+            "score__bad": rank.astype(float),
+        }
+    )
+
+
+def test_per_model_diagnostics_and_committed_series():
+    signals, prices = _synthetic_panels()
+    signals = _with_models(signals)
+    sealed = hsr.build_replay_results(signals, prices, _registration())
+    h30 = sealed["30"]
+    per_model = h30["development"]["per_model"]
+    assert set(per_model) == {"good", "bad"}
+    assert per_model["good"]["pass_spread"]["mean"] > 0
+    assert per_model["bad"]["pass_spread"]["mean"] < 0
+    assert per_model["good"]["rank_ic"]["mean"] > 0 > per_model["bad"]["rank_ic"]["mean"]
+    assert per_model["good"]["mean_pass_share"] == pytest.approx(0.3)
+
+    series = h30["development_series"]
+    assert len(series) == h30["development"]["cohorts"]
+    assert set(series[0]) == {*hsr.SERIES_FIELDS, "models"}
+    assert set(series[0]["models"]) == {"good", "bad"}
+    assert "holdout_series" not in h30
+    assert "S0" not in json.dumps(series)  # cohort means only, no names
+
+    revealed = hsr.build_replay_results(signals, prices, _registration(), reveal_holdout=True)
+    assert len(revealed["30"]["holdout_series"]) == revealed["30"]["holdout"]["cohorts"]
+
+
+def test_midcap_sibling_status_findings_and_deletion(tmp_path: Path):
+    reg = hsr.load_registration(hsr.MIDCAP_REGISTRATION_PATH)
+    reg_path = tmp_path / "mid_reg.json"
+    reg_path.write_text(json.dumps({**reg, "screen_code_fingerprint": "old"}))
+    store_path = tmp_path / hsr.MIDCAP_STORE_PATH.name
+    store_path.write_text(
+        json.dumps(
+            {
+                "holdout_reveals": [],
+                "licensed_data": {"first_used_at": "2026-11-01T00:00:00+00:00"},
+            }
+        )
+    )
+    block = hsr.midcap_status_block(reg_path, store_path)
+    assert block["registration_id"] == "hsr-mid-v1"
+    assert block["matches_screen_code"] is False and block["has_results"] is False
+    (finding,) = hsr.findings_from_store({"midcap": block})
+    assert finding["title"] == hsr.MIDCAP_STALE_REGISTRATION_TITLE
+    assert "--universe midcap" in finding["summary"]
+
+    spent = {**block, "holdout_reveals": [{"at": "a"}, {"at": "b"}]}
+    titles = {f["title"] for f in hsr.findings_from_store({"midcap": spent})}
+    assert titles == {hsr.MIDCAP_STALE_VERDICT_TITLE, hsr.MIDCAP_HOLDOUT_REUSED_TITLE}
+
+    early = hsr._earliest_licensed(
+        {"first_used_at": "2026-11-05T00:00:00+00:00"}, block["licensed_data"]
+    )
+    assert early["first_used_at"].startswith("2026-11-01")
+    assert hsr._earliest_licensed({"first_used_at": "x", "deleted_at": "y"}, None) is None
+
+    main = tmp_path / "historical_screen_replay.json"
+    main.write_text(json.dumps({"licensed_data": {"first_used_at": "2026-11-05T00:00:00+00:00"}}))
+    hsr.confirm_deleted(main)
+    assert json.loads(store_path.read_text())["licensed_data"]["deleted_at"]
+    assert json.loads(main.read_text())["licensed_data"]["deleted_at"]
+
+
+def test_committed_midcap_registration_mirrors_hsr_v1():
+    mid = hsr.load_registration(hsr.MIDCAP_REGISTRATION_PATH)
+    base = hsr.load_registration()
+    assert mid["registration_id"] == "hsr-mid-v1"
+    assert mid["screen_code_fingerprint"] == hsr.screen_code_fingerprint()
+    for key in ("windows", "horizons_days", "primary", "comparators", "rebalance", "delisting"):
+        assert mid[key] == base[key]
+    assert mid["universe_rule"] == {**mid["universe_rule"], "kind": "us_cap_rank"}
+    assert (mid["universe_rule"]["rank_from"], mid["universe_rule"]["rank_to"]) == (501, 1000)
+    assert mid["costs"]["base_per_side"] > base["costs"]["base_per_side"]
+    assert hsr.universe_paths("midcap") == (hsr.MIDCAP_REGISTRATION_PATH, hsr.MIDCAP_STORE_PATH)
