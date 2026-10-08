@@ -114,6 +114,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://me-group.com/wp-content/uploads/2026/07/260713-ME-Group-2026-Interim-Results-Presentation.pdf",
         "https://me-group.com/wp-content/uploads/2025/02/ME-Group-Annual-Report-2024.pdf",
     ],
+    # eng-20261008-03: ftse350 MOON.L gap-closure had 0/0 refetch (empty IR allowlist); moonpig.group PDFs.
+    "MOON.L": [
+        "https://www.moonpig.group/media/vqlazdhs/moonpig-group-plc-annual-report-2026-full-version.pdf",
+        "https://www.moonpig.group/media/xfpd5o4c/moonpig-group-plc-annual-report-2025-full-version.pdf",
+        "https://www.moonpig.group/media/mrknsquo/moonpig-group-plc-fy26-full-year-results-announcement.pdf",
+        "https://www.moonpig.group/media/t2lbafil/moonpig-group-plc-fy26-half-year-results-announcement.pdf",
+        "https://www.moonpig.group/media/llvdqs3c/2026-03-18-moon-trading-update-final.pdf",
+    ],
     "MGNS.L": [
         "https://d3s3eeezfmyz8l.cloudfront.net/pdfs/MSG-FY-2025-presentation_2026-03-16-145529_wjhq.pdf",
         "https://d3s3eeezfmyz8l.cloudfront.net/pdfs/FY-2025-RNS-FINAL.pdf",
@@ -5354,6 +5362,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://links.sgx.com/1.0.0/corporate-announcements/WKFS34K5F6T83U1G/866254_FLCT%20-%202HFY25%20Condensed%20Interim%20FS.pdf": "annual",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
+    # eng-20261008-03: MOON.L HY26 slug contains fy26 before half-year token.
+    "https://www.moonpig.group/media/t2lbafil/moonpig-group-plc-fy26-half-year-results-announcement.pdf": "interim",
 }
 
 
