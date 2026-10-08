@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-08T06:19:25+00:00",
+  "updated_at": "2026-10-08T07:22:44+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13213,7 +13213,7 @@
       "section": "research",
       "title": "Dividend yield unit mismatch in company screen models",
       "summary": "Live and library rows carry Yahoo dividend_yield in percent (median 2.5 = 2.5%), but DividendModel/DividendGrowth/LowPEHighYield floors (0.02-0.04) and Neff PEGY (growth fraction + yield) treat it as a fraction, so the yield floors pass almost any payer and PEGY is inflated ~100x on yield. Percentile ranks are unaffected. Trusts already normalise via trust_metrics.normalize_yield. Fix = normalise at fetch/library load; changes the screen fingerprint.",
-      "revisit_when": "User decides: either fix and run ftse-historical-replay register before the hsr-v1 holdout is revealed, or fix after the reveal as a new epoch so the replay tests the screen as it ran",
+      "revisit_when": "Decided 2026-10-08: fix after the hsr-v1 holdout reveal, as a new screen epoch (re-register; the replay tests the screen as it ran). Trigger: holdout_reveals non-empty in historical_screen_replay.json",
       "tags": [
         "screen",
         "dividend",
@@ -13223,7 +13223,18 @@
       ],
       "status": "open",
       "source": "historical screen replay Phase 2 adapter (PR #1019)",
-      "added_at": "2026-10-07T17:28:44+00:00"
+      "added_at": "2026-10-07T17:28:44+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/historical_screen_replay.json",
+            "path": "holdout_reveals",
+            "op": "truthy"
+          }
+        ]
+      },
+      "updated_at": "2026-10-08T07:22:44+00:00",
+      "status_note": "User accepted the recommendation (PR #1023 thread): leave the unit mismatch until after the hsr-v1 reveal, then fix as a new epoch."
     },
     {
       "id": "L572",
