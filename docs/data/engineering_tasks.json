@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-10-08T18:16:58.733519+00:00",
+  "compiled_at": "2026-10-08T19:17:52.905055+00:00",
   "run_at": null,
   "task_count": 146,
   "tasks": [
@@ -8763,6 +8763,62 @@
       "merged_at": "2026-10-02T10:55:17.370432+00:00"
     },
     {
+      "id": "eng-20261002-13",
+      "area": "ingest",
+      "title": "Repair dead hunter allowlist URL for ADYEN.AS",
+      "summary": "Monitor detected live-fetch failure for https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download (ADYEN.AS, euro_depth). Inspect whether the URL rot is fixable via a known canonical replacement, a fresh allowlist entry, or a PARKED_SOURCE_HUNTER_SKIP update. Do not invent URLs.",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "hunter_url_repair",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "ADYEN.AS",
+        "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
+        "monitor_reason": "live-fetch failed or body too short for https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
+        "parent_task_id": "eng-20260930-01",
+        "parent_merged_at": "2026-10-02T06:41:46.662799+00:00",
+        "universe": "library",
+        "doc": "docs/ops/ops-monitor.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for ADYEN.AS only — do not invent URLs",
+        "Repair or replace the dead URL recorded for ADYEN.AS",
+        "Add/adjust regression coverage in tests/test_research_filings.py",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20261002-13.md",
+      "branch_name": "cursor/eng-20261002-13-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/944",
+      "pr_number": 944,
+      "completed_at": "2026-10-02T09:24:15.090277+00:00",
+      "merged_at": "2026-10-02T09:54:55.076376+00:00",
+      "no_diff_count": 0
+    },
+    {
       "id": "eng-20260918-16",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
@@ -8856,66 +8912,7 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "parked",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "preflight_clash",
-      "parked_at": "2026-10-08T18:32:34.482832+00:00"
-    },
-    {
-      "id": "eng-20261002-13",
-      "area": "ingest",
-      "title": "Repair dead hunter allowlist URL for ADYEN.AS",
-      "summary": "Monitor detected live-fetch failure for https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download (ADYEN.AS, euro_depth). Inspect whether the URL rot is fixable via a known canonical replacement, a fresh allowlist entry, or a PARKED_SOURCE_HUNTER_SKIP update. Do not invent URLs.",
-      "priority": "low",
-      "priority_score": 12.0,
-      "source": "hunter_url_repair",
-      "evidence": {
-        "market_id": "euro_depth",
-        "library_market": "euro_depth",
-        "hunter_market_id": "euro_depth",
-        "hunter_ticker": "ADYEN.AS",
-        "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
-        "monitor_reason": "live-fetch failed or body too short for https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
-        "parent_task_id": "eng-20260930-01",
-        "parent_merged_at": "2026-10-02T06:41:46.662799+00:00",
-        "universe": "library",
-        "doc": "docs/ops/ops-monitor.md"
-      },
-      "acceptance_criteria": [
-        "Inspect IR / exchange sources for ADYEN.AS only — do not invent URLs",
-        "Repair or replace the dead URL recorded for ADYEN.AS",
-        "Add/adjust regression coverage in tests/test_research_filings.py",
-        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "merged",
-      "result_path": "output/engineering_result_eng-20261002-13.md",
-      "branch_name": "cursor/eng-20261002-13-1de3",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/944",
-      "pr_number": 944,
-      "completed_at": "2026-10-02T09:24:15.090277+00:00",
-      "merged_at": "2026-10-02T09:54:55.076376+00:00",
-      "no_diff_count": 0
+      "status": "open"
     },
     {
       "id": "eng-20261004-07",
@@ -9604,7 +9601,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 3,
-    "evaluated_at": "2026-10-08T18:17:27.758077+00:00",
+    "evaluated_at": "2026-10-08T19:17:52.924616+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -9612,11 +9609,11 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "hunter_url_repair",
   "library_market_id": "nasdaq100",
-  "hunter_ticker": "PDD",
+  "hunter_ticker": "ADYEN.AS",
   "source_gap_closure_run_id": "igc-20261008-02",
   "source_trial_id": "igc-20261008-02",
   "source_chain_root_id": "igc-20261008-02",
-  "failed_url": "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440/press-release-lvmh-2025-annual-results.pdf"
+  "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download"
 }
