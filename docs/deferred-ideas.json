@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-08T07:35:29+00:00",
+  "updated_at": "2026-10-08T08:11:01+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13540,6 +13540,34 @@
       "status": "open",
       "source": "PR #1023: best use of the Sharadar month",
       "added_at": "2026-10-08T07:35:29+00:00"
+    },
+    {
+      "id": "N199",
+      "category": "not_now",
+      "section": "universe",
+      "title": "US mid-cap offline library market (S&P 400 scale) in the ingest cascade",
+      "summary": "Add US mid caps (S&P 400 or market-cap ranks 501-1000) as an offline ftse-library market so the shard can enter learning like sp500. Not the live universe: live stays FTSE 350 until stage 4. Wait for the hsr-mid-v1 verdict, and for the P2 cascade to have room: no fourth equal sprint stream.",
+      "revisit_when": "hsr-mid-v1 holdout_verdict is pass (midcap block in historical_screen_replay.json) and the current P2 cascade head has graduated",
+      "tags": [
+        "midcap",
+        "us",
+        "universe",
+        "historical-replay"
+      ],
+      "status": "open",
+      "source": "PR #1023 follow-up: mid-cap sibling and live universe question",
+      "added_at": "2026-10-08T08:10:57+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/historical_screen_replay.json",
+            "path": "midcap.holdout_verdict",
+            "op": "==",
+            "value": "pass"
+          }
+        ]
+      },
+      "updated_at": "2026-10-08T08:11:01+00:00"
     }
   ],
   "fragments": [
