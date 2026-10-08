@@ -133,7 +133,8 @@ def load_sp500(path: Path) -> pd.DataFrame:
 def load_tickers(path: Path) -> pd.DataFrame:
     frame = pd.read_csv(path, dtype=str)
     if "table" in frame.columns:
-        sf1 = frame.loc[frame["table"].str.upper() == "SF1"]
+        # Nasdaq Data Link labels the fundamentals rows "SF1"; sharadar.com direct uses "fundamentals".
+        sf1 = frame.loc[frame["table"].str.upper().isin(("SF1", "FUNDAMENTALS"))]
         frame = sf1 if not sf1.empty else frame
     frame = frame.drop_duplicates(subset=["ticker"], keep="last")
     keep = [
