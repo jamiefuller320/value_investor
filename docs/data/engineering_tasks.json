@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-10-08T19:17:52.905055+00:00",
+  "compiled_at": "2026-10-08T19:31:09.043619+00:00",
   "run_at": null,
   "task_count": 146,
   "tasks": [
@@ -8763,6 +8763,53 @@
       "merged_at": "2026-10-02T10:55:17.370432+00:00"
     },
     {
+      "id": "eng-20260918-16",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
+      "summary": "Library market nasdaq100 (Nasdaq-100) parked PDD after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statut",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "nasdaq100",
+        "library_market": "nasdaq100",
+        "hunter_market_id": "nasdaq100",
+        "hunter_ticker": "PDD",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for PDD only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "cancelled"
+    },
+    {
       "id": "eng-20261002-13",
       "area": "ingest",
       "title": "Repair dead hunter allowlist URL for ADYEN.AS",
@@ -8817,53 +8864,6 @@
       "completed_at": "2026-10-02T09:24:15.090277+00:00",
       "merged_at": "2026-10-02T09:54:55.076376+00:00",
       "no_diff_count": 0
-    },
-    {
-      "id": "eng-20260918-16",
-      "area": "ingest",
-      "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
-      "summary": "Library market nasdaq100 (Nasdaq-100) parked PDD after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statut",
-      "priority": "low",
-      "priority_score": 12.0,
-      "source": "parked_source_hunter",
-      "evidence": {
-        "market_id": "nasdaq100",
-        "library_market": "nasdaq100",
-        "hunter_market_id": "nasdaq100",
-        "hunter_ticker": "PDD",
-        "parked_reason": "unfetchable_iwb",
-        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
-      },
-      "acceptance_criteria": [
-        "Inspect IR / exchange sources for PDD only — do not invent URLs",
-        "If a fetchable statutory/IR body exists, add allowlist + regression test",
-        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
-        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "cancelled"
     },
     {
       "id": "eng-20261008-04",
@@ -9609,9 +9609,9 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "hunter_url_repair",
+  "micro_compile_source": "parked_source_hunter",
   "library_market_id": "nasdaq100",
-  "hunter_ticker": "ADYEN.AS",
+  "hunter_ticker": "PDD",
   "source_gap_closure_run_id": "igc-20261008-02",
   "source_trial_id": "igc-20261008-02",
   "source_chain_root_id": "igc-20261008-02",
