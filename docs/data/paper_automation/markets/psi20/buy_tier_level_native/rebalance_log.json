@@ -1719,18 +1719,18 @@
   },
   {
     "schema_version": 2,
-    "logged_at": "2026-10-08T08:47:09.500389+00:00",
+    "logged_at": "2026-10-08T08:50:32.470715+00:00",
     "track_id": "buy_tier_level_native",
     "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
     "strategy_mode": "automated",
     "screen_source": {
       "path": "docs/data/paper_automation/markets/psi20/screen_latest.json",
-      "run_at": "2026-10-07T15:40:13.981146+00:00",
-      "generated_at": "2026-10-08T08:47:09.447485+00:00"
+      "run_at": "2026-10-08T06:52:45.205398+00:00",
+      "generated_at": "2026-10-08T08:50:32.398819+00:00"
     },
     "knob_epoch_started_at": null,
     "gate": {
-      "local_time": "2026-10-08T09:47:09.487884+01:00",
+      "local_time": "2026-10-08T09:50:32.459009+01:00",
       "trading_day": true,
       "after_settle": true,
       "market_open_at": "2026-10-08T08:00:00+01:00",
@@ -1739,7 +1739,7 @@
       "reason": "ok"
     },
     "acted": true,
-    "note": "Rebalanced after open settle (0 trade(s)).",
+    "note": "Rebalanced after open settle (1 trade(s)).",
     "selection": {
       "skip_timing_wait": true,
       "min_conviction": 0.0,
@@ -1767,7 +1767,7 @@
         "data_quality_score": 0.95,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 6.71,
+        "price": 6.69,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -1777,11 +1777,11 @@
         "name": "The Navigator Company, S.A.",
         "signal": "buy",
         "adjusted_signal": "hold",
-        "conviction_score": 0.280925,
+        "conviction_score": 0.327675,
         "data_quality_score": 0.9,
         "timing_signal": "accumulate",
         "sector": "Basic Materials",
-        "price": 3.064,
+        "price": 3.074,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -1795,7 +1795,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Energy",
-        "price": 21.92,
+        "price": 22.23,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -1811,7 +1811,7 @@
         "data_quality_score": 0.95,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 6.71,
+        "price": 6.69,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -1821,11 +1821,11 @@
         "name": "The Navigator Company, S.A.",
         "signal": "buy",
         "adjusted_signal": "hold",
-        "conviction_score": 0.280925,
+        "conviction_score": 0.327675,
         "data_quality_score": 0.9,
         "timing_signal": "accumulate",
         "sector": "Basic Materials",
-        "price": 3.064,
+        "price": 3.074,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -1839,7 +1839,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Energy",
-        "price": 21.92,
+        "price": 22.23,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -1859,8 +1859,8 @@
         "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
         "Dust guard: skip trim/top-up adjustments below \u00a310."
       ],
-      "nav": 978.47,
-      "cash": 0.08,
+      "nav": 983.27,
+      "cash": 10.43,
       "max_positions": 120,
       "min_conviction": 0.0,
       "sector_cap": 1.0,
@@ -1872,28 +1872,28 @@
       "rank_drop_exit_min": 3,
       "block_rebuy_while_in_candidates": false,
       "min_rebalance_notional_gbp": 10.0,
-      "target_sleeve_value": 326.16,
+      "target_sleeve_value": 327.76,
       "targets": [
         {
           "ticker": "GALP.LS",
           "name": "Galp Energia, SGPS, S.A.",
           "signal": "buy",
           "conviction_score": 0.6133000000000001,
-          "price": 21.92
+          "price": 22.23
         },
         {
           "ticker": "COR.LS",
           "name": "Corticeira Amorim, S.G.P.S., S.A.",
           "signal": "buy",
           "conviction_score": 0.41046499999999997,
-          "price": 6.71
+          "price": 6.69
         },
         {
           "ticker": "NVG.LS",
           "name": "The Navigator Company, S.A.",
           "signal": "buy",
-          "conviction_score": 0.280925,
-          "price": 3.064
+          "conviction_score": 0.327675,
+          "price": 3.074
         }
       ],
       "anticipated_exits": [],
@@ -1903,11 +1903,21 @@
       "anticipated_holds": [
         {
           "action": "hold",
+          "ticker": "GALP.LS",
+          "name": "Galp Energia, SGPS, S.A.",
+          "reason": "Already near equal-weight target",
+          "value": 327.75,
+          "target_value": 327.76,
+          "conviction_score": 0.6133000000000001,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
           "ticker": "COR.LS",
           "name": "Corticeira Amorim, S.G.P.S., S.A.",
-          "reason": "Already near equal-weight target",
-          "value": 322.98,
-          "target_value": 326.16,
+          "reason": "Top-up below min trade size (\u00a310)",
+          "value": 322.01,
+          "target_value": 327.76,
           "conviction_score": 0.41046499999999997,
           "signal": "buy"
         },
@@ -1916,18 +1926,35 @@
           "ticker": "NVG.LS",
           "name": "The Navigator Company, S.A.",
           "reason": "Top-up below min trade size (\u00a310)",
-          "value": 322.03,
-          "target_value": 326.16,
-          "conviction_score": 0.280925,
+          "value": 323.08,
+          "target_value": 327.76,
+          "conviction_score": 0.327675,
           "signal": "buy"
         }
       ],
       "skipped": [],
       "waitlisted": [],
-      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 2 near-target holding(s)."
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
     },
-    "trades": [],
-    "nav_before": 978.47,
+    "trades": [
+      {
+        "id": "0c871f7d-ffe0-48b7-b5f2-326274b957fc",
+        "fund_id": "8353f516-bffb-4ba3-b5f9-62a77ea5d75b",
+        "acted_at": "2026-10-08T09:50:32.459009+01:00",
+        "ticker": "GALP.LS",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.465481,
+        "price": 22.23,
+        "gross": 10.35,
+        "cost": 0.0,
+        "net_cash": 10.35,
+        "note": "Automated trim",
+        "name": "Galp Energia, SGPS, S.A.",
+        "avg_cost_at_exit": 21.9
+      }
+    ],
+    "nav_before": 983.27,
     "cash_before": 0.08,
     "contributed_capital_before": 1000.0,
     "holdings_before": [
@@ -1966,8 +1993,8 @@
       "exit_streak": {},
       "reentry_cooldown": {}
     },
-    "nav_after": 978.47,
-    "cash_after": 0.08,
+    "nav_after": 983.27,
+    "cash_after": 10.43,
     "holdings_after": [
       {
         "ticker": "COR.LS",
@@ -1991,7 +2018,7 @@
       },
       {
         "ticker": "GALP.LS",
-        "shares": 15.209289,
+        "shares": 14.743808,
         "avg_cost": 21.9,
         "sector": "Energy",
         "name": "Galp Energia, SGPS, S.A.",

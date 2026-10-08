@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-07T16:34:53.721549+00:00
+Track: `buy_tier_level_native` · updated 2026-10-08T08:50:32.463682+00:00
 
 ## Portfolio loser feedback
 
@@ -10,18 +10,18 @@ Track: `buy_tier_level_native` · updated 2026-10-07T16:34:53.721549+00:00
 
 ## Holding reviews
 
-### NVG.LS — weakening / watch_review (-3.3%)
-- research verdict caution
-- conviction 28% below intact floor
-- still buy
-- cheapness family still passes
-
-### COR.LS — weakening / watch_review (-3.0%)
+### COR.LS — weakening / watch_review (-3.3%)
 - research verdict caution
 - still buy
 - cheapness family still passes
 
-### GALP.LS — intact / hold_tolerate (+0.1%)
+### NVG.LS — weakening / watch_review (-3.0%)
+- research verdict caution
+- conviction 33% below intact floor
+- still buy
+- cheapness family still passes
+
+### GALP.LS — intact / hold_tolerate (+1.5%)
 - still buy
 - research accumulate
 - cheapness family still passes

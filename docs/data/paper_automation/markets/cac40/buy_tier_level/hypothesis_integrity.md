@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-08T08:46:59.414724+00:00
+Track: `buy_tier_level` · updated 2026-10-08T08:50:22.464697+00:00
 
 ## Portfolio loser feedback
 
@@ -17,17 +17,17 @@ Track: `buy_tier_level` · updated 2026-10-08T08:46:59.414724+00:00
 - data_quality 1.00
 - conviction 72%
 
+### ORA.PA — weakening / watch_review (-3.4%)
+- research verdict caution
+- still strong_buy
+- cheapness family still passes
+
 ### TTE.PA — intact / hold_tolerate (-3.2%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 74%
-
-### ORA.PA — weakening / watch_review (-3.2%)
-- research verdict caution
-- still strong_buy
-- cheapness family still passes
+- conviction 75%
 
 ### DG.PA — intact / hold_tolerate (-2.0%)
 - still strong_buy
@@ -43,33 +43,38 @@ Track: `buy_tier_level` · updated 2026-10-08T08:46:59.414724+00:00
 - data_quality 1.00
 - conviction 88%
 
-### EN.PA — weakening / watch_review (+0.1%)
+### EN.PA — weakening / watch_review (-1.0%)
 - research verdict neutral
 - still strong_buy
 - cheapness family still passes
 
-### VIE.PA — intact / hold_tolerate (+0.4%)
+### VIE.PA — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 64%
+- conviction 62%
 
-### TEP.PA — intact / hold_tolerate (+1.1%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 76%
-
-### URW.PA — intact / hold_tolerate (+1.5%)
+### URW.PA — intact / hold_tolerate (+0.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
 
-### CAP.PA — weakening / watch_review (+1.8%)
+### TEP.PA — intact / hold_tolerate (+1.7%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 76%
+
+### RI.PA — weakening / watch_review (+2.6%)
+- research verdict caution
+- still strong_buy
+- cheapness family still passes
+
+### CAP.PA — weakening / watch_review (+2.6%)
 - research verdict neutral
 - still strong_buy
 - cheapness family still passes
@@ -81,12 +86,7 @@ Track: `buy_tier_level` · updated 2026-10-08T08:46:59.414724+00:00
 - data_quality 1.00
 - conviction 67%
 
-### RI.PA — weakening / watch_review (+3.8%)
-- research verdict caution
-- still strong_buy
-- cheapness family still passes
-
-### CA.PA — weakening / watch_review (+4.1%)
+### CA.PA — weakening / watch_review (+3.6%)
 - research verdict neutral
 - still strong_buy
 - cheapness family still passes

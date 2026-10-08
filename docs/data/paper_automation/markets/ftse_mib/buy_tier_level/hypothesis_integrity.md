@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-08T08:47:03.945358+00:00
+Track: `buy_tier_level` · updated 2026-10-08T08:50:26.928517+00:00
 
 ## Portfolio loser feedback
 
@@ -10,14 +10,14 @@ Track: `buy_tier_level` · updated 2026-10-08T08:47:03.945358+00:00
 
 ## Holding reviews
 
-### BZU.MI — intact / hold_tolerate (-1.5%)
+### BZU.MI — intact / hold_tolerate (-2.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
 
-### REC.MI — intact / hold_tolerate (-0.1%)
+### REC.MI — intact / hold_tolerate (-0.2%)
 - still buy
 - research accumulate
 - cheapness family still passes
@@ -29,9 +29,9 @@ Track: `buy_tier_level` · updated 2026-10-08T08:47:03.945358+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 60%
+- conviction 68%
 
-### AMP.MI — weakening / watch_review (+4.9%)
+### AMP.MI — weakening / watch_review (+3.5%)
 - research verdict caution
 - still buy
 - cheapness family still passes
