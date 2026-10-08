@@ -400,7 +400,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.infineon.com/assets/row/public/documents/corporate/investors/annual-reports/2025/2025-annual-report-v01-00-en.pdf",
     ],
     # dax buy-tier deepen — eng-20260922-05: ESEF index empty; IR PDF seeds unmeasured names.
-    # eng-20261006-01: igc-20260920-03 0/0 — add H1 statutory report so library deepen clears thin_body (≥3).
+    # eng-20261006-01 / eng-20261008-01: igc-20260920-03 — H1 statutory report clears thin_body (≥3).
     "HEI.DE": [
         "https://www.heidelbergmaterials.com/system/files/2026-03/HM_Annual_Financial_Statements_2025.pdf",
         "https://www.eqs-news.com/media/document/86940b2a-a5f1-41b6-8b27-6ee13543a147/assets/DE0006047004-JA-2025-EQ-D-00.pdf",
@@ -9187,6 +9187,51 @@ def refresh_uk_filing_listings_into_index(
     }
 
 
+def refresh_euro_filing_listings_into_index(
+    filings_dir: Path,
+    *,
+    ticker: str,
+    company_name: str = "",
+    market: str | None = None,
+) -> dict[str, Any]:
+    """
+    Merge IR allowlist rows into the euro filings index before body refetch.
+
+    UK gap-closure runs call ``refresh_uk_filing_listings_into_index`` first so
+    new statutory URLs appear before refetch stats are recorded. Euro/library
+    deepen used a frozen two-PDF HEI.DE index while a third allowlist URL (H1
+    2025) shipped in code — without this refresh, ``ir_refetch`` could report
+    0 attempted / 0 fetched even though gaps remained.
+    """
+    filings_dir = Path(filings_dir)
+    prior = _load_prior_filings_rows(filings_dir)
+    merge_meta = merge_ir_allowlist_filings(ticker, filings_dir)
+    after = _load_prior_filings_rows(filings_dir)
+    added = int(merge_meta.get("added") or 0)
+    index_path = filings_dir / "filings_index.json"
+    if index_path.exists() and (added > 0 or (fetch_filings_ir_allowlist(ticker) and not prior)):
+        try:
+            payload = json.loads(index_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            payload = {}
+        if company_name:
+            payload["company_name"] = company_name
+        if ticker:
+            payload["ticker"] = ticker.upper()
+        if market:
+            payload["market"] = market
+        payload.setdefault("regime", "euro_filings")
+        payload["listing_refresh_at"] = datetime.now(UTC).isoformat()
+        index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return {
+        "prior_count": len(prior),
+        "merged_count": len(after),
+        "added": added,
+        "total_allowlist": int(merge_meta.get("total_allowlist") or 0),
+        "note": "refresh_euro_filing_listings_into_index",
+    }
+
+
 def reconcile_filing_body_flags(
     filings: list[dict[str, Any]],
     bodies_dir: Path,
@@ -10130,6 +10175,11 @@ def refetch_euro_filings_primary_bodies(
     Mirrors ``refetch_uk_primary_filing_bodies`` for ``euro_filings`` regimes so
     weekday ingest and library deepen can land statutory PDFs before body-lag rememo.
     """
+    listing_refresh = refresh_euro_filing_listings_into_index(
+        filings_dir,
+        ticker=ticker,
+        company_name=company_name,
+    )
     body_reconcile = reconcile_filings_index_body_flags(
         filings_dir,
         company_name=company_name,
@@ -10166,6 +10216,7 @@ def refetch_euro_filings_primary_bodies(
         or before
     )
     return {
+        "listing_refresh": listing_refresh,
         "body_reconcile": body_reconcile,
         "residual": residual,
         "ir_allowlist": ir,

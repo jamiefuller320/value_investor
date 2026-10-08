@@ -7108,6 +7108,75 @@ def test_refetch_euro_filings_primary_bodies_hei_de_eng_20261006_01(mock_fetch, 
     assert any(row.get("has_body") for row in payload.get("filings") or [])
 
 
+@patch("value_investor.research.filings.fetch_filing_body")
+def test_refetch_euro_filings_primary_bodies_hei_de_thin_body_eng_20261008_01(
+    mock_fetch, tmp_path: Path
+):
+    """eng-20261008-01: HEI.DE thin_body — listing refresh merges H1 then refetches."""
+    from value_investor.research.filings import refetch_euro_filings_primary_bodies
+
+    mock_fetch.return_value = (
+        "Heidelberg Materials half year interim financial report revenue operating margin "
+        "consolidated statements " * 40
+    )
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    annual_rows = [
+        {
+            "id": "ir_b0e06b2966d9ae0d",
+            "source": "ir_allowlist",
+            "url": "https://www.heidelbergmaterials.com/system/files/2026-03/HM_Annual_Financial_Statements_2025.pdf",
+            "period": "annual",
+            "category": "ir_allowlist",
+            "has_body": True,
+            "body_path": str(bodies_dir / "ir_b0e06b2966d9ae0d.txt"),
+        },
+        {
+            "id": "ir_220cea9233cdc5ec",
+            "source": "ir_allowlist",
+            "url": "https://www.eqs-news.com/media/document/86940b2a-a5f1-41b6-8b27-6ee13543a147/assets/DE0006047004-JA-2025-EQ-D-00.pdf",
+            "period": "annual",
+            "category": "ir_allowlist",
+            "has_body": True,
+            "body_path": str(bodies_dir / "ir_220cea9233cdc5ec.txt"),
+        },
+    ]
+    for row in annual_rows:
+        Path(str(row["body_path"])).write_text(
+            "Heidelberg Materials annual report " * 80, encoding="utf-8"
+        )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "HEI.DE",
+                "regime": "euro_filings",
+                "filings": annual_rows,
+                "summary": {"total": 2, "with_body": 2, "annual": 2, "interim": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = refetch_euro_filings_primary_bodies(
+        filings_dir,
+        ticker="HEI.DE",
+        company_name="Heidelberg Materials AG",
+        max_bodies=5,
+    )
+    listing = result.get("listing_refresh") or {}
+    assert int(listing.get("added") or 0) >= 1
+    assert int(listing.get("total_allowlist") or 0) >= 3
+    assert result["attempted"] >= 1
+    assert result["with_body_after"] >= 3
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 3
+    assert int(payload["summary"]["with_body"]) >= 3
+    assert any(
+        row.get("period") == "interim" and row.get("has_body")
+        for row in payload.get("filings") or []
+    )
+
+
 def test_fetch_filings_ir_allowlist_hang_seng_unmeasured_builtins_eng_20260930_03(
     tmp_path: Path,
 ):
