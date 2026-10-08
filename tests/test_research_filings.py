@@ -6262,6 +6262,22 @@ def test_builtin_ir_allowlist_includes_oiz_ir():
     assert len(fetch_filings_ir_allowlist("OIZ")) >= 4
 
 
+def test_builtin_ir_allowlist_includes_igg_l():
+    """eng-20261008-02: ftse350 IGG.L intensive pin had empty IR allowlist (0 refetch)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("IGG.L") or []
+    assert any("annual-report-31-December-2025.pdf" in url for url in urls)
+    assert any("ig-group-h1-2026-results-rns.pdf" in url for url in urls)
+    assert all("iggroup.com" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("IGG.L")
+    assert len(rows) >= 4
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    periods = {row.get("period") for row in rows}
+    assert "annual" in periods
+    assert "interim" in periods
+
+
 def test_builtin_ir_allowlist_includes_hoc_l():
     """eng-20261007-02: ftse350 HOC.L intensive pin had empty IR allowlist (0 refetch)."""
     from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
