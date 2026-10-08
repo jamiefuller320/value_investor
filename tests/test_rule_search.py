@@ -310,12 +310,10 @@ def test_search_reveal_and_holdout_order(built, tmp_path: Path):
         assert paired["monthly"]["low"] <= paired["monthly"]["mean"] <= paired["monthly"]["high"]
         same = holdout["chosen"]["config_id"] == holdout["frozen"]["config_id"]
         assert (paired["verdict"] == "same_rules") == same
-    assert holdout["frozen"]["base"]["verdict_vs_market"] in {
-        "pass",
-        "fail",
-        "inconclusive",
-        "too_thin",
-    }
+    verdicts = {"pass", "fail", "inconclusive", "too_thin"}
+    assert holdout["frozen"]["base"]["verdict_vs_plain_value"] in verdicts
+    assert holdout["frozen"]["base"]["market_context_vs_cap_weighted"] in verdicts
+    assert "verdict_vs_market" not in holdout["frozen"]["base"]
     assert revealed["holdout_reveals"] == [{"at": holdout["run_at"], "evidence": True}]
 
     block = rs.status_block(reg_path, store)
@@ -343,6 +341,38 @@ def test_tactical_off_matches_core_only_and_costs_lower_returns(built):
     assert np.all(dear.portfolio <= cheap.portfolio + 1e-12)
     assert dear.tactical_trades == []
     assert len(cheap.cap_weighted) == len(cheap.portfolio) == 24
+    assert np.all(dear.plain_value <= cheap.plain_value + 1e-12)
+    assert dear.plain_value[0] < cheap.plain_value[0]  # the first month buys the whole book
+
+
+def test_plain_value_book_is_the_objective_benchmark(built):
+    build, reg_path, _ = built
+    reg = json.loads(reg_path.read_text())
+    data = rs.load_search_data(build, reg)
+    first = data.screens[1]
+    # At or above the 70th percentile of 24 falling positive yields: S00..S06.
+    assert first.plain_value == frozenset(f"S{i:02d}" for i in range(7))
+
+    window = reg["windows"]["development"]
+    dates = data.window_dates(window)
+    book = rs.plain_value_book(data, dates, cost_per_side=0.0)
+    assert book.fallback_months == 0
+    expected = np.mean(
+        [rs._month_return(data, t, dates[0], dates[1])[0] for t in sorted(first.plain_value)]
+    )
+    assert book.returns[0] == pytest.approx(expected)
+    assert rs.plain_value_book(data, dates, cost_per_side=0.0) is book
+
+    run = rs.simulate(data, rs.RuleConfig("buy_tier", None, "tier1", None), window, cost_per_side=0)
+    metrics = rs.window_metrics(run, horizons=[12], lag=12, z=1.645)
+    log_ex = np.log1p(run.portfolio) - np.log1p(run.plain_value)
+    assert metrics["horizons"]["12"] == rs.horizon_probability(log_ex, 12, lag=12, z=1.645)
+    context = metrics["market_context"]
+    cap_ex = np.log1p(run.portfolio) - np.log1p(run.cap_weighted)
+    assert context["horizons_vs_cap_weighted"]["12"] == rs.horizon_probability(
+        cap_ex, 12, lag=12, z=1.645
+    )
+    assert "annualised_excess_cap" in context and "annualised_excess_cap" not in metrics
 
 
 def test_findings_for_stale_registration():

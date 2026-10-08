@@ -14,15 +14,23 @@ L574. Observe-only: no book, signal, or knob reads it.
 ## Learning question
 
 On the frozen screen's output, which selection rule, core exit rule, and
-tactical variant gives the highest probability of beating the cap-weighted
-universe over 36 months? Does holding the core until a thesis break (the PR
+tactical variant gives the highest probability of beating a **plain value
+book** over 36 months? Does holding the core until a thesis break (the PR
 #1021 core sell trigger) beat selling on leaving the selection, and does a
 re-rating exit stop open-ended holding without giving that up? Does the
 tactical slice add anything to the core once its idle cash and costs are
 counted?
 
 The objective is not maximum profit. It is the lower confidence bound of the
-probability that the book is ahead of the market after a set holding period.
+probability that the book is ahead of a plain value book after a set holding
+period.
+
+Why not the market? The holdout decade favoured growth, and no selection or
+exit rule changes how much value exposure the book carries. Against the market
+the search would mostly score the value regime. The plain value book (the
+hsr-v1 earnings-yield sort: top 30% by positive earnings yield, equal weight,
+monthly, same costs) carries the same exposure, so the comparison isolates what
+the rules add. Market-relative results are still reported as context.
 
 ## What is searched
 
@@ -81,8 +89,11 @@ holdout then tests the chosen one once.
   haircut.
 * **Costs.** 0.175% per side, the fair GBP-funded US cost (3% stress), on core turnover, on every slice fill
   and exit, and on monthly slice resizing while the slice is in position.
-* **Benchmarks.** The screened universe on each date, cap-weighted (primary) and
-  equal-weighted.
+* **Benchmarks.** The plain value book decides: the top 30% of the screened
+  names by positive earnings yield, equal weight, rebalanced monthly at the
+  same cost per side on its own turnover. A month with no such names uses the
+  equal-weight universe and is counted (`plain_value_fallback_months`). The
+  screened universe, cap-weighted and equal-weighted, is market context.
 
 Simplifications are listed in the registration: idle slice cash earns zero, plans
 are weekly rather than per screen run, and there is no fill on the core's exit
@@ -93,11 +104,14 @@ day.
 Per rule set, on each window:
 
 * `p` and `p_lower` at 12, 36, and 60 months: P(cumulative log excess over the
-  cap-weighted universe > 0) = Φ(μ√H / σ), where σ is the Newey–West long-run
+  plain value book > 0) = Φ(μ√H / σ), where σ is the Newey–West long-run
   standard deviation (lag 12). `p_lower` uses μ − z·σ/√T (z = 1.645 in the
   search, 1.96 at the holdout).
 * The empirical overlapping hit rate (reported, not optimised), annualised
-  return and excess, and the information ratio.
+  return and excess over the plain book, and the information ratio.
+* `market_context`: the same probabilities against the cap-weighted universe,
+  excess over the cap- and equal-weighted universes, and the plain book's own
+  excess over the cap-weighted universe (the value regime). Context only.
 * Holding: median, 90th percentile, and longest holding in months, episodes
   still open at the window end, and sells by reason (`avoid`, `left_selection`,
   `thesis_break`, `rerated`, `left_universe`).
@@ -106,7 +120,8 @@ Per rule set, on each window:
   its interval.
 
 Across the grid: the probability of backtest overfitting (CSCV, 16 blocks) and
-the deflated Sharpe ratio of the chosen rule set.
+the deflated Sharpe ratio of the chosen rule set, both on excess over the plain
+book.
 
 ## Selection and reveal order
 
@@ -130,18 +145,21 @@ the deflated Sharpe ratio of the chosen rule set.
 | Chosen minus frozen is inconclusive or below zero | Keep the live rules; the search found noise |
 | Chosen uses a `rerate` or `thesis` exit and passes | Propose that exit for the core sell trigger (`core_sell_trigger.py`) through a cold-start twin; the replayed thresholds are starting values, not a live edit |
 | Tactical increment costs or is inconclusive | Keep tactical levels as alerts only; do not build a cycling slice into paper books |
-| Neither passes | Follow the hsr-v1 decision |
+| Neither passes | The rules add nothing over textbook value; follow the hsr-v1 decision |
 
-Pass bar: holdout 36-month `p_lower` ≥ 0.5 at base cost. A high PBO (above 0.5)
+Pass bar (`verdict_vs_plain_value`): holdout 36-month `p_lower` against the
+plain value book ≥ 0.5 at base cost. `market_context_vs_cap_weighted` applies
+the same rule to the cap-weighted universe and is context only. A high PBO (above 0.5)
 or a low deflated Sharpe means the development ranking should not be trusted
 even if the holdout passes.
 
 ### Reading the result
 
 * The holdout (2013–2025) was a poor period for value, especially 2017–2020.
-  A market verdict of `fail` for both frozen and chosen points at the regime
-  and the hsr-v1 plain-value comparator; chosen minus frozen still answers
-  whether the search added anything.
+  Read `market_context` with the plain book's own excess over the market: a
+  rule set that lags the market but beats the plain book did its job in a
+  value-lagged decade. Chosen minus frozen answers whether the search added
+  anything.
 * Every rule set holds equal weights and has no position cap. The live
   `buy_tier_level` book caps at 120 names and has a one-screen re-entry
   cooldown; the median names held per rule set shows how far that matters.
