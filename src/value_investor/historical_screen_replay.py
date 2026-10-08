@@ -2,8 +2,10 @@
 
 Learning question (fixed in ``docs/data/historical_screen_replay_registration.json``
 before any licensed data is bought): in a survivorship-free point-in-time universe,
-does the screen's buy tier beat (a) the equal-weight universe and (b) a plain
-"cheapest 30% on earnings yield" sort of the same names, after costs?
+does the screen's buy tier beat a plain "cheapest 30% on earnings yield" sort of
+the same names, after costs on both? Both legs face the same value regime, so the
+answer does not depend on whether value or growth led the decade. The spread over
+the equal-weight universe is reported as context, split by value regime.
 
 The harness scores each historical rebalance date with ``run_library_screen`` on a
 scratch library root, so the replay runs the same code as the offline screen.
@@ -262,11 +264,18 @@ def forward_returns(
     return pd.DataFrame(rows, columns=["as_of", "exit", "ticker", "ret", "exit_kind"])
 
 
+def _turnover(names: set[str], previous: set[str] | None) -> float:
+    if previous is None or not names:
+        return 1.0
+    return 1.0 - len(names & previous) / len(names)
+
+
 def score_cohort(
     cohort: pd.DataFrame,
     *,
     max_abs_return: float | None = None,
     previous_buy: set[str] | None = None,
+    previous_plain: set[str] | None = None,
 ) -> dict[str, Any] | None:
     """Spreads for one entry date. ``cohort`` joins signals with forward returns."""
     rows = cohort
@@ -282,10 +291,8 @@ def score_cohort(
     avoid = rows.loc[rows["signal"] == "avoid", "ret"]
     plain = plain_value_tickers(rows) if "earnings_yield" in rows.columns else set()
     plain_rets = rows.loc[rows["ticker"].isin(plain), "ret"]
-    buy_names = set(buy["ticker"])
-    turnover = (
-        1.0 - len(buy_names & previous_buy) / len(buy_names) if previous_buy is not None else 1.0
-    )
+    turnover = _turnover(set(buy["ticker"]), previous_buy)
+    plain_turnover = _turnover(plain, previous_plain) if plain else None
     rank_ic = spearman(rows["conviction_score"].astype(float).tolist(), rows["ret"].tolist())
     buy_spread = float(buy["ret"].mean()) - universe
     plain_spread = (
@@ -304,6 +311,7 @@ def score_cohort(
             None if plain_spread is None else round(buy_spread - plain_spread, 4)
         ),
         "buy_tier_turnover": round(turnover, 4),
+        "plain_value_turnover": None if plain_turnover is None else round(plain_turnover, 4),
         "dropped_extreme_returns": dropped,
         "terminal_exits": int((rows.get("exit_kind") == "terminal").sum())
         if "exit_kind" in rows.columns
@@ -326,13 +334,23 @@ def score_cohorts(
         as_of: set(group.loc[group["signal"].isin(BUY_TIER), "ticker"])
         for as_of, group in sig.groupby("as_of")
     }
+    plain_by_date = (
+        {as_of: plain_value_tickers(group) for as_of, group in sig.groupby("as_of")}
+        if "earnings_yield" in sig.columns
+        else {}
+    )
     dates = sorted(buy_by_date)
     out: list[dict[str, Any]] = []
     for as_of, cohort in sorted(joined.groupby("as_of"), key=lambda item: item[0]):
         lookback = as_of - pd.Timedelta(days=horizon_days)
         earlier = [d for d in dates if d <= lookback]
-        previous = buy_by_date[earlier[-1]] if earlier else None
-        scored = score_cohort(cohort, max_abs_return=max_abs_return, previous_buy=previous)
+        previous = earlier[-1] if earlier else None
+        scored = score_cohort(
+            cohort,
+            max_abs_return=max_abs_return,
+            previous_buy=None if previous is None else buy_by_date[previous],
+            previous_plain=None if previous is None else plain_by_date.get(previous),
+        )
         if scored is not None:
             out.append(scored)
     return out
@@ -371,10 +389,27 @@ def summarise_window(
     def pick(key: str) -> list[float]:
         return [c[key] for c in cohorts if c.get(key) is not None]
 
-    def net(cost: float) -> list[float]:
-        return [c["buy_tier_spread"] - 2.0 * cost * c["buy_tier_turnover"] for c in cohorts]
+    def net(cost: float, rows: list[dict[str, Any]] = cohorts) -> list[float]:
+        return [c["buy_tier_spread"] - 2.0 * cost * c["buy_tier_turnover"] for c in rows]
+
+    def plain_net(c: dict[str, Any], cost: float) -> float | None:
+        if c.get("plain_value_spread") is None:
+            return None
+        turnover = c.get("plain_value_turnover")
+        return c["plain_value_spread"] - 2.0 * cost * (1.0 if turnover is None else turnover)
+
+    def versus_plain(cost: float, rows: list[dict[str, Any]] = cohorts) -> list[float]:
+        return [
+            c["buy_tier_spread"] - 2.0 * cost * c["buy_tier_turnover"] - plain
+            for c in rows
+            if (plain := plain_net(c, cost)) is not None
+        ]
 
     kwargs = {"step_days": step_days, "horizon_days": horizon_days}
+    regimes = [(c, c.get("plain_value_spread")) for c in cohorts]
+    led = [c for c, spread in regimes if spread is not None and spread > 0]
+    lagged = [c for c, spread in regimes if spread is not None and spread <= 0]
+    plain_turnover = pick("plain_value_turnover")
     return {
         "cohorts": len(cohorts),
         "first_entry": cohorts[0]["entry"] if cohorts else None,
@@ -383,10 +418,31 @@ def summarise_window(
         "buy_tier_spread_net": summarise(net(cost_per_side), **kwargs),
         "buy_tier_spread_net_stress": summarise(net(stress_cost_per_side), **kwargs),
         "plain_value_spread": summarise(pick("plain_value_spread"), **kwargs),
+        "plain_value_spread_net": summarise(
+            [v for c in cohorts if (v := plain_net(c, cost_per_side)) is not None], **kwargs
+        ),
         "buy_minus_plain_value": summarise(pick("buy_minus_plain_value"), **kwargs),
+        "buy_minus_plain_value_net": summarise(versus_plain(cost_per_side), **kwargs),
+        "buy_minus_plain_value_net_stress": summarise(versus_plain(stress_cost_per_side), **kwargs),
+        "value_regime": {
+            "basis": "cohorts split by whether the plain value sort beat the universe",
+            "value_led": {
+                "cohorts": len(led),
+                "buy_minus_plain_value_net": summarise(versus_plain(cost_per_side, led), **kwargs),
+                "buy_tier_spread_net": summarise(net(cost_per_side, led), **kwargs),
+            },
+            "value_lagged": {
+                "cohorts": len(lagged),
+                "buy_minus_plain_value_net": summarise(
+                    versus_plain(cost_per_side, lagged), **kwargs
+                ),
+                "buy_tier_spread_net": summarise(net(cost_per_side, lagged), **kwargs),
+            },
+        },
         "avoid_spread": summarise(pick("avoid_spread"), **kwargs),
         "rank_ic": summarise(pick("rank_ic"), **kwargs),
         "mean_buy_tier_turnover": round(mean(pick("buy_tier_turnover")), 4) if cohorts else None,
+        "mean_plain_value_turnover": round(mean(plain_turnover), 4) if plain_turnover else None,
         "terminal_exits": sum(int(c.get("terminal_exits") or 0) for c in cohorts),
     }
 
@@ -448,6 +504,10 @@ def build_replay_results(
                 entry["holdout_secondary_verdict"] = verdict(
                     entry["holdout"], primary["secondary_metric"]
                 )
+        if horizon == primary.get("confirmation_horizon_days"):
+            entry["development_confirmation_verdict"] = verdict(dev_summary, primary["metric"])
+            if reveal_holdout:
+                entry["holdout_confirmation_verdict"] = verdict(entry["holdout"], primary["metric"])
         out[str(horizon)] = entry
     return out
 
