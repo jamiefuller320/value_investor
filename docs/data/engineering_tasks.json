@@ -8912,7 +8912,10 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open"
+      "status": "parked",
+      "parked_reason": "automation waste reburn — 6 engineering-agent failure(s) in 6h without an in-flight PR (PM stop_automation_waste)",
+      "parked_policy": "reburn_loop",
+      "parked_at": "2026-10-08T22:17:24.530790+00:00"
     },
     {
       "id": "eng-20261004-07",
@@ -9552,20 +9555,20 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-08T18:58:32.353857+00:00",
-    "pause_active": false,
-    "automation_waste_active": false,
+    "evaluated_at": "2026-10-08T22:17:20.452100+00:00",
+    "pause_active": true,
+    "automation_waste_active": true,
     "automation_waste_signals": [
       {
         "kind": "eng_agent_reburn",
         "title": "Automation waste: engineering agent reburn",
         "severity": "fail",
-        "summary": "3 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261004-05) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
+        "summary": "6 engineering-agent failure(s) in 6h while open task(s) remain (eng-20261008-04) and no engineering PR is in flight. Likely park-not-committed / preflight reburn — pause dispatch and park.",
         "workflow": "engineering-agent.yml",
         "task_ids": [
-          "eng-20261004-05"
+          "eng-20261008-04"
         ],
-        "failure_count": 3,
+        "failure_count": 6,
         "window_hours": 6.0,
         "auto_remediable": true,
         "evidence": {
@@ -9576,7 +9579,7 @@
       }
     ],
     "automation_waste_parked_task_ids": [
-      "eng-20261004-05"
+      "eng-20261008-04"
     ],
     "automation_waste_cleared_at": "2026-10-06T21:48:06.858409+00:00",
     "last_change": {
@@ -9596,8 +9599,11 @@
         "last_head_sha": null
       }
     },
-    "last_action_at": "2026-10-06T21:48:06.858409+00:00",
-    "resumed_at": "2026-10-06T21:48:06.858409+00:00"
+    "last_action_at": "2026-10-08T22:17:20.452100+00:00",
+    "pause_reasons": [
+      "automation_waste"
+    ],
+    "pause_started_at": "2026-10-08T22:17:20.452100+00:00"
   },
   "queue_clearing": {
     "attention_parked_count": 3,
