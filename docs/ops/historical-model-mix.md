@@ -125,8 +125,9 @@ git add docs/data/historical_model_mix.json && git commit -m "Record the hms-v1 
 ftse-model-mix reveal --build ~/hsr-build --midcap-build ~/hsr-mid-build
 ```
 
-It reuses both signal caches, so it costs minutes, not another screening
-pass. The builds must sit outside the repository (the tool refuses
+It reuses both signal caches, so it needs no further screening pass: about 30
+seconds for both universes at full scale (500 names, 156 development months,
+timed on synthetic data). The builds must sit outside the repository (the tool refuses
 otherwise). The committed store holds per-candidate IC summaries and monthly
 IC means, book-level monthly returns, and correlations between candidates. No
 per-name rows.
