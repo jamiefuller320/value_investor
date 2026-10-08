@@ -119,6 +119,11 @@ Per rule set, on each window:
   and the **tactical increment** (combined minus core-only monthly return) with
   its interval.
 
+Kept for after deletion: book-level monthly returns (portfolio, plain value
+book, cap- and equal-weighted universe, names held) for the frozen and chosen
+rules on development (`search.series`) and for every holdout run
+(`series`, plus `core_only_portfolio` when tactical is on).
+
 Across the grid: the probability of backtest overfitting (CSCV, 16 blocks) and
 the deflated Sharpe ratio of the chosen rule set, both on excess over the plain
 book.
