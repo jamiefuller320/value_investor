@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-08T12:32:06.731507+00:00`
+Generated: `2026-10-08T17:32:08.253479+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,6 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `human`/human PR #912 `eng-20260930-02` — Hunt fetchable IR source for parked euro_depth leftover MC.PA
 - `human`/human PR #1027 `eng-20261008-02` — Seed IR allowlist for unmeasured/zero-body IGG.L — empty allowlist after 0-improve pin (igc-20261008-01)
 
 ## PR fix occasions — common failure reasons
