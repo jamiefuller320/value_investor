@@ -3,37 +3,37 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-07T16:34:38.034261+00:00",
+  "generated_at": "2026-10-08T08:46:57.182885+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 12,
+    "closed_total": 14,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 5,
+    "open_with_thesis": 3,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 2,
+        "closed_count": 3,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0198,
-        "mean_trough_unrealized_pct": -0.0293,
+        "mean_peak_unrealized_pct": 0.1049,
+        "mean_trough_unrealized_pct": -0.0234,
         "outcome_labels": {
-          "recovered": 2
+          "recovered": 3
         }
       },
       "broken": {
-        "closed_count": 10,
+        "closed_count": 11,
         "recovery_rate": 1.0,
         "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0273,
-        "mean_trough_unrealized_pct": 0.0241,
+        "mean_peak_unrealized_pct": 0.0255,
+        "mean_trough_unrealized_pct": 0.0226,
         "outcome_labels": {
-          "recovered": 10
+          "recovered": 11
         }
       },
       "insufficient_data": {
@@ -62,10 +62,9 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 12,
+    "hold_closed_with_thesis": 14,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold thesis buckets thin (weakening=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -218,7 +217,7 @@
       "ticker": "CARD.L",
       "name": "Card Factory plc",
       "started_at": "2026-09-16T08:19:12.079221+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -260,9 +259,9 @@
       "peak_unrealized_pct": 0.2751,
       "trough_unrealized_pct": -0.0117,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-08T09:46:57.163328+01:00",
+      "linked_sell_trade_id": "c1fbf267-205d-40a9-a700-a309a011c081"
     },
     {
       "episode_id": "buy_tier_level:FOXT.L:2026-09-16T08:19:12.079221+01:00",
@@ -729,7 +728,7 @@
       "ticker": "SBRE.L",
       "name": "Sabre Insurance Group plc",
       "started_at": "2026-10-07T17:34:38.016694+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -761,9 +760,9 @@
       "peak_unrealized_pct": 0.008,
       "trough_unrealized_pct": 0.008,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-08T09:46:57.163328+01:00",
+      "linked_sell_trade_id": "2c126cca-b559-43b9-b0c8-0f216688823e"
     },
     {
       "episode_id": "buy_tier_level:APTD.L:2026-10-07T17:34:38.016694+01:00",
@@ -802,9 +801,9 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0347,
+      "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": -0.0347,
-      "recovered_to_breakeven": null,
+      "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
@@ -936,12 +935,19 @@
           "avg_sell_return": 0.0034,
           "avg_buy_return": 0.0,
           "replacement_delta": -0.0034
+        },
+        {
+          "scored_at": "2026-10-08T09:46:57.163328+01:00",
+          "days_after": 28,
+          "avg_sell_return": 0.0789,
+          "avg_buy_return": 0.0,
+          "replacement_delta": -0.0789
         }
       ],
       "sell_returns_since_rotation": {
         "CARD.L": 0.2328,
         "CAPD.L": 0.0804,
-        "REC.L": 0.0,
+        "REC.L": -0.0302,
         "GLE.L": 0.0327
       },
       "buy_returns_since_rotation": {
@@ -1062,7 +1068,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "REC.L": -0.0337,
+        "REC.L": -0.0629,
         "DFS.L": 0.0,
         "CARD.L": 0.2618
       },
@@ -1413,7 +1419,7 @@
       },
       "buy_returns_since_rotation": {
         "DFS.L": 0.1115,
-        "APTD.L": 0.0
+        "APTD.L": 0.036
       },
       "verdict": null,
       "closed_at": null
@@ -1558,7 +1564,7 @@
       ],
       "sell_returns_since_rotation": {
         "DFS.L": 0.1115,
-        "APTD.L": 0.0
+        "APTD.L": 0.036
       },
       "buy_returns_since_rotation": {
         "CARD.L": 0.2471
@@ -1744,7 +1750,7 @@
         "MER.L": 0.0
       },
       "buy_returns_since_rotation": {
-        "REC.L": 0.0214,
+        "REC.L": -0.0095,
         "FOXT.L": -0.0274
       },
       "verdict": null,
@@ -1913,7 +1919,7 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "REC.L": 0.0238
+        "REC.L": -0.0071
       },
       "buy_returns_since_rotation": {
         "CAPD.L": 0.0083
@@ -2136,7 +2142,7 @@
         "CARD.L": 0.0438
       },
       "buy_returns_since_rotation": {
-        "REC.L": 0.0142
+        "REC.L": -0.0165
       },
       "verdict": null,
       "closed_at": null
@@ -2268,7 +2274,7 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "REC.L": 0.0142
+        "REC.L": -0.0165
       },
       "buy_returns_since_rotation": {
         "SBRE.L": 0.008,
@@ -2403,7 +2409,91 @@
         "ENQ.L": 0.0149
       },
       "buy_returns_since_rotation": {
-        "APTD.L": -0.0347
+        "APTD.L": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-08T09:46:57.163328+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-08T09:46:57.163328+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.003,
+      "sells": [
+        {
+          "ticker": "CARD.L",
+          "price": 85.8,
+          "shares": 2.714665,
+          "gross": 232.92,
+          "cost": 0.12,
+          "avg_cost_at_exit": 70.2187,
+          "realized_pct": 0.2219,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.2219
+        },
+        {
+          "ticker": "SBRE.L",
+          "price": 175.4,
+          "shares": 1.282447,
+          "gross": 224.94,
+          "cost": 0.11,
+          "avg_cost_at_exit": 174.0,
+          "realized_pct": 0.008,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.008
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "CAPD.L",
+          "price": 121.0,
+          "shares": 1.895759,
+          "gross": 229.39,
+          "cost": 1.26
+        },
+        {
+          "ticker": "ENQ.L",
+          "price": 27.2,
+          "shares": 8.299285,
+          "gross": 225.74,
+          "cost": 1.24
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "CARD.L": 0.0,
+        "SBRE.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "CAPD.L": 0.0,
+        "ENQ.L": 0.0
       },
       "verdict": null,
       "closed_at": null

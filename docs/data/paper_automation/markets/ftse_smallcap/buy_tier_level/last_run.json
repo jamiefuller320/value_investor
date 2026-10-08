@@ -1,29 +1,78 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-07T17:34:38.016694+01:00",
+    "local_time": "2026-10-08T09:46:57.163328+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-10-07T08:00:00+01:00",
-    "settle_at": "2026-10-07T09:15:00+01:00",
+    "market_open_at": "2026-10-08T08:00:00+01:00",
+    "settle_at": "2026-10-08T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
   "trades": [
     {
-      "id": "4d1b4597-e937-436e-bc46-072dbc408319",
+      "id": "c1fbf267-205d-40a9-a700-a309a011c081",
       "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
-      "acted_at": "2026-10-07T17:34:38.016694+01:00",
+      "acted_at": "2026-10-08T09:46:57.163328+01:00",
+      "ticker": "CARD.L",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 2.714665,
+      "price": 85.8,
+      "gross": 232.92,
+      "cost": 0.12,
+      "net_cash": 232.8,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Card Factory plc",
+      "avg_cost_at_exit": 70.2187,
+      "position_closed": true
+    },
+    {
+      "id": "2c126cca-b559-43b9-b0c8-0f216688823e",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-10-08T09:46:57.163328+01:00",
+      "ticker": "SBRE.L",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 1.282447,
+      "price": 175.4,
+      "gross": 224.94,
+      "cost": 0.11,
+      "net_cash": 224.83,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Sabre Insurance Group plc",
+      "avg_cost_at_exit": 174.0,
+      "position_closed": true
+    },
+    {
+      "id": "e86840a0-934a-438d-a68c-1b78d6d469db",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-10-08T09:46:57.163328+01:00",
       "ticker": "CAPD.L",
       "side": "buy",
       "sizing_mode": "cash",
-      "shares": 0.9042,
+      "shares": 1.895759,
       "price": 121.0,
-      "gross": 109.41,
-      "cost": 0.6,
-      "net_cash": -110.01,
+      "gross": 229.39,
+      "cost": 1.26,
+      "net_cash": -230.65,
       "note": "Automated buy",
       "name": "Capital Limited"
+    },
+    {
+      "id": "e67cc7b0-1352-42d6-8ce5-fa035c724461",
+      "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+      "acted_at": "2026-10-08T09:46:57.163328+01:00",
+      "ticker": "ENQ.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 8.299285,
+      "price": 27.2,
+      "gross": 225.74,
+      "cost": 1.24,
+      "net_cash": -226.98,
+      "note": "Automated buy",
+      "name": "EnQuest PLC"
     }
   ],
   "plan": {
@@ -39,7 +88,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1128.32,
+    "nav": 1129.5,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -52,7 +101,7 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 376.03,
+    "target_sleeve_value": 564.72,
     "targets": [
       {
         "ticker": "CAPD.L",
@@ -60,13 +109,6 @@
         "signal": "strong_buy",
         "conviction_score": 0.8,
         "price": 121.0
-      },
-      {
-        "ticker": "APTD.L",
-        "name": "Aptitude Software Group plc",
-        "signal": "buy",
-        "conviction_score": 0.6813,
-        "price": 250.0
       },
       {
         "ticker": "ENQ.L",
@@ -79,21 +121,12 @@
     "anticipated_exits": [
       {
         "action": "sell",
-        "ticker": "CARD.L",
-        "name": "Card Factory plc",
+        "ticker": "APTD.L",
+        "name": "Aptitude Software Group plc",
         "reason": "No longer in the top conviction target set",
-        "shares": 2.714665,
-        "price": 85.8,
-        "value": 232.92
-      },
-      {
-        "action": "sell",
-        "ticker": "SBRE.L",
-        "name": "Sabre Insurance Group plc",
-        "reason": "No longer in the top conviction target set",
-        "shares": 1.282447,
-        "price": 175.4,
-        "value": 224.94
+        "shares": 0.434532,
+        "price": 259.0,
+        "value": 112.54
       }
     ],
     "anticipated_grace_holds": [],
@@ -101,39 +134,28 @@
     "anticipated_buys": [
       {
         "action": "buy",
-        "ticker": "CAPD.L",
-        "name": "Capital Limited",
-        "reason": "Top-up to equal weight",
-        "value": 40.68,
-        "price": 121.0,
-        "target_value": 376.03,
-        "conviction_score": 0.8,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "APTD.L",
-        "name": "Aptitude Software Group plc",
-        "reason": "Top-up to equal weight",
-        "value": 267.4,
-        "price": 250.0,
-        "target_value": 376.03,
-        "conviction_score": 0.6813,
-        "signal": "buy"
-      },
-      {
-        "action": "buy",
         "ticker": "ENQ.L",
         "name": "EnQuest PLC",
         "reason": "Top-up to equal weight",
-        "value": 149.55,
+        "value": 112.49,
         "price": 27.2,
-        "target_value": 376.03,
+        "target_value": 564.72,
         "conviction_score": 0.39949999999999997,
         "signal": "buy"
       }
     ],
-    "anticipated_holds": [],
+    "anticipated_holds": [
+      {
+        "action": "hold",
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "reason": "Already near equal-weight target",
+        "value": 564.74,
+        "target_value": 564.72,
+        "conviction_score": 0.8,
+        "signal": "strong_buy"
+      }
+    ],
     "skipped": [],
     "waitlisted": [
       {
@@ -144,20 +166,9 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 3 buy(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 1 near-target holding(s)."
   },
   "alerts": [
-    {
-      "ticker": "CARD.L",
-      "name": "Card Factory plc",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
-      "mark": 85.8,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "wait"
-    },
     {
       "ticker": "CAPD.L",
       "name": "Capital Limited",
@@ -168,17 +179,6 @@
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
-    },
-    {
-      "ticker": "SBRE.L",
-      "name": "Sabre Insurance Group plc",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 175.4,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "accumulate"
     },
     {
       "ticker": "ENQ.L",
@@ -197,10 +197,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 250.0,
+      "mark": 259.0,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": null
     }
   ],
   "fund": {
@@ -222,21 +222,10 @@
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
-      "CARD.L": {
-        "ticker": "CARD.L",
-        "shares": 2.714665,
-        "avg_cost": 70.2187,
-        "name": "Card Factory plc",
-        "sector": "Consumer Cyclical",
-        "currency": "GBP",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-09-09T08:23:01.537702+01:00"
-      },
       "CAPD.L": {
         "ticker": "CAPD.L",
-        "shares": 2.771526,
-        "avg_cost": 118.7109,
+        "shares": 4.667285,
+        "avg_cost": 119.6407,
         "name": "Capital Limited",
         "sector": "Basic Materials",
         "currency": "GBP",
@@ -244,21 +233,10 @@
         "take_profit": null,
         "opened_at": "2026-09-09T08:23:01.537702+01:00"
       },
-      "SBRE.L": {
-        "ticker": "SBRE.L",
-        "shares": 1.282447,
-        "avg_cost": 174.0,
-        "name": "Sabre Insurance Group plc",
-        "sector": "Financial Services",
-        "currency": "GBP",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-05T08:38:04.201828+01:00"
-      },
       "ENQ.L": {
         "ticker": "ENQ.L",
-        "shares": 8.326366,
-        "avg_cost": 26.8,
+        "shares": 16.625651,
+        "avg_cost": 26.9997,
         "name": "EnQuest PLC",
         "sector": "Energy",
         "currency": "GBP",
@@ -1409,6 +1387,70 @@
         "net_cash": -110.01,
         "note": "Automated buy",
         "name": "Capital Limited"
+      },
+      {
+        "id": "c1fbf267-205d-40a9-a700-a309a011c081",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-08T09:46:57.163328+01:00",
+        "ticker": "CARD.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 2.714665,
+        "price": 85.8,
+        "gross": 232.92,
+        "cost": 0.12,
+        "net_cash": 232.8,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Card Factory plc",
+        "avg_cost_at_exit": 70.2187,
+        "position_closed": true
+      },
+      {
+        "id": "2c126cca-b559-43b9-b0c8-0f216688823e",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-08T09:46:57.163328+01:00",
+        "ticker": "SBRE.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 1.282447,
+        "price": 175.4,
+        "gross": 224.94,
+        "cost": 0.11,
+        "net_cash": 224.83,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Sabre Insurance Group plc",
+        "avg_cost_at_exit": 174.0,
+        "position_closed": true
+      },
+      {
+        "id": "e86840a0-934a-438d-a68c-1b78d6d469db",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-08T09:46:57.163328+01:00",
+        "ticker": "CAPD.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 1.895759,
+        "price": 121.0,
+        "gross": 229.39,
+        "cost": 1.26,
+        "net_cash": -230.65,
+        "note": "Automated buy",
+        "name": "Capital Limited"
+      },
+      {
+        "id": "e67cc7b0-1352-42d6-8ce5-fa035c724461",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-10-08T09:46:57.163328+01:00",
+        "ticker": "ENQ.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 8.299285,
+        "price": 27.2,
+        "gross": 225.74,
+        "cost": 1.24,
+        "net_cash": -226.98,
+        "note": "Automated buy",
+        "name": "EnQuest PLC"
       }
     ],
     "equity_curve": [
@@ -1851,27 +1893,45 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-08T09:46:57.163328+01:00",
+        "portfolio_value": 1129.5,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-07T17:34:38.016694+01:00",
+    "last_mark_at": "2026-10-08T09:46:57.163328+01:00",
     "rebalance_state": {
       "exit_streak": {
+        "APTD.L": 1
+      },
+      "reentry_cooldown": {
         "CARD.L": 1,
         "SBRE.L": 1
-      },
-      "reentry_cooldown": {}
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (1 trade(s)).",
+  "note": "Rebalanced after open settle (4 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "ftse_smallcap",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-07T16:34:38.026459+00:00",
+    "generated_at": "2026-10-08T08:46:57.174603+00:00",
     "observe_only": true,
-    "open_count": 14,
+    "open_count": 16,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -1906,7 +1966,7 @@
       }
     },
     "first_episode": {
-      "open_count": 9,
+      "open_count": 10,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -1942,13 +2002,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 2,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-07T16:34:38.028202+00:00",
+    "generated_at": "2026-10-08T08:46:57.176507+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2002,36 +2062,36 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 12,
+      "hold_closed_count": 14,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 10,
       "gaps": [
-        "hold_recovery closed episodes=12 (target >=15)",
+        "hold_recovery closed episodes=14 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 5,
-        "recovered_to_breakeven": 4,
+        "count": 3,
+        "recovered_to_breakeven": 3,
         "close_reasons": {
-          "open": 5
+          "open": 3
         }
       },
       "closed": {
-        "count": 12,
-        "recovered_to_breakeven": 12,
+        "count": 14,
+        "recovered_to_breakeven": 14,
         "close_reasons": {
-          "sold_while_recovered": 12
+          "sold_while_recovered": 14
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 18,
+        "count": 19,
         "verdicts": {
-          "open": 18
+          "open": 19
         }
       },
       "closed": {
@@ -2040,12 +2100,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 2,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -2053,8 +2113,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-07T16:34:38.030914+00:00",
-    "as_of": "2026-10-07T17:34:38.016694+01:00",
+    "updated_at": "2026-10-08T08:46:57.179466+00:00",
+    "as_of": "2026-10-08T09:46:57.163328+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2066,16 +2126,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 5,
+    "holding_count": 3,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 2,
-      "weakening": 3,
-      "broken": 0,
+      "intact": 1,
+      "weakening": 1,
+      "broken": 1,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 5,
+      "holding_count": 3,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -2093,11 +2153,11 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.0,
-        "quality": 0.2,
-        "dividend": 0.0,
-        "garp": 0.2,
-        "risk": 0.0
+        "cheapness": 0.3333,
+        "quality": 0.3333,
+        "dividend": 0.3333,
+        "garp": 0.6667,
+        "risk": 0.3333
       },
       "selection_feedback_flags": [],
       "balancing_hint": "maintain",
@@ -2106,82 +2166,35 @@
     "holdings": [
       {
         "ticker": "APTD.L",
-        "name": "Aptitude Software Group plc",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
+        "name": "APTD.L",
+        "thesis_status": "broken",
+        "recommended_action": "exit_candidate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0347,
-        "mark": 250.0,
+        "unrealized_pct": 0.0,
+        "mark": 259.0,
         "avg_cost": 259.0,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.6813,
-        "data_quality_score": 1.0,
-        "passed_families": [
+        "signal": null,
+        "timing_signal": null,
+        "conviction_score": null,
+        "data_quality_score": null,
+        "passed_families": [],
+        "failed_families": [
           "cheapness",
           "quality",
           "dividend",
           "garp",
           "risk"
         ],
-        "failed_families": [],
-        "research_verdict": "neutral",
+        "research_verdict": null,
         "reasons": [
-          "research verdict neutral",
-          "still buy",
-          "cheapness family still passes"
+          "cheapness lost and not in buy tier"
         ],
-        "intact_reasons": [
-          "still buy",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 68%"
-        ],
-        "weaken_reasons": [
-          "research verdict neutral"
-        ],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "SBRE.L",
-        "name": "Sabre Insurance Group plc",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.008,
-        "mark": 175.4,
-        "avg_cost": 174.0,
-        "signal": "hold",
-        "timing_signal": "accumulate",
-        "conviction_score": 0.34,
-        "data_quality_score": 0.85,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "left buy tier (hold)",
-          "conviction 34% below intact floor",
-          "research accumulate",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.85"
-        ],
-        "weaken_reasons": [
-          "left buy tier (hold)",
-          "conviction 34% below intact floor"
-        ],
-        "broken_reasons": []
+        "intact_reasons": [],
+        "weaken_reasons": [],
+        "broken_reasons": [
+          "cheapness lost and not in buy tier"
+        ]
       },
       {
         "ticker": "ENQ.L",
@@ -2190,9 +2203,9 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0149,
+        "unrealized_pct": 0.0074,
         "mark": 27.2,
-        "avg_cost": 26.8,
+        "avg_cost": 26.9997,
         "signal": "buy",
         "timing_signal": "neutral",
         "conviction_score": 0.3995,
@@ -2230,9 +2243,9 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0193,
+        "unrealized_pct": 0.0114,
         "mark": 121.0,
-        "avg_cost": 118.7109,
+        "avg_cost": 119.6407,
         "signal": "strong_buy",
         "timing_signal": "neutral",
         "conviction_score": 0.8,
@@ -2262,47 +2275,6 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
-      },
-      {
-        "ticker": "CARD.L",
-        "name": "Card Factory plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.2219,
-        "mark": 85.8,
-        "avg_cost": 70.2187,
-        "signal": "strong_buy",
-        "timing_signal": "wait",
-        "conviction_score": 0.7003,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "quality"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 70%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 70%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -2312,37 +2284,37 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-07T16:34:38.034261+00:00",
+    "generated_at": "2026-10-08T08:46:57.182885+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 12,
+      "closed_total": 14,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 5,
+      "open_with_thesis": 3,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 2,
+          "closed_count": 3,
           "recovery_rate": 1.0,
           "sold_underwater_rate": 0.0,
-          "mean_peak_unrealized_pct": 0.0198,
-          "mean_trough_unrealized_pct": -0.0293,
+          "mean_peak_unrealized_pct": 0.1049,
+          "mean_trough_unrealized_pct": -0.0234,
           "outcome_labels": {
-            "recovered": 2
+            "recovered": 3
           }
         },
         "broken": {
-          "closed_count": 10,
+          "closed_count": 11,
           "recovery_rate": 1.0,
           "sold_underwater_rate": 0.0,
-          "mean_peak_unrealized_pct": 0.0273,
-          "mean_trough_unrealized_pct": 0.0241,
+          "mean_peak_unrealized_pct": 0.0255,
+          "mean_trough_unrealized_pct": 0.0226,
           "outcome_labels": {
-            "recovered": 10
+            "recovered": 11
           }
         },
         "insufficient_data": {
@@ -2371,10 +2343,9 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 12,
+      "hold_closed_with_thesis": 14,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold thesis buckets thin (weakening=2; target >=3 each)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -2386,15 +2357,15 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-07T16:34:38.039950+00:00",
-    "open_count": 3,
-    "closed_count": 12,
+    "generated_at": "2026-10-08T08:46:57.189069+00:00",
+    "open_count": 2,
+    "closed_count": 13,
     "scored_count": 7,
-    "scored_count_all": 12,
-    "recommit_scored_count": 5,
+    "scored_count_all": 13,
+    "recommit_scored_count": 6,
     "entry_kind_counts": {
       "first_entry": 7,
-      "recommit": 5
+      "recommit": 6
     },
     "any_de_risk_count": 0,
     "winning_cadence_counts": {
@@ -2442,17 +2413,17 @@
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
       "first_entry_scored": 7,
-      "recommit_scored": 5
+      "recommit_scored": 6
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
     "marked_this_pass": 3,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-07T17:34:38.016694+01:00",
+    "generated_at": "2026-10-08T09:46:57.163328+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2479,8 +2450,8 @@
     "open_count": 8,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 5,
-      "off_book": 3,
+      "on_book": 3,
+      "off_book": 5,
       "never_funded": 0
     },
     "closed_by_capital_status": {
@@ -2503,13 +2474,13 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_off_book": 2
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-07T17:34:38.016694+01:00",
+    "generated_at": "2026-10-08T09:46:57.163328+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -2517,21 +2488,198 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 1,
-    "card_count": 1,
+    "proposal_count": 4,
+    "card_count": 4,
     "verdict_counts": {
-      "agree": 1,
-      "veto": 0,
-      "abstain": 0
+      "agree": 2,
+      "veto": 1,
+      "abstain": 1
     },
     "by_algo_action": {
+      "sell": {
+        "agree": 1,
+        "veto": 1,
+        "abstain": 0
+      },
       "buy": {
         "agree": 1,
         "veto": 0,
-        "abstain": 0
+        "abstain": 1
       }
     },
     "cards": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 2
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 2
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.7003
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-08T09:46:57.163328+01:00",
+        "proposal_id": "buy_tier_level:CARD.L:sell:2026-10-08T09:46:57.163328+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "SBRE.L",
+        "name": "Sabre Insurance Group plc",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.33999999999999997
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-08T09:46:57.163328+01:00",
+        "proposal_id": "buy_tier_level:SBRE.L:sell:2026-10-08T09:46:57.163328+01:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": null,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
       {
         "ticker": "CAPD.L",
         "name": "Capital Limited",
@@ -2607,13 +2755,108 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-07T17:34:38.016694+01:00",
-        "proposal_id": "buy_tier_level:CAPD.L:buy:2026-10-07T17:34:38.016694+01:00",
+        "logged_at": "2026-10-08T09:46:57.163328+01:00",
+        "proposal_id": "buy_tier_level:CAPD.L:buy:2026-10-08T09:46:57.163328+01:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
           "rank_drop_exit_min": 3,
           "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "ENQ.L",
+        "name": "EnQuest PLC",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "abstain",
+        "reasons": [
+          "Buy while not buyish \u2014 abstain."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 3
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 3
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.39949999999999997
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-08T09:46:57.163328+01:00",
+        "proposal_id": "buy_tier_level:ENQ.L:buy:2026-10-08T09:46:57.163328+01:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
           "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
           "judge_spec_id": "heuristic.v1",
           "p1_live_inputs": {
@@ -2632,28 +2875,35 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-07T17:34:38.016694+01:00",
+      "generated_at": "2026-10-08T09:46:57.163328+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 1,
+      "card_count": 4,
       "verdict_counts": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
+        "agree": 2,
+        "veto": 1,
+        "abstain": 1
       },
       "by_algo_action": {
+        "sell": {
+          "agree": 1,
+          "veto": 1,
+          "abstain": 0
+        },
         "buy": {
           "agree": 1,
           "veto": 0,
-          "abstain": 0
+          "abstain": 1
         }
       },
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "veto_sell_count": 1,
+      "veto_sell_tickers": [
+        "CARD.L"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -2667,7 +2917,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-07T16:34:38.043101+00:00",
+  "generated_at": "2026-10-08T08:46:57.192964+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

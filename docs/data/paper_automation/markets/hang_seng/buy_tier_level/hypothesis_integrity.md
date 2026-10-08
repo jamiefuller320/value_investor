@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-07T16:34:51.411295+00:00
+Track: `buy_tier_level` · updated 2026-10-08T08:47:06.977688+00:00
 
 ## Portfolio loser feedback
 
@@ -9,6 +9,9 @@ Track: `buy_tier_level` · updated 2026-10-07T16:34:51.411295+00:00
 - Balancing hint: `maintain`
 
 ## Holding reviews
+
+### 1024.HK — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### 2318.HK — intact / hold_tolerate (-2.9%)
 - still strong_buy
@@ -76,11 +79,6 @@ Track: `buy_tier_level` · updated 2026-10-07T16:34:51.411295+00:00
 
 ### 1093.HK — weakening / watch_review (+0.2%)
 - research verdict neutral
-- still strong_buy
-- cheapness family still passes
-
-### 1024.HK — weakening / watch_review (+0.7%)
-- research verdict caution
 - still strong_buy
 - cheapness family still passes
 
