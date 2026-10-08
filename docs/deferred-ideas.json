@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-08T08:11:01+00:00",
+  "updated_at": "2026-10-08T10:10:53+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13568,6 +13568,33 @@
         ]
       },
       "updated_at": "2026-10-08T08:11:01+00:00"
+    },
+    {
+      "id": "L582",
+      "category": "later",
+      "section": "research",
+      "title": "FTSE library-screen paper twin with the hms-v1 model mix as composite",
+      "summary": "If hms-v1 finds a mix that beats the frozen composite in both US universes, build a cold-start FTSE 350 library-screen twin whose composite is the kept candidates' equal-weight percentile mix (frozen epoch, new replay registration). Check first that the FTSE library carries the inputs the kept published signals need (gross margin x revenue, total_assets_prev, shares_outstanding_prev, operating cash flow, 13 months of prices). No live book change on backtest evidence.",
+      "revisit_when": "hms-v1 holdout decision is mix_adds_in_both (model_mix block in historical_screen_replay.json)",
+      "tags": [
+        "model-mix",
+        "historical-replay",
+        "screen",
+        "twin"
+      ],
+      "status": "open",
+      "source": "PR #1024 follow-up: test a larger range of screening models and tailor the mix",
+      "added_at": "2026-10-08T10:10:53+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/historical_screen_replay.json",
+            "path": "model_mix.decision",
+            "op": "==",
+            "value": "mix_adds_in_both"
+          }
+        ]
+      }
     }
   ],
   "fragments": [

@@ -299,6 +299,7 @@ def test_search_reveal_and_holdout_order(built, tmp_path: Path):
             store_path=replay_store,
             reveal_holdout=True,
             rule_search_registration_path=reg_path,
+            model_mix_registration_path=tmp_path / "no-hms.json",
         )
 
     revealed = rs.reveal(build, registration_path=reg_path, store_path=store)

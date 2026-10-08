@@ -7,7 +7,8 @@ picks the names: S&P 500 members (hsr-v1) or US market-cap ranks (hsr-mid-v1).
 
 * ``panel.csv.gz`` — one row per (month-end rebalance, universe member) with the
   Yahoo-style metric columns the library screen reads, built only from filings
-  available at least ``FILING_LAG_DAYS`` before the rebalance.
+  available at least ``FILING_LAG_DAYS`` before the rebalance (plus
+  ``total_assets_prev``, which only the model-mix search reads).
 * ``prices.csv.gz`` — total-return closes (``closeadj``) on rebalance dates, on
   each horizon's exit dates, and on every delisted name's last trading date.
 * ``terminal_baseline.csv`` / ``terminal_sensitivity.csv`` — delisting haircuts.
@@ -94,6 +95,7 @@ PANEL_COLUMNS = (
     "asset_turnover",
     "asset_turnover_prev",
     "shares_outstanding_prev",
+    "total_assets_prev",
 )
 
 
@@ -540,6 +542,7 @@ def build_panel(
                 _num(rows, "revenue_py"), _num(rows, "assets_py"), positive_den=True
             ),
             "shares_outstanding_prev": _num(rows, "sharesbas_py"),
+            "total_assets_prev": _num(rows, "assets_py"),
         }
     )
     out = out.sort_values(["as_of", "ticker"]).reset_index(drop=True)
