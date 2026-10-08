@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "market_id": "euro_depth",
-  "updated_at": "2026-10-08T10:29:35.154136+00:00",
-  "exhausted": false,
-  "complete_zero_improve_runs": 2,
+  "updated_at": "2026-10-08T13:23:32.795086+00:00",
+  "exhausted": true,
+  "complete_zero_improve_runs": 0,
   "min_zero_runs": 3,
   "parked": [
     {
@@ -115,12 +115,24 @@
       "indexed_without_body": 1,
       "thin": true,
       "source_surface": "euro_filings"
+    },
+    {
+      "ticker": "ASSA-B.ST",
+      "reason": "unfetchable_iwb",
+      "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+      "parked_at": "2026-10-08T13:23:32.795086+00:00",
+      "park_via": "straggler_soft_park",
+      "filings_total": 20,
+      "filings_with_body": 14,
+      "indexed_without_body": 6,
+      "thin": false,
+      "source_surface": "euro_filings+cision_direct"
     }
   ],
   "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
   "straggler_max_leftovers": 3,
   "straggler_zero_runs": 2,
-  "had_complete_targets": true,
+  "had_complete_targets": false,
   "leftover_tickers": [
     "ABI.BR",
     "ACKB.BR",
@@ -128,16 +140,12 @@
     "ASSA-B.ST",
     "BAS.DE",
     "DQ7A.IR",
-    "DTE.DE",
     "EVN.VI",
     "MUV2.DE",
     "SAP.DE",
     "UCB.BR",
     "WIE.VI"
   ],
-  "unparked_leftover": [
-    "ASSA-B.ST",
-    "DTE.DE"
-  ],
+  "unparked_leftover": [],
   "surface_released": []
 }
