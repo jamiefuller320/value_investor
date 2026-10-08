@@ -6,6 +6,7 @@ import json
 import shutil
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from statistics import mean
 
 import pandas as pd
 import pytest
@@ -231,6 +232,12 @@ def test_parity_with_screen_premise_backtest(tmp_path: Path):
     titles = [f["title"] for f in hsr.findings_from_store({"parity": broken})]
     assert hsr.PARITY_FINDING_TITLE in titles
 
+    with_dividends = json.loads(json.dumps(premise))
+    with_dividends["return_basis"] = "price_plus_dividends"
+    rebuilt = hsr.parity_with_screen_premise(data_dir, with_dividends)
+    assert rebuilt["status"] == "ok" and rebuilt["max_abs_diff"] == 0.0
+    assert rebuilt["premise_basis"].startswith("price (rebuilt")
+
 
 def _registration() -> dict:
     return {
@@ -243,8 +250,9 @@ def _registration() -> dict:
         "horizons_days": [30],
         "primary": {
             "horizon_days": 30,
-            "metric": "buy_tier_spread_net",
-            "secondary_metric": "buy_minus_plain_value",
+            "metric": "buy_minus_plain_value_net",
+            "secondary_metric": "buy_tier_spread_net",
+            "confirmation_horizon_days": 30,
         },
         "costs": {"base_per_side": 0.0053, "stress_per_side": 0.03},
     }
@@ -260,7 +268,8 @@ def _synthetic_panels() -> tuple[pd.DataFrame, pd.DataFrame]:
                 "ticker": t,
                 "signal": "buy" if i < 6 else "hold",
                 "conviction_score": float(20 - i),
-                "earnings_yield": 0.2 - 0.01 * i,
+                # The plain sort picks the cheapest holds (S14..S19), not the buy tier.
+                "earnings_yield": 0.01 + 0.01 * i,
             }
             for d in month_ends[:-1]
             for i, t in enumerate(tickers)
@@ -291,11 +300,54 @@ def test_holdout_sealed_unless_revealed():
     assert h30["development"]["buy_tier_spread"]["mean"] > 0
     assert h30["development_verdict"] == "pass"
 
+    assert h30["development_confirmation_verdict"] == "pass"
     revealed = hsr.build_replay_results(signals, prices, _registration(), reveal_holdout=True)
     assert revealed["30"]["holdout_verdict"] == "pass"
+    assert revealed["30"]["holdout_secondary_verdict"] == "pass"
+    assert revealed["30"]["holdout_confirmation_verdict"] == "pass"
     dev = h30["development"]
     assert dev["buy_tier_spread_net_stress"]["mean"] < dev["buy_tier_spread"]["mean"]
+    assert dev["buy_minus_plain_value_net"]["mean"] > 0
     assert revealed["30"]["holdout"]["mean_buy_tier_turnover"] == 0.0
+    assert revealed["30"]["holdout"]["mean_plain_value_turnover"] == 0.0
+
+
+def test_plain_value_leg_is_costed_and_split_by_value_regime():
+    base = {"buy_tier_turnover": 0.5, "plain_value_turnover": 1.0}
+    cohorts = [
+        {"entry": "a", "buy_tier_spread": 0.03, "plain_value_spread": 0.02, **base},
+        {"entry": "b", "buy_tier_spread": 0.01, "plain_value_spread": -0.01, **base},
+        {"entry": "c", "buy_tier_spread": 0.00, "plain_value_spread": 0.00, **base},
+        {"entry": "d", "buy_tier_spread": 0.02, "plain_value_spread": None, **base},
+    ]
+    window = hsr.summarise_window(
+        cohorts, step_days=30, horizon_days=30, cost_per_side=0.01, stress_cost_per_side=0.03
+    )
+    # Buy leg pays 2 x 1% x 0.5 = 1%; the plain leg pays 2 x 1% x 1.0 = 2%.
+    assert window["plain_value_spread_net"]["mean"] == pytest.approx(
+        mean([0.0, -0.03, -0.02]), abs=1e-4
+    )
+    assert window["buy_minus_plain_value_net"]["cohorts"] == 3
+    assert window["buy_minus_plain_value_net"]["mean"] == pytest.approx(
+        mean([0.02, 0.03, 0.01]), abs=1e-4
+    )
+    stress = window["buy_minus_plain_value_net_stress"]["mean"]
+    assert stress > window["buy_minus_plain_value_net"]["mean"]  # plain sort trades more
+    regime = window["value_regime"]
+    assert regime["value_led"]["cohorts"] == 1
+    assert regime["value_lagged"]["cohorts"] == 2  # a zero spread counts as lagged
+    assert regime["value_led"]["buy_minus_plain_value_net"]["mean"] == pytest.approx(0.02)
+
+    scored = hsr.score_cohorts(*_turnover_panels(), horizon_days=30)
+    assert scored[0]["plain_value_turnover"] == 1.0
+    assert scored[-1]["plain_value_turnover"] == pytest.approx(0.0)  # same names a month on
+
+
+def _turnover_panels() -> tuple[pd.DataFrame, pd.DataFrame]:
+    signals, prices = _synthetic_panels()
+    entries = sorted(signals["as_of"].unique())[:3]
+    signals = signals.loc[signals["as_of"].isin(entries)]
+    return signals, hsr.forward_returns(prices, entries, 30)
 
 
 def test_findings_for_drift_and_reused_holdout():
@@ -357,3 +409,32 @@ def test_ops_monitor_check_writes_store_without_parity_finding(tmp_path: Path):
     assert payload["results"] is None
     assert payload["rule_search"]["registration_id"] == "hrs-v1"
     assert payload["rule_search"]["selection"] is None
+
+
+def test_licensed_data_deletion_reminder(tmp_path: Path):
+    used = datetime(2026, 11, 1, tzinfo=UTC)
+    licensed = {"first_used_at": used.isoformat()}
+    assert hsr._deletion_findings(licensed, now=used + timedelta(days=59)) == []
+    (finding,) = hsr._deletion_findings(licensed, now=used + timedelta(days=60))
+    assert finding["title"] == hsr.DELETION_DUE_TITLE and finding["severity"] == "warn"
+    assert finding["auto_fixable"] is False
+    assert hsr._deletion_findings(None) == []
+
+    store = tmp_path / "replay.json"
+    store.write_text(json.dumps({"licensed_data": licensed, "holdout_reveals": []}))
+    assert hsr.confirm_deleted(store)["deleted_at"]
+    payload = json.loads(store.read_text())
+    assert hsr._deletion_findings(payload["licensed_data"], now=used + timedelta(days=90)) == []
+
+
+def test_status_refresh_keeps_licensed_data(tmp_path: Path):
+    data_dir = _snapshot_dir(tmp_path)
+    (data_dir / "screen_premise_backtest.json").write_text(
+        json.dumps(build_screen_premise_backtest(data_dir))
+    )
+    store = tmp_path / "replay.json"
+    store.write_text(json.dumps({"licensed_data": {"first_used_at": "2026-11-01T00:00:00+00:00"}}))
+    payload = hsr.refresh_historical_screen_replay(
+        data_dir, store_path=store, premise_store_path=data_dir / "screen_premise_backtest.json"
+    )
+    assert payload["licensed_data"]["first_used_at"].startswith("2026-11-01")

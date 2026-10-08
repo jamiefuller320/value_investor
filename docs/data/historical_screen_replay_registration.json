@@ -1,11 +1,16 @@
 {
   "registration_id": "hsr-v1",
-  "registered_at": "2026-10-07T15:30:00+00:00",
+  "registered_at": "2026-10-08T06:02:01.031801+00:00",
   "status": "registered_holdout_sealed",
-  "learning_question": "In a survivorship-free point-in-time US universe, does the frozen value screen's buy tier (buy + strong_buy) beat (a) the equal-weight universe and (b) a plain top-30% earnings-yield sort of the same names, on total return after costs?",
-  "closes": ["L536", "L542"],
-  "supersedes": ["L565"],
-  "screen_code_fingerprint": "ae06fd503417beba5200858ceea9419e65b72e466568f434ecd508b6401a8a4e",
+  "learning_question": "In a survivorship-free point-in-time US universe, does the frozen value screen's buy tier (buy + strong_buy) beat a plain top-30% earnings-yield sort of the same names, after costs on both? Both legs carry the same value exposure, so the answer does not hinge on whether value or growth led the period. Whether value beats the market is the published factor question (value-factor-base-rate.md); the spread over the equal-weight universe is reported as context, split by value regime.",
+  "closes": [
+    "L536",
+    "L542"
+  ],
+  "supersedes": [
+    "L565"
+  ],
+  "screen_code_fingerprint": "5442bfcc1933ec862db97332417fe2498e5806cef2604ab9c4b2a5b88f14063d",
   "screen_code_paths": [
     "src/value_investor/models/",
     "src/value_investor/scoring/__init__.py",
@@ -14,7 +19,8 @@
     "src/value_investor/signals.py",
     "src/value_investor/sector_scoring.py",
     "src/value_investor/data_quality.py",
-    "src/value_investor/signal_stability.py"
+    "src/value_investor/signal_stability.py",
+    "src/value_investor/library_screen.py"
   ],
   "market_id": "sp500",
   "universe": "S&P 500 members on each rebalance date (Sharadar sp500 table), common stock, active and delisted. Financials and real estate included, as in the live screen; reported split by sector.",
@@ -42,22 +48,29 @@
       "reveal_rule": "Revealed once, after the development window is reviewed and nothing in this file has changed. Later reveals are exploratory."
     }
   },
-  "horizons_days": [30, 91, 365],
+  "horizons_days": [
+    30,
+    91,
+    365
+  ],
   "primary": {
     "horizon_days": 30,
-    "metric": "buy_tier_spread_net",
-    "secondary_metric": "buy_minus_plain_value",
+    "metric": "buy_minus_plain_value_net",
+    "secondary_metric": "buy_tier_spread_net",
+    "secondary_role": "context: the buy tier over the equal-weight universe, net of costs. Reported with the value_regime split; it does not decide the verdict.",
     "confirmation_horizon_days": 365,
-    "pass_bar": "Holdout 90% interval on the primary metric lies wholly above zero, and the 365-day holdout net spread is not wholly below zero (the monthly edge does not reverse over a year)."
+    "pass_bar": "Holdout 90% interval on the primary metric lies wholly above zero, and the 365-day holdout primary is not wholly below zero (the monthly edge over the plain sort does not reverse over a year)."
   },
   "comparators": {
-    "universe": "equal-weight return of every name with entry and exit prices",
-    "plain_value": "equal-weight top 30% by positive earnings yield (earnings_yield_pe) among the same names"
+    "plain_value": "equal-weight top 30% by positive earnings yield (earnings_yield_pe) among the same names, charged the same cost per side on its own turnover. The decision comparator.",
+    "universe": "equal-weight return of every name with entry and exit prices; costless. Context only.",
+    "value_regime": "each cohort is labelled value_led when the plain sort beat the universe gross, value_lagged otherwise; the primary and the market spread are summarised in each. Descriptive, not a pass bar."
   },
   "costs": {
-    "base_per_side": 0.0053,
+    "base_per_side": 0.00175,
     "stress_per_side": 0.03,
-    "model": "net spread = gross buy-tier spread - 2 x cost x buy-tier turnover versus the entry one horizon earlier; the universe comparator is costless"
+    "model": "Each leg pays 2 x cost x its own turnover versus its set one horizon earlier: buy_minus_plain_value_net = (buy-tier spread - 2c x buy-tier turnover) - (plain spread - 2c x plain turnover). The universe comparator is costless.",
+    "source": "Base is the fair S&P 500 cost for this GBP-funded investor from market_trading_costs (sp500, t212_invest_fair_v1): about 0.15% FX per conversion plus a 0.025% half-spread, 0.175% per side. Stress is 3% per side."
   },
   "delisting": {
     "baseline_haircut": 0.0,
@@ -71,15 +84,28 @@
     "Any change to this file or to the fingerprinted screen code after the holdout is revealed opens a new registration_id; its results are exploratory."
   ],
   "decisions": {
-    "pass_both": "Buy tier beats the universe and the plain value sort: keep the screen's machinery; multi-year total return becomes the fitness test N197 asks for.",
-    "pass_universe_only": "Beats the universe but not the plain sort: our extras add nothing over textbook value; simplify toward the published sorts.",
-    "fail_universe": "Does not beat the universe: stop building forward machinery on this screen and rethink before stage 4."
+    "beats_plain_value": "The screen's machinery (sector-relative ranks, pass count, quality and risk vetoes) adds to textbook value after costs: keep it; multi-year total return becomes the fitness test N197 asks for.",
+    "inconclusive": "No measurable gain over the plain sort: freeze the screen's machinery (no new extras) and let forward evidence and the AI layer earn their keep separately.",
+    "loses_to_plain_value": "The extras cost money over textbook value: simplify toward the published sort before stage 4.",
+    "market_context": "The spread over the universe and its value_regime split are read beside the verdict, never instead of it. A negative market spread in a value_lagged decade with a positive primary is a value-regime result, not a screen failure."
   },
   "amendments": [
     {
       "at": "2026-10-07",
       "before_any_data": true,
       "change": "data_source spelled out to match the Phase 2 adapter: market cap rolled by split-adjusted close (replaces close x sharesbas, which breaks across splits), Yahoo unit conventions including percent dividend yield, quarterly growth, staleness and currency exclusions, merger classification."
+    },
+    {
+      "at": "2026-10-07",
+      "before_data": true,
+      "change": "Base cost 0.53% -> 0.175% per side (stress 3% unchanged). library_screen.py added to the fingerprinted screen code.",
+      "reason": "0.53% is the FTSE 350 round trip (0.5% stamp duty), not a US per-side cost; it overstated US costs about threefold. library_screen.py runs the replayed pipeline (load, derived columns, scoring order, stability), so a change there must stale the registration and the signal cache. No licensed data has been used."
+    },
+    {
+      "at": "2026-10-08",
+      "before_data": true,
+      "change": "Primary metric buy_tier_spread_net -> buy_minus_plain_value_net (the plain sort now pays the same costs on its own turnover). The market spread becomes secondary context with a value_regime split. A 365-day confirmation verdict is computed. Decisions reworded around the plain sort.",
+      "reason": "The holdout (2013-2025) is a decade in which value lagged growth. Scoring the screen against the market would mostly measure that regime, which the published value base rate already covers. Both legs of buy-minus-plain carry the same value exposure, so it isolates what this project controls. No licensed data has been used and no holdout has been revealed."
     }
   ]
 }

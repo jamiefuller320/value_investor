@@ -12,8 +12,11 @@ set is a combination of:
   replayed on daily prices by ``tactical_replay``.
 
 The search scores every registered combination on the development window only,
-by the lower confidence bound of the probability that the book beats the
-cap-weighted universe over the registered horizon. It picks from a plateau
+by the lower confidence bound of the probability that the book beats a plain
+value book (the hsr-v1 earnings-yield sort, equal weight, same costs) over the
+registered horizon. Both face the same value regime, so a decade when growth
+led the market does not decide the answer; the excess over the cap-weighted
+universe is reported as market context. It picks from a plateau
 (median over one-step neighbours), reports the probability of backtest
 overfitting and the deflated Sharpe ratio, and commits only config-level
 aggregates. The holdout is evaluated once, for the frozen rules and the chosen
@@ -190,6 +193,8 @@ class ScreenDate:
     market_cap: dict[str, float]
     # Earnings-yield percentile among names screened that date (0 = dearest).
     ey_pct: dict[str, float] = field(default_factory=dict)
+    # The hsr-v1 plain value sort: top 30% by positive earnings yield.
+    plain_value: frozenset[str] = frozenset()
 
 
 class SearchData:
@@ -233,6 +238,9 @@ class SearchData:
                     ),
                     market_cap=cap_by_date.get(d, {}),
                     ey_pct=ey_pct,
+                    plain_value=frozenset(hsr.plain_value_tickers(g))
+                    if "earnings_yield" in g
+                    else frozenset(),
                 )
             )
         tier_rows: dict[str, list[tuple[np.datetime64, bool]]] = {}
@@ -251,6 +259,7 @@ class SearchData:
         self._indicators: dict[str, pd.DataFrame] = {}
         self._plans: dict[tuple[str, str], TickerPlans] = {}
         self.benchmarks: dict[tuple[pd.Timestamp, ...], tuple[np.ndarray, np.ndarray]] = {}
+        self.plain_books: dict[tuple[tuple[pd.Timestamp, ...], float], PlainBook] = {}
 
     def plans(self, ticker: str, key: str) -> TickerPlans:
         memo = (ticker, key)
@@ -392,11 +401,20 @@ def _month_return(
 
 
 @dataclass
+class PlainBook:
+    returns: np.ndarray
+    # Months with no plain value names; the equal-weight universe stands in.
+    fallback_months: int = 0
+
+
+@dataclass
 class WindowRun:
     dates: list[pd.Timestamp]
     portfolio: np.ndarray
     cap_weighted: np.ndarray
     equal_weighted: np.ndarray
+    plain_value: np.ndarray
+    plain_value_fallback_months: int
     names_held: list[int]
     tactical_trades: list[dict[str, Any]]
     holding_months: int
@@ -505,11 +523,14 @@ def simulate(
         )
 
     cap_w, eq_w = benchmark_returns(data, dates)
+    plain = plain_value_book(data, dates, cost_per_side=cost_per_side)
     return WindowRun(
         dates=dates,
         portfolio=portfolio,
         cap_weighted=cap_w,
         equal_weighted=eq_w,
+        plain_value=plain.returns,
+        plain_value_fallback_months=plain.fallback_months,
         names_held=[len(h) for h in holdings],
         tactical_trades=trades,
         holding_months=sum(len(h) for h in holdings),
@@ -544,6 +565,42 @@ def benchmark_returns(
             eq_w[k] = float(np.mean(rets))
     data.benchmarks[memo] = (cap_w, eq_w)
     return cap_w, eq_w
+
+
+def plain_value_book(
+    data: SearchData, dates: Sequence[pd.Timestamp], *, cost_per_side: float
+) -> PlainBook:
+    """Equal-weight plain value sort, rebalanced monthly and costed like the rule books."""
+    memo = (tuple(dates), cost_per_side)
+    if memo in data.plain_books:
+        return data.plain_books[memo]
+    screens = {s.date: s for s in data.screens}
+    _, eq_w = benchmark_returns(data, dates)
+    out = np.zeros(len(dates) - 1)
+    fallback = 0
+    prev: dict[str, float] = {}
+    for k, day in enumerate(dates[:-1]):
+        names = sorted(
+            t
+            for t in screens[day].plain_value
+            if t in data.series and data.bar_at(t, day) is not None
+        )
+        if not names:
+            out[k] = eq_w[k]
+            fallback += 1
+            prev = {}
+            continue
+        rets = {t: _month_return(data, t, day, dates[k + 1])[0] for t in names}
+        w = 1.0 / len(names)
+        turnover = sum(abs(w - prev.get(t, 0.0)) for t in names)
+        turnover += sum(v for t, v in prev.items() if t not in rets)
+        gross = float(np.mean(list(rets.values())))
+        out[k] = gross - cost_per_side * turnover
+        growth = 1.0 + gross
+        prev = {t: w * (1.0 + r) / growth for t, r in rets.items()} if growth > 0 else {}
+    book = PlainBook(returns=out, fallback_months=fallback)
+    data.plain_books[memo] = book
+    return book
 
 
 # --- Statistics ----------------------------------------------------------------------------
@@ -597,6 +654,11 @@ def mean_ci(x: np.ndarray, *, lag: int, z: float) -> dict[str, float | None]:
     return {"mean": round(mu, 6), "low": round(mu - half, 6), "high": round(mu + half, 6)}
 
 
+def excess_vs_plain_value(run: WindowRun) -> np.ndarray:
+    """Monthly log excess over the plain value book: the search objective's series."""
+    return np.log1p(run.portfolio) - np.log1p(run.plain_value)
+
+
 def window_metrics(
     run: WindowRun, *, horizons: Sequence[int], lag: int, z: float
 ) -> dict[str, Any]:
@@ -607,22 +669,36 @@ def window_metrics(
                 str(h): horizon_probability(np.array([]), h, lag=lag, z=z) for h in horizons
             },
         }
-    log_ex = np.log1p(run.portfolio) - np.log1p(run.cap_weighted)
+    log_ex = excess_vs_plain_value(run)
+    log_ex_cap = np.log1p(run.portfolio) - np.log1p(run.cap_weighted)
     log_ex_eq = np.log1p(run.portfolio) - np.log1p(run.equal_weighted)
+    plain_vs_cap = np.log1p(run.plain_value) - np.log1p(run.cap_weighted)
     sd = float(np.std(log_ex, ddof=1)) if len(log_ex) > 1 else float("nan")
     trades = run.tactical_trades
     years = run.holding_months / 12.0
+
+    def annualised(x: np.ndarray) -> float:
+        return round(float(np.expm1(12 * np.mean(x))), 4)
+
     return {
         "months": len(run.portfolio),
         "first": run.dates[0].date().isoformat() if run.dates else None,
         "last": run.dates[-1].date().isoformat() if run.dates else None,
-        "annualised_return": round(float(np.expm1(12 * np.mean(np.log1p(run.portfolio)))), 4),
-        "annualised_excess_cap": round(float(np.expm1(12 * np.mean(log_ex))), 4),
-        "annualised_excess_equal": round(float(np.expm1(12 * np.mean(log_ex_eq))), 4),
+        "annualised_return": annualised(np.log1p(run.portfolio)),
+        "annualised_excess_plain_value": annualised(log_ex),
         "information_ratio": round(float(np.mean(log_ex) / sd * math.sqrt(12)), 4)
         if sd > 0
         else None,
         "horizons": {str(h): horizon_probability(log_ex, h, lag=lag, z=z) for h in horizons},
+        "plain_value_fallback_months": run.plain_value_fallback_months,
+        "market_context": {
+            "annualised_excess_cap": annualised(log_ex_cap),
+            "annualised_excess_equal": annualised(log_ex_eq),
+            "plain_value_annualised_excess_cap": annualised(plain_vs_cap),
+            "horizons_vs_cap_weighted": {
+                str(h): horizon_probability(log_ex_cap, h, lag=lag, z=z) for h in horizons
+            },
+        },
         "median_names_held": float(np.median(run.names_held)) if run.names_held else 0.0,
         "holding": _holding_summary(run),
         "tactical": {
@@ -791,9 +867,7 @@ def run_search(data: SearchData, registration: Mapping[str, Any]) -> dict[str, A
         )
     scores = {row["id"]: _objective(row["development"], registration) for row in rows}
     chosen, plateau_score = choose(scores, configs, registration)
-    excess = np.column_stack(
-        [np.log1p(runs[c.id].portfolio) - np.log1p(runs[c.id].cap_weighted) for c in configs]
-    )
+    excess = np.column_stack([excess_vs_plain_value(runs[c.id]) for c in configs])
     trial_sharpes = [
         float(np.mean(col) / np.std(col, ddof=1)) if np.std(col, ddof=1) > 0 else float("nan")
         for col in excess.T
@@ -819,8 +893,8 @@ def run_search(data: SearchData, registration: Mapping[str, Any]) -> dict[str, A
     }
 
 
-def _verdict_vs_market(metrics: Mapping[str, Any], registration: Mapping[str, Any]) -> str:
-    h = metrics["horizons"][str(registration["objective"]["horizon_months"])]
+def _verdict_p_lower(horizons: Mapping[str, Any], registration: Mapping[str, Any]) -> str:
+    h = horizons[str(registration["objective"]["horizon_months"])]
     if h["p_lower"] is None:
         return "too_thin"
     if h["p_lower"] >= float(registration["pass_bars"]["holdout_p_lower_min"]):
@@ -849,10 +923,12 @@ def run_reveal(
     chosen = RuleConfig(**selection["params"])
     frozen = frozen_config(registration)
     out: dict[str, Any] = {"run_at": datetime.now(UTC).isoformat(), "window": dict(window)}
+    portfolios: dict[tuple[str, str], np.ndarray] = {}
     for label, config in (("frozen", frozen), ("chosen", chosen)):
         entry: dict[str, Any] = {"config_id": config.id}
         for cost_label, cost in (("base", s["cost"]), ("stress", s["stress_cost"])):
             run = simulate(data, config, window, cost_per_side=cost)
+            portfolios[(label, cost_label)] = run.portfolio
             metrics = window_metrics(run, horizons=s["horizons"], lag=s["lag"], z=s["z_holdout"])
             block: dict[str, Any] = {"metrics": metrics}
             if config.tactical is not None:
@@ -863,9 +939,21 @@ def run_reveal(
                 ci = mean_ci(run.portfolio - core.portfolio, lag=s["lag"], z=s["z_holdout"])
                 block["tactical_increment_monthly"] = ci
                 block["tactical_verdict"] = _verdict_increment(ci)
-            block["verdict_vs_market"] = _verdict_vs_market(metrics, registration)
+            block["verdict_vs_plain_value"] = _verdict_p_lower(metrics["horizons"], registration)
+            block["market_context_vs_cap_weighted"] = _verdict_p_lower(
+                metrics["market_context"]["horizons_vs_cap_weighted"], registration
+            )
             entry[cost_label] = block
         out[label] = entry
+    # Did the search add anything over the live rules? Same months, so a paired difference.
+    out["chosen_minus_frozen"] = {}
+    for cost_label in ("base", "stress"):
+        diff = portfolios[("chosen", cost_label)] - portfolios[("frozen", cost_label)]
+        ci = mean_ci(diff, lag=s["lag"], z=s["z_holdout"])
+        out["chosen_minus_frozen"][cost_label] = {
+            "monthly": ci,
+            "verdict": "same_rules" if chosen.id == frozen.id else _verdict_increment(ci),
+        }
     return out
 
 

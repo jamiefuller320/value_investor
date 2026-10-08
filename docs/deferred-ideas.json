@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-07T20:48:06+00:00",
+  "updated_at": "2026-10-08T07:35:29+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13213,7 +13213,7 @@
       "section": "research",
       "title": "Dividend yield unit mismatch in company screen models",
       "summary": "Live and library rows carry Yahoo dividend_yield in percent (median 2.5 = 2.5%), but DividendModel/DividendGrowth/LowPEHighYield floors (0.02-0.04) and Neff PEGY (growth fraction + yield) treat it as a fraction, so the yield floors pass almost any payer and PEGY is inflated ~100x on yield. Percentile ranks are unaffected. Trusts already normalise via trust_metrics.normalize_yield. Fix = normalise at fetch/library load; changes the screen fingerprint.",
-      "revisit_when": "User decides: either fix and run ftse-historical-replay register before the hsr-v1 holdout is revealed, or fix after the reveal as a new epoch so the replay tests the screen as it ran",
+      "revisit_when": "Decided 2026-10-08: fix after the hsr-v1 holdout reveal, as a new screen epoch (re-register; the replay tests the screen as it ran). Trigger: holdout_reveals non-empty in historical_screen_replay.json",
       "tags": [
         "screen",
         "dividend",
@@ -13223,7 +13223,18 @@
       ],
       "status": "open",
       "source": "historical screen replay Phase 2 adapter (PR #1019)",
-      "added_at": "2026-10-07T17:28:44+00:00"
+      "added_at": "2026-10-07T17:28:44+00:00",
+      "trigger": {
+        "any": [
+          {
+            "file": "docs/data/historical_screen_replay.json",
+            "path": "holdout_reveals",
+            "op": "truthy"
+          }
+        ]
+      },
+      "updated_at": "2026-10-08T07:22:44+00:00",
+      "status_note": "User accepted the recommendation (PR #1023 thread): leave the unit mismatch until after the hsr-v1 reveal, then fix as a new epoch."
     },
     {
       "id": "L572",
@@ -13481,6 +13492,54 @@
       "status": "open",
       "source": "PR #1021 / #1022 exit-rule discussion",
       "added_at": "2026-10-07T20:48:06+00:00"
+    },
+    {
+      "id": "L579",
+      "category": "later",
+      "section": "learning",
+      "title": "Position sizing and cap in a later rule-search registration",
+      "summary": "hrs-v1 holds equal weights with no position cap; the live buy_tier_level book caps at 120 names with a one-screen re-entry cooldown, and the graduated-allocation book sizes by conviction. Add sizing (equal vs conviction-graduated) and the cap as grid dimensions in a new registration, run on years after the hrs-v1 holdout or a fresh market.",
+      "revisit_when": "hrs-v1 holdout revealed and median names held for the chosen rule set exceeds 120, or graduated allocation is proposed for promotion",
+      "tags": [
+        "rule-search",
+        "sizing",
+        "hrs-v1"
+      ],
+      "status": "open",
+      "source": "final pre-data gap check on the replay test plan",
+      "added_at": "2026-10-07T23:46:11+00:00"
+    },
+    {
+      "id": "L580",
+      "category": "later",
+      "section": "research",
+      "title": "Factor-regression alpha view for the historical replay",
+      "summary": "Regress hsr-v1 buy-tier monthly returns on public Fama-French value, size, momentum and quality factors to report alpha and loadings beside buy-minus-plain. Shows whether the screen's edge is a hidden tilt (quality, momentum) rather than better value selection.",
+      "revisit_when": "After the hsr-v1 holdout reveal, if buy_minus_plain_value_net passes or the value_regime split differs sharply between regimes",
+      "tags": [
+        "historical-replay",
+        "factor",
+        "regime"
+      ],
+      "status": "open",
+      "source": "PR #1023 reframing: does the model beat the market",
+      "added_at": "2026-10-08T06:19:25+00:00"
+    },
+    {
+      "id": "L581",
+      "category": "later",
+      "section": "research",
+      "title": "Investable value ETF comparator for the historical replay",
+      "summary": "Compare the hsr-v1 buy tier and hrs-v1 books with a real value ETF (IWD or VTV total return, free public prices) as the practical alternative to running the system. Needs the replay's monthly cohort-level series to have been committed before the licensed data was deleted.",
+      "revisit_when": "After the hsr-v1 reveal, once monthly cohort-level return series are committed to the replay stores",
+      "tags": [
+        "historical-replay",
+        "benchmark",
+        "etf"
+      ],
+      "status": "open",
+      "source": "PR #1023: best use of the Sharadar month",
+      "added_at": "2026-10-08T07:35:29+00:00"
     }
   ],
   "fragments": [

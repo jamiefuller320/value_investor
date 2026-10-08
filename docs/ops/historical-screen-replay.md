@@ -21,21 +21,31 @@ residual on history that already happened.
 ## Learning question
 
 In a survivorship-free point-in-time US universe, does the frozen screen's buy
-tier (buy + strong_buy) beat:
+tier (buy + strong_buy) beat a plain top-30% earnings-yield sort of the same
+names, on total return after costs on both?
 
-1. the equal-weight universe, and
-2. a plain top-30% earnings-yield sort of the same names,
+This asks whether our machinery (sector-relative ranks, the pass count, the
+quality and risk vetoes) adds anything over textbook value. It is the part of
+the result this project controls.
 
-on total return after costs?
+It deliberately does not ask whether the screen beats the market. Both
+windows sit in value regimes: value did well for much of 2000–2012 and poorly
+for much of 2013–2025, when growth and large tech led. A buy tier that lags the
+market in the holdout could be a good value screen in a bad decade for value.
+Whether value beats the market over the long run is the published factor
+question ([value-factor-base-rate.md](value-factor-base-rate.md)). The plain
+sort carries the same value exposure as the buy tier, so their difference
+mostly cancels the regime.
 
-Question 1 asks whether the screen has an edge at all. Question 2 asks whether
-our extra machinery adds anything over textbook value.
+The spread over the equal-weight universe is still reported as context, split
+by value regime: each cohort is `value_led` when the plain sort beat the
+universe and `value_lagged` otherwise.
 
 ## Pre-registration (fixed before data is bought)
 
 | Item | Registered value |
 |------|------------------|
-| Screen | Code fingerprint over `models/`, `scoring/__init__.py`, `model_families.py`, `model_weights.py`, `signals.py`, `sector_scoring.py`, `data_quality.py`, `signal_stability.py`. Default model weights; the 28-day learner is not run (N197) |
+| Screen | Code fingerprint over `models/`, `scoring/__init__.py`, `model_families.py`, `model_weights.py`, `signals.py`, `sector_scoring.py`, `data_quality.py`, `signal_stability.py`, `library_screen.py`. Default model weights; the 28-day learner is not run (N197) |
 | Universe | S&P 500 members on each date, active and delisted (Sharadar `sp500`) |
 | Fundamentals | Sharadar `fundamentals`, dimension `ART` (as reported, trailing twelve months), latest row filed at least 2 days before the date. As-reported, so later restatements cannot leak. Filings over 456 days old and non-USD reporters are dropped and counted |
 | Prices | `closeadj` (splits, dividends, spinoffs) for total return. Market cap is the filing-date `marketcap` rolled forward by the split-adjusted close |
@@ -44,10 +54,10 @@ our extra machinery adds anything over textbook value.
 | Development window | Entries 2000-01 to 2012-12 |
 | Holdout window | Entries 2013-01 to 2025-09, sealed until revealed once |
 | Horizons | 30, 91, 365 days; exit on the first trading day on or after the horizon |
-| Primary metric | 30-day buy tier minus universe, net of costs |
-| Secondary metric | Buy tier minus the plain earnings-yield sort |
-| Pass bar | Holdout 90% interval on the primary wholly above zero, and the 365-day net spread not wholly below zero |
-| Costs | 0.53% per side (base) and 3% (stress), charged on measured buy-tier turnover |
+| Primary metric | 30-day buy tier minus the plain earnings-yield sort, each net of costs on its own turnover (`buy_minus_plain_value_net`) |
+| Context metric | 30-day buy tier minus the equal-weight universe, net of costs (`buy_tier_spread_net`), with the `value_regime` split. Does not decide the verdict |
+| Pass bar | Holdout 90% interval on the primary wholly above zero, and the 365-day primary not wholly below zero |
+| Costs | 0.175% per side (base: the fair GBP-funded US cost in `market_trading_costs`, FX plus half-spread) and 3% (stress), charged on each leg's measured turnover |
 | Delistings | Exit at the last adjusted close; sensitivity −30% for non-merger delistings |
 | Forbidden | Threshold, weight, or model search on any window (N33). Per-model rank IC is report-only |
 
@@ -61,23 +71,45 @@ revealed opens a new `registration_id`, and its results are exploratory.
 
 ## Decisions (agreed before the run)
 
-| Holdout result | Meaning | Action |
+| Holdout primary | Meaning | Action |
 |---|---|---|
-| Beats universe and plain sort | Screen machinery adds value | Keep it; multi-year total return becomes the fitness test N197 asks for |
-| Beats universe, not plain sort | Extras add nothing over textbook value | Simplify toward the published sorts; the AI layer must earn its keep separately |
-| Does not beat universe | Premise fails in the US | Stop building forward machinery on this screen; rethink before stage 4 |
+| Beats the plain sort | Screen machinery adds to textbook value after costs | Keep it; multi-year total return becomes the fitness test N197 asks for |
+| Inconclusive | No measurable gain over the plain sort | Freeze the machinery (no new extras); the AI layer and forward evidence must earn their keep separately |
+| Loses to the plain sort | The extras cost money | Simplify toward the published sort before stage 4 |
+
+The market spread and its `value_regime` split are read beside the verdict,
+never instead of it. A negative market spread in `value_lagged` cohorts with a
+positive primary is a value-regime result, not a screen failure.
+
+### Reading the result
+
+* `buy_minus_plain_value_net` decides. `buy_minus_plain_value` (gross) and the
+  `_stress` variant show how much costs matter; the plain sort usually trades
+  more than the buy tier.
+* `value_regime.value_led` / `value_lagged` give the primary and the market
+  spread in each regime. A screen that only beats the plain sort in one regime
+  is a regime bet, not a better value method; read the two before acting.
+* `development_confirmation_verdict` / `holdout_confirmation_verdict` are the
+  365-day primary. `fail` there means the monthly edge reverses over a year.
 
 ## Limits
 
 - US results are evidence about the method, not proof for the FTSE 350.
 - The AI judgment layer cannot be replayed: the model knows how 2000–2025 turned
   out. It stays forward-tested only (N39).
-- The plain earnings-yield sort and the universe are costless comparators, so
-  the net spread is conservative.
+- The universe comparator is costless, so the market context spread is
+  conservative. The plain sort pays costs like the buy tier.
 - The replay reproduces the live screen, quirks included. Live rows carry
   dividend yield in percent while the dividend models' floors (0.02–0.04) read
   as fractions, so those floors pass almost any payer. The replay feeds percent
   too, so it tests the screen as it actually runs (see the deferred store).
+- Sector is today's classification from the `tickers` table, not the sector on
+  each date (Sharadar keeps no sector history). Sector-relative ranks therefore
+  carry a little look-ahead, mostly around the 2018 GICS move of media and
+  internet names into Communication Services.
+- The windows fall in different value regimes (see the learning question).
+  The primary cancels most of that; it cannot cancel a regime in which our
+  extras themselves behave differently, which the `value_regime` split shows.
 
 ## Phases
 
@@ -94,12 +126,20 @@ code. `forward_returns` and `score_cohorts` use the same exit rule as
 
 Parity: ops-monitor re-scores the committed FTSE run-snapshot cohorts with the
 harness and diffs buy-tier spread, avoid spread, and rank IC against
-`screen_premise_backtest.json`. At registration all 42 values matched exactly.
+`screen_premise_backtest.json`. At registration all 42 values matched exactly. The harness
+scores snapshot closes, so when the premise store credits dividends
+(`return_basis: price_plus_dividends`) parity rebuilds the premise cohorts
+price-only from the same snapshots, with no fetch, and compares those.
 
 ### Phase 2 — licensed data (human gate)
 
 Human checklist: `adhoc-historical-replay-data`. Personal-use licence only.
 
+0. Dry run before paying. Download the vendor's free sample tables (if
+   offered) to a directory outside the repository and run `build-panel` on
+   them. The sample is too small for results, but it shows whether the column
+   names, date formats, and table layouts match the adapter. Fix any mismatch
+   before subscribing. The sample is licensed too: never commit it.
 1. Subscribe to the Sharadar Core US Equities Bundle, full history, for **one
    month** (monthly plan). Bulk-download `fundamentals` (SF1), `stocks` (SEP),
    `actions`, `tickers`, `sp500` to a directory **outside the repository**
@@ -142,7 +182,9 @@ Human checklist: `adhoc-historical-replay-data`. Personal-use licence only.
    Commit `docs/data/historical_screen_replay.json`. Then `ftse-rule-search
    reveal --build ~/hsr-build` and commit `docs/data/historical_rule_search.json`.
 6. Cancel the subscription and delete every raw table and derived file
-   (`~/sharadar`, `~/hsr-build`) within 30 days (licence). Keep the store.
+   (`~/sharadar`, `~/hsr-build`, including `signals_cache.csv.gz` and
+   `daily.csv.gz`) within 30 days (licence). Then run
+   `ftse-historical-replay confirm-deleted`. Keep the stores.
 
 `run` refuses inputs inside the repository: the repo is public, and the licence
 forbids sharing the data or anything that reproduces it. The committed store
@@ -177,6 +219,7 @@ years after a change is a search over history (N33, N35). Re-run only when:
 | Historical screen replay registration predates screen code | info | Screen code changed while the holdout is sealed; run `ftse-historical-replay register` |
 | Historical screen replay verdict no longer describes the live screen | warn | Screen code changed after the holdout reveal |
 | Historical screen replay holdout revealed more than once | warn | Only the first reveal is evidence |
+| Licensed replay data deletion not confirmed | warn | 60 days after the first licensed run (one paid month plus the licence's 30 days) with no `confirm-deleted` |
 
 The same check carries the rule search's findings
 ([historical-rule-search.md](historical-rule-search.md#ops-monitor-findings)).

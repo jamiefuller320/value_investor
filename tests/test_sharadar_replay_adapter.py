@@ -363,6 +363,7 @@ def test_build_then_replay_end_to_end(sharadar_dir: Path, tmp_path: Path):
     assert results["horizons"]["30"]["development"]["cohorts"] >= 5
     assert results["horizons"]["30"]["holdout"]["sealed"] is True
     assert payload["holdout_reveals"] == []
+    first_used = payload["licensed_data"]["first_used_at"]
 
     sens = hsr.run_replay(
         out / "panel.csv.gz",
@@ -375,6 +376,7 @@ def test_build_then_replay_end_to_end(sharadar_dir: Path, tmp_path: Path):
     assert sens["results"] == results
     assert sens["results_delisting_sensitivity"]["horizons"]["30"]["holdout"]["sealed"] is True
     assert sens["holdout_reveals"] == []
+    assert sens["licensed_data"]["first_used_at"] == first_used
     with pytest.raises(ValueError, match="Only the baseline"):
         hsr.run_replay(
             out / "panel.csv.gz",
