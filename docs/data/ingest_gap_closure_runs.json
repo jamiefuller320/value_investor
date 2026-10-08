@@ -19843,8 +19843,117 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20261008-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "ASSA-B.ST",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "ASSA-B.ST"
+        ],
+        "market_id": "euro_depth",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20261008-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-10-08T10:28:45.851888+00:00",
+      "completed_at": "2026-10-08T10:31:13.305170+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": -1,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "ASSA-B.ST"
+        ],
+        "results": [
+          {
+            "ticker": "ASSA-B.ST",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 9,
+              "filings_with_body": 4,
+              "indexed_without_body": 5
+            },
+            "after": {
+              "filings_total": 20,
+              "filings_with_body": 14,
+              "indexed_without_body": 6
+            },
+            "improved": false,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 21,
+              "annual": 14,
+              "interim": 2,
+              "trading_update": 2,
+              "other": 3,
+              "with_body": 14,
+              "period_coverage": {
+                "annual": {
+                  "total": 14,
+                  "with_body": 9
+                },
+                "interim": {
+                  "total": 2,
+                  "with_body": 2
+                },
+                "trading_update": {
+                  "total": 2,
+                  "with_body": 2
+                },
+                "other": {
+                  "total": 3,
+                  "with_body": 1
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 14,
+              "with_body_after": 14,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 1,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "shared_body_propagated": 0,
+              "ir_metadata_reconciled": 0,
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "ASSA-B.ST",
+            "with_body_before": 4,
+            "with_body_after": 14,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-10-07T15:01:02.343976+00:00",
+  "updated_at": "2026-10-08T10:31:13.305179+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
