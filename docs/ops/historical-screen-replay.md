@@ -5,6 +5,8 @@ Closes L536 and L542; supersedes L565. Observe-only: never changes signals,
 books, or knobs.
 
 - Registration (frozen): `docs/data/historical_screen_replay_registration.json`
+- Mid-cap sibling (hsr-mid-v1): `docs/data/historical_screen_replay_midcap_registration.json`,
+  results in `docs/data/historical_screen_replay_midcap.json`
 - Status and results (aggregates only): `docs/data/historical_screen_replay.json`
 - Code: `src/value_investor/historical_screen_replay.py` (`ftse-historical-replay`)
 
@@ -92,6 +94,52 @@ positive primary is a value-regime result, not a screen failure.
 * `development_confirmation_verdict` / `holdout_confirmation_verdict` are the
   365-day primary. `fail` there means the monthly edge reverses over a year.
 
+## Reporting kept for after deletion
+
+The licence requires deleting every raw and derived file within 30 days of
+cancelling, so anything we may want later must be computed or kept inside the
+month. Beyond the verdicts, each run commits:
+
+- `development_series` (and `holdout_series` once revealed) at the primary
+  horizon: one row per monthly cohort with the universe return, buy-tier,
+  plain-sort and avoid spreads, rank IC, both turnovers, and per-model
+  `[pass_spread, rank_ic]`. Cohort-level means only, never a per-name value.
+  Enough for the factor regression (L580), the value ETF comparison (L581),
+  regime re-cuts, and a model-mix study without the licensed data.
+- `per_model` per window and horizon: each model's passers' spread over the
+  universe, its score rank IC, and its pass share. Report-only: it never tunes
+  the screen (N33). The cache keeps every model's pass flag and score.
+- The rule search keeps book-level monthly returns for the frozen and chosen
+  rules ([historical-rule-search.md](historical-rule-search.md)).
+
+### Exploratory: dividend units (L571)
+
+`--variant dividend_units_fixed` re-screens with dividend yield as a fraction,
+which is what the L571 fix will do at load. It has its own signal cache, opens
+the holdout only after the baseline reveal, is marked `exploratory`, and is
+never evidence. It shows whether the fix changes the result before the fix is
+made live as a new epoch.
+
+## Mid-cap sibling (hsr-mid-v1)
+
+The live FTSE 350 is two thirds FTSE 250 mid caps; the S&P 500 is large caps
+only, and value and quality screens behave differently by size. hsr-mid-v1
+runs the same screen, windows, horizons, primary, and pass bar on US mid
+caps:
+
+- Universe: US domestic common stocks reporting in USD, ranks 501–1000 by
+  point-in-time market cap on each date (the latest filing's market cap rolled
+  by the split-adjusted close). Active and delisted. The `exchange` field is
+  not used because it is today's listing.
+- Base cost 0.225% per side (FX plus a wider mid-cap half-spread); stress 3%.
+- Its holdout also waits for the committed rule-search selection.
+- Decisions: both sizes beat the plain sort → the machinery works across
+  size; one size only → no live change, but FTSE 250 evidence is read
+  separately before stage 4; neither → follow hsr-v1.
+
+The rule search (hrs-v1) stays on the S&P 500. Use `--universe midcap` with
+`build-panel`, `run`, and `register`.
+
 ## Limits
 
 - US results are evidence about the method, not proof for the FTSE 350.
@@ -135,6 +183,26 @@ price-only from the same snapshots, with no fetch, and compares those.
 
 Human checklist: `adhoc-historical-replay-data`. Personal-use licence only.
 
+#### The month, day by day
+
+Compute is not the constraint: the screen pass takes about 25 minutes per
+universe and the rule search about 20–30 minutes (timed on synthetic data at
+scale). What cannot be redone after deletion is any question we forgot to
+ask. Hence this order:
+
+| When | Step |
+|------|------|
+| Before paying | Both PRs merged; ops-monitor shows no replay findings; dry run on the free sample (step 0) |
+| Day 1 | Subscribe. Bulk-download **every** table in the bundle, not only the five the adapter reads, to `~/sharadar` |
+| Day 1–2 | `build-panel` for both universes; check both build reports |
+| Day 2 | Development runs for both universes (caches the signals). Review; change nothing registered. Fix adapter bugs only here, and log them as amendments |
+| Day 3 | Rule search; commit its selection |
+| Day 3 | Reveal hsr-v1, then hsr-mid-v1; delisting sensitivity for both; rule-search reveal; commit the stores |
+| Day 4 | Exploratory `dividend_units_fixed` on both universes; commit |
+| Day 4–5 | Check the stores hold the series and per-model blocks. Run any other question that needs the raw data now |
+| Before renewal | Cancel |
+| Within 30 days of cancelling | Delete `~/sharadar`, `~/hsr-build`, `~/hsr-mid-build` (caches included); `confirm-deleted` |
+
 0. Dry run before paying. Download the vendor's free sample tables (if
    offered) to a directory outside the repository and run `build-panel` on
    them. The sample is too small for results, but it shows whether the column
@@ -150,6 +218,7 @@ Human checklist: `adhoc-historical-replay-data`. Personal-use licence only.
    ftse-historical-replay build-panel --sharadar-dir ~/sharadar --out ~/hsr-build
    ```
 
+   For the mid-cap sibling, add `--universe midcap --out ~/hsr-mid-build`.
    This writes `panel.csv.gz`, `prices.csv.gz`, `daily.csv.gz` (adjusted daily
    OHLC for the tactical replay), `terminal_baseline.csv`,
    `terminal_sensitivity.csv`, and `build_report.json` (counts only). Check the
@@ -179,11 +248,14 @@ Human checklist: `adhoc-historical-replay-data`. Personal-use licence only.
      --variant delisting_sensitivity
    ```
 
-   Commit `docs/data/historical_screen_replay.json`. Then `ftse-rule-search
+   Repeat the development run, reveal, and sensitivity with `--universe
+   midcap` on `~/hsr-mid-build`. Commit `docs/data/historical_screen_replay.json`
+   and `docs/data/historical_screen_replay_midcap.json`. Then `ftse-rule-search
    reveal --build ~/hsr-build` and commit `docs/data/historical_rule_search.json`.
+   Last, `--variant dividend_units_fixed` on both universes (exploratory).
 6. Cancel the subscription and delete every raw table and derived file
-   (`~/sharadar`, `~/hsr-build`, including `signals_cache.csv.gz` and
-   `daily.csv.gz`) within 30 days (licence). Then run
+   (`~/sharadar`, `~/hsr-build`, `~/hsr-mid-build`, including every
+   `signals_cache*.csv.gz` and `daily.csv.gz`) within 30 days (licence). Then run
    `ftse-historical-replay confirm-deleted`. Keep the stores.
 
 `run` refuses inputs inside the repository: the repo is public, and the licence
@@ -219,7 +291,10 @@ years after a change is a search over history (N33, N35). Re-run only when:
 | Historical screen replay registration predates screen code | info | Screen code changed while the holdout is sealed; run `ftse-historical-replay register` |
 | Historical screen replay verdict no longer describes the live screen | warn | Screen code changed after the holdout reveal |
 | Historical screen replay holdout revealed more than once | warn | Only the first reveal is evidence |
-| Licensed replay data deletion not confirmed | warn | 60 days after the first licensed run (one paid month plus the licence's 30 days) with no `confirm-deleted` |
+| Licensed replay data deletion not confirmed | warn | 60 days after the first licensed run on either universe (one paid month plus the licence's 30 days) with no `confirm-deleted`; one confirmation covers both stores |
+| Historical mid-cap replay registration predates screen code | info | As above for hsr-mid-v1; run `ftse-historical-replay register --universe midcap` |
+| Historical mid-cap replay verdict no longer describes the live screen | warn | Screen code changed after the hsr-mid-v1 reveal |
+| Historical mid-cap replay holdout revealed more than once | warn | Only the first hsr-mid-v1 reveal is evidence |
 
 The same check carries the rule search's findings
 ([historical-rule-search.md](historical-rule-search.md#ops-monitor-findings)).

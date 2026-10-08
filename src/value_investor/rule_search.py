@@ -715,6 +715,22 @@ def window_metrics(
     }
 
 
+def monthly_series(run: WindowRun) -> dict[str, Any]:
+    """Book-level monthly returns (no per-name rows), kept for analysis after deletion."""
+
+    def rounded(x: np.ndarray) -> list[float]:
+        return [round(float(v), 6) for v in x]
+
+    return {
+        "month_starts": [d.date().isoformat() for d in run.dates[:-1]],
+        "portfolio": rounded(run.portfolio),
+        "plain_value": rounded(run.plain_value),
+        "cap_weighted": rounded(run.cap_weighted),
+        "equal_weighted": rounded(run.equal_weighted),
+        "names_held": [int(n) for n in run.names_held],
+    }
+
+
 def _holding_summary(run: WindowRun) -> dict[str, Any]:
     """Holding periods in months; episodes still open at the window end are censored."""
     lengths = np.asarray(run.episode_months, dtype=float)
@@ -873,6 +889,7 @@ def run_search(data: SearchData, registration: Mapping[str, Any]) -> dict[str, A
         for col in excess.T
     ]
     chosen_col = excess[:, [c.id for c in configs].index(chosen.id)]
+    frozen = frozen_config(registration)
     return {
         "run_at": datetime.now(UTC).isoformat(),
         "window": dict(window),
@@ -889,6 +906,10 @@ def run_search(data: SearchData, registration: Mapping[str, Any]) -> dict[str, A
         "overfitting": {
             "pbo_cscv": pbo_cscv(excess, blocks=int(registration["overfitting"]["cscv_blocks"])),
             "deflated_sharpe_chosen": deflated_sharpe(chosen_col, trial_sharpes),
+        },
+        "series": {
+            "frozen": monthly_series(runs[frozen.id]) if frozen.id in runs else None,
+            "chosen": monthly_series(runs[chosen.id]),
         },
     }
 
@@ -930,12 +951,13 @@ def run_reveal(
             run = simulate(data, config, window, cost_per_side=cost)
             portfolios[(label, cost_label)] = run.portfolio
             metrics = window_metrics(run, horizons=s["horizons"], lag=s["lag"], z=s["z_holdout"])
-            block: dict[str, Any] = {"metrics": metrics}
+            block: dict[str, Any] = {"metrics": metrics, "series": monthly_series(run)}
             if config.tactical is not None:
                 core = simulate(data, config.core_only(), window, cost_per_side=cost)
                 block["core_only_metrics"] = window_metrics(
                     core, horizons=s["horizons"], lag=s["lag"], z=s["z_holdout"]
                 )
+                block["core_only_portfolio"] = monthly_series(core)["portfolio"]
                 ci = mean_ci(run.portfolio - core.portfolio, lag=s["lag"], z=s["z_holdout"])
                 block["tactical_increment_monthly"] = ci
                 block["tactical_verdict"] = _verdict_increment(ci)

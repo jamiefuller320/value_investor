@@ -42,6 +42,9 @@ DEFAULT_DATA_DIR = Path("docs/data")
 DEFAULT_REGISTRATION_PATH = REPO_ROOT / "docs/data/historical_screen_replay_registration.json"
 DEFAULT_STORE_PATH = Path("docs/data/historical_screen_replay.json")
 DEFAULT_PREMISE_STORE_PATH = Path("docs/data/screen_premise_backtest.json")
+MIDCAP_REGISTRATION_PATH = REPO_ROOT / "docs/data/historical_screen_replay_midcap_registration.json"
+MIDCAP_STORE_PATH = Path("docs/data/historical_screen_replay_midcap.json")
+UNIVERSES = ("sp500", "midcap")
 
 SCREEN_CODE_PATHS = (
     "models",
@@ -67,11 +70,19 @@ STALE_REGISTRATION_TITLE = "Historical screen replay registration predates scree
 STALE_VERDICT_TITLE = "Historical screen replay verdict no longer describes the live screen"
 HOLDOUT_REUSED_TITLE = "Historical screen replay holdout revealed more than once"
 DELETION_DUE_TITLE = "Licensed replay data deletion not confirmed"
+MIDCAP_STALE_REGISTRATION_TITLE = "Historical mid-cap replay registration predates screen code"
+MIDCAP_STALE_VERDICT_TITLE = "Historical mid-cap replay verdict no longer describes the live screen"
+MIDCAP_HOLDOUT_REUSED_TITLE = "Historical mid-cap replay holdout revealed more than once"
 # One paid month plus the licence's 30 days to delete after cancelling.
 DELETION_DUE_DAYS = 60
 RULE_SEARCH_STORE_NAME = "historical_rule_search.json"
-VARIANTS = ("baseline", "delisting_sensitivity")
+VARIANTS = ("baseline", "delisting_sensitivity", "dividend_units_fixed")
+# Variants that change what the screen sees; exploratory, never evidence.
+PANEL_TRANSFORM_VARIANTS = frozenset({"dividend_units_fixed"})
 SIGNAL_CACHE_NAME = "signals_cache.csv.gz"
+SIGNAL_CACHE_VERSION = 2
+MODEL_PASS_PREFIX = "pass__"
+MODEL_SCORE_PREFIX = "score__"
 SIGNAL_COLUMNS = (
     "as_of",
     "ticker",
@@ -163,10 +174,57 @@ def replay_screen(panel: pd.DataFrame, *, market_id: str, scratch_root: Path) ->
         )
         for col in ("composite_score", "data_quality_score"):
             frame[col] = pd.to_numeric(signals.get(col, blank), errors="coerce")
-        frames.append(frame)
+        frames.append(frame.merge(_model_columns(result.model_results), on="ticker", how="left"))
     if not frames:
         return pd.DataFrame(columns=list(SIGNAL_COLUMNS))
     return pd.concat(frames, ignore_index=True)
+
+
+def _model_columns(model_results: pd.DataFrame) -> pd.DataFrame:
+    """One row per ticker: ``pass__<model>`` (0/1) and ``score__<model>`` for every model."""
+    if model_results is None or model_results.empty:
+        return pd.DataFrame(columns=["ticker"])
+    rows = model_results.assign(
+        ticker=model_results["ticker"].astype(str),
+        passed=model_results["passed"].astype(bool).astype(int),
+        score=pd.to_numeric(model_results["score"], errors="coerce"),
+    )
+    passed = rows.pivot_table(index="ticker", columns="model_id", values="passed", aggfunc="max")
+    score = rows.pivot_table(index="ticker", columns="model_id", values="score", aggfunc="mean")
+    passed.columns = [f"{MODEL_PASS_PREFIX}{c}" for c in passed.columns]
+    score.columns = [f"{MODEL_SCORE_PREFIX}{c}" for c in score.columns]
+    return passed.join(score).reset_index()
+
+
+def model_ids(frame: pd.DataFrame) -> list[str]:
+    return sorted(
+        c[len(MODEL_PASS_PREFIX) :] for c in frame.columns if c.startswith(MODEL_PASS_PREFIX)
+    )
+
+
+def dividend_units_fixed(panel: pd.DataFrame) -> pd.DataFrame:
+    """L571 exploratory fix: dividend yield as a fraction, as the dividend models' floors assume."""
+    out = panel.copy()
+    out["dividend_yield"] = pd.to_numeric(out["dividend_yield"], errors="coerce") / 100.0
+    return out
+
+
+PANEL_TRANSFORMS = {"dividend_units_fixed": dividend_units_fixed}
+
+
+def signal_cache_key(panel: pd.DataFrame, transform: str | None = None) -> dict[str, Any]:
+    return {
+        "version": SIGNAL_CACHE_VERSION,
+        "screen_code": screen_code_fingerprint(),
+        "panel": _data_fingerprint(panel),
+        "transform": transform,
+    }
+
+
+def signal_cache_name(variant: str = "baseline") -> str:
+    if variant in PANEL_TRANSFORM_VARIANTS:
+        return f"signals_cache_{variant}.csv.gz"
+    return SIGNAL_CACHE_NAME
 
 
 def cached_replay_signals(
@@ -175,8 +233,9 @@ def cached_replay_signals(
     market_id: str,
     cache_path: Path,
     scratch_root: Path | None = None,
+    transform: str | None = None,
 ) -> pd.DataFrame:
-    """``replay_screen`` once per (screen code, panel); later runs read ``cache_path``.
+    """``replay_screen`` once per (screen code, panel, transform); later runs read ``cache_path``.
 
     The cache sits beside the licensed panel, outside the repository, and is
     deleted with it.
@@ -184,15 +243,16 @@ def cached_replay_signals(
     cache_path = Path(cache_path)
     if _inside_repo(cache_path):
         raise ValueError(f"{cache_path} is inside the repository; keep the cache with the panel.")
-    key = {"screen_code": screen_code_fingerprint(), "panel": _data_fingerprint(panel)}
+    key = signal_cache_key(panel, transform)
     key_path = cache_path.with_name(cache_path.name + ".key.json")
     if cache_path.exists() and _read_json(key_path) == key:
         cached = pd.read_csv(cache_path)
         cached["as_of"] = cached["as_of"].map(_utc)
         return cached
+    screened = PANEL_TRANSFORMS[transform](panel) if transform else panel
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(scratch_root) if scratch_root is not None else Path(tmp)
-        signals = replay_screen(panel, market_id=market_id, scratch_root=root)
+        signals = replay_screen(screened, market_id=market_id, scratch_root=root)
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     signals.to_csv(cache_path, index=False)
     key_path.write_text(json.dumps(key), encoding="utf-8")
@@ -316,7 +376,31 @@ def score_cohort(
         "terminal_exits": int((rows.get("exit_kind") == "terminal").sum())
         if "exit_kind" in rows.columns
         else 0,
+        "models": _model_stats(rows, universe),
     }
+
+
+def _model_stats(rows: pd.DataFrame, universe: float) -> dict[str, dict[str, float | None]]:
+    """Per model: passers' spread over the universe, score rank IC, and the pass share."""
+    out: dict[str, dict[str, float | None]] = {}
+    for model in model_ids(rows):
+        passed = pd.to_numeric(rows[f"{MODEL_PASS_PREFIX}{model}"], errors="coerce") == 1
+        passers = rows.loc[passed, "ret"]
+        scores = pd.to_numeric(rows.get(f"{MODEL_SCORE_PREFIX}{model}"), errors="coerce")
+        scored = scores.notna()
+        ic = (
+            spearman(scores[scored].astype(float).tolist(), rows.loc[scored, "ret"].tolist())
+            if scored.sum() >= MIN_COHORT_NAMES
+            else None
+        )
+        out[model] = {
+            "pass_spread": round(float(passers.mean()) - universe, 4)
+            if len(passers) >= MIN_COHORT_NAMES
+            else None,
+            "rank_ic": None if ic is None else round(ic, 4),
+            "pass_share": round(float(passed.mean()), 4),
+        }
+    return out
 
 
 def score_cohorts(
@@ -444,7 +528,60 @@ def summarise_window(
         "mean_buy_tier_turnover": round(mean(pick("buy_tier_turnover")), 4) if cohorts else None,
         "mean_plain_value_turnover": round(mean(plain_turnover), 4) if plain_turnover else None,
         "terminal_exits": sum(int(c.get("terminal_exits") or 0) for c in cohorts),
+        "per_model": _summarise_models(cohorts, **kwargs),
     }
+
+
+def _summarise_models(
+    cohorts: list[dict[str, Any]], *, step_days: float, horizon_days: int
+) -> dict[str, Any]:
+    """Report-only per-model diagnostics (registration: never tunes the screen)."""
+    models = sorted({m for c in cohorts for m in (c.get("models") or {})})
+    out: dict[str, Any] = {}
+    for model in models:
+        stats = [(c.get("models") or {}).get(model) or {} for c in cohorts]
+
+        def pick(key: str, stats: list[dict[str, Any]] = stats) -> list[float]:
+            return [s[key] for s in stats if s.get(key) is not None]
+
+        shares = pick("pass_share")
+        out[model] = {
+            "pass_spread": summarise(
+                pick("pass_spread"), step_days=step_days, horizon_days=horizon_days
+            ),
+            "rank_ic": summarise(pick("rank_ic"), step_days=step_days, horizon_days=horizon_days),
+            "mean_pass_share": round(mean(shares), 4) if shares else None,
+        }
+    return out
+
+
+SERIES_FIELDS = (
+    "entry",
+    "names",
+    "buy_tier_names",
+    "universe_return",
+    "buy_tier_spread",
+    "plain_value_spread",
+    "avoid_spread",
+    "rank_ic",
+    "buy_tier_turnover",
+    "plain_value_turnover",
+)
+
+
+def series_row(cohort: Mapping[str, Any]) -> dict[str, Any]:
+    """One committed monthly row: cohort-level means only, never a per-name value.
+
+    Kept so later questions (factor regressions, ETF comparisons, model mixes)
+    can be answered after the licensed data is deleted. Models are
+    ``[pass_spread, rank_ic]`` pairs.
+    """
+    row = {k: cohort.get(k) for k in SERIES_FIELDS}
+    row["models"] = {
+        m: [s.get("pass_spread"), s.get("rank_ic")]
+        for m, s in sorted((cohort.get("models") or {}).items())
+    }
+    return row
 
 
 def verdict(window: dict[str, Any], primary: str) -> str:
@@ -498,6 +635,9 @@ def build_replay_results(
         else:
             entry["holdout"] = {"sealed": True, "cohorts": len(hold)}
         if horizon == primary["horizon_days"]:
+            entry["development_series"] = [series_row(c) for c in dev]
+            if reveal_holdout:
+                entry["holdout_series"] = [series_row(c) for c in hold]
             entry["development_verdict"] = verdict(dev_summary, primary["metric"])
             if reveal_holdout:
                 entry["holdout_verdict"] = verdict(entry["holdout"], primary["metric"])
@@ -640,6 +780,7 @@ def refresh_historical_screen_replay(
     registration_path: Path = DEFAULT_REGISTRATION_PATH,
     premise_store_path: Path = DEFAULT_PREMISE_STORE_PATH,
     rule_search_registration_path: Path | None = None,
+    midcap_registration_path: Path = MIDCAP_REGISTRATION_PATH,
     persist: bool = True,
 ) -> dict[str, Any]:
     """Daily status: registration fingerprint, harness parity, and any committed results.
@@ -675,6 +816,9 @@ def refresh_historical_screen_replay(
             rule_search_registration_path or rule_search.DEFAULT_REGISTRATION_PATH,
             Path(store_path).parent / RULE_SEARCH_STORE_NAME,
         ),
+        "midcap": midcap_status_block(
+            midcap_registration_path, Path(store_path).parent / MIDCAP_STORE_PATH.name
+        ),
     }
     if persist:
         _write_store(store_path, payload)
@@ -707,17 +851,58 @@ def findings_from_store(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
                 "auto_fixable": False,
             }
         )
-    reveals = payload.get("holdout_reveals") or []
-    matches = (payload.get("registration") or {}).get("matches_screen_code")
+    findings.extend(
+        _registration_findings(
+            (payload.get("registration") or {}).get("matches_screen_code"),
+            payload.get("holdout_reveals") or [],
+            titles=(STALE_VERDICT_TITLE, STALE_REGISTRATION_TITLE, HOLDOUT_REUSED_TITLE),
+            label="The replay",
+            register_cmd="ftse-historical-replay register",
+        )
+    )
+    midcap = payload.get("midcap") or {}
+    if midcap:
+        findings.extend(
+            _registration_findings(
+                midcap.get("matches_screen_code"),
+                midcap.get("holdout_reveals") or [],
+                titles=(
+                    MIDCAP_STALE_VERDICT_TITLE,
+                    MIDCAP_STALE_REGISTRATION_TITLE,
+                    MIDCAP_HOLDOUT_REUSED_TITLE,
+                ),
+                label="The mid-cap replay (hsr-mid-v1)",
+                register_cmd="ftse-historical-replay register --universe midcap",
+            )
+        )
+    findings.extend(rule_search.findings_from_block(payload.get("rule_search")))
+    findings.extend(
+        _deletion_findings(
+            _earliest_licensed(payload.get("licensed_data"), midcap.get("licensed_data"))
+        )
+    )
+    return findings
+
+
+def _registration_findings(
+    matches: bool | None,
+    reveals: list[Any],
+    *,
+    titles: tuple[str, str, str],
+    label: str,
+    register_cmd: str,
+) -> list[dict[str, Any]]:
+    stale_verdict, stale_registration, reused = titles
+    findings: list[dict[str, Any]] = []
     if matches is False:
         if reveals:
             findings.append(
                 {
                     "severity": "warn",
                     "category": "backtest",
-                    "title": STALE_VERDICT_TITLE,
+                    "title": stale_verdict,
                     "summary": (
-                        "Screen code changed after the holdout was revealed. The replay verdict "
+                        f"Screen code changed after the holdout was revealed. {label} verdict "
                         "describes the registered screen, not the live one. A new run is "
                         "exploratory: the holdout is spent. See docs/ops/historical-screen-replay.md."
                     ),
@@ -729,11 +914,10 @@ def findings_from_store(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
                 {
                     "severity": "info",
                     "category": "backtest",
-                    "title": STALE_REGISTRATION_TITLE,
+                    "title": stale_registration,
                     "summary": (
-                        "Screen code changed since the replay was registered. Re-register "
-                        "(python -m value_investor.historical_screen_replay register) before "
-                        "the licensed run; the holdout is still sealed."
+                        f"Screen code changed since {label.lower()} was registered. Run "
+                        f"`{register_cmd}` before the licensed run; the holdout is still sealed."
                     ),
                     "auto_fixable": False,
                 }
@@ -743,17 +927,46 @@ def findings_from_store(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
             {
                 "severity": "warn",
                 "category": "backtest",
-                "title": HOLDOUT_REUSED_TITLE,
+                "title": reused,
                 "summary": (
-                    f"The holdout was revealed {len(reveals)} times. Only the first reveal is "
+                    f"{label} holdout was revealed {len(reveals)} times. Only the first reveal is "
                     "evidence; later ones are exploratory."
                 ),
                 "auto_fixable": False,
             }
         )
-    findings.extend(rule_search.findings_from_block(payload.get("rule_search")))
-    findings.extend(_deletion_findings(payload.get("licensed_data")))
     return findings
+
+
+def _earliest_licensed(*blocks: Mapping[str, Any] | None) -> dict[str, Any] | None:
+    """Both universes come from one download: the earliest unconfirmed first use governs."""
+    pending = [b for b in blocks if b and b.get("first_used_at") and not b.get("deleted_at")]
+    if not pending:
+        return None
+    return dict(min(pending, key=lambda b: _utc(b["first_used_at"])))
+
+
+def midcap_status_block(
+    registration_path: Path = MIDCAP_REGISTRATION_PATH, store_path: Path = MIDCAP_STORE_PATH
+) -> dict[str, Any] | None:
+    """Daily ops-monitor view of the mid-cap sibling (embedded in the main store)."""
+    if not Path(registration_path).exists():
+        return None
+    registration = load_registration(registration_path)
+    store = _read_json(store_path) or {}
+    results = store.get("results") or {}
+    primary = str(registration["primary"]["horizon_days"])
+    horizon = (results.get("horizons") or {}).get(primary) or {}
+    return {
+        "registration_id": registration.get("registration_id"),
+        "matches_screen_code": registration.get("screen_code_fingerprint")
+        == screen_code_fingerprint(),
+        "has_results": bool(results),
+        "development_verdict": horizon.get("development_verdict"),
+        "holdout_verdict": horizon.get("holdout_verdict"),
+        "holdout_reveals": list(store.get("holdout_reveals") or []),
+        "licensed_data": store.get("licensed_data"),
+    }
 
 
 def _deletion_findings(
@@ -780,14 +993,24 @@ def _deletion_findings(
     ]
 
 
-def confirm_deleted(store_path: Path = DEFAULT_STORE_PATH) -> dict[str, Any]:
-    """Record that every licensed raw and derived file has been deleted."""
-    store = _read_json(store_path) or {}
-    licensed = dict(store.get("licensed_data") or {})
-    licensed["deleted_at"] = datetime.now(UTC).isoformat()
-    store["licensed_data"] = licensed
-    _write_store(store_path, store)
-    return licensed
+def confirm_deleted(
+    store_path: Path = DEFAULT_STORE_PATH, midcap_store_path: Path | None = None
+) -> dict[str, Any]:
+    """Record that every licensed raw and derived file has been deleted (both universes)."""
+    deleted_at = datetime.now(UTC).isoformat()
+    midcap = midcap_store_path or Path(store_path).parent / MIDCAP_STORE_PATH.name
+    out: dict[str, Any] = {}
+    for path in (Path(store_path), Path(midcap)):
+        store = _read_json(path)
+        if store is None and path != Path(store_path):
+            continue
+        store = store or {}
+        licensed = dict(store.get("licensed_data") or {})
+        licensed["deleted_at"] = deleted_at
+        store["licensed_data"] = licensed
+        _write_store(path, store)
+        out = licensed if path == Path(store_path) else out
+    return out
 
 
 def _inside_repo(path: Path) -> bool:
@@ -825,8 +1048,10 @@ def run_replay(
     """Replay the registered screen on a local point-in-time panel and commit aggregates only.
 
     ``variant="delisting_sensitivity"`` re-scores with the sensitivity terminal
-    file into ``results_delisting_sensitivity``. It never counts as a reveal: its
-    holdout opens only once the baseline holdout has been revealed.
+    file into ``results_delisting_sensitivity``. ``variant="dividend_units_fixed"``
+    re-screens with dividend yield as a fraction (the L571 fix) into its own
+    signal cache and is marked exploratory. Neither counts as a reveal: their
+    holdouts open only once the baseline holdout has been revealed.
 
     While a rule search is registered, the baseline holdout stays sealed until
     the search selection is committed beside ``store_path``.
@@ -866,11 +1091,13 @@ def run_replay(
         haircuts = dict(
             zip(terminal["ticker"].astype(str), terminal["haircut"].astype(float), strict=True)
         )
+    transform = variant if variant in PANEL_TRANSFORM_VARIANTS else None
     signals = cached_replay_signals(
         panel,
         market_id=registration["market_id"],
-        cache_path=Path(panel_path).parent / SIGNAL_CACHE_NAME,
+        cache_path=Path(panel_path).parent / signal_cache_name(variant),
         scratch_root=scratch_root,
+        transform=transform,
     )
     results = build_replay_results(
         signals,
@@ -891,6 +1118,7 @@ def run_replay(
         "registration_id": registration.get("registration_id"),
         results_key: {
             "run_at": now,
+            "exploratory": transform is not None,
             "data_fingerprint": _data_fingerprint(panel, prices),
             "rebalance_dates": int(signals["as_of"].nunique()),
             "tickers": int(signals["ticker"].nunique()),
@@ -931,13 +1159,21 @@ def register(
     return registration["screen_code_fingerprint"]
 
 
+def universe_paths(universe: str) -> tuple[Path, Path]:
+    if universe == "midcap":
+        return MIDCAP_REGISTRATION_PATH, MIDCAP_STORE_PATH
+    return DEFAULT_REGISTRATION_PATH, DEFAULT_STORE_PATH
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="ftse-historical-replay", description=__doc__.split("\n")[0]
     )
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("status", help="Refresh fingerprint and parity status (what ops-monitor runs)")
-    sub.add_parser("register", help="Re-freeze the screen fingerprint while the holdout is sealed")
+    reg_p = sub.add_parser(
+        "register", help="Re-freeze the screen fingerprint while the holdout is sealed"
+    )
     run_p = sub.add_parser("run", help="Replay on a local licensed panel (outside the repo)")
     run_p.add_argument("--panel", type=Path, required=True)
     run_p.add_argument("--prices", type=Path, required=True)
@@ -950,6 +1186,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     build_p.add_argument("--sharadar-dir", type=Path, required=True)
     build_p.add_argument("--out", type=Path, required=True)
+    for p in (reg_p, run_p, build_p):
+        p.add_argument(
+            "--universe",
+            choices=UNIVERSES,
+            default="sp500",
+            help="sp500: hsr-v1 (S&P 500 members); midcap: hsr-mid-v1 (US market-cap ranks)",
+        )
     sub.add_parser(
         "confirm-deleted",
         help="Record that all licensed raw and derived files were deleted (licence)",
@@ -958,17 +1201,24 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "status":
         payload = refresh_historical_screen_replay()
         print(json.dumps({k: payload[k] for k in ("registration", "parity")}, indent=2))
-    elif args.command == "register":
-        print(register())
-    elif args.command == "confirm-deleted":
+        return 0
+    if args.command == "confirm-deleted":
         print(json.dumps(confirm_deleted(), indent=2))
+        return 0
+    registration_path, store_path = universe_paths(args.universe)
+    if args.command == "register":
+        print(register(registration_path, store_path))
     elif args.command == "build-panel":
-        print(json.dumps(build_panel_files(args.sharadar_dir, args.out), indent=2))
+        print(
+            json.dumps(build_panel_files(args.sharadar_dir, args.out, registration_path), indent=2)
+        )
     else:
         payload = run_replay(
             args.panel,
             args.prices,
             terminal_path=args.terminal,
+            registration_path=registration_path,
+            store_path=store_path,
             scratch_root=args.scratch,
             reveal_holdout=args.reveal_holdout,
             variant=args.variant,

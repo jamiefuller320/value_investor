@@ -1,6 +1,6 @@
 {
   "registration_id": "hsr-v1",
-  "registered_at": "2026-10-08T06:02:01.031801+00:00",
+  "registered_at": "2026-10-08T08:06:41.511112+00:00",
   "status": "registered_holdout_sealed",
   "learning_question": "In a survivorship-free point-in-time US universe, does the frozen value screen's buy tier (buy + strong_buy) beat a plain top-30% earnings-yield sort of the same names, after costs on both? Both legs carry the same value exposure, so the answer does not hinge on whether value or growth led the period. Whether value beats the market is the published factor question (value-factor-base-rate.md); the spread over the equal-weight universe is reported as context, split by value regime.",
   "closes": [
@@ -106,6 +106,17 @@
       "before_data": true,
       "change": "Primary metric buy_tier_spread_net -> buy_minus_plain_value_net (the plain sort now pays the same costs on its own turnover). The market spread becomes secondary context with a value_regime split. A 365-day confirmation verdict is computed. Decisions reworded around the plain sort.",
       "reason": "The holdout (2013-2025) is a decade in which value lagged growth. Scoring the screen against the market would mostly measure that regime, which the published value base rate already covers. Both legs of buy-minus-plain carry the same value exposure, so it isolates what this project controls. No licensed data has been used and no holdout has been revealed."
+    },
+    {
+      "at": "2026-10-08",
+      "before_data": true,
+      "change": "Reporting only: committed monthly cohort series, per-model diagnostics, and the exploratory dividend_units_fixed variant. Verdicts, metrics, and pass bars unchanged.",
+      "reason": "The licensed data must be deleted within 30 days of cancelling. Later questions (factor regression L580, ETF comparison L581, model mix, the L571 fix) can only be answered from what is kept or run inside the month. No licensed data has been used."
     }
-  ]
+  ],
+  "reporting": {
+    "monthly_series": "At the primary horizon, per-cohort aggregates (universe return, buy-tier, plain and avoid spreads, rank IC, turnover, and per-model pass spread and rank IC) are committed for the development window, and for the holdout once revealed. Cohort-level means only; no per-name value.",
+    "per_model": "Report-only per-model pass spread, score rank IC, and pass share per window and horizon.",
+    "exploratory_variants": "dividend_units_fixed re-screens with dividend yield as a fraction (the L571 fix). It opens the holdout only after the baseline reveal and is never evidence."
+  }
 }

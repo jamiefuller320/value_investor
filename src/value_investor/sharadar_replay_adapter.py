@@ -2,9 +2,10 @@
 
 Reads the licensed bulk exports (fundamentals, stocks, tickers, actions, sp500)
 from a local directory outside the repository and writes the three files that
-``ftse-historical-replay run`` consumes:
+``ftse-historical-replay run`` consumes. The registration's ``universe_rule``
+picks the names: S&P 500 members (hsr-v1) or US market-cap ranks (hsr-mid-v1).
 
-* ``panel.csv.gz`` — one row per (month-end rebalance, S&P 500 member) with the
+* ``panel.csv.gz`` — one row per (month-end rebalance, universe member) with the
   Yahoo-style metric columns the library screen reads, built only from filings
   available at least ``FILING_LAG_DAYS`` before the rebalance.
 * ``prices.csv.gz`` — total-return closes (``closeadj``) on rebalance dates, on
@@ -135,7 +136,9 @@ def load_tickers(path: Path) -> pd.DataFrame:
         sf1 = frame.loc[frame["table"].str.upper() == "SF1"]
         frame = sf1 if not sf1.empty else frame
     frame = frame.drop_duplicates(subset=["ticker"], keep="last")
-    keep = [c for c in ("ticker", "name", "sector", "currency", "isdelisted") if c in frame]
+    keep = [
+        c for c in ("ticker", "name", "sector", "currency", "isdelisted", "category") if c in frame
+    ]
     return frame[keep].set_index("ticker")
 
 
@@ -228,6 +231,104 @@ def ever_members(sp500: pd.DataFrame, first: pd.Timestamp, last: pd.Timestamp) -
     in_window = (sp500["date"] > first) & (sp500["date"] <= last)
     added = sp500.loc[in_window & sp500["action"].isin(("added", "historical")), "ticker"]
     return start | set(added)
+
+
+def eligible_common_stocks(tickers: pd.DataFrame) -> set[str]:
+    """US domestic common stocks reporting in USD, listed or delisted.
+
+    The ``exchange`` field is today's listing, so filtering on it would drop
+    names that later fell to OTC or delisted (survivorship). Size ranks keep
+    the universe to listed-scale companies instead.
+    """
+    category = tickers.get("category", pd.Series(dtype=str)).fillna("").astype(str)
+    currency = tickers.get("currency", pd.Series(dtype=str)).fillna("USD").astype(str)
+    ok = category.str.startswith("Domestic Common Stock") & (currency.str.upper() == "USD")
+    return set(tickers.index[ok.reindex(tickers.index, fill_value=False)].astype(str))
+
+
+def load_trading_calendar(path: Path) -> list[pd.Timestamp]:
+    dates: set[str] = set()
+    for chunk in pd.read_csv(path, usecols=["date"], chunksize=STOCKS_CHUNK_ROWS):
+        dates.update(chunk["date"].astype(str).unique())
+    return sorted(pd.to_datetime(list(dates)).normalize())
+
+
+def load_closes_on(path: Path, tickers: set[str], dates: set[pd.Timestamp]) -> pd.DataFrame:
+    """Split-adjusted ``close`` for ``tickers`` on ``dates`` only (a light pass over SEP)."""
+    wanted = {d.strftime("%Y-%m-%d") for d in dates}
+    chunks = []
+    for chunk in pd.read_csv(
+        path, usecols=lambda c: c in {"ticker", "date", "close"}, chunksize=STOCKS_CHUNK_ROWS
+    ):
+        chunk = chunk.loc[chunk["ticker"].isin(tickers) & chunk["date"].astype(str).isin(wanted)]
+        if not chunk.empty:
+            chunks.append(chunk)
+    frame = (
+        pd.concat(chunks, ignore_index=True)
+        if chunks
+        else pd.DataFrame(columns=["ticker", "date", "close"])
+    )
+    frame["date"] = _dates(frame["date"])
+    frame["close"] = pd.to_numeric(frame["close"], errors="coerce")
+    return frame.dropna(subset=["date", "close"])
+
+
+def load_market_caps(path: Path, tickers: set[str]) -> pd.DataFrame:
+    """ART ``marketcap`` struck at each filing date, for ranking the universe."""
+    chunks = []
+    for chunk in pd.read_csv(
+        path,
+        usecols=lambda c: c in {"ticker", "dimension", "datekey", "date", "marketcap"},
+        chunksize=500_000,
+    ):
+        chunk = chunk.loc[chunk["ticker"].isin(tickers) & (chunk["dimension"] == "ART")]
+        if not chunk.empty:
+            chunks.append(chunk)
+    if not chunks:
+        return pd.DataFrame(columns=["ticker", "filed", "marketcap"])
+    frame = pd.concat(chunks, ignore_index=True)
+    filed_col = "datekey" if "datekey" in frame.columns else "date"
+    frame["filed"] = _dates(frame[filed_col])
+    frame["marketcap"] = pd.to_numeric(frame["marketcap"], errors="coerce")
+    return frame[["ticker", "filed", "marketcap"]].dropna()
+
+
+def cap_rank_membership(
+    caps: pd.DataFrame,
+    closes: pd.DataFrame,
+    rebalances: Iterable[pd.Timestamp],
+    *,
+    rank_from: int,
+    rank_to: int,
+) -> dict[pd.Timestamp, set]:
+    """Names ranked ``rank_from``..``rank_to`` (1 = largest) by market cap on each date.
+
+    Market cap is the latest filing's ``marketcap`` (filed at least
+    ``FILING_LAG_DAYS`` before, at most ``STALE_FILING_DAYS`` old) rolled forward
+    by the split-adjusted close from the last ranking date on or before the
+    filing. ``closes`` must carry those earlier dates too. The roll misses up to
+    a month of price change at the filing, which only moves names near the rank
+    boundaries and uses nothing from after the date.
+    """
+    dates = sorted({pd.Timestamp(d).normalize() for d in rebalances})
+    rows = closes.loc[closes["date"].isin(dates), ["ticker", "date", "close"]].rename(
+        columns={"close": "close_d"}
+    )
+    rows = rows.loc[rows["close_d"] > 0].assign(
+        cutoff=lambda f: f["date"] - pd.Timedelta(days=FILING_LAG_DAYS)
+    )
+    rows = _asof(rows, caps.sort_values("filed"), left_on="cutoff", right_on="filed")
+    rows = rows.dropna(subset=["filed", "marketcap"])
+    rows = rows.loc[(rows["date"] - rows["filed"]).dt.days <= STALE_FILING_DAYS]
+    marks = closes.rename(columns={"date": "mark_date", "close": "close_m"})
+    rows = _asof(rows, marks, left_on="filed", right_on="mark_date")
+    rows["cap"] = rows["marketcap"] * _ratio(rows["close_d"], rows["close_m"], positive_den=True)
+    rows = rows.loc[rows["cap"] > 0]
+    out: dict[pd.Timestamp, set] = {}
+    for d in dates:
+        ranked = rows.loc[rows["date"] == d].sort_values(["cap", "ticker"], ascending=[False, True])
+        out[d] = set(ranked["ticker"].iloc[rank_from - 1 : rank_to])
+    return out
 
 
 def month_end_trading_days(
@@ -537,14 +638,35 @@ def build_replay_inputs(
     last = pd.Timestamp(windows["holdout"]["last_entry"])
     horizons = [int(h) for h in registration["horizons_days"]]
 
-    sp500 = load_sp500(find_table(sharadar_dir, "sp500"))
-    ever = ever_members(sp500, first - pd.offsets.MonthBegin(1), last + pd.offsets.MonthEnd(0))
-    stocks = load_stocks(find_table(sharadar_dir, "stocks"), ever)
-    rebalances = month_end_trading_days(stocks["date"], first, last)
-    members = membership_on(sp500, rebalances)
-    universe = set().union(*members.values()) if members else set()
-
+    rule = registration.get("universe_rule") or {"kind": "sp500_members"}
     tickers = load_tickers(find_table(sharadar_dir, "tickers"))
+    stocks_path = find_table(sharadar_dir, "stocks")
+    if rule["kind"] == "sp500_members":
+        sp500 = load_sp500(find_table(sharadar_dir, "sp500"))
+        ever = ever_members(sp500, first - pd.offsets.MonthBegin(1), last + pd.offsets.MonthEnd(0))
+        stocks = load_stocks(stocks_path, ever)
+        rebalances = month_end_trading_days(stocks["date"], first, last)
+        members = membership_on(sp500, rebalances)
+        universe = set().union(*members.values()) if members else set()
+    elif rule["kind"] == "us_cap_rank":
+        eligible = eligible_common_stocks(tickers)
+        calendar = load_trading_calendar(stocks_path)
+        rebalances = month_end_trading_days(calendar, first, last)
+        marks = month_end_trading_days(calendar, first - pd.DateOffset(months=18), last)
+        closes = load_closes_on(stocks_path, eligible, set(marks))
+        caps = load_market_caps(find_table(sharadar_dir, "fundamentals"), eligible)
+        members = cap_rank_membership(
+            caps,
+            closes,
+            rebalances,
+            rank_from=int(rule["rank_from"]),
+            rank_to=int(rule["rank_to"]),
+        )
+        universe = set().union(*members.values()) if members else set()
+        stocks = load_stocks(stocks_path, universe)
+    else:
+        raise ValueError(f"Unknown universe_rule kind {rule['kind']!r}")
+
     actions = load_actions(find_table(sharadar_dir, "actions"))
     fundamentals = load_fundamentals(find_table(sharadar_dir, "fundamentals"), universe)
     panel, counts = build_panel(

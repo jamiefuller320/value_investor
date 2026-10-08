@@ -98,10 +98,7 @@ def _build(root: Path) -> Path:
     )
     cache = build / hsr.SIGNAL_CACHE_NAME
     pd.DataFrame(sig_rows).to_csv(cache, index=False)
-    key = {
-        "screen_code": hsr.screen_code_fingerprint(),
-        "panel": hsr._data_fingerprint(pd.read_csv(build / "panel.csv.gz")),
-    }
+    key = hsr.signal_cache_key(pd.read_csv(build / "panel.csv.gz"))
     cache.with_name(cache.name + ".key.json").write_text(json.dumps(key))
     return build
 
@@ -291,6 +288,9 @@ def test_search_reveal_and_holdout_order(built, tmp_path: Path):
     assert patient["open_at_window_end"] > quick["open_at_window_end"]
     assert rows["buy_tier|top=all|exit=rerate50|tac=off"]["holding"]["exits"]["rerated"] == 4
     assert "S0" not in json.dumps(result)  # aggregates only, no per-name rows
+    chosen_series = result["series"]["chosen"]
+    assert len(chosen_series["portfolio"]) == len(chosen_series["plain_value"]) == 24
+    assert result["series"]["frozen"]["month_starts"][0] == "2000-01-31"
 
     with pytest.raises(FileNotFoundError):
         hsr.run_replay(
@@ -304,6 +304,8 @@ def test_search_reveal_and_holdout_order(built, tmp_path: Path):
     revealed = rs.reveal(build, registration_path=reg_path, store_path=store)
     holdout = revealed["holdout"]
     assert holdout["frozen"]["base"]["metrics"]["months"] == 12
+    assert len(holdout["frozen"]["base"]["series"]["portfolio"]) == 12
+    assert len(holdout["frozen"]["stress"]["core_only_portfolio"]) == 12
     assert "tactical_increment_monthly" in holdout["frozen"]["stress"]
     for cost in ("base", "stress"):
         paired = holdout["chosen_minus_frozen"][cost]

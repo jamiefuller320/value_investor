@@ -146,6 +146,7 @@ def _tickers() -> pd.DataFrame:
                 "sector": "Technology" if i % 2 else "Energy",
                 "currency": "EUR" if t == "EURCO" else "USD",
                 "isdelisted": "Y" if t in DELISTED else "N",
+                "category": "Domestic Common Stock",
             }
             for i, t in enumerate(ALL)
         ]
@@ -157,7 +158,17 @@ def _tickers() -> pd.DataFrame:
                 "sector": "",
                 "currency": "USD",
                 "isdelisted": "N",
-            }
+                "category": "Domestic Common Stock",
+            },
+            {
+                "table": "SF1",
+                "ticker": "FUND",
+                "name": "Synthetic ETF",
+                "sector": "",
+                "currency": "USD",
+                "isdelisted": "N",
+                "category": "ETF",
+            },
         ]
     )
 
@@ -393,3 +404,83 @@ def test_build_refuses_paths_inside_repo(sharadar_dir: Path):
         hsr.build_panel_files(sharadar_dir, hsr.REPO_ROOT / "tmp-replay-out")
     with pytest.raises(ValueError, match="inside the repository"):
         hsr.build_panel_files(hsr.REPO_ROOT / "docs", Path("/tmp/x"))
+
+
+def test_cap_rank_membership_is_point_in_time():
+    caps = pd.DataFrame(
+        [
+            ("X", "2000-01-10", 100.0),
+            ("Y", "2000-01-10", 300.0),
+            ("Z", "2000-01-10", 200.0),
+            ("W", "2000-02-28", 1000.0),  # filed inside the 2-day lag of 29 Feb
+            ("V", "1998-01-01", 5000.0),  # stale filing
+        ],
+        columns=["ticker", "filed", "marketcap"],
+    ).assign(filed=lambda f: pd.to_datetime(f["filed"]))
+    marks = ["1999-12-31", "2000-01-31", "2000-02-29"]
+    closes = pd.DataFrame(
+        [
+            (t, d, 40.0 if (t == "X" and d == marks[-1]) else 10.0)
+            for d in marks
+            for t in ("X", "Y", "Z", "W", "V")
+        ],
+        columns=["ticker", "date", "close"],
+    ).assign(date=lambda f: pd.to_datetime(f["date"]))
+    jan, feb = pd.Timestamp("2000-01-31"), pd.Timestamp("2000-02-29")
+    top = sra.cap_rank_membership(caps, closes, [jan, feb], rank_from=1, rank_to=2)
+    assert top[jan] == {"Y", "Z"}
+    assert top[feb] == {"X", "Y"}  # X rolled from 100 to 400 by its close
+    middle = sra.cap_rank_membership(caps, closes, [feb], rank_from=2, rank_to=3)
+    assert middle[feb] == {"Y", "Z"}
+
+
+def _midcap_registration() -> dict:
+    reg = hsr.load_registration(hsr.MIDCAP_REGISTRATION_PATH)
+    base = _registration()
+    reg.update(
+        windows=base["windows"],
+        horizons_days=base["horizons_days"],
+        primary=base["primary"],
+        screen_code_fingerprint=hsr.screen_code_fingerprint(),
+    )
+    reg["universe_rule"] = {**reg["universe_rule"], "rank_from": 6, "rank_to": 20}
+    return reg
+
+
+def test_midcap_build_ranks_the_universe_and_replays(sharadar_dir: Path, tmp_path: Path):
+    reg_path = tmp_path / "mid.json"
+    reg_path.write_text(json.dumps(_midcap_registration()))
+    out = tmp_path / "mid"
+    report = hsr.build_panel_files(sharadar_dir, out, registration_path=reg_path)
+    assert report["registration_id"] == "hsr-mid-v1"
+    assert report["members_per_date"]["max"] == 15
+    panel = pd.read_csv(out / "panel.csv.gz")
+    assert "FUND" not in set(panel["ticker"]) and "EURCO" not in set(panel["ticker"])
+    for _, names in panel.groupby("as_of")["ticker"]:
+        assert len(names) <= 15
+
+    store = tmp_path / hsr.MIDCAP_STORE_PATH.name
+    payload = hsr.run_replay(
+        out / "panel.csv.gz",
+        out / "prices.csv.gz",
+        terminal_path=out / "terminal_baseline.csv",
+        registration_path=reg_path,
+        store_path=store,
+    )
+    assert payload["registration_id"] == "hsr-mid-v1"
+    assert payload["results"]["exploratory"] is False
+    assert payload["results"]["horizons"]["30"]["holdout"]["sealed"] is True
+
+    fixed = hsr.run_replay(
+        out / "panel.csv.gz",
+        out / "prices.csv.gz",
+        terminal_path=out / "terminal_baseline.csv",
+        registration_path=reg_path,
+        store_path=store,
+        variant="dividend_units_fixed",
+    )
+    variant = fixed["results_dividend_units_fixed"]
+    assert variant["exploratory"] is True
+    assert variant["horizons"]["30"]["holdout"]["sealed"] is True
+    assert fixed["holdout_reveals"] == []
+    assert (out / hsr.signal_cache_name("dividend_units_fixed")).exists()

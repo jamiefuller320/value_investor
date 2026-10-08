@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-08T07:35:29+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-08T08:11:01+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -237,6 +237,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N196 | **Calibrated / exclusion shadows of the fair primary** | Knob-calibration and exclusion-ladder shadows only support the ai_judgment parent, which is frozen. Priors and ladder replay now run on ai_judgment_fair observe-only; spawning fair-parent shadows would add new live tracks (factory, not P1). | knob_calibration_priors for ai_judgment_fair reports ready_for_shadow_bootstrap with confidence above low, or exclusion replay_beats_actual is true on the primary for 3 consecutive Sundays |
 | N197 | **Do not connect 28-day price-correlation weights to the live signal** | update_model_weights runs on every screen and maps Pearson correlation of model score to 28-day price return into a weight. assign_signal and conviction_score ignore that weight and use the fixed composite_value blend plus an unweighted pass count. Wiring the current learner into the buy tier would teach a short, dividend-blind, overlapping-window objective. Leave it disconnected until fitness is multi-year total return with a holdout. | L536 or L542 reports a model-level score that predicts multi-year total return out of sample |
 | N198 | **Do not make rolling profit-taking the value capital path** | Value selection stays the aim. Live books already turn over about 30x a year because rank exits fire after 2 screens (median hold 4 days). L531 replays prefer longer holds, and harvest skims already sit on ai_judgment_graduated_fair. Treating rolling clips as the strategy waits until those twins finish their gates. | ai_judgment_hold5_fair and ai_judgment_graduated_fair each have at least 130 common days with ai_judgment_fair on the assessment scoreboard (weekday proxy for their >=26 weekly-screen gates). _(machine-checked)_ |
+| N199 | **US mid-cap offline library market (S&P 400 scale) in the ingest cascade** | Add US mid caps (S&P 400 or market-cap ranks 501-1000) as an offline ftse-library market so the shard can enter learning like sp500. Not the live universe: live stays FTSE 350 until stage 4. Wait for the hsr-mid-v1 verdict, and for the P2 cascade to have room: no fourth equal sprint stream. | hsr-mid-v1 holdout_verdict is pass (midcap block in historical_screen_replay.json) and the current P2 cascade head has graduated _(machine-checked)_ |
 
 ---
 
