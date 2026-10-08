@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-07T23:46:11+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-08T06:19:25+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -476,6 +476,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L553 | **OCR fallback for outlined-text filing PDFs (AMF unextractable URLs)** | Some AMF PDFs (e.g. VINCI H1/Q3 2025) have no text layer, so they are dropped and listed under unextractable_body_urls with a 30-day retry. An OCR fallback could recover those bodies. | unextractable_body_urls covers a buy-tier name's latest annual or interim results, or more than 3 French buy-tier names |
 | L570 | **Re-run historical screen replay on a fresh holdout** | The hsr-v1 holdout (2013-2025) can be spent once. New out-of-sample evidence only comes from years after 2025: re-register under a new registration_id and buy another one-month data window to score them. | At least 5 calendar years after the hsr-v1 holdout reveal, or when the screen code changes materially and the stale-verdict warning fires |
 | L571 | **Dividend yield unit mismatch in company screen models** | Live and library rows carry Yahoo dividend_yield in percent (median 2.5 = 2.5%), but DividendModel/DividendGrowth/LowPEHighYield floors (0.02-0.04) and Neff PEGY (growth fraction + yield) treat it as a fraction, so the yield floors pass almost any payer and PEGY is inflated ~100x on yield. Percentile ranks are unaffected. Trusts already normalise via trust_metrics.normalize_yield. Fix = normalise at fetch/library load; changes the screen fingerprint. | User decides: either fix and run ftse-historical-replay register before the hsr-v1 holdout is revealed, or fix after the reveal as a new epoch so the replay tests the screen as it ran |
+| L580 | **Factor-regression alpha view for the historical replay** | Regress hsr-v1 buy-tier monthly returns on public Fama-French value, size, momentum and quality factors to report alpha and loadings beside buy-minus-plain. Shows whether the screen's edge is a hidden tilt (quality, momentum) rather than better value selection. | After the hsr-v1 holdout reveal, if buy_minus_plain_value_net passes or the value_regime split differs sharply between regimes |
 
 ### Ops / reliability
 
