@@ -458,5 +458,75 @@
       "reason": "no usable statistics for buy_tier_level_dca (insufficient_data)"
     },
     "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
+  },
+  {
+    "reviewed_at": "2026-10-08T09:12:51.240046+00:00",
+    "enough_history": true,
+    "applied": false,
+    "knobs_before": {
+      "max_positions": 120,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0
+    },
+    "knobs_after": {
+      "max_positions": 120,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0
+    },
+    "proposed_changes": {},
+    "reasons": [
+      "No knob change warranted from current reviewed outcomes.",
+      "Total-return epoch vs FTAL.L needs two marks since 2026-10-08T09:12:51.240046+00:00; price excess is recorded and not used for proposals."
+    ],
+    "metrics": {
+      "portfolio_value": 1492.61,
+      "contributed_capital": 1500.0,
+      "total_return": -0.0049,
+      "total_costs": 6.8,
+      "cost_drag": 0.0045,
+      "trade_count": 79,
+      "buy_count": 77,
+      "sell_count": 2,
+      "positions": 63,
+      "cash_fraction": 0.1299,
+      "equity_marks": 12,
+      "max_sector_weight": 0.2629,
+      "dominant_sector": "Consumer Cyclical",
+      "benchmark_return": -0.0207,
+      "excess_after_costs": 0.0158,
+      "note": "",
+      "proposal": {
+        "basis": "total_return_vs_ftal",
+        "benchmark": "FTAL.L",
+        "started_at": "2026-10-08T09:12:51.240046+00:00",
+        "excess": null,
+        "price_excess_after_costs": 0.0158,
+        "used_for_proposals": false,
+        "marks": null
+      }
+    },
+    "note": "Frozen lab/shadow track \u2014 knobs fixed; decision-review apply skipped.",
+    "saturated_knobs": [],
+    "track_id": "buy_tier_level_dca",
+    "track_label": "Buy-tier level DCA realism (\u00a3500/mo, Suite B costs, cold-start capital epoch)",
+    "is_primary_learning_track": false,
+    "apply_policy": "significance_gate_v1",
+    "significance_gate": {
+      "policy": "significance_gate_v1",
+      "return_basis": "total_return_vs_ftal",
+      "benchmark": "FTAL.L",
+      "started_at": "2026-10-08T09:12:51.240046+00:00",
+      "passed": false,
+      "closed_by": "evidence",
+      "price_statistics_used": false,
+      "periods": 0,
+      "fund_periods": 0,
+      "dividends_gbp": 0.0,
+      "dividends_skipped": 0,
+      "reason": "total-return proposal window vs FTAL.L is too thin (0 daily periods, need 20); price statistics are not used"
+    },
+    "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success. Knob proposals wait for two total-return marks vs FTAL.L; price excess is recorded and not used."
   }
 ]

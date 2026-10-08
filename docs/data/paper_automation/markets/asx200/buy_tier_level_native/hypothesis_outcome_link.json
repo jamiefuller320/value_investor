@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-07T16:34:32.058527+00:00",
+  "generated_at": "2026-10-08T08:50:10.590423+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 7,
+    "closed_total": 8,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 23,
     "by_thesis_status": {
@@ -28,13 +28,14 @@
         }
       },
       "broken": {
-        "closed_count": 1,
-        "recovery_rate": 0.0,
-        "sold_underwater_rate": 1.0,
-        "mean_peak_unrealized_pct": -0.0056,
-        "mean_trough_unrealized_pct": -0.0056,
+        "closed_count": 2,
+        "recovery_rate": 0.5,
+        "sold_underwater_rate": 0.5,
+        "mean_peak_unrealized_pct": 0.0033,
+        "mean_trough_unrealized_pct": -0.0103,
         "outcome_labels": {
-          "sold_underwater": 1
+          "sold_underwater": 1,
+          "recovered": 1
         }
       },
       "insufficient_data": {
@@ -63,11 +64,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 7,
+    "hold_closed_with_thesis": 8,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=7 (target >=8)",
-      "hold thesis buckets thin (broken=1; target >=3 each)",
+      "hold thesis buckets thin (broken=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -174,7 +174,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0185,
-      "trough_unrealized_pct": -0.0442,
+      "trough_unrealized_pct": -0.0573,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -320,7 +320,7 @@
           "trough_unrealized_pct": -0.0275
         }
       ],
-      "peak_unrealized_pct": 0.0398,
+      "peak_unrealized_pct": 0.0417,
       "trough_unrealized_pct": -0.0275,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -373,7 +373,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0151,
-      "trough_unrealized_pct": -0.0677,
+      "trough_unrealized_pct": -0.0716,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -425,7 +425,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0155,
-      "trough_unrealized_pct": -0.0738,
+      "trough_unrealized_pct": -0.0857,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -583,7 +583,7 @@
         }
       ],
       "peak_unrealized_pct": 0.0066,
-      "trough_unrealized_pct": -0.0166,
+      "trough_unrealized_pct": -0.0245,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -886,7 +886,7 @@
         }
       ],
       "peak_unrealized_pct": 0.0042,
-      "trough_unrealized_pct": -0.0111,
+      "trough_unrealized_pct": -0.0117,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -1044,7 +1044,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0323,
-      "trough_unrealized_pct": -0.0802,
+      "trough_unrealized_pct": -0.0828,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -1148,7 +1148,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0055,
-      "trough_unrealized_pct": -0.0461,
+      "trough_unrealized_pct": -0.0572,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -1337,7 +1337,7 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0269,
+      "peak_unrealized_pct": -0.0256,
       "trough_unrealized_pct": -0.0423,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -1380,9 +1380,9 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0035,
+      "peak_unrealized_pct": 0.0221,
       "trough_unrealized_pct": -0.0123,
-      "recovered_to_breakeven": null,
+      "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
@@ -1512,7 +1512,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.012,
-      "trough_unrealized_pct": -0.0216,
+      "trough_unrealized_pct": -0.0264,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -1524,7 +1524,7 @@
       "ticker": "ARB.AX",
       "name": "ARB Corporation Limited",
       "started_at": "2026-10-08T03:34:32.026934+11:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -1554,8 +1554,52 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": 0.0122,
-      "trough_unrealized_pct": 0.0122,
+      "trough_unrealized_pct": -0.0151,
       "recovered_to_breakeven": true,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-08T19:50:10.561178+11:00",
+      "linked_sell_trade_id": "1944e4de-5de5-47e8-8965-8849cf4c13ca"
+    },
+    {
+      "episode_id": "buy_tier_level_native:PRN.AX:2026-10-08T19:50:10.561178+11:00",
+      "track_id": "buy_tier_level_native",
+      "ticker": "PRN.AX",
+      "name": "Perenti Limited",
+      "started_at": "2026-10-08T19:50:10.561178+11:00",
+      "status": "open",
+      "stress_triggers": [
+        "underwater",
+        "exit_streak"
+      ],
+      "entry_mark": 2.2,
+      "avg_cost": 2.23,
+      "unrealized_pct_at_start": -0.0135,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "still buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": -0.0135,
+      "screen_signal": "buy",
+      "effective_signal": "buy",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.3717,
+      "exit_streak_at_start": 1,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0135,
+      "trough_unrealized_pct": -0.0135,
+      "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
@@ -1622,8 +1666,8 @@
         "BWP.AX": 0.0
       },
       "buy_returns_since_rotation": {
-        "MND.AX": 0.0207,
-        "TUA.AX": -0.0674
+        "MND.AX": -0.0119,
+        "TUA.AX": -0.0702
       },
       "verdict": null,
       "closed_at": null

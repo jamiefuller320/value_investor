@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-07T16:34:40.630708+00:00
+Track: `buy_tier_level_native` · updated 2026-10-08T08:50:19.151703+00:00
 
 ## Portfolio loser feedback
 
@@ -50,7 +50,7 @@ Track: `buy_tier_level_native` · updated 2026-10-07T16:34:40.630708+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 73%
+- conviction 72%
 
 ### AD.AS — intact / hold_tolerate (+1.0%)
 - still strong_buy
@@ -71,7 +71,7 @@ Track: `buy_tier_level_native` · updated 2026-10-07T16:34:40.630708+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 87%
+- conviction 84%
 
 ### MC.PA — intact / hold_tolerate (+2.6%)
 - still buy

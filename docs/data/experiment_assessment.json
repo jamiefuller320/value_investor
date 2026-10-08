@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-10-07T11:18:12.097145+00:00",
+  "updated_at": "2026-10-08T09:12:55.324065+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -19,7 +19,7 @@
   },
   "context": {
     "history_run_count": 24,
-    "backtest_run_count": 23,
+    "backtest_run_count": 24,
     "trajectory_labeled_events": 336,
     "exit_shadow_closed_total": 0,
     "experimental_track_count": 2,
@@ -27,11 +27,11 @@
     "entry_dca_ready": true
   },
   "summary": {
-    "observing": 0,
-    "proposed": 2,
     "recommend": 3,
-    "continue": 5,
+    "observing": 0,
     "fail": 0,
+    "proposed": 2,
+    "continue": 5,
     "human_ack_pending": 2,
     "total": 10
   },
@@ -139,7 +139,7 @@
         },
         "archive": {
           "history_run_count": 24,
-          "backtest_run_count": 23,
+          "backtest_run_count": 24,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -300,7 +300,7 @@
         },
         "archive": {
           "history_run_count": 24,
-          "backtest_run_count": 23,
+          "backtest_run_count": 24,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -446,7 +446,7 @@
         },
         "archive": {
           "history_run_count": 24,
-          "backtest_run_count": 23,
+          "backtest_run_count": 24,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -578,7 +578,7 @@
         "parent_id": "still_in_buy_set",
         "instrument": "twin_already_open",
         "graduation_signal": "twin_present",
-        "noted_at": "2026-10-07T11:18:12.096506+00:00",
+        "noted_at": "2026-10-08T09:12:55.322501+00:00",
         "title": "Sell-gate churn twin already open",
         "note": "still_in_buy_set Suite A twin is the capital-path churn instrument; do not spawn a duplicate sell-gate refinement book."
       }
@@ -616,7 +616,20 @@
     "lanes_path": "docs/data/refinement_lanes.json",
     "note": "On graduation/adoption success, auto-registers the next observe refinement child (parent_id / refinement_of). Never mid-flight rewrites live books; LLM challenger stays fail-closed without a disagreement theme."
   },
-  "task_sync": null,
+  "task_sync": {
+    "updated": [
+      "ana-20260728-04",
+      "ana-20260921-01",
+      "ana-20260921-03",
+      "ana-20260921-05",
+      "ldr-20260823-02",
+      "ldr-20260823-03"
+    ],
+    "skipped": [
+      "ana-20260921-02",
+      "ana-20260921-04"
+    ]
+  },
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
     "analysis_tasks": "docs/data/analysis_tasks.json",
