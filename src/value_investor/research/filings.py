@@ -93,6 +93,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         # Q1 2026 trading update — ad-revenue cyclicality when Yahoo quarterlies are empty.
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/2026-IR/ITV%20Plc%20Q1%202026%20Trading%20Update.pdf",
     ],
+    # eng-20261008-02: ftse350 IGG.L gap-closure had 0/0 refetch (empty IR allowlist); iggroup.com PDFs.
+    "IGG.L": [
+        "https://www.iggroup.com/~/media/Files/I/IG-Group/documents/investors/financial-results/results-reports-and-presentations/2026/annual-report-31-December-2025.pdf",
+        "https://www.iggroup.com/~/media/Files/I/IG-Group/documents/investors/financial-results/results-reports-and-presentations/2025/annual-report-2025.pdf",
+        "https://www.iggroup.com/~/media/Files/I/IG-Group/documents/investors/financial-results/results-reports-and-presentations/2026/ig-group-h1-2026-results-rns.pdf",
+        "https://www.iggroup.com/~/media/Files/I/IG-Group/documents/investors/financial-results/results-reports-and-presentations/2026/ig-group-h1-2026-results-presentation.pdf",
+        "https://www.iggroup.com/~/media/Files/I/IG-Group/documents/investors/financial-results/results-reports-and-presentations/2026/igg-cy25-results-presentation.pdf",
+    ],
     # Live-path target — IMB index is own-shares/TVR; HY26 RNS was missing. IR hub is bot-gated.
     "IMB.L": [
         "https://www.rns-pdf.londonstockexchange.com/rns/8727D_1-2026-5-11.pdf",
