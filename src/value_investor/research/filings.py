@@ -93,6 +93,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         # Q1 2026 trading update — ad-revenue cyclicality when Yahoo quarterlies are empty.
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/2026-IR/ITV%20Plc%20Q1%202026%20Trading%20Update.pdf",
     ],
+    # eng-20261009-03: ftse350 JD.L gap-closure 0/3 refetch (empty IR allowlist; Investegate href <br> junk).
+    "JD.L": [
+        "https://www.jdplc.com/wp-content/uploads/2026/07/2026-Annual-Report-and-Accounts.pdf",
+        "https://www.jdplc.com/wp-content/uploads/2026/05/20260507-2025_26-Full-year-results_RNS_vF.pdf",
+        "https://www.jdplc.com/wp-content/uploads/2026/09/HY27-Results-Statement.pdf",
+        "https://www.jdplc.com/wp-content/uploads/2026/08/20260820-2026_27-Q2-trading-statement_RNS_vF.pdf",
+        "https://www.jdplc.com/wp-content/uploads/2026/07/20260121-2025_26-Q4-trading-update_RNS.pdf",
+    ],
     # eng-20261008-02: ftse350 IGG.L gap-closure had 0/0 refetch (empty IR allowlist); iggroup.com PDFs.
     "IGG.L": [
         "https://www.iggroup.com/~/media/Files/I/IG-Group/documents/investors/financial-results/results-reports-and-presentations/2026/annual-report-31-December-2025.pdf",
@@ -1551,13 +1559,14 @@ def _parse_investegate_company_page_html(
         except ValueError:
             published = None
         period = classify_filing_period(headline_clean)
+        link_clean = _sanitize_investegate_announcement_url(link)
         rows.append(
             {
-                "id": _filing_id("investegate", link),
+                "id": _filing_id("investegate", link_clean),
                 "source": "investegate_direct",
                 "headline": headline_clean,
                 "published_at": published,
-                "url": link,
+                "url": link_clean,
                 "period": period,
                 "category": None,
                 "summary": headline_clean,
@@ -1850,7 +1859,7 @@ def _is_investegate_ai_summary_body(text: str) -> bool:
 
 def _normalize_rns_document_url(url: str | None) -> str:
     """Stable dedupe key for the same LSE/Investegate PDF attachment."""
-    text = str(url or "").strip()
+    text = _sanitize_investegate_announcement_url(str(url or "").strip())
     if not text.startswith("http"):
         return text.lower()
     parsed = urllib.parse.urlparse(text)
@@ -3365,6 +3374,20 @@ def _parse_rss_date(value: str | None) -> str | None:
         return value
 
 
+_INVESTEGATE_URL_HTML_JUNK_RE = re.compile(r"(?i)(?:%3[cC]br%3[eE]|<br\s*/?>)+$")
+
+
+def _sanitize_investegate_announcement_url(url: str) -> str:
+    """Strip HTML tag debris accidentally captured in Investegate announcement hrefs."""
+    text = str(url or "").strip()
+    if not text or "investegate.co.uk/announcement/" not in text.lower():
+        return text
+    cleaned = _INVESTEGATE_URL_HTML_JUNK_RE.sub("", text)
+    unquoted = urllib.parse.unquote(cleaned)
+    cleaned = _INVESTEGATE_URL_HTML_JUNK_RE.sub("", unquoted)
+    return cleaned
+
+
 def _sanitize_http_url(url: str) -> str:
     """Quote unsafe path/query bytes (e.g. spaces in ESEF package paths)."""
     text = str(url or "").strip()
@@ -4711,6 +4734,7 @@ def standardise_investegate_lse_fetch_url(url: str | None) -> str | None:
     """
     if not url or not url.startswith("http"):
         return url
+    url = _sanitize_investegate_announcement_url(url)
     if "news.google.com" in url:
         resolved = resolve_google_news_publisher_url(url)
         if not resolved or "news.google.com" in resolved:
@@ -5386,6 +5410,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://links.sgx.com/1.0.0/corporate-announcements/WKFS34K5F6T83U1G/866254_FLCT%20-%202HFY25%20Condensed%20Interim%20FS.pdf": "annual",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
+    # eng-20261009-03: JD.L HY27 slug has no half-year token (would classify other).
+    "https://www.jdplc.com/wp-content/uploads/2026/09/HY27-Results-Statement.pdf": "interim",
 }
 
 
