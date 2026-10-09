@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-08T22:17:20.452100+00:00`
+Generated: `2026-10-09T02:35:11.378586+00:00`
 Trajectory: **blocked_by_pr_queue**
 Dispatch pause: **active** (stuck PRs: 0)
 
@@ -34,8 +34,7 @@ Dispatch pause: **active** (stuck PRs: 0)
 - `pause_dispatch` — paused — 0 stuck PR(s); reasons=['automation_waste'] (applied)
 
 ## Merges today (monitor independent verify)
-- `human`/human PR #912 `eng-20260930-02` — Hunt fetchable IR source for parked euro_depth leftover MC.PA
-- `human`/human PR #1027 `eng-20261008-02` — Seed IR allowlist for unmeasured/zero-body IGG.L — empty allowlist after 0-improve pin (igc-20261008-01)
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 182
@@ -47,6 +46,21 @@ Dispatch pause: **active** (stuck PRs: 0)
 - `Merge conflicts in deferred-ideas.json with main` — 2×
 - `validate job failed` — 2×
 - `Ruff F841 unused dismissable in market_warning_triage.propose_triage` — 2×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — FAIL`
+- Findings: 11 (open=11, resolved=0)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Universe archive body-miss rate elevated — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Price-only excess misstates track performance — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Primary book trails its control on total return — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Decision-review knobs saturated at bounds — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Paper book would halt on drawdown or concentration — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Deferred idea triggers met — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] FAIL Engineering agent sync failures — planned: `draft_ops_engineering_task` (Draft supervised ops engineering task (ops-monitor draft path); drafted=eng-20261009-01)
+- [open] WARN Project traffic pause active — planned: `request_unstick_stuck_prs` (PM v1: traffic pause/unstick path (CI comment / conflict-resolve))
 
 ## Merge authority
 - Status: **scoped_auto_merge**
