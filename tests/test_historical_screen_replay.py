@@ -92,6 +92,22 @@ def test_fingerprint_tracks_screen_code_only(tmp_path: Path):
     assert hsr.screen_code_fingerprint(pkg) != base
 
 
+def test_fingerprint_ignores_crlf_vs_lf(tmp_path: Path):
+    pkg = tmp_path / "pkg"
+    for rel in hsr.SCREEN_CODE_PATHS:
+        src = hsr.PACKAGE_DIR / rel
+        dest = pkg / rel
+        if src.is_dir():
+            shutil.copytree(src, dest, ignore=shutil.ignore_patterns("__pycache__"))
+        else:
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(src, dest)
+    lf = hsr.screen_code_fingerprint(pkg)
+    for path in pkg.rglob("*.py"):
+        path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+    assert hsr.screen_code_fingerprint(pkg) == lf
+
+
 def test_replay_screen_matches_direct_library_screen(tmp_path: Path):
     rows = _metric_rows()
     dates = [datetime(2010, 1, 29, tzinfo=UTC), datetime(2010, 2, 26, tzinfo=UTC)]

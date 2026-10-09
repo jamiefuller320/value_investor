@@ -54,7 +54,7 @@ def mix_code_fingerprint(package_dir: Path = hsr.PACKAGE_DIR) -> str:
     for rel in MIX_CODE_PATHS:
         path = Path(package_dir) / rel
         digest.update(rel.encode())
-        digest.update(path.read_bytes() if path.exists() else b"<missing>")
+        digest.update(hsr.fingerprint_file_bytes(path) if path.exists() else b"<missing>")
     return digest.hexdigest()
 
 
