@@ -593,14 +593,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03139235-2A1698934",
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03142935-2A1700926",
     ],
-    # asx200 IWB blocker — FMG.AX parked unfetchable_iwb; Market Index HTML shells for four
-    # leftover rows (Alta acquisition, RHK Form 604, debt tender, dividend notice) lack
-    # embedded PDFs in CI; Markit/ASX/content.fortescue and data-api inline PDFs fetch.
+    # asx200 IWB blocker — FMG.AX parked unfetchable_iwb; Market Index HTML shells for leftover
+    # rows lack embedded PDFs in CI. Cap at HUNTER_MAX_NEW_URLS (3): ASX PDF + two Markit filings.
     "FMG.AX": [
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03066248-6A1315517",
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03123284-6A1339357",
         "https://announcements.asx.com.au/asxpdf/20251007/pdf/06q63y7tn13n1k.pdf",
-        "https://www.marketindex.com.au/data-api/api/v1/announcements/XASX:FMG:6A1253259/pdf/inline/change-in-substantial-holding-for-rhk",
     ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
     "GIB-A.TO": [

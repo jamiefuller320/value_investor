@@ -9556,30 +9556,28 @@ def test_yal_ax_markit_leftover_pdfs_live_fetch():
 
 
 def test_fetch_filings_ir_allowlist_fmg_ax_asx200_iwb_builtin(tmp_path: Path):
-    """eng-20261009-02: FMG.AX leftover IWB — seed Markit/ASX/data-api PDFs for four Market Index rows."""
+    """eng-20261009-02: FMG.AX leftover IWB — seed Markit/ASX PDFs for unfetchable Market Index rows."""
     allowlist_path = tmp_path / "empty_ir.json"
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
 
     rows = fetch_filings_ir_allowlist("FMG.AX", path=allowlist_path)
     urls = {row["url"] for row in rows}
-    assert len(rows) == 4
+    assert len(rows) == 3
     assert any("6A1315517" in url for url in urls)
     assert any("6A1339357" in url for url in urls)
     assert any("06q63y7tn13n1k.pdf" in url for url in urls)
-    assert any("6A1253259" in url for url in urls)
     assert all(row["source"] == "ir_allowlist" for row in rows)
     assert "FMG.AX" not in PARKED_SOURCE_HUNTER_SKIP
 
 
 def test_parked_source_hunter_fmg_ax_asx200_has_fetchable_ir():
-    """eng-20261009-02: FMG.AX leftover IWB — Markit/ASX/data-api PDFs in _BUILTIN_IR_URLS."""
+    """eng-20261009-02: FMG.AX leftover IWB — Markit/ASX PDFs in _BUILTIN_IR_URLS."""
     assert "FMG.AX" not in PARKED_SOURCE_HUNTER_SKIP
     urls = _BUILTIN_IR_URLS.get("FMG.AX") or []
-    assert len(urls) == 4
+    assert len(urls) == 3
     assert any("6A1315517" in url for url in urls)
     assert any("6A1339357" in url for url in urls)
     assert any("06q63y7tn13n1k.pdf" in url for url in urls)
-    assert any("6A1253259" in url for url in urls)
 
 
 def test_resolve_asx_publisher_document_url_fmg_marketindex_iwb_inline():
