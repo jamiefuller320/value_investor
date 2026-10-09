@@ -1,138 +1,212 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-09T13:18:30.325361+00:00",
+  "generated_at": "2026-10-09T15:43:43.291862+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-10-06",
   "counts": {
-    "new_info": 4,
-    "unacked": 6,
-    "acked": 23,
+    "new_info": 0,
+    "unacked": 0,
+    "acked": 33,
     "automated": 20,
     "human": 33
   },
   "tasks": [
     {
-      "id": "weekday-engineering-parked-backlog-clear",
-      "title": "Clear engineering parked backlog when dispatch pauses",
-      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
-      "automated": false,
-      "cadence": "weekday",
-      "section_id": "weekday",
-      "section_title": "Weekday (Mon–Fri)",
-      "doc_path": "docs/ops/ops-monitor.md",
-      "doc_anchor": "engineering-parked-backlog-clearing",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "4 attention-parked eng tasks",
-        "updated_at": "2026-10-09T13:18:27.623015+00:00",
-        "fingerprint": "c699c0fce33dc5e3",
-        "bullets": [
-          "Parked tasks: 4 (attention ~4)",
-          "Queue-clearing pause active: False — evaluated 2026-10-09T13:18:27.623015+00:00",
-          "Traffic pause active: False",
-          "eng-20261004-06: Workflow fix: analysis review failure",
-          "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo",
-          "eng-20261004-05: Reconcile research index with committed overlays for the two `index_missing_committed_verdicts` names (AO.L, HOC.L) and add a CI check that `committed_count` eq",
-          "eng-20261008-04: Repair dead hunter allowlist URL for MC.PA"
-        ],
-        "source_keys": [
-          "engineering_tasks"
-        ],
-        "ack_sufficient": false,
-        "auto_ackable": false,
-        "ack_reason": "attention_parked_remaining"
-      },
-      "ack": {
-        "acked": true,
-        "stale": true,
-        "acked_at": "2026-09-30T14:44:15.387984+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "c0c3ee56f97eb146"
-      },
-      "sort_bucket": "new_info",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "sunday-shard-epoch0-watch",
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "id": "sunday-hold-buffer-twin",
+      "title": "Hold-buffer twin vs primary (L541)",
+      "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_hold5_fair (exit_confirm_screens 5) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote the longer buffer only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Never edit either book mid-flight.",
       "automated": false,
       "cadence": "sunday",
       "section_id": "sunday",
       "section_title": "Sunday",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "what-enter-learning-means",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "doc_path": "docs/ops/assessment-scoreboard.md",
+      "doc_anchor": "twins",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#twins",
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-09T10:52:24.142926+00:00",
-        "fingerprint": "25a8985a680383ea",
-        "bullets": [
-          "euro_depth: phase=3 ai=False knob=False holdings=36",
-          "hang_seng: phase=0 ai=False knob=False holdings=17",
-          "cac40: phase=1 ai=False knob=False holdings=13",
-          "aex: phase=0 ai=False knob=False holdings=8",
-          "aim: phase=0 ai=False knob=False holdings=16",
-          "atx: phase=0 ai=False knob=False holdings=2",
-          "bel20: phase=0 ai=False knob=False holdings=3",
-          "dax: phase=1 ai=False knob=False holdings=1"
-        ],
-        "source_keys": [
-          "market_status"
-        ]
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "904f3835cc1085dd",
+        "bullets": [],
+        "source_keys": []
       },
       "ack": {
         "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-03T18:23:38.063060+00:00",
+        "stale": false,
+        "acked_at": "2026-10-09T15:43:43.242310+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "c7a1dd236ba3e49b"
+        "finding_fingerprint": "904f3835cc1085dd"
       },
-      "sort_bucket": "new_info",
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
     {
-      "id": "adhoc-review-ingest-deviations",
-      "title": "Review open ingest deviations and reprocess if needed",
-      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
+      "id": "sunday-graduated-twin",
+      "title": "Graduated-allocation twin vs primary",
+      "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_graduated_fair (use_graduated_allocation on) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote graduated sizing only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Do not read the 3% stress graduated_allocation book as evidence. Never edit either book mid-flight.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/assessment-scoreboard.md",
+      "doc_anchor": "graduated-allocation-twin",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#graduated-allocation-twin",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "c7c95a1157a741ed",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-10-09T15:43:43.231450+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "c7c95a1157a741ed"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-deferred-triggers",
+      "title": "Act on met deferred triggers",
+      "summary": "When ops-monitor reports Deferred idea triggers met / unreadable / name frozen books (docs/data/deferred_trigger_check.json), pick up (ftse-defer status <ID> now), retarget (ftse-defer set-trigger), or close (ftse-defer status done|drop --note) each named idea. ftse-defer triggers shows the current list.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/deferred-triggers.md",
+      "doc_anchor": "clearing-a-finding",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/deferred-triggers.md#clearing-a-finding",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "11c988254f384628",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-10-09T15:43:43.220574+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "11c988254f384628"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-historical-replay-data",
+      "title": "Buy one month of point-in-time US data and run the registered screen replay",
+      "summary": "Phase 2 of the historical screen replay (L536/L542) and its mid-cap sibling (hsr-mid-v1). Personal-use sharadar.com direct Bundle, Full History, monthly plan ($69; the $29 Bundle is 5 years only); follow the day-by-day table in the runbook. The free-sample dry run of build-panel passed on 2026-10-08. Keep the API key in a local environment variable, never in the repo, chat, or cloud secrets. On day 1 bulk-download every bundle table (years=full) outside the repo. Do not publish judgements on the data's quality or fitness (licence s.8): build_report.json stays out of the repo. Build both universes (build-panel, and build-panel --universe midcap) and check both build_report.json files, run both development windows (baseline and --variant dividend_units_fixed), run the rule search (ftse-rule-search search) and the model-mix search (ftse-model-mix search --build --midcap-build) and commit both selections, reveal each holdout once (run --reveal-holdout, with and without --universe midcap), run the delisting sensitivity for both, then ftse-rule-search reveal and ftse-model-mix reveal, then re-run the exploratory --variant dividend_units_fixed on both. Commit only the replay, mid-cap, rule-search, and model-mix stores (aggregates and series). Cancel and delete all raw tables, panels, caches and daily files within 30 days, then run ftse-historical-replay confirm-deleted (ops-monitor warns 60 days after first use until confirmed). Never change a registration after its reveal.",
       "automated": false,
       "cadence": "ad_hoc",
       "section_id": "ad_hoc",
       "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/ingest-deviations.md",
-      "doc_anchor": "what-needs-a-human",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
+      "doc_path": "docs/ops/historical-screen-replay.md",
+      "doc_anchor": "phase-2--licensed-data-human-gate",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/historical-screen-replay.md#phase-2--licensed-data-human-gate",
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-10-09T10:51:28.949380+00:00",
-        "fingerprint": "f765d60144146672",
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "61359ff81f6d57b1",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-10-09T15:43:43.209643+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "61359ff81f6d57b1"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-assessment-model-change",
+      "title": "Change primary/control or freeze a learning track",
+      "summary": "Human decision. Record it with apply_assessment_model() (src/value_investor/assessment_model.py) so the switch or freeze lands in paper_automation/assessment_model.json with date, reason, superseded_by and final NAV. Never edit or unfreeze a frozen book to test an idea — start a twin with its own cold start. Market shards keep the legacy ai_judgment/rules pair.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/primary-learning-track.md",
+      "doc_anchor": "assessment-model-and-frozen-tracks",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/primary-learning-track.md#assessment-model-and-frozen-tracks",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "605f59d80f400708",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-10-09T15:43:43.198798+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "605f59d80f400708"
+      },
+      "sort_bucket": "acked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-assessment-scoreboard",
+      "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
+      "summary": "Read docs/data/assessment_scoreboard.json: primary ai_judgment_fair vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also twins, frozen books' final records and policy_changes (e.g. significance_gate_v1). Approve a promotion (knob prior, twin or primary/control switch) only when the primary verdict is positive on fair costs; 'AI beats the screen' stays unproven while the accumulate gate never binds (N189). Calibrated, exclusion and Suite A books are frozen: no spawns from them, never edit them. Survivors are starting priors — never auto-apply.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/assessment-scoreboard.md",
+      "doc_anchor": "assessment-scoreboard",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard",
+      "approval_gate": true,
+      "approval_label": "Approve promotion",
+      "analysis": {
+        "headline": "Assessment scoreboard · primary negative",
+        "updated_at": "2026-10-09T13:17:30.516296+00:00",
+        "fingerprint": "782b2addb6782b0b",
         "bullets": [
-          "Open deviations: 1",
-          "0288.HK: blocker_no_improve — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources."
+          "ai_judgment_fair: total return -8.2% vs FTAL.L -3.5% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -6.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: negative · 90% interval [-1.7635, -0.1336] · excess at 3% stress -0.2392",
+          "vs control buy_tier_level: difference -0.0626 (common window, not significance)",
+          "AI gate binds: False (N189 while it never binds)",
+          "twin ai_judgment_graduated_fair: difference 0.014 over 3 days",
+          "twin ai_judgment_hold5_fair: difference 0.009 over 3 days",
+          "Policy changes: significance_gate_v1 (2026-10-06)"
         ],
         "source_keys": [
-          "ingest_deviations"
+          "assessment_scoreboard"
         ]
       },
       "ack": {
         "acked": true,
-        "stale": true,
-        "acked_at": "2026-09-27T20:03:44.648200+00:00",
+        "stale": false,
+        "acked_at": "2026-10-09T15:43:43.187966+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "750849fd9e662f70"
+        "finding_fingerprint": "782b2addb6782b0b"
       },
-      "sort_bucket": "new_info",
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -168,208 +242,134 @@
       },
       "ack": {
         "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-03T18:23:38.129460+00:00",
+        "stale": false,
+        "acked_at": "2026-10-09T15:43:43.177105+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "05900a47b6870fbe"
+        "finding_fingerprint": "eee1ea27ae69f897"
       },
-      "sort_bucket": "new_info",
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
     {
-      "id": "sunday-assessment-scoreboard",
-      "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
-      "summary": "Read docs/data/assessment_scoreboard.json: primary ai_judgment_fair vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also twins, frozen books' final records and policy_changes (e.g. significance_gate_v1). Approve a promotion (knob prior, twin or primary/control switch) only when the primary verdict is positive on fair costs; 'AI beats the screen' stays unproven while the accumulate gate never binds (N189). Calibrated, exclusion and Suite A books are frozen: no spawns from them, never edit them. Survivors are starting priors — never auto-apply.",
+      "id": "adhoc-review-ingest-deviations",
+      "title": "Review open ingest deviations and reprocess if needed",
+      "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
       "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/assessment-scoreboard.md",
-      "doc_anchor": "assessment-scoreboard",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#assessment-scoreboard",
-      "approval_gate": true,
-      "approval_label": "Approve promotion",
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/ingest-deviations.md",
+      "doc_anchor": "what-needs-a-human",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ingest-deviations.md#what-needs-a-human",
+      "approval_gate": false,
+      "approval_label": null,
       "analysis": {
-        "headline": "Assessment scoreboard · primary negative",
-        "updated_at": "2026-10-09T13:17:30.516296+00:00",
-        "fingerprint": "782b2addb6782b0b",
+        "headline": "Ingest deviations · 1 open",
+        "updated_at": "2026-10-09T14:39:48.152362+00:00",
+        "fingerprint": "f765d60144146672",
         "bullets": [
-          "ai_judgment_fair: total return -8.2% vs FTAL.L -3.5% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -6.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-          "Primary verdict: negative · 90% interval [-1.7635, -0.1336] · excess at 3% stress -0.2392",
-          "vs control buy_tier_level: difference -0.0626 (common window, not significance)",
-          "AI gate binds: False (N189 while it never binds)",
-          "twin ai_judgment_graduated_fair: difference 0.014 over 3 days",
-          "twin ai_judgment_hold5_fair: difference 0.009 over 3 days",
-          "Policy changes: significance_gate_v1 (2026-10-06)"
+          "Open deviations: 1",
+          "0288.HK: blocker_no_improve — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources."
         ],
         "source_keys": [
-          "assessment_scoreboard"
+          "ingest_deviations"
         ]
       },
       "ack": {
-        "acked": false,
+        "acked": true,
         "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
+        "acked_at": "2026-10-09T15:43:43.166131+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "f765d60144146672"
       },
-      "sort_bucket": "unacked",
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
     {
-      "id": "adhoc-assessment-model-change",
-      "title": "Change primary/control or freeze a learning track",
-      "summary": "Human decision. Record it with apply_assessment_model() (src/value_investor/assessment_model.py) so the switch or freeze lands in paper_automation/assessment_model.json with date, reason, superseded_by and final NAV. Never edit or unfreeze a frozen book to test an idea — start a twin with its own cold start. Market shards keep the legacy ai_judgment/rules pair.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/primary-learning-track.md",
-      "doc_anchor": "assessment-model-and-frozen-tracks",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/primary-learning-track.md#assessment-model-and-frozen-tracks",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "605f59d80f400708",
-        "bullets": [],
-        "source_keys": []
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "adhoc-historical-replay-data",
-      "title": "Buy one month of point-in-time US data and run the registered screen replay",
-      "summary": "Phase 2 of the historical screen replay (L536/L542) and its mid-cap sibling (hsr-mid-v1). Personal-use sharadar.com direct Bundle, Full History, monthly plan ($69; the $29 Bundle is 5 years only); follow the day-by-day table in the runbook. The free-sample dry run of build-panel passed on 2026-10-08. Keep the API key in a local environment variable, never in the repo, chat, or cloud secrets. On day 1 bulk-download every bundle table (years=full) outside the repo. Do not publish judgements on the data's quality or fitness (licence s.8): build_report.json stays out of the repo. Build both universes (build-panel, and build-panel --universe midcap) and check both build_report.json files, run both development windows (baseline and --variant dividend_units_fixed), run the rule search (ftse-rule-search search) and the model-mix search (ftse-model-mix search --build --midcap-build) and commit both selections, reveal each holdout once (run --reveal-holdout, with and without --universe midcap), run the delisting sensitivity for both, then ftse-rule-search reveal and ftse-model-mix reveal, then re-run the exploratory --variant dividend_units_fixed on both. Commit only the replay, mid-cap, rule-search, and model-mix stores (aggregates and series). Cancel and delete all raw tables, panels, caches and daily files within 30 days, then run ftse-historical-replay confirm-deleted (ops-monitor warns 60 days after first use until confirmed). Never change a registration after its reveal.",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/historical-screen-replay.md",
-      "doc_anchor": "phase-2--licensed-data-human-gate",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/historical-screen-replay.md#phase-2--licensed-data-human-gate",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "61359ff81f6d57b1",
-        "bullets": [],
-        "source_keys": []
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "sunday-deferred-triggers",
-      "title": "Act on met deferred triggers",
-      "summary": "When ops-monitor reports Deferred idea triggers met / unreadable / name frozen books (docs/data/deferred_trigger_check.json), pick up (ftse-defer status <ID> now), retarget (ftse-defer set-trigger), or close (ftse-defer status done|drop --note) each named idea. ftse-defer triggers shows the current list.",
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
       "automated": false,
       "cadence": "sunday",
       "section_id": "sunday",
       "section_title": "Sunday",
-      "doc_path": "docs/ops/deferred-triggers.md",
-      "doc_anchor": "clearing-a-finding",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/deferred-triggers.md#clearing-a-finding",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "11c988254f384628",
-        "bullets": [],
-        "source_keys": []
+        "headline": "Admitted shard epoch-0 watch · 22",
+        "updated_at": "2026-10-09T14:41:36.982078+00:00",
+        "fingerprint": "445acb0f9a3f9032",
+        "bullets": [
+          "euro_depth: phase=3 ai=False knob=False holdings=36",
+          "aex: phase=0 ai=False knob=False holdings=8",
+          "aim: phase=0 ai=False knob=False holdings=16",
+          "atx: phase=0 ai=False knob=False holdings=2",
+          "bel20: phase=0 ai=False knob=False holdings=3",
+          "cac40: phase=1 ai=False knob=False holdings=13",
+          "dax: phase=1 ai=False knob=False holdings=1",
+          "euro_stoxx50: phase=1 ai=False knob=False holdings=11"
+        ],
+        "source_keys": [
+          "market_status"
+        ]
       },
       "ack": {
-        "acked": false,
+        "acked": true,
         "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
+        "acked_at": "2026-10-09T15:43:43.165559+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "445acb0f9a3f9032"
       },
-      "sort_bucket": "unacked",
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
     {
-      "id": "sunday-graduated-twin",
-      "title": "Graduated-allocation twin vs primary",
-      "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_graduated_fair (use_graduated_allocation on) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote graduated sizing only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Do not read the 3% stress graduated_allocation book as evidence. Never edit either book mid-flight.",
+      "id": "weekday-engineering-parked-backlog-clear",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
       "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/assessment-scoreboard.md",
-      "doc_anchor": "graduated-allocation-twin",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#graduated-allocation-twin",
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "engineering-parked-backlog-clearing",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "c7c95a1157a741ed",
-        "bullets": [],
-        "source_keys": []
+        "headline": "4 attention-parked eng tasks",
+        "updated_at": "2026-10-09T15:18:26.391369+00:00",
+        "fingerprint": "c699c0fce33dc5e3",
+        "bullets": [
+          "Parked tasks: 4 (attention ~4)",
+          "Queue-clearing pause active: False — evaluated 2026-10-09T15:18:26.391369+00:00",
+          "Traffic pause active: True",
+          "eng-20261004-06: Workflow fix: analysis review failure",
+          "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo",
+          "eng-20261004-05: Reconcile research index with committed overlays for the two `index_missing_committed_verdicts` names (AO.L, HOC.L) and add a CI check that `committed_count` eq",
+          "eng-20261008-04: Repair dead hunter allowlist URL for MC.PA"
+        ],
+        "source_keys": [
+          "engineering_tasks"
+        ],
+        "ack_sufficient": false,
+        "auto_ackable": false,
+        "ack_reason": "attention_parked_remaining"
       },
       "ack": {
-        "acked": false,
+        "acked": true,
         "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
+        "acked_at": "2026-10-09T15:43:43.142686+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "c699c0fce33dc5e3"
       },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "sunday-hold-buffer-twin",
-      "title": "Hold-buffer twin vs primary (L541)",
-      "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_hold5_fair (exit_confirm_screens 5) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote the longer buffer only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Never edit either book mid-flight.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/assessment-scoreboard.md",
-      "doc_anchor": "twins",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#twins",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "904f3835cc1085dd",
-        "bullets": [],
-        "source_keys": []
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
