@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-08T21:36:05.901964+00:00",
+  "run_at": "2026-10-09T07:52:14.468691+00:00",
   "market_id": "asx200",
   "targets": [
     "FMG.AX"
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-08T21:35:34.457547+00:00",
+    "snapshot_at": "2026-10-09T07:49:27.747556+00:00",
     "market_id": "asx200",
     "buy_tier_count": 26,
     "unmeasured_buy_tier": 0,
@@ -115,7 +115,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-08T21:36:01.201297+00:00",
+    "snapshot_at": "2026-10-09T07:49:59.362757+00:00",
     "market_id": "asx200",
     "buy_tier_count": 26,
     "unmeasured_buy_tier": 0,
@@ -136,15 +136,15 @@
     "indexed_without_body_by_ticker": {
       "FMG.AX": 4
     },
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 4,
-    "effective_indexed_without_body_tickers": [
+    "parked_tickers": [
       "FMG.AX"
     ],
-    "ingest_exhausted": false
+    "parked_count": 1,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -155,10 +155,31 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "asx200",
+    "to_market": null,
+    "stream_markets_after": [],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "asx200",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "FMG.AX"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": null,
+    "at": "2026-10-09T07:50:22.241244+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "asx200",
-    "assessed_at": "2026-10-08T21:35:36.374867+00:00",
+    "assessed_at": "2026-10-09T07:49:30.550898+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -188,9 +209,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 22.918680241000004,
+  "used_seconds": 26.015936204000013,
   "budget_seconds": 2100.0,
-  "leftover_seconds": 2077.081319759,
+  "leftover_seconds": 2073.984063796,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -198,11 +219,24 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "asx200",
-    "updated_at": "2026-10-08T21:36:01.205707+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-10-09T07:49:59.367728+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "FMG.AX",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-09T07:49:59.367728+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 58,
+        "filings_with_body": 54,
+        "indexed_without_body": 4,
+        "thin": false,
+        "source_surface": "asx_announcements"
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
@@ -210,25 +244,49 @@
     "leftover_tickers": [
       "FMG.AX"
     ],
-    "unparked_leftover": [
-      "FMG.AX"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/asx200/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "asx200"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "asx200",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
-    "compiled_count": 0,
-    "task_ids": [],
-    "task_count": 146,
-    "market_id": "nasdaq100",
-    "hunter_ticker": "PDD",
+    "compiled_count": 1,
+    "task_ids": [
+      "eng-20261009-02"
+    ],
+    "task_count": 148,
+    "market_id": "asx200",
+    "hunter_ticker": "FMG.AX",
     "hunter_tickers": [
-      "PDD"
+      "FMG.AX"
     ],
     "priority_score": 12.0,
     "wait_behind_task_id": "",
