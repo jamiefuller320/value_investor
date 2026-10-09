@@ -37,6 +37,7 @@ from value_investor.research.filings import (
     _is_statutory_results_headline,
     _issuer_matches_sec_name,
     _match_ir_row_to_investegate,
+    _resolve_ir_allowlist_canonical,
     _rns_row_needs_body_refetch,
     _scrub_misattributed_filing_rows,
     _sec_edgar_supplement_allowed,
@@ -11610,11 +11611,11 @@ def test_load_ir_url_allowlist_canonicalizes_mc_pa_dead_globenewswire_urls(tmp_p
     bare_uuid = (
         "https://ml-eu.globenewswire.com/Resource/Download/d18b2bea-e144-44ea-9f53-71cd9cca8440"
     )
-    live = _BUILTIN_IR_URLS["MC.PA"][0]
+    canonical_live = _resolve_ir_allowlist_canonical(_BUILTIN_IR_URLS["MC.PA"][0], "MC.PA")
     path = tmp_path / "ir.json"
     path.write_text(json.dumps({"urls": {"MC.PA": [dead_html, bare_uuid]}}), encoding="utf-8")
     mapping = load_ir_url_allowlist(path)
-    assert live in mapping["MC.PA"]
+    assert canonical_live in mapping["MC.PA"]
     assert dead_html not in mapping["MC.PA"]
     assert bare_uuid not in mapping["MC.PA"]
 
@@ -11625,9 +11626,9 @@ def test_refetch_ir_allowlist_migrates_mc_pa_dead_globenewswire_url(tmp_path: Pa
         "https://www.globenewswire.com/news-release/2026/01/27/3226833/0/en/"
         "LVMH-Solid-performance-in-a-disrupted-global-economic-and-geopolitical-environment.html"
     )
-    live = _BUILTIN_IR_URLS["MC.PA"][0]
+    canonical_live = _resolve_ir_allowlist_canonical(_BUILTIN_IR_URLS["MC.PA"][0], "MC.PA")
     allowlist_path = tmp_path / "ir_urls.json"
-    allowlist_path.write_text(json.dumps({"urls": {"MC.PA": [live]}}), encoding="utf-8")
+    allowlist_path.write_text(json.dumps({"urls": {"MC.PA": [canonical_live]}}), encoding="utf-8")
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()
     (filings_dir / "filings_index.json").write_text(
@@ -11670,9 +11671,18 @@ def test_refetch_ir_allowlist_migrates_mc_pa_dead_globenewswire_url(tmp_path: Pa
     assert result["fetched"] == 1
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     row = saved["filings"][0]
-    assert row["url"] == live
+    assert row["url"] == canonical_live
     assert row.get("unfetchable") is not True
     assert row["has_body"] is True
+
+
+def test_mc_pa_builtin_ir_seeds_bare_globenewswire_href():
+    """eng-20261008-04: hunter monitor seeds bare Resource/Download href from GlobeNewswire IR."""
+    bare = _BUILTIN_IR_URLS["MC.PA"][0]
+    assert bare.endswith("d18b2bea-e144-44ea-9f53-71cd9cca8440")
+    assert "press-release-lvmh" not in bare
+    canonical = _resolve_ir_allowlist_canonical(bare, "MC.PA")
+    assert canonical.endswith("press-release-lvmh-2025-annual-results.pdf")
 
 
 def test_parked_source_hunter_mc_pa_euro_depth_has_fetchable_ir():
@@ -11682,6 +11692,15 @@ def test_parked_source_hunter_mc_pa_euro_depth_has_fetchable_ir():
     assert len(rows) == 1
     assert "d18b2bea-e144-44ea-9f53-71cd9cca8440" in rows[0]["url"]
     assert rows[0]["url"].endswith("press-release-lvmh-2025-annual-results.pdf")
+
+
+def test_mc_pa_hunter_url_repair_globenewswire_pdf_live_fetch():
+    """eng-20261008-04: bare GlobeNewswire href passes hunter live-fetch (canonical PDF suffix)."""
+    from value_investor.hunter_auto_merge import live_fetch_hunter_urls
+
+    bare = _BUILTIN_IR_URLS["MC.PA"][0]
+    ok, reason = live_fetch_hunter_urls([bare], ticker="MC.PA")
+    assert ok, reason
 
 
 def test_fetch_filings_ir_allowlist_euro_depth_wkl_as_builtins(tmp_path: Path):
