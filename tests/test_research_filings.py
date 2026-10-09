@@ -37,7 +37,9 @@ from value_investor.research.filings import (
     _is_statutory_results_headline,
     _issuer_matches_sec_name,
     _match_ir_row_to_investegate,
+    _normalize_rns_document_url,
     _rns_row_needs_body_refetch,
+    _sanitize_investegate_announcement_url,
     _scrub_misattributed_filing_rows,
     _sec_edgar_supplement_allowed,
     _sec_href_to_archive_url,
@@ -6260,6 +6262,100 @@ def test_builtin_ir_allowlist_includes_oiz_ir():
     assert all(row.get("source") == "ir_allowlist" for row in rows)
     # Base symbol key also resolves (euro_filings sometimes strips suffix).
     assert len(fetch_filings_ir_allowlist("OIZ")) >= 4
+
+
+def test_sanitize_investegate_announcement_url_strips_br_suffix_eng_20261009_03():
+    """eng-20261009-03: JD.L index row had %3Cbr%3E in Investegate href — refetch 0/3."""
+    dirty = (
+        "https://www.investegate.co.uk/announcement/rns/jd-sports-fashion--jd./"
+        "jd-group-enters-mexico-with-grupo-axo-partnership/9780835%3Cbr%3E"
+    )
+    clean = _sanitize_investegate_announcement_url(dirty)
+    assert clean.endswith("/9780835")
+    assert "<br" not in clean.lower()
+    assert "%3cbr" not in clean.lower()
+    good = (
+        "https://www.investegate.co.uk/announcement/rns/jd-sports-fashion--jd./"
+        "jd-group-enters-mexico-with-grupo-axo-partnership/9780835"
+    )
+    assert _normalize_rns_document_url(dirty) == _normalize_rns_document_url(good)
+
+
+def test_refetch_investegate_filing_bodies_jd_l_br_suffix_url(tmp_path, monkeypatch):
+    """Malformed Investegate URL must be cleaned before body fetch (JD.L igc-20261009-01)."""
+    from value_investor.research.filings import refetch_investegate_filing_bodies
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    dirty_url = (
+        "https://www.investegate.co.uk/announcement/rns/jd-sports-fashion--jd./"
+        "jd-group-enters-mexico-with-grupo-axo-partnership/9780835%3Cbr%3E"
+    )
+    body = (
+        "JD Sports Fashion plc Mexico partnership with Grupo Axo. "
+        "JD Group takes first step into Mexico." + ("x" * 220)
+    )
+    index = {
+        "ticker": "JD.L",
+        "company_name": "JD Sports Fashion Plc",
+        "filings": [
+            {
+                "id": "jd_br",
+                "source": "investegate_resolved",
+                "headline": "JD Group enters Mexico with Grupo Axo partnership",
+                "published_at": "2026-10-08T06:02:58+00:00",
+                "url": dirty_url,
+                "period": "other",
+                "has_body": False,
+                "body_path": None,
+                "priority": 0,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda filings, **kwargs: list(filings),
+    )
+
+    def fake_fetch(url: str):
+        clean = _sanitize_investegate_announcement_url(url)
+        assert clean.endswith("/9780835")
+        return body, None
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        fake_fetch,
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="JD.L",
+        company_name="JD Sports Fashion Plc",
+        max_bodies=2,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    assert "%3Cbr%3E" not in saved["filings"][0]["url"]
+
+
+def test_builtin_ir_allowlist_includes_jd_l():
+    """eng-20261009-03: ftse350 JD.L intensive pin had empty IR allowlist (0 refetch)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("JD.L") or []
+    assert any("2026-Annual-Report-and-Accounts.pdf" in url for url in urls)
+    assert any("HY27-Results-Statement.pdf" in url for url in urls)
+    assert any("Q2-trading-statement" in url for url in urls)
+    assert all("jdplc.com" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("JD.L")
+    assert len(rows) >= 4
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    periods = {row.get("period") for row in rows}
+    assert "annual" in periods
+    assert "interim" in periods
+    assert "trading_update" in periods
 
 
 def test_builtin_ir_allowlist_includes_igg_l():
