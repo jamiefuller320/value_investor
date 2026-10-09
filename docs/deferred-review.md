@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-09T09:18:29+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-09T11:33:07+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -626,6 +626,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L548 | **Render assessment scoreboard on dashboard and retire dual-suite rollup** | assessment_scoreboard.json feeds ops-monitor and the progress headline but has no dashboard panel; the Suite A/B dual-suite rollup (learning_tracks_dual_suite, L487 republish bridge) still renders. Add a scoreboard panel, then retire the dual-suite view. | Scoreboard has refreshed cleanly for 4 Sundays after the scoreboard PR merges _(machine-checked)_ |
 | L551 | **Triage the deferred-ideas backlog (544 open)** | Parking is cheap, so the store holds 544 open ideas and 27 open fragments; revisit triggers are rarely evaluated automatically. Add an automated trigger check (e.g. ops-monitor or horizon-scan) and drop ideas superseded by the single assessment model. | Next monthly horizon scan _(machine-checked)_ |
 | L583 | **Personal ephemeral VM playbook for Sharadar data month** | When the human schedules Phase 2 and mainly works from iPad, document a short personal-use path: rent a one-week Linux VPS, SSH from iPad, put SHARADAR_API_KEY only in that VM env, run the Day 1–5 loop, commit aggregates, destroy the VM as the deletion step. Do not wire Cursor cloud secrets or shared CI to the key. | Human schedules the historical-replay data month and asks for an iPad-friendly path |
+| L584 | **Windows-safe chart artifact names (CON/PRN)** | Checkout fails on Windows because docs/data/charts has CON.DE.json, PRN.AX.json, PRN.L.json (reserved device names). Phase 2 uses sparse-checkout excluding charts. Longer fix: rename or relocate those artifacts so a normal Windows clone works. | A Windows contributor hits clone failure again, or chart paths are next touched |
 
 ---
 
