@@ -519,6 +519,18 @@ def prepare_gap_fill_source_pack(
     ch_refetch: dict[str, Any] = {}
     investegate_refetch: dict[str, Any] = {}
     ticker_rns_refetch: dict[str, Any] = {}
+    euro_primary: dict[str, Any] = {}
+    if _market_bucket(market, ticker) == "euro":
+        from value_investor.research.filings import refetch_euro_filings_primary_bodies
+
+        euro_primary = refetch_euro_filings_primary_bodies(
+            filings_dir,
+            ticker=ticker,
+            company_name=company_name,
+            max_bodies=20,
+        )
+        if int(euro_primary.get("fetched") or 0) > 0:
+            body_refetch = euro_primary
     if _market_bucket(market, ticker) == "uk":
         primary_refetch = refetch_uk_primary_filing_bodies(
             filings_dir,

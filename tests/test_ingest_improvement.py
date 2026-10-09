@@ -10,6 +10,7 @@ import pytest
 
 from value_investor.research.filings import sanitize_filings_index
 from value_investor.research.format import format_ingest_improvement_text
+from value_investor.research.ingest import library_gap_closure_pin_exempt_from_pool
 from value_investor.research.ingest_improvement import (
     BODY_GAP_BATCH_TICKERS,
     DEFAULT_INGEST_IMPROVEMENT_CAP,
@@ -890,6 +891,18 @@ def test_select_ingest_improvement_targets_uses_library_research_path(tmp_path: 
     assert targets[0].ticker == "BREE.L"
     assert targets[0].filings_total == 20
     assert targets[0].indexed_without_body == 20
+
+
+def test_library_gap_closure_pin_exempt_from_pool_hei_de_eng_20261009_01():
+    """eng-20261009-01: pinned HEI.DE gap-closure may deepen despite pool parking when IR URLs exist."""
+    assert library_gap_closure_pin_exempt_from_pool(
+        "HEI.DE",
+        pin_tickers=["HEI.DE", "DTG.DE"],
+    )
+    assert not library_gap_closure_pin_exempt_from_pool(
+        "ADS.DE",
+        pin_tickers=["HEI.DE"],
+    )
 
 
 def test_planned_sources_prioritises_companies_house_for_uk_zero_bodies():
