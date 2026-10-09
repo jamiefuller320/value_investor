@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-08T10:36:17.910514+00:00",
+  "run_at": "2026-10-09T07:35:23.066045+00:00",
   "market_id": "dax",
   "targets": [],
   "target_details": [],
@@ -9,13 +9,13 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-08T10:35:16.643078+00:00",
+    "snapshot_at": "2026-10-09T07:34:23.166428+00:00",
     "market_id": "dax",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 10,
-    "indexed_without_body": 0,
+    "indexed_without_body": 1,
     "bodies_min": 1,
     "bodies_median": 1,
     "bodies_max": 50,
@@ -35,8 +35,12 @@
       "DTE.DE",
       "HEN3.DE"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "HEI.DE"
+    ],
+    "indexed_without_body_by_ticker": {
+      "HEI.DE": 1
+    },
     "parked_tickers": [
       "BAS.DE",
       "DHL.DE",
@@ -57,7 +61,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-08T10:36:12.477766+00:00",
+    "snapshot_at": "2026-10-09T07:35:17.036407+00:00",
     "market_id": "dax",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -117,7 +121,7 @@
   "discovery_scan": {
     "scanned": 11,
     "hits": 10,
-    "new_rows_total": 1,
+    "new_rows_total": 0,
     "curiosity_total": 11,
     "errors": 0,
     "prioritization_weights": {
@@ -131,7 +135,6 @@
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
       "DHL.DE",
-      "HEI.DE",
       "DTG.DE",
       "VOW3.DE",
       "BAS.DE",
@@ -139,7 +142,8 @@
       "HNR1.DE",
       "MUV2.DE",
       "DTE.DE",
-      "HEN3.DE"
+      "HEN3.DE",
+      "HEI.DE"
     ],
     "runtime_cutoff": false
   },
@@ -152,13 +156,19 @@
   },
   "critical_path": {
     "market_id": "dax",
-    "assessed_at": "2026-10-08T10:35:17.292991+00:00",
+    "assessed_at": "2026-10-09T07:34:23.900342+00:00",
     "unmeasured": [],
     "zero_body": [],
-    "indexed_without_body": [],
+    "indexed_without_body": [
+      {
+        "ticker": "HEI.DE",
+        "indexed_without_body": 1,
+        "filings_total": 3,
+        "filings_with_body": 2
+      }
+    ],
     "thin_need_discovery": [
       "DHL.DE",
-      "HEI.DE",
       "DTG.DE",
       "VOW3.DE",
       "BAS.DE",
@@ -168,26 +178,31 @@
       "DTE.DE",
       "HEN3.DE"
     ],
-    "thin_need_bodies": [],
-    "primary_blocker": "thin_need_discovery",
+    "thin_need_bodies": [
+      "HEI.DE"
+    ],
+    "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
-    "auto_pin_tickers": [],
+    "auto_pin_tickers": [
+      "HEI.DE"
+    ],
     "recommended_actions": [
-      "Discovery/IR seed for 10 thin ticker(s) that already have bodies for every indexed filing",
+      "Prefer indexed-without-body body refetch (1 tickers, top: HEI.DE(1))",
+      "Discovery/IR seed for 9 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 0,
-      "indexed_without_body_rows": 0,
-      "thin_need_discovery": 10,
-      "thin_need_bodies": 0
+      "indexed_without_body_tickers": 1,
+      "indexed_without_body_rows": 1,
+      "thin_need_discovery": 9,
+      "thin_need_bodies": 1
     }
   },
-  "used_seconds": 54.59809986700003,
+  "used_seconds": 52.41561869099999,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3545.401900133,
+  "leftover_seconds": 3547.584381309,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -195,9 +210,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "dax",
-    "updated_at": "2026-10-08T10:36:12.485345+00:00",
+    "updated_at": "2026-10-09T07:35:17.044973+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 12,
+    "complete_zero_improve_runs": 13,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -364,7 +379,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 144,
+    "task_count": 147,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "hunter_tickers": [

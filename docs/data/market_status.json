@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-08T21:38:08.137837+00:00",
+  "generated_at": "2026-10-09T07:47:14.460602+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -31,8 +31,8 @@
     "market_count": 23,
     "ingest_counts": {
       "live": 1,
-      "maintenance": 21,
-      "sprint": 1
+      "sprint": 2,
+      "maintenance": 20
     },
     "role_counts": {
       "live": 1,
@@ -40,8 +40,8 @@
       "sprint": 1,
       "admitted": 20
     },
-    "sprint_count": 1,
-    "maintenance_count": 21,
+    "sprint_count": 2,
+    "maintenance_count": 20,
     "live_count": 1,
     "admitted_count": 22,
     "should_run_library_maintenance": true,
@@ -53,7 +53,6 @@
       "bel20",
       "cac40",
       "dax",
-      "euro_depth",
       "euro_stoxx50",
       "ftse_mib",
       "ftse_smallcap",
@@ -72,7 +71,7 @@
     "spare_sprint": {
       "1": "asx200"
     },
-    "equal_support_generated_at": "2026-10-08T20:43:25.962185+00:00"
+    "equal_support_generated_at": "2026-10-09T06:40:56.370987+00:00"
   },
   "markets": [
     {
@@ -577,13 +576,13 @@
       "is_queue": false,
       "is_admitted": true,
       "is_ftse_equivalent": false,
-      "ingest": "maintenance",
+      "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest avenues exhausted — parked 11 leftover thin/IWB name(s) (ABI.BR, ACKB.BR, APAM.AS, ASSA-B.ST, BAS.DE, DQ7A.IR, EVN.VI, MUV2.DE); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=8, indexed_without_body=17)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
-      "shared_maintenance": true,
+      "shared_maintenance": false,
       "health": "warn",
       "coverage_pct": 0.9948,
       "honest_coverage_pct": null,
@@ -634,12 +633,12 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 8,
-        "indexed_without_body": 22,
+        "indexed_without_body": 17,
         "bodies_median": 4.5,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
-        "ingest_exhausted": true,
-        "parked_count": 11,
+        "ingest_exhausted": false,
+        "parked_count": 10,
         "zero_body_tickers": [],
         "thin_body_tickers": [
           "WIE.VI",
@@ -656,11 +655,11 @@
           "ABI.BR",
           "ACKB.BR",
           "APAM.AS",
-          "ASSA-B.ST",
           "BAS.DE",
           "DQ7A.IR",
           "EVN.VI",
-          "MUV2.DE"
+          "MUV2.DE",
+          "SAP.DE"
         ]
       },
       "filing_gaps": 0,
@@ -716,7 +715,51 @@
           "BMW.DE"
         ]
       },
-      "sprint_progress": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 3,
+        "targets": 5,
+        "improved": 3,
+        "improved_tickers": [
+          "SHELL.AS",
+          "DTE.DE"
+        ],
+        "last_run_at": "2026-10-09T07:41:05.358230+00:00",
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 9,
+          "indexed_without_body": 21,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 8,
+          "indexed_without_body": 17,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": -1,
+          "indexed_without_body": -4,
+          "filing_gaps": 0
+        },
+        "remaining": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 8,
+          "indexed_without_body": 17,
+          "filing_gaps": 0
+        },
+        "admission_ready": true,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [],
+        "sprint_entered_at": null
+      },
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -953,7 +996,7 @@
         "filing_ready": true,
         "span_weeks": null,
         "unique_days": null,
-        "leftover": 30,
+        "leftover": 25,
         "steps": [
           {
             "id": "start",
@@ -1103,10 +1146,10 @@
         "acted": true,
         "last_run_at": "2026-10-08T08:50:10.771078+00:00",
         "holdings": 25,
-        "nav": 538.29,
+        "nav": 537.36,
         "cash": 93.27,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 44,
+        "weekday_batch_count": 45,
         "epoch0_batch_count": 23
       },
       "equal_support": {
@@ -1357,6 +1400,19 @@
               "buy_tier_level_gbp_fx_warped": 445.02
             },
             "market": 984.84
+          },
+          {
+            "date": "2026-10-09",
+            "held": 943.5,
+            "nav": 978.76,
+            "held_stock": 943.5,
+            "cash": 35.26,
+            "positions": 25,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 444.09
+            },
+            "market": 984.84
           }
         ],
         "series": [
@@ -1396,16 +1452,16 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 27
+            "point_count": 28
           }
         ],
         "last": {
-          "date": "2026-10-08",
-          "held": 904.36,
+          "date": "2026-10-09",
+          "held": 943.5,
           "market": 984.84,
-          "nav": 978.77,
-          "positions": 24,
-          "excess_pct": -0.081719
+          "nav": 978.76,
+          "positions": 25,
+          "excess_pct": -0.041976
         }
       },
       "learning_depth": null,
