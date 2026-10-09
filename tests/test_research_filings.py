@@ -9572,12 +9572,36 @@ def test_fetch_filings_ir_allowlist_fmg_ax_asx200_iwb_builtin(tmp_path: Path):
 
 def test_parked_source_hunter_fmg_ax_asx200_has_fetchable_ir():
     """eng-20261009-02: FMG.AX leftover IWB — Markit/ASX PDFs in _BUILTIN_IR_URLS."""
+    from value_investor.research.filings import _ESEF_ENTITY_SEARCH_ALIASES
+
     assert "FMG.AX" not in PARKED_SOURCE_HUNTER_SKIP
     urls = _BUILTIN_IR_URLS.get("FMG.AX") or []
     assert len(urls) == 3
     assert any("6A1315517" in url for url in urls)
     assert any("6A1339357" in url for url in urls)
     assert any("06q63y7tn13n1k.pdf" in url for url in urls)
+    # Opaque Markit documentKeys need issuer aliases for live-fetch title match.
+    aliases = _ESEF_ENTITY_SEARCH_ALIASES.get("FMG") or ()
+    assert any("Fortescue" in a for a in aliases)
+
+
+def test_fmg_ax_markit_leftover_pdfs_live_fetch():
+    """eng-20261009-02: Markit/ASX PDFs for parked IWB documentKeys fetch substantive bodies."""
+    acquisition = "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03066248-6A1315517"
+    dividend = "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03123284-6A1339357"
+    debt = "https://announcements.asx.com.au/asxpdf/20251007/pdf/06q63y7tn13n1k.pdf"
+    for url in (acquisition, dividend, debt):
+        body, source = _fetch_ir_allowlist_body(
+            {
+                "id": "hunter_gate",
+                "url": url,
+                "period": _ir_allowlist_period_from_url(url),
+                "source": "ir_allowlist",
+            },
+            ticker="FMG.AX",
+        )
+        assert body and len(body) >= 200, f"{url} source={source}"
+        assert "FORTESCUE" in body.upper()
 
 
 def test_resolve_asx_publisher_document_url_fmg_marketindex_iwb_inline():
