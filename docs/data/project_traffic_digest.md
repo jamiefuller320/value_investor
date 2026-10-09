@@ -1,8 +1,8 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-09T02:35:11.378586+00:00`
-Trajectory: **blocked_by_pr_queue**
-Dispatch pause: **active** (stuck PRs: 0)
+Generated: `2026-10-09T07:48:31.310953+00:00`
+Trajectory: **on_track**
+Dispatch pause: **inactive** (stuck PRs: 0)
 
 ## Achieved (grounded)
 - Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
@@ -25,13 +25,13 @@ Dispatch pause: **active** (stuck PRs: 0)
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Progress report present (generated_at=2026-09-30T20:08:50+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview', 'learning_path_gap_groups'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-10-08T07:47:04.642907+00:00 _(source: docs/data/ops_status.json)_
-- [ok] Traffic pause_active=True; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
+- [ok] Queue health overall=blocked; headline=Traffic pause — 0 stuck PR(s). project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation _(source: docs/data/queue_health.json)_
+- [ok] Ops monitor overall=fail at 2026-10-09T02:31:49.308392+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `stop_automation_waste` — signals=1; parked=eng-20261008-04; pause=True (applied)
-- `pause_dispatch` — paused — 0 stuck PR(s); reasons=['automation_waste'] (applied)
+- `stop_automation_waste` — cleared automation-waste hold — no remediable signal (applied)
+- `resume_dispatch` — resumed — no stuck monitored PRs and idle window elapsed (applied)
 
 ## Merges today (monitor independent verify)
 - _(none merged today)_
@@ -49,7 +49,7 @@ Dispatch pause: **active** (stuck PRs: 0)
 
 ## Ops-monitor email handoff
 - Email subject: `FTSE Ops Monitor — FAIL`
-- Findings: 11 (open=11, resolved=0)
+- Findings: 10 (open=10, resolved=0)
 - [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Universe archive body-miss rate elevated — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Price-only excess misstates track performance — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
@@ -59,8 +59,7 @@ Dispatch pause: **active** (stuck PRs: 0)
 - [open] WARN Paper book would halt on drawdown or concentration — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Deferred idea triggers met — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 - [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
-- [open] FAIL Engineering agent sync failures — planned: `draft_ops_engineering_task` (Draft supervised ops engineering task (ops-monitor draft path); drafted=eng-20261009-01)
-- [open] WARN Project traffic pause active — planned: `request_unstick_stuck_prs` (PM v1: traffic pause/unstick path (CI comment / conflict-resolve))
+- [open] FAIL Engineering agent sync failures — planned: `draft_ops_engineering_task` (Draft supervised ops engineering task (ops-monitor draft path))
 
 ## Merge authority
 - Status: **scoped_auto_merge**
