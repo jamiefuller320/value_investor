@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-08T10:10:53+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-09T09:18:29+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -625,6 +625,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L534 | **T212 catalogue as ISIN identifier master and currency cross-check** | T212 has no quotes, candles or fundamentals, but fetch_instruments() returns ISIN, currency (GBX vs GBP), exchange and addedOn. Use ISIN as the join key across Yahoo/library tickers and the T212 currency code to validate yahoo_price_units pence/pound corrections; use fetch_exchanges() schedules as the per-market trading calendar. | Next ticker-mapping or price-unit bug, or when a second market goes live (stage 4) |
 | L548 | **Render assessment scoreboard on dashboard and retire dual-suite rollup** | assessment_scoreboard.json feeds ops-monitor and the progress headline but has no dashboard panel; the Suite A/B dual-suite rollup (learning_tracks_dual_suite, L487 republish bridge) still renders. Add a scoreboard panel, then retire the dual-suite view. | Scoreboard has refreshed cleanly for 4 Sundays after the scoreboard PR merges _(machine-checked)_ |
 | L551 | **Triage the deferred-ideas backlog (544 open)** | Parking is cheap, so the store holds 544 open ideas and 27 open fragments; revisit triggers are rarely evaluated automatically. Add an automated trigger check (e.g. ops-monitor or horizon-scan) and drop ideas superseded by the single assessment model. | Next monthly horizon scan _(machine-checked)_ |
+| L583 | **Personal ephemeral VM playbook for Sharadar data month** | When the human schedules Phase 2 and mainly works from iPad, document a short personal-use path: rent a one-week Linux VPS, SSH from iPad, put SHARADAR_API_KEY only in that VM env, run the Day 1–5 loop, commit aggregates, destroy the VM as the deletion step. Do not wire Cursor cloud secrets or shared CI to the key. | Human schedules the historical-replay data month and asks for an iPad-friendly path |
 
 ---
 
