@@ -305,6 +305,11 @@ this workflow:
 forbids sharing the data or anything that reproduces it. The committed store
 holds cohort-level aggregates only.
 
+On Windows, set `git config core.autocrlf false` before checkout so screen
+files stay LF. Registration fingerprints normalise CRLF when hashing, so a
+CRLF checkout still matches; do **not** run `register` only because of line
+endings.
+
 ### Phase 3 — results in the system
 
 `historical_screen_replay.json` → assessment scoreboard context beside the
