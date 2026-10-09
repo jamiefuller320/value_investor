@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-09T18:28:40.062125+00:00`
+Generated: `2026-10-09T21:49:44.622820+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,6 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `ingest_narrow`/verified PR #1031 `eng-20261009-03` — Close stubborn ingest gaps for JD.L (chain 1/3: 0/3 bodies, run igc-20261009-01)
 - `parked_hunter`/verified PR #1029 `eng-20261009-02` — Hunt fetchable IR source for parked asx200 leftover FMG.AX
 
 ## PR fix occasions — common failure reasons
