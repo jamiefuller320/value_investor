@@ -593,6 +593,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03139235-2A1698934",
         "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03142935-2A1700926",
     ],
+    # asx200 IWB blocker — FMG.AX parked unfetchable_iwb; Market Index HTML shells for leftover
+    # rows lack embedded PDFs in CI. Cap at HUNTER_MAX_NEW_URLS (3): ASX PDF + two Markit filings.
+    "FMG.AX": [
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03066248-6A1315517",
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03123284-6A1339357",
+        "https://announcements.asx.com.au/asxpdf/20251007/pdf/06q63y7tn13n1k.pdf",
+    ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
     "GIB-A.TO": [
         "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm",
@@ -880,6 +887,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "SU": ("Suncor", "Suncor Energy"),
     "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "YAL": ("Yancoal", "Yancoal Australia"),
+    # asx200 FMG.AX Markit/ASX allowlist PDFs — opaque documentKey URLs need issuer tokens
+    # for _ir_body_title_tokens_match (same pattern as YAL.AX).
+    "FMG": ("Fortescue", "Fortescue Ltd"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
     "HM-B": (
@@ -4728,6 +4738,27 @@ def _standardise_rns_index_row_url(row: dict[str, Any]) -> dict[str, Any]:
     return item
 
 
+_ASX_MARKETINDEX_ANNOUNCEMENT_PATH_RE = re.compile(
+    r"/asx/(?P<epic>[^/]+)/announcements/(?P<slug>.+)-(?P<dockey>[0-9]+[A-Za-z][0-9]+)/?$",
+    re.I,
+)
+
+
+def _marketindex_inline_pdf_url_from_landing(url: str) -> str | None:
+    """Synthesize Market Index data-api inline PDF URL from an announcement landing path."""
+    path = urllib.parse.urlparse(url).path
+    match = _ASX_MARKETINDEX_ANNOUNCEMENT_PATH_RE.search(path)
+    if not match:
+        return None
+    epic = match.group("epic").upper()
+    slug = match.group("slug")
+    dockey = match.group("dockey").upper()
+    return (
+        "https://www.marketindex.com.au/data-api/api/v1/announcements/"
+        f"XASX:{epic}:{dockey}/pdf/inline/{slug}"
+    )
+
+
 def resolve_asx_publisher_document_url(url: str | None) -> str | None:
     """
     Upgrade ASX publisher landing pages to direct PDF/document URLs when possible.
@@ -4744,12 +4775,13 @@ def resolve_asx_publisher_document_url(url: str | None) -> str | None:
         return url
     if "/pdf/" in url.lower() or "data-api" in url.lower():
         return url
+    inline_fallback = _marketindex_inline_pdf_url_from_landing(url)
     try:
         raw = _http_get(url, headers={"User-Agent": USER_AGENT}, timeout=30)
         html = raw.decode("utf-8", errors="replace")
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         logger.debug("ASX publisher page fetch failed for %s: %s", url, exc)
-        return url
+        return inline_fallback or url
     for pattern in (
         r'"(https://www\.marketindex\.com\.au/data-api/api/v1/announcements/[^"]+/pdf/[^"]+)"',
         r'"(https://asx\.api\.markitdigital\.com/[^"]+)"',
@@ -4761,7 +4793,7 @@ def resolve_asx_publisher_document_url(url: str | None) -> str | None:
             candidate = match.group(1)
             if candidate.startswith("http"):
                 return candidate
-    return url
+    return inline_fallback or url
 
 
 def _is_ch_document_url(url: str | None) -> bool:
