@@ -96,6 +96,15 @@ SIGNAL_COLUMNS = (
 )
 
 
+def fingerprint_file_bytes(path: Path) -> bytes:
+    """File bytes for registration fingerprints.
+
+    Normalises newlines so a Windows checkout (CRLF) matches the LF tree the
+    registrations were frozen on. Do not ``register`` just because of line endings.
+    """
+    return path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+
+
 def screen_code_fingerprint(package_dir: Path = PACKAGE_DIR) -> str:
     """SHA-256 over the modules that turn metrics into signals."""
     digest = hashlib.sha256()
@@ -105,7 +114,7 @@ def screen_code_fingerprint(package_dir: Path = PACKAGE_DIR) -> str:
         for file in files:
             digest.update(file.relative_to(package_dir).as_posix().encode())
             digest.update(b"\0")
-            digest.update(file.read_bytes())
+            digest.update(fingerprint_file_bytes(file))
             digest.update(b"\0")
     return digest.hexdigest()
 

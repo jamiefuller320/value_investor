@@ -170,8 +170,8 @@
     "market_context": "Market-relative results are read beside the verdicts with the plain book's own excess (the value regime). Lagging the market while beating the plain book is a value-regime result, not a rule failure."
   },
   "screen_code_fingerprint": "5442bfcc1933ec862db97332417fe2498e5806cef2604ab9c4b2a5b88f14063d",
-  "rule_code_fingerprint": "43345b1c89aa3acf657bf3c4201472aa762e0659a1ec5487566afa511a24bc36",
-  "registered_at": "2026-10-08T08:06:42.200511+00:00",
+  "rule_code_fingerprint": "e70c4cd62fe8e54e00ce796ea794de02547ccf3dad944c3c49f24d0f26a7e857",
+  "registered_at": "2026-10-09T13:37:35.023392+00:00",
   "exit_rules": {
     "order": "Ordered from quickest to most patient sell; the plateau steps along this order.",
     "tier1": {
@@ -232,6 +232,12 @@
       "before_data": true,
       "change": "Reporting only: monthly book-level returns (portfolio, plain value book, cap- and equal-weighted universe, names held) for the frozen and chosen rules on development, and for every holdout run. Selection and verdicts unchanged.",
       "reason": "Kept so later analysis needs no licensed data after deletion. No search has run."
+    },
+    {
+      "at": "2026-10-09",
+      "before_data": true,
+      "change": "rule_code_fingerprint: hash file bytes with CRLF normalised to LF (Windows checkouts).",
+      "reason": "Windows autocrlf made registration fingerprints fail before any licensed run could start; normalising newlines keeps Linux and Windows hashes aligned. No search has run and no holdout has been revealed."
     }
   ]
 }
