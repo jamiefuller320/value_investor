@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-10-08T09:12:55.324065+00:00",
+  "updated_at": "2026-10-09T08:39:30.050509+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -23,15 +23,15 @@
     "trajectory_labeled_events": 336,
     "exit_shadow_closed_total": 0,
     "experimental_track_count": 2,
-    "entry_dca_scored": 153,
+    "entry_dca_scored": 165,
     "entry_dca_ready": true
   },
   "summary": {
-    "recommend": 3,
     "observing": 0,
+    "continue": 5,
     "fail": 0,
     "proposed": 2,
-    "continue": 5,
+    "recommend": 3,
     "human_ack_pending": 2,
     "total": 10
   },
@@ -47,8 +47,8 @@
       "human_ack_required": false,
       "forward_evidence": {
         "source": "learning_tracks_entry_dca.json",
-        "scored_count": 153,
-        "tracks_with_closed": 13,
+        "scored_count": 165,
+        "tracks_with_closed": 14,
         "ready_for_cadence_analysis": true,
         "leading_cadence": "dca_4x_weekly",
         "model_independent_hint": true
@@ -79,7 +79,7 @@
         "entry_dca": {
           "ready_for_cadence_analysis": true,
           "leading_cadence": "dca_4x_weekly",
-          "scored_count": 153
+          "scored_count": 165
         },
         "human_disposition": "watch"
       },
@@ -346,7 +346,7 @@
         "entry_dca": {
           "ready_for_cadence_analysis": true,
           "leading_cadence": "dca_4x_weekly",
-          "scored_count": 153
+          "scored_count": 165
         }
       },
       "evidence_path": "docs/data/analysis_tasks.json",
@@ -386,7 +386,7 @@
         "entry_dca": {
           "ready_for_cadence_analysis": true,
           "leading_cadence": "dca_4x_weekly",
-          "scored_count": 153
+          "scored_count": 165
         },
         "human_disposition": "watch"
       },
@@ -528,7 +528,7 @@
     "execute_started_at": "2026-09-25T17:56:08.074645+00:00",
     "execute_track_id": "graduated_allocation",
     "execute_cadence": "dca_4x_weekly",
-    "current_stage": "paper_execute_graduated",
+    "current_stage": "out_of_sample_first_entry",
     "target_cadence": "dca_4x_weekly",
     "do_not": [
       "Execute DCA on paper books until paper_execute_graduated is ready",
@@ -546,8 +546,8 @@
       },
       {
         "id": "out_of_sample_first_entry",
-        "status": "done",
-        "ready": true,
+        "status": "open",
+        "ready": false,
         "revisit_when": "ai_judgment_fair first_entry>=3, buy_tier_level first_entry>=1, leading still dca_4x_weekly, fair tracks still agree",
         "do_not": "Do not treat frozen or calibration books as live-book confirmation"
       },
@@ -578,7 +578,7 @@
         "parent_id": "still_in_buy_set",
         "instrument": "twin_already_open",
         "graduation_signal": "twin_present",
-        "noted_at": "2026-10-08T09:12:55.322501+00:00",
+        "noted_at": "2026-10-09T08:39:30.049007+00:00",
         "title": "Sell-gate churn twin already open",
         "note": "still_in_buy_set Suite A twin is the capital-path churn instrument; do not spawn a duplicate sell-gate refinement book."
       }

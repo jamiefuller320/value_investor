@@ -3,21 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "ai_judgment_graduated_fair",
-  "generated_at": "2026-10-08T09:12:03.998815+00:00",
+  "generated_at": "2026-10-09T08:38:47.674096+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 2,
+    "open_with_thesis": 1,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 0.0,
+        "sold_underwater_rate": 1.0,
+        "mean_peak_unrealized_pct": -0.0018,
+        "mean_trough_unrealized_pct": -0.0245,
+        "outcome_labels": {
+          "sold_underwater": 1
+        }
       },
       "broken": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (weakening=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -66,7 +74,7 @@
       "ticker": "PAF.L",
       "name": "Pan African Resources PLC",
       "started_at": "2026-10-08T10:11:49.445175+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater",
         "exit_streak"
@@ -97,12 +105,12 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0245,
+      "peak_unrealized_pct": -0.0018,
       "trough_unrealized_pct": -0.0245,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-09T09:38:35.244466+01:00",
+      "linked_sell_trade_id": "c61609c9-9551-45fa-9b65-07af9a553f19"
     },
     {
       "episode_id": "ai_judgment_graduated_fair:KLR.L:2026-10-08T10:11:49.445175+01:00",
@@ -140,7 +148,7 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0354,
+      "peak_unrealized_pct": -0.0244,
       "trough_unrealized_pct": -0.0354,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -148,5 +156,58 @@
       "linked_sell_trade_id": null
     }
   ],
-  "swap_rotations": []
+  "swap_rotations": [
+    {
+      "rotation_id": "ai_judgment_graduated_fair:2026-10-09T09:38:35.244466+01:00",
+      "track_id": "ai_judgment_graduated_fair",
+      "logged_at": "2026-10-09T09:38:35.244466+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0028,
+      "sells": [
+        {
+          "ticker": "PAF.L",
+          "price": 117.593,
+          "shares": 1.688926,
+          "gross": 198.61,
+          "cost": 0.05,
+          "avg_cost_at_exit": 117.8,
+          "realized_pct": -0.0018,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0018
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "FRES.L",
+          "price": 2780.189,
+          "shares": 0.070878,
+          "gross": 197.05,
+          "cost": 1.03
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "PAF.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "FRES.L": -0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    }
+  ]
 }
