@@ -172,8 +172,15 @@
     "Sector is today's classification (as in hsr-v1); models that rank within sector carry that small look-ahead.",
     "The panel signals use the latest trailing-twelve-month filing and the filing a year earlier, filed at least 2 days before the rebalance."
   ],
-  "amendments": [],
+  "amendments": [
+    {
+      "at": "2026-10-08",
+      "before_data": true,
+      "change": "sharadar_replay_adapter.py: tickers.table filter accepts the sharadar.com direct label 'fundamentals' as well as 'SF1'. mix_code_fingerprint re-frozen.",
+      "reason": "Direct downloads label company rows 'fundamentals'; the old filter fell back to every row, so a fund or insider row reusing a ticker could replace the company. No search has run and no holdout has been revealed."
+    }
+  ],
   "screen_code_fingerprint": "5442bfcc1933ec862db97332417fe2498e5806cef2604ab9c4b2a5b88f14063d",
-  "mix_code_fingerprint": "9ec1c3a845f7651a53e73a64af42e5095bca9d6add413d3a0144c22ecac0a10a",
-  "registered_at": "2026-10-08T10:09:52.354560+00:00"
+  "mix_code_fingerprint": "3af8ba68c85dfc42d41f444c602c2e058e69e35699119d4c3458f7a5b77ffa07",
+  "registered_at": "2026-10-08T13:10:14.752905+00:00"
 }

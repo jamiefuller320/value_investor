@@ -197,7 +197,7 @@ ask. Hence this order:
 
 | When | Step |
 |------|------|
-| Before paying | Both PRs merged; ops-monitor shows no replay findings; dry run on the free sample (step 0) |
+| Before paying | Both PRs merged; ops-monitor shows no replay findings; dry run on the free sample (step 0, passed 2026-10-08) |
 | Day 1 | Subscribe. Bulk-download **every** table in the bundle, not only the five the adapter reads, to `~/sharadar` |
 | Day 1–2 | `build-panel` for both universes; check both build reports |
 | Day 2 | Development runs for both universes, baseline and `--variant dividend_units_fixed` (caches both sets of signals; the variant's holdout stays sealed). Review; change nothing registered. Fix adapter bugs only here, and log them as amendments |
@@ -208,15 +208,46 @@ ask. Hence this order:
 | Before renewal | Cancel |
 | Within 30 days of cancelling | Delete `~/sharadar`, `~/hsr-build`, `~/hsr-mid-build` (caches included); `confirm-deleted` |
 
-0. Dry run before paying. Download the vendor's free sample tables (if
-   offered) to a directory outside the repository and run `build-panel` on
-   them. The sample is too small for results, but it shows whether the column
-   names, date formats, and table layouts match the adapter. Fix any mismatch
-   before subscribing. The sample is licensed too: never commit it.
-1. Subscribe to the Sharadar Core US Equities Bundle, full history, for **one
-   month** (monthly plan). Bulk-download `fundamentals` (SF1), `stocks` (SEP),
-   `actions`, `tickers`, `sp500` to a directory **outside the repository**
-   (`.csv`, `.csv.gz`, or the vendor `.zip` files as downloaded).
+Vendor: sharadar.com direct (`https://api.sharadar.com/v1.0`), not Nasdaq
+Data Link, so do not use the `nasdaqdatalink` / `quandl` libraries. Plans,
+tables, and endpoints are summarised in
+[sharadar.com/llms.txt](https://sharadar.com/llms.txt); licence at
+[sharadar.com/terms](https://sharadar.com/terms). Licence points that bind
+this workflow:
+
+- Personal, non-professional use by an individual; the key and data are not
+  shared with anyone (§2–4).
+- Delete the data, caches, and anything that could rebuild the tables within
+  30 days of cancelling; research outputs, backtest results, and summary
+  statistics may be kept (§10). That is the `confirm-deleted` step.
+- Do not publish conclusions about the data's quality or fitness without
+  Sharadar's written approval (§8). `build_report.json` (coverage, fill rates)
+  stays in the build directory and never goes into the repository, PRs, or
+  deferred entries.
+
+0. Dry run before paying (done 2026-10-08: the direct layout built a panel
+   with 0.98 coverage). The documented public `test-api-key` returns only the
+   free sample (AAPL, about five years), and bulk downloads need a paid key.
+   To repeat it, fetch each table with `format=csv&ticker=AAPL&from=1998-01-01`
+   into a directory outside the repository, run `build-panel`, then delete the
+   directory. The sample is licensed too: never commit it.
+1. Subscribe to the **Bundle, Full History**, monthly ($69; the $29 Bundle is
+   5 years only) for **one month**. Keep the key in an environment variable
+   on your own machine, never in the repository, chat, or cloud secrets.
+   Bulk-download every table (`years=full` returns a 302 to a zip):
+
+   ```bash
+   mkdir -p ~/sharadar && cd ~/sharadar
+   for t in fundamentals stocks tickers actions sp500 daily metrics events \
+            descriptions funds insiders holdings holdings_ticker holdings_investor; do
+     curl -fL -o "$t.csv.zip" \
+       "https://api.sharadar.com/v1.0/data/$t?api_key=$SHARADAR_API_KEY&years=full"
+   done
+   ```
+
+   The adapter reads `fundamentals`, `stocks`, `tickers`, `actions`, and
+   `sp500` as `.csv`, `.csv.gz`, or the vendor `.zip` files, under either the
+   direct names or the Nasdaq Data Link `SHARADAR_<CODE>_…` names.
 2. Build the inputs:
 
    ```bash

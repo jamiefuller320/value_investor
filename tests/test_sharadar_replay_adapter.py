@@ -354,6 +354,41 @@ def test_build_writes_point_in_time_panel(sharadar_dir: Path, tmp_path: Path):
     assert "A05" not in report_text and "DEAD" not in report_text
 
 
+def test_direct_bulk_layout_builds_the_same_panel(sharadar_dir: Path, tmp_path: Path):
+    """sharadar.com direct: ``<table>.csv.zip`` files, filing date in ``date``, and
+    ``tickers.table`` values ``fundamentals`` / ``stocks`` / ``funds`` instead of SF1 / SEP."""
+    direct = tmp_path / "direct"
+    direct.mkdir()
+
+    def zipped(frame: pd.DataFrame, table: str) -> None:
+        frame.to_csv(
+            direct / f"{table}.csv.zip",
+            index=False,
+            compression={"method": "zip", "archive_name": f"{table}.csv"},
+        )
+
+    stocks = _stocks()
+    zipped(stocks, "stocks")
+    zipped(_fundamentals(stocks).rename(columns={"datekey": "date"}), "fundamentals")
+    zipped(_sp500(), "sp500")
+    zipped(_actions(), "actions")
+    tickers = _tickers()
+    tickers["table"] = tickers["table"].map({"SF1": "fundamentals", "SEP": "stocks"})
+    fund_clash = tickers.loc[tickers["ticker"] == "A05"].assign(
+        table="funds", name="Recycled fund", currency="EUR", category="ETF"
+    )
+    zipped(pd.concat([tickers, fund_clash], ignore_index=True), "tickers")
+
+    legacy_report = sra.build_replay_inputs(sharadar_dir, tmp_path / "legacy", _registration())
+    direct_report = sra.build_replay_inputs(direct, tmp_path / "direct_out", _registration())
+
+    assert direct_report["counts"] == legacy_report["counts"]
+    legacy = pd.read_csv(tmp_path / "legacy" / "panel.csv.gz")
+    got = pd.read_csv(tmp_path / "direct_out" / "panel.csv.gz")
+    pd.testing.assert_frame_equal(got, legacy)
+    assert "A05" in set(got["ticker"])
+
+
 def test_build_then_replay_end_to_end(sharadar_dir: Path, tmp_path: Path):
     reg_path = tmp_path / "registration.json"
     reg_path.write_text(json.dumps(_registration()))
