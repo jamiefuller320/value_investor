@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-08T08:50:23.375073+00:00
+Track: `buy_tier_level` · updated 2026-10-09T07:32:43.333655+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level` · updated 2026-10-08T08:50:23.375073+00:00
 
 ## Holding reviews
 
-### FME.DE — weakening / watch_review (-3.8%)
+### FME.DE — weakening / watch_review (-3.3%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes

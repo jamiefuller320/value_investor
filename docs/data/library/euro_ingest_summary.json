@@ -1,10 +1,20 @@
 {
-  "run_at": "2026-10-09T07:41:10.763931+00:00",
+  "run_at": "2026-10-08T13:23:37.707815+00:00",
   "market_id": "euro_depth",
   "targets": [
-    "SHELL.AS"
+    "ASSA-B.ST",
+    "SHELL.AS",
+    "DTE.DE"
   ],
   "target_details": [
+    {
+      "ticker": "ASSA-B.ST",
+      "priority_score": 25.694499999999998,
+      "filings_total": 21,
+      "filings_with_body": 14,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    },
     {
       "ticker": "SHELL.AS",
       "priority_score": 15.3917,
@@ -12,9 +22,79 @@
       "filings_with_body": 43,
       "indexed_without_body": 2,
       "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "DTE.DE",
+      "priority_score": 7.6834,
+      "filings_total": 3,
+      "filings_with_body": 2,
+      "indexed_without_body": 0,
+      "reason": "thin_bodies"
     }
   ],
   "results": [
+    {
+      "ticker": "ASSA-B.ST",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 21,
+        "filings_with_body": 14,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 20,
+        "filings_with_body": 14,
+        "indexed_without_body": 6
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 21,
+        "annual": 14,
+        "interim": 2,
+        "trading_update": 2,
+        "other": 3,
+        "with_body": 14,
+        "period_coverage": {
+          "annual": {
+            "total": 14,
+            "with_body": 9
+          },
+          "interim": {
+            "total": 2,
+            "with_body": 2
+          },
+          "trading_update": {
+            "total": 2,
+            "with_body": 2
+          },
+          "other": {
+            "total": 3,
+            "with_body": 1
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 14,
+        "with_body_after": 14,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    },
     {
       "ticker": "SHELL.AS",
       "reason": "indexed_without_body",
@@ -92,16 +172,144 @@
         "mandatory": true,
         "note": "refetch_ir_allowlist_filing_bodies"
       }
+    },
+    {
+      "ticker": "DTE.DE",
+      "reason": "thin_bodies",
+      "before": {
+        "filings_total": 3,
+        "filings_with_body": 2,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 3,
+        "filings_with_body": 3,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 3,
+        "annual": 1,
+        "interim": 0,
+        "trading_update": 0,
+        "other": 2,
+        "with_body": 3,
+        "period_coverage": {
+          "annual": {
+            "total": 1,
+            "with_body": 1
+          },
+          "interim": {
+            "total": 0,
+            "with_body": 0
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 2,
+            "with_body": 2
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 3,
+        "with_body_after": 3,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
     }
   ],
   "improved": [
-    "SHELL.AS"
+    "SHELL.AS",
+    "DTE.DE"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-09T07:37:01.971412+00:00",
+    "snapshot_at": "2026-10-08T13:18:38.338969+00:00",
+    "market_id": "euro_depth",
+    "buy_tier_count": 50,
+    "unmeasured_buy_tier": 0,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 9,
+    "indexed_without_body": 22,
+    "bodies_min": 1,
+    "bodies_median": 4.5,
+    "bodies_max": 121,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [
+      "WIE.VI",
+      "ACKB.BR",
+      "EVN.VI",
+      "APAM.AS",
+      "DTE.DE",
+      "UCB.BR",
+      "MUV2.DE",
+      "BAS.DE",
+      "DQ7A.IR"
+    ],
+    "indexed_without_body_tickers": [
+      "WIE.VI",
+      "EVN.VI",
+      "SAP.DE",
+      "UCB.BR",
+      "ABI.BR",
+      "ASSA-B.ST"
+    ],
+    "indexed_without_body_by_ticker": {
+      "WIE.VI": 1,
+      "EVN.VI": 1,
+      "SAP.DE": 1,
+      "UCB.BR": 1,
+      "ABI.BR": 12,
+      "ASSA-B.ST": 6
+    },
+    "parked_tickers": [
+      "ABI.BR",
+      "ACKB.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "DQ7A.IR",
+      "EVN.VI",
+      "MUV2.DE",
+      "SAP.DE",
+      "UCB.BR",
+      "WIE.VI"
+    ],
+    "parked_count": 10,
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
+      "DTE.DE"
+    ],
+    "effective_indexed_without_body": 6,
+    "effective_indexed_without_body_tickers": [
+      "ASSA-B.ST"
+    ],
+    "ingest_exhausted": false
+  },
+  "health_after": {
+    "snapshot_at": "2026-10-08T13:23:32.784633+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 50,
     "unmeasured_buy_tier": 0,
@@ -161,68 +369,6 @@
     "effective_indexed_without_body_tickers": [],
     "ingest_exhausted": true
   },
-  "health_after": {
-    "snapshot_at": "2026-10-09T07:41:05.353095+00:00",
-    "market_id": "euro_depth",
-    "buy_tier_count": 50,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 8,
-    "indexed_without_body": 17,
-    "bodies_min": 1,
-    "bodies_median": 4.5,
-    "bodies_max": 121,
-    "coverage_scope": "canonical_plus_shards",
-    "ftse_equivalent": false,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "WIE.VI",
-      "ACKB.BR",
-      "EVN.VI",
-      "APAM.AS",
-      "UCB.BR",
-      "MUV2.DE",
-      "BAS.DE",
-      "DQ7A.IR"
-    ],
-    "indexed_without_body_tickers": [
-      "WIE.VI",
-      "EVN.VI",
-      "SAP.DE",
-      "UCB.BR",
-      "ABI.BR",
-      "ASSA-B.ST"
-    ],
-    "indexed_without_body_by_ticker": {
-      "WIE.VI": 1,
-      "EVN.VI": 1,
-      "SAP.DE": 1,
-      "UCB.BR": 1,
-      "ABI.BR": 12,
-      "ASSA-B.ST": 1
-    },
-    "parked_tickers": [
-      "ABI.BR",
-      "ACKB.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "DQ7A.IR",
-      "EVN.VI",
-      "MUV2.DE",
-      "SAP.DE",
-      "UCB.BR",
-      "WIE.VI"
-    ],
-    "parked_count": 10,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
-      "ASSA-B.ST"
-    ],
-    "ingest_exhausted": false
-  },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
@@ -232,7 +378,7 @@
   "discovery_scan": {
     "scanned": 50,
     "hits": 43,
-    "new_rows_total": 2,
+    "new_rows_total": 1,
     "curiosity_total": 46,
     "errors": 0,
     "prioritization_weights": {
@@ -242,8 +388,8 @@
       "unknown_host": 2.0,
       "strong_buy": 1.0
     },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
+    "forced_by_critical_path": true,
+    "max_runtime_seconds": 675.0,
     "prefer_tickers": [
       "ACKB.BR",
       "APAM.AS",
@@ -259,12 +405,16 @@
     ],
     "runtime_cutoff": false
   },
-  "maintenance_mode": true,
+  "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "euro_depth"
+  },
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-10-09T07:37:05.431562+00:00",
+    "assessed_at": "2026-10-08T13:18:41.530102+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -342,9 +492,9 @@
       "thin_need_bodies": 3
     }
   },
-  "used_seconds": 236.56989034199995,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3363.430109658,
+  "used_seconds": 288.09124323099996,
+  "budget_seconds": 2700.0,
+  "leftover_seconds": 2411.908756769,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -352,8 +502,8 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-10-09T07:41:05.366390+00:00",
-    "exhausted": false,
+    "updated_at": "2026-10-08T13:23:32.795086+00:00",
+    "exhausted": true,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
@@ -466,6 +616,18 @@
         "indexed_without_body": 1,
         "thin": true,
         "source_surface": "euro_filings"
+      },
+      {
+        "ticker": "ASSA-B.ST",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-08T13:23:32.795086+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 20,
+        "filings_with_body": 14,
+        "indexed_without_body": 6,
+        "thin": false,
+        "source_surface": "euro_filings+cision_direct"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -485,21 +647,43 @@
       "UCB.BR",
       "WIE.VI"
     ],
-    "unparked_leftover": [
-      "ASSA-B.ST"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/euro_depth/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "euro_depth"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "euro_depth",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 147,
+    "task_count": 145,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "hunter_tickers": [

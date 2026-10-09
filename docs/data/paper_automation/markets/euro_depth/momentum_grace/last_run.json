@@ -1,15 +1,48 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-08T10:51:19.217383+02:00",
+    "local_time": "2026-10-09T09:33:41.557328+02:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-10-08T09:00:00+02:00",
-    "settle_at": "2026-10-08T09:30:00+02:00",
+    "market_open_at": "2026-10-09T09:00:00+02:00",
+    "settle_at": "2026-10-09T09:30:00+02:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "657d6594-dabb-4cef-b76e-13a8eb0fc78f",
+      "fund_id": "f7129ed1-2fd6-453f-8a2e-7f27774731e5",
+      "acted_at": "2026-10-09T09:33:41.557328+02:00",
+      "ticker": "AED.BR",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 3.250519,
+      "price": 61.45,
+      "gross": 199.74,
+      "cost": 0.37,
+      "net_cash": 199.37,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Aedifica NV/SA",
+      "avg_cost_at_exit": 60.5,
+      "position_closed": true
+    },
+    {
+      "id": "9799dcf3-45dc-4887-a007-d9d73a669d2f",
+      "fund_id": "f7129ed1-2fd6-453f-8a2e-7f27774731e5",
+      "acted_at": "2026-10-09T09:33:41.557328+02:00",
+      "ticker": "TTE.PA",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 2.59794,
+      "price": 77.17,
+      "gross": 200.48,
+      "cost": 0.37,
+      "net_cash": -200.85,
+      "note": "Automated buy",
+      "name": "TotalEnergies SE"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -24,8 +57,8 @@
       "Dust guard: skip trim/top-up adjustments below \u00a310.",
       "Momentum grace: holdings that leave buy-tier but still show strong price trend may be kept for up to 6 weeks with tightened trailing stops."
     ],
-    "nav": 994.27,
-    "cash": 9.37,
+    "nav": 1003.9,
+    "cash": 7.89,
     "max_positions": 5,
     "min_conviction": 0.0,
     "sector_cap": 0.3,
@@ -37,42 +70,42 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 198.85,
+    "target_sleeve_value": 200.78,
     "targets": [
       {
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "signal": "strong_buy",
         "conviction_score": 0.9417000000000001,
-        "price": 94.72
+        "price": 96.24
       },
       {
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "signal": "strong_buy",
-        "conviction_score": 0.9256000000000001,
-        "price": 106.8
+        "conviction_score": 0.9319000000000001,
+        "price": 107.6
       },
       {
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "signal": "strong_buy",
-        "conviction_score": 0.878,
-        "price": 71.39
+        "conviction_score": 0.8917,
+        "price": 71.91
       },
       {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "signal": "strong_buy",
-        "conviction_score": 0.8615,
-        "price": 32.08
+        "conviction_score": 0.8808,
+        "price": 32.59
       },
       {
-        "ticker": "AED.BR",
-        "name": "Aedifica NV/SA",
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
         "signal": "strong_buy",
-        "conviction_score": 0.8084,
-        "price": 61.1
+        "conviction_score": 0.8167000000000001,
+        "price": 77.17
       }
     ],
     "anticipated_exits": [],
@@ -85,8 +118,8 @@
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 193.66,
-        "target_value": 198.85,
+        "value": 196.77,
+        "target_value": 200.78,
         "conviction_score": 0.9417000000000001,
         "signal": "strong_buy"
       },
@@ -95,9 +128,9 @@
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 194.32,
-        "target_value": 198.85,
-        "conviction_score": 0.9256000000000001,
+        "value": 195.77,
+        "target_value": 200.78,
+        "conviction_score": 0.9319000000000001,
         "signal": "strong_buy"
       },
       {
@@ -105,19 +138,19 @@
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 192.72,
-        "target_value": 198.85,
-        "conviction_score": 0.878,
+        "value": 194.12,
+        "target_value": 200.78,
+        "conviction_score": 0.8917,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "AED.BR",
-        "name": "Aedifica NV/SA",
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
         "reason": "Already near equal-weight target",
-        "value": 198.61,
-        "target_value": 198.85,
-        "conviction_score": 0.8084,
+        "value": 200.48,
+        "target_value": 200.78,
+        "conviction_score": 0.8167000000000001,
         "signal": "strong_buy"
       }
     ],
@@ -132,7 +165,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 94.72000122070312,
+      "mark": 96.23999786376953,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -143,7 +176,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 32.08000183105469,
+      "mark": 32.59000015258789,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -154,7 +187,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 71.38999938964844,
+      "mark": 71.91000366210938,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -165,18 +198,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 106.80000305175781,
+      "mark": 107.5999984741211,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
     },
     {
-      "ticker": "AED.BR",
-      "name": "Aedifica NV/SA",
+      "ticker": "TTE.PA",
+      "name": "TotalEnergies SE",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 61.099998474121094,
+      "mark": 77.16999816894531,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -197,7 +230,7 @@
       "id": "f7129ed1-2fd6-453f-8a2e-7f27774731e5",
       "created_at": "2026-09-09T07:22:28.840178+00:00"
     },
-    "cash": 9.37,
+    "cash": 7.89,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -245,16 +278,16 @@
         "take_profit": null,
         "opened_at": "2026-09-24T09:40:45.371569+02:00"
       },
-      "AED.BR": {
-        "ticker": "AED.BR",
-        "shares": 3.250519,
-        "avg_cost": 60.5,
-        "name": "Aedifica NV/SA",
-        "sector": "Real Estate",
+      "TTE.PA": {
+        "ticker": "TTE.PA",
+        "shares": 2.59794,
+        "avg_cost": 77.17,
+        "name": "TotalEnergies SE",
+        "sector": "Energy",
         "currency": "EUR",
         "stop_loss": null,
         "take_profit": null,
-        "opened_at": "2026-10-05T09:39:19.860475+02:00"
+        "opened_at": "2026-10-09T09:33:41.557328+02:00"
       }
     },
     "trades": [
@@ -492,6 +525,38 @@
         "net_cash": -197.02,
         "note": "Automated buy",
         "name": "Aedifica NV/SA"
+      },
+      {
+        "id": "657d6594-dabb-4cef-b76e-13a8eb0fc78f",
+        "fund_id": "f7129ed1-2fd6-453f-8a2e-7f27774731e5",
+        "acted_at": "2026-10-09T09:33:41.557328+02:00",
+        "ticker": "AED.BR",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 3.250519,
+        "price": 61.45,
+        "gross": 199.74,
+        "cost": 0.37,
+        "net_cash": 199.37,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Aedifica NV/SA",
+        "avg_cost_at_exit": 60.5,
+        "position_closed": true
+      },
+      {
+        "id": "9799dcf3-45dc-4887-a007-d9d73a669d2f",
+        "fund_id": "f7129ed1-2fd6-453f-8a2e-7f27774731e5",
+        "acted_at": "2026-10-09T09:33:41.557328+02:00",
+        "ticker": "TTE.PA",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.59794,
+        "price": 77.17,
+        "gross": 200.48,
+        "cost": 0.37,
+        "net_cash": -200.85,
+        "note": "Automated buy",
+        "name": "TotalEnergies SE"
       }
     ],
     "equity_curve": [
@@ -1094,24 +1159,62 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-09T09:25:23.501755+02:00",
+        "portfolio_value": 701.06,
+        "cash": 9.37,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.84809,
+            "SEK": 0.07561
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-09T09:33:41.557328+02:00",
+        "portfolio_value": 700.59,
+        "cash": 7.89,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.84808,
+            "SEK": 0.07562
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-08T10:51:19.217383+02:00",
+    "last_mark_at": "2026-10-09T09:33:41.557328+02:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {}
+      "reentry_cooldown": {
+        "AED.BR": 1
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "euro_depth",
     "track_id": "momentum_grace",
-    "generated_at": "2026-10-08T08:51:27.682281+00:00",
+    "generated_at": "2026-10-09T07:33:50.715575+00:00",
     "observe_only": true,
-    "open_count": 5,
+    "open_count": 6,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -1146,7 +1249,7 @@
       }
     },
     "first_episode": {
-      "open_count": 3,
+      "open_count": 4,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -1182,13 +1285,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "momentum_grace",
-    "generated_at": "2026-10-08T08:51:27.683333+00:00",
+    "generated_at": "2026-10-09T07:33:50.716778+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1242,11 +1345,11 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 5,
+      "hold_closed_count": 6,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 9,
+      "hold_with_data_quality_count": 10,
       "gaps": [
-        "hold_recovery closed episodes=5 (target >=15)",
+        "hold_recovery closed episodes=6 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
@@ -1260,19 +1363,19 @@
         }
       },
       "closed": {
-        "count": 5,
-        "recovered_to_breakeven": 3,
+        "count": 6,
+        "recovered_to_breakeven": 4,
         "close_reasons": {
-          "sold_while_recovered": 3,
+          "sold_while_recovered": 4,
           "sold_while_underwater": 2
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 4,
+        "count": 5,
         "verdicts": {
-          "open": 4
+          "open": 5
         }
       },
       "closed": {
@@ -1282,7 +1385,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -1294,8 +1397,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "momentum_grace",
-    "updated_at": "2026-10-08T08:51:27.684660+00:00",
-    "as_of": "2026-10-08T10:51:19.217383+02:00",
+    "updated_at": "2026-10-09T07:33:50.718282+00:00",
+    "as_of": "2026-10-09T09:33:41.557328+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1352,12 +1455,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0361,
-        "mark": 106.8,
+        "unrealized_pct": -0.0289,
+        "mark": 107.6,
         "avg_cost": 110.8,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9256,
+        "conviction_score": 0.9319,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1392,12 +1495,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0346,
-        "mark": 71.39,
+        "unrealized_pct": -0.0276,
+        "mark": 71.91,
         "avg_cost": 73.95,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.878,
+        "conviction_score": 0.8917,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1413,14 +1516,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 88%"
+          "conviction 89%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 88%"
+          "conviction 89%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1432,8 +1535,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0299,
-        "mark": 94.72,
+        "unrealized_pct": -0.0143,
+        "mark": 96.24,
         "avg_cost": 97.64,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -1466,18 +1569,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "AED.BR",
-        "name": "Aedifica NV/SA",
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0099,
-        "mark": 61.1,
-        "avg_cost": 60.5,
+        "unrealized_pct": 0.0,
+        "mark": 77.17,
+        "avg_cost": 77.17,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8084,
+        "conviction_score": 0.8167,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1493,14 +1596,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 81%"
+          "conviction 82%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 81%"
+          "conviction 82%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1512,12 +1615,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0299,
-        "mark": 32.08,
+        "unrealized_pct": 0.0462,
+        "mark": 32.59,
         "avg_cost": 31.15,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8615,
+        "conviction_score": 0.8808,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1533,14 +1636,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 86%"
+          "conviction 88%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 86%"
+          "conviction 88%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1553,13 +1656,13 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "momentum_grace",
-    "generated_at": "2026-10-08T08:51:27.686339+00:00",
+    "generated_at": "2026-10-09T07:33:50.720149+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 5,
+      "closed_total": 6,
       "closed_unknown_thesis": 0,
       "open_with_thesis": 4,
       "by_thesis_status": {
@@ -1567,13 +1670,13 @@
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 5,
-          "recovery_rate": 0.6,
-          "sold_underwater_rate": 0.4,
-          "mean_peak_unrealized_pct": 0.0149,
-          "mean_trough_unrealized_pct": 0.0032,
+          "closed_count": 6,
+          "recovery_rate": 0.6667,
+          "sold_underwater_rate": 0.3333,
+          "mean_peak_unrealized_pct": 0.015,
+          "mean_trough_unrealized_pct": 0.0052,
           "outcome_labels": {
-            "recovered": 3,
+            "recovered": 4,
             "sold_underwater": 2
           }
         },
@@ -1606,10 +1709,10 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 5,
+      "hold_closed_with_thesis": 6,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=5 (target >=8)",
+        "hold closed with thesis=6 (target >=8)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -1621,73 +1724,74 @@
     "schema_version": 1,
     "track_id": "momentum_grace",
     "observe_only": true,
-    "generated_at": "2026-10-08T08:51:27.688923+00:00",
+    "generated_at": "2026-10-09T07:33:50.723281+00:00",
     "open_count": 2,
-    "closed_count": 3,
-    "scored_count": 1,
-    "scored_count_all": 3,
+    "closed_count": 4,
+    "scored_count": 2,
+    "scored_count_all": 4,
     "recommit_scored_count": 2,
     "entry_kind_counts": {
-      "first_entry": 1,
+      "first_entry": 2,
       "recommit": 2
     },
     "any_de_risk_count": 1,
     "winning_cadence_counts": {
-      "dca_5x_weekday": 1
+      "dca_5x_weekday": 1,
+      "dca_2x_weekly": 1
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 1,
-        "mean_end_value_delta": 0.53,
-        "mean_de_risk_gbp": 1.59,
-        "de_risk_rate": 1.0,
-        "win_count": 0
+        "scored_episodes": 2,
+        "mean_end_value_delta": -0.505,
+        "mean_de_risk_gbp": 0.795,
+        "de_risk_rate": 0.5,
+        "win_count": 1
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 1,
-        "mean_end_value_delta": 0.8,
-        "mean_de_risk_gbp": 2.38,
-        "de_risk_rate": 1.0,
+        "scored_episodes": 2,
+        "mean_end_value_delta": -0.76,
+        "mean_de_risk_gbp": 1.19,
+        "de_risk_rate": 0.5,
         "win_count": 0
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 1,
-        "mean_end_value_delta": 0.53,
-        "mean_de_risk_gbp": 1.59,
-        "de_risk_rate": 1.0,
+        "scored_episodes": 2,
+        "mean_end_value_delta": -0.505,
+        "mean_de_risk_gbp": 0.795,
+        "de_risk_rate": 0.5,
         "win_count": 0
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 1,
-        "mean_end_value_delta": 0.98,
-        "mean_de_risk_gbp": 1.26,
-        "de_risk_rate": 1.0,
+        "scored_episodes": 2,
+        "mean_end_value_delta": -0.89,
+        "mean_de_risk_gbp": -0.585,
+        "de_risk_rate": 0.5,
         "win_count": 1
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 1,
+      "closed_episodes": 2,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 1,
+      "first_entry_scored": 2,
       "recommit_scored": 2
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 2,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "momentum_grace",
-    "generated_at": "2026-10-08T10:51:19.217383+02:00",
+    "generated_at": "2026-10-09T09:33:41.557328+02:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1711,11 +1815,11 @@
       },
       "evidence_validity": "Additive observe store \u2014 does not invalidate prior NAV / decision-review / exit_shadow marks. Those remain valid for what they measured. Do not back-label historical NAV as dual-path sleeve evidence."
     },
-    "open_count": 50,
+    "open_count": 51,
     "closed_count": 0,
     "open_by_capital_status": {
       "on_book": 5,
-      "off_book": 3,
+      "off_book": 4,
       "never_funded": 42
     },
     "closed_by_capital_status": {
@@ -1737,14 +1841,14 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_on_book": 1,
+      "tagged_off_book": 1
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "momentum_grace",
-    "generated_at": "2026-10-08T10:51:19.217383+02:00",
+    "generated_at": "2026-10-09T09:33:41.557328+02:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -1752,35 +1856,250 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 2,
+    "card_count": 2,
     "verdict_counts": {
-      "agree": 0,
-      "veto": 0,
+      "agree": 1,
+      "veto": 1,
       "abstain": 0
     },
-    "by_algo_action": {},
-    "cards": [],
+    "by_algo_action": {
+      "sell": {
+        "agree": 0,
+        "veto": 1,
+        "abstain": 0
+      },
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
+    "cards": [
+      {
+        "ticker": "AED.BR",
+        "name": "Aedifica NV/SA",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "veto",
+        "reasons": [
+          "Capacity-bump risk: still buyish with insufficient rank drop \u2014 prefer hold over churn sell."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 12
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 12
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.775
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "momentum_grace",
+        "logged_at": "2026-10-09T09:33:41.557328+02:00",
+        "proposal_id": "momentum_grace:AED.BR:sell:2026-10-09T09:33:41.557328+02:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "TTE.PA",
+        "name": "TotalEnergies SE",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy into buyish target set \u2014 agree with algo selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "strong_buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 9
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 9
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.8167000000000001
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "momentum_grace",
+        "logged_at": "2026-10-09T09:33:41.557328+02:00",
+        "proposal_id": "momentum_grace:TTE.PA:buy:2026-10-09T09:33:41.557328+02:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "momentum_grace",
-      "generated_at": "2026-10-08T10:51:19.217383+02:00",
+      "generated_at": "2026-10-09T09:33:41.557328+02:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 2,
       "verdict_counts": {
-        "agree": 0,
-        "veto": 0,
+        "agree": 1,
+        "veto": 1,
         "abstain": 0
       },
-      "by_algo_action": {},
-      "veto_sell_count": 0,
-      "veto_sell_tickers": [],
+      "by_algo_action": {
+        "sell": {
+          "agree": 0,
+          "veto": 1,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "veto_sell_count": 1,
+      "veto_sell_tickers": [
+        "AED.BR"
+      ],
       "promotion_gate": {
         "ready_for_hard_veto": false,
         "requires": [
@@ -1794,7 +2113,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-08T08:51:27.693489+00:00",
+  "generated_at": "2026-10-09T07:33:50.728432+00:00",
   "track_id": "momentum_grace",
   "track_label": "Screen rules + momentum grace",
   "is_primary_learning_track": false,
