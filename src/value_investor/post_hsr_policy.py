@@ -197,12 +197,8 @@ def build_post_hsr_policy(
             "hsr_v1_holdout_verdict": hsr_verdict,
             "hsr_mid_v1_holdout_verdict": mid_verdict,
             "hrs_v1_chosen_config_id": hrs_ev.get("chosen_config_id"),
-            "hrs_v1_chosen_verdict_vs_plain_value": hrs_ev.get(
-                "chosen_verdict_vs_plain_value"
-            ),
-            "hrs_v1_chosen_minus_frozen_verdict": hrs_ev.get(
-                "chosen_minus_frozen_verdict"
-            ),
+            "hrs_v1_chosen_verdict_vs_plain_value": hrs_ev.get("chosen_verdict_vs_plain_value"),
+            "hrs_v1_chosen_minus_frozen_verdict": hrs_ev.get("chosen_minus_frozen_verdict"),
             "hms_v1_decision": hms_ev.get("decision"),
             "hms_v1_kept": hms_ev.get("kept") or [],
         },
