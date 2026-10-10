@@ -7074,8 +7074,9 @@ def test_fetch_filings_ir_allowlist_ftse_mib_ten_mi_unmeasured_eng_20261005_01(
     rows = fetch_filings_ir_allowlist("TEN.MI", path=allowlist_path)
     assert len(rows) == 2
     assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert {row["period"] for row in rows} == {"annual", "interim"}
     assert any(row["period"] == "annual" and "ts-20251231.htm" in row["url"] for row in rows)
-    assert any("f6k_050626fs.htm" in row["url"] for row in rows)
+    assert any(row["period"] == "interim" and "f6k_050626fs.htm" in row["url"] for row in rows)
     assert "TEN.MI" in _BUILTIN_IR_URLS
     assert "TEN" not in _BUILTIN_IR_URLS
 
@@ -7109,6 +7110,71 @@ def test_fetch_filings_ir_allowlist_ten_mi_live_sec_20f_eng_20261005_01():
     assert "tenaris" in body.lower()
     valid, reason = _validate_ir_allowlist_body_content(annual, body, ticker="TEN.MI")
     assert valid, reason
+
+
+def test_fetch_filings_ir_allowlist_ten_mi_skips_sec_homonym_base_eng_20261010_02(
+    tmp_path: Path,
+):
+    """eng-20261010-02: TEN.MI must not inherit bogus TEN base-symbol IR URLs (Tsakos homonym)."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(
+        json.dumps(
+            {
+                "urls": {
+                    "TEN": [
+                        "https://www.sec.gov/Archives/edgar/data/1234567/000000000000000/wrong.htm"
+                    ]
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    rows = fetch_filings_ir_allowlist("TEN.MI", path=allowlist_path)
+    urls = {row["url"] for row in rows}
+    assert all("1190723" in url for url in urls)
+    assert not any("1234567" in url for url in urls)
+
+
+def test_fetch_filings_ir_allowlist_ten_mi_f6k_live_eng_20261010_02():
+    """eng-20261010-02: TEN.MI Q1 2026 FS 6-K passes IR allowlist validation as interim."""
+    rows = fetch_filings_ir_allowlist("TEN.MI")
+    interim = next(row for row in rows if row["period"] == "interim")
+    assert "f6k_050626fs.htm" in interim["url"]
+    body = fetch_filing_body(interim["url"])
+    assert body and len(body) > 5000
+    assert "tenaris" in body.lower()
+    valid, reason = _validate_ir_allowlist_body_content(interim, body, ticker="TEN.MI")
+    assert valid, reason
+
+
+@patch("value_investor.research.filings.fetch_filing_body")
+def test_refetch_euro_filings_primary_bodies_ten_mi_eng_20261010_02(mock_fetch, tmp_path: Path):
+    """eng-20261010-02: euro primary pipeline bootstraps empty TEN.MI index from IR allowlist."""
+    from value_investor.research.filings import refetch_euro_filings_primary_bodies
+
+    mock_fetch.return_value = (
+        "Tenaris S.A. consolidated financial statements revenue operating income "
+        "pipe seamless tubular products interim quarter " * 40
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"with_body": 0, "total": 0}}),
+        encoding="utf-8",
+    )
+    result = refetch_euro_filings_primary_bodies(
+        filings_dir,
+        ticker="TEN.MI",
+        company_name="Tenaris S.A.",
+        max_bodies=5,
+    )
+    assert result["with_body_after"] >= 1
+    assert result["fetched"] >= 1
+    assert result["ir_allowlist"].get("allowlist_count", 0) >= 2
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) >= 2
+    assert int(payload["summary"]["interim"]) >= 1
+    assert any(row.get("has_body") for row in payload.get("filings") or [])
 
 
 def test_fetch_filings_ir_allowlist_bzu_mi_trading_update_live_eng_20261003_01():
