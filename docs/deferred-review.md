@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-10T17:58:42+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-10T18:03:38+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -483,6 +483,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L580 | **Factor-regression alpha view for the historical replay** | Regress hsr-v1 buy-tier monthly returns on public Fama-French value, size, momentum and quality factors to report alpha and loadings beside buy-minus-plain. Shows whether the screen's edge is a hidden tilt (quality, momentum) rather than better value selection. | After the hsr-v1 holdout reveal, if buy_minus_plain_value_net passes or the value_regime split differs sharply between regimes |
 | L581 | **Investable value ETF comparator for the historical replay** | Compare the hsr-v1 buy tier and hrs-v1 books with a real value ETF (IWD or VTV total return, free public prices) as the practical alternative to running the system. Needs the replay's monthly cohort-level series to have been committed before the licensed data was deleted. | After the hsr-v1 reveal, once monthly cohort-level return series are committed to the replay stores |
 | L582 | **FTSE library-screen paper twin with the hms-v1 model mix as composite** | If hms-v1 finds a mix that beats the frozen composite in both US universes, build a cold-start FTSE 350 library-screen twin whose composite is the kept candidates' equal-weight percentile mix (frozen epoch, new replay registration). Check first that the FTSE library carries the inputs the kept published signals need (gross margin x revenue, total_assets_prev, shares_outstanding_prev, operating cash flow, 13 months of prices). No live book change on backtest evidence. | hms-v1 holdout decision is mix_adds_in_both (model_mix block in historical_screen_replay.json) _(machine-checked)_ |
+| L583 | **Split: shared data engine vs competing strategy sleeves** | Architecture sketch after US holdouts: Element 1 = shared collection/analysis engine (filings, fundamentals, panels) kept improving; Element 2 = small set of independent strategy sleeves that consume the same engine, each with its own sealed learning loop. Fits the null on screen extras better than one ever-richer composite. Risk is sleeve sprawl—cap concurrent live/paper sleeves and require registration before capital. | Writing down post-hsr policy (freeze screen extras) and choosing the next single sealed strategy question |
 
 ### Ops / reliability
 
