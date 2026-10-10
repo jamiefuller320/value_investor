@@ -79,6 +79,12 @@ revealed opens a new `registration_id`, and its results are exploratory.
 | Inconclusive | No measurable gain over the plain sort | Freeze the machinery (no new extras); the AI layer and forward evidence must earn their keep separately |
 | Loses to the plain sort | The extras cost money | Simplify toward the published sort before stage 4 |
 
+**In force after reveal:** hsr-v1 and hsr-mid-v1 holdout primaries were
+`inconclusive`, so the freeze-extras action applies. Ops note and strand
+catalog: [post-hsr-freeze-extras.md](post-hsr-freeze-extras.md) (store
+`docs/data/post_hsr_policy.json`; daily `check_post_hsr_policy`). Strand A
+(current stack) stays; orthogonal peer strands are named but not registered.
+
 The market spread and its `value_regime` split are read beside the verdict,
 never instead of it. A negative market spread in `value_lagged` cohorts with a
 positive primary is a value-regime result, not a screen failure.

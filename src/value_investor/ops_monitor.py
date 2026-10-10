@@ -2950,6 +2950,56 @@ def check_historical_screen_replay(
     ]
 
 
+def check_post_hsr_policy(
+    *,
+    store_path: Path | None = None,
+    repo_root: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only: post-hsr freeze-extras policy after inconclusive US holdouts.
+
+    Refreshes ``docs/data/post_hsr_policy.json``. Keeps strand A; names peer
+    strands (N200/N201) without registering them. Does not change signals or
+    books. See docs/ops/post-hsr-freeze-extras.md (PR #1035 / L585).
+    """
+    from value_investor.post_hsr_policy import (
+        DEFAULT_STORE_PATH,
+        ops_findings_from_post_hsr_policy,
+        refresh_post_hsr_policy,
+    )
+
+    path = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+    try:
+        payload = refresh_post_hsr_policy(
+            store_path=path,
+            repo_root=Path(repo_root) if repo_root is not None else None,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title="Post-hsr freeze-extras policy check failed",
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Post-hsr freeze-extras policy"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_post_hsr_policy(
+            payload,
+            repo_root=Path(repo_root) if repo_root is not None else None,
+        )
+    ]
+
+
 def check_assessment_scoreboard(
     *,
     data_dir: Path | None = None,
@@ -3586,6 +3636,7 @@ def collect_ops_findings(
     findings.extend(check_backtest_history())
     findings.extend(check_screen_premise_backtest())
     findings.extend(check_historical_screen_replay())
+    findings.extend(check_post_hsr_policy())
     findings.extend(check_value_factor_base_rate())
     findings.extend(check_assessment_scoreboard())
     findings.extend(check_paper_learning_tracks())
