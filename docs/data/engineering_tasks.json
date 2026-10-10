@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-09T23:52:27.639029+00:00",
+  "compiled_at": "2026-10-10T02:34:58.082071+00:00",
   "run_at": null,
-  "task_count": 149,
+  "task_count": 150,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2088,57 +2088,72 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
-      "id": "eng-20261009-03",
+      "id": "eng-20261010-01",
       "area": "ingest",
-      "title": "Close stubborn ingest gaps for JD.L (chain 1/3: 0/3 bodies, run igc-20261009-01)",
-      "summary": "Ingest gap-closure run igc-20261009-01 (chain root igc-20261009-01, round 1) targeted JD.L with outstanding indexed gaps after refetch yield 0/3. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "title": "Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260921-06)",
+      "summary": "Ingest gap-closure run igc-20260921-06 (chain root igc-20260921-06, round 1) targeted HEI.DE with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
       "priority": "high",
       "priority_score": 88.0,
       "source": "ingest_gap_closure",
       "evidence": {
-        "gap_closure_run_id": "igc-20261009-01",
-        "trial_id": "igc-20261009-01",
-        "chain_root_id": "igc-20261009-01",
+        "gap_closure_run_id": "igc-20260921-06",
+        "trial_id": "igc-20260921-06",
+        "chain_root_id": "igc-20260921-06",
         "chain_round": 1,
         "tickers": [
-          "JD.L"
+          "HEI.DE"
         ],
-        "ticker": "JD.L",
-        "market_id": null,
-        "library_market": null,
-        "universe": "ftse350",
+        "ticker": "HEI.DE",
+        "market_id": "dax",
+        "library_market": "dax",
+        "universe": "library",
         "rerun_ingest_gap_closure": true,
         "rerun_ingest_trial": true,
-        "rerun_library_ingest_loop": false,
-        "refetch_attempted": 3,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
         "refetch_fetched": 0,
         "gap_closure_params": {
           "max_targets": 1,
           "max_bodies": 40,
-          "bootstrap_seed_cap": 0,
           "max_runtime_seconds": 2100.0,
           "require_outstanding_gaps": true,
           "intensive_gap_closure": true,
           "pin_tickers": [
-            "JD.L"
-          ]
+            "HEI.DE",
+            "DTG.DE",
+            "HNR1.DE",
+            "HEN3.DE",
+            "FRE.DE",
+            "G1A.DE",
+            "VOW3.DE"
+          ],
+          "market_id": "dax",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
         },
         "trial_params": {
           "max_targets": 1,
           "max_bodies": 40,
-          "bootstrap_seed_cap": 0,
           "max_runtime_seconds": 2100.0,
           "require_outstanding_gaps": true,
           "intensive_gap_closure": true,
           "pin_tickers": [
-            "JD.L"
-          ]
+            "HEI.DE",
+            "DTG.DE",
+            "HNR1.DE",
+            "HEN3.DE",
+            "FRE.DE",
+            "G1A.DE",
+            "VOW3.DE"
+          ],
+          "market_id": "dax",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
         },
-        "compile_reason": "zero_yield_refetch",
-        "merge_class": "ingest_narrow"
+        "compile_reason": "gaps_remain_without_refetch"
       },
       "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for JD.L",
+        "Add or extend fetch logic with a focused regression test for HEI.DE",
         "Do not change live signal thresholds or paper-fund behaviour",
         "Existing ingest-improvement pass can fetch new bodies on the next dry run"
       ],
@@ -2163,15 +2178,7 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "merged",
-      "result_path": "output/engineering_result_eng-20261009-03.md",
-      "branch_name": "cursor/eng-20261009-03-1de3",
-      "no_diff_count": 0,
-      "completed_at": "2026-10-09T20:29:53.443302+00:00",
-      "merge_class": "ingest_narrow",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1031",
-      "pr_number": 1031,
-      "merged_at": "2026-10-09T20:54:32.823522+00:00"
+      "status": "open"
     },
     {
       "id": "eng-20261009-01",
@@ -2266,11 +2273,11 @@
       "auto_merge": false,
       "status": "cancelled",
       "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "duplicate",
       "parked_at": "2026-10-09T09:47:02.210130+00:00",
+      "parked_policy": "duplicate",
       "duplicate_of": "eng-20261006-01",
-      "cancelled_at": "2026-10-09T10:17:25.126665+00:00",
       "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261006-01",
+      "cancelled_at": "2026-10-09T10:17:25.126665+00:00",
       "cancelled_policy": "superseded_gap_closure"
     },
     {
@@ -2372,6 +2379,92 @@
       "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261006-01",
       "cancelled_at": "2026-10-08T03:17:18.933003+00:00",
       "cancelled_policy": "superseded_gap_closure"
+    },
+    {
+      "id": "eng-20261009-03",
+      "area": "ingest",
+      "title": "Close stubborn ingest gaps for JD.L (chain 1/3: 0/3 bodies, run igc-20261009-01)",
+      "summary": "Ingest gap-closure run igc-20261009-01 (chain root igc-20261009-01, round 1) targeted JD.L with outstanding indexed gaps after refetch yield 0/3. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20261009-01",
+        "trial_id": "igc-20261009-01",
+        "chain_root_id": "igc-20261009-01",
+        "chain_round": 1,
+        "tickers": [
+          "JD.L"
+        ],
+        "ticker": "JD.L",
+        "market_id": null,
+        "library_market": null,
+        "universe": "ftse350",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": false,
+        "refetch_attempted": 3,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "JD.L"
+          ]
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "bootstrap_seed_cap": 0,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "JD.L"
+          ]
+        },
+        "compile_reason": "zero_yield_refetch",
+        "merge_class": "ingest_narrow"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for JD.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20261009-03.md",
+      "branch_name": "cursor/eng-20261009-03-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-10-09T20:29:53.443302+00:00",
+      "merge_class": "ingest_narrow",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/1031",
+      "pr_number": 1031,
+      "merged_at": "2026-10-09T20:54:32.823522+00:00"
     },
     {
       "id": "eng-20261008-03",
@@ -9805,7 +9898,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-09T21:49:44.622820+00:00",
+    "evaluated_at": "2026-10-10T02:34:26.436560+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -9854,7 +9947,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 4,
-    "evaluated_at": "2026-10-09T23:53:01.581566+00:00",
+    "evaluated_at": "2026-10-10T02:34:26.404815+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -9862,12 +9955,12 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "ingest_gap_closure",
   "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
-  "source_gap_closure_run_id": "igc-20261009-01",
-  "source_trial_id": "igc-20261009-01",
-  "source_chain_root_id": "igc-20261009-01",
+  "source_gap_closure_run_id": "igc-20260921-06",
+  "source_trial_id": "igc-20260921-06",
+  "source_chain_root_id": "igc-20260921-06",
   "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
   "queue_block_notify": {
     "last_fingerprint": "traffic_pause|project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",

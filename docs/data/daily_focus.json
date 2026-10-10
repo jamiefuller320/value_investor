@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "local_date": "2026-10-09",
+  "local_date": "2026-10-10",
   "timezone": "Europe/London",
-  "generated_at": "2026-10-09T15:43:43.357218Z",
+  "generated_at": "2026-10-10T02:34:59.299626Z",
   "refresh_deadline_local": "04:00",
   "stale_for_local_date": false,
   "focus_lines": [
@@ -161,19 +161,19 @@
       "href": null,
       "recommendation_id": "rec-b877dd532f10",
       "status": {
-        "state": "proposed",
+        "state": "ready",
         "label": "Proposed",
         "next_steps": [],
         "waiting_on": [],
-        "ready": false,
-        "ready_reason": null,
+        "ready": true,
+        "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-10-09T15:43:43.357218Z",
+        "updated_at": "2026-10-10T02:34:59.299626Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Euro fat released — do not reopen. Watch RAT.L entry DCA / still_in_buy_set paper path. Policy green ≠ utility.",
           "stage_label": "proposed",
-          "stage_state": "proposed",
+          "stage_state": "ready",
           "stage_since": null,
           "days_in_stage": null,
           "stage_duration": "duration unknown",
@@ -190,12 +190,12 @@
           "observe_only": true
         }
       },
-      "closed": true,
+      "closed": false,
       "notes_block": "",
       "assessment": {
         "where_we_are": "Euro fat released — do not reopen. Watch RAT.L entry DCA / still_in_buy_set paper path. Policy green ≠ utility.",
         "stage_label": "proposed",
-        "stage_state": "proposed",
+        "stage_state": "ready",
         "stage_since": null,
         "days_in_stage": null,
         "stage_duration": "duration unknown",
@@ -279,19 +279,19 @@
       "href": "#automation/daily",
       "recommendation_id": "rec-6e8435c411c0",
       "status": {
-        "state": "proposed",
+        "state": "ready",
         "label": "Proposed",
         "next_steps": [],
         "waiting_on": [],
-        "ready": false,
-        "ready_reason": null,
+        "ready": true,
+        "ready_reason": "proposal present · no blockers",
         "blocked_reason": null,
-        "updated_at": "2026-10-09T15:43:43.357218Z",
+        "updated_at": "2026-10-10T02:34:59.299626Z",
         "updated_by": "morning_builder",
         "assessment": {
           "where_we_are": "Ship Automation Daily hub; do not open parallel eng spray from reconcile ambers.",
           "stage_label": "proposed",
-          "stage_state": "proposed",
+          "stage_state": "ready",
           "stage_since": null,
           "days_in_stage": null,
           "stage_duration": "duration unknown",
@@ -308,12 +308,12 @@
           "observe_only": true
         }
       },
-      "closed": true,
+      "closed": false,
       "notes_block": "",
       "assessment": {
         "where_we_are": "Ship Automation Daily hub; do not open parallel eng spray from reconcile ambers.",
         "stage_label": "proposed",
-        "stage_state": "proposed",
+        "stage_state": "ready",
         "stage_since": null,
         "days_in_stage": null,
         "stage_duration": "duration unknown",
@@ -378,9 +378,382 @@
           }
         ]
       }
+    },
+    {
+      "task_ref": "mwarn:euro_depth:health_warn",
+      "source": "market_warning_triage",
+      "work_class": "surface",
+      "task_family": "market-warning-triage",
+      "priority": 5,
+      "title": "Park · EU depth composite (STOXX50 + periphery) · health_warn",
+      "summary": "health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear",
+      "sort_bucket": "market_warn",
+      "closeable": true,
+      "close_action": "daily-focus-ack",
+      "close_payload": {
+        "focus_id": "mwarn:euro_depth:health_warn",
+        "decision": "accept",
+        "triage_action": "park"
+      },
+      "href": "#overview",
+      "recommendation_id": "rec-23b769e8280f",
+      "status": {
+        "state": "ready",
+        "label": "Ready to park",
+        "next_steps": [
+          "Accept park/dismiss triage for today"
+        ],
+        "waiting_on": [
+          {
+            "kind": "external",
+            "ref": null,
+            "detail": "operator Accept on observe-safe triage"
+          }
+        ],
+        "ready": true,
+        "ready_reason": "observe-safe Accept → park",
+        "blocked_reason": null,
+        "updated_at": "2026-10-10T02:34:59.299626Z",
+        "updated_by": "morning_builder",
+        "assessment": {
+          "where_we_are": "euro_depth · health_warn (focus/fat-slot head) — proposed triage: park. Observe-only; do not divert the euro fat slot on ritual ambers.",
+          "stage_label": "warn:park",
+          "stage_state": "ready",
+          "stage_since": null,
+          "days_in_stage": null,
+          "stage_duration": "duration unknown",
+          "waiting_for": "operator Accept on observe-safe triage",
+          "how_achieved": "Accept park/dismiss triage for today",
+          "provenance": [
+            "status:next_steps",
+            "observe:where",
+            "observe:stage_label",
+            "observe:waiting_for"
+          ],
+          "incomplete_fields": [
+            "stage_duration"
+          ],
+          "observe_only": true
+        }
+      },
+      "closed": false,
+      "triage_action": "park",
+      "prefer_discuss": false,
+      "dismissable": true,
+      "parkable": true,
+      "market_warning": {
+        "kind": "health_amber",
+        "flag_id": "health_warn",
+        "market_id": "euro_depth",
+        "is_focus": true,
+        "is_spare": false,
+        "severity": "warn",
+        "tickers": null,
+        "cli_hint": null,
+        "deviation_id": null,
+        "first_seen_at": null
+      },
+      "assessment": {
+        "where_we_are": "euro_depth · health_warn (focus/fat-slot head) — proposed triage: park. Observe-only; do not divert the euro fat slot on ritual ambers.",
+        "stage_label": "warn:park",
+        "stage_state": "ready",
+        "stage_since": null,
+        "days_in_stage": null,
+        "stage_duration": "duration unknown",
+        "waiting_for": "operator Accept on observe-safe triage",
+        "how_achieved": "Accept park/dismiss triage for today",
+        "provenance": [
+          "status:next_steps",
+          "observe:where",
+          "observe:stage_label",
+          "observe:waiting_for"
+        ],
+        "incomplete_fields": [
+          "stage_duration"
+        ],
+        "observe_only": true
+      },
+      "recommendation": {
+        "id": "rec-23b769e8280f",
+        "task_id": "mwarn:euro_depth:health_warn",
+        "summary": "Market warning triage → park: EU depth composite (STOXX50 + periphery) / health_warn.",
+        "rationale": "euro_depth: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
+        "accept_action": {
+          "kind": "focus-ack",
+          "payload": {
+            "focus_id": "mwarn:euro_depth:health_warn",
+            "decision": "accept",
+            "triage_action": "park"
+          }
+        },
+        "discuss_prompt": "Discuss daily recommendation `rec-23b769e8280f` (market warning `mwarn:euro_depth:health_warn`):\nProposed action: park\nMarket: euro_depth (focus=True spare=False)\nFlag: health_warn — health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear\nRationale: euro_depth: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
+        "priority": 5,
+        "options": [
+          "Accept — park / observe-ack for today",
+          "Discuss — only if this should become deepen",
+          "Do not ritual-clear badges or starve euro fat slot"
+        ],
+        "triage_action": "park",
+        "prefer_discuss": false,
+        "dismissable": true,
+        "parkable": true,
+        "market_id": "euro_depth",
+        "flag_id": "health_warn",
+        "cli_hint": null,
+        "work_class": "surface",
+        "task_family": "market-warning-triage"
+      }
+    },
+    {
+      "task_ref": "mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve",
+      "source": "market_warning_triage",
+      "work_class": "surface",
+      "task_family": "market-warning-triage",
+      "priority": 6,
+      "title": "Dismiss · hang_seng · ingest_deviation",
+      "summary": "0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources. · 0288.HK",
+      "sort_bucket": "market_warn",
+      "closeable": true,
+      "close_action": "daily-focus-ack",
+      "close_payload": {
+        "focus_id": "mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve",
+        "decision": "accept",
+        "triage_action": "dismiss"
+      },
+      "href": "#automation",
+      "recommendation_id": "rec-af120866b150",
+      "status": {
+        "state": "ready",
+        "label": "Ready to dismiss",
+        "next_steps": [
+          "Accept park/dismiss triage for today"
+        ],
+        "waiting_on": [
+          {
+            "kind": "external",
+            "ref": null,
+            "detail": "operator Accept on observe-safe triage"
+          }
+        ],
+        "ready": true,
+        "ready_reason": "observe-safe Accept → dismiss",
+        "blocked_reason": null,
+        "updated_at": "2026-10-10T02:34:59.299626Z",
+        "updated_by": "morning_builder",
+        "assessment": {
+          "where_we_are": "hang_seng · ingest_deviation (ingest_deviation) — proposed triage: dismiss. Observe-only; do not divert the euro fat slot on ritual ambers.",
+          "stage_label": "warn:dismiss",
+          "stage_state": "ready",
+          "stage_since": "2026-10-06T21:33:21.615298+00:00",
+          "days_in_stage": 4,
+          "stage_duration": "4 days in stage",
+          "waiting_for": "operator Accept on observe-safe triage",
+          "how_achieved": "Accept park/dismiss triage for today",
+          "provenance": [
+            "status:next_steps",
+            "observe:where",
+            "observe:stage_label",
+            "observe:stage_since",
+            "observe:waiting_for"
+          ],
+          "incomplete_fields": [],
+          "observe_only": true
+        }
+      },
+      "closed": false,
+      "triage_action": "dismiss",
+      "prefer_discuss": false,
+      "dismissable": true,
+      "parkable": true,
+      "market_warning": {
+        "kind": "ingest_deviation",
+        "flag_id": "ingest_deviation",
+        "market_id": "hang_seng",
+        "is_focus": false,
+        "is_spare": false,
+        "severity": "warn",
+        "tickers": "0288.HK",
+        "cli_hint": "ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve",
+        "deviation_id": "dev-hang_seng-0288.HK-blocker_no_improve",
+        "first_seen_at": "2026-10-06T21:33:21.615298+00:00"
+      },
+      "assessment": {
+        "where_we_are": "hang_seng · ingest_deviation (ingest_deviation) — proposed triage: dismiss. Observe-only; do not divert the euro fat slot on ritual ambers.",
+        "stage_label": "warn:dismiss",
+        "stage_state": "ready",
+        "stage_since": "2026-10-06T21:33:21.615298+00:00",
+        "days_in_stage": 4,
+        "stage_duration": "4 days in stage",
+        "waiting_for": "operator Accept on observe-safe triage",
+        "how_achieved": "Accept park/dismiss triage for today",
+        "provenance": [
+          "status:next_steps",
+          "observe:where",
+          "observe:stage_label",
+          "observe:stage_since",
+          "observe:waiting_for"
+        ],
+        "incomplete_fields": [],
+        "observe_only": true
+      },
+      "recommendation": {
+        "id": "rec-af120866b150",
+        "task_id": "mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve",
+        "summary": "Market warning triage → dismiss: hang_seng / ingest_deviation · 0288.HK.",
+        "rationale": "Signal triage says dismiss — parked_leftover. Do not intensive-pin or divert the euro fat slot. Observe-safe Accept records the triage; run `ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve` manually (Phase B may automate dismiss later).",
+        "accept_action": {
+          "kind": "focus-ack",
+          "payload": {
+            "focus_id": "mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve",
+            "decision": "accept",
+            "triage_action": "dismiss"
+          }
+        },
+        "discuss_prompt": "Discuss daily recommendation `rec-af120866b150` (market warning `mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve`):\nProposed action: dismiss\nMarket: hang_seng (focus=False spare=False)\nFlag: ingest_deviation — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources.\nRationale: Signal triage says dismiss — parked_leftover. Do not intensive-pin or divert the euro fat slot. Observe-safe Accept records the triage; run `ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve` manually (Phase B may automate dismiss later).\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — observe-ack dismiss triage (run CLI if shown; Phase B may automate)\n2) Discuss — if signal triage looks wrong\n3) Do not intensive-pin from this row alone\nCLI hint: ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve\nContext: docs/data/market_status.json + Daily hub market warning triage",
+        "priority": 6,
+        "options": [
+          "Accept — observe-ack dismiss triage (run CLI if shown; Phase B may automate)",
+          "Discuss — if signal triage looks wrong",
+          "Do not intensive-pin from this row alone"
+        ],
+        "triage_action": "dismiss",
+        "prefer_discuss": false,
+        "dismissable": true,
+        "parkable": true,
+        "market_id": "hang_seng",
+        "flag_id": "ingest_deviation",
+        "cli_hint": "ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve",
+        "work_class": "surface",
+        "task_family": "market-warning-triage"
+      }
+    },
+    {
+      "task_ref": "mwarn:multi:health_warn_rollup",
+      "source": "market_warning_triage",
+      "work_class": "surface",
+      "task_family": "market-warning-triage",
+      "priority": 7,
+      "title": "Park · Admitted / maintenance ambers · health_warn_rollup",
+      "summary": "health=warn on aex, aim, atx, bel20, ftse_mib, ftse_smallcap (+7) without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray",
+      "sort_bucket": "market_warn",
+      "closeable": true,
+      "close_action": "daily-focus-ack",
+      "close_payload": {
+        "focus_id": "mwarn:multi:health_warn_rollup",
+        "decision": "accept",
+        "triage_action": "park"
+      },
+      "href": "#overview",
+      "recommendation_id": "rec-f5640d8d9d85",
+      "status": {
+        "state": "ready",
+        "label": "Ready to park",
+        "next_steps": [
+          "Accept park/dismiss triage for today"
+        ],
+        "waiting_on": [
+          {
+            "kind": "external",
+            "ref": null,
+            "detail": "operator Accept on observe-safe triage"
+          }
+        ],
+        "ready": true,
+        "ready_reason": "observe-safe Accept → park",
+        "blocked_reason": null,
+        "updated_at": "2026-10-10T02:34:59.299626Z",
+        "updated_by": "morning_builder",
+        "assessment": {
+          "where_we_are": "multi · health_warn_rollup (health_amber_rollup) — proposed triage: park. Observe-only; do not divert the euro fat slot on ritual ambers.",
+          "stage_label": "warn:park",
+          "stage_state": "ready",
+          "stage_since": null,
+          "days_in_stage": null,
+          "stage_duration": "duration unknown",
+          "waiting_for": "operator Accept on observe-safe triage",
+          "how_achieved": "Accept park/dismiss triage for today",
+          "provenance": [
+            "status:next_steps",
+            "observe:where",
+            "observe:stage_label",
+            "observe:waiting_for"
+          ],
+          "incomplete_fields": [
+            "stage_duration"
+          ],
+          "observe_only": true
+        }
+      },
+      "closed": false,
+      "triage_action": "park",
+      "prefer_discuss": false,
+      "dismissable": true,
+      "parkable": true,
+      "market_warning": {
+        "kind": "health_amber_rollup",
+        "flag_id": "health_warn_rollup",
+        "market_id": "multi",
+        "is_focus": false,
+        "is_spare": false,
+        "severity": "warn",
+        "tickers": null,
+        "cli_hint": null,
+        "deviation_id": null,
+        "first_seen_at": null
+      },
+      "assessment": {
+        "where_we_are": "multi · health_warn_rollup (health_amber_rollup) — proposed triage: park. Observe-only; do not divert the euro fat slot on ritual ambers.",
+        "stage_label": "warn:park",
+        "stage_state": "ready",
+        "stage_since": null,
+        "days_in_stage": null,
+        "stage_duration": "duration unknown",
+        "waiting_for": "operator Accept on observe-safe triage",
+        "how_achieved": "Accept park/dismiss triage for today",
+        "provenance": [
+          "status:next_steps",
+          "observe:where",
+          "observe:stage_label",
+          "observe:waiting_for"
+        ],
+        "incomplete_fields": [
+          "stage_duration"
+        ],
+        "observe_only": true
+      },
+      "recommendation": {
+        "id": "rec-f5640d8d9d85",
+        "task_id": "mwarn:multi:health_warn_rollup",
+        "summary": "Market warning triage → park: Admitted / maintenance ambers / health_warn_rollup.",
+        "rationale": "multi: health=warn on aex, aim, atx, bel20, ftse_mib, ftse_smallcap (+7) without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
+        "accept_action": {
+          "kind": "focus-ack",
+          "payload": {
+            "focus_id": "mwarn:multi:health_warn_rollup",
+            "decision": "accept",
+            "triage_action": "park"
+          }
+        },
+        "discuss_prompt": "Discuss daily recommendation `rec-f5640d8d9d85` (market warning `mwarn:multi:health_warn_rollup`):\nProposed action: park\nMarket: multi (focus=False spare=False)\nFlag: health_warn_rollup — health=warn on aex, aim, atx, bel20, ftse_mib, ftse_smallcap (+7) without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray\nRationale: multi: health=warn on aex, aim, atx, bel20, ftse_mib, ftse_smallcap (+7) without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
+        "priority": 7,
+        "options": [
+          "Accept — park / observe-ack for today",
+          "Discuss — only if this should become deepen",
+          "Do not ritual-clear badges or starve euro fat slot"
+        ],
+        "triage_action": "park",
+        "prefer_discuss": false,
+        "dismissable": true,
+        "parkable": true,
+        "market_id": "multi",
+        "flag_id": "health_warn_rollup",
+        "cli_hint": null,
+        "work_class": "surface",
+        "task_family": "market-warning-triage"
+      }
     }
   ],
-  "open_task_count": 0,
+  "open_task_count": 5,
   "recommendations": [
     {
       "id": "rec-b877dd532f10",
@@ -479,22 +852,102 @@
           }
         }
       ]
+    },
+    {
+      "id": "rec-23b769e8280f",
+      "task_id": "mwarn:euro_depth:health_warn",
+      "summary": "Market warning triage → park: EU depth composite (STOXX50 + periphery) / health_warn.",
+      "rationale": "euro_depth: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
+      "accept_action": {
+        "kind": "focus-ack",
+        "payload": {
+          "focus_id": "mwarn:euro_depth:health_warn",
+          "decision": "accept",
+          "triage_action": "park"
+        }
+      },
+      "discuss_prompt": "Discuss daily recommendation `rec-23b769e8280f` (market warning `mwarn:euro_depth:health_warn`):\nProposed action: park\nMarket: euro_depth (focus=True spare=False)\nFlag: health_warn — health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear\nRationale: euro_depth: health=warn with no high admission flag — expected sprint tone while filing gaps remain; do not ritual-clear. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
+      "priority": 5,
+      "options": [
+        "Accept — park / observe-ack for today",
+        "Discuss — only if this should become deepen",
+        "Do not ritual-clear badges or starve euro fat slot"
+      ],
+      "triage_action": "park",
+      "prefer_discuss": false,
+      "dismissable": true,
+      "parkable": true,
+      "market_id": "euro_depth",
+      "flag_id": "health_warn",
+      "cli_hint": null,
+      "work_class": "surface",
+      "task_family": "market-warning-triage"
+    },
+    {
+      "id": "rec-af120866b150",
+      "task_id": "mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve",
+      "summary": "Market warning triage → dismiss: hang_seng / ingest_deviation · 0288.HK.",
+      "rationale": "Signal triage says dismiss — parked_leftover. Do not intensive-pin or divert the euro fat slot. Observe-safe Accept records the triage; run `ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve` manually (Phase B may automate dismiss later).",
+      "accept_action": {
+        "kind": "focus-ack",
+        "payload": {
+          "focus_id": "mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve",
+          "decision": "accept",
+          "triage_action": "dismiss"
+        }
+      },
+      "discuss_prompt": "Discuss daily recommendation `rec-af120866b150` (market warning `mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve`):\nProposed action: dismiss\nMarket: hang_seng (focus=False spare=False)\nFlag: ingest_deviation — 0288.HK hit the weekday ticker cap with no coverage gain and 4 indexed-without-body row(s). Pin intensive or fix sources.\nRationale: Signal triage says dismiss — parked_leftover. Do not intensive-pin or divert the euro fat slot. Observe-safe Accept records the triage; run `ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve` manually (Phase B may automate dismiss later).\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — observe-ack dismiss triage (run CLI if shown; Phase B may automate)\n2) Discuss — if signal triage looks wrong\n3) Do not intensive-pin from this row alone\nCLI hint: ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve\nContext: docs/data/market_status.json + Daily hub market warning triage",
+      "priority": 6,
+      "options": [
+        "Accept — observe-ack dismiss triage (run CLI if shown; Phase B may automate)",
+        "Discuss — if signal triage looks wrong",
+        "Do not intensive-pin from this row alone"
+      ],
+      "triage_action": "dismiss",
+      "prefer_discuss": false,
+      "dismissable": true,
+      "parkable": true,
+      "market_id": "hang_seng",
+      "flag_id": "ingest_deviation",
+      "cli_hint": "ftse-library ingest-deviations dismiss dev-hang_seng-0288.HK-blocker_no_improve",
+      "work_class": "surface",
+      "task_family": "market-warning-triage"
+    },
+    {
+      "id": "rec-f5640d8d9d85",
+      "task_id": "mwarn:multi:health_warn_rollup",
+      "summary": "Market warning triage → park: Admitted / maintenance ambers / health_warn_rollup.",
+      "rationale": "multi: health=warn on aex, aim, atx, bel20, ftse_mib, ftse_smallcap (+7) without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.",
+      "accept_action": {
+        "kind": "focus-ack",
+        "payload": {
+          "focus_id": "mwarn:multi:health_warn_rollup",
+          "decision": "accept",
+          "triage_action": "park"
+        }
+      },
+      "discuss_prompt": "Discuss daily recommendation `rec-f5640d8d9d85` (market warning `mwarn:multi:health_warn_rollup`):\nProposed action: park\nMarket: multi (focus=False spare=False)\nFlag: health_warn_rollup — health=warn on aex, aim, atx, bel20, ftse_mib, ftse_smallcap (+7) without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray\nRationale: multi: health=warn on aex, aim, atx, bel20, ftse_mib, ftse_smallcap (+7) without high admission flags — expected maintenance tone; do not ritual-clear or eng-spray. Park — do not ritual-clear the badge, eng-spray, or divert euro capacity.\nPolicy: dismissable=True parkable=True\nSuggested options:\n1) Accept — park / observe-ack for today\n2) Discuss — only if this should become deepen\n3) Do not ritual-clear badges or starve euro fat slot\nContext: docs/data/market_status.json + Daily hub market warning triage",
+      "priority": 7,
+      "options": [
+        "Accept — park / observe-ack for today",
+        "Discuss — only if this should become deepen",
+        "Do not ritual-clear badges or starve euro fat slot"
+      ],
+      "triage_action": "park",
+      "prefer_discuss": false,
+      "dismissable": true,
+      "parkable": true,
+      "market_id": "multi",
+      "flag_id": "health_warn_rollup",
+      "cli_hint": null,
+      "work_class": "surface",
+      "task_family": "market-warning-triage"
     }
   ],
-  "closed_today": [
-    "focus-1",
-    "focus-2",
-    "mwarn:cac40:zero_improve_stall",
-    "mwarn:dev:dev-hang_seng-0288.HK-blocker_no_improve",
-    "mwarn:euro_depth:health_warn",
-    "mwarn:hang_seng:no_observe_benchmark",
-    "mwarn:hang_seng:unmeasured_stuck",
-    "mwarn:hang_seng:zero_improve_stall",
-    "mwarn:multi:health_warn_rollup"
-  ],
+  "closed_today": [],
   "counts": {
-    "focus": 0,
-    "market_warnings": 0,
+    "focus": 2,
+    "market_warnings": 3,
     "gha_failures": 0,
     "human_new_info": 0,
     "human_unacked": 0,
@@ -503,14 +956,16 @@
   },
   "project_sync": {
     "notes_fingerprint": null,
-    "synced_at": "2026-10-09T15:43:43.357218Z",
+    "synced_at": "2026-10-10T02:34:59.299626Z",
     "method": "morning_builder_reads_committed_export_or_manual"
   },
   "illumination_hints": {
     "automation.daily": {
-      "attention": false,
+      "attention": true,
       "new_info": true,
-      "reasons": []
+      "reasons": [
+        "open_tasks=5"
+      ]
     },
     "automation.human": {
       "attention": false,
