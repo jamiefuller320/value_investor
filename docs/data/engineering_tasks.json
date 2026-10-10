@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-10-10T07:41:40.572729+00:00",
+  "compiled_at": "2026-10-10T07:50:37.905538+00:00",
   "run_at": null,
-  "task_count": 150,
+  "task_count": 151,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2088,6 +2088,87 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20261010-02",
+      "area": "ingest",
+      "title": "Close library ingest gaps for ftse_mib / TEN.MI (chain 1/3: 0/0 improved, run igc-20261005-01)",
+      "summary": "Ingest gap-closure run igc-20261005-01 (chain root igc-20261005-01, round 1) targeted TEN.MI with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20261005-01",
+        "trial_id": "igc-20261005-01",
+        "chain_root_id": "igc-20261005-01",
+        "chain_round": 1,
+        "tickers": [
+          "TEN.MI"
+        ],
+        "ticker": "TEN.MI",
+        "market_id": "ftse_mib",
+        "library_market": "ftse_mib",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "TEN.MI"
+          ],
+          "market_id": "ftse_mib",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "TEN.MI"
+          ],
+          "market_id": "ftse_mib",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "compile_reason": "gaps_remain_without_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for TEN.MI",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20261010-01",
       "area": "ingest",
       "title": "Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260921-06)",
@@ -2178,10 +2259,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "parked",
+      "status": "cancelled",
       "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "preflight_clash",
-      "parked_at": "2026-10-10T02:52:05.451364+00:00"
+      "parked_policy": "duplicate",
+      "parked_at": "2026-10-10T02:52:05.451364+00:00",
+      "duplicate_of": "eng-20261006-01",
+      "cancelled_at": "2026-10-10T07:48:43.312482+00:00",
+      "cancelled_reason": "tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261006-01",
+      "cancelled_policy": "superseded_gap_closure"
     },
     {
       "id": "eng-20261009-01",
@@ -9901,7 +9986,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-10-10T02:34:26.436560+00:00",
+    "evaluated_at": "2026-10-10T07:50:00.502121+00:00",
     "pause_active": false,
     "automation_waste_active": false,
     "automation_waste_signals": [
@@ -9950,7 +10035,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 4,
-    "evaluated_at": "2026-10-10T02:37:42.434477+00:00",
+    "evaluated_at": "2026-10-10T07:48:43.739474+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -9958,12 +10043,12 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "ingest_gap_closure",
   "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
-  "source_gap_closure_run_id": "igc-20260921-06",
-  "source_trial_id": "igc-20260921-06",
-  "source_chain_root_id": "igc-20260921-06",
+  "source_gap_closure_run_id": "igc-20261005-01",
+  "source_trial_id": "igc-20261005-01",
+  "source_chain_root_id": "igc-20261005-01",
   "failed_url": "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
   "queue_block_notify": {
     "last_fingerprint": "traffic_pause|project traffic pause (automation_waste) — automation waste hold; clear reburn / parked tasks before new PR generation",
