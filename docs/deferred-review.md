@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-10T17:47:33+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-10T17:50:42+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -59,6 +59,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20261006-02 | Oslo Bors newsreader API (api3.oslo.oslobors.no/v1/newsreader/list?issuer=) is public JSON with annual/half-year categories and attachments, but no project market lists .OL names today. | oslo, euro_filings |
 | frag-20261006-03 | SEC 20-F/6-K helps few euro names: most DAX/OMXS30 matches are unsponsored OTC ADRs with no SEC filings; real filers (TTE, SNY, SHEL, NVS, UL, GRFS, TS) are mostly already well covered. | sec, euro_filings |
 | frag-20261007-01 | Machinery is outpacing evidence: ~6,900 commits since Sept 1, 14 tracks (11 frozen), primary re-based several times, while the oldest book has 41 marks. Each restart resets the evidence clock. Consider an explicit evidence-clock budget: no primary/control restart for 26+ weeks. | evidence, complexity, epochs |
+| frag-20261010-01 | Unconstrained strategy chat after US holdout null: if P1/freeze-extras/FTSE-stage rules were ignored, candidate north star would be radical screen simplification to plain value (+ maybe 1-2 published factors), edge in portfolio construction/costs/patience rather than model count, AI as underwriting not ranking, no pivot to technical-as-engine. | strategy, hsr-v1, plain-value |
 
 ---
 
