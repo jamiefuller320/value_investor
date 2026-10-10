@@ -6187,6 +6187,30 @@ def refetch_ir_allowlist_filing_bodies(
         payload["ir_allowlist_metadata_synced_at"] = datetime.now(UTC).isoformat()
         index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
+    retry_cleared = 0
+    if allowlist_urls:
+        refreshed_for_retry: list[dict[str, Any]] = []
+        for row in filings:
+            item = dict(row)
+            url = str(item.get("url") or "").strip()
+            if (
+                _is_ir_allowlist_row(item)
+                and item.get("unfetchable")
+                and str(item.get("unfetchable_reason") or "") == "ir_allowlist_fetch_failed"
+                and url
+                and url in allowlist_urls
+            ):
+                for key in ("unfetchable", "unfetchable_reason", "unfetchable_at"):
+                    item.pop(key, None)
+                retry_cleared += 1
+            refreshed_for_retry.append(item)
+        if retry_cleared:
+            filings = refreshed_for_retry
+            payload["filings"] = filings
+            payload["summary"] = summarize_filings(filings)
+            payload["ir_allowlist_retry_cleared_at"] = datetime.now(UTC).isoformat()
+            index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
     ir_rows = [row for row in filings if _is_ir_allowlist_row(row)]
     missing = [
         row
@@ -6214,6 +6238,7 @@ def refetch_ir_allowlist_filing_bodies(
             "merge": merge_meta,
             "shared_body_propagated": shared_body_propagated,
             "ir_metadata_reconciled": ir_metadata_reconciled,
+            "retry_cleared": retry_cleared,
             "note": "no missing IR allowlist bodies",
         }
 
@@ -6406,6 +6431,7 @@ def refetch_ir_allowlist_filing_bodies(
         "skipped_unfetchable": skipped_unfetchable,
         "deadline_hit": deadline_hit,
         "merge": merge_meta,
+        "retry_cleared": retry_cleared,
         "mandatory": True,
         "note": "refetch_ir_allowlist_filing_bodies",
     }
@@ -8937,6 +8963,12 @@ def _write_bodies(
                 extracted_headline: str | None = None
                 if _is_ch_filing_row(row):
                     body = _fetch_companies_house_body(row)
+                elif _is_ir_allowlist_row(row) and row.get("url") and ticker:
+                    body, _ir_src = _fetch_ir_allowlist_body(
+                        row,
+                        ticker=ticker,
+                        company_name=company_name,
+                    )
                 elif row.get("url"):
                     if ticker and company_name:
                         row = _standardise_rns_index_row_url(row)
@@ -11044,6 +11076,28 @@ def ingest_filings(
     prune_orphaned_filing_bodies(filings_dir)
     written = resolve_json_path(index_path) or index_path
 
+    ir_tail_refetch: dict[str, Any] = {}
+    allowlist_rows = fetch_filings_ir_allowlist(ticker)
+    summary = index.get("summary") or {}
+    if allowlist_rows and int(summary.get("total") or 0) > int(summary.get("with_body") or 0):
+        ir_tail_refetch = refetch_ir_allowlist_filing_bodies(
+            filings_dir,
+            ticker,
+            company_name=company_name,
+            max_bodies=max_bodies,
+        )
+        if (
+            int(ir_tail_refetch.get("fetched") or 0) > 0
+            or int(ir_tail_refetch.get("attempted") or 0) > 0
+        ):
+            try:
+                index_payload = json.loads(index_path.read_text(encoding="utf-8"))
+                index["summary"] = dict(index_payload.get("summary") or summary)
+                index["filings"] = list(index_payload.get("filings") or index.get("filings") or [])
+                write_json(index_path, index, compact=True, compress=False)
+            except (OSError, ValueError, TypeError):
+                pass
+
     cashflow_refresh = refresh_sources_yahoo_cashflow_metrics(
         ticker=ticker,
         sources_dir=sources_dir,
@@ -11068,6 +11122,7 @@ def ingest_filings(
         "filings_summary": index["summary"],
         "filings_sources": index["sources_used"],
         "filings_regime": regime,
+        "ir_allowlist_tail_refetch": ir_tail_refetch,
         "yahoo_cashflow_metrics_refresh": cashflow_refresh,
         "sec_companyfacts_refresh": companyfacts_refresh,
     }

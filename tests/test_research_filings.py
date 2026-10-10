@@ -7220,6 +7220,68 @@ def test_refetch_euro_filings_primary_bodies_hei_de_eng_20261006_01(mock_fetch, 
     assert any(row.get("has_body") for row in payload.get("filings") or [])
 
 
+@patch("value_investor.research.filings._fetch_ir_allowlist_body")
+def test_refetch_ir_allowlist_hei_de_clears_unfetchable_interim_eng_20261010_01(
+    mock_ir_fetch, tmp_path: Path
+):
+    """eng-20261010-01: parked HEI.DE leftover — retry IR refetch after prior fetch_failed."""
+    from value_investor.research.filings import refetch_ir_allowlist_filing_bodies
+
+    interim_id = "ir_ad5fd414650fb689"
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "bodies").mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_b0e06b2966d9ae0d",
+                        "source": "ir_allowlist",
+                        "url": "https://www.heidelbergmaterials.com/system/files/2026-03/HM_Annual_Financial_Statements_2025.pdf",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings_dir / "bodies" / "ir_b0e06b2966d9ae0d.txt"),
+                    },
+                    {
+                        "id": interim_id,
+                        "source": "ir_allowlist",
+                        "url": "https://www.heidelbergmaterials.com/system/files/2025-07/Heidelberg_Materials_Half-year_financial_report_2025.pdf",
+                        "period": "interim",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "ir_allowlist_fetch_failed",
+                    },
+                ],
+                "summary": {"total": 2, "with_body": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    (filings_dir / "bodies" / "ir_b0e06b2966d9ae0d.txt").write_text(
+        "Heidelberg Materials annual consolidated financial statements " * 40,
+        encoding="utf-8",
+    )
+    mock_ir_fetch.return_value = (
+        "Heidelberg Materials half year interim consolidated financial statements " * 40,
+        "pdf",
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "HEI.DE",
+        company_name="Heidelberg Materials AG",
+        max_bodies=5,
+    )
+    assert result["retry_cleared"] >= 1
+    assert result["attempted"] >= 1
+    assert result["fetched"] >= 1
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    interim = next(row for row in payload["filings"] if row["id"] == interim_id)
+    assert interim.get("has_body") is True
+    assert not interim.get("unfetchable")
+
+
 def test_fetch_filings_ir_allowlist_hang_seng_unmeasured_builtins_eng_20260930_03(
     tmp_path: Path,
 ):

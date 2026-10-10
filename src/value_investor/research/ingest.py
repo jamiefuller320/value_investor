@@ -1236,6 +1236,25 @@ def filter_misattributed_news_articles(
     return kept
 
 
+def library_gap_closure_pin_exempt_from_pool(
+    ticker: str,
+    *,
+    pin_tickers: list[str] | None,
+) -> bool:
+    """
+    Intensive gap-closure pins may deepen when mandatory IR allowlist PDFs remain bodiless.
+
+    Library weekday batches otherwise skip parked thin / indexed-without-body names.
+    """
+    pin_set = {str(t or "").strip().upper() for t in (pin_tickers or []) if str(t or "").strip()}
+    token = str(ticker or "").strip().upper()
+    if not token or token not in pin_set:
+        return False
+    from value_investor.research.filings import fetch_filings_ir_allowlist
+
+    return bool(fetch_filings_ir_allowlist(token))
+
+
 def ingest_research_sources(
     *,
     ticker: str,
@@ -1400,33 +1419,39 @@ def ingest_research_sources(
             }:
                 from value_investor.library_ingest_budget import deadline_reached
                 from value_investor.research.filings import (
+                    refetch_euro_filings_primary_bodies,
                     refetch_ir_allowlist_filing_bodies,
-                    refetch_residual_filing_bodies,
                 )
 
                 summary = filings_meta.get("filings_summary") or {}
                 ir_refetch: dict[str, Any] = {}
                 residual_refetch: dict[str, Any] = {}
+                euro_primary: dict[str, Any] = {}
                 if not deadline_reached(deadline_monotonic):
-                    ir_refetch = refetch_ir_allowlist_filing_bodies(
-                        sources_dir / "filings",
-                        ticker=ticker,
-                        company_name=company_name,
-                        max_bodies=12,
-                        deadline_monotonic=deadline_monotonic,
-                    )
-                if not deadline_reached(deadline_monotonic):
-                    residual_refetch = refetch_residual_filing_bodies(
-                        sources_dir / "filings",
-                        ticker=ticker,
-                        company_name=company_name,
-                        max_bodies=12,
-                    )
+                    if resolve_filings_regime(market, ticker) == "euro_filings":
+                        euro_primary = refetch_euro_filings_primary_bodies(
+                            sources_dir / "filings",
+                            ticker=ticker,
+                            company_name=company_name,
+                            max_bodies=12,
+                        )
+                        ir_refetch = dict(euro_primary.get("ir_allowlist") or {})
+                        residual_refetch = dict(euro_primary.get("residual") or {})
+                    else:
+                        ir_refetch = refetch_ir_allowlist_filing_bodies(
+                            sources_dir / "filings",
+                            ticker=ticker,
+                            company_name=company_name,
+                            max_bodies=12,
+                            deadline_monotonic=deadline_monotonic,
+                        )
+                filings_meta["euro_primary_refetch"] = euro_primary
                 filings_meta["ir_refetch"] = ir_refetch
                 filings_meta["residual_refetch"] = residual_refetch
                 merge_added = int((ir_refetch.get("merge") or {}).get("added") or 0)
                 if (
-                    int(ir_refetch.get("fetched") or 0)
+                    int(euro_primary.get("fetched") or 0)
+                    or int(ir_refetch.get("fetched") or 0)
                     or int(residual_refetch.get("fetched") or 0)
                     or merge_added > 0
                 ):
