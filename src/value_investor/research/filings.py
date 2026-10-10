@@ -445,8 +445,8 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.posteitaliane.it/files/1476646637138/Annual-Report-2025.pdf",
         "https://www.posteitaliane.it/files/1476642553365/Interim-Report-at-30-June-2025.pdf",
     ],
-    # ftse_mib buy-tier deepen — eng-20261005-01: TEN.MI unmeasured — Yahoo base TEN collides with
-    # Tsakos on SEC; pin Tenaris S.A. FY2025 20-F + Q1 2026 financial statements 6-K (CIK 1190723).
+    # ftse_mib buy-tier deepen — eng-20261005-01 / eng-20261010-02: TEN.MI unmeasured — Yahoo base
+    # TEN collides with Tsakos on SEC; pin Tenaris S.A. FY2025 20-F + Q1 2026 FS 6-K (CIK 1190723).
     "TEN.MI": [
         "https://www.sec.gov/Archives/edgar/data/1190723/000155485526000490/ts-20251231.htm",
         "https://www.sec.gov/Archives/edgar/data/1190723/000117184326003164/f6k_050626fs.htm",
@@ -854,6 +854,14 @@ _IR_ALLOWLIST_TICKER_ALIASES: dict[str, tuple[str, ...]] = {
     "VOW3.DE": ("VOW.DE",),
     "VOW3": ("VOW.DE", "VOW"),
 }
+
+# Do not inherit IR URLs from the Yahoo base symbol (SEC homonyms vs pinned full tickers).
+_IR_ALLOWLIST_SKIP_BASE_SYMBOL: frozenset[str] = frozenset(
+    {
+        # eng-20261010-02: TEN.MI Tenaris vs US-listed TEN (Tsakos) on EDGAR.
+        "TEN.MI",
+    }
+)
 
 # filings.xbrl.org entity search aliases when Yahoo/legal names miss the ESEF index.
 _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
@@ -5338,7 +5346,8 @@ def _ir_allowlist_ticker_keys(ticker: str) -> list[str]:
 
     _add(upper)
     base = _base_symbol(ticker)
-    _add(base)
+    if upper not in _IR_ALLOWLIST_SKIP_BASE_SYMBOL:
+        _add(base)
     for alias in _IR_ALLOWLIST_TICKER_ALIASES.get(upper, ()):
         _add(str(alias))
     return keys
@@ -5412,6 +5421,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
     # eng-20261009-03: JD.L HY27 slug has no half-year token (would classify other).
     "https://www.jdplc.com/wp-content/uploads/2026/09/HY27-Results-Statement.pdf": "interim",
+    # eng-20261010-02: Tenaris TEN.MI Q1 2026 FS 6-K slug (f6k_*fs.htm) has no interim token.
+    "https://www.sec.gov/Archives/edgar/data/1190723/000117184326003164/f6k_050626fs.htm": "interim",
 }
 
 
@@ -5458,6 +5469,9 @@ def _ir_allowlist_period_from_url(url: str) -> str:
     if re.search(r"[-_/]hy\d{2}[a-z]?(?:[.?]|$)", lower):
         return "interim"
     if "stock-exchange-release" in lower and re.search(r"2802\d{2}", lower):
+        return "interim"
+    # SEC Form 6-K financial-statement exhibits (e.g. Tenaris f6k_*fs.htm — eng-20261010-02).
+    if re.search(r"/f6k_\d+fs\.htm(?:$|\?)", lower):
         return "interim"
     return "other"
 
