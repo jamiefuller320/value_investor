@@ -6264,6 +6264,19 @@ def test_builtin_ir_allowlist_includes_oiz_ir():
     assert len(fetch_filings_ir_allowlist("OIZ")) >= 4
 
 
+def test_builtin_ir_allowlist_includes_una_as_eng_20261011_01():
+    """eng-20261011-01: UNA.AS unmeasured — empty IR allowlist blocked refetch (igc-20261005-02)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("UNA.AS") or []
+    assert any("unilever-annual-report-and-accounts-2025" in url for url in urls)
+    assert any("ir-q2-2025-full-announcement" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("UNA.AS")
+    assert len(rows) >= 3
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    assert len(fetch_filings_ir_allowlist("UNA")) >= 3
+
+
 def test_sanitize_investegate_announcement_url_strips_br_suffix_eng_20261009_03():
     """eng-20261009-03: JD.L index row had %3Cbr%3E in Investegate href — refetch 0/3."""
     dirty = (
