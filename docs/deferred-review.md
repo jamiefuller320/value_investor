@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T06:44:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T06:49:51+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -635,6 +635,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L551 | **Triage the deferred-ideas backlog (544 open)** | Parking is cheap, so the store holds 544 open ideas and 27 open fragments; revisit triggers are rarely evaluated automatically. Add an automated trigger check (e.g. ops-monitor or horizon-scan) and drop ideas superseded by the single assessment model. | Next monthly horizon scan _(machine-checked)_ |
 | L586 | **Post-hsr policy on observe-utilization dashboard** | Optional: add post_hsr_policy.json as an instrument card on the observe-utilization dashboard (freshness + freeze_extras / candidate strand status) once more observe instruments share that surface. | Next observe-utilization instrument batch after post-hsr freeze-extras is on main |
 | L587 | **Write freeze-extras standing policy into repo ops after user confirms reset** | Project store goals-direction-reset.md proposes freeze-extras as standing policy. After user confirms, add a short ops note (or ops-monitor observe finding) so automation and agents treat no-new-screen-extras as durable, not chat-only. | User confirms freeze-extras in goals-direction-reset.md decision question 1 |
+| L588 | **M1 Investment ownership facade (value_investor.investment) + import allowlist** | After pillar-separation-analysis M0: add soft package with ownership manifest and allowlisted Data→Investment hooks (admission/ladder); pytest that Data modules do not import paper_fund mutators or decision_review apply. No big-bang module move. | User confirms Investment unit M1 in goals-direction-reset decision question 6 / pillar-separation-analysis §6 Q1 |
 
 ---
 
