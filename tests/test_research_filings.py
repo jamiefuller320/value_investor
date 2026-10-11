@@ -953,6 +953,94 @@ def test_eng_20260927_01_fetch_backfills_ocf_when_output_cache_lacks_operating_c
     assert metrics.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
 
 
+def test_eng_20261011_03_ingest_backfills_ocf_from_cashflow_metrics_json(
+    tmp_path: Path, monkeypatch
+):
+    """Regression: prefer committed ``cashflow_metrics`` OCF when output JSON lacks OCF rows."""
+    from types import SimpleNamespace
+
+    from value_investor import fetch as fetch_mod
+    from value_investor.research.ingest import (
+        _resolve_cached_annual_financials,
+    )
+    from value_investor.research.ingest import (
+        supplement_company_metrics_cashflow as ingest_supplement,
+    )
+
+    monkeypatch.chdir(tmp_path)
+    output_sources = tmp_path / "output" / "research" / "BLND.L" / "sources"
+    output_sources.mkdir(parents=True)
+    stale_financials = {
+        "ticker": "BLND.L",
+        "cash_flow": {"2025": {"Free Cash Flow": 12_000_000.0}},
+        "cashflow_metrics": {},
+    }
+    (output_sources / "financials_annual.json").write_text(
+        json.dumps(stale_financials), encoding="utf-8"
+    )
+
+    committed_sources = tmp_path / "docs" / "data" / "research" / "BLND.L" / "sources"
+    committed_sources.mkdir(parents=True)
+    committed_financials = {
+        "ticker": "BLND.L",
+        "cashflow_metrics": {
+            "operating_cashflow": 88_500_000.0,
+            "free_cashflow": 12_000_000.0,
+        },
+    }
+    (committed_sources / "financials_annual.json").write_text(
+        json.dumps(committed_financials), encoding="utf-8"
+    )
+
+    resolved = _resolve_cached_annual_financials("BLND.L", output_dir=Path("output"))
+    assert resolved is not None
+    assert resolved.get("cashflow_metrics", {}).get("operating_cashflow") == pytest.approx(
+        88_500_000.0
+    )
+
+    metrics = CompanyMetrics(ticker="BLND.L", operating_cashflow=None, free_cashflow=None)
+    filled = ingest_supplement(metrics, output_dir=Path("output"), allow_live_fetch=False)
+    assert filled == ["operating_cashflow", "free_cashflow"]
+    assert metrics.operating_cashflow == pytest.approx(88_500_000.0)
+    assert metrics.free_cashflow == pytest.approx(12_000_000.0)
+
+    class DummyTicker:
+        @property
+        def info(self):
+            return {"longName": "British Land Company plc", "marketCap": 4_000_000_000}
+
+        @property
+        def fast_info(self):
+            return SimpleNamespace(market_cap=4_000_000_000)
+
+        @property
+        def balance_sheet(self):
+            return None
+
+        @property
+        def income_stmt(self):
+            return None
+
+        @property
+        def cashflow(self):
+            return None
+
+        financials = pd.DataFrame()
+        quarterly_financials = None
+
+    fetch_mod.fetch_company_metrics._cashflow_fallback_installed = False  # type: ignore[attr-defined]
+    from value_investor.research.ingest import install_fetch_cashflow_fallback as ingest_install
+
+    ingest_install()
+
+    with patch.object(fetch_mod.yf, "Ticker", lambda _sym: DummyTicker()):
+        fetched = fetch_mod.fetch_company_metrics("BLND.L")
+
+    assert fetched.operating_cashflow == pytest.approx(88_500_000.0)
+    assert fetched.free_cashflow == pytest.approx(12_000_000.0)
+    assert fetched.data_sources.get("operating_cashflow") == "yahoo_financials_annual"
+
+
 def test_fetch_annual_financials_includes_cashflow_metrics(monkeypatch):
     cashflow_df = pd.DataFrame(
         {"2024": [90_800_000.0, 55_000_000.0]},

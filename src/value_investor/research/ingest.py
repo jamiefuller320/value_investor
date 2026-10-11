@@ -391,41 +391,79 @@ def apply_cashflow_metrics_fallback(
     return filled
 
 
+def _financials_with_merged_cashflow_metrics(financials: dict[str, Any]) -> dict[str, Any]:
+    """Ensure ``cashflow_metrics`` reflects Yahoo ``cash_flow`` rows for fetch backfill."""
+    extracted = extract_cashflow_metrics_from_annual_financials(financials)
+    if not extracted:
+        return financials
+
+    merged_metrics = dict(financials.get("cashflow_metrics") or {})
+    changed = False
+    for key, value in extracted.items():
+        if value is not None and merged_metrics.get(key) != value:
+            merged_metrics[key] = value
+            changed = True
+    if not changed:
+        return financials
+
+    updated = dict(financials)
+    updated["cashflow_metrics"] = merged_metrics
+    return updated
+
+
+def _cashflow_backfill_score(financials: dict[str, Any]) -> int:
+    """Count OCF/FCF fields available from annual rows and stored ``cashflow_metrics``."""
+    probe = dict.fromkeys(CASHFLOW_METRIC_KEYS)
+    apply_cashflow_metrics_fallback(probe, financials)
+    return sum(1 for key in CASHFLOW_METRIC_KEYS if probe.get(key) is not None)
+
+
 def _resolve_cached_annual_financials(
     ticker: str,
     *,
     output_dir: Path | None = None,
     sources_dir: Path | None = None,
 ) -> dict[str, Any] | None:
-    from value_investor.scoring.fcf import load_cached_financials
+    from value_investor.scoring.fcf import _financials_candidates
     from value_investor.storage import read_json, resolve_json_path
 
     normalized = ticker.strip().upper()
-    candidates: list[Path] = []
+    candidate_paths: list[Path] = []
     if sources_dir is not None:
-        candidates.append(sources_dir / "financials_annual.json")
+        candidate_paths.append(sources_dir / "financials_annual.json")
     if output_dir is not None:
-        candidates.append(
+        candidate_paths.append(
             output_dir / "research" / normalized / "sources" / "financials_annual.json"
         )
+    candidate_paths.extend(_financials_candidates(normalized, output_dir))
 
-    for path in candidates:
+    best: dict[str, Any] | None = None
+    best_score = -1
+    seen_paths: set[str] = set()
+
+    for path in candidate_paths:
         resolved = resolve_json_path(path)
         if resolved is None:
             continue
+        path_key = str(resolved)
+        if path_key in seen_paths:
+            continue
+        seen_paths.add(path_key)
         try:
             payload = read_json(resolved)
         except (OSError, ValueError, TypeError):
             continue
         if not isinstance(payload, dict):
             continue
-        if payload.get("cash_flow"):
-            return payload
-        stored = payload.get("cashflow_metrics") or {}
-        if any(stored.get(key) is not None for key in CASHFLOW_METRIC_KEYS):
-            return payload
+        merged = _financials_with_merged_cashflow_metrics(payload)
+        score = _cashflow_backfill_score(merged)
+        if score > best_score:
+            best_score = score
+            best = merged
+        if score >= len(CASHFLOW_METRIC_KEYS):
+            break
 
-    return load_cached_financials(normalized, output_dir=output_dir)
+    return best if best_score >= 0 else None
 
 
 def supplement_company_metrics_cashflow(
@@ -496,9 +534,13 @@ def install_fetch_cashflow_fallback() -> None:
     ):
         metrics = original(ticker, name=name, sector=sector, market=market)
         try:
+            resolved = (metrics.ticker or ticker or "").strip().upper()
+            output_dir = Path("output")
             supplement_company_metrics_cashflow(
                 metrics,
-                output_dir=Path("output"),
+                ticker=resolved,
+                output_dir=output_dir,
+                sources_dir=output_dir / "research" / resolved / "sources",
                 allow_live_fetch=False,
             )
         except Exception as exc:  # noqa: BLE001 — screening should continue
