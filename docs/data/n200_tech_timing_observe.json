@@ -1,0 +1,526 @@
+{
+  "schema_version": 1,
+  "registration_id": "strand-b-plain-value-tech-timing-v0",
+  "deferred_id": "N200",
+  "generated_at": "2026-10-11T09:11:17.097305+00:00",
+  "observe_only": true,
+  "influences_live": false,
+  "identity_id": "raw_buy_tier",
+  "success_metric_id": "smooth_ret_cohort_median",
+  "learning_question": "On threshold-eligible names, does raw_buy_tier identity with calendar \u00b114d entry/exit timing brackets beat default timing (offset 0) on cost-aware smooth_ret_cohort_median?",
+  "snapshot_count": 24,
+  "completed_entry_episodes": 99,
+  "skipped_ineligible": 0,
+  "calendar_weeks_spanned": 9,
+  "volume_gate": {
+    "min_episodes": 24,
+    "min_weeks": 8,
+    "met": true
+  },
+  "phase": {
+    "entries_per_week": 11.0,
+    "floor": 5.0,
+    "floor_met": true
+  },
+  "path_scoreboard": {
+    "primary": "absolute_smoothed_return",
+    "success_metric_id": "smooth_ret_cohort_median",
+    "control_cell": "entry_+0__exit_+0",
+    "control_smooth_ret_cohort_median": -0.06,
+    "diagnostic_best_cell": "entry_+0__exit_-14",
+    "diagnostic_best_median": -0.050092,
+    "note": "Control absolute primary is sealed path metric. Best-cell is diagnostic only \u2014 not a promote signal (F8)."
+  },
+  "cells": {
+    "entry_-14__exit_-14": {
+      "n": 35,
+      "smooth_ret_cohort_median": -0.064613,
+      "control_excess_report_only": -0.004613
+    },
+    "entry_-14__exit_+0": {
+      "n": 42,
+      "smooth_ret_cohort_median": -0.090987,
+      "control_excess_report_only": -0.030987
+    },
+    "entry_-14__exit_+14": {
+      "n": 36,
+      "smooth_ret_cohort_median": -0.079853,
+      "control_excess_report_only": -0.019853
+    },
+    "entry_+0__exit_-14": {
+      "n": 40,
+      "smooth_ret_cohort_median": -0.050092,
+      "control_excess_report_only": 0.009908
+    },
+    "entry_+0__exit_+0": {
+      "n": 99,
+      "smooth_ret_cohort_median": -0.06,
+      "control_excess_report_only": 0.0
+    },
+    "entry_+0__exit_+14": {
+      "n": 92,
+      "smooth_ret_cohort_median": -0.062578,
+      "control_excess_report_only": -0.002578
+    },
+    "entry_+14__exit_-14": {
+      "n": 26,
+      "smooth_ret_cohort_median": -0.073116,
+      "control_excess_report_only": -0.013116
+    },
+    "entry_+14__exit_+0": {
+      "n": 40,
+      "smooth_ret_cohort_median": -0.085338,
+      "control_excess_report_only": -0.025338
+    },
+    "entry_+14__exit_+14": {
+      "n": 84,
+      "smooth_ret_cohort_median": -0.062842,
+      "control_excess_report_only": -0.002842
+    }
+  },
+  "entry_lever_scoreboard": {
+    "-14": {
+      "n": 42,
+      "smooth_ret_cohort_median": -0.090987
+    },
+    "0": {
+      "n": 99,
+      "smooth_ret_cohort_median": -0.06
+    },
+    "14": {
+      "n": 40,
+      "smooth_ret_cohort_median": -0.085338
+    }
+  },
+  "exit_lever_scoreboard": {
+    "-14": {
+      "n": 40,
+      "smooth_ret_cohort_median": -0.050092
+    },
+    "0": {
+      "n": 99,
+      "smooth_ret_cohort_median": -0.06
+    },
+    "14": {
+      "n": 92,
+      "smooth_ret_cohort_median": -0.062578
+    }
+  },
+  "change_markers": [
+    {
+      "marker_id": "n200-seal-v0",
+      "at": "2026-10-11T00:00:00+00:00",
+      "lever": "params",
+      "before_id": null,
+      "after_id": "strand-b-plain-value-tech-timing-v0",
+      "registration_id": "strand-b-plain-value-tech-timing-v0",
+      "reason": "Initial seal: raw_buy_tier + \u00b114d brackets, absolute primary",
+      "eligible_set_ref": "archive_history_buy_tier_f9_or_pass",
+      "success_metric_id": "smooth_ret_cohort_median",
+      "applies_to": "observe_only"
+    }
+  ],
+  "episodes_sample": [
+    {
+      "ticker": "ABDN.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-10T16:11:20.778493+00:00",
+      "hold_days": 8,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": -0.0201,
+        "entry_+0__exit_+14": -0.050856,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.070595
+      },
+      "control_return": -0.0201
+    },
+    {
+      "ticker": "ABF.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-19T10:24:14.725305+00:00",
+      "hold_days": 16,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": -0.051854,
+        "entry_+0__exit_+0": -0.093062,
+        "entry_+0__exit_+14": -0.091145,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": -0.076569,
+        "entry_+14__exit_+14": -0.07462
+      },
+      "control_return": -0.093062
+    },
+    {
+      "ticker": "AEP.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-10-07T10:11:36.589913+00:00",
+      "hold_days": 65,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": 0.09,
+        "entry_+0__exit_+0": 0.033333,
+        "entry_+0__exit_+14": null,
+        "entry_+14__exit_-14": 0.077363,
+        "entry_+14__exit_+0": 0.021319,
+        "entry_+14__exit_+14": null
+      },
+      "control_return": 0.033333
+    },
+    {
+      "ticker": "ALFA.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-09-06T06:47:53.947778+00:00",
+      "hold_days": 34,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": -0.033138,
+        "entry_+0__exit_+0": -0.052674,
+        "entry_+0__exit_+14": -0.074005,
+        "entry_+14__exit_-14": -0.050396,
+        "entry_+14__exit_+0": -0.069604,
+        "entry_+14__exit_+14": -0.090576
+      },
+      "control_return": -0.052674
+    },
+    {
+      "ticker": "ASHM.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-09T05:44:10.639418+00:00",
+      "hold_days": 6,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": 0.028178,
+        "entry_+0__exit_+14": 0.03593,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.067895
+      },
+      "control_return": 0.028178
+    },
+    {
+      "ticker": "BKG.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-09-06T06:47:53.947778+00:00",
+      "hold_days": 34,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": -0.044571,
+        "entry_+0__exit_+0": -0.072571,
+        "entry_+0__exit_+14": -0.116571,
+        "entry_+14__exit_-14": -0.078774,
+        "entry_+14__exit_+0": -0.105831,
+        "entry_+14__exit_+14": -0.148349
+      },
+      "control_return": -0.072571
+    },
+    {
+      "ticker": "BME.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-09-06T06:47:53.947778+00:00",
+      "hold_days": 34,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": 0.001995,
+        "entry_+0__exit_+0": -0.040234,
+        "entry_+0__exit_+14": 0.007385,
+        "entry_+14__exit_-14": -0.047147,
+        "entry_+14__exit_+0": -0.087421,
+        "entry_+14__exit_+14": -0.042005
+      },
+      "control_return": -0.040234
+    },
+    {
+      "ticker": "BOWL.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-10T16:11:20.778493+00:00",
+      "hold_days": 8,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": -0.075762,
+        "entry_+0__exit_+14": -0.082767,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.058205
+      },
+      "control_return": -0.075762
+    },
+    {
+      "ticker": "BOY.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-09T05:44:10.639418+00:00",
+      "hold_days": 6,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": 0.205744,
+        "entry_+0__exit_+14": 0.197439,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.066561
+      },
+      "control_return": 0.205744
+    },
+    {
+      "ticker": "BREE.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-09-21T07:39:55.690079+00:00",
+      "hold_days": 49,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": -0.032205,
+        "entry_+0__exit_+0": -0.102296,
+        "entry_+0__exit_+14": -0.11136,
+        "entry_+14__exit_-14": -0.09462,
+        "entry_+14__exit_+0": -0.160454,
+        "entry_+14__exit_+14": -0.168967
+      },
+      "control_return": -0.102296
+    },
+    {
+      "ticker": "BT-A.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-16T06:19:37.808906+00:00",
+      "hold_days": 13,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": -0.064968,
+        "entry_+0__exit_+14": -0.040129,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.035037
+      },
+      "control_return": -0.064968
+    },
+    {
+      "ticker": "BTRW.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-03T20:19:21.700123+00:00",
+      "hold_days": 1,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": -0.021814,
+        "entry_+0__exit_+14": 0.052513,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": null
+      },
+      "control_return": -0.021814
+    },
+    {
+      "ticker": "BWY.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-10T16:11:20.778493+00:00",
+      "hold_days": 8,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": -0.003662,
+        "entry_+0__exit_+14": 0.00338,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.091164
+      },
+      "control_return": -0.003662
+    },
+    {
+      "ticker": "BYIT.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-09-06T06:47:53.947778+00:00",
+      "hold_days": 34,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": -0.032056,
+        "entry_+0__exit_+0": -0.005609,
+        "entry_+0__exit_+14": 0.092196,
+        "entry_+14__exit_-14": -0.064831,
+        "entry_+14__exit_+0": -0.039227,
+        "entry_+14__exit_+14": 0.055459
+      },
+      "control_return": -0.005609
+    },
+    {
+      "ticker": "CNA.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-10T16:11:20.778493+00:00",
+      "hold_days": 8,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": -0.06871,
+        "entry_+0__exit_+14": -0.067097,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.073145
+      },
+      "control_return": -0.06871
+    },
+    {
+      "ticker": "CURY.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-30T06:43:33.462150+00:00",
+      "hold_days": 27,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": -0.105265,
+        "entry_+0__exit_+0": -0.155295,
+        "entry_+0__exit_+14": -0.18031,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": -0.112402,
+        "entry_+14__exit_+14": -0.138603
+      },
+      "control_return": -0.155295
+    },
+    {
+      "ticker": "DNLM.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-10T16:11:20.778493+00:00",
+      "hold_days": 8,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": -0.034698,
+        "entry_+0__exit_+14": -0.043324,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.068413
+      },
+      "control_return": -0.034698
+    },
+    {
+      "ticker": "DOM.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-09-21T07:39:55.690079+00:00",
+      "hold_days": 49,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": -0.013327,
+        "entry_+0__exit_+0": -0.02425,
+        "entry_+0__exit_+14": -0.000417,
+        "entry_+14__exit_-14": 0.006802,
+        "entry_+14__exit_+0": -0.004332,
+        "entry_+14__exit_+14": 0.019959
+      },
+      "control_return": -0.02425
+    },
+    {
+      "ticker": "EDV.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-10T16:11:20.778493+00:00",
+      "hold_days": 8,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": 0.096729,
+        "entry_+0__exit_+14": 0.26879,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": 0.078409
+      },
+      "control_return": 0.096729
+    },
+    {
+      "ticker": "FOUR.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-09T05:44:10.639418+00:00",
+      "hold_days": 6,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": 0.135726,
+        "entry_+0__exit_+14": 0.055104,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.086293
+      },
+      "control_return": 0.135726
+    },
+    {
+      "ticker": "GAMA.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-10T16:11:20.778493+00:00",
+      "hold_days": 8,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": -0.019936,
+        "entry_+0__exit_+14": 0.095983,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": 0.049175
+      },
+      "control_return": -0.019936
+    },
+    {
+      "ticker": "GCP.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-04T08:38:47.304498+00:00",
+      "hold_days": 1,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": -0.058467,
+        "entry_+0__exit_+14": -0.072269,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.054201
+      },
+      "control_return": -0.058467
+    },
+    {
+      "ticker": "GFRD.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-09-12T11:21:34.513768+00:00",
+      "hold_days": 40,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": -0.029492,
+        "entry_+0__exit_+0": -0.097288,
+        "entry_+0__exit_+14": 0.123051,
+        "entry_+14__exit_-14": -0.0872,
+        "entry_+14__exit_+0": -0.1512,
+        "entry_+14__exit_+14": 0.0568
+      },
+      "control_return": -0.097288
+    },
+    {
+      "ticker": "GSK.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-10T16:11:20.778493+00:00",
+      "hold_days": 8,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": -0.062071,
+        "entry_+0__exit_+14": -0.066731,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.004429
+      },
+      "control_return": -0.062071
+    },
+    {
+      "ticker": "HLN.L",
+      "entry_run_at": "2026-08-02T12:34:17.581768+00:00",
+      "exit_run_at": "2026-08-10T16:11:20.778493+00:00",
+      "hold_days": 8,
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "cells": {
+        "entry_+0__exit_-14": null,
+        "entry_+0__exit_+0": -0.05477,
+        "entry_+0__exit_+14": -0.06055,
+        "entry_+14__exit_-14": null,
+        "entry_+14__exit_+0": null,
+        "entry_+14__exit_+14": -0.038909
+      },
+      "control_return": -0.05477
+    }
+  ],
+  "ops_doc": "docs/ops/n200-tech-timing-observe.md"
+}

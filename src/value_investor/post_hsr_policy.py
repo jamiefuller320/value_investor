@@ -41,16 +41,22 @@ STRAND_A = {
 CANDIDATE_STRANDS = [
     {
         "id": "strand_b_plain_value_technical_timing",
-        "status": "named_not_registered",
+        "status": "sealed_observe_only",
         "deferred_id": "N200",
         "title": "Technical entry/exit with plain-value identity backstop",
         "summary": (
-            "Identity = plain value (or buy-tier); test technical timing for "
-            "entry/exit as a sealed observe-only instrument — not a live "
+            "Identity = raw_buy_tier; sealed observe-only technical entry/exit "
+            "±14d brackets (strand-b-plain-value-tech-timing-v0). Not a live "
             "replacement for the screen stack."
         ),
-        "learning_question": None,
-        "registration_id": None,
+        "learning_question": (
+            "On threshold-eligible names, does raw_buy_tier identity with "
+            "calendar ±14d entry/exit timing brackets beat default timing on "
+            "cost-aware smooth_ret_cohort_median?"
+        ),
+        "registration_id": "strand-b-plain-value-tech-timing-v0",
+        "observe_store": "docs/data/n200_tech_timing_observe.json",
+        "ops_doc": "docs/ops/n200-tech-timing-observe.md",
     },
     {
         "id": "strand_c_short_horizon_value_momentum",
@@ -59,7 +65,8 @@ CANDIDATE_STRANDS = [
         "title": "Global short-horizon value+momentum pipeline",
         "summary": (
             "Continuous small-weight short-hold (~3m) high-value book fed by "
-            "global breadth — distinct from the patient value holdings book."
+            "global breadth — distinct from the patient value holdings book. "
+            "Define-only; not sealed with N200."
         ),
         "learning_question": None,
         "registration_id": None,

@@ -219,6 +219,8 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "docs/data/shard_nav_fx_warp.json" in text
     assert "docs/data/combined_tagged_learning.json" in text
     assert "docs/data/post_hsr_policy.json" in text
+    assert "docs/data/n200_tech_timing_observe.json" in text
+    assert "docs/data/n200_tech_timing_registration.json" in text
     # Optional (not OWNED) — same race-safe lane as queue_health / observe rollup.
     optional_line = next(
         line for line in text.splitlines() if "GHA_COMMIT_OPTIONAL" in line and ":-" in line
@@ -243,6 +245,8 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "track_statistics.json" in optional_line
     assert "total_return_view.json" in optional_line
     assert "hold_period_counterfactual.json" in optional_line
+    assert "n200_tech_timing_observe.json" in optional_line
+    assert "n200_tech_timing_registration.json" in optional_line
     assert "two_lot_replay.json" in optional_line
     assert "sec_companyfacts_coverage.json" in optional_line
     assert "hkex_direct_coverage.json" in optional_line
