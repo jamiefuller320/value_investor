@@ -38,14 +38,22 @@ Kept the same `registration_id` because this is an exploratory cost-stamp correc
 | Trigger | Schedule |
 |---|---|
 | **Daily ops-monitor** | `check_n200_tech_timing_observe` refreshes store |
+| **Queue-health refresh** | Projects phase/volume/freshness into `queue_health.n200_pipeline_health` (no re-score) |
 | Manual | `ftse-n200-tech-timing --output-dir docs/data` |
+
+## Dashboard
+
+**Automation → Queue & hunter** shows **N200 / learning-factory pipeline** (phase floor, volume gate, store freshness, ops-check). Compact strip also on **Analysis → observe**.
+
+Phase green = **mechanism throughput** only — not alpha, path P&L, or capital readiness (F8). Projection helper: `build_n200_pipeline_health_projection`.
 
 ## Artifacts
 
 | Path | Role |
 |---|---|
 | `docs/data/n200_tech_timing_registration.json` | Frozen seal record (+ cost_basis / stress fields) |
-| `docs/data/n200_tech_timing_observe.json` | Bracket scoreboard + markers + phase/volume + stress diagnostic |
+| `docs/data/n200_tech_timing_observe.json` | Bracket scoreboard + markers + phase/volume + stress diagnostic (Pages sidecar) |
+| `docs/data/queue_health.json` → `n200_pipeline_health` | Dashboard projection (freshness + functioning) |
 | This doc | Runbook |
 
 Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
