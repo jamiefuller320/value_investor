@@ -1,6 +1,6 @@
 # Hikma Pharmaceuticals PLC (HIK.L) — Research memo
 
-_Version 6 · Updated 2026-09-27T07:40:09.321350+00:00 · Mode: structured_verdict_update_
+_Version 7 · Updated 2026-10-11T07:52:47.969149+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Planned CFO succession and FY fundamentals still support value, but unverified recall coverage and statutory FCF cover gaps only partly confirm the Strong Buy screen.
+Rationale: Filing-aligned value metrics still support Strong Buy, but thin primary news and unresolved recall plus statutory FCF cover gaps only partly confirm the screen.
 RiskTags: regulatory, competitive, leverage, litigation
 
 ## Weekly updates
@@ -38,3 +38,8 @@ Strong Buy screen stable (21 weeks); accumulate overlay unchanged.
 24 Sep RNS: Rebecca Hall appointed Group CFO from Q1 2027; Khalid Nabilsi steps down from the board at year-end but remains on the executive committee.  
 Two third-party Kalkine R&D/semaglutide pieces add no primary evidence; unverified blood-pressure recall coverage still has no matching company disclosure in scope.  
 Strong Buy screen stable (22 weeks); accumulate overlay unchanged.
+
+### 2026-10-11T07:52:47.969149+00:00
+No new RNS or filings since the 27 Sep refresh; the news batch is third-party Kalkine/Yahoo commentary on CFO succession and R&D only.  
+Unverified blood-pressure recall coverage still has no matching company disclosure in scope.  
+Strong Buy screen stable (25 weeks); accumulate overlay unchanged.

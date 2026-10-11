@@ -1,6 +1,6 @@
 # Alfa Financial Software Holdings PLC (ALFA.L) — Research memo
 
-_Version 3 · Updated 2026-09-23T12:31:07.109238+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-10-11T08:03:56.546002+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: H1 2026 filing backs subscription and TCV momentum with FY on track; no post-mid-Sep RNS or material news to weaken the screen buy, with premium P/B, FX and governance offsets unchanged.
+Rationale: H1 2026 filing still supports subscription and TCV momentum with FY on track; no post-Sep RNS or news weakens the screen buy; premium P/B, FX and governance offsets unchanged.
 RiskTags: cyclical, competitive, governance, customer_concentration, key_person, regulatory, other
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Syndicated H1 earnings-call coverage (3 Sep) and Investors' Chronicle on sticky 
 No new company RNS since the 3 Sep H1 report; disclosure set unchanged since the 15 Sep refresh.  
 16–23 Sep press is a single syndicated Kalkine piece (22 Sep) on revenue and insider buying; no profit warnings or regulatory actions identified.  
 H1 themes—ARR/TCV growth, contracting delays, severance and FX on reported profit—are already in filings; thesis unchanged.
+
+### 2026-10-11T08:03:56.546002+00:00
+No new company RNS since the 3 Sep H1 report; only routine 30 Sep total voting rights since the 23 Sep refresh.  
+24 Sep–11 Oct news batch is empty; no profit warnings or regulatory actions identified.  
+Disclosure set and H1 themes (ARR/TCV, FX, contracting) are unchanged; thesis intact.

@@ -1,6 +1,6 @@
 # The Berkeley Group Holdings plc (BKG.L) — Research memo
 
-_Version 3 · Updated 2026-09-23T18:00:45.739621+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-10-11T08:24:40.847034+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Research still confirms the screen on net cash and buybacks, but cautious AGM messaging and no fresh trading update leave near-term demand risks unresolved.
+Rationale: Ongoing buybacks support the cheapness screen and capital return, but with no fresh trading update, cyclical, regulatory and litigation overhangs still cap conviction versus the buy signal.
 RiskTags: cyclical, regulatory, litigation, competitive, leverage, governance
 
 ## Weekly updates
@@ -22,4 +22,9 @@ The June £4bn housebuilder litigation and April land-buy pause remain unchanged
 ### 2026-09-23T18:00:45.739621+00:00
 Since 15 Sep, commentary highlights a cautious AGM tone and share weakness (Kalkine, 23 Sep); no material RNS beyond routine buybacks and cancellations (18 Sep).
 Reports of ~£1.20m insider buying (22 Sep) align with ongoing capital return; governance headlines reiterate London exposure without new disclosures.
+June housebuilder litigation and the land-buy pause remain unchanged overhangs.
+
+### 2026-10-11T08:24:40.847034+00:00
+Since 23 Sep, RNS and press coverage are mostly routine buybacks and total voting-rights notices (28 Sep–7 Oct); no new trading statement or results.
+Kalkine and TipRanks highlight continued share-count reduction; nothing in this batch changes demand, policy, or litigation narratives.
 June housebuilder litigation and the land-buy pause remain unchanged overhangs.
