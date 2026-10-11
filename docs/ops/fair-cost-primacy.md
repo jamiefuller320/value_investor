@@ -18,12 +18,14 @@ scoreboard product. Existing fair-cost surfaces
 already align. Sealed instruments keep their frozen cost stamps until a logged
 change marker or new registration.
 
-## N200 pointer
+## N200
 
-N200 (`strand-b-plain-value-tech-timing-v0`) scores **cost-aware** episode
-returns via sealed `trade_cost_pct` (not gross). See
-[n200-tech-timing-observe.md](n200-tech-timing-observe.md). Aligning that stamp
-to market-table fair rates is a seal amendment, not a silent edit.
+N200 (`strand-b-plain-value-tech-timing-v0`) scores episode returns with
+**fair market-table costs** as the **primary** (`market_trading_costs` /
+`ftse350` for the FTSE/LSE archive). Legacy **3% per side** is retained as
+**stress / report-only** (`stress_scoreboard_report_only`). Amend logged as
+change marker `n200-fair-cost-primary-v1` (same `registration_id`; see
+[n200-tech-timing-observe.md](n200-tech-timing-observe.md)).
 
 ## Related
 

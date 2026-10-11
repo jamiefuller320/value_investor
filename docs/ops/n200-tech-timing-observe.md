@@ -6,9 +6,9 @@
 
 ## Learning question
 
-On threshold-eligible names, does **raw buy-tier** identity with calendar **±14d** entry/exit timing brackets beat default timing (offset 0) on cost-aware **`smooth_ret_cohort_median`**?
+On threshold-eligible names, does **raw buy-tier** identity with calendar **±14d** entry/exit timing brackets beat default timing (offset 0) on cost-aware **`smooth_ret_cohort_median`** measured at **fair market-table costs**?
 
-Episode returns deduct sealed `trade_cost_pct` (not gross/pre-cost). Project-wide standing rule: **fair costs** are the primary metric on all Investment models — see [fair-cost-primacy.md](fair-cost-primacy.md). N200’s frozen stamp remains `trade_cost_pct = 0.03` until a change marker / new registration.
+Episode returns deduct fair T212-shaped friction from `market_trading_costs` (FTSE/LSE archive → `ftse350`: stamp + half-spread). Project-wide standing rule: [fair-cost-primacy.md](fair-cost-primacy.md). Legacy **3% per side** is kept as **stress / report-only** (control median + episode diagnostic), not promotion truth.
 
 ## Seal defaults (O2–O6)
 
@@ -16,11 +16,22 @@ Episode returns deduct sealed `trade_cost_pct` (not gross/pre-cost). Project-wid
 |---|---|
 | O2 identity | `raw_buy_tier` |
 | O3 volume gate | ≥24 completed entry episodes **and** ≥8 calendar weeks |
-| O4 smoother | `smooth_ret_cohort_median` (cost-aware episode returns) |
-| O5 primacy | Absolute smoothed return **primary** (cost-aware; fair-cost standing rule); control excess **report-only** |
+| O4 smoother | `smooth_ret_cohort_median` (fair-cost episode returns) |
+| O5 primacy | Absolute smoothed return **primary** at fair costs; control excess + stress 3% **report-only** |
 | O6 phase floor | 5 entries/week (illustrative) |
 
 Amend only via logged change marker or new registration.
+
+### Cost stamp (amended in place)
+
+| Field | Value |
+|---|---|
+| **Primary** | Fair market table (`market_trading_costs` / `ftse350`) — buy + sell sides |
+| **Stress / report-only** | `stress_trade_cost_pct = 0.03` per side |
+| **registration_id** | Unchanged (`strand-b-plain-value-tech-timing-v0`) |
+| **Change marker** | `n200-fair-cost-primary-v1` |
+
+Kept the same `registration_id` because this is an exploratory cost-stamp correction on a still-open observe unit, not a new learning question or identity. History is not silently rewritten: the observe store appends the marker and registration records `cost_amendment`.
 
 ## When it runs
 
@@ -33,18 +44,18 @@ Amend only via logged change marker or new registration.
 
 | Path | Role |
 |---|---|
-| `docs/data/n200_tech_timing_registration.json` | Frozen seal record |
-| `docs/data/n200_tech_timing_observe.json` | Bracket scoreboard + markers + phase/volume |
+| `docs/data/n200_tech_timing_registration.json` | Frozen seal record (+ cost_basis / stress fields) |
+| `docs/data/n200_tech_timing_observe.json` | Bracket scoreboard + markers + phase/volume + stress diagnostic |
 | This doc | Runbook |
 
 Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
 
 ## Scoreboards
 
-1. **Path** — control cell `entry_+0__exit_+0` absolute median of **cost-aware** episode returns (primary; fair-cost standing rule — [fair-cost-primacy.md](fair-cost-primacy.md)).
-2. **Per-lever** — entry offsets with control exit; exit offsets with control entry (independent of path P&L).
+1. **Path** — control cell `entry_+0__exit_+0` absolute median of **fair-cost** episode returns (primary — [fair-cost-primacy.md](fair-cost-primacy.md)).
+2. **Per-lever** — entry offsets with control exit; exit offsets with control entry (independent of path P&L; also at fair costs).
 3. **Phase** — entries/week vs sealed floor.
-4. **Diagnostics** — full cell matrix + best-cell (not a promote signal; F8).
+4. **Diagnostics** — full cell matrix + best-cell; **stress 3%** control median (`stress_scoreboard_report_only`) — not a promote signal (F8).
 
 ## Constraints
 
