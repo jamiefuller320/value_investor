@@ -376,14 +376,10 @@ def test_n200_pipeline_health_on_queue_and_analysis() -> None:
     assert "function renderN200PipelineHealthSection(" in text
     assert "function resolveN200PipelineHealth(" in text
     assert '["n200_tech_timing_observe", "data/n200_tech_timing_observe.json"]' in text
-    queue_fn = text.split("function renderQueueHealthMonitor(", 1)[1].split(
-        "\nfunction ", 1
-    )[0]
+    queue_fn = text.split("function renderQueueHealthMonitor(", 1)[1].split("\nfunction ", 1)[0]
     assert "renderN200PipelineHealthSection(" in queue_fn
     assert "n200_pipeline_health" in queue_fn
-    analysis = text.split('id="analysis-observe"', 1)[1].split(
-        'id="analysis-charts"', 1
-    )[0]
+    analysis = text.split('id="analysis-observe"', 1)[1].split('id="analysis-charts"', 1)[0]
     assert "renderN200PipelineHealthSection(data, { compact: true })" in analysis
     assert "not alpha" in text.lower() or "not a promote" in text.lower()
     assert "mechanism throughput" in text.lower() or "Throughput only" in text
