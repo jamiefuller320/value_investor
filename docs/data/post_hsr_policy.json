@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "policy_id": "post-hsr-freeze-extras-v1",
+  "generated_at": "2026-10-10T23:11:00.941218+00:00",
+  "observe_only": true,
+  "influences_live": false,
+  "freeze_extras": true,
+  "freeze_reason": "hsr-v1 / hsr-mid-v1 / hrs-v1 / hms-v1 holdout primaries did not clearly beat plain value (or the frozen mix); pre-registered decision is freeze screen extras \u2014 AI layer and forward evidence must earn their keep separately.",
+  "evidence": {
+    "hsr_v1_registration_id": "hsr-v1",
+    "hsr_v1_holdout_verdict": "inconclusive",
+    "hsr_mid_v1_holdout_verdict": "inconclusive",
+    "hrs_v1_chosen_config_id": "buy_tier|top=40|exit=tier3|tac=off",
+    "hrs_v1_chosen_verdict_vs_plain_value": "inconclusive",
+    "hrs_v1_chosen_minus_frozen_verdict": "inconclusive",
+    "hms_v1_decision": "no_gain_over_frozen_mix",
+    "hms_v1_kept": [
+      "acquirers_multiple",
+      "composite_value",
+      "graham_enterprising",
+      "quality_value",
+      "magic_formula",
+      "fcf_yield",
+      "piotroski_f",
+      "net_share_issuance",
+      "earnings_quality",
+      "lynch_peg"
+    ]
+  },
+  "strand_a": {
+    "id": "strand_a_current_stack",
+    "status": "active",
+    "title": "Current overarching model (strand A)",
+    "summary": "Existing composite / buy-tier stack. Keep its experiment grid on the current framework; do not discard it because extras failed to beat plain value in the US holdouts."
+  },
+  "candidate_strands": [
+    {
+      "id": "strand_b_plain_value_technical_timing",
+      "status": "named_not_registered",
+      "deferred_id": "N200",
+      "title": "Technical entry/exit with plain-value identity backstop",
+      "summary": "Identity = plain value (or buy-tier); test technical timing for entry/exit as a sealed observe-only instrument \u2014 not a live replacement for the screen stack.",
+      "learning_question": null,
+      "registration_id": null
+    },
+    {
+      "id": "strand_c_short_horizon_value_momentum",
+      "status": "named_not_registered",
+      "deferred_id": "N201",
+      "title": "Global short-horizon value+momentum pipeline",
+      "summary": "Continuous small-weight short-hold (~3m) high-value book fed by global breadth \u2014 distinct from the patient value holdings book.",
+      "learning_question": null,
+      "registration_id": null
+    }
+  ],
+  "shared_timing_experiments": "Entry/exit and cost experiments may be shared factorially across strands once registered; each strand keeps its own identity freeze.",
+  "prune_policy": "Prefer orthogonal strands over near-copy screen / overlay / paper-track variants. No new screen extras (models, vetoes, composite knobs) without a new sealed registration_id and a pinned learning question.",
+  "ops_doc": "docs/ops/post-hsr-freeze-extras.md",
+  "related_deferred": [
+    "L583",
+    "L584",
+    "L585",
+    "N200",
+    "N201"
+  ],
+  "source_pr": 1035
+}

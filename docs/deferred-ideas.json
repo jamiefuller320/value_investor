@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-10T20:42:28+00:00",
+  "updated_at": "2026-10-10T23:12:25+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13602,7 +13602,7 @@
       "section": "learning",
       "title": "Technical entry/exit with plain-value identity backstop",
       "summary": "After hsr/hrs/hms holdouts: screen extras did not clearly beat plain value; rule search chose tac=off in-sample and holdout vs frozen was inconclusive. A sealed observe-only instrument that keeps identity=plain-value (or buy-tier) and tests technical timing for entry/exit is a later experiment, not a live replacement for the screen stack.",
-      "revisit_when": "After freeze-extras policy is written into ops from the US holdout null, and a single learning question for timing-vs-identity is pinned with a new registration_id",
+      "revisit_when": "After freeze-extras policy is in force (docs/ops/post-hsr-freeze-extras.md) and a human pins a single learning question + registration_id for strand B (plain-value identity + technical timing); do not start while P1/P2 are the spend priority.",
       "tags": [
         "hsr-v1",
         "timing",
@@ -13611,7 +13611,8 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-3b8ca08e-d4e3-44e5-b354-fee22e669155",
-      "added_at": "2026-10-10T17:47:33+00:00"
+      "added_at": "2026-10-10T17:47:33+00:00",
+      "updated_at": "2026-10-10T23:12:25+00:00"
     },
     {
       "id": "N201",
@@ -13619,7 +13620,7 @@
       "section": "learning",
       "title": "Global short-horizon value+momentum pipeline (vs long-term holdings)",
       "summary": "Alternative vision: use global breadth and processing to feed a continuous book of small-weight, short-hold (~3m trough-to-peak / momentum) high-value names instead of long-term value holdings. Distinct product from the registered hsr/hrs/hms questions. US holdout did not test this; model-mix did not keep momentum_12_1; rule search preferred tac=off and exit search was holdout-inconclusive. Revisit only with a new sealed registration that separates identity, short-horizon exit, and capacity/cost assumptions.",
-      "revisit_when": "A single learning question and registration_id are pinned for short-horizon global pipeline vs patient value book, with costed turnover and capacity limits stated before any paper track",
+      "revisit_when": "After freeze-extras policy is in force (docs/ops/post-hsr-freeze-extras.md) and a human pins a single learning question + registration_id for strand C (short-horizon value+momentum); costed turnover and capacity stated first; not while P1/P2 dominate.",
       "tags": [
         "strategy",
         "short-horizon",
@@ -13629,7 +13630,8 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-3b8ca08e-d4e3-44e5-b354-fee22e669155",
-      "added_at": "2026-10-10T17:58:42+00:00"
+      "added_at": "2026-10-10T17:58:42+00:00",
+      "updated_at": "2026-10-10T23:12:25+00:00"
     },
     {
       "id": "L583",
@@ -13637,7 +13639,7 @@
       "section": "research",
       "title": "Split: shared data engine vs competing strategy sleeves",
       "summary": "Architecture sketch after US holdouts: Element 1 = shared collection/analysis engine (filings, fundamentals, panels) kept improving; Element 2 = small set of independent strategy sleeves that consume the same engine, each with its own sealed learning loop. Fits the null on screen extras better than one ever-richer composite. Risk is sleeve sprawl\u2014cap concurrent live/paper sleeves and require registration before capital.",
-      "revisit_when": "Writing down post-hsr policy (freeze screen extras) and choosing the next single sealed strategy question",
+      "revisit_when": "Pin one learning question and registration_id for the first alternate strand (B/N200 or C/N201, not both) under docs/ops/post-hsr-freeze-extras.md; freeze-extras policy already written.",
       "tags": [
         "architecture",
         "data-engine",
@@ -13646,7 +13648,8 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-3b8ca08e-d4e3-44e5-b354-fee22e669155",
-      "added_at": "2026-10-10T18:03:38+00:00"
+      "added_at": "2026-10-10T18:03:38+00:00",
+      "updated_at": "2026-10-10T23:12:21+00:00"
     },
     {
       "id": "L584",
@@ -13654,7 +13657,7 @@
       "section": "research",
       "title": "Parallel orthogonal strategy hypotheses with shared timing experiments",
       "summary": "Refinement of the two-element model: run a small set of structurally distinct strategy hypotheses in parallel (not one sleeve only), each as its own observation strand on the shared data engine. Prefer orthogonal theses over near-copy screen variants. Entry/exit and cost experiments can be shared factorially across sleeves for collective learning while each hypothesis keeps its own identity freeze and sealed markers. Cap the set; refuse isomorphic duplicates.",
-      "revisit_when": "Post-hsr freeze-extras policy is written and the first cohort of orthogonal hypotheses is being named for registration",
+      "revisit_when": "First alternate strand (B or C) has a sealed registration_id; then share timing experiments factorially across strands while each keeps its identity freeze.",
       "tags": [
         "architecture",
         "strategy-sleeves",
@@ -13663,7 +13666,8 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-3b8ca08e-d4e3-44e5-b354-fee22e669155",
-      "added_at": "2026-10-10T20:26:53+00:00"
+      "added_at": "2026-10-10T20:26:53+00:00",
+      "updated_at": "2026-10-10T23:12:21+00:00"
     },
     {
       "id": "L585",
@@ -13678,9 +13682,27 @@
         "prune",
         "strategy-sleeves"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-3b8ca08e-d4e3-44e5-b354-fee22e669155",
-      "added_at": "2026-10-10T20:42:28+00:00"
+      "added_at": "2026-10-10T20:42:28+00:00",
+      "updated_at": "2026-10-10T23:12:20+00:00",
+      "status_note": "Post-hsr freeze-extras ops note + post_hsr_policy.json shipped; strand A kept; N200/N201 named not registered (PR progressing #1035)."
+    },
+    {
+      "id": "L586",
+      "category": "later",
+      "section": "ops",
+      "title": "Post-hsr policy on observe-utilization dashboard",
+      "summary": "Optional: add post_hsr_policy.json as an instrument card on the observe-utilization dashboard (freshness + freeze_extras / candidate strand status) once more observe instruments share that surface.",
+      "revisit_when": "Next observe-utilization instrument batch after post-hsr freeze-extras is on main",
+      "tags": [
+        "observe",
+        "post-hsr",
+        "dashboard"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-d511239d-fb76-55ac-a1be-9ad9bd72a2a6",
+      "added_at": "2026-10-10T23:12:25+00:00"
     }
   ],
   "fragments": [
