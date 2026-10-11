@@ -6,23 +6,37 @@ Short ops pointer for spend under the two-pillar plan. Cascade mechanics stay in
 
 ## P1 — Investment-demanded absolute availability
 
-Close real bind gaps on names Investment uses:
+Close real bind gaps on names Investment uses, in **serve order**:
 
-| Cohort | Today |
-|--------|--------|
-| Live holdings | Always in scope |
-| Active sealed shortlists | FTSE buy-tier (strand A + N200 `raw_buy_tier`) |
-| Accepted F3 repair priorities | When Investment negotiates a repair; Data accepts/defers within cascade capacity |
+| Rank | Cohort | Today |
+|------|--------|--------|
+| 1 | Live holdings | Always in scope |
+| 2 | Already-running sealed units | Strand A FTSE buy-tier + N200 `raw_buy_tier` — keep Data SLA |
+| 3 | Accepted F3 repair priorities on ranks 1–2 | Negotiation; Data accepts/defers within capacity |
+| 4 | **Launch-queue head** | Next newly sealed strategy needing incremental deepen / threshold readiness / distinct shortlist coverage |
+| 5 | Other launch-queue waiters | Wait — do not parallel-divert P1 |
+| Spare | Quiet cold-store | **L499** / **L594** only after ranks 1–4 are green or deferred |
 
 Bind fields (F9 per-name): `key_filing_bodies`, `fcf_basis_bound`, `overlay_bound`,
 `memo_recent` (≤21d default). Platform inventory
 (`docs/data/decision_input_inventory.json`) holds absolute facts — Investment
 reads eligibility and may negotiate; it does not own the join.
 
-**When the active set is green:** maintain freshness (holdings-first / oldest
-memo); do **not** widen rememo caps or invent buy-tier spray. Put quiet spare
-into cold-store option value (**L499** writers / deferred **L594**), not a
-fourth equal sprint.
+### Sealed-strategy launch queue
+
+Each sealed observe/capital strategy is subject to a **launch queue** so new Data
+demands do **not starve running units**.
+
+- Sealing enqueues incremental Data work; it does **not** instantly divert P1 from
+  holdings or already-running sealed units (e.g. N200 keeps its SLA when N201 seals).
+- Newly sealed strategies wait their turn unless Investment + Data **explicitly**
+  re-prioritize the queue head.
+- Aligns with: deepen only sealed shortlists, F3 as priority feed, no preemptive
+  deepen, clash-aware capacity, no fourth equal sprint.
+
+**When ranks 1–4 are green:** maintain freshness (holdings-first / oldest memo);
+do **not** widen rememo caps or invent buy-tier spray. Put quiet spare into
+cold-store option value, not a fourth equal sprint.
 
 **F8:** inventory green, repair schedule, or exception alone never applies knobs
 or fills.
@@ -36,5 +50,7 @@ equal-support after admission; no fourth equal sprint; no shard AI /
 ## Do not deepen preemptively
 
 Add a deepen cohort for a *different* shortlist only when that shortlist is
-**sealed** (or named tickers are on an accepted F3 repair). N201 stays
-define-only until a separate seal — do not pre-deepen its draft universe.
+**sealed** and either is an already-running unit or the **launch-queue head**
+(or named tickers are on an accepted F3 repair). N201 stays define-only until a
+separate seal — do not pre-deepen its draft universe; after seal it enters the
+launch queue rather than leaping ahead of running units.
