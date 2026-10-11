@@ -39,21 +39,25 @@ REGISTRATION_ID = "strand-b-plain-value-tech-timing-v0"
 DEFERRED_ID = "N200"
 IDENTITY_ID = "raw_buy_tier"
 SUCCESS_METRIC_ID = "smooth_ret_cohort_median"
-SCHEMA_VERSION = 2
-PIPELINE_HEALTH_SCHEMA_VERSION = 1
+SCHEMA_VERSION = 3
+PIPELINE_HEALTH_SCHEMA_VERSION = 2
+PER_LEVER_SCOREBOARD_SCHEMA_VERSION = 1
 # Ops-monitor runs ~2×/day; past this the observe store is obviously stale.
 DEFAULT_STALE_AFTER_HOURS = 30.0
 DEFAULT_STORE_LAG_WARN_HOURS = 2.0
 PIPELINE_HEALTH_DISCLAIMER = (
-    "Phase floor and volume gate measure mechanism throughput health — "
-    "not alpha, path P&L, or capital readiness (F8). Observe-only."
+    "Phase floor, volume gate, and per-lever scoreboards measure factory "
+    "mechanism / lever quality — not alpha or capital readiness (F8). "
+    "Lever wins are independent of path P&L. Observe-only."
 )
 
 BRACKET_OFFSETS_DAYS = (-14, 0, 14)
+CONTROL_OFFSET_DAYS = 0
 # Primary = fair market-table (FTSE/LSE archive → ftse350). Stress 3%/side = report-only.
 DEFAULT_MARKET_ID = LIVE_PAPER_MARKET_ID
 STRESS_TRADE_COST_PCT = LEGACY_STRESS_TRADE_COST_PCT
 FAIR_COST_MARKER_ID = "n200-fair-cost-primary-v1"
+PER_LEVER_MARKER_ID = "n200-per-lever-scoreboard-v1"
 VOLUME_MIN_EPISODES = 24
 VOLUME_MIN_WEEKS = 8
 PHASE_ENTRIES_PER_WEEK_FLOOR = 5.0
@@ -321,6 +325,179 @@ def _median_or_none(values: list[float]) -> float | None:
     return round(float(statistics.median(values)), 6)
 
 
+def _episode_lever_outcome(
+    offset_returns: dict[int, float],
+    *,
+    control_offset: int = CONTROL_OFFSET_DAYS,
+) -> dict[str, Any]:
+    """Per-episode best-feasible check for one lever (fair-cost returns)."""
+    control_ret = offset_returns.get(control_offset)
+    scored = {o: r for o, r in offset_returns.items() if r is not None}
+    if control_ret is None or len(scored) < 2:
+        return {
+            "control_offset_days": control_offset,
+            "control_return": None if control_ret is None else round(control_ret, 6),
+            "best_offset_days": None,
+            "best_return": None,
+            "best_alt_offset_days": None,
+            "best_alt_return": None,
+            "control_is_best_feasible": None,
+            "margin_vs_best_alt": None,
+            "verdict": "insufficient",
+        }
+    best_offset, best_ret = max(scored.items(), key=lambda item: item[1])
+    alts = {o: r for o, r in scored.items() if o != control_offset}
+    best_alt_offset, best_alt_ret = max(alts.items(), key=lambda item: item[1])
+    margin = round(control_ret - best_alt_ret, 6)
+    if control_ret > best_alt_ret:
+        verdict = "win"
+        control_is_best = True
+    elif control_ret < best_alt_ret:
+        verdict = "lose"
+        control_is_best = False
+    else:
+        verdict = "tie"
+        control_is_best = True
+    return {
+        "control_offset_days": control_offset,
+        "control_return": round(control_ret, 6),
+        "best_offset_days": best_offset,
+        "best_return": round(best_ret, 6),
+        "best_alt_offset_days": best_alt_offset,
+        "best_alt_return": round(best_alt_ret, 6),
+        "control_is_best_feasible": control_is_best,
+        "margin_vs_best_alt": margin,
+        "verdict": verdict,
+    }
+
+
+def build_lever_scoreboard(
+    offset_returns: dict[int, list[float]],
+    *,
+    lever: str,
+    control_offset: int = CONTROL_OFFSET_DAYS,
+) -> dict[str, Any]:
+    """Cohort per-lever scoreboard: control vs ±14d at fair costs, path-independent.
+
+    ``verdict`` is win/tie/lose/insufficient for whether the sealed control
+    offset (0) is best-feasible among scored brackets. Path P&L is never an
+    input — a lever can win on a losing book and lose on a profitable one.
+    """
+    offsets_out: dict[str, Any] = {}
+    for offset, vals in sorted(offset_returns.items(), key=lambda item: item[0]):
+        offsets_out[str(offset)] = {
+            "n": len(vals),
+            "smooth_ret_cohort_median": _median_or_none(vals),
+        }
+
+    control_key = str(control_offset)
+    control_med = offsets_out.get(control_key, {}).get("smooth_ret_cohort_median")
+
+    best_offset: int | None = None
+    best_med: float | None = None
+    for key, info in offsets_out.items():
+        med = info.get("smooth_ret_cohort_median")
+        if med is None:
+            continue
+        offset = int(key)
+        if best_med is None or med > best_med:
+            best_med = med
+            best_offset = offset
+
+    alt_pairs: list[tuple[int, float]] = []
+    for key, info in offsets_out.items():
+        offset = int(key)
+        if offset == control_offset:
+            continue
+        med = info.get("smooth_ret_cohort_median")
+        if med is not None:
+            alt_pairs.append((offset, float(med)))
+
+    best_alt_offset: int | None = None
+    best_alt_med: float | None = None
+    if alt_pairs:
+        best_alt_offset, best_alt_med = max(alt_pairs, key=lambda item: item[1])
+
+    if control_med is None or best_alt_med is None:
+        verdict = "insufficient"
+        control_is_best: bool | None = None
+        margin: float | None = None
+    elif control_med > best_alt_med:
+        verdict = "win"
+        control_is_best = True
+        margin = round(float(control_med) - float(best_alt_med), 6)
+    elif control_med < best_alt_med:
+        verdict = "lose"
+        control_is_best = False
+        margin = round(float(control_med) - float(best_alt_med), 6)
+    else:
+        verdict = "tie"
+        control_is_best = True
+        margin = 0.0
+
+    # Flat offset keys retained for readers that expect the v2 shape.
+    flat = {key: dict(info) for key, info in offsets_out.items()}
+    return {
+        **flat,
+        "schema_version": PER_LEVER_SCOREBOARD_SCHEMA_VERSION,
+        "lever": lever,
+        "cost_basis": "fair_market_table",
+        "metric_id": SUCCESS_METRIC_ID,
+        "control_offset_days": control_offset,
+        "bracket_offsets_days": sorted(offset_returns.keys()),
+        "independent_of_path_pnl": True,
+        "not_capital_ready": True,
+        "offsets": offsets_out,
+        "control_smooth_ret_cohort_median": control_med,
+        "best_offset_days": best_offset,
+        "best_smooth_ret_cohort_median": best_med,
+        "best_alt_offset_days": best_alt_offset,
+        "best_alt_smooth_ret_cohort_median": best_alt_med,
+        "control_is_best_feasible": control_is_best,
+        "margin_vs_best_alt": margin,
+        "verdict": verdict,
+        "note": (
+            f"{lever.capitalize()} lever: fair-cost {SUCCESS_METRIC_ID} for "
+            f"offset {control_offset} vs ±14d alternatives (other timing lever "
+            "held at control). Independent of path P&L — not a promote signal (F8)."
+        ),
+    }
+
+
+def build_per_lever_rollup(
+    entry_lever: dict[str, Any],
+    exit_lever: dict[str, Any],
+    *,
+    path_control_median: float | None,
+) -> dict[str, Any]:
+    """Compact dual-lever rollup for dashboard / ops findings."""
+    return {
+        "schema_version": PER_LEVER_SCOREBOARD_SCHEMA_VERSION,
+        "cost_basis": "fair_market_table",
+        "metric_id": SUCCESS_METRIC_ID,
+        "independent_of_path_pnl": True,
+        "not_capital_ready": True,
+        "entry_verdict": entry_lever.get("verdict"),
+        "exit_verdict": exit_lever.get("verdict"),
+        "entry_control_is_best_feasible": entry_lever.get("control_is_best_feasible"),
+        "exit_control_is_best_feasible": exit_lever.get("control_is_best_feasible"),
+        "entry_margin_vs_best_alt": entry_lever.get("margin_vs_best_alt"),
+        "exit_margin_vs_best_alt": exit_lever.get("margin_vs_best_alt"),
+        "entry_control_smooth_ret_cohort_median": entry_lever.get(
+            "control_smooth_ret_cohort_median"
+        ),
+        "exit_control_smooth_ret_cohort_median": exit_lever.get("control_smooth_ret_cohort_median"),
+        "entry_best_alt_offset_days": entry_lever.get("best_alt_offset_days"),
+        "exit_best_alt_offset_days": exit_lever.get("best_alt_offset_days"),
+        "path_control_smooth_ret_cohort_median": path_control_median,
+        "note": (
+            "Per-lever verdicts use fair-cost bracket medians only. Path control "
+            "median is shown for juxtaposition and is not an input to lever "
+            "verdicts. Lever/phase wins never alone promote capital (F8)."
+        ),
+    }
+
+
 def build_n200_observe(
     snapshots: list[RunSnapshot],
     *,
@@ -360,6 +537,8 @@ def build_n200_observe(
             if exit_idx is None:
                 continue  # still open — not scored for primary
             episode_cells: dict[str, float | None] = {}
+            episode_entry_lever: dict[int, float] = {}
+            episode_exit_lever: dict[int, float] = {}
             for e_off in offsets:
                 e_i = _nearest_snapshot_index(snapshots, i, e_off)
                 if e_i is None:
@@ -381,18 +560,18 @@ def build_n200_observe(
                     )
                     episode_cells[_cell_key(e_off, x_off)] = round(ret, 6)
                     cell_returns[_cell_key(e_off, x_off)].append(ret)
-                # Entry lever: control exit (0)
-                x0 = _nearest_snapshot_index(snapshots, exit_idx, 0)
+                # Entry lever: control exit (0) — independent of path cell matrix.
+                x0 = _nearest_snapshot_index(snapshots, exit_idx, CONTROL_OFFSET_DAYS)
                 if x0 is not None and x0 > e_i:
                     p_x = _price_at(snapshots, x0, ticker)
                     if p_x is not None:
-                        entry_lever_returns[e_off].append(
-                            episode_return(
-                                p_entry, p_x, buy_cost_pct=buy_pct, sell_cost_pct=sell_pct
-                            )
+                        e_ret = episode_return(
+                            p_entry, p_x, buy_cost_pct=buy_pct, sell_cost_pct=sell_pct
                         )
+                        entry_lever_returns[e_off].append(e_ret)
+                        episode_entry_lever[e_off] = e_ret
             # Exit lever: control entry (0)
-            e0 = _nearest_snapshot_index(snapshots, i, 0)
+            e0 = _nearest_snapshot_index(snapshots, i, CONTROL_OFFSET_DAYS)
             p_e0 = _price_at(snapshots, e0, ticker) if e0 is not None else None
             if p_e0 is not None:
                 for x_off in offsets:
@@ -402,13 +581,13 @@ def build_n200_observe(
                     p_x = _price_at(snapshots, x_i, ticker)
                     if p_x is None:
                         continue
-                    exit_lever_returns[x_off].append(
-                        episode_return(p_e0, p_x, buy_cost_pct=buy_pct, sell_cost_pct=sell_pct)
-                    )
+                    x_ret = episode_return(p_e0, p_x, buy_cost_pct=buy_pct, sell_cost_pct=sell_pct)
+                    exit_lever_returns[x_off].append(x_ret)
+                    episode_exit_lever[x_off] = x_ret
             # Stress diagnostic on control cell only (report-only).
             control_ret_stress: float | None = None
-            e0_ctrl = _nearest_snapshot_index(snapshots, i, 0)
-            x0_ctrl = _nearest_snapshot_index(snapshots, exit_idx, 0)
+            e0_ctrl = _nearest_snapshot_index(snapshots, i, CONTROL_OFFSET_DAYS)
+            x0_ctrl = _nearest_snapshot_index(snapshots, exit_idx, CONTROL_OFFSET_DAYS)
             if e0_ctrl is not None and x0_ctrl is not None and x0_ctrl > e0_ctrl:
                 p_in = _price_at(snapshots, e0_ctrl, ticker)
                 p_out = _price_at(snapshots, x0_ctrl, ticker)
@@ -416,6 +595,7 @@ def build_n200_observe(
                     control_ret_stress = episode_return(p_in, p_out, trade_cost_pct=stress_pct)
                     stress_control_returns.append(control_ret_stress)
             hold_days = _days_between(snap.run_at, snapshots[exit_idx].run_at)
+            path_control = episode_cells.get(_cell_key(CONTROL_OFFSET_DAYS, CONTROL_OFFSET_DAYS))
             episodes.append(
                 {
                     "ticker": ticker,
@@ -424,10 +604,12 @@ def build_n200_observe(
                     "hold_days": hold_days,
                     "eligibility": elig_note,
                     "cells": episode_cells,
-                    "control_return": episode_cells.get(_cell_key(0, 0)),
+                    "control_return": path_control,
                     "control_return_stress_report_only": (
                         None if control_ret_stress is None else round(control_ret_stress, 6)
                     ),
+                    "entry_lever": _episode_lever_outcome(episode_entry_lever),
+                    "exit_lever": _episode_lever_outcome(episode_exit_lever),
                 }
             )
             if len(episodes) >= cfg.max_episodes:
@@ -458,20 +640,11 @@ def build_n200_observe(
             best_med = med
             best_cell = key
 
-    entry_lever = {
-        str(o): {
-            "n": len(entry_lever_returns[o]),
-            "smooth_ret_cohort_median": _median_or_none(entry_lever_returns[o]),
-        }
-        for o in offsets
-    }
-    exit_lever = {
-        str(o): {
-            "n": len(exit_lever_returns[o]),
-            "smooth_ret_cohort_median": _median_or_none(exit_lever_returns[o]),
-        }
-        for o in offsets
-    }
+    entry_lever = build_lever_scoreboard(entry_lever_returns, lever="entry")
+    exit_lever = build_lever_scoreboard(exit_lever_returns, lever="exit")
+    per_lever = build_per_lever_rollup(
+        entry_lever, exit_lever, path_control_median=absolute_primary
+    )
 
     weeks = 0
     if len(snapshots) >= 2:
@@ -512,11 +685,31 @@ def build_n200_observe(
         "success_metric_id": SUCCESS_METRIC_ID,
         "applies_to": "observe_only",
     }
+    per_lever_marker = {
+        "marker_id": PER_LEVER_MARKER_ID,
+        "at": "2026-10-11T16:00:00+00:00",
+        "lever": "params",
+        "before_id": "lever_medians_offsets_only",
+        "after_id": "per_lever_scoreboard_verdicts_v1",
+        "registration_id": REGISTRATION_ID,
+        "reason": (
+            "Factory stage: persist per-lever entry/exit scoreboards with "
+            "best-feasible verdicts vs ±14d brackets at fair costs, "
+            "independent of path P&L. Same registration_id — instrumentation "
+            "enrichment via logged marker, not a new learning question or "
+            "capital promote (F8)."
+        ),
+        "eligible_set_ref": "archive_history_buy_tier_f9_or_pass",
+        "success_metric_id": SUCCESS_METRIC_ID,
+        "applies_to": "observe_only",
+    }
     markers = list(prior_markers or [])
     if not any(m.get("marker_id") == seal_marker["marker_id"] for m in markers):
         markers.insert(0, seal_marker)
     if not any(m.get("marker_id") == fair_cost_marker["marker_id"] for m in markers):
         markers.append(fair_cost_marker)
+    if not any(m.get("marker_id") == per_lever_marker["marker_id"] for m in markers):
+        markers.append(per_lever_marker)
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -567,6 +760,7 @@ def build_n200_observe(
         "cells": cell_summary,
         "entry_lever_scoreboard": entry_lever,
         "exit_lever_scoreboard": exit_lever,
+        "per_lever_scoreboards": per_lever,
         "change_markers": markers,
         "episodes_sample": episodes[:25],
         "ops_doc": str(DEFAULT_OPS_DOC),
@@ -625,9 +819,16 @@ def ops_findings_from_n200_observe(payload: dict[str, Any]) -> list[dict[str, An
     path = (
         payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
     )
+    levers = (
+        payload.get("per_lever_scoreboards")
+        if isinstance(payload.get("per_lever_scoreboards"), dict)
+        else {}
+    )
     control_med = path.get("control_smooth_ret_cohort_median")
     stress_med = path.get("control_smooth_ret_cohort_median_stress_report_only")
     entries_pw = phase.get("entries_per_week")
+    entry_v = levers.get("entry_verdict")
+    exit_v = levers.get("exit_verdict")
     findings.append(
         {
             "severity": "info",
@@ -637,6 +838,8 @@ def ops_findings_from_n200_observe(payload: dict[str, Any]) -> list[dict[str, An
                 f"{REGISTRATION_ID}: {n} completed episodes over {weeks} weeks; "
                 f"entries/week={entries_pw}; control {SUCCESS_METRIC_ID}="
                 f"{control_med} (fair costs primary); "
+                f"entry_lever={entry_v}; exit_lever={exit_v} "
+                f"(independent of path P&L); "
                 f"stress_3pct_report_only={stress_med}. "
                 "Observe-only — no live writes (F8)."
             ),
@@ -668,6 +871,11 @@ def format_n200_observe_text(payload: dict[str, Any]) -> str:
     phase = payload.get("phase") if isinstance(payload.get("phase"), dict) else {}
     volume = payload.get("volume_gate") if isinstance(payload.get("volume_gate"), dict) else {}
     cost = payload.get("cost_basis") if isinstance(payload.get("cost_basis"), dict) else {}
+    levers = (
+        payload.get("per_lever_scoreboards")
+        if isinstance(payload.get("per_lever_scoreboards"), dict)
+        else {}
+    )
     lines = [
         f"N200 {payload.get('registration_id')} (observe-only)",
         f"  episodes={payload.get('completed_entry_episodes')} "
@@ -675,6 +883,11 @@ def format_n200_observe_text(payload: dict[str, Any]) -> str:
         f"entries/week={phase.get('entries_per_week')}",
         f"  control {SUCCESS_METRIC_ID}={path.get('control_smooth_ret_cohort_median')} "
         f"(fair {cost.get('market_id')} RT={cost.get('round_trip_pct')})",
+        f"  entry_lever={levers.get('entry_verdict')} "
+        f"(margin_vs_best_alt={levers.get('entry_margin_vs_best_alt')}) "
+        f"exit_lever={levers.get('exit_verdict')} "
+        f"(margin_vs_best_alt={levers.get('exit_margin_vs_best_alt')}) "
+        "independent_of_path_pnl",
         f"  stress_3pct_report_only="
         f"{path.get('control_smooth_ret_cohort_median_stress_report_only')}",
         f"  volume_gate_met={volume.get('met')} phase_floor_met={phase.get('floor_met')}",
@@ -787,6 +1000,82 @@ def _ops_n200_check_status(ops_status: dict[str, Any] | None) -> dict[str, Any]:
     }
 
 
+def _project_per_lever_from_store(payload: dict[str, Any] | None) -> dict[str, Any]:
+    """Extract / rebuild a slim per-lever block for dashboard projection."""
+    if not isinstance(payload, dict):
+        return {
+            "present": False,
+            "independent_of_path_pnl": True,
+            "cost_basis": "fair_market_table",
+            "not_capital_ready": True,
+            "entry_verdict": None,
+            "exit_verdict": None,
+            "detail": "Per-lever scoreboards not yet in observe store.",
+        }
+    rollup = payload.get("per_lever_scoreboards")
+    if isinstance(rollup, dict) and rollup.get("entry_verdict") is not None:
+        return {
+            "present": True,
+            "independent_of_path_pnl": bool(rollup.get("independent_of_path_pnl", True)),
+            "cost_basis": rollup.get("cost_basis") or "fair_market_table",
+            "not_capital_ready": True,
+            "entry_verdict": rollup.get("entry_verdict"),
+            "exit_verdict": rollup.get("exit_verdict"),
+            "entry_control_is_best_feasible": rollup.get("entry_control_is_best_feasible"),
+            "exit_control_is_best_feasible": rollup.get("exit_control_is_best_feasible"),
+            "entry_margin_vs_best_alt": rollup.get("entry_margin_vs_best_alt"),
+            "exit_margin_vs_best_alt": rollup.get("exit_margin_vs_best_alt"),
+            "entry_control_smooth_ret_cohort_median": rollup.get(
+                "entry_control_smooth_ret_cohort_median"
+            ),
+            "exit_control_smooth_ret_cohort_median": rollup.get(
+                "exit_control_smooth_ret_cohort_median"
+            ),
+            "path_control_smooth_ret_cohort_median": rollup.get(
+                "path_control_smooth_ret_cohort_median"
+            ),
+            "detail": (
+                f"Entry lever {rollup.get('entry_verdict')}; "
+                f"exit lever {rollup.get('exit_verdict')} "
+                "(fair costs; independent of path P&L)."
+            ),
+        }
+    # Legacy flat offset medians only — no verdict yet.
+    entry = payload.get("entry_lever_scoreboard")
+    exit_sb = payload.get("exit_lever_scoreboard")
+    if isinstance(entry, dict) or isinstance(exit_sb, dict):
+        return {
+            "present": True,
+            "independent_of_path_pnl": True,
+            "cost_basis": "fair_market_table",
+            "not_capital_ready": True,
+            "entry_verdict": (entry.get("verdict") if isinstance(entry, dict) else None),
+            "exit_verdict": (exit_sb.get("verdict") if isinstance(exit_sb, dict) else None),
+            "entry_control_is_best_feasible": (
+                entry.get("control_is_best_feasible") if isinstance(entry, dict) else None
+            ),
+            "exit_control_is_best_feasible": (
+                exit_sb.get("control_is_best_feasible") if isinstance(exit_sb, dict) else None
+            ),
+            "entry_margin_vs_best_alt": (
+                entry.get("margin_vs_best_alt") if isinstance(entry, dict) else None
+            ),
+            "exit_margin_vs_best_alt": (
+                exit_sb.get("margin_vs_best_alt") if isinstance(exit_sb, dict) else None
+            ),
+            "detail": "Lever medians present; refresh observe store for full verdicts.",
+        }
+    return {
+        "present": False,
+        "independent_of_path_pnl": True,
+        "cost_basis": "fair_market_table",
+        "not_capital_ready": True,
+        "entry_verdict": None,
+        "exit_verdict": None,
+        "detail": "Per-lever scoreboards not yet in observe store.",
+    }
+
+
 def build_n200_pipeline_health_projection(
     payload: dict[str, Any] | None = None,
     *,
@@ -797,10 +1086,10 @@ def build_n200_pipeline_health_projection(
     stale_after_hours: float = DEFAULT_STALE_AFTER_HOURS,
     store_lag_warn_hours: float = DEFAULT_STORE_LAG_WARN_HOURS,
 ) -> dict[str, Any]:
-    """Slim dashboard projection: phase floor, volume gate, pipeline freshness.
+    """Slim dashboard projection: phase, volume, per-lever, pipeline freshness.
 
     Reads the committed observe store (does **not** re-score archive history).
-    Phase green = throughput health only — never alpha or capital-ready (F8).
+    Phase / lever green = factory health only — never alpha or capital-ready (F8).
     """
     clock = now or datetime.now(UTC)
     store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
@@ -830,6 +1119,7 @@ def build_n200_pipeline_health_projection(
     volume = volume_raw if isinstance(volume_raw, dict) else {}
     episodes = int((payload or {}).get("completed_entry_episodes") or 0) if present else 0
     weeks = int((payload or {}).get("calendar_weeks_spanned") or 0) if present else 0
+    per_lever = _project_per_lever_from_store(payload if present else None)
 
     entries_pw = phase.get("entries_per_week")
     floor = phase.get("floor", PHASE_ENTRIES_PER_WEEK_FLOOR)
@@ -841,34 +1131,44 @@ def build_n200_pipeline_health_projection(
     ops_ok = bool(ops_check["ops_check_ok"]) or (freshness["state"] == "fresh" and present)
     functioning = bool(present and freshness_ok and ops_ok)
 
+    lever_bit = ""
+    if per_lever.get("present") and per_lever.get("entry_verdict"):
+        lever_bit = (
+            f"; entry lever {per_lever.get('entry_verdict')}, "
+            f"exit lever {per_lever.get('exit_verdict')}"
+        )
+
     if not present:
         headline = "N200 observe store missing — pipeline not yet published."
     elif not functioning:
         headline = (
             f"N200 pipeline attention — freshness={freshness['state']}; "
             f"phase floor {'met' if floor_met else 'not met'}; "
-            f"volume gate {'met' if volume_met else 'not met'}."
+            f"volume gate {'met' if volume_met else 'not met'}{lever_bit}."
         )
     elif floor_met and volume_met:
         headline = (
             f"N200 pipeline functioning — phase {entries_pw}/{floor} entries/week "
-            f"(floor met); volume gate met ({episodes} ep / {weeks} wk)."
+            f"(floor met); volume gate met ({episodes} ep / {weeks} wk)"
+            f"{lever_bit}."
         )
     elif floor_met:
         headline = (
             f"N200 pipeline functioning — phase floor met ({entries_pw}/{floor} "
-            f"entries/week); volume gate not yet met ({episodes} ep / {weeks} wk)."
+            f"entries/week); volume gate not yet met ({episodes} ep / {weeks} wk)"
+            f"{lever_bit}."
         )
     else:
         headline = (
             f"N200 pipeline functioning — phase below floor "
             f"({entries_pw}/{floor} entries/week); volume "
-            f"{'met' if volume_met else 'not met'}."
+            f"{'met' if volume_met else 'not met'}{lever_bit}."
         )
 
     pipeline_detail_parts = [
         ops_check["detail"],
         freshness["detail"],
+        per_lever.get("detail") or "",
     ]
     if functioning:
         pipeline_detail_parts.insert(0, "Observe refresh path looks alive.")
@@ -900,13 +1200,14 @@ def build_n200_pipeline_health_projection(
             "min_episodes": volume.get("min_episodes", VOLUME_MIN_EPISODES),
             "min_weeks": volume.get("min_weeks", VOLUME_MIN_WEEKS),
         },
+        "per_lever": per_lever,
         "freshness": freshness,
         "pipeline": {
             "functioning": functioning,
             "ops_check_ok": bool(ops_check["ops_check_ok"]),
             "ops_finding_present": bool(ops_check["ops_finding_present"]),
             "ops_run_at": ops_run_at.isoformat() if ops_run_at else None,
-            "detail": " ".join(pipeline_detail_parts),
+            "detail": " ".join(part for part in pipeline_detail_parts if part),
         },
         "ops_doc": str(DEFAULT_OPS_DOC),
     }

@@ -1,8 +1,8 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "registration_id": "strand-b-plain-value-tech-timing-v0",
   "deferred_id": "N200",
-  "generated_at": "2026-10-11T12:16:17.499011+00:00",
+  "generated_at": "2026-10-11T16:40:58.383270+00:00",
   "observe_only": true,
   "influences_live": false,
   "identity_id": "raw_buy_tier",
@@ -109,7 +109,42 @@
     "14": {
       "n": 40,
       "smooth_ret_cohort_median": -0.030838
-    }
+    },
+    "schema_version": 1,
+    "lever": "entry",
+    "cost_basis": "fair_market_table",
+    "metric_id": "smooth_ret_cohort_median",
+    "control_offset_days": 0,
+    "bracket_offsets_days": [
+      -14,
+      0,
+      14
+    ],
+    "independent_of_path_pnl": true,
+    "not_capital_ready": true,
+    "offsets": {
+      "-14": {
+        "n": 44,
+        "smooth_ret_cohort_median": -0.036487
+      },
+      "0": {
+        "n": 101,
+        "smooth_ret_cohort_median": -0.0055
+      },
+      "14": {
+        "n": 40,
+        "smooth_ret_cohort_median": -0.030838
+      }
+    },
+    "control_smooth_ret_cohort_median": -0.0055,
+    "best_offset_days": 0,
+    "best_smooth_ret_cohort_median": -0.0055,
+    "best_alt_offset_days": 14,
+    "best_alt_smooth_ret_cohort_median": -0.030838,
+    "control_is_best_feasible": true,
+    "margin_vs_best_alt": 0.025338,
+    "verdict": "win",
+    "note": "Entry lever: fair-cost smooth_ret_cohort_median for offset 0 vs \u00b114d alternatives (other timing lever held at control). Independent of path P&L \u2014 not a promote signal (F8)."
   },
   "exit_lever_scoreboard": {
     "-14": {
@@ -123,7 +158,61 @@
     "14": {
       "n": 93,
       "smooth_ret_cohort_median": -0.008349
-    }
+    },
+    "schema_version": 1,
+    "lever": "exit",
+    "cost_basis": "fair_market_table",
+    "metric_id": "smooth_ret_cohort_median",
+    "control_offset_days": 0,
+    "bracket_offsets_days": [
+      -14,
+      0,
+      14
+    ],
+    "independent_of_path_pnl": true,
+    "not_capital_ready": true,
+    "offsets": {
+      "-14": {
+        "n": 40,
+        "smooth_ret_cohort_median": 0.004408
+      },
+      "0": {
+        "n": 101,
+        "smooth_ret_cohort_median": -0.0055
+      },
+      "14": {
+        "n": 93,
+        "smooth_ret_cohort_median": -0.008349
+      }
+    },
+    "control_smooth_ret_cohort_median": -0.0055,
+    "best_offset_days": -14,
+    "best_smooth_ret_cohort_median": 0.004408,
+    "best_alt_offset_days": -14,
+    "best_alt_smooth_ret_cohort_median": 0.004408,
+    "control_is_best_feasible": false,
+    "margin_vs_best_alt": -0.009908,
+    "verdict": "lose",
+    "note": "Exit lever: fair-cost smooth_ret_cohort_median for offset 0 vs \u00b114d alternatives (other timing lever held at control). Independent of path P&L \u2014 not a promote signal (F8)."
+  },
+  "per_lever_scoreboards": {
+    "schema_version": 1,
+    "cost_basis": "fair_market_table",
+    "metric_id": "smooth_ret_cohort_median",
+    "independent_of_path_pnl": true,
+    "not_capital_ready": true,
+    "entry_verdict": "win",
+    "exit_verdict": "lose",
+    "entry_control_is_best_feasible": true,
+    "exit_control_is_best_feasible": false,
+    "entry_margin_vs_best_alt": 0.025338,
+    "exit_margin_vs_best_alt": -0.009908,
+    "entry_control_smooth_ret_cohort_median": -0.0055,
+    "exit_control_smooth_ret_cohort_median": -0.0055,
+    "entry_best_alt_offset_days": 14,
+    "exit_best_alt_offset_days": -14,
+    "path_control_smooth_ret_cohort_median": -0.0055,
+    "note": "Per-lever verdicts use fair-cost bracket medians only. Path control median is shown for juxtaposition and is not an input to lever verdicts. Lever/phase wins never alone promote capital (F8)."
   },
   "change_markers": [
     {
@@ -149,6 +238,18 @@
       "eligible_set_ref": "archive_history_buy_tier_f9_or_pass",
       "success_metric_id": "smooth_ret_cohort_median",
       "applies_to": "observe_only"
+    },
+    {
+      "marker_id": "n200-per-lever-scoreboard-v1",
+      "at": "2026-10-11T16:00:00+00:00",
+      "lever": "params",
+      "before_id": "lever_medians_offsets_only",
+      "after_id": "per_lever_scoreboard_verdicts_v1",
+      "registration_id": "strand-b-plain-value-tech-timing-v0",
+      "reason": "Factory stage: persist per-lever entry/exit scoreboards with best-feasible verdicts vs \u00b114d brackets at fair costs, independent of path P&L. Same registration_id \u2014 instrumentation enrichment via logged marker, not a new learning question or capital promote (F8).",
+      "eligible_set_ref": "archive_history_buy_tier_f9_or_pass",
+      "success_metric_id": "smooth_ret_cohort_median",
+      "applies_to": "observe_only"
     }
   ],
   "episodes_sample": [
@@ -167,7 +268,29 @@
         "entry_+14__exit_+14": -0.016095
       },
       "control_return": 0.0344,
-      "control_return_stress_report_only": -0.0201
+      "control_return_stress_report_only": -0.0201,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.0344,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.0344,
+        "best_offset_days": 0,
+        "best_return": 0.0344,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.003644,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.030756,
+        "verdict": "win"
+      }
     },
     {
       "ticker": "ABF.L",
@@ -184,7 +307,29 @@
         "entry_+14__exit_+14": -0.02012
       },
       "control_return": -0.038562,
-      "control_return_stress_report_only": -0.093062
+      "control_return_stress_report_only": -0.093062,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.038562,
+        "best_offset_days": 14,
+        "best_return": -0.022069,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.022069,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.016493,
+        "verdict": "lose"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.038562,
+        "best_offset_days": -14,
+        "best_return": 0.002646,
+        "best_alt_offset_days": -14,
+        "best_alt_return": 0.002646,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.041207,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "AEP.L",
@@ -201,7 +346,29 @@
         "entry_+14__exit_+14": null
       },
       "control_return": 0.087833,
-      "control_return_stress_report_only": 0.033333
+      "control_return_stress_report_only": 0.033333,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.087833,
+        "best_offset_days": 0,
+        "best_return": 0.087833,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.075819,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.012015,
+        "verdict": "win"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.087833,
+        "best_offset_days": -14,
+        "best_return": 0.1445,
+        "best_alt_offset_days": -14,
+        "best_alt_return": 0.1445,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.056667,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "ALFA.L",
@@ -218,7 +385,29 @@
         "entry_+14__exit_+14": -0.036076
       },
       "control_return": 0.001826,
-      "control_return_stress_report_only": -0.052674
+      "control_return_stress_report_only": -0.052674,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.001826,
+        "best_offset_days": 0,
+        "best_return": 0.001826,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.015104,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.01693,
+        "verdict": "win"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.001826,
+        "best_offset_days": -14,
+        "best_return": 0.021362,
+        "best_alt_offset_days": -14,
+        "best_alt_return": 0.021362,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.019536,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "ASHM.L",
@@ -235,7 +424,29 @@
         "entry_+14__exit_+14": -0.013395
       },
       "control_return": 0.082678,
-      "control_return_stress_report_only": 0.028178
+      "control_return_stress_report_only": 0.028178,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.082678,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.082678,
+        "best_offset_days": 14,
+        "best_return": 0.09043,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.09043,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.007752,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "BKG.L",
@@ -252,7 +463,29 @@
         "entry_+14__exit_+14": -0.093849
       },
       "control_return": -0.018071,
-      "control_return_stress_report_only": -0.072571
+      "control_return_stress_report_only": -0.072571,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.018071,
+        "best_offset_days": 0,
+        "best_return": -0.018071,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.051331,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.03326,
+        "verdict": "win"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.018071,
+        "best_offset_days": -14,
+        "best_return": 0.009929,
+        "best_alt_offset_days": -14,
+        "best_alt_return": 0.009929,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.028,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "BME.L",
@@ -269,7 +502,29 @@
         "entry_+14__exit_+14": 0.012495
       },
       "control_return": 0.014266,
-      "control_return_stress_report_only": -0.040234
+      "control_return_stress_report_only": -0.040234,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.014266,
+        "best_offset_days": 0,
+        "best_return": 0.014266,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.032921,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.047187,
+        "verdict": "win"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.014266,
+        "best_offset_days": 14,
+        "best_return": 0.061885,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.061885,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.047619,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "BOWL.L",
@@ -286,7 +541,29 @@
         "entry_+14__exit_+14": -0.003705
       },
       "control_return": -0.021262,
-      "control_return_stress_report_only": -0.075762
+      "control_return_stress_report_only": -0.075762,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.021262,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.021262,
+        "best_offset_days": 0,
+        "best_return": -0.021262,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.028267,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.007005,
+        "verdict": "win"
+      }
     },
     {
       "ticker": "BOY.L",
@@ -303,7 +580,29 @@
         "entry_+14__exit_+14": -0.012061
       },
       "control_return": 0.260244,
-      "control_return_stress_report_only": 0.205744
+      "control_return_stress_report_only": 0.205744,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.260244,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.260244,
+        "best_offset_days": 0,
+        "best_return": 0.260244,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.251939,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.008304,
+        "verdict": "win"
+      }
     },
     {
       "ticker": "BREE.L",
@@ -320,7 +619,29 @@
         "entry_+14__exit_+14": -0.114467
       },
       "control_return": -0.047796,
-      "control_return_stress_report_only": -0.102296
+      "control_return_stress_report_only": -0.102296,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.047796,
+        "best_offset_days": 0,
+        "best_return": -0.047796,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.105954,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.058158,
+        "verdict": "win"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.047796,
+        "best_offset_days": -14,
+        "best_return": 0.022295,
+        "best_alt_offset_days": -14,
+        "best_alt_return": 0.022295,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.070091,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "BT-A.L",
@@ -337,7 +658,29 @@
         "entry_+14__exit_+14": 0.019463
       },
       "control_return": -0.010468,
-      "control_return_stress_report_only": -0.064968
+      "control_return_stress_report_only": -0.064968,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.010468,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.010468,
+        "best_offset_days": 14,
+        "best_return": 0.014371,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.014371,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.024839,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "BTRW.L",
@@ -354,7 +697,29 @@
         "entry_+14__exit_+14": null
       },
       "control_return": 0.032686,
-      "control_return_stress_report_only": -0.021814
+      "control_return_stress_report_only": -0.021814,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.032686,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.032686,
+        "best_offset_days": 14,
+        "best_return": 0.107013,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.107013,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.074327,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "BWY.L",
@@ -371,7 +736,29 @@
         "entry_+14__exit_+14": -0.036664
       },
       "control_return": 0.050838,
-      "control_return_stress_report_only": -0.003662
+      "control_return_stress_report_only": -0.003662,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.050838,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.050838,
+        "best_offset_days": 14,
+        "best_return": 0.05788,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.05788,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.007042,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "BYIT.L",
@@ -388,7 +775,29 @@
         "entry_+14__exit_+14": 0.109959
       },
       "control_return": 0.048891,
-      "control_return_stress_report_only": -0.005609
+      "control_return_stress_report_only": -0.005609,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.048891,
+        "best_offset_days": 0,
+        "best_return": 0.048891,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.015273,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.033618,
+        "verdict": "win"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.048891,
+        "best_offset_days": 14,
+        "best_return": 0.146696,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.146696,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.097804,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "CNA.L",
@@ -405,7 +814,29 @@
         "entry_+14__exit_+14": -0.018645
       },
       "control_return": -0.01421,
-      "control_return_stress_report_only": -0.06871
+      "control_return_stress_report_only": -0.06871,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.01421,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.01421,
+        "best_offset_days": 14,
+        "best_return": -0.012597,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.012597,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.001613,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "CURY.L",
@@ -422,7 +853,29 @@
         "entry_+14__exit_+14": -0.084103
       },
       "control_return": -0.100795,
-      "control_return_stress_report_only": -0.155295
+      "control_return_stress_report_only": -0.155295,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.100795,
+        "best_offset_days": 14,
+        "best_return": -0.057902,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.057902,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.042893,
+        "verdict": "lose"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.100795,
+        "best_offset_days": -14,
+        "best_return": -0.050765,
+        "best_alt_offset_days": -14,
+        "best_alt_return": -0.050765,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.05003,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "DNLM.L",
@@ -439,7 +892,29 @@
         "entry_+14__exit_+14": -0.013913
       },
       "control_return": 0.019802,
-      "control_return_stress_report_only": -0.034698
+      "control_return_stress_report_only": -0.034698,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.019802,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.019802,
+        "best_offset_days": 0,
+        "best_return": 0.019802,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.011176,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.008626,
+        "verdict": "win"
+      }
     },
     {
       "ticker": "DOM.L",
@@ -456,7 +931,29 @@
         "entry_+14__exit_+14": 0.074459
       },
       "control_return": 0.03025,
-      "control_return_stress_report_only": -0.02425
+      "control_return_stress_report_only": -0.02425,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.03025,
+        "best_offset_days": 14,
+        "best_return": 0.050168,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.050168,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.019918,
+        "verdict": "lose"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.03025,
+        "best_offset_days": 14,
+        "best_return": 0.054083,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.054083,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.023833,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "EDV.L",
@@ -473,7 +970,29 @@
         "entry_+14__exit_+14": 0.132909
       },
       "control_return": 0.151229,
-      "control_return_stress_report_only": 0.096729
+      "control_return_stress_report_only": 0.096729,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.151229,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.151229,
+        "best_offset_days": 14,
+        "best_return": 0.32329,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.32329,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.172061,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "FOUR.L",
@@ -490,7 +1009,29 @@
         "entry_+14__exit_+14": -0.031793
       },
       "control_return": 0.190226,
-      "control_return_stress_report_only": 0.135726
+      "control_return_stress_report_only": 0.135726,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.190226,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.190226,
+        "best_offset_days": 0,
+        "best_return": 0.190226,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.109604,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.080622,
+        "verdict": "win"
+      }
     },
     {
       "ticker": "GAMA.L",
@@ -507,7 +1048,29 @@
         "entry_+14__exit_+14": 0.103675
       },
       "control_return": 0.034564,
-      "control_return_stress_report_only": -0.019936
+      "control_return_stress_report_only": -0.019936,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.034564,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": 0.034564,
+        "best_offset_days": 14,
+        "best_return": 0.150483,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.150483,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.115919,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "GCP.L",
@@ -524,7 +1087,29 @@
         "entry_+14__exit_+14": 0.000299
       },
       "control_return": -0.003967,
-      "control_return_stress_report_only": -0.058467
+      "control_return_stress_report_only": -0.058467,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.003967,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.003967,
+        "best_offset_days": 0,
+        "best_return": -0.003967,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.017769,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.013802,
+        "verdict": "win"
+      }
     },
     {
       "ticker": "GFRD.L",
@@ -541,7 +1126,29 @@
         "entry_+14__exit_+14": 0.1113
       },
       "control_return": -0.042788,
-      "control_return_stress_report_only": -0.097288
+      "control_return_stress_report_only": -0.097288,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.042788,
+        "best_offset_days": 0,
+        "best_return": -0.042788,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.0967,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.053912,
+        "verdict": "win"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.042788,
+        "best_offset_days": 14,
+        "best_return": 0.177551,
+        "best_alt_offset_days": 14,
+        "best_alt_return": 0.177551,
+        "control_is_best_feasible": false,
+        "margin_vs_best_alt": -0.220339,
+        "verdict": "lose"
+      }
     },
     {
       "ticker": "GSK.L",
@@ -558,7 +1165,29 @@
         "entry_+14__exit_+14": 0.050071
       },
       "control_return": -0.007571,
-      "control_return_stress_report_only": -0.062071
+      "control_return_stress_report_only": -0.062071,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.007571,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.007571,
+        "best_offset_days": 0,
+        "best_return": -0.007571,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.012231,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.00466,
+        "verdict": "win"
+      }
     },
     {
       "ticker": "HLN.L",
@@ -575,7 +1204,29 @@
         "entry_+14__exit_+14": 0.015591
       },
       "control_return": -0.00027,
-      "control_return_stress_report_only": -0.05477
+      "control_return_stress_report_only": -0.05477,
+      "entry_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.00027,
+        "best_offset_days": null,
+        "best_return": null,
+        "best_alt_offset_days": null,
+        "best_alt_return": null,
+        "control_is_best_feasible": null,
+        "margin_vs_best_alt": null,
+        "verdict": "insufficient"
+      },
+      "exit_lever": {
+        "control_offset_days": 0,
+        "control_return": -0.00027,
+        "best_offset_days": 0,
+        "best_return": -0.00027,
+        "best_alt_offset_days": 14,
+        "best_alt_return": -0.00605,
+        "control_is_best_feasible": true,
+        "margin_vs_best_alt": 0.00578,
+        "verdict": "win"
+      }
     }
   ],
   "ops_doc": "docs/ops/n200-tech-timing-observe.md"

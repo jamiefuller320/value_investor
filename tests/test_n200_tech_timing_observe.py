@@ -14,11 +14,13 @@ from value_investor.market_trading_costs import (
 from value_investor.n200_tech_timing_observe import (
     FAIR_COST_MARKER_ID,
     FINDING_TITLE,
+    PER_LEVER_MARKER_ID,
     PIPELINE_HEALTH_DISCLAIMER,
     REGISTRATION_ID,
     STRESS_TRADE_COST_PCT,
     VOLUME_GATE_TITLE,
     N200Config,
+    build_lever_scoreboard,
     build_n200_observe,
     build_n200_pipeline_health_projection,
     build_registration_payload,
@@ -29,14 +31,19 @@ from value_investor.n200_tech_timing_observe import (
 )
 
 
-def _snap(day: int, rows: list[tuple[str, str, float]]) -> RunSnapshot:
+def _snap(
+    day: int,
+    rows: list[tuple[str, str, float]],
+    *,
+    month: int = 1,
+) -> RunSnapshot:
     signals = [
         {"ticker": t, "signal": sig, "conviction_score": 0.5, "data_quality_score": 0.8}
         for t, sig, _ in rows
     ]
     prices = {t: p for t, _, p in rows}
     return RunSnapshot(
-        run_at=f"2026-01-{day:02d}T12:00:00+00:00",
+        run_at=f"2026-{month:02d}-{day:02d}T12:00:00+00:00",
         prices=prices,
         signals=signals,
     )
@@ -103,6 +110,11 @@ def test_build_n200_observe_scores_brackets_fair_primary():
     assert FAIR_COST_MARKER_ID in marker_ids
     assert "entry_lever_scoreboard" in payload
     assert "exit_lever_scoreboard" in payload
+    assert payload["entry_lever_scoreboard"]["cost_basis"] == "fair_market_table"
+    assert payload["entry_lever_scoreboard"]["independent_of_path_pnl"] is True
+    assert payload["per_lever_scoreboards"]["independent_of_path_pnl"] is True
+    assert payload["per_lever_scoreboards"]["not_capital_ready"] is True
+    assert PER_LEVER_MARKER_ID in marker_ids
 
 
 def test_fair_vs_stress_cfg_override_separates_scoreboards():
@@ -204,6 +216,11 @@ def test_ops_findings_volume_gate():
         "control_smooth_ret_cohort_median": 0.01,
         "control_smooth_ret_cohort_median_stress_report_only": -0.05,
     }
+    base["per_lever_scoreboards"] = {
+        "entry_verdict": "win",
+        "exit_verdict": "lose",
+        "independent_of_path_pnl": True,
+    }
     findings = ops_findings_from_n200_observe(base)
     titles = {f["title"] for f in findings}
     assert FINDING_TITLE in titles
@@ -212,6 +229,9 @@ def test_ops_findings_volume_gate():
     refresh = next(f for f in findings if f["title"] == FINDING_TITLE)
     assert "fair costs primary" in refresh["summary"]
     assert "stress_3pct_report_only" in refresh["summary"]
+    assert "entry_lever=win" in refresh["summary"]
+    assert "exit_lever=lose" in refresh["summary"]
+    assert "independent of path P&L" in refresh["summary"]
 
 
 def test_registration_payload_seal_fields():
@@ -235,6 +255,15 @@ def test_pipeline_health_projection_phase_volume_fresh():
         "calendar_weeks_spanned": 9,
         "phase": {"entries_per_week": 11.0, "floor": 5.0, "floor_met": True},
         "volume_gate": {"met": True, "min_episodes": 24, "min_weeks": 8},
+        "per_lever_scoreboards": {
+            "entry_verdict": "lose",
+            "exit_verdict": "win",
+            "entry_margin_vs_best_alt": -0.01,
+            "exit_margin_vs_best_alt": 0.005,
+            "independent_of_path_pnl": True,
+            "cost_basis": "fair_market_table",
+            "path_control_smooth_ret_cohort_median": -0.0055,
+        },
         "observe_only": True,
     }
     ops = {
@@ -258,6 +287,13 @@ def test_pipeline_health_projection_phase_volume_fresh():
     assert proj["freshness"]["state"] == "fresh"
     assert proj["pipeline"]["functioning"] is True
     assert proj["pipeline"]["ops_check_ok"] is True
+    assert proj["per_lever"]["present"] is True
+    assert proj["per_lever"]["entry_verdict"] == "lose"
+    assert proj["per_lever"]["exit_verdict"] == "win"
+    assert proj["per_lever"]["independent_of_path_pnl"] is True
+    assert proj["per_lever"]["cost_basis"] == "fair_market_table"
+    assert "entry lever lose" in proj["headline"]
+    assert "exit lever win" in proj["headline"]
 
 
 def test_pipeline_health_projection_missing_store():
@@ -289,3 +325,116 @@ def test_pipeline_health_projection_stale_not_functioning():
     assert proj["freshness"]["state"] == "stale"
     assert proj["pipeline"]["functioning"] is False
     assert proj["phase"]["floor_met"] is False
+
+
+def test_build_lever_scoreboard_fair_cost_primary_and_verdicts():
+    # Control best → win; alternative better → lose. Fair-cost medians only.
+    win_board = build_lever_scoreboard(
+        {-14: [-0.04], 0: [-0.01], 14: [-0.03]},
+        lever="entry",
+    )
+    assert win_board["cost_basis"] == "fair_market_table"
+    assert win_board["independent_of_path_pnl"] is True
+    assert win_board["verdict"] == "win"
+    assert win_board["control_is_best_feasible"] is True
+    assert win_board["margin_vs_best_alt"] == 0.02
+    assert win_board["best_alt_offset_days"] == 14
+
+    lose_board = build_lever_scoreboard(
+        {-14: [0.05], 0: [0.01], 14: [0.02]},
+        lever="exit",
+    )
+    assert lose_board["verdict"] == "lose"
+    assert lose_board["control_is_best_feasible"] is False
+    assert lose_board["best_alt_offset_days"] == -14
+    assert lose_board["margin_vs_best_alt"] == -0.04
+
+
+def test_entry_lever_wins_while_path_loses():
+    """Learning independence: best-feasible entry can win on a net-loss path.
+
+    Prices (fair costs tiny so sign matches gross):
+    - Control entry Jan15 @100 → exit Feb12 @95 → path loss
+    - Early entry Jan1 @120 would be worse (bought higher)
+    - Late entry Jan29 @110 would be worse
+    """
+    snaps = [
+        _snap(1, [("AAA.L", "hold", 120.0)]),
+        _snap(8, [("AAA.L", "hold", 115.0)]),
+        _snap(15, [("AAA.L", "buy", 100.0)]),  # enter buy-tier (control)
+        _snap(22, [("AAA.L", "buy", 102.0)]),
+        _snap(29, [("AAA.L", "buy", 110.0)]),  # +14d entry worse
+        _snap(5, [("AAA.L", "buy", 98.0)], month=2),
+        _snap(12, [("AAA.L", "hold", 95.0)], month=2),  # leave buy-tier
+    ]
+    cfg = N200Config(buy_cost_pct=0.001, sell_cost_pct=0.001)
+    payload = build_n200_observe(snaps, cfg=cfg)
+    assert payload["completed_entry_episodes"] == 1
+    path = payload["path_scoreboard"]["control_smooth_ret_cohort_median"]
+    assert path is not None and path < 0
+    entry = payload["entry_lever_scoreboard"]
+    assert entry["cost_basis"] == "fair_market_table"
+    assert entry["verdict"] == "win"
+    assert entry["control_is_best_feasible"] is True
+    assert entry["independent_of_path_pnl"] is True
+    # Episode-level: path loss + entry win coexist.
+    ep = payload["episodes_sample"][0]
+    assert ep["control_return"] < 0
+    assert ep["entry_lever"]["verdict"] == "win"
+    assert payload["per_lever_scoreboards"]["entry_verdict"] == "win"
+    assert payload["per_lever_scoreboards"]["path_control_smooth_ret_cohort_median"] == path
+
+
+def test_entry_lever_fails_while_path_profits():
+    """Learning independence: path can be green while entry was not best-feasible.
+
+    Control entry Jan15 @100 → exit Feb12 @120 → path profit, but Jan1 @80
+    would have been a better entry (bought cheaper).
+    """
+    snaps = [
+        _snap(1, [("AAA.L", "hold", 80.0)]),  # -14d better entry
+        _snap(8, [("AAA.L", "hold", 90.0)]),
+        _snap(15, [("AAA.L", "buy", 100.0)]),
+        _snap(22, [("AAA.L", "buy", 105.0)]),
+        _snap(29, [("AAA.L", "buy", 110.0)]),
+        _snap(5, [("AAA.L", "buy", 115.0)], month=2),
+        _snap(12, [("AAA.L", "hold", 120.0)], month=2),
+    ]
+    cfg = N200Config(buy_cost_pct=0.001, sell_cost_pct=0.001)
+    payload = build_n200_observe(snaps, cfg=cfg)
+    path = payload["path_scoreboard"]["control_smooth_ret_cohort_median"]
+    assert path is not None and path > 0
+    entry = payload["entry_lever_scoreboard"]
+    assert entry["verdict"] == "lose"
+    assert entry["control_is_best_feasible"] is False
+    assert entry["best_alt_offset_days"] == -14
+    assert entry["cost_basis"] == "fair_market_table"
+    ep = payload["episodes_sample"][0]
+    assert ep["control_return"] > 0
+    assert ep["entry_lever"]["verdict"] == "lose"
+    assert payload["per_lever_scoreboards"]["entry_verdict"] == "lose"
+    # Path profit must not flip lever verdict.
+    assert payload["per_lever_scoreboards"]["path_control_smooth_ret_cohort_median"] == path
+
+
+def test_exit_lever_independent_of_path_pnl():
+    """Exit lever scored with control entry; can disagree with path sign."""
+    # Rising then falling: early exit (-14d) better; control exit still +ve path.
+    snaps = [
+        _snap(1, [("AAA.L", "hold", 100.0)]),
+        _snap(8, [("AAA.L", "hold", 100.0)]),
+        _snap(15, [("AAA.L", "buy", 100.0)]),
+        _snap(22, [("AAA.L", "buy", 130.0)]),
+        _snap(29, [("AAA.L", "buy", 125.0)]),  # peak-ish — -14d from leave
+        _snap(5, [("AAA.L", "buy", 118.0)], month=2),
+        _snap(12, [("AAA.L", "hold", 110.0)], month=2),  # control exit still profit
+    ]
+    cfg = N200Config(buy_cost_pct=0.001, sell_cost_pct=0.001)
+    payload = build_n200_observe(snaps, cfg=cfg)
+    path = payload["path_scoreboard"]["control_smooth_ret_cohort_median"]
+    assert path is not None and path > 0
+    exit_sb = payload["exit_lever_scoreboard"]
+    assert exit_sb["verdict"] == "lose"
+    assert exit_sb["best_alt_offset_days"] == -14
+    assert exit_sb["independent_of_path_pnl"] is True
+    assert exit_sb["cost_basis"] == "fair_market_table"

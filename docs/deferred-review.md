@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T13:53:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T16:41:10+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -243,6 +243,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N202 | **Do not promote hrs-v1 chosen rules after inconclusive holdout delta** | Rule search selected buy_tier|top=40|exit=tier3|tac=off in-sample, but holdout chosen_minus_frozen was inconclusive under base and stress. Keep live frozen rules; do not cold-start or rewrite books to the chosen config from hrs alone. | FTSE forward evidence shows a concentrated top-N / tier3-exit book beats the frozen rules control on cost-aware total return with readiness gates met |
 | N203 | **Do not re-subscribe Sharadar to re-litigate spent hsr holdout** | hsr-v1/hsr-mid-v1 holdouts were revealed 2026-10-10 and licensed raw deleted. Re-buying Bundle now cannot reseal the same 2013-2025 window; aggregates already committed. Park immediate re-subscribe / re-panel work. | L570 fresh-holdout trigger fires (5+ years after reveal or material screen epoch needing a new registration_id) |
 | N204 | **Do not simplify screen to plain earnings-yield after inconclusive HSR** | Pre-registered hsr action on inconclusive is freeze extras, not simplify. Point estimates were slightly positive on S&P 500; mid-cap near zero. Simplifying now would treat a null as a loss. | A future sealed registration (new registration_id) holdout_verdict is lose vs plain value, or user explicitly chooses simplify over freeze |
+| N205 | **N200 selection lever scoreboard** | Selection post-mortem lever is a separate factory question from N200 entry/exit timing; do not fold into tech-timing observe. | Ended-lifecycle selection post-mortem instrument is sealed or N200 entry/exit levers banked. |
 
 ---
 
@@ -337,6 +338,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L579 | **Position sizing and cap in a later rule-search registration** | hrs-v1 holds equal weights with no position cap; the live buy_tier_level book caps at 120 names with a one-screen re-entry cooldown, and the graduated-allocation book sizes by conviction. Add sizing (equal vs conviction-graduated) and the cap as grid dimensions in a new registration, run on years after the hrs-v1 holdout or a fresh market. | hrs-v1 holdout revealed and median names held for the chosen rule set exceeds 120, or graduated allocation is proposed for promotion |
 | L592 | **Factory absolute smoothed-return metric implementation** | Implement sealed success_metric_id options (e.g. EWM ~26w, trailing 12m, cohort-median episode %) for lifecycle factory / N200/N201 observe lanes; keep market and control excess as report-only diagnostics. Do not change live assessment_scoreboard primaries without an explicit decision. Change-marker store schema may ship alongside. | User seals N200 or N201 (or opens factory observe lane) and picks success_metric_id / O4-O5 in docs/lifecycle-learning-flow.md |
 | L593 | **Factory phase/mechanism throughput scoreboard** | Observe scoreboard for lifecycle factory layer-1 success: entries/week, bracket completions, change-marker hygiene, volume-gated review cadence — bankable irrespective of candidate return quality. Separate from absolute smoothed-return layer (L592). No capital promotion from phase wins (F8). | User seals first factory observe lane or N200/N201 and picks O6 (entries/week floor) in docs/lifecycle-learning-flow.md |
+| L597 | **N200 path-absolute fair-cost scoreboard stage** | After per-lever scoreboards, next factory stage is path-level absolute smoothed return at fair costs (smooth_ret_cohort_median already stamped; needs dedicated path-success banking / readiness surface separate from lever verdicts). | Per-lever scoreboards merged and phase green remains; start path-absolute stage before application. |
 
 ### Universe & data
 
@@ -642,6 +644,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L590 | **Eligibility negotiation instrument (why-not / repair requests / agreements)** | After F3-A: keep decision_input_inventory as platform absolute availability. Add observe/ops instrument: why-not view from inventory+market gates, Investment repair request JSON, agreed decision JSON (accept_blocked|schedule_repair|exception_with_trail). Fail-closed: green or agreement alone never apply knobs/fills. Wire optional ops-monitor observe finding + runbook mention when built. | Idle eng queue after N200/N201 definition drafts exist, or Investment repeatedly needs structured why-not/priority outside chat |
 | L595 | **Automate sealed-strategy Data launch queue** | Policy is docs-only: newly sealed strategies enqueue incremental Data deepen/threshold/shortlist work so they do not starve holdings or running sealed units. Later eng: committed queue JSON + ops-monitor observe finding + optional accept/advance CLI; fail-closed; no 4th sprint; do not auto-divert P1. | A second strategy seals (e.g. N201) and needs a distinct shortlist / threshold readiness pack beyond N200+holdings SLA, or F3 repair volume makes manual queue ordering error-prone |
 | L596 | **Dashboard system map with fault and bottleneck highlights** | Topology view of how Data / Investment / Platform modules interact, with visual highlight of faults and performance bottlenecks from ops findings, job timeouts, and rate limits. Hard to visualize architecture otherwise; observe-only (not live capital control). | After N200 observe / fair-cost primacy / dashboard phase-health surfaces land and eng capacity is idle; or sooner if ops-monitor fault surfaces need a topology view to triage bottlenecks. |
+| L598 | **N200 per-lever episode drilldown UI** | Dashboard shows cohort entry/exit verdicts; optional episode-level lever win/lose table can wait. | Cohort per-lever strip is in use and humans ask for episode drilldown. |
 
 ---
 

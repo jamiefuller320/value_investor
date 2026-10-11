@@ -337,7 +337,7 @@ def test_daily_hub_accept_passes_focus_ack_decision() -> None:
     assert "badge-sell" in card
     html = Path("docs/index.html").read_text(encoding="utf-8")
     assert 'src="app.js?v=' in html
-    assert "n200-pipeline-health-20261011" in html
+    assert "n200-per-lever-20261011" in html
     assert "Market warning triage" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "zero_body_stuck" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "Expansive assessment" in OPS_MONITOR.read_text(encoding="utf-8")
@@ -371,26 +371,35 @@ def test_css_automation_subnav_and_daily_rec() -> None:
 
 
 def test_n200_pipeline_health_on_queue_and_analysis() -> None:
-    """N200 phase/volume throughput readout on Automation Queue + Analysis observe."""
+    """N200 phase/volume/per-lever readout on Automation Queue + Analysis observe."""
     text = APP_JS.read_text(encoding="utf-8")
     assert "function renderN200PipelineHealthSection(" in text
     assert "function resolveN200PipelineHealth(" in text
+    assert "function n200LeverBadge(" in text
     assert '["n200_tech_timing_observe", "data/n200_tech_timing_observe.json"]' in text
+    assert "per_lever" in text
+    assert "Entry lever" in text
+    assert "Exit lever" in text
+    assert "independent of path p&l" in text.lower()
     queue_fn = text.split("function renderQueueHealthMonitor(", 1)[1].split("\nfunction ", 1)[0]
     assert "renderN200PipelineHealthSection(" in queue_fn
     assert "n200_pipeline_health" in queue_fn
     analysis = text.split('id="analysis-observe"', 1)[1].split('id="analysis-charts"', 1)[0]
     assert "renderN200PipelineHealthSection(data, { compact: true })" in analysis
     assert "not alpha" in text.lower() or "not a promote" in text.lower()
-    assert "mechanism throughput" in text.lower() or "Throughput only" in text
+    assert "mechanism throughput" in text.lower() or "Throughput only" in text or "Lever ≠ path"
     css = STYLES.read_text(encoding="utf-8")
     assert ".n200-pipeline-health-section" in css
     assert ".n200-pipeline-grid" in css
+    assert ".n200-lever-verdict" in css
     ops = OPS_MONITOR.read_text(encoding="utf-8")
     assert "N200 pipeline health" in ops
+    assert "per-lever" in ops
     n200_doc = Path("docs/ops/n200-tech-timing-observe.md").read_text(encoding="utf-8")
     assert "## Dashboard" in n200_doc
     assert "build_n200_pipeline_health_projection" in n200_doc
+    assert "per_lever_scoreboards" in n200_doc
+    assert "independent of path P&L" in n200_doc
 
 
 def test_ops_runbook_documents_daily_hub() -> None:
