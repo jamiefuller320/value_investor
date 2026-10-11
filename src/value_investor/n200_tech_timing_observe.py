@@ -394,9 +394,7 @@ def build_n200_observe(
                     if p_x is None:
                         continue
                     exit_lever_returns[x_off].append(
-                        episode_return(
-                            p_e0, p_x, buy_cost_pct=buy_pct, sell_cost_pct=sell_pct
-                        )
+                        episode_return(p_e0, p_x, buy_cost_pct=buy_pct, sell_cost_pct=sell_pct)
                     )
             # Stress diagnostic on control cell only (report-only).
             control_ret_stress: float | None = None
@@ -406,9 +404,7 @@ def build_n200_observe(
                 p_in = _price_at(snapshots, e0_ctrl, ticker)
                 p_out = _price_at(snapshots, x0_ctrl, ticker)
                 if p_in is not None and p_out is not None:
-                    control_ret_stress = episode_return(
-                        p_in, p_out, trade_cost_pct=stress_pct
-                    )
+                    control_ret_stress = episode_return(p_in, p_out, trade_cost_pct=stress_pct)
                     stress_control_returns.append(control_ret_stress)
             hold_days = _days_between(snap.run_at, snapshots[exit_idx].run_at)
             episodes.append(
