@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.backtest import RunSnapshot
@@ -13,11 +14,13 @@ from value_investor.market_trading_costs import (
 from value_investor.n200_tech_timing_observe import (
     FAIR_COST_MARKER_ID,
     FINDING_TITLE,
+    PIPELINE_HEALTH_DISCLAIMER,
     REGISTRATION_ID,
     STRESS_TRADE_COST_PCT,
     VOLUME_GATE_TITLE,
     N200Config,
     build_n200_observe,
+    build_n200_pipeline_health_projection,
     build_registration_payload,
     episode_return,
     ops_findings_from_n200_observe,
@@ -221,3 +224,68 @@ def test_registration_payload_seal_fields():
     assert reg["cost_basis"]["primary"] == "fair_market_table"
     assert reg["trade_cost_pct"] == reg["cost_basis"]["trade_cost_pct_symmetric_proxy"]
     assert reg["stress_trade_cost_pct"] == 0.03
+
+
+def test_pipeline_health_projection_phase_volume_fresh():
+    store = {
+        "registration_id": REGISTRATION_ID,
+        "deferred_id": "N200",
+        "generated_at": "2026-10-11T12:00:00+00:00",
+        "completed_entry_episodes": 101,
+        "calendar_weeks_spanned": 9,
+        "phase": {"entries_per_week": 11.0, "floor": 5.0, "floor_met": True},
+        "volume_gate": {"met": True, "min_episodes": 24, "min_weeks": 8},
+        "observe_only": True,
+    }
+    ops = {
+        "run_at": "2026-10-11T12:30:00+00:00",
+        "findings": [{"title": FINDING_TITLE, "severity": "info"}],
+    }
+    proj = build_n200_pipeline_health_projection(
+        store,
+        ops_status=ops,
+        now=datetime(2026, 10, 11, 13, 0, tzinfo=UTC),
+    )
+    assert proj["observe_only"] is True
+    assert proj["not_alpha_signal"] is True
+    assert proj["not_capital_ready"] is True
+    assert proj["disclaimer"] == PIPELINE_HEALTH_DISCLAIMER
+    assert proj["phase"]["floor_met"] is True
+    assert proj["phase"]["entries_per_week"] == 11.0
+    assert proj["volume_gate"]["met"] is True
+    assert proj["volume_gate"]["episodes"] == 101
+    assert proj["volume_gate"]["weeks"] == 9
+    assert proj["freshness"]["state"] == "fresh"
+    assert proj["pipeline"]["functioning"] is True
+    assert proj["pipeline"]["ops_check_ok"] is True
+
+
+def test_pipeline_health_projection_missing_store():
+    proj = build_n200_pipeline_health_projection(
+        None,
+        store_path=Path("/nonexistent/n200_tech_timing_observe.json"),
+        ops_status={"run_at": "2026-10-11T12:00:00+00:00", "findings": []},
+        now=datetime(2026, 10, 11, 13, 0, tzinfo=UTC),
+    )
+    assert proj["store_present"] is False
+    assert proj["pipeline"]["functioning"] is False
+    assert proj["freshness"]["state"] == "missing"
+    assert proj["not_capital_ready"] is True
+
+
+def test_pipeline_health_projection_stale_not_functioning():
+    store = {
+        "generated_at": "2026-10-01T00:00:00+00:00",
+        "completed_entry_episodes": 10,
+        "calendar_weeks_spanned": 2,
+        "phase": {"entries_per_week": 2.0, "floor": 5.0, "floor_met": False},
+        "volume_gate": {"met": False, "min_episodes": 24, "min_weeks": 8},
+    }
+    proj = build_n200_pipeline_health_projection(
+        store,
+        ops_status={"run_at": "2026-10-11T12:00:00+00:00", "findings": []},
+        now=datetime(2026, 10, 11, 13, 0, tzinfo=UTC),
+    )
+    assert proj["freshness"]["state"] == "stale"
+    assert proj["pipeline"]["functioning"] is False
+    assert proj["phase"]["floor_met"] is False

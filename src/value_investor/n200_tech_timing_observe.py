@@ -32,6 +32,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT_DIR = Path("docs/data")
 DEFAULT_STORE_PATH = Path("docs/data/n200_tech_timing_observe.json")
 DEFAULT_REGISTRATION_PATH = Path("docs/data/n200_tech_timing_registration.json")
+DEFAULT_OPS_STATUS_PATH = Path("docs/data/ops_status.json")
 DEFAULT_OPS_DOC = Path("docs/ops/n200-tech-timing-observe.md")
 
 REGISTRATION_ID = "strand-b-plain-value-tech-timing-v0"
@@ -39,6 +40,14 @@ DEFERRED_ID = "N200"
 IDENTITY_ID = "raw_buy_tier"
 SUCCESS_METRIC_ID = "smooth_ret_cohort_median"
 SCHEMA_VERSION = 2
+PIPELINE_HEALTH_SCHEMA_VERSION = 1
+# Ops-monitor runs ~2×/day; past this the observe store is obviously stale.
+DEFAULT_STALE_AFTER_HOURS = 30.0
+DEFAULT_STORE_LAG_WARN_HOURS = 2.0
+PIPELINE_HEALTH_DISCLAIMER = (
+    "Phase floor and volume gate measure mechanism throughput health — "
+    "not alpha, path P&L, or capital readiness (F8). Observe-only."
+)
 
 BRACKET_OFFSETS_DAYS = (-14, 0, 14)
 # Primary = fair market-table (FTSE/LSE archive → ftse350). Stress 3%/side = report-only.
@@ -672,3 +681,232 @@ def format_n200_observe_text(payload: dict[str, Any]) -> str:
         f"  diagnostic_best_cell={path.get('diagnostic_best_cell')}",
     ]
     return "\n".join(lines) + "\n"
+
+
+def _parse_dt(value: Any) -> datetime | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    try:
+        dt = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=UTC)
+    return dt.astimezone(UTC)
+
+
+def _hours_since(then: datetime | None, *, now: datetime) -> float | None:
+    if then is None:
+        return None
+    return round((now - then).total_seconds() / 3600.0, 2)
+
+
+def _safe_read_json(path: Path) -> dict[str, Any] | None:
+    path = Path(path)
+    if not path.is_file():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def _freshness_block(
+    *,
+    as_of: datetime | None,
+    now: datetime,
+    ops_run_at: datetime | None,
+    stale_after_hours: float,
+    store_lag_warn_hours: float,
+    present: bool,
+) -> dict[str, Any]:
+    age_h = _hours_since(as_of, now=now)
+    store_lag_h = None
+    if as_of is not None and ops_run_at is not None and ops_run_at > as_of:
+        store_lag_h = round((ops_run_at - as_of).total_seconds() / 3600.0, 2)
+
+    if not present:
+        state = "missing"
+        label = "Missing"
+        detail = "N200 observe store not published yet."
+    elif age_h is None:
+        state = "unknown"
+        label = "Unknown"
+        detail = "Store present but no usable timestamp."
+    elif age_h >= stale_after_hours:
+        state = "stale"
+        label = "Stale"
+        detail = f"Last refresh {age_h:.1f}h ago (limit {stale_after_hours:.0f}h)."
+    elif store_lag_h is not None and store_lag_h >= store_lag_warn_hours:
+        state = "lagging"
+        label = "Lagging ops"
+        detail = f"Store trails ops_status by {store_lag_h:.1f}h (check ops-monitor commit path)."
+    else:
+        state = "fresh"
+        label = "Fresh"
+        detail = f"Last refresh {age_h:.1f}h ago."
+
+    return {
+        "state": state,
+        "label": label,
+        "detail": detail,
+        "as_of": as_of.isoformat() if as_of else None,
+        "age_hours": age_h,
+        "store_lag_hours": store_lag_h,
+        "stale_after_hours": float(stale_after_hours),
+    }
+
+
+def _ops_n200_check_status(ops_status: dict[str, Any] | None) -> dict[str, Any]:
+    """Whether daily ops-monitor N200 check looks healthy in findings."""
+    findings = (ops_status or {}).get("findings")
+    rows = findings if isinstance(findings, list) else []
+    titles = {str(row.get("title") or "") for row in rows if isinstance(row, dict)}
+    failed = STORE_FAILED_TITLE in titles
+    refreshed = FINDING_TITLE in titles
+    if failed:
+        return {
+            "ops_check_ok": False,
+            "ops_finding_present": True,
+            "detail": f"Ops finding: {STORE_FAILED_TITLE}",
+        }
+    if refreshed:
+        return {
+            "ops_check_ok": True,
+            "ops_finding_present": True,
+            "detail": f"Ops finding: {FINDING_TITLE}",
+        }
+    return {
+        "ops_check_ok": False,
+        "ops_finding_present": False,
+        "detail": "No N200 ops finding in latest ops_status (store may lag until ops commits).",
+    }
+
+
+def build_n200_pipeline_health_projection(
+    payload: dict[str, Any] | None = None,
+    *,
+    store_path: Path | None = None,
+    ops_status_path: Path | None = None,
+    ops_status: dict[str, Any] | None = None,
+    now: datetime | None = None,
+    stale_after_hours: float = DEFAULT_STALE_AFTER_HOURS,
+    store_lag_warn_hours: float = DEFAULT_STORE_LAG_WARN_HOURS,
+) -> dict[str, Any]:
+    """Slim dashboard projection: phase floor, volume gate, pipeline freshness.
+
+    Reads the committed observe store (does **not** re-score archive history).
+    Phase green = throughput health only — never alpha or capital-ready (F8).
+    """
+    clock = now or datetime.now(UTC)
+    store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
+    if payload is None:
+        payload = _safe_read_json(store)
+    present = isinstance(payload, dict) and bool(payload)
+
+    if ops_status is None:
+        ops_path = Path(ops_status_path) if ops_status_path is not None else DEFAULT_OPS_STATUS_PATH
+        ops_status = _safe_read_json(ops_path)
+
+    ops_run_at = _parse_dt((ops_status or {}).get("run_at"))
+    store_as_of = _parse_dt((payload or {}).get("generated_at")) if present else None
+    freshness = _freshness_block(
+        as_of=store_as_of,
+        now=clock,
+        ops_run_at=ops_run_at,
+        stale_after_hours=stale_after_hours,
+        store_lag_warn_hours=store_lag_warn_hours,
+        present=present,
+    )
+    ops_check = _ops_n200_check_status(ops_status)
+
+    phase_raw = (payload or {}).get("phase") if present else None
+    phase = phase_raw if isinstance(phase_raw, dict) else {}
+    volume_raw = (payload or {}).get("volume_gate") if present else None
+    volume = volume_raw if isinstance(volume_raw, dict) else {}
+    episodes = int((payload or {}).get("completed_entry_episodes") or 0) if present else 0
+    weeks = int((payload or {}).get("calendar_weeks_spanned") or 0) if present else 0
+
+    entries_pw = phase.get("entries_per_week")
+    floor = phase.get("floor", PHASE_ENTRIES_PER_WEEK_FLOOR)
+    floor_met = bool(phase.get("floor_met")) if present and "floor_met" in phase else False
+    volume_met = bool(volume.get("met")) if present and "met" in volume else False
+
+    # Functioning = store usable + not stale/missing + (ops check ok OR store fresh).
+    freshness_ok = freshness["state"] in {"fresh", "lagging"}
+    ops_ok = bool(ops_check["ops_check_ok"]) or (freshness["state"] == "fresh" and present)
+    functioning = bool(present and freshness_ok and ops_ok)
+
+    if not present:
+        headline = "N200 observe store missing — pipeline not yet published."
+    elif not functioning:
+        headline = (
+            f"N200 pipeline attention — freshness={freshness['state']}; "
+            f"phase floor {'met' if floor_met else 'not met'}; "
+            f"volume gate {'met' if volume_met else 'not met'}."
+        )
+    elif floor_met and volume_met:
+        headline = (
+            f"N200 pipeline functioning — phase {entries_pw}/{floor} entries/week "
+            f"(floor met); volume gate met ({episodes} ep / {weeks} wk)."
+        )
+    elif floor_met:
+        headline = (
+            f"N200 pipeline functioning — phase floor met ({entries_pw}/{floor} "
+            f"entries/week); volume gate not yet met ({episodes} ep / {weeks} wk)."
+        )
+    else:
+        headline = (
+            f"N200 pipeline functioning — phase below floor "
+            f"({entries_pw}/{floor} entries/week); volume "
+            f"{'met' if volume_met else 'not met'}."
+        )
+
+    pipeline_detail_parts = [
+        ops_check["detail"],
+        freshness["detail"],
+    ]
+    if functioning:
+        pipeline_detail_parts.insert(0, "Observe refresh path looks alive.")
+    else:
+        pipeline_detail_parts.insert(0, "Pipeline not fully healthy.")
+
+    return {
+        "schema_version": PIPELINE_HEALTH_SCHEMA_VERSION,
+        "generated_at": clock.isoformat(),
+        "observe_only": True,
+        "influences_live": False,
+        "not_alpha_signal": True,
+        "not_capital_ready": True,
+        "registration_id": (payload or {}).get("registration_id") or REGISTRATION_ID,
+        "deferred_id": (payload or {}).get("deferred_id") or DEFERRED_ID,
+        "headline": headline,
+        "disclaimer": PIPELINE_HEALTH_DISCLAIMER,
+        "store_present": present,
+        "store_generated_at": store_as_of.isoformat() if store_as_of else None,
+        "phase": {
+            "entries_per_week": entries_pw,
+            "floor": floor,
+            "floor_met": floor_met,
+        },
+        "volume_gate": {
+            "met": volume_met,
+            "episodes": episodes,
+            "weeks": weeks,
+            "min_episodes": volume.get("min_episodes", VOLUME_MIN_EPISODES),
+            "min_weeks": volume.get("min_weeks", VOLUME_MIN_WEEKS),
+        },
+        "freshness": freshness,
+        "pipeline": {
+            "functioning": functioning,
+            "ops_check_ok": bool(ops_check["ops_check_ok"]),
+            "ops_finding_present": bool(ops_check["ops_finding_present"]),
+            "ops_run_at": ops_run_at.isoformat() if ops_run_at else None,
+            "detail": " ".join(pipeline_detail_parts),
+        },
+        "ops_doc": str(DEFAULT_OPS_DOC),
+    }

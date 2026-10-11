@@ -599,6 +599,7 @@ const DASHBOARD_SIDECARS = [
   ["assessment_scoreboard", "data/assessment_scoreboard.json"],
   ["total_return_view", "data/total_return_view.json"],
   ["lifecycle_maturity_trajectory", "data/lifecycle_maturity_trajectory.json"],
+  ["n200_tech_timing_observe", "data/n200_tech_timing_observe.json"],
   ["chart_outcome_review", "data/chart_outcome_review.json"],
   ["engineering_tasks", "data/engineering_tasks.json"],
   ["ingest_deviations", "data/ingest_deviations.json"],
@@ -4146,6 +4147,7 @@ function renderAnalysis(data) {
       ${renderTotalReturnVsPricePanel(data)}
       ${renderPaperTrackBucketsPanel(data)}
       ${renderObserveUtilizationSection(data, { compact: true })}
+      ${renderN200PipelineHealthSection(data, { compact: true })}
     </section>
     ${renderSundayReview(data)}
     <section class="analysis-section" id="analysis-charts">
@@ -4860,6 +4862,167 @@ function resolveLifecycleMaturity(data) {
   return health?.lifecycle_maturity_trajectory || null;
 }
 
+function resolveN200PipelineHealth(data) {
+  if (data.n200_pipeline_health) return data.n200_pipeline_health;
+  const health = resolveQueueHealth(data);
+  if (health?.n200_pipeline_health) return health.n200_pipeline_health;
+  // Fallback: project a minimal client-side view from the observe sidecar.
+  const store = data.n200_tech_timing_observe;
+  if (!store || typeof store !== "object") return null;
+  const phase = store.phase || {};
+  const volume = store.volume_gate || {};
+  return {
+    observe_only: true,
+    influences_live: false,
+    not_alpha_signal: true,
+    not_capital_ready: true,
+    registration_id: store.registration_id,
+    deferred_id: store.deferred_id || "N200",
+    headline: "N200 observe store loaded (client projection).",
+    disclaimer:
+      "Phase floor and volume gate measure mechanism throughput health — not alpha, path P&L, or capital readiness (F8). Observe-only.",
+    store_present: true,
+    store_generated_at: store.generated_at || null,
+    phase: {
+      entries_per_week: phase.entries_per_week,
+      floor: phase.floor,
+      floor_met: !!phase.floor_met,
+    },
+    volume_gate: {
+      met: !!volume.met,
+      episodes: store.completed_entry_episodes ?? 0,
+      weeks: store.calendar_weeks_spanned ?? 0,
+      min_episodes: volume.min_episodes,
+      min_weeks: volume.min_weeks,
+    },
+    freshness: { state: "unknown", detail: "Awaiting queue-health embed for freshness." },
+    pipeline: {
+      functioning: null,
+      ops_check_ok: null,
+      ops_run_at: null,
+      detail: "Refresh with ops-monitor / queue health for full pipeline status.",
+    },
+    ops_doc: store.ops_doc || "docs/ops/n200-tech-timing-observe.md",
+  };
+}
+
+function n200GateBadge(met, { yes = "met", no = "not met" } = {}) {
+  if (met === true) {
+    return `<span class="badge badge-ii-yes">${esc(yes)}</span>`;
+  }
+  if (met === false) {
+    return `<span class="badge badge-ii-no">${esc(no)}</span>`;
+  }
+  return `<span class="badge">${esc("—")}</span>`;
+}
+
+function renderN200PipelineHealthSection(data, { compact = false } = {}) {
+  const payload = resolveN200PipelineHealth(data);
+  const runbookUrl = githubOpsDocUrl("docs/ops/n200-tech-timing-observe.md");
+  const sectionAttrs = compact
+    ? ' class="automation-section automation-section-full n200-pipeline-health-section analysis-observe-compact"'
+    : ' class="automation-section automation-section-full n200-pipeline-health-section"';
+  if (!payload) {
+    return `
+      <section${sectionAttrs}>
+        <h2>N200 pipeline health</h2>
+        <p class="muted small">Observe store not published yet. Refreshes with daily ops-monitor (<code>check_n200_tech_timing_observe</code>).</p>
+      </section>`;
+  }
+  const phase = payload.phase || {};
+  const volume = payload.volume_gate || {};
+  const freshness = payload.freshness || {};
+  const pipeline = payload.pipeline || {};
+  const entriesPw =
+    phase.entries_per_week == null || !Number.isFinite(Number(phase.entries_per_week))
+      ? "—"
+      : String(Number(phase.entries_per_week));
+  const floor =
+    phase.floor == null || !Number.isFinite(Number(phase.floor))
+      ? "—"
+      : String(Number(phase.floor));
+  const functioningBadge =
+    pipeline.functioning === true
+      ? `<span class="badge badge-ii-yes">functioning</span>`
+      : pipeline.functioning === false
+        ? `<span class="badge badge-ii-no">attention</span>`
+        : `<span class="badge">unknown</span>`;
+  const disclaimer = esc(
+    payload.disclaimer ||
+      "Phase floor = mechanism throughput, not alpha or capital readiness (F8)."
+  );
+  const metaLine = `<p class="small muted">Store ${esc(fmtDate(payload.store_generated_at))}
+        · projection ${esc(fmtDate(payload.generated_at))}
+        · ops ${esc(fmtDate(pipeline.ops_run_at))}
+        · ${esc(payload.registration_id || "strand-b-plain-value-tech-timing-v0")}
+      </p>`;
+  if (compact) {
+    return `
+      <section${sectionAttrs}>
+        <h2>N200 pipeline health ${observeFreshnessBadge(freshness.state)} ${functioningBadge}</h2>
+        <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
+        ${metaLine}
+        <p class="small muted" style="margin:0.35rem 0 0">
+          Phase ${esc(entriesPw)}/${esc(floor)} ${n200GateBadge(!!phase.floor_met)}
+          · volume ${n200GateBadge(!!volume.met)}
+          (${esc(String(volume.episodes ?? "—"))} ep / ${esc(String(volume.weeks ?? "—"))} wk)
+        </p>
+        <p class="small muted" style="margin-bottom:0">
+          Compact strip — full readout on
+          <button type="button" class="link-btn" data-tab-jump="automation">Automation → Queue &amp; hunter</button>.
+          Throughput only — not a promote signal.
+        </p>
+      </section>`;
+  }
+  return `
+    <section${sectionAttrs}>
+      <h2>N200 / learning-factory pipeline ${observeFreshnessBadge(freshness.state)} ${functioningBadge}</h2>
+      <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
+      ${metaLine}
+      <p class="small muted">${disclaimer}
+        ${runbookUrl ? ` <a href="${esc(runbookUrl)}" target="_blank" rel="noopener">N200 runbook</a>` : ""}
+      </p>
+      <div class="grid n200-pipeline-grid" style="margin-top:0.75rem">
+        <div class="card n200-pipeline-card">
+          <h3>Phase floor ${n200GateBadge(!!phase.floor_met)}</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value">${esc(entriesPw)}<span class="n200-floor-den">/${esc(floor)}</span></div>
+          </div>
+          <p class="small muted">Entries/week vs sealed floor (O6). Throughput health only.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Volume gate ${n200GateBadge(!!volume.met)}</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value">${esc(String(volume.episodes ?? "—"))}<span class="n200-floor-den"> ep</span></div>
+          </div>
+          ${settingRow("Weeks", esc(String(volume.weeks ?? "—")))}
+          ${settingRow(
+            "Minimums",
+            `≥${esc(String(volume.min_episodes ?? 24))} ep and ≥${esc(String(volume.min_weeks ?? 8))} wk`
+          )}
+          <p class="small muted">Review gate — not auto-promote.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Pipeline ${functioningBadge}</h3>
+          ${settingRow("Store freshness", `${observeFreshnessBadge(freshness.state)} · ${esc(freshness.detail || "")}`)}
+          ${settingRow(
+            "Ops check",
+            pipeline.ops_check_ok === true
+              ? n200GateBadge(true, { yes: "ok" })
+              : pipeline.ops_check_ok === false
+                ? n200GateBadge(false, { no: pipeline.ops_finding_present ? "failed" : "absent" })
+                : "—"
+          )}
+          ${settingRow("Last store refresh", esc(fmtDate(payload.store_generated_at)))}
+          <p class="small muted">${esc(pipeline.detail || "")}</p>
+        </div>
+      </div>
+      <p class="small muted" style="margin-top:0.75rem;margin-bottom:0">
+        Observe-only strand B. Phase green ≠ alpha. Never writes books/knobs (F8).
+      </p>
+    </section>`;
+}
+
 function observeFreshnessBadge(state) {
   const key = String(state || "unknown").toLowerCase();
   const labels = {
@@ -5374,6 +5537,11 @@ function renderQueueHealthMonitor(data) {
       </div>
       ${renderTaskCompletionMonitor(health)}
       ${renderObserveUtilizationSection({ queue_health: health, observe_utilization: health.observe_utilization })}
+      ${renderN200PipelineHealthSection({
+        queue_health: health,
+        n200_pipeline_health: health.n200_pipeline_health,
+        n200_tech_timing_observe: data.n200_tech_timing_observe,
+      })}
       ${Array.isArray(health.merges_today) && health.merges_today.length ? `
       <div class="card" style="margin-top:0.75rem">
         <h3>Engineering merges today</h3>
