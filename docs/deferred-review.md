@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T11:05:08+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T13:53:15+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -641,6 +641,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L589 | **Align AGENTS.md live-screener FTSE lock with quality-threshold Investment eligibility** | Project store proposes F9-B: Investment capital/decision eligibility by Data quality thresholds (filings/FCF/overlay/memo; market sprint-complete), not geography-first. Repo AGENTS.md/PROJECT_OBJECTIVE still say live screener FTSE 350 until stage 4. After user confirms F9-B, draft a careful repo wording PR that separates screener product scope from Investment name eligibility. | User accepts F9-B quality-threshold eligibility in design-fork-decisions.md |
 | L590 | **Eligibility negotiation instrument (why-not / repair requests / agreements)** | After F3-A: keep decision_input_inventory as platform absolute availability. Add observe/ops instrument: why-not view from inventory+market gates, Investment repair request JSON, agreed decision JSON (accept_blocked|schedule_repair|exception_with_trail). Fail-closed: green or agreement alone never apply knobs/fills. Wire optional ops-monitor observe finding + runbook mention when built. | Idle eng queue after N200/N201 definition drafts exist, or Investment repeatedly needs structured why-not/priority outside chat |
 | L595 | **Automate sealed-strategy Data launch queue** | Policy is docs-only: newly sealed strategies enqueue incremental Data deepen/threshold/shortlist work so they do not starve holdings or running sealed units. Later eng: committed queue JSON + ops-monitor observe finding + optional accept/advance CLI; fail-closed; no 4th sprint; do not auto-divert P1. | A second strategy seals (e.g. N201) and needs a distinct shortlist / threshold readiness pack beyond N200+holdings SLA, or F3 repair volume makes manual queue ordering error-prone |
+| L596 | **Dashboard system map with fault and bottleneck highlights** | Topology view of how Data / Investment / Platform modules interact, with visual highlight of faults and performance bottlenecks from ops findings, job timeouts, and rate limits. Hard to visualize architecture otherwise; observe-only (not live capital control). | After N200 observe / fair-cost primacy / dashboard phase-health surfaces land and eng capacity is idle; or sooner if ops-monitor fault surfaces need a topology view to triage bottlenecks. |
 
 ---
 
