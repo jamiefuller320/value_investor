@@ -1,19 +1,133 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-11T02:33:22.793863+00:00",
+  "generated_at": "2026-10-11T07:49:05.180326+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
-  "checklist_updated_at": "2026-10-06",
+  "checklist_updated_at": "2026-10-10",
   "counts": {
-    "new_info": 0,
-    "unacked": 0,
-    "acked": 33,
+    "new_info": 2,
+    "unacked": 1,
+    "acked": 31,
     "automated": 20,
-    "human": 33
+    "human": 34
   },
   "tasks": [
+    {
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Admitted shard epoch-0 watch · 22",
+        "updated_at": "2026-10-11T07:12:43.781170+00:00",
+        "fingerprint": "bfc790bbb3ad9f33",
+        "bullets": [
+          "euro_depth: phase=3 ai=False knob=False holdings=36",
+          "bel20: phase=0 ai=False knob=False holdings=4",
+          "aex: phase=0 ai=False knob=False holdings=8",
+          "aim: phase=0 ai=False knob=False holdings=16",
+          "atx: phase=0 ai=False knob=False holdings=2",
+          "cac40: phase=1 ai=False knob=False holdings=14",
+          "dax: phase=1 ai=False knob=False holdings=1",
+          "euro_stoxx50: phase=1 ai=False knob=False holdings=11"
+        ],
+        "source_keys": [
+          "market_status"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-09T15:43:43.165559+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "445acb0f9a3f9032"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "monthly-pr-fix-common-issues",
+      "title": "Review common PR check / merge fix-request reasons",
+      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/project-traffic.md",
+      "doc_anchor": "pr-fix-occasion-log",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "PR fix common issues",
+        "updated_at": "2026-10-10T23:15:08.077656+00:00",
+        "fingerprint": "ed2d18080ea9a2c3",
+        "bullets": [
+          "Occasions logged: 185",
+          "PR mergeable=CONFLICTING against main: 7",
+          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
+          "validate check failed: 3",
+          "deferred-ideas.json conflict after L516 merge: 3",
+          "merge_conflict:dirty: 3"
+        ],
+        "source_keys": [
+          "pr_fix_occasions",
+          "project_traffic_digest"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-09T15:43:43.177105+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "eee1ea27ae69f897"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-post-hsr-alternate-strand",
+      "title": "Pin learning question before registering first post-hsr alternate strand",
+      "summary": "After freeze-extras is in force (docs/ops/post-hsr-freeze-extras.md), keep strand A. Before opening paper/observe tracks for strand B (N200 plain-value + technical timing) or strand C (N201 short-horizon value+momentum), pin one learning question and registration_id, answer the four freeze questions, and do not register both at once. Prefer P1/P2 spend until that pin is deliberate.",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/post-hsr-freeze-extras.md",
+      "doc_anchor": "next-engineering-steps-parked-until-ready",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/post-hsr-freeze-extras.md#next-engineering-steps-parked-until-ready",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "4b3865afc1007df5",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
     {
       "id": "sunday-hold-buffer-twin",
       "title": "Hold-buffer twin vs primary (L541)",
@@ -184,7 +298,7 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary negative",
-        "updated_at": "2026-10-11T02:32:19.336800+00:00",
+        "updated_at": "2026-10-11T07:47:39.383651+00:00",
         "fingerprint": "782b2addb6782b0b",
         "bullets": [
           "ai_judgment_fair: total return -8.2% vs FTAL.L -3.6% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -6.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -205,47 +319,6 @@
         "acked_at": "2026-10-09T15:43:43.187966+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "782b2addb6782b0b"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "monthly-pr-fix-common-issues",
-      "title": "Review common PR check / merge fix-request reasons",
-      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
-      "automated": false,
-      "cadence": "monthly",
-      "section_id": "monthly",
-      "section_title": "Monthly",
-      "doc_path": "docs/ops/project-traffic.md",
-      "doc_anchor": "pr-fix-occasion-log",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "PR fix common issues",
-        "updated_at": "2026-10-08T13:09:50.571183+00:00",
-        "fingerprint": "eee1ea27ae69f897",
-        "bullets": [
-          "Occasions logged: 184",
-          "PR mergeable=CONFLICTING against main: 7",
-          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
-          "validate check failed: 3",
-          "deferred-ideas.json conflict after L516 merge: 3",
-          "merge_conflict:dirty: 3"
-        ],
-        "source_keys": [
-          "pr_fix_occasions",
-          "project_traffic_digest"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-10-09T15:43:43.177105+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "eee1ea27ae69f897"
       },
       "sort_bucket": "acked",
       "auto_ackable": false,
@@ -288,48 +361,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "sunday-shard-epoch0-watch",
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "what-enter-learning-means",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-10T20:27:31.392592+00:00",
-        "fingerprint": "445acb0f9a3f9032",
-        "bullets": [
-          "euro_depth: phase=3 ai=False knob=False holdings=36",
-          "aex: phase=0 ai=False knob=False holdings=8",
-          "aim: phase=0 ai=False knob=False holdings=16",
-          "atx: phase=0 ai=False knob=False holdings=2",
-          "bel20: phase=0 ai=False knob=False holdings=3",
-          "cac40: phase=1 ai=False knob=False holdings=13",
-          "dax: phase=1 ai=False knob=False holdings=1",
-          "euro_stoxx50: phase=1 ai=False knob=False holdings=11"
-        ],
-        "source_keys": [
-          "market_status"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-10-09T15:43:43.165559+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "445acb0f9a3f9032"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "weekday-engineering-parked-backlog-clear",
       "title": "Clear engineering parked backlog when dispatch pauses",
       "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
@@ -344,11 +375,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "4 attention-parked eng tasks",
-        "updated_at": "2026-10-11T02:33:04.027736+00:00",
+        "updated_at": "2026-10-11T07:48:29.919769+00:00",
         "fingerprint": "c699c0fce33dc5e3",
         "bullets": [
           "Parked tasks: 4 (attention ~4)",
-          "Queue-clearing pause active: False — evaluated 2026-10-11T02:33:04.027736+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-10-11T07:48:29.919769+00:00",
           "Traffic pause active: False",
           "eng-20261004-06: Workflow fix: analysis review failure",
           "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo",
