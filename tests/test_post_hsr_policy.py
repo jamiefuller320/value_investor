@@ -98,6 +98,10 @@ def test_build_policy_from_fixture_tree(tmp_path: Path) -> None:
         "N200",
         "N201",
     }
+    by_id = {row["deferred_id"]: row for row in payload["candidate_strands"]}
+    assert by_id["N200"]["status"] == "sealed_observe_only"
+    assert by_id["N200"]["registration_id"] == "strand-b-plain-value-tech-timing-v0"
+    assert by_id["N201"]["status"] == "named_not_registered"
     assert payload["influences_live"] is False
 
 

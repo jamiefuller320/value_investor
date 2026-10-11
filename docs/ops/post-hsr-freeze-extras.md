@@ -52,12 +52,12 @@ not a mandate to throw away the live stack.
 | Strand | Status | Role |
 |--------|--------|------|
 | **A — current stack** | Active | Live / paper experiment grid on the existing framework |
-| **B — plain-value + technical timing** (N200) | Named, not registered | Identity = plain value (or buy-tier); technical timing for entry/exit as observe-only |
-| **C — short-horizon value+momentum** (N201) | Named, not registered | Global breadth → small-weight ~3m holds; distinct from patient value book |
+| **B — plain-value + technical timing** (N200) | **Sealed observe-only** (`strand-b-plain-value-tech-timing-v0`) | Identity = `raw_buy_tier`; ±14d entry/exit brackets; see [n200-tech-timing-observe.md](n200-tech-timing-observe.md) |
+| **C — short-horizon value+momentum** (N201) | Named, not registered (define-only) | Global breadth → small-weight ~3m holds; distinct from patient value book |
 
-Registration (learning question + `registration_id`) is a later step. Do
-**not** open paper tracks, sleeve forks, or AI-judgment shards for B/C until
-those are pinned and P1/P2 capacity allows.
+N200 is sealed for **observe-only** archive scoring. Do **not** open live
+paper tracks, sleeve forks, or AI-judgment shards for B/C capital influence
+until a later promotion seal. N201 remains define-only.
 
 ## What this is not
 
@@ -79,12 +79,11 @@ those are pinned and P1/P2 capacity allows.
 
 All findings are `auto_fixable=False` (observe / warn-only).
 
-## Next engineering steps (parked until ready)
+## Next engineering steps
 
-1. Pin one learning question and `registration_id` for strand B **or** C
-   (not both at once) — revisit **N200** / **N201**.
-2. Cap concurrent live/paper sleeves when the first alternate registers
-   (**L583**).
-3. Only then share timing experiments across strands (**L584**).
+1. **Done (observe):** N200 sealed — daily `check_n200_tech_timing_observe`.
+2. Parked: N201 seal (independent); L588/L589/L590/L592/L593 via `ftse-defer`.
+3. Cap concurrent live/paper sleeves when any alternate gets capital influence
+   (**L583**); share timing factorials later (**L584**).
 
-Until then, spend stays on P1/P2.
+Spend stays on P1/P2; N200 is Investment observe work and must not starve D1.

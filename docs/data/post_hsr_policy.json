@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "policy_id": "post-hsr-freeze-extras-v1",
-  "generated_at": "2026-10-11T07:47:39.360781+00:00",
+  "generated_at": "2026-10-11T09:52:33.941923+00:00",
   "observe_only": true,
   "influences_live": false,
   "freeze_extras": true,
@@ -36,19 +36,21 @@
   "candidate_strands": [
     {
       "id": "strand_b_plain_value_technical_timing",
-      "status": "named_not_registered",
+      "status": "sealed_observe_only",
       "deferred_id": "N200",
       "title": "Technical entry/exit with plain-value identity backstop",
-      "summary": "Identity = plain value (or buy-tier); test technical timing for entry/exit as a sealed observe-only instrument \u2014 not a live replacement for the screen stack.",
-      "learning_question": null,
-      "registration_id": null
+      "summary": "Identity = raw_buy_tier; sealed observe-only technical entry/exit \u00b114d brackets (strand-b-plain-value-tech-timing-v0). Not a live replacement for the screen stack.",
+      "learning_question": "On threshold-eligible names, does raw_buy_tier identity with calendar \u00b114d entry/exit timing brackets beat default timing on cost-aware smooth_ret_cohort_median?",
+      "registration_id": "strand-b-plain-value-tech-timing-v0",
+      "observe_store": "docs/data/n200_tech_timing_observe.json",
+      "ops_doc": "docs/ops/n200-tech-timing-observe.md"
     },
     {
       "id": "strand_c_short_horizon_value_momentum",
       "status": "named_not_registered",
       "deferred_id": "N201",
       "title": "Global short-horizon value+momentum pipeline",
-      "summary": "Continuous small-weight short-hold (~3m) high-value book fed by global breadth \u2014 distinct from the patient value holdings book.",
+      "summary": "Continuous small-weight short-hold (~3m) high-value book fed by global breadth \u2014 distinct from the patient value holdings book. Define-only; not sealed with N200.",
       "learning_question": null,
       "registration_id": null
     }

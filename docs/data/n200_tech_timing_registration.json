@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "registration_id": "strand-b-plain-value-tech-timing-v0",
+  "deferred_id": "N200",
+  "status": "sealed_observe_only",
+  "sealed_at": "2026-10-11",
+  "observe_only": true,
+  "influences_live": false,
+  "learning_question": "On threshold-eligible names, does raw_buy_tier identity with calendar \u00b114d entry/exit timing brackets beat default timing (offset 0) on cost-aware smooth_ret_cohort_median?",
+  "identity_id": "raw_buy_tier",
+  "success_metric_id": "smooth_ret_cohort_median",
+  "o2_identity": "raw_buy_tier",
+  "o3_volume_gate": {
+    "completed_entry_episodes_min": 24,
+    "calendar_weeks_spanned_min": 8,
+    "rule": "both_required"
+  },
+  "o4_smoother": "smooth_ret_cohort_median",
+  "o5_primacy": {
+    "primary": "absolute_smoothed_return",
+    "control_excess": "report_only"
+  },
+  "o6_phase_floor": {
+    "entries_per_week_target": 5.0,
+    "note": "illustrative sealed mechanism floor (5\u201310 band)"
+  },
+  "brackets": {
+    "entry_offsets_days": [
+      -14,
+      0,
+      14
+    ],
+    "exit_offsets_days": [
+      -14,
+      0,
+      14
+    ]
+  },
+  "trade_cost_pct": 0.03,
+  "constraints": [
+    "observe_only",
+    "no_live_strand_a_writes",
+    "no_decision_review_apply",
+    "no_new_screen_extras",
+    "f9_eligibility",
+    "f8_fail_closed",
+    "per_lever_scoreboard_separate_from_path_pnl",
+    "logged_change_markers"
+  ],
+  "n201_sealed": false,
+  "ops_doc": "docs/ops/n200-tech-timing-observe.md",
+  "observe_store": "docs/data/n200_tech_timing_observe.json"
+}

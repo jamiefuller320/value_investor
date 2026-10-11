@@ -2060,6 +2060,55 @@ def check_total_return_view(
     ]
 
 
+def check_n200_tech_timing_observe(
+    *,
+    output_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only N200: sealed raw_buy_tier ±14d entry/exit brackets.
+
+    Writes ``docs/data/n200_tech_timing_observe.json`` (+ registration).
+    Never changes books or knobs (``auto_fixable=False``).
+    See docs/ops/n200-tech-timing-observe.md.
+    """
+    from value_investor.n200_tech_timing_observe import (
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_n200_observe,
+        refresh_n200_tech_timing_observe,
+    )
+
+    data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
+    try:
+        payload = refresh_n200_tech_timing_observe(
+            output_dir=data_dir,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "N200 tech-timing observe"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_n200_observe(payload)
+    ]
+
+
 def check_hold_period_counterfactual(
     *,
     paper_root: Path | None = None,
@@ -3621,6 +3670,7 @@ def collect_ops_findings(
     findings.extend(check_decision_review_significance_gate())
     findings.extend(check_total_return_view())
     findings.extend(check_hold_period_counterfactual())
+    findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_two_lot_replay())
     findings.extend(check_sec_companyfacts_coverage())
     findings.extend(check_hkex_direct_coverage())
