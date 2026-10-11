@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T08:53:55+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T08:56:32+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -337,6 +337,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L578 | **Re-rating exit for the core sell trigger** | The PR #1021 core sell trigger sells only on a confirmed thesis break (hard avoid or failed research), so a name that re-rates to fair value can be held indefinitely. Add a valuation exit: sell after 2 consecutive screens outside the buy tier with the earnings yield below a percentile of the universe, with the threshold taken from the hrs-v1 search (rerate50 / rerate30), via a cold-start twin rather than a live edit. | hrs-v1 holdout revealed and the chosen rule set uses a rerate or thesis exit that passes |
 | L579 | **Position sizing and cap in a later rule-search registration** | hrs-v1 holds equal weights with no position cap; the live buy_tier_level book caps at 120 names with a one-screen re-entry cooldown, and the graduated-allocation book sizes by conviction. Add sizing (equal vs conviction-graduated) and the cap as grid dimensions in a new registration, run on years after the hrs-v1 holdout or a fresh market. | hrs-v1 holdout revealed and median names held for the chosen rule set exceeds 120, or graduated allocation is proposed for promotion |
 | L592 | **Factory absolute smoothed-return metric implementation** | Implement sealed success_metric_id options (e.g. EWM ~26w, trailing 12m, cohort-median episode %) for lifecycle factory / N200/N201 observe lanes; keep market and control excess as report-only diagnostics. Do not change live assessment_scoreboard primaries without an explicit decision. Change-marker store schema may ship alongside. | User seals N200 or N201 (or opens factory observe lane) and picks success_metric_id / O4-O5 in docs/lifecycle-learning-flow.md |
+| L593 | **Factory phase/mechanism throughput scoreboard** | Observe scoreboard for lifecycle factory layer-1 success: entries/week, bracket completions, change-marker hygiene, volume-gated review cadence — bankable irrespective of candidate return quality. Separate from absolute smoothed-return layer (L592). No capital promotion from phase wins (F8). | User seals first factory observe lane or N200/N201 and picks O6 (entries/week floor) in docs/lifecycle-learning-flow.md |
 
 ### Universe & data
 
