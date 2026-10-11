@@ -1,14 +1,17 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-09T07:32:29.795609+00:00
+Track: `buy_tier_level` · updated 2026-10-11T07:07:44.698242+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **12** / 27 (44% count, 43% NAV)
+- Losers: **11** / 26 (42% count, 41% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
 ## Holding reviews
+
+### FMG.AX — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### WGX.AX — intact / watch_review (-16.1%)
 - deep drawdown (-16.1%) — re-check facts; thesis still intact
@@ -17,14 +20,6 @@ Track: `buy_tier_level` · updated 2026-10-09T07:32:29.795609+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-
-### FMG.AX — intact / hold_tolerate (-13.7%)
-- price drawdown alone does not invalidate value thesis
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 78%
 
 ### GGP.AX — intact / hold_tolerate (-12.0%)
 - price drawdown alone does not invalidate value thesis
@@ -127,13 +122,6 @@ Track: `buy_tier_level` · updated 2026-10-09T07:32:29.795609+00:00
 - data_quality 0.95
 - conviction 58%
 
-### PRN.AX — intact / hold_tolerate (-0.9%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 37%
-
 ### WDS.AX — intact / hold_tolerate (-0.0%)
 - still buy
 - research accumulate
@@ -153,11 +141,11 @@ Track: `buy_tier_level` · updated 2026-10-09T07:32:29.795609+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 38%
+- conviction 44%
 
 ### ARB.AX — weakening / watch_review (+0.0%)
 - research verdict caution
-- conviction 28% below intact floor
+- conviction 34% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -185,7 +173,7 @@ Track: `buy_tier_level` · updated 2026-10-09T07:32:29.795609+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
+- conviction 65%
 
 ### PMV.AX — intact / hold_tolerate (+5.5%)
 - still strong_buy
@@ -199,4 +187,4 @@ Track: `buy_tier_level` · updated 2026-10-09T07:32:29.795609+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 61%
+- conviction 60%

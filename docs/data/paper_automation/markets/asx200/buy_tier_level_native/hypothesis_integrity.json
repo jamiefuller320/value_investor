@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "updated_at": "2026-10-09T07:32:29.950998+00:00",
-  "as_of": "2026-10-09T18:32:29.922104+11:00",
+  "updated_at": "2026-10-11T07:07:44.852244+00:00",
+  "as_of": "2026-10-11T18:07:44.823976+11:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -17,37 +17,37 @@
     "skip_underwater_urgency_when_intact": true
   },
   "holding_count": 26,
-  "underwater_count": 4,
+  "underwater_count": 3,
   "thesis_status_counts": {
-    "intact": 23,
-    "weakening": 3,
-    "broken": 0,
+    "intact": 21,
+    "weakening": 4,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
     "holding_count": 26,
-    "loser_count": 4,
-    "loser_share": 0.1538,
-    "loser_nav_share": 0.1443,
+    "loser_count": 3,
+    "loser_share": 0.1154,
+    "loser_nav_share": 0.1084,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
-    "intact_loser_count": 4,
+    "intact_loser_count": 3,
     "weakening_loser_count": 0,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
       "quality": 0.0,
-      "dividend": 0.25,
-      "garp": 0.25,
+      "dividend": 0.3333,
+      "garp": 0.3333,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
-      "quality": 0.4545,
-      "dividend": 0.1818,
-      "garp": 0.2727,
-      "risk": 0.0
+      "cheapness": 0.0435,
+      "quality": 0.4348,
+      "dividend": 0.2174,
+      "garp": 0.2609,
+      "risk": 0.0435
     },
     "selection_feedback_flags": [],
     "balancing_hint": "tolerate_intact_losers",
@@ -56,44 +56,35 @@
   "holdings": [
     {
       "ticker": "FMG.AX",
-      "name": "Fortescue Ltd",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
+      "name": "FMG.AX",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0842,
-      "mark": 15.34,
+      "unrealized_pct": 0.0,
+      "mark": 16.75,
       "avg_cost": 16.75,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7833,
-      "data_quality_score": 0.95,
-      "passed_families": [
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
         "cheapness",
         "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
+      "research_verdict": null,
       "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 78%"
+        "cheapness lost and not in buy tier"
       ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 78%"
-      ],
+      "intact_reasons": [],
       "weaken_reasons": [],
-      "broken_reasons": []
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
     },
     {
       "ticker": "GGP.AX",
@@ -312,7 +303,7 @@
       "avg_cost": 30.7,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.3708,
+      "conviction_score": 0.3702,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -582,47 +573,6 @@
       "broken_reasons": []
     },
     {
-      "ticker": "PRN.AX",
-      "name": "Perenti Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.009,
-      "mark": 2.21,
-      "avg_cost": 2.23,
-      "signal": "buy",
-      "timing_signal": "wait",
-      "conviction_score": 0.3664,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "quality",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 37%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 37%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "HVN.AX",
       "name": "Harvey Norman Holdings Limited",
       "thesis_status": "intact",
@@ -675,7 +625,7 @@
       "avg_cost": 30.82,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.3799,
+      "conviction_score": 0.4443,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -691,16 +641,56 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 38%"
+        "conviction 44%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 38%"
+        "conviction 44%"
       ],
       "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ARB.AX",
+      "name": "ARB Corporation Limited",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 17.62,
+      "avg_cost": 17.62,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3425,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "conviction 34% below intact floor",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 0.95"
+      ],
+      "weaken_reasons": [
+        "research verdict caution",
+        "conviction 34% below intact floor"
+      ],
       "broken_reasons": []
     },
     {
@@ -756,7 +746,7 @@
       "avg_cost": 4.04,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.472,
+      "conviction_score": 0.4699,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -879,7 +869,7 @@
       "avg_cost": 31.7,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.66,
+      "conviction_score": 0.6491,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -895,14 +885,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 66%"
+        "conviction 65%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 66%"
+        "conviction 65%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -1080,7 +1070,7 @@
       "avg_cost": 67.9,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.6101,
+      "conviction_score": 0.6031,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -1096,14 +1086,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 61%"
+        "conviction 60%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 61%"
+        "conviction 60%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []

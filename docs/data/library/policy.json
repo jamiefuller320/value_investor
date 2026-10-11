@@ -549,7 +549,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-11T02:38:44.262019+00:00",
+  "updated_at": "2026-10-11T07:12:36.392011+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -561,7 +561,9 @@
     "omxs30",
     "psi20"
   ],
-  "ingest_parallel_sprint": [],
+  "ingest_parallel_sprint": [
+    "bel20"
+  ],
   "ingest_parallel_sprint_2": [],
   "ladder": {
     "enabled": true,
@@ -575,7 +577,7 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-10-09T06:53:03.174854+00:00",
+      "run_at": "2026-10-11T06:22:31.316875+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
       "screen_shortlist": 52,
@@ -617,13 +619,13 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 62.1,
+        "remaining_usd_before": 61.7,
         "dedupe": {
-          "already_researched_count": 478,
-          "fresh_skipped_count": 478,
+          "already_researched_count": 479,
+          "fresh_skipped_count": 479,
           "rememo_eligible_count": 0,
           "rememo_eligible_sample": [],
-          "skipped_count": 435,
+          "skipped_count": 437,
           "skipped_sample": [
             {
               "market": "euro_depth",
@@ -642,12 +644,12 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "UMI.BR",
+              "ticker": "SAN.PA",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "SAN.PA",
+              "ticker": "UMI.BR",
               "reason": "fresh_memo"
             },
             {
@@ -672,6 +674,11 @@
             },
             {
               "market": "euro_depth",
+              "ticker": "AED.BR",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
               "ticker": "LOGN.SW",
               "reason": "fresh_memo"
             },
@@ -687,22 +694,17 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "AED.BR",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "RAND.AS",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "WIE.VI",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
               "ticker": "C5H.IR",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "RAND.AS",
               "reason": "fresh_memo"
             },
             {
@@ -722,28 +724,16 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "APAM.AS",
+              "ticker": "ANDR.VI",
               "reason": "fresh_memo"
             }
           ],
           "first_time_preferred": true,
           "note": "Exact Yahoo ticker match; earlier queue market wins. Each market queue puts no-memo buy-tier first, then rememo. Fresh memos are skipped; thin / body-lag memos rememo after ingest."
         },
-        "targets": [
-          {
-            "market": "cac40",
-            "ticker": "FGR.PA",
-            "name": "Eiffage SA",
-            "signal": "strong_buy",
-            "conviction_score": 0.4157
-          }
-        ],
-        "executed": 1,
-        "created": 1,
-        "updated": 0,
-        "errors": [],
-        "estimated_spend_usd": 0.4,
-        "remaining_usd_after": 61.7
+        "targets": [],
+        "dry_run": true,
+        "executed": 0
       },
       "graduation": {
         "graduated": false,
@@ -841,16 +831,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-09-29T14:53:18.695901+00:00",
-        "parallel_stream": 2,
-        "from_market": "aex",
-        "to_market": "asx200",
-        "stream_markets_after": [
-          "asx200"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-09-29T16:47:26.168805+00:00",
         "parallel_stream": 2,
@@ -1386,6 +1366,28 @@
         "to_market": null,
         "stream_markets_after": [],
         "ingest_parity_recorded": false
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-10-11T07:10:01.889821+00:00",
+        "parallel_stream": 1,
+        "from_market": null,
+        "to_market": "bel20",
+        "stream_markets_after": [
+          "bel20"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "bel20",
+          "forced": true,
+          "prior_screen_at": "2026-10-11T06:22:31.316875+00:00",
+          "prior_age_days": 0,
+          "run_at": "2026-10-11T07:10:01.889837+00:00",
+          "shortlist_count": 6,
+          "ticker_count": 20
+        }
       }
     ]
   },

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-09T07:32:47.805182+00:00
+Track: `buy_tier_level` · updated 2026-10-11T07:08:02.041643+00:00
 
 ## Portfolio loser feedback
 
@@ -10,26 +10,19 @@ Track: `buy_tier_level` · updated 2026-10-09T07:32:47.805182+00:00
 
 ## Holding reviews
 
-### RAND.AS — intact / hold_tolerate (-3.4%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 68%
-
-### KPN.AS — intact / hold_tolerate (-1.5%)
+### KPN.AS — intact / hold_tolerate (-1.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 62%
 
-### ADYEN.AS — intact / hold_tolerate (-1.0%)
+### RAND.AS — intact / hold_tolerate (-1.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 39%
+- conviction 68%
 
 ### PHIA.AS — intact / hold_tolerate (-0.4%)
 - still buy
@@ -38,30 +31,37 @@ Track: `buy_tier_level` · updated 2026-10-09T07:32:47.805182+00:00
 - data_quality 1.00
 - conviction 63%
 
-### AD.AS — intact / hold_tolerate (+1.2%)
+### AKZA.AS — intact / hold_tolerate (+1.5%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 81%
+
+### AD.AS — intact / hold_tolerate (+1.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 89%
 
-### AKZA.AS — intact / hold_tolerate (+1.8%)
+### ADYEN.AS — intact / hold_tolerate (+1.8%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 39%
+
+### SHELL.AS — intact / hold_tolerate (+7.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 81%
 
-### WKL.AS — intact / hold_tolerate (+4.5%)
+### WKL.AS — intact / hold_tolerate (+9.2%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 78%
-
-### SHELL.AS — intact / hold_tolerate (+5.5%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 81%

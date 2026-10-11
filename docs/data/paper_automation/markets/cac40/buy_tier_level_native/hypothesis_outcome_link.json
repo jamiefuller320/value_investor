@@ -3,21 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-09T07:32:42.291281+00:00",
+  "generated_at": "2026-10-11T07:07:56.906298+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 1,
+    "closed_total": 2,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 8,
+    "open_with_thesis": 7,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 0.0,
+        "sold_underwater_rate": 1.0,
+        "mean_peak_unrealized_pct": -0.0034,
+        "mean_trough_unrealized_pct": -0.0375,
+        "outcome_labels": {
+          "sold_underwater": 1
+        }
       },
       "broken": {
         "closed_count": 1,
@@ -55,11 +62,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 1,
+    "hold_closed_with_thesis": 2,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=1 (target >=8)",
-      "hold thesis buckets thin (broken=1; target >=3 each)",
+      "hold closed with thesis=2 (target >=8)",
+      "hold thesis buckets thin (weakening=1, broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -167,7 +174,7 @@
       "ticker": "TEP.PA",
       "name": "Teleperformance SE",
       "started_at": "2026-09-29T08:24:19.843785+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -209,9 +216,9 @@
       "peak_unrealized_pct": -0.0034,
       "trough_unrealized_pct": -0.0375,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-11T08:07:56.891220+01:00",
+      "linked_sell_trade_id": "30e8455c-e99b-450f-9315-b8345431e175"
     },
     {
       "episode_id": "buy_tier_level_native:DG.PA:2026-09-30T08:26:45.658612+01:00",
@@ -353,7 +360,16 @@
       "conviction_score": 0.875,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-11T08:07:56.891220+01:00",
+          "days_after": 7,
+          "price": 71.52,
+          "unrealized_pct": -0.0028,
+          "peak_unrealized_pct": 0.0012,
+          "trough_unrealized_pct": -0.0127
+        }
+      ],
       "peak_unrealized_pct": 0.0012,
       "trough_unrealized_pct": -0.0127,
       "recovered_to_breakeven": true,
@@ -397,7 +413,7 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0349,
+      "peak_unrealized_pct": -0.0322,
       "trough_unrealized_pct": -0.0349,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -484,7 +500,7 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0176,
+      "peak_unrealized_pct": -0.0023,
       "trough_unrealized_pct": -0.0176,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -571,14 +587,14 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "SGO.PA": -0.0725
+        "SGO.PA": -0.0699
       },
       "buy_returns_since_rotation": {
-        "SAN.PA": -0.012,
-        "TEP.PA": -0.0161,
-        "DG.PA": -0.0391,
-        "TTE.PA": -0.0301,
-        "ORA.PA": 0.0046
+        "SAN.PA": -0.0038,
+        "TEP.PA": -0.0127,
+        "DG.PA": -0.0382,
+        "TTE.PA": -0.0183,
+        "ORA.PA": -0.0205
       },
       "verdict": null,
       "closed_at": null
@@ -637,14 +653,22 @@
           "cost": 0.0
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-11T08:07:56.891220+01:00",
+          "days_after": 7,
+          "avg_sell_return": -0.037,
+          "avg_buy_return": 0.0223,
+          "replacement_delta": 0.0593
+        }
+      ],
       "sell_returns_since_rotation": {
-        "MC.PA": -0.0347
+        "MC.PA": -0.037
       },
       "buy_returns_since_rotation": {
-        "SAN.PA": 0.0017,
-        "DG.PA": 0.0014,
-        "TTE.PA": 0.0419
+        "SAN.PA": 0.01,
+        "DG.PA": 0.0023,
+        "TTE.PA": 0.0547
       },
       "verdict": null,
       "closed_at": null
@@ -732,13 +756,71 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "SAN.PA": 0.0017,
-        "DG.PA": 0.0014
+        "SAN.PA": 0.01,
+        "DG.PA": 0.0023
       },
       "buy_returns_since_rotation": {
-        "TEP.PA": 0.0318,
-        "TTE.PA": 0.0419,
-        "ORA.PA": 0.0175
+        "TEP.PA": 0.0354,
+        "TTE.PA": 0.0547,
+        "ORA.PA": -0.0079
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-10-11T08:07:56.891220+01:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-10-11T08:07:56.891220+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "TEP.PA",
+          "price": 71.1957,
+          "shares": 1.078137,
+          "gross": 76.76,
+          "cost": 0.02,
+          "avg_cost_at_exit": 71.1957,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "FGR.PA",
+          "price": 98.72,
+          "shares": 0.711016,
+          "gross": 70.19,
+          "cost": 0.02
+        },
+        {
+          "ticker": "PUB.PA",
+          "price": 97.28,
+          "shares": 0.067114,
+          "gross": 6.53,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "TEP.PA": 0.0034
+      },
+      "buy_returns_since_rotation": {
+        "FGR.PA": 0.0,
+        "PUB.PA": 0.0
       },
       "verdict": null,
       "closed_at": null

@@ -1,31 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-09T08:32:50.925481+01:00",
+    "local_time": "2026-10-11T08:08:05.025728+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-09T08:00:00+01:00",
-    "settle_at": "2026-10-09T09:15:00+01:00",
+    "market_open_at": "2026-10-11T08:00:00+01:00",
+    "settle_at": "2026-10-11T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
-  "trades": [
-    {
-      "id": "b676d348-f703-4e4f-93be-4f27a64db1a3",
-      "fund_id": "8884831b-105d-4b66-a095-a5c6bc871dea",
-      "acted_at": "2026-10-09T08:32:50.925481+01:00",
-      "ticker": "WIT",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 2.963331,
-      "price": 1.67,
-      "gross": 4.95,
-      "cost": 0.0,
-      "net_cash": -4.95,
-      "note": "Automated buy",
-      "name": "Wipro Limited"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -39,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1033.52,
+    "nav": 1046.41,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -52,40 +36,52 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 516.76,
+    "target_sleeve_value": 523.21,
     "targets": [
       {
         "ticker": "WIT",
         "name": "Wipro Limited",
         "signal": "strong_buy",
         "conviction_score": 0.8625,
-        "price": 1.67
+        "price": 1.7
       },
       {
         "ticker": "SONY",
         "name": "Sony Group Corporation",
         "signal": "buy",
         "conviction_score": 0.6333000000000001,
-        "price": 23.95
+        "price": 24.12
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
-    "anticipated_holds": [],
-    "skipped": [
+    "anticipated_holds": [
       {
+        "action": "hold",
         "ticker": "WIT",
         "name": "Wipro Limited",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 516.76,
+        "reason": "Already near equal-weight target",
+        "value": 520.62,
+        "target_value": 523.21,
         "conviction_score": 0.8625,
         "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "SONY",
+        "name": "Sony Group Corporation",
+        "reason": "Already near equal-weight target",
+        "value": 525.79,
+        "target_value": 523.21,
+        "conviction_score": 0.6333000000000001,
+        "signal": "buy"
       }
     ],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
   },
   "alerts": [
     {
@@ -94,7 +90,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 1.67,
+      "mark": 1.7,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -105,10 +101,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 23.95,
+      "mark": 24.12,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     }
   ],
   "fund": {
@@ -492,9 +488,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-11T08:08:05.025728+01:00",
+        "portfolio_value": 1046.41,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 2,
+        "reporting_currency": "USD",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "USD": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-09T08:32:50.925481+01:00",
+    "last_mark_at": "2026-10-11T08:08:05.025728+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -502,12 +514,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (1 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "us_adr_asia",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-09T07:32:50.929382+00:00",
+    "generated_at": "2026-10-11T07:08:05.029299+00:00",
     "observe_only": true,
     "open_count": 1,
     "closed_count": 0,
@@ -586,7 +598,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-09T07:32:50.930150+00:00",
+    "generated_at": "2026-10-11T07:08:05.030030+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -676,7 +688,7 @@
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -684,8 +696,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-10-09T07:32:50.930912+00:00",
-    "as_of": "2026-10-09T08:32:50.925481+01:00",
+    "updated_at": "2026-10-11T07:08:05.030833+00:00",
+    "as_of": "2026-10-11T08:08:05.025728+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -736,14 +748,54 @@
     },
     "holdings": [
       {
+        "ticker": "SONY",
+        "name": "Sony Group Corporation",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0305,
+        "mark": 24.12,
+        "avg_cost": 23.4068,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6333,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 63%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 63%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "WIT",
         "name": "Wipro Limited",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.014,
-        "mark": 1.67,
+        "unrealized_pct": 0.0322,
+        "mark": 1.7,
         "avg_cost": 1.6469,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -773,46 +825,6 @@
           "research verdict neutral"
         ],
         "broken_reasons": []
-      },
-      {
-        "ticker": "SONY",
-        "name": "Sony Group Corporation",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0232,
-        "mark": 23.95,
-        "avg_cost": 23.4068,
-        "signal": "buy",
-        "timing_signal": "accumulate",
-        "conviction_score": 0.6333,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 63%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 63%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -822,7 +834,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-09T07:32:50.931940+00:00",
+    "generated_at": "2026-10-11T07:08:05.031863+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -882,7 +894,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-10-09T07:32:50.933081+00:00",
+    "generated_at": "2026-10-11T07:08:05.033080+00:00",
     "open_count": 0,
     "closed_count": 0,
     "scored_count": 0,
@@ -946,7 +958,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-09T08:32:50.925481+01:00",
+    "generated_at": "2026-10-11T08:08:05.025728+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1003,7 +1015,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-09T08:32:50.925481+01:00",
+    "generated_at": "2026-10-11T08:08:05.025728+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -1011,246 +1023,33 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 2,
-    "card_count": 2,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 2,
+      "agree": 0,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "rebuy_skip": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
-      },
-      "buy": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
-    "cards": [
-      {
-        "ticker": "WIT",
-        "name": "Wipro Limited",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 1
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "neutral"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.8625
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level_native",
-        "logged_at": "2026-10-09T08:32:50.925481+01:00",
-        "proposal_id": "buy_tier_level_native:WIT:rebuy_skip:2026-10-09T08:32:50.925481+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "neutral",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      },
-      {
-        "ticker": "WIT",
-        "name": "Wipro Limited",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Buy into buyish target set \u2014 agree with algo selection."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "strong_buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 1
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "neutral"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.8625
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level_native",
-        "logged_at": "2026-10-09T08:32:50.925481+01:00",
-        "proposal_id": "buy_tier_level_native:WIT:buy:2026-10-09T08:32:50.925481+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "neutral",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      }
-    ],
+    "by_algo_action": {},
+    "cards": [],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-10-09T08:32:50.925481+01:00",
+      "generated_at": "2026-10-11T08:08:05.025728+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 2,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 2,
+        "agree": 0,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "rebuy_skip": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        },
-        "buy": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
+      "by_algo_action": {},
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -1266,7 +1065,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-09T07:32:50.935466+00:00",
+  "generated_at": "2026-10-11T07:08:05.035456+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (USD reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

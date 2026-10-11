@@ -1,31 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-09T08:32:52.647023+01:00",
+    "local_time": "2026-10-11T08:08:06.886421+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-09T08:00:00+01:00",
-    "settle_at": "2026-10-09T09:15:00+01:00",
+    "market_open_at": "2026-10-11T08:00:00+01:00",
+    "settle_at": "2026-10-11T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
-  "trades": [
-    {
-      "id": "122f4a96-a9d5-4a22-80b4-fefed378bd7a",
-      "fund_id": "8353f516-bffb-4ba3-b5f9-62a77ea5d75b",
-      "acted_at": "2026-10-09T08:32:52.647023+01:00",
-      "ticker": "COR.LS",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 1.551695,
-      "price": 6.72,
-      "gross": 10.43,
-      "cost": 0.0,
-      "net_cash": -10.43,
-      "note": "Automated buy",
-      "name": "Corticeira Amorim, S.G.P.S., S.A."
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -39,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 992.13,
+    "nav": 983.19,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -52,64 +36,58 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 496.02,
+    "target_sleeve_value": 327.73,
     "targets": [
       {
         "ticker": "COR.LS",
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
         "signal": "buy",
         "conviction_score": 0.41046499999999997,
-        "price": 6.72
+        "price": 6.64
+      },
+      {
+        "ticker": "GALP.LS",
+        "name": "Galp Energia, SGPS, S.A.",
+        "signal": "buy",
+        "conviction_score": 0.40199999999999997,
+        "price": 22.51
       },
       {
         "ticker": "NVG.LS",
         "name": "The Navigator Company, S.A.",
         "signal": "buy",
         "conviction_score": 0.37451,
-        "price": 3.08
+        "price": 3.058
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "GALP.LS",
-        "name": "Galp Energia, SGPS, S.A.",
-        "reason": "No longer in the top conviction target set",
-        "shares": 14.743808,
-        "price": 22.69,
-        "value": 334.54
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
+    "anticipated_buys": [],
+    "anticipated_holds": [
       {
-        "action": "buy",
+        "action": "hold",
         "ticker": "COR.LS",
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
-        "reason": "Top-up to equal weight",
-        "value": 162.14,
-        "price": 6.72,
-        "target_value": 496.02,
+        "reason": "Already near equal-weight target",
+        "value": 329.91,
+        "target_value": 327.73,
         "conviction_score": 0.41046499999999997,
         "signal": "buy"
-      },
+      }
+    ],
+    "skipped": [
       {
-        "action": "buy",
         "ticker": "NVG.LS",
         "name": "The Navigator Company, S.A.",
-        "reason": "Top-up to equal weight",
-        "value": 172.31,
-        "price": 3.08,
-        "target_value": 496.02,
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 327.73,
         "conviction_score": 0.37451,
         "signal": "buy"
       }
     ],
-    "anticipated_holds": [],
-    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -118,7 +96,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 6.72,
+      "mark": 6.64,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -129,7 +107,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3.08,
+      "mark": 3.058,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "accumulate"
@@ -138,9 +116,9 @@
       "ticker": "GALP.LS",
       "name": "Galp Energia, SGPS, S.A.",
       "source": "paper",
-      "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 22.69,
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 22.51,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -429,24 +407,38 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-11T08:08:06.886421+01:00",
+        "portfolio_value": 983.19,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-09T08:32:52.647023+01:00",
+    "last_mark_at": "2026-10-11T08:08:06.886421+01:00",
     "rebalance_state": {
-      "exit_streak": {
-        "GALP.LS": 1
-      },
+      "exit_streak": {},
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (1 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "psi20",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-09T07:32:52.650435+00:00",
+    "generated_at": "2026-10-11T07:08:06.889871+00:00",
     "observe_only": true,
     "open_count": 0,
     "closed_count": 0,
@@ -525,7 +517,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-09T07:32:52.651131+00:00",
+    "generated_at": "2026-10-11T07:08:06.890579+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -613,11 +605,11 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     }
   },
@@ -626,8 +618,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-10-09T07:32:52.651920+00:00",
-    "as_of": "2026-10-09T08:32:52.647023+01:00",
+    "updated_at": "2026-10-11T07:08:06.891405+00:00",
+    "as_of": "2026-10-11T08:08:06.886421+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -642,8 +634,8 @@
     "holding_count": 3,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 0,
-      "weakening": 3,
+      "intact": 1,
+      "weakening": 2,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -678,54 +670,14 @@
     },
     "holdings": [
       {
-        "ticker": "NVG.LS",
-        "name": "The Navigator Company, S.A.",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0284,
-        "mark": 3.08,
-        "avg_cost": 3.17,
-        "signal": "buy",
-        "timing_signal": "accumulate",
-        "conviction_score": 0.3745,
-        "data_quality_score": 0.9,
-        "passed_families": [
-          "cheapness",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "quality"
-        ],
-        "research_verdict": "caution",
-        "reasons": [
-          "research verdict caution",
-          "still buy",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "cheapness family still passes",
-          "data_quality 0.90",
-          "conviction 37%"
-        ],
-        "weaken_reasons": [
-          "research verdict caution"
-        ],
-        "broken_reasons": []
-      },
-      {
         "ticker": "COR.LS",
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.028,
-        "mark": 6.72,
+        "unrealized_pct": -0.0396,
+        "mark": 6.64,
         "avg_cost": 6.9138,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -758,18 +710,58 @@
         "broken_reasons": []
       },
       {
-        "ticker": "GALP.LS",
-        "name": "Galp Energia, SGPS, S.A.",
+        "ticker": "NVG.LS",
+        "name": "The Navigator Company, S.A.",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0361,
-        "mark": 22.69,
+        "unrealized_pct": -0.0353,
+        "mark": 3.058,
+        "avg_cost": 3.17,
+        "signal": "buy",
+        "timing_signal": "accumulate",
+        "conviction_score": 0.3745,
+        "data_quality_score": 0.9,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "quality"
+        ],
+        "research_verdict": "caution",
+        "reasons": [
+          "research verdict caution",
+          "still buy",
+          "cheapness family still passes"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "cheapness family still passes",
+          "data_quality 0.90",
+          "conviction 37%"
+        ],
+        "weaken_reasons": [
+          "research verdict caution"
+        ],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "GALP.LS",
+        "name": "Galp Energia, SGPS, S.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0279,
+        "mark": 22.51,
         "avg_cost": 21.9,
-        "signal": "hold",
+        "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.3892,
+        "conviction_score": 0.402,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -781,19 +773,20 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "left buy tier (hold)",
-          "research accumulate",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
+          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 39%"
+          "conviction 40%"
         ],
-        "weaken_reasons": [
-          "left buy tier (hold)"
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 40%"
         ],
+        "weaken_reasons": [],
         "broken_reasons": []
       }
     ],
@@ -804,7 +797,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-09T07:32:52.653183+00:00",
+    "generated_at": "2026-10-11T07:08:06.892579+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -864,7 +857,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-10-09T07:32:52.654488+00:00",
+    "generated_at": "2026-10-11T07:08:06.893989+00:00",
     "open_count": 2,
     "closed_count": 0,
     "scored_count": 0,
@@ -928,7 +921,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-09T08:32:52.647023+01:00",
+    "generated_at": "2026-10-11T08:08:06.886421+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -985,7 +978,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-09T08:32:52.647023+01:00",
+    "generated_at": "2026-10-11T08:08:06.886421+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -996,32 +989,32 @@
     "proposal_count": 1,
     "card_count": 1,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 1,
       "veto": 0,
-      "abstain": 1
+      "abstain": 0
     },
     "by_algo_action": {
-      "buy": {
-        "agree": 0,
+      "rebuy_skip": {
+        "agree": 1,
         "veto": 0,
-        "abstain": 1
+        "abstain": 0
       }
     },
     "cards": [
       {
-        "ticker": "COR.LS",
-        "name": "Corticeira Amorim, S.G.P.S., S.A.",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "abstain",
+        "ticker": "NVG.LS",
+        "name": "The Navigator Company, S.A.",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
         "reasons": [
-          "Buy while not buyish \u2014 abstain."
+          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
         ],
         "evidence": [
           {
             "kind": "algo_reason",
             "source": "plan_or_trade",
-            "detail": "Automated buy"
+            "detail": "Insufficient cash after higher-conviction fills"
           },
           {
             "kind": "screen_signal",
@@ -1033,13 +1026,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 1
+            "value": 3
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
+            "value": 3
           },
           {
             "kind": "rank_drop",
@@ -1057,7 +1050,7 @@
             "kind": "conviction_score",
             "source": "candidates",
             "detail": "Conviction score at decision time",
-            "value": 0.41046499999999997
+            "value": 0.37451
           },
           {
             "kind": "still_buyish",
@@ -1083,8 +1076,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level_native",
-        "logged_at": "2026-10-09T08:32:52.647023+01:00",
-        "proposal_id": "buy_tier_level_native:COR.LS:buy:2026-10-09T08:32:52.647023+01:00",
+        "logged_at": "2026-10-11T08:08:06.886421+01:00",
+        "proposal_id": "buy_tier_level_native:NVG.LS:rebuy_skip:2026-10-11T08:08:06.886421+01:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": 0,
@@ -1108,7 +1101,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-10-09T08:32:52.647023+01:00",
+      "generated_at": "2026-10-11T08:08:06.886421+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
@@ -1117,15 +1110,15 @@
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
       "card_count": 1,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 1,
         "veto": 0,
-        "abstain": 1
+        "abstain": 0
       },
       "by_algo_action": {
-        "buy": {
-          "agree": 0,
+        "rebuy_skip": {
+          "agree": 1,
           "veto": 0,
-          "abstain": 1
+          "abstain": 0
         }
       },
       "veto_sell_count": 0,
@@ -1143,7 +1136,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-09T07:32:52.656679+00:00",
+  "generated_at": "2026-10-11T07:08:06.896347+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

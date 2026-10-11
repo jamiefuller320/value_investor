@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-09T07:32:47.164743+00:00
+Track: `buy_tier_level_native` · updated 2026-10-11T07:08:01.433027+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level_native` · updated 2026-10-09T07:32:47.164743+00:00
 
 ## Holding reviews
 
-### BZU.MI — intact / hold_tolerate (-2.9%)
+### BZU.MI — intact / hold_tolerate (-2.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
@@ -24,14 +24,14 @@ Track: `buy_tier_level_native` · updated 2026-10-09T07:32:47.164743+00:00
 - data_quality 1.00
 - conviction 67%
 
-### ENI.MI — intact / hold_tolerate (+3.1%)
+### ENI.MI — intact / hold_tolerate (+4.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
 
-### AMP.MI — weakening / watch_review (+6.1%)
+### AMP.MI — weakening / watch_review (+11.4%)
 - research verdict caution
 - still buy
 - cheapness family still passes

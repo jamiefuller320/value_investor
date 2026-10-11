@@ -1,88 +1,99 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-09T07:32:42.289320+00:00
+Track: `buy_tier_level_native` · updated 2026-10-11T07:07:56.904249+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 13 (0% count, 0% NAV)
+- Losers: **0** / 14 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
 ## Holding reviews
 
-### TEP.PA — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### SGO.PA — intact / hold_tolerate (-3.5%)
-- still strong_buy
+### SGO.PA — intact / hold_tolerate (-3.2%)
+- still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 48%
 
-### TTE.PA — intact / hold_tolerate (-2.6%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 49%
-
-### DG.PA — intact / hold_tolerate (-2.2%)
+### DG.PA — intact / hold_tolerate (-2.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 75%
 
-### URW.PA — intact / hold_tolerate (-1.8%)
+### TTE.PA — intact / hold_tolerate (-1.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 66%
 
-### SAN.PA — intact / hold_tolerate (-1.1%)
+### ORA.PA — weakening / watch_review (-1.1%)
+- research verdict caution
+- still strong_buy
+- cheapness family still passes
+
+### EN.PA — weakening / watch_review (-1.0%)
+- research verdict neutral
+- still strong_buy
+- cheapness family still passes
+
+### SAN.PA — intact / hold_tolerate (-0.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 88%
 
-### EN.PA — weakening / watch_review (-0.2%)
-- research verdict neutral
+### URW.PA — intact / hold_tolerate (-0.2%)
 - still strong_buy
+- research accumulate
 - cheapness family still passes
+- data_quality 1.00
+- conviction 67%
 
-### VIE.PA — intact / hold_tolerate (+0.5%)
+### FGR.PA — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 63%
+
+### PUB.PA — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 65%
+- conviction 55%
 
-### MC.PA — intact / hold_tolerate (+0.6%)
+### MC.PA — intact / hold_tolerate (+0.4%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 67%
 
-### ORA.PA — weakening / watch_review (+1.4%)
-- research verdict caution
-- still strong_buy
+### VIE.PA — intact / hold_tolerate (+1.2%)
+- still buy
+- research accumulate
 - cheapness family still passes
+- data_quality 1.00
+- conviction 65%
 
-### CAP.PA — weakening / watch_review (+1.8%)
+### CA.PA — weakening / watch_review (+4.2%)
 - research verdict neutral
 - still strong_buy
 - cheapness family still passes
 
-### RI.PA — weakening / watch_review (+4.2%)
+### RI.PA — weakening / watch_review (+5.1%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
 
-### CA.PA — weakening / watch_review (+5.4%)
+### CAP.PA — weakening / watch_review (+5.7%)
 - research verdict neutral
 - still strong_buy
 - cheapness family still passes

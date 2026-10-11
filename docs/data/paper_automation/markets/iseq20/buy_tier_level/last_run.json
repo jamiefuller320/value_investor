@@ -1,15 +1,32 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-09T08:32:54.605005+01:00",
+    "local_time": "2026-10-11T08:08:08.695692+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-09T08:00:00+01:00",
-    "settle_at": "2026-10-09T09:15:00+01:00",
+    "market_open_at": "2026-10-11T08:00:00+01:00",
+    "settle_at": "2026-10-11T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "fa96bad2-6365-4f6d-872c-b9c07e23053c",
+      "fund_id": "65aa3829-0214-45f6-84e5-cca8e7a524b1",
+      "acted_at": "2026-10-11T08:08:08.695692+01:00",
+      "ticker": "MIO.IR",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 16.844384,
+      "price": 1.02,
+      "gross": 17.18,
+      "cost": 0.03,
+      "net_cash": 17.15,
+      "note": "Automated trim",
+      "name": "Mincon Group plc",
+      "avg_cost_at_exit": 0.94
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +40,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 992.61,
-    "cash": 0.0,
+    "nav": 1007.43,
+    "cash": 17.15,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,35 +53,35 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 248.15,
+    "target_sleeve_value": 251.86,
     "targets": [
       {
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
         "signal": "buy",
         "conviction_score": 0.7272000000000001,
-        "price": 2.635
+        "price": 2.61
       },
       {
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
         "signal": "buy",
         "conviction_score": 0.6081000000000001,
-        "price": 19.2
+        "price": 19.0
       },
       {
         "ticker": "OIZ.IR",
         "name": "Origin Enterprises plc",
         "signal": "buy",
         "conviction_score": 0.5962000000000001,
-        "price": 3.82
+        "price": 3.8
       },
       {
         "ticker": "MIO.IR",
         "name": "Mincon Group plc",
         "signal": "buy",
         "conviction_score": 0.38675,
-        "price": 0.94
+        "price": 1.02
       }
     ],
     "anticipated_exits": [],
@@ -74,11 +91,31 @@
     "anticipated_holds": [
       {
         "action": "hold",
+        "ticker": "C5H.IR",
+        "name": "Cairn Homes plc",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 242.62,
+        "target_value": 251.86,
+        "conviction_score": 0.7272000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "EG7.IR",
+        "name": "FBD Holdings plc",
+        "reason": "Already near equal-weight target",
+        "value": 250.19,
+        "target_value": 251.86,
+        "conviction_score": 0.6081000000000001,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
         "ticker": "OIZ.IR",
         "name": "Origin Enterprises plc",
-        "reason": "Already near equal-weight target",
-        "value": 246.92,
-        "target_value": 248.15,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 245.63,
+        "target_value": 251.86,
         "conviction_score": 0.5962000000000001,
         "signal": "buy"
       },
@@ -87,24 +124,15 @@
         "ticker": "MIO.IR",
         "name": "Mincon Group plc",
         "reason": "Already near equal-weight target",
-        "value": 247.92,
-        "target_value": 248.15,
+        "value": 251.83,
+        "target_value": 251.86,
         "conviction_score": 0.38675,
         "signal": "buy"
       }
     ],
-    "skipped": [
-      {
-        "ticker": "C5H.IR",
-        "name": "Cairn Homes plc",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 248.15,
-        "conviction_score": 0.7272000000000001,
-        "signal": "buy"
-      }
-    ],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
   },
   "alerts": [
     {
@@ -113,7 +141,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2.635,
+      "mark": 2.61,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -124,7 +152,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 19.2,
+      "mark": 19.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -135,7 +163,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3.82,
+      "mark": 3.8,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -146,7 +174,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 0.94,
+      "mark": 1.02,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -167,7 +195,7 @@
       "id": "65aa3829-0214-45f6-84e5-cca8e7a524b1",
       "created_at": "2026-10-05T14:16:43.437739+00:00"
     },
-    "cash": 0.0,
+    "cash": 17.15,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -206,7 +234,7 @@
       },
       "MIO.IR": {
         "ticker": "MIO.IR",
-        "shares": 263.740582,
+        "shares": 246.896198,
         "avg_cost": 0.94,
         "name": "Mincon Group plc",
         "sector": "Industrials",
@@ -401,6 +429,22 @@
         "net_cash": -248.35,
         "note": "Automated buy",
         "name": "Mincon Group plc"
+      },
+      {
+        "id": "fa96bad2-6365-4f6d-872c-b9c07e23053c",
+        "fund_id": "65aa3829-0214-45f6-84e5-cca8e7a524b1",
+        "acted_at": "2026-10-11T08:08:08.695692+01:00",
+        "ticker": "MIO.IR",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 16.844384,
+        "price": 1.02,
+        "gross": 17.18,
+        "cost": 0.03,
+        "net_cash": 17.15,
+        "note": "Automated trim",
+        "name": "Mincon Group plc",
+        "avg_cost_at_exit": 0.94
       }
     ],
     "equity_curve": [
@@ -529,9 +573,26 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-11T08:08:08.695692+01:00",
+        "portfolio_value": 855.03,
+        "cash": 17.15,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.84611
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-09T08:32:54.605005+01:00",
+    "last_mark_at": "2026-10-11T08:08:08.695692+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -539,12 +600,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "iseq20",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-09T07:32:54.624971+00:00",
+    "generated_at": "2026-10-11T07:08:08.713860+00:00",
     "observe_only": true,
     "open_count": 1,
     "closed_count": 0,
@@ -623,7 +684,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-09T07:32:54.625757+00:00",
+    "generated_at": "2026-10-11T07:08:08.716110+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -679,7 +740,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 1,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 3,
+      "hold_with_data_quality_count": 4,
       "gaps": [
         "hold_recovery closed episodes=1 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -688,10 +749,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 2,
+        "count": 3,
         "recovered_to_breakeven": 1,
         "close_reasons": {
-          "open": 2
+          "open": 3
         }
       },
       "closed": {
@@ -715,7 +776,7 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
@@ -728,8 +789,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-09T07:32:54.626616+00:00",
-    "as_of": "2026-10-09T08:32:54.605005+01:00",
+    "updated_at": "2026-10-11T07:08:08.717063+00:00",
+    "as_of": "2026-10-11T08:08:08.695692+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -786,8 +847,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0205,
-        "mark": 3.82,
+        "unrealized_pct": -0.0256,
+        "mark": 3.8,
         "avg_cost": 3.9,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -827,8 +888,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0019,
-        "mark": 2.635,
+        "unrealized_pct": -0.0114,
+        "mark": 2.61,
         "avg_cost": 2.64,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -861,14 +922,54 @@
         "broken_reasons": []
       },
       {
+        "ticker": "EG7.IR",
+        "name": "FBD Holdings plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 19.0,
+        "avg_cost": 19.0,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.6081,
+        "data_quality_score": 0.95,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.95",
+          "conviction 61%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.95",
+          "conviction 61%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "MIO.IR",
         "name": "Mincon Group plc",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 0.94,
+        "unrealized_pct": 0.0851,
+        "mark": 1.02,
         "avg_cost": 0.94,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -900,46 +1001,6 @@
           "cheapness family no longer passes"
         ],
         "broken_reasons": []
-      },
-      {
-        "ticker": "EG7.IR",
-        "name": "FBD Holdings plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0105,
-        "mark": 19.2,
-        "avg_cost": 19.0,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.6081,
-        "data_quality_score": 0.95,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.95",
-          "conviction 61%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.95",
-          "conviction 61%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -949,7 +1010,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-09T07:32:54.627832+00:00",
+    "generated_at": "2026-10-11T07:08:08.718319+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -957,7 +1018,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 1,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 2,
+      "open_with_thesis": 3,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -1017,7 +1078,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-09T07:32:54.629589+00:00",
+    "generated_at": "2026-10-11T07:08:08.720090+00:00",
     "open_count": 4,
     "closed_count": 1,
     "scored_count": 1,
@@ -1083,7 +1144,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-09T08:32:54.605005+01:00",
+    "generated_at": "2026-10-11T08:08:08.695692+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1140,7 +1201,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-09T08:32:54.605005+01:00",
+    "generated_at": "2026-10-11T08:08:08.695692+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -1148,141 +1209,33 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 1,
-    "card_count": 1,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 1,
+      "agree": 0,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "rebuy_skip": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
-    "cards": [
-      {
-        "ticker": "C5H.IR",
-        "name": "Cairn Homes plc",
-        "algo_action": "rebuy_skip",
-        "algo_reason": "Insufficient cash after higher-conviction fills",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Insufficient cash after higher-conviction fills"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 1
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.7272000000000001
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-09T08:32:54.605005+01:00",
-        "proposal_id": "buy_tier_level:C5H.IR:rebuy_skip:2026-10-09T08:32:54.605005+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          }
-        },
-        "schema_version": 1
-      }
-    ],
+    "by_algo_action": {},
+    "cards": [],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-09T08:32:54.605005+01:00",
+      "generated_at": "2026-10-11T08:08:08.695692+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 1,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 1,
+        "agree": 0,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "rebuy_skip": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
+      "by_algo_action": {},
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -1298,7 +1251,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-09T07:32:54.632715+00:00",
+  "generated_at": "2026-10-11T07:08:08.723032+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
