@@ -1,22 +1,17 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-09T07:32:29.950998+00:00
+Track: `buy_tier_level_native` · updated 2026-10-11T07:07:44.852244+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **4** / 26 (15% count, 14% NAV)
+- Losers: **3** / 26 (12% count, 11% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
-### FMG.AX — intact / hold_tolerate (-8.4%)
-- price drawdown alone does not invalidate value thesis
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 78%
+### FMG.AX — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### GGP.AX — intact / hold_tolerate (-7.8%)
 - price drawdown alone does not invalidate value thesis
@@ -100,13 +95,6 @@ Track: `buy_tier_level_native` · updated 2026-10-09T07:32:29.950998+00:00
 - data_quality 0.90
 - conviction 50%
 
-### PRN.AX — intact / hold_tolerate (-0.9%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 37%
-
 ### HVN.AX — intact / hold_tolerate (-0.5%)
 - still strong_buy
 - research accumulate
@@ -119,7 +107,13 @@ Track: `buy_tier_level_native` · updated 2026-10-09T07:32:29.950998+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 38%
+- conviction 44%
+
+### ARB.AX — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 34% below intact floor
+- still buy
+- cheapness family still passes
 
 ### YAL.AX — weakening / watch_review (+0.3%)
 - research verdict caution
@@ -153,7 +147,7 @@ Track: `buy_tier_level_native` · updated 2026-10-09T07:32:29.950998+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
+- conviction 65%
 
 ### BWP.AX — intact / hold_tolerate (+2.9%)
 - still buy
@@ -187,4 +181,4 @@ Track: `buy_tier_level_native` · updated 2026-10-09T07:32:29.950998+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 61%
+- conviction 60%

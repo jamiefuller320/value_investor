@@ -1,6 +1,6 @@
 # Shell plc (SHEL.L) — Research memo
 
-_Version 3 · Updated 2026-09-23T12:44:23.721594+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-10-11T08:15:07.259063+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Filings and divestitures still support a valuation-led buy, but Brent-linked rally, windfall-tax noise, and unresolved UK upstream and FCF-basis gaps limit conviction versus the screen.
+Confidence: 0.70
+Rationale: H1 filing cheapness still partly supports the buy screen, but thin news and Brent-driven swings add no new fundamentals while FCF/yield basis gaps cap conviction.
 RiskTags: cyclical, regulatory, leverage, other
 
 ## Weekly updates
@@ -23,3 +23,7 @@ Shares moved with Brent crude toward triple digits; no new group results since t
 Shell finalised an ~$840m Gulf of Mexico platform sale to Talos/Ridgewood, continuing portfolio recycling after the Rhode Island deal.  
 European windfall-tax politics resurfaced with oil above $100; LNG Canada Phase 2 expansion may be decided as early as October.  
 No new group results since the 30 July H1 filing; the share lagged the market slightly on the week.
+
+### 2026-10-11T08:15:07.259063+00:00
+Since the 23 September refresh, sources are mostly commentary: RBC reiterates Hold (8 October) and LSE coverage tracks Brent/Iran moves and fading crude momentum.  
+No new group results since the 30 July H1 2026 filing; the screen still flags FCF-basis divergence and RSI ~72 (overbought).

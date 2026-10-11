@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-09T07:32:51.709348+00:00
+Track: `buy_tier_level` · updated 2026-10-11T07:08:05.767189+00:00
 
 ## Portfolio loser feedback
 
@@ -15,14 +15,14 @@ Track: `buy_tier_level` · updated 2026-10-09T07:32:51.709348+00:00
 - still buy
 - cheapness family still passes
 
+### U14.SI — weakening / watch_review (-0.1%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
 ### Y92.SI — intact / hold_tolerate (+0.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 73%
-
-### U14.SI — weakening / watch_review (+0.0%)
-- research verdict caution
-- still buy
-- cheapness family still passes
+- conviction 82%

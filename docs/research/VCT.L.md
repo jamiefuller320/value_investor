@@ -1,6 +1,6 @@
 # Victrex plc (VCT.L) — Research memo
 
-_Version 3 · Updated 2026-10-04T07:46:50.734450+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-10-11T08:02:07.500842+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.70
-Rationale: Pre-close guidance still stands, but the 24 Sep capital markets dividend reset and share reaction temper the yield-led buy case; research favours measured accumulation, not chasing the re-rating.
+Rationale: Pre-close PBT guidance stands and the persistent buy screen holds, but no new RNS and the 24 Sep dividend reset plus ~0.95× FCF cover still temper the yield case — confirms measured accumulation.
 RiskTags: cyclical, competitive, liquidity, leverage, accounting, customer_concentration, key_person, other
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Syndicated press (7–14 Sep) noted a sharp share reaction and prices near yearl
 24 Sep RNS Capital Markets Event: FY26 ordinary dividend 30p (final 16.58p) and a new capital-return framework (≥75% of cumulative levered FCF FY27–31); syndicated press noted share weakness on the reset.  
 No trading or results RNS since the 9 Sep pre-close upgrade; only routine voting-rights disclosures.  
 Quantitative buy signal unchanged (second week, stable timing).
+
+### 2026-10-11T08:02:07.500842+00:00
+No trading or results RNS since the 9 Sep pre-close upgrade; only routine 30 Sep voting-rights and 5 Oct holder disclosure.  
+News batch since 4 Oct empty; quantitative buy signal unchanged (fourth week, stable).  
+No material change to FY26 guidance or the 24 Sep dividend and capital-return framework.
