@@ -11,10 +11,10 @@ North-star stages and the “richness before breadth on the live path” rule ar
 
 Prefer work that serves these two, in order. Anything else should be parked with `ftse-defer`, not started.
 
-1. **P1 — Live-path utilization.** Change what a weekday paper-auto / AI-judgment pass can see: filings, FCF basis, overlay bind, memo recency on FTSE holdings and buy-tier. Extra FTSE ingest on a green buy-tier, new paper tracks, and live universe expansion are factory, not foundation.
+1. **P1 — Investment-demanded input quality (absolute availability).** Raise filings bodies, FCF basis, overlay bind, and memo recency for names Investment actually uses, in serve order: live holdings → **already-running sealed units** (today: FTSE buy-tier for strand A + N200 `raw_buy_tier`) → accepted F3 repairs on those sets → **launch-queue head** (next newly sealed strategy needing incremental Data) → waiters. Newly sealed strategies enter a **launch queue** so their Data deepen / threshold / shortlist demand does **not starve** holdings or running units; they wait unless explicitly re-prioritized. Green inventory on the active set is success — do not invent rememo/ingest spray. Honour Investment why-not / repair negotiation when capacity allows; Data still owns gap closure and never alone applies knobs or fills (**F8**). Extra FTSE ingest on a green set, new paper tracks, and live universe expansion are factory, not foundation. Quiet cold-store archive (**L499** / **L594**) is option value below the launch-queue head — not a daytime equal sprint.
 2. **P2 — Offline ingest cascade.** Serialize one market at a time to the **maintenance ingest threshold** (`sprint_ingest_complete`: raw parity or leftover thin/IWB parked). Fat slot on that head; spare streams front-start the next queue names and **auto-advance** when a spare graduates (today: `tsx60` / `ftse_smallcap`). When the head graduates, shift the fat slot and give the graduated market **equivalent resource** (FTSE-volume maintenance + epoch-0 `buy_tier_level` + equal-support near-miss / counterfactual archives). Admitted now: `sp500`, `asx200`. Do **not** pause spare auto-advance; watch shared runner capacity (job timeouts, source rate limits, L323) as more markets join maintenance. Do **not** fork shard AI-judgment or `decision-review --apply` until those books have marks. Do **not** add a fourth equal sprint stream that can starve the current head. See [`docs/ops/market-sharded-learning.md`](docs/ops/market-sharded-learning.md#what-enter-learning-means).
 
-See [`docs/ops/market-sharded-learning.md`](docs/ops/market-sharded-learning.md) and [`docs/ops/euro-depth-sprint.md`](docs/ops/euro-depth-sprint.md).
+See [`docs/ops/data-pillar-priorities.md`](docs/ops/data-pillar-priorities.md), [`docs/ops/market-sharded-learning.md`](docs/ops/market-sharded-learning.md) and [`docs/ops/euro-depth-sprint.md`](docs/ops/euro-depth-sprint.md).
 
 ## Dialogue → instrument (working style)
 
@@ -97,8 +97,9 @@ findings,” or similar:
 
 1. Read that policy and follow the **three-lane model** (ingest factory → engineering
    queue → narrative refresh).
-2. Align work to **P1** (FTSE buy-tier bodies, FCF basis, overlay bind, memo recency)
-   then **P2** (focus ingest sprint). Defer the rest with `ftse-defer`.
+2. Align work to **P1** (Investment-demanded bind fields: filings/FCF/overlay/memo
+   on holdings ∪ active shortlists ∪ F3 repairs) then **P2** (focus ingest sprint).
+   Defer the rest with `ftse-defer`.
 3. Use **existing batching** — ingest-loop + gap-closure pins, `so-what --apply`,
    compile-cap drain, narrow eng splits, clash-aware max **2** agents — never a
    parallel “clearance queue” or one PR per ticker for shared scoring gaps.
