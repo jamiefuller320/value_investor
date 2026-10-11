@@ -272,6 +272,20 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "APAM.AS": [
         "https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf",
     ],
+    # euro_depth unmeasured stuck — UNA.AS (Unilever N.V.): ESEF/news discovery
+    # repeatedly 0-improve with empty IR allowlist (igc-20261005-02). Seed unilever.com IR PDFs.
+    "UNA.AS": [
+        "https://www.unilever.com/files/unilever-annual-report-and-accounts-2025.pdf",
+        "https://www.unilever.com/files/ir-q2-2025-full-announcement.pdf",
+        "https://www.unilever.com/files/ir-q4-2025-full-announcement.pdf",
+        "https://www.sec.gov/Archives/edgar/data/217410/000021741026000007/ul-20251231.htm",
+    ],
+    "UNA": [
+        "https://www.unilever.com/files/unilever-annual-report-and-accounts-2025.pdf",
+        "https://www.unilever.com/files/ir-q2-2025-full-announcement.pdf",
+        "https://www.unilever.com/files/ir-q4-2025-full-announcement.pdf",
+        "https://www.sec.gov/Archives/edgar/data/217410/000021741026000007/ul-20251231.htm",
+    ],
     # euro_depth leftover awaiting_periodic_report — ADYEN.AS thin ESEF-only; brand.adyen.com PDFs.
     "ADYEN.AS": [
         "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEyMjMwOCwidGltZXN0YW1wIjoxNzc1NTY0MjQ0LCJ2ZXJzaW9uIjoxNzcyNjkwMjA3fQ:adyen:DEcCEo4XPo3eDfzj-fjMZ366g2pQkuoZMPARCHC5BoE/download",
