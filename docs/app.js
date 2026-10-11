@@ -4871,6 +4871,9 @@ function resolveN200PipelineHealth(data) {
   if (!store || typeof store !== "object") return null;
   const phase = store.phase || {};
   const volume = store.volume_gate || {};
+  const levers = store.per_lever_scoreboards || {};
+  const entrySb = store.entry_lever_scoreboard || {};
+  const exitSb = store.exit_lever_scoreboard || {};
   return {
     observe_only: true,
     influences_live: false,
@@ -4880,7 +4883,7 @@ function resolveN200PipelineHealth(data) {
     deferred_id: store.deferred_id || "N200",
     headline: "N200 observe store loaded (client projection).",
     disclaimer:
-      "Phase floor and volume gate measure mechanism throughput health — not alpha, path P&L, or capital readiness (F8). Observe-only.",
+      "Phase floor, volume gate, and per-lever scoreboards measure factory mechanism / lever quality — not alpha or capital readiness (F8). Lever wins are independent of path P&L. Observe-only.",
     store_present: true,
     store_generated_at: store.generated_at || null,
     phase: {
@@ -4895,6 +4898,19 @@ function resolveN200PipelineHealth(data) {
       min_episodes: volume.min_episodes,
       min_weeks: volume.min_weeks,
     },
+    per_lever: {
+      present: !!(levers.entry_verdict || entrySb.verdict),
+      independent_of_path_pnl: true,
+      cost_basis: levers.cost_basis || entrySb.cost_basis || "fair_market_table",
+      not_capital_ready: true,
+      entry_verdict: levers.entry_verdict || entrySb.verdict || null,
+      exit_verdict: levers.exit_verdict || exitSb.verdict || null,
+      entry_margin_vs_best_alt:
+        levers.entry_margin_vs_best_alt ?? entrySb.margin_vs_best_alt ?? null,
+      exit_margin_vs_best_alt:
+        levers.exit_margin_vs_best_alt ?? exitSb.margin_vs_best_alt ?? null,
+      detail: "Client projection from observe sidecar.",
+    },
     freshness: { state: "unknown", detail: "Awaiting queue-health embed for freshness." },
     pipeline: {
       functioning: null,
@@ -4904,6 +4920,20 @@ function resolveN200PipelineHealth(data) {
     },
     ops_doc: store.ops_doc || "docs/ops/n200-tech-timing-observe.md",
   };
+}
+
+function n200LeverBadge(verdict) {
+  const key = String(verdict || "").toLowerCase();
+  if (key === "win" || key === "tie") {
+    return `<span class="badge badge-ii-yes">${esc(key)}</span>`;
+  }
+  if (key === "lose") {
+    return `<span class="badge badge-ii-no">${esc(key)}</span>`;
+  }
+  if (key === "insufficient") {
+    return `<span class="badge">${esc(key)}</span>`;
+  }
+  return `<span class="badge">${esc("—")}</span>`;
 }
 
 function n200GateBadge(met, { yes = "met", no = "not met" } = {}) {
@@ -4956,6 +4986,15 @@ function renderN200PipelineHealthSection(data, { compact = false } = {}) {
         · ops ${esc(fmtDate(pipeline.ops_run_at))}
         · ${esc(payload.registration_id || "strand-b-plain-value-tech-timing-v0")}
       </p>`;
+  const perLever = payload.per_lever || {};
+  const entryVerdict = perLever.entry_verdict;
+  const exitVerdict = perLever.exit_verdict;
+  const fmtMargin = (v) => {
+    if (v == null || !Number.isFinite(Number(v))) return "—";
+    const n = Number(v);
+    const pct = (n * 100).toFixed(2);
+    return `${n >= 0 ? "+" : ""}${pct}pp`;
+  };
   if (compact) {
     return `
       <section${sectionAttrs}>
@@ -4966,11 +5005,13 @@ function renderN200PipelineHealthSection(data, { compact = false } = {}) {
           Phase ${esc(entriesPw)}/${esc(floor)} ${n200GateBadge(!!phase.floor_met)}
           · volume ${n200GateBadge(!!volume.met)}
           (${esc(String(volume.episodes ?? "—"))} ep / ${esc(String(volume.weeks ?? "—"))} wk)
+          · entry ${n200LeverBadge(entryVerdict)}
+          · exit ${n200LeverBadge(exitVerdict)}
         </p>
         <p class="small muted" style="margin-bottom:0">
           Compact strip — full readout on
           <button type="button" class="link-btn" data-tab-jump="automation">Automation → Queue &amp; hunter</button>.
-          Throughput only — not a promote signal.
+          Lever ≠ path P&L; not a promote signal (F8).
         </p>
       </section>`;
   }
@@ -5003,6 +5044,24 @@ function renderN200PipelineHealthSection(data, { compact = false } = {}) {
           <p class="small muted">Review gate — not auto-promote.</p>
         </div>
         <div class="card n200-pipeline-card">
+          <h3>Entry lever ${n200LeverBadge(entryVerdict)}</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value n200-lever-verdict">${esc(entryVerdict || "—")}</div>
+          </div>
+          ${settingRow("Margin vs best ±14d", esc(fmtMargin(perLever.entry_margin_vs_best_alt)))}
+          ${settingRow("Cost basis", esc(perLever.cost_basis || "fair_market_table"))}
+          <p class="small muted">Best-feasible at fair costs; independent of path P&L.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Exit lever ${n200LeverBadge(exitVerdict)}</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value n200-lever-verdict">${esc(exitVerdict || "—")}</div>
+          </div>
+          ${settingRow("Margin vs best ±14d", esc(fmtMargin(perLever.exit_margin_vs_best_alt)))}
+          ${settingRow("Cost basis", esc(perLever.cost_basis || "fair_market_table"))}
+          <p class="small muted">Best-feasible at fair costs; independent of path P&L.</p>
+        </div>
+        <div class="card n200-pipeline-card">
           <h3>Pipeline ${functioningBadge}</h3>
           ${settingRow("Store freshness", `${observeFreshnessBadge(freshness.state)} · ${esc(freshness.detail || "")}`)}
           ${settingRow(
@@ -5018,7 +5077,7 @@ function renderN200PipelineHealthSection(data, { compact = false } = {}) {
         </div>
       </div>
       <p class="small muted" style="margin-top:0.75rem;margin-bottom:0">
-        Observe-only strand B. Phase green ≠ alpha. Never writes books/knobs (F8).
+        Observe-only strand B. Phase/lever green ≠ alpha or capital-ready. Never writes books/knobs (F8).
       </p>
     </section>`;
 }

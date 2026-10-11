@@ -184,7 +184,7 @@ for Project chat pickup (`discuss daily recommendation \`rec-…\``). See
 
 The Automation tab shows **merge lane** (auto-merge idle/running) and **agent/hunter lane** (dispatch idle/blocked/running) plus ops monitor dispatch signal.
 
-Also embeds **N200 pipeline health** (`n200_pipeline_health`: phase floor, volume gate, observe-store freshness) — mechanism throughput only, not alpha / capital-ready. See [n200-tech-timing-observe.md](n200-tech-timing-observe.md).
+Also embeds **N200 pipeline health** (`n200_pipeline_health`: phase floor, volume gate, per-lever entry/exit verdicts, observe-store freshness) — mechanism / lever quality only, not alpha / capital-ready. See [n200-tech-timing-observe.md](n200-tech-timing-observe.md).
 
 ## Local dev
 

@@ -43,17 +43,17 @@ Kept the same `registration_id` because this is an exploratory cost-stamp correc
 
 ## Dashboard
 
-**Automation → Queue & hunter** shows **N200 / learning-factory pipeline** (phase floor, volume gate, store freshness, ops-check). Compact strip also on **Analysis → observe**.
+**Automation → Queue & hunter** shows **N200 / learning-factory pipeline** (phase floor, volume gate, **per-lever entry/exit verdicts**, store freshness, ops-check). Compact strip also on **Analysis → observe**.
 
-Phase green = **mechanism throughput** only — not alpha, path P&L, or capital readiness (F8). Projection helper: `build_n200_pipeline_health_projection`.
+Phase green = **mechanism throughput** only. Lever win/lose = **best-feasible under ±14d brackets at fair costs**, independent of path P&L. Neither is alpha or capital readiness (F8). Projection helper: `build_n200_pipeline_health_projection` → `queue_health.n200_pipeline_health.per_lever`.
 
 ## Artifacts
 
 | Path | Role |
 |---|---|
 | `docs/data/n200_tech_timing_registration.json` | Frozen seal record (+ cost_basis / stress fields) |
-| `docs/data/n200_tech_timing_observe.json` | Bracket scoreboard + markers + phase/volume + stress diagnostic (Pages sidecar) |
-| `docs/data/queue_health.json` → `n200_pipeline_health` | Dashboard projection (freshness + functioning) |
+| `docs/data/n200_tech_timing_observe.json` | Bracket + **per-lever** scoreboards + markers + phase/volume + stress diagnostic (Pages sidecar) |
+| `docs/data/queue_health.json` → `n200_pipeline_health` | Dashboard projection (phase / volume / **per_lever** / freshness) |
 | This doc | Runbook |
 
 Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
@@ -61,7 +61,7 @@ Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
 ## Scoreboards
 
 1. **Path** — control cell `entry_+0__exit_+0` absolute median of **fair-cost** episode returns (primary — [fair-cost-primacy.md](fair-cost-primacy.md)).
-2. **Per-lever** — entry offsets with control exit; exit offsets with control entry (independent of path P&L; also at fair costs).
+2. **Per-lever** — `entry_lever_scoreboard` / `exit_lever_scoreboard` + rollup `per_lever_scoreboards`: control offset `0` vs ±14d alternatives at **fair costs**, other timing lever held at control. Verdict `win` / `tie` / `lose` / `insufficient` is **independent of path P&L** (lever can win on a losing book). Marker `n200-per-lever-scoreboard-v1`.
 3. **Phase** — entries/week vs sealed floor.
 4. **Diagnostics** — full cell matrix + best-cell; **stress 3%** control median (`stress_scoreboard_report_only`) — not a promote signal (F8).
 

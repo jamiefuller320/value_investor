@@ -221,7 +221,7 @@
         "near_limit": false,
         "budget_flag": "enforced",
         "remaining_weekly_ops_usd": 61.7,
-        "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) — warning only, not a hard cap.",
+        "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) \u2014 warning only, not a hard cap.",
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
@@ -279,7 +279,7 @@
         "name": "FTSE Library Ladder",
         "cron_weekly": "17 6 * * 0",
         "cron_daily_surplus": "30 5 * * *",
-        "cadence": "Dispatched by orchestrator — Sunday quiet bundle + catch-up + surplus-day gate",
+        "cadence": "Dispatched by orchestrator \u2014 Sunday quiet bundle + catch-up + surplus-day gate",
         "workflow": "library-grow.yml"
       },
       "model_review": {
@@ -308,19 +308,19 @@
       "dashboard_bridge": {
         "name": "Dashboard bridge worker",
         "cron": "*/10 * * * 1-5",
-        "cadence": "Weekday every 10m UTC — **primary: cron-job.org** (import_cron_jobs.py --job dashboard-bridge). GitHub schedule */10 is backup only and often drifts hours. Polls Supabase dashboard_commands and repository_dispatches target workflows. docs/ops/dashboard-bridge.md.",
+        "cadence": "Weekday every 10m UTC \u2014 **primary: cron-job.org** (import_cron_jobs.py --job dashboard-bridge). GitHub schedule */10 is backup only and often drifts hours. Polls Supabase dashboard_commands and repository_dispatches target workflows. docs/ops/dashboard-bridge.md.",
         "workflow": "dashboard-bridge.yml"
       },
       "ingest_loop": {
         "name": "FTSE Ingest Loop",
         "cron": "5 7,10 * * 1-5; 5 20,23 * * 6",
-        "cadence": "Mon–Fri 07:05 + 10:05 UTC deepen; Saturday 20:05 + 23:05 UTC pre-Sunday deepen (drain cap 6) so Sunday email-report can send without OCR burn. External cron: docs/ops/orchestrator-cron.md; design: docs/ops/ingest-scan-then-target.md#saturday-pre-sunday-deepen.",
+        "cadence": "Mon\u2013Fri 07:05 + 10:05 UTC deepen; Saturday 20:05 + 23:05 UTC pre-Sunday deepen (drain cap 6) so Sunday email-report can send without OCR burn. External cron: docs/ops/orchestrator-cron.md; design: docs/ops/ingest-scan-then-target.md#saturday-pre-sunday-deepen.",
         "workflow": "ingest-loop.yml"
       },
       "universe_filing_archive_pack": {
         "name": "Universe filing archive pack",
         "cron": "0 22 * * 1-5",
-        "cadence": "Mon–Fri 22:00 UTC quiet-window cold archive lane under archive_lane_gate (week-first then backward pack plan). Preemptible; suspends while focus fat sprint active. Writes bottleneck review (observe-only). docs/ops/universe-filing-archive-pack.md.",
+        "cadence": "Mon\u2013Fri 22:00 UTC quiet-window cold archive lane under archive_lane_gate (week-first then backward pack plan). Preemptible; suspends while focus fat sprint active. Writes bottleneck review (observe-only). docs/ops/universe-filing-archive-pack.md.",
         "workflow": "universe-filing-archive-pack.yml"
       },
       "analysis_review": {
@@ -372,7 +372,7 @@
         "at": "2026-10-11T06:22:31.316875+00:00",
         "kind": "ladder_run",
         "title": "Library ladder run (focus euro_depth)",
-        "detail": "shortlist=52 research created=None updated=None spend≈None"
+        "detail": "shortlist=52 research created=None updated=None spend\u2248None"
       },
       {
         "at": "2026-10-09T08:38:35.156441+00:00",
@@ -383,19 +383,19 @@
       {
         "at": "2026-09-20T06:54:20.282932+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       },
       {
         "at": "2026-09-01T09:52:07.968538+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       },
       {
         "at": "2026-08-19T08:26:14.657687+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       },
       {
@@ -413,7 +413,7 @@
       {
         "at": "2026-08-14T15:46:47.564038+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: omxs30 → iseq20",
+        "title": "Focus advanced: omxs30 \u2192 iseq20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -425,13 +425,13 @@
       {
         "at": "2026-08-02T12:34:15.511558+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       },
       {
         "at": "2026-08-02T12:33:10.531346+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: smi → omxs30",
+        "title": "Focus advanced: smi \u2192 omxs30",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -443,7 +443,7 @@
       {
         "at": "2026-07-26T18:19:32.036441+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: psi20 → smi",
+        "title": "Focus advanced: psi20 \u2192 smi",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -455,7 +455,7 @@
       {
         "at": "2026-07-26T05:41:29.750591+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: atx → psi20",
+        "title": "Focus advanced: atx \u2192 psi20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -467,7 +467,7 @@
       {
         "at": "2026-07-25T06:02:07.067074+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: us_adr_asia → atx",
+        "title": "Focus advanced: us_adr_asia \u2192 atx",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -491,7 +491,7 @@
       {
         "at": "2026-07-18T18:33:47.281863+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sti → us_adr_asia",
+        "title": "Focus advanced: sti \u2192 us_adr_asia",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -503,7 +503,7 @@
       {
         "at": "2026-07-18T18:33:47.280727+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: hang_seng → sti",
+        "title": "Focus advanced: hang_seng \u2192 sti",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -515,7 +515,7 @@
       {
         "at": "2026-07-18T18:33:47.279140+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: bel20 → hang_seng",
+        "title": "Focus advanced: bel20 \u2192 hang_seng",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -527,7 +527,7 @@
       {
         "at": "2026-07-18T18:33:47.278138+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aex → bel20",
+        "title": "Focus advanced: aex \u2192 bel20",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -539,7 +539,7 @@
       {
         "at": "2026-07-18T18:33:47.277118+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_mib → aex",
+        "title": "Focus advanced: ftse_mib \u2192 aex",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -551,7 +551,7 @@
       {
         "at": "2026-07-18T18:33:47.275978+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ibex35 → ftse_mib",
+        "title": "Focus advanced: ibex35 \u2192 ftse_mib",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -563,7 +563,7 @@
       {
         "at": "2026-07-18T18:33:47.274723+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: aim → ibex35",
+        "title": "Focus advanced: aim \u2192 ibex35",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -575,7 +575,7 @@
       {
         "at": "2026-07-18T18:04:30.214468+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: tsx60 → aim",
+        "title": "Focus advanced: tsx60 \u2192 aim",
         "detail": "Opened AIM / Euronext / HK-SG / ADR Asia slices on the offline ladder"
       },
       {
@@ -623,32 +623,32 @@
       {
         "at": "2026-07-18T13:49:17.502997+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: cac40 → tsx60",
+        "title": "Focus advanced: cac40 \u2192 tsx60",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.501764+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: dax → cac40",
+        "title": "Focus advanced: dax \u2192 cac40",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.500540+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: nasdaq100 → dax",
+        "title": "Focus advanced: nasdaq100 \u2192 dax",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-18T13:49:17.498573+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: ftse_smallcap → nasdaq100",
+        "title": "Focus advanced: ftse_smallcap \u2192 nasdaq100",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
         "at": "2026-07-17T04:51:50.477798+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:51:50.477265+00:00",
@@ -690,12 +690,12 @@
         "at": "2026-07-17T04:28:29.172645+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:28:29.172198+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: euro_stoxx50 → asx200",
+        "title": "Focus advanced: euro_stoxx50 \u2192 asx200",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -732,12 +732,12 @@
         "at": "2026-07-17T04:23:00.290382+00:00",
         "kind": "advance_log",
         "title": "Offline advance: graduate",
-        "detail": "market=—"
+        "detail": "market=\u2014"
       },
       {
         "at": "2026-07-17T04:23:00.289731+00:00",
         "kind": "graduation",
-        "title": "Focus advanced: sp500 → euro_stoxx50",
+        "title": "Focus advanced: sp500 \u2192 euro_stoxx50",
         "detail": "coverage=1.0 stale=0.0 reason=advanced"
       },
       {
@@ -749,7 +749,7 @@
       {
         "at": "2026-07-16T14:09:40.872338+00:00",
         "kind": "model_review",
-        "title": "Research model: composer-2.5 → composer-2.5",
+        "title": "Research model: composer-2.5 \u2192 composer-2.5",
         "detail": "pool=first_party"
       }
     ],
@@ -1303,7 +1303,7 @@
     "schema_version": 1,
     "generated_at": "2026-10-11T08:25:23.760370+00:00",
     "observe_only": true,
-    "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
+    "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs \u22652 equity marks and \u22651 post-apply trade before epoch-scoped excess is used for knob proposals \u2014 no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment_fair",
     "tracks": {
       "ai_judgment_fair": {
@@ -1385,7 +1385,7 @@
       },
       "buy_tier_level_dca": {
         "track_id": "buy_tier_level_dca",
-        "track_label": "Buy-tier level DCA realism (£500/mo, Suite B costs, cold-start capital epoch)",
+        "track_label": "Buy-tier level DCA realism (\u00a3500/mo, Suite B costs, cold-start capital epoch)",
         "is_primary_learning_track": false,
         "applied": false,
         "epoch_started_at": null,
@@ -1424,7 +1424,7 @@
       "pr_open_count": 0,
       "open_engineering_prs": [],
       "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+      "detail": "No open engineering PRs \u2014 auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
       "state": "idle",
@@ -1441,7 +1441,7 @@
       "blocked_task_count": 0,
       "next_task_id": null,
       "reason": "no open engineering tasks in queue",
-      "detail": "No open engineering tasks — queue is idle."
+      "detail": "No open engineering tasks \u2014 queue is idle."
     },
     "queue_clearing": {
       "pause_active": false,
@@ -1708,7 +1708,7 @@
       "schema_version": 1,
       "generated_at": "2026-10-11T16:33:05.987458+00:00",
       "observe_only": true,
-      "headline": "Instrument stores lag ops_status (commit-path anomaly) — prefer trajectory only if history looks continuous.",
+      "headline": "Instrument stores lag ops_status (commit-path anomaly) \u2014 prefer trajectory only if history looks continuous.",
       "surface_freshness": "lagging",
       "ops_run_at": "2026-10-11T07:46:38.693830+00:00",
       "warn_instrument_count": 2,
@@ -1723,12 +1723,12 @@
       "instruments": [
         {
           "id": "buy_tier_flip_lag",
-          "title": "Buy-tier flip → usable",
+          "title": "Buy-tier flip \u2192 usable",
           "finding_title": "New buy-tier not yet usable",
           "observe_only": true,
           "warn_active": true,
           "severity": "warn",
-          "finding_summary": "10 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, ftse350, ibex35, sti: aim/CAM.L (no_memo, 439.78h since flip), aim/MPE.L (no_key_bodies, 439.78h since flip), aim/YNGN.L (no_key_bodies, 391.78h since flip), ibex35/REP.MC (no_key_bodies, 391.78h since flip), aim/DOTD.L (no_key_bodies, 343.78h since flip), aim/CAML.L (no_key_bodies, 271.78h since flip), asx200/BWP.AX (no_memo, 175.78h since flip), aim/PEBB.L (no_key_bodies, 151.78h since flip), IGG.L (no_memo, 103.78h since flip), sti/Y92.SI (no_key_bodies, 103.78h since flip). Blocking: no_key_bodies=7, no_memo=3.",
+          "finding_summary": "10 recent buy-tier flip(s) still missing index / key bodies / first memo after \u226524h (path incomplete) across aim, asx200, ftse350, ibex35, sti: aim/CAM.L (no_memo, 439.78h since flip), aim/MPE.L (no_key_bodies, 439.78h since flip), aim/YNGN.L (no_key_bodies, 391.78h since flip), ibex35/REP.MC (no_key_bodies, 391.78h since flip), aim/DOTD.L (no_key_bodies, 343.78h since flip), aim/CAML.L (no_key_bodies, 271.78h since flip), asx200/BWP.AX (no_memo, 175.78h since flip), aim/PEBB.L (no_key_bodies, 151.78h since flip), IGG.L (no_memo, 103.78h since flip), sti/Y92.SI (no_key_bodies, 103.78h since flip). Blocking: no_key_bodies=7, no_memo=3.",
           "metrics": {
             "warn_not_usable": 9,
             "open_not_usable": 22,
@@ -1811,7 +1811,7 @@
           },
           "primary_metric": "warn_not_usable",
           "primary_value": 9,
-          "primary_label": "Warn cohort (≥24h path-incomplete)",
+          "primary_label": "Warn cohort (\u226524h path-incomplete)",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -1878,7 +1878,7 @@
           "observe_only": true,
           "warn_active": true,
           "severity": "warn",
-          "finding_summary": "Archive body-miss proxy 52% of 237 recent buy-tier flips; 16 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/YNGN.L). Observe-only outcome signal — not a cold-store start gate; do not eng-spray or add a second live crawler / fourth sprint stream (N180/N181).",
+          "finding_summary": "Archive body-miss proxy 52% of 237 recent buy-tier flips; 16 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/YNGN.L). Observe-only outcome signal \u2014 not a cold-store start gate; do not eng-spray or add a second live crawler / fourth sprint stream (N180/N181).",
           "metrics": {
             "miss_rate": 0.5385,
             "enter_body_miss_count": 126,
@@ -2031,7 +2031,7 @@
           "freshness": {
             "state": "lagging",
             "label": "Lagging ops",
-            "detail": "Store trails ops_status by 5.2h (raw stores should commit with ops-monitor — check commit path).",
+            "detail": "Store trails ops_status by 5.2h (raw stores should commit with ops-monitor \u2014 check commit path).",
             "as_of": "2026-10-11T02:31:56.740262+00:00",
             "age_hours": 14.02,
             "store_lag_hours": 5.24,
@@ -2067,7 +2067,7 @@
           "freshness": {
             "state": "lagging",
             "label": "Lagging ops",
-            "detail": "Store trails ops_status by 5.2h (raw stores should commit with ops-monitor — check commit path).",
+            "detail": "Store trails ops_status by 5.2h (raw stores should commit with ops-monitor \u2014 check commit path).",
             "as_of": "2026-10-11T02:31:56.810391+00:00",
             "age_hours": 14.02,
             "store_lag_hours": 5.24,
@@ -2796,7 +2796,7 @@
         ],
         "note": "Composition / j-curve observe twin only. Ultimate book health stays on cumulative beat_market; post-exit path on exit_shadow."
       },
-      "headline": "Focus EU depth composite (STOXX50 + periphery) still early-lifecycle-heavy (100% just_bought+growth) — expected for young books; not a heal cue.",
+      "headline": "Focus EU depth composite (STOXX50 + periphery) still early-lifecycle-heavy (100% just_bought+growth) \u2014 expected for young books; not a heal cue.",
       "surface_freshness": "fresh",
       "ops_run_at": "2026-10-11T07:46:38.693830+00:00",
       "board_generated_at": "2026-10-11T08:25:23.878433+00:00",
@@ -2890,7 +2890,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 36.36,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -2993,7 +2993,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -3096,7 +3096,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -3199,7 +3199,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -3302,7 +3302,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -3405,7 +3405,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -3508,7 +3508,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -3611,7 +3611,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -3714,7 +3714,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -3817,7 +3817,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -3920,7 +3920,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -4023,7 +4023,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -4126,7 +4126,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 94.12,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -4229,7 +4229,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -4332,7 +4332,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -4435,7 +4435,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -4538,7 +4538,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -4641,7 +4641,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -4744,7 +4744,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -4847,7 +4847,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -4950,7 +4950,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -5053,7 +5053,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -5156,7 +5156,7 @@
           },
           "primary_metric": "early_share_pct",
           "primary_value": 100.0,
-          "primary_label": "Early share % (just_bought+growth)/held — lower = more mature",
+          "primary_label": "Early share % (just_bought+growth)/held \u2014 lower = more mature",
           "freshness": {
             "state": "fresh",
             "label": "Fresh",
@@ -9274,18 +9274,18 @@
       ]
     },
     "n200_pipeline_health": {
-      "schema_version": 1,
-      "generated_at": "2026-10-11T16:33:06.011298+00:00",
+      "schema_version": 2,
+      "generated_at": "2026-10-11T16:41:36.503658+00:00",
       "observe_only": true,
       "influences_live": false,
       "not_alpha_signal": true,
       "not_capital_ready": true,
       "registration_id": "strand-b-plain-value-tech-timing-v0",
       "deferred_id": "N200",
-      "headline": "N200 pipeline functioning — phase 11.222/5.0 entries/week (floor met); volume gate met (101 ep / 9 wk).",
-      "disclaimer": "Phase floor and volume gate measure mechanism throughput health — not alpha, path P&L, or capital readiness (F8). Observe-only.",
+      "headline": "N200 pipeline functioning \u2014 phase 11.222/5.0 entries/week (floor met); volume gate met (101 ep / 9 wk); entry lever win, exit lever lose.",
+      "disclaimer": "Phase floor, volume gate, and per-lever scoreboards measure factory mechanism / lever quality \u2014 not alpha or capital readiness (F8). Lever wins are independent of path P&L. Observe-only.",
       "store_present": true,
-      "store_generated_at": "2026-10-11T12:16:17.499011+00:00",
+      "store_generated_at": "2026-10-11T16:40:58.383270+00:00",
       "phase": {
         "entries_per_week": 11.222,
         "floor": 5.0,
@@ -9298,12 +9298,28 @@
         "min_episodes": 24,
         "min_weeks": 8
       },
+      "per_lever": {
+        "present": true,
+        "independent_of_path_pnl": true,
+        "cost_basis": "fair_market_table",
+        "not_capital_ready": true,
+        "entry_verdict": "win",
+        "exit_verdict": "lose",
+        "entry_control_is_best_feasible": true,
+        "exit_control_is_best_feasible": false,
+        "entry_margin_vs_best_alt": 0.025338,
+        "exit_margin_vs_best_alt": -0.009908,
+        "entry_control_smooth_ret_cohort_median": -0.0055,
+        "exit_control_smooth_ret_cohort_median": -0.0055,
+        "path_control_smooth_ret_cohort_median": -0.0055,
+        "detail": "Entry lever win; exit lever lose (fair costs; independent of path P&L)."
+      },
       "freshness": {
         "state": "fresh",
         "label": "Fresh",
-        "detail": "Last refresh 4.3h ago.",
-        "as_of": "2026-10-11T12:16:17.499011+00:00",
-        "age_hours": 4.28,
+        "detail": "Last refresh 0.0h ago.",
+        "as_of": "2026-10-11T16:40:58.383270+00:00",
+        "age_hours": 0.01,
         "store_lag_hours": null,
         "stale_after_hours": 30.0
       },
@@ -9312,7 +9328,7 @@
         "ops_check_ok": false,
         "ops_finding_present": false,
         "ops_run_at": "2026-10-11T07:46:38.693830+00:00",
-        "detail": "Observe refresh path looks alive. No N200 ops finding in latest ops_status (store may lag until ops commits). Last refresh 4.3h ago."
+        "detail": "Observe refresh path looks alive. No N200 ops finding in latest ops_status (store may lag until ops commits). Last refresh 0.0h ago. Entry lever win; exit lever lose (fair costs; independent of path P&L)."
       },
       "ops_doc": "docs/ops/n200-tech-timing-observe.md"
     }
