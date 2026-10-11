@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "registration_id": "strand-b-plain-value-tech-timing-v0",
   "deferred_id": "N200",
   "status": "sealed_observe_only",
@@ -17,8 +17,9 @@
   },
   "o4_smoother": "smooth_ret_cohort_median",
   "o5_primacy": {
-    "primary": "absolute_smoothed_return",
-    "control_excess": "report_only"
+    "primary": "absolute_smoothed_return_fair_costs",
+    "control_excess": "report_only",
+    "stress_cost": "report_only"
   },
   "o6_phase_floor": {
     "entries_per_week_target": 5.0,
@@ -36,7 +37,26 @@
       14
     ]
   },
-  "trade_cost_pct": 0.03,
+  "cost_basis": {
+    "primary": "fair_market_table",
+    "market_id": "ftse350",
+    "buy_cost_pct": 0.00525,
+    "sell_cost_pct": 0.00025,
+    "round_trip_pct": 0.0055,
+    "trade_cost_pct_symmetric_proxy": 0.00275,
+    "source": "t212_invest_fair_v1",
+    "stress_trade_cost_pct": 0.03,
+    "stress_role": "report_only"
+  },
+  "trade_cost_pct": 0.00275,
+  "buy_cost_pct": 0.00525,
+  "sell_cost_pct": 0.00025,
+  "stress_trade_cost_pct": 0.03,
+  "cost_amendment": {
+    "kept_registration_id": true,
+    "marker_id": "n200-fair-cost-primary-v1",
+    "reason": "Amend-in-place: fair market-table costs become primary; legacy 3% per side kept as stress/report-only. Same registration_id \u2014 exploratory stamp fix via change marker, not a new learning question."
+  },
   "constraints": [
     "observe_only",
     "no_live_strand_a_writes",
@@ -45,7 +65,9 @@
     "f9_eligibility",
     "f8_fail_closed",
     "per_lever_scoreboard_separate_from_path_pnl",
-    "logged_change_markers"
+    "logged_change_markers",
+    "fair_costs_primary",
+    "stress_cost_report_only"
   ],
   "n201_sealed": false,
   "ops_doc": "docs/ops/n200-tech-timing-observe.md",
