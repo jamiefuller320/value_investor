@@ -62,6 +62,7 @@ ftse-library sim --markets euro_depth --trade-cost 0.03   # explicit stress over
 1. Do **not** flip primary FTSE learning books off 3% without an explicit human decision — keep stress and fair views separate.
 2. New market shards and observe sims should use fair assumptions by default.
 3. AIM stamp exemptions and per-ticker spreads are deferred; current AIM row keeps stamp on for conservatism.
+4. **Standing Investment metric:** fair costs are the **primary** success basis on strands / observe instruments / path scoreboards (not gross; stress and market-relative stay secondary unless a seal adds a co-primary). See [fair-cost-primacy.md](fair-cost-primacy.md).
 
 ## Test and adoption strategy (dual suite)
 

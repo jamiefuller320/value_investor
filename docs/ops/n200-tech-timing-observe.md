@@ -8,14 +8,16 @@
 
 On threshold-eligible names, does **raw buy-tier** identity with calendar **±14d** entry/exit timing brackets beat default timing (offset 0) on cost-aware **`smooth_ret_cohort_median`**?
 
+Episode returns deduct sealed `trade_cost_pct` (not gross/pre-cost). Project-wide standing rule: **fair costs** are the primary metric on all Investment models — see [fair-cost-primacy.md](fair-cost-primacy.md). N200’s frozen stamp remains `trade_cost_pct = 0.03` until a change marker / new registration.
+
 ## Seal defaults (O2–O6)
 
 | ID | Choice |
 |---|---|
 | O2 identity | `raw_buy_tier` |
 | O3 volume gate | ≥24 completed entry episodes **and** ≥8 calendar weeks |
-| O4 smoother | `smooth_ret_cohort_median` |
-| O5 primacy | Absolute smoothed return **primary**; control excess **report-only** |
+| O4 smoother | `smooth_ret_cohort_median` (cost-aware episode returns) |
+| O5 primacy | Absolute smoothed return **primary** (cost-aware; fair-cost standing rule); control excess **report-only** |
 | O6 phase floor | 5 entries/week (illustrative) |
 
 Amend only via logged change marker or new registration.
@@ -39,7 +41,7 @@ Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
 
 ## Scoreboards
 
-1. **Path** — control cell `entry_+0__exit_+0` absolute median (primary).
+1. **Path** — control cell `entry_+0__exit_+0` absolute median of **cost-aware** episode returns (primary; fair-cost standing rule — [fair-cost-primacy.md](fair-cost-primacy.md)).
 2. **Per-lever** — entry offsets with control exit; exit offsets with control entry (independent of path P&L).
 3. **Phase** — entries/week vs sealed floor.
 4. **Diagnostics** — full cell matrix + best-cell (not a promote signal; F8).
@@ -53,5 +55,6 @@ Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
 
 ## Related
 
+- Fair-cost primacy: [fair-cost-primacy.md](fair-cost-primacy.md) · [market-trading-costs.md](market-trading-costs.md)
 - Project store: `alternate-strand-learning-questions.md`, `lifecycle-learning-flow.md`
 - Post-hsr policy: `docs/ops/post-hsr-freeze-extras.md`
