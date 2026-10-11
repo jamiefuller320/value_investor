@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-10-10T07:46:35.214472+00:00",
+  "run_at": "2026-10-11T02:31:39.419960+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "11 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, ftse350, hang_seng, ibex35, sti: aim/CAM.L (no_memo, 415.81h since flip), aim/MPE.L (no_key_bodies, 415.81h since flip), aim/YNGN.L (no_key_bodies, 367.81h since flip), ibex35/REP.MC (no_key_bodies, 367.81h since flip), aim/DOTD.L (no_key_bodies, 319.81h since flip), aim/CAML.L (no_key_bodies, 247.81h since flip), asx200/BWP.AX (no_memo, 151.81h since flip), aim/PEBB.L (no_key_bodies, 127.81h since flip), IGG.L (no_memo, 79.81h since flip), sti/Y92.SI (no_key_bodies, 79.81h since flip) (+1 more). Blocking: no_key_bodies=7, no_memo=4.",
+      "summary": "11 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, ftse350, hang_seng, ibex35, sti: aim/CAM.L (no_memo, 434.53h since flip), aim/MPE.L (no_key_bodies, 434.53h since flip), aim/YNGN.L (no_key_bodies, 386.53h since flip), ibex35/REP.MC (no_key_bodies, 386.53h since flip), aim/DOTD.L (no_key_bodies, 338.53h since flip), aim/CAML.L (no_key_bodies, 266.53h since flip), asx200/BWP.AX (no_memo, 170.53h since flip), aim/PEBB.L (no_key_bodies, 146.53h since flip), IGG.L (no_memo, 98.53h since flip), sti/Y92.SI (no_key_bodies, 98.53h since flip) (+1 more). Blocking: no_key_bodies=7, no_memo=4.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -33,7 +33,7 @@
       "severity": "warn",
       "category": "research",
       "title": "SEC filed FCF diverges from Yahoo basis on US buy-tier",
-      "summary": "11 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (12 of 191 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%); DOC (sp500) FY2025 SEC 357M vs Yahoo 1,252M (71%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.",
+      "summary": "11 US buy-tier memo name(s) where SEC-filed OCF − capex differs from the Yahoo filing_aligned basis by >25% (12 of 200 compared overall): FANG (nasdaq100) FY2025 SEC 2,820M vs Yahoo -703M (125%); WIT (us_adr_asia) FY2025 SEC 1,810M vs Yahoo 154,389M (99%); UMC (us_adr_asia) FY2024 SEC 163M vs Yahoo 2,529M (94%); BIDU (us_adr_asia) FY2025 SEC -2,157M vs Yahoo -16,430M (87%); DOC (sp500) FY2025 SEC 357M vs Yahoo 1,252M (71%). Observe-only: memos cite sec_companyfacts.json; scoring still reads Yahoo. See docs/ops/sec-companyfacts.md for the promotion gate.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -69,7 +69,7 @@
       "severity": "warn",
       "category": "observe",
       "title": "Deferred idea triggers met",
-      "summary": "1 open deferred idea(s) have met their structured trigger: L558 (2026-10-07). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).",
+      "summary": "2 open deferred idea(s) have met their structured trigger: L558 (2026-10-07), L571 (2026-10-11). Pick up, retarget, or close each with ftse-defer (docs/ops/deferred-triggers.md).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -86,16 +86,12 @@
   ],
   "auto_fixes": [
     {
-      "action": "housekeep_parked_task",
-      "detail": "cancel_superseded_gap_closure eng-20261010-01: tier-1 housekeep: superseded gap-closure — duplicate of merged eng-20261006-01 (of eng-20261006-01)"
-    },
-    {
       "action": "market_eng_gap_burndown",
-      "detail": "gap_closure_compile for ftse_mib → eng-20261010-02"
+      "detail": "gap_closure_compile for euro_depth → eng-20261011-01"
     }
   ],
   "drafted_task_ids": [
-    "eng-20261010-02"
+    "eng-20261011-01"
   ],
   "workflow_checks": [
     {
@@ -104,9 +100,9 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-10-09T23:53:31+00:00",
-      "last_success_run_id": 38006598312,
-      "age_hours": 7.9,
+      "last_success_at": "2026-10-11T00:39:33+00:00",
+      "last_success_run_id": 38099174662,
+      "age_hours": 1.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -115,11 +111,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-09T17:29:18+00:00",
-      "last_success_run_id": 37966613900,
-      "age_hours": 14.3,
+      "last_success_at": "2026-10-10T11:18:53+00:00",
+      "last_success_run_id": 38047964142,
+      "age_hours": 15.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -130,9 +126,9 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 26,
-      "last_success_at": "2026-10-10T02:35:09+00:00",
-      "last_success_run_id": 38017505454,
-      "age_hours": 5.2,
+      "last_success_at": "2026-10-10T23:05:44+00:00",
+      "last_success_run_id": 38093818713,
+      "age_hours": 3.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -143,9 +139,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-10-10T07:40:34+00:00",
-      "last_success_run_id": 38035239550,
-      "age_hours": 0.2,
+      "last_success_at": "2026-10-11T02:30:54+00:00",
+      "last_success_run_id": 38105402511,
+      "age_hours": 0.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -156,9 +152,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-09T14:27:48+00:00",
-      "last_success_run_id": 37944352236,
-      "age_hours": 17.4,
+      "last_success_at": "2026-10-10T07:30:51+00:00",
+      "last_success_run_id": 38034678901,
+      "age_hours": 19.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -166,12 +162,12 @@
     {
       "workflow": "analysis-review.yml",
       "name": "Modelling analysis review",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 36,
       "last_success_at": "2026-10-04T14:10:20+00:00",
       "last_success_run_id": 37208269690,
-      "age_hours": 137.7,
+      "age_hours": 156.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -179,12 +175,12 @@
     {
       "workflow": "library-grow.yml",
       "name": "FTSE Library Ladder",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 36,
       "last_success_at": "2026-10-09T06:51:46+00:00",
       "last_success_run_id": 37895770782,
-      "age_hours": 25.0,
+      "age_hours": 43.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -192,12 +188,12 @@
     {
       "workflow": "library-model-review.yml",
       "name": "Library model review",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 36,
       "last_success_at": "2026-10-04T07:20:39+00:00",
       "last_success_run_id": 37185492808,
-      "age_hours": 144.5,
+      "age_hours": 163.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -205,12 +201,12 @@
     {
       "workflow": "email-report.yml",
       "name": "Email report",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 36,
       "last_success_at": "2026-10-07T10:10:24+00:00",
       "last_success_run_id": 37605622681,
-      "age_hours": 69.7,
+      "age_hours": 88.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -218,12 +214,12 @@
     {
       "workflow": "data-backup.yml",
       "name": "FTSE Data Backup",
-      "expected_today": false,
+      "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 36,
       "last_success_at": "2026-10-04T16:54:12+00:00",
       "last_success_run_id": 37218476834,
-      "age_hours": 134.9,
+      "age_hours": 153.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -236,7 +232,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-10-09T08:37:19+00:00",
       "last_success_run_id": 37906086169,
-      "age_hours": 23.2,
+      "age_hours": 41.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -247,9 +243,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-10T02:30:44+00:00",
-      "last_success_run_id": 38017233107,
-      "age_hours": 5.3,
+      "last_success_at": "2026-10-10T17:50:30+00:00",
+      "last_success_run_id": 38073379759,
+      "age_hours": 8.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -259,7 +255,7 @@
     "open_count": 0,
     "pr_open_count": 0,
     "parked_count": 4,
-    "merged_count": 117,
+    "merged_count": 118,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
