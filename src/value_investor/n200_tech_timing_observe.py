@@ -261,9 +261,7 @@ def build_n200_observe(
     offsets = tuple(cfg.bracket_offsets_days)
     episodes: list[dict[str, Any]] = []
     skipped_ineligible = 0
-    cell_returns: dict[str, list[float]] = {
-        _cell_key(e, x): [] for e in offsets for x in offsets
-    }
+    cell_returns: dict[str, list[float]] = {_cell_key(e, x): [] for e in offsets for x in offsets}
     entry_lever_returns: dict[int, list[float]] = {o: [] for o in offsets}
     exit_lever_returns: dict[int, list[float]] = {o: [] for o in offsets}
 
@@ -302,9 +300,7 @@ def build_n200_observe(
                     if p_exit is None:
                         episode_cells[_cell_key(e_off, x_off)] = None
                         continue
-                    ret = episode_return(
-                        p_entry, p_exit, trade_cost_pct=cfg.trade_cost_pct
-                    )
+                    ret = episode_return(p_entry, p_exit, trade_cost_pct=cfg.trade_cost_pct)
                     episode_cells[_cell_key(e_off, x_off)] = round(ret, 6)
                     cell_returns[_cell_key(e_off, x_off)].append(ret)
                 # Entry lever: control exit (0)
@@ -389,13 +385,8 @@ def build_n200_observe(
     elif snapshots:
         weeks = 1
     entries_per_week = round(len(episodes) / weeks, 3) if weeks else None
-    volume_gate_met = (
-        len(episodes) >= cfg.volume_min_episodes and weeks >= cfg.volume_min_weeks
-    )
-    phase_ok = (
-        entries_per_week is not None
-        and entries_per_week >= cfg.phase_entries_per_week_floor
-    )
+    volume_gate_met = len(episodes) >= cfg.volume_min_episodes and weeks >= cfg.volume_min_weeks
+    phase_ok = entries_per_week is not None and entries_per_week >= cfg.phase_entries_per_week_floor
 
     seal_marker = {
         "marker_id": "n200-seal-v0",
@@ -471,9 +462,7 @@ def refresh_n200_tech_timing_observe(
     data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
     store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
     reg_path = (
-        Path(registration_path)
-        if registration_path is not None
-        else DEFAULT_REGISTRATION_PATH
+        Path(registration_path) if registration_path is not None else DEFAULT_REGISTRATION_PATH
     )
 
     prior_markers: list[dict[str, Any]] = []
@@ -510,9 +499,7 @@ def ops_findings_from_n200_observe(payload: dict[str, Any]) -> list[dict[str, An
     weeks = int(payload.get("calendar_weeks_spanned") or 0)
     phase = payload.get("phase") if isinstance(payload.get("phase"), dict) else {}
     path = (
-        payload.get("path_scoreboard")
-        if isinstance(payload.get("path_scoreboard"), dict)
-        else {}
+        payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
     )
     control_med = path.get("control_smooth_ret_cohort_median")
     entries_pw = phase.get("entries_per_week")
@@ -549,9 +536,7 @@ def ops_findings_from_n200_observe(payload: dict[str, Any]) -> list[dict[str, An
 
 def format_n200_observe_text(payload: dict[str, Any]) -> str:
     path = (
-        payload.get("path_scoreboard")
-        if isinstance(payload.get("path_scoreboard"), dict)
-        else {}
+        payload.get("path_scoreboard") if isinstance(payload.get("path_scoreboard"), dict) else {}
     )
     phase = payload.get("phase") if isinstance(payload.get("phase"), dict) else {}
     volume = payload.get("volume_gate") if isinstance(payload.get("volume_gate"), dict) else {}
@@ -560,10 +545,8 @@ def format_n200_observe_text(payload: dict[str, Any]) -> str:
         f"  episodes={payload.get('completed_entry_episodes')} "
         f"weeks={payload.get('calendar_weeks_spanned')} "
         f"entries/week={phase.get('entries_per_week')}",
-        f"  control {SUCCESS_METRIC_ID}="
-        f"{path.get('control_smooth_ret_cohort_median')}",
-        f"  volume_gate_met={volume.get('met')} "
-        f"phase_floor_met={phase.get('floor_met')}",
+        f"  control {SUCCESS_METRIC_ID}={path.get('control_smooth_ret_cohort_median')}",
+        f"  volume_gate_met={volume.get('met')} phase_floor_met={phase.get('floor_met')}",
         f"  diagnostic_best_cell={path.get('diagnostic_best_cell')}",
     ]
     return "\n".join(lines) + "\n"
