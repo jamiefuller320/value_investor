@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T06:58:43+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T07:22:07+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -637,6 +637,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L587 | **Write freeze-extras standing policy into repo ops after user confirms reset** | Project store goals-direction-reset.md proposes freeze-extras as standing policy. After user confirms, add a short ops note (or ops-monitor observe finding) so automation and agents treat no-new-screen-extras as durable, not chat-only. | User confirms freeze-extras in goals-direction-reset.md decision question 1 |
 | L588 | **M1 Investment ownership facade (value_investor.investment) + import allowlist** | After pillar-separation-analysis M0: add soft package with ownership manifest and allowlisted Data→Investment hooks (admission/ladder); pytest that Data modules do not import paper_fund mutators or decision_review apply. No big-bang module move. | User confirms Investment unit M1 in goals-direction-reset decision question 6 / pillar-separation-analysis §6 Q1 |
 | L589 | **Align AGENTS.md live-screener FTSE lock with quality-threshold Investment eligibility** | Project store proposes F9-B: Investment capital/decision eligibility by Data quality thresholds (filings/FCF/overlay/memo; market sprint-complete), not geography-first. Repo AGENTS.md/PROJECT_OBJECTIVE still say live screener FTSE 350 until stage 4. After user confirms F9-B, draft a careful repo wording PR that separates screener product scope from Investment name eligibility. | User accepts F9-B quality-threshold eligibility in design-fork-decisions.md |
+| L590 | **Eligibility negotiation instrument (why-not / repair requests / agreements)** | After F3-A: keep decision_input_inventory as platform absolute availability. Add observe/ops instrument: why-not view from inventory+market gates, Investment repair request JSON, agreed decision JSON (accept_blocked|schedule_repair|exception_with_trail). Fail-closed: green or agreement alone never apply knobs/fills. Wire optional ops-monitor observe finding + runbook mention when built. | Idle eng queue after N200/N201 definition drafts exist, or Investment repeatedly needs structured why-not/priority outside chat |
 
 ---
 
