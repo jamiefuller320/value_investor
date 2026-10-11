@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T09:06:35+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T10:33:09+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -359,6 +359,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L499 | **Universe-wide filing archive / data-pack lane (cold store)** | Thin quiet --apply cold-store writers shipped (week-first plan, max_units=2, archive budgets, gitignored cold root). Miss-rate remains observe-only. Scale caps only after quiet nights prove isolation_ok; keep N180/N181 parked. | Several quiet apply nights with capacity_isolation.isolation_ok and no shared 429/runner collision vs euro maintenance or spare sprints — then raise max_units / fetch caps gradually |
 | L557 | **ESAP (EU single access point) adapter for euro regulated filings** | ESMA's European Single Access Point will expose Transparency Directive filings (annual, half-year, inside information) for all EU issuers through one API, replacing per-country OAM adapters for DE/ES/IT/AT/NL. | ESMA announces a public ESAP API covering Transparency Directive filings |
 | L563 | **Investor withholding and wrapper drag in multi-market yield** | A value book's edge is often the dividend. Cross-market rankings use gross yield. Withholding tax, UK dividend tax outside an ISA, and ETF fee drag change which foreign name is cheap to this investor. Net it into expected return before a non-UK book is judged on total return or any live capital is allocated. | A non-UK shard is scored on total return, or stage 6 capital allocation is designed |
+| L594 | **Cold-store option value for multi-strand / F9 eligible pool** | Quiet universe archive (L499 writers under archive_lane_gate) is option value for future Investment shortlists and threshold-eligible names outside today's buy-tier deepen — not a second live crawler or fourth equal sprint. Scale only with isolation_ok; do not steal fat/spare sprint capacity. | A second sealed shortlist (e.g. N201) needs non-buy-tier bodies, OR several quiet L499 apply nights show isolation_ok and Investment F3 repairs start requesting non-buy-tier names |
 
 ### Research & portfolio product
 
