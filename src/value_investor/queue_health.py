@@ -184,6 +184,7 @@ def build_queue_health_snapshot(
     observe_utilization: dict[str, Any] | None = None,
     lifecycle_maturity: dict[str, Any] | None = None,
     n200_pipeline_health: dict[str, Any] | None = None,
+    n201_pipeline_health: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Roll up merge lane, agent lane, and ops monitor into one dashboard snapshot."""
     from value_investor.engineering_preflight import clash_report_for_queue
@@ -253,6 +254,18 @@ def build_queue_health_snapshot(
             ops_status=ops_status,
             now=clock,
         )
+    if n201_pipeline_health is None:
+        from value_investor.n201_value_mom_observe import (
+            build_n201_pipeline_health_projection,
+        )
+
+        n201_store = Path(ops_status_path).parent / "n201_value_mom_observe.json"
+        n201_pipeline_health = build_n201_pipeline_health_projection(
+            store_path=n201_store,
+            ops_status_path=ops_status_path,
+            ops_status=ops_status,
+            now=clock,
+        )
 
     overall = "ok"
     if agent_lane["blocked"] or merge_lane["blocked"]:
@@ -309,6 +322,8 @@ def build_queue_health_snapshot(
         "lifecycle_maturity_trajectory": lifecycle_maturity,
         # N200 — mechanism throughput (phase/volume); not alpha / not capital-ready.
         "n200_pipeline_health": n200_pipeline_health,
+        # N201 — launch-queue waiter; fixed-stake mechanism only (F8).
+        "n201_pipeline_health": n201_pipeline_health,
     }
 
 
@@ -333,6 +348,9 @@ def refresh_queue_health_ui(
     from value_investor.n200_tech_timing_observe import (
         build_n200_pipeline_health_projection,
     )
+    from value_investor.n201_value_mom_observe import (
+        build_n201_pipeline_health_projection,
+    )
     from value_investor.observe_utilization import refresh_observe_utilization
 
     anchor = automation_path or queue_health_path or tasks_path or DEFAULT_AUTOMATION_PATH
@@ -352,9 +370,13 @@ def refresh_queue_health_ui(
         store_path=data_dir / "lifecycle_maturity_trajectory.json",
         board_path=data_dir / "lifecycle_board.json",
     )
-    # Read existing N200 store only — ops-monitor already refreshes scores.
+    # Read existing observe stores only — ops-monitor already refreshes scores.
     n200_health = build_n200_pipeline_health_projection(
         store_path=data_dir / "n200_tech_timing_observe.json",
+        ops_status_path=ops_status_path,
+    )
+    n201_health = build_n201_pipeline_health_projection(
+        store_path=data_dir / "n201_value_mom_observe.json",
         ops_status_path=ops_status_path,
     )
     snapshot = build_queue_health_snapshot(
@@ -364,6 +386,7 @@ def refresh_queue_health_ui(
         observe_utilization=observe,
         lifecycle_maturity=maturity,
         n200_pipeline_health=n200_health,
+        n201_pipeline_health=n201_health,
     )
     now = snapshot["generated_at"]
     queue_health_path = Path(queue_health_path)

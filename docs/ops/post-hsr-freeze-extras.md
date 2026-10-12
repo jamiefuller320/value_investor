@@ -82,8 +82,11 @@ All findings are `auto_fixable=False` (observe / warn-only).
 ## Next engineering steps
 
 1. **Done (observe):** N200 sealed — daily `check_n200_tech_timing_observe`.
-2. Parked: N201 seal (independent); L588/L589/L590/L592/L593 via `ftse-defer`.
-3. Cap concurrent live/paper sleeves when any alternate gets capital influence
+2. **Done (observe):** N201 sealed independently — daily `check_n201_value_mom_observe`
+   (launch-queue waiter; does not steal P1 from holdings/N200).
+3. Parked: L588/L589/L590/L592/L593 via `ftse-defer`.
+4. Cap concurrent live/paper sleeves when any alternate gets capital influence
    (**L583**); share timing factorials later (**L584**).
 
-Spend stays on P1/P2; N200 is Investment observe work and must not starve D1.
+Spend stays on P1/P2; N200/N201 observe work must not starve D1. Dual observe OK;
+≤1 live promotion path.

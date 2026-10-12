@@ -309,7 +309,7 @@ def build_registration_payload(*, sealed_at: str | None = None) -> dict[str, Any
             "fair_costs_primary",
             "stress_cost_report_only",
         ],
-        "n201_sealed": False,
+        "n201_sealed": True,
         "ops_doc": str(DEFAULT_OPS_DOC),
         "observe_store": str(DEFAULT_STORE_PATH),
     }

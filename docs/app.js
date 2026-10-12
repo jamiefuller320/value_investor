@@ -600,6 +600,7 @@ const DASHBOARD_SIDECARS = [
   ["total_return_view", "data/total_return_view.json"],
   ["lifecycle_maturity_trajectory", "data/lifecycle_maturity_trajectory.json"],
   ["n200_tech_timing_observe", "data/n200_tech_timing_observe.json"],
+  ["n201_value_mom_observe", "data/n201_value_mom_observe.json"],
   ["chart_outcome_review", "data/chart_outcome_review.json"],
   ["engineering_tasks", "data/engineering_tasks.json"],
   ["ingest_deviations", "data/ingest_deviations.json"],
