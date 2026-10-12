@@ -1,17 +1,14 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-11T07:07:44.698242+00:00
+Track: `buy_tier_level` · updated 2026-10-12T00:46:29.458648+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **11** / 26 (42% count, 41% NAV)
+- Losers: **11** / 25 (44% count, 43% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
 ## Holding reviews
-
-### FMG.AX — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
 
 ### WGX.AX — intact / watch_review (-16.1%)
 - deep drawdown (-16.1%) — re-check facts; thesis still intact
