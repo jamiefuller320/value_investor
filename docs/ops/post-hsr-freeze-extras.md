@@ -4,8 +4,8 @@ Observe-only ops note for the directional shift parked in **PR #1035**
 (deferred **L583** / **L584** / **L585**, candidates **N200** / **N201**).
 
 Does **not** change live signals, paper books, knobs, or decision-review
-`--apply`. P1 live-path utilization and P2 offline ingest cascade stay the
-spend priorities.
+`--apply`. P1 Investment-demanded absolute availability and P2 offline ingest
+cascade stay the spend priorities ([data-pillar-priorities.md](data-pillar-priorities.md)).
 
 - Policy store: `docs/data/post_hsr_policy.json`
 - Code: `src/value_investor/post_hsr_policy.py`

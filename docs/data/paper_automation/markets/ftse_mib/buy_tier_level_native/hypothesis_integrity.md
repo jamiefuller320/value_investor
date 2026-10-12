@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-11T07:08:01.433027+00:00
+Track: `buy_tier_level_native` · updated 2026-10-12T07:29:30.590880+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 4 (0% count, 0% NAV)
+- Losers: **0** / 5 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
@@ -22,7 +22,14 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:08:01.433027+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 67%
+- conviction 71%
+
+### LTMC.MI — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 42%
 
 ### ENI.MI — intact / hold_tolerate (+4.5%)
 - still buy

@@ -2,8 +2,10 @@
 
 Dated integrity pass against the stage-2b learning contract: weekday paper-auto /
 AI-judgment should see filings, FCF basis, overlay bind, and memo recency on
-FTSE holdings and buy-tier. Offline library stays cascaded (P2). This page is a
-snapshot plus the commands to re-run the same checks — not a new human cadence.
+Investment-demanded name sets (holdings ∪ active sealed shortlists ∪ F3 repairs;
+see [data-pillar-priorities.md](data-pillar-priorities.md)). Offline library stays
+cascaded (P2). This page is a snapshot plus the commands to re-run the same
+checks — not a new human cadence.
 
 **As of:** 2026-09-07 · agent run `bc-58e13586-9496-4300-8dcc-0be00303f9e3`
 

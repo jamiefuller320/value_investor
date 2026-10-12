@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-11T16:41:10+00:00",
+  "updated_at": "2026-10-12T09:49:28+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -13998,6 +13998,131 @@
       "status": "open",
       "source": "n200-per-lever-scoreboards cloud agent",
       "added_at": "2026-10-11T16:41:10+00:00"
+    },
+    {
+      "id": "L599",
+      "category": "later",
+      "section": "ops",
+      "title": "Preserve cancelled eng tasks across library-ladder queue rewrites",
+      "summary": "eng-20261004-06 was cancelled via #965 then resurrected to parked when chore: run offline library ladder rewrote docs/data/engineering_tasks.json (a9d7a9bf87). Queue writers should not flip cancelled\u2192parked unless explicitly re-opened.",
+      "revisit_when": "Next eng cancel is overwritten by a non-cancel queue commit, or when hardening engineering_tasks merge/write helpers",
+      "tags": [
+        "engineering-queue",
+        "cancel",
+        "resurrection",
+        "library-ladder"
+      ],
+      "status": "open",
+      "source": "parked eng triage rec-72aaf5b0ee80 / PR 1048",
+      "added_at": "2026-10-12T08:23:59+00:00"
+    },
+    {
+      "id": "L600",
+      "category": "later",
+      "section": "security",
+      "title": "Grant Workflows permission on WORKFLOW_DISPATCH_PAT for eng-agent workflow edits",
+      "summary": "Optional harden: eng-agent cannot push .github/workflows without Workflows scope, which parks workflow_permission tasks. Not required for eng-20261004-06 (fixed by #960 human PR).",
+      "revisit_when": "Next eng task must edit .github/workflows and would otherwise park workflow_permission",
+      "tags": [
+        "gha",
+        "pat",
+        "workflows",
+        "engineering-agent"
+      ],
+      "status": "open",
+      "source": "parked eng triage rec-72aaf5b0ee80 / PR 1048",
+      "added_at": "2026-10-12T08:23:59+00:00"
+    },
+    {
+      "id": "N206",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Brainstorm wider investment-model spread beyond A/B/C",
+      "summary": "A live + B sealed observe (N200) + C define-only (N201) already is the post-hsr orthogonal spread. Do not open a new model-catalog sprint or seal stack while N200 is still early and launch-queue/P1 rules apply; next decision is whether/when to seal N201, not invent more near-copies.",
+      "revisit_when": "N200 has thick enough fair-cost lever/cohort evidence to decide promote-vs-park, and N201 either seals under the launch queue or is explicitly dropped; then consider one new orthogonal strand with a pinned learning question.",
+      "tags": [
+        "strands",
+        "N200",
+        "N201",
+        "post-hsr",
+        "models",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a12f4b-be3b-76b7-94fc-fd3d290bfe5d",
+      "added_at": "2026-10-12T09:19:45+00:00"
+    },
+    {
+      "id": "L601",
+      "category": "later",
+      "section": "learning",
+      "title": "N201 FX conversion twin after native no-FX observe",
+      "summary": "If N201 seals as market-native (ignore FX) across all admitted+live markets, add a later cold-start twin that marks/costs with FX conversion legs to test whether cross-market NAV in one currency changes the short-horizon value+momentum verdict. Do not rewrite the native book mid-flight.",
+      "revisit_when": "N201 observe unit is sealed, volume gate met, and fair-cost native verdict is stable enough to justify a second registration_id for FX-aware marking.",
+      "tags": [
+        "N201",
+        "FX",
+        "native",
+        "twin",
+        "strands"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a12f4b-be3b-76b7-94fc-fd3d290bfe5d",
+      "added_at": "2026-10-12T09:43:52+00:00"
+    },
+    {
+      "id": "N207",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Mid-flight shrink N201 from broad book to top-40",
+      "summary": "Do not iteratively tighten a sealed N201 observe book from all-eligible to ~40 names on the same registration_id. Prefer wide frozen eligibility + equal-weight (or weight caps) for the first seal; use a new cold-start twin/registration when selection/timing improvements justify a concentrated ~40 book.",
+      "revisit_when": "N201 broad-eligibility observe unit has met its volume gate and a pinned selection/timing improvement has a new learning question ready for a separate registration_id.",
+      "tags": [
+        "N201",
+        "capacity",
+        "seal",
+        "twins",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a12f4b-be3b-76b7-94fc-fd3d290bfe5d",
+      "added_at": "2026-10-12T09:47:05+00:00",
+      "updated_at": "2026-10-12T09:49:28+00:00",
+      "status_note": "Clarified 2026-10-12: organic shrink via diagnosed failure modes is desired \u2014 but as new observe twins/registrations that cut those modes, not mid-flight discretionary pruning of the same sealed book. Size can also float down if the frozen selective bar admits fewer names."
+    },
+    {
+      "id": "N208",
+      "category": "not_now",
+      "section": "learning",
+      "title": "N201 equal-weight all EY+momentum passers with no quality bar",
+      "summary": "Do not seal N201 as buy/hold every name that merely clears plain earnings-yield plus momentum across all markets. Prefer wide scan universe + selective frozen entry (value AND existing quality/data floors) so throughput comes from multi-market episode flow, not a junk-filled book.",
+      "revisit_when": "Only if a pinned learning question explicitly tests whether an unfiltered EY+momentum market book beats a quality-gated twin after costs.",
+      "tags": [
+        "N201",
+        "quality",
+        "selection",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a12f4b-be3b-76b7-94fc-fd3d290bfe5d",
+      "added_at": "2026-10-12T09:48:04+00:00"
+    },
+    {
+      "id": "L602",
+      "category": "later",
+      "section": "learning",
+      "title": "N201 failure-mode twin ladder after broad selective seal",
+      "summary": "After a sealed N201 broad-scan / quality-gated observe book accumulates enough poor-outcome episodes, pin one failure mode at a time (e.g. value traps, momentum crashes, thin-data names) into a new registration_id twin that excludes or down-weights that mode. Compare fair-cost smoothed return vs the parent seal; do not edit the parent mid-flight.",
+      "revisit_when": "N201 v0 observe unit has met its volume gate and a concrete failure-mode cluster is evidenced in episode diagnostics with a one-sentence learning question ready to freeze.",
+      "tags": [
+        "N201",
+        "failure-mode",
+        "twins",
+        "selection"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a12f4b-be3b-76b7-94fc-fd3d290bfe5d",
+      "added_at": "2026-10-12T09:49:20+00:00"
     }
   ],
   "fragments": [

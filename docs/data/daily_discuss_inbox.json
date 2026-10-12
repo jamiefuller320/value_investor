@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-02T11:13:35.697270+00:00",
+  "updated_at": "2026-10-12T07:52:51.917314+00:00",
   "items": [
     {
       "recommendation_id": "rec-6d2619c1c5ba",
@@ -356,6 +356,74 @@
       "queued_at": "2026-10-02T11:03:57.351204+00:00",
       "source": "dashboard_bridge",
       "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-8c5618459335`"
+    },
+    {
+      "recommendation_id": "rec-72aaf5b0ee80",
+      "task_id": "human:weekday-engineering-parked-backlog-clear",
+      "local_date": "2026-10-12",
+      "status": "open",
+      "summary": "Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only). [option:discuss]",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "rationale": "sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 4 attention-parked eng tasks detail: Parked tasks: 5 (attention ~4); Queue-clearing pause active: False — evaluated 2026-10-12T02:34:09.142913+00:00; Traffic pause active: False; eng-20261004-06: Workflow fix: analysis review failure",
+      "discuss_prompt": "Discuss daily recommendation `rec-72aaf5b0ee80` (human task `weekday-engineering-parked-backlog-clear`):\nTitle: Clear engineering parked backlog when dispatch pauses\nSummary: Review new analysis on “Clear engineering parked backlog when dispatch pauses”, then Acknowledge (observe-only).\nRationale: sort_bucket=new_info Ack / Approve never auto-apply knobs, crons, or capital. analysis: 4 attention-parked eng tasks detail: Parked tasks: 5 (attention ~4); Queue-clearing pause active: False — evaluated 2026-10-12T02:34:09.142913+00:00; Traffic pause active: False; eng-20261004-06: Workflow fix: analysis review failure\nReview detail:\n- Parked tasks: 5 (attention ~4)\n- Queue-clearing pause active: False — evaluated 2026-10-12T02:34:09.142913+00:00\n- Traffic pause active: False\n- eng-20261004-06: Workflow fix: analysis review failure\n- eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo\n- eng-20261004-05: Reconcile research index with committed overlays for the two `index_missing_committed_verdicts` names (AO.L, HOC.L) and add a CI check that `committed_count` eq\nSuggested options:\n1) Accept → Acknowledge (observe-only)\n2) Defer / rewrite runbook expectation\n3) Open runbook\n4) Discuss in Project chat\nSay: discuss daily recommendation `rec-72aaf5b0ee80` — coordinator reads docs/data/daily_discuss_inbox.json and Project store docs/daily-discuss-inbox.md",
+      "options": [
+        {
+          "action": {
+            "kind": "human-task-ack",
+            "payload": {
+              "decision": "ack_observe",
+              "finding_fingerprint": "91aacacf20aee75e",
+              "task_id": "weekday-engineering-parked-backlog-clear"
+            }
+          },
+          "id": "accept",
+          "label": "Accept → Acknowledge (observe-only)"
+        },
+        {
+          "action": {
+            "kind": "human-task-ack",
+            "payload": {
+              "decision": "defer",
+              "finding_fingerprint": "91aacacf20aee75e",
+              "task_id": "weekday-engineering-parked-backlog-clear"
+            }
+          },
+          "id": "defer",
+          "label": "Defer / rewrite runbook expectation"
+        },
+        {
+          "action": {
+            "kind": "link_only",
+            "payload": {
+              "href": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing"
+            }
+          },
+          "id": "runbook",
+          "label": "Open runbook"
+        },
+        {
+          "action": {
+            "kind": "discuss",
+            "payload": {}
+          },
+          "id": "discuss",
+          "label": "Discuss in Project chat"
+        }
+      ],
+      "priority": 13,
+      "accept_action": {
+        "kind": "human-task-ack",
+        "payload": {
+          "decision": "ack_observe",
+          "finding_fingerprint": "91aacacf20aee75e",
+          "task_id": "weekday-engineering-parked-backlog-clear"
+        }
+      },
+      "work_class": "ops_gate",
+      "task_family": "weekday-engineering-parked-backlog-clear",
+      "queued_at": "2026-10-12T07:52:51.917314+00:00",
+      "source": "dashboard_bridge",
+      "project_pickup": "In Project chat (bc-01a0d034-3cd4-71bc-88ad-5088afa3424a) say: discuss daily recommendation `rec-72aaf5b0ee80`"
     }
   ]
 }

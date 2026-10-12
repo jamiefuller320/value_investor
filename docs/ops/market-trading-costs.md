@@ -62,7 +62,7 @@ ftse-library sim --markets euro_depth --trade-cost 0.03   # explicit stress over
 1. Do **not** flip primary FTSE learning books off 3% without an explicit human decision — keep stress and fair views separate.
 2. New market shards and observe sims should use fair assumptions by default.
 3. AIM stamp exemptions and per-ticker spreads are deferred; current AIM row keeps stamp on for conservatism.
-4. **Standing Investment metric:** fair costs are the **primary** success basis on strands / observe instruments / path scoreboards (not gross; stress and market-relative stay secondary unless a seal adds a co-primary). See [fair-cost-primacy.md](fair-cost-primacy.md).
+4. **Standing Investment metric:** fair costs are the **primary** success basis on strands / observe instruments / path scoreboards (not gross; stress and market-relative stay secondary unless a seal adds a co-primary). New observe / model instruments default to a **fixed-stake** mechanical test scored on fair-cost episode % (park fund NAV on v0) — see [fair-cost-primacy.md](fair-cost-primacy.md#fixed-stake-v0-default-new-observe--models).
 5. **N200** sealed observe scores primary episode returns on the fair `ftse350` table; legacy 3% per side is stress/report-only (change marker `n200-fair-cost-primary-v1`). See [n200-tech-timing-observe.md](n200-tech-timing-observe.md).
 
 ## Test and adoption strategy (dual suite)

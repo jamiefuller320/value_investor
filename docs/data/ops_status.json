@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-10-12T02:31:42.178459+00:00",
+  "run_at": "2026-10-12T07:46:35.831464+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "9 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, ibex35, sti: aim/CAM.L (no_memo, 458.53h since flip), aim/MPE.L (no_key_bodies, 458.53h since flip), aim/YNGN.L (no_key_bodies, 410.53h since flip), ibex35/REP.MC (no_key_bodies, 410.53h since flip), aim/DOTD.L (no_key_bodies, 362.53h since flip), aim/CAML.L (no_key_bodies, 290.53h since flip), asx200/BWP.AX (no_memo, 194.53h since flip), aim/PEBB.L (no_key_bodies, 170.53h since flip), sti/Y92.SI (no_key_bodies, 122.53h since flip). Blocking: no_key_bodies=7, no_memo=2.",
+      "summary": "9 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, ibex35, sti: aim/CAM.L (no_memo, 463.78h since flip), aim/MPE.L (no_key_bodies, 463.78h since flip), aim/YNGN.L (no_key_bodies, 415.78h since flip), ibex35/REP.MC (no_key_bodies, 415.78h since flip), aim/DOTD.L (no_key_bodies, 367.78h since flip), aim/CAML.L (no_key_bodies, 295.78h since flip), asx200/BWP.AX (no_memo, 199.78h since flip), aim/PEBB.L (no_key_bodies, 175.78h since flip), sti/Y92.SI (no_key_bodies, 127.78h since flip). Blocking: no_key_bodies=7, no_memo=2.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -24,7 +24,7 @@
       "severity": "warn",
       "category": "ingest",
       "title": "Universe archive pack bottleneck review stale",
-      "summary": "Archive pack bottleneck review age 49.0h exceeds 36h (expected weekday 22:00 UTC refresh).",
+      "summary": "Archive pack bottleneck review age 54.3h exceeds 36h (expected weekday 22:00 UTC refresh).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -113,6 +113,15 @@
     {
       "severity": "warn",
       "category": "engineering",
+      "title": "Orphaned pr_open engineering tasks",
+      "summary": "Tasks without matching open PR: eng-20261012-01",
+      "auto_fixable": true,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "engineering",
       "title": "Parked engineering tasks need manual review",
       "summary": "4 parked task(s): eng-20261004-03, eng-20261004-05, eng-20261004-06, eng-20261008-04",
       "auto_fixable": false,
@@ -120,12 +129,7 @@
       "action_taken": null
     }
   ],
-  "auto_fixes": [
-    {
-      "action": "market_eng_gap_burndown",
-      "detail": "parked_hunter for sti → "
-    }
-  ],
+  "auto_fixes": [],
   "drafted_task_ids": [],
   "workflow_checks": [
     {
@@ -136,7 +140,7 @@
       "max_age_hours": 30,
       "last_success_at": "2026-10-12T02:19:02+00:00",
       "last_success_run_id": 38195299361,
-      "age_hours": 0.2,
+      "age_hours": 5.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -145,11 +149,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": false,
+      "past_email_ready": true,
       "max_age_hours": 28,
       "last_success_at": "2026-10-11T17:41:51+00:00",
       "last_success_run_id": 38160724071,
-      "age_hours": 8.9,
+      "age_hours": 14.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -159,10 +163,10 @@
       "name": "FTSE Engineering Queue",
       "expected_today": true,
       "past_email_ready": false,
-      "max_age_hours": 26,
-      "last_success_at": "2026-10-12T02:15:27+00:00",
-      "last_success_run_id": 38195069283,
-      "age_hours": 0.3,
+      "max_age_hours": 3,
+      "last_success_at": "2026-10-12T07:15:26+00:00",
+      "last_success_run_id": 38216728893,
+      "age_hours": 0.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -173,9 +177,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-10-12T02:30:57+00:00",
-      "last_success_run_id": 38196088312,
-      "age_hours": 0.0,
+      "last_success_at": "2026-10-12T07:40:36+00:00",
+      "last_success_run_id": 38219073615,
+      "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -188,7 +192,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-10-11T14:15:54+00:00",
       "last_success_run_id": 38146472836,
-      "age_hours": 12.3,
+      "age_hours": 17.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -201,7 +205,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T14:58:24+00:00",
       "last_success_run_id": 38149345226,
-      "age_hours": 11.6,
+      "age_hours": 16.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -214,7 +218,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T06:21:34+00:00",
       "last_success_run_id": 38117798943,
-      "age_hours": 20.2,
+      "age_hours": 25.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -227,7 +231,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T07:27:28+00:00",
       "last_success_run_id": 38121428588,
-      "age_hours": 19.1,
+      "age_hours": 24.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -240,7 +244,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T07:27:30+00:00",
       "last_success_run_id": 38121429962,
-      "age_hours": 19.1,
+      "age_hours": 24.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -253,7 +257,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T17:43:12+00:00",
       "last_success_run_id": 38160816599,
-      "age_hours": 8.8,
+      "age_hours": 14.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -266,7 +270,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-10-09T08:37:19+00:00",
       "last_success_run_id": 37906086169,
-      "age_hours": 65.9,
+      "age_hours": 71.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -277,9 +281,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-11T18:03:10+00:00",
-      "last_success_run_id": 38162186118,
-      "age_hours": 8.5,
+      "last_success_at": "2026-10-12T02:30:44+00:00",
+      "last_success_run_id": 38196073365,
+      "age_hours": 5.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -287,18 +291,18 @@
   ],
   "queue_status": {
     "open_count": 0,
-    "pr_open_count": 0,
+    "pr_open_count": 1,
     "parked_count": 5,
     "merged_count": 120,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
-    "in_flight_pr": null,
+    "in_flight_pr": 1047,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": true,
+  "should_dispatch_engineering": false,
   "email_deferred": false,
   "email_defer_reasons": []
 }

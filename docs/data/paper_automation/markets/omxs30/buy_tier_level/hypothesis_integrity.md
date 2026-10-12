@@ -1,16 +1,24 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-11T07:08:08.214401+00:00
+Track: `buy_tier_level` · updated 2026-10-12T07:29:37.518132+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 11 (0% count, 0% NAV)
+- Losers: **1** / 11 (9% count, 9% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
-- Balancing hint: `maintain`
+- Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
-### SKF-B.ST — intact / hold_tolerate (-3.1%)
+### TEL2-B.ST — intact / hold_tolerate (-5.3%)
+- price drawdown alone does not invalidate value thesis
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 84%
+
+### SKF-B.ST — intact / hold_tolerate (-2.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
@@ -22,65 +30,58 @@ Track: `buy_tier_level` · updated 2026-10-11T07:08:08.214401+00:00
 - still buy
 - cheapness family still passes
 
-### TEL2-B.ST — intact / hold_tolerate (-1.9%)
+### ASSA-B.ST — intact / hold_tolerate (-0.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 84%
 
-### ASSA-B.ST — intact / hold_tolerate (-1.2%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 84%
-
-### SAND.ST — intact / hold_tolerate (-0.4%)
+### SAND.ST — intact / hold_tolerate (+0.5%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
 
-### VOLV-B.ST — intact / hold_tolerate (+0.3%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 87%
-
-### SKA-B.ST — intact / hold_tolerate (+0.3%)
+### SKA-B.ST — intact / hold_tolerate (+0.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 82%
 
-### ERIC-B.ST — intact / hold_tolerate (+1.8%)
+### VOLV-B.ST — intact / hold_tolerate (+0.9%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 87%
+
+### ERIC-B.ST — intact / hold_tolerate (+1.5%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 80%
 
-### ESSITY-B.ST — intact / hold_tolerate (+2.5%)
+### ESSITY-B.ST — intact / hold_tolerate (+3.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 76%
+- conviction 77%
 
-### HM-B.ST — intact / hold_tolerate (+4.5%)
+### HM-B.ST — intact / hold_tolerate (+5.1%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 69%
 
-### BOL.ST — intact / hold_tolerate (+5.2%)
+### BOL.ST — intact / hold_tolerate (+6.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 72%
+- conviction 71%
