@@ -18,6 +18,22 @@ scoreboard product. Existing fair-cost surfaces
 already align. Sealed instruments keep their frozen cost stamps until a logged
 change marker or new registration.
 
+## Fixed-stake v0 default (new observe / models)
+
+**Standing default** for **new** Investment observe / model instruments (not
+N201-only): size as a **fixed-stake mechanical test**, not a fund from day one.
+
+| Layer | v0 default |
+|---|---|
+| **Stake** | Fixed notional per entry (e.g. **100** units of local / market currency) |
+| **Cash / fund NAV** | **Parked** — no cash constraint, no equal-weight book NAV on v0 |
+| **Primary scoreboard** | Fair-cost **episode %** (cohort median / sealed metric) — same primacy as above |
+| **Later twins** | Portfolio construction, weight caps, cash drag, DCA tranche splits (e.g. **100/n**) — new `registration_id`, not silent v0 defaults |
+
+This does **not** change live strand A capital books or the existing sealed N200
+registration. Fair-cost primacy and stress-as-report-only are unchanged. See
+also `AGENTS.md` (Dialogue → instrument).
+
 ## N200
 
 N200 (`strand-b-plain-value-tech-timing-v0`) scores episode returns with

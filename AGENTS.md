@@ -32,6 +32,13 @@ Also keep:
 
 - **Separate ID, timing, and capital-path questions** — do not collapse them into
   one NAV line or one track.
+- **Fixed-stake v0 for new observe / models** — default new Investment observe
+  strands to a fixed notional stake per entry (e.g. 100 local-currency units);
+  park cash constraints and fund-NAV construction; score fair-cost **episode %**
+  (cohort median / sealed metric). Portfolio weights, cash drag, and DCA
+  (`100/n`) are later twins — not silent v0 defaults. Does not rewrite live
+  strand A or sealed N200. Detail:
+  [`docs/ops/fair-cost-primacy.md`](docs/ops/fair-cost-primacy.md#fixed-stake-v0-default-new-observe--models).
 - **Twins over edits** for capital-policy experiments (e.g. deposits): new cold
   start / epoch, not toggling the recycling book mid-flight.
 - **Do not back-label** prior NAV or marks as evidence for a new dual-path /
