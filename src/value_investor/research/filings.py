@@ -927,6 +927,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # asx200 FMG.AX Markit/ASX allowlist PDFs — opaque documentKey URLs need issuer tokens
     # for _ir_body_title_tokens_match (same pattern as YAL.AX).
     "FMG": ("Fortescue", "Fortescue Ltd"),
+    # sti J36.SI SGX allowlist — opaque 877984_JMH.pdf / 853959_JMH.pdf slugs need issuer
+    # tokens for _ir_body_title_tokens_match (same pattern as FMG.AX / YAL.AX).
+    "J36": ("Jardine Matheson", "Jardine Matheson Holdings"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
     "HM-B": (
