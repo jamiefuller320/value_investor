@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-11T16:41:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-12T08:23:59+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -645,6 +645,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L595 | **Automate sealed-strategy Data launch queue** | Policy is docs-only: newly sealed strategies enqueue incremental Data deepen/threshold/shortlist work so they do not starve holdings or running sealed units. Later eng: committed queue JSON + ops-monitor observe finding + optional accept/advance CLI; fail-closed; no 4th sprint; do not auto-divert P1. | A second strategy seals (e.g. N201) and needs a distinct shortlist / threshold readiness pack beyond N200+holdings SLA, or F3 repair volume makes manual queue ordering error-prone |
 | L596 | **Dashboard system map with fault and bottleneck highlights** | Topology view of how Data / Investment / Platform modules interact, with visual highlight of faults and performance bottlenecks from ops findings, job timeouts, and rate limits. Hard to visualize architecture otherwise; observe-only (not live capital control). | After N200 observe / fair-cost primacy / dashboard phase-health surfaces land and eng capacity is idle; or sooner if ops-monitor fault surfaces need a topology view to triage bottlenecks. |
 | L598 | **N200 per-lever episode drilldown UI** | Dashboard shows cohort entry/exit verdicts; optional episode-level lever win/lose table can wait. | Cohort per-lever strip is in use and humans ask for episode drilldown. |
+| L599 | **Preserve cancelled eng tasks across library-ladder queue rewrites** | eng-20261004-06 was cancelled via #965 then resurrected to parked when chore: run offline library ladder rewrote docs/data/engineering_tasks.json (a9d7a9bf87). Queue writers should not flip cancelled→parked unless explicitly re-opened. | Next eng cancel is overwritten by a non-cancel queue commit, or when hardening engineering_tasks merge/write helpers |
 
 ---
 
@@ -658,6 +659,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | S1 | **Rotate any API/SMTP secrets that were pasted or committed** | Git history may still contain old keys even after gitignore fixes | Immediately if keys may still be live |
 | S3 | **Quote special characters in .env** | Unquoted passwords break source .env | When recreating or editing .env locally |
 | N184 | **Pages token guessing from GHA 403** | Do not infer or rotate GitHub Pages tokens from 403 logs. Pages #941 is a different class from workflow_dispatch actions:write. | Pages deploy fails twice consecutively on main for a permissions/token error with a named runbook |
+| L600 | **Grant Workflows permission on WORKFLOW_DISPATCH_PAT for eng-agent workflow edits** | Optional harden: eng-agent cannot push .github/workflows without Workflows scope, which parks workflow_permission tasks. Not required for eng-20261004-06 (fixed by #960 human PR). | Next eng task must edit .github/workflows and would otherwise park workflow_permission |
 
 ---
 
