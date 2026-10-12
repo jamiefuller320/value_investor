@@ -7453,6 +7453,59 @@ def test_merge_ir_allowlist_filings_bootstraps_empty_buou_si_index(tmp_path: Pat
     assert "ir_allowlist" in payload["sources_used"]
 
 
+def test_fetch_filings_ir_allowlist_sti_j36_si_builtins_eng_20261012_01(tmp_path: Path):
+    """eng-20261012-01: sti parked J36.SI — SGX annual/interim/preliminary statutory PDF seeds."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("J36.SI", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert any(row["period"] == "annual" for row in rows)
+    assert any(row["period"] == "interim" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("Annual%20Report%202024.pdf" in url for url in urls)
+    assert any("853959_JMH.pdf" in url for url in urls)
+    assert any("877984_JMH.pdf" in url for url in urls)
+    assert all("links.sgx.com" in url for url in urls)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_j36_si_index(tmp_path: Path):
+    """Empty J36.SI filings_index.json must gain IR rows for library sti measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("J36.SI", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] == 3
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) == 3
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_parked_source_hunter_j36_si_sti_has_fetchable_ir():
+    """eng-20261012-01: J36.SI has live-fetchable SGX statutory PDF filings."""
+    assert "J36.SI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("J36.SI")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("links.sgx.com" in url for url in urls)
+    annual_url = next(
+        url for url in urls if "Annual%20Report%202024.pdf" in url or "877984_JMH.pdf" in url
+    )
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("SGX PDF body fetch unavailable (network) — retry later")
+    assert len(body) >= 50000
+
+
 def test_fetch_filings_ir_allowlist_smi_unmeasured_builtins_eng_20261003_02(tmp_path: Path):
     """eng-20261003-02: smi buy-tier unmeasured — IR PDF seeds when ESEF/news discovery is empty."""
     allowlist_path = tmp_path / "ir.json"
