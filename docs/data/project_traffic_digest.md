@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-12T17:32:09.520924+00:00`
+Generated: `2026-10-12T21:22:40.356953+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,10 +33,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `parked_hunter`/verified PR #1047 `eng-20261012-01` — Hunt fetchable IR source for parked sti leftover J36.SI
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 189
+- Occasion count: 190
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 3×
