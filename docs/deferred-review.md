@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-12T09:47:05+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-12T09:48:04+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -246,6 +246,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N205 | **N200 selection lever scoreboard** | Selection post-mortem lever is a separate factory question from N200 entry/exit timing; do not fold into tech-timing observe. | Ended-lifecycle selection post-mortem instrument is sealed or N200 entry/exit levers banked. |
 | N206 | **Brainstorm wider investment-model spread beyond A/B/C** | A live + B sealed observe (N200) + C define-only (N201) already is the post-hsr orthogonal spread. Do not open a new model-catalog sprint or seal stack while N200 is still early and launch-queue/P1 rules apply; next decision is whether/when to seal N201, not invent more near-copies. | N200 has thick enough fair-cost lever/cohort evidence to decide promote-vs-park, and N201 either seals under the launch queue or is explicitly dropped; then consider one new orthogonal strand with a pinned learning question. |
 | N207 | **Mid-flight shrink N201 from broad book to top-40** | Do not iteratively tighten a sealed N201 observe book from all-eligible to ~40 names on the same registration_id. Prefer wide frozen eligibility + equal-weight (or weight caps) for the first seal; use a new cold-start twin/registration when selection/timing improvements justify a concentrated ~40 book. | N201 broad-eligibility observe unit has met its volume gate and a pinned selection/timing improvement has a new learning question ready for a separate registration_id. |
+| N208 | **N201 equal-weight all EY+momentum passers with no quality bar** | Do not seal N201 as buy/hold every name that merely clears plain earnings-yield plus momentum across all markets. Prefer wide scan universe + selective frozen entry (value AND existing quality/data floors) so throughput comes from multi-market episode flow, not a junk-filled book. | Only if a pinned learning question explicitly tests whether an unfiltered EY+momentum market book beats a quality-gated twin after costs. |
 
 ---
 
