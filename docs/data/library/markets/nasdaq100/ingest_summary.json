@@ -1,99 +1,23 @@
 {
-  "run_at": "2026-10-12T10:51:16.899265+00:00",
+  "run_at": "2026-10-12T21:57:23.379331+00:00",
   "market_id": "nasdaq100",
-  "targets": [
-    "FER"
-  ],
-  "target_details": [
-    {
-      "ticker": "FER",
-      "priority_score": 19.5857,
-      "filings_total": 35,
-      "filings_with_body": 20,
-      "indexed_without_body": 15,
-      "reason": "indexed_without_body"
-    }
-  ],
-  "results": [
-    {
-      "ticker": "FER",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 35,
-        "filings_with_body": 20,
-        "indexed_without_body": 15
-      },
-      "after": {
-        "filings_total": 35,
-        "filings_with_body": 35,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "sec_edgar",
-      "filings_summary": {
-        "total": 35,
-        "annual": 2,
-        "interim": 33,
-        "trading_update": 0,
-        "other": 0,
-        "with_body": 35,
-        "period_coverage": {
-          "annual": {
-            "total": 2,
-            "with_body": 2
-          },
-          "interim": {
-            "total": 33,
-            "with_body": 33
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 0,
-            "with_body": 0
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 35,
-        "with_body_after": 35,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    }
-  ],
-  "improved": [
-    "FER"
-  ],
+  "targets": [],
+  "target_details": [],
+  "results": [],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-12T10:49:03.201424+00:00",
+    "snapshot_at": "2026-10-12T21:57:10.921601+00:00",
     "market_id": "nasdaq100",
     "buy_tier_count": 40,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 24,
+    "indexed_without_body": 9,
     "bodies_min": 17,
-    "bodies_median": 20.5,
+    "bodies_median": 21.0,
     "bodies_max": 104,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -102,13 +26,11 @@
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
       "TRI",
-      "PDD",
-      "FER"
+      "PDD"
     ],
     "indexed_without_body_by_ticker": {
       "TRI": 8,
-      "PDD": 1,
-      "FER": 15
+      "PDD": 1
     },
     "parked_tickers": [
       "PDD",
@@ -117,14 +39,12 @@
     "parked_count": 2,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 15,
-    "effective_indexed_without_body_tickers": [
-      "FER"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-12T10:49:21.109336+00:00",
+    "snapshot_at": "2026-10-12T21:57:17.699081+00:00",
     "market_id": "nasdaq100",
     "buy_tier_count": 40,
     "unmeasured_buy_tier": 0,
@@ -164,44 +84,40 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 40,
+    "hits": 0,
+    "new_rows_total": 0,
+    "curiosity_total": 0,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "TRI",
+      "PDD"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "advanced": true,
-    "parallel_stream": 1,
-    "from_market": "nasdaq100",
-    "to_market": null,
-    "stream_markets_after": [],
-    "parity_event": {
-      "recorded": false,
-      "reason": "ingest_exhausted_leftover_gaps",
-      "market_id": "nasdaq100",
-      "ingest_exhausted": true,
-      "exhausted_maintenance_recorded": true,
-      "parked_tickers": [
-        "PDD",
-        "TRI"
-      ],
-      "learning_admitted_changed": false,
-      "learning_admitted": true
-    },
-    "screen_refresh": null,
-    "at": "2026-10-12T10:49:45.405941+00:00",
-    "ingest_parity_recorded": false
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "nasdaq100"
   },
   "critical_path": {
     "market_id": "nasdaq100",
-    "assessed_at": "2026-10-12T10:49:05.178637+00:00",
+    "assessed_at": "2026-10-12T21:57:12.782944+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
-      {
-        "ticker": "FER",
-        "indexed_without_body": 15,
-        "filings_total": 35,
-        "filings_with_body": 20
-      },
       {
         "ticker": "TRI",
         "indexed_without_body": 8,
@@ -220,25 +136,24 @@
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": false,
     "auto_pin_tickers": [
-      "FER",
       "TRI",
       "PDD"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (3 tickers, top: FER(15), TRI(8), PDD(1))"
+      "Prefer indexed-without-body body refetch (2 tickers, top: TRI(8), PDD(1))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 3,
-      "indexed_without_body_rows": 24,
+      "indexed_without_body_tickers": 2,
+      "indexed_without_body_rows": 9,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 13.90165241599999,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2086.098347584,
+  "used_seconds": 3.059844708000014,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3596.940155292,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -246,9 +161,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "nasdaq100",
-    "updated_at": "2026-10-12T10:49:21.115239+00:00",
+    "updated_at": "2026-10-12T21:57:17.704921+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -317,7 +232,15 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261012-01"
+    "task_ids": [],
+    "task_count": 155,
+    "market_id": "nasdaq100",
+    "hunter_ticker": "PDD",
+    "hunter_tickers": [
+      "PDD"
+    ],
+    "priority_score": 12.0,
+    "wait_behind_task_id": "",
+    "leftover_key_bodies": false
   }
 }
