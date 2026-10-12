@@ -116,7 +116,7 @@ Raw `summary.recommend` (including acked overlays and capacity `ana-*` rows) is 
 | Task | Who | Doc |
 |------|-----|-----|
 | **Lock recording plan** before new learning strands — four freeze questions + `ftse-decision-recording validate`; preview-freeze OK; Phase C writer stays readiness-gated | Human | [decision-recording-checklist.md](decision-recording-checklist.md#the-four-questions) |
-| **Pin learning question** before registering the first post-hsr alternate strand (B = N200 or C = N201, not both); keep strand A; prefer P1/P2 until that pin is deliberate | Human | [post-hsr-freeze-extras.md](post-hsr-freeze-extras.md#next-engineering-steps-parked-until-ready) |
+| **Pin learning question** before registering a further post-hsr alternate (N200/N201 already sealed observe-only; dual observe OK; ≤1 live path); respect launch queue; prefer P1/P2 until deliberate | Human | [post-hsr-freeze-extras.md](post-hsr-freeze-extras.md#next-engineering-steps) |
 | **Decision packs** before live capital (verify checklist) | Human | [primary-learning-track.md](primary-learning-track.md#success-datums) |
 | **Paper-learning review** when churn / exit-timing cohorts mature | Human | [paper-learning-review.md](paper-learning-review.md) |
 | **Change primary/control or freeze a learning track** — record via `apply_assessment_model()` (date, reason, `superseded_by`, final NAV in `assessment_model.json`); never edit or unfreeze a frozen book — start a twin | Human | [primary-learning-track.md](primary-learning-track.md#assessment-model-and-frozen-tracks) |

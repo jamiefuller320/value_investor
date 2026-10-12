@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "registration_id": "strand-c-short-horizon-value-mom-v0",
+  "deferred_id": "N201",
+  "generated_at": "2026-10-12T19:11:46.987140+00:00",
+  "observe_only": true,
+  "influences_live": false,
+  "independent_of_n200": true,
+  "identity_id": "plain_ey_top30_mom_12_1_financial_health",
+  "success_metric_id": "smooth_ret_cohort_median",
+  "learning_question": "Across live \u222a admitted markets, do observe-only selective ~3m plain-EY + momentum entries (market-native, no FX), sized as a fixed-stake mechanical test, beat a patient plain-value hold on the same eligible set after fair local costs?",
+  "eligibility_mode": "entry_fields_required_f9_or_pass",
+  "sizing": {
+    "mode": "fixed_stake",
+    "stake_units": 100.0,
+    "cash_fund_nav": "parked",
+    "scoreboard_unit": "fair_cost_episode_pct",
+    "independent_of_fund_nav": true
+  },
+  "patient_hold_baseline": {
+    "id": "patient_plain_ey_hold_v0",
+    "definition": "Same universe and market-native returns; plain EY top-30% local; no momentum filter; same financial_health pass; same 63 trading-day or identity/quality-break exit; same fixed 100 local-currency stake; fair per-market costs. Excess vs strategy is report-only.",
+    "identity_id": "plain_ey_top30_financial_health",
+    "momentum_filter": false,
+    "financial_health_required": true,
+    "hold_trading_days": 63,
+    "fixed_stake_units": 100.0,
+    "role": "report_only"
+  },
+  "cost_basis": {
+    "primary": "fair_market_table",
+    "market_id": "ftse350",
+    "buy_cost_pct": 0.00525,
+    "sell_cost_pct": 0.00025,
+    "round_trip_pct": 0.0055,
+    "trade_cost_pct_symmetric_proxy": 0.00275,
+    "source": "t212_invest_fair_v1",
+    "stress_trade_cost_pct": 0.03,
+    "stress_role": "report_only",
+    "per_market_tables": true,
+    "fx_conversion": false
+  },
+  "snapshot_count": 25,
+  "completed_entry_episodes": 0,
+  "skipped_missing_entry_fields": 0,
+  "skipped_ineligible": 0,
+  "skipped_filters": 0,
+  "calendar_weeks_spanned": 9,
+  "volume_gate": {
+    "min_episodes": 48,
+    "min_weeks": 8,
+    "met": false
+  },
+  "phase": {
+    "entries_per_week": 0.0,
+    "floor": 8.0,
+    "floor_met": false
+  },
+  "path_scoreboard": {
+    "primary": "absolute_smoothed_return_fair_costs",
+    "success_metric_id": "smooth_ret_cohort_median",
+    "smooth_ret_cohort_median": null,
+    "smooth_ret_cohort_median_stress_report_only": null,
+    "patient_hold_smooth_ret_cohort_median_report_only": null,
+    "patient_hold_excess_report_only": null,
+    "n": 0,
+    "independent_of_fund_nav": true,
+    "note": "Primary is fair-cost episode % cohort median on fixed-stake entries. Fund NAV / cash drag not used. Patient-hold excess and stress 3%/side are report-only (F8)."
+  },
+  "stress_scoreboard_report_only": {
+    "trade_cost_pct_per_side": 0.03,
+    "smooth_ret_cohort_median": null,
+    "n": 0,
+    "role": "report_only"
+  },
+  "launch_queue": {
+    "enqueued": true,
+    "rank_note": "Waiter behind holdings + running sealed units (N200). Do not divert P1 deepen until launch-queue head."
+  },
+  "change_markers": [
+    {
+      "marker_id": "n201-seal-v0",
+      "at": "2026-10-12T00:00:00+00:00",
+      "lever": "horizon_product",
+      "before_id": null,
+      "after_id": "strand-c-short-horizon-value-mom-v0",
+      "registration_id": "strand-c-short-horizon-value-mom-v0",
+      "reason": "Initial seal: plain EY top-30% local + 12\u20131 mom > 0 + financial_health pass; fixed 100 local stake; 63d or break exit; fair-cost smooth_ret_cohort_median primary; patient-hold excess report-only. Independent of N200.",
+      "eligible_set_ref": "entry_fields_required_f9_or_pass",
+      "success_metric_id": "smooth_ret_cohort_median",
+      "applies_to": "observe_only"
+    }
+  ],
+  "episodes_sample": [],
+  "ops_doc": "docs/ops/n201-value-mom-observe.md"
+}

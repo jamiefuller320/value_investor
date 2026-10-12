@@ -25,6 +25,7 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     assert '["total_return_view", "data/total_return_view.json"]' in text
     assert '["lifecycle_maturity_trajectory", "data/lifecycle_maturity_trajectory.json"]' in text
     assert '["n200_tech_timing_observe", "data/n200_tech_timing_observe.json"]' in text
+    assert '["n201_value_mom_observe", "data/n201_value_mom_observe.json"]' in text
     assert '["market_status", "data/market_status.json"]' in text
     assert '["system_gaps", "data/system_gaps.json"]' in text
     assert '["ingest_deviations", "data/ingest_deviations.json"]' in text

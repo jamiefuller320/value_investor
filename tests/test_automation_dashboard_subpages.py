@@ -377,6 +377,7 @@ def test_n200_pipeline_health_on_queue_and_analysis() -> None:
     assert "function resolveN200PipelineHealth(" in text
     assert "function n200LeverBadge(" in text
     assert '["n200_tech_timing_observe", "data/n200_tech_timing_observe.json"]' in text
+    assert '["n201_value_mom_observe", "data/n201_value_mom_observe.json"]' in text
     assert "per_lever" in text
     assert "Entry lever" in text
     assert "Exit lever" in text

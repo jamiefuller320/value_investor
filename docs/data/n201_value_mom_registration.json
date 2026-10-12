@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "registration_id": "strand-c-short-horizon-value-mom-v0",
+  "deferred_id": "N201",
+  "status": "sealed_observe_only",
+  "sealed_at": "2026-10-12",
+  "observe_only": true,
+  "influences_live": false,
+  "independent_of_n200": true,
+  "learning_question": "Across live \u222a admitted markets, do observe-only selective ~3m plain-EY + momentum entries (market-native, no FX), sized as a fixed-stake mechanical test, beat a patient plain-value hold on the same eligible set after fair local costs?",
+  "identity_id": "plain_ey_top30_mom_12_1_financial_health",
+  "success_metric_id": "smooth_ret_cohort_median",
+  "o2_identity": "plain_ey_top30_mom_12_1_financial_health",
+  "entry_filters": {
+    "plain_ey_top_share_local": 0.3,
+    "momentum_12_1_gt": 0.0,
+    "financial_health": "pass",
+    "all_required": true
+  },
+  "sizing": {
+    "mode": "fixed_stake",
+    "stake_units": 100.0,
+    "stake_currency": "local_market",
+    "cash_fund_nav": "parked",
+    "scoreboard_unit": "fair_cost_episode_pct",
+    "dca": "not_on_v0"
+  },
+  "universe": {
+    "markets": "ftse350_plus_admitted",
+    "returns": "market_native",
+    "fx_conversion": false
+  },
+  "buy_trigger": "next_eligible_weekly_refresh_after_filters_clear",
+  "exit": {
+    "hold_trading_days": 63,
+    "or_identity_quality_break": true,
+    "whichever_first": true,
+    "archive_trading_day_proxy": "weekday_count"
+  },
+  "patient_hold_baseline": {
+    "id": "patient_plain_ey_hold_v0",
+    "definition": "Same universe and market-native returns; plain EY top-30% local; no momentum filter; same financial_health pass; same 63 trading-day or identity/quality-break exit; same fixed 100 local-currency stake; fair per-market costs. Excess vs strategy is report-only.",
+    "identity_id": "plain_ey_top30_financial_health",
+    "momentum_filter": false,
+    "financial_health_required": true,
+    "hold_trading_days": 63,
+    "fixed_stake_units": 100.0,
+    "role": "report_only"
+  },
+  "o3_volume_gate": {
+    "completed_entry_episodes_min": 48,
+    "calendar_weeks_spanned_min": 8,
+    "rule": "both_required"
+  },
+  "o4_smoother": "smooth_ret_cohort_median",
+  "o5_primacy": {
+    "primary": "absolute_smoothed_return_fair_costs",
+    "patient_hold_excess": "report_only",
+    "stress_cost": "report_only"
+  },
+  "o6_phase_floor": {
+    "entries_per_week_target": 8.0,
+    "note": "mechanism floor only \u2014 not alpha"
+  },
+  "cost_basis": {
+    "primary": "fair_market_table",
+    "market_id": "ftse350",
+    "buy_cost_pct": 0.00525,
+    "sell_cost_pct": 0.00025,
+    "round_trip_pct": 0.0055,
+    "trade_cost_pct_symmetric_proxy": 0.00275,
+    "source": "t212_invest_fair_v1",
+    "stress_trade_cost_pct": 0.03,
+    "stress_role": "report_only",
+    "per_market_tables": true,
+    "fx_conversion": false
+  },
+  "trade_cost_pct": 0.00275,
+  "buy_cost_pct": 0.00525,
+  "sell_cost_pct": 0.00025,
+  "stress_trade_cost_pct": 0.03,
+  "eligibility_mode": "entry_fields_required_f9_or_pass",
+  "soft_gaps": [
+    "Live FTSE history signal rows often lack earnings_yield / momentum_12_1 / financial_health_pass; MVP scores only rows with required entry fields (or price-proxy momentum). Zero episodes until enrichment \u2014 fail-closed for capital (F8).",
+    "Admitted-market weekly archive panels not fully wired into this walker; v0 primarily consumes ftse350 history plus any enriched market_id rows present on snapshots.",
+    "Hold of 63 trading days uses weekday-count proxy on the weekly archive (no exchange holiday calendar)."
+  ],
+  "launch_queue": {
+    "enqueued": true,
+    "rank_note": "Newly sealed \u2014 Data deepen / shortlist demand waits behind holdings and already-running sealed units (N200). Do not steal P1 from ranks 1\u20132.",
+    "doc": "docs/ops/data-pillar-priorities.md"
+  },
+  "shrink_policy": "new_twins_failure_mode_ladder_not_mid_flight_prune",
+  "constraints": [
+    "observe_only",
+    "no_live_strand_a_writes",
+    "no_decision_review_apply",
+    "no_new_screen_extras",
+    "f9_eligibility",
+    "f8_fail_closed",
+    "fixed_stake_not_fund_nav",
+    "fair_costs_primary",
+    "stress_cost_report_only",
+    "patient_hold_excess_report_only",
+    "independent_of_n200",
+    "logged_change_markers",
+    "no_fx_conversion"
+  ],
+  "ops_doc": "docs/ops/n201-value-mom-observe.md",
+  "observe_store": "docs/data/n201_value_mom_observe.json"
+}

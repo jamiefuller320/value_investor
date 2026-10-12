@@ -70,7 +70,7 @@ Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
 - No live strand A writes; no `--apply`.
 - No new screen extras (F4).
 - F9 binds when present on archive rows; else `row_fields_or_pass` for MVP archive (still fail-closed for capital).
-- N201 remains define-only / not sealed.
+- N201 sealed independently (`strand-c-short-horizon-value-mom-v0`); dual observe OK; ≤1 live promotion path.
 
 ## Related
 

@@ -196,7 +196,7 @@ def test_refresh_persists_registration_and_store(tmp_path: Path):
     saved_reg = json.loads(reg.read_text(encoding="utf-8"))
     assert saved_reg["registration_id"] == REGISTRATION_ID
     assert saved_reg["o2_identity"] == "raw_buy_tier"
-    assert saved_reg["n201_sealed"] is False
+    assert saved_reg["n201_sealed"] is True
     assert saved_reg["cost_basis"]["primary"] == "fair_market_table"
     assert saved_reg["stress_trade_cost_pct"] == LEGACY_STRESS_TRADE_COST_PCT
     assert saved_reg["cost_amendment"]["marker_id"] == FAIR_COST_MARKER_ID
