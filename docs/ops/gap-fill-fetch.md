@@ -59,10 +59,10 @@ Scheduled path is **Sunday** `email-report` → `--research-docs` (cap 12 active
 raw `signal=buy` with `adjusted_signal=hold` is **not** researched. FTSE Sunday
 **prefers no-memo / first-time** buy-tier ahead of rememo inside the cap (N114
 parity with library). Among already-memo'd actives, rememo order is **current
-holdings → oldest memo activity (`updated_at`) → conviction** — P1 live-path
-freshness on the human decision pack without widening the Sunday cap or a
-rememo burst. Decision-input `memo_recent` uses the same `updated_at` clock so a
-holdings rememo can clear the utilization gap.
+holdings → oldest memo activity (`updated_at`) → conviction** — P1
+Investment-demanded freshness on the human decision pack without widening the
+Sunday cap or a rememo burst. Decision-input `memo_recent` uses the same
+`updated_at` clock so a holdings rememo can clear the availability gap.
 
 Weekday `--weekday-rememo` only rewrites **existing** memos (body-lag). It never
 creates a first memo.

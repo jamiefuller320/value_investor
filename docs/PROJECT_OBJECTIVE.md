@@ -39,7 +39,7 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 
 Agent and engineering time, in order (also in [`AGENTS.md`](../AGENTS.md)):
 
-1. **P1 — Live-path utilization.** Work that changes what a weekday paper-auto / AI-judgment pass can see (filings, FCF basis, overlay bind, memo recency on FTSE holdings and buy-tier). Extra FTSE ingest on a green buy-tier, new paper tracks, and live breadth are factory, not foundation.
+1. **P1 — Investment-demanded input quality (absolute availability).** Raise filings bodies, FCF basis, overlay bind, and memo recency for names Investment actually uses, in serve order: live holdings → already-running sealed units (today: FTSE buy-tier for strand A + N200 `raw_buy_tier`) → accepted F3 repairs on those sets → launch-queue head → waiters. Green inventory on the active set is success — do not invent rememo/ingest spray. Extra FTSE ingest on a green set, new paper tracks, and live breadth are factory, not foundation. See [`ops/data-pillar-priorities.md`](ops/data-pillar-priorities.md).
 2. **P2 — Offline ingest cascade.** After P1, maximum effort on the highest-priority market not yet in the learning phase; spare capacity on the next queue names; shift the fat slot when that phase transition completes. Equal extra sprint streams can starve the head target — do not add them.
 
 ---
