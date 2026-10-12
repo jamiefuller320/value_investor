@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from value_investor.backtest import RunSnapshot
 from value_investor.market_trading_costs import (
     LEGACY_STRESS_TRADE_COST_PCT,
@@ -22,14 +24,18 @@ from value_investor.n201_value_mom_observe import (
     VOLUME_MIN_EPISODES,
     VOLUME_MIN_WEEKS,
     N201Config,
+    _earnings_yield,
+    _financial_health_pass,
     build_n201_observe,
     build_n201_pipeline_health_projection,
     build_registration_payload,
     episode_return,
     fixed_stake_pnl,
+    load_library_market_snapshots,
     ops_findings_from_n201_observe,
     refresh_n201_value_mom_observe,
     row_f9_eligible,
+    trading_days_between,
 )
 
 
@@ -107,6 +113,49 @@ def test_registration_invariants_seal_fields():
     assert "independent_of_n200" in reg["constraints"]
     assert reg["cost_basis"]["primary"] == "fair_market_table"
     assert reg["stress_trade_cost_pct"] == LEGACY_STRESS_TRADE_COST_PCT
+    assert reg["exit"]["archive_trading_day_proxy"] == "session_calendar_or_busday_holidays"
+
+
+def test_earnings_yield_from_key_metrics_pe():
+    assert _earnings_yield({"key_metrics": {"P/E": "12.5"}}) == pytest.approx(1.0 / 12.5)
+    assert _earnings_yield({"trailing_pe": 10.0}) == pytest.approx(0.1)
+    assert _earnings_yield({"earnings_yield_pe": 0.08}) == pytest.approx(0.08)
+
+
+def test_financial_health_from_passed_models_display_name():
+    assert _financial_health_pass({"passed_models": ["Financial Health", "Magic Formula"]}) is True
+    assert _financial_health_pass({"failed_models": ["Financial Health"]}) is False
+    # Enumerated passed_models without FH → fail (enriched archive row).
+    assert (
+        _financial_health_pass(
+            {"passed_models": ["Earnings Yield"], "failed_models": ["Financial Health"]}
+        )
+        is False
+    )
+    assert _financial_health_pass({"ticker": "AAA.L"}) is None
+
+
+def test_trading_days_between_skips_weekend_and_uk_holiday():
+    # 2026-04-02 (Thu) → 2026-04-07 (Tue) includes Good Friday 2026-04-03 + Easter Monday 2026-04-06.
+    days = trading_days_between(
+        "2026-04-02T12:00:00+00:00",
+        "2026-04-07T12:00:00+00:00",
+        market_id="ftse350",
+    )
+    # Fri+Mon holidays, Sat+Sun weekend → only Tue 2026-04-07 counts in (start, end].
+    assert days == 1
+
+
+def test_trading_days_between_prefers_session_calendar():
+    from datetime import date
+
+    sessions = {date(2026, 1, 2), date(2026, 1, 5), date(2026, 1, 6)}
+    days = trading_days_between(
+        "2026-01-01T00:00:00+00:00",
+        "2026-01-06T00:00:00+00:00",
+        sessions=sessions,
+    )
+    assert days == 3
 
 
 def test_row_f9_eligible_pass_and_fail():
@@ -150,7 +199,11 @@ def test_build_n201_observe_scores_fixed_stake_fair_primary():
         _snap(29, cohort(124.0), month=3),
         _snap(5, cohort(126.0), month=4),
     ]
-    payload = build_n201_observe(snaps, generated_at="2026-10-12T00:00:00+00:00")
+    payload = build_n201_observe(
+        snaps,
+        cfg=N201Config(fetch_momentum_prices=False),
+        generated_at="2026-10-12T00:00:00+00:00",
+    )
     assert payload["registration_id"] == REGISTRATION_ID
     assert payload["observe_only"] is True
     assert payload["influences_live"] is False
@@ -194,8 +247,12 @@ def test_scoring_independent_of_fund_nav_cfg_stake():
         _snap(1, rows_entry, month=1),
         _snap(1, rows_exit, month=4),
     ]
-    a = build_n201_observe(snaps, cfg=N201Config(fixed_stake_units=100.0))
-    b = build_n201_observe(snaps, cfg=N201Config(fixed_stake_units=9999.0))
+    a = build_n201_observe(
+        snaps, cfg=N201Config(fixed_stake_units=100.0, fetch_momentum_prices=False)
+    )
+    b = build_n201_observe(
+        snaps, cfg=N201Config(fixed_stake_units=9999.0, fetch_momentum_prices=False)
+    )
     assert a["completed_entry_episodes"] == b["completed_entry_episodes"] == 1
     assert (
         a["path_scoreboard"]["smooth_ret_cohort_median"]
@@ -227,7 +284,7 @@ def test_skips_missing_entry_fields_soft_gap():
             month=4,
         ),
     ]
-    payload = build_n201_observe(snaps)
+    payload = build_n201_observe(snaps, cfg=N201Config(fetch_momentum_prices=False))
     # Single-name EY universe: BBB is top 30% of itself, but AAA never enters.
     assert all(ep["ticker"] != "AAA.L" for ep in payload["episodes_sample"])
 
@@ -275,6 +332,8 @@ def test_refresh_persists_registration_and_store(tmp_path: Path):
         store_path=store,
         registration_path=reg,
         persist=True,
+        include_admitted_markets=False,
+        cfg=N201Config(fetch_momentum_prices=False),
     )
     assert store.is_file()
     assert reg.is_file()
@@ -285,6 +344,36 @@ def test_refresh_persists_registration_and_store(tmp_path: Path):
     assert saved_reg["sizing"]["stake_units"] == 100.0
     assert payload["completed_entry_episodes"] == 1
     assert SEAL_MARKER_ID in [m["marker_id"] for m in payload["change_markers"]]
+    assert saved_reg["exit"]["archive_trading_day_proxy"] == ("session_calendar_or_busday_holidays")
+
+
+def test_load_library_market_snapshots_enriches_ey_and_fh(tmp_path: Path):
+    import gzip
+
+    screen = tmp_path / "markets" / "sp500" / "screen"
+    history = screen / "history"
+    history.mkdir(parents=True)
+    (screen / "signals_20261001_120000.csv").write_text(
+        "ticker,signal,earnings_yield_pe,last_price\nAAA,hold,0.12,100.0\nBBB,hold,0.02,50.0\n",
+        encoding="utf-8",
+    )
+    models = {
+        "run_at": "2026-10-01T12:00:00+00:00",
+        "models": [
+            {"ticker": "AAA", "model_id": "financial_health", "passed": True, "score": 1.0},
+            {"ticker": "BBB", "model_id": "financial_health", "passed": False, "score": 0.0},
+        ],
+    }
+    with gzip.open(history / "models_20261001_120000.json.gz", "wt", encoding="utf-8") as fh:
+        json.dump(models, fh)
+
+    snaps = load_library_market_snapshots(tmp_path, "sp500")
+    assert len(snaps) == 1
+    by_ticker = {r["ticker"]: r for r in snaps[0].signals}
+    assert by_ticker["AAA"]["earnings_yield_pe"] == pytest.approx(0.12)
+    assert by_ticker["AAA"]["financial_health_pass"] is True
+    assert by_ticker["BBB"]["financial_health_pass"] is False
+    assert by_ticker["AAA"]["market_id"] == "sp500"
 
 
 def test_ops_findings_volume_gate():

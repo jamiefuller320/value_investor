@@ -17,18 +17,25 @@ See ``docs/ops/n201-value-mom-observe.md`` and Project store
 from __future__ import annotations
 
 import json
+import logging
 import statistics
-from dataclasses import dataclass
-from datetime import UTC, datetime, timedelta
+from dataclasses import dataclass, field
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+import pandas as pd
+
 from value_investor.backtest import RunSnapshot, load_run_snapshots
+from value_investor.data_library import DEFAULT_LIBRARY_ROOT
 from value_investor.market_trading_costs import (
     LEGACY_STRESS_TRADE_COST_PCT,
     LIVE_PAPER_MARKET_ID,
     costs_for_market,
 )
+
+logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT_DIR = Path("docs/data")
@@ -53,6 +60,7 @@ PIPELINE_HEALTH_DISCLAIMER = (
 )
 
 DEFAULT_MARKET_ID = LIVE_PAPER_MARKET_ID
+DEFAULT_LIBRARY_POLICY_PATH = Path("docs/data/library/policy.json")
 STRESS_TRADE_COST_PCT = LEGACY_STRESS_TRADE_COST_PCT
 SEAL_MARKER_ID = "n201-seal-v0"
 VOLUME_MIN_EPISODES = 48
@@ -62,9 +70,73 @@ HOLD_TRADING_DAYS = 63
 FIXED_STAKE_UNITS = 100.0
 EY_TOP_SHARE = 0.30
 MAX_EPISODES = 500
-# ~12 calendar months / 1 month on weekly archive for momentum proxy.
-MOM_LOOKBACK_WEEKS_12 = 52
-MOM_LOOKBACK_WEEKS_1 = 4
+# Classic 12–1: return from ~12 calendar months ago to ~1 month ago.
+MOM_LOOKBACK_MONTHS_12 = 12
+MOM_LOOKBACK_MONTHS_1 = 1
+MOM_BAR_TOLERANCE_DAYS = 10
+MOM_PRICE_FETCH_PERIOD = "2y"
+# Cap external price fetches per refresh (observe-only; fail-closed beyond).
+DEFAULT_MAX_MOMENTUM_PRICE_FETCHES = 400
+ARCHIVE_ENRICH_MAX_DAY_DELTA = 3
+
+# Display names / ids used on dashboard archives and library model dumps.
+_FH_MODEL_IDS = frozenset({"financial_health"})
+_FH_MODEL_NAMES = frozenset({"financial health"})
+
+# Minimal exchange holidays (ISO dates) when no session calendar is available.
+# Kept small on purpose — prefer session calendars derived from price bars.
+_MARKET_HOLIDAYS: dict[str, frozenset[str]] = {
+    "ftse350": frozenset(
+        {
+            "2025-01-01",
+            "2025-04-18",
+            "2025-04-21",
+            "2025-05-05",
+            "2025-05-26",
+            "2025-08-25",
+            "2025-12-25",
+            "2025-12-26",
+            "2026-01-01",
+            "2026-04-03",
+            "2026-04-06",
+            "2026-05-04",
+            "2026-05-25",
+            "2026-08-31",
+            "2026-12-25",
+            "2026-12-28",
+        }
+    ),
+    "ftse_smallcap": frozenset(),  # filled below from ftse350
+    "aim": frozenset(),
+    "sp500": frozenset(
+        {
+            "2025-01-01",
+            "2025-01-20",
+            "2025-02-17",
+            "2025-04-18",
+            "2025-05-26",
+            "2025-06-19",
+            "2025-07-04",
+            "2025-09-01",
+            "2025-11-27",
+            "2025-12-25",
+            "2026-01-01",
+            "2026-01-19",
+            "2026-02-16",
+            "2026-04-03",
+            "2026-05-25",
+            "2026-06-19",
+            "2026-07-03",
+            "2026-09-07",
+            "2026-11-26",
+            "2026-12-25",
+        }
+    ),
+}
+_MARKET_HOLIDAYS["ftse_smallcap"] = _MARKET_HOLIDAYS["ftse350"]
+_MARKET_HOLIDAYS["aim"] = _MARKET_HOLIDAYS["ftse350"]
+_MARKET_HOLIDAYS["nasdaq100"] = _MARKET_HOLIDAYS["sp500"]
+_MARKET_HOLIDAYS["us_adr_asia"] = _MARKET_HOLIDAYS["sp500"]
 
 F9_BIND_FIELDS = (
     "key_filing_bodies",
@@ -118,19 +190,67 @@ def _days_between(start: str, end: str) -> int:
     return max(0, int((_parse_run_at(end) - _parse_run_at(start)).total_seconds() // 86400))
 
 
-def _trading_days_between(start: str, end: str) -> int:
-    """Weekday count between timestamps (archive proxy for trading days)."""
+def _holidays_for_market(market_id: str) -> list[str]:
+    mid = str(market_id or DEFAULT_MARKET_ID).strip() or DEFAULT_MARKET_ID
+    holidays = _MARKET_HOLIDAYS.get(mid)
+    if holidays is None:
+        # Unknown market: UK table is a conservative default for weekday busday.
+        holidays = _MARKET_HOLIDAYS.get(DEFAULT_MARKET_ID, frozenset())
+    return sorted(holidays)
+
+
+def trading_days_between(
+    start: str,
+    end: str,
+    *,
+    market_id: str = DEFAULT_MARKET_ID,
+    sessions: set[date] | frozenset[date] | None = None,
+) -> int:
+    """Count trading days in ``(start, end]``.
+
+    Prefer an explicit session calendar (from price bars) when provided; else
+    numpy busday with a small per-market holiday table; weekdays-only is the
+    last-resort fallback when holiday data is empty.
+    """
     a = _parse_run_at(start).date()
     b = _parse_run_at(end).date()
     if b <= a:
         return 0
-    days = 0
-    cur = a + timedelta(days=1)
-    while cur <= b:
-        if cur.weekday() < 5:
-            days += 1
-        cur += timedelta(days=1)
-    return days
+    if sessions:
+        return sum(1 for d in sessions if a < d <= b)
+    holidays = _holidays_for_market(market_id)
+    try:
+        return int(np.busday_count(a, b, holidays=holidays))
+    except Exception:  # noqa: BLE001 — never break observe on calendar quirks
+        days = 0
+        cur = a + timedelta(days=1)
+        while cur <= b:
+            if cur.weekday() < 5 and cur.isoformat() not in holidays:
+                days += 1
+            cur += timedelta(days=1)
+        return days
+
+
+def _trading_days_between(start: str, end: str) -> int:
+    """Backward-compatible default (FTSE holiday table)."""
+    return trading_days_between(start, end, market_id=DEFAULT_MARKET_ID)
+
+
+def sessions_from_price_frames(
+    frames: dict[str, pd.DataFrame],
+) -> set[date]:
+    """Union of session dates present on fetched/panel price frames."""
+    out: set[date] = set()
+    for frame in frames.values():
+        if frame is None or getattr(frame, "empty", True):
+            continue
+        idx = pd.to_datetime(frame.index)
+        for ts in idx:
+            try:
+                out.add(pd.Timestamp(ts).date())
+            except (TypeError, ValueError):
+                continue
+    return out
 
 
 def _truthy_bind(value: Any) -> bool | None:
@@ -155,13 +275,13 @@ def row_f9_eligible(row: dict[str, Any]) -> tuple[bool, str]:
     never promotes.
     """
     present = 0
-    for field in F9_BIND_FIELDS:
-        flag = _truthy_bind(row.get(field))
+    for bind_field in F9_BIND_FIELDS:
+        flag = _truthy_bind(row.get(bind_field))
         if flag is None:
             continue
         present += 1
         if not flag:
-            return False, f"f9_fail:{field}"
+            return False, f"f9_fail:{bind_field}"
     if present == 0:
         return True, "eligibility_mode=row_fields_or_pass"
     return True, "f9_binds_ok"
@@ -172,6 +292,18 @@ def _row_market_id(row: dict[str, Any], default: str = DEFAULT_MARKET_ID) -> str
     return mid or default
 
 
+def _model_token_match(value: Any, *, ids: frozenset[str], names: frozenset[str]) -> bool:
+    text = str(value or "").strip().lower().replace("-", " ").replace("_", " ")
+    text = " ".join(text.split())
+    if not text:
+        return False
+    if text in ids or text in names:
+        return True
+    # Dashboard archives use display names like "Financial Health".
+    compact = text.replace(" ", "")
+    return compact in {x.replace(" ", "") for x in names} or compact in ids
+
+
 def _financial_health_pass(row: dict[str, Any]) -> bool | None:
     """True/False when known; None when archive row lacks the gate."""
     flag = row.get("financial_health_pass")
@@ -179,7 +311,7 @@ def _financial_health_pass(row: dict[str, Any]) -> bool | None:
         flag = row.get("financial_health")
     if isinstance(flag, bool):
         return flag
-    if isinstance(flag, (int, float)):
+    if isinstance(flag, (int, float)) and flag == flag:
         return bool(flag)
     if isinstance(flag, str):
         text = flag.strip().lower()
@@ -187,28 +319,83 @@ def _financial_health_pass(row: dict[str, Any]) -> bool | None:
             return True
         if text in {"fail", "failed", "false", "0", "no"}:
             return False
+
+    # Explicit model pass/fail lists (dashboard archives / library dumps).
+    passed_models = row.get("passed_models")
+    failed_models = row.get("failed_models")
+    if isinstance(passed_models, list) and any(
+        _model_token_match(m, ids=_FH_MODEL_IDS, names=_FH_MODEL_NAMES) for m in passed_models
+    ):
+        return True
+    if isinstance(failed_models, list) and any(
+        _model_token_match(m, ids=_FH_MODEL_IDS, names=_FH_MODEL_NAMES) for m in failed_models
+    ):
+        return False
+    # Both lists present and enumerated → FH was evaluated and did not pass.
+    if (
+        isinstance(passed_models, list)
+        and isinstance(failed_models, list)
+        and (passed_models or failed_models)
+        and all(isinstance(m, str) for m in (*passed_models, *failed_models))
+    ):
+        return False
+
+    model_passes = row.get("model_passes")
+    if isinstance(model_passes, dict) and "financial_health" in model_passes:
+        return bool(model_passes.get("financial_health"))
+
     models = row.get("models_passed")
     if isinstance(models, list):
-        if "financial_health" in models:
+        if any(_model_token_match(m, ids=_FH_MODEL_IDS, names=_FH_MODEL_NAMES) for m in models):
             return True
         # List present but model absent → treat as fail only when other model
-        # ids are enumerated (enriched rows). Bare history uses a float count.
+        # ids/names are enumerated (enriched rows). Bare history uses a float count.
         if models and all(isinstance(m, str) for m in models):
             return False
     return None
 
 
+def _coerce_positive_float(raw: Any) -> float | None:
+    if raw is None:
+        return None
+    if isinstance(raw, str):
+        text = raw.strip().replace(",", "").replace("%", "")
+        if not text or text.lower() in {"n/a", "na", "none", "null", "-"}:
+            return None
+        raw = text
+    try:
+        val = float(raw)
+    except (TypeError, ValueError):
+        return None
+    if val != val:  # NaN
+        return None
+    return val
+
+
 def _earnings_yield(row: dict[str, Any]) -> float | None:
+    """EY from explicit fields, else 1/P/E from screen metrics already on the row."""
     for key in ("earnings_yield", "earnings_yield_pe", "earnings_yield_ebit"):
-        raw = row.get(key)
-        if raw is None:
-            continue
-        try:
-            val = float(raw)
-        except (TypeError, ValueError):
-            continue
-        if val == val:  # not NaN
+        val = _coerce_positive_float(row.get(key))
+        if val is not None:
             return val
+
+    for key in ("trailing_pe", "pe", "forward_pe"):
+        pe = _coerce_positive_float(row.get(key))
+        if pe is not None and pe > 0:
+            return 1.0 / pe
+
+    for nest_key in ("key_metrics", "screening_inputs", "metrics"):
+        nest = row.get(nest_key)
+        if not isinstance(nest, dict):
+            continue
+        for key in ("earnings_yield", "earnings_yield_pe", "earnings_yield_ebit"):
+            val = _coerce_positive_float(nest.get(key))
+            if val is not None:
+                return val
+        for key in ("P/E", "p/e", "trailing_pe", "pe", "PE"):
+            pe = _coerce_positive_float(nest.get(key))
+            if pe is not None and pe > 0:
+                return 1.0 / pe
     return None
 
 
@@ -218,11 +405,11 @@ def _momentum_12_1_from_row(row: dict[str, Any]) -> float | None:
         if raw is None:
             continue
         try:
-            val = float(raw)
+            num = float(raw)
         except (TypeError, ValueError):
             continue
-        if val == val:
-            return val
+        if num == num:  # not NaN (negative mom is valid)
+            return num
     return None
 
 
@@ -233,18 +420,82 @@ def _price_at(snapshots: list[RunSnapshot], idx: int, ticker: str) -> float | No
     return float(price)
 
 
+def _close_near(
+    frame: pd.DataFrame,
+    target: datetime | pd.Timestamp,
+    *,
+    tol_days: int = MOM_BAR_TOLERANCE_DAYS,
+) -> float | None:
+    """Nearest Close to ``target`` within ``tol_days`` (prefer on/before)."""
+    if frame is None or frame.empty:
+        return None
+    idx = pd.to_datetime(frame.index)
+    if getattr(idx, "tz", None) is not None:
+        idx = idx.tz_convert(None)
+    work = frame.copy()
+    work.index = idx
+    target_ts = pd.Timestamp(target)
+    if target_ts.tzinfo is not None:
+        target_ts = target_ts.tz_localize(None)
+
+    before = work.loc[work.index <= target_ts]
+    if not before.empty:
+        last = before.index[-1]
+        if (target_ts - last).days <= tol_days:
+            close = before.iloc[-1].get("Close", before.iloc[-1].iloc[0])
+            val = _coerce_positive_float(close)
+            return val if val is not None and val > 0 else None
+
+    deltas = abs(work.index - target_ts)
+    nearest = work.index[int(deltas.argmin())]
+    if abs((nearest - target_ts).days) <= tol_days:
+        close = work.loc[nearest].get("Close", work.loc[nearest].iloc[0])
+        val = _coerce_positive_float(close)
+        return val if val is not None and val > 0 else None
+    return None
+
+
+def _momentum_12_1_from_frame(
+    frame: pd.DataFrame,
+    as_of: str | datetime,
+) -> float | None:
+    """Classic 12–1 from a daily price frame; None when bars missing (fail-closed)."""
+    as_of_ts = pd.Timestamp(_parse_run_at(as_of) if isinstance(as_of, str) else as_of)
+    p_recent = _close_near(frame, as_of_ts - pd.DateOffset(months=MOM_LOOKBACK_MONTHS_1))
+    p_old = _close_near(frame, as_of_ts - pd.DateOffset(months=MOM_LOOKBACK_MONTHS_12))
+    if p_recent is None or p_old is None or p_old <= 0:
+        return None
+    return p_recent / p_old - 1.0
+
+
 def _momentum_12_1_from_prices(
     snapshots: list[RunSnapshot],
     idx: int,
     ticker: str,
 ) -> float | None:
-    """Weekly-archive proxy: close[~12m]→close[~1m] return when row field absent."""
-    i_recent = idx - MOM_LOOKBACK_WEEKS_1
-    i_old = idx - MOM_LOOKBACK_WEEKS_12
-    if i_recent < 0 or i_old < 0:
+    """Calendar 12–1 from snapshot price marks when a year of marks exists."""
+    if idx < 0 or idx >= len(snapshots):
         return None
-    p_recent = _price_at(snapshots, i_recent, ticker)
-    p_old = _price_at(snapshots, i_old, ticker)
+    as_of = _parse_run_at(snapshots[idx].run_at)
+    target_recent = as_of - pd.DateOffset(months=MOM_LOOKBACK_MONTHS_1)
+    target_old = as_of - pd.DateOffset(months=MOM_LOOKBACK_MONTHS_12)
+
+    def _nearest_price(target: pd.Timestamp) -> float | None:
+        best: tuple[int, float] | None = None
+        tgt_date = pd.Timestamp(target).date()
+        for snap in snapshots:
+            price = snap.prices.get(ticker)
+            if price is None or float(price) <= 0:
+                continue
+            day_delta = abs((_parse_run_at(snap.run_at).date() - tgt_date).days)
+            if day_delta > MOM_BAR_TOLERANCE_DAYS:
+                continue
+            if best is None or day_delta < best[0]:
+                best = (day_delta, float(price))
+        return None if best is None else best[1]
+
+    p_recent = _nearest_price(target_recent)
+    p_old = _nearest_price(target_old)
     if p_recent is None or p_old is None or p_old <= 0:
         return None
     return p_recent / p_old - 1.0
@@ -370,6 +621,10 @@ class N201Config:
     fixed_stake_units: float = FIXED_STAKE_UNITS
     ey_top_share: float = EY_TOP_SHARE
     max_episodes: int = MAX_EPISODES
+    fetch_momentum_prices: bool = True
+    max_momentum_price_fetches: int = DEFAULT_MAX_MOMENTUM_PRICE_FETCHES
+    price_frames: dict[str, pd.DataFrame] = field(default_factory=dict)
+    trading_sessions: frozenset[date] | None = None
 
     def primary_buy_sell(self, market_id: str | None = None) -> tuple[float, float]:
         if self.buy_cost_pct is not None and self.sell_cost_pct is not None:
@@ -437,7 +692,7 @@ def build_registration_payload(*, sealed_at: str | None = None) -> dict[str, Any
             "hold_trading_days": HOLD_TRADING_DAYS,
             "or_identity_quality_break": True,
             "whichever_first": True,
-            "archive_trading_day_proxy": "weekday_count",
+            "archive_trading_day_proxy": "session_calendar_or_busday_holidays",
         },
         "patient_hold_baseline": PATIENT_HOLD_BASELINE,
         "o3_volume_gate": {
@@ -463,19 +718,25 @@ def build_registration_payload(*, sealed_at: str | None = None) -> dict[str, Any
         "eligibility_mode": ELIGIBILITY_MODE,
         "soft_gaps": [
             (
-                "Live FTSE history signal rows often lack earnings_yield / "
-                "momentum_12_1 / financial_health_pass; MVP scores only rows "
-                "with required entry fields (or price-proxy momentum). Zero "
-                "episodes until enrichment — fail-closed for capital (F8)."
+                "Entry fields: observe refresh enriches EY from key_metrics P/E "
+                "/ trailing_pe / earnings_yield_* and financial_health from "
+                "passed_models/failed_models (archive + library panels). "
+                "12–1 mom uses calendar lookback on snapshot prices, then "
+                "optional daily price fetch (cap per refresh). Still "
+                "fail-closed when fields/bars remain missing (F8)."
             ),
             (
-                "Admitted-market weekly archive panels not fully wired into "
-                "this walker; v0 primarily consumes ftse350 history plus any "
-                "enriched market_id rows present on snapshots."
+                "Admitted-market weekly panels: walker loads library "
+                "signals_*.csv + models_*.json.gz for "
+                "ladder.admitted_learning_markets when present; residual "
+                "markets without screen panels are listed on the observe "
+                "store (panel_coverage)."
             ),
             (
-                "Hold of 63 trading days uses weekday-count proxy on the "
-                "weekly archive (no exchange holiday calendar)."
+                "Hold of 63 trading days uses session dates from fetched/"
+                "panel price bars when available, else numpy busday with a "
+                "small per-market holiday table (weekday fallback only if "
+                "that fails)."
             ),
         ],
         "launch_queue": {
@@ -519,10 +780,18 @@ def _resolve_momentum(
     idx: int,
     ticker: str,
     row: dict[str, Any],
+    *,
+    price_frames: dict[str, pd.DataFrame] | None = None,
 ) -> float | None:
     mom = _momentum_12_1_from_row(row)
     if mom is not None:
         return mom
+    frames = price_frames or {}
+    frame = frames.get(ticker)
+    if frame is not None:
+        mom = _momentum_12_1_from_frame(frame, snapshots[idx].run_at)
+        if mom is not None:
+            return mom
     return _momentum_12_1_from_prices(snapshots, idx, ticker)
 
 
@@ -533,6 +802,8 @@ def _find_exit_index(
     *,
     hold_trading_days: int,
     ey_top_by_snap: list[set[str]],
+    market_id: str = DEFAULT_MARKET_ID,
+    sessions: set[date] | frozenset[date] | None = None,
 ) -> tuple[int | None, str | None]:
     """Exit at hold horizon or identity/quality break, whichever first."""
     entry_at = snapshots[entry_idx].run_at
@@ -553,9 +824,69 @@ def _find_exit_index(
             # wait for horizon (soft-gap tolerant for open episodes).
         if reason is not None:
             return j, reason
-        if _trading_days_between(entry_at, snapshots[j].run_at) >= hold_trading_days:
+        held = trading_days_between(
+            entry_at,
+            snapshots[j].run_at,
+            market_id=market_id,
+            sessions=sessions,
+        )
+        if held >= hold_trading_days:
             return j, "hold_trading_days"
     return None, None
+
+
+def _ensure_momentum_price_frames(
+    snapshots: list[RunSnapshot],
+    *,
+    cfg: N201Config,
+    market_id: str,
+) -> dict[str, pd.DataFrame]:
+    """Fetch daily bars for EY-top ∩ FH candidates still missing 12–1 mom.
+
+    Mutates ``cfg.price_frames`` in place when present so a shared cache can
+    span FTSE + admitted markets within one refresh.
+    """
+    frames = cfg.price_frames
+    if frames is None:
+        frames = {}
+    if not cfg.fetch_momentum_prices:
+        return frames
+
+    wanted: list[str] = []
+    for i, snap in enumerate(snapshots):
+        row_map = _snapshot_rows(snap)
+        ey_top = _plain_ey_top_share(row_map, top_share=cfg.ey_top_share)
+        for ticker in ey_top:
+            row = row_map[ticker]
+            if _financial_health_pass(row) is not True:
+                continue
+            if _momentum_12_1_from_row(row) is not None:
+                continue
+            if (
+                ticker in frames
+                and _momentum_12_1_from_frame(frames[ticker], snap.run_at) is not None
+            ):
+                continue
+            if _momentum_12_1_from_prices(snapshots, i, ticker) is not None:
+                continue
+            if ticker not in wanted:
+                wanted.append(ticker)
+
+    already = len(frames)
+    remaining = max(0, int(cfg.max_momentum_price_fetches) - already)
+    # Only fetch tickers not already cached.
+    to_fetch = [t for t in wanted if t not in frames][:remaining]
+    if not to_fetch:
+        return frames
+    try:
+        from value_investor.technical_analysis import fetch_price_history
+
+        fetched = fetch_price_history(to_fetch, period=MOM_PRICE_FETCH_PERIOD, market=market_id)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("N201 momentum price fetch failed for %s: %s", market_id, exc)
+        return frames
+    frames.update(fetched)
+    return frames
 
 
 def build_n201_observe(
@@ -564,11 +895,20 @@ def build_n201_observe(
     cfg: N201Config | None = None,
     generated_at: str | None = None,
     prior_markers: list[dict[str, Any]] | None = None,
+    panel_coverage: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Score N201 fixed-stake episodes from archive snapshots (pure; no I/O)."""
+    """Score N201 fixed-stake episodes from archive snapshots.
+
+    May fetch daily prices for 12–1 when ``cfg.fetch_momentum_prices`` is set
+    (observe-only enrichment; still fail-closed when bars are missing).
+    """
     cfg = cfg or N201Config()
     cost_fields = cfg.primary_cost_fields()
     stress_pct = float(cfg.stress_trade_cost_pct)
+    price_frames = _ensure_momentum_price_frames(snapshots, cfg=cfg, market_id=cfg.market_id)
+    sessions: set[date] | frozenset[date] | None = cfg.trading_sessions
+    if sessions is None and price_frames:
+        sessions = frozenset(sessions_from_price_frames(price_frames))
 
     # Precompute local EY top sets per snapshot (among rows with EY present).
     row_maps = [_snapshot_rows(s) for s in snapshots]
@@ -588,7 +928,7 @@ def build_n201_observe(
         ey_top = ey_top_by_snap[i]
         strategy_clear: set[str] = set()
         for ticker, row in row_map.items():
-            mom = _resolve_momentum(snapshots, i, ticker, row)
+            mom = _resolve_momentum(snapshots, i, ticker, row, price_frames=price_frames)
             ok, note, _detail = _entry_filter_state(
                 row, in_ey_top=ticker in ey_top, momentum=mom, require_momentum=True
             )
@@ -604,7 +944,7 @@ def build_n201_observe(
             if not eligible:
                 skipped_ineligible += 1
                 continue
-            mom = _resolve_momentum(snapshots, i, ticker, row)
+            mom = _resolve_momentum(snapshots, i, ticker, row, price_frames=price_frames)
             ok, note, detail = _entry_filter_state(
                 row, in_ey_top=True, momentum=mom, require_momentum=True
             )
@@ -615,17 +955,19 @@ def build_n201_observe(
                     skipped_filters += 1
                 continue
 
+            mid = _row_market_id(row, cfg.market_id)
             exit_idx, exit_reason = _find_exit_index(
                 snapshots,
                 i,
                 ticker,
                 hold_trading_days=cfg.hold_trading_days,
                 ey_top_by_snap=ey_top_by_snap,
+                market_id=mid,
+                sessions=sessions,
             )
             if exit_idx is None:
                 continue  # still open
 
-            mid = _row_market_id(row, cfg.market_id)
             buy_pct, sell_pct = cfg.primary_buy_sell(mid)
             p_entry = _price_at(snapshots, i, ticker)
             p_exit = _price_at(snapshots, exit_idx, ticker)
@@ -655,6 +997,8 @@ def build_n201_observe(
                     ticker,
                     hold_trading_days=cfg.hold_trading_days,
                     ey_top_by_snap=ey_top_by_snap,
+                    market_id=mid,
+                    sessions=sessions,
                 )
                 if p_exit_idx is not None:
                     p_p_exit = _price_at(snapshots, p_exit_idx, ticker)
@@ -675,8 +1019,11 @@ def build_n201_observe(
                     "market_id": mid,
                     "entry_run_at": snap.run_at,
                     "exit_run_at": snapshots[exit_idx].run_at,
-                    "hold_trading_days": _trading_days_between(
-                        snap.run_at, snapshots[exit_idx].run_at
+                    "hold_trading_days": trading_days_between(
+                        snap.run_at,
+                        snapshots[exit_idx].run_at,
+                        market_id=mid,
+                        sessions=sessions,
                     ),
                     "exit_reason": exit_reason,
                     "eligibility": elig_note,
@@ -699,7 +1046,7 @@ def build_n201_observe(
         for ticker, row in row_map.items():
             if ticker in strategy_clear or ticker in prev_strategy:
                 continue
-            mom = _resolve_momentum(snapshots, i, ticker, row)
+            mom = _resolve_momentum(snapshots, i, ticker, row, price_frames=price_frames)
             _ok, note, _ = _entry_filter_state(
                 row,
                 in_ey_top=ticker in ey_top,
@@ -752,7 +1099,8 @@ def build_n201_observe(
     if not any(m.get("marker_id") == seal_marker["marker_id"] for m in markers):
         markers.insert(0, seal_marker)
 
-    return {
+    hold_mode = "session_calendar" if sessions else "busday_with_market_holidays"
+    out: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "registration_id": REGISTRATION_ID,
         "deferred_id": DEFERRED_ID,
@@ -779,6 +1127,8 @@ def build_n201_observe(
         "skipped_ineligible": skipped_ineligible,
         "skipped_filters": skipped_filters,
         "calendar_weeks_spanned": weeks,
+        "hold_trading_day_mode": hold_mode,
+        "momentum_price_frames_used": len(price_frames),
         "volume_gate": {
             "min_episodes": cfg.volume_min_episodes,
             "min_weeks": cfg.volume_min_weeks,
@@ -821,6 +1171,403 @@ def build_n201_observe(
         "episodes_sample": episodes[:25],
         "ops_doc": str(DEFAULT_OPS_DOC),
     }
+    if panel_coverage is not None:
+        out["panel_coverage"] = panel_coverage
+    return out
+
+
+def _archive_enrichment_by_day(archive_dir: Path) -> dict[str, dict[str, dict[str, Any]]]:
+    """date ISO → ticker → {earnings_yield, financial_health_pass, ...} from reports."""
+    from value_investor.archive_history import list_dashboard_archives
+
+    out: dict[str, dict[str, dict[str, Any]]] = {}
+    if not Path(archive_dir).is_dir():
+        return out
+    for run_at, path in list_dashboard_archives(Path(archive_dir)):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError, UnicodeDecodeError):
+            continue
+        reports = payload.get("reports") if isinstance(payload, dict) else None
+        if not isinstance(reports, list):
+            continue
+        day = run_at.date().isoformat()
+        by_ticker: dict[str, dict[str, Any]] = {}
+        for row in reports:
+            if not isinstance(row, dict):
+                continue
+            ticker = str(row.get("ticker") or "").strip()
+            if not ticker:
+                continue
+            slim: dict[str, Any] = {}
+            for key in (
+                "passed_models",
+                "failed_models",
+                "key_metrics",
+                "screening_inputs",
+                "trailing_pe",
+                "earnings_yield",
+                "earnings_yield_pe",
+                "earnings_yield_ebit",
+                "financial_health_pass",
+                "market_id",
+            ):
+                if key in row:
+                    slim[key] = row[key]
+            # Derive EY from key_metrics P/E when explicit EY absent.
+            if slim.get("earnings_yield") is None and isinstance(slim.get("key_metrics"), dict):
+                pe = _coerce_positive_float(slim["key_metrics"].get("P/E"))
+                if pe is not None and pe > 0:
+                    slim["earnings_yield"] = 1.0 / pe
+            if slim.get("financial_health_pass") is None:
+                fh = _financial_health_pass(slim)
+                if fh is not None:
+                    slim["financial_health_pass"] = fh
+            if slim:
+                by_ticker[ticker] = slim
+        if by_ticker:
+            out[day] = by_ticker
+    return out
+
+
+def _nearest_archive_day(
+    day: str, archive_days: list[str], *, max_delta: int = ARCHIVE_ENRICH_MAX_DAY_DELTA
+) -> str | None:
+    if day in archive_days:
+        return day
+    if not archive_days:
+        return None
+    target = date.fromisoformat(day)
+    best = min(archive_days, key=lambda d: abs((date.fromisoformat(d) - target).days))
+    if abs((date.fromisoformat(best) - target).days) <= max_delta:
+        return best
+    return None
+
+
+def enrich_snapshots_from_archives(
+    snapshots: list[RunSnapshot],
+    archive_dir: Path,
+) -> list[RunSnapshot]:
+    """In-memory merge of dashboard archive entry fields onto history rows."""
+    by_day = _archive_enrichment_by_day(archive_dir)
+    if not by_day:
+        return snapshots
+    days = sorted(by_day)
+    enriched: list[RunSnapshot] = []
+    for snap in snapshots:
+        day = _parse_run_at(snap.run_at).date().isoformat()
+        src_day = _nearest_archive_day(day, days)
+        amap = by_day.get(src_day or "", {})
+        if not amap:
+            enriched.append(snap)
+            continue
+        new_signals: list[dict[str, Any]] = []
+        for row in snap.signals:
+            merged = dict(row)
+            extra = amap.get(str(merged.get("ticker") or "").strip()) or {}
+            for key, value in extra.items():
+                if merged.get(key) is None:
+                    merged[key] = value
+            if merged.get("market_id") is None:
+                merged["market_id"] = DEFAULT_MARKET_ID
+            new_signals.append(merged)
+        enriched.append(RunSnapshot(run_at=snap.run_at, prices=snap.prices, signals=new_signals))
+    return enriched
+
+
+def _fh_pass_from_models_rows(models: list[dict[str, Any]]) -> dict[str, bool]:
+    out: dict[str, bool] = {}
+    for row in models:
+        if not isinstance(row, dict):
+            continue
+        if str(row.get("model_id") or "") != "financial_health":
+            continue
+        ticker = str(row.get("ticker") or "").strip()
+        if not ticker:
+            continue
+        out[ticker] = bool(row.get("passed"))
+    return out
+
+
+def load_library_market_snapshots(
+    library_root: Path,
+    market_id: str,
+    *,
+    max_panels: int | None = None,
+) -> list[RunSnapshot]:
+    """Build RunSnapshots from library ``signals_*.csv`` + ``models_*.json.gz``.
+
+    Uses existing screen outputs only (F4 — no new screen extras).
+    """
+    from value_investor.library_screen import screen_dir_for
+    from value_investor.storage import read_json
+
+    screen_dir = screen_dir_for(Path(library_root), market_id)
+    if not screen_dir.is_dir():
+        return []
+
+    import re
+
+    stamp_re = re.compile(r"signals_(\d{8}_\d{6})\.csv$")
+    panels: list[tuple[datetime, Path]] = []
+    for path in sorted(screen_dir.glob("signals_*.csv")):
+        match = stamp_re.match(path.name)
+        if not match:
+            continue
+        stamp = match.group(1)
+        try:
+            run_at = datetime.strptime(stamp, "%Y%m%d_%H%M%S").replace(tzinfo=UTC)
+        except ValueError:
+            continue
+        panels.append((run_at, path))
+    if max_panels is not None and max_panels > 0:
+        panels = panels[-max_panels:]
+
+    history_dir = screen_dir / "history"
+    snapshots: list[RunSnapshot] = []
+    for run_at, signals_path in panels:
+        try:
+            frame = pd.read_csv(signals_path)
+        except (OSError, ValueError, pd.errors.ParserError):
+            continue
+        if frame.empty or "ticker" not in frame.columns:
+            continue
+        stamp = run_at.strftime("%Y%m%d_%H%M%S")
+        models_path = history_dir / f"models_{stamp}.json.gz"
+        if not models_path.is_file():
+            models_path = screen_dir / f"models_{stamp}.json.gz"
+        fh_map: dict[str, bool] = {}
+        if models_path.is_file():
+            try:
+                models_payload = read_json(models_path)
+                models = models_payload.get("models") if isinstance(models_payload, dict) else None
+                if isinstance(models, list):
+                    fh_map = _fh_pass_from_models_rows(models)
+            except (OSError, ValueError, TypeError, KeyError):
+                fh_map = {}
+
+        # Prefer prices from matching run snapshot when present.
+        prices: dict[str, float] = {}
+        run_path = history_dir / f"run_{stamp}.json.gz"
+        if run_path.is_file():
+            try:
+                run_payload = read_json(run_path)
+                raw_prices = run_payload.get("prices") if isinstance(run_payload, dict) else None
+                if isinstance(raw_prices, dict):
+                    for ticker, price in raw_prices.items():
+                        val = _coerce_positive_float(price)
+                        if val is not None and val > 0:
+                            prices[str(ticker)] = val
+            except (OSError, ValueError, TypeError, KeyError):
+                prices = {}
+
+        signals: list[dict[str, Any]] = []
+        for _, row in frame.iterrows():
+            ticker = str(row.get("ticker") or "").strip()
+            if not ticker:
+                continue
+            sig: dict[str, Any] = {
+                "ticker": ticker,
+                "signal": str(row.get("signal") or "hold"),
+                "market_id": market_id,
+            }
+            for col in (
+                "earnings_yield",
+                "earnings_yield_pe",
+                "earnings_yield_ebit",
+                "trailing_pe",
+                "conviction_score",
+                "data_quality_score",
+                "timing_signal",
+                "adjusted_signal",
+                "research_verdict",
+            ):
+                if col in frame.columns and pd.notna(row.get(col)):
+                    sig[col] = row.get(col)
+            if ticker in fh_map:
+                sig["financial_health_pass"] = fh_map[ticker]
+            last_price = (
+                _coerce_positive_float(row.get("last_price"))
+                if "last_price" in frame.columns
+                else None
+            )
+            if last_price is not None and last_price > 0:
+                prices.setdefault(ticker, last_price)
+            if ticker not in prices:
+                continue
+            signals.append(sig)
+        if not signals:
+            continue
+        snapshots.append(RunSnapshot(run_at=run_at.isoformat(), prices=prices, signals=signals))
+    return snapshots
+
+
+def _admitted_markets(policy_path: Path | None = None) -> list[str]:
+    path = Path(policy_path) if policy_path is not None else DEFAULT_LIBRARY_POLICY_PATH
+    if not path.is_file():
+        return []
+    try:
+        policy = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError):
+        return []
+    if not isinstance(policy, dict):
+        return []
+    from value_investor.market_shard_admission import admitted_learning_markets_for_policy
+
+    return list(admitted_learning_markets_for_policy(policy))
+
+
+def _merge_observe_payloads(
+    payloads: list[dict[str, Any]],
+    *,
+    generated_at: str | None,
+    prior_markers: list[dict[str, Any]],
+    panel_coverage: dict[str, Any],
+    cfg: N201Config,
+) -> dict[str, Any]:
+    if not payloads:
+        return build_n201_observe(
+            [],
+            cfg=cfg,
+            generated_at=generated_at,
+            prior_markers=prior_markers,
+            panel_coverage=panel_coverage,
+        )
+    if len(payloads) == 1:
+        out = dict(payloads[0])
+        out["panel_coverage"] = panel_coverage
+        return out
+
+    episodes: list[dict[str, Any]] = []
+    strategy_returns: list[float] = []
+    patient_returns: list[float] = []
+    stress_returns: list[float] = []
+    skipped_missing = 0
+    skipped_ineligible = 0
+    skipped_filters = 0
+    snapshot_count = 0
+    markers = list(prior_markers)
+    for payload in payloads:
+        snapshot_count += int(payload.get("snapshot_count") or 0)
+        skipped_missing += int(payload.get("skipped_missing_entry_fields") or 0)
+        skipped_ineligible += int(payload.get("skipped_ineligible") or 0)
+        skipped_filters += int(payload.get("skipped_filters") or 0)
+        for ep in payload.get("episodes_sample") or []:
+            if isinstance(ep, dict):
+                episodes.append(ep)
+                if ep.get("return_pct") is not None:
+                    strategy_returns.append(float(ep["return_pct"]))
+                if ep.get("patient_hold_return_pct_report_only") is not None:
+                    patient_returns.append(float(ep["patient_hold_return_pct_report_only"]))
+                if ep.get("return_pct_stress_report_only") is not None:
+                    stress_returns.append(float(ep["return_pct_stress_report_only"]))
+        for marker in payload.get("change_markers") or []:
+            if isinstance(marker, dict) and marker.get("marker_id") not in {
+                m.get("marker_id") for m in markers
+            }:
+                markers.append(marker)
+
+    # Prefer full episode counts from each market payload (not just samples).
+    completed = sum(int(p.get("completed_entry_episodes") or 0) for p in payloads)
+    # Recompute medians from samples when full return vectors unavailable.
+    # Prefer path_scoreboard n when present by gathering listed sample returns only
+    # for display; primary uses sample pool when markets exceed sample cap.
+    # Better: each market payload path_scoreboard has the true median for that
+    # market's full episode set — combine via weighted-by-n median of returns from
+    # episodes_sample is incomplete. Re-score path from per-market scoreboards'
+    # stored medians only when n matches sample; otherwise keep concatenated samples
+    # and set n=completed with median over samples as approximation.
+    # Collect returns from each payload's episodes_sample PLUS synthesize from
+    # completed counts by re-running is too heavy — instead have build store all
+    # returns? For v0 merge, recompute by concatenating each market's sample and
+    # also reading path_scoreboard when completed == sample length.
+    all_strategy: list[float] = []
+    all_patient: list[float] = []
+    all_stress: list[float] = []
+    for payload in payloads:
+        n = int(payload.get("completed_entry_episodes") or 0)
+        sample = [e for e in (payload.get("episodes_sample") or []) if isinstance(e, dict)]
+        if n <= len(sample):
+            for ep in sample[:n]:
+                if ep.get("return_pct") is not None:
+                    all_strategy.append(float(ep["return_pct"]))
+                if ep.get("patient_hold_return_pct_report_only") is not None:
+                    all_patient.append(float(ep["patient_hold_return_pct_report_only"]))
+                if ep.get("return_pct_stress_report_only") is not None:
+                    all_stress.append(float(ep["return_pct_stress_report_only"]))
+        else:
+            # Incomplete sample — fall back to that market's published median once.
+            path = (
+                payload.get("path_scoreboard")
+                if isinstance(payload.get("path_scoreboard"), dict)
+                else {}
+            )
+            med = path.get("smooth_ret_cohort_median")
+            if med is not None and n > 0:
+                all_strategy.extend([float(med)] * n)
+            pmed = path.get("patient_hold_smooth_ret_cohort_median_report_only")
+            if pmed is not None:
+                all_patient.append(float(pmed))
+            smed = path.get("smooth_ret_cohort_median_stress_report_only")
+            if smed is not None:
+                all_stress.append(float(smed))
+
+    absolute_primary = _median_or_none(all_strategy)
+    patient_median = _median_or_none(all_patient)
+    stress_median = _median_or_none(all_stress)
+    patient_excess = None
+    if absolute_primary is not None and patient_median is not None:
+        patient_excess = round(absolute_primary - patient_median, 6)
+
+    weeks = max(int(p.get("calendar_weeks_spanned") or 0) for p in payloads)
+    entries_per_week = round(completed / weeks, 3) if weeks else None
+    volume_gate_met = completed >= cfg.volume_min_episodes and weeks >= cfg.volume_min_weeks
+    phase_ok = entries_per_week is not None and entries_per_week >= cfg.phase_entries_per_week_floor
+    base = payloads[0]
+    return {
+        **base,
+        "generated_at": generated_at or _utc_now(),
+        "snapshot_count": snapshot_count,
+        "completed_entry_episodes": completed,
+        "skipped_missing_entry_fields": skipped_missing,
+        "skipped_ineligible": skipped_ineligible,
+        "skipped_filters": skipped_filters,
+        "calendar_weeks_spanned": weeks,
+        "volume_gate": {
+            "min_episodes": cfg.volume_min_episodes,
+            "min_weeks": cfg.volume_min_weeks,
+            "met": volume_gate_met,
+        },
+        "phase": {
+            "entries_per_week": entries_per_week,
+            "floor": cfg.phase_entries_per_week_floor,
+            "floor_met": phase_ok,
+        },
+        "path_scoreboard": {
+            **(
+                base.get("path_scoreboard") if isinstance(base.get("path_scoreboard"), dict) else {}
+            ),
+            "smooth_ret_cohort_median": absolute_primary,
+            "smooth_ret_cohort_median_stress_report_only": stress_median,
+            "patient_hold_smooth_ret_cohort_median_report_only": patient_median,
+            "patient_hold_excess_report_only": patient_excess,
+            "n": completed,
+            "independent_of_fund_nav": True,
+        },
+        "stress_scoreboard_report_only": {
+            "trade_cost_pct_per_side": cfg.stress_trade_cost_pct,
+            "smooth_ret_cohort_median": stress_median,
+            "n": len(all_stress),
+            "role": "report_only",
+        },
+        "change_markers": markers,
+        "episodes_sample": episodes[:25],
+        "panel_coverage": panel_coverage,
+        "markets_scored": [
+            str(p.get("cost_basis", {}).get("market_id") or p.get("market_id") or "")
+            for p in payloads
+        ],
+    }
 
 
 def refresh_n201_value_mom_observe(
@@ -831,13 +1578,18 @@ def refresh_n201_value_mom_observe(
     persist: bool = True,
     cfg: N201Config | None = None,
     generated_at: str | None = None,
+    library_root: Path | None = None,
+    library_policy_path: Path | None = None,
+    include_admitted_markets: bool = True,
 ) -> dict[str, Any]:
-    """Load archive history, score episodes, optionally persist stores."""
+    """Load FTSE history (+ archive enrich) and admitted library panels; score."""
     data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
     store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
     reg_path = (
         Path(registration_path) if registration_path is not None else DEFAULT_REGISTRATION_PATH
     )
+    lib_root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
+    cfg = cfg or N201Config()
 
     prior_markers: list[dict[str, Any]] = []
     if store.is_file():
@@ -849,12 +1601,98 @@ def refresh_n201_value_mom_observe(
         except (OSError, json.JSONDecodeError):
             prior_markers = []
 
-    snapshots = load_run_snapshots(data_dir)
-    payload = build_n201_observe(
-        snapshots,
-        cfg=cfg,
+    ftse_snapshots = enrich_snapshots_from_archives(
+        load_run_snapshots(data_dir), data_dir / "archive"
+    )
+    payloads: list[dict[str, Any]] = []
+    # Share a fetch budget across markets (FTSE first).
+    shared_frames: dict[str, pd.DataFrame] = dict(cfg.price_frames or {})
+    fetch_budget = int(cfg.max_momentum_price_fetches)
+
+    ftse_cfg = N201Config(
+        market_id=cfg.market_id,
+        buy_cost_pct=cfg.buy_cost_pct,
+        sell_cost_pct=cfg.sell_cost_pct,
+        stress_trade_cost_pct=cfg.stress_trade_cost_pct,
+        volume_min_episodes=cfg.volume_min_episodes,
+        volume_min_weeks=cfg.volume_min_weeks,
+        phase_entries_per_week_floor=cfg.phase_entries_per_week_floor,
+        hold_trading_days=cfg.hold_trading_days,
+        fixed_stake_units=cfg.fixed_stake_units,
+        ey_top_share=cfg.ey_top_share,
+        max_episodes=cfg.max_episodes,
+        fetch_momentum_prices=cfg.fetch_momentum_prices,
+        max_momentum_price_fetches=fetch_budget,
+        price_frames=shared_frames,
+        trading_sessions=cfg.trading_sessions,
+    )
+    ftse_payload = build_n201_observe(
+        ftse_snapshots,
+        cfg=ftse_cfg,
         generated_at=generated_at,
         prior_markers=prior_markers,
+    )
+    payloads.append(ftse_payload)
+    fetch_budget = max(0, int(cfg.max_momentum_price_fetches) - len(shared_frames))
+
+    panel_loaded: list[str] = []
+    panel_missing: list[str] = []
+    panel_counts: dict[str, int] = {DEFAULT_MARKET_ID: len(ftse_snapshots)}
+
+    if include_admitted_markets:
+        for mid in _admitted_markets(library_policy_path):
+            snaps = load_library_market_snapshots(lib_root, mid)
+            if not snaps:
+                panel_missing.append(mid)
+                continue
+            panel_loaded.append(mid)
+            panel_counts[mid] = len(snaps)
+            remaining_episodes = max(
+                0,
+                cfg.max_episodes
+                - sum(int(p.get("completed_entry_episodes") or 0) for p in payloads),
+            )
+            if remaining_episodes <= 0:
+                break
+            mid_cfg = N201Config(
+                market_id=mid,
+                buy_cost_pct=cfg.buy_cost_pct,
+                sell_cost_pct=cfg.sell_cost_pct,
+                stress_trade_cost_pct=cfg.stress_trade_cost_pct,
+                volume_min_episodes=cfg.volume_min_episodes,
+                volume_min_weeks=cfg.volume_min_weeks,
+                phase_entries_per_week_floor=cfg.phase_entries_per_week_floor,
+                hold_trading_days=cfg.hold_trading_days,
+                fixed_stake_units=cfg.fixed_stake_units,
+                ey_top_share=cfg.ey_top_share,
+                max_episodes=remaining_episodes,
+                fetch_momentum_prices=cfg.fetch_momentum_prices and fetch_budget > 0,
+                max_momentum_price_fetches=int(cfg.max_momentum_price_fetches),
+                price_frames=shared_frames,
+                trading_sessions=cfg.trading_sessions,
+            )
+            market_payload = build_n201_observe(
+                snaps,
+                cfg=mid_cfg,
+                generated_at=generated_at,
+                prior_markers=[],
+            )
+            payloads.append(market_payload)
+            fetch_budget = max(0, int(cfg.max_momentum_price_fetches) - len(shared_frames))
+
+    panel_coverage = {
+        "ftse_snapshots": len(ftse_snapshots),
+        "admitted_loaded": panel_loaded,
+        "admitted_missing_or_empty": panel_missing,
+        "panel_snapshot_counts": panel_counts,
+        "library_root": str(lib_root),
+    }
+    payload = _merge_observe_payloads(
+        payloads,
+        generated_at=generated_at,
+        prior_markers=prior_markers,
+        panel_coverage=panel_coverage,
+        cfg=cfg,
     )
     registration = build_registration_payload()
 

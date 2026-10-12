@@ -37,17 +37,19 @@ Amend only via logged change marker or new registration.
 | **Definition** | Same universe; plain EY top-30% local; **no** momentum filter; same `financial_health` pass; same 63 trading-day or identity/quality-break exit; same fixed 100 local stake; fair per-market costs |
 | **Role** | Report-only excess vs strategy (not co-primary) |
 
-### Eligibility / soft gaps (MVP)
+### Eligibility / soft gaps (post-enrichment)
 
 | Item | Note |
 |---|---|
 | **eligibility_mode** | `entry_fields_required_f9_or_pass` |
-| **Entry fields** | Rows need `earnings_yield` (+ local top-30%), `momentum_12_1` (or weekly price proxy), and `financial_health_pass` / model pass |
-| **Soft gap** | Live FTSE history often lacks those fields → zero episodes until enrichment; fail-closed for capital (F8) |
-| **Hold proxy** | 63 trading days ≈ weekday count on weekly archive (no holiday calendar) |
-| **Admitted markets** | Walker primarily consumes ftse350 history plus any enriched `market_id` rows |
+| **Entry fields** | Rows need plain EY (+ local top-30%), 12–1 momentum > 0, and `financial_health` pass |
+| **EY enrichment** | From `earnings_yield*` / `trailing_pe` / archive `key_metrics["P/E"]` (1/PE). No new screen extras (F4). |
+| **FH enrichment** | From `financial_health_pass` or archive/library `passed_models` / `failed_models` / `model_id=financial_health`. Fail-closed when still unknown. |
+| **12–1 mom** | Calendar lookback on snapshot prices; else optional daily price fetch (capped per refresh). Fail-closed when bars missing. |
+| **Hold days** | 63 trading days via session calendar from price bars when available, else numpy busday + small per-market holiday table |
+| **Admitted markets** | Refresh loads library `signals_*.csv` + `models_*.json.gz` for `ladder.admitted_learning_markets`; residuals listed on observe store `panel_coverage` |
 
-Same spirit as N200’s archive MVP `row_fields_or_pass` — soft gaps documented, capital still fail-closed.
+Capital influence remains fail-closed (F8). Soft gaps that remain are data-span limits (short panels cannot complete a full 63d hold without an identity/quality break; mom fetch budget may leave some admitted names unresolved).
 
 ## Launch queue
 
