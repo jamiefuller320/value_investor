@@ -1,32 +1,109 @@
 {
-  "run_at": "2026-10-11T13:41:46.882840+00:00",
+  "run_at": "2026-10-12T11:19:08.472523+00:00",
   "market_id": "ftse_mib",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "LTMC.MI"
+  ],
+  "target_details": [
+    {
+      "ticker": "LTMC.MI",
+      "priority_score": 12.4444,
+      "filings_total": 0,
+      "filings_with_body": 0,
+      "indexed_without_body": 0,
+      "reason": "unmeasured"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "LTMC.MI",
+      "reason": "unmeasured",
+      "before": {
+        "filings_total": 0,
+        "filings_with_body": 0,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 2,
+        "annual": 1,
+        "interim": 0,
+        "trading_update": 0,
+        "other": 1,
+        "with_body": 2,
+        "period_coverage": {
+          "annual": {
+            "total": 1,
+            "with_body": 1
+          },
+          "interim": {
+            "total": 0,
+            "with_body": 0
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 1,
+            "with_body": 1
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 2,
+        "with_body_after": 2,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "LTMC.MI"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-11T13:41:05.740112+00:00",
+    "snapshot_at": "2026-10-12T11:18:43.558512+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 11,
-    "unmeasured_buy_tier": 0,
+    "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 7,
+    "thin_body_buy_tier": 6,
     "indexed_without_body": 0,
     "bodies_min": 1,
-    "bodies_median": 2,
+    "bodies_median": 2.0,
     "bodies_max": 61,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
-    "unmeasured_tickers": [],
+    "unmeasured_tickers": [
+      "LTMC.MI"
+    ],
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "MONC.MI",
       "PST.MI",
-      "BC.MI",
       "INW.MI",
       "UNI.MI",
       "TEN.MI",
@@ -48,10 +125,10 @@
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-11T13:41:42.934605+00:00",
+    "snapshot_at": "2026-10-12T11:19:08.458951+00:00",
     "market_id": "ftse_mib",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -68,16 +145,15 @@
     "thin_body_tickers": [
       "MONC.MI",
       "PST.MI",
-      "BC.MI",
       "INW.MI",
       "UNI.MI",
       "TEN.MI",
+      "LTMC.MI",
       "FCT.MI"
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
     "parked_tickers": [
-      "BC.MI",
       "FCT.MI",
       "INW.MI",
       "MONC.MI",
@@ -85,12 +161,14 @@
       "TEN.MI",
       "UNI.MI"
     ],
-    "parked_count": 7,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
+    "parked_count": 6,
+    "effective_thin_body_buy_tier": 1,
+    "effective_thin_body_tickers": [
+      "LTMC.MI"
+    ],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -98,74 +176,53 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 11,
-    "hits": 3,
-    "new_rows_total": 0,
-    "curiosity_total": 3,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "MONC.MI",
-      "PST.MI",
-      "BC.MI",
-      "INW.MI",
-      "UNI.MI",
-      "TEN.MI",
-      "FCT.MI"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
-  "parity_handoff": null,
-  "parallel_sprint_handoff": {
+  "discovery_scan": null,
+  "maintenance_mode": false,
+  "parity_handoff": {
     "skipped": true,
-    "reason": "not_parallel_sprint_market",
+    "reason": "not_focus_market",
     "market_id": "ftse_mib"
   },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "ftse_mib",
-    "assessed_at": "2026-10-11T13:41:06.181632+00:00",
-    "unmeasured": [],
+    "assessed_at": "2026-10-12T11:18:43.867410+00:00",
+    "unmeasured": [
+      "LTMC.MI"
+    ],
     "zero_body": [],
     "indexed_without_body": [],
     "thin_need_discovery": [
       "MONC.MI",
       "PST.MI",
-      "BC.MI",
       "INW.MI",
       "UNI.MI",
       "TEN.MI",
       "FCT.MI"
     ],
     "thin_need_bodies": [],
-    "primary_blocker": "thin_need_discovery",
+    "primary_blocker": "unmeasured",
     "force_discovery_scan": true,
-    "auto_pin_tickers": [],
+    "auto_pin_tickers": [
+      "LTMC.MI"
+    ],
     "recommended_actions": [
-      "Discovery/IR seed for 7 thin ticker(s) that already have bodies for every indexed filing",
+      "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+      "Discovery/IR seed for 6 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
-      "unmeasured": 0,
+      "unmeasured": 1,
       "zero_body": 0,
       "indexed_without_body_tickers": 0,
       "indexed_without_body_rows": 0,
-      "thin_need_discovery": 7,
+      "thin_need_discovery": 6,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 36.313256681999974,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3563.686743318,
+  "used_seconds": 24.260949816999997,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 2075.739050183,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -173,22 +230,11 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_mib",
-    "updated_at": "2026-10-11T13:41:42.938829+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 4,
+    "updated_at": "2026-10-12T11:19:08.464477+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
-      {
-        "ticker": "BC.MI",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-27T20:12:58.751368+00:00",
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
-      },
       {
         "ticker": "FCT.MI",
         "reason": "awaiting_periodic_report",
@@ -262,58 +308,28 @@
     "straggler_zero_runs": 2,
     "had_complete_targets": false,
     "leftover_tickers": [
-      "BC.MI",
       "FCT.MI",
       "INW.MI",
+      "LTMC.MI",
       "MONC.MI",
       "PST.MI",
       "TEN.MI",
       "UNI.MI"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "LTMC.MI"
+    ],
     "surface_released": [],
     "path": "docs/data/library/markets/ftse_mib/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "ftse_mib",
-    "ingest_exhausted_markets": [
-      "aex",
-      "asx200",
-      "atx",
-      "bel20",
-      "cac40",
-      "dax",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_mib",
-      "ftse_smallcap",
-      "hang_seng",
-      "ibex35",
-      "nasdaq100",
-      "omxs30",
-      "psi20",
-      "smi",
-      "sp500",
-      "sti",
-      "tsx60",
-      "us_adr_asia"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "ftse_mib"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "task_ids": [],
-    "task_count": 154,
-    "market_id": "nasdaq100",
-    "hunter_ticker": "PDD",
-    "hunter_tickers": [
-      "PDD"
-    ],
-    "priority_score": 12.0,
-    "wait_behind_task_id": "",
-    "leftover_key_bodies": false
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20261012-01"
   }
 }
