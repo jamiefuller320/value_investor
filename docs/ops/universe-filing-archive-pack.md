@@ -98,7 +98,7 @@ Apply caps (pilot): `max_units=2`, ≤2 tickers/unit, ≤1 body/ticker, ≤8 HTT
 
 - Second live crawler parallel to `euro-ingest-loop` / sprint streams (**N180**).
 - Proprietary binary filing format as v1.
-- Forking shard AI-judgment or live-path utilization work to “fill the archive.”
+- Forking shard AI-judgment or P1 Investment-demanded work to “fill the archive.”
 - Fourth equal sprint stream / weekend full-universe crawl.
 - Auto-rewriting live deepen from bottleneck / miss-rate (observe/report first; **N181**).
 - Waiting for miss-rate ≥50% before cold-store collection.
