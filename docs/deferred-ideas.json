@@ -14000,6 +14000,40 @@
       "added_at": "2026-10-11T16:41:10+00:00"
     },
     {
+      "id": "L599",
+      "category": "later",
+      "section": "ops",
+      "title": "Preserve cancelled eng tasks across library-ladder queue rewrites",
+      "summary": "eng-20261004-06 was cancelled via #965 then resurrected to parked when chore: run offline library ladder rewrote docs/data/engineering_tasks.json (a9d7a9bf87). Queue writers should not flip cancelled\u2192parked unless explicitly re-opened.",
+      "revisit_when": "Next eng cancel is overwritten by a non-cancel queue commit, or when hardening engineering_tasks merge/write helpers",
+      "tags": [
+        "engineering-queue",
+        "cancel",
+        "resurrection",
+        "library-ladder"
+      ],
+      "status": "open",
+      "source": "parked eng triage rec-72aaf5b0ee80 / PR 1048",
+      "added_at": "2026-10-12T08:23:59+00:00"
+    },
+    {
+      "id": "L600",
+      "category": "later",
+      "section": "security",
+      "title": "Grant Workflows permission on WORKFLOW_DISPATCH_PAT for eng-agent workflow edits",
+      "summary": "Optional harden: eng-agent cannot push .github/workflows without Workflows scope, which parks workflow_permission tasks. Not required for eng-20261004-06 (fixed by #960 human PR).",
+      "revisit_when": "Next eng task must edit .github/workflows and would otherwise park workflow_permission",
+      "tags": [
+        "gha",
+        "pat",
+        "workflows",
+        "engineering-agent"
+      ],
+      "status": "open",
+      "source": "parked eng triage rec-72aaf5b0ee80 / PR 1048",
+      "added_at": "2026-10-12T08:23:59+00:00"
+    },
+    {
       "id": "N206",
       "category": "not_now",
       "section": "learning",
