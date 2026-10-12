@@ -1,30 +1,29 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-11T08:08:06.854596+01:00",
+    "local_time": "2026-10-12T08:29:36.079261+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-11T08:00:00+01:00",
-    "settle_at": "2026-10-11T09:15:00+01:00",
+    "market_open_at": "2026-10-12T08:00:00+01:00",
+    "settle_at": "2026-10-12T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [
     {
-      "id": "2e1a7748-5b31-4a63-98f6-6843c5e9ad31",
+      "id": "25f48a96-9c2c-4387-859c-5eee7a941904",
       "fund_id": "97d001ec-6b08-4286-8657-7409e3d783fc",
-      "acted_at": "2026-10-11T08:08:06.854596+01:00",
-      "ticker": "GALP.LS",
-      "side": "sell",
+      "acted_at": "2026-10-12T08:29:36.079261+01:00",
+      "ticker": "COR.LS",
+      "side": "buy",
       "sizing_mode": "cash",
-      "shares": 0.630068,
-      "price": 22.51,
-      "gross": 14.18,
+      "shares": 2.122412,
+      "price": 6.66,
+      "gross": 14.14,
       "cost": 0.02,
-      "net_cash": 14.16,
-      "note": "Automated trim",
-      "name": "Galp Energia, SGPS, S.A.",
-      "avg_cost_at_exit": 21.9
+      "net_cash": -14.16,
+      "note": "Automated buy",
+      "name": "Corticeira Amorim, S.G.P.S., S.A."
     }
   ],
   "plan": {
@@ -40,8 +39,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 979.97,
-    "cash": 14.16,
+    "nav": 980.15,
+    "cash": -0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -53,69 +52,64 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 326.66,
+    "target_sleeve_value": 489.79,
     "targets": [
       {
         "ticker": "COR.LS",
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
         "signal": "buy",
-        "conviction_score": 0.41046499999999997,
-        "price": 6.64
-      },
-      {
-        "ticker": "GALP.LS",
-        "name": "Galp Energia, SGPS, S.A.",
-        "signal": "buy",
-        "conviction_score": 0.40199999999999997,
-        "price": 22.51
+        "conviction_score": 0.430695,
+        "price": 6.66
       },
       {
         "ticker": "NVG.LS",
         "name": "The Navigator Company, S.A.",
         "signal": "buy",
         "conviction_score": 0.37451,
-        "price": 3.058
+        "price": 3.066
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "GALP.LS",
+        "name": "Galp Energia, SGPS, S.A.",
+        "reason": "No longer in the top conviction target set",
+        "shares": 14.510925,
+        "price": 22.4,
+        "value": 325.04
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
+        "action": "buy",
         "ticker": "COR.LS",
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 318.74,
-        "target_value": 326.66,
-        "conviction_score": 0.41046499999999997,
+        "reason": "Top-up to equal weight",
+        "value": 155.96,
+        "price": 6.66,
+        "target_value": 489.79,
+        "conviction_score": 0.430695,
         "signal": "buy"
       },
       {
-        "action": "hold",
-        "ticker": "GALP.LS",
-        "name": "Galp Energia, SGPS, S.A.",
-        "reason": "Already near equal-weight target",
-        "value": 326.64,
-        "target_value": 326.66,
-        "conviction_score": 0.40199999999999997,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
+        "action": "buy",
         "ticker": "NVG.LS",
         "name": "The Navigator Company, S.A.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 320.43,
-        "target_value": 326.66,
+        "reason": "Top-up to equal weight",
+        "value": 168.52,
+        "price": 3.066,
+        "target_value": 489.79,
         "conviction_score": 0.37451,
         "signal": "buy"
       }
     ],
+    "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s)."
   },
   "alerts": [
     {
@@ -124,7 +118,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 6.64,
+      "mark": 6.66,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -135,18 +129,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3.058,
+      "mark": 3.066,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "GALP.LS",
       "name": "Galp Energia, SGPS, S.A.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 22.51,
+      "severity": "watch",
+      "message": "Screen signal is now hold",
+      "mark": 22.4,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -167,14 +161,14 @@
       "id": "97d001ec-6b08-4286-8657-7409e3d783fc",
       "created_at": "2026-10-04T07:10:11.986866+00:00"
     },
-    "cash": 14.16,
+    "cash": -0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
       "COR.LS": {
         "ticker": "COR.LS",
-        "shares": 48.002972,
-        "avg_cost": 6.9196,
+        "shares": 50.125384,
+        "avg_cost": 6.9086,
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
         "sector": "Basic Materials",
         "currency": "EUR",
@@ -297,6 +291,21 @@
         "note": "Automated trim",
         "name": "Galp Energia, SGPS, S.A.",
         "avg_cost_at_exit": 21.9
+      },
+      {
+        "id": "25f48a96-9c2c-4387-859c-5eee7a941904",
+        "fund_id": "97d001ec-6b08-4286-8657-7409e3d783fc",
+        "acted_at": "2026-10-12T08:29:36.079261+01:00",
+        "ticker": "COR.LS",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.122412,
+        "price": 6.66,
+        "gross": 14.14,
+        "cost": 0.02,
+        "net_cash": -14.16,
+        "note": "Automated buy",
+        "name": "Corticeira Amorim, S.G.P.S., S.A."
       }
     ],
     "equity_curve": [
@@ -459,11 +468,30 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-12T08:29:36.079261+01:00",
+        "portfolio_value": 829.12,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.84591
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-11T08:08:06.854596+01:00",
+    "last_mark_at": "2026-10-12T08:29:36.079261+01:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "GALP.LS": 1
+      },
       "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
@@ -474,7 +502,7 @@
     "schema_version": 2,
     "market_id": "psi20",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-11T07:08:06.872044+00:00",
+    "generated_at": "2026-10-12T07:29:36.099884+00:00",
     "observe_only": true,
     "open_count": 0,
     "closed_count": 0,
@@ -553,7 +581,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-11T07:08:06.872800+00:00",
+    "generated_at": "2026-10-12T07:29:36.100731+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -646,7 +674,7 @@
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 1,
-      "swap_rotations": 0
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -654,8 +682,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-11T07:08:06.873642+00:00",
-    "as_of": "2026-10-11T08:08:06.854596+01:00",
+    "updated_at": "2026-10-12T07:29:36.101673+00:00",
+    "as_of": "2026-10-12T08:29:36.079261+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -670,8 +698,8 @@
     "holding_count": 3,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 1,
-      "weakening": 2,
+      "intact": 0,
+      "weakening": 3,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -712,12 +740,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0404,
-        "mark": 6.64,
-        "avg_cost": 6.9196,
+        "unrealized_pct": -0.036,
+        "mark": 6.66,
+        "avg_cost": 6.9086,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4105,
+        "conviction_score": 0.4307,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -738,7 +766,7 @@
           "still buy",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 41%"
+          "conviction 43%"
         ],
         "weaken_reasons": [
           "research verdict caution"
@@ -752,11 +780,11 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0353,
-        "mark": 3.058,
+        "unrealized_pct": -0.0328,
+        "mark": 3.066,
         "avg_cost": 3.17,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.3745,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -788,16 +816,16 @@
       {
         "ticker": "GALP.LS",
         "name": "Galp Energia, SGPS, S.A.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0279,
-        "mark": 22.51,
+        "unrealized_pct": 0.0228,
+        "mark": 22.4,
         "avg_cost": 21.9,
-        "signal": "buy",
+        "signal": "hold",
         "timing_signal": "neutral",
-        "conviction_score": 0.402,
+        "conviction_score": 0.3892,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -809,20 +837,19 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "still buy",
+          "left buy tier (hold)",
           "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 40%"
+          "cheapness family still passes"
         ],
         "intact_reasons": [
-          "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 40%"
+          "conviction 39%"
         ],
-        "weaken_reasons": [],
+        "weaken_reasons": [
+          "left buy tier (hold)"
+        ],
         "broken_reasons": []
       }
     ],
@@ -833,7 +860,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-11T07:08:06.874828+00:00",
+    "generated_at": "2026-10-12T07:29:36.102820+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -893,7 +920,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-11T07:08:06.876302+00:00",
+    "generated_at": "2026-10-12T07:29:36.104308+00:00",
     "open_count": 3,
     "closed_count": 0,
     "scored_count": 0,
@@ -957,7 +984,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-11T08:08:06.854596+01:00",
+    "generated_at": "2026-10-12T08:29:36.079261+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1014,7 +1041,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-11T08:08:06.854596+01:00",
+    "generated_at": "2026-10-12T08:29:36.079261+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -1022,33 +1049,141 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
       "agree": 0,
       "veto": 0,
-      "abstain": 0
+      "abstain": 1
     },
-    "by_algo_action": {},
-    "cards": [],
+    "by_algo_action": {
+      "buy": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 1
+      }
+    },
+    "cards": [
+      {
+        "ticker": "COR.LS",
+        "name": "Corticeira Amorim, S.G.P.S., S.A.",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "abstain",
+        "reasons": [
+          "Buy while not buyish \u2014 abstain."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 1
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 1
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "caution"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.430695
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-12T08:29:36.079261+01:00",
+        "proposal_id": "buy_tier_level:COR.LS:buy:2026-10-12T08:29:36.079261+01:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "caution",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-11T08:08:06.854596+01:00",
+      "generated_at": "2026-10-12T08:29:36.079261+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 1,
       "verdict_counts": {
         "agree": 0,
         "veto": 0,
-        "abstain": 0
+        "abstain": 1
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "buy": {
+          "agree": 0,
+          "veto": 0,
+          "abstain": 1
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -1064,7 +1199,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-11T07:08:06.878803+00:00",
+  "generated_at": "2026-10-12T07:29:36.106923+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-11T07:08:08.738366+00:00
+Track: `buy_tier_level_native` · updated 2026-10-12T07:29:38.019742+00:00
 
 ## Portfolio loser feedback
 
@@ -9,6 +9,9 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:08:08.738366+00:00
 - Balancing hint: `maintain`
 
 ## Holding reviews
+
+### MIO.IR — broken / exit_candidate (+8.5%)
+- cheapness lost and not in buy tier
 
 ### OIZ.IR — intact / hold_tolerate (-2.6%)
 - still buy
@@ -30,9 +33,3 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:08:08.738366+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 61%
-
-### MIO.IR — weakening / watch_review (+8.5%)
-- research verdict caution
-- cheapness family no longer passes
-- still buy
-- data_quality 1.00

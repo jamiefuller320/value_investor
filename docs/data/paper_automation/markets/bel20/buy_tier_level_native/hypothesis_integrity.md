@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-11T07:08:02.610494+00:00
+Track: `buy_tier_level_native` · updated 2026-10-12T07:29:31.813903+00:00
 
 ## Portfolio loser feedback
 
@@ -10,13 +10,16 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:08:02.610494+00:00
 
 ## Holding reviews
 
+### SOLB.BR — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
 ### AED.BR — intact / hold_tolerate (-5.1%)
 - price drawdown alone does not invalidate value thesis
-- still buy
+- still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 46%
+- conviction 49%
 
 ### UMI.BR — intact / hold_tolerate (-0.6%)
 - still buy
@@ -24,12 +27,6 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:08:02.610494+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 73%
-
-### SOLB.BR — weakening / watch_review (+0.0%)
-- research verdict caution
-- conviction 23% below intact floor
-- still buy
-- cheapness family still passes
 
 ### ABI.BR — intact / hold_tolerate (+5.8%)
 - still buy

@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-11T07:07:49.299286+00:00",
+  "generated_at": "2026-10-12T07:29:18.371923+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 13,
+    "closed_total": 14,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 34,
+    "open_with_thesis": 33,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 8,
-        "recovery_rate": 0.875,
-        "sold_underwater_rate": 0.125,
-        "mean_peak_unrealized_pct": 0.0034,
-        "mean_trough_unrealized_pct": -0.0084,
+        "closed_count": 9,
+        "recovery_rate": 0.8889,
+        "sold_underwater_rate": 0.1111,
+        "mean_peak_unrealized_pct": 0.0391,
+        "mean_trough_unrealized_pct": 0.0041,
         "outcome_labels": {
-          "recovered": 7,
+          "recovered": 8,
           "sold_underwater": 1
         }
       },
@@ -64,7 +64,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 13,
+    "hold_closed_with_thesis": 14,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -388,7 +388,7 @@
       "ticker": "MIO.IR",
       "name": "Mincon Group plc",
       "started_at": "2026-09-27T09:04:11.844071+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -431,9 +431,9 @@
       "peak_unrealized_pct": 0.3247,
       "trough_unrealized_pct": 0.1039,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-12T09:29:18.073185+02:00",
+      "linked_sell_trade_id": "07f16cd1-cbc7-437a-a20e-62603ebad44d"
     },
     {
       "episode_id": "buy_tier_level_native:OMV.VI:2026-09-27T09:04:11.844071+02:00",
@@ -2611,7 +2611,15 @@
           "cost": 0.01
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-12T09:29:18.073185+02:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0237,
+          "avg_buy_return": 0.0412,
+          "replacement_delta": 0.0649
+        }
+      ],
       "sell_returns_since_rotation": {
         "AMRZ.SW": -0.0237
       },
@@ -2733,6 +2741,64 @@
         "MC.PA": -0.0218,
         "EL.PA": -0.002,
         "ASSA-B.ST": 0.0256
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level_native:2026-10-12T09:29:18.073185+02:00",
+      "track_id": "buy_tier_level_native",
+      "logged_at": "2026-10-12T09:29:18.073185+02:00",
+      "status": "open",
+      "trade_cost_pct": 0.0003,
+      "sells": [
+        {
+          "ticker": "MIO.IR",
+          "price": 1.02,
+          "shares": 32.456173,
+          "gross": 33.11,
+          "cost": 0.01,
+          "avg_cost_at_exit": 0.77,
+          "realized_pct": 0.3247,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.3247
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "TEL2-B.ST",
+          "price": 157.55,
+          "shares": 0.151853,
+          "gross": 23.92,
+          "cost": 0.01
+        },
+        {
+          "ticker": "OMV.VI",
+          "price": 71.95,
+          "shares": 0.127278,
+          "gross": 9.16,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "MIO.IR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "TEL2-B.ST": 0.0,
+        "OMV.VI": 0.0
       },
       "verdict": null,
       "closed_at": null

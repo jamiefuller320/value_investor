@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-11T07:07:59.785757+00:00
+Track: `buy_tier_level` · updated 2026-10-12T07:29:28.913452+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:59.785757+00:00
 
 ## Holding reviews
 
-### PAF.L — intact / hold_tolerate (-9.9%)
+### PAF.L — intact / hold_tolerate (-11.2%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
@@ -42,7 +42,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:59.785757+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 67%
+- conviction 68%
 
 ### BREE.L — weakening / watch_review (-3.9%)
 - conviction 33% below intact floor
@@ -58,7 +58,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:59.785757+00:00
 
 ### PMI.L — weakening / watch_review (-3.5%)
 - research verdict caution
-- conviction 23% below intact floor
+- conviction 30% below intact floor
 - still buy
 - cheapness family still passes
 

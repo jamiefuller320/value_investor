@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-11T07:07:56.904249+00:00
+Track: `buy_tier_level_native` · updated 2026-10-12T07:29:26.064296+00:00
 
 ## Portfolio loser feedback
 
@@ -15,7 +15,7 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:07:56.904249+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 48%
+- conviction 56%
 
 ### DG.PA — intact / hold_tolerate (-2.1%)
 - still strong_buy
@@ -25,11 +25,11 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:07:56.904249+00:00
 - conviction 75%
 
 ### TTE.PA — intact / hold_tolerate (-1.4%)
-- still strong_buy
+- still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
+- conviction 49%
 
 ### ORA.PA — weakening / watch_review (-1.1%)
 - research verdict caution
@@ -53,21 +53,21 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:07:56.904249+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 67%
+- conviction 75%
 
 ### FGR.PA — intact / hold_tolerate (+0.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 63%
+- conviction 73%
 
 ### PUB.PA — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 55%
+- conviction 62%
 
 ### MC.PA — intact / hold_tolerate (+0.4%)
 - still buy
@@ -81,7 +81,7 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:07:56.904249+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 65%
+- conviction 64%
 
 ### CA.PA — weakening / watch_review (+4.2%)
 - research verdict neutral
