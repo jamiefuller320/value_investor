@@ -7,9 +7,11 @@ existing automation (ingest factory, clash-aware agents, batching).
 
 **Audience:** Cloud agents, engineering queue, ops monitor, humans triaging Analysis.
 
-**Spend alignment:** P1 live-path utilization (FTSE buy-tier filings, FCF basis, overlay
-bind, memo recency) first; P2 offline ingest cascade (focus market sprint) second.
-Everything in this doc is scoped to those priorities unless explicitly deferred.
+**Spend alignment:** P1 Investment-demanded absolute availability (filings, FCF basis,
+overlay bind, memo recency on holdings ∪ active sealed shortlists ∪ F3 repairs;
+serve order in [data-pillar-priorities.md](data-pillar-priorities.md)) first; P2
+offline ingest cascade (focus market sprint) second. Everything in this doc is
+scoped to those priorities unless explicitly deferred.
 
 ## Related runbooks
 
@@ -24,6 +26,7 @@ Everything in this doc is scoped to those priorities unless explicitly deferred.
 | [progress-report.md](progress-report.md) | Role coherence, compile-cap audit signals |
 | [project-traffic.md](project-traffic.md) | Pause/resume when ≥2 stuck PRs; narrow auto-merge |
 | [analysis-review.md](analysis-review.md) | Sunday modelling review (separate from post-run plan) |
+| [data-pillar-priorities.md](data-pillar-priorities.md) | P1 serve order + sealed-strategy launch queue |
 | [market-sharded-learning.md](market-sharded-learning.md) | P2 focus market; do not spray 21-market rememo |
 
 ---
@@ -128,7 +131,8 @@ zero-body catch-up for rememo (after bodies land).
 **Does not require** an engineering PR for each ticker. This lane should run **while**
 Lane B is busy.
 
-**P1 focus:** FTSE buy-tier and names blocking conviction in deep analysis (bodies +
+**P1 focus:** Investment-demanded name sets (holdings ∪ running sealed shortlists
+∪ accepted F3 repairs) and names blocking conviction in deep analysis (bodies +
 structured IR metrics). **P2:** focus market buy-tier per sprint policy.
 
 **Explicitly out of Lane A (unless promoted):** Off-buy-tier memos with zero filing
