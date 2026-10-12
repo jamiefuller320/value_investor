@@ -572,9 +572,7 @@ def build_n201_observe(
 
     # Precompute local EY top sets per snapshot (among rows with EY present).
     row_maps = [_snapshot_rows(s) for s in snapshots]
-    ey_top_by_snap = [
-        _plain_ey_top_share(rm, top_share=cfg.ey_top_share) for rm in row_maps
-    ]
+    ey_top_by_snap = [_plain_ey_top_share(rm, top_share=cfg.ey_top_share) for rm in row_maps]
 
     strategy_returns: list[float] = []
     patient_returns: list[float] = []
@@ -730,13 +728,8 @@ def build_n201_observe(
     elif snapshots:
         weeks = 1
     entries_per_week = round(len(episodes) / weeks, 3) if weeks else None
-    volume_gate_met = (
-        len(episodes) >= cfg.volume_min_episodes and weeks >= cfg.volume_min_weeks
-    )
-    phase_ok = (
-        entries_per_week is not None
-        and entries_per_week >= cfg.phase_entries_per_week_floor
-    )
+    volume_gate_met = len(episodes) >= cfg.volume_min_episodes and weeks >= cfg.volume_min_weeks
+    phase_ok = entries_per_week is not None and entries_per_week >= cfg.phase_entries_per_week_floor
 
     seal_marker = {
         "marker_id": SEAL_MARKER_ID,
@@ -843,9 +836,7 @@ def refresh_n201_value_mom_observe(
     data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
     store = Path(store_path) if store_path is not None else DEFAULT_STORE_PATH
     reg_path = (
-        Path(registration_path)
-        if registration_path is not None
-        else DEFAULT_REGISTRATION_PATH
+        Path(registration_path) if registration_path is not None else DEFAULT_REGISTRATION_PATH
     )
 
     prior_markers: list[dict[str, Any]] = []
@@ -938,13 +929,10 @@ def format_n201_observe_text(payload: dict[str, Any]) -> str:
         f"  {SUCCESS_METRIC_ID}={path.get('smooth_ret_cohort_median')} "
         f"(fair {cost.get('market_id')} RT={cost.get('round_trip_pct')}; "
         f"fixed-stake %; independent of fund NAV)",
-        f"  patient_hold_excess_report_only="
-        f"{path.get('patient_hold_excess_report_only')}",
-        f"  stress_3pct_report_only="
-        f"{path.get('smooth_ret_cohort_median_stress_report_only')}",
+        f"  patient_hold_excess_report_only={path.get('patient_hold_excess_report_only')}",
+        f"  stress_3pct_report_only={path.get('smooth_ret_cohort_median_stress_report_only')}",
         f"  volume_gate_met={volume.get('met')} phase_floor_met={phase.get('floor_met')}",
-        f"  skipped_missing_entry_fields="
-        f"{payload.get('skipped_missing_entry_fields')}",
+        f"  skipped_missing_entry_fields={payload.get('skipped_missing_entry_fields')}",
     ]
     return "\n".join(lines) + "\n"
 

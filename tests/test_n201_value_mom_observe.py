@@ -202,9 +202,10 @@ def test_scoring_independent_of_fund_nav_cfg_stake():
         == b["path_scoreboard"]["smooth_ret_cohort_median"]
     )
     assert a["episodes_sample"][0]["return_pct"] == b["episodes_sample"][0]["return_pct"]
-    assert a["episodes_sample"][0]["pnl_local_report_only"] != b["episodes_sample"][0][
-        "pnl_local_report_only"
-    ]
+    assert (
+        a["episodes_sample"][0]["pnl_local_report_only"]
+        != b["episodes_sample"][0]["pnl_local_report_only"]
+    )
 
 
 def test_skips_missing_entry_fields_soft_gap():
