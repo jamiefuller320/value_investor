@@ -726,6 +726,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://links.sgx.com/1.0.0/corporate-announcements/WKFS34K5F6T83U1G/866254_FLCT%20-%202HFY25%20Condensed%20Interim%20FS.pdf",
         "https://links.sgx.com/1.0.0/corporate-announcements/WKFS34K5F6T83U1G/866255_FLCT%20-%20FY2025%20Press%20Release.pdf",
     ],
+    # sti parked leftover — eng-20261012-01: J36.SI awaiting_periodic_report; asia_filings
+    # only indexed Google News; seed SGX statutory PDFs (jardines.com IR is HTML microsite).
+    "J36.SI": [
+        "https://links.sgx.com/1.0.0/corporate-announcements/NNROSHY4H9NUAP7W/839235_Annual%20Report%202024.pdf",
+        "https://links.sgx.com/1.0.0/corporate-announcements/Q8J0WJFOI16JD3R1/877984_JMH.pdf",
+        "https://links.sgx.com/1.0.0/corporate-announcements/0A4G5Y7TN4CAYJOX/853959_JMH.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -5431,6 +5438,9 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0423/2026042300830.pdf": "annual",
     # eng-20261002-14: BUOU.SI — 2HFY25 slug reads interim but is full-year condensed FS.
     "https://links.sgx.com/1.0.0/corporate-announcements/WKFS34K5F6T83U1G/866254_FLCT%20-%202HFY25%20Condensed%20Interim%20FS.pdf": "annual",
+    # eng-20261012-01: J36.SI — opaque SGX JMH.pdf slugs (half-year vs preliminary full-year).
+    "https://links.sgx.com/1.0.0/corporate-announcements/0A4G5Y7TN4CAYJOX/853959_JMH.pdf": "interim",
+    "https://links.sgx.com/1.0.0/corporate-announcements/Q8J0WJFOI16JD3R1/877984_JMH.pdf": "annual",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
     # eng-20261009-03: JD.L HY27 slug has no half-year token (would classify other).
