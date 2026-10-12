@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-11T07:07:50.826366+00:00
+Track: `buy_tier_level` · updated 2026-10-12T07:29:19.910705+00:00
 
 ## Portfolio loser feedback
 
@@ -17,7 +17,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:50.826366+00:00
 - data_quality 1.00
 - conviction 80%
 
-### SBRE.L — intact / hold_tolerate (+0.6%)
+### SBRE.L — intact / hold_tolerate (+0.5%)
 - still buy
 - research accumulate
 - cheapness family still passes

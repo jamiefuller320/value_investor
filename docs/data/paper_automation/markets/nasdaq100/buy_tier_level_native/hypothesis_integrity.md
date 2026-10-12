@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-11T07:07:55.709050+00:00
+Track: `buy_tier_level_native` · updated 2026-10-12T07:29:25.010653+00:00
 
 ## Portfolio loser feedback
 
@@ -15,8 +15,8 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:07:55.709050+00:00
 - still buy
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 67%
+- data_quality 0.90
+- conviction 68%
 
 ### TMUS — intact / hold_tolerate (-10.1%)
 - price drawdown alone does not invalidate value thesis
@@ -96,7 +96,7 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:07:55.709050+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 90%
+- conviction 91%
 
 ### BKR — intact / hold_tolerate (-1.0%)
 - still strong_buy
@@ -117,7 +117,7 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:07:55.709050+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 58%
+- conviction 59%
 
 ### CSX — intact / hold_tolerate (-0.4%)
 - still buy
@@ -161,12 +161,10 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:07:55.709050+00:00
 - data_quality 0.90
 - conviction 65%
 
-### MAR — intact / hold_tolerate (+1.9%)
-- still buy
+### MAR — weakening / watch_review (+1.9%)
+- left buy tier (hold)
 - research accumulate
 - cheapness family still passes
-- data_quality 0.90
-- conviction 56%
 
 ### AMGN — intact / hold_tolerate (+2.2%)
 - still buy
@@ -201,14 +199,14 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:07:55.709050+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 73%
+- conviction 71%
 
 ### LIN — intact / hold_tolerate (+3.3%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 46%
+- conviction 52%
 
 ### TXN — weakening / watch_review (+4.8%)
 - cheapness family no longer passes
@@ -246,7 +244,7 @@ Track: `buy_tier_level_native` · updated 2026-10-11T07:07:55.709050+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 57%
+- conviction 66%
 
 ### ADSK — intact / hold_tolerate (+11.4%)
 - still buy

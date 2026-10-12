@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
+Track: `buy_tier_level` · updated 2026-10-12T07:29:09.585489+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **55** / 120 (46% count, 44% NAV)
+- Losers: **54** / 120 (45% count, 43% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -50,14 +50,6 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - cheapness family still passes
 - data_quality 1.00
 
-### WYNN — intact / watch_review (-17.9%)
-- deep drawdown (-17.9%) — re-check facts; thesis still intact
-- price drawdown alone does not invalidate value thesis
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.90
-
 ### VZ — intact / watch_review (-16.9%)
 - deep drawdown (-16.9%) — re-check facts; thesis still intact
 - price drawdown alone does not invalidate value thesis
@@ -80,7 +72,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 82%
+- conviction 83%
 
 ### FSLR — intact / hold_tolerate (-13.0%)
 - price drawdown alone does not invalidate value thesis
@@ -162,7 +154,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 89%
+- conviction 90%
 
 ### JKHY — intact / hold_tolerate (-9.9%)
 - price drawdown alone does not invalidate value thesis
@@ -178,7 +170,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 73%
+- conviction 72%
 
 ### DPZ — intact / hold_tolerate (-9.3%)
 - price drawdown alone does not invalidate value thesis
@@ -226,7 +218,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 72%
+- conviction 69%
 
 ### MCD — intact / hold_tolerate (-8.0%)
 - price drawdown alone does not invalidate value thesis
@@ -234,7 +226,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 53%
+- conviction 52%
 
 ### GD — intact / hold_tolerate (-7.8%)
 - price drawdown alone does not invalidate value thesis
@@ -250,7 +242,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 74%
+- conviction 75%
 
 ### AMCR — intact / hold_tolerate (-7.6%)
 - price drawdown alone does not invalidate value thesis
@@ -282,7 +274,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 73%
+- conviction 72%
 
 ### OTIS — intact / hold_tolerate (-7.4%)
 - price drawdown alone does not invalidate value thesis
@@ -306,7 +298,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
+- conviction 69%
 
 ### AOS — intact / hold_tolerate (-6.8%)
 - price drawdown alone does not invalidate value thesis
@@ -330,7 +322,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 63%
+- conviction 62%
 
 ### HIG — intact / hold_tolerate (-6.7%)
 - price drawdown alone does not invalidate value thesis
@@ -346,7 +338,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 63%
+- conviction 64%
 
 ### TGT — intact / hold_tolerate (-6.6%)
 - price drawdown alone does not invalidate value thesis
@@ -362,7 +354,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 72%
+- conviction 71%
 
 ### TXT — intact / hold_tolerate (-6.2%)
 - price drawdown alone does not invalidate value thesis
@@ -418,7 +410,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 76%
+- conviction 75%
 
 ### LHX — intact / hold_tolerate (-5.5%)
 - price drawdown alone does not invalidate value thesis
@@ -474,7 +466,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 67%
+- conviction 66%
 
 ### STZ — intact / hold_tolerate (-4.3%)
 - still strong_buy
@@ -502,7 +494,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 72%
+- conviction 73%
 
 ### ALLE — intact / hold_tolerate (-4.2%)
 - still buy
@@ -530,7 +522,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 65%
+- conviction 64%
 
 ### CAH — intact / hold_tolerate (-3.9%)
 - still buy
@@ -551,14 +543,14 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 62%
+- conviction 61%
 
 ### BBY — intact / hold_tolerate (-3.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 81%
+- conviction 82%
 
 ### PCAR — weakening / watch_review (-3.6%)
 - research verdict neutral
@@ -577,14 +569,14 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 79%
+- conviction 80%
 
 ### XYL — intact / hold_tolerate (-2.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 76%
+- conviction 77%
 
 ### GRMN — intact / hold_tolerate (-2.8%)
 - still buy
@@ -618,8 +610,8 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - still strong_buy
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 79%
+- data_quality 0.90
+- conviction 85%
 
 ### BF-B — intact / hold_tolerate (-1.3%)
 - still buy
@@ -682,14 +674,14 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 60%
+- conviction 59%
 
 ### CI — intact / hold_tolerate (-0.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 92%
+- conviction 93%
 
 ### FICO — intact / hold_tolerate (+0.0%)
 - still buy
@@ -697,6 +689,20 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 52%
+
+### INVH — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 58%
+
+### EXR — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 54%
 
 ### INCY — intact / hold_tolerate (+0.0%)
 - still buy
@@ -710,14 +716,14 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 60%
+- conviction 61%
 
 ### FTV — intact / hold_tolerate (+0.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 58%
+- conviction 57%
 
 ### RTX — weakening / watch_review (+0.7%)
 - cheapness family no longer passes
@@ -805,7 +811,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 61%
+- conviction 60%
 
 ### LDOS — intact / hold_tolerate (+3.4%)
 - still strong_buy
@@ -852,7 +858,7 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 85%
+- conviction 84%
 
 ### VRSN — weakening / watch_review (+8.5%)
 - cheapness family no longer passes
@@ -872,8 +878,3 @@ Track: `buy_tier_level` · updated 2026-10-11T07:07:40.636433+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 91%
-
-### HPE — weakening / watch_review (+41.3%)
-- cheapness family no longer passes
-- still buy
-- research accumulate
