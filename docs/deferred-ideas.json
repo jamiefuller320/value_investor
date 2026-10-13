@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-13T13:07:00+00:00",
+  "updated_at": "2026-10-13T14:37:48+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -14140,6 +14140,42 @@
       "status": "open",
       "source": "independent-model-testing O2 dialogue",
       "added_at": "2026-10-13T06:47:10+00:00"
+    },
+    {
+      "id": "L604",
+      "category": "later",
+      "section": "learning",
+      "title": "Joint DCA+tech observe twin after alone gates",
+      "summary": "Entry-DCA cadence (sizing/fill) and N200-style tech timing are orthogonal levers. After each alone clears its observe gates (DCA OOS/cadence agreement; N200 path-absolute at fair costs), open one observe-only joint twin/overlay that scores winning cadence on top of a frozen timing product \u2014 never mid-flight stack on live strand A (F4).",
+      "revisit_when": "entry_dca out_of_sample_first_entry ready (fair twins agree on target cadence) AND N200 path-absolute stage (L597) reviewed with thick volume; owner locks a joint observe LQ",
+      "tags": [
+        "dca",
+        "technical",
+        "n200",
+        "observe",
+        "twin",
+        "complementarity",
+        "f4"
+      ],
+      "status": "open",
+      "source": "owner question: DCA and technical complementarity",
+      "added_at": "2026-10-13T14:37:48+00:00",
+      "trigger": {
+        "all": [
+          {
+            "file": "docs/data/entry_dca_adoption_plan.json",
+            "path": "stages[id=out_of_sample_first_entry].ready",
+            "op": "==",
+            "value": true
+          },
+          {
+            "file": "docs/data/n200_tech_timing_observe.json",
+            "path": "volume_gate.met",
+            "op": "==",
+            "value": true
+          }
+        ]
+      }
     }
   ],
   "fragments": [

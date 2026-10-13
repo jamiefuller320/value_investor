@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-13T13:07:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-13T14:37:48+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -344,6 +344,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L601 | **N201 FX conversion twin after native no-FX observe** | If N201 seals as market-native (ignore FX) across all admitted+live markets, add a later cold-start twin that marks/costs with FX conversion legs to test whether cross-market NAV in one currency changes the short-horizon value+momentum verdict. Do not rewrite the native book mid-flight. | N201 observe unit is sealed, volume gate met, and fair-cost native verdict is stable enough to justify a second registration_id for FX-aware marking. |
 | L602 | **N201 failure-mode twin ladder after broad selective seal** | After a sealed N201 broad-scan / quality-gated observe book accumulates enough poor-outcome episodes, pin one failure mode at a time (e.g. value traps, momentum crashes, thin-data names) into a new registration_id twin that excludes or down-weights that mode. Compare fair-cost smoothed return vs the parent seal; do not edit the parent mid-flight. | N201 v0 observe unit has met its volume gate and a concrete failure-mode cluster is evidenced in episode diagnostics with a one-sentence learning question ready to freeze. |
 | L603 | **Short-term technical observe strand (MA / tramlines / OB-OS)** | Park a classic technical timing family (moving averages, tramlines / overbought-oversold triggers) as a later observe strand: orthogonal timing thesis, new registration_id when sealed, not a remix of A; distinct from menu F (value-identity + mean-reversion entry). Not competing with O2 D/E/F head. | After N200+N201 path-absolute evidence and next O2 seal (D/E/F/none) decided; capacity for another observe registration |
+| L604 | **Joint DCA+tech observe twin after alone gates** | Entry-DCA cadence (sizing/fill) and N200-style tech timing are orthogonal levers. After each alone clears its observe gates (DCA OOS/cadence agreement; N200 path-absolute at fair costs), open one observe-only joint twin/overlay that scores winning cadence on top of a frozen timing product — never mid-flight stack on live strand A (F4). | entry_dca out_of_sample_first_entry ready (fair twins agree on target cadence) AND N200 path-absolute stage (L597) reviewed with thick volume; owner locks a joint observe LQ _(machine-checked)_ |
 
 ### Universe & data
 
