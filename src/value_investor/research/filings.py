@@ -733,6 +733,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://links.sgx.com/1.0.0/corporate-announcements/Q8J0WJFOI16JD3R1/877984_JMH.pdf",
         "https://links.sgx.com/1.0.0/corporate-announcements/0A4G5Y7TN4CAYJOX/853959_JMH.pdf",
     ],
+    # sti parked leftover — eng-20261013-01: BS6.SI awaiting_periodic_report; asia_filings
+    # only indexed Google News; seed SGX statutory PDFs (yzjship.com / listedcompany WAF-gated).
+    "BS6.SI": [
+        "https://links.sgx.com/1.0.0/corporate-announcements/THA0PLPKRMMPMCGD/839389_YZJ%20-%20Annual%20Report%20FY2024.pdf",
+        "https://links.sgx.com/1.0.0/corporate-announcements/EXEMPATSYSZ0D0JI/882837_YZJ%20Shipbuilding%20-%20Annual%20Report%20FY2025.pdf",
+        "https://links.sgx.com/1.0.0/corporate-announcements/BVOFJZ13W8GQU8N6/854456_YZJSH_1H2025_results%20announcement_Final.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -930,6 +937,12 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     # sti J36.SI SGX allowlist — opaque 877984_JMH.pdf / 853959_JMH.pdf slugs need issuer
     # tokens for _ir_body_title_tokens_match (same pattern as FMG.AX / YAL.AX).
     "J36": ("Jardine Matheson", "Jardine Matheson Holdings"),
+    # sti BS6.SI SGX allowlist — %20-encoded slugs yield 20annual/20shipbuilding tokens.
+    "BS6": (
+        "Yangzijiang Shipbuilding",
+        "Yangzijiang Shipbuilding (Holdings)",
+        "YZJ Shipbuilding",
+    ),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
     "HM-B": (
@@ -5444,6 +5457,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     # eng-20261012-01: J36.SI — opaque SGX JMH.pdf slugs (half-year vs preliminary full-year).
     "https://links.sgx.com/1.0.0/corporate-announcements/0A4G5Y7TN4CAYJOX/853959_JMH.pdf": "interim",
     "https://links.sgx.com/1.0.0/corporate-announcements/Q8J0WJFOI16JD3R1/877984_JMH.pdf": "annual",
+    # eng-20261013-01: BS6.SI — 1H2025 slug has no half-year token (would classify other).
+    "https://links.sgx.com/1.0.0/corporate-announcements/BVOFJZ13W8GQU8N6/854456_YZJSH_1H2025_results%20announcement_Final.pdf": "interim",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
     # eng-20261009-03: JD.L HY27 slug has no half-year token (would classify other).
