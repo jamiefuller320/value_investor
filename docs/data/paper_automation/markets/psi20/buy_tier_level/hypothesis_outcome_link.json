@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-12T07:29:36.102820+00:00",
+  "generated_at": "2026-10-13T08:46:53.317324+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -20,7 +20,14 @@
         "closed_count": 0
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0361,
+        "mean_trough_unrealized_pct": 0.0228,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -172,7 +180,7 @@
       "ticker": "GALP.LS",
       "name": "Galp Energia, SGPS, S.A.",
       "started_at": "2026-10-09T08:32:52.614182+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -204,9 +212,9 @@
       "peak_unrealized_pct": 0.0361,
       "trough_unrealized_pct": 0.0228,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-13T09:46:53.275496+01:00",
+      "linked_sell_trade_id": "81fd9a4f-43c0-4ee9-bac5-5477792b9d47"
     }
   ],
   "swap_rotations": [
@@ -267,6 +275,64 @@
       },
       "buy_returns_since_rotation": {
         "NVG.LS": -0.0328
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-13T09:46:53.275496+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-13T09:46:53.275496+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "GALP.LS",
+          "price": 22.4,
+          "shares": 14.510925,
+          "gross": 325.04,
+          "cost": 0.57,
+          "avg_cost_at_exit": 21.9,
+          "realized_pct": 0.0228,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0228
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "COR.LS",
+          "price": 6.66,
+          "shares": 23.375974,
+          "gross": 155.68,
+          "cost": 0.27
+        },
+        {
+          "ticker": "NVG.LS",
+          "price": 3.066,
+          "shares": 54.867926,
+          "gross": 168.23,
+          "cost": 0.29
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "GALP.LS": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "COR.LS": 0.0,
+        "NVG.LS": 0.0
       },
       "verdict": null,
       "closed_at": null

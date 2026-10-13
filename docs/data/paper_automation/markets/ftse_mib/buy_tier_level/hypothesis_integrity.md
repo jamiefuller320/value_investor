@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-12T07:29:30.562202+00:00
+Track: `buy_tier_level` · updated 2026-10-13T08:46:49.135691+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,10 @@ Track: `buy_tier_level` · updated 2026-10-12T07:29:30.562202+00:00
 
 ## Holding reviews
 
-### BZU.MI — intact / hold_tolerate (-2.1%)
+### LTMC.MI — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
+
+### BZU.MI — intact / hold_tolerate (-1.7%)
 - still buy
 - research accumulate
 - cheapness family still passes
@@ -23,13 +26,6 @@ Track: `buy_tier_level` · updated 2026-10-12T07:29:30.562202+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 71%
-
-### LTMC.MI — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 42%
 
 ### ENI.MI — intact / hold_tolerate (+4.5%)
 - still buy
