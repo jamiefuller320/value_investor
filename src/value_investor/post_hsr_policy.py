@@ -122,6 +122,16 @@ def _hsr_holdout_verdict(
     return _verdict_from_results(store.get("results"))
 
 
+def _spent_or_active(store: dict[str, Any], spent_id: str) -> dict[str, Any]:
+    """Prefer a labelled spent epoch block so later registrations cannot reattribute it."""
+    spent = store.get("spent_epochs")
+    if isinstance(spent, dict):
+        block = spent.get(spent_id)
+        if isinstance(block, dict):
+            return block
+    return store
+
+
 def _hrs_evidence(store: dict[str, Any] | None) -> dict[str, Any]:
     out: dict[str, Any] = {
         "chosen_config_id": None,
@@ -130,10 +140,11 @@ def _hrs_evidence(store: dict[str, Any] | None) -> dict[str, Any]:
     }
     if not store:
         return out
-    search = store.get("search") if isinstance(store.get("search"), dict) else {}
+    src = _spent_or_active(store, "hrs-v1")
+    search = src.get("search") if isinstance(src.get("search"), dict) else {}
     selection = search.get("selection") if isinstance(search.get("selection"), dict) else {}
     out["chosen_config_id"] = selection.get("config_id")
-    holdout = store.get("holdout") if isinstance(store.get("holdout"), dict) else {}
+    holdout = src.get("holdout") if isinstance(src.get("holdout"), dict) else {}
     chosen = holdout.get("chosen") if isinstance(holdout.get("chosen"), dict) else {}
     base = chosen.get("base") if isinstance(chosen.get("base"), dict) else {}
     out["chosen_verdict_vs_plain_value"] = base.get("verdict_vs_plain_value")
@@ -151,9 +162,10 @@ def _hms_evidence(store: dict[str, Any] | None) -> dict[str, Any]:
     out: dict[str, Any] = {"decision": None, "kept": []}
     if not store:
         return out
-    holdout = store.get("holdout") if isinstance(store.get("holdout"), dict) else {}
+    src = _spent_or_active(store, "hms-v1")
+    holdout = src.get("holdout") if isinstance(src.get("holdout"), dict) else {}
     out["decision"] = holdout.get("decision")
-    search = store.get("search") if isinstance(store.get("search"), dict) else {}
+    search = src.get("search") if isinstance(src.get("search"), dict) else {}
     selection = search.get("selection") if isinstance(search.get("selection"), dict) else {}
     kept = selection.get("kept")
     if isinstance(kept, list):

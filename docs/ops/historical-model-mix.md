@@ -1,4 +1,8 @@
-# Historical model-mix search (pre-registered, hms-v1)
+# Historical model-mix search (pre-registered, hms-v2)
+
+Spent **hms-v1** (pre-L571 screen fingerprint) is archived under
+`docs/data/historical_model_mix_registration_hms-v1.json` and store
+`spent_epochs.hms-v1`. Active registration id: **hms-v2**.
 
 A pre-registered test of **which screening models to combine**, run on the
 same licensed builds as the [historical screen replay](historical-screen-replay.md)
@@ -33,7 +37,7 @@ proposal for a cold-start twin.
 
 | Group | Candidates | Score |
 |---|---|---|
-| Screen models | All 22 in `models.ALL_MODELS` (Graham, Schloss, deep value, earnings and FCF yield, PEG, quality and moat, dividend, Magic Formula, Acquirer's Multiple, Dreman, Piotroski, composite value, earnings quality, financial health) | Each model's own 0–1 score from the `dividend_units_fixed` signal cache on the spent hsr-v1 panel (pre-L571 probe). Live scoring after **hsr-v2** normalises yield at load; hms-v1 remains a spent registration on the pre-fix fingerprint |
+| Screen models | All 22 in `models.ALL_MODELS` (Graham, Schloss, deep value, earnings and FCF yield, PEG, quality and moat, dividend, Magic Formula, Acquirer's Multiple, Dreman, Piotroski, composite value, earnings quality, financial health) | Each model's own 0–1 score from the `dividend_units_fixed` signal cache on the spent hsr-v1 panel (pre-L571 probe). Live scoring after **hsr-v2** normalises yield at load; spent **hms-v1** holdout stays labelled under `spent_epochs`; **hms-v2** matches the new screen fingerprint |
 | Gross profitability | (gross margin × revenue) / total assets | Novy-Marx (2013); higher is better |
 | Accruals | (net income − operating cash flow) / total assets | Sloan (1996); lower is better |
 | Net share issuance | shares / shares a year earlier − 1 | Pontiff–Woodgate (2008); lower is better |
