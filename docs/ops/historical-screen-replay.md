@@ -4,10 +4,13 @@ Point-in-time replay of the frozen value screen on 25 years of US data.
 Closes L536 and L542; supersedes L565. Observe-only: never changes signals,
 books, or knobs.
 
-- Registration (frozen): `docs/data/historical_screen_replay_registration.json`
-- Mid-cap sibling (hsr-mid-v1): `docs/data/historical_screen_replay_midcap_registration.json`,
+- Registration (active epoch **hsr-v2**): `docs/data/historical_screen_replay_registration.json`
+  (spent **hsr-v1** archive: `docs/data/historical_screen_replay_registration_hsr-v1.json`)
+- Mid-cap sibling (**hsr-mid-v2**): `docs/data/historical_screen_replay_midcap_registration.json`,
   results in `docs/data/historical_screen_replay_midcap.json`
+  (spent **hsr-mid-v1** archive: `…_hsr-mid-v1.json`)
 - Status and results (aggregates only): `docs/data/historical_screen_replay.json`
+  (`spent_epochs.hsr-v1` keeps the revealed holdout; do not reattribute it to hsr-v2)
 - Code: `src/value_investor/historical_screen_replay.py` (`ftse-historical-replay`)
 
 ## Why
@@ -51,7 +54,7 @@ universe and `value_lagged` otherwise.
 | Universe | S&P 500 members on each date, active and delisted (Sharadar `sp500`) |
 | Fundamentals | Sharadar `fundamentals`, dimension `ART` (as reported, trailing twelve months), latest row filed at least 2 days before the date. As-reported, so later restatements cannot leak. Filings over 456 days old and non-USD reporters are dropped and counted |
 | Prices | `closeadj` (splits, dividends, spinoffs) for total return. Market cap is the filing-date `marketcap` rolled forward by the split-adjusted close |
-| Metric units | Yahoo conventions, as the live screen receives them: dividend yield and debt/equity in percent; margins, returns, and growth as fractions. Growth is quarterly year-on-year (`ARQ`); `*_prev` fields come from the `ART` row a year earlier |
+| Metric units | Yahoo conventions after library load (**hsr-v2** / L571): `dividend_yield` as a fraction (Yahoo percent normalised at fetch/load; Sharadar `divyield` stays a fraction); debt/equity in percent; margins, returns, and growth as fractions. Growth is quarterly year-on-year (`ARQ`); `*_prev` fields come from the `ART` row a year earlier. Spent **hsr-v1** fed percent yields into the models as the live screen then did. |
 | Rebalance | Last trading day of each month |
 | Development window | Entries 2000-01 to 2012-12 |
 | Holdout window | Entries 2013-01 to 2025-09, sealed until revealed once |
@@ -84,6 +87,8 @@ revealed opens a new `registration_id`, and its results are exploratory.
 catalog: [post-hsr-freeze-extras.md](post-hsr-freeze-extras.md) (store
 `docs/data/post_hsr_policy.json`; daily `check_post_hsr_policy`). Strand A
 (current stack) stays; orthogonal peer strands are named but not registered.
+Those spent verdicts live under `spent_epochs` after the **hsr-v2** dividend-units
+epoch (L571); freeze policy still reads the v1 marks, never the empty v2 slot.
 
 The market spread and its `value_regime` split are read beside the verdict,
 never instead of it. A negative market spread in `value_lagged` cohorts with a
@@ -122,13 +127,21 @@ month. Beyond the verdicts, each run commits:
   returns ([historical-model-mix.md](historical-model-mix.md)). The replay
   itself still never tunes the screen.
 
-### Exploratory: dividend units (L571)
+### Dividend units epoch (L571 → hsr-v2)
 
-`--variant dividend_units_fixed` re-screens with dividend yield as a fraction,
-which is what the L571 fix will do at load. It has its own signal cache, opens
-the holdout only after the baseline reveal, is marked `exploratory`, and is
-never evidence. It shows whether the fix changes the result before the fix is
-made live as a new epoch.
+Live Yahoo rows carried `dividend_yield` in percent while Dividend /
+LowPEHighYield / Neff PEGY floors treated it as a fraction, so floors always
+passed and PEGY was ~100× inflated on yield. Trusts already normalised.
+
+**hsr-v2** (and **hsr-mid-v2**) normalise at fetch and library load
+(`normalize_yield` / `normalize_metrics_dividend_yield`). That changes the
+screen fingerprint, so the spent hsr-v1 holdout stays labelled under
+`spent_epochs` and is not evidence for the new epoch. A licensed re-run of
+hsr-v2 would be exploratory.
+
+`--variant dividend_units_fixed` was the pre-fix probe on hsr-v1 (panel
+`/100`). Under hsr-v2 it is an identity kept for CLI/store key stability and
+is never evidence.
 
 ## Mid-cap sibling (hsr-mid-v1)
 
@@ -158,10 +171,9 @@ The rule search (hrs-v1) stays on the S&P 500. Use `--universe midcap` with
   out. It stays forward-tested only (N39).
 - The universe comparator is costless, so the market context spread is
   conservative. The plain sort pays costs like the buy tier.
-- The replay reproduces the live screen, quirks included. Live rows carry
-  dividend yield in percent while the dividend models' floors (0.02–0.04) read
-  as fractions, so those floors pass almost any payer. The replay feeds percent
-  too, so it tests the screen as it actually runs (see the deferred store).
+- Spent **hsr-v1** reproduced the live screen quirks of that epoch (percent
+  yields into fraction floors). **hsr-v2** matches the fixed load path
+  (fraction yields). Do not mix the two when reading verdicts.
 - Sector is today's classification from the `tickers` table, not the sector on
   each date (Sharadar keeps no sector history). Sector-relative ranks therefore
   carry a little look-ahead, mostly around the 2018 GICS move of media and

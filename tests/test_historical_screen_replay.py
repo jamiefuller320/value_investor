@@ -167,9 +167,8 @@ def test_signal_cache_reused_until_panel_changes(tmp_path: Path, monkeypatch):
     hsr.cached_replay_signals(
         panel, market_id="sp500", cache_path=fixed_cache, transform="dividend_units_fixed"
     )
-    assert seen[0]["dividend_yield"].tolist() == pytest.approx(
-        (panel["dividend_yield"] / 100.0).tolist()
-    )
+    # hsr-v2: load-path normalisation superseded the /100 transform; variant is identity.
+    assert seen[0]["dividend_yield"].tolist() == pytest.approx(panel["dividend_yield"].tolist())
     hsr.cached_replay_signals(changed, market_id="sp500", cache_path=cache)
     assert len(seen) == 1  # the baseline cache is untouched by the variant
 
@@ -445,7 +444,7 @@ def test_ops_monitor_check_writes_store_without_parity_finding(tmp_path: Path):
     payload = json.loads(store.read_text())
     assert payload["parity"]["status"] == "ok"
     assert payload["results"] is None
-    assert payload["rule_search"]["registration_id"] == "hrs-v1"
+    assert payload["rule_search"]["registration_id"] == "hrs-v2"
     assert payload["rule_search"]["selection"] is None
 
 
@@ -527,7 +526,7 @@ def test_midcap_sibling_status_findings_and_deletion(tmp_path: Path):
         )
     )
     block = hsr.midcap_status_block(reg_path, store_path)
-    assert block["registration_id"] == "hsr-mid-v1"
+    assert block["registration_id"] == "hsr-mid-v2"
     assert block["matches_screen_code"] is False and block["has_results"] is False
     (finding,) = hsr.findings_from_store({"midcap": block})
     assert finding["title"] == hsr.MIDCAP_STALE_REGISTRATION_TITLE
@@ -550,14 +549,18 @@ def test_midcap_sibling_status_findings_and_deletion(tmp_path: Path):
     assert json.loads(main.read_text())["licensed_data"]["deleted_at"]
 
 
-def test_committed_midcap_registration_mirrors_hsr_v1():
+def test_committed_midcap_registration_mirrors_hsr_v2():
     mid = hsr.load_registration(hsr.MIDCAP_REGISTRATION_PATH)
     base = hsr.load_registration()
-    assert mid["registration_id"] == "hsr-mid-v1"
+    assert mid["registration_id"] == "hsr-mid-v2"
+    assert base["registration_id"] == "hsr-v2"
     assert mid["screen_code_fingerprint"] == hsr.screen_code_fingerprint()
+    assert mid["screen_code_fingerprint"] == base["screen_code_fingerprint"]
     for key in ("windows", "horizons_days", "primary", "comparators", "rebalance", "delisting"):
         assert mid[key] == base[key]
     assert mid["universe_rule"] == {**mid["universe_rule"], "kind": "us_cap_rank"}
     assert (mid["universe_rule"]["rank_from"], mid["universe_rule"]["rank_to"]) == (501, 1000)
     assert mid["costs"]["base_per_side"] > base["costs"]["base_per_side"]
+    assert "hsr-mid-v1" in mid["supersedes"]
+    assert "hsr-v1" in base["supersedes"]
     assert hsr.universe_paths("midcap") == (hsr.MIDCAP_REGISTRATION_PATH, hsr.MIDCAP_STORE_PATH)

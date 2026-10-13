@@ -88,10 +88,7 @@ def _load_json(path: Path) -> dict[str, Any] | None:
     return raw if isinstance(raw, dict) else None
 
 
-def _hsr_holdout_verdict(store: dict[str, Any] | None) -> str | None:
-    if not store:
-        return None
-    results = store.get("results")
+def _verdict_from_results(results: Any) -> str | None:
     if not isinstance(results, dict):
         return None
     horizons = results.get("horizons")
@@ -104,6 +101,37 @@ def _hsr_holdout_verdict(store: dict[str, Any] | None) -> str | None:
     return str(verdict) if verdict is not None else None
 
 
+def _hsr_holdout_verdict(
+    store: dict[str, Any] | None, *, spent_id: str | None = None
+) -> str | None:
+    """Holdout verdict for freeze policy.
+
+    Prefer a labelled spent epoch (hsr-v1 / hsr-mid-v1) so a later screen epoch
+    (e.g. hsr-v2 / L571 dividend units) cannot silently reattribute those marks.
+    """
+    if not store:
+        return None
+    if spent_id:
+        spent = store.get("spent_epochs")
+        if isinstance(spent, dict):
+            block = spent.get(spent_id)
+            if isinstance(block, dict):
+                verdict = _verdict_from_results(block.get("results"))
+                if verdict is not None:
+                    return verdict
+    return _verdict_from_results(store.get("results"))
+
+
+def _spent_or_active(store: dict[str, Any], spent_id: str) -> dict[str, Any]:
+    """Prefer a labelled spent epoch block so later registrations cannot reattribute it."""
+    spent = store.get("spent_epochs")
+    if isinstance(spent, dict):
+        block = spent.get(spent_id)
+        if isinstance(block, dict):
+            return block
+    return store
+
+
 def _hrs_evidence(store: dict[str, Any] | None) -> dict[str, Any]:
     out: dict[str, Any] = {
         "chosen_config_id": None,
@@ -112,10 +140,11 @@ def _hrs_evidence(store: dict[str, Any] | None) -> dict[str, Any]:
     }
     if not store:
         return out
-    search = store.get("search") if isinstance(store.get("search"), dict) else {}
+    src = _spent_or_active(store, "hrs-v1")
+    search = src.get("search") if isinstance(src.get("search"), dict) else {}
     selection = search.get("selection") if isinstance(search.get("selection"), dict) else {}
     out["chosen_config_id"] = selection.get("config_id")
-    holdout = store.get("holdout") if isinstance(store.get("holdout"), dict) else {}
+    holdout = src.get("holdout") if isinstance(src.get("holdout"), dict) else {}
     chosen = holdout.get("chosen") if isinstance(holdout.get("chosen"), dict) else {}
     base = chosen.get("base") if isinstance(chosen.get("base"), dict) else {}
     out["chosen_verdict_vs_plain_value"] = base.get("verdict_vs_plain_value")
@@ -133,9 +162,10 @@ def _hms_evidence(store: dict[str, Any] | None) -> dict[str, Any]:
     out: dict[str, Any] = {"decision": None, "kept": []}
     if not store:
         return out
-    holdout = store.get("holdout") if isinstance(store.get("holdout"), dict) else {}
+    src = _spent_or_active(store, "hms-v1")
+    holdout = src.get("holdout") if isinstance(src.get("holdout"), dict) else {}
     out["decision"] = holdout.get("decision")
-    search = store.get("search") if isinstance(store.get("search"), dict) else {}
+    search = src.get("search") if isinstance(src.get("search"), dict) else {}
     selection = search.get("selection") if isinstance(search.get("selection"), dict) else {}
     kept = selection.get("kept")
     if isinstance(kept, list):
@@ -173,8 +203,8 @@ def build_post_hsr_policy(
     hrs = _load_json(root / HRS_STORE)
     hms = _load_json(root / HMS_STORE)
 
-    hsr_verdict = _hsr_holdout_verdict(hsr)
-    mid_verdict = _hsr_holdout_verdict(mid)
+    hsr_verdict = _hsr_holdout_verdict(hsr, spent_id="hsr-v1")
+    mid_verdict = _hsr_holdout_verdict(mid, spent_id="hsr-mid-v1")
     hrs_ev = _hrs_evidence(hrs)
     hms_ev = _hms_evidence(hms)
     freeze = holdouts_justify_freeze(
@@ -183,6 +213,19 @@ def build_post_hsr_policy(
         hrs_verdict=str(hrs_ev.get("chosen_verdict_vs_plain_value") or "") or None,
         hms_decision=str(hms_ev.get("decision") or "") or None,
     )
+
+    def _spent_reg_id(store: dict[str, Any] | None, spent_id: str) -> str | None:
+        if not store:
+            return None
+        spent = store.get("spent_epochs")
+        if isinstance(spent, dict):
+            block = spent.get(spent_id)
+            if isinstance(block, dict) and block.get("registration_id"):
+                return str(block["registration_id"])
+            if isinstance(block, dict):
+                return spent_id
+        rid = store.get("registration_id")
+        return str(rid) if rid is not None else None
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -200,7 +243,7 @@ def build_post_hsr_policy(
             else "Holdout evidence does not currently justify freeze_extras."
         ),
         "evidence": {
-            "hsr_v1_registration_id": (hsr or {}).get("registration_id"),
+            "hsr_v1_registration_id": _spent_reg_id(hsr, "hsr-v1"),
             "hsr_v1_holdout_verdict": hsr_verdict,
             "hsr_mid_v1_holdout_verdict": mid_verdict,
             "hrs_v1_chosen_config_id": hrs_ev.get("chosen_config_id"),

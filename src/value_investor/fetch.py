@@ -383,7 +383,10 @@ def fetch_company_metrics(
             metrics.trailing_pe = _safe_float(info.get("trailingPE"))
             metrics.forward_pe = _safe_float(info.get("forwardPE"))
             metrics.price_to_book = _safe_float(info.get("priceToBook"))
-            metrics.dividend_yield = _safe_float(info.get("dividendYield"))
+            from value_investor.trust_metrics import normalize_yield
+
+            # L571 / hsr-v2: Yahoo often returns percent (2.5 = 2.5%); models use fractions.
+            metrics.dividend_yield = normalize_yield(_safe_float(info.get("dividendYield")))
             metrics.current_ratio = _safe_float(info.get("currentRatio"))
             metrics.debt_to_equity = _safe_float(info.get("debtToEquity"))
             metrics.return_on_equity = _safe_float(info.get("returnOnEquity"))

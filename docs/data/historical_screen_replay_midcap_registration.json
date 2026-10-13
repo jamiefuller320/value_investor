@@ -1,11 +1,13 @@
 {
-  "registration_id": "hsr-mid-v1",
-  "registered_at": "2026-10-08T08:06:40.890553+00:00",
+  "registration_id": "hsr-mid-v2",
+  "registered_at": "2026-10-13T12:59:43.482443+00:00",
   "status": "registered_holdout_sealed",
   "learning_question": "In US mid caps (point-in-time market-cap ranks 501-1000 among domestic common stocks, the closest US analogue to the FTSE 250 that makes up two thirds of the live FTSE 350), does the frozen screen's buy tier beat a plain top-30% earnings-yield sort of the same names after costs on both? Does the answer agree with hsr-v1 on the S&P 500?",
   "closes": [],
-  "supersedes": [],
-  "screen_code_fingerprint": "5442bfcc1933ec862db97332417fe2498e5806cef2604ab9c4b2a5b88f14063d",
+  "supersedes": [
+    "hsr-mid-v1"
+  ],
+  "screen_code_fingerprint": "7a8397337b38df1f4495daad9f575606e89c00ddae07871efba03d9ed14d4ffb",
   "screen_code_paths": [
     "src/value_investor/models/",
     "src/value_investor/scoring/__init__.py",
@@ -23,7 +25,7 @@
     "vendor": "Sharadar personal-use licence (sharadar.com), Core US Equities Bundle, full history",
     "fundamentals": "fundamentals table, dimension ART (as-reported trailing twelve months), latest row with filing date (datekey, or date in newer exports) at least 2 days before the rebalance date. Rows filed more than 456 days before the rebalance, and non-USD reporters, are dropped and counted.",
     "prices": "stocks table closeadj (split, dividend and spinoff adjusted) for total return. Market cap is the filing-date marketcap rolled to the rebalance by the split-adjusted close ratio, so splits between filing and rebalance cancel.",
-    "metric_mapping": "Yahoo conventions as the live library screen receives them: dividend_yield and debt_to_equity in percent (2.5 = 2.5%), margins, returns and growth as fractions. revenue_growth and earnings_growth are quarterly year-on-year from ARQ (Yahoo's definition), falling back to ART year-on-year. *_prev fields come from the ART row one year earlier. Implemented in src/value_investor/sharadar_replay_adapter.py.",
+    "metric_mapping": "Yahoo conventions as the live library screen receives them: dividend_yield as a fraction after library load (L571 / hsr-v2; Yahoo percent is normalised; Sharadar divyield stays a fraction); debt_to_equity in percent (2.5 = 2.5%), margins, returns and growth as fractions. revenue_growth and earnings_growth are quarterly year-on-year from ARQ (Yahoo's definition), falling back to ART year-on-year. *_prev fields come from the ART row one year earlier. Implemented in src/value_investor/sharadar_replay_adapter.py.",
     "sector": "tickers table sector",
     "delistings": "tickers isdelisted = Y. Merger exits for the sensitivity variant: actions acquisitionby or mergerto (ticker) and mergerfrom or acquisitionof (contraticker).",
     "licence_handling": "Raw tables stay outside the repository and are deleted within 30 days of cancelling. Only cohort-level aggregates are committed.",
@@ -87,7 +89,14 @@
     "neither": "Follow the hsr-v1 decision; mid caps do not rescue the screen.",
     "market_context": "As hsr-v1: the market spread and its value_regime split are read beside the verdict, never instead of it."
   },
-  "amendments": [],
+  "amendments": [
+    {
+      "at": "2026-10-13",
+      "before_data": false,
+      "change": "Open hsr-mid-v2 after hsr-mid-v1 holdout reveal: normalise Yahoo-style dividend_yield percent\u2192fraction at fetch/library load (L571). Spent holdout evidence stays labelled under spent_epochs; do not reattribute v1 verdicts to this fingerprint.",
+      "reason": "Sibling epoch to hsr-v2 for the same L571 dividend-units load fix."
+    }
+  ],
   "related": [
     "hsr-v1",
     "hrs-v1",
@@ -98,5 +107,6 @@
     "rank_from": 501,
     "rank_to": 1000,
     "ranking": "Latest ART marketcap filed at least 2 days before the date and at most 456 days old, rolled by the split-adjusted close from the last month-end on or before the filing."
-  }
+  },
+  "reporting": {}
 }

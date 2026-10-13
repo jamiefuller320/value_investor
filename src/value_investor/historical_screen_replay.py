@@ -213,10 +213,14 @@ def model_ids(frame: pd.DataFrame) -> list[str]:
 
 
 def dividend_units_fixed(panel: pd.DataFrame) -> pd.DataFrame:
-    """L571 exploratory fix: dividend yield as a fraction, as the dividend models' floors assume."""
-    out = panel.copy()
-    out["dividend_yield"] = pd.to_numeric(out["dividend_yield"], errors="coerce") / 100.0
-    return out
+    """Pre-hsr-v2 exploratory probe (L571 on hsr-v1).
+
+    Under hsr-v1 the panel carried Yahoo-style percent yields and this transform
+    divided by 100 before scoring. The live epoch (hsr-v2) normalises at library
+    load instead, so this variant is now an identity — kept only so committed
+    ``results_dividend_units_fixed`` keys and CLI ``--variant`` stay stable.
+    """
+    return panel.copy()
 
 
 PANEL_TRANSFORMS = {"dividend_units_fixed": dividend_units_fixed}
@@ -823,6 +827,8 @@ def refresh_historical_screen_replay(
         },
         "holdout_reveals": list(previous.get("holdout_reveals") or []),
         "licensed_data": previous.get("licensed_data"),
+        # Spent epochs (e.g. hsr-v1) stay labelled; never reattribute their reveals to a new id.
+        "spent_epochs": previous.get("spent_epochs"),
         "rule_search": rule_search.status_block(
             rule_search_registration_path or rule_search.DEFAULT_REGISTRATION_PATH,
             Path(store_path).parent / RULE_SEARCH_STORE_NAME,
@@ -886,7 +892,7 @@ def findings_from_store(payload: Mapping[str, Any]) -> list[dict[str, Any]]:
                     MIDCAP_STALE_REGISTRATION_TITLE,
                     MIDCAP_HOLDOUT_REUSED_TITLE,
                 ),
-                label="The mid-cap replay (hsr-mid-v1)",
+                label="The mid-cap replay",
                 register_cmd="ftse-historical-replay register --universe midcap",
             )
         )
