@@ -252,6 +252,24 @@ def assess_library_metrics_health(root: Path, market_id: str) -> dict[str, Any]:
     }
 
 
+def normalize_metrics_dividend_yield(frame: pd.DataFrame) -> pd.DataFrame:
+    """L571 / hsr-v2: Yahoo-style percent yields become fractions before models score.
+
+    Live Yahoo rows often carry ``dividend_yield`` as percent (2.5 = 2.5%). Dividend
+    model floors (0.02–0.04) and Neff PEGY treat it as a fraction. Trusts already
+    normalise via ``trust_metrics.normalize_yield``; company / library rows do so here
+    at load so the screen fingerprint marks a new epoch rather than silently rewriting
+    spent holdout labels.
+    """
+    if frame.empty or "dividend_yield" not in frame.columns:
+        return frame
+    from value_investor.trust_metrics import normalize_yield
+
+    out = frame.copy()
+    out["dividend_yield"] = out["dividend_yield"].map(normalize_yield)
+    return out
+
+
 def load_library_metrics(root: Path, market_id: str) -> pd.DataFrame:
     path = _metrics_latest_path(root, market_id)
     if not path.exists():
@@ -274,7 +292,7 @@ def load_library_metrics(root: Path, market_id: str) -> pd.DataFrame:
         frame = frame.loc[usable_mask].copy()
     else:
         frame = frame.iloc[0:0].copy()
-    return frame.reset_index(drop=True)
+    return normalize_metrics_dividend_yield(frame.reset_index(drop=True))
 
 
 def screen_dir_for(root: Path, market_id: str) -> Path:

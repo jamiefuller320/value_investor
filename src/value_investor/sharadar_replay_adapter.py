@@ -499,9 +499,9 @@ def build_panel(
             "market_cap": market_cap,
             "trailing_pe": _ratio(market_cap, netinc, positive_den=True),
             "price_to_book": _ratio(market_cap, equity, positive_den=True),
-            # Live Yahoo rows carry dividend yield in percent (2.5 = 2.5%); Sharadar is a fraction.
-            "dividend_yield": _ratio(_num(rows, "divyield"), rows["price_scale"], positive_den=True)
-            * 100.0,
+            # hsr-v2 / L571: live library load normalises Yahoo percent → fraction; Sharadar
+            # divyield is already a fraction — emit fraction so the replay matches the epoch.
+            "dividend_yield": _ratio(_num(rows, "divyield"), rows["price_scale"], positive_den=True),
             "current_ratio": _num(rows, "currentratio"),
             "debt_to_equity": _ratio(debt, equity, positive_den=True) * 100.0,
             "return_on_equity": _num(rows, "roe"),

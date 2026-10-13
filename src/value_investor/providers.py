@@ -24,6 +24,13 @@ USER_AGENT = "value-investor/0.1 (research screener; fallback providers)"
 HTTP_TIMEOUT_SECONDS = 20
 PROVIDER_RETRIES = 2
 
+
+def _normalize_yield(value: float | None) -> float | None:
+    """Yahoo dividendYield is often percent-scaled; models expect a fraction (L571)."""
+    from value_investor.trust_metrics import normalize_yield
+
+    return normalize_yield(value)
+
 # Fields worth filling from secondary providers when the primary leaves gaps.
 FALLBACK_METRIC_KEYS = (
     "market_cap",
@@ -218,7 +225,7 @@ class YahooQuoteSummaryProvider:
             "trailing_pe": _safe_float(raw(summary, "trailingPE") or raw(stats, "trailingPE")),
             "forward_pe": _safe_float(raw(summary, "forwardPE") or raw(stats, "forwardPE")),
             "price_to_book": _safe_float(raw(stats, "priceToBook")),
-            "dividend_yield": _safe_float(raw(summary, "dividendYield")),
+            "dividend_yield": _normalize_yield(_safe_float(raw(summary, "dividendYield"))),
             "shares_outstanding": _safe_float(raw(stats, "sharesOutstanding")),
             "book_value": _safe_float(raw(stats, "bookValue")),
             "enterprise_value": _safe_float(raw(stats, "enterpriseValue")),
