@@ -216,6 +216,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "docs/data/daily_focus_acks.json" in text
     assert "docs/data/daily_discuss_inbox.json" in text
     assert "docs/data/daily_hub_history.json" in text
+    assert "docs/data/daily_hub_relevance.json" in text
     assert "docs/data/shard_nav_fx_warp.json" in text
     assert "docs/data/combined_tagged_learning.json" in text
     assert "docs/data/post_hsr_policy.json" in text
@@ -239,6 +240,7 @@ def test_ops_monitor_commit_optional_includes_observe_instrument_stores() -> Non
     assert "daily_focus.json" in optional_line
     assert "gha_failure_triage.json" in optional_line
     assert "daily_hub_history.json" in optional_line
+    assert "daily_hub_relevance.json" in optional_line
     assert "shard_nav_fx_warp.json" in optional_line
     assert "combined_tagged_learning.json" in optional_line
     assert "post_hsr_policy.json" in optional_line
