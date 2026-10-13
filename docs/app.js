@@ -7394,7 +7394,7 @@ function renderDailyHubPanel(data) {
       ${wallStale ? ' · <span class="badge badge-watch">stale vs wall clock</span>' : ""}
     </p>
     ${staleBanner}
-    <div class="daily-hub-aim muted small">Aim: policy green ≠ utility — Suite A stress streaks and graduated badges are not the day’s north star. Market warning triage: deepen / dismiss / park — do not ritual-clear badges or starve the euro fat slot.</div>
+    <div class="daily-hub-aim muted small">Aim: policy green ≠ utility — Focus tracks P1 live-path bind (holdings ∪ strand A ∪ N200; N201 waiter honest) and P2 offline ingest maintenance / clash-aware eng. Suite A stress streaks and graduated badges are not the day’s north star. Market warning triage: deepen / dismiss / park — do not ritual-clear badges or divert offline ingest / maintenance capacity.</div>
     <div class="daily-hub-session daily-hub-today" id="daily-hub-today">
       <h3>Today</h3>
       <h4 class="small" style="margin:0.35rem 0">Focus</h4>

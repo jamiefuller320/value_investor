@@ -3204,6 +3204,78 @@ def check_deferred_triggers(
     ]
 
 
+def check_daily_hub_relevance(
+    *,
+    data_dir: Path | None = None,
+    anchors_path: Path | None = None,
+    result_path: Path | None = None,
+    aim_path: Path | None = None,
+    persist: bool = True,
+    now: datetime | None = None,
+) -> list[OpsFinding]:
+    """Warn when Daily hub Focus / aim looks stale vs P1/P2 spend-priority anchors.
+
+    Writes ``docs/data/daily_hub_relevance.json``. Phrase/anchor mismatch only
+    (no LLM). Observe/warn-only (``auto_fixable=False``) — never rewrites Focus.
+    """
+    from value_investor.daily_hub_relevance import (
+        DEFAULT_ANCHORS_PATH,
+        DEFAULT_DATA_DIR,
+        DEFAULT_RESULT_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_relevance,
+        refresh_daily_hub_relevance,
+    )
+
+    anchors = Path(anchors_path) if anchors_path is not None else DEFAULT_ANCHORS_PATH
+    if not anchors.exists():
+        return [
+            OpsFinding(
+                severity="warn",
+                category="dashboard_health",
+                title=STORE_FAILED_TITLE,
+                summary=(
+                    f"Priority anchors missing at {anchors}. "
+                    "Commit docs/data/daily_hub_priority_anchors.json."
+                ),
+                auto_fixable=False,
+            )
+        ]
+    try:
+        payload = refresh_daily_hub_relevance(
+            data_dir=Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR,
+            anchors_path=anchors,
+            result_path=Path(result_path) if result_path is not None else DEFAULT_RESULT_PATH,
+            aim_path=aim_path,
+            persist=persist,
+            now=now,
+        )
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="dashboard_health",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    evaluation = payload.get("evaluation") or {}
+    corpus = {
+        "focus_titles": (payload.get("corpus") or {}).get("focus_titles") or [],
+    }
+    return [
+        OpsFinding(
+            severity=str(row["severity"]),
+            category=str(row["category"]),
+            title=str(row["title"]),
+            summary=str(row["summary"]),
+            auto_fixable=False,
+        )
+        for row in ops_findings_from_relevance(evaluation, corpus=corpus)
+    ]
+
+
 def _next_engineering_seq(existing_rows: list[dict[str, Any]], run_stamp: str) -> int:
     prefix = f"eng-{run_stamp}-"
     used = [
@@ -3744,6 +3816,7 @@ def collect_ops_findings(
     findings.extend(check_investor_yield())
     findings.extend(check_paper_halt())
     findings.extend(check_deferred_triggers())
+    findings.extend(check_daily_hub_relevance())
 
     engineering_findings, queue_status = check_engineering_queue(
         open_prs=open_prs,
