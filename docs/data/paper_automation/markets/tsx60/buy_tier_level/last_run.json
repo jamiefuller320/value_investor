@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-12T03:29:21.108005-04:00",
+    "local_time": "2026-10-13T10:16:45.934623-04:00",
     "trading_day": true,
-    "after_settle": false,
-    "market_open_at": "2026-10-12T09:30:00-04:00",
-    "settle_at": "2026-10-12T10:00:00-04:00",
-    "can_act": false,
-    "reason": "before market open"
+    "after_settle": true,
+    "market_open_at": "2026-10-13T09:30:00-04:00",
+    "settle_at": "2026-10-13T10:00:00-04:00",
+    "can_act": true,
+    "reason": "ok"
   },
   "trades": [],
   "plan": {
@@ -2243,9 +2243,26 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-13T10:16:45.934623-04:00",
+        "portfolio_value": 505.2,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 12,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CAD": 0.5303
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-12T03:29:21.108005-04:00",
+    "last_mark_at": "2026-10-13T10:16:45.934623-04:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -2258,7 +2275,7 @@
     "schema_version": 2,
     "market_id": "tsx60",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T07:29:21.273547+00:00",
+    "generated_at": "2026-10-13T14:16:46.071552+00:00",
     "observe_only": true,
     "open_count": 11,
     "closed_count": 0,
@@ -2337,7 +2354,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T07:29:21.275168+00:00",
+    "generated_at": "2026-10-13T14:16:46.073192+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2434,8 +2451,8 @@
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 1,
-      "swap_rotations": 0
+      "hold_episodes": 2,
+      "swap_rotations": 2
     }
   },
   "hypothesis_integrity": {
@@ -2443,8 +2460,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-12T07:29:21.277822+00:00",
-    "as_of": "2026-10-12T03:29:21.108005-04:00",
+    "updated_at": "2026-10-13T14:16:46.075859+00:00",
+    "as_of": "2026-10-13T10:16:45.934623-04:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2981,7 +2998,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T07:29:21.281133+00:00",
+    "generated_at": "2026-10-13T14:16:46.079216+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -3055,15 +3072,15 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-12T07:29:21.290214+00:00",
-    "open_count": 1,
-    "closed_count": 22,
+    "generated_at": "2026-10-13T14:16:46.088835+00:00",
+    "open_count": 0,
+    "closed_count": 23,
     "scored_count": 19,
-    "scored_count_all": 22,
-    "recommit_scored_count": 3,
+    "scored_count_all": 23,
+    "recommit_scored_count": 4,
     "entry_kind_counts": {
       "first_entry": 19,
-      "recommit": 3
+      "recommit": 4
     },
     "any_de_risk_count": 14,
     "winning_cadence_counts": {
@@ -3114,17 +3131,17 @@
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
       "first_entry_scored": 19,
-      "recommit_scored": 3
+      "recommit_scored": 4
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
     "marked_this_pass": 1,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T03:29:21.108005-04:00",
+    "generated_at": "2026-10-13T10:16:45.934623-04:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -3181,7 +3198,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T03:29:21.108005-04:00",
+    "generated_at": "2026-10-13T10:16:45.934623-04:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -3279,8 +3296,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-12T03:29:21.108005-04:00",
-        "proposal_id": "buy_tier_level:OTEX.TO:rebuy_skip:2026-10-12T03:29:21.108005-04:00",
+        "logged_at": "2026-10-13T10:16:45.934623-04:00",
+        "proposal_id": "buy_tier_level:OTEX.TO:rebuy_skip:2026-10-13T10:16:45.934623-04:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -3374,8 +3391,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-12T03:29:21.108005-04:00",
-        "proposal_id": "buy_tier_level:CVE.TO:rebuy_skip:2026-10-12T03:29:21.108005-04:00",
+        "logged_at": "2026-10-13T10:16:45.934623-04:00",
+        "proposal_id": "buy_tier_level:CVE.TO:rebuy_skip:2026-10-13T10:16:45.934623-04:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -3469,8 +3486,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-12T03:29:21.108005-04:00",
-        "proposal_id": "buy_tier_level:IFC.TO:rebuy_skip:2026-10-12T03:29:21.108005-04:00",
+        "logged_at": "2026-10-13T10:16:45.934623-04:00",
+        "proposal_id": "buy_tier_level:IFC.TO:rebuy_skip:2026-10-13T10:16:45.934623-04:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -3564,8 +3581,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-12T03:29:21.108005-04:00",
-        "proposal_id": "buy_tier_level:MG.TO:rebuy_skip:2026-10-12T03:29:21.108005-04:00",
+        "logged_at": "2026-10-13T10:16:45.934623-04:00",
+        "proposal_id": "buy_tier_level:MG.TO:rebuy_skip:2026-10-13T10:16:45.934623-04:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -3659,8 +3676,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-12T03:29:21.108005-04:00",
-        "proposal_id": "buy_tier_level:SAP.TO:rebuy_skip:2026-10-12T03:29:21.108005-04:00",
+        "logged_at": "2026-10-13T10:16:45.934623-04:00",
+        "proposal_id": "buy_tier_level:SAP.TO:rebuy_skip:2026-10-13T10:16:45.934623-04:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -3754,8 +3771,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-12T03:29:21.108005-04:00",
-        "proposal_id": "buy_tier_level:RCI-B.TO:rebuy_skip:2026-10-12T03:29:21.108005-04:00",
+        "logged_at": "2026-10-13T10:16:45.934623-04:00",
+        "proposal_id": "buy_tier_level:RCI-B.TO:rebuy_skip:2026-10-13T10:16:45.934623-04:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -3779,7 +3796,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-12T03:29:21.108005-04:00",
+      "generated_at": "2026-10-13T10:16:45.934623-04:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
@@ -3814,7 +3831,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-12T07:29:21.296457+00:00",
+  "generated_at": "2026-10-13T14:16:46.095601+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

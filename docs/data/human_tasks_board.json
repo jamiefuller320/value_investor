@@ -1,61 +1,47 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-13T07:50:10.060059+00:00",
+  "generated_at": "2026-10-13T13:13:48.827993+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-10-10",
   "counts": {
-    "new_info": 2,
-    "unacked": 1,
-    "acked": 31,
+    "new_info": 0,
+    "unacked": 0,
+    "acked": 34,
     "automated": 20,
     "human": 34
   },
   "tasks": [
     {
-      "id": "weekday-engineering-parked-backlog-clear",
-      "title": "Clear engineering parked backlog when dispatch pauses",
-      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+      "id": "adhoc-post-hsr-alternate-strand",
+      "title": "Pin learning question before registering a post-hsr alternate strand",
+      "summary": "After freeze-extras is in force (docs/ops/post-hsr-freeze-extras.md), keep strand A as the sole live/capital path. N200 and N201 are sealed observe-only independently (dual observe OK). Before opening any further observe/capital alternate, pin one learning question and registration_id, answer the four freeze questions, and respect the sealed-strategy launch queue (do not steal P1 from holdings/running units). Prefer P1/P2 spend until that pin is deliberate. At most one live promotion path.",
       "automated": false,
-      "cadence": "weekday",
-      "section_id": "weekday",
-      "section_title": "Weekday (Mon–Fri)",
-      "doc_path": "docs/ops/ops-monitor.md",
-      "doc_anchor": "engineering-parked-backlog-clearing",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/post-hsr-freeze-extras.md",
+      "doc_anchor": "next-engineering-steps",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/post-hsr-freeze-extras.md#next-engineering-steps",
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "4 attention-parked eng tasks",
-        "updated_at": "2026-10-13T07:49:47.544837+00:00",
-        "fingerprint": "91aacacf20aee75e",
-        "bullets": [
-          "Parked tasks: 5 (attention ~4)",
-          "Queue-clearing pause active: False — evaluated 2026-10-13T07:49:47.544837+00:00",
-          "Traffic pause active: False",
-          "eng-20261004-06: Workflow fix: analysis review failure",
-          "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo",
-          "eng-20261004-05: Reconcile research index with committed overlays for the two `index_missing_committed_verdicts` names (AO.L, HOC.L) and add a CI check that `committed_count` eq",
-          "eng-20261008-04: Repair dead hunter allowlist URL for MC.PA",
-          "eng-20261011-02: Sector override map for misclassified issuers (e.g. plantation/agriculture off Consumer Defensive peer sets)"
-        ],
-        "source_keys": [
-          "engineering_tasks"
-        ],
-        "ack_sufficient": false,
-        "auto_ackable": false,
-        "ack_reason": "attention_parked_remaining"
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "4b3865afc1007df5",
+        "bullets": [],
+        "source_keys": []
       },
       "ack": {
         "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-09T15:43:43.142686+00:00",
+        "stale": false,
+        "acked_at": "2026-10-13T13:13:48.786908+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "c699c0fce33dc5e3"
+        "finding_fingerprint": "4b3865afc1007df5"
       },
-      "sort_bucket": "new_info",
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -91,43 +77,57 @@
       },
       "ack": {
         "acked": true,
-        "stale": true,
-        "acked_at": "2026-10-09T15:43:43.177105+00:00",
+        "stale": false,
+        "acked_at": "2026-10-13T13:13:48.769596+00:00",
         "decision": "ack_observe",
-        "finding_fingerprint": "eee1ea27ae69f897"
+        "finding_fingerprint": "239d8637750ce7b4"
       },
-      "sort_bucket": "new_info",
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
     {
-      "id": "adhoc-post-hsr-alternate-strand",
-      "title": "Pin learning question before registering a post-hsr alternate strand",
-      "summary": "After freeze-extras is in force (docs/ops/post-hsr-freeze-extras.md), keep strand A as the sole live/capital path. N200 and N201 are sealed observe-only independently (dual observe OK). Before opening any further observe/capital alternate, pin one learning question and registration_id, answer the four freeze questions, and respect the sealed-strategy launch queue (do not steal P1 from holdings/running units). Prefer P1/P2 spend until that pin is deliberate. At most one live promotion path.",
+      "id": "weekday-engineering-parked-backlog-clear",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
       "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/post-hsr-freeze-extras.md",
-      "doc_anchor": "next-engineering-steps",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/post-hsr-freeze-extras.md#next-engineering-steps",
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "engineering-parked-backlog-clearing",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "4b3865afc1007df5",
-        "bullets": [],
-        "source_keys": []
+        "headline": "4 attention-parked eng tasks",
+        "updated_at": "2026-10-13T12:18:12.427351+00:00",
+        "fingerprint": "91aacacf20aee75e",
+        "bullets": [
+          "Parked tasks: 5 (attention ~4)",
+          "Queue-clearing pause active: False — evaluated 2026-10-13T12:18:12.427351+00:00",
+          "Traffic pause active: False",
+          "eng-20261004-06: Workflow fix: analysis review failure",
+          "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo",
+          "eng-20261004-05: Reconcile research index with committed overlays for the two `index_missing_committed_verdicts` names (AO.L, HOC.L) and add a CI check that `committed_count` eq",
+          "eng-20261008-04: Repair dead hunter allowlist URL for MC.PA",
+          "eng-20261011-02: Sector override map for misclassified issuers (e.g. plantation/agriculture off Consumer Defensive peer sets)"
+        ],
+        "source_keys": [
+          "engineering_tasks"
+        ],
+        "ack_sufficient": false,
+        "auto_ackable": false,
+        "ack_reason": "attention_parked_remaining"
       },
       "ack": {
-        "acked": false,
+        "acked": true,
         "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
+        "acked_at": "2026-10-13T13:13:48.750688+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "91aacacf20aee75e"
       },
-      "sort_bucket": "unacked",
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -342,7 +342,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-10-13T07:41:13.570366+00:00",
+        "updated_at": "2026-10-13T10:42:22.497004+00:00",
         "fingerprint": "f765d60144146672",
         "bullets": [
           "Open deviations: 1",
@@ -378,14 +378,14 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-13T07:43:16.831523+00:00",
+        "updated_at": "2026-10-13T10:44:24.261126+00:00",
         "fingerprint": "445acb0f9a3f9032",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=36",
           "aex: phase=0 ai=False knob=False holdings=8",
           "aim: phase=0 ai=False knob=False holdings=16",
           "atx: phase=0 ai=False knob=False holdings=2",
-          "bel20: phase=0 ai=False knob=False holdings=4",
+          "bel20: phase=0 ai=False knob=False holdings=3",
           "cac40: phase=1 ai=False knob=False holdings=14",
           "dax: phase=1 ai=False knob=False holdings=1",
           "euro_stoxx50: phase=1 ai=False knob=False holdings=11"
@@ -420,7 +420,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-10-12T08:38:26.298289+00:00",
+        "updated_at": "2026-10-13T08:28:32.176276+00:00",
         "fingerprint": "1d374ee9ad0e2d3b",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -806,7 +806,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-10-12T08:38:26.296021+00:00",
+        "updated_at": "2026-10-13T08:28:32.174158+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",

@@ -1,15 +1,48 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-12T03:29:24.801079-04:00",
+    "local_time": "2026-10-13T10:17:03.988522-04:00",
     "trading_day": true,
-    "after_settle": false,
-    "market_open_at": "2026-10-12T09:30:00-04:00",
-    "settle_at": "2026-10-12T10:00:00-04:00",
-    "can_act": false,
-    "reason": "before market open"
+    "after_settle": true,
+    "market_open_at": "2026-10-13T09:30:00-04:00",
+    "settle_at": "2026-10-13T10:00:00-04:00",
+    "can_act": true,
+    "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "7df22ac1-fc5d-4663-8871-085a9aec8716",
+      "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+      "acted_at": "2026-10-13T10:17:03.988522-04:00",
+      "ticker": "MAR",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.020227,
+      "price": 365.88,
+      "gross": 7.4,
+      "cost": 0.01,
+      "net_cash": 7.39,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Marriott International, Inc.",
+      "avg_cost_at_exit": 358.96,
+      "position_closed": true
+    },
+    {
+      "id": "e370dd6b-cec9-469d-86f9-b663b4a899c4",
+      "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+      "acted_at": "2026-10-13T10:17:03.988522-04:00",
+      "ticker": "CSX",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.156047,
+      "price": 47.26,
+      "gross": 7.37,
+      "cost": 0.01,
+      "net_cash": -7.39,
+      "note": "Automated buy",
+      "name": "CSX Corporation"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +56,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 993.48,
-    "cash": 0.0,
+    "nav": 993.45,
+    "cash": -0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,7 +69,7 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 26.14,
+    "target_sleeve_value": 26.85,
     "targets": [
       {
         "ticker": "CMCSA",
@@ -130,6 +163,13 @@
         "price": 270.88
       },
       {
+        "ticker": "CSCO",
+        "name": "Cisco Systems, Inc.",
+        "signal": "buy",
+        "conviction_score": 0.7426,
+        "price": 118.39
+      },
+      {
         "ticker": "KDP",
         "name": "Keurig Dr Pepper Inc.",
         "signal": "buy",
@@ -186,13 +226,6 @@
         "price": 192.13
       },
       {
-        "ticker": "CSCO",
-        "name": "Cisco Systems, Inc.",
-        "signal": "buy",
-        "conviction_score": 0.656,
-        "price": 118.39
-      },
-      {
         "ticker": "BKNG",
         "name": "Booking Holdings Inc.",
         "signal": "strong_buy",
@@ -235,13 +268,6 @@
         "price": 483.73
       },
       {
-        "ticker": "ADSK",
-        "name": "Autodesk, Inc.",
-        "signal": "buy",
-        "conviction_score": 0.5197,
-        "price": 235.35
-      },
-      {
         "ticker": "ADBE",
         "name": "Adobe Inc.",
         "signal": "strong_buy",
@@ -277,6 +303,13 @@
         "price": 151.17
       },
       {
+        "ticker": "AVGO",
+        "name": "Broadcom Inc.",
+        "signal": "buy",
+        "conviction_score": 0.38148,
+        "price": 361.54
+      },
+      {
         "ticker": "SBUX",
         "name": "Starbucks Corporation",
         "signal": "buy",
@@ -284,11 +317,11 @@
         "price": 90.75
       },
       {
-        "ticker": "AVGO",
-        "name": "Broadcom Inc.",
+        "ticker": "FER",
+        "name": "Ferrovial N.V.",
         "signal": "buy",
-        "conviction_score": 0.333795,
-        "price": 361.54
+        "conviction_score": 0.3357,
+        "price": 50.15
       },
       {
         "ticker": "SNDK",
@@ -296,24 +329,17 @@
         "signal": "buy",
         "conviction_score": 0.29818,
         "price": 1581.82
-      },
-      {
-        "ticker": "FER",
-        "name": "Ferrovial N.V.",
-        "signal": "buy",
-        "conviction_score": 0.2797,
-        "price": 50.15
       }
     ],
     "anticipated_exits": [
       {
         "action": "sell",
-        "ticker": "MAR",
-        "name": "Marriott International, Inc.",
+        "ticker": "ADSK",
+        "name": "Autodesk, Inc.",
         "reason": "No longer in the top conviction target set",
-        "shares": 0.020227,
-        "price": 365.88,
-        "value": 7.4
+        "shares": 0.133269,
+        "price": 235.35,
+        "value": 31.36
       }
     ],
     "anticipated_grace_holds": [],
@@ -323,11 +349,22 @@
         "action": "buy",
         "ticker": "CSX",
         "name": "CSX Corporation",
-        "reason": "New sleeve",
-        "value": 7.39,
+        "reason": "Top-up to equal weight",
+        "value": 19.47,
         "price": 47.26,
-        "target_value": 26.14,
+        "target_value": 26.85,
         "conviction_score": 0.4957,
+        "signal": "buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "ROST",
+        "name": "Ross Stores, Inc.",
+        "reason": "New sleeve",
+        "value": 11.84,
+        "price": 222.41,
+        "target_value": 26.85,
+        "conviction_score": 0.4634,
         "signal": "buy"
       }
     ],
@@ -338,7 +375,7 @@
         "name": "Comcast Corporation",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 25.56,
-        "target_value": 26.14,
+        "target_value": 26.85,
         "conviction_score": 0.9695,
         "signal": "strong_buy"
       },
@@ -346,9 +383,9 @@
         "action": "hold",
         "ticker": "PAYX",
         "name": "Paychex, Inc.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 26.16,
-        "target_value": 26.14,
+        "target_value": 26.85,
         "conviction_score": 0.8664000000000001,
         "signal": "strong_buy"
       },
@@ -358,7 +395,7 @@
         "name": "T-Mobile US, Inc.",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 24.75,
-        "target_value": 26.14,
+        "target_value": 26.85,
         "conviction_score": 0.8438,
         "signal": "strong_buy"
       },
@@ -366,51 +403,59 @@
         "action": "hold",
         "ticker": "MU",
         "name": "Micron Technology, Inc.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 26.21,
-        "target_value": 26.14,
+        "target_value": 26.85,
         "conviction_score": 0.8001,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "CPRT",
-        "name": "Copart, Inc.",
+        "ticker": "PCAR",
+        "name": "PACCAR Inc",
         "reason": "Already near equal-weight target",
-        "value": 26.03,
-        "target_value": 26.14,
-        "conviction_score": 0.46149999999999997,
+        "value": 26.83,
+        "target_value": 26.85,
+        "conviction_score": 0.6993,
         "signal": "buy"
       }
     ],
     "skipped": [
       {
-        "ticker": "ROST",
-        "name": "Ross Stores, Inc.",
+        "ticker": "CPRT",
+        "name": "Copart, Inc.",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 26.14,
-        "conviction_score": 0.4634,
+        "target_value": 26.85,
+        "conviction_score": 0.46149999999999997,
         "signal": "buy"
       },
       {
         "ticker": "AVGO",
         "name": "Broadcom Inc.",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 26.14,
-        "conviction_score": 0.333795,
+        "target_value": 26.85,
+        "conviction_score": 0.38148,
         "signal": "buy"
       },
       {
         "ticker": "FER",
         "name": "Ferrovial N.V.",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 26.14,
-        "conviction_score": 0.2797,
+        "target_value": 26.85,
+        "conviction_score": 0.3357,
         "signal": "buy"
       }
     ],
-    "waitlisted": [],
-    "summary": "Next rebalance would target 38 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 5 near-target holding(s)."
+    "waitlisted": [
+      {
+        "ticker": "ADSK",
+        "name": "Autodesk, Inc.",
+        "signal": "buy",
+        "conviction_score": 0.5197,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      }
+    ],
+    "summary": "Next rebalance would target 37 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s); leave 5 near-target holding(s)."
   },
   "alerts": [
     {
@@ -422,7 +467,7 @@
       "mark": 20.66,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "INTU",
@@ -444,7 +489,7 @@
       "mark": 364.09,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "BKR",
@@ -532,7 +577,7 @@
       "mark": 414.87,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "PCAR",
@@ -725,12 +770,12 @@
       "ticker": "ADSK",
       "name": "Autodesk, Inc.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
       "mark": 235.35,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
     },
     {
       "ticker": "GILD",
@@ -763,7 +808,7 @@
       "mark": 90.75,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "MU",
@@ -788,12 +833,12 @@
       "timing_signal": "neutral"
     },
     {
-      "ticker": "MAR",
-      "name": "Marriott International, Inc.",
+      "ticker": "CSX",
+      "name": "CSX Corporation",
       "source": "paper",
-      "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 365.88,
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 47.26,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -814,7 +859,7 @@
       "id": "e97ef74a-eb76-42af-9436-ace9da81566c",
       "created_at": "2026-09-18T00:46:47.721247+00:00"
     },
-    "cash": 0.0,
+    "cash": -0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -1192,16 +1237,16 @@
         "take_profit": null,
         "opened_at": "2026-10-06T10:18:54.086416-04:00"
       },
-      "MAR": {
-        "ticker": "MAR",
-        "shares": 0.020227,
-        "avg_cost": 358.96,
-        "name": "Marriott International, Inc.",
-        "sector": "Consumer Cyclical",
+      "CSX": {
+        "ticker": "CSX",
+        "shares": 0.156047,
+        "avg_cost": 47.26,
+        "name": "CSX Corporation",
+        "sector": "Industrials",
         "currency": "USD",
         "stop_loss": null,
         "take_profit": null,
-        "opened_at": "2026-10-06T10:18:54.086416-04:00"
+        "opened_at": "2026-10-13T10:17:03.988522-04:00"
       }
     },
     "trades": [
@@ -1887,6 +1932,38 @@
         "net_cash": -7.27,
         "note": "Automated buy",
         "name": "Marriott International, Inc."
+      },
+      {
+        "id": "7df22ac1-fc5d-4663-8871-085a9aec8716",
+        "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+        "acted_at": "2026-10-13T10:17:03.988522-04:00",
+        "ticker": "MAR",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.020227,
+        "price": 365.88,
+        "gross": 7.4,
+        "cost": 0.01,
+        "net_cash": 7.39,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Marriott International, Inc.",
+        "avg_cost_at_exit": 358.96,
+        "position_closed": true
+      },
+      {
+        "id": "e370dd6b-cec9-469d-86f9-b663b4a899c4",
+        "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+        "acted_at": "2026-10-13T10:17:03.988522-04:00",
+        "ticker": "CSX",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.156047,
+        "price": 47.26,
+        "gross": 7.37,
+        "cost": 0.01,
+        "net_cash": -7.39,
+        "note": "Automated buy",
+        "name": "CSX Corporation"
       }
     ],
     "equity_curve": [
@@ -2321,26 +2398,45 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-13T10:17:03.988522-04:00",
+        "portfolio_value": 750.17,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "positions": 35,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "USD": 0.75511
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-12T03:29:24.801079-04:00",
+    "last_mark_at": "2026-10-13T10:17:03.988522-04:00",
     "rebalance_state": {
       "exit_streak": {
-        "MAR": 1
+        "ADSK": 1
       },
-      "reentry_cooldown": {}
+      "reentry_cooldown": {
+        "MAR": 1
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "nasdaq100",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T07:29:24.883051+00:00",
+    "generated_at": "2026-10-13T14:17:04.079660+00:00",
     "observe_only": true,
-    "open_count": 4,
+    "open_count": 5,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -2375,7 +2471,7 @@
       }
     },
     "first_episode": {
-      "open_count": 4,
+      "open_count": 5,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -2411,13 +2507,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "ingested_this_pass": 1,
+    "checkpoints_added_this_pass": 2
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T07:29:24.884630+00:00",
+    "generated_at": "2026-10-13T14:17:04.081242+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2471,36 +2567,36 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 4,
+      "hold_closed_count": 5,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 32,
       "gaps": [
-        "hold_recovery closed episodes=4 (target >=15)",
+        "hold_recovery closed episodes=5 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 29,
-        "recovered_to_breakeven": 13,
+        "count": 28,
+        "recovered_to_breakeven": 12,
         "close_reasons": {
-          "open": 29
+          "open": 28
         }
       },
       "closed": {
-        "count": 4,
-        "recovered_to_breakeven": 4,
+        "count": 5,
+        "recovered_to_breakeven": 5,
         "close_reasons": {
-          "sold_while_recovered": 4
+          "sold_while_recovered": 5
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 3,
+        "count": 4,
         "verdicts": {
-          "open": 3
+          "open": 4
         }
       },
       "closed": {
@@ -2509,12 +2605,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 0
+      "hold_episodes": 2,
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -2522,8 +2618,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-12T07:29:24.887308+00:00",
-    "as_of": "2026-10-12T03:29:24.801079-04:00",
+    "updated_at": "2026-10-13T14:17:04.083939+00:00",
+    "as_of": "2026-10-13T10:17:03.988522-04:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2538,8 +2634,8 @@
     "holding_count": 35,
     "underwater_count": 8,
     "thesis_status_counts": {
-      "intact": 28,
-      "weakening": 7,
+      "intact": 29,
+      "weakening": 6,
       "broken": 0,
       "insufficient_data": 0
     },
@@ -2563,7 +2659,7 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0741,
-        "quality": 0.1481,
+        "quality": 0.1852,
         "dividend": 0.1852,
         "garp": 0.1111,
         "risk": 0.0
@@ -2625,7 +2721,7 @@
         "mark": 20.66,
         "avg_cost": 23.73,
         "signal": "strong_buy",
-        "timing_signal": "neutral",
+        "timing_signal": "accumulate",
         "conviction_score": 0.9695,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2910,7 +3006,7 @@
         "mark": 90.75,
         "avg_cost": 95.44,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.3728,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -3192,7 +3288,7 @@
         "mark": 364.09,
         "avg_cost": 375.82,
         "signal": "strong_buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.9074,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3384,6 +3480,47 @@
         "broken_reasons": []
       },
       {
+        "ticker": "CSX",
+        "name": "CSX Corporation",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 47.26,
+        "avg_cost": 47.26,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.4957,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "quality"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 50%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 50%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "BKR",
         "name": "Baker Hughes Company",
         "thesis_status": "intact",
@@ -3421,45 +3558,6 @@
           "conviction 86%"
         ],
         "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "MAR",
-        "name": "Marriott International, Inc.",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0193,
-        "mark": 365.88,
-        "avg_cost": 358.96,
-        "signal": "hold",
-        "timing_signal": "neutral",
-        "conviction_score": 0.3568,
-        "data_quality_score": 0.9,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "left buy tier (hold)",
-          "research accumulate",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.90",
-          "conviction 36%"
-        ],
-        "weaken_reasons": [
-          "left buy tier (hold)"
-        ],
         "broken_reasons": []
       },
       {
@@ -3755,7 +3853,7 @@
         "mark": 235.35,
         "avg_cost": 220.31,
         "signal": "buy",
-        "timing_signal": "neutral",
+        "timing_signal": "wait",
         "conviction_score": 0.5197,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3877,7 +3975,7 @@
         "avg_cost": 107.74,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.656,
+        "conviction_score": 0.7426,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3893,14 +3991,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 66%"
+          "conviction 74%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 66%"
+          "conviction 74%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3916,7 +4014,7 @@
         "mark": 414.87,
         "avg_cost": 376.35,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.69,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3993,15 +4091,15 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T07:29:24.890899+00:00",
+    "generated_at": "2026-10-13T14:17:04.087720+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 4,
+      "closed_total": 5,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 29,
+      "open_with_thesis": 28,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -4017,13 +4115,13 @@
           }
         },
         "broken": {
-          "closed_count": 3,
+          "closed_count": 4,
           "recovery_rate": 1.0,
           "sold_underwater_rate": 0.0,
-          "mean_peak_unrealized_pct": 0.0455,
-          "mean_trough_unrealized_pct": 0.0387,
+          "mean_peak_unrealized_pct": 0.0389,
+          "mean_trough_unrealized_pct": 0.0338,
           "outcome_labels": {
-            "recovered": 3
+            "recovered": 4
           }
         },
         "insufficient_data": {
@@ -4052,10 +4150,10 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 4,
+      "hold_closed_with_thesis": 5,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=4 (target >=8)",
+        "hold closed with thesis=5 (target >=8)",
         "hold thesis buckets thin (weakening=1; target >=3 each)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
@@ -4068,76 +4166,76 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-12T07:29:24.906358+00:00",
+    "generated_at": "2026-10-13T14:17:04.102312+00:00",
     "open_count": 3,
-    "closed_count": 36,
-    "scored_count": 36,
-    "scored_count_all": 36,
+    "closed_count": 37,
+    "scored_count": 37,
+    "scored_count_all": 37,
     "recommit_scored_count": 0,
     "entry_kind_counts": {
-      "first_entry": 36,
+      "first_entry": 37,
       "recommit": 0
     },
-    "any_de_risk_count": 24,
+    "any_de_risk_count": 25,
     "winning_cadence_counts": {
       "dca_4x_weekly": 14,
-      "dca_2x_biweekly": 7,
+      "dca_2x_biweekly": 8,
       "dca_5x_weekday": 13,
       "dca_2x_weekly": 2
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 36,
-        "mean_end_value_delta": -0.1183,
-        "mean_de_risk_gbp": -0.0797,
-        "de_risk_rate": 0.4722,
+        "scored_episodes": 37,
+        "mean_end_value_delta": -0.1173,
+        "mean_de_risk_gbp": -0.0795,
+        "de_risk_rate": 0.4595,
         "win_count": 2
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 36,
-        "mean_end_value_delta": 0.0258,
-        "mean_de_risk_gbp": 0.1139,
-        "de_risk_rate": 0.4722,
+        "scored_episodes": 37,
+        "mean_end_value_delta": 0.0222,
+        "mean_de_risk_gbp": 0.1105,
+        "de_risk_rate": 0.4595,
         "win_count": 14
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 36,
-        "mean_end_value_delta": 0.1031,
-        "mean_de_risk_gbp": 0.1372,
-        "de_risk_rate": 0.5833,
-        "win_count": 7
+        "scored_episodes": 37,
+        "mean_end_value_delta": 0.0984,
+        "mean_de_risk_gbp": 0.1343,
+        "de_risk_rate": 0.5946,
+        "win_count": 8
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 36,
-        "mean_end_value_delta": -0.1033,
-        "mean_de_risk_gbp": -0.0519,
-        "de_risk_rate": 0.5556,
+        "scored_episodes": 37,
+        "mean_end_value_delta": -0.1016,
+        "mean_de_risk_gbp": -0.0514,
+        "de_risk_rate": 0.5405,
         "win_count": 13
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 36,
+      "closed_episodes": 37,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 36,
+      "first_entry_scored": 37,
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 3,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T03:29:24.801079-04:00",
+    "generated_at": "2026-10-13T10:17:03.988522-04:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -4165,8 +4263,8 @@
     "closed_count": 0,
     "open_by_capital_status": {
       "on_book": 35,
-      "off_book": 2,
-      "never_funded": 5
+      "off_book": 3,
+      "never_funded": 4
     },
     "closed_by_capital_status": {
       "on_book": 0,
@@ -4185,16 +4283,16 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 1,
+      "opened": 0,
       "closed": 0,
-      "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_on_book": 1,
+      "tagged_off_book": 1
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T03:29:24.801079-04:00",
+    "generated_at": "2026-10-13T10:17:03.988522-04:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -4202,10 +4300,10 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 3,
-    "card_count": 3,
+    "proposal_count": 5,
+    "card_count": 5,
     "verdict_counts": {
-      "agree": 3,
+      "agree": 5,
       "veto": 0,
       "abstain": 0
     },
@@ -4214,12 +4312,22 @@
         "agree": 3,
         "veto": 0,
         "abstain": 0
+      },
+      "sell": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      },
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
       }
     },
     "cards": [
       {
-        "ticker": "ROST",
-        "name": "Ross Stores, Inc.",
+        "ticker": "CPRT",
+        "name": "Copart, Inc.",
         "algo_action": "rebuy_skip",
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
@@ -4242,13 +4350,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 32
+            "value": 33
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 32
+            "value": 33
           },
           {
             "kind": "rank_drop",
@@ -4260,13 +4368,13 @@
             "kind": "research_verdict",
             "source": "candidates",
             "detail": "Research overlay verdict at decision time",
-            "value": "neutral"
+            "value": "accumulate"
           },
           {
             "kind": "conviction_score",
             "source": "candidates",
             "detail": "Conviction score at decision time",
-            "value": 0.4634
+            "value": 0.46149999999999997
           },
           {
             "kind": "still_buyish",
@@ -4292,13 +4400,13 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-12T03:29:24.801079-04:00",
-        "proposal_id": "buy_tier_level:ROST:rebuy_skip:2026-10-12T03:29:24.801079-04:00",
+        "logged_at": "2026-10-13T10:17:03.988522-04:00",
+        "proposal_id": "buy_tier_level:CPRT:rebuy_skip:2026-10-13T10:17:03.988522-04:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
           "rank_drop_exit_min": 3,
-          "research_verdict": "neutral",
+          "research_verdict": "accumulate",
           "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
           "judge_spec_id": "heuristic.v1",
           "p1_live_inputs": {
@@ -4337,13 +4445,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 36
+            "value": 35
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 36
+            "value": 35
           },
           {
             "kind": "rank_drop",
@@ -4361,7 +4469,7 @@
             "kind": "conviction_score",
             "source": "candidates",
             "detail": "Conviction score at decision time",
-            "value": 0.333795
+            "value": 0.38148
           },
           {
             "kind": "still_buyish",
@@ -4387,8 +4495,8 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-12T03:29:24.801079-04:00",
-        "proposal_id": "buy_tier_level:AVGO:rebuy_skip:2026-10-12T03:29:24.801079-04:00",
+        "logged_at": "2026-10-13T10:17:03.988522-04:00",
+        "proposal_id": "buy_tier_level:AVGO:rebuy_skip:2026-10-13T10:17:03.988522-04:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": 0,
@@ -4432,13 +4540,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 38
+            "value": 37
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 38
+            "value": 37
           },
           {
             "kind": "rank_drop",
@@ -4456,7 +4564,7 @@
             "kind": "conviction_score",
             "source": "candidates",
             "detail": "Conviction score at decision time",
-            "value": 0.2797
+            "value": 0.3357
           },
           {
             "kind": "still_buyish",
@@ -4482,13 +4590,185 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-12T03:29:24.801079-04:00",
-        "proposal_id": "buy_tier_level:FER:rebuy_skip:2026-10-12T03:29:24.801079-04:00",
+        "logged_at": "2026-10-13T10:17:03.988522-04:00",
+        "proposal_id": "buy_tier_level:FER:rebuy_skip:2026-10-13T10:17:03.988522-04:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
           "rank_drop_exit_min": 3,
           "research_verdict": "neutral",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "MAR",
+        "name": "Marriott International, Inc.",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "hold"
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.4182
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-13T10:17:03.988522-04:00",
+        "proposal_id": "buy_tier_level:MAR:sell:2026-10-13T10:17:03.988522-04:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": null,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      },
+      {
+        "ticker": "CSX",
+        "name": "CSX Corporation",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy into buyish target set \u2014 agree with algo selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 31
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 31
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 0.4957
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level",
+        "logged_at": "2026-10-13T10:17:03.988522-04:00",
+        "proposal_id": "buy_tier_level:CSX:buy:2026-10-13T10:17:03.988522-04:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
           "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
           "judge_spec_id": "heuristic.v1",
           "p1_live_inputs": {
@@ -4507,22 +4787,32 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-12T03:29:24.801079-04:00",
+      "generated_at": "2026-10-13T10:17:03.988522-04:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 3,
+      "card_count": 5,
       "verdict_counts": {
-        "agree": 3,
+        "agree": 5,
         "veto": 0,
         "abstain": 0
       },
       "by_algo_action": {
         "rebuy_skip": {
           "agree": 3,
+          "veto": 0,
+          "abstain": 0
+        },
+        "sell": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 1,
           "veto": 0,
           "abstain": 0
         }
@@ -4542,7 +4832,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-12T07:29:24.915716+00:00",
+  "generated_at": "2026-10-13T14:17:04.113031+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
