@@ -33,7 +33,7 @@ proposal for a cold-start twin.
 
 | Group | Candidates | Score |
 |---|---|---|
-| Screen models | All 22 in `models.ALL_MODELS` (Graham, Schloss, deep value, earnings and FCF yield, PEG, quality and moat, dividend, Magic Formula, Acquirer's Multiple, Dreman, Piotroski, composite value, earnings quality, financial health) | Each model's own 0–1 score from the `dividend_units_fixed` signal cache: the models as the next epoch will score them once L571 is fixed |
+| Screen models | All 22 in `models.ALL_MODELS` (Graham, Schloss, deep value, earnings and FCF yield, PEG, quality and moat, dividend, Magic Formula, Acquirer's Multiple, Dreman, Piotroski, composite value, earnings quality, financial health) | Each model's own 0–1 score from the `dividend_units_fixed` signal cache on the spent hsr-v1 panel (pre-L571 probe). Live scoring after **hsr-v2** normalises yield at load; hms-v1 remains a spent registration on the pre-fix fingerprint |
 | Gross profitability | (gross margin × revenue) / total assets | Novy-Marx (2013); higher is better |
 | Accruals | (net income − operating cash flow) / total assets | Sloan (1996); lower is better |
 | Net share issuance | shares / shares a year earlier − 1 | Pontiff–Woodgate (2008); lower is better |
