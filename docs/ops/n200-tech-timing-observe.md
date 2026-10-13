@@ -43,7 +43,9 @@ Kept the same `registration_id` because this is an exploratory cost-stamp correc
 
 ## Dashboard
 
-**Automation → Queue & hunter** shows **N200 / learning-factory pipeline** (phase floor, volume gate, **per-lever entry/exit verdicts**, store freshness, ops-check). Compact strip also on **Analysis → observe**.
+**Analysis → Observe** has an **investment model switcher** — select **N200 · observe** for the full pipeline + path scoreboard + companion diagnostics (time running, volume toward gate, cohort median / sample avg close Δ). Strand A remains the only live capital view (F5); this tab is observe-only.
+
+**Automation → Queue & hunter** also shows **N200 / learning-factory pipeline** (phase floor, volume gate, **per-lever entry/exit verdicts**, store freshness, ops-check).
 
 Phase green = **mechanism throughput** only. Lever win/lose = **best-feasible under ±14d brackets at fair costs**, independent of path P&L. Neither is alpha or capital readiness (F8). Projection helper: `build_n200_pipeline_health_projection` → `queue_health.n200_pipeline_health.per_lever`.
 

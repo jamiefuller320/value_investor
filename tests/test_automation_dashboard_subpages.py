@@ -337,7 +337,7 @@ def test_daily_hub_accept_passes_focus_ack_decision() -> None:
     assert "badge-sell" in card
     html = Path("docs/index.html").read_text(encoding="utf-8")
     assert 'src="app.js?v=' in html
-    assert "n200-per-lever-20261011" in html
+    assert "investment-model-switcher-20261013" in html
     assert "Market warning triage" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "zero_body_stuck" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "Expansive assessment" in OPS_MONITOR.read_text(encoding="utf-8")
@@ -371,7 +371,7 @@ def test_css_automation_subnav_and_daily_rec() -> None:
 
 
 def test_n200_pipeline_health_on_queue_and_analysis() -> None:
-    """N200 phase/volume/per-lever readout on Automation Queue + Analysis observe."""
+    """N200 phase/volume/per-lever readout on Automation Queue + Analysis model switcher."""
     text = APP_JS.read_text(encoding="utf-8")
     assert "function renderN200PipelineHealthSection(" in text
     assert "function resolveN200PipelineHealth(" in text
@@ -385,22 +385,55 @@ def test_n200_pipeline_health_on_queue_and_analysis() -> None:
     queue_fn = text.split("function renderQueueHealthMonitor(", 1)[1].split("\nfunction ", 1)[0]
     assert "renderN200PipelineHealthSection(" in queue_fn
     assert "n200_pipeline_health" in queue_fn
-    analysis = text.split('id="analysis-observe"', 1)[1].split('id="analysis-charts"', 1)[0]
-    assert "renderN200PipelineHealthSection(data, { compact: true })" in analysis
+    assert "renderN201PipelineHealthSection(" in queue_fn
+    assert "n201_pipeline_health" in queue_fn
+    assert "function renderAnalysisObserveForModel(" in text
+    assert 'renderN200PipelineHealthSection(data, { compact: false })' in text
+    assert "INVESTMENT_MODELS" in text
+    assert "function renderInvestmentModelSwitcher(" in text
     assert "not alpha" in text.lower() or "not a promote" in text.lower()
     assert "mechanism throughput" in text.lower() or "Throughput only" in text or "Lever ≠ path"
     css = STYLES.read_text(encoding="utf-8")
     assert ".n200-pipeline-health-section" in css
     assert ".n200-pipeline-grid" in css
     assert ".n200-lever-verdict" in css
+    assert ".investment-model-switcher" in css
+    assert ".n201-pipeline-health-section" in css
     ops = OPS_MONITOR.read_text(encoding="utf-8")
     assert "N200 pipeline health" in ops
     assert "per-lever" in ops
+    assert "model switcher" in ops
     n200_doc = Path("docs/ops/n200-tech-timing-observe.md").read_text(encoding="utf-8")
     assert "## Dashboard" in n200_doc
     assert "build_n200_pipeline_health_projection" in n200_doc
     assert "per_lever_scoreboards" in n200_doc
     assert "independent of path P&L" in n200_doc
+    assert "model switcher" in n200_doc
+    n201_doc = Path("docs/ops/n201-value-mom-observe.md").read_text(encoding="utf-8")
+    assert "## Dashboard" in n201_doc
+    assert "model switcher" in n201_doc
+
+
+def test_investment_model_switcher_catalog_and_hash() -> None:
+    """Model switcher exposes A/N200/N201 with live vs observe labels and hash wiring."""
+    text = APP_JS.read_text(encoding="utf-8")
+    assert 'id: "strand-a"' in text
+    assert 'id: "n200"' in text
+    assert 'id: "n201"' in text
+    assert 'mode: "live"' in text
+    assert 'mode: "observe"' in text
+    assert "function normalizeInvestmentModel(" in text
+    assert "function isInvestmentModelHashToken(" in text
+    assert "function jumpToInvestmentModel(" in text
+    assert "function renderInvestmentModelCompanionStrip(" in text
+    assert "function renderN201PipelineHealthSection(" in text
+    assert "function resolveN201PipelineHealth(" in text
+    assert "#analysis/observe/" in text
+    assert "one live capital path" in text.lower() or "Sole live" in text
+    assert "launch-queue waiter" in text
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    assert "investment-model-switcher-20261013" in html
+    assert "function renderObservePathScoreboardPanel(" in text
 
 
 def test_ops_runbook_documents_daily_hub() -> None:

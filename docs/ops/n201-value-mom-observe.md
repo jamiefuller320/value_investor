@@ -63,6 +63,12 @@ Sealing **enqueues** N201 Data demand (deepen / shortlist / threshold readiness)
 | **Queue-health refresh** | Projects phase/volume/freshness into `queue_health.n201_pipeline_health` (no re-score) |
 | Manual | `ftse-n201-value-mom --output-dir docs/data` |
 
+## Dashboard
+
+**Analysis → Observe** investment model switcher → **N201 · observe** shows pipeline health (phase / volume / path median), companion diagnostics, and the alone path scoreboard. Hash: `#analysis/observe/n201`.
+
+**Automation → Queue & hunter** shows a compact N201 strip (launch-queue waiter badge). Observe-only — never a second live capital path (F5 / F8).
+
 ## Artifacts
 
 | Path | Role |
