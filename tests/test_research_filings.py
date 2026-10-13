@@ -11235,6 +11235,23 @@ def test_parked_source_hunter_skip_intu_sp500():
     assert fetch_filings_ir_allowlist("INTU") == []
 
 
+def test_parked_source_hunter_skip_jd_us_adr_asia():
+    """eng-20261013-02: JD leftover IWB is 6-K board-meeting notices, not missing 20-F/results."""
+    assert "JD" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["JD"]
+    assert "6-K" in reason
+    assert "substantiveness" in reason
+    assert "EX-99.1" in reason
+    assert "20-F" in reason
+    assert "sec_edgar" in reason
+    assert "403" in reason
+    assert fetch_filings_ir_allowlist("JD") == []
+    board_meeting_6k = (
+        "https://www.sec.gov/Archives/edgar/data/1549802/000119312526326847/d169158d6k.htm"
+    )
+    assert fetch_filing_body(board_meeting_6k) is None
+
+
 def test_parked_source_hunter_skip_ldos_sp500():
     """eng-20260907-06: LDOS leftover IWB is acquisition-closing 8-K primary, not missing 10-K/10-Q."""
     assert "LDOS" in PARKED_SOURCE_HUNTER_SKIP
