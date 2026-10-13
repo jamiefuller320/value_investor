@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-12T07:29:24.887308+00:00
+Track: `buy_tier_level` · updated 2026-10-13T14:17:04.083939+00:00
 
 ## Portfolio loser feedback
 
@@ -150,17 +150,19 @@ Track: `buy_tier_level` · updated 2026-10-12T07:29:24.887308+00:00
 - data_quality 1.00
 - conviction 74%
 
+### CSX — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 50%
+
 ### BKR — intact / hold_tolerate (+0.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 86%
-
-### MAR — weakening / watch_review (+1.9%)
-- left buy tier (hold)
-- research accumulate
-- cheapness family still passes
 
 ### GILD — intact / hold_tolerate (+2.4%)
 - still buy
@@ -232,7 +234,7 @@ Track: `buy_tier_level` · updated 2026-10-12T07:29:24.887308+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
+- conviction 74%
 
 ### AMGN — intact / hold_tolerate (+10.2%)
 - still buy

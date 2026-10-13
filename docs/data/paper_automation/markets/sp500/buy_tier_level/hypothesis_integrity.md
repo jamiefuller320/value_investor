@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-12T07:29:09.585489+00:00
+Track: `buy_tier_level` · updated 2026-10-13T14:16:43.593444+00:00
 
 ## Portfolio loser feedback
 
@@ -704,6 +704,25 @@ Track: `buy_tier_level` · updated 2026-10-12T07:29:09.585489+00:00
 - data_quality 1.00
 - conviction 54%
 
+### CCL — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 57%
+
+### QCOM — weakening / watch_review (+0.0%)
+- research verdict caution
+- still strong_buy
+- cheapness family still passes
+
+### LOW — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.90
+- conviction 51%
+
 ### INCY — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
@@ -724,11 +743,6 @@ Track: `buy_tier_level` · updated 2026-10-12T07:29:09.585489+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 57%
-
-### RTX — weakening / watch_review (+0.7%)
-- cheapness family no longer passes
-- still buy
-- research accumulate
 
 ### ZBH — intact / hold_tolerate (+1.0%)
 - still strong_buy
@@ -827,11 +841,6 @@ Track: `buy_tier_level` · updated 2026-10-12T07:29:09.585489+00:00
 - data_quality 0.90
 - conviction 71%
 
-### TSN — weakening / watch_review (+4.5%)
-- research verdict neutral
-- still buy
-- cheapness family still passes
-
 ### TEL — intact / hold_tolerate (+4.6%)
 - still buy
 - research accumulate
@@ -864,13 +873,6 @@ Track: `buy_tier_level` · updated 2026-10-12T07:29:09.585489+00:00
 - cheapness family no longer passes
 - still buy
 - research accumulate
-
-### GDDY — intact / hold_tolerate (+11.3%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 50%
 
 ### ACN — intact / hold_tolerate (+12.0%)
 - still strong_buy
