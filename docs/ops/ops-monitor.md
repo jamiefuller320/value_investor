@@ -90,6 +90,12 @@ lane change and readiness gate (see N152 / P1 pin rules).
   **GHA failure needs Daily-hub triage**, `auto_fixable=False`).
   Dispatch HTTP 403 / missing `actions: write` is allowlisted (hygiene scan +
   supervised YAML task) and does **not** mint a hub rec.
+- **Daily hub Focus relevance** — `check_daily_hub_relevance` compares Focus
+  titles/summaries + aim line to committed P1/P2 phrase anchors
+  (`docs/data/daily_hub_priority_anchors.json`). Finding **Daily hub Focus
+  stale vs spend priorities** is observe-only (`auto_fixable=False`); result
+  store `docs/data/daily_hub_relevance.json` is in `GHA_COMMIT_OPTIONAL`. See
+  [Daily hub Focus relevance](#daily-hub-focus-relevance).
 - **Missing-IR allowlist stall** — ops finding when focus **or spare sprint**
   `unmeasured_stuck` / `zero_body_stuck` tickers still have empty IR allowlist
   after ≥2 intensive 0-improve pins (`check_missing_ir_allowlist_stall`,
@@ -398,6 +404,7 @@ archive pack workflow and refreshed at end of ops-monitor. Dashboard: Automation
 | `check_total_return_view` | **Price-only excess misstates track performance** | Published excess vs `^FTSE` and total-return excess vs `FTAL.L` (dividends credited; clean epoch for fair-cost books) differ by sign or ≥5pp on a headline track. Observe-only — no metric/knob rewrite. See [total-return-view.md](total-return-view.md) | `docs/data/total_return_view.json` | Live |
 | `check_assessment_scoreboard` | **Primary book trails its control on total return** | Single fair-cost scoreboard (total return vs `FTAL.L`, 90% CI, 3% stress-cost sensitivity, gate binding). Warns when the assessment-model primary is ≥5pp behind its control on the common window. Observe-only — see [assessment-scoreboard.md](assessment-scoreboard.md) | `docs/data/assessment_scoreboard.json` | Live |
 | `check_deferred_triggers` | **Deferred idea triggers met** / **… unreadable** / **… name frozen books** | An open deferred idea's structured `trigger` is met; a trigger is invalid or unknown for more than 7 days; or a free-text `revisit_when` still names a book frozen after the idea was last edited. Warn-only; a human picks up, retargets or closes the idea. See [deferred-triggers.md](deferred-triggers.md) | `docs/data/deferred_trigger_check.json` | Live |
+| `check_daily_hub_relevance` | **Daily hub Focus stale vs spend priorities** | Focus titles/summaries (seed preferred) + Daily hub aim line fail a cheap phrase/anchor match against committed P1/P2 allowlist, or still contain demoted stale phrases (e.g. RAT.L-as-north-star, Daily hub Phase 1 land, starve-euro-fat aim). Observe-only — never auto-rewrites Focus. See [Daily hub Focus relevance](#daily-hub-focus-relevance) | `docs/data/daily_hub_relevance.json` (+ anchors `docs/data/daily_hub_priority_anchors.json`) | Live |
 | `check_hold_period_counterfactual` | **Longer holds beat live exit buffer in replay** | A faithful replay of logged passes (baseline within 1% of logged NAV) with `exit_confirm_screens` 5/10/20 beats the live knob by ≥1pp on a headline track. Observe-only (L531) — no knob edit; next step is a cold-start twin. See [hold-period-counterfactual.md](hold-period-counterfactual.md) | `docs/data/hold_period_counterfactual.json` | Live |
 | `check_n200_tech_timing_observe` | **N200 tech-timing observe refreshed** / **N200 volume gate ready for review** | Sealed observe-only strand B (`strand-b-plain-value-tech-timing-v0`): raw_buy_tier identity + ±14d entry/exit brackets from archive history. Cost-aware absolute `smooth_ret_cohort_median` primary (fair-cost standing rule — [fair-cost-primacy.md](fair-cost-primacy.md)); **per-lever** entry/exit best-feasible verdicts independent of path P&L; control excess + stress report-only. Never writes books/knobs. Dashboard: Automation → Queue **N200 pipeline health** (phase / volume / per-lever / freshness — not promote). See [n200-tech-timing-observe.md](n200-tech-timing-observe.md) | `docs/data/n200_tech_timing_observe.json`, `docs/data/n200_tech_timing_registration.json`, `queue_health.n200_pipeline_health` | Live |
 | `check_n201_value_mom_observe` | **N201 value-mom observe refreshed** / **N201 volume gate ready for review** | Sealed observe-only strand C (`strand-c-short-horizon-value-mom-v0`): plain EY top-30% local + 12–1 mom > 0 + `financial_health` pass; fixed 100 local stake; 63d or identity/quality-break exit; fair-cost `smooth_ret_cohort_median` primary (independent of fund NAV); patient-hold excess + stress report-only. Launch-queue waiter (does not steal P1 from holdings/N200). Never writes books/knobs. See [n201-value-mom-observe.md](n201-value-mom-observe.md) | `docs/data/n201_value_mom_observe.json`, `docs/data/n201_value_mom_registration.json`, `queue_health.n201_pipeline_health` | Live |
@@ -518,10 +525,26 @@ with **Accept followed** vs **Discuss resolved**.
 | Expansive assessment | Per-task structured `assessment` fields (`where_we_are`, stage duration / `stage_since`, `waiting_for`, `how_achieved`) from seed, notes (`Where:` / `Stage:` / `Since:` / `How:`), status markers, and observe fillers (market triage, human gates, reconcile). Missing duration stays `duration unknown` in JSON (no invented dates). **UI** renders one coherent paragraph from the fields that are present — empty waiting/how and bare “proposed / duration unknown” are omitted (no labeled “not stated” rows) |
 | Accept-streak hint | Observe-only footer when ≥5 Accepts / 30d with 0 Discuss on a family — never auto-flips `automated: true` (N169) |
 | Aim filter | Suite A stress streaks / off-buy-tier zero-filing themes stay out unless already a checklist item or focus line |
+| Focus relevance | `check_daily_hub_relevance` (P1/P2 phrase anchors) — see [Daily hub Focus relevance](#daily-hub-focus-relevance) |
 
 Project notes `Today —` bullets are the editorial surface; after the morning build,
 JSON wins for the UI. Agents do not push unprompted into chat — say
 `discuss daily recommendation \`rec-…\`` in the Project conversation.
+
+## Daily hub Focus relevance {#daily-hub-focus-relevance}
+
+Observe/warn-only cross-check so Focus / “today’s north star” lines do not drift
+from standing spend priorities while the rest of the hub stays green.
+
+| Layer | Behavior |
+|-------|----------|
+| Anchors | Committed `docs/data/daily_hub_priority_anchors.json` — `required_groups` (P1 live-path bind + P2 offline ingest / clash-aware) and `stale_phrases` (demoted heroes such as RAT.L-as-north-star, Daily hub Phase 1 land, starve-euro-fat aim). Edit this file when P1/P2 wording changes. |
+| What “relevant” means | Combined Focus titles+summaries (prefer `project_daily_seed.json`, else published `daily_focus.json`) plus the Daily hub aim line in `docs/app.js` must hit ≥1 phrase from **each** required group and must not contain any `stale_phrases`. Deterministic substring match; no LLM. Clash-aware capacity is a P2 constraint, not a separate required hero unless listed in anchors. |
+| Trigger | `collect_ops_findings` → `check_daily_hub_relevance` (daily ops-monitor schedule, including early hub slot) |
+| Store | `docs/data/daily_hub_relevance.json` (ops-monitor `GHA_COMMIT_OPTIONAL`) |
+| Finding | **Daily hub Focus stale vs spend priorities** when mismatch (`auto_fixable=False`, category `dashboard_health`) |
+| Non-goals | No auto-rewrite of Focus/seed/aim from the finding alone; no eng spray; market-warning triage copy is out of corpus (Focus + aim only) |
+| Response | Human/agent rewrites `project_daily_seed.json` Focus lines and/or aim copy, then next ops-monitor rebuild publishes `daily_focus.json` |
 
 ## CLI
 

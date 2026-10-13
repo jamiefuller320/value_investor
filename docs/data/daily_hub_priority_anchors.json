@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-10-13",
+  "definition": "Daily hub Focus / Today north-star lines are relevant when their combined titles+summaries (and the Daily hub aim line) match standing AGENTS.md / PROJECT_OBJECTIVE spend priorities via required_groups, and do not contain demoted stale_phrases. Clash-aware capacity is a constraint inside P2, not a standalone hero Focus unless listed in required_groups. Observe/warn-only — never auto-rewrite Focus from the finding alone. Edit this file when P1/P2 wording changes.",
+  "sources": [
+    "AGENTS.md spend priorities",
+    "docs/PROJECT_OBJECTIVE.md",
+    "docs/ops/data-pillar-priorities.md"
+  ],
+  "required_groups": [
+    {
+      "id": "p1_live_path_bind",
+      "label": "P1 FTSE live-path bind quality (holdings ∪ strand A ∪ N200; N201 waiter honest)",
+      "any_of": [
+        "p1",
+        "bind",
+        "holdings",
+        "strand a",
+        "n200",
+        "n201",
+        "launch-queue",
+        "launch queue",
+        "live-path",
+        "live path"
+      ]
+    },
+    {
+      "id": "p2_offline_ingest",
+      "label": "P2 offline ingest maintenance / clash-aware eng",
+      "any_of": [
+        "p2",
+        "offline",
+        "ingest",
+        "maintenance",
+        "cascade",
+        "clash-aware",
+        "clash aware"
+      ]
+    }
+  ],
+  "stale_phrases": [
+    {
+      "id": "rat_l_as_north_star",
+      "phrase": "rat.l",
+      "note": "RAT.L entry/DCA watch is tactical paper detail, not standing P1 north star"
+    },
+    {
+      "id": "daily_hub_phase_1",
+      "phrase": "daily hub phase 1",
+      "note": "Hub Phase 1 + Accept/Discuss shipping debt already landed"
+    },
+    {
+      "id": "accept_discuss_land",
+      "phrase": "accept/discuss land",
+      "note": "Accept/Discuss land is complete; do not keep as Focus hero"
+    },
+    {
+      "id": "starve_euro_fat_slot",
+      "phrase": "starve the euro fat",
+      "note": "Euro fat sprint released (sprint_count 0); aim/triage should not hero-starve a closed fat slot"
+    },
+    {
+      "id": "starve_euro_fat_short",
+      "phrase": "starve euro fat",
+      "note": "Short form of released euro-fat starve framing"
+    }
+  ],
+  "surfaces": [
+    "project_daily_seed.focus_lines",
+    "daily_focus.focus_lines",
+    "docs/app.js daily-hub-aim"
+  ]
+}

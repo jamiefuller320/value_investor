@@ -1073,7 +1073,7 @@ def _observe_for_market_warn(task: dict[str, Any]) -> dict[str, Any]:
     role = ", ".join(role_bits)
     where = (
         f"{market} · {flag_id} ({role}) — proposed triage: {action}. "
-        "Observe-only; do not divert the euro fat slot on ritual ambers."
+        "Observe-only; do not divert offline ingest / maintenance capacity on ritual ambers."
     )
     waiting = ""
     how = ""
