@@ -1,29 +1,31 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-12T18:29:13.642612+11:00",
+    "local_time": "2026-10-13T11:46:39.090236+11:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-10-12T10:00:00+11:00",
-    "settle_at": "2026-10-12T10:30:00+11:00",
+    "market_open_at": "2026-10-13T10:00:00+11:00",
+    "settle_at": "2026-10-13T10:30:00+11:00",
     "can_act": true,
     "reason": "ok"
   },
   "trades": [
     {
-      "id": "0a3df97c-a080-4862-ad6d-839fd05bc1d5",
+      "id": "cd500084-d347-4769-8875-42ea213286d6",
       "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
-      "acted_at": "2026-10-12T18:29:13.642612+11:00",
-      "ticker": "PRN.AX",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 17.233021,
-      "price": 2.2,
-      "gross": 37.91,
-      "cost": 0.07,
-      "net_cash": -37.98,
-      "note": "Automated buy",
-      "name": "Perenti Limited"
+      "acted_at": "2026-10-13T11:46:39.090236+11:00",
+      "ticker": "MND.AX",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 1.181029,
+      "price": 30.94,
+      "gross": 36.54,
+      "cost": 0.06,
+      "net_cash": 36.48,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Monadelphous Group Limited",
+      "avg_cost_at_exit": 30.82,
+      "position_closed": true
     }
   ],
   "plan": {
@@ -39,8 +41,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 949.41,
-    "cash": 53.62,
+    "nav": 949.34,
+    "cash": 90.1,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -230,17 +232,7 @@
         "price": 5.88
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "MND.AX",
-        "name": "Monadelphous Group Limited",
-        "reason": "No longer in the top conviction target set",
-        "shares": 1.181029,
-        "price": 30.94,
-        "value": 36.54
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
@@ -466,7 +458,7 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 25 equal-weight sleeve(s); sell 1 name(s) that left the set; leave 21 near-target holding(s)."
+    "summary": "Next rebalance would target 25 equal-weight sleeve(s); leave 21 near-target holding(s)."
   },
   "alerts": [
     {
@@ -723,17 +715,6 @@
       "timing_signal": "neutral"
     },
     {
-      "ticker": "MND.AX",
-      "name": "Monadelphous Group Limited",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Screen signal is now hold",
-      "mark": 30.94,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "neutral"
-    },
-    {
       "ticker": "ARB.AX",
       "name": "ARB Corporation Limited",
       "source": "paper",
@@ -771,7 +752,7 @@
       "id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
       "created_at": "2026-09-07T10:31:58.323814+00:00"
     },
-    "cash": 53.62,
+    "cash": 90.1,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -1027,17 +1008,6 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-08T19:50:10.203865+11:00"
-      },
-      "MND.AX": {
-        "ticker": "MND.AX",
-        "shares": 1.181029,
-        "avg_cost": 30.82,
-        "name": "Monadelphous Group Limited",
-        "sector": "Industrials",
-        "currency": "AUD",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-09T18:32:29.655411+11:00"
       },
       "ARB.AX": {
         "ticker": "ARB.AX",
@@ -2201,6 +2171,23 @@
         "net_cash": -37.98,
         "note": "Automated buy",
         "name": "Perenti Limited"
+      },
+      {
+        "id": "cd500084-d347-4769-8875-42ea213286d6",
+        "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+        "acted_at": "2026-10-13T11:46:39.090236+11:00",
+        "ticker": "MND.AX",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 1.181029,
+        "price": 30.94,
+        "gross": 36.54,
+        "cost": 0.06,
+        "net_cash": 36.48,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Monadelphous Group Limited",
+        "avg_cost_at_exit": 30.82,
+        "position_closed": true
       }
     ],
     "equity_curve": [
@@ -3060,14 +3047,31 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-13T11:46:39.090236+11:00",
+        "portfolio_value": 542.06,
+        "cash": 90.1,
+        "contributed_capital": 1000.0,
+        "positions": 25,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "AUD": 0.526
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-12T18:29:13.642612+11:00",
+    "last_mark_at": "2026-10-13T11:46:39.090236+11:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "MND.AX": 1
-      },
-      "reentry_cooldown": {}
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
@@ -3077,9 +3081,9 @@
     "schema_version": 2,
     "market_id": "asx200",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T07:29:13.780823+00:00",
+    "generated_at": "2026-10-13T00:46:39.417767+00:00",
     "observe_only": true,
-    "open_count": 22,
+    "open_count": 23,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -3150,13 +3154,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "ingested_this_pass": 1,
+    "checkpoints_added_this_pass": 3
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T07:29:13.782911+00:00",
+    "generated_at": "2026-10-13T00:46:39.419899+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -3210,7 +3214,7 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 21,
+      "hold_closed_count": 22,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 45,
       "gaps": [
@@ -3220,17 +3224,17 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 25,
-        "recovered_to_breakeven": 15,
+        "count": 24,
+        "recovered_to_breakeven": 14,
         "close_reasons": {
-          "open": 25
+          "open": 24
         }
       },
       "closed": {
-        "count": 21,
-        "recovered_to_breakeven": 14,
+        "count": 22,
+        "recovered_to_breakeven": 15,
         "close_reasons": {
-          "sold_while_recovered": 14,
+          "sold_while_recovered": 15,
           "sold_while_underwater": 7
         }
       }
@@ -3248,11 +3252,11 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     }
   },
@@ -3261,8 +3265,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-12T07:29:13.786046+00:00",
-    "as_of": "2026-10-12T18:29:13.642612+11:00",
+    "updated_at": "2026-10-13T00:46:39.422880+00:00",
+    "as_of": "2026-10-13T11:46:39.090236+11:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -3274,19 +3278,19 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 26,
+    "holding_count": 25,
     "underwater_count": 12,
     "thesis_status_counts": {
       "intact": 21,
-      "weakening": 5,
+      "weakening": 4,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 26,
+      "holding_count": 25,
       "loser_count": 12,
-      "loser_share": 0.4615,
-      "loser_nav_share": 0.4449,
+      "loser_share": 0.48,
+      "loser_nav_share": 0.4638,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": false,
@@ -3302,9 +3306,9 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.5,
-        "dividend": 0.1429,
-        "garp": 0.2857,
+        "quality": 0.5385,
+        "dividend": 0.1538,
+        "garp": 0.3077,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -4091,45 +4095,6 @@
         "broken_reasons": []
       },
       {
-        "ticker": "MND.AX",
-        "name": "Monadelphous Group Limited",
-        "thesis_status": "weakening",
-        "recommended_action": "watch_review",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0039,
-        "mark": 30.94,
-        "avg_cost": 30.82,
-        "signal": "hold",
-        "timing_signal": "neutral",
-        "conviction_score": 0.3704,
-        "data_quality_score": 0.95,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "left buy tier (hold)",
-          "research accumulate",
-          "cheapness family still passes"
-        ],
-        "intact_reasons": [
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.95",
-          "conviction 37%"
-        ],
-        "weaken_reasons": [
-          "left buy tier (hold)"
-        ],
-        "broken_reasons": []
-      },
-      {
         "ticker": "YAL.AX",
         "name": "Yancoal Australia Ltd",
         "thesis_status": "weakening",
@@ -4378,15 +4343,15 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T07:29:13.790152+00:00",
+    "generated_at": "2026-10-13T00:46:39.426917+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 21,
+      "closed_total": 22,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 25,
+      "open_with_thesis": 24,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -4403,13 +4368,13 @@
           }
         },
         "broken": {
-          "closed_count": 1,
+          "closed_count": 2,
           "recovery_rate": 1.0,
           "sold_underwater_rate": 0.0,
-          "mean_peak_unrealized_pct": 0.0,
-          "mean_trough_unrealized_pct": 0.0,
+          "mean_peak_unrealized_pct": 0.0019,
+          "mean_trough_unrealized_pct": 0.0019,
           "outcome_labels": {
-            "recovered": 1
+            "recovered": 2
           }
         },
         "insufficient_data": {
@@ -4438,10 +4403,10 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 21,
+      "hold_closed_with_thesis": 22,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold thesis buckets thin (broken=1; target >=3 each)",
+        "hold thesis buckets thin (broken=2; target >=3 each)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -4453,15 +4418,15 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-12T07:29:13.797231+00:00",
-    "open_count": 5,
-    "closed_count": 14,
+    "generated_at": "2026-10-13T00:46:39.434363+00:00",
+    "open_count": 4,
+    "closed_count": 15,
     "scored_count": 3,
-    "scored_count_all": 14,
-    "recommit_scored_count": 11,
+    "scored_count_all": 15,
+    "recommit_scored_count": 12,
     "entry_kind_counts": {
       "first_entry": 3,
-      "recommit": 11
+      "recommit": 12
     },
     "any_de_risk_count": 3,
     "winning_cadence_counts": {
@@ -4510,17 +4475,17 @@
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
       "first_entry_scored": 3,
-      "recommit_scored": 11
+      "recommit_scored": 12
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
-    "marked_this_pass": 4,
-    "closed_this_pass": 0
+    "ingested_this_pass": 0,
+    "marked_this_pass": 5,
+    "closed_this_pass": 1
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T18:29:13.642612+11:00",
+    "generated_at": "2026-10-13T11:46:39.090236+11:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -4547,8 +4512,8 @@
     "open_count": 31,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 26,
-      "off_book": 5,
+      "on_book": 25,
+      "off_book": 6,
       "never_funded": 0
     },
     "closed_by_capital_status": {
@@ -4570,14 +4535,14 @@
     "ingested_this_pass": {
       "opened": 0,
       "closed": 0,
-      "tagged_on_book": 1,
-      "tagged_off_book": 0
+      "tagged_on_book": 0,
+      "tagged_off_book": 1
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-12T18:29:13.642612+11:00",
+    "generated_at": "2026-10-13T11:46:39.090236+11:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -4593,7 +4558,7 @@
       "abstain": 0
     },
     "by_algo_action": {
-      "buy": {
+      "sell": {
         "agree": 1,
         "veto": 0,
         "abstain": 0
@@ -4601,43 +4566,25 @@
     },
     "cards": [
       {
-        "ticker": "PRN.AX",
-        "name": "Perenti Limited",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
+        "ticker": "MND.AX",
+        "name": "Monadelphous Group Limited",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
         "shadow_verdict": "agree",
         "reasons": [
-          "Buy into buyish target set \u2014 agree with algo selection."
+          "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
         ],
         "evidence": [
           {
             "kind": "algo_reason",
             "source": "plan_or_trade",
-            "detail": "Automated buy"
+            "detail": "Automated exit \u2014 left target set"
           },
           {
             "kind": "screen_signal",
             "source": "candidates",
             "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 24
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 24
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
+            "value": "hold"
           },
           {
             "kind": "research_verdict",
@@ -4649,13 +4596,13 @@
             "kind": "conviction_score",
             "source": "candidates",
             "detail": "Conviction score at decision time",
-            "value": 0.3691
+            "value": 0.3704
           },
           {
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
+            "value": false
           },
           {
             "kind": "fcf_basis_overlay",
@@ -4675,11 +4622,11 @@
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level",
-        "logged_at": "2026-10-12T18:29:13.642612+11:00",
-        "proposal_id": "buy_tier_level:PRN.AX:buy:2026-10-12T18:29:13.642612+11:00",
+        "logged_at": "2026-10-13T11:46:39.090236+11:00",
+        "proposal_id": "buy_tier_level:MND.AX:sell:2026-10-13T11:46:39.090236+11:00",
         "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
+          "still_buyish": false,
+          "rank_drop": null,
           "rank_drop_exit_min": 3,
           "research_verdict": "accumulate",
           "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
@@ -4700,7 +4647,7 @@
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-12T18:29:13.642612+11:00",
+      "generated_at": "2026-10-13T11:46:39.090236+11:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
@@ -4714,7 +4661,7 @@
         "abstain": 0
       },
       "by_algo_action": {
-        "buy": {
+        "sell": {
           "agree": 1,
           "veto": 0,
           "abstain": 0
@@ -4735,7 +4682,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-12T07:29:13.802604+00:00",
+  "generated_at": "2026-10-13T00:46:39.439677+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

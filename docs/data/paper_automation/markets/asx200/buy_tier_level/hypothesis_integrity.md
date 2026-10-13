@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-12T07:29:13.786046+00:00
+Track: `buy_tier_level` · updated 2026-10-13T00:46:39.422880+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **12** / 26 (46% count, 44% NAV)
+- Losers: **12** / 25 (48% count, 46% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -145,11 +145,6 @@ Track: `buy_tier_level` · updated 2026-10-12T07:29:13.786046+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 37%
-
-### MND.AX — weakening / watch_review (+0.4%)
-- left buy tier (hold)
-- research accumulate
-- cheapness family still passes
 
 ### YAL.AX — weakening / watch_review (+1.2%)
 - research verdict caution
