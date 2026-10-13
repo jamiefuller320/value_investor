@@ -190,10 +190,7 @@ def ops_findings_from_relevance(
         )
     for hit in evaluation.get("stale_hits") or []:
         note = str(hit.get("note") or "").strip()
-        bits.append(
-            f"stale phrase `{hit.get('phrase')}`"
-            + (f" — {note}" if note else "")
-        )
+        bits.append(f"stale phrase `{hit.get('phrase')}`" + (f" — {note}" if note else ""))
     titles = (corpus or {}).get("focus_titles") or []
     title_bit = f" Current Focus titles: {titles}." if titles else ""
     return [
