@@ -1,5 +1,5 @@
 {
-  "registration_id": "hms-v1",
+  "registration_id": "hms-v2",
   "status": "registered_holdout_sealed",
   "learning_question": "Which of the screen's 22 models, and five published signals they do not cover, rank next month's total returns reliably in both US universes (the hsr-v1 S&P 500 build and the hsr-mid-v1 mid-cap build) over 2000-2012? Does an equal-weight mix of only those beat the frozen screen's own model mix (its composite score) at the same breadth over 2013-2025, after costs?",
   "closes": [],
@@ -9,7 +9,9 @@
     "hrs-v1",
     "N33",
     "N197",
-    "L571"
+    "L571",
+    "hsr-v2",
+    "hsr-mid-v2"
   ],
   "n33_basis": "N33 forbids tuning the frozen screen on history unless there is an explicit decision to run a controlled research experiment. The user asked for one on 2026-10-08 (test a much larger range of screening models and tailor the mix to the most reliable). This registration is that experiment: research only, fixed before data, never writes assign_signal, model weights, or any live knob.",
   "market_id": "sp500",
@@ -184,9 +186,18 @@
       "before_data": true,
       "change": "mix_code_fingerprint: hash file bytes with CRLF normalised to LF (Windows checkouts).",
       "reason": "Windows autocrlf made registration fingerprints fail before any licensed run could start; normalising newlines keeps Linux and Windows hashes aligned. No search has run and no holdout has been revealed."
+    },
+    {
+      "at": "2026-10-13",
+      "before_data": false,
+      "change": "Open hms-v2 after hms-v1 holdout reveal: screen fingerprint moved with L571 / hsr-v2 dividend-yield unit normalisation. Spent hms-v1 evidence stays under spent_epochs; do not reattribute.",
+      "reason": "hms-v1 holdout spent on pre-L571 screen fingerprint; reopen for hsr-v2 screen epoch."
     }
   ],
-  "screen_code_fingerprint": "5442bfcc1933ec862db97332417fe2498e5806cef2604ab9c4b2a5b88f14063d",
-  "mix_code_fingerprint": "a08480ac52ac1fef46d6fd75c4d2f84cd64ab8dc9fa414bde806136484296d27",
-  "registered_at": "2026-10-09T13:37:35.025189+00:00"
+  "screen_code_fingerprint": "7a8397337b38df1f4495daad9f575606e89c00ddae07871efba03d9ed14d4ffb",
+  "mix_code_fingerprint": "7592f4b5d95866cd3eee606898f2fe45cba4d5f45231ddee038dd9ecf3b7bac7",
+  "registered_at": "2026-10-13T13:41:24.646614+00:00",
+  "supersedes": [
+    "hms-v1"
+  ]
 }

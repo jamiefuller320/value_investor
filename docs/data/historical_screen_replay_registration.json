@@ -1,6 +1,6 @@
 {
-  "registration_id": "hsr-v1",
-  "registered_at": "2026-10-08T08:06:41.511112+00:00",
+  "registration_id": "hsr-v2",
+  "registered_at": "2026-10-13T12:59:43.482443+00:00",
   "status": "registered_holdout_sealed",
   "learning_question": "In a survivorship-free point-in-time US universe, does the frozen value screen's buy tier (buy + strong_buy) beat a plain top-30% earnings-yield sort of the same names, after costs on both? Both legs carry the same value exposure, so the answer does not hinge on whether value or growth led the period. Whether value beats the market is the published factor question (value-factor-base-rate.md); the spread over the equal-weight universe is reported as context, split by value regime.",
   "closes": [
@@ -8,9 +8,10 @@
     "L542"
   ],
   "supersedes": [
-    "L565"
+    "L565",
+    "hsr-v1"
   ],
-  "screen_code_fingerprint": "5442bfcc1933ec862db97332417fe2498e5806cef2604ab9c4b2a5b88f14063d",
+  "screen_code_fingerprint": "7a8397337b38df1f4495daad9f575606e89c00ddae07871efba03d9ed14d4ffb",
   "screen_code_paths": [
     "src/value_investor/models/",
     "src/value_investor/scoring/__init__.py",
@@ -28,7 +29,7 @@
     "vendor": "Sharadar personal-use licence (sharadar.com), Core US Equities Bundle, full history",
     "fundamentals": "fundamentals table, dimension ART (as-reported trailing twelve months), latest row with filing date (datekey, or date in newer exports) at least 2 days before the rebalance date. Rows filed more than 456 days before the rebalance, and non-USD reporters, are dropped and counted.",
     "prices": "stocks table closeadj (split, dividend and spinoff adjusted) for total return. Market cap is the filing-date marketcap rolled to the rebalance by the split-adjusted close ratio, so splits between filing and rebalance cancel.",
-    "metric_mapping": "Yahoo conventions as the live library screen receives them: dividend_yield and debt_to_equity in percent (2.5 = 2.5%), margins, returns and growth as fractions. revenue_growth and earnings_growth are quarterly year-on-year from ARQ (Yahoo's definition), falling back to ART year-on-year. *_prev fields come from the ART row one year earlier. Implemented in src/value_investor/sharadar_replay_adapter.py.",
+    "metric_mapping": "Yahoo conventions as the live library screen receives them: dividend_yield as a fraction after library load (L571 / hsr-v2; Yahoo percent is normalised; Sharadar divyield stays a fraction); debt_to_equity in percent (2.5 = 2.5%), margins, returns and growth as fractions. revenue_growth and earnings_growth are quarterly year-on-year from ARQ (Yahoo's definition), falling back to ART year-on-year. *_prev fields come from the ART row one year earlier. Implemented in src/value_investor/sharadar_replay_adapter.py.",
     "sector": "tickers table sector",
     "delistings": "tickers isdelisted = Y. Merger exits for the sensitivity variant: actions acquisitionby or mergerto (ticker) and mergerfrom or acquisitionof (contraticker).",
     "licence_handling": "Raw tables stay outside the repository and are deleted within 30 days of cancelling. Only cohort-level aggregates are committed."
@@ -112,11 +113,17 @@
       "before_data": true,
       "change": "Reporting only: committed monthly cohort series, per-model diagnostics, and the exploratory dividend_units_fixed variant. Verdicts, metrics, and pass bars unchanged.",
       "reason": "The licensed data must be deleted within 30 days of cancelling. Later questions (factor regression L580, ETF comparison L581, model mix, the L571 fix) can only be answered from what is kept or run inside the month. No licensed data has been used."
+    },
+    {
+      "at": "2026-10-13",
+      "before_data": false,
+      "change": "Open hsr-v2 after hsr-v1 holdout reveal: normalise Yahoo-style dividend_yield percent\u2192fraction at fetch/library load (L571). Spent holdout evidence stays labelled under spent_epochs; do not reattribute v1 verdicts to this fingerprint.",
+      "reason": "hsr-v1 holdout_reveals already fired (trigger on L571). Unit mismatch made dividend floors pass almost any payer and inflated Neff PEGY. Fix at load changes the screen fingerprint; new registration_id required."
     }
   ],
   "reporting": {
     "monthly_series": "At the primary horizon, per-cohort aggregates (universe return, buy-tier, plain and avoid spreads, rank IC, turnover, and per-model pass spread and rank IC) are committed for the development window, and for the holdout once revealed. Cohort-level means only; no per-name value.",
     "per_model": "Report-only per-model pass spread, score rank IC, and pass share per window and horizon.",
-    "exploratory_variants": "dividend_units_fixed re-screens with dividend yield as a fraction (the L571 fix). It opens the holdout only after the baseline reveal and is never evidence."
+    "exploratory_variants": "dividend_units_fixed was the pre-epoch L571 probe on hsr-v1 (percent\u2192fraction panel transform). Under hsr-v2 the load path normalises; the variant is an identity kept for CLI/store key stability and is never evidence."
   }
 }

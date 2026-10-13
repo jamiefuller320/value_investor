@@ -394,6 +394,7 @@ def test_refuses_build_inside_repo():
 
 def test_committed_registration_fingerprints_match_code():
     reg = rs.load_registration()
+    assert reg["registration_id"] == "hrs-v2"
     assert reg["screen_code_fingerprint"] == hsr.screen_code_fingerprint()
     assert reg["rule_code_fingerprint"] == rs.rule_code_fingerprint()
     hsr_reg = hsr.load_registration()

@@ -327,7 +327,7 @@ def test_build_writes_point_in_time_panel(sharadar_dir: Path, tmp_path: Path):
     assert row["ncav"] == pytest.approx(-400.0)
     assert row["current_ratio_bs"] == pytest.approx(2.0)
     assert row["return_on_assets_prev"] == pytest.approx(row["return_on_assets"] - 0.004)
-    assert 2.5 < row["dividend_yield"] < 3.5  # percent, the live Yahoo unit
+    assert 0.025 < row["dividend_yield"] < 0.035  # fraction (hsr-v2 / L571)
 
     terminal = pd.read_csv(out / "terminal_baseline.csv")
     sensitivity = pd.read_csv(out / "terminal_sensitivity.csv").set_index("ticker")["haircut"]
@@ -487,7 +487,7 @@ def test_midcap_build_ranks_the_universe_and_replays(sharadar_dir: Path, tmp_pat
     reg_path.write_text(json.dumps(_midcap_registration()))
     out = tmp_path / "mid"
     report = hsr.build_panel_files(sharadar_dir, out, registration_path=reg_path)
-    assert report["registration_id"] == "hsr-mid-v1"
+    assert report["registration_id"] == "hsr-mid-v2"
     assert report["members_per_date"]["max"] == 15
     panel = pd.read_csv(out / "panel.csv.gz")
     assert "FUND" not in set(panel["ticker"]) and "EURCO" not in set(panel["ticker"])
@@ -502,7 +502,7 @@ def test_midcap_build_ranks_the_universe_and_replays(sharadar_dir: Path, tmp_pat
         registration_path=reg_path,
         store_path=store,
     )
-    assert payload["registration_id"] == "hsr-mid-v1"
+    assert payload["registration_id"] == "hsr-mid-v2"
     assert payload["results"]["exploratory"] is False
     assert payload["results"]["horizons"]["30"]["holdout"]["sealed"] is True
 

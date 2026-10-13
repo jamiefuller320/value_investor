@@ -1,0 +1,102 @@
+{
+  "registration_id": "hsr-mid-v1",
+  "registered_at": "2026-10-08T08:06:40.890553+00:00",
+  "status": "registered_holdout_sealed",
+  "learning_question": "In US mid caps (point-in-time market-cap ranks 501-1000 among domestic common stocks, the closest US analogue to the FTSE 250 that makes up two thirds of the live FTSE 350), does the frozen screen's buy tier beat a plain top-30% earnings-yield sort of the same names after costs on both? Does the answer agree with hsr-v1 on the S&P 500?",
+  "closes": [],
+  "supersedes": [],
+  "screen_code_fingerprint": "5442bfcc1933ec862db97332417fe2498e5806cef2604ab9c4b2a5b88f14063d",
+  "screen_code_paths": [
+    "src/value_investor/models/",
+    "src/value_investor/scoring/__init__.py",
+    "src/value_investor/model_families.py",
+    "src/value_investor/model_weights.py",
+    "src/value_investor/signals.py",
+    "src/value_investor/sector_scoring.py",
+    "src/value_investor/data_quality.py",
+    "src/value_investor/signal_stability.py",
+    "src/value_investor/library_screen.py"
+  ],
+  "market_id": "sp500",
+  "universe": "US domestic common stocks reporting in USD, ranked by point-in-time market cap on each rebalance date; ranks 501-1000 (1 = largest). Active and delisted. The exchange field is not used (it is today's listing). Financials and real estate included.",
+  "data_source": {
+    "vendor": "Sharadar personal-use licence (sharadar.com), Core US Equities Bundle, full history",
+    "fundamentals": "fundamentals table, dimension ART (as-reported trailing twelve months), latest row with filing date (datekey, or date in newer exports) at least 2 days before the rebalance date. Rows filed more than 456 days before the rebalance, and non-USD reporters, are dropped and counted.",
+    "prices": "stocks table closeadj (split, dividend and spinoff adjusted) for total return. Market cap is the filing-date marketcap rolled to the rebalance by the split-adjusted close ratio, so splits between filing and rebalance cancel.",
+    "metric_mapping": "Yahoo conventions as the live library screen receives them: dividend_yield and debt_to_equity in percent (2.5 = 2.5%), margins, returns and growth as fractions. revenue_growth and earnings_growth are quarterly year-on-year from ARQ (Yahoo's definition), falling back to ART year-on-year. *_prev fields come from the ART row one year earlier. Implemented in src/value_investor/sharadar_replay_adapter.py.",
+    "sector": "tickers table sector",
+    "delistings": "tickers isdelisted = Y. Merger exits for the sensitivity variant: actions acquisitionby or mergerto (ticker) and mergerfrom or acquisitionof (contraticker).",
+    "licence_handling": "Raw tables stay outside the repository and are deleted within 30 days of cancelling. Only cohort-level aggregates are committed.",
+    "universe_inputs": "tickers table category (Domestic Common Stock*) and currency; fundamentals ART marketcap; stocks close on month-ends."
+  },
+  "rebalance": {
+    "cadence": "last trading day of each month",
+    "step_days": 30
+  },
+  "windows": {
+    "development": {
+      "first_entry": "2000-01-31",
+      "last_entry": "2012-12-31"
+    },
+    "holdout": {
+      "first_entry": "2013-01-31",
+      "last_entry": "2025-09-30",
+      "reveal_rule": "Revealed once, after the development window is reviewed and nothing in this file has changed. Later reveals are exploratory."
+    }
+  },
+  "horizons_days": [
+    30,
+    91,
+    365
+  ],
+  "primary": {
+    "horizon_days": 30,
+    "metric": "buy_minus_plain_value_net",
+    "secondary_metric": "buy_tier_spread_net",
+    "secondary_role": "context: the buy tier over the equal-weight universe, net of costs. Reported with the value_regime split; it does not decide the verdict.",
+    "confirmation_horizon_days": 365,
+    "pass_bar": "Holdout 90% interval on the primary metric lies wholly above zero, and the 365-day holdout primary is not wholly below zero (the monthly edge over the plain sort does not reverse over a year)."
+  },
+  "comparators": {
+    "plain_value": "equal-weight top 30% by positive earnings yield (earnings_yield_pe) among the same names, charged the same cost per side on its own turnover. The decision comparator.",
+    "universe": "equal-weight return of every name with entry and exit prices; costless. Context only.",
+    "value_regime": "each cohort is labelled value_led when the plain sort beat the universe gross, value_lagged otherwise; the primary and the market spread are summarised in each. Descriptive, not a pass bar."
+  },
+  "costs": {
+    "base_per_side": 0.00225,
+    "stress_per_side": 0.03,
+    "model": "Each leg pays 2 x cost x its own turnover versus its set one horizon earlier: buy_minus_plain_value_net = (buy-tier spread - 2c x buy-tier turnover) - (plain spread - 2c x plain turnover). The universe comparator is costless.",
+    "source": "The fair GBP-funded US cost from market_trading_costs (about 0.15% FX per conversion) plus a 0.075% half-spread for $2-10bn names, three times the S&P 500 half-spread: 0.225% per side. Stress is 3% per side."
+  },
+  "delisting": {
+    "baseline_haircut": 0.0,
+    "sensitivity_haircut_non_merger": -0.3,
+    "rule": "A name whose prices end before the exit date exits at its last adjusted close times (1 + haircut). Baseline 0; sensitivity -30% for delistings that were not mergers or acquisitions."
+  },
+  "fixed_rules": [
+    "No threshold, weight, or model search on any window (N33).",
+    "Model weights stay at defaults; the 28-day learner is not run (N197).",
+    "Per-model rank IC may be reported but never tunes the screen.",
+    "Any change to this file or to the fingerprinted screen code after the holdout is revealed opens a new registration_id; its results are exploratory.",
+    "Same screen fingerprint, windows, horizons, primary, and pass bar as hsr-v1; only the universe and base cost differ.",
+    "The holdout is revealed once, and only after the hrs-v1 selection is committed (the replay enforces it), so mid-cap holdout results cannot inform the rule search."
+  ],
+  "decisions": {
+    "beats_plain_value_in_both": "hsr-v1 and hsr-mid-v1 both beat the plain sort: the machinery works across size; FTSE 250 names need no size-specific handling, and a US mid-cap library market becomes a candidate for the P2 ingest queue when the cascade has room.",
+    "beats_in_one_size_only": "The machinery's value depends on size: no live change; record which size and treat FTSE 250 evidence separately in forward reviews before stage 4.",
+    "neither": "Follow the hsr-v1 decision; mid caps do not rescue the screen.",
+    "market_context": "As hsr-v1: the market spread and its value_regime split are read beside the verdict, never instead of it."
+  },
+  "amendments": [],
+  "related": [
+    "hsr-v1",
+    "hrs-v1",
+    "L571"
+  ],
+  "universe_rule": {
+    "kind": "us_cap_rank",
+    "rank_from": 501,
+    "rank_to": 1000,
+    "ranking": "Latest ART marketcap filed at least 2 days before the date and at most 456 days old, rolled by the split-adjusted close from the last month-end on or before the filing."
+  }
+}

@@ -1,4 +1,4 @@
-"""Pre-registered model-mix search (registration ``hms-v1``).
+"""Pre-registered model-mix search (registration ``hms-v2``; spent ``hms-v1``).
 
 Learning question (fixed in ``docs/data/historical_model_mix_registration.json``
 before any licensed data is bought): which of the screen's 22 models, and five
@@ -659,12 +659,24 @@ def _check_builds(builds: Mapping[str, Path], registration: Mapping[str, Any]) -
         raise ValueError(f"Builds for {sorted(wanted)} are required; got {sorted(builds)}")
 
 
+def _store_has_holdout_reveal(store: Mapping[str, Any]) -> bool:
+    """True when the active slot or any spent epoch already opened the holdout."""
+    if store.get("holdout_reveals"):
+        return True
+    spent = store.get("spent_epochs")
+    if isinstance(spent, dict):
+        for block in spent.values():
+            if isinstance(block, dict) and block.get("holdout_reveals"):
+                return True
+    return False
+
+
 def replay_reveals(store_path: Path = DEFAULT_STORE_PATH) -> list[str]:
     """Replay stores beside ``store_path`` whose holdout has been revealed."""
     out = []
     for name in REPLAY_STORE_NAMES:
         store = rs._read_json(Path(store_path).parent / name) or {}
-        if store.get("holdout_reveals"):
+        if _store_has_holdout_reveal(store):
             out.append(name)
     return out
 
@@ -714,7 +726,8 @@ def search(
         raise ValueError(
             f"Replay holdout already revealed in {', '.join(revealed)}: its committed series "
             "carry per-model holdout results, so a selection now would not be blind. "
-            "hms-v1 can no longer run; open a new registration with a later holdout."
+            "Model-mix search can no longer run on this holdout window; open a new "
+            "registration with a later holdout."
         )
     universes = {u: load_universe(path, registration, u) for u, path in builds.items()}
     result = run_search(universes, registration)
