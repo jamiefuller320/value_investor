@@ -1,39 +1,46 @@
 {
-  "market_id": "nasdaq100",
-  "assessed_at": "2026-10-13T20:15:03.676637+00:00",
+  "market_id": "sti",
+  "assessed_at": "2026-10-13T21:34:27.148063+00:00",
   "unmeasured": [],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "TRI",
-      "indexed_without_body": 8,
-      "filings_total": 93,
-      "filings_with_body": 85
+      "ticker": "BS6.SI",
+      "indexed_without_body": 3,
+      "filings_total": 4,
+      "filings_with_body": 1
     },
     {
-      "ticker": "PDD",
-      "indexed_without_body": 1,
-      "filings_total": 18,
-      "filings_with_body": 17
+      "ticker": "J36.SI",
+      "indexed_without_body": 3,
+      "filings_total": 4,
+      "filings_with_body": 1
     }
   ],
-  "thin_need_discovery": [],
-  "thin_need_bodies": [],
+  "thin_need_discovery": [
+    "A17U.SI"
+  ],
+  "thin_need_bodies": [
+    "J36.SI",
+    "BS6.SI"
+  ],
   "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "TRI",
-    "PDD"
+    "BS6.SI",
+    "J36.SI"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (2 tickers, top: TRI(8), PDD(1))"
+    "Prefer indexed-without-body body refetch (2 tickers, top: BS6.SI(3), J36.SI(3))",
+    "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
     "indexed_without_body_tickers": 2,
-    "indexed_without_body_rows": 9,
-    "thin_need_discovery": 0,
-    "thin_need_bodies": 0
+    "indexed_without_body_rows": 6,
+    "thin_need_discovery": 1,
+    "thin_need_bodies": 2
   }
 }
