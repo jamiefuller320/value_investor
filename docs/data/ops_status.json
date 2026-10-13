@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-10-12T07:46:35.831464+00:00",
+  "run_at": "2026-10-13T02:31:42.055624+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "9 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, ibex35, sti: aim/CAM.L (no_memo, 463.78h since flip), aim/MPE.L (no_key_bodies, 463.78h since flip), aim/YNGN.L (no_key_bodies, 415.78h since flip), ibex35/REP.MC (no_key_bodies, 415.78h since flip), aim/DOTD.L (no_key_bodies, 367.78h since flip), aim/CAML.L (no_key_bodies, 295.78h since flip), asx200/BWP.AX (no_memo, 199.78h since flip), aim/PEBB.L (no_key_bodies, 175.78h since flip), sti/Y92.SI (no_key_bodies, 127.78h since flip). Blocking: no_key_bodies=7, no_memo=2.",
+      "summary": "10 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, hang_seng, ibex35, sti: aim/CAM.L (no_memo, 482.53h since flip), aim/MPE.L (no_key_bodies, 482.53h since flip), aim/YNGN.L (no_key_bodies, 434.53h since flip), ibex35/REP.MC (no_key_bodies, 434.53h since flip), aim/DOTD.L (no_key_bodies, 386.53h since flip), aim/CAML.L (no_key_bodies, 314.53h since flip), asx200/BWP.AX (no_memo, 218.53h since flip), aim/PEBB.L (no_key_bodies, 194.53h since flip), sti/Y92.SI (no_key_bodies, 146.53h since flip), hang_seng/0001.HK (no_memo, 26.53h since flip). Blocking: no_key_bodies=7, no_memo=3.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -15,7 +15,7 @@
       "severity": "warn",
       "category": "ingest",
       "title": "Universe archive body-miss rate elevated",
-      "summary": "Archive body-miss proxy 52% of 241 recent buy-tier flips; 16 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/YNGN.L). Observe-only outcome signal — not a cold-store start gate; do not eng-spray or add a second live crawler / fourth sprint stream (N180/N181).",
+      "summary": "Archive body-miss proxy 52% of 244 recent buy-tier flips; 16 still open without key bodies (sample: euro_depth/NBA.LS, tsx60/SAP.TO, tsx60/PPL.TO, tsx60/TECK-B.TO, euro_stoxx50/ADYEN.AS, aim/YNGN.L). Observe-only outcome signal — not a cold-store start gate; do not eng-spray or add a second live crawler / fourth sprint stream (N180/N181).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -24,7 +24,7 @@
       "severity": "warn",
       "category": "ingest",
       "title": "Universe archive pack bottleneck review stale",
-      "summary": "Archive pack bottleneck review age 54.3h exceeds 36h (expected weekday 22:00 UTC refresh).",
+      "summary": "Archive pack bottleneck review age 73.0h exceeds 36h (expected weekday 22:00 UTC refresh).",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -33,7 +33,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Price-only excess misstates track performance",
-      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -13.6% vs total-return -4.6% (clean epoch, dividends £0.00); ai_judgment_graduated_fair: published +0.4% vs total-return -0.5% (lifetime, dividends £0.00); ai_judgment_hold5_fair: published +0.4% vs total-return -1.0% (lifetime, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
+      "summary": "Published excess vs ^FTSE (price index, cost-basis NAV, no dividends) differs from total-return excess vs FTAL.L by sign or ≥5%: ai_judgment_fair: published -14.7% vs total-return -4.8% (clean epoch, dividends £0.00). Cite the total-return view for performance. See docs/ops/total-return-view.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -52,6 +52,24 @@
       "category": "research",
       "title": "N200 volume gate ready for review",
       "summary": "Volume gate met (episodes>=24 and weeks>=8). Human may review brackets; no auto-promote.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "N201 value-mom observe refreshed",
+      "summary": "strand-c-short-horizon-value-mom-v0: 78 completed episodes over 12 weeks; entries/week=6.5; smooth_ret_cohort_median=0.012641 (fair costs primary; fixed-stake %; independent of fund NAV); patient_hold_excess_report_only=0.0; stress_3pct_report_only=-0.042859; skipped_missing_entry_fields=58495. Observe-only — launch-queue waiter; no live writes (F8).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "info",
+      "category": "research",
+      "title": "N201 volume gate ready for review",
+      "summary": "Volume gate met (episodes>=48 and weeks>=8). Human may review; no auto-promote.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -78,7 +96,7 @@
       "severity": "warn",
       "category": "paper",
       "title": "Primary book trails its control on total return",
-      "summary": "ai_judgment_fair total return -6.9% vs buy_tier_level -0.6% since 2026-09-07 (-6.3%). The primary's filter is costing return against the unfiltered buy tier. Observe-only: do not change the primary from this alone. See docs/ops/assessment-scoreboard.md.",
+      "summary": "ai_judgment_fair total return -6.2% vs buy_tier_level -1.0% since 2026-09-07 (-5.1%). The primary's filter is costing return against the unfiltered buy tier. Observe-only: do not change the primary from this alone. See docs/ops/assessment-scoreboard.md.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -113,15 +131,6 @@
     {
       "severity": "warn",
       "category": "engineering",
-      "title": "Orphaned pr_open engineering tasks",
-      "summary": "Tasks without matching open PR: eng-20261012-01",
-      "auto_fixable": true,
-      "fixed": false,
-      "action_taken": null
-    },
-    {
-      "severity": "warn",
-      "category": "engineering",
       "title": "Parked engineering tasks need manual review",
       "summary": "4 parked task(s): eng-20261004-03, eng-20261004-05, eng-20261004-06, eng-20261008-04",
       "auto_fixable": false,
@@ -129,18 +138,23 @@
       "action_taken": null
     }
   ],
-  "auto_fixes": [],
+  "auto_fixes": [
+    {
+      "action": "market_eng_gap_burndown",
+      "detail": "parked_hunter for sti → "
+    }
+  ],
   "drafted_task_ids": [],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": true,
+      "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-10-12T02:19:02+00:00",
-      "last_success_run_id": 38195299361,
-      "age_hours": 5.5,
+      "last_success_at": "2026-10-13T02:23:46+00:00",
+      "last_success_run_id": 38336677592,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -149,11 +163,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": true,
+      "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-11T17:41:51+00:00",
-      "last_success_run_id": 38160724071,
-      "age_hours": 14.1,
+      "last_success_at": "2026-10-12T20:22:12+00:00",
+      "last_success_run_id": 38303762123,
+      "age_hours": 6.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -163,10 +177,10 @@
       "name": "FTSE Engineering Queue",
       "expected_today": true,
       "past_email_ready": false,
-      "max_age_hours": 3,
-      "last_success_at": "2026-10-12T07:15:26+00:00",
-      "last_success_run_id": 38216728893,
-      "age_hours": 0.5,
+      "max_age_hours": 26,
+      "last_success_at": "2026-10-13T02:20:28+00:00",
+      "last_success_run_id": 38336416490,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -177,9 +191,9 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-10-12T07:40:36+00:00",
-      "last_success_run_id": 38219073615,
-      "age_hours": 0.1,
+      "last_success_at": "2026-10-13T02:30:57+00:00",
+      "last_success_run_id": 38337245593,
+      "age_hours": 0.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -190,9 +204,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-11T14:15:54+00:00",
-      "last_success_run_id": 38146472836,
-      "age_hours": 17.5,
+      "last_success_at": "2026-10-12T16:52:30+00:00",
+      "last_success_run_id": 38280415287,
+      "age_hours": 9.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -205,7 +219,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T14:58:24+00:00",
       "last_success_run_id": 38149345226,
-      "age_hours": 16.8,
+      "age_hours": 35.6,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -216,9 +230,9 @@
       "expected_today": false,
       "past_email_ready": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-10-11T06:21:34+00:00",
-      "last_success_run_id": 38117798943,
-      "age_hours": 25.4,
+      "last_success_at": "2026-10-12T06:51:53+00:00",
+      "last_success_run_id": 38214645378,
+      "age_hours": 19.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -231,7 +245,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T07:27:28+00:00",
       "last_success_run_id": 38121428588,
-      "age_hours": 24.3,
+      "age_hours": 43.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -244,7 +258,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T07:27:30+00:00",
       "last_success_run_id": 38121429962,
-      "age_hours": 24.3,
+      "age_hours": 43.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -257,7 +271,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T17:43:12+00:00",
       "last_success_run_id": 38160816599,
-      "age_hours": 14.1,
+      "age_hours": 32.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -268,9 +282,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-09T08:37:19+00:00",
-      "last_success_run_id": 37906086169,
-      "age_hours": 71.2,
+      "last_success_at": "2026-10-12T08:35:53+00:00",
+      "last_success_run_id": 38224538217,
+      "age_hours": 18.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -281,9 +295,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-12T02:30:44+00:00",
-      "last_success_run_id": 38196073365,
-      "age_hours": 5.3,
+      "last_success_at": "2026-10-12T21:43:04+00:00",
+      "last_success_run_id": 38312360566,
+      "age_hours": 4.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -291,18 +305,18 @@
   ],
   "queue_status": {
     "open_count": 0,
-    "pr_open_count": 1,
+    "pr_open_count": 0,
     "parked_count": 5,
-    "merged_count": 120,
+    "merged_count": 121,
     "failed_count": 0,
     "next_task_id": null,
     "in_flight_branch": null,
-    "in_flight_pr": 1047,
+    "in_flight_pr": null,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": false,
+  "should_dispatch_engineering": true,
   "email_deferred": false,
   "email_defer_reasons": []
 }
