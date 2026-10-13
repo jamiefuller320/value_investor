@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-13T14:37:48+00:00",
+  "updated_at": "2026-10-13T15:12:11+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -12980,7 +12980,7 @@
       "section": "learning",
       "title": "Recalibrate decision-review cost-drag thresholds for fair costs",
       "summary": "HIGH_COST_DRAG (4%) and the auto-raise min_conviction rule were tuned on 3% stress books. On fair T212 costs (~0.55% round trip) they rarely fire, so cost-driven proposals are effectively off. Re-derive the thresholds from fair-cost turnover before applies start happening. Replaces L221.",
-      "revisit_when": "significance_gate_v1 first opens on a fair-cost book, or a fair book's cost_drag exceeds 1% on an epoch",
+      "revisit_when": "significance_gate_v1 first opens on a fair-cost book (ai_judgment_fair or hold5 fair) \u2014 then recalibrate HIGH_COST_DRAG / related heuristics from fair turnover before --apply relies on them",
       "tags": [
         "decision-review",
         "costs",
@@ -13002,22 +13002,10 @@
             "path": "reviews.ai_judgment_hold5_fair.significance_gate.passed",
             "op": "==",
             "value": true
-          },
-          {
-            "file": "docs/data/paper_automation/learning_tracks_review.json",
-            "path": "reviews.ai_judgment_fair.metrics.epoch.cost_drag",
-            "op": ">",
-            "value": 0.01
-          },
-          {
-            "file": "docs/data/paper_automation/learning_tracks_review.json",
-            "path": "reviews.ai_judgment_hold5_fair.metrics.epoch.cost_drag",
-            "op": ">",
-            "value": 0.01
           }
         ]
       },
-      "updated_at": "2026-10-06T19:52:43+00:00"
+      "updated_at": "2026-10-13T15:12:11+00:00"
     },
     {
       "id": "L559",
