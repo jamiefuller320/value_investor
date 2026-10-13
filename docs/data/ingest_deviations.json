@@ -1,8 +1,48 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-13T17:52:22.881926+00:00",
-  "open_count": 1,
+  "updated_at": "2026-10-13T20:12:27.447300+00:00",
+  "open_count": 2,
   "open_items": [
+    {
+      "id": "dev-nasdaq100-CCEP-blocker_no_improve",
+      "market_id": "nasdaq100",
+      "ticker": "CCEP",
+      "kind": "blocker_no_improve",
+      "status": "open",
+      "recommended_action": "pin_intensive",
+      "summary": "CCEP hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.",
+      "human_required": true,
+      "auto_actions": [],
+      "evidence": {
+        "improved": false,
+        "ticker_budget_hit": true,
+        "ir_exhausted": false,
+        "indexed_without_body": 1,
+        "filings_with_body": 122,
+        "filings_total": 125
+      },
+      "reprocess": {
+        "approve": "ftse-library ingest-deviations approve dev-nasdaq100-CCEP-blocker_no_improve",
+        "dismiss": "ftse-library ingest-deviations dismiss dev-nasdaq100-CCEP-blocker_no_improve"
+      },
+      "first_seen_at": "2026-09-22T10:45:08.204480+00:00",
+      "last_seen_at": "2026-10-13T20:07:31.070324+00:00",
+      "run_at": "2026-10-13T20:07:31.070324+00:00",
+      "reopened_at": "2026-10-13T20:07:31.070324+00:00",
+      "previous_status": "dismissed",
+      "signal_triage": {
+        "observe_only": true,
+        "proposed_action": "park_hunter",
+        "human_action": "dismiss",
+        "reason": "buy_patchy_leftover",
+        "signal": "buy",
+        "parked": false,
+        "rationale": "Plain buy with thin leftover IWB — dismiss; maintenance / park-hunter.",
+        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
+        "conviction_score": 0.4857,
+        "screen_found": true
+      }
+    },
     {
       "id": "dev-hang_seng-0288.HK-blocker_no_improve",
       "market_id": "hang_seng",
@@ -212,47 +252,6 @@
       "review_note": "signal_triage buy→park_hunter; IR dead but bodies complete"
     },
     {
-      "id": "dev-nasdaq100-CCEP-blocker_no_improve",
-      "market_id": "nasdaq100",
-      "ticker": "CCEP",
-      "kind": "blocker_no_improve",
-      "status": "dismissed",
-      "recommended_action": "pin_intensive",
-      "summary": "CCEP hit the weekday ticker cap with no coverage gain and 2 indexed-without-body row(s). Pin intensive or fix sources.",
-      "human_required": true,
-      "auto_actions": [],
-      "evidence": {
-        "improved": false,
-        "ticker_budget_hit": true,
-        "ir_exhausted": false,
-        "indexed_without_body": 2,
-        "filings_with_body": 111,
-        "filings_total": 116
-      },
-      "reprocess": {
-        "approve": "ftse-library ingest-deviations approve dev-nasdaq100-CCEP-blocker_no_improve",
-        "dismiss": "ftse-library ingest-deviations dismiss dev-nasdaq100-CCEP-blocker_no_improve"
-      },
-      "first_seen_at": "2026-09-22T10:45:08.204480+00:00",
-      "last_seen_at": "2026-09-22T10:45:08.204480+00:00",
-      "run_at": "2026-09-22T10:45:08.204480+00:00",
-      "signal_triage": {
-        "observe_only": true,
-        "proposed_action": "park_hunter",
-        "human_action": "dismiss",
-        "reason": "buy_patchy_leftover",
-        "signal": "buy",
-        "parked": false,
-        "rationale": "Plain buy with thin leftover IWB — dismiss; maintenance / park-hunter.",
-        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
-        "conviction_score": 0.6583,
-        "screen_found": true
-      },
-      "reviewed_at": "2026-09-23T17:55:27.990538+00:00",
-      "review_action": "dismiss",
-      "review_note": "signal_triage buy→park_hunter; thin IWB on near-full book"
-    },
-    {
       "id": "dev-aim-TFW.L-blocker_no_improve",
       "market_id": "aim",
       "ticker": "TFW.L",
@@ -348,10 +347,80 @@
       "run_at": "2026-09-20T17:43:40.282501+00:00",
       "resolved_at": "2026-09-20T19:39:16.836523+00:00",
       "resolved_reason": "ticker_improved_on_later_ingest"
+    },
+    {
+      "id": "dev-asx200-DNL.AX-ir_exhausted",
+      "market_id": "asx200",
+      "ticker": "DNL.AX",
+      "kind": "ir_exhausted",
+      "status": "resolved",
+      "recommended_action": "replace_allowlist_or_pin",
+      "summary": "DNL.AX IR allowlist refetch failed with 0 bodies fetched. Failed rows are marked unfetchable; replace the URL or pin intensive.",
+      "human_required": true,
+      "auto_actions": [
+        "ir_rows_marked_unfetchable"
+      ],
+      "evidence": {
+        "improved": false,
+        "ticker_budget_hit": false,
+        "ir_exhausted": true,
+        "indexed_without_body": 0,
+        "filings_with_body": 6,
+        "filings_total": 6
+      },
+      "reprocess": {
+        "approve": "ftse-library ingest-deviations approve dev-asx200-DNL.AX-ir_exhausted",
+        "dismiss": "ftse-library ingest-deviations dismiss dev-asx200-DNL.AX-ir_exhausted"
+      },
+      "first_seen_at": "2026-09-12T18:47:36.024253+00:00",
+      "last_seen_at": "2026-09-12T18:47:36.024253+00:00",
+      "run_at": "2026-09-12T18:47:36.024253+00:00",
+      "resolved_at": "2026-09-13T18:57:26.948937+00:00",
+      "resolved_reason": "ticker_improved_on_later_ingest"
     }
   ],
   "signal_triage_policy": "observe_only: leftover/dismiss, buy/park_hunter, strong_buy/pin_intensive",
   "items": [
+    {
+      "id": "dev-nasdaq100-CCEP-blocker_no_improve",
+      "market_id": "nasdaq100",
+      "ticker": "CCEP",
+      "kind": "blocker_no_improve",
+      "status": "open",
+      "recommended_action": "pin_intensive",
+      "summary": "CCEP hit the weekday ticker cap with no coverage gain and 1 indexed-without-body row(s). Pin intensive or fix sources.",
+      "human_required": true,
+      "auto_actions": [],
+      "evidence": {
+        "improved": false,
+        "ticker_budget_hit": true,
+        "ir_exhausted": false,
+        "indexed_without_body": 1,
+        "filings_with_body": 122,
+        "filings_total": 125
+      },
+      "reprocess": {
+        "approve": "ftse-library ingest-deviations approve dev-nasdaq100-CCEP-blocker_no_improve",
+        "dismiss": "ftse-library ingest-deviations dismiss dev-nasdaq100-CCEP-blocker_no_improve"
+      },
+      "first_seen_at": "2026-09-22T10:45:08.204480+00:00",
+      "last_seen_at": "2026-10-13T20:07:31.070324+00:00",
+      "run_at": "2026-10-13T20:07:31.070324+00:00",
+      "reopened_at": "2026-10-13T20:07:31.070324+00:00",
+      "previous_status": "dismissed",
+      "signal_triage": {
+        "observe_only": true,
+        "proposed_action": "park_hunter",
+        "human_action": "dismiss",
+        "reason": "buy_patchy_leftover",
+        "signal": "buy",
+        "parked": false,
+        "rationale": "Plain buy with thin leftover IWB — dismiss; maintenance / park-hunter.",
+        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
+        "conviction_score": 0.4857,
+        "screen_found": true
+      }
+    },
     {
       "id": "dev-hang_seng-0288.HK-blocker_no_improve",
       "market_id": "hang_seng",
@@ -511,47 +580,6 @@
         "conviction_score": 0.6011,
         "screen_found": true
       }
-    },
-    {
-      "id": "dev-nasdaq100-CCEP-blocker_no_improve",
-      "market_id": "nasdaq100",
-      "ticker": "CCEP",
-      "kind": "blocker_no_improve",
-      "status": "dismissed",
-      "recommended_action": "pin_intensive",
-      "summary": "CCEP hit the weekday ticker cap with no coverage gain and 2 indexed-without-body row(s). Pin intensive or fix sources.",
-      "human_required": true,
-      "auto_actions": [],
-      "evidence": {
-        "improved": false,
-        "ticker_budget_hit": true,
-        "ir_exhausted": false,
-        "indexed_without_body": 2,
-        "filings_with_body": 111,
-        "filings_total": 116
-      },
-      "reprocess": {
-        "approve": "ftse-library ingest-deviations approve dev-nasdaq100-CCEP-blocker_no_improve",
-        "dismiss": "ftse-library ingest-deviations dismiss dev-nasdaq100-CCEP-blocker_no_improve"
-      },
-      "first_seen_at": "2026-09-22T10:45:08.204480+00:00",
-      "last_seen_at": "2026-09-22T10:45:08.204480+00:00",
-      "run_at": "2026-09-22T10:45:08.204480+00:00",
-      "signal_triage": {
-        "observe_only": true,
-        "proposed_action": "park_hunter",
-        "human_action": "dismiss",
-        "reason": "buy_patchy_leftover",
-        "signal": "buy",
-        "parked": false,
-        "rationale": "Plain buy with thin leftover IWB — dismiss; maintenance / park-hunter.",
-        "policy": "leftover_dismiss__buy_park_hunter__strong_buy_pin",
-        "conviction_score": 0.6583,
-        "screen_found": true
-      },
-      "reviewed_at": "2026-09-23T17:55:27.990538+00:00",
-      "review_action": "dismiss",
-      "review_note": "signal_triage buy→park_hunter; thin IWB on near-full book"
     },
     {
       "id": "dev-cac40-TTE.PA-blocker_no_improve",
