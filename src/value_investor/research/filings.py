@@ -770,6 +770,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "filing); primary fails the substantiveness gate and EX-99.01 fetches but is not the "
         "indexed URL and duplicates the same-day 10-Q already bodied."
     ),
+    "JD": (
+        "us_adr_asia leftover IWB: nine SEC 6-K cover HTML primaries are board-meeting "
+        "date notices below the substantiveness/financial gate; EX-99.1 exhibits are the "
+        "same notice stubs and are not the indexed URLs; quarterly/interim results 6-Ks "
+        "and 20-F are already bodied via sec_edgar; ir.jd.com is bot-gated (403)."
+    ),
     "LDOS": (
         "Leftover indexed-without-body row is Item 2.01/7.01/9.01 acquisition-closing 8-K "
         "primary below the substantiveness gate; EX-99.1 press release fetches but is not the "
