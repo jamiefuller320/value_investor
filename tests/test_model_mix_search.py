@@ -146,6 +146,7 @@ def test_committed_registration_matches_code():
         "asset_growth": -1,
         "momentum_12_1": 1,
     }
+    assert reg["registration_id"] == "hms-v2"
     assert reg["screen_code_fingerprint"] == hsr.screen_code_fingerprint()
     assert reg["mix_code_fingerprint"] == mm.mix_code_fingerprint()
     for universe, path in (
@@ -158,7 +159,12 @@ def test_committed_registration_matches_code():
         assert (
             reg["windows"]["holdout"]["first_entry"] == replay["windows"]["holdout"]["first_entry"]
         )
-    assert all(a["before_data"] for a in reg["amendments"])
+    # Pre-data amendments stay before_data; the L571 / hms-v2 open is post-reveal.
+    assert all(
+        a["before_data"]
+        for a in reg["amendments"]
+        if not str(a.get("change", "")).startswith("Open hms-v2")
+    )
 
 
 def test_published_signals_follow_their_definitions():
@@ -303,6 +309,25 @@ def test_search_reveal_and_gates(builds, reg_path: Path, tmp_path: Path):
 def test_search_refuses_after_a_replay_reveal(builds, reg_path: Path, tmp_path: Path):
     (tmp_path / hsr.MIDCAP_STORE_PATH.name).write_text(
         json.dumps({"holdout_reveals": [{"at": "2026-11-01", "evidence": True}]})
+    )
+    with pytest.raises(ValueError, match="would not be blind"):
+        mm.search(builds, registration_path=reg_path, store_path=tmp_path / "hms-store.json")
+
+
+def test_search_refuses_when_replay_reveal_is_only_in_spent_epochs(
+    builds, reg_path: Path, tmp_path: Path
+):
+    """hsr-v2 clears top-level reveals; spent hsr-v1 must still block a blind search."""
+    (tmp_path / hsr.DEFAULT_STORE_PATH.name).write_text(
+        json.dumps(
+            {
+                "registration_id": "hsr-v2",
+                "holdout_reveals": [],
+                "spent_epochs": {
+                    "hsr-v1": {"holdout_reveals": [{"at": "2026-10-10", "evidence": True}]}
+                },
+            }
+        )
     )
     with pytest.raises(ValueError, match="would not be blind"):
         mm.search(builds, registration_path=reg_path, store_path=tmp_path / "hms-store.json")

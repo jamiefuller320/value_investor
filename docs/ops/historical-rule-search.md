@@ -1,9 +1,13 @@
-# Historical rule search (pre-registered, hrs-v1)
+# Historical rule search (pre-registered, hrs-v2)
 
 A pre-registered search over the rules applied **after** the frozen screen, plus
 a replay of the trade plan's tactical slice, both run on the same licensed build
 as the [historical screen replay](historical-screen-replay.md). Closes L573 and
 L574. Observe-only: no book, signal, or knob reads it.
+
+Spent **hrs-v1** (pre-L571 screen fingerprint) is archived under
+`docs/data/historical_rule_search_registration_hrs-v1.json` and store
+`spent_epochs.hrs-v1`. Active registration id: **hrs-v2**.
 
 - Registration (frozen): `docs/data/historical_rule_search_registration.json`
 - Results (config-level aggregates only): `docs/data/historical_rule_search.json`
