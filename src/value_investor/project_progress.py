@@ -222,6 +222,13 @@ def build_project_progress(
                 f"return 90% CI {_fmt_pct(ci[0])} to {_fmt_pct(ci[1])}"
                 + (f"; ~{years:.0f} years of marks to detect a 3%/yr edge." if years else ".")
             )
+    elif evidence.get("primary_excess_total_return") is not None and (
+        float(evidence["primary_excess_total_return"]) < 0
+    ):
+        gaps.append(
+            "Primary AI track still below FTAL.L on total return "
+            f"({_fmt_pct(evidence['primary_excess_total_return'])} excess; history still thin)."
+        )
     elif ai_excess is not None and ai_excess < 0:
         gaps.append(
             f"Primary AI track still below ^FTSE after costs ({_fmt_pct(ai_excess)} excess; history still thin)."

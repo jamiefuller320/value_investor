@@ -195,6 +195,14 @@
           "doc_anchor": "assessment-scoreboard"
         },
         {
+          "id": "sunday-saturated-knobs-judgment",
+          "title": "Judge saturated decision-review knobs (no silent clamp step)",
+          "summary": "When ops-monitor warns Decision-review knobs saturated at bounds (e.g. ai_judgment_fair sector_cap at lower 0.2), read saturated_knobs on that book's decision_review.json. The loop can no longer move that axis — decide whether the driver (concentration, cost model, churn) needs a policy change, a new cold-start epoch, or no action. Do not invent another knob step or decision-review --apply from the finding alone.",
+          "automated": false,
+          "doc_path": "docs/ops/decision-review.md",
+          "doc_anchor": "saturated-knobs"
+        },
+        {
           "id": "sunday-deferred-triggers",
           "title": "Act on met deferred triggers",
           "summary": "When ops-monitor reports Deferred idea triggers met / unreadable / name frozen books (docs/data/deferred_trigger_check.json), pick up (ftse-defer status <ID> now), retarget (ftse-defer set-trigger), or close (ftse-defer status done|drop --note) each named idea. ftse-defer triggers shows the current list.",
