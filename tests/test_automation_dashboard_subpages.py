@@ -388,7 +388,7 @@ def test_n200_pipeline_health_on_queue_and_analysis() -> None:
     assert "renderN201PipelineHealthSection(" in queue_fn
     assert "n201_pipeline_health" in queue_fn
     assert "function renderAnalysisObserveForModel(" in text
-    assert 'renderN200PipelineHealthSection(data, { compact: false })' in text
+    assert "renderN200PipelineHealthSection(data, { compact: false })" in text
     assert "INVESTMENT_MODELS" in text
     assert "function renderInvestmentModelSwitcher(" in text
     assert "not alpha" in text.lower() or "not a promote" in text.lower()
