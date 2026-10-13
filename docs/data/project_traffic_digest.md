@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-13T12:32:12.272355+00:00`
+Generated: `2026-10-13T17:32:12.945098+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -37,10 +37,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `parked_hunter`/verified PR #1052 `eng-20261013-01` — Hunt fetchable IR source for parked sti leftover BS6.SI
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 190
+- Occasion count: 198
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
-- `validate check failed` — 3×
+- `validate check failed` — 4×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `merge_conflict:dirty` — 3×
 - `Merge conflicts in deferred-ideas.json with main` — 2×
