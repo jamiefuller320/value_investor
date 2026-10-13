@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-12T23:18:27.025743+00:00",
+  "generated_at": "2026-10-13T07:43:16.831523+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -68,7 +68,7 @@
       "us_adr_asia"
     ],
     "spare_sprint": {},
-    "equal_support_generated_at": "2026-10-12T22:31:27.144613+00:00"
+    "equal_support_generated_at": "2026-10-13T07:05:27.482168+00:00"
   },
   "markets": [
     {
@@ -7842,11 +7842,11 @@
         "knob_apply": false,
         "acted": true,
         "last_run_at": "2026-10-12T07:29:14.149391+00:00",
-        "holdings": 26,
-        "nav": 525.16,
-        "cash": 53.62,
+        "holdings": 25,
+        "nav": 542.06,
+        "cash": 90.1,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 49,
+        "weekday_batch_count": 50,
         "epoch0_batch_count": 26
       },
       "equal_support": {
@@ -8095,6 +8095,19 @@
               "buy_tier_level_gbp_fx_warped": 471.54
             },
             "market": 998.75
+          },
+          {
+            "date": "2026-10-13",
+            "held": 954.86,
+            "nav": 990.24,
+            "held_stock": 954.86,
+            "cash": 35.38,
+            "positions": 25,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 451.96
+            },
+            "market": 998.75
           }
         ],
         "series": [
@@ -8134,16 +8147,16 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 30
+            "point_count": 31
           }
         ],
         "last": {
-          "date": "2026-10-12",
-          "held": 990.25,
+          "date": "2026-10-13",
+          "held": 954.86,
           "market": 998.75,
-          "nav": 990.25,
-          "positions": 26,
-          "excess_pct": -0.008511
+          "nav": 990.24,
+          "positions": 25,
+          "excess_pct": -0.043945
         }
       },
       "learning_depth": null,

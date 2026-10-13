@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-12T10:33:33.449078+00:00",
+  "run_at": "2026-10-13T07:37:11.096892+00:00",
   "market_id": "sti",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-12T10:33:30.026216+00:00",
+    "snapshot_at": "2026-10-13T07:37:02.388361+00:00",
     "market_id": "sti",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
@@ -43,13 +43,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-12T10:33:33.322012+00:00",
+    "snapshot_at": "2026-10-13T07:37:05.560083+00:00",
     "market_id": "sti",
     "buy_tier_count": 6,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 3,
-    "indexed_without_body": 0,
+    "indexed_without_body": 6,
     "bodies_min": 1,
     "bodies_median": 2.5,
     "bodies_max": 4,
@@ -62,8 +62,14 @@
       "BS6.SI",
       "A17U.SI"
     ],
-    "indexed_without_body_tickers": [],
-    "indexed_without_body_by_ticker": {},
+    "indexed_without_body_tickers": [
+      "J36.SI",
+      "BS6.SI"
+    ],
+    "indexed_without_body_by_ticker": {
+      "J36.SI": 3,
+      "BS6.SI": 3
+    },
     "parked_tickers": [
       "A17U.SI",
       "BS6.SI",
@@ -84,9 +90,9 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 6,
-    "hits": 1,
-    "new_rows_total": 0,
-    "curiosity_total": 1,
+    "hits": 4,
+    "new_rows_total": 7,
+    "curiosity_total": 3,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -113,7 +119,7 @@
   },
   "critical_path": {
     "market_id": "sti",
-    "assessed_at": "2026-10-12T10:33:30.284445+00:00",
+    "assessed_at": "2026-10-13T07:37:02.845295+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -139,9 +145,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 2.7792540820000085,
+  "used_seconds": 2.2193368189998637,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3597.220745918,
+  "leftover_seconds": 3597.780663181,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -149,35 +155,11 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sti",
-    "updated_at": "2026-10-12T10:33:33.324455+00:00",
+    "updated_at": "2026-10-13T07:37:05.562333+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 10,
+    "complete_zero_improve_runs": 11,
     "min_zero_runs": 3,
     "parked": [
-      {
-        "ticker": "J36.SI",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-02T14:19:21.991917+00:00",
-        "park_via": "straggler_soft_park",
-        "filings_total": 1,
-        "filings_with_body": 1,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "asia_filings"
-      },
-      {
-        "ticker": "BS6.SI",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-10-06T16:34:32.060348+00:00",
-        "park_via": "market_wide_zero_improve",
-        "filings_total": 1,
-        "filings_with_body": 1,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "asia_filings"
-      },
       {
         "ticker": "A17U.SI",
         "reason": "awaiting_periodic_report",
@@ -187,6 +169,30 @@
         "filings_total": 2,
         "filings_with_body": 2,
         "indexed_without_body": 0,
+        "thin": true,
+        "source_surface": "asia_filings"
+      },
+      {
+        "ticker": "BS6.SI",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-13T07:37:05.562333+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 4,
+        "filings_with_body": 1,
+        "indexed_without_body": 3,
+        "thin": true,
+        "source_surface": "asia_filings"
+      },
+      {
+        "ticker": "J36.SI",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-13T07:37:05.562333+00:00",
+        "park_via": "market_wide_zero_improve",
+        "filings_total": 4,
+        "filings_with_body": 1,
+        "indexed_without_body": 3,
         "thin": true,
         "source_surface": "asia_filings"
       }
@@ -235,7 +241,15 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261012-01"
+    "task_ids": [],
+    "task_count": 156,
+    "market_id": "nasdaq100",
+    "hunter_ticker": "PDD",
+    "hunter_tickers": [
+      "PDD"
+    ],
+    "priority_score": 12.0,
+    "wait_behind_task_id": "",
+    "leftover_key_bodies": false
   }
 }
