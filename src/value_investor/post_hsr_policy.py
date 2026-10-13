@@ -101,7 +101,9 @@ def _verdict_from_results(results: Any) -> str | None:
     return str(verdict) if verdict is not None else None
 
 
-def _hsr_holdout_verdict(store: dict[str, Any] | None, *, spent_id: str | None = None) -> str | None:
+def _hsr_holdout_verdict(
+    store: dict[str, Any] | None, *, spent_id: str | None = None
+) -> str | None:
     """Holdout verdict for freeze policy.
 
     Prefer a labelled spent epoch (hsr-v1 / hsr-mid-v1) so a later screen epoch

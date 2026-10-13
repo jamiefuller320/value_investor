@@ -31,6 +31,7 @@ def _normalize_yield(value: float | None) -> float | None:
 
     return normalize_yield(value)
 
+
 # Fields worth filling from secondary providers when the primary leaves gaps.
 FALLBACK_METRIC_KEYS = (
     "market_cap",

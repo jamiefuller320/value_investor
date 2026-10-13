@@ -60,9 +60,7 @@ def test_load_library_metrics_normalises_percent_yield(tmp_path: Path):
 
 def test_dividend_floors_reject_percent_scale_without_normalisation():
     """Percent-scale yield clears the 3% floor; normalised fraction does not."""
-    model = HighDividendYieldModel().fit(
-        pd.DataFrame({"dividend_yield": [0.01, 0.02, 0.03, 0.04]})
-    )
+    model = HighDividendYieldModel().fit(pd.DataFrame({"dividend_yield": [0.01, 0.02, 0.03, 0.04]}))
     assert HighDividendYieldModel.MIN_YIELD == 0.03
     assert 2.5 >= HighDividendYieldModel.MIN_YIELD
     assert normalize_yield(2.5) < HighDividendYieldModel.MIN_YIELD

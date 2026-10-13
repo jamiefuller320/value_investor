@@ -501,7 +501,9 @@ def build_panel(
             "price_to_book": _ratio(market_cap, equity, positive_den=True),
             # hsr-v2 / L571: live library load normalises Yahoo percent → fraction; Sharadar
             # divyield is already a fraction — emit fraction so the replay matches the epoch.
-            "dividend_yield": _ratio(_num(rows, "divyield"), rows["price_scale"], positive_den=True),
+            "dividend_yield": _ratio(
+                _num(rows, "divyield"), rows["price_scale"], positive_den=True
+            ),
             "current_ratio": _num(rows, "currentratio"),
             "debt_to_equity": _ratio(debt, equity, positive_den=True) * 100.0,
             "return_on_equity": _num(rows, "roe"),
