@@ -191,6 +191,12 @@ def should_run_acceptance_verify(task: dict[str, Any]) -> tuple[bool, str]:
     return True, "ok"
 
 
+# Live IR/SEC/ASX body fetches in test_research_filings.py are a known flake
+# class (ci-pr-autofix reruns them). Eng preflight must not burn its 600s budget
+# on them — full CI still runs the marked tests.
+PREFLIGHT_SKIP_LIVE_NETWORK_MARKER = "not live_network"
+
+
 def default_pytest_runner(paths: list[str], cwd: Path) -> dict[str, Any]:
     """Run pytest on the given paths; return exit code + trimmed output."""
     existing = [p for p in paths if (cwd / p).exists()]
@@ -202,7 +208,10 @@ def default_pytest_runner(paths: list[str], cwd: Path) -> dict[str, Any]:
             "existing_paths": [],
             "output": "No acceptance test paths exist on disk",
         }
-    cmd = ["python3", "-m", "pytest", "-q", "--tb=line", *existing]
+    cmd = ["python3", "-m", "pytest", "-q", "--tb=line"]
+    if any(path.replace("\\", "/").endswith("tests/test_research_filings.py") for path in existing):
+        cmd.extend(["-m", PREFLIGHT_SKIP_LIVE_NETWORK_MARKER])
+    cmd.extend(existing)
     try:
         completed = subprocess.run(
             cmd,

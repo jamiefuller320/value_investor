@@ -7,9 +7,11 @@ from pathlib import Path
 
 from value_investor.engineering_verify import (
     MAX_VERIFY_REWORK_ROUNDS,
+    PREFLIGHT_SKIP_LIVE_NETWORK_MARKER,
     VERIFY_SOURCE,
     acceptance_test_paths,
     count_verify_chain_rounds,
+    default_pytest_runner,
     is_pytest_infra_failure,
     should_run_acceptance_verify,
     verify_merged_task,
@@ -203,6 +205,42 @@ def test_is_pytest_infra_failure_detects_missing_module():
             "output": "FAILED tests/test_pipeline.py::test_fcf - AssertionError",
         }
     )
+
+
+def test_default_pytest_runner_skips_live_network_for_filings_suite(tmp_path: Path, monkeypatch):
+    filings = tmp_path / "tests" / "test_research_filings.py"
+    filings.parent.mkdir(parents=True)
+    filings.write_text("# stub\n", encoding="utf-8")
+    other = tmp_path / "tests" / "test_pipeline.py"
+    other.write_text("# stub\n", encoding="utf-8")
+    seen: list[list[str]] = []
+
+    def fake_run(cmd, **kwargs):
+        seen.append(list(cmd))
+
+        class _Completed:
+            returncode = 0
+            stdout = "1 passed"
+            stderr = ""
+
+        return _Completed()
+
+    monkeypatch.setattr("value_investor.engineering_verify.subprocess.run", fake_run)
+
+    result = default_pytest_runner(["tests/test_research_filings.py"], cwd=tmp_path)
+    assert result["ok"] is True
+    assert seen
+    cmd = seen[0]
+    assert PREFLIGHT_SKIP_LIVE_NETWORK_MARKER in cmd
+    # Marker filter sits after ``python3 -m pytest …`` module invocation.
+    marker_at = cmd.index(PREFLIGHT_SKIP_LIVE_NETWORK_MARKER)
+    assert cmd[marker_at - 1] == "-m"
+
+    seen.clear()
+    result = default_pytest_runner(["tests/test_pipeline.py"], cwd=tmp_path)
+    assert result["ok"] is True
+    assert seen
+    assert PREFLIGHT_SKIP_LIVE_NETWORK_MARKER not in seen[0]
 
 
 def test_verify_merged_skips_rework_on_pytest_infra_failure(tmp_path: Path):
