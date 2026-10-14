@@ -5,15 +5,18 @@ evidence-citing agree/veto disagree often enough to justify a later hard veto
 on the live capital path?
 
 Default judge is a deterministic evidence heuristic that cites screen / rank /
-research fields already on the decision trail. Schema is LLM-ready
-(``judge_backend=llm``) but paper-auto does not call an LLM (N24). Live
-influence stays fail-closed without durable evidence (N173 / project principle).
+research fields already on the decision trail. Phase 1 may opt into an
+observe-only LLM backend (``judge_backend=llm``, ``judge_spec_id=llm.v1``) that
+emits the same card schema with ``parent_spec_id=heuristic.v1``. LLM path never
+changes fills (N24); hard veto stays parked (N173). Missing key / parse / API
+errors fail closed to the heuristic baseline (or abstain with host evidence).
 """
 
 from __future__ import annotations
 
 import json
-from collections.abc import Iterable
+import os
+from collections.abc import Callable, Iterable
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
@@ -30,6 +33,16 @@ DEFAULT_RANK_DROP_EXIT_MIN = 3
 KEEP_CARDS = 400
 # Versioned judge/prompt spec — unlocks observe A/B later without live influence.
 DEFAULT_JUDGE_SPEC_ID = "heuristic.v1"
+LLM_JUDGE_SPEC_ID = "llm.v1"
+LLM_JUDGE_BACKEND = "llm"
+HEURISTIC_JUDGE_BACKEND = "evidence_heuristic"
+# Env: auto (LLM when API key present) | llm | heuristic
+JUDGE_BACKEND_ENV = "LLM_AGREE_VETO_BACKEND"
+LLM_MODEL_ENV = "LLM_AGREE_VETO_MODEL"
+DEFAULT_LLM_MODEL = "composer-2.5"
+MAX_LLM_PROPOSALS_PER_PASS = 24
+
+LlmCompleteFn = Callable[[str], str]
 
 LEARNING_QUESTION = (
     "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto "
@@ -516,6 +529,230 @@ def judge_proposal(
     )
 
 
+def resolve_agree_veto_judge_backend(
+    *,
+    requested: str | None = None,
+    api_key_present: bool | None = None,
+) -> str:
+    """Resolve judge backend: ``heuristic`` | ``llm``.
+
+    ``auto`` (default via env ``LLM_AGREE_VETO_BACKEND``) uses LLM when a Cursor
+    API key is present, else heuristic. Explicit ``llm`` / ``heuristic`` win.
+    """
+    raw = (
+        requested if requested is not None else os.environ.get(JUDGE_BACKEND_ENV, "auto") or "auto"
+    )
+    choice = str(raw).strip().lower()
+    if choice in {"heuristic", "evidence_heuristic", "off", "0", "false", "no"}:
+        return HEURISTIC_JUDGE_BACKEND
+    if choice in {"llm", "true", "1", "yes", "on"}:
+        return LLM_JUDGE_BACKEND
+    # auto
+    if api_key_present is None:
+        try:
+            from value_investor.cursor_api_key import resolve_cursor_api_key
+
+            api_key_present = bool(resolve_cursor_api_key()[0])
+        except Exception:
+            api_key_present = False
+    return LLM_JUDGE_BACKEND if api_key_present else HEURISTIC_JUDGE_BACKEND
+
+
+def build_llm_agree_veto_prompt(
+    *,
+    track_id: str,
+    learning_question: str,
+    items: list[dict[str, Any]],
+) -> str:
+    """Prompt for batched observe-only agree/veto JSON (no invented metrics)."""
+    payload = {
+        "learning_question": learning_question,
+        "track_id": track_id,
+        "rules": [
+            "Observe-only review — you never change fills or live capital.",
+            'Return JSON only: {"cards":[...]} with one object per proposal.',
+            "Each card: ticker, algo_action, shadow_verdict (agree|veto|abstain), "
+            "reasons (non-empty string list), cited_kinds (subset of provided "
+            "evidence kind strings — do not invent metrics or values).",
+            "Abstain when evidence is thin; never invent ranks, signals, or filing facts.",
+            "Prefer veto on sell only when still_buyish with insufficient rank_drop "
+            "(capacity-bump risk); prefer agree when leave-buy-cohort looks decisive.",
+        ],
+        "proposals": items,
+    }
+    return (
+        "You are an observe-only agree/veto judge for algo paper-trading proposals.\n"
+        "Reply with a single JSON object only (no markdown prose).\n\n"
+        f"{json.dumps(payload, indent=2)}\n"
+    )
+
+
+def _default_llm_complete(prompt: str) -> str:
+    from value_investor.cursor_api_key import resolve_cursor_api_key
+    from value_investor.research.agent import _run_agent_prompt
+
+    api_key, _ = resolve_cursor_api_key()
+    if not api_key:
+        raise RuntimeError("CURSOR_API_KEY missing — cannot run LLM agree/veto judge")
+    model = (os.environ.get(LLM_MODEL_ENV) or DEFAULT_LLM_MODEL).strip() or DEFAULT_LLM_MODEL
+    text, _agent_id = _run_agent_prompt(
+        prompt=prompt,
+        api_key=api_key,
+        model=model,
+        cwd=None,
+    )
+    return text
+
+
+def parse_llm_agree_veto_response(text: str) -> list[dict[str, Any]]:
+    """Parse LLM JSON into a list of card dicts; raises ValueError on failure."""
+    from value_investor.research.director_worker import extract_json_object
+
+    obj = extract_json_object(text)
+    cards = obj.get("cards")
+    if not isinstance(cards, list):
+        raise ValueError("LLM agree/veto response missing cards[]")
+    return [c for c in cards if isinstance(c, dict)]
+
+
+def apply_llm_verdicts_to_heuristic_cards(
+    heuristic_cards: list[dict[str, Any]],
+    llm_cards: list[dict[str, Any]],
+    *,
+    judge_spec_id: str = LLM_JUDGE_SPEC_ID,
+) -> list[dict[str, Any]]:
+    """Merge LLM verdicts onto host evidence cards; fail-closed per row."""
+    by_key = {(str(c.get("ticker") or ""), str(c.get("algo_action") or "")): c for c in llm_cards}
+    out: list[dict[str, Any]] = []
+    for base in heuristic_cards:
+        key = (str(base.get("ticker") or ""), str(base.get("algo_action") or ""))
+        llm = by_key.get(key)
+        card = dict(base)
+        card["influences_live"] = False
+        card["observe_only"] = True
+        card["judge_backend"] = LLM_JUDGE_BACKEND
+        card["judge_spec_id"] = judge_spec_id
+        card["parent_spec_id"] = DEFAULT_JUDGE_SPEC_ID
+        meta = dict(card.get("meta") or {})
+        meta["heuristic_baseline"] = {
+            "shadow_verdict": base.get("shadow_verdict"),
+            "reasons": list(base.get("reasons") or []),
+            "judge_spec_id": DEFAULT_JUDGE_SPEC_ID,
+        }
+        if not llm:
+            meta["llm_merge"] = "missing_row_keep_heuristic"
+            card["meta"] = meta
+            # Keep heuristic verdict but mark as llm backend with parent for trail honesty
+            card["shadow_verdict"] = base.get("shadow_verdict") or "abstain"
+            card["reasons"] = list(base.get("reasons") or []) + [
+                "LLM row missing for proposal — kept heuristic baseline (fail-closed)."
+            ]
+            out.append(card)
+            continue
+        verdict = str(llm.get("shadow_verdict") or "").strip().lower()
+        if verdict not in {"agree", "veto", "abstain"}:
+            meta["llm_merge"] = "bad_verdict_abstain"
+            card["shadow_verdict"] = "abstain"
+            card["reasons"] = [f"LLM returned invalid verdict {verdict!r} — fail-closed abstain."]
+            card["meta"] = meta
+            out.append(card)
+            continue
+        reasons = [str(r).strip() for r in (llm.get("reasons") or []) if str(r).strip()]
+        if not reasons:
+            meta["llm_merge"] = "empty_reasons_abstain"
+            card["shadow_verdict"] = "abstain"
+            card["reasons"] = ["LLM omitted reasons — fail-closed abstain."]
+            card["meta"] = meta
+            out.append(card)
+            continue
+        # Host evidence stays authoritative; optional cited_kinds only filters display order.
+        evidence = list(base.get("evidence") or [])
+        cited = llm.get("cited_kinds") or llm.get("evidence_kinds") or []
+        if isinstance(cited, list) and cited:
+            wanted = {str(k) for k in cited if str(k).strip()}
+            filtered = [e for e in evidence if str(e.get("kind") or "") in wanted]
+            if filtered:
+                evidence = filtered
+        card["shadow_verdict"] = verdict
+        card["reasons"] = reasons
+        card["evidence"] = evidence
+        meta["llm_merge"] = "ok"
+        card["meta"] = meta
+        if not has_justifying_evidence(card):
+            card["shadow_verdict"] = "abstain"
+            card.setdefault("reasons", []).append(
+                "Missing justifying evidence after LLM merge — fail-closed abstain."
+            )
+        out.append(card)
+    return out
+
+
+def enrich_cards_with_llm_judge(
+    heuristic_cards: list[dict[str, Any]],
+    *,
+    track_id: str,
+    llm_complete: LlmCompleteFn | None = None,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Run batched LLM judge; on any failure return heuristic cards + error info."""
+    info: dict[str, Any] = {
+        "attempted": True,
+        "ok": False,
+        "fallback": "heuristic",
+    }
+    if not heuristic_cards:
+        info["ok"] = True
+        info["fallback"] = None
+        return heuristic_cards, info
+    items: list[dict[str, Any]] = []
+    for card in heuristic_cards[:MAX_LLM_PROPOSALS_PER_PASS]:
+        evidence = list(card.get("evidence") or [])
+        items.append(
+            {
+                "ticker": card.get("ticker"),
+                "name": card.get("name"),
+                "algo_action": card.get("algo_action"),
+                "algo_reason": card.get("algo_reason"),
+                "evidence_kinds": [str(e.get("kind") or "") for e in evidence],
+                "evidence": evidence,
+                "heuristic_baseline": {
+                    "shadow_verdict": card.get("shadow_verdict"),
+                    "reasons": list(card.get("reasons") or []),
+                },
+            }
+        )
+    prompt = build_llm_agree_veto_prompt(
+        track_id=track_id,
+        learning_question=LEARNING_QUESTION,
+        items=items,
+    )
+    complete = llm_complete or _default_llm_complete
+    try:
+        raw = complete(prompt)
+        llm_cards = parse_llm_agree_veto_response(raw)
+        merged = apply_llm_verdicts_to_heuristic_cards(heuristic_cards, llm_cards)
+        info["ok"] = True
+        info["fallback"] = None
+        info["llm_card_count"] = len(llm_cards)
+        return merged, info
+    except Exception as err:  # noqa: BLE001 — observe path must never raise into paper-auto
+        info["error"] = f"{type(err).__name__}: {err}"
+        kept = []
+        for card in heuristic_cards:
+            c = dict(card)
+            meta = dict(c.get("meta") or {})
+            meta["llm_fallback"] = info["error"]
+            meta["heuristic_baseline"] = {
+                "shadow_verdict": card.get("shadow_verdict"),
+                "reasons": list(card.get("reasons") or []),
+                "judge_spec_id": DEFAULT_JUDGE_SPEC_ID,
+            }
+            c["meta"] = meta
+            c["influences_live"] = False
+            c["observe_only"] = True
+            kept.append(c)
+        return kept, info
+
+
 def build_shadow_pass(
     *,
     track_id: str,
@@ -528,12 +765,20 @@ def build_shadow_pass(
     rank_drop_exit_min: int = DEFAULT_RANK_DROP_EXIT_MIN,
     as_of: str | None = None,
     judge_backend: str = "evidence_heuristic",
-    judge_spec_id: str = DEFAULT_JUDGE_SPEC_ID,
+    judge_spec_id: str | None = None,
     parent_spec_id: str | None = None,
+    llm_complete: LlmCompleteFn | None = None,
 ) -> dict[str, Any]:
     """Build observe-only agree/veto cards for one paper-auto pass."""
     logged_at = as_of or _utcnow()
-    spec_id = judge_spec_id or DEFAULT_JUDGE_SPEC_ID
+    backend = str(judge_backend or HEURISTIC_JUDGE_BACKEND).strip().lower()
+    if backend in {"llm", "true", "1", "yes", "on"}:
+        backend = LLM_JUDGE_BACKEND
+    elif backend in {"auto"}:
+        backend = resolve_agree_veto_judge_backend(requested="auto")
+    else:
+        backend = HEURISTIC_JUDGE_BACKEND
+
     by_ticker = _candidate_index(candidates)
     buy_ranks = _conviction_ranks(candidates, use_adjusted_signal=use_adjusted_signal)
     entry_ranks_raw = (rebalance_state_before or {}).get("entry_candidate_rank") or {}
@@ -546,7 +791,7 @@ def build_shadow_pass(
         if isinstance(row, dict) and str(row.get("ticker") or "").strip()
     }
     proposals = extract_algo_proposals(plan=plan, trades=trades)
-    cards = [
+    heuristic_cards = [
         judge_proposal(
             proposal,
             candidate=by_ticker.get(str(proposal["ticker"])),
@@ -556,16 +801,45 @@ def build_shadow_pass(
             rank_drop_exit_min=rank_drop_exit_min,
             track_id=track_id,
             logged_at=logged_at,
-            judge_backend=judge_backend,
-            judge_spec_id=spec_id,
-            parent_spec_id=parent_spec_id,
+            judge_backend=HEURISTIC_JUDGE_BACKEND,
+            judge_spec_id=DEFAULT_JUDGE_SPEC_ID,
+            parent_spec_id=None,
         ).to_dict()
         for proposal in proposals
     ]
+
+    llm_info: dict[str, Any] | None = None
+    if backend == LLM_JUDGE_BACKEND:
+        cards, llm_info = enrich_cards_with_llm_judge(
+            heuristic_cards,
+            track_id=track_id,
+            llm_complete=llm_complete,
+        )
+        if llm_info.get("ok"):
+            spec_id = judge_spec_id or LLM_JUDGE_SPEC_ID
+            parent = parent_spec_id or DEFAULT_JUDGE_SPEC_ID
+            effective_backend = LLM_JUDGE_BACKEND
+        else:
+            # Fail-closed: keep heuristic cards / ids when LLM unavailable.
+            cards = heuristic_cards
+            spec_id = DEFAULT_JUDGE_SPEC_ID
+            parent = None
+            effective_backend = HEURISTIC_JUDGE_BACKEND
+    else:
+        cards = heuristic_cards
+        spec_id = judge_spec_id or DEFAULT_JUDGE_SPEC_ID
+        parent = parent_spec_id
+        effective_backend = HEURISTIC_JUDGE_BACKEND
+
     # Fail-closed strip: never allow influences_live on this instrument.
     for card in cards:
         card["influences_live"] = False
         card["observe_only"] = True
+        if effective_backend == LLM_JUDGE_BACKEND:
+            card["judge_backend"] = LLM_JUDGE_BACKEND
+            card["judge_spec_id"] = spec_id
+            if parent:
+                card["parent_spec_id"] = parent
         if not has_justifying_evidence(card):
             card["shadow_verdict"] = "abstain"
             card.setdefault("reasons", []).append(
@@ -574,35 +848,52 @@ def build_shadow_pass(
 
     counts = {"agree": 0, "veto": 0, "abstain": 0}
     by_action: dict[str, dict[str, int]] = {}
+    disagree_vs_heuristic = 0
     for card in cards:
         v = str(card.get("shadow_verdict") or "abstain")
         counts[v] = counts.get(v, 0) + 1
         action = str(card.get("algo_action") or "other")
         bucket = by_action.setdefault(action, {"agree": 0, "veto": 0, "abstain": 0})
         bucket[v] = bucket.get(v, 0) + 1
+        baseline = (card.get("meta") or {}).get("heuristic_baseline") or {}
+        if baseline.get("shadow_verdict") and baseline.get("shadow_verdict") != v:
+            disagree_vs_heuristic += 1
 
-    return {
+    note = (
+        "Observe-only agree/veto shadow — never blocks fills. "
+        "still_in_buy_set remains the algo capital-path twin; this is a "
+        "parallel review layer. Cards carry judge_spec_id for later A/B."
+    )
+    if effective_backend == LLM_JUDGE_BACKEND:
+        note += (
+            f" Phase-1 LLM judge active ({spec_id}, parent {DEFAULT_JUDGE_SPEC_ID}); "
+            "heuristic baseline retained in card.meta.heuristic_baseline."
+        )
+    elif llm_info and llm_info.get("attempted") and not llm_info.get("ok"):
+        note += " LLM judge attempted but failed closed to heuristic baseline."
+
+    payload: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "track_id": track_id,
         "generated_at": logged_at,
         "observe_only": True,
         "influences_live": False,
-        "judge_backend": judge_backend,
+        "judge_backend": effective_backend,
         "judge_spec_id": spec_id,
-        "parent_spec_id": parent_spec_id,
+        "parent_spec_id": parent,
         "learning_question": LEARNING_QUESTION,
         "principle": PRINCIPLE,
         "proposal_count": len(proposals),
         "card_count": len(cards),
         "verdict_counts": counts,
         "by_algo_action": by_action,
+        "disagree_vs_heuristic_count": disagree_vs_heuristic,
         "cards": cards,
-        "note": (
-            "Observe-only agree/veto shadow — never blocks fills. "
-            "still_in_buy_set remains the algo capital-path twin; this is a "
-            "parallel review layer. Cards carry judge_spec_id for later A/B."
-        ),
+        "note": note,
     }
+    if llm_info is not None:
+        payload["llm_judge"] = llm_info
+    return payload
 
 
 def load_store(path: Path) -> dict[str, Any]:
@@ -698,9 +989,16 @@ def run_llm_agree_veto_shadow_pass(
     use_adjusted_signal: bool = False,
     rank_drop_exit_min: int = DEFAULT_RANK_DROP_EXIT_MIN,
     as_of: str | None = None,
+    judge_backend: str | None = None,
+    judge_spec_id: str | None = None,
+    parent_spec_id: str | None = None,
+    llm_complete: LlmCompleteFn | None = None,
 ) -> dict[str, Any]:
     """Persist shadow cards + review under a track dir; return pass payload."""
     output_dir = Path(output_dir)
+    backend = judge_backend
+    if backend is None:
+        backend = resolve_agree_veto_judge_backend()
     pass_payload = build_shadow_pass(
         track_id=track_id,
         plan=plan,
@@ -711,6 +1009,10 @@ def run_llm_agree_veto_shadow_pass(
         use_adjusted_signal=use_adjusted_signal,
         rank_drop_exit_min=rank_drop_exit_min,
         as_of=as_of,
+        judge_backend=backend,
+        judge_spec_id=judge_spec_id,
+        parent_spec_id=parent_spec_id,
+        llm_complete=llm_complete,
     )
     store_path = output_dir / STORE_FILENAME
     store = load_store(store_path)
