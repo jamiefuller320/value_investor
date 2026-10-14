@@ -3276,6 +3276,32 @@ def check_daily_hub_relevance(
     ]
 
 
+def check_daily_hub_push_empty(
+    *,
+    data_dir: Path | None = None,
+) -> list[OpsFinding]:
+    """Warn when Push ranker is empty while mapped human warns are still open.
+
+    Observe/warn-only — never eng-sprays or invents Push cards.
+    """
+    from value_investor.daily_hub_attention import check_daily_push_empty_while_mapped_warns
+
+    rows = check_daily_push_empty_while_mapped_warns(
+        data_dir=Path(data_dir) if data_dir is not None else Path("docs/data")
+    )
+    return [
+        OpsFinding(
+            severity=str(row.get("severity") or "warn"),
+            category=str(row.get("category") or "dashboard_health"),
+            title=str(row.get("title") or "Daily push suggestions empty while mapped warns open"),
+            summary=str(row.get("detail") or row.get("summary") or ""),
+            auto_fixable=False,
+        )
+        for row in rows
+        if isinstance(row, dict)
+    ]
+
+
 def _next_engineering_seq(existing_rows: list[dict[str, Any]], run_stamp: str) -> int:
     prefix = f"eng-{run_stamp}-"
     used = [
@@ -3817,6 +3843,7 @@ def collect_ops_findings(
     findings.extend(check_paper_halt())
     findings.extend(check_deferred_triggers())
     findings.extend(check_daily_hub_relevance())
+    findings.extend(check_daily_hub_push_empty())
 
     engineering_findings, queue_status = check_engineering_queue(
         open_prs=open_prs,

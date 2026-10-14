@@ -8580,6 +8580,59 @@ function renderDailyHubTaskCard(task) {
   </details>`;
 }
 
+function renderDailyHubStatusReport(hub) {
+  const report = (hub && hub.status_report) || null;
+  const rows = (report && report.rows) || [];
+  if (!rows.length) {
+    return `<h4 class="small" style="margin:0.35rem 0">Status</h4>
+      <p class="muted small">Status report not in payload yet — next ops-monitor rebuild will embed it.</p>`;
+  }
+  const lis = rows
+    .map(
+      (r) =>
+        `<li><strong>${esc(r.label || r.id || "")}</strong>
+        <span class="small">${esc(r.value || "")}</span></li>`
+    )
+    .join("");
+  return `<h4 class="small" style="margin:0.35rem 0">Status <span class="badge badge-neutral">grounded</span></h4>
+    <ul class="list-plain daily-status-list">${lis}</ul>`;
+}
+
+function renderDailyHubLaneBlock(hub, lane) {
+  const key = lane === "explore" ? "explore_suggestions" : "push_suggestions";
+  const block = (hub && hub[key]) || null;
+  const suggestions = (block && block.suggestions) || [];
+  const title = lane === "explore" ? "Explore (not-today)" : "Push (today)";
+  const badge =
+    lane === "explore"
+      ? '<span class="badge badge-watch">explore · not-today</span>'
+      : '<span class="badge badge-neutral">push · ≤3</span>';
+  if (!suggestions.length) {
+    const empty =
+      lane === "push"
+        ? esc(block && block.empty_message ? block.empty_message : "No forced push — factory green.")
+        : "No explore cards (empty OK).";
+    return `<h4 class="small" style="margin:0.75rem 0 0.35rem">${esc(title)} ${badge}</h4>
+      <p class="muted small">${empty}</p>`;
+  }
+  const lis = suggestions
+    .map((s) => {
+      if (lane === "explore") {
+        return `<li><strong>${esc(s.claim || s.title || "")}</strong> ${badge}
+          <div class="small">Why: ${esc(s.why_matters || "")}</div>
+          <div class="small muted">Falsify/promote: ${esc(s.falsify_or_promote || "")}</div>
+          <div class="small muted">${esc(s.defer_hint || "ftse-defer add|fragment")}</div></li>`;
+      }
+      const cite = s.cite || {};
+      return `<li><strong>${esc(s.title || "")}</strong> ${badge}
+        <div class="small">${esc(s.why_now || "")}</div>
+        <div class="small muted">Cite: ${esc(cite.kind || "")} ${esc(cite.ref || "")}</div></li>`;
+    })
+    .join("");
+  return `<h4 class="small" style="margin:0.75rem 0 0.35rem">${esc(title)} ${badge}</h4>
+    <ul class="list-plain daily-lane-list">${lis}</ul>`;
+}
+
 function renderDailyHubPanel(data) {
   const hub = (data && data.daily_focus) || null;
   if (!hub) {
@@ -8617,7 +8670,11 @@ function renderDailyHubPanel(data) {
     })
     .join("");
   const openTasks = (hub.tasks || []).filter((t) => !t.closed);
-  const cards = openTasks.map(renderDailyHubTaskCard).join("");
+  // Push/Explore already rendered in lane blocks — keep triage/human/reconcile here.
+  const triageTasks = openTasks.filter(
+    (t) => t.sort_bucket !== "push" && t.sort_bucket !== "explore"
+  );
+  const cards = triageTasks.map(renderDailyHubTaskCard).join("");
   const counts = hub.counts || {};
   const hist = (data && data.daily_hub_history) || null;
   const histSummary = (hist && hist.summary) || {};
@@ -8630,7 +8687,8 @@ function renderDailyHubPanel(data) {
       )}
       · ${renderUiReconcileBadge(data)}
       · open ${esc(String(hub.open_task_count ?? openTasks.length))}
-      · focus ${esc(String(counts.focus || 0))} /
+      · push ${esc(String(counts.push || 0))} /
+        explore ${esc(String(counts.explore || 0))} /
         warn ${esc(String(counts.market_warnings || 0))} /
         new ${esc(String(counts.human_new_info || 0))} /
         unacked ${esc(String(counts.human_unacked || 0))}
@@ -8638,15 +8696,18 @@ function renderDailyHubPanel(data) {
       ${wallStale ? ' · <span class="badge badge-watch">stale vs wall clock</span>' : ""}
     </p>
     ${staleBanner}
-    <div class="daily-hub-aim muted small">Aim: policy green ≠ utility — Focus tracks P1 live-path bind (holdings ∪ strand A ∪ N200; N201 waiter honest) and P2 offline ingest maintenance / clash-aware eng. Suite A stress streaks and graduated badges are not the day’s north star. Market warning triage: deepen / dismiss / park — do not ritual-clear badges or divert offline ingest / maintenance capacity.</div>
+    <div class="daily-hub-aim muted small">Aim: policy green ≠ utility — Focus tracks P1 live-path bind (holdings ∪ strand A ∪ N200; N201 waiter honest) and P2 offline ingest maintenance / clash-aware eng (chips only — no ritual Focus Accept). Two lanes: <strong>Push</strong> (execution, cited, ≤3) and <strong>Explore</strong> (labeled not-today; may sit outside North Star; claim + why + falsify). Market warning triage: deepen / dismiss / park only when actionable — do not ritual-clear bare health=warn or divert offline ingest / maintenance capacity.</div>
     <div class="daily-hub-session daily-hub-today" id="daily-hub-today">
       <h3>Today</h3>
-      <h4 class="small" style="margin:0.35rem 0">Focus</h4>
+      ${renderDailyHubStatusReport(hub)}
+      <h4 class="small" style="margin:0.35rem 0">Focus <span class="badge badge-neutral">chips</span></h4>
       ${
         focusHtml
           ? `<ul class="list-plain daily-focus-list">${focusHtml}</ul>`
           : '<p class="muted">No focus lines — sync Project notes Today bullets into project_daily_seed.json.</p>'
       }
+      ${renderDailyHubLaneBlock(hub, "push")}
+      ${renderDailyHubLaneBlock(hub, "explore")}
       <h4 class="small" style="margin:0.75rem 0 0.35rem">Prioritized tasks</h4>
       ${cards || '<p class="muted">No open daily tasks.</p>'}
     </div>
