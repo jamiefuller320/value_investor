@@ -208,6 +208,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://d1jgvns6wxbcsj.cloudfront.net/app/uploads/2025/03/2025-03-25-annual-report-2024.pdf",
         "https://d1jgvns6wxbcsj.cloudfront.net/app/uploads/2025/09/2025-09-15-Interim-report.pdf",
     ],
+    # aim buy-tier no_key_bodies — DOTD.L has memo but RNS index misses statutory PDF bodies; cdn.dotdigitalgroup.com IR PDFs fetch.
+    "DOTD.L": [
+        "https://cdn.dotdigitalgroup.com/group/2025/11/Annual-report-2025.pdf",
+        "https://cdn.dotdigitalgroup.com/group/2024/11/Annual-Report-2024.pdf",
+        "https://cdn.dotdigitalgroup.com/group/2026/03/Interim-Results-Dec-2025.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",

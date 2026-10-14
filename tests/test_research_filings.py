@@ -11782,6 +11782,33 @@ def test_parked_source_hunter_mpe_l_aim_has_fetchable_ir():
     _first_fetchable_allowlist_body(urls)
 
 
+def test_fetch_filings_ir_allowlist_aim_dotd_l_builtins(tmp_path: Path):
+    """Regression: DOTD.L buy-tier no_key_bodies — cdn.dotdigitalgroup.com FY2025/2024 AR + H1 statutory PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("DOTD.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("Annual-report-2025.pdf" in url for url in urls)
+    assert any("Annual-Report-2024.pdf" in url for url in urls)
+    assert any("Interim-Results-Dec-2025.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+
+
+def test_parked_source_hunter_dotd_l_aim_has_fetchable_ir():
+    """eng-20261013-06: DOTD.L has live cdn.dotdigitalgroup.com FY2025/2024 AR + H1 statutory PDFs."""
+    assert "DOTD.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("DOTD.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("cdn.dotdigitalgroup.com/group/" in url for url in urls)
+    assert any("Annual-report-2025.pdf" in url for url in urls)
+    _first_fetchable_allowlist_body(urls)
+
+
 def test_fetch_filings_ir_allowlist_tsx60_cnq_to_builtins(tmp_path: Path):
     """Regression: CNQ.TO parked IWB — cnrl.com AIF PDF that live-fetches."""
     allowlist_path = tmp_path / "ir.json"
