@@ -11809,6 +11809,33 @@ def test_parked_source_hunter_dotd_l_aim_has_fetchable_ir():
     _first_fetchable_allowlist_body(urls)
 
 
+def test_fetch_filings_ir_allowlist_aim_caml_l_builtins(tmp_path: Path):
+    """Regression: CAML.L buy-tier no_key_bodies — centralasiametals.com S3 FY2025/2024 AR + H1 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("CAML.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("CAML_AR25_WEB.pdf" in url for url in urls)
+    assert any("CAML-2024-Annual-Report.pdf" in url for url in urls)
+    assert any("CAML_H1_2026_results_paged-1.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+
+
+def test_parked_source_hunter_caml_l_aim_has_fetchable_ir():
+    """eng-20261013-07: CAML.L has live centralasiametals.com S3 FY2025/2024 AR + H1 statutory PDFs."""
+    assert "CAML.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("CAML.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("wp-caml-2023.s3.eu-west-2.amazonaws.com" in url for url in urls)
+    assert any("CAML_AR25_WEB.pdf" in url for url in urls)
+    _first_fetchable_allowlist_body(urls)
+
+
 def test_fetch_filings_ir_allowlist_tsx60_cnq_to_builtins(tmp_path: Path):
     """Regression: CNQ.TO parked IWB — cnrl.com AIF PDF that live-fetches."""
     allowlist_path = tmp_path / "ir.json"

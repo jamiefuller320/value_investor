@@ -214,6 +214,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://cdn.dotdigitalgroup.com/group/2024/11/Annual-Report-2024.pdf",
         "https://cdn.dotdigitalgroup.com/group/2026/03/Interim-Results-Dec-2025.pdf",
     ],
+    # aim buy-tier no_key_bodies — CAML.L has memo but RNS index misses statutory annual PDF bodies; centralasiametals.com S3 IR PDFs fetch.
+    "CAML.L": [
+        "https://wp-caml-2023.s3.eu-west-2.amazonaws.com/media/2025/12/CAML_AR25_WEB.pdf",
+        "https://wp-caml-2023.s3.eu-west-2.amazonaws.com/media/2025/04/CAML-2024-Annual-Report.pdf",
+        "https://wp-caml-2023.s3.eu-west-2.amazonaws.com/media/2026/08/CAML_H1_2026_results_paged-1.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
