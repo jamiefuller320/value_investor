@@ -1,19 +1,11 @@
 {
-  "run_at": "2026-10-14T12:56:42.263977+00:00",
+  "run_at": "2026-10-14T13:22:48.889195+00:00",
   "market_id": "euro_depth",
   "targets": [
-    "PRX.AS",
-    "SHELL.AS"
+    "SHELL.AS",
+    "PRX.AS"
   ],
   "target_details": [
-    {
-      "ticker": "PRX.AS",
-      "priority_score": 18.284,
-      "filings_total": 2,
-      "filings_with_body": 0,
-      "indexed_without_body": 2,
-      "reason": "zero_body"
-    },
     {
       "ticker": "SHELL.AS",
       "priority_score": 15.320799999999998,
@@ -21,71 +13,17 @@
       "filings_with_body": 44,
       "indexed_without_body": 2,
       "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "PRX.AS",
+      "priority_score": 3.284,
+      "filings_total": 2,
+      "filings_with_body": 2,
+      "indexed_without_body": 0,
+      "reason": "thin_bodies"
     }
   ],
   "results": [
-    {
-      "ticker": "PRX.AS",
-      "reason": "zero_body",
-      "before": {
-        "filings_total": 2,
-        "filings_with_body": 0,
-        "indexed_without_body": 2
-      },
-      "after": {
-        "filings_total": 2,
-        "filings_with_body": 2,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 2,
-        "annual": 0,
-        "interim": 0,
-        "trading_update": 0,
-        "other": 2,
-        "with_body": 2,
-        "period_coverage": {
-          "annual": {
-            "total": 0,
-            "with_body": 0
-          },
-          "interim": {
-            "total": 0,
-            "with_body": 0
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 2,
-            "with_body": 2
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 2,
-        "with_body_after": 2,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "shared_body_propagated": 0,
-        "ir_metadata_reconciled": 0,
-        "note": "no missing IR allowlist bodies"
-      }
-    },
     {
       "ticker": "SHELL.AS",
       "reason": "indexed_without_body",
@@ -163,17 +101,78 @@
         "mandatory": true,
         "note": "refetch_ir_allowlist_filing_bodies"
       }
+    },
+    {
+      "ticker": "PRX.AS",
+      "reason": "thin_bodies",
+      "before": {
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 2,
+        "filings_with_body": 2,
+        "indexed_without_body": 0
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 2,
+        "annual": 0,
+        "interim": 0,
+        "trading_update": 0,
+        "other": 2,
+        "with_body": 2,
+        "period_coverage": {
+          "annual": {
+            "total": 0,
+            "with_body": 0
+          },
+          "interim": {
+            "total": 0,
+            "with_body": 0
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 2,
+            "with_body": 2
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 2,
+        "with_body_after": 2,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
     }
   ],
   "improved": [
-    "PRX.AS",
     "SHELL.AS"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-14T12:53:11.023715+00:00",
+    "snapshot_at": "2026-10-14T13:18:40.124557+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -218,11 +217,10 @@
       "DQ7A.IR",
       "EVN.VI",
       "MUV2.DE",
-      "SAP.DE",
       "UCB.BR",
       "WIE.VI"
     ],
-    "parked_count": 10,
+    "parked_count": 9,
     "effective_thin_body_buy_tier": 1,
     "effective_thin_body_tickers": [
       "PRX.AS"
@@ -232,7 +230,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-14T12:56:42.233659+00:00",
+    "snapshot_at": "2026-10-14T13:22:48.841931+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -297,8 +295,8 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 49,
-    "hits": 40,
-    "new_rows_total": 2,
+    "hits": 39,
+    "new_rows_total": 0,
     "curiosity_total": 42,
     "errors": 0,
     "prioritization_weights": {
@@ -329,7 +327,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-10-14T12:53:12.811123+00:00",
+    "assessed_at": "2026-10-14T13:18:43.441845+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -394,9 +392,9 @@
       "thin_need_bodies": 3
     }
   },
-  "used_seconds": 207.53852630400002,
+  "used_seconds": 242.27146684699997,
   "budget_seconds": 2700.0,
-  "leftover_seconds": 2492.461473696,
+  "leftover_seconds": 2457.728533153,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -404,7 +402,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-10-14T12:56:42.240948+00:00",
+    "updated_at": "2026-10-14T13:22:48.851814+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
