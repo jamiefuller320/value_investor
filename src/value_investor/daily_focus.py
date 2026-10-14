@@ -1038,15 +1038,13 @@ def _closed_ids(acks: dict[str, Any] | None, *, local_date: str) -> set[str]:
 
 
 def _prior_assessments(data_dir: Path) -> dict[str, dict[str, Any]]:
-    """Map task_ref → prior assessment from last committed daily_focus.json."""
+    """Map task_ref / focus id → prior assessment from last committed daily_focus.json."""
     prior_payload = _safe_read(data_dir / "daily_focus.json") or {}
     out: dict[str, dict[str, Any]] = {}
-    for row in prior_payload.get("tasks") or []:
-        if not isinstance(row, dict):
-            continue
-        ref = str(row.get("task_ref") or "").strip()
-        if not ref:
-            continue
+
+    def _take(ref: str, row: dict[str, Any]) -> None:
+        if not ref or ref in out:
+            return
         assess = row.get("assessment")
         if not isinstance(assess, dict):
             status = row.get("status") if isinstance(row.get("status"), dict) else {}
@@ -1055,6 +1053,14 @@ def _prior_assessments(data_dir: Path) -> dict[str, dict[str, Any]]:
             )
         if isinstance(assess, dict):
             out[ref] = assess
+
+    for row in prior_payload.get("tasks") or []:
+        if isinstance(row, dict):
+            _take(str(row.get("task_ref") or "").strip(), row)
+    # D1: Focus chips live on focus_lines (no Accept tasks) — still carry stage_since.
+    for row in prior_payload.get("focus_lines") or []:
+        if isinstance(row, dict):
+            _take(str(row.get("id") or "").strip(), row)
     return out
 
 
@@ -1408,7 +1414,59 @@ def build_daily_focus(
     recommendations: list[dict[str, Any]] = []
 
     # 1) Focus lines (pinned) — D1 locked: status chips only; no Focus Accept tasks.
-    # Keep focus_lines on the payload for the Focus strip; do not emit open Accept cards.
+    # Enrich chips with status/work_class/assessment for UI + stage_since carry.
+    enriched_focus: list[dict[str, Any]] = []
+    for line in focus_lines:
+        if not isinstance(line, dict):
+            continue
+        task_ref = str(line.get("id") or "")
+        status = derive_ready_status(
+            dict(
+                line.get("status")
+                or parse_status_conventions(
+                    title=str(line.get("title") or ""),
+                    summary=str(line.get("summary") or ""),
+                    seed_row=line,
+                )
+            ),
+            recommendation_present=False,
+            closed=task_ref in closed_ids,
+        )
+        status["updated_at"] = status.get("updated_at") or generated_at
+        work_class = str(
+            line.get("work_class")
+            or work_class_for_source(
+                str(line.get("source") or "daily_focus"),
+                tags=list(line.get("tags") or []),
+            )
+        )
+        family = str(line.get("task_family") or task_family_for_row(line, fallback=task_ref))
+        chip = dict(line)
+        chip["work_class"] = work_class
+        chip["task_family"] = family
+        chip["status"] = status
+        # attach_assessment / prior map key on task_ref (chips use id).
+        chip["task_ref"] = task_ref
+        observe = _observe_for_focus(
+            {
+                "title": chip.get("title"),
+                "summary": chip.get("summary"),
+                "task_ref": task_ref,
+            }
+        )
+        attach_assessment(
+            chip,
+            prior_by_ref=prior_by_ref,
+            now=now,
+            observe=observe,
+            notes_block=str(chip.get("notes_block") or ""),
+            seed_row=line,
+        )
+        # Mirror assessment onto status for chip consumers that read status.assessment.
+        if isinstance(chip.get("assessment"), dict):
+            status["assessment"] = chip["assessment"]
+        enriched_focus.append(chip)
+    focus_lines = enriched_focus
 
     # 1b) Market warning triage (deepen / dismiss / park) — after focus, before gates
     # D2 locked: drop ritual bare health_warn / health_warn_rollup park rows.
