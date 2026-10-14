@@ -11728,6 +11728,32 @@ def test_parked_source_hunter_rec_l_ftse_smallcap_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_aim_mpe_l_builtins(tmp_path: Path):
+    """Regression: MPE.L buy-tier no_key_bodies — mpevans.co.uk FY2025/2024 AR + H1 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("MPE.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("25_03_25-annual-report.pdf" in url for url in urls)
+    assert any("2025-03-25-annual-report-2024.pdf" in url for url in urls)
+    assert any("2025-09-15-Interim-report.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_mpe_l_aim_has_fetchable_ir():
+    """eng-20261013-03: MPE.L has live mpevans.co.uk FY2025/2024 AR + H1 statutory PDFs."""
+    assert "MPE.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("MPE.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("cloudfront.net/app/uploads" in url for url in urls)
+    assert any("25_03_25-annual-report.pdf" in url for url in urls)
+    _first_fetchable_allowlist_body(urls)
+
+
 def test_fetch_filings_ir_allowlist_tsx60_cnq_to_builtins(tmp_path: Path):
     """Regression: CNQ.TO parked IWB — cnrl.com AIF PDF that live-fetches."""
     allowlist_path = tmp_path / "ir.json"

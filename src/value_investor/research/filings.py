@@ -202,6 +202,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://recordfg.com/wp-content/uploads/2025/06/2024-Annual-Report-Record-plc.pdf",
         "https://recordfg.com/wp-content/uploads/2025/06/2024-Half-Year-Report-Record-plc.pdf",
     ],
+    # aim buy-tier no_key_bodies — MPE.L has memo but RNS index misses statutory PDF bodies; mpevans.co.uk CDN fetch.
+    "MPE.L": [
+        "https://d1jgvns6wxbcsj.cloudfront.net/app/uploads/2026/03/25_03_25-annual-report.pdf",
+        "https://d1jgvns6wxbcsj.cloudfront.net/app/uploads/2025/03/2025-03-25-annual-report-2024.pdf",
+        "https://d1jgvns6wxbcsj.cloudfront.net/app/uploads/2025/09/2025-09-15-Interim-report.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
