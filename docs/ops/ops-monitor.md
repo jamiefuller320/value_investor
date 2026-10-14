@@ -362,6 +362,16 @@ bind, and EPS-from-body onto reports → slim candidates → agree/veto cites
 (observe-only; does not enable Phase C `autopsy_freeze`). First-run observe pin:
 `check_p1_first_run_pin` (time-boxed; see table below).
 
+**AI path cadence (observe / warn-only):** weekday finding stays **LLM agree/veto
+shadow rollup missing**. Human **Sunday** scoreboard review is checklist
+`sunday-ai-path-scoreboard` (see
+[`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md#sunday-ai-path-scoreboard)
++ Project store `docs/ai-path-roadmap.md`). Intended later finding title
+**AI path scoreboard — Sunday review** (`auto_fixable=False`) once a committed
+rollup freshness flag exists — do not invent rememo/ingest/eng spray from it.
+Beachhead / ecosystem parks (**N209** / **L606** / **L605**) surface via
+**Deferred idea triggers met**, not a second daily ritual.
+
 Weekday paper findings before **10:00 UTC** defer alert email (same ready time
 as `paper-auto.yml` workflow freshness). The 13:15 catch-up is the actionable
 pass.
