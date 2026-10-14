@@ -11836,6 +11836,33 @@ def test_parked_source_hunter_caml_l_aim_has_fetchable_ir():
     _first_fetchable_allowlist_body(urls)
 
 
+def test_fetch_filings_ir_allowlist_aim_pebb_l_builtins(tmp_path: Path):
+    """Regression: PEBB.L buy-tier no_key_bodies — thepebblegroup.com FY2025/2024 AR + HY26 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("PEBB.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("272947_Pebble_Group_AR_Interactive.pdf" in url for url in urls)
+    assert any("270065_Pebble_ARA_2024_INTERACTIVE3_FINAL.pdf" in url for url in urls)
+    assert any("HY_26_Results_Statement" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+
+
+def test_parked_source_hunter_pebb_l_aim_has_fetchable_ir():
+    """eng-20261013-08: PEBB.L has live thepebblegroup.com FY2025/2024 AR + HY26 statutory PDFs."""
+    assert "PEBB.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("PEBB.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("thepebblegroup.com/application/files" in url for url in urls)
+    assert any("272947_Pebble_Group_AR_Interactive.pdf" in url for url in urls)
+    _first_fetchable_allowlist_body(urls)
+
+
 def test_fetch_filings_ir_allowlist_tsx60_cnq_to_builtins(tmp_path: Path):
     """Regression: CNQ.TO parked IWB — cnrl.com AIF PDF that live-fetches."""
     allowlist_path = tmp_path / "ir.json"

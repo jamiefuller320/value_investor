@@ -220,6 +220,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://wp-caml-2023.s3.eu-west-2.amazonaws.com/media/2025/04/CAML-2024-Annual-Report.pdf",
         "https://wp-caml-2023.s3.eu-west-2.amazonaws.com/media/2026/08/CAML_H1_2026_results_paged-1.pdf",
     ],
+    # aim buy-tier no_key_bodies — PEBB.L has memo but RNS index misses statutory annual PDF bodies; thepebblegroup.com IR PDFs fetch.
+    "PEBB.L": [
+        "https://www.thepebblegroup.com/application/files/7117/7505/8006/272947_Pebble_Group_AR_Interactive.pdf",
+        "https://www.thepebblegroup.com/application/files/3417/4587/6836/270065_Pebble_ARA_2024_INTERACTIVE3_FINAL.pdf",
+        "https://www.thepebblegroup.com/application/files/1717/8880/8359/The_Pebble_Group_-_HY_26_Results_Statement_-_07.09.2026.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
@@ -5496,6 +5502,10 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.jdplc.com/wp-content/uploads/2026/09/HY27-Results-Statement.pdf": "interim",
     # eng-20261010-02: Tenaris TEN.MI Q1 2026 FS 6-K slug (f6k_*fs.htm) has no interim token.
     "https://www.sec.gov/Archives/edgar/data/1190723/000117184326003164/f6k_050626fs.htm": "interim",
+    # eng-20261013-08: PEBB.L — Concrete5 IR filenames (AR_Interactive / ARA_2024 / HY_26) lack annual/interim tokens.
+    "https://www.thepebblegroup.com/application/files/7117/7505/8006/272947_Pebble_Group_AR_Interactive.pdf": "annual",
+    "https://www.thepebblegroup.com/application/files/3417/4587/6836/270065_Pebble_ARA_2024_INTERACTIVE3_FINAL.pdf": "annual",
+    "https://www.thepebblegroup.com/application/files/1717/8880/8359/The_Pebble_Group_-_HY_26_Results_Statement_-_07.09.2026.pdf": "interim",
 }
 
 
