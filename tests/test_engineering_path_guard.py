@@ -181,6 +181,17 @@ def test_validate_engineering_pr_paths_allows_engineering_tasks_json():
     assert result.violations == []
 
 
+def test_validate_engineering_pr_paths_allows_pr_fix_occasions_json():
+    """L432: recording PR fix occasions on eng-* branches must not trip the guard."""
+    task = _ingest_task()
+    result = validate_engineering_pr_paths(
+        task=task,
+        changed_files=["docs/data/pr_fix_occasions.json"],
+    )
+    assert result.ok
+    assert result.violations == []
+
+
 def test_validate_engineering_pr_paths_for_task_id_from_queue_file(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
     tasks_path.write_text(
