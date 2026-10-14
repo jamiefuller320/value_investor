@@ -506,6 +506,67 @@ def test_dashboard_assets_include_system_gaps_card():
     assert ".system-gap-tile" in css
 
 
+def test_dashboard_assets_include_system_map_card():
+    """L596 — Overview topology from architecture.md + mild sidecar stress."""
+    app = Path("docs/app.js").read_text(encoding="utf-8")
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    css = Path("docs/styles.css").read_text(encoding="utf-8")
+    assert "function renderSystemMapCard(data)" in app
+    assert "function resolveSystemMapStress(data)" in app
+    assert "${renderSystemMapCard(data)}" in app
+    assert 'id="system-map-card"' in app
+    assert "docs/architecture.md" in app
+    assert "docs/PROJECT_OBJECTIVE.md" in app
+    assert "app.js?v=system-map-20261014" in html
+    assert ".system-map-pipeline" in css
+    assert ".system-map-pillars" in css
+    assert ".system-map-pillar-high" in css
+
+
+def test_system_map_stress_uses_published_sidecars():
+    import json
+    from subprocess import check_output
+
+    app = Path("docs/app.js").read_text(encoding="utf-8")
+    start = app.index("function resolveSystemMapStress(data)")
+    end = app.index("function systemMapStressBadge(level)")
+    # Minimal resolveQueueHealth stub — production helper lives later in app.js.
+    helpers = (
+        "function resolveQueueHealth(data) {\n"
+        "  return (data && data.queue_health) || null;\n"
+        "}\n" + app[start:end]
+    )
+    script = (
+        helpers
+        + """
+const out = {
+  ok: resolveSystemMapStress({}),
+  data_high: resolveSystemMapStress({
+    project_progress: { ingest_bottleneck: { stalled: true, summary: "Buy-tier bodies stalled" } },
+  }),
+  invest_high: resolveSystemMapStress({
+    system_gaps: { high_flag_count: 2, flags: [{ severity: "high" }, { severity: "high" }] },
+  }),
+  platform_warn: resolveSystemMapStress({
+    queue_health: { ops_monitor: { overall: "warn" }, merge_lane: { state: "ok" } },
+  }),
+};
+console.log(JSON.stringify({
+  ok: out.ok.data.level + "/" + out.ok.investment.level + "/" + out.ok.platform.level,
+  data_high: out.data_high.data.level,
+  invest_high: out.invest_high.investment.level,
+  platform_warn: out.platform_warn.platform.level,
+}));
+"""
+    )
+    raw = check_output(["node", "-e", script], text=True)
+    parsed = json.loads(raw)
+    assert parsed["ok"] == "ok/ok/ok"
+    assert parsed["data_high"] == "high"
+    assert parsed["invest_high"] == "high"
+    assert parsed["platform_warn"] == "medium"
+
+
 def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
     library = _seed_library(tmp_path / "library")
     policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
