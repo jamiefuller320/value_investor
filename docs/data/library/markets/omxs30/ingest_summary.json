@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-14T18:14:33.725060+00:00",
+  "run_at": "2026-10-14T18:15:41.492447+00:00",
   "market_id": "omxs30",
   "targets": [
     "NIBE-B.ST"
@@ -7,21 +7,21 @@
   "target_details": [
     {
       "ticker": "NIBE-B.ST",
-      "priority_score": 12.5149,
-      "filings_total": 0,
+      "priority_score": 17.5149,
+      "filings_total": 1,
       "filings_with_body": 0,
-      "indexed_without_body": 0,
-      "reason": "unmeasured"
+      "indexed_without_body": 1,
+      "reason": "zero_body"
     }
   ],
   "results": [
     {
       "ticker": "NIBE-B.ST",
-      "reason": "unmeasured",
+      "reason": "zero_body",
       "before": {
-        "filings_total": 0,
+        "filings_total": 1,
         "filings_with_body": 0,
-        "indexed_without_body": 0
+        "indexed_without_body": 1
       },
       "after": {
         "filings_total": 1,
@@ -85,7 +85,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-14T18:14:16.262230+00:00",
+    "snapshot_at": "2026-10-14T18:14:14.144181+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 1,
@@ -113,7 +113,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-14T18:14:33.711441+00:00",
+    "snapshot_at": "2026-10-14T18:15:41.479776+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
@@ -148,8 +148,27 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 12,
+    "hits": 8,
+    "new_rows_total": 1,
+    "curiosity_total": 8,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "NIBE-B.ST"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": {
     "skipped": true,
     "reason": "not_focus_market",
@@ -158,7 +177,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "omxs30",
-    "assessed_at": "2026-10-14T18:14:16.891272+00:00",
+    "assessed_at": "2026-10-14T18:14:14.750944+00:00",
     "unmeasured": [
       "NIBE-B.ST"
     ],
@@ -184,9 +203,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 16.221046510999997,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2083.778953489,
+  "used_seconds": 86.16196055299997,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3513.838039447,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -194,7 +213,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "omxs30",
-    "updated_at": "2026-10-14T18:14:33.718603+00:00",
+    "updated_at": "2026-10-14T18:15:41.486492+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
