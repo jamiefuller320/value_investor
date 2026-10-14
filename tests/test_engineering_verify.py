@@ -207,9 +207,7 @@ def test_is_pytest_infra_failure_detects_missing_module():
     )
 
 
-def test_default_pytest_runner_skips_live_network_for_filings_suite(
-    tmp_path: Path, monkeypatch
-):
+def test_default_pytest_runner_skips_live_network_for_filings_suite(tmp_path: Path, monkeypatch):
     filings = tmp_path / "tests" / "test_research_filings.py"
     filings.parent.mkdir(parents=True)
     filings.write_text("# stub\n", encoding="utf-8")
@@ -227,13 +225,9 @@ def test_default_pytest_runner_skips_live_network_for_filings_suite(
 
         return _Completed()
 
-    monkeypatch.setattr(
-        "value_investor.engineering_verify.subprocess.run", fake_run
-    )
+    monkeypatch.setattr("value_investor.engineering_verify.subprocess.run", fake_run)
 
-    result = default_pytest_runner(
-        ["tests/test_research_filings.py"], cwd=tmp_path
-    )
+    result = default_pytest_runner(["tests/test_research_filings.py"], cwd=tmp_path)
     assert result["ok"] is True
     assert seen
     cmd = seen[0]
