@@ -5,6 +5,9 @@ Credentials (env):
   TRADING212_API_SECRET
   TRADING212_ENV = demo|live  (default: demo)
 
+Pair each key with the env it was issued for. Production / Actions-injected
+catalogue keys usually need TRADING212_ENV=live (demo host often returns 401).
+
 Does not place orders — see deferred N14 / stage 6.
 """
 
