@@ -3961,6 +3961,94 @@ function renderSundayReview(data) {
 const ANALYSIS_SECTION_IDS = ["observe", "sunday", "charts", "deep", "postrun", "memos"];
 let analysisSectionId = "observe";
 
+/**
+ * Investment model switcher catalog (Analysis → Observe).
+ * ≤1 live capital path (F5). Observe seals may be many; append here when sealed.
+ * Pattern for future models: { id, label, shortLabel, mode: "live"|"observe",
+ * registrationId, deferredId, opsDoc, emptyHint }.
+ */
+const INVESTMENT_MODELS = [
+  {
+    id: "strand-a",
+    label: "Strand A",
+    shortLabel: "A · live",
+    mode: "live",
+    modeLabel: "Live capital",
+    registrationId: null,
+    deferredId: null,
+    opsDoc: "docs/ops/assessment-scoreboard.md",
+    emptyHint: "Assessment scoreboard publishes with daily ops-monitor.",
+    blurb:
+      "Sole live / capital path until promote (F5). Assessment scoreboard + paper tracks — not an observe seal.",
+  },
+  {
+    id: "n200",
+    label: "N200 tech timing",
+    shortLabel: "N200 · observe",
+    mode: "observe",
+    modeLabel: "Observe-only",
+    registrationId: "strand-b-plain-value-tech-timing-v0",
+    deferredId: "N200",
+    opsDoc: "docs/ops/n200-tech-timing-observe.md",
+    emptyHint: "N200 observe store not published yet (check_n200_tech_timing_observe).",
+    blurb:
+      "Sealed observe: buy-tier identity + ±14d entry/exit brackets. Alone scoreboards — never auto-promotes (F8).",
+  },
+  {
+    id: "n201",
+    label: "N201 short-horizon",
+    shortLabel: "N201 · observe",
+    mode: "observe",
+    modeLabel: "Observe-only",
+    registrationId: "strand-c-short-horizon-value-mom-v0",
+    deferredId: "N201",
+    opsDoc: "docs/ops/n201-value-mom-observe.md",
+    emptyHint: "N201 observe store not published yet (check_n201_value_mom_observe).",
+    blurb:
+      "Sealed observe (launch-queue waiter): plain EY + 12–1 mom + financial_health, fixed stake. Alone scoreboards — never auto-promotes (F8).",
+  },
+];
+
+const INVESTMENT_MODEL_IDS = new Set(INVESTMENT_MODELS.map((m) => m.id));
+let investmentModelId = "strand-a";
+
+function normalizeInvestmentModel(value) {
+  const key = String(value || "")
+    .toLowerCase()
+    .replace(/_/g, "-");
+  if (key === "a" || key === "strand-a" || key === "live" || key === "strand_a") return "strand-a";
+  if (key === "b" || key === "n200" || key === "strand-b" || key === "tech-timing") return "n200";
+  if (key === "c" || key === "n201" || key === "strand-c" || key === "value-mom") return "n201";
+  if (INVESTMENT_MODEL_IDS.has(key)) return key;
+  return "strand-a";
+}
+
+/** True only for explicit model hash tokens — not Analysis section ids like sunday/charts. */
+function isInvestmentModelHashToken(value) {
+  const key = String(value || "")
+    .toLowerCase()
+    .replace(/_/g, "-");
+  if (!key || ANALYSIS_SECTION_IDS.includes(key)) return false;
+  return (
+    INVESTMENT_MODEL_IDS.has(key) ||
+    key === "a" ||
+    key === "live" ||
+    key === "strand-a" ||
+    key === "strand_a" ||
+    key === "b" ||
+    key === "strand-b" ||
+    key === "tech-timing" ||
+    key === "c" ||
+    key === "strand-c" ||
+    key === "value-mom"
+  );
+}
+
+function investmentModelMeta(modelId) {
+  const id = normalizeInvestmentModel(modelId);
+  return INVESTMENT_MODELS.find((m) => m.id === id) || INVESTMENT_MODELS[0];
+}
+
 function normalizeAnalysisSection(value) {
   const key = String(value || "").toLowerCase();
   if (key === "chart" || key === "chart-outcomes" || key === "charts") return "charts";
@@ -3989,16 +4077,22 @@ function renderAnalysisSubnav(activeId) {
     ).join("")}
   </nav>
   <p class="small muted analysis-ia-contract" style="margin:0.35rem 0 0.75rem">
-    Analysis is a review surface — assessment scoreboard (total return vs FTAL.L) leads Observe;
-    dense Sunday tables default-collapsed; full observe cards live on Automation.
-    Dual-suite A/B buckets are legacy context, not the promotion scoreboard.
+    Analysis is a review surface — use the <strong>model switcher</strong> under Observe to flip
+    Strand A (live capital) vs sealed observe models (N200 / N201). ≤1 live path (F5);
+    observe views never imply a second capital book. Dense Sunday tables default-collapsed;
+    full pipeline cards also live on Automation → Queue.
   </p>`;
 }
 
 function syncAnalysisHash() {
   const section = normalizeAnalysisSection(analysisSectionId);
   if (section === "observe") {
-    history.replaceState(null, "", "#analysis");
+    const model = normalizeInvestmentModel(investmentModelId);
+    if (model === "strand-a") {
+      history.replaceState(null, "", "#analysis");
+      return;
+    }
+    history.replaceState(null, "", `#analysis/observe/${model}`);
     return;
   }
   history.replaceState(null, "", `#analysis/${section}`);
@@ -4018,10 +4112,32 @@ function jumpToAnalysisSection(sectionId, { updateHash = true } = {}) {
   if (updateHash) syncAnalysisHash();
 }
 
+function jumpToInvestmentModel(modelId, { updateHash = true, scroll = true } = {}) {
+  investmentModelId = normalizeInvestmentModel(modelId);
+  analysisSectionId = "observe";
+  if (dashboardData) {
+    renderAnalysis(dashboardData);
+  }
+  if (scroll) {
+    window.requestAnimationFrame(() => {
+      const panel = document.getElementById("panel-analysis");
+      const target = panel?.querySelector("#analysis-observe");
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+  if (updateHash) syncAnalysisHash();
+}
+
 function bindAnalysisPanel(panel) {
   if (!panel || panel.dataset.analysisBound === "1") return;
   panel.dataset.analysisBound = "1";
   panel.addEventListener("click", (event) => {
+    const modelBtn = event.target.closest("[data-investment-model]");
+    if (modelBtn) {
+      event.preventDefault();
+      jumpToInvestmentModel(modelBtn.dataset.investmentModel);
+      return;
+    }
     const sub = event.target.closest("[data-analysis-section]");
     if (sub) {
       event.preventDefault();
@@ -4034,6 +4150,84 @@ function bindAnalysisPanel(panel) {
       activateTab(tabJump.dataset.tabJump, { updateHash: true });
     }
   });
+}
+
+function renderInvestmentModelSwitcher(activeModelId) {
+  const active = normalizeInvestmentModel(activeModelId);
+  const meta = investmentModelMeta(active);
+  const buttons = INVESTMENT_MODELS.map((m) => {
+    const modeClass = m.mode === "live" ? "model-mode-live" : "model-mode-observe";
+    const badge =
+      m.mode === "live"
+        ? `<span class="badge badge-buy model-mode-badge">live</span>`
+        : `<span class="badge badge-info model-mode-badge">observe</span>`;
+    return `<button type="button" class="paper-subtab investment-model-tab ${modeClass}${
+      m.id === active ? " active" : ""
+    }" data-investment-model="${esc(m.id)}" title="${esc(m.blurb)}">${esc(
+      m.shortLabel
+    )} ${badge}</button>`;
+  }).join("");
+  const runbookUrl = meta.opsDoc ? githubOpsDocUrl(meta.opsDoc) : "";
+  return `
+    <div class="investment-model-switcher" role="group" aria-label="Investment model">
+      <div class="investment-model-switcher-head">
+        <h3 class="investment-model-switcher-title">Investment model</h3>
+        <p class="small muted" style="margin:0">
+          Switch scoreboards — <strong>one live capital path</strong> (Strand A);
+          N200 / N201 are sealed observe-only (alone-first; never auto-promote).
+        </p>
+      </div>
+      <nav class="paper-subnav investment-model-subnav" aria-label="Investment models">
+        ${buttons}
+      </nav>
+      <p class="small investment-model-active-blurb">
+        <span class="badge ${meta.mode === "live" ? "badge-buy" : "badge-info"}">${esc(
+          meta.modeLabel
+        )}</span>
+        ${esc(meta.blurb)}
+        ${
+          meta.registrationId
+            ? ` · <code>${esc(meta.registrationId)}</code>`
+            : ""
+        }
+        ${
+          runbookUrl
+            ? ` · <a href="${esc(runbookUrl)}" target="_blank" rel="noopener">runbook</a>`
+            : ""
+        }
+      </p>
+    </div>`;
+}
+
+function renderAnalysisObserveForModel(data, modelId) {
+  const id = normalizeInvestmentModel(modelId);
+  if (id === "n200") {
+    return `
+      ${renderInvestmentModelCompanionStrip(data, "n200")}
+      ${renderN200PipelineHealthSection(data, { compact: false })}
+      ${renderObservePathScoreboardPanel(data, "n200")}
+      <p class="small muted">
+        Compact Automation strip remains on
+        <button type="button" class="link-btn" data-tab-jump="automation">Automation → Queue &amp; hunter</button>.
+      </p>`;
+  }
+  if (id === "n201") {
+    return `
+      ${renderInvestmentModelCompanionStrip(data, "n201")}
+      ${renderN201PipelineHealthSection(data, { compact: false })}
+      ${renderObservePathScoreboardPanel(data, "n201")}
+      <p class="small muted">
+        Compact Automation strip remains on
+        <button type="button" class="link-btn" data-tab-jump="automation">Automation → Queue &amp; hunter</button>.
+      </p>`;
+  }
+  // Strand A — live capital path surfaces.
+  return `
+    ${renderInvestmentModelCompanionStrip(data, "strand-a")}
+    ${renderAssessmentScoreboardPanel(data)}
+    ${renderTotalReturnVsPricePanel(data)}
+    ${renderPaperTrackBucketsPanel(data)}
+    ${renderObserveUtilizationSection(data, { compact: true })}`;
 }
 
 function renderAnalysis(data) {
@@ -4144,11 +4338,12 @@ function renderAnalysis(data) {
   panel.innerHTML = `
     ${renderAnalysisSubnav(analysisSectionId)}
     <section class="analysis-section" id="analysis-observe">
-      ${renderAssessmentScoreboardPanel(data)}
-      ${renderTotalReturnVsPricePanel(data)}
-      ${renderPaperTrackBucketsPanel(data)}
-      ${renderObserveUtilizationSection(data, { compact: true })}
-      ${renderN200PipelineHealthSection(data, { compact: true })}
+      ${renderInvestmentModelSwitcher(investmentModelId)}
+      <div class="investment-model-view" data-active-model="${esc(
+        normalizeInvestmentModel(investmentModelId)
+      )}">
+        ${renderAnalysisObserveForModel(data, investmentModelId)}
+      </div>
     </section>
     ${renderSundayReview(data)}
     <section class="analysis-section" id="analysis-charts">
@@ -5083,6 +5278,398 @@ function renderN200PipelineHealthSection(data, { compact = false } = {}) {
     </section>`;
 }
 
+function resolveN201PipelineHealth(data) {
+  if (data.n201_pipeline_health) return data.n201_pipeline_health;
+  const health = resolveQueueHealth(data);
+  if (health?.n201_pipeline_health) return health.n201_pipeline_health;
+  const store = data.n201_value_mom_observe;
+  if (!store || typeof store !== "object") return null;
+  const phase = store.phase || {};
+  const volume = store.volume_gate || {};
+  const path = store.path_scoreboard || {};
+  return {
+    observe_only: true,
+    influences_live: false,
+    not_alpha_signal: true,
+    not_capital_ready: true,
+    independent_of_fund_nav: true,
+    launch_queue_waiter: true,
+    registration_id: store.registration_id,
+    deferred_id: store.deferred_id || "N201",
+    headline: "N201 observe store loaded (client projection).",
+    disclaimer:
+      "Phase floor and volume gate measure factory mechanism throughput — not alpha or capital readiness (F8). Fixed-stake episode % is independent of fund NAV. Observe-only.",
+    store_present: true,
+    store_generated_at: store.generated_at || null,
+    phase: {
+      entries_per_week: phase.entries_per_week,
+      floor: phase.floor,
+      floor_met: !!phase.floor_met,
+    },
+    volume_gate: {
+      met: !!volume.met,
+      episodes: store.completed_entry_episodes ?? 0,
+      weeks: store.calendar_weeks_spanned ?? 0,
+      min_episodes: volume.min_episodes,
+      min_weeks: volume.min_weeks,
+    },
+    path_scoreboard: path,
+    freshness: { state: "unknown", detail: "Awaiting queue-health embed for freshness." },
+    pipeline: {
+      functioning: null,
+      ops_check_ok: null,
+      ops_run_at: null,
+      detail: "Refresh with ops-monitor / queue health for full pipeline status.",
+    },
+    ops_doc: store.ops_doc || "docs/ops/n201-value-mom-observe.md",
+  };
+}
+
+function renderN201PipelineHealthSection(data, { compact = false } = {}) {
+  const payload = resolveN201PipelineHealth(data);
+  const runbookUrl = githubOpsDocUrl("docs/ops/n201-value-mom-observe.md");
+  const sectionAttrs = compact
+    ? ' class="automation-section automation-section-full n201-pipeline-health-section analysis-observe-compact"'
+    : ' class="automation-section automation-section-full n201-pipeline-health-section"';
+  if (!payload) {
+    return `
+      <section${sectionAttrs}>
+        <h2>N201 pipeline health</h2>
+        <p class="muted small">Observe store not published yet. Refreshes with daily ops-monitor (<code>check_n201_value_mom_observe</code>).</p>
+      </section>`;
+  }
+  const phase = payload.phase || {};
+  const volume = payload.volume_gate || {};
+  const freshness = payload.freshness || {};
+  const pipeline = payload.pipeline || {};
+  const path = payload.path_scoreboard || {};
+  const entriesPw =
+    phase.entries_per_week == null || !Number.isFinite(Number(phase.entries_per_week))
+      ? "—"
+      : String(Number(phase.entries_per_week));
+  const floor =
+    phase.floor == null || !Number.isFinite(Number(phase.floor))
+      ? "—"
+      : String(Number(phase.floor));
+  const functioningBadge =
+    pipeline.functioning === true
+      ? `<span class="badge badge-ii-yes">functioning</span>`
+      : pipeline.functioning === false
+        ? `<span class="badge badge-ii-no">attention</span>`
+        : `<span class="badge">unknown</span>`;
+  const waiterBadge = payload.launch_queue_waiter
+    ? `<span class="badge badge-hold">launch-queue waiter</span>`
+    : "";
+  const disclaimer = esc(
+    payload.disclaimer ||
+      "Phase floor = mechanism throughput, not alpha or capital readiness (F8)."
+  );
+  const metaLine = `<p class="small muted">Store ${esc(fmtDate(payload.store_generated_at))}
+        · projection ${esc(fmtDate(payload.generated_at))}
+        · ops ${esc(fmtDate(pipeline.ops_run_at))}
+        · ${esc(payload.registration_id || "strand-c-short-horizon-value-mom-v0")}
+      </p>`;
+  const pathMedian = path.smooth_ret_cohort_median;
+  if (compact) {
+    return `
+      <section${sectionAttrs}>
+        <h2>N201 pipeline health ${observeFreshnessBadge(freshness.state)} ${functioningBadge} ${waiterBadge}</h2>
+        <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
+        ${metaLine}
+        <p class="small muted" style="margin:0.35rem 0 0">
+          Phase ${esc(entriesPw)}/${esc(floor)} ${n200GateBadge(!!phase.floor_met)}
+          · volume ${n200GateBadge(!!volume.met)}
+          (${esc(String(volume.episodes ?? "—"))} ep / ${esc(String(volume.weeks ?? "—"))} wk)
+          · path median ${pctOrDash(pathMedian)}
+        </p>
+        <p class="small muted" style="margin-bottom:0">
+          Compact strip — full readout on Analysis model switcher (N201) or
+          <button type="button" class="link-btn" data-tab-jump="automation">Automation → Queue</button>.
+          Not a promote signal (F8).
+        </p>
+      </section>`;
+  }
+  return `
+    <section${sectionAttrs}>
+      <h2>N201 / short-horizon value-mom ${observeFreshnessBadge(freshness.state)} ${functioningBadge} ${waiterBadge}</h2>
+      <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
+      ${metaLine}
+      <p class="small muted">${disclaimer}
+        ${runbookUrl ? ` <a href="${esc(runbookUrl)}" target="_blank" rel="noopener">N201 runbook</a>` : ""}
+      </p>
+      <div class="grid n200-pipeline-grid n201-pipeline-grid" style="margin-top:0.75rem">
+        <div class="card n200-pipeline-card">
+          <h3>Phase floor ${n200GateBadge(!!phase.floor_met)}</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value">${esc(entriesPw)}<span class="n200-floor-den">/${esc(floor)}</span></div>
+          </div>
+          <p class="small muted">Entries/week vs sealed floor. Throughput health only.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Volume gate ${n200GateBadge(!!volume.met)}</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value">${esc(String(volume.episodes ?? "—"))}<span class="n200-floor-den"> ep</span></div>
+          </div>
+          ${settingRow("Weeks", esc(String(volume.weeks ?? "—")))}
+          ${settingRow(
+            "Minimums",
+            `≥${esc(String(volume.min_episodes ?? 48))} ep and ≥${esc(String(volume.min_weeks ?? 8))} wk`
+          )}
+          <p class="small muted">Review gate — not auto-promote.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Path median (fair)</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value">${pctOrDash(pathMedian)}</div>
+          </div>
+          ${settingRow("n episodes", esc(String(path.n ?? volume.episodes ?? "—")))}
+          ${settingRow("Stress median (report-only)", pctOrDash(path.smooth_ret_cohort_median_stress_report_only))}
+          <p class="small muted">Fixed-stake episode %; independent of fund NAV.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Pipeline ${functioningBadge}</h3>
+          ${settingRow("Store freshness", `${observeFreshnessBadge(freshness.state)} · ${esc(freshness.detail || "")}`)}
+          ${settingRow(
+            "Ops check",
+            pipeline.ops_check_ok === true
+              ? n200GateBadge(true, { yes: "ok" })
+              : pipeline.ops_check_ok === false
+                ? n200GateBadge(false, { no: pipeline.ops_finding_present ? "failed" : "absent" })
+                : "—"
+          )}
+          ${settingRow("Last store refresh", esc(fmtDate(payload.store_generated_at)))}
+          <p class="small muted">${esc(pipeline.detail || "")}</p>
+        </div>
+      </div>
+      <p class="small muted" style="margin-top:0.75rem;margin-bottom:0">
+        Observe-only strand C (launch-queue waiter). Phase green ≠ alpha or capital-ready. Never writes books/knobs (F8).
+      </p>
+    </section>`;
+}
+
+function _observeSealStartedAt(store) {
+  const markers = Array.isArray(store?.change_markers) ? store.change_markers : [];
+  for (const m of markers) {
+    if (m && m.at) return m.at;
+  }
+  return store?.sealed_at || store?.generated_at || null;
+}
+
+function _formatRunningDuration(startedAt, asOf) {
+  if (!startedAt) return "—";
+  try {
+    const start = new Date(startedAt);
+    const end = asOf ? new Date(asOf) : new Date();
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return "—";
+    const days = Math.max(0, Math.floor((end.getTime() - start.getTime()) / 86400000));
+    if (days < 14) return `${days}d`;
+    const weeks = Math.floor(days / 7);
+    return `${weeks}w (${days}d)`;
+  } catch {
+    return "—";
+  }
+}
+
+function _meanEpisodeCloseDelta(store, modelId) {
+  const sample = Array.isArray(store?.episodes_sample) ? store.episodes_sample : [];
+  const values = [];
+  for (const ep of sample) {
+    if (!ep || typeof ep !== "object") continue;
+    const raw =
+      modelId === "n201"
+        ? ep.return_pct
+        : ep.control_return ?? ep.return_pct ?? ep.smooth_ret;
+    if (raw == null || !Number.isFinite(Number(raw))) continue;
+    values.push(Number(raw));
+  }
+  if (!values.length) return null;
+  return values.reduce((a, b) => a + b, 0) / values.length;
+}
+
+/**
+ * Companion diagnostics (time running / volume / avg close delta) from existing
+ * observe stores — graceful empty when fields missing (O3 design guidance).
+ */
+function renderInvestmentModelCompanionStrip(data, modelId) {
+  const id = normalizeInvestmentModel(modelId);
+  if (id === "strand-a") {
+    const board = data.assessment_scoreboard;
+    const tracks = Array.isArray(board?.tracks) ? board.tracks : [];
+    const primary = tracks.find((t) => t.role === "primary") || tracks[0];
+    const marks =
+      primary?.statistics?.n_marks ??
+      primary?.n_marks ??
+      primary?.marks ??
+      null;
+    return `
+      <div class="investment-model-companion" aria-label="Strand A companion diagnostics">
+        <div class="investment-model-companion-grid">
+          <div class="investment-model-companion-cell">
+            <div class="small muted">Mode</div>
+            <div class="investment-model-companion-value"><span class="badge badge-buy">live capital</span></div>
+          </div>
+          <div class="investment-model-companion-cell">
+            <div class="small muted">Primary track</div>
+            <div class="investment-model-companion-value"><code>${esc(
+              board?.primary_track || primary?.track_id || "—"
+            )}</code></div>
+          </div>
+          <div class="investment-model-companion-cell">
+            <div class="small muted">Marks (if published)</div>
+            <div class="investment-model-companion-value">${esc(
+              marks == null ? "—" : String(marks)
+            )}</div>
+          </div>
+          <div class="investment-model-companion-cell">
+            <div class="small muted">TR excess vs ${esc(board?.benchmark || "FTAL.L")}</div>
+            <div class="investment-model-companion-value">${pctOrDash(
+              primary?.excess_total_return
+            )}</div>
+          </div>
+        </div>
+        <p class="small muted" style="margin:0.35rem 0 0">Sole live path (F5). Observe models are separate tabs — never a second capital book.</p>
+      </div>`;
+  }
+
+  const store =
+    id === "n201" ? data.n201_value_mom_observe : data.n200_tech_timing_observe;
+  const health =
+    id === "n201" ? resolveN201PipelineHealth(data) : resolveN200PipelineHealth(data);
+  if (!store && !health) {
+    const meta = investmentModelMeta(id);
+    return `
+      <div class="investment-model-companion empty-state">
+        <p class="muted small">${esc(meta.emptyHint)}</p>
+      </div>`;
+  }
+  const volume = (health && health.volume_gate) || (store && store.volume_gate) || {};
+  const episodes =
+    volume.episodes ?? store?.completed_entry_episodes ?? null;
+  const weeks = volume.weeks ?? store?.calendar_weeks_spanned ?? null;
+  const minEp = volume.min_episodes;
+  const started = _observeSealStartedAt(store);
+  const running = _formatRunningDuration(started, store?.generated_at);
+  const path = (health && health.path_scoreboard) || store?.path_scoreboard || {};
+  const cohortMedian =
+    id === "n201"
+      ? path.smooth_ret_cohort_median
+      : path.control_smooth_ret_cohort_median ?? path.smooth_ret_cohort_median;
+  const sampleMean = _meanEpisodeCloseDelta(store, id);
+  const volumeLabel =
+    episodes == null
+      ? "—"
+      : minEp != null
+        ? `${episodes} / ${minEp} ep`
+        : `${episodes} ep`;
+  return `
+    <div class="investment-model-companion" aria-label="${esc(id)} companion diagnostics">
+      <div class="investment-model-companion-grid">
+        <div class="investment-model-companion-cell">
+          <div class="small muted">Time running</div>
+          <div class="investment-model-companion-value">${esc(running)}</div>
+          <div class="small muted">since seal ${esc(fmtDate(started))}</div>
+        </div>
+        <div class="investment-model-companion-cell">
+          <div class="small muted">Volume toward gate</div>
+          <div class="investment-model-companion-value">${esc(volumeLabel)} ${n200GateBadge(
+            volume.met
+          )}</div>
+          <div class="small muted">${esc(String(weeks ?? "—"))} wk spanned</div>
+        </div>
+        <div class="investment-model-companion-cell">
+          <div class="small muted">Cohort median (fair)</div>
+          <div class="investment-model-companion-value ${signedReturnClass(
+            cohortMedian
+          )}">${pctOrDash(cohortMedian)}</div>
+          <div class="small muted">path scoreboard primary</div>
+        </div>
+        <div class="investment-model-companion-cell">
+          <div class="small muted">Sample avg close Δ</div>
+          <div class="investment-model-companion-value ${signedReturnClass(
+            sampleMean
+          )}">${pctOrDash(sampleMean)}</div>
+          <div class="small muted">episodes_sample mean (diagnostic)</div>
+        </div>
+      </div>
+      <p class="small muted" style="margin:0.35rem 0 0">
+        Companion diagnostics for trend-vs-luck — not promotion truth (O3 alone-first / F8).
+      </p>
+    </div>`;
+}
+
+function renderObservePathScoreboardPanel(data, modelId) {
+  const id = normalizeInvestmentModel(modelId);
+  const store =
+    id === "n201" ? data.n201_value_mom_observe : data.n200_tech_timing_observe;
+  const path = store?.path_scoreboard;
+  if (!path || typeof path !== "object") {
+    return `
+      <section class="automation-section observe-path-scoreboard-section">
+        <h3>Path scoreboard</h3>
+        <p class="muted small">No path_scoreboard on observe store yet.</p>
+      </section>`;
+  }
+  if (id === "n201") {
+    return `
+      <section class="automation-section observe-path-scoreboard-section">
+        <h3>Path scoreboard (N201 · alone)</h3>
+        <p class="small muted" style="margin-top:0">${esc(path.note || "")}</p>
+        <div class="table-wrap">
+          <table class="learning-tracks-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Fair-cost cohort median</td><td class="${signedReturnClass(
+                path.smooth_ret_cohort_median
+              )}">${pctOrDash(path.smooth_ret_cohort_median)}</td></tr>
+              <tr><td>Patient-hold median (report-only)</td><td>${pctOrDash(
+                path.patient_hold_smooth_ret_cohort_median_report_only
+              )}</td></tr>
+              <tr><td>Patient-hold excess (report-only)</td><td class="${signedReturnClass(
+                path.patient_hold_excess_report_only
+              )}">${pctOrDash(path.patient_hold_excess_report_only)}</td></tr>
+              <tr><td>Stress 3%/side median (report-only)</td><td>${pctOrDash(
+                path.smooth_ret_cohort_median_stress_report_only
+              )}</td></tr>
+              <tr><td>n</td><td>${esc(String(path.n ?? "—"))}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>`;
+  }
+  return `
+    <section class="automation-section observe-path-scoreboard-section">
+      <h3>Path scoreboard (N200 · alone)</h3>
+      <p class="small muted" style="margin-top:0">${esc(path.note || "")}</p>
+      <div class="table-wrap">
+        <table class="learning-tracks-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Control cell</td><td><code>${esc(path.control_cell || "—")}</code></td></tr>
+            <tr><td>Fair-cost cohort median</td><td class="${signedReturnClass(
+              path.control_smooth_ret_cohort_median
+            )}">${pctOrDash(path.control_smooth_ret_cohort_median)}</td></tr>
+            <tr><td>Stress median (report-only)</td><td>${pctOrDash(
+              path.control_smooth_ret_cohort_median_stress_report_only
+            )}</td></tr>
+            <tr><td>Diagnostic best cell</td><td><code>${esc(
+              path.diagnostic_best_cell || "—"
+            )}</code> · ${pctOrDash(path.diagnostic_best_median)}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>`;
+}
+
 function observeFreshnessBadge(state) {
   const key = String(state || "unknown").toLowerCase();
   const labels = {
@@ -5602,6 +6189,11 @@ function renderQueueHealthMonitor(data) {
         n200_pipeline_health: health.n200_pipeline_health,
         n200_tech_timing_observe: data.n200_tech_timing_observe,
       })}
+      ${renderN201PipelineHealthSection({
+        queue_health: health,
+        n201_pipeline_health: health.n201_pipeline_health,
+        n201_value_mom_observe: data.n201_value_mom_observe,
+      }, { compact: true })}
       ${Array.isArray(health.merges_today) && health.merges_today.length ? `
       <div class="card" style="margin-top:0.75rem">
         <h3>Engineering merges today</h3>
@@ -8114,9 +8706,19 @@ function parseDashboardHash() {
   const parts = raw.split("/").filter(Boolean);
   const tab = parts[0] || null;
   if (tab === "analysis") {
+    // Support #analysis/observe/<modelId> and #analysis/<modelId> shorthand.
+    let subpage = parts[1] || "observe";
+    let model = null;
+    if (isInvestmentModelHashToken(subpage)) {
+      model = normalizeInvestmentModel(subpage);
+      subpage = "observe";
+    } else if (parts[2] && isInvestmentModelHashToken(parts[2])) {
+      model = normalizeInvestmentModel(parts[2]);
+    }
     return {
       tab: "analysis",
-      subpage: normalizeAnalysisSection(parts[1] || "observe"),
+      subpage: normalizeAnalysisSection(subpage),
+      model,
       market: null,
       track: null,
     };
@@ -8177,11 +8779,16 @@ function applyDashboardHash() {
   if (parsed.tab === "analysis" && parsed.subpage) {
     analysisSectionId = normalizeAnalysisSection(parsed.subpage);
   }
+  if (parsed.tab === "analysis" && parsed.model) {
+    investmentModelId = normalizeInvestmentModel(parsed.model);
+  }
   if (parsed.tab === "automation" && parsed.subpage) {
     automationSectionId = normalizeAutomationSection(parsed.subpage);
   }
   activateTab(parsed.tab);
   if (parsed.tab === "analysis" && dashboardData) {
+    // Re-render so model-bound Observe panels match hash before scroll.
+    if (parsed.model) renderAnalysis(dashboardData);
     // Defer scroll until panel is visible / laid out.
     window.requestAnimationFrame(() => jumpToAnalysisSection(analysisSectionId, { updateHash: false }));
   }
