@@ -11,7 +11,7 @@ ARCHITECTURE = Path("docs/architecture.md")
 
 def test_l271_fragment_glossary_in_architecture() -> None:
     text = ARCHITECTURE.read_text(encoding="utf-8")
-    assert 'Glossary: “fragment”' in text or 'Glossary: "fragment"' in text
+    assert "Glossary: “fragment”" in text or 'Glossary: "fragment"' in text
     assert "Deferred scratch" in text
     assert "Keyword substring" in text
     assert "Action-note prose" in text
