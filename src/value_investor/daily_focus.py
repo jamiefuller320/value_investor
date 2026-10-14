@@ -1186,6 +1186,182 @@ def _observe_for_focus(task: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _append_push_explore_tasks(
+    tasks: list[dict[str, Any]],
+    recommendations: list[dict[str, Any]],
+    *,
+    push_block: dict[str, Any],
+    explore_block: dict[str, Any],
+    closed_ids: set[str],
+    generated_at: str,
+    priority_start: int,
+) -> int:
+    """Emit Push / Explore as hub tasks (Discuss / observe-ack; Explore never eng)."""
+    priority = priority_start
+    for sug in push_block.get("suggestions") or []:
+        if not isinstance(sug, dict):
+            continue
+        task_ref = str(sug.get("id") or "")
+        if not task_ref or task_ref in closed_ids:
+            continue
+        rid = f"rec-{_stable_id('push', task_ref)}"
+        cite = sug.get("cite") if isinstance(sug.get("cite"), dict) else {}
+        why = str(sug.get("why_now") or "")
+        rec = {
+            "id": rid,
+            "task_id": task_ref,
+            "summary": str(sug.get("title") or task_ref),
+            "rationale": why,
+            "accept_action": {
+                "kind": "focus-ack",
+                "payload": {"focus_id": task_ref, "decision": "accept", "lane": "push"},
+            },
+            "discuss_prompt": (
+                f"Discuss daily recommendation `{rid}` (push `{task_ref}`):\n"
+                f"{sug.get('title')}\nWhy now: {why}\n"
+                f"Cite: {cite.get('kind')} {cite.get('ref')}\n"
+                "Push is execution — do not invent a new strand from chat alone."
+            ),
+            "priority": priority,
+            "options": [
+                {
+                    "id": "accept",
+                    "label": "Accept — reviewed for today (observe-only)",
+                    "action": {
+                        "kind": "focus-ack",
+                        "payload": {"focus_id": task_ref, "decision": "accept"},
+                    },
+                },
+                {
+                    "id": "discuss",
+                    "label": "Discuss in Project chat",
+                    "action": {"kind": "discuss", "payload": {"recommendation_id": rid}},
+                },
+            ],
+            "lane": "push",
+            "work_class": "ops_gate",
+            "task_family": "daily-push",
+        }
+        recommendations.append(rec)
+        tasks.append(
+            {
+                "task_ref": task_ref,
+                "source": "daily_push",
+                "work_class": "ops_gate",
+                "task_family": "daily-push",
+                "priority": priority,
+                "title": sug.get("title"),
+                "summary": why,
+                "sort_bucket": "push",
+                "lane": "push",
+                "closeable": True,
+                "close_action": "daily-focus-ack",
+                "close_payload": {"focus_id": task_ref, "decision": "accept"},
+                "href": sug.get("href") or "#automation/daily",
+                "recommendation_id": rid,
+                "status": {
+                    "state": "ready",
+                    "label": "Push",
+                    "next_steps": ["Discuss or observe-ack after acting"],
+                    "waiting_on": [],
+                    "ready": True,
+                    "ready_reason": "cited push suggestion",
+                    "blocked_reason": None,
+                    "updated_at": generated_at,
+                    "updated_by": "morning_builder",
+                },
+                "closed": False,
+                "push": sug,
+            }
+        )
+        priority += 1
+
+    for sug in explore_block.get("suggestions") or []:
+        if not isinstance(sug, dict):
+            continue
+        task_ref = str(sug.get("id") or "")
+        if not task_ref or task_ref in closed_ids:
+            continue
+        rid = f"rec-{_stable_id('explore', task_ref)}"
+        claim = str(sug.get("claim") or sug.get("title") or "")
+        why = str(sug.get("why_matters") or "")
+        falsify = str(sug.get("falsify_or_promote") or "")
+        rec = {
+            "id": rid,
+            "task_id": task_ref,
+            "summary": claim,
+            "rationale": f"{why} | Falsify/promote: {falsify}",
+            "accept_action": {
+                "kind": "focus-ack",
+                "payload": {
+                    "focus_id": task_ref,
+                    "decision": "accept",
+                    "lane": "explore",
+                },
+            },
+            "discuss_prompt": (
+                f"Discuss daily recommendation `{rid}` (explore `{task_ref}`):\n"
+                f"Claim: {claim}\nWhy: {why}\nFalsify/promote: {falsify}\n"
+                "Labeled not-today — park via ftse-defer add/fragment; never eng-dispatch."
+            ),
+            "priority": priority,
+            "options": [
+                {
+                    "id": "accept",
+                    "label": "Accept — park / acknowledge for later (not-today)",
+                    "action": {
+                        "kind": "focus-ack",
+                        "payload": {"focus_id": task_ref, "decision": "accept"},
+                    },
+                },
+                {
+                    "id": "discuss",
+                    "label": "Discuss / promote to defer",
+                    "action": {"kind": "discuss", "payload": {"recommendation_id": rid}},
+                },
+            ],
+            "lane": "explore",
+            "label": "not-today",
+            "work_class": "surface",
+            "task_family": "daily-explore",
+        }
+        recommendations.append(rec)
+        tasks.append(
+            {
+                "task_ref": task_ref,
+                "source": "daily_explore",
+                "work_class": "surface",
+                "task_family": "daily-explore",
+                "priority": priority,
+                "title": f"Explore · {claim}",
+                "summary": f"{why} — Falsify/promote: {falsify}",
+                "sort_bucket": "explore",
+                "lane": "explore",
+                "label": "not-today",
+                "closeable": True,
+                "close_action": "daily-focus-ack",
+                "close_payload": {"focus_id": task_ref, "decision": "accept"},
+                "href": "#automation/daily",
+                "recommendation_id": rid,
+                "status": {
+                    "state": "ready",
+                    "label": "Explore (not-today)",
+                    "next_steps": ["Park via defer/fragment; do not treat as today’s job"],
+                    "waiting_on": [],
+                    "ready": True,
+                    "ready_reason": "quality-barred explore card",
+                    "blocked_reason": None,
+                    "updated_at": generated_at,
+                    "updated_by": "morning_builder",
+                },
+                "closed": False,
+                "explore": sug,
+            }
+        )
+        priority += 1
+    return priority
+
+
 def build_daily_focus(
     *,
     data_dir: Path | None = None,
@@ -1231,55 +1407,12 @@ def build_daily_focus(
     tasks: list[dict[str, Any]] = []
     recommendations: list[dict[str, Any]] = []
 
-    # 1) Focus lines (pinned)
-    for line in focus_lines:
-        task_ref = str(line.get("id") or "")
-        rec = _recommendation_for_focus(line)
-        recommendations.append(rec)
-        is_closed = task_ref in closed_ids
-        status = derive_ready_status(
-            dict(
-                line.get("status")
-                or parse_status_conventions(
-                    title=str(line.get("title") or ""),
-                    summary=str(line.get("summary") or ""),
-                    seed_row=line,
-                )
-            ),
-            recommendation_present=True,
-            closed=is_closed,
-        )
-        status["updated_at"] = status.get("updated_at") or generated_at
-        work_class = str(
-            line.get("work_class")
-            or work_class_for_source(
-                str(line.get("source") or "daily_focus"),
-                tags=list(line.get("tags") or []),
-            )
-        )
-        family = str(line.get("task_family") or task_family_for_row(line, fallback=task_ref))
-        tasks.append(
-            {
-                "task_ref": task_ref,
-                "source": "daily_focus",
-                "work_class": work_class,
-                "task_family": family,
-                "priority": int(line.get("priority") or 1),
-                "title": line.get("title"),
-                "summary": line.get("summary"),
-                "sort_bucket": "focus",
-                "closeable": True,
-                "close_action": "daily-focus-ack",
-                "close_payload": {"focus_id": task_ref, "decision": "ack"},
-                "href": line.get("href"),
-                "recommendation_id": rec["id"],
-                "status": status,
-                "closed": is_closed,
-                "notes_block": str(line.get("notes_block") or ""),
-            }
-        )
+    # 1) Focus lines (pinned) — D1 locked: status chips only; no Focus Accept tasks.
+    # Keep focus_lines on the payload for the Focus strip; do not emit open Accept cards.
 
     # 1b) Market warning triage (deepen / dismiss / park) — after focus, before gates
+    # D2 locked: drop ritual bare health_warn / health_warn_rollup park rows.
+    from value_investor.daily_hub_attention import filter_actionable_market_warn_tasks
     from value_investor.market_warning_triage import build_market_warning_triage_items
 
     mwarn_tasks, mwarn_recs = build_market_warning_triage_items(
@@ -1289,6 +1422,11 @@ def build_daily_focus(
         priority_start=5,
         generated_at=generated_at,
     )
+    mwarn_tasks = filter_actionable_market_warn_tasks(mwarn_tasks)
+    mwarn_refs = {str(t.get("task_ref") or "") for t in mwarn_tasks}
+    mwarn_recs = [
+        r for r in mwarn_recs if isinstance(r, dict) and str(r.get("task_id") or "") in mwarn_refs
+    ]
     for task in mwarn_tasks:
         status = derive_ready_status(
             dict(task.get("status") or {}),
@@ -1486,6 +1624,31 @@ def build_daily_focus(
             )
             priority += 1
 
+    # Attention lanes (locked D3 / D7 A) — before assessment attach so cards get prose.
+    from value_investor.daily_hub_attention import (
+        build_daily_explore_suggestions,
+        build_daily_push_suggestions,
+        build_daily_status_report,
+    )
+
+    push_block = build_daily_push_suggestions(data_dir=data_dir, closed_ids=closed_ids)
+    explore_block = build_daily_explore_suggestions(
+        data_dir=data_dir, seed_path=seed_path, closed_ids=closed_ids
+    )
+    status_report = build_daily_status_report(
+        data_dir=data_dir,
+        local_date=local_date,
+    )
+    priority = _append_push_explore_tasks(
+        tasks,
+        recommendations,
+        push_block=push_block,
+        explore_block=explore_block,
+        closed_ids=closed_ids,
+        generated_at=generated_at,
+        priority_start=priority,
+    )
+
     # Stale when wall-clock operator date ≠ artifact local_date (always false at
     # a correct morning write; clients recompute against wall clock too).
     stale = compute_stale_for_local_date(local_date, now=now, timezone=timezone)
@@ -1534,6 +1697,16 @@ def build_daily_focus(
             observe = _observe_for_reconcile(task)
             notes_block = ""
             seed_row = task
+        elif source in {"daily_push", "daily_explore"}:
+            observe = {
+                "where_we_are": str(task.get("summary") or ""),
+                "waiting_for": "operator Discuss or observe-ack (Explore = park/defer only)",
+                "how_achieved": (
+                    "Push cites ops/eng/defer artifacts; Explore is labeled not-today"
+                ),
+            }
+            notes_block = ""
+            seed_row = task
         else:
             observe = {}
             notes_block = ""
@@ -1564,6 +1737,9 @@ def build_daily_focus(
         "refresh_deadline_local": refresh_deadline_local,
         "stale_for_local_date": bool(stale),
         "focus_lines": focus_lines,
+        "status_report": status_report,
+        "push_suggestions": push_block,
+        "explore_suggestions": explore_block,
         "tasks": tasks,
         "open_task_count": len(open_tasks),
         "recommendations": recommendations,
@@ -1578,6 +1754,8 @@ def build_daily_focus(
             "human_unacked": sum(1 for t in open_tasks if t.get("sort_bucket") == "unacked"),
             "progress": sum(1 for t in open_tasks if t.get("source") == "progress_actionable"),
             "reconcile": sum(1 for t in open_tasks if t.get("source") == "ui_reconcile"),
+            "push": sum(1 for t in open_tasks if t.get("sort_bucket") == "push"),
+            "explore": sum(1 for t in open_tasks if t.get("sort_bucket") == "explore"),
         },
         "project_sync": {
             "notes_fingerprint": notes_fp,

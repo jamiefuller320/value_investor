@@ -415,6 +415,7 @@ archive pack workflow and refreshed at end of ops-monitor. Dashboard: Automation
 | `check_assessment_scoreboard` | **Primary book trails its control on total return** | Single fair-cost scoreboard (total return vs `FTAL.L`, 90% CI, 3% stress-cost sensitivity, gate binding). Warns when the assessment-model primary is ≥5pp behind its control on the common window. Observe-only — see [assessment-scoreboard.md](assessment-scoreboard.md) | `docs/data/assessment_scoreboard.json` | Live |
 | `check_deferred_triggers` | **Deferred idea triggers met** / **… unreadable** / **… name frozen books** | An open deferred idea's structured `trigger` is met; a trigger is invalid or unknown for more than 7 days; or a free-text `revisit_when` still names a book frozen after the idea was last edited. Warn-only; a human picks up, retargets or closes the idea. See [deferred-triggers.md](deferred-triggers.md) | `docs/data/deferred_trigger_check.json` | Live |
 | `check_daily_hub_relevance` | **Daily hub Focus stale vs spend priorities** | Focus titles/summaries (seed preferred) + Daily hub aim line fail a cheap phrase/anchor match against committed P1/P2 allowlist, or still contain demoted stale phrases (e.g. RAT.L-as-north-star, Daily hub Phase 1 land, starve-euro-fat aim). Observe-only — never auto-rewrites Focus. See [Daily hub Focus relevance](#daily-hub-focus-relevance) | `docs/data/daily_hub_relevance.json` (+ anchors `docs/data/daily_hub_priority_anchors.json`) | Live |
+| `check_daily_hub_push_empty` | **Daily push suggestions empty while mapped warns open** | Push ranker returned no cards but ops still has mapped human warns (saturated knobs, volume gates, parked eng, …). Observe-only — never invents Push cards or eng-sprays. See [Daily hub attention](#daily-hub-attention) | (derived from `ops_status.json` + push ranker) | Live |
 | `check_hold_period_counterfactual` | **Longer holds beat live exit buffer in replay** | A faithful replay of logged passes (baseline within 1% of logged NAV) with `exit_confirm_screens` 5/10/20 beats the live knob by ≥1pp on a headline track. Observe-only (L531) — no knob edit; next step is a cold-start twin. See [hold-period-counterfactual.md](hold-period-counterfactual.md) | `docs/data/hold_period_counterfactual.json` | Live |
 | `check_n200_tech_timing_observe` | **N200 tech-timing observe refreshed** / **N200 volume gate ready for review** | Sealed observe-only strand B (`strand-b-plain-value-tech-timing-v0`): raw_buy_tier identity + ±14d entry/exit brackets from archive history. Cost-aware absolute `smooth_ret_cohort_median` primary (fair-cost standing rule — [fair-cost-primacy.md](fair-cost-primacy.md)); **per-lever** entry/exit best-feasible verdicts independent of path P&L; control excess + stress report-only. Never writes books/knobs. Dashboard: Analysis → Observe **model switcher** (N200) + Automation → Queue **N200 pipeline health** (phase / volume / per-lever / freshness — not promote). See [n200-tech-timing-observe.md](n200-tech-timing-observe.md) | `docs/data/n200_tech_timing_observe.json`, `docs/data/n200_tech_timing_registration.json`, `queue_health.n200_pipeline_health` | Live |
 | `check_n201_value_mom_observe` | **N201 value-mom observe refreshed** / **N201 volume gate ready for review** | Sealed observe-only strand C (`strand-c-short-horizon-value-mom-v0`): plain EY top-30% local + 12–1 mom > 0 + `financial_health` pass; fixed 100 local stake; 63d or identity/quality-break exit; fair-cost `smooth_ret_cohort_median` primary (independent of fund NAV); patient-hold excess + stress report-only. Launch-queue waiter (does not steal P1 from holdings/N200). Never writes books/knobs. Dashboard: Analysis → Observe **model switcher** (N201) + Automation → Queue compact strip. See [n201-value-mom-observe.md](n201-value-mom-observe.md) | `docs/data/n201_value_mom_observe.json`, `docs/data/n201_value_mom_registration.json`, `queue_health.n201_pipeline_health` | Live |
@@ -536,10 +537,23 @@ with **Accept followed** vs **Discuss resolved**.
 | Accept-streak hint | Observe-only footer when ≥5 Accepts / 30d with 0 Discuss on a family — never auto-flips `automated: true` (N169) |
 | Aim filter | Suite A stress streaks / off-buy-tier zero-filing themes stay out unless already a checklist item or focus line |
 | Focus relevance | `check_daily_hub_relevance` (P1/P2 phrase anchors) — see [Daily hub Focus relevance](#daily-hub-focus-relevance) |
+| Status + Push + Explore | `status_report` / `push_suggestions` / `explore_suggestions` on `daily_focus.json` via `daily_hub_attention.py` (locked D1–D7). Focus = chips only (no Accept). Market hub rows skip ritual `health_warn` park (D2). Push ≤3 fail-closed; consumes `post_sell_cue_digest.json` when sibling package M publishes it (does not invent the digest). Explore ≤2 labeled not-today with claim/why/falsify. Finding **Daily push suggestions empty while mapped warns open** (`check_daily_hub_push_empty`, `auto_fixable=False`) — see [Daily hub attention](#daily-hub-attention) |
 
 Project notes `Today —` bullets are the editorial surface; after the morning build,
 JSON wins for the UI. Agents do not push unprompted into chat — say
 `discuss daily recommendation \`rec-…\`` in the Project conversation.
+
+## Daily hub attention {#daily-hub-attention}
+
+Locked two-lane redesign (Project store `docs/daily-hub-attention-redesign.md` D1–D7 **A**).
+
+| Layer | Behavior |
+|-------|----------|
+| Status | Deterministic `build_daily_status_report` from ops / scoreboard / eng / defer / post-run / optional post-sell digest |
+| Push | `build_daily_push_suggestions` ≤3; cites mapped ops findings + eng head + defer met; fail-closed empty OK; optional Push source `docs/data/post_sell_cue_digest.json` when present |
+| Explore | `build_daily_explore_suggestions` ≤2; seed `explore_lines` or quality-barred defaults; badge not-today; Accept = park later (defer/fragment), never eng |
+| Finding | **Daily push suggestions empty while mapped warns open** — observe-only |
+| Non-goals | No LLM brainstorm dump; no inventing post-sell digest / N205 (sibling package M) |
 
 ## Daily hub Focus relevance {#daily-hub-focus-relevance}
 

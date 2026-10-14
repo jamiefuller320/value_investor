@@ -132,12 +132,19 @@ def test_build_daily_focus_collates_sources(tmp_path: Path) -> None:
     assert payload["local_date"] == "2026-09-28"
     assert payload["refresh_deadline_local"] == "04:00"
     assert payload["focus_lines"][0]["id"] == "focus-1"
+    # D1: Focus chips only — no Focus Accept task cards
     refs = [t["task_ref"] for t in payload["tasks"]]
-    assert "focus-1" in refs
+    assert "focus-1" not in refs
     assert "human:weekday-daily-hub-glance" in refs
     assert "human:weekday-engineering-parked-backlog-clear" in refs
     assert "progress:defer-1" in refs
     assert "reconcile:learning_tracks_dual_suite_present" in refs
+    assert "status_report" in payload and payload["status_report"].get("rows") is not None
+    assert "push_suggestions" in payload
+    assert "explore_suggestions" in payload
+    assert payload["explore_suggestions"].get("lane") == "explore"
+    explore_refs = [t["task_ref"] for t in payload["tasks"] if t.get("sort_bucket") == "explore"]
+    assert explore_refs  # D7 defaults present when seed has no explore_lines
     reconcile = next(
         t
         for t in payload["tasks"]
@@ -172,20 +179,19 @@ def test_build_daily_focus_collates_sources(tmp_path: Path) -> None:
         "link_only",
     }
     assert "Discuss daily recommendation" in sample["discuss_prompt"]
-    # Tasks embed recommendation object
-    focus_task = next(t for t in payload["tasks"] if t["task_ref"] == "focus-1")
-    assert focus_task["recommendation"]["id"].startswith("rec-")
     assert payload["illumination_hints"]["automation.human"]["new_info"] is True
     human_task = next(
         t for t in payload["tasks"] if t["task_ref"] == "human:weekday-daily-hub-glance"
     )
     assert human_task.get("review_detail", {}).get("headline")
     assert human_task["recommendation"]["options"][0]["action"]["kind"] == "human-task-ack"
-    focus_opts = focus_task["recommendation"]["options"]
-    assert isinstance(focus_opts[0], dict) and focus_opts[0]["id"] == "accept"
+    explore_task = next(t for t in payload["tasks"] if t.get("sort_bucket") == "explore")
+    assert explore_task["recommendation"]["options"][0]["id"] == "accept"
+    assert explore_task.get("label") == "not-today"
 
 
 def test_focus_ack_closes_for_local_date(tmp_path: Path) -> None:
+    """Legacy focus_id ack still records; D1 no longer emits Focus Accept tasks."""
     _write_minimal_board(tmp_path)
     result = run_daily_focus_ack(
         tmp_path,
@@ -198,8 +204,11 @@ def test_focus_ack_closes_for_local_date(tmp_path: Path) -> None:
     acks = json.loads((tmp_path / "daily_focus_acks.json").read_text(encoding="utf-8"))
     assert any(a.get("focus_id") == "focus-1" for a in acks["acks"])
     focus = json.loads((tmp_path / "daily_focus.json").read_text(encoding="utf-8"))
-    focus_task = next(t for t in focus["tasks"] if t["task_ref"] == "focus-1")
-    assert focus_task["closed"] is True
+    assert "focus-1" in focus.get("closed_today", []) or not any(
+        t.get("task_ref") == "focus-1" for t in focus.get("tasks") or []
+    )
+    # Explore/push cards remain the Accept surface when present.
+    assert not any(t.get("task_ref") == "focus-1" and not t.get("closed") for t in focus["tasks"])
 
 
 def test_reconcile_dismiss_closes_for_local_date(tmp_path: Path) -> None:
