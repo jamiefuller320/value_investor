@@ -60,6 +60,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20261006-03 | SEC 20-F/6-K helps few euro names: most DAX/OMXS30 matches are unsponsored OTC ADRs with no SEC filings; real filers (TTE, SNY, SHEL, NVS, UL, GRFS, TS) are mostly already well covered. | sec, euro_filings |
 | frag-20261007-01 | Machinery is outpacing evidence: ~6,900 commits since Sept 1, 14 tracks (11 frozen), primary re-based several times, while the oldest book has 41 marks. Each restart resets the evidence clock. Consider an explicit evidence-clock budget: no primary/control restart for 26+ weeks. | evidence, complexity, epochs |
 | frag-20261010-01 | Unconstrained strategy chat after US holdout null: if P1/freeze-extras/FTSE-stage rules were ignored, candidate north star would be radical screen simplification to plain value (+ maybe 1-2 published factors), edge in portfolio construction/costs/patience rather than model count, AI as underwriting not ranking, no pivot to technical-as-engine. | strategy, hsr-v1, plain-value |
+| frag-20261014-01 | Daily hub: after owner locks attention redesign forks D1-D6 (store docs/daily-hub-attention-redesign.md), ship deterministic status_report + Push 1-3 ranker in daily_focus.json. Drop ritual Focus Accept; bare health_warn email-only. Promote to ftse-defer add only after PR #1082 merges so beachhead can keep L606. | daily-hub, attention, ops-monitor |
+| frag-20261014-02 | Daily hub two-lane: Push fail-closed P1/P2 cited ≤3; Explore labeled not-today with claim+why+falsify, may sit outside North Star/AGENTS, durable→ftse-defer. Forks D1–D7 in store docs/daily-hub-attention-redesign.md. Promote after #1082 (keep L606 for beachhead). | daily-hub, attention, explore, ops-monitor |
 
 ---
 
