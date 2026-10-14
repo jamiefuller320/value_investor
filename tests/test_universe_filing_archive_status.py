@@ -45,7 +45,7 @@ def test_status_dry_complete_next_widen_need_apply() -> None:
             "fourth_equal_sprint_stream": False,
             "http_fetches": 0,
         },
-        "max_units": 2,
+        "max_units": 4,
     }
     payload = build_universe_filing_archive_status(
         pack_run=pack_run,
@@ -61,6 +61,7 @@ def test_status_dry_complete_next_widen_need_apply() -> None:
     assert payload["clash_flags"]["fourth_equal_sprint_stream"] is False
     assert payload["next_widen_step"]["id"] == "need_apply_nights"
     assert payload["current_caps"]["max_units"] == PILOT_CAPS["max_units"]
+    assert payload["current_caps"]["max_http_fetches"] == PILOT_CAPS["max_http_fetches"]
     assert WIDEN_CRITERIA in payload["next_widen_step"]["widen_criteria"]
 
 
@@ -71,18 +72,18 @@ def test_status_apply_isolation_ok_accumulate() -> None:
         "outcome": "apply_complete",
         "dry_run": False,
         "gate": {"decision": "allow", "allowed": True, "focus_pressure_reasons": []},
-        "max_units": 2,
-        "units_attempted": 2,
-        "units_completed": 2,
-        "objects_written": 3,
+        "max_units": 4,
+        "units_attempted": 4,
+        "units_completed": 3,
+        "objects_written": 6,
         "fourth_equal_sprint_stream": False,
         "capacity_isolation": {
             "isolation_ok": True,
             "shared_critical_path": False,
-            "http_fetches": 4,
+            "http_fetches": 8,
             "fourth_equal_sprint_stream": False,
         },
-        "assemble_caps": {"max_http_fetches": 8, "max_tickers_per_unit": 2},
+        "assemble_caps": {"max_http_fetches": 16, "max_tickers_per_unit": 2},
     }
     payload = build_universe_filing_archive_status(
         pack_run=pack_run,
@@ -91,7 +92,7 @@ def test_status_apply_isolation_ok_accumulate() -> None:
     )
     assert payload["last_run"]["mode"] == "apply"
     assert payload["next_widen_step"]["id"] == "accumulate_quiet_nights"
-    assert "max_units=2" in payload["next_widen_step"]["detail"]
+    assert "max_units=4" in payload["next_widen_step"]["detail"]
 
 
 def test_status_failures_hold_widen() -> None:
