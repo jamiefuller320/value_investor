@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-14T02:35:58.660997+00:00",
+  "generated_at": "2026-10-14T07:50:02.861408+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
-  "checklist_updated_at": "2026-10-13",
+  "checklist_updated_at": "2026-10-14",
   "counts": {
     "new_info": 2,
-    "unacked": 1,
+    "unacked": 2,
     "acked": 32,
     "automated": 20,
-    "human": 35
+    "human": 36
   },
   "tasks": [
     {
@@ -28,25 +28,21 @@
       "approval_gate": false,
       "approval_label": null,
       "analysis": {
-        "headline": "8 attention-parked eng tasks",
-        "updated_at": "2026-10-14T02:35:56.396382+00:00",
-        "fingerprint": "0ab4e7ed18585fbe",
+        "headline": "1 attention-parked eng tasks",
+        "updated_at": "2026-10-14T07:49:55.541746+00:00",
+        "fingerprint": "59a308ec112288b5",
         "bullets": [
-          "Parked tasks: 11 (attention ~8)",
-          "Queue-clearing pause active: True — evaluated 2026-10-14T02:35:56.396382+00:00",
-          "Traffic pause active: True",
-          "eng-20261004-06: Workflow fix: analysis review failure",
-          "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo",
-          "eng-20261004-05: Reconcile research index with committed overlays for the two `index_missing_committed_verdicts` names (AO.L, HOC.L) and add a CI check that `committed_count` eq",
-          "eng-20261008-04: Repair dead hunter allowlist URL for MC.PA",
-          "eng-20261013-03: Hunt fetchable IR source for parked aim leftover MPE.L"
+          "Parked tasks: 1 (attention ~1)",
+          "Queue-clearing pause active: False — evaluated 2026-10-14T07:49:55.541746+00:00",
+          "Traffic pause active: False",
+          "eng-20261013-04: Hunt fetchable IR source for parked aim leftover YNGN.L"
         ],
         "source_keys": [
           "engineering_tasks"
         ],
         "ack_sufficient": false,
         "auto_ackable": false,
-        "ack_reason": "queue_clearing_pause_active"
+        "ack_reason": "attention_parked_remaining"
       },
       "ack": {
         "acked": true,
@@ -74,15 +70,15 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-10-13T17:26:17.885349+00:00",
-        "fingerprint": "9ae4491a2bc621c3",
+        "updated_at": "2026-10-14T07:08:59.724022+00:00",
+        "fingerprint": "e9065ae66cf97f9d",
         "bullets": [
-          "Occasions logged: 199",
+          "Occasions logged: 203",
           "PR mergeable=CONFLICTING against main: 7",
           "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
           "validate check failed: 4",
-          "deferred-ideas.json conflict after L516 merge: 3",
-          "merge_conflict:dirty: 3"
+          "validate failed: 3",
+          "deferred-ideas.json conflict after L516 merge: 3"
         ],
         "source_keys": [
           "pr_fix_occasions",
@@ -97,6 +93,37 @@
         "finding_fingerprint": "239d8637750ce7b4"
       },
       "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-n200-n201-volume-gate-review",
+      "title": "Review N200/N201 volume gates when ops-monitor marks ready (no auto-promote)",
+      "summary": "When ops-monitor info findings say N200 and/or N201 volume gate ready for review, open the matching Observe switcher tab (or observe JSON), read fair-cost path/lever brackets, and decide only whether a deliberate promotion design is warranted later. Do not promote, do not decision-review --apply, and do not open a second live capital path (F8).",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/n200-tech-timing-observe.md",
+      "doc_anchor": "human-volume-gate-review",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/n200-tech-timing-observe.md#human-volume-gate-review",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "455bb8413eaaf99b",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -320,7 +347,7 @@
     {
       "id": "sunday-assessment-scoreboard",
       "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
-      "summary": "Read docs/data/assessment_scoreboard.json: primary ai_judgment_fair vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also twins, frozen books' final records and policy_changes (e.g. significance_gate_v1). Approve a promotion (knob prior, twin or primary/control switch) only when the primary verdict is positive on fair costs; 'AI beats the screen' stays unproven while the accumulate gate never binds (N189). Calibrated, exclusion and Suite A books are frozen: no spawns from them, never edit them. Survivors are starting priors — never auto-apply.",
+      "summary": "Read docs/data/assessment_scoreboard.json (Analysis → Observe model switcher defaults to Strand A · live): primary ai_judgment_fair vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also twins, frozen books' final records and policy_changes (e.g. significance_gate_v1). Approve a promotion (knob prior, twin or primary/control switch) only when the primary verdict is positive on fair costs; 'AI beats the screen' stays unproven while the accumulate gate never binds (N189). Calibrated, exclusion and Suite A books are frozen: no spawns from them, never edit them. Survivors are starting priors — never auto-apply. N200/N201 tabs are sealed observe-only alone scoreboards — never a second live capital path and never a promote gate.",
       "automated": false,
       "cadence": "sunday",
       "section_id": "sunday",
@@ -332,7 +359,7 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary negative",
-        "updated_at": "2026-10-14T02:34:08.021961+00:00",
+        "updated_at": "2026-10-14T07:48:39.935335+00:00",
         "fingerprint": "782b2addb6782b0b",
         "bullets": [
           "ai_judgment_fair: total return -6.6% vs FTAL.L -1.8% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -5.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
@@ -373,7 +400,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-10-13T21:43:17.443678+00:00",
+        "updated_at": "2026-10-14T07:36:58.188920+00:00",
         "fingerprint": "f765d60144146672",
         "bullets": [
           "Open deviations: 1",
@@ -409,7 +436,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-13T21:44:18.621987+00:00",
+        "updated_at": "2026-10-14T07:38:08.951825+00:00",
         "fingerprint": "445acb0f9a3f9032",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=36",

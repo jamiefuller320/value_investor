@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-14T05:22:36.633433+00:00`
+Generated: `2026-10-14T07:50:07.993456+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -30,22 +30,34 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `stop_automation_waste` — cleared automation-waste hold — no remediable signal (applied)
-- `resume_dispatch` — resumed — no stuck monitored PRs and idle window elapsed (applied)
+- _(none)_
 
 ## Merges today (monitor independent verify)
 - _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 201
+- Occasion count: 203
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 4×
+- `validate failed` — 3×
 - `deferred-ideas.json conflict after L516 merge` — 3×
 - `merge_conflict:dirty` — 3×
 - `Merge conflicts in deferred-ideas.json with main` — 2×
 - `validate job failed` — 2×
-- `Ruff F841 unused dismissable in market_warning_triage.propose_triage` — 2×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 9 (open=8, resolved=1)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Universe archive body-miss rate elevated — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Price-only excess misstates track performance — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Primary book trails its control on total return — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Decision-review knobs saturated at bounds — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Paper book would halt on drawdown or concentration — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [resolved] WARN Orphaned pr_open engineering tasks — planned: `remediate_queue_merge_sync` (PM v1: recover/mark-merged engineering queue reconciliation; cleared lag=['none'])
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
