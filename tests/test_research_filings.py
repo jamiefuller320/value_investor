@@ -7906,6 +7906,22 @@ def test_fetch_filings_ir_allowlist_psi20_galp_ls_builtins(tmp_path: Path):
     assert sum(1 for row in rows if row["period"] == "interim") == 2
 
 
+def test_fetch_filings_ir_allowlist_ibex35_rep_mc_builtins(tmp_path: Path):
+    """Regression: REP.MC no_key_bodies — repsol.com FY2025 annual + H1/2Q26 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("REP.MC", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all("repsol.com/content/dam/repsol-corporate" in url for url in urls)
+    assert any("consolidated-annual-financial-report-2025.pdf" in url for url in urls)
+    assert any("interim-consolidated-management-report-first-half-2026.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 2
+
+
 def test_load_ir_url_allowlist_canonicalizes_dte_de_dead_urls(tmp_path: Path):
     """Dead blob/publications URLs in research_ir_urls.json map to live FY2025 annual report PDF."""
     dead_pdf = (
@@ -11496,6 +11512,18 @@ def test_parked_source_hunter_galp_ls_psi20_has_fetchable_ir():
     interim = [row for row in rows if row["period"] == "interim"]
     assert len(interim) == 2
     body = fetch_filing_body(interim[0]["url"])
+    assert body
+    assert len(body) >= 50000
+
+
+def test_parked_source_hunter_rep_mc_ibex35_has_fetchable_ir():
+    """eng-20261013-05: REP.MC has live repsol.com FY2025 annual + H1/2Q26 interim statutory PDFs."""
+    assert "REP.MC" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("REP.MC")
+    assert len(rows) == 3
+    annual = [row for row in rows if row["period"] == "annual"]
+    assert len(annual) == 1
+    body = fetch_filing_body(annual[0]["url"])
     assert body
     assert len(body) >= 50000
 

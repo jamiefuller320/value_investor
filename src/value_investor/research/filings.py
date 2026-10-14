@@ -372,6 +372,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.galp.com/corp/Portals/0/Recursos/Inv 2Q26/2Q26 Report.pdf",
         "https://www.galp.com/corp/Portals/0/Recursos/Inv 1Q26/1Q26 Report.pdf",
     ],
+    # ibex35 IWB blocker — eng-20261013-05: REP.MC buy-tier no_key_bodies; google_news_euro
+    # only indexed CNMV entity pages; repsol.com IR statutory PDFs (FY2025 + H1/2Q26).
+    "REP.MC": [
+        "https://www.repsol.com/content/dam/repsol-corporate/en_gb/accionistas-e-inversores/informes-anuales/2025/consolidated-annual-financial-report-2025.pdf",
+        "https://www.repsol.com/content/dam/repsol-corporate/en_gb/accionistas-e-inversores/resultados/2026/2t/interim-consolidated-management-report-first-half-2026.pdf",
+        "https://www.repsol.com/content/dam/repsol-corporate/en_gb/accionistas-e-inversores/resultados/2026/2t/periodic-public-information-2q26.pdf",
+    ],
     "MUV2.DE": [
         "https://www.munichre.com/content/dam/munichre/mrwebsiteslaunches/2025-annual-report/MunichRe-Group-Annual-Report-2025-en.pdf/_jcr_content/renditions/original./MunichRe-Group-Annual-Report-2025-en.pdf",
     ],
