@@ -65,7 +65,7 @@ Sealing **enqueues** N201 Data demand (deepen / shortlist / threshold readiness)
 
 ## Dashboard
 
-**Analysis → Observe** investment model switcher → **N201 · observe** shows pipeline health (phase / volume / path median), companion diagnostics, and the alone path scoreboard. Hash: `#analysis/observe/n201`.
+**Analysis → Observe** investment model switcher → **N201 · observe** shows its **own lifecycle monitor** (phase / volume / path + episodes sample + markers from `n201_value_mom_observe.json`, with launch-queue waiter / thin-sample empty states), plus pipeline health, companion diagnostics, and the alone path scoreboard. Hash: `#analysis/observe/n201`. Not Strand A’s Lifecycle board; never auto-promote (F8).
 
 **Automation → Queue & hunter** shows a compact N201 strip (launch-queue waiter badge). Observe-only — never a second live capital path (F5 / F8).
 

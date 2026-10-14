@@ -4144,6 +4144,17 @@ function bindAnalysisPanel(panel) {
       jumpToAnalysisSection(sub.dataset.analysisSection);
       return;
     }
+    const lifecycleJump = event.target.closest("[data-lifecycle-jump]");
+    if (lifecycleJump) {
+      event.preventDefault();
+      lifecycleSubpage = normalizeLifecycleSubpage(
+        lifecycleJump.dataset.lifecycleJump || "positions"
+      );
+      activateTab("lifecycle", { updateHash: true });
+      if (dashboardData) renderLifecycle(dashboardData);
+      syncLifecycleHash();
+      return;
+    }
     const tabJump = event.target.closest("[data-tab-jump]");
     if (tabJump) {
       event.preventDefault();
@@ -4204,6 +4215,7 @@ function renderAnalysisObserveForModel(data, modelId) {
   if (id === "n200") {
     return `
       ${renderInvestmentModelCompanionStrip(data, "n200")}
+      ${renderModelLifecycleMonitor(data, "n200")}
       ${renderN200PipelineHealthSection(data, { compact: false })}
       ${renderObservePathScoreboardPanel(data, "n200")}
       <p class="small muted">
@@ -4214,6 +4226,7 @@ function renderAnalysisObserveForModel(data, modelId) {
   if (id === "n201") {
     return `
       ${renderInvestmentModelCompanionStrip(data, "n201")}
+      ${renderModelLifecycleMonitor(data, "n201")}
       ${renderN201PipelineHealthSection(data, { compact: false })}
       ${renderObservePathScoreboardPanel(data, "n201")}
       <p class="small muted">
@@ -4224,6 +4237,7 @@ function renderAnalysisObserveForModel(data, modelId) {
   // Strand A — live capital path surfaces.
   return `
     ${renderInvestmentModelCompanionStrip(data, "strand-a")}
+    ${renderModelLifecycleMonitor(data, "strand-a")}
     ${renderAssessmentScoreboardPanel(data)}
     ${renderTotalReturnVsPricePanel(data)}
     ${renderPaperTrackBucketsPanel(data)}
@@ -5443,6 +5457,276 @@ function renderN201PipelineHealthSection(data, { compact = false } = {}) {
       </div>
       <p class="small muted" style="margin-top:0.75rem;margin-bottom:0">
         Observe-only strand C (launch-queue waiter). Phase green ≠ alpha or capital-ready. Never writes books/knobs (F8).
+      </p>
+    </section>`;
+}
+
+/**
+ * Per-model lifecycle monitor on Analysis → Observe.
+ * Strand A → live Lifecycle tab pointer (+ maturity snapshot).
+ * N200 / N201 → each model’s own sealed store (phase / volume / path / episodes / markers).
+ * Never swaps Strand A’s board under an observe label (F5 / F8).
+ */
+function renderModelLifecycleMonitor(data, modelId) {
+  const id = normalizeInvestmentModel(modelId);
+  if (id === "strand-a") return renderStrandALifecycleMonitor(data);
+  return renderObserveLifecycleMonitor(data, id);
+}
+
+function renderStrandALifecycleMonitor(data) {
+  const maturity = resolveLifecycleMaturity(data);
+  const markets = Array.isArray(maturity?.markets) ? maturity.markets : [];
+  const live =
+    markets.find((row) => row && (row.is_live || row.market_id === "ftse350")) || null;
+  const metrics = live?.metrics || {};
+  const early =
+    live?.primary_value != null
+      ? `${Number(live.primary_value).toFixed(1)}%`
+      : metrics.early_share != null
+        ? `${(Number(metrics.early_share) * 100).toFixed(1)}%`
+        : "—";
+  const held = metrics.held_count != null ? String(metrics.held_count) : "—";
+  const sold = metrics.sold_count != null ? String(metrics.sold_count) : "—";
+  return `
+    <section class="automation-section automation-section-full model-lifecycle-monitor model-lifecycle-monitor-live" data-lifecycle-model="strand-a">
+      <h2>Lifecycle monitor · Strand A
+        <span class="badge badge-buy model-mode-badge">live</span>
+      </h2>
+      <p class="small muted" style="margin-top:0">
+        Sole live capital path (F5). Position board and maturity mix live on the
+        <button type="button" class="link-btn" data-tab-jump="lifecycle">Lifecycle</button> tab —
+        not an observe seal. N200 / N201 each have their own sealed stores under this switcher.
+      </p>
+      <div class="grid n200-pipeline-grid model-lifecycle-stage-grid" style="margin-top:0.75rem">
+        <div class="card n200-pipeline-card">
+          <h3>Live board</h3>
+          <p class="small" style="margin:0.35rem 0">
+            <button type="button" class="link-btn" data-tab-jump="lifecycle">Open Positions</button>
+            ·
+            <button type="button" class="link-btn" data-lifecycle-jump="maturity">Maturity mix</button>
+          </p>
+          <p class="small muted">Holding-state columns for FTSE live books — Acknowledge / Start stay observe-gated.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>FTSE maturity snapshot</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value">${esc(early)}</div>
+          </div>
+          ${settingRow("Held", esc(held))}
+          ${settingRow("Sold (book)", esc(sold))}
+          <p class="small muted">${esc(
+            live?.primary_label || "Early share % — lower = more mature (observe maturity mix)"
+          )}</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Capital path</h3>
+          ${settingRow("Mode", '<span class="badge badge-buy">live</span>')}
+          ${settingRow("Promote", "Human gate only — never auto (F8)")}
+          <p class="small muted">Assessment scoreboard below is the Strand A promote readout.</p>
+        </div>
+      </div>
+    </section>`;
+}
+
+function _observeLifecycleStore(data, modelId) {
+  if (modelId === "n201") {
+    return {
+      store: data.n201_value_mom_observe || null,
+      health: resolveN201PipelineHealth(data),
+      label: "N201",
+      registrationFallback: "strand-c-short-horizon-value-mom-v0",
+      emptyHint:
+        "N201 observe store not published yet (check_n201_value_mom_observe). Launch-queue waiter — thin data is expected until P1 capacity allows deepen.",
+    };
+  }
+  return {
+    store: data.n200_tech_timing_observe || null,
+    health: resolveN200PipelineHealth(data),
+    label: "N200",
+    registrationFallback: "strand-b-plain-value-tech-timing-v0",
+    emptyHint:
+      "N200 observe store not published yet (check_n200_tech_timing_observe).",
+  };
+}
+
+function renderObserveLifecycleEpisodeRows(store, modelId) {
+  const sample = Array.isArray(store?.episodes_sample) ? store.episodes_sample : [];
+  if (!sample.length) {
+    return `<tr><td colspan="5" class="muted small">No episodes_sample yet — waiting on sealed refresh.</td></tr>`;
+  }
+  return sample
+    .slice(0, 12)
+    .map((ep) => {
+      if (!ep || typeof ep !== "object") return "";
+      if (modelId === "n201") {
+        return `<tr>
+          <td><code>${esc(ep.ticker || "—")}</code></td>
+          <td>${esc(ep.market_id || "—")}</td>
+          <td>${esc(String(ep.hold_trading_days ?? "—"))}</td>
+          <td class="${signedReturnClass(ep.return_pct)}">${pctOrDash(ep.return_pct)}</td>
+          <td class="small muted">${esc(ep.exit_reason || ep.eligibility || "—")}</td>
+        </tr>`;
+      }
+      return `<tr>
+        <td><code>${esc(ep.ticker || "—")}</code></td>
+        <td>${esc(String(ep.hold_days ?? "—"))}</td>
+        <td class="${signedReturnClass(ep.control_return)}">${pctOrDash(ep.control_return)}</td>
+        <td>${esc(ep.entry_lever || "—")}</td>
+        <td>${esc(ep.exit_lever || "—")}</td>
+      </tr>`;
+    })
+    .join("");
+}
+
+function renderObserveLifecycleMarkers(store) {
+  const markers = Array.isArray(store?.change_markers) ? store.change_markers : [];
+  if (!markers.length) {
+    return `<p class="muted small">No change_markers on store yet.</p>`;
+  }
+  const items = markers
+    .map((m) => {
+      if (!m || typeof m !== "object") return "";
+      return `<li>
+        <code>${esc(m.marker_id || "—")}</code>
+        <span class="muted"> · ${esc(fmtDate(m.at))} · ${esc(m.lever || "")}</span>
+        <div class="small muted">${esc(m.reason || "")}</div>
+      </li>`;
+    })
+    .join("");
+  return `<ul class="list-plain model-lifecycle-markers">${items}</ul>`;
+}
+
+function renderObserveLifecycleMonitor(data, modelId) {
+  const id = normalizeInvestmentModel(modelId);
+  const meta = investmentModelMeta(id);
+  const pack = _observeLifecycleStore(data, id);
+  const store = pack.store;
+  const health = pack.health;
+  if (!store && !health) {
+    return `
+      <section class="automation-section automation-section-full model-lifecycle-monitor model-lifecycle-monitor-empty" data-lifecycle-model="${esc(
+        id
+      )}">
+        <h2>Lifecycle monitor · ${esc(pack.label)}
+          <span class="badge badge-info model-mode-badge">observe</span>
+        </h2>
+        <div class="empty-state">
+          <p class="muted small">${esc(pack.emptyHint || meta.emptyHint)}</p>
+        </div>
+      </section>`;
+  }
+  const phase = (health && health.phase) || (store && store.phase) || {};
+  const volume = (health && health.volume_gate) || {};
+  const path =
+    (health && health.path_scoreboard) || (store && store.path_scoreboard) || {};
+  const episodes =
+    volume.episodes ?? store?.completed_entry_episodes ?? null;
+  const weeks = volume.weeks ?? store?.calendar_weeks_spanned ?? null;
+  const entriesPw =
+    phase.entries_per_week == null || !Number.isFinite(Number(phase.entries_per_week))
+      ? "—"
+      : String(Number(phase.entries_per_week));
+  const floor =
+    phase.floor == null || !Number.isFinite(Number(phase.floor))
+      ? "—"
+      : String(Number(phase.floor));
+  const pathPrimary =
+    id === "n201"
+      ? path.smooth_ret_cohort_median
+      : path.control_smooth_ret_cohort_median ?? path.smooth_ret_cohort_median;
+  const registration =
+    store?.registration_id || health?.registration_id || pack.registrationFallback;
+  const waiter =
+    id === "n201" &&
+    (health?.launch_queue_waiter || store?.launch_queue?.enqueued)
+      ? `<span class="badge badge-hold">launch-queue waiter</span>`
+      : "";
+  const thinSample =
+    id === "n201" &&
+    Array.isArray(store?.episodes_sample) &&
+    store.episodes_sample.length > 0 &&
+    (episodes == null || Number(episodes) < (volume.min_episodes || 48));
+  const thinNote = thinSample
+    ? `<p class="small muted model-lifecycle-waiter-note">Sample may look thin while N201 waits behind holdings / N200 on the launch queue — scoreboards stay alone-first (F8).</p>`
+    : "";
+  const episodeHead =
+    id === "n201"
+      ? `<tr><th>Ticker</th><th>Market</th><th>Hold (td)</th><th>Return %</th><th>Exit / note</th></tr>`
+      : `<tr><th>Ticker</th><th>Hold (d)</th><th>Control ret</th><th>Entry lever</th><th>Exit lever</th></tr>`;
+  const sampleLen = Array.isArray(store?.episodes_sample)
+    ? store.episodes_sample.length
+    : 0;
+  const totalEp = episodes != null ? String(episodes) : "—";
+  return `
+    <section class="automation-section automation-section-full model-lifecycle-monitor" data-lifecycle-model="${esc(
+      id
+    )}">
+      <h2>Lifecycle monitor · ${esc(pack.label)}
+        <span class="badge badge-info model-mode-badge">observe</span>
+        ${waiter}
+      </h2>
+      <p class="small muted" style="margin-top:0">
+        Bound to <code>${esc(registration)}</code> sealed store — not Strand A’s Lifecycle board.
+        Phase / volume / path are this registration’s alone scoreboards; never auto-promote (F8).
+      </p>
+      ${thinNote}
+      <div class="grid n200-pipeline-grid model-lifecycle-stage-grid" style="margin-top:0.75rem">
+        <div class="card n200-pipeline-card">
+          <h3>Phase ${n200GateBadge(!!phase.floor_met)}</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value">${esc(entriesPw)}<span class="n200-floor-den">/${esc(
+              floor
+            )}</span></div>
+          </div>
+          <p class="small muted">Entries/week vs sealed floor — mechanism only.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Volume ${n200GateBadge(volume.met)}</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value">${esc(String(totalEp))}<span class="n200-floor-den"> ep</span></div>
+          </div>
+          ${settingRow("Weeks", esc(String(weeks ?? "—")))}
+          ${settingRow(
+            "Gate",
+            `≥${esc(String(volume.min_episodes ?? (id === "n201" ? 48 : 24)))} ep · ≥${esc(
+              String(volume.min_weeks ?? 8)
+            )} wk`
+          )}
+          <p class="small muted">Review gate — not promote.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Path (fair)</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value ${signedReturnClass(
+              pathPrimary
+            )}">${pctOrDash(pathPrimary)}</div>
+          </div>
+          ${settingRow(
+            "Primary",
+            esc(path.success_metric_id || store?.success_metric_id || "smooth_ret_cohort_median")
+          )}
+          <p class="small muted">Cohort median at fair costs — alone scoreboard.</p>
+        </div>
+      </div>
+      <div class="model-lifecycle-episodes" style="margin-top:0.85rem">
+        <h3>Episodes sample
+          <span class="small muted">showing ${esc(String(sampleLen))} of ${esc(totalEp)} completed</span>
+        </h3>
+        <div class="table-wrap">
+          <table class="learning-tracks-table model-lifecycle-episode-table">
+            <thead>${episodeHead}</thead>
+            <tbody>${renderObserveLifecycleEpisodeRows(store, id)}</tbody>
+          </table>
+        </div>
+      </div>
+      <div class="model-lifecycle-markers-wrap" style="margin-top:0.85rem">
+        <h3>Change markers</h3>
+        ${renderObserveLifecycleMarkers(store)}
+      </div>
+      <p class="small muted" style="margin-top:0.75rem;margin-bottom:0">
+        Observe-only. Pipeline cards below add freshness / ${
+          id === "n200" ? "per-lever detail" : "ops status"
+        }. Does not write books or knobs.
       </p>
     </section>`;
 }
