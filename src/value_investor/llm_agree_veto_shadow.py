@@ -539,7 +539,9 @@ def resolve_agree_veto_judge_backend(
     ``auto`` (default via env ``LLM_AGREE_VETO_BACKEND``) uses LLM when a Cursor
     API key is present, else heuristic. Explicit ``llm`` / ``heuristic`` win.
     """
-    raw = (requested if requested is not None else os.environ.get(JUDGE_BACKEND_ENV, "auto") or "auto")
+    raw = (
+        requested if requested is not None else os.environ.get(JUDGE_BACKEND_ENV, "auto") or "auto"
+    )
     choice = str(raw).strip().lower()
     if choice in {"heuristic", "evidence_heuristic", "off", "0", "false", "no"}:
         return HEURISTIC_JUDGE_BACKEND
@@ -568,7 +570,7 @@ def build_llm_agree_veto_prompt(
         "track_id": track_id,
         "rules": [
             "Observe-only review — you never change fills or live capital.",
-            "Return JSON only: {\"cards\":[...]} with one object per proposal.",
+            'Return JSON only: {"cards":[...]} with one object per proposal.',
             "Each card: ticker, algo_action, shadow_verdict (agree|veto|abstain), "
             "reasons (non-empty string list), cited_kinds (subset of provided "
             "evidence kind strings — do not invent metrics or values).",
@@ -620,9 +622,7 @@ def apply_llm_verdicts_to_heuristic_cards(
     judge_spec_id: str = LLM_JUDGE_SPEC_ID,
 ) -> list[dict[str, Any]]:
     """Merge LLM verdicts onto host evidence cards; fail-closed per row."""
-    by_key = {
-        (str(c.get("ticker") or ""), str(c.get("algo_action") or "")): c for c in llm_cards
-    }
+    by_key = {(str(c.get("ticker") or ""), str(c.get("algo_action") or "")): c for c in llm_cards}
     out: list[dict[str, Any]] = []
     for base in heuristic_cards:
         key = (str(base.get("ticker") or ""), str(base.get("algo_action") or ""))
@@ -653,9 +653,7 @@ def apply_llm_verdicts_to_heuristic_cards(
         if verdict not in {"agree", "veto", "abstain"}:
             meta["llm_merge"] = "bad_verdict_abstain"
             card["shadow_verdict"] = "abstain"
-            card["reasons"] = [
-                f"LLM returned invalid verdict {verdict!r} — fail-closed abstain."
-            ]
+            card["reasons"] = [f"LLM returned invalid verdict {verdict!r} — fail-closed abstain."]
             card["meta"] = meta
             out.append(card)
             continue
