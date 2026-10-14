@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-14T12:32:22.201844+00:00`
+Generated: `2026-10-14T17:29:53.236004+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,13 +33,15 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `parked_hunter`/verified PR #1074 `eng-20261013-09` — Hunt fetchable IR source for parked sti leftover Y92.SI
+- `human`/human PR #1073 `eng-20261013-08` — Hunt fetchable IR source for parked aim leftover PEBB.L
 - `human`/human PR #1068 `eng-20261013-07` — Hunt fetchable IR source for parked aim leftover CAML.L
 - `parked_hunter`/verified PR #1067 `eng-20261013-06` — Hunt fetchable IR source for parked aim leftover DOTD.L
 - `parked_hunter`/verified PR #1065 `eng-20261013-05` — Hunt fetchable IR source for parked ibex35 leftover REP.MC
 - `parked_hunter`/verified PR #1064 `eng-20261013-03` — Hunt fetchable IR source for parked aim leftover MPE.L
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 204
+- Occasion count: 208
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 4×
