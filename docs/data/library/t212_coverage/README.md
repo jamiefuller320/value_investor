@@ -10,3 +10,5 @@ Tradable north star for offline library markets.
 - `unavailable_watch.json` — dashboard bypass seed
 
 Does not change live FTSE 350 screening. No live order placement.
+
+**Catalogue env:** `ftse-library t212-catalogue` defaults to `TRADING212_ENV=demo`. Production / Actions-injected keys usually need `TRADING212_ENV=live` (or `--env live`) — see [`catalogue/README.md`](catalogue/README.md).
