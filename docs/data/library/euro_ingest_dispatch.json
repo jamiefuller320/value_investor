@@ -24,7 +24,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-14T13:48:48.913813+00:00",
+    "snapshot_at": "2026-10-14T13:52:58.454373+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -93,7 +93,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-10-14T13:48:48.918172+00:00",
+  "evaluated_at": "2026-10-14T13:52:58.458689+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -147,12 +147,13 @@
       "market_id": "sp500",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=13)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=5)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
       "parked_tickers": [
         "CRH",
+        "LH",
         "LMT"
       ],
       "phase3_ready": false,
@@ -162,13 +163,13 @@
         "sp500 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-14T13:49:29.190242+00:00",
+        "snapshot_at": "2026-10-14T13:53:38.805877+00:00",
         "market_id": "sp500",
         "buy_tier_count": 148,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 13,
+        "indexed_without_body": 5,
         "bodies_min": 17,
         "bodies_median": 21.0,
         "bodies_max": 88,
@@ -185,21 +186,21 @@
         ],
         "indexed_without_body_by_ticker": {
           "LMT": 1,
-          "EME": 9,
+          "EME": 1,
           "CRH": 2,
           "LH": 1
         },
         "parked_tickers": [
           "CRH",
+          "LH",
           "LMT"
         ],
-        "parked_count": 2,
+        "parked_count": 3,
         "effective_thin_body_buy_tier": 0,
         "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 10,
+        "effective_indexed_without_body": 1,
         "effective_indexed_without_body_tickers": [
-          "EME",
-          "LH"
+          "EME"
         ],
         "ingest_exhausted": false
       },
@@ -215,63 +216,71 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-14T13:49:29.195573+00:00",
+      "evaluated_at": "2026-10-14T13:53:38.811157+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "parallel_sprint_2_markets": [
-    "aex"
+    "euro_stoxx50"
   ],
   "parallel_sprint_2_status": [
     {
-      "market_id": "aex",
+      "market_id": "euro_stoxx50",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=1)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=3, indexed_without_body=1)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
-      "parked_tickers": [],
+      "parked_tickers": [
+        "BAS.DE",
+        "MUV2.DE",
+        "SAP.DE"
+      ],
       "phase3_ready": false,
-      "current_phase": 0,
+      "current_phase": 1,
       "next_phase": 1,
       "phase_blockers": [
-        "no benchmark configured for aex"
+        "euro_stoxx50 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-14T13:49:29.677459+00:00",
-        "market_id": "aex",
-        "buy_tier_count": 7,
+        "snapshot_at": "2026-10-14T13:53:39.704867+00:00",
+        "market_id": "euro_stoxx50",
+        "buy_tier_count": 15,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 1,
+        "thin_body_buy_tier": 3,
         "indexed_without_body": 1,
-        "bodies_min": 2,
-        "bodies_median": 4,
-        "bodies_max": 40,
+        "bodies_min": 1,
+        "bodies_median": 5,
+        "bodies_max": 123,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [
-          "PRX.AS"
+          "MUV2.DE",
+          "BAS.DE",
+          "IFX.DE"
         ],
         "indexed_without_body_tickers": [
-          "MT.AS"
+          "SAP.DE"
         ],
         "indexed_without_body_by_ticker": {
-          "MT.AS": 1
+          "SAP.DE": 1
         },
-        "parked_tickers": [],
-        "parked_count": 0,
+        "parked_tickers": [
+          "BAS.DE",
+          "MUV2.DE",
+          "SAP.DE"
+        ],
+        "parked_count": 3,
         "effective_thin_body_buy_tier": 1,
         "effective_thin_body_tickers": [
-          "PRX.AS"
+          "IFX.DE"
         ],
-        "effective_indexed_without_body": 1,
-        "effective_indexed_without_body_tickers": [
-          "MT.AS"
-        ],
+        "effective_indexed_without_body": 0,
+        "effective_indexed_without_body_tickers": [],
         "ingest_exhausted": false
       },
       "filing_gaps": 0,
@@ -286,14 +295,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-14T13:49:29.677870+00:00",
+      "evaluated_at": "2026-10-14T13:53:39.706386+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
     "sp500",
-    "aex"
+    "euro_stoxx50"
   ],
   "market_queue": [
     "sp500",
@@ -349,7 +358,7 @@
     "sp500"
   ],
   "scheduler_stream_2_markets": [
-    "aex"
+    "euro_stoxx50"
   ],
   "should_run_library_maintenance": true
 }
