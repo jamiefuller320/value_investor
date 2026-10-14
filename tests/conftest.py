@@ -13,6 +13,41 @@ from pinned_time import weekday_noon_utc
 REPO_ROOT = Path(__file__).resolve().parent.parent
 _DOCS_STATUS_KEY = pytest.StashKey[set[str] | None]()
 
+# Name tokens for tests in test_research_filings.py that hit live IR/SEC/ASX
+# endpoints. Eng preflight excludes ``live_network`` so the 600s budget is not
+# burned on the known flake class (full CI still runs them).
+_LIVE_NETWORK_NAME_TOKENS = (
+    "live_fetch",
+    "has_fetchable_ir",
+    "annual_live",
+    "interim_live",
+    "live_sec",
+    "trading_update_live",
+    "h1_live",
+    "sec_edgar_body_accepts_issuer_alias",
+    "resolve_asx_publisher_document_url_fmg_marketindex_iwb_inline",
+    "results_pdf_fetches",
+)
+
+
+def pytest_configure(config: pytest.Config) -> None:
+    config.addinivalue_line(
+        "markers",
+        "live_network: hits live IR/SEC/ASX endpoints (skipped in eng preflight)",
+    )
+
+
+def pytest_collection_modifyitems(
+    config: pytest.Config, items: list[pytest.Item]
+) -> None:
+    mark = pytest.mark.live_network
+    for item in items:
+        if "test_research_filings.py" not in item.nodeid:
+            continue
+        name = item.name
+        if any(token in name for token in _LIVE_NETWORK_NAME_TOKENS):
+            item.add_marker(mark)
+
 
 def _docs_status() -> set[str] | None:
     try:
