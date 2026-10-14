@@ -279,8 +279,7 @@ def _status_rows(
                 "id": "post_sell_cue_digest",
                 "label": "Post-sell cue digest",
                 "value": str(
-                    digest_row.get("headline")
-                    or f"present (items={digest_row.get('item_count')})"
+                    digest_row.get("headline") or f"present (items={digest_row.get('item_count')})"
                 ),
             }
         )
@@ -361,7 +360,7 @@ def build_daily_push_suggestions(
                     "category": finding.get("category"),
                 },
                 "checklist_task_id": checklist_id,
-                "href": f"#automation/human",
+                "href": "#automation/human",
                 "doc_path": href,
                 "leverage": "Human judgment on existing gate — not a new strand",
             }
@@ -544,9 +543,7 @@ def _default_explore_cards() -> list[dict[str, Any]]:
         {
             "id": "explore:memo-change-my-mind-cites",
             "claim": "LLM extract of “what would change my mind” from memo → cite card",
-            "why_matters": (
-                "Feeds agree/veto shadow cites (AI path Phase 2) without rememo spray"
-            ),
+            "why_matters": ("Feeds agree/veto shadow cites (AI path Phase 2) without rememo spray"),
             "falsify_or_promote": (
                 "Cite precision vs heuristic; cost/latency; no live influence until N173 path"
             ),
