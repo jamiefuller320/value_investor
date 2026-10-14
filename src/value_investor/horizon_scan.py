@@ -486,6 +486,7 @@ _OFFLINE_SIM_PATHS = [
     "tests/test_index_stress_archive_sim.py",
     "tests/test_exit_timing_cohorts.py",
     "docs/data/exit_timing_near_miss.json",
+    "docs/data/exit_timing_near_miss_review.json",
     "docs/data/index_stress_archive.json",
     "docs/data/index_stress_archive_review.json",
 ]

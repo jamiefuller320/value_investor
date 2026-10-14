@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 
 from value_investor.horizon_scan import (
+    _OFFLINE_SIM_PATHS,
+    _allowed_paths_for_horizon_area,
     apply_fragment_actions,
     apply_park_proposals,
     build_horizon_payload,
@@ -42,6 +44,14 @@ PARK
 ACCELERATE
 1. [offline_sim] Run near-miss archive sim monthly — priors for grace knobs
 """
+
+
+def test_offline_sim_allowed_paths_include_near_miss_review():
+    """L133: companion review artifact must be allowlisted with the cohort JSON."""
+    paths = _allowed_paths_for_horizon_area("offline_sim")
+    assert "docs/data/exit_timing_near_miss.json" in paths
+    assert "docs/data/exit_timing_near_miss_review.json" in paths
+    assert "docs/data/exit_timing_near_miss_review.json" in _OFFLINE_SIM_PATHS
 
 
 def test_parse_horizon_scan_sections():
