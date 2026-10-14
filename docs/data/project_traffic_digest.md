@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-14T17:32:02.010451+00:00`
+Generated: `2026-10-14T20:53:01.830376+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -41,7 +41,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `parked_hunter`/verified PR #1064 `eng-20261013-03` — Hunt fetchable IR source for parked aim leftover MPE.L
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 208
+- Occasion count: 210
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 4×

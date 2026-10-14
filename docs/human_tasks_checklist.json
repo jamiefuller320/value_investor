@@ -2,19 +2,19 @@
   "version": 1,
   "updated_at": "2026-10-14",
   "title": "Human tasks checklist",
-  "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
+  "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "sections": [
     {
       "id": "weekday",
-      "title": "Weekday (Mon–Fri)",
+      "title": "Weekday (Mon\u2013Fri)",
       "cadence": "weekday",
       "tasks": [
         {
           "id": "weekday-verify-paper-auto",
           "title": "Spot-check learning tracks after paper-auto",
-          "summary": "ops-monitor (13:15 catch-up) checks post-settle last_run, decision-review coverage of the assessment-model primary (ai_judgment_fair) and control (buy_tier_level), active calibrated shadows, and buy_tier_level fill. Frozen tracks are skipped. Workflow freshness covers CI acted. Excess vs ^FTSE comparison stays Sunday — do not promote on weekday marks.",
+          "summary": "ops-monitor (13:15 catch-up) checks post-settle last_run, decision-review coverage of the assessment-model primary (ai_judgment_fair) and control (buy_tier_level), active calibrated shadows, and buy_tier_level fill. Frozen tracks are skipped. Workflow freshness covers CI acted. Excess vs ^FTSE comparison stays Sunday \u2014 do not promote on weekday marks.",
           "automated": true,
           "doc_path": "docs/ops/ops-monitor.md",
           "doc_anchor": "paper-learning-tracks"
@@ -62,7 +62,7 @@
         {
           "id": "weekday-daily-hub-glance",
           "title": "Glance Daily hub before acting on chat todos",
-          "summary": "Before acting on chat or Project notes todos, open Automation → Daily (#automation/daily). Prefer a grounded status skim (ops warns/fails, scoreboard headline, eng queue head, defer triggers, post-run clearance) plus two labeled lanes: (1) Push — at most 1–3 execution suggestions that cite those facts and respect P1/P2 for what to do today (fail-closed empty over padding); (2) Explore — may sit outside North Star / AGENTS spend priorities (new levers, process/AI ideas, post-sell cues) but must be labeled not-today, meet a quality bar (concrete claim + why it might matter + what would falsify or promote), and route durable items to ftse-defer add/fragment — never displace Push or become unbounded brainstorm. Focus P1/P2 lines are north-star chips (relevance-gated); do not ritual-Accept them. Act on market warning triage only when deepen/dismiss/park is decision-relevant (zero_body/unmeasured not dismissable; spare stall → park; bare health=warn stays email/monitor — do not divert offline ingest / maintenance capacity). Prefer new_info / triggered human gates (saturated knobs, volume-ready, parked backlog when pause still fires) over quiet ack theater. Check History for yesterday’s Accept followed vs Discuss resolved. Hub fresh before 04:00 Europe/London (early ops-monitor ~02:30 UTC). Suite A stress green / graduated badges ≠ adoption. Accept = observe-ack only; Discuss → Project pickup for deepen / capacity. Accept-streak hints observe-only — never auto-flip automated:true. Redesign forks D1–D7: Project store docs/daily-hub-attention-redesign.md.",
+          "summary": "Before acting on chat or Project notes todos, open Automation \u2192 Daily (#automation/daily). Prefer a grounded status skim (ops warns/fails, scoreboard headline, eng queue head, defer triggers, post-run clearance) plus two labeled lanes: (1) Push \u2014 at most 1\u20133 execution suggestions that cite those facts and respect P1/P2 for what to do today (fail-closed empty over padding); (2) Explore \u2014 may sit outside North Star / AGENTS spend priorities (new levers, process/AI ideas, post-sell cues) but must be labeled not-today, meet a quality bar (concrete claim + why it might matter + what would falsify or promote), and route durable items to ftse-defer add/fragment \u2014 never displace Push or become unbounded brainstorm. Focus P1/P2 lines are north-star chips (relevance-gated); do not ritual-Accept them. Act on market warning triage only when deepen/dismiss/park is decision-relevant (zero_body/unmeasured not dismissable; spare stall \u2192 park; bare health=warn stays email/monitor \u2014 do not divert offline ingest / maintenance capacity). Prefer new_info / triggered human gates (saturated knobs, volume-ready, parked backlog when pause still fires) over quiet ack theater. Check History for yesterday\u2019s Accept followed vs Discuss resolved. Hub fresh before 04:00 Europe/London (early ops-monitor ~02:30 UTC). Suite A stress green / graduated badges \u2260 adoption. Accept = observe-ack only; Discuss \u2192 Project pickup for deepen / capacity. Accept-streak hints observe-only \u2014 never auto-flip automated:true. Redesign forks D1\u2013D7: Project store docs/daily-hub-attention-redesign.md.",
           "automated": false,
           "doc_path": "docs/ops/ops-monitor.md",
           "doc_anchor": "daily-hub"
@@ -70,7 +70,7 @@
         {
           "id": "weekday-engineering-parked-backlog-clear",
           "title": "Clear engineering parked backlog when dispatch pauses",
-          "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+          "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) \u2014 no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
           "automated": false,
           "doc_path": "docs/ops/ops-monitor.md",
           "doc_anchor": "engineering-parked-backlog-clearing"
@@ -78,7 +78,7 @@
         {
           "id": "weekday-project-traffic-runs",
           "title": "Project traffic pause / unstick / EOD digest",
-          "summary": "Weekday project-traffic (and ops-monitor) classifies stuck cursor/* PRs, pauses new engineering-agent dispatch, comments for CI/conflict fixes (appending pr_fix_occasions.json with failure reasons), may dispatch conflict-resolve for eng branches, stops Composer reburn / Cursor fail-loop automation waste (park burning tasks + pause), and writes a grounded EOD digest that lists today's eng merges (including independently verified ingest_narrow / scoring_narrow / compile_cap_drain auto-merges) plus common PR-fix failure reasons. Automation → Queue & hunter monitor shows today/yesterday merge counts, a 14-day auto vs manual merge bar chart, and PR-fix intervention tallies. Spot-check digest trajectory and the merges-today list when pause is active, auto-merges land, or a cohesion_bypass task still needed human merge because the actual diff stayed over the path cap.",
+          "summary": "Weekday project-traffic (and ops-monitor) classifies stuck cursor/* PRs, pauses new engineering-agent dispatch, comments for CI/conflict fixes (appending pr_fix_occasions.json with failure reasons), may dispatch conflict-resolve for eng branches, stops Composer reburn / Cursor fail-loop automation waste (park burning tasks + pause), and writes a grounded EOD digest that lists today's eng merges (including independently verified ingest_narrow / scoring_narrow / compile_cap_drain auto-merges) plus common PR-fix failure reasons. Automation \u2192 Queue & hunter monitor shows today/yesterday merge counts, a 14-day auto vs manual merge bar chart, and PR-fix intervention tallies. Spot-check digest trajectory and the merges-today list when pause is active, auto-merges land, or a cohesion_bypass task still needed human merge because the actual diff stayed over the path cap.",
           "automated": true,
           "doc_path": "docs/ops/project-traffic.md",
           "doc_anchor": "authority-v1"
@@ -93,7 +93,7 @@
         },
         {
           "id": "weekday-buy-tier-level-dca",
-          "title": "FTSE buy-tier level DCA realism (£500/mo)",
+          "title": "FTSE buy-tier level DCA realism (\u00a3500/mo)",
           "summary": "Paper-auto runs buy_tier_level_dca (same level-book policy, monthly_deposit=500, cold-start capital epoch). Overlays FTSE Overview held-vs-market as branch series with deposit-matched ^FTSE. Not a promotion gate; recycling buy_tier_level stays the primary held line.",
           "automated": true,
           "doc_path": "docs/ops/buy-tier-cohort-labs.md",
@@ -102,7 +102,7 @@
         {
           "id": "weekday-sleeve-episodes-pass",
           "title": "Dual-path sleeve episodes (observe-only)",
-          "summary": "Paper-auto opens/updates widest sleeve episodes (near-buy hold@≥0.28 or buy-tier → grace-end+~1m / fallback leave-wide×confirms+~1m) with capital_status tags (on_book / off_book / never_funded). Does not change allocation or NAV scoreboard. Manual: ftse-sleeve-episodes.",
+          "summary": "Paper-auto opens/updates widest sleeve episodes (near-buy hold@\u22650.28 or buy-tier \u2192 grace-end+~1m / fallback leave-wide\u00d7confirms+~1m) with capital_status tags (on_book / off_book / never_funded). Does not change allocation or NAV scoreboard. Manual: ftse-sleeve-episodes.",
           "automated": true,
           "doc_path": "docs/ops/dual-path-sleeve-lab.md",
           "doc_anchor": "artifacts"
@@ -125,7 +125,7 @@
         {
           "id": "sunday-phase-c-readiness-runs",
           "title": "Phase C readiness assessment (observe-only)",
-          "summary": "Sunday analysis-review runs ftse-phase-c-readiness and writes docs/data/phase_c_readiness.json. Checks Phase B slim evidence, ≥8 weeks AI-judgment rebalance_log with buy-tier/candidates, and non-trivial feature coverage. Does not fail the Sunday job on NOT READY.",
+          "summary": "Sunday analysis-review runs ftse-phase-c-readiness and writes docs/data/phase_c_readiness.json. Checks Phase B slim evidence, \u22658 weeks AI-judgment rebalance_log with buy-tier/candidates, and non-trivial feature coverage. Does not fail the Sunday job on NOT READY.",
           "automated": true,
           "doc_path": "docs/ops/pit-decision-autopsy.md",
           "doc_anchor": "automated-readiness-gate"
@@ -133,7 +133,7 @@
         {
           "id": "sunday-phase-c-readiness-gate",
           "title": "Start Phase C freeze writer only when readiness is READY",
-          "summary": "Before building or enabling the PIT autopsy freeze writer, confirm phase_c_readiness.json (or ftse-phase-c-readiness exit 0) is READY. Do not start Phase C on vibes or with --force-phase-b-done alone — that override does not invent rebalance history or feature coverage.",
+          "summary": "Before building or enabling the PIT autopsy freeze writer, confirm phase_c_readiness.json (or ftse-phase-c-readiness exit 0) is READY. Do not start Phase C on vibes or with --force-phase-b-done alone \u2014 that override does not invent rebalance history or feature coverage.",
           "automated": false,
           "doc_path": "docs/ops/pit-decision-autopsy.md",
           "doc_anchor": "automated-readiness-gate"
@@ -163,25 +163,9 @@
           "doc_anchor": "what-enter-learning-means"
         },
         {
-          "id": "sunday-buy-cross-archive",
-          "title": "Read buy-cross archive review",
-          "summary": "After analysis-review, read buy_cross_archive_review.json: cross-book vs level comparison, week-0 cash, names that never entered because they stayed buy-tier. Observe-only — do not spawn a live cross book from sparse historic crossings.",
-          "automated": false,
-          "doc_path": "docs/ops/buy-tier-cohort-labs.md",
-          "doc_anchor": "cross-book-archive-only"
-        },
-        {
-          "id": "sunday-knob-calibration-priors",
-          "title": "Review knob calibration priors",
-          "summary": "Confirm readiness signals in knob_calibration_priors.json for the primary book (ai_judgment_fair; frozen books are listed under excluded_frozen_tracks) — confidence, score_gap_vs_runner_up, ready_for_*. If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop — do not promote. Promotion is a separate gate (sunday-assessment-scoreboard).",
-          "automated": false,
-          "doc_path": "docs/ops/knob-calibration.md",
-          "doc_anchor": "promoting-a-prior-human-gate"
-        },
-        {
           "id": "sunday-shadow-endurance",
           "title": "Review unified experiment assessment",
-          "summary": "Read fail/continue/recommend only — recommend ≠ do-now. Failed calibration/exclusion shadows close the promote path. Already-acked recommends (e.g. entry_dca_overlay) do not inflate urgency. Remaining ana-* recommends are eng/manual capacity, not this Sunday gate. Acknowledge when blocking unacked promote/overlay recommends are empty; never auto-promote. Do not reopen N58/N59. Verify live board; 2026-09-03 emptied then-open task recommends.",
+          "summary": "Read fail/continue/recommend only \u2014 recommend \u2260 do-now. Failed calibration/exclusion shadows close the promote path. Already-acked recommends (e.g. entry_dca_overlay) do not inflate urgency. Remaining ana-* recommends are eng/manual capacity, not this Sunday gate. Acknowledge when blocking unacked promote/overlay recommends are empty; never auto-promote. Do not reopen N58/N59. Verify live board; 2026-09-03 emptied then-open task recommends.",
           "automated": false,
           "doc_path": "docs/ops/experiment-assessment.md",
           "doc_anchor": "human-gate"
@@ -189,7 +173,7 @@
         {
           "id": "sunday-assessment-scoreboard",
           "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
-          "summary": "Read docs/data/assessment_scoreboard.json (Analysis → Observe model switcher defaults to Strand A · live): primary ai_judgment_fair vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also twins, frozen books' final records and policy_changes (e.g. significance_gate_v1). Approve a promotion (knob prior, twin or primary/control switch) only when the primary verdict is positive on fair costs; 'AI beats the screen' stays unproven while the accumulate gate never binds (N189). Calibrated, exclusion and Suite A books are frozen: no spawns from them, never edit them. Survivors are starting priors — never auto-apply. N200/N201 tabs are sealed observe-only alone scoreboards — never a second live capital path and never a promote gate.",
+          "summary": "Read docs/data/assessment_scoreboard.json (Analysis \u2192 Observe model switcher defaults to Strand A \u00b7 live): primary ai_judgment_fair vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also twins (hold-buffer + graduated \u2014 readiness gate \u226526 screens / interval excludes zero; freeze if confounded parent_knobs_changed), knob_calibration_priors readiness (Acknowledge-and-stop when confidence low and score_gap <0.005), buy_cross_archive_review (observe-only; do not spawn live cross), frozen books' final records and policy_changes (e.g. significance_gate_v1), and nest sunday-ai-path-scoreboard (agree/veto rollup) as a subsection \u2014 not a peer essay. Approve a promotion (knob prior, twin or primary/control switch) only when the primary verdict is positive on fair costs; 'AI beats the screen' stays unproven while the accumulate gate never binds (N189). Calibrated, exclusion and Suite A books are frozen: no spawns from them, never edit them. Survivors are starting priors \u2014 never auto-apply. N200/N201 tabs are sealed observe-only alone scoreboards \u2014 never a second live capital path and never a promote gate.",
           "automated": false,
           "doc_path": "docs/ops/assessment-scoreboard.md",
           "doc_anchor": "assessment-scoreboard"
@@ -197,7 +181,7 @@
         {
           "id": "sunday-saturated-knobs-judgment",
           "title": "Judge saturated decision-review knobs (no silent clamp step)",
-          "summary": "When ops-monitor warns Decision-review knobs saturated at bounds (e.g. ai_judgment_fair sector_cap at lower 0.2), read saturated_knobs on that book's decision_review.json. The loop can no longer move that axis — decide whether the driver (concentration, cost model, churn) needs a policy change, a new cold-start epoch, or no action. Do not invent another knob step or decision-review --apply from the finding alone.",
+          "summary": "When ops-monitor warns Decision-review knobs saturated at bounds (e.g. ai_judgment_fair sector_cap at lower 0.2), read saturated_knobs on that book's decision_review.json. The loop can no longer move that axis \u2014 decide whether the driver (concentration, cost model, churn) needs a policy change, a new cold-start epoch, or no action. Do not invent another knob step or decision-review --apply from the finding alone.",
           "automated": false,
           "doc_path": "docs/ops/decision-review.md",
           "doc_anchor": "saturated-knobs"
@@ -226,25 +210,9 @@
           "doc_path": "docs/ops/post-sell-cue-digest.md"
         },
         {
-          "id": "sunday-hold-buffer-twin",
-          "title": "Hold-buffer twin vs primary (L541)",
-          "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_hold5_fair (exit_confirm_screens 5) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote the longer buffer only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Never edit either book mid-flight.",
-          "automated": false,
-          "doc_path": "docs/ops/assessment-scoreboard.md",
-          "doc_anchor": "twins"
-        },
-        {
-          "id": "sunday-graduated-twin",
-          "title": "Graduated-allocation twin vs primary",
-          "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_graduated_fair (use_graduated_allocation on) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote graduated sizing only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Do not read the 3% stress graduated_allocation book as evidence. Never edit either book mid-flight.",
-          "automated": false,
-          "doc_path": "docs/ops/assessment-scoreboard.md",
-          "doc_anchor": "graduated-allocation-twin"
-        },
-        {
           "id": "sunday-entry-dca-cadence",
           "title": "Review entry DCA cadence when overlay readiness fires",
-          "summary": "Ack via CLI or Lifecycle Acknowledge (observe-only — Do not execute DCA from ack). Review docs/data/entry_dca_adoption_plan.json. Lifecycle Start enables 4× weekly entry DCA on graduated_allocation only; that book is frozen (2026-10-07), so paper_execute_graduated stays blocked until execute is repointed to ai_judgment_graduated_fair (N135). Do not change starter fraction or apply to primary/live while beat_market is false.",
+          "summary": "Ack via CLI or Lifecycle Acknowledge (observe-only \u2014 Do not execute DCA from ack). Review docs/data/entry_dca_adoption_plan.json. Lifecycle Start enables 4\u00d7 weekly entry DCA on graduated_allocation only; that book is frozen (2026-10-07), so paper_execute_graduated stays blocked until execute is repointed to ai_judgment_graduated_fair (N135). Do not change starter fraction or apply to primary/live while beat_market is false.",
           "automated": false,
           "doc_path": "docs/ops/position-lifecycle.md",
           "doc_anchor": "entry-dca-adoption-plan"
@@ -252,7 +220,7 @@
         {
           "id": "sunday-sleeve-episodes-readiness",
           "title": "Review dual-path sleeve episodes when tag cohorts mature",
-          "summary": "When learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true (≥15 closed per on_book/off_book/never_funded), review stratified sleeve timing. Do not mix never_funded marks into NAV vs ^FTSE. Do not back-label historical NAV as sleeve evidence.",
+          "summary": "When learning_tracks_sleeve_episodes readiness.ready_for_sleeve_timing_analysis is true (\u226515 closed per on_book/off_book/never_funded), review stratified sleeve timing. Do not mix never_funded marks into NAV vs ^FTSE. Do not back-label historical NAV as sleeve evidence.",
           "automated": false,
           "doc_path": "docs/ops/dual-path-sleeve-lab.md",
           "doc_anchor": "evidence-gathered-to-date--validity"
@@ -268,7 +236,7 @@
         {
           "id": "sunday-analysis-tasks",
           "title": "Triage analysis_tasks experiments",
-          "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim — do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
+          "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim \u2014 do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
           "automated": false,
           "doc_path": "docs/ops/analysis-review.md",
           "doc_anchor": "manual-promotion-to-engineering"
@@ -299,7 +267,7 @@
         {
           "id": "monthly-ops-review-cadence",
           "title": "Follow unified ops review cadence",
-          "summary": "Use the weekly → monthly → quarterly sequence in ops-review-cadence.md (analysis review, horizon scan, deferred ideas) rather than ad-hoc review order.",
+          "summary": "Use the weekly \u2192 monthly \u2192 quarterly sequence in ops-review-cadence.md (analysis review, horizon scan, deferred ideas) rather than ad-hoc review order.",
           "automated": false,
           "doc_path": "docs/ops/ops-review-cadence.md",
           "doc_anchor": "sequence"
@@ -359,6 +327,38 @@
       "cadence": "ad_hoc",
       "tasks": [
         {
+          "id": "sunday-buy-cross-archive",
+          "title": "Read buy-cross archive review",
+          "summary": "Triggered / nested under sunday-assessment-scoreboard (D4 collapse): After analysis-review, read buy_cross_archive_review.json: cross-book vs level comparison, week-0 cash, names that never entered because they stayed buy-tier. Observe-only \u2014 do not spawn a live cross book from sparse historic crossings.",
+          "automated": false,
+          "doc_path": "docs/ops/buy-tier-cohort-labs.md",
+          "doc_anchor": "cross-book-archive-only"
+        },
+        {
+          "id": "sunday-knob-calibration-priors",
+          "title": "Review knob calibration priors",
+          "summary": "Triggered / nested under sunday-assessment-scoreboard (D4 collapse): Confirm readiness signals in knob_calibration_priors.json for the primary book (ai_judgment_fair; frozen books are listed under excluded_frozen_tracks) \u2014 confidence, score_gap_vs_runner_up, ready_for_*. If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop \u2014 do not promote. Promotion is a separate gate (sunday-assessment-scoreboard).",
+          "automated": false,
+          "doc_path": "docs/ops/knob-calibration.md",
+          "doc_anchor": "promoting-a-prior-human-gate"
+        },
+        {
+          "id": "sunday-hold-buffer-twin",
+          "title": "Hold-buffer twin vs primary (L541)",
+          "summary": "Triggered / nested under sunday-assessment-scoreboard (D4 collapse): Read the twins row in assessment_scoreboard.json: ai_judgment_hold5_fair (exit_confirm_screens 5) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote the longer buffer only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Never edit either book mid-flight.",
+          "automated": false,
+          "doc_path": "docs/ops/assessment-scoreboard.md",
+          "doc_anchor": "twins"
+        },
+        {
+          "id": "sunday-graduated-twin",
+          "title": "Graduated-allocation twin vs primary",
+          "summary": "Triggered / nested under sunday-assessment-scoreboard (D4 collapse): Read the twins row in assessment_scoreboard.json: ai_judgment_graduated_fair (use_graduated_allocation on) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote graduated sizing only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Do not read the 3% stress graduated_allocation book as evidence. Never edit either book mid-flight.",
+          "automated": false,
+          "doc_path": "docs/ops/assessment-scoreboard.md",
+          "doc_anchor": "graduated-allocation-twin"
+        },
+        {
           "id": "adhoc-decision-recording-plan",
           "title": "Lock recording plan before new learning strands",
           "summary": "Before opening a new analysis, counterfactual, or model-dev strand, answer the four freeze questions (unit, freeze-at-t, join-later, never-backfill) and validate with ftse-decision-recording. Use preview-freeze for coverage gaps. Do not enable the Phase C freeze writer until readiness is READY.",
@@ -385,7 +385,7 @@
         {
           "id": "adhoc-live-capital-pack",
           "title": "Verify decision packs before live capital",
-          "summary": "For real-money trades, use decision-pack verify checklist and primary sources — separate from the automated learning loop.",
+          "summary": "For real-money trades, use decision-pack verify checklist and primary sources \u2014 separate from the automated learning loop.",
           "automated": false,
           "doc_path": "docs/ops/primary-learning-track.md",
           "doc_anchor": "success-datums"
@@ -401,7 +401,7 @@
         {
           "id": "adhoc-assessment-model-change",
           "title": "Change primary/control or freeze a learning track",
-          "summary": "Human decision. Record it with apply_assessment_model() (src/value_investor/assessment_model.py) so the switch or freeze lands in paper_automation/assessment_model.json with date, reason, superseded_by and final NAV. Never edit or unfreeze a frozen book to test an idea — start a twin with its own cold start. Market shards keep the legacy ai_judgment/rules pair.",
+          "summary": "Human decision. Record it with apply_assessment_model() (src/value_investor/assessment_model.py) so the switch or freeze lands in paper_automation/assessment_model.json with date, reason, superseded_by and final NAV. Never edit or unfreeze a frozen book to test an idea \u2014 start a twin with its own cold start. Market shards keep the legacy ai_judgment/rules pair.",
           "automated": false,
           "doc_path": "docs/ops/primary-learning-track.md",
           "doc_anchor": "assessment-model-and-frozen-tracks"
@@ -417,7 +417,7 @@
         {
           "id": "adhoc-euro-ingest-cron-reimport",
           "title": "Re-import euro ingest cron slots after cadence change",
-          "summary": "On main merge of import_cron_jobs.py / epoch0 slots / euro+library ingest workflow schedules, import-ingest-crons.yml re-imports Mon–Sat peak + daily off-peak slots (and epoch-0 buckets) on cron-job.org. Soft-skips when CRONJOB_API_KEY or WORKFLOW_DISPATCH_PAT is missing. Manual re-import only if the workflow was deleted or secrets were absent.",
+          "summary": "On main merge of import_cron_jobs.py / epoch0 slots / euro+library ingest workflow schedules, import-ingest-crons.yml re-imports Mon\u2013Sat peak + daily off-peak slots (and epoch-0 buckets) on cron-job.org. Soft-skips when CRONJOB_API_KEY or WORKFLOW_DISPATCH_PAT is missing. Manual re-import only if the workflow was deleted or secrets were absent.",
           "automated": true,
           "doc_path": "docs/ops/euro-depth-sprint.md",
           "doc_anchor": "register-euro-ingest-crons-after-cadence-changes"
@@ -481,7 +481,7 @@
         {
           "id": "adhoc-review-ingest-deviations",
           "title": "Review open ingest deviations and reprocess if needed",
-          "summary": "When Automation → Ingest deviations shows open rows, follow observe-only signal_triage (leftover → dismiss, buy → park/hunter via dismiss, strong_buy → approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
+          "summary": "When Automation \u2192 Ingest deviations shows open rows, follow observe-only signal_triage (leftover \u2192 dismiss, buy \u2192 park/hunter via dismiss, strong_buy \u2192 approve pin). Approve writes a 7-day intensive pin; dismiss closes 7 days. Do not auto-replace IR URLs.",
           "automated": false,
           "doc_path": "docs/ops/ingest-deviations.md",
           "doc_anchor": "what-needs-a-human"
@@ -489,7 +489,7 @@
         {
           "id": "adhoc-review-fcf-basis-bridges",
           "title": "Override FCF auto policy only when majority/filing is wrong",
-          "summary": "Ordinary buy-tier FCF mismatches auto-resolve (majority among screen/filing/company-adjusted, else filing-aligned OCF−CapEx). Write docs/data/research/<TICKER>/sources/fcf_bridge.json only as a residual override when that auto pick is wrong, or when so-what flags fcf_bridge_needed because no filing/company figure exists. Never leave divergent Yahoo TTM as policy.",
+          "summary": "Ordinary buy-tier FCF mismatches auto-resolve (majority among screen/filing/company-adjusted, else filing-aligned OCF\u2212CapEx). Write docs/data/research/<TICKER>/sources/fcf_bridge.json only as a residual override when that auto pick is wrong, or when so-what flags fcf_bridge_needed because no filing/company figure exists. Never leave divergent Yahoo TTM as policy.",
           "automated": false,
           "doc_path": "docs/ops/fcf-basis-bridges.md",
           "doc_anchor": "when-to-review-residual"

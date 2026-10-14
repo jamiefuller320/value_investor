@@ -142,13 +142,15 @@ def test_build_daily_focus_attaches_expansive_assessment(tmp_path: Path) -> None
     )
     now = datetime(2026, 9, 30, 1, 30, tzinfo=UTC)
     payload = build_daily_focus(data_dir=tmp_path, now=now)
-    task = next(t for t in payload["tasks"] if t["task_ref"] == "focus-1")
-    assess = task["assessment"]
+    # D1: Focus chips only — assessment lives on focus_lines, not Accept tasks.
+    assert not any(t.get("task_ref") == "focus-1" for t in payload["tasks"])
+    chip = next(t for t in payload["focus_lines"] if t["id"] == "focus-1")
+    assess = chip["assessment"]
     assert assess["where_we_are"].startswith("Holdings rememo")
     assert assess["waiting_for"] == "memo body"
     assert "body_lag rememo" in assess["how_achieved"]
     assert assess["days_in_stage"] == 2
-    assert task["status"]["assessment"]["stage_since"] == "2026-09-28"
+    assert chip["status"]["assessment"]["stage_since"] == "2026-09-28"
 
 
 def test_assessment_carries_stage_since_across_rebuilds(tmp_path: Path) -> None:
@@ -175,7 +177,7 @@ def test_assessment_carries_stage_since_across_rebuilds(tmp_path: Path) -> None:
         compact=False,
     )
     first = write_daily_focus(data_dir=tmp_path, now=datetime(2026, 9, 28, 8, 0, tzinfo=UTC))
-    t1 = next(t for t in first["tasks"] if t["task_ref"] == "focus-carry")
+    t1 = next(t for t in first["focus_lines"] if t["id"] == "focus-carry")
     assert t1["assessment"]["stage_since"] == "2026-09-25"
     # Drop explicit stage_since from seed; prior assessment should carry it.
     write_json(
@@ -194,7 +196,7 @@ def test_assessment_carries_stage_since_across_rebuilds(tmp_path: Path) -> None:
         compact=False,
     )
     second = build_daily_focus(data_dir=tmp_path, now=datetime(2026, 9, 30, 8, 0, tzinfo=UTC))
-    t2 = next(t for t in second["tasks"] if t["task_ref"] == "focus-carry")
+    t2 = next(t for t in second["focus_lines"] if t["id"] == "focus-carry")
     assert t2["assessment"]["stage_since"] == "2026-09-25"
     assert t2["assessment"]["days_in_stage"] == 5
     assert "prior:stage_since" in t2["assessment"]["provenance"]
@@ -249,11 +251,12 @@ def test_build_daily_focus_status_and_work_class(tmp_path: Path) -> None:
     now = datetime(2026, 9, 29, 1, 30, tzinfo=UTC)  # before 04:00 London
     payload = build_daily_focus(data_dir=tmp_path, now=now)
     assert payload["stale_for_local_date"] is False
-    task = next(t for t in payload["tasks"] if t["task_ref"] == "focus-1")
-    assert task["work_class"] == "dev"
-    assert task["task_family"] in {"p1", "rememo", "focus-1"}
-    assert task["status"]["ready"] is False
-    assert task["status"]["waiting_on"]
+    assert not any(t.get("task_ref") == "focus-1" for t in payload["tasks"])
+    chip = next(t for t in payload["focus_lines"] if t["id"] == "focus-1")
+    assert chip["work_class"] == "dev"
+    assert chip["task_family"] in {"p1", "rememo", "focus-1"}
+    assert chip["status"]["ready"] is False
+    assert chip["status"]["waiting_on"]
 
 
 def test_ack_enrichment_stores_outcome_fields(tmp_path: Path) -> None:
