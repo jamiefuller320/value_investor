@@ -1,19 +1,136 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-13T13:13:48.827993+00:00",
+  "generated_at": "2026-10-14T02:35:58.660997+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
-  "checklist_updated_at": "2026-10-10",
+  "checklist_updated_at": "2026-10-13",
   "counts": {
-    "new_info": 0,
-    "unacked": 0,
-    "acked": 34,
+    "new_info": 2,
+    "unacked": 1,
+    "acked": 32,
     "automated": 20,
-    "human": 34
+    "human": 35
   },
   "tasks": [
+    {
+      "id": "weekday-engineering-parked-backlog-clear",
+      "title": "Clear engineering parked backlog when dispatch pauses",
+      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
+      "automated": false,
+      "cadence": "weekday",
+      "section_id": "weekday",
+      "section_title": "Weekday (Mon–Fri)",
+      "doc_path": "docs/ops/ops-monitor.md",
+      "doc_anchor": "engineering-parked-backlog-clearing",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "8 attention-parked eng tasks",
+        "updated_at": "2026-10-14T02:35:56.396382+00:00",
+        "fingerprint": "0ab4e7ed18585fbe",
+        "bullets": [
+          "Parked tasks: 11 (attention ~8)",
+          "Queue-clearing pause active: True — evaluated 2026-10-14T02:35:56.396382+00:00",
+          "Traffic pause active: True",
+          "eng-20261004-06: Workflow fix: analysis review failure",
+          "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo",
+          "eng-20261004-05: Reconcile research index with committed overlays for the two `index_missing_committed_verdicts` names (AO.L, HOC.L) and add a CI check that `committed_count` eq",
+          "eng-20261008-04: Repair dead hunter allowlist URL for MC.PA",
+          "eng-20261013-03: Hunt fetchable IR source for parked aim leftover MPE.L"
+        ],
+        "source_keys": [
+          "engineering_tasks"
+        ],
+        "ack_sufficient": false,
+        "auto_ackable": false,
+        "ack_reason": "queue_clearing_pause_active"
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-13T13:13:48.750688+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "91aacacf20aee75e"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "monthly-pr-fix-common-issues",
+      "title": "Review common PR check / merge fix-request reasons",
+      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
+      "automated": false,
+      "cadence": "monthly",
+      "section_id": "monthly",
+      "section_title": "Monthly",
+      "doc_path": "docs/ops/project-traffic.md",
+      "doc_anchor": "pr-fix-occasion-log",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "PR fix common issues",
+        "updated_at": "2026-10-13T17:26:17.885349+00:00",
+        "fingerprint": "9ae4491a2bc621c3",
+        "bullets": [
+          "Occasions logged: 199",
+          "PR mergeable=CONFLICTING against main: 7",
+          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
+          "validate check failed: 4",
+          "deferred-ideas.json conflict after L516 merge: 3",
+          "merge_conflict:dirty: 3"
+        ],
+        "source_keys": [
+          "pr_fix_occasions",
+          "project_traffic_digest"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-13T13:13:48.769596+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "239d8637750ce7b4"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-saturated-knobs-judgment",
+      "title": "Judge saturated decision-review knobs (no silent clamp step)",
+      "summary": "When ops-monitor warns Decision-review knobs saturated at bounds (e.g. ai_judgment_fair sector_cap at lower 0.2), read saturated_knobs on that book's decision_review.json. The loop can no longer move that axis — decide whether the driver (concentration, cost model, churn) needs a policy change, a new cold-start epoch, or no action. Do not invent another knob step or decision-review --apply from the finding alone.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/decision-review.md",
+      "doc_anchor": "saturated-knobs",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/decision-review.md#saturated-knobs",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "0d6813b459bad0c0",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
     {
       "id": "adhoc-post-hsr-alternate-strand",
       "title": "Pin learning question before registering a post-hsr alternate strand",
@@ -40,92 +157,6 @@
         "acked_at": "2026-10-13T13:13:48.786908+00:00",
         "decision": "ack_observe",
         "finding_fingerprint": "4b3865afc1007df5"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "monthly-pr-fix-common-issues",
-      "title": "Review common PR check / merge fix-request reasons",
-      "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
-      "automated": false,
-      "cadence": "monthly",
-      "section_id": "monthly",
-      "section_title": "Monthly",
-      "doc_path": "docs/ops/project-traffic.md",
-      "doc_anchor": "pr-fix-occasion-log",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/project-traffic.md#pr-fix-occasion-log",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "PR fix common issues",
-        "updated_at": "2026-10-12T19:15:48.506426+00:00",
-        "fingerprint": "239d8637750ce7b4",
-        "bullets": [
-          "Occasions logged: 190",
-          "PR mergeable=CONFLICTING against main: 7",
-          "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
-          "validate check failed: 3",
-          "deferred-ideas.json conflict after L516 merge: 3",
-          "merge_conflict:dirty: 3"
-        ],
-        "source_keys": [
-          "pr_fix_occasions",
-          "project_traffic_digest"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-10-13T13:13:48.769596+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "239d8637750ce7b4"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
-      "id": "weekday-engineering-parked-backlog-clear",
-      "title": "Clear engineering parked backlog when dispatch pauses",
-      "summary": "Hourly recover-queue self-heals first (cancel resolved/superseded gap-closure parks; unpark healed preflight_clash) before the cap-8 pause/email. When attention_parked_count=0 and queue_clearing.pause_active=false, board rebuild auto-acks observe-only (quiet fingerprint) — no list-parked work. When the warning still fires after recover-queue, triage remaining oldest parks via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
-      "automated": false,
-      "cadence": "weekday",
-      "section_id": "weekday",
-      "section_title": "Weekday (Mon–Fri)",
-      "doc_path": "docs/ops/ops-monitor.md",
-      "doc_anchor": "engineering-parked-backlog-clearing",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/ops-monitor.md#engineering-parked-backlog-clearing",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "4 attention-parked eng tasks",
-        "updated_at": "2026-10-13T12:18:12.427351+00:00",
-        "fingerprint": "91aacacf20aee75e",
-        "bullets": [
-          "Parked tasks: 5 (attention ~4)",
-          "Queue-clearing pause active: False — evaluated 2026-10-13T12:18:12.427351+00:00",
-          "Traffic pause active: False",
-          "eng-20261004-06: Workflow fix: analysis review failure",
-          "eng-20261004-03: Bulk IR results-presentation fetch from allowlisted company IR URLs (pattern in backlog: HIK.L hikma.com, MEGP.L photo-me.co.uk, ITV.L IR PDFs) into `filings/bo",
-          "eng-20261004-05: Reconcile research index with committed overlays for the two `index_missing_committed_verdicts` names (AO.L, HOC.L) and add a CI check that `committed_count` eq",
-          "eng-20261008-04: Repair dead hunter allowlist URL for MC.PA",
-          "eng-20261011-02: Sector override map for misclassified issuers (e.g. plantation/agriculture off Consumer Defensive peer sets)"
-        ],
-        "source_keys": [
-          "engineering_tasks"
-        ],
-        "ack_sufficient": false,
-        "auto_ackable": false,
-        "ack_reason": "attention_parked_remaining"
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-10-13T13:13:48.750688+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "91aacacf20aee75e"
       },
       "sort_bucket": "acked",
       "auto_ackable": false,
@@ -301,15 +332,15 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary negative",
-        "updated_at": "2026-10-13T07:48:48.914467+00:00",
+        "updated_at": "2026-10-14T02:34:08.021961+00:00",
         "fingerprint": "782b2addb6782b0b",
         "bullets": [
-          "ai_judgment_fair: total return -7.5% vs FTAL.L -2.7% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -5.1% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-          "Primary verdict: negative · 90% interval [-1.6825, -0.1357] · excess at 3% stress -0.2397",
-          "vs control buy_tier_level: difference -0.0515 (common window, not significance)",
+          "ai_judgment_fair: total return -6.6% vs FTAL.L -1.8% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -5.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: negative · 90% interval [-1.6542, -0.1159] · excess at 3% stress -0.2397",
+          "vs control buy_tier_level: difference -0.0527 (common window, not significance)",
           "AI gate binds: False (N189 while it never binds)",
-          "twin ai_judgment_graduated_fair: difference 0.0098 over 4 days",
-          "twin ai_judgment_hold5_fair: difference 0.0057 over 4 days",
+          "twin ai_judgment_graduated_fair: difference 0.0067 over 5 days",
+          "twin ai_judgment_hold5_fair: difference 0.0144 over 5 days",
           "Policy changes: significance_gate_v1 (2026-10-06)"
         ],
         "source_keys": [
@@ -342,7 +373,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-10-13T10:42:22.497004+00:00",
+        "updated_at": "2026-10-13T21:43:17.443678+00:00",
         "fingerprint": "f765d60144146672",
         "bullets": [
           "Open deviations: 1",
@@ -378,7 +409,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-13T10:44:24.261126+00:00",
+        "updated_at": "2026-10-13T21:44:18.621987+00:00",
         "fingerprint": "445acb0f9a3f9032",
         "bullets": [
           "euro_depth: phase=3 ai=False knob=False holdings=36",
@@ -1032,7 +1063,7 @@
     {
       "id": "weekday-daily-hub-glance",
       "title": "Glance Daily hub before acting on chat todos",
-      "summary": "Before acting on chat or Project notes todos, open Automation → Daily (#automation/daily). Prefer top focus lines + market warning triage (deepen/dismiss/park on open admission flags — zero_body/unmeasured are not dismissable; spare DAX stall → park; do not ritual-clear health=warn or starve euro fat slot) + new_info human tasks; check History for yesterday’s Accept followed vs Discuss resolved. Hub should be fresh before 04:00 Europe/London (early ops-monitor ~02:30 UTC). Do not treat Suite A stress green or graduated badges as adoption. Accept runs safe observe-acks only; Discuss queues Project pickup for fat-slot judgment. Accept-streak hints are observe-only — never auto-flip automated:true.",
+      "summary": "Before acting on chat or Project notes todos, open Automation → Daily (#automation/daily). Prefer top focus lines (P1 live-path bind + P2 offline ingest maintenance) + market warning triage (deepen/dismiss/park on open admission flags — zero_body/unmeasured are not dismissable; spare stall → park; do not ritual-clear health=warn or divert offline ingest / maintenance capacity) + new_info human tasks; check History for yesterday’s Accept followed vs Discuss resolved. Hub should be fresh before 04:00 Europe/London (early ops-monitor ~02:30 UTC). Do not treat Suite A stress green or graduated badges as adoption. Accept runs safe observe-acks only; Discuss queues Project pickup for deepen / capacity judgment. Accept-streak hints are observe-only — never auto-flip automated:true.",
       "automated": false,
       "cadence": "weekday",
       "section_id": "weekday",
