@@ -11341,6 +11341,20 @@ def test_parked_source_hunter_skip_ldos_sp500():
     assert fetch_filings_ir_allowlist("LDOS") == []
 
 
+def test_parked_source_hunter_skip_lh_sp500():
+    """eng-20261014-01: LH leftover IWB is Item 7.01 PAMA/CMS 8-K cover, not missing 10-K/10-Q."""
+    assert "LH" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["LH"]
+    assert "7.01" in reason
+    assert "8-K" in reason
+    assert "PAMA" in reason
+    assert "substantiveness" in reason
+    assert "10-K/10-Q" in reason
+    assert fetch_filings_ir_allowlist("LH") == []
+    pama_8k = "https://www.sec.gov/Archives/edgar/data/920148/000092014826000205/lh-20260922.htm"
+    assert fetch_filing_body(pama_8k) is None
+
+
 def test_parked_source_hunter_skip_lmt_sp500():
     """eng-20260907-07: LMT leftover IWB is Item 8.01 pension buy-out 8-K, not missing 10-K/10-Q."""
     assert "LMT" in PARKED_SOURCE_HUNTER_SKIP
