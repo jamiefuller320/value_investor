@@ -73,3 +73,22 @@ Until then: observe marks only; algo twin owns any capital-path churn experiment
 | CLI | Optional — cards are on the rebalance trail; no sole-path CLI required |
 
 Finding title: **LLM agree/veto shadow rollup missing** (`auto_fixable=False`).
+
+## Sunday AI path scoreboard
+
+Human gate (with the Sunday analysis bundle): read the rollup + per-track review
+JSON as a **checklist/scoreboard** — disagreement / abstain rates, heuristic
+baseline vs any later LLM `judge_spec_id`, comparison to `still_in_buy_set`
+marks. Ordered phases and attention budget live in the Project store
+`docs/ai-path-roadmap.md` (shadow judge first; beachhead / ecosystem later under
+**L605** / **N209** / **L606**).
+
+| Do | Don't |
+|----|-------|
+| Scoreboard marks only | Per-ticker AI chat as the weekly ritual |
+| Keep `influences_live=false` | Promote hard veto (**N173**) from thin marks |
+| Surface via human checklist `sunday-ai-path-scoreboard` | Invent a Daily Hub per-name todo |
+
+Weekday automation stays the rollup-missing warn above. Intended later
+ops-monitor finding (not wired until a committed freshness flag exists):
+**AI path scoreboard — Sunday review** (`auto_fixable=False`).
