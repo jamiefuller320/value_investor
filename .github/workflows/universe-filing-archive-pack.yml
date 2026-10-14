@@ -2,7 +2,7 @@ name: Universe filing archive pack
 
 # Quiet-window cold archive lane (L499). Week-first then iterative-backward pack
 # under archive_lane_gate. Preemptible, max concurrency 1, NOT a fourth equal
-# sprint stream. Thin --apply writers use archive budgets + tiny max_units.
+# sprint stream. Thin --apply writers use archive budgets + stage-1 max_units.
 # Suspends while focus fat sprint is active. Cold blobs stay on the runner;
 # only pack_run + bottleneck review are committed.
 # See docs/ops/universe-filing-archive-pack.md
@@ -21,17 +21,17 @@ on:
         type: string
         default: "12"
       max_units:
-        description: "Cap on week×market units (apply pilot default 2)"
+        description: "Cap on week×market units (stage-1 default 4)"
         type: string
-        default: "2"
+        default: "4"
       apply:
         description: "Thin quiet cold-store writers (archive budgets; tiny caps)"
         type: boolean
         default: true
       max_http_fetches:
-        description: "Hard archive-lane HTTP fetch cap"
+        description: "Hard archive-lane HTTP fetch cap (stage-1 default 16)"
         type: string
-        default: "8"
+        default: "16"
 
 permissions:
   contents: write

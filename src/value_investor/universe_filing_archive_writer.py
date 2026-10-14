@@ -39,12 +39,13 @@ from value_investor.universe_filing_archive_isolation import (
 
 SCHEMA_VERSION = 1
 
-# Hard caps for the quiet-window pilot — keep shared runners/sources free.
-DEFAULT_APPLY_MAX_UNITS = 2
+# Hard caps for quiet-window apply — stage-1 thin widen (was pilot 2/8).
+# Tickers/bodies stay at pilot; raise units/HTTP only after isolation_ok streaks.
+DEFAULT_APPLY_MAX_UNITS = 4
 DEFAULT_MAX_TICKERS_PER_UNIT = 2
 DEFAULT_MAX_BODIES_PER_TICKER = 1
 DEFAULT_MAX_DISCOVER_ITEMS = 3
-DEFAULT_MAX_HTTP_FETCHES = 8
+DEFAULT_MAX_HTTP_FETCHES = 16
 DEFAULT_LIBRARY_ROOT = Path("docs/data/library")
 
 DiscoverFn = Callable[[str, str, str], list[dict[str, Any]]]

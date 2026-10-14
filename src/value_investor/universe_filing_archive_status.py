@@ -17,13 +17,13 @@ DEFAULT_PACK_RUN_PATH = Path("docs/data/universe_filing_archive_pack_run.json")
 DEFAULT_BOTTLENECK_PATH = Path("docs/data/universe_filing_archive_bottleneck_review.json")
 DEFAULT_STATUS_PATH = Path("docs/data/universe_filing_archive_status.json")
 
-# Pilot caps from docs/ops/universe-filing-archive-pack.md — scale only after
-# several quiet nights with isolation_ok.
+# Current apply defaults (stage-1 thin widen). Scale only after several quiet
+# nights with isolation_ok; never auto-widen (N180/N181).
 PILOT_CAPS = {
-    "max_units": 2,
+    "max_units": 4,
     "max_tickers_per_unit": 2,
     "max_bodies_per_ticker": 1,
-    "max_http_fetches": 8,
+    "max_http_fetches": 16,
 }
 
 WIDEN_CRITERIA = (
