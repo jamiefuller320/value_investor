@@ -517,15 +517,15 @@ def test_dashboard_assets_include_system_map_card():
     assert 'id="system-map-card"' in app
     assert "docs/architecture.md" in app
     assert "docs/PROJECT_OBJECTIVE.md" in app
-    assert 'app.js?v=system-map-20261014' in html
+    assert "app.js?v=system-map-20261014" in html
     assert ".system-map-pipeline" in css
     assert ".system-map-pillars" in css
     assert ".system-map-pillar-high" in css
 
 
 def test_system_map_stress_uses_published_sidecars():
-    from subprocess import check_output
     import json
+    from subprocess import check_output
 
     app = Path("docs/app.js").read_text(encoding="utf-8")
     start = app.index("function resolveSystemMapStress(data)")
@@ -534,8 +534,7 @@ def test_system_map_stress_uses_published_sidecars():
     helpers = (
         "function resolveQueueHealth(data) {\n"
         "  return (data && data.queue_health) || null;\n"
-        "}\n"
-        + app[start:end]
+        "}\n" + app[start:end]
     )
     script = (
         helpers
