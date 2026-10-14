@@ -5549,6 +5549,20 @@ function _observeLifecycleStore(data, modelId) {
   };
 }
 
+function _formatObserveLeverCell(lever) {
+  if (lever == null || lever === "") return "—";
+  if (typeof lever === "string" || typeof lever === "number" || typeof lever === "boolean") {
+    return String(lever);
+  }
+  if (typeof lever === "object") {
+    const verdict = lever.verdict;
+    if (verdict) return String(verdict);
+    if (lever.control_offset_days != null) return `off ${lever.control_offset_days}`;
+    return "—";
+  }
+  return "—";
+}
+
 function renderObserveLifecycleEpisodeRows(store, modelId) {
   const sample = Array.isArray(store?.episodes_sample) ? store.episodes_sample : [];
   if (!sample.length) {
@@ -5571,8 +5585,8 @@ function renderObserveLifecycleEpisodeRows(store, modelId) {
         <td><code>${esc(ep.ticker || "—")}</code></td>
         <td>${esc(String(ep.hold_days ?? "—"))}</td>
         <td class="${signedReturnClass(ep.control_return)}">${pctOrDash(ep.control_return)}</td>
-        <td>${esc(ep.entry_lever || "—")}</td>
-        <td>${esc(ep.exit_lever || "—")}</td>
+        <td>${esc(_formatObserveLeverCell(ep.entry_lever))}</td>
+        <td>${esc(_formatObserveLeverCell(ep.exit_lever))}</td>
       </tr>`;
     })
     .join("");

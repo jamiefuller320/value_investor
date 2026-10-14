@@ -337,7 +337,7 @@ def test_daily_hub_accept_passes_focus_ack_decision() -> None:
     assert "badge-sell" in card
     html = Path("docs/index.html").read_text(encoding="utf-8")
     assert 'src="app.js?v=' in html
-    assert "per-model-lifecycle-monitor-20261014" in html
+    assert "per-model-lifecycle-monitor-20261014b" in html
     assert "Market warning triage" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "zero_body_stuck" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "Expansive assessment" in OPS_MONITOR.read_text(encoding="utf-8")
@@ -432,7 +432,7 @@ def test_investment_model_switcher_catalog_and_hash() -> None:
     assert "one live capital path" in text.lower() or "Sole live" in text
     assert "launch-queue waiter" in text
     html = Path("docs/index.html").read_text(encoding="utf-8")
-    assert "per-model-lifecycle-monitor-20261014" in html
+    assert "per-model-lifecycle-monitor-20261014b" in html
     assert "function renderObservePathScoreboardPanel(" in text
 
 
@@ -443,7 +443,9 @@ def test_per_model_lifecycle_monitor_bound_to_own_stores() -> None:
     assert "function renderStrandALifecycleMonitor(" in text
     assert "function renderObserveLifecycleMonitor(" in text
     assert "function renderObserveLifecycleEpisodeRows(" in text
+    assert "function _formatObserveLeverCell(" in text
     assert "function renderObserveLifecycleMarkers(" in text
+    assert "lever.verdict" in text
     observe_fn = text.split("function renderAnalysisObserveForModel(", 1)[1].split(
         "\nfunction renderAnalysis(", 1
     )[0]
