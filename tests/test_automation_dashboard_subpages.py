@@ -337,7 +337,7 @@ def test_daily_hub_accept_passes_focus_ack_decision() -> None:
     assert "badge-sell" in card
     html = Path("docs/index.html").read_text(encoding="utf-8")
     assert 'src="app.js?v=' in html
-    assert "investment-model-switcher-20261013" in html
+    assert "per-model-lifecycle-monitor-20261014b" in html
     assert "Market warning triage" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "zero_body_stuck" in OPS_MONITOR.read_text(encoding="utf-8")
     assert "Expansive assessment" in OPS_MONITOR.read_text(encoding="utf-8")
@@ -432,8 +432,40 @@ def test_investment_model_switcher_catalog_and_hash() -> None:
     assert "one live capital path" in text.lower() or "Sole live" in text
     assert "launch-queue waiter" in text
     html = Path("docs/index.html").read_text(encoding="utf-8")
-    assert "investment-model-switcher-20261013" in html
+    assert "per-model-lifecycle-monitor-20261014b" in html
     assert "function renderObservePathScoreboardPanel(" in text
+
+
+def test_per_model_lifecycle_monitor_bound_to_own_stores() -> None:
+    """N200/N201 lifecycle monitors bind sealed stores; Strand A points at live Lifecycle tab."""
+    text = APP_JS.read_text(encoding="utf-8")
+    assert "function renderModelLifecycleMonitor(" in text
+    assert "function renderStrandALifecycleMonitor(" in text
+    assert "function renderObserveLifecycleMonitor(" in text
+    assert "function renderObserveLifecycleEpisodeRows(" in text
+    assert "function _formatObserveLeverCell(" in text
+    assert "function renderObserveLifecycleMarkers(" in text
+    assert "lever.verdict" in text
+    observe_fn = text.split("function renderAnalysisObserveForModel(", 1)[1].split(
+        "\nfunction renderAnalysis(", 1
+    )[0]
+    assert 'renderModelLifecycleMonitor(data, "n200")' in observe_fn
+    assert 'renderModelLifecycleMonitor(data, "n201")' in observe_fn
+    assert 'renderModelLifecycleMonitor(data, "strand-a")' in observe_fn
+    # Own-store binding — not a shared A board with a label swap.
+    assert "n200_tech_timing_observe" in text
+    assert "n201_value_mom_observe" in text
+    assert "data-lifecycle-model=" in text
+    assert "not Strand A" in text or "not Strand A’s" in text or "not Strand A's" in text
+    assert "never auto-promote" in text.lower() or "Never auto" in text
+    assert "launch-queue waiter" in text
+    css = STYLES.read_text(encoding="utf-8")
+    assert ".model-lifecycle-monitor" in css
+    assert ".model-lifecycle-stage-grid" in css
+    n200_doc = Path("docs/ops/n200-tech-timing-observe.md").read_text(encoding="utf-8")
+    assert "lifecycle monitor" in n200_doc.lower()
+    n201_doc = Path("docs/ops/n201-value-mom-observe.md").read_text(encoding="utf-8")
+    assert "lifecycle monitor" in n201_doc.lower()
 
 
 def test_ops_runbook_documents_daily_hub() -> None:

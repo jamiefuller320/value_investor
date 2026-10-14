@@ -43,7 +43,7 @@ Kept the same `registration_id` because this is an exploratory cost-stamp correc
 
 ## Dashboard
 
-**Analysis → Observe** has an **investment model switcher** — select **N200 · observe** for the full pipeline + path scoreboard + companion diagnostics (time running, volume toward gate, cohort median / sample avg close Δ). Strand A remains the only live capital view (F5); this tab is observe-only.
+**Analysis → Observe** has an **investment model switcher** — select **N200 · observe** for its **own lifecycle monitor** (phase / volume / path + episodes sample + change markers bound to `n200_tech_timing_observe.json`), plus pipeline + path scoreboard + companion diagnostics. Strand A’s Lifecycle tab stays the live capital board (F5); this tab is observe-only and never auto-promotes (F8).
 
 **Automation → Queue & hunter** also shows **N200 / learning-factory pipeline** (phase floor, volume gate, **per-lever entry/exit verdicts**, store freshness, ops-check).
 
