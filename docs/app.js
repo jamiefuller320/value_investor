@@ -2017,6 +2017,138 @@ function renderLearningCompletenessCard(data) {
     </section>`;
 }
 
+/** Map published sidecars → mild pillar stress for the Overview system map (L596). */
+function resolveSystemMapStress(data) {
+  const ingest = ((data.project_progress || {}).ingest_bottleneck) || {};
+  const gaps = data.system_gaps || {};
+  const flags = Array.isArray(gaps.flags) ? gaps.flags : [];
+  const highGaps = Number(gaps.high_flag_count || flags.filter((f) => f.severity === "high").length || 0);
+  const health = resolveQueueHealth(data) || {};
+  const opsOverall = String(((health.ops_monitor || {}).overall) || health.overall || "").toLowerCase();
+  const mergeState = String(((health.merge_lane || {}).state) || "").toLowerCase();
+
+  const dataNotes = [];
+  let dataLevel = "ok";
+  if (ingest.stalled) {
+    dataLevel = "high";
+    dataNotes.push(ingest.summary || "Ingest bottleneck stalled");
+  } else if (ingest.summary && /thin|backlog|rate.?limit|timeout/i.test(String(ingest.summary))) {
+    dataLevel = "medium";
+    dataNotes.push(ingest.summary);
+  }
+
+  const investNotes = [];
+  let investLevel = "ok";
+  if (highGaps > 0) {
+    investLevel = "high";
+    investNotes.push(`${highGaps} high learning-path gap flag${highGaps === 1 ? "" : "s"}`);
+  } else if (flags.length > 0) {
+    investLevel = "medium";
+    investNotes.push(`${flags.length} learning-path gap flag${flags.length === 1 ? "" : "s"}`);
+  }
+
+  const platformNotes = [];
+  let platformLevel = "ok";
+  if (opsOverall === "fail" || mergeState === "blocked" || mergeState === "fail") {
+    platformLevel = "high";
+    platformNotes.push(
+      opsOverall === "fail"
+        ? `Ops monitor ${opsOverall}`
+        : `Merge lane ${mergeState || "blocked"}`
+    );
+  } else if (opsOverall === "warn" || mergeState === "warn" || mergeState === "attention") {
+    platformLevel = "medium";
+    platformNotes.push(
+      opsOverall === "warn" ? `Ops monitor ${opsOverall}` : `Merge lane ${mergeState}`
+    );
+  }
+
+  return {
+    data: { level: dataLevel, notes: dataNotes },
+    investment: { level: investLevel, notes: investNotes },
+    platform: { level: platformLevel, notes: platformNotes },
+  };
+}
+
+function systemMapStressBadge(level) {
+  if (level === "high") return '<span class="badge badge-ii-no" title="Elevated pressure">stress</span>';
+  if (level === "medium") return '<span class="badge badge-hold" title="Watch">watch</span>';
+  return '<span class="badge badge-ii-ok" title="No published stress signal">ok</span>';
+}
+
+function renderSystemMapCard(data) {
+  const stress = resolveSystemMapStress(data);
+  const archUrl = githubOpsDocUrl("docs/architecture.md");
+  const objectiveUrl = githubOpsDocUrl("docs/PROJECT_OBJECTIVE.md");
+  const pillar = (key, title, blurb, nodes) => {
+    const row = stress[key] || { level: "ok", notes: [] };
+    const noteHtml = row.notes.length
+      ? `<p class="small system-map-stress-note">${esc(row.notes[0])}</p>`
+      : "";
+    return `
+      <div class="system-map-pillar system-map-pillar-${esc(row.level)}" data-pillar="${esc(key)}">
+        <div class="system-map-pillar-header">
+          <strong>${esc(title)}</strong>
+          ${systemMapStressBadge(row.level)}
+        </div>
+        <p class="small muted" style="margin:0.25rem 0 0.5rem">${esc(blurb)}</p>
+        <ul class="list-plain small system-map-node-list">
+          ${nodes.map((n) => `<li>${esc(n)}</li>`).join("")}
+        </ul>
+        ${noteHtml}
+      </div>`;
+  };
+
+  return `
+    <section class="card system-map-section" id="system-map-card">
+      <div class="market-status-header">
+        <h3>System map</h3>
+        <p class="small muted" style="margin:0">
+          Topology only — observe, not capital control.
+          ${archUrl ? ` · <a href="${esc(archUrl)}" target="_blank" rel="noopener">architecture.md</a>` : ""}
+          ${objectiveUrl ? ` · <a href="${esc(objectiveUrl)}" target="_blank" rel="noopener">PROJECT_OBJECTIVE</a>` : ""}
+        </p>
+      </div>
+      <div class="system-map-pipeline" aria-label="Live pipeline">
+        <span class="system-map-stage">ftse-screen</span>
+        <span class="system-map-arrow" aria-hidden="true">→</span>
+        <span class="system-map-stage">ftse-research</span>
+        <span class="system-map-arrow" aria-hidden="true">→</span>
+        <span class="system-map-stage">deep analysis</span>
+        <span class="system-map-arrow" aria-hidden="true">→</span>
+        <span class="system-map-stage">gap-fill</span>
+        <span class="system-map-arrow" aria-hidden="true">→</span>
+        <span class="system-map-stage">ftse-publish</span>
+      </div>
+      <p class="small muted" style="margin:0.35rem 0 0.75rem">
+        Same spine as <code>docs/architecture.md</code>; offline <code>ftse-library</code> does not touch the live FTSE 350 screen.
+      </p>
+      <div class="system-map-pillars">
+        ${pillar(
+          "data",
+          "Data",
+          "Inventory, filings/FCF bind, ingest sprint — never owns Investment knobs (F8).",
+          ["ingest-loop / library", "filings · FCF · overlay bind", "gap-closure · sprint markets"]
+        )}
+        ${pillar(
+          "investment",
+          "Investment",
+          "Strand A capital path + sealed observe (N200 / N201); reads Data screens.",
+          ["strand A · decision-review", "N200 / N201 observe", "LLM agree/veto shadow"]
+        )}
+        ${pillar(
+          "platform",
+          "Platform",
+          "Schedules, findings, heal paths — ops-monitor → dashboard / eng queue.",
+          ["ops-monitor · automation", "dashboard bridge", "eng queue · email"]
+        )}
+      </div>
+      <p class="small muted" style="margin:0.75rem 0 0">
+        Stress badges use published sidecars (ingest bottleneck, learning-path gaps, queue/ops health) — not live telemetry.
+      </p>
+    </section>`;
+}
+
 function renderSystemGapsCard(data) {
   const payload = data.system_gaps;
   const docUrl = githubOpsDocUrl("docs/ops/analysis-review.md", "system-gaps-learning-path-integrity");
@@ -2423,6 +2555,7 @@ function renderOverview(data) {
     ${renderMarketStatusGrid(data)}
     ${renderLearningCompletenessCard(data)}
     ${renderSystemGapsCard(data)}
+    ${renderSystemMapCard(data)}
     <div class="grid">
       <div class="card">
         <h3>Operating companies</h3>
