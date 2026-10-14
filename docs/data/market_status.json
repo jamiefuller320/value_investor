@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-14T14:29:02.910084+00:00",
+  "generated_at": "2026-10-14T15:14:22.272057+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -31,8 +31,8 @@
     "market_count": 23,
     "ingest_counts": {
       "live": 1,
-      "sprint": 3,
-      "maintenance": 19
+      "maintenance": 20,
+      "sprint": 2
     },
     "role_counts": {
       "live": 1,
@@ -40,8 +40,8 @@
       "sprint": 2,
       "admitted": 19
     },
-    "sprint_count": 3,
-    "maintenance_count": 19,
+    "sprint_count": 2,
+    "maintenance_count": 20,
     "live_count": 1,
     "admitted_count": 22,
     "should_run_library_maintenance": true,
@@ -53,6 +53,7 @@
       "bel20",
       "cac40",
       "dax",
+      "euro_depth",
       "euro_stoxx50",
       "ftse_mib",
       "ftse_smallcap",
@@ -605,13 +606,13 @@
       "is_queue": false,
       "is_admitted": true,
       "is_ftse_equivalent": false,
-      "ingest": "sprint",
+      "ingest": "maintenance",
       "ingest_stream": null,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=9, indexed_without_body=15)",
+      "ingest_reason": "Ingest avenues exhausted — parked 10 leftover thin/IWB name(s) (ABI.BR, ACKB.BR, APAM.AS, BAS.DE, DQ7A.IR, EVN.VI, MUV2.DE, PRX.AS); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
-      "shared_maintenance": false,
+      "shared_maintenance": true,
       "health": "warn",
       "coverage_pct": 0.9948,
       "honest_coverage_pct": null,
@@ -666,8 +667,8 @@
         "bodies_median": 4.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
-        "ingest_exhausted": false,
-        "parked_count": 9,
+        "ingest_exhausted": true,
+        "parked_count": 10,
         "zero_body_tickers": [],
         "thin_body_tickers": [
           "EVN.VI",
@@ -688,7 +689,7 @@
           "DQ7A.IR",
           "EVN.VI",
           "MUV2.DE",
-          "UCB.BR"
+          "PRX.AS"
         ]
       },
       "filing_gaps": 0,
@@ -746,53 +747,7 @@
           "BN.PA"
         ]
       },
-      "sprint_progress": {
-        "window_days": 2,
-        "run_count": 4,
-        "targets": 8,
-        "improved": 7,
-        "improved_tickers": [
-          "TTE.PA",
-          "SHELL.AS",
-          "MC.PA",
-          "PRX.AS"
-        ],
-        "last_run_at": "2026-10-14T13:22:48.845867+00:00",
-        "runtime_cutoff_runs": 0,
-        "error_runs": 0,
-        "gaps_before": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 8,
-          "indexed_without_body": 16,
-          "filing_gaps": 0
-        },
-        "gaps_after": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 9,
-          "indexed_without_body": 15,
-          "filing_gaps": 0
-        },
-        "gap_delta": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 1,
-          "indexed_without_body": -1,
-          "filing_gaps": 0
-        },
-        "remaining": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 9,
-          "indexed_without_body": 15,
-          "filing_gaps": 0
-        },
-        "admission_ready": true,
-        "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [],
-        "sprint_entered_at": null
-      },
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
