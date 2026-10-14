@@ -89,6 +89,10 @@ Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
 
 Fixed-stake `%` is **independent of fund NAV** — cash drag / equal-weight book construction parked on v0.
 
+## Human volume-gate review
+
+When ops-monitor reports **N201 volume gate ready for review** (episodes≥48 and weeks≥8): open the N201 observe tab / `n201_value_mom_observe.json`, read fair-cost path median vs patient-hold (report-only), and decide only whether a *deliberate* promotion design is warranted later. **No auto-promote** from the info finding (F8). Launch-queue waiter status is unchanged by this review.
+
 ## Constraints
 
 - Observe-only; no live strand A writes; no `--apply`.

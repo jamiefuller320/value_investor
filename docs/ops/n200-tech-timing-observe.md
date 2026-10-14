@@ -67,6 +67,10 @@ Stores commit via ops-monitor `GHA_COMMIT_OPTIONAL`.
 3. **Phase** — entries/week vs sealed floor.
 4. **Diagnostics** — full cell matrix + best-cell; **stress 3%** control median (`stress_scoreboard_report_only`) — not a promote signal (F8).
 
+## Human volume-gate review
+
+When ops-monitor reports **N200 volume gate ready for review** (episodes≥24 and weeks≥8): open the N200 observe tab / `n200_tech_timing_observe.json`, read path + per-lever brackets at fair costs, and decide only whether a *deliberate* promotion design is warranted later. **No auto-promote** from the info finding (F8). Phase green and lever win/lose are not capital readiness.
+
 ## Constraints
 
 - No live strand A writes; no `--apply`.
