@@ -198,10 +198,7 @@ def _exit_shadow_cues(rollup: dict[str, Any] | None) -> list[dict[str, Any]]:
         {
             "cue_id": "exit_shadow_control",
             "lane": "timing",
-            "claim": (
-                f"Control exit-shadow closed={closed} open={open_n} "
-                "(auto-tune still gated)"
-            ),
+            "claim": (f"Control exit-shadow closed={closed} open={open_n} (auto-tune still gated)"),
             "why_matters": "Post-exit path answers 'too early?' only after closed shadows thicken",
             "falsify_or_promote": "N25: ≥15 closed exits/track before exit-shadow→knob path",
             "severity": "info",
