@@ -168,6 +168,8 @@ function activateTab(tabId, { updateHash = false } = {}) {
     if (tabId === "lifecycle") syncLifecycleHash();
     else if (tabId === "analysis") syncAnalysisHash();
     else if (tabId === "automation") syncAutomationHash();
+    else if (tabId === "performance") syncPerformanceHash();
+    else if (tabId === "screener") syncScreenerHash();
     else if (location.hash && location.hash !== `#${tabId}`) {
       history.replaceState(null, "", `#${tabId}`);
     }
@@ -614,6 +616,7 @@ const DASHBOARD_SIDECARS = [
   ["daily_focus_acks", "data/daily_focus_acks.json"],
   ["daily_discuss_inbox", "data/daily_discuss_inbox.json"],
   ["daily_hub_history", "data/daily_hub_history.json"],
+  ["pr_fix_occasions", "data/pr_fix_occasions.json"],
 ];
 
 let dashboardRefreshInFlight = null;
@@ -2527,21 +2530,67 @@ function renderTrusts(data) {
   `;
 }
 
+const SCREENER_FILTER_IDS = [
+  "",
+  "strong_buy",
+  "buy",
+  "hold",
+  "avoid",
+  "insufficient_data",
+];
+const SCREENER_FILTER_LABELS = {
+  "": "All",
+  strong_buy: "Strong buy",
+  buy: "Buy",
+  hold: "Hold",
+  avoid: "Avoid",
+  insufficient_data: "Insufficient",
+};
+let screenerFilterId = "";
+
+function normalizeScreenerFilter(value) {
+  const key = String(value || "");
+  return SCREENER_FILTER_IDS.includes(key) ? key : "";
+}
+
+function renderScreenerSubnav(activeId, reports) {
+  const active = normalizeScreenerFilter(activeId);
+  const counts = Object.create(null);
+  for (const id of SCREENER_FILTER_IDS) counts[id] = 0;
+  counts[""] = (reports || []).length;
+  for (const row of reports || []) {
+    const sig = String(row.signal || "");
+    if (Object.prototype.hasOwnProperty.call(counts, sig)) counts[sig] += 1;
+  }
+  return `<nav class="paper-subnav screener-subnav" aria-label="Screener signal filters">
+    ${SCREENER_FILTER_IDS.map((id) => {
+      const label = SCREENER_FILTER_LABELS[id] || id;
+      const n = counts[id] ?? 0;
+      return `<button type="button" class="paper-subtab${
+        id === active ? " active" : ""
+      }" data-screener-filter="${esc(id)}">${esc(label)} <span class="small muted">${n}</span></button>`;
+    }).join("")}
+  </nav>`;
+}
+
+function syncScreenerHash() {
+  const filter = normalizeScreenerFilter(screenerFilterId);
+  if (!filter) {
+    history.replaceState(null, "", "#screener");
+    return;
+  }
+  history.replaceState(null, "", `#screener/${filter}`);
+}
+
 function renderScreener(data) {
   const reports = data.reports || [];
   const panel = document.getElementById("panel-screener");
+  screenerFilterId = normalizeScreenerFilter(screenerFilterId);
 
   panel.innerHTML = `
+    ${renderScreenerSubnav(screenerFilterId, reports)}
     <div class="toolbar">
       <input type="search" id="screener-search" placeholder="Search company or ticker…" aria-label="Search">
-      <select id="screener-filter" aria-label="Filter by signal">
-        <option value="">All signals</option>
-        <option value="strong_buy">Strong buy</option>
-        <option value="buy">Buy</option>
-        <option value="hold">Hold</option>
-        <option value="avoid">Avoid</option>
-        <option value="insufficient_data">Insufficient data</option>
-      </select>
     </div>
     <div class="table-wrap">
       <table id="screener-table">
@@ -2563,12 +2612,11 @@ function renderScreener(data) {
 
   const tbody = panel.querySelector("tbody");
   const searchInput = panel.querySelector("#screener-search");
-  const filterSelect = panel.querySelector("#screener-filter");
   const byTicker = new Map(reports.map((r) => [r.ticker, r]));
 
   function renderRows() {
     const q = (searchInput.value || "").toLowerCase();
-    const filter = filterSelect.value;
+    const filter = normalizeScreenerFilter(screenerFilterId);
     const rows = reports.filter((report) => {
       if (filter && report.signal !== filter) return false;
       const hay = `${report.name} ${report.ticker} ${report.sector || ""}`.toLowerCase();
@@ -2604,8 +2652,19 @@ function renderScreener(data) {
     bindChartButtons(tbody, byTicker);
   }
 
+  if (!panel.dataset.screenerBound) {
+    panel.dataset.screenerBound = "1";
+    panel.addEventListener("click", (event) => {
+      const btn = event.target.closest("[data-screener-filter]");
+      if (!btn) return;
+      event.preventDefault();
+      screenerFilterId = normalizeScreenerFilter(btn.dataset.screenerFilter);
+      syncScreenerHash();
+      if (dashboardData) renderScreener(dashboardData);
+    });
+  }
+
   searchInput.addEventListener("input", renderRows);
-  filterSelect.addEventListener("change", renderRows);
   renderRows();
 }
 
@@ -3374,11 +3433,51 @@ function renderSimTrackDetail(track, data, simulation) {
     ${holdings ? `<p><strong>Holdings</strong><ul class="list-plain">${holdings}</ul></p>` : ""}`;
 }
 
+const PERFORMANCE_SECTION_IDS = ["signals", "sim", "historical"];
+let performanceSectionId = "signals";
+
+function normalizePerformanceSection(value) {
+  const key = String(value || "").toLowerCase();
+  if (key === "signal" || key === "backtest") return "signals";
+  if (key === "simulation" || key === "sims") return "sim";
+  if (key === "history" || key === "hist") return "historical";
+  if (PERFORMANCE_SECTION_IDS.includes(key)) return key;
+  return "signals";
+}
+
+function renderPerformanceSubnav(activeId) {
+  const active = normalizePerformanceSection(activeId);
+  const labels = {
+    signals: "Signals",
+    sim: "Simulation",
+    historical: "Historical",
+  };
+  return `<nav class="paper-subnav performance-subnav" aria-label="Performance sections">
+    ${PERFORMANCE_SECTION_IDS.map(
+      (id) =>
+        `<button type="button" class="paper-subtab${
+          id === active ? " active" : ""
+        }" data-performance-section="${id}">${esc(labels[id])}</button>`
+    ).join("")}
+  </nav>`;
+}
+
+function syncPerformanceHash() {
+  const section = normalizePerformanceSection(performanceSectionId);
+  if (section === "signals") {
+    history.replaceState(null, "", "#performance");
+    return;
+  }
+  history.replaceState(null, "", `#performance/${section}`);
+}
+
 function renderPerformance(data) {
   const backtest = data.backtest;
   const simulation = data.simulation;
   const historical = data.historical_analysis;
   const panel = document.getElementById("panel-performance");
+  performanceSectionId = normalizePerformanceSection(performanceSectionId);
+  const section = performanceSectionId;
 
   let backtestHtml = '<div class="empty-state">Backtest needs at least two archived weekly runs.</div>';
   if (backtest && backtest.horizons && backtest.horizons.length) {
@@ -3501,20 +3600,45 @@ function renderPerformance(data) {
   }
 
   panel.innerHTML = `
-    <div class="card">
-      <h3>Signal backtest</h3>
-      ${backtestHtml}
+    ${renderPerformanceSubnav(section)}
+    <div class="performance-section-pane" data-performance-pane="signals" ${
+      section === "signals" ? "" : "hidden"
+    }>
+      <div class="card">
+        <h3>Signal backtest</h3>
+        ${backtestHtml}
+      </div>
     </div>
-    <div class="card" style="margin-top:1rem">
-      <h3>Portfolio simulation (£1,000)</h3>
-      ${simHtml}
+    <div class="performance-section-pane" data-performance-pane="sim" ${
+      section === "sim" ? "" : "hidden"
+    }>
+      <div class="card">
+        <h3>Portfolio simulation (£1,000)</h3>
+        ${simHtml}
+      </div>
     </div>
-    <div class="card" style="margin-top:1rem">
-      <h3>Historical analysis</h3>
-      <p class="small muted">Point-in-time replay of screen signals, research verdicts, and model scores with weekly smoothing.</p>
-      ${renderHistoricalAnalysis(historical)}
+    <div class="performance-section-pane" data-performance-pane="historical" ${
+      section === "historical" ? "" : "hidden"
+    }>
+      <div class="card">
+        <h3>Historical analysis</h3>
+        <p class="small muted">Point-in-time replay of screen signals, research verdicts, and model scores with weekly smoothing.</p>
+        ${renderHistoricalAnalysis(historical)}
+      </div>
     </div>
   `;
+
+  if (!panel.dataset.performanceBound) {
+    panel.dataset.performanceBound = "1";
+    panel.addEventListener("click", (event) => {
+      const btn = event.target.closest("[data-performance-section]");
+      if (!btn) return;
+      event.preventDefault();
+      performanceSectionId = normalizePerformanceSection(btn.dataset.performanceSection);
+      syncPerformanceHash();
+      if (dashboardData) renderPerformance(dashboardData);
+    });
+  }
 
   panel.querySelectorAll("[data-sim-track]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -3737,20 +3861,70 @@ function renderSundayReview(data) {
       </div>`
     : `<p class="muted">No exclusion week-pairs yet — needs ≥2 archived runs and <code>ftse-exclusion-universe-archive</code>.</p>`;
 
+  const regimeDeltaSpan = (current, prior, { pct = false, digits = 1 } = {}) => {
+    if (current == null || prior == null || Number.isNaN(Number(current)) || Number.isNaN(Number(prior))) {
+      return "";
+    }
+    const delta = Number(current) - Number(prior);
+    if (Math.abs(delta) < 1e-12) {
+      return ` <span class="regime-delta regime-delta-flat small muted">Δ0</span>`;
+    }
+    const cls = delta > 0 ? "text-positive" : "text-negative";
+    const label = pct
+      ? `${delta > 0 ? "+" : ""}${(delta * 100).toFixed(digits)}pp`
+      : `${delta > 0 ? "+" : ""}${delta.toFixed(digits)}`;
+    return ` <span class="regime-delta ${cls} small">Δ${esc(label)}</span>`;
+  };
+  const regimeChangedClass = (current, prior) => {
+    if (prior == null) return "";
+    return String(current ?? "") === String(prior ?? "") ? "regime-unchanged" : "regime-changed";
+  };
+
   const regimeRows = history
-    .map((snap) => {
+    .map((snap, index) => {
       const regime = snap.regime || {};
       const excl = snap.exclusion?.summary || {};
+      // history is newest-first; prior week is the next row.
+      const prior = history[index + 1] || null;
+      const priorRegime = (prior && prior.regime) || {};
+      const priorExcl = (prior && prior.exclusion && prior.exclusion.summary) || {};
+      const step = regime.recommended_exclusion_step || review.recommended_exclusion_step || "—";
+      const priorStep =
+        priorRegime.recommended_exclusion_step ||
+        (prior ? review.recommended_exclusion_step : null) ||
+        null;
       return `<tr>
         <td><strong>${esc(snap.week_ending || "—")}</strong><br><span class="small muted">${esc(fmtDate(snap.reviewed_at))}</span></td>
-        <td>${esc(regime.recommended_exclusion_step || review.recommended_exclusion_step || "—")}</td>
-        <td class="${alphaClass(excl.cumulative_exclusion_alpha)}">${pctOrDash(excl.cumulative_exclusion_alpha)}</td>
-        <td>${pctOrDash(regime.positive_alpha_rate)}</td>
-        <td>${regime.exclusion_week_pairs ?? "—"}</td>
-        <td class="${alphaClass(regime.primary_excess_after_costs)}">${pctOrDash(regime.primary_excess_after_costs)}</td>
-        <td>${regime.beat_market ? '<span class="badge badge-buy">yes</span>' : '<span class="badge badge-avoid">no</span>'}</td>
-        <td>${regime.ready_for_shadow_spawn ? '<span class="badge badge-buy">yes</span>' : '<span class="badge badge-neutral">no</span>'}</td>
-        <td class="small">${esc((regime.flags || []).slice(0, 2).join(", ") || "—")}</td>
+        <td class="${regimeChangedClass(step, prior ? priorStep : null)}">${esc(step)}${
+          prior && String(step) !== String(priorStep ?? "")
+            ? ` <span class="regime-delta small muted">was ${esc(priorStep ?? "—")}</span>`
+            : prior
+              ? ` <span class="regime-delta regime-delta-flat small muted">same</span>`
+              : ""
+        }</td>
+        <td class="${alphaClass(excl.cumulative_exclusion_alpha)}">${pctOrDash(excl.cumulative_exclusion_alpha)}${regimeDeltaSpan(
+          excl.cumulative_exclusion_alpha,
+          priorExcl.cumulative_exclusion_alpha,
+          { pct: true }
+        )}</td>
+        <td class="${regimeChangedClass(regime.positive_alpha_rate, priorRegime.positive_alpha_rate)}">${pctOrDash(regime.positive_alpha_rate)}${regimeDeltaSpan(
+          regime.positive_alpha_rate,
+          priorRegime.positive_alpha_rate,
+          { pct: true }
+        )}</td>
+        <td class="${regimeChangedClass(regime.exclusion_week_pairs, priorRegime.exclusion_week_pairs)}">${regime.exclusion_week_pairs ?? "—"}${regimeDeltaSpan(
+          regime.exclusion_week_pairs,
+          priorRegime.exclusion_week_pairs,
+          { pct: false, digits: 0 }
+        )}</td>
+        <td class="${alphaClass(regime.primary_excess_after_costs)}">${pctOrDash(regime.primary_excess_after_costs)}${regimeDeltaSpan(
+          regime.primary_excess_after_costs,
+          priorRegime.primary_excess_after_costs,
+          { pct: true }
+        )}</td>
+        <td class="${regimeChangedClass(Boolean(regime.beat_market), prior ? Boolean(priorRegime.beat_market) : null)}">${regime.beat_market ? '<span class="badge badge-buy">yes</span>' : '<span class="badge badge-avoid">no</span>'}</td>
+        <td class="${regimeChangedClass(Boolean(regime.ready_for_shadow_spawn), prior ? Boolean(priorRegime.ready_for_shadow_spawn) : null)}">${regime.ready_for_shadow_spawn ? '<span class="badge badge-buy">yes</span>' : '<span class="badge badge-neutral">no</span>'}</td>
+        <td class="small ${regimeChangedClass((regime.flags || []).slice(0, 2).join(", "), (priorRegime.flags || []).slice(0, 2).join(", "))}">${esc((regime.flags || []).slice(0, 2).join(", ") || "—")}</td>
       </tr>`;
     })
     .join("");
@@ -3773,6 +3947,7 @@ function renderSundayReview(data) {
           </thead>
           <tbody>${regimeRows}</tbody>
         </table>
+        <p class="small muted">Δ columns are week-over-week vs the prior Sunday snapshot (newest rows first). Unchanged filter/gate cells stay muted.</p>
       </div>`
     : `<p class="muted">Regime history fills as <code>ftse-publish</code> runs each week.</p>`;
 
@@ -7285,33 +7460,38 @@ function renderLearningTracksPanel(data) {
     <p class="small muted" style="margin-top:0">
       Weekday paper-auto books from CI — not the browser local sandbox.
       <strong>Canonical assessment</strong> is the scoreboard above (total return vs FTAL.L + statistics interval).
-      These Suite A/B tables are legacy dual-suite context: columns are <strong>price-only</strong> return / excess vs ^FTSE.
-      Suite A 3% stress books are frozen final records — do not promote on stress excess alone (N145).
-      Suite B pair follows the assessment model.
+      Suite A/B dual-suite tables are retired to the collapsed archive below (price-only vs ^FTSE).
       ${docDual ? `<a href="${esc(docDual)}" target="_blank" rel="noopener">Dual-suite costs</a>` : ""}
       ${docPrimary ? ` · <a href="${esc(docPrimary)}" target="_blank" rel="noopener">Primary learning track</a>` : ""}
     </p>
     ${
       technicalMissing
-        ? `<p class="small muted">Technical server track not published yet (L108) — use <strong>Performance → Static/Trailing</strong> for archived level sims, or <strong>Portfolio → Technical</strong> for the browser sandbox.</p>`
+        ? `<p class="small muted">Technical server track not published yet (L108) — use <strong>Performance → Simulation → Static/Trailing</strong> for archived level sims, or <strong>Portfolio → Technical</strong> for the browser sandbox.</p>`
         : ""
     }
-    ${renderLearningTracksSuiteTable(
-      suiteBMeta.label || "Suite B — fair adoption scoreboard",
-      suiteBMeta.blurb ||
-        "Fair T212-shaped twins and cohort labs. Price-only excess vs ^FTSE — promotion cites the assessment scoreboard (total return vs FTAL.L).",
-      suiteBHeadline,
-      rowsB ||
-        '<tr><td colspan="9" class="muted">No Suite B fair / cohort tracks published yet.</td></tr>'
-    )}
-    ${renderLearningTracksSuiteTable(
-      suiteAMeta.label || "Suite A — stress / churn lab",
-      suiteAMeta.blurb ||
-        "Live FTSE books at 3% per-side stress (frozen final records). Use for cost drag / trade count / hold stability — not promotion.",
-      suiteAHeadline,
-      rowsA
-    )}
-    ${assessBlock}
+    <details class="overview-secondary learning-tracks-dual-suite-archive" style="margin-top:0.75rem">
+      <summary><strong>Legacy Suite A/B track tables</strong> — not the assessment scoreboard</summary>
+      <p class="small muted">
+        Price-only return / excess vs ^FTSE. Suite A 3% stress books are frozen final records — do not promote on stress excess alone (N145).
+        Suite B pair follows the assessment model but promotion cites the scoreboard (total return vs FTAL.L).
+      </p>
+      ${renderLearningTracksSuiteTable(
+        suiteBMeta.label || "Suite B — fair adoption scoreboard",
+        suiteBMeta.blurb ||
+          "Fair T212-shaped twins and cohort labs. Price-only excess vs ^FTSE — promotion cites the assessment scoreboard (total return vs FTAL.L).",
+        suiteBHeadline,
+        rowsB ||
+          '<tr><td colspan="9" class="muted">No Suite B fair / cohort tracks published yet.</td></tr>'
+      )}
+      ${renderLearningTracksSuiteTable(
+        suiteAMeta.label || "Suite A — stress / churn lab",
+        suiteAMeta.blurb ||
+          "Live FTSE books at 3% per-side stress (frozen final records). Use for cost drag / trade count / hold stability — not promotion.",
+        suiteAHeadline,
+        rowsA
+      )}
+      ${assessBlock}
+    </details>
   </section>`;
 }
 
@@ -7509,6 +7689,47 @@ function renderUiReconcileBadge(data) {
   return `<button type="button" class="link-btn" data-automation-section="ops" title="Open Automation → Ops">
     <span class="badge ${cls}">${esc(label)}</span>
   </button>`;
+}
+
+function renderPrFixCommonIssuesPanel(data) {
+  const occasions = (data && data.pr_fix_occasions) || null;
+  if (!occasions) {
+    return `<section class="automation-section automation-section-full pr-fix-common-issues" id="pr-fix-common-issues">
+      <h2>PR fix common issues</h2>
+      <p class="muted">No <code>pr_fix_occasions.json</code> yet — log fixes with <code>ftse-project-traffic record-fix</code>.</p>
+    </section>`;
+  }
+  const common = occasions.common_issues || {};
+  const byReason = Array.isArray(common.by_reason) ? common.by_reason : [];
+  const n = Array.isArray(occasions.occasions) ? occasions.occasions.length : 0;
+  const rows = byReason
+    .slice(0, 8)
+    .map((row) => {
+      const reason = row.failure_reason || row.reason || row.key || "—";
+      const prs = Array.isArray(row.recent_prs) ? row.recent_prs.slice(0, 4).join(", ") : "—";
+      return `<tr>
+        <td class="small">${esc(reason)}</td>
+        <td>${row.count ?? "—"}</td>
+        <td class="small muted">${esc(prs)}</td>
+      </tr>`;
+    })
+    .join("");
+  const docUrl = githubOpsDocUrl("docs/ops/project-traffic.md", "pr-fix-occasion-log");
+  return `<section class="automation-section automation-section-full pr-fix-common-issues" id="pr-fix-common-issues">
+    <h2>PR fix common issues</h2>
+    <p class="small muted" style="margin-top:0">
+      Top recurring fix-request reasons from <code>pr_fix_occasions.json</code>
+      (${n} occasions). Monthly checklist also surfaces this on the Human tab.
+      ${docUrl ? `<a href="${esc(docUrl)}" target="_blank" rel="noopener">Occasion log runbook</a>` : ""}
+      ${occasions.updated_at ? ` · Updated ${esc(fmtDate(occasions.updated_at))}` : ""}
+    </p>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Reason</th><th>Count</th><th>Recent PRs</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="3" class="muted">No common-issue rollup yet.</td></tr>'}</tbody>
+      </table>
+    </div>
+  </section>`;
 }
 
 function renderUiReconcileTable(data) {
@@ -8888,6 +9109,7 @@ function renderAutomation(data) {
     <div class="automation-section-pane" data-automation-pane="ops" ${
       section === "ops" ? "" : "hidden"
     }>
+      ${renderPrFixCommonIssuesPanel(data)}
       ${renderColdStoreArchiveStatusPanel(data)}
       ${renderUiReconcileTable(data)}
     </div>
@@ -9029,6 +9251,22 @@ function parseDashboardHash() {
       track: null,
     };
   }
+  if (tab === "performance") {
+    return {
+      tab: "performance",
+      subpage: normalizePerformanceSection(parts[1] || "signals"),
+      market: null,
+      track: null,
+    };
+  }
+  if (tab === "screener") {
+    return {
+      tab: "screener",
+      subpage: normalizeScreenerFilter(parts[1] || ""),
+      market: null,
+      track: null,
+    };
+  }
   if (tab !== "lifecycle") {
     return { tab, subpage: null, market: parts[1] || null, track: parts[2] || null };
   }
@@ -9083,6 +9321,12 @@ function applyDashboardHash() {
   if (parsed.tab === "automation" && parsed.subpage) {
     automationSectionId = normalizeAutomationSection(parsed.subpage);
   }
+  if (parsed.tab === "performance" && parsed.subpage) {
+    performanceSectionId = normalizePerformanceSection(parsed.subpage);
+  }
+  if (parsed.tab === "screener") {
+    screenerFilterId = normalizeScreenerFilter(parsed.subpage || "");
+  }
   activateTab(parsed.tab);
   if (parsed.tab === "analysis" && dashboardData) {
     // Re-render so model-bound Observe panels match hash before scroll.
@@ -9092,6 +9336,12 @@ function applyDashboardHash() {
   }
   if (parsed.tab === "automation" && dashboardData) {
     window.requestAnimationFrame(() => jumpToAutomationSection(automationSectionId, { updateHash: false }));
+  }
+  if (parsed.tab === "performance" && dashboardData) {
+    renderPerformance(dashboardData);
+  }
+  if (parsed.tab === "screener" && dashboardData) {
+    renderScreener(dashboardData);
   }
 }
 
@@ -9670,13 +9920,79 @@ function lifecycleExperimentChipButton(row) {
   }</button>`;
 }
 
+function lifecycleExperimentGroupKey(row) {
+  return String(row.experiment || row.factor_id || "").trim() || String(row.factor_id || "experiment");
+}
+
+function lifecyclePickPrimaryExperimentRow(group) {
+  const rows = Array.isArray(group) ? group : [];
+  const score = (row) => {
+    let n = 0;
+    if (String(row.status || "") === "observing") n += 4;
+    if (String(row.assessment_status || "") === "recommend") n += 2;
+    if (row.initiation && row.initiation.ready_to_initiate) n += 1;
+    return n;
+  };
+  return [...rows].sort((a, b) => score(b) - score(a) || String(a.factor_id || "").localeCompare(String(b.factor_id || "")))[0];
+}
+
+function lifecycleCollapsedExperimentChip(group) {
+  const primary = lifecyclePickPrimaryExperimentRow(group);
+  if (!primary) return "";
+  if (group.length < 2) return lifecycleExperimentChipButton(primary);
+  const siblings = group
+    .map((row) => row.factor_id)
+    .filter((id) => id && id !== primary.factor_id);
+  const title = `${primary.experiment || primary.factor_id} · factors: ${group
+    .map((row) => row.factor_id)
+    .filter(Boolean)
+    .join(", ")}`;
+  const status = primary.assessment_status || primary.status;
+  const initiation = primary.initiation || {};
+  const recommend = String(primary.assessment_status || "") === "recommend";
+  const readyHint = recommend
+    ? initiation.ready_to_initiate
+      ? " · ready for next human step"
+      : " · not ready to initiate"
+    : "";
+  return `<button type="button" class="lifecycle-exp-chip lifecycle-exp-collapsed" data-lifecycle-experiment="${esc(
+    primary.factor_id || ""
+  )}" title="${esc(title)}${esc(readyHint)}">${esc(primary.experiment || primary.factor_id || "experiment")} ${lifecycleStatusChip(
+    status
+  )}<span class="lifecycle-exp-siblings" title="${esc(siblings.join(", "))}">×${group.length}</span>${
+    recommend
+      ? `<span class="lifecycle-exp-ready ${initiation.ready_to_initiate ? "ready" : "waiting"}">${
+          initiation.ready_to_initiate ? "next step" : "waiting"
+        }</span>`
+      : ""
+  }</button>`;
+}
+
 function lifecycleExperimentChips(experiments) {
   const rows = Array.isArray(experiments) ? experiments : [];
-  const observing = rows.filter((row) => String(row.status || "") === "observing");
-  const other = rows.filter((row) => String(row.status || "") !== "observing");
-  const chips = observing.map(lifecycleExperimentChipButton).join("");
-  const planned = other.length
-    ? `<details class="lifecycle-planned"><summary class="small muted">${other.length} planned / deferred</summary><ul class="list-plain small">${other
+  // Collapse shared-experiment Start chips (e.g. entry_dca_overlay siblings) into one control.
+  const groups = new Map();
+  for (const row of rows) {
+    const key = lifecycleExperimentGroupKey(row);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row);
+  }
+  const chipParts = [];
+  const leftoverPlanned = [];
+  for (const group of groups.values()) {
+    if (group.length > 1) {
+      chipParts.push(lifecycleCollapsedExperimentChip(group));
+      continue;
+    }
+    const row = group[0];
+    if (String(row.status || "") === "observing") {
+      chipParts.push(lifecycleExperimentChipButton(row));
+    } else {
+      leftoverPlanned.push(row);
+    }
+  }
+  const planned = leftoverPlanned.length
+    ? `<details class="lifecycle-planned"><summary class="small muted">${leftoverPlanned.length} planned / deferred</summary><ul class="list-plain small">${leftoverPlanned
         .map(
           (row) =>
             `<li>${lifecycleExperimentChipButton(row)}<div class="small muted">${esc(row.question || "")}${
@@ -9689,7 +10005,7 @@ function lifecycleExperimentChips(experiments) {
         )
         .join("")}</ul></details>`
     : "";
-  return `${chips}${planned}`;
+  return `${chipParts.join("")}${planned}`;
 }
 
 function lifecycleTickerCard(card) {
@@ -9737,6 +10053,14 @@ function findLifecycleTickerCard(ticker) {
 function findLifecycleReport(ticker) {
   const reports = (dashboardData || {}).reports || [];
   return reports.find((row) => row.ticker === ticker) || null;
+}
+
+function findResearchMemo(ticker) {
+  const research = (dashboardData || {}).research || [];
+  const key = String(ticker || "").toUpperCase();
+  return (
+    research.find((row) => String(row.ticker || "").toUpperCase() === key) || null
+  );
 }
 
 function findChartOutcomeRow(ticker) {
@@ -9806,6 +10130,12 @@ function renderLifecycleTickerCard(ticker) {
     .filter(Boolean)
     .join(" · ");
   const hasReport = Boolean(report.ticker);
+  const memo = findResearchMemo(ticker);
+  const memoBtn = memo
+    ? `<button type="button" class="btn btn-primary" data-lifecycle-open-memo="${esc(
+        ticker
+      )}">Read memo</button>`
+    : "";
   return `
     <p class="small muted" style="margin-top:0">${esc(metaBits.join(" · ") || "Lifecycle board name")}</p>
     <div class="market-card-badges">
@@ -9831,6 +10161,11 @@ function renderLifecycleTickerCard(ticker) {
            ${decisionPackHtml(report)}
            <p class="small">${esc(report.summary || "")}</p>`
         : `<p class="small muted">No live-screen report for this ticker in the published dashboard payload (common for sold / cooldown names).</p>`
+    }
+    ${
+      memoBtn
+        ? `<p class="lifecycle-memo-actions pick-actions">${memoBtn}<span class="small muted">Opens the published research memo dialog.</span></p>`
+        : `<p class="small muted">No published research memo for this ticker.</p>`
     }
     ${lifecycleChartOutcomeHtml(outcome)}
     <h4 class="small">Price chart</h4>
@@ -10126,6 +10461,13 @@ function bindLifecyclePanel() {
   if (window.__lifecycleOpenBound) return;
   window.__lifecycleOpenBound = true;
   document.addEventListener("click", (event) => {
+    const memoBtn = event.target.closest("[data-lifecycle-open-memo]");
+    if (memoBtn) {
+      event.preventDefault();
+      const memo = findResearchMemo(memoBtn.dataset.lifecycleOpenMemo);
+      if (memo) void openMemo(memo);
+      return;
+    }
     const btn = event.target.closest("[data-open-lifecycle]");
     if (!btn) return;
     event.preventDefault();
@@ -10158,6 +10500,12 @@ function renderDashboard(data) {
   }
   if (parsed && parsed.tab === "analysis" && parsed.subpage) {
     analysisSectionId = normalizeAnalysisSection(parsed.subpage);
+  }
+  if (parsed && parsed.tab === "performance" && parsed.subpage) {
+    performanceSectionId = normalizePerformanceSection(parsed.subpage);
+  }
+  if (parsed && parsed.tab === "screener") {
+    screenerFilterId = normalizeScreenerFilter(parsed.subpage || "");
   }
 
   renderOverview(data);

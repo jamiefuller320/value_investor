@@ -218,6 +218,23 @@ a third parallel store.
 
 ---
 
+## Glossary: “fragment” (four unrelated meanings)
+
+The word **fragment** appears in several subsystems. They are **not** one schema —
+do not treat a deferred scratch row as an ingest utilization unit, or a keyword
+substring as an action-note snippet.
+
+| Sense | Where | What it is |
+|-------|-------|------------|
+| **Deferred scratch** | `docs/deferred-ideas.json` → `fragments[]`; `ftse-defer fragment` | Half-formed thought below a full deferred idea. Horizon scan / weeder triage these. |
+| **Keyword substring** | Scoring overlays (`*_KEYWORD_FRAGMENTS` in `src/value_investor/scoring/`) | Case-insensitive text needles matched against filings / notes for sector overlays. |
+| **Action-note prose** | Overlay helpers (`format_*_action_note`, structured-verdict slim) | Short human-readable clause appended to a screen `action_note`. |
+| **Ingest utilization unit** | `ingest_utilization_audit` / buy-tier fragment utilization | Count of usable filing/body pieces vs overlay and paper gates — ops metric, not prose. |
+
+When docs or chat say “fragment,” pin which row above is meant.
+
+---
+
 ## Related docs
 
 - [`PROJECT_OBJECTIVE.md`](PROJECT_OBJECTIVE.md) — stages and exit criteria
