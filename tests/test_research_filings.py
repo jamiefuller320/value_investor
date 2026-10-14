@@ -7557,6 +7557,67 @@ def test_parked_source_hunter_bs6_si_sti_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_sti_y92_si_builtins_eng_20261013_09(tmp_path: Path):
+    """eng-20261013-09: sti buy-tier leftover Y92.SI — SGX annual/interim statutory PDF seeds."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("Y92.SI", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    urls = [row["url"] for row in rows]
+    assert any("THBEV_Annual_Report_2025_EN.pdf" in url for url in urls)
+    assert any("THBEV_Annual_Report_2024_EN.pdf" in url for url in urls)
+    assert any("1HFY2025_SGX" in url for url in urls)
+    assert all("links.sgx.com" in url for url in urls)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_y92_si_index(tmp_path: Path):
+    """Empty Y92.SI filings_index.json must gain IR rows for library sti measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("Y92.SI", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] == 3
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) == 3
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_parked_source_hunter_y92_si_sti_has_fetchable_ir():
+    """eng-20261013-09: Y92.SI (Thai Beverage) has live-fetchable SGX statutory PDF filings."""
+    assert "Y92.SI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("Y92.SI")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("links.sgx.com" in url for url in urls)
+    annual_url = next(url for url in urls if "THBEV_Annual_Report_2025_EN.pdf" in url)
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("SGX PDF body fetch unavailable (network) — retry later")
+    assert len(body) >= 50000
+
+
+def test_ir_allowlist_period_classifies_y92_si_1hfy25_slug():
+    """eng-20261013-09: 1HFY2025 SGX slug must map to interim (not annual fy token)."""
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/FileOpen/1HFY2025_SGX%20Format.ashx?App=Announcement&FileID=845031"
+        )
+        == "interim"
+    )
+
+
 def test_fetch_filings_ir_allowlist_smi_unmeasured_builtins_eng_20261003_02(tmp_path: Path):
     """eng-20261003-02: smi buy-tier unmeasured — IR PDF seeds when ESEF/news discovery is empty."""
     allowlist_path = tmp_path / "ir.json"

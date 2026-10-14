@@ -771,6 +771,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://links.sgx.com/1.0.0/corporate-announcements/EXEMPATSYSZ0D0JI/882837_YZJ%20Shipbuilding%20-%20Annual%20Report%20FY2025.pdf",
         "https://links.sgx.com/1.0.0/corporate-announcements/BVOFJZ13W8GQU8N6/854456_YZJSH_1H2025_results%20announcement_Final.pdf",
     ],
+    # sti buy-tier leftover — eng-20261013-09: Y92.SI no_key_bodies; asia_filings only indexed
+    # Google News; seed SGX statutory PDFs (investor.thaibev.com IR is CloudFront-gated).
+    "Y92.SI": [
+        "https://links.sgx.com/1.0.0/corporate-announcements/XJHFB16NSXYU79R3/871645_THBEV_Annual_Report_2025_EN.pdf",
+        "https://links.sgx.com/1.0.0/corporate-announcements/X3Q953SWG85J70UD/830150_THBEV_Annual_Report_2024_EN.pdf",
+        "https://links.sgx.com/FileOpen/1HFY2025_SGX%20Format.ashx?App=Announcement&FileID=845031",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -980,6 +987,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
         "Yangzijiang Shipbuilding (Holdings)",
         "YZJ Shipbuilding",
     ),
+    # sti Y92.SI SGX allowlist — THBEV slugs and 1HFY2025 token need issuer match (fy false-positive).
+    "Y92": ("Thai Beverage", "ThaiBev", "THBEV"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
     "HM-B": (
@@ -5496,6 +5505,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://links.sgx.com/1.0.0/corporate-announcements/Q8J0WJFOI16JD3R1/877984_JMH.pdf": "annual",
     # eng-20261013-01: BS6.SI — 1H2025 slug has no half-year token (would classify other).
     "https://links.sgx.com/1.0.0/corporate-announcements/BVOFJZ13W8GQU8N6/854456_YZJSH_1H2025_results%20announcement_Final.pdf": "interim",
+    # eng-20261013-09: Y92.SI — 1HFY2025 slug contains fy token (would classify annual).
+    "https://links.sgx.com/FileOpen/1HFY2025_SGX%20Format.ashx?App=Announcement&FileID=845031": "interim",
     # eng-20261004-01: GALP.LS — Inv_4Q25 path contains q2 so would classify interim.
     "https://www.galp.com/corp/Portals/0/Recursos/Inv_4Q25/Results_4Q25.pdf": "annual",
     # eng-20261009-03: JD.L HY27 slug has no half-year token (would classify other).
