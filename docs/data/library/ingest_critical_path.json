@@ -1,53 +1,50 @@
 {
-  "market_id": "sp500",
-  "assessed_at": "2026-10-14T16:49:44.801751+00:00",
+  "market_id": "sti",
+  "assessed_at": "2026-10-14T17:18:43.381229+00:00",
   "unmeasured": [],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "CRH",
+      "ticker": "BS6.SI",
+      "indexed_without_body": 3,
+      "filings_total": 4,
+      "filings_with_body": 1
+    },
+    {
+      "ticker": "J36.SI",
+      "indexed_without_body": 3,
+      "filings_total": 4,
+      "filings_with_body": 1
+    },
+    {
+      "ticker": "N2IU.SI",
       "indexed_without_body": 2,
-      "filings_total": 65,
-      "filings_with_body": 63
-    },
-    {
-      "ticker": "EME",
-      "indexed_without_body": 1,
-      "filings_total": 68,
-      "filings_with_body": 67
-    },
-    {
-      "ticker": "LH",
-      "indexed_without_body": 1,
-      "filings_total": 18,
-      "filings_with_body": 17
-    },
-    {
-      "ticker": "LMT",
-      "indexed_without_body": 1,
-      "filings_total": 20,
-      "filings_with_body": 19
+      "filings_total": 7,
+      "filings_with_body": 5
     }
   ],
   "thin_need_discovery": [],
-  "thin_need_bodies": [],
+  "thin_need_bodies": [
+    "J36.SI",
+    "BS6.SI"
+  ],
   "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "CRH",
-    "EME",
-    "LH",
-    "LMT"
+    "BS6.SI",
+    "J36.SI",
+    "N2IU.SI"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (4 tickers, top: CRH(2), EME(1), LH(1), LMT(1))"
+    "Prefer indexed-without-body body refetch (3 tickers, top: BS6.SI(3), J36.SI(3), N2IU.SI(2))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 4,
-    "indexed_without_body_rows": 5,
+    "indexed_without_body_tickers": 3,
+    "indexed_without_body_rows": 8,
     "thin_need_discovery": 0,
-    "thin_need_bodies": 0
+    "thin_need_bodies": 2
   }
 }
