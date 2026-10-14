@@ -1,28 +1,46 @@
 {
   "market_id": "sti",
-  "assessed_at": "2026-10-13T07:37:02.845295+00:00",
+  "assessed_at": "2026-10-13T21:34:27.148063+00:00",
   "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
+  "indexed_without_body": [
+    {
+      "ticker": "BS6.SI",
+      "indexed_without_body": 3,
+      "filings_total": 4,
+      "filings_with_body": 1
+    },
+    {
+      "ticker": "J36.SI",
+      "indexed_without_body": 3,
+      "filings_total": 4,
+      "filings_with_body": 1
+    }
+  ],
   "thin_need_discovery": [
-    "J36.SI",
-    "BS6.SI",
     "A17U.SI"
   ],
-  "thin_need_bodies": [],
-  "primary_blocker": "thin_need_discovery",
+  "thin_need_bodies": [
+    "J36.SI",
+    "BS6.SI"
+  ],
+  "primary_blocker": "indexed_without_body",
   "force_discovery_scan": true,
-  "auto_pin_tickers": [],
+  "auto_pin_tickers": [
+    "BS6.SI",
+    "J36.SI"
+  ],
   "recommended_actions": [
-    "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
+    "Prefer indexed-without-body body refetch (2 tickers, top: BS6.SI(3), J36.SI(3))",
+    "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
-    "thin_need_discovery": 3,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 2,
+    "indexed_without_body_rows": 6,
+    "thin_need_discovery": 1,
+    "thin_need_bodies": 2
   }
 }

@@ -234,8 +234,17 @@ def build_role_coherence(
     current_focus = str(progress.get("current_focus") or "")
 
     if current_focus == "stage_2b":
-        ai_excess = evidence.get("ai_excess_after_costs")
-        if ai_excess is not None and float(ai_excess) < 0:
+        # Prefer total-return excess vs FTAL.L (clean epoch) over published
+        # price-only excess_after_costs — see total-return-view.md / ops finding.
+        tr_excess = evidence.get("primary_excess_total_return")
+        price_excess = evidence.get("ai_excess_after_costs")
+        cite_excess = tr_excess if tr_excess is not None else price_excess
+        cite_label = (
+            "total-return excess vs FTAL.L"
+            if tr_excess is not None
+            else "published excess after costs vs ^FTSE"
+        )
+        if cite_excess is not None and float(cite_excess) < 0:
             checks.append(
                 {
                     "id": "stage_2b_learning_edge",
@@ -243,8 +252,9 @@ def build_role_coherence(
                     "category": "doctrine",
                     "title": "Stage 2b focus aligned with primary learning gap",
                     "summary": (
-                        "North-star focus is stage 2b while AI-judgment excess after costs is "
-                        f"still negative ({float(ai_excess) * 100:+.1f}%). "
+                        "North-star focus is stage 2b while primary "
+                        f"{cite_label} is still negative "
+                        f"({float(cite_excess) * 100:+.1f}%). "
                         "Breadth expansion and new tracks should stay deferred."
                     ),
                 }

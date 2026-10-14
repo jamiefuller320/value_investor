@@ -2,11 +2,11 @@
   "ticker": "UNA.AS",
   "company_name": "Unilever PLC",
   "market": "euro_depth",
-  "built_at": "2026-10-10T13:47:56.362058+00:00",
+  "built_at": "2026-10-13T20:18:11.484731+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
-      "filings_bodies": false,
+      "filings_bodies": true,
       "yahoo_financials": true,
       "yahoo_quarterly_cashflow": false,
       "yahoo_quarterly_income": false,
@@ -18,27 +18,26 @@
       "alternate_news": true
     },
     "thin": [
-      "filings_bodies",
       "yahoo_quarterly_cashflow",
       "yahoo_quarterly_income",
       "screen_run_manifest"
     ],
-    "filings_body_files": 0,
-    "filings_indexed_bodies": 0,
+    "filings_body_files": 1,
+    "filings_indexed_bodies": 1,
     "filings_summary": {
-      "total": 0,
-      "annual": 0,
-      "interim": 0,
+      "total": 4,
+      "annual": 2,
+      "interim": 2,
       "trading_update": 0,
       "other": 0,
-      "with_body": 0,
+      "with_body": 1,
       "period_coverage": {
         "annual": {
-          "total": 0,
-          "with_body": 0
+          "total": 2,
+          "with_body": 1
         },
         "interim": {
-          "total": 0,
+          "total": 2,
           "with_body": 0
         },
         "trading_update": {
@@ -53,11 +52,11 @@
     },
     "period_coverage": {
       "annual": {
-        "total": 0,
-        "with_body": 0
+        "total": 2,
+        "with_body": 1
       },
       "interim": {
-        "total": 0,
+        "total": 2,
         "with_body": 0
       },
       "trading_update": {
@@ -69,7 +68,7 @@
         "with_body": 0
       }
     },
-    "news_article_count": 92,
+    "news_article_count": 104,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
@@ -84,16 +83,35 @@
     ]
   },
   "body_refetch": {
-    "attempted": 0,
+    "attempted": 3,
     "fetched": 0,
-    "with_body_before": 0,
-    "with_body_after": 0,
+    "with_body_before": 1,
+    "with_body_after": 1,
     "note": "refetch_missing_filing_bodies"
   },
   "ch_refetch": {},
   "investegate_refetch": {},
   "ticker_rns_refetch": {},
-  "ir_refetch": {},
+  "ir_refetch": {
+    "attempted": 0,
+    "fetched": 0,
+    "failed": 0,
+    "with_body_before": 1,
+    "with_body_after": 1,
+    "investegate_fallbacks": 0,
+    "skipped_unfetchable": 3,
+    "deadline_hit": false,
+    "merge": {
+      "added": 0,
+      "total_allowlist": 4,
+      "note": "merge_ir_allowlist_filings"
+    },
+    "shared_body_propagated": 0,
+    "ir_metadata_reconciled": 0,
+    "note": "no missing IR allowlist bodies",
+    "mandatory": true,
+    "allowlist_count": 4
+  },
   "screen_run_manifest": {
     "attached": false,
     "reason": "not_ftse350"
@@ -102,7 +120,7 @@
     "bridge_count": 0,
     "segment_split_count": 0,
     "lease_maturity_count": 0,
-    "mandatory": false,
+    "mandatory": true,
     "path": "docs/data/library/markets/euro_depth/screen/research/UNA.AS/sources/ir_presentation_metrics.json"
   },
   "filing_interim_financials": {
@@ -116,28 +134,9 @@
     "latest_secured_workload_to_revenue_ratio": null,
     "path": "docs/data/library/markets/euro_depth/screen/research/UNA.AS/sources/ch_annual_year_in_numbers.json"
   },
-  "alternate_news_added": 1,
+  "alternate_news_added": 0,
   "alternate_news_path": "docs/data/library/markets/euro_depth/screen/research/UNA.AS/sources/alternate_news.json",
-  "planned_alternate_sources": [
-    {
-      "id": "investegate_rns_full",
-      "label": "Full Investegate / RNS HTML body re-pull",
-      "why": "Many Euro large-caps publish on Investegate; index may list filings without bodies",
-      "score": "3"
-    },
-    {
-      "id": "exchange_filings_full",
-      "label": "Euronext / national register filing full-text re-pull",
-      "why": "Euro memos often index headlines without bodies; .PA names and French LEIs index AMF open-data half-year reports and results releases with PDF bodies, mapped Stockholm issuers index Cision interim / year-end / annual report PDFs, other countries are still ESEF / Google News",
-      "score": "3"
-    },
-    {
-      "id": "company_ir_presentation",
-      "label": "Company IR annual report / results deck PDF",
-      "why": "ESEF/iXBRL and segment tables often missing from Yahoo",
-      "score": "3"
-    }
-  ],
+  "planned_alternate_sources": [],
   "evidence_ladder": [
     "filings_bodies",
     "filings_index",

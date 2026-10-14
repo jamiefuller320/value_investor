@@ -1,81 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-13T07:48:48.952181+00:00",
+  "generated_at": "2026-10-14T02:34:08.061194+00:00",
   "observe_only": true,
-  "open_ideas": 573,
+  "open_ideas": 574,
   "with_trigger": 12,
-  "met": [
-    {
-      "id": "L558",
-      "title": "Recalibrate decision-review cost-drag thresholds for fair costs",
-      "status": "open",
-      "first_met_at": "2026-10-07T02:32:44.418539+00:00",
-      "conditions": [
-        {
-          "condition": {
-            "file": "docs/data/paper_automation/learning_tracks_review.json",
-            "path": "reviews.ai_judgment_fair.significance_gate.passed",
-            "op": "==",
-            "value": true
-          },
-          "state": "unmet",
-          "actual": false
-        },
-        {
-          "condition": {
-            "file": "docs/data/paper_automation/learning_tracks_review.json",
-            "path": "reviews.ai_judgment_hold5_fair.significance_gate.passed",
-            "op": "==",
-            "value": true
-          },
-          "state": "unmet",
-          "actual": false
-        },
-        {
-          "condition": {
-            "file": "docs/data/paper_automation/learning_tracks_review.json",
-            "path": "reviews.ai_judgment_fair.metrics.epoch.cost_drag",
-            "op": ">",
-            "value": 0.01
-          },
-          "state": "met",
-          "actual": 0.0197
-        },
-        {
-          "condition": {
-            "file": "docs/data/paper_automation/learning_tracks_review.json",
-            "path": "reviews.ai_judgment_hold5_fair.metrics.epoch.cost_drag",
-            "op": ">",
-            "value": 0.01
-          },
-          "state": "unknown",
-          "reason": "reviews.ai_judgment_hold5_fair.metrics.epoch.cost_drag not in docs/data/paper_automation/learning_tracks_review.json"
-        }
-      ]
-    },
-    {
-      "id": "L571",
-      "title": "Dividend yield unit mismatch in company screen models",
-      "status": "open",
-      "first_met_at": "2026-10-11T02:32:19.361661+00:00",
-      "conditions": [
-        {
-          "condition": {
-            "file": "docs/data/historical_screen_replay.json",
-            "path": "holdout_reveals",
-            "op": "truthy"
-          },
-          "state": "met",
-          "actual": [
-            {
-              "at": "2026-10-10T14:13:52.819675+00:00",
-              "evidence": true
-            }
-          ]
-        }
-      ]
-    }
-  ],
+  "met": [],
   "unknown": [],
   "unmet": [
     "N135",
@@ -83,11 +12,13 @@
     "N18",
     "L548",
     "L551",
+    "L558",
     "N198",
     "L567",
     "L569",
     "N199",
-    "L582"
+    "L582",
+    "L604"
   ],
   "frozen_mentions": [],
   "unknown_grace_days": 7

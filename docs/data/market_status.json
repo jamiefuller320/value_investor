@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-13T16:44:36.784123+00:00",
+  "generated_at": "2026-10-13T21:44:18.621987+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -68,7 +68,7 @@
       "us_adr_asia"
     ],
     "spare_sprint": {},
-    "equal_support_generated_at": "2026-10-13T16:27:38.398776+00:00"
+    "equal_support_generated_at": "2026-10-13T20:43:22.988937+00:00"
   },
   "markets": [
     {
@@ -6343,16 +6343,16 @@
       "failed_fetch_count": 0,
       "last_metrics_refresh": "2026-10-12T07:06:40.361611+00:00",
       "last_constituents_refresh": "2026-10-12T07:06:28.699866+00:00",
-      "last_screen_at": "2026-10-12T07:31:46.451063+00:00",
+      "last_screen_at": "2026-10-13T20:05:39.849185+00:00",
       "signal_counts": {
-        "hold": 40,
-        "buy": 22,
-        "avoid": 21,
-        "strong_buy": 18
+        "hold": 37,
+        "buy": 25,
+        "avoid": 22,
+        "strong_buy": 17
       },
-      "shortlist_count": 40,
-      "strong_buy": 18,
-      "buy": 22,
+      "shortlist_count": 42,
+      "strong_buy": 17,
+      "buy": 25,
       "learning_phase": 1,
       "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
@@ -6407,32 +6407,32 @@
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 22,
-        "not_buy_tier_count": 61,
-        "never_buy_tier_count": 57,
+        "hold_near_buy_count": 14,
+        "not_buy_tier_count": 59,
+        "never_buy_tier_count": 54,
         "rememo_eligible_count": 0,
-        "first_time_memo_count": 0,
+        "first_time_memo_count": 3,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
-        "hold_near_buy_count": 22,
-        "not_buy_tier_count": 61,
-        "never_buy_tier_count": 57,
+        "hold_near_buy_count": 14,
+        "not_buy_tier_count": 59,
+        "never_buy_tier_count": 54,
         "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
         "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
-          "EXC",
-          "HON",
-          "NVDA",
-          "AAPL",
           "AMAT",
-          "ODFL",
-          "GOOG",
-          "GOOGL"
+          "HON",
+          "EXC",
+          "GOOGL",
+          "STX",
+          "LRCX",
+          "META",
+          "KLAC"
         ]
       },
       "sprint_progress": null,
