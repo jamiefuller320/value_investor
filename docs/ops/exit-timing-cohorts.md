@@ -56,9 +56,9 @@ Pair with:
 - `exit_shadow.json` — post-exit path **after** a sell (early vs good exit)
 - `rebalance_log.json` — counterfactual replay of decision-time candidates
 - `learning_tracks_churn_health.json` — cost drag and hold-buffer state
+- [`post-sell-cue-digest.md`](post-sell-cue-digest.md) — observe cue rollup (timing + selection skeleton; package M)
 
 Exit-shadow answers “was the sell too early?” Hold-recovery and swap-rotation answer “should we have held or swapped differently?”
-
 ## Commands
 
 ```bash
