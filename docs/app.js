@@ -10501,6 +10501,9 @@ function renderDashboard(data) {
   if (parsed && parsed.tab === "analysis" && parsed.subpage) {
     analysisSectionId = normalizeAnalysisSection(parsed.subpage);
   }
+  if (parsed && parsed.tab === "automation" && parsed.subpage) {
+    automationSectionId = normalizeAutomationSection(parsed.subpage);
+  }
   if (parsed && parsed.tab === "performance" && parsed.subpage) {
     performanceSectionId = normalizePerformanceSection(parsed.subpage);
   }
@@ -10521,6 +10524,11 @@ function renderDashboard(data) {
   if (parsed && parsed.tab) activateTab(parsed.tab);
   if (parsed && parsed.tab === "analysis" && parsed.subpage && parsed.subpage !== "observe") {
     window.requestAnimationFrame(() => jumpToAnalysisSection(analysisSectionId, { updateHash: false }));
+  }
+  if (parsed && parsed.tab === "automation" && parsed.subpage && parsed.subpage !== "daily") {
+    window.requestAnimationFrame(() =>
+      jumpToAutomationSection(automationSectionId, { updateHash: false })
+    );
   }
 }
 

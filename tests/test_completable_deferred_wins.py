@@ -32,6 +32,13 @@ def test_l406_pr_fix_common_issues_on_ops() -> None:
     assert "function renderPrFixCommonIssuesPanel(" in text
     assert "renderPrFixCommonIssuesPanel(data)" in text
     assert "pr-fix-common-issues" in text
+    # Deep-link #automation/ops must honor hash on first renderDashboard.
+    render_fn = text.split("function renderDashboard(data)", 1)[1].split(
+        "\nasync function loadOptionalDashboardJson", 1
+    )[0]
+    assert 'parsed.tab === "automation"' in render_fn
+    assert "normalizeAutomationSection(parsed.subpage)" in render_fn
+    assert "jumpToAutomationSection(automationSectionId" in render_fn
     css = STYLES.read_text(encoding="utf-8")
     assert ".pr-fix-common-issues" in css
 
