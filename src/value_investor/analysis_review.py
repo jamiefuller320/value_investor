@@ -60,6 +60,9 @@ from value_investor.review_payload_slim import (
     slim_loser_snapshot_cards as _slim_loser_snapshot_cards,
 )
 from value_investor.review_payload_slim import (
+    slim_post_sell_cue_digest as _slim_post_sell_cue_digest,
+)
+from value_investor.review_payload_slim import (
     slim_simulation as _slim_simulation,
 )
 from value_investor.storage import COMMITTED_HISTORY_DIR, read_json, write_json
@@ -303,6 +306,9 @@ def build_analysis_payload(
         _safe_read(paper_root / "learning_tracks_hypothesis_outcomes.json")
     )
     entry_dca = _slim_entry_dca(_safe_read(paper_root / "learning_tracks_entry_dca.json"))
+    post_sell_cue_digest = _slim_post_sell_cue_digest(
+        _safe_read(data_dir / "post_sell_cue_digest.json")
+    )
     churn_health = _safe_read(paper_root / "learning_tracks_churn_health.json")
     knob_calibration = _safe_read(paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
     experiment_assessment = slim_experiment_assessment_for_review(
@@ -358,6 +364,7 @@ def build_analysis_payload(
         "hypothesis_outcomes": hypothesis_outcomes,
         "entry_dca_overlay": entry_dca,
         "entry_dca_adoption": (experiment_assessment or {}).get("entry_dca_adoption"),
+        "post_sell_cue_digest": post_sell_cue_digest,
         "churn_health": churn_health,
         "knob_calibration_priors": knob_calibration,
         "experiment_assessment": experiment_assessment,

@@ -2158,6 +2158,56 @@ def check_n201_value_mom_observe(
     ]
 
 
+def check_post_sell_cue_digest(
+    *,
+    data_dir: Path | None = None,
+    paper_root: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only package M: post-sell cue digest + selection skeleton (N205 feed).
+
+    Writes ``docs/data/post_sell_cue_digest.json``. Never changes books or knobs
+    (``auto_fixable=False``). See docs/ops/post-sell-cue-digest.md.
+    """
+    from value_investor.post_sell_cue_digest import (
+        DEFAULT_DATA_DIR,
+        DEFAULT_PAPER_ROOT,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_digest,
+        refresh_post_sell_cue_digest,
+    )
+
+    try:
+        payload = refresh_post_sell_cue_digest(
+            data_dir=Path(data_dir) if data_dir is not None else DEFAULT_DATA_DIR,
+            paper_root=Path(paper_root) if paper_root is not None else DEFAULT_PAPER_ROOT,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "Post-sell cue digest (observe)"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_digest(payload)
+    ]
+
+
 def check_hold_period_counterfactual(
     *,
     paper_root: Path | None = None,
@@ -3791,6 +3841,7 @@ def collect_ops_findings(
     findings.extend(check_decision_review_significance_gate())
     findings.extend(check_total_return_view())
     findings.extend(check_hold_period_counterfactual())
+    findings.extend(check_post_sell_cue_digest())
     findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_n201_value_mom_observe())
     findings.extend(check_two_lot_replay())

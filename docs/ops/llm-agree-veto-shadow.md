@@ -89,6 +89,11 @@ marks. Ordered phases and attention budget live in the Project store
 | Keep `influences_live=false` | Promote hard veto (**N173**) from thin marks |
 | Surface via human checklist `sunday-ai-path-scoreboard` | Invent a Daily Hub per-name todo |
 
+**Sunday nest neighbor (package M):** human checklist `sunday-post-sell-cues`
+sits in the same scoreboard neighborhood — thin pointer to
+`docs/data/post_sell_cue_digest.json` (timing + selection cues; N205 skeleton
+feed). Not a second AI ritual; see [post-sell-cue-digest.md](post-sell-cue-digest.md).
+
 Weekday automation stays the rollup-missing warn above. Intended later
 ops-monitor finding (not wired until a committed freshness flag exists):
 **AI path scoreboard — Sunday review** (`auto_fixable=False`).
