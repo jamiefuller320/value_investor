@@ -4961,18 +4961,18 @@
   },
   {
     "schema_version": 2,
-    "logged_at": "2026-10-14T08:47:04.194157+00:00",
+    "logged_at": "2026-10-14T08:52:21.971098+00:00",
     "track_id": "buy_tier_level",
     "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
     "strategy_mode": "automated",
     "screen_source": {
       "path": "docs/data/paper_automation/markets/iseq20/screen_latest.json",
-      "run_at": "2026-10-12T06:52:50.803209+00:00",
-      "generated_at": "2026-10-14T08:47:04.119230+00:00"
+      "run_at": "2026-10-14T06:52:20.691925+00:00",
+      "generated_at": "2026-10-14T08:52:21.881145+00:00"
     },
     "knob_epoch_started_at": null,
     "gate": {
-      "local_time": "2026-10-14T09:47:04.129309+01:00",
+      "local_time": "2026-10-14T09:52:21.886414+01:00",
       "trading_day": true,
       "after_settle": true,
       "market_open_at": "2026-10-14T08:00:00+01:00",
@@ -5005,11 +5005,11 @@
         "name": "Origin Enterprises plc",
         "signal": "buy",
         "adjusted_signal": "buy",
-        "conviction_score": 0.5973,
+        "conviction_score": 0.5691,
         "data_quality_score": 0.9,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 3.8,
+        "price": 3.98,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -5019,11 +5019,11 @@
         "name": "Cairn Homes plc",
         "signal": "buy",
         "adjusted_signal": "buy",
-        "conviction_score": 0.7305,
+        "conviction_score": 0.6995,
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Consumer Cyclical",
-        "price": 2.61,
+        "price": 2.65,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -5031,13 +5031,13 @@
       {
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
-        "signal": "buy",
-        "adjusted_signal": "buy",
-        "conviction_score": 0.6081000000000001,
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.3729,
         "data_quality_score": 0.95,
         "timing_signal": "neutral",
         "sector": "Financial Services",
-        "price": 19.0,
+        "price": 18.95,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -5049,11 +5049,11 @@
         "name": "Origin Enterprises plc",
         "signal": "buy",
         "adjusted_signal": "buy",
-        "conviction_score": 0.5973,
+        "conviction_score": 0.5691,
         "data_quality_score": 0.9,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 3.8,
+        "price": 3.98,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -5063,11 +5063,11 @@
         "name": "Cairn Homes plc",
         "signal": "buy",
         "adjusted_signal": "buy",
-        "conviction_score": 0.7305,
+        "conviction_score": 0.6995,
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Consumer Cyclical",
-        "price": 2.61,
+        "price": 2.65,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -5075,13 +5075,13 @@
       {
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
-        "signal": "buy",
-        "adjusted_signal": "buy",
-        "conviction_score": 0.6081000000000001,
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.3729,
         "data_quality_score": 0.95,
         "timing_signal": "neutral",
         "sector": "Financial Services",
-        "price": 19.0,
+        "price": 18.95,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -5101,7 +5101,7 @@
         "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
         "Dust guard: skip trim/top-up adjustments below \u00a310."
       ],
-      "nav": 1006.52,
+      "nav": 1026.67,
       "cash": 0.0,
       "max_positions": 120,
       "min_conviction": 0.0,
@@ -5114,72 +5114,67 @@
       "rank_drop_exit_min": 3,
       "block_rebuy_while_in_candidates": false,
       "min_rebalance_notional_gbp": 10.0,
-      "target_sleeve_value": 335.51,
+      "target_sleeve_value": 513.04,
       "targets": [
         {
           "ticker": "C5H.IR",
           "name": "Cairn Homes plc",
           "signal": "buy",
-          "conviction_score": 0.7305,
-          "price": 2.61
-        },
-        {
-          "ticker": "EG7.IR",
-          "name": "FBD Holdings plc",
-          "signal": "buy",
-          "conviction_score": 0.6081000000000001,
-          "price": 19.0
+          "conviction_score": 0.6995,
+          "price": 2.65
         },
         {
           "ticker": "OIZ.IR",
           "name": "Origin Enterprises plc",
           "signal": "buy",
-          "conviction_score": 0.5973,
-          "price": 3.8
+          "conviction_score": 0.5691,
+          "price": 3.98
         }
       ],
-      "anticipated_exits": [],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "EG7.IR",
+          "name": "FBD Holdings plc",
+          "reason": "No longer in the top conviction target set",
+          "shares": 17.658016,
+          "price": 18.95,
+          "value": 334.62
+        }
+      ],
       "anticipated_grace_holds": [],
       "anticipated_trims": [],
-      "anticipated_buys": [],
-      "anticipated_holds": [
+      "anticipated_buys": [
         {
-          "action": "hold",
+          "action": "buy",
           "ticker": "C5H.IR",
           "name": "Cairn Homes plc",
-          "reason": "Already near equal-weight target",
-          "value": 335.52,
-          "target_value": 335.51,
-          "conviction_score": 0.7305,
+          "reason": "Top-up to equal weight",
+          "value": 172.38,
+          "price": 2.65,
+          "target_value": 513.04,
+          "conviction_score": 0.6995,
           "signal": "buy"
         },
         {
-          "action": "hold",
-          "ticker": "EG7.IR",
-          "name": "FBD Holdings plc",
-          "reason": "Already near equal-weight target",
-          "value": 335.5,
-          "target_value": 335.51,
-          "conviction_score": 0.6081000000000001,
-          "signal": "buy"
-        },
-        {
-          "action": "hold",
+          "action": "buy",
           "ticker": "OIZ.IR",
           "name": "Origin Enterprises plc",
-          "reason": "Already near equal-weight target",
-          "value": 335.49,
-          "target_value": 335.51,
-          "conviction_score": 0.5973,
+          "reason": "Top-up to equal weight",
+          "value": 161.65,
+          "price": 3.98,
+          "target_value": 513.04,
+          "conviction_score": 0.5691,
           "signal": "buy"
         }
       ],
+      "anticipated_holds": [],
       "skipped": [],
       "waitlisted": [],
-      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s)."
     },
     "trades": [],
-    "nav_before": 1006.52,
+    "nav_before": 1026.67,
     "cash_before": 0.0,
     "contributed_capital_before": 1000.0,
     "holdings_before": [
@@ -5220,7 +5215,7 @@
         "MIO.IR": 1
       }
     },
-    "nav_after": 1006.52,
+    "nav_after": 1026.67,
     "cash_after": 0.0,
     "holdings_after": [
       {
@@ -5255,7 +5250,9 @@
       }
     ],
     "rebalance_state_after": {
-      "exit_streak": {},
+      "exit_streak": {
+        "EG7.IR": 1
+      },
       "reentry_cooldown": {}
     },
     "llm_agree_veto_shadow": {

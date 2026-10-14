@@ -7062,18 +7062,18 @@
   },
   {
     "schema_version": 2,
-    "logged_at": "2026-10-14T08:46:55.857814+00:00",
+    "logged_at": "2026-10-14T08:52:17.591543+00:00",
     "track_id": "buy_tier_level_native",
     "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
     "strategy_mode": "automated",
     "screen_source": {
       "path": "docs/data/paper_automation/markets/ftse_mib/screen_latest.json",
-      "run_at": "2026-10-12T07:32:07.686293+00:00",
-      "generated_at": "2026-10-14T08:46:55.611176+00:00"
+      "run_at": "2026-10-14T06:52:20.691925+00:00",
+      "generated_at": "2026-10-14T08:52:17.519508+00:00"
     },
     "knob_epoch_started_at": null,
     "gate": {
-      "local_time": "2026-10-14T09:46:55.835522+01:00",
+      "local_time": "2026-10-14T09:52:17.577905+01:00",
       "trading_day": true,
       "after_settle": true,
       "market_open_at": "2026-10-14T08:00:00+01:00",
@@ -7082,7 +7082,7 @@
       "reason": "ok"
     },
     "acted": true,
-    "note": "Rebalanced after open settle (4 trade(s)).",
+    "note": "Rebalanced after open settle (3 trade(s)).",
     "selection": {
       "skip_timing_wait": true,
       "min_conviction": 0.0,
@@ -7106,11 +7106,11 @@
         "name": "Buzzi S.p.A.",
         "signal": "buy",
         "adjusted_signal": "buy",
-        "conviction_score": 0.7335,
+        "conviction_score": 0.4522,
         "data_quality_score": 1.0,
         "timing_signal": "accumulate",
         "sector": "Basic Materials",
-        "price": 36.86,
+        "price": 37.09,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -7138,7 +7138,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Energy",
-        "price": 25.21,
+        "price": 25.67,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -7146,13 +7146,13 @@
       {
         "ticker": "AMP.MI",
         "name": "Amplifon S.p.A.",
-        "signal": "buy",
+        "signal": "hold",
         "adjusted_signal": "hold",
-        "conviction_score": 0.379695,
+        "conviction_score": 0.17799,
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Healthcare",
-        "price": 12.86,
+        "price": 12.68,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -7164,11 +7164,11 @@
         "name": "Buzzi S.p.A.",
         "signal": "buy",
         "adjusted_signal": "buy",
-        "conviction_score": 0.7335,
+        "conviction_score": 0.4522,
         "data_quality_score": 1.0,
         "timing_signal": "accumulate",
         "sector": "Basic Materials",
-        "price": 36.86,
+        "price": 37.09,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -7196,7 +7196,7 @@
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Energy",
-        "price": 25.21,
+        "price": 25.67,
         "research_verdict": "accumulate",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -7204,13 +7204,13 @@
       {
         "ticker": "AMP.MI",
         "name": "Amplifon S.p.A.",
-        "signal": "buy",
+        "signal": "hold",
         "adjusted_signal": "hold",
-        "conviction_score": 0.379695,
+        "conviction_score": 0.17799,
         "data_quality_score": 1.0,
         "timing_signal": "neutral",
         "sector": "Healthcare",
-        "price": 12.86,
+        "price": 12.68,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -7230,7 +7230,7 @@
         "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
         "Dust guard: skip trim/top-up adjustments below \u00a310."
       ],
-      "nav": 1034.61,
+      "nav": 1037.11,
       "cash": 0.0,
       "max_positions": 120,
       "min_conviction": 0.0,
@@ -7243,15 +7243,8 @@
       "rank_drop_exit_min": 3,
       "block_rebuy_while_in_candidates": false,
       "min_rebalance_notional_gbp": 10.0,
-      "target_sleeve_value": 258.65,
+      "target_sleeve_value": 345.69,
       "targets": [
-        {
-          "ticker": "BZU.MI",
-          "name": "Buzzi S.p.A.",
-          "signal": "buy",
-          "conviction_score": 0.7335,
-          "price": 36.86
-        },
         {
           "ticker": "REC.MI",
           "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
@@ -7264,71 +7257,74 @@
           "name": "Eni S.p.A.",
           "signal": "buy",
           "conviction_score": 0.675,
-          "price": 25.21
+          "price": 25.67
         },
         {
-          "ticker": "AMP.MI",
-          "name": "Amplifon S.p.A.",
-          "signal": "buy",
-          "conviction_score": 0.379695,
-          "price": 12.86
-        }
-      ],
-      "anticipated_exits": [],
-      "anticipated_grace_holds": [],
-      "anticipated_trims": [],
-      "anticipated_buys": [],
-      "anticipated_holds": [
-        {
-          "action": "hold",
           "ticker": "BZU.MI",
           "name": "Buzzi S.p.A.",
-          "reason": "Already near equal-weight target",
-          "value": 258.66,
-          "target_value": 258.65,
-          "conviction_score": 0.7335,
+          "signal": "buy",
+          "conviction_score": 0.4522,
+          "price": 37.09
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "AMP.MI",
+          "name": "Amplifon S.p.A.",
+          "reason": "No longer in the top conviction target set",
+          "shares": 16.092019,
+          "price": 12.68,
+          "value": 204.05
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "ENI.MI",
+          "name": "Eni S.p.A.",
+          "reason": "Top-up to equal weight",
+          "value": 118.58,
+          "price": 25.67,
+          "target_value": 345.69,
+          "conviction_score": 0.675,
           "signal": "buy"
         },
+        {
+          "action": "buy",
+          "ticker": "BZU.MI",
+          "name": "Buzzi S.p.A.",
+          "reason": "Top-up to equal weight",
+          "value": 85.41,
+          "price": 37.09,
+          "target_value": 345.69,
+          "conviction_score": 0.4522,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [
         {
           "action": "hold",
           "ticker": "REC.MI",
           "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
           "reason": "Already near equal-weight target",
-          "value": 258.65,
-          "target_value": 258.65,
+          "value": 345.68,
+          "target_value": 345.69,
           "conviction_score": 0.7083,
-          "signal": "buy"
-        },
-        {
-          "action": "hold",
-          "ticker": "ENI.MI",
-          "name": "Eni S.p.A.",
-          "reason": "Already near equal-weight target",
-          "value": 258.65,
-          "target_value": 258.65,
-          "conviction_score": 0.675,
-          "signal": "buy"
-        },
-        {
-          "action": "hold",
-          "ticker": "AMP.MI",
-          "name": "Amplifon S.p.A.",
-          "reason": "Already near equal-weight target",
-          "value": 258.65,
-          "target_value": 258.65,
-          "conviction_score": 0.379695,
           "signal": "buy"
         }
       ],
       "skipped": [],
       "waitlisted": [],
-      "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s); leave 1 near-target holding(s)."
     },
     "trades": [
       {
-        "id": "bec7ff41-4bee-4092-9a2f-0367ed597fa8",
+        "id": "2c7bd48d-daba-4318-841f-26b777258121",
         "fund_id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
-        "acted_at": "2026-10-14T09:46:55.835522+01:00",
+        "acted_at": "2026-10-14T09:52:17.577905+01:00",
         "ticker": "LTMC.MI",
         "side": "sell",
         "sizing_mode": "shares",
@@ -7343,52 +7339,37 @@
         "position_closed": true
       },
       {
-        "id": "50be4160-9cba-4bc9-83d1-35c6684cfe14",
+        "id": "c766493a-d393-4c9f-9b7c-71b07bf924ff",
         "fund_id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
-        "acted_at": "2026-10-14T09:46:55.835522+01:00",
+        "acted_at": "2026-10-14T09:52:17.577905+01:00",
         "ticker": "REC.MI",
         "side": "buy",
         "sizing_mode": "cash",
-        "shares": 0.79556,
+        "shares": 2.43764,
         "price": 53.0,
-        "gross": 42.16,
-        "cost": 0.01,
-        "net_cash": -42.18,
+        "gross": 129.19,
+        "cost": 0.03,
+        "net_cash": -129.23,
         "note": "Automated buy",
         "name": "Recordati Industria Chimica e Farmaceutica S.p.A."
       },
       {
-        "id": "58a67940-c1f0-480d-ad6a-02b900e18aa9",
+        "id": "8d07affb-2a1c-40aa-afed-754972f78033",
         "fund_id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
-        "acted_at": "2026-10-14T09:46:55.835522+01:00",
+        "acted_at": "2026-10-14T09:52:17.577905+01:00",
         "ticker": "ENI.MI",
         "side": "buy",
         "sizing_mode": "cash",
-        "shares": 2.050963,
-        "price": 25.21,
-        "gross": 51.7,
-        "cost": 0.01,
-        "net_cash": -51.72,
+        "shares": 0.638125,
+        "price": 25.67,
+        "gross": 16.38,
+        "cost": 0.0,
+        "net_cash": -16.38,
         "note": "Automated buy",
         "name": "Eni S.p.A."
-      },
-      {
-        "id": "e65bdf3d-43b7-401a-9f6b-95ba9214478d",
-        "fund_id": "0e889b7a-d131-44bd-84a3-c842a2fe9772",
-        "acted_at": "2026-10-14T09:46:55.835522+01:00",
-        "ticker": "AMP.MI",
-        "side": "buy",
-        "sizing_mode": "cash",
-        "shares": 4.020694,
-        "price": 12.86,
-        "gross": 51.71,
-        "cost": 0.01,
-        "net_cash": -51.72,
-        "note": "Automated buy",
-        "name": "Amplifon S.p.A."
       }
     ],
-    "nav_before": 1034.69,
+    "nav_before": 1037.18,
     "cash_before": 0.0,
     "contributed_capital_before": 1000.0,
     "holdings_before": [
@@ -7449,13 +7430,13 @@
       },
       "reentry_cooldown": {}
     },
-    "nav_after": 1034.61,
+    "nav_after": 1037.11,
     "cash_after": 0.0,
     "holdings_after": [
       {
         "ticker": "ENI.MI",
-        "shares": 10.259798,
-        "avg_cost": 24.3374,
+        "shares": 8.84696,
+        "avg_cost": 24.2312,
         "sector": "Energy",
         "name": "Eni S.p.A.",
         "momentum_grace": false,
@@ -7464,8 +7445,8 @@
       },
       {
         "ticker": "REC.MI",
-        "shares": 4.880224,
-        "avg_cost": 53.0321,
+        "shares": 6.522304,
+        "avg_cost": 53.024,
         "sector": "Healthcare",
         "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
         "momentum_grace": false,
@@ -7474,8 +7455,8 @@
       },
       {
         "ticker": "AMP.MI",
-        "shares": 20.112713,
-        "avg_cost": 11.8094,
+        "shares": 16.092019,
+        "avg_cost": 11.5469,
         "sector": "Healthcare",
         "name": "Amplifon S.p.A.",
         "momentum_grace": false,
@@ -7494,7 +7475,9 @@
       }
     ],
     "rebalance_state_after": {
-      "exit_streak": {},
+      "exit_streak": {
+        "AMP.MI": 1
+      },
       "reentry_cooldown": {
         "LTMC.MI": 1
       }
@@ -7508,7 +7491,7 @@
       "verdict_counts": {
         "agree": 3,
         "veto": 0,
-        "abstain": 1
+        "abstain": 0
       },
       "cards": [
         {
@@ -7538,8 +7521,8 @@
           "influences_live": false,
           "observe_only": true,
           "track_id": "buy_tier_level_native",
-          "logged_at": "2026-10-14T09:46:55.835522+01:00",
-          "proposal_id": "buy_tier_level_native:LTMC.MI:sell:2026-10-14T09:46:55.835522+01:00",
+          "logged_at": "2026-10-14T09:52:17.577905+01:00",
+          "proposal_id": "buy_tier_level_native:LTMC.MI:sell:2026-10-14T09:52:17.577905+01:00",
           "meta": {
             "still_buyish": false,
             "rank_drop": null,
@@ -7583,13 +7566,13 @@
               "kind": "conviction_rank",
               "source": "candidates",
               "detail": "1-based conviction rank among buyish names",
-              "value": 2
+              "value": 1
             },
             {
               "kind": "entry_rank",
               "source": "rebalance_state",
               "detail": "Conviction rank recorded at sleeve entry",
-              "value": 2
+              "value": 1
             },
             {
               "kind": "rank_drop",
@@ -7633,8 +7616,8 @@
           "influences_live": false,
           "observe_only": true,
           "track_id": "buy_tier_level_native",
-          "logged_at": "2026-10-14T09:46:55.835522+01:00",
-          "proposal_id": "buy_tier_level_native:REC.MI:buy:2026-10-14T09:46:55.835522+01:00",
+          "logged_at": "2026-10-14T09:52:17.577905+01:00",
+          "proposal_id": "buy_tier_level_native:REC.MI:buy:2026-10-14T09:52:17.577905+01:00",
           "meta": {
             "still_buyish": true,
             "rank_drop": 0,
@@ -7678,13 +7661,13 @@
               "kind": "conviction_rank",
               "source": "candidates",
               "detail": "1-based conviction rank among buyish names",
-              "value": 3
+              "value": 2
             },
             {
               "kind": "entry_rank",
               "source": "rebalance_state",
               "detail": "Conviction rank recorded at sleeve entry",
-              "value": 3
+              "value": 2
             },
             {
               "kind": "rank_drop",
@@ -7728,108 +7711,13 @@
           "influences_live": false,
           "observe_only": true,
           "track_id": "buy_tier_level_native",
-          "logged_at": "2026-10-14T09:46:55.835522+01:00",
-          "proposal_id": "buy_tier_level_native:ENI.MI:buy:2026-10-14T09:46:55.835522+01:00",
+          "logged_at": "2026-10-14T09:52:17.577905+01:00",
+          "proposal_id": "buy_tier_level_native:ENI.MI:buy:2026-10-14T09:52:17.577905+01:00",
           "meta": {
             "still_buyish": true,
             "rank_drop": 0,
             "rank_drop_exit_min": 3,
             "research_verdict": "accumulate",
-            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-            "judge_spec_id": "heuristic.v1",
-            "p1_live_inputs": {
-              "fcf_basis_overlay": false,
-              "key_filing_bodies": null,
-              "filings_with_body": null,
-              "overlay_bound": true,
-              "interim_eps_decline_pct": null,
-              "adjusted_eps_growth_pct": null
-            }
-          },
-          "schema_version": 1
-        },
-        {
-          "ticker": "AMP.MI",
-          "name": "Amplifon S.p.A.",
-          "algo_action": "buy",
-          "algo_reason": "Automated buy",
-          "shadow_verdict": "abstain",
-          "reasons": [
-            "Buy while not buyish \u2014 abstain."
-          ],
-          "evidence": [
-            {
-              "kind": "algo_reason",
-              "source": "plan_or_trade",
-              "detail": "Automated buy"
-            },
-            {
-              "kind": "screen_signal",
-              "source": "candidates",
-              "detail": "Effective signal at decision time",
-              "value": "hold"
-            },
-            {
-              "kind": "conviction_rank",
-              "source": "candidates",
-              "detail": "1-based conviction rank among buyish names",
-              "value": 4
-            },
-            {
-              "kind": "entry_rank",
-              "source": "rebalance_state",
-              "detail": "Conviction rank recorded at sleeve entry",
-              "value": 4
-            },
-            {
-              "kind": "rank_drop",
-              "source": "derived",
-              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-              "value": 0
-            },
-            {
-              "kind": "research_verdict",
-              "source": "candidates",
-              "detail": "Research overlay verdict at decision time",
-              "value": "caution"
-            },
-            {
-              "kind": "conviction_score",
-              "source": "candidates",
-              "detail": "Conviction score at decision time",
-              "value": 0.379695
-            },
-            {
-              "kind": "still_buyish",
-              "source": "derived",
-              "detail": "Name remains buy/strong_buy on the decision screen",
-              "value": false
-            },
-            {
-              "kind": "fcf_basis_overlay",
-              "source": "candidates",
-              "detail": "FCF basis overlay flag bound on the live report at decision time",
-              "value": false
-            },
-            {
-              "kind": "overlay_bound",
-              "source": "candidates",
-              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-              "value": true
-            }
-          ],
-          "judge_backend": "evidence_heuristic",
-          "judge_spec_id": "heuristic.v1",
-          "influences_live": false,
-          "observe_only": true,
-          "track_id": "buy_tier_level_native",
-          "logged_at": "2026-10-14T09:46:55.835522+01:00",
-          "proposal_id": "buy_tier_level_native:AMP.MI:buy:2026-10-14T09:46:55.835522+01:00",
-          "meta": {
-            "still_buyish": false,
-            "rank_drop": 0,
-            "rank_drop_exit_min": 3,
-            "research_verdict": "caution",
             "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
             "judge_spec_id": "heuristic.v1",
             "p1_live_inputs": {

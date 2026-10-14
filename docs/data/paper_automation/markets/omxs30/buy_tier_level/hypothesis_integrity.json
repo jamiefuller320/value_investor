@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-10-14T08:47:03.647444+00:00",
-  "as_of": "2026-10-14T09:47:03.527567+01:00",
+  "updated_at": "2026-10-14T08:52:21.655297+00:00",
+  "as_of": "2026-10-14T09:52:21.552647+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,19 +16,19 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 11,
+  "holding_count": 12,
   "underwater_count": 1,
   "thesis_status_counts": {
-    "intact": 10,
-    "weakening": 1,
+    "intact": 9,
+    "weakening": 3,
     "broken": 0,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 11,
+    "holding_count": 12,
     "loser_count": 1,
-    "loser_share": 0.0909,
-    "loser_nav_share": 0.0857,
+    "loser_share": 0.0833,
+    "loser_nav_share": 0.086,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
@@ -39,17 +39,19 @@
       "cheapness": 0.0,
       "quality": 0.0,
       "dividend": 0.0,
-      "garp": 0.0,
+      "garp": 1.0,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
+      "cheapness": 0.0909,
       "quality": 0.0,
-      "dividend": 0.0,
-      "garp": 0.0,
+      "dividend": 0.2727,
+      "garp": 0.3636,
       "risk": 0.0
     },
-    "selection_feedback_flags": [],
+    "selection_feedback_flags": [
+      "garp fails more often among losers (100% vs 36%)"
+    ],
     "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
@@ -61,21 +63,22 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0534,
-      "mark": 152.05,
+      "unrealized_pct": -0.0569,
+      "mark": 151.5,
       "avg_cost": 160.6351,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.8384,
+      "conviction_score": 0.6667,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
         "dividend",
-        "garp",
         "risk"
       ],
-      "failed_families": [],
+      "failed_families": [
+        "garp"
+      ],
       "research_verdict": "accumulate",
       "reasons": [
         "price drawdown alone does not invalidate value thesis",
@@ -83,54 +86,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 84%"
+        "conviction 67%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 84%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "SKF-B.ST",
-      "name": "AB SKF (publ)",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0266,
-      "mark": 270.4,
-      "avg_cost": 277.8,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7096,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 71%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 71%"
+        "conviction 67%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -142,21 +105,22 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0225,
-      "mark": 43.37,
+      "unrealized_pct": -0.0196,
+      "mark": 43.5,
       "avg_cost": 44.37,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5231,
+      "conviction_score": 0.4066,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
         "dividend",
-        "garp",
         "risk"
       ],
-      "failed_families": [],
+      "failed_families": [
+        "garp"
+      ],
       "research_verdict": "caution",
       "reasons": [
         "research verdict caution",
@@ -167,7 +131,7 @@
         "still buy",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 52%"
+        "conviction 41%"
       ],
       "weaken_reasons": [
         "research verdict caution"
@@ -175,98 +139,98 @@
       "broken_reasons": []
     },
     {
-      "ticker": "ASSA-B.ST",
-      "name": "ASSA ABLOY AB (publ)",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "ticker": "SKF-B.ST",
+      "name": "AB SKF (publ)",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0082,
-      "mark": 349.9,
-      "avg_cost": 352.8,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8423,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 84%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 84%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "SAND.ST",
-      "name": "Sandvik AB (publ)",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0047,
-      "mark": 364.2,
-      "avg_cost": 362.5,
+      "unrealized_pct": -0.0191,
+      "mark": 272.5,
+      "avg_cost": 277.8,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7308,
+      "conviction_score": 0.4215,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "cheapness",
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "cheapness family no longer passes",
+        "still buy",
+        "research accumulate"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "data_quality 1.00",
+        "conviction 42%"
+      ],
+      "weaken_reasons": [
+        "cheapness family no longer passes"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ASSA-B.ST",
+      "name": "ASSA ABLOY AB (publ)",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0006,
+      "mark": 352.6,
+      "avg_cost": 352.8,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.332,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
-        "dividend",
-        "garp",
         "risk"
       ],
-      "failed_families": [],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
       "research_verdict": "accumulate",
       "reasons": [
+        "conviction 33% below intact floor",
         "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 73%"
+        "research accumulate"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 73%"
+        "data_quality 1.00"
       ],
-      "weaken_reasons": [],
+      "weaken_reasons": [
+        "conviction 33% below intact floor"
+      ],
       "broken_reasons": []
     },
     {
-      "ticker": "SKA-B.ST",
-      "name": "Skanska AB (publ)",
+      "ticker": "NIBE-B.ST",
+      "name": "NIBE Industrier AB (publ)",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0084,
-      "mark": 265.2,
-      "avg_cost": 263.0,
-      "signal": "strong_buy",
+      "unrealized_pct": 0.0,
+      "mark": 44.78,
+      "avg_cost": 44.78,
+      "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.825,
+      "conviction_score": 0.4791,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -278,18 +242,18 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 82%"
+        "conviction 48%"
       ],
       "intact_reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 82%"
+        "conviction 48%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -301,12 +265,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0086,
-      "mark": 317.2,
+      "unrealized_pct": 0.0111,
+      "mark": 318.0,
       "avg_cost": 314.5,
       "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8731,
+      "timing_signal": "accumulate",
+      "conviction_score": 0.8327,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -322,14 +286,95 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 87%"
+        "conviction 83%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 87%"
+        "conviction 83%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "SAND.ST",
+      "name": "Sandvik AB (publ)",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.019,
+      "mark": 369.4,
+      "avg_cost": 362.5,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5623,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 56%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 56%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "SKA-B.ST",
+      "name": "Skanska AB (publ)",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0221,
+      "mark": 268.8,
+      "avg_cost": 263.0,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7846,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 78%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 78%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -341,75 +386,36 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0146,
-      "mark": 95.64,
+      "unrealized_pct": 0.0231,
+      "mark": 96.44,
       "avg_cost": 94.26,
       "signal": "strong_buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.7998,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 80%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 80%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "ESSITY-B.ST",
-      "name": "Essity AB (publ)",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0315,
-      "mark": 265.4,
-      "avg_cost": 257.3,
-      "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7669,
+      "conviction_score": 0.6359,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
         "dividend",
-        "garp",
         "risk"
       ],
-      "failed_families": [],
+      "failed_families": [
+        "garp"
+      ],
       "research_verdict": "accumulate",
       "reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 77%"
+        "conviction 64%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 77%"
+        "conviction 64%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -421,12 +427,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0508,
-      "mark": 166.55,
+      "unrealized_pct": 0.0284,
+      "mark": 163.0,
       "avg_cost": 158.5,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.6914,
+      "conviction_score": 0.6739,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -442,14 +448,55 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 69%"
+        "conviction 67%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 69%"
+        "conviction 67%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ESSITY-B.ST",
+      "name": "Essity AB (publ)",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.04,
+      "mark": 267.6,
+      "avg_cost": 257.3,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.393,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 39%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 39%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -461,12 +508,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0674,
-      "mark": 554.2,
+      "unrealized_pct": 0.0532,
+      "mark": 546.8,
       "avg_cost": 519.2,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7097,
+      "conviction_score": 0.6922,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -482,14 +529,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 71%"
+        "conviction 69%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 71%"
+        "conviction 69%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []

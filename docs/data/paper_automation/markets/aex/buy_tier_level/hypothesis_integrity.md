@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-14T08:46:56.542380+00:00
+Track: `buy_tier_level` · updated 2026-10-14T08:52:17.947365+00:00
 
 ## Portfolio loser feedback
 
@@ -10,58 +10,54 @@ Track: `buy_tier_level` · updated 2026-10-14T08:46:56.542380+00:00
 
 ## Holding reviews
 
-### KPN.AS — intact / hold_tolerate (-1.4%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 62%
-
-### RAND.AS — intact / hold_tolerate (-1.4%)
+### RAND.AS — intact / hold_tolerate (-1.9%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 68%
 
-### PHIA.AS — intact / hold_tolerate (-0.4%)
-- still buy
+### KPN.AS — weakening / watch_review (-1.3%)
+- left buy tier (hold)
+- conviction 32% below intact floor
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 63%
 
-### AKZA.AS — intact / hold_tolerate (+1.5%)
+### AD.AS — intact / hold_tolerate (-0.5%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 81%
+- conviction 72%
 
-### AD.AS — intact / hold_tolerate (+1.6%)
+### PHIA.AS — weakening / watch_review (+2.2%)
+- left buy tier (hold)
+- research accumulate
+- cheapness family still passes
+
+### AKZA.AS — intact / hold_tolerate (+3.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 89%
+- conviction 62%
 
-### ADYEN.AS — intact / hold_tolerate (+1.8%)
-- still buy
+### ADYEN.AS — weakening / watch_review (+7.2%)
+- left buy tier (hold)
+- conviction 27% below intact floor
 - research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 39%
 
-### SHELL.AS — intact / hold_tolerate (+7.1%)
+### SHELL.AS — intact / hold_tolerate (+9.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 81%
+- conviction 76%
 
-### WKL.AS — intact / hold_tolerate (+9.2%)
+### WKL.AS — intact / hold_tolerate (+14.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 78%
+- conviction 64%

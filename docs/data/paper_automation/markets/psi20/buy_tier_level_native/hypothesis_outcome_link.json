@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "generated_at": "2026-10-12T07:29:36.120777+00:00",
+  "generated_at": "2026-10-14T08:52:20.850628+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -20,7 +20,14 @@
         "closed_count": 0
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0361,
+        "mean_trough_unrealized_pct": 0.0228,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -106,7 +114,7 @@
           "trough_unrealized_pct": -0.0405
         }
       ],
-      "peak_unrealized_pct": -0.0289,
+      "peak_unrealized_pct": -0.026,
       "trough_unrealized_pct": -0.0405,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -159,7 +167,7 @@
           "trough_unrealized_pct": -0.0353
         }
       ],
-      "peak_unrealized_pct": -0.0284,
+      "peak_unrealized_pct": -0.0189,
       "trough_unrealized_pct": -0.0353,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -172,7 +180,7 @@
       "ticker": "GALP.LS",
       "name": "Galp Energia, SGPS, S.A.",
       "started_at": "2026-10-09T08:32:52.647023+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -204,9 +212,9 @@
       "peak_unrealized_pct": 0.0361,
       "trough_unrealized_pct": 0.0228,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-14T09:52:20.846239+01:00",
+      "linked_sell_trade_id": "f88151a5-1eab-48e7-8d44-7d472861cc91"
     }
   ],
   "swap_rotations": [
@@ -263,10 +271,10 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "COR.LS": -0.0376
+        "COR.LS": -0.026
       },
       "buy_returns_since_rotation": {
-        "NVG.LS": -0.0328
+        "NVG.LS": -0.0189
       },
       "verdict": null,
       "closed_at": null

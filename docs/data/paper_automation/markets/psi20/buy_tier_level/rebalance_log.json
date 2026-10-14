@@ -3794,18 +3794,18 @@
   },
   {
     "schema_version": 2,
-    "logged_at": "2026-10-14T08:47:02.114022+00:00",
+    "logged_at": "2026-10-14T08:52:20.842532+00:00",
     "track_id": "buy_tier_level",
     "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
     "strategy_mode": "automated",
     "screen_source": {
       "path": "docs/data/paper_automation/markets/psi20/screen_latest.json",
-      "run_at": "2026-10-12T06:52:50.803209+00:00",
-      "generated_at": "2026-10-14T08:47:02.042479+00:00"
+      "run_at": "2026-10-14T06:52:20.691925+00:00",
+      "generated_at": "2026-10-14T08:52:20.800150+00:00"
     },
     "knob_epoch_started_at": null,
     "gate": {
-      "local_time": "2026-10-14T09:47:02.050601+01:00",
+      "local_time": "2026-10-14T09:52:20.804607+01:00",
       "trading_day": true,
       "after_settle": true,
       "market_open_at": "2026-10-14T08:00:00+01:00",
@@ -3838,11 +3838,11 @@
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
         "signal": "buy",
         "adjusted_signal": "hold",
-        "conviction_score": 0.430695,
+        "conviction_score": 0.323,
         "data_quality_score": 0.95,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 6.66,
+        "price": 6.74,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -3850,13 +3850,13 @@
       {
         "ticker": "NVG.LS",
         "name": "The Navigator Company, S.A.",
-        "signal": "buy",
+        "signal": "hold",
         "adjusted_signal": "hold",
-        "conviction_score": 0.37451,
+        "conviction_score": 0.175525,
         "data_quality_score": 0.9,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 3.066,
+        "price": 3.11,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -3868,11 +3868,11 @@
         "name": "Corticeira Amorim, S.G.P.S., S.A.",
         "signal": "buy",
         "adjusted_signal": "hold",
-        "conviction_score": 0.430695,
+        "conviction_score": 0.323,
         "data_quality_score": 0.95,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 6.66,
+        "price": 6.74,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -3880,13 +3880,13 @@
       {
         "ticker": "NVG.LS",
         "name": "The Navigator Company, S.A.",
-        "signal": "buy",
+        "signal": "hold",
         "adjusted_signal": "hold",
-        "conviction_score": 0.37451,
+        "conviction_score": 0.175525,
         "data_quality_score": 0.9,
         "timing_signal": "neutral",
         "sector": "Basic Materials",
-        "price": 3.066,
+        "price": 3.11,
         "research_verdict": "caution",
         "fcf_basis_overlay": false,
         "overlay_bound": true
@@ -3906,7 +3906,7 @@
         "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
         "Dust guard: skip trim/top-up adjustments below \u00a310."
       ],
-      "nav": 979.02,
+      "nav": 991.92,
       "cash": 0.0,
       "max_positions": 120,
       "min_conviction": 0.0,
@@ -3919,55 +3919,49 @@
       "rank_drop_exit_min": 3,
       "block_rebuy_while_in_candidates": false,
       "min_rebalance_notional_gbp": 10.0,
-      "target_sleeve_value": 489.51,
+      "target_sleeve_value": 991.05,
       "targets": [
         {
           "ticker": "COR.LS",
           "name": "Corticeira Amorim, S.G.P.S., S.A.",
           "signal": "buy",
-          "conviction_score": 0.430695,
-          "price": 6.66
-        },
-        {
-          "ticker": "NVG.LS",
-          "name": "The Navigator Company, S.A.",
-          "signal": "buy",
-          "conviction_score": 0.37451,
-          "price": 3.066
+          "conviction_score": 0.323,
+          "price": 6.74
         }
       ],
-      "anticipated_exits": [],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "NVG.LS",
+          "name": "The Navigator Company, S.A.",
+          "reason": "No longer in the top conviction target set",
+          "shares": 159.653327,
+          "price": 3.11,
+          "value": 496.52
+        }
+      ],
       "anticipated_grace_holds": [],
       "anticipated_trims": [],
-      "anticipated_buys": [],
-      "anticipated_holds": [
+      "anticipated_buys": [
         {
-          "action": "hold",
+          "action": "buy",
           "ticker": "COR.LS",
           "name": "Corticeira Amorim, S.G.P.S., S.A.",
-          "reason": "Already near equal-weight target",
-          "value": 489.52,
-          "target_value": 489.51,
-          "conviction_score": 0.430695,
-          "signal": "buy"
-        },
-        {
-          "action": "hold",
-          "ticker": "NVG.LS",
-          "name": "The Navigator Company, S.A.",
-          "reason": "Already near equal-weight target",
-          "value": 489.5,
-          "target_value": 489.51,
-          "conviction_score": 0.37451,
+          "reason": "Top-up to equal weight",
+          "value": 495.65,
+          "price": 6.74,
+          "target_value": 991.05,
+          "conviction_score": 0.323,
           "signal": "buy"
         }
       ],
+      "anticipated_holds": [],
       "skipped": [],
       "waitlisted": [],
-      "summary": "Next rebalance would target 2 equal-weight sleeve(s); leave 2 near-target holding(s)."
+      "summary": "Next rebalance would target 1 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s)."
     },
     "trades": [],
-    "nav_before": 979.02,
+    "nav_before": 991.92,
     "cash_before": 0.0,
     "contributed_capital_before": 1000.0,
     "holdings_before": [
@@ -3998,7 +3992,7 @@
         "GALP.LS": 1
       }
     },
-    "nav_after": 979.02,
+    "nav_after": 991.92,
     "cash_after": 0.0,
     "holdings_after": [
       {
@@ -4023,7 +4017,9 @@
       }
     ],
     "rebalance_state_after": {
-      "exit_streak": {},
+      "exit_streak": {
+        "NVG.LS": 1
+      },
       "reentry_cooldown": {}
     },
     "llm_agree_veto_shadow": {

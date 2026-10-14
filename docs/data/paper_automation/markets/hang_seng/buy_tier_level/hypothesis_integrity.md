@@ -1,112 +1,113 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-14T08:46:59.223780+00:00
+Track: `buy_tier_level` · updated 2026-10-14T08:52:19.259801+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **2** / 17 (12% count, 12% NAV)
+- Losers: **3** / 17 (18% count, 19% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
 
-### 2382.HK — intact / hold_tolerate (-9.4%)
+### 1093.HK — weakening / watch_review (-10.1%)
+- research verdict neutral
+- still strong_buy
+- cheapness family still passes
+
+### 2382.HK — intact / hold_tolerate (-9.5%)
 - price drawdown alone does not invalidate value thesis
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 70%
+- conviction 65%
 
-### 1093.HK — weakening / watch_review (-8.2%)
-- research verdict neutral
-- still strong_buy
-- cheapness family still passes
-
-### 2628.HK — weakening / watch_review (-4.9%)
+### 2628.HK — weakening / watch_review (-9.5%)
 - research verdict caution
 - still strong_buy
 - cheapness family still passes
 
-### 2318.HK — intact / hold_tolerate (-2.6%)
+### 2318.HK — intact / hold_tolerate (-4.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
 - conviction 80%
 
-### 0101.HK — weakening / watch_review (-1.1%)
+### 0101.HK — weakening / watch_review (-3.5%)
 - research verdict caution
+- conviction 31% below intact floor
 - still buy
 - cheapness family still passes
 
-### 0001.HK — weakening / watch_review (-0.5%)
-- conviction 29% below intact floor
-- still buy
-- cheapness family still passes
-
-### 1024.HK — weakening / watch_review (-0.5%)
-- research verdict caution
-- still strong_buy
-- cheapness family still passes
-
-### 0291.HK — weakening / watch_review (+0.4%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
-### 1378.HK — intact / hold_tolerate (+0.5%)
+### 1378.HK — intact / hold_tolerate (-0.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 82%
 
-### 0175.HK — intact / hold_tolerate (+0.8%)
+### 0001.HK — weakening / watch_review (-0.4%)
+- conviction 34% below intact floor
+- still buy
+- cheapness family still passes
+
+### 1024.HK — weakening / watch_review (+0.1%)
+- research verdict caution
+- still strong_buy
+- cheapness family still passes
+
+### 0175.HK — intact / hold_tolerate (+1.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 78%
+- conviction 76%
 
-### 1099.HK — weakening / watch_review (+0.8%)
-- research verdict neutral
-- still strong_buy
+### 0291.HK — weakening / watch_review (+1.6%)
+- research verdict caution
+- conviction 30% below intact floor
+- still buy
 - cheapness family still passes
 
-### 0883.HK — intact / hold_tolerate (+1.0%)
+### 0941.HK — intact / hold_tolerate (+2.3%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 41%
+
+### 6862.HK — weakening / watch_review (+3.7%)
+- research verdict caution
+- still buy
+- cheapness family still passes
+
+### 0883.HK — intact / hold_tolerate (+4.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 84%
 
-### 0941.HK — intact / hold_tolerate (+1.3%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 53%
-
-### 2618.HK — weakening / watch_review (+3.4%)
+### 2618.HK — weakening / watch_review (+4.3%)
 - research verdict neutral
-- conviction 34% below intact floor
 - still buy
 - cheapness family still passes
 
-### 2313.HK — weakening / watch_review (+3.5%)
-- research verdict caution
-- still buy
-- cheapness family still passes
-
-### 0762.HK — intact / hold_tolerate (+3.6%)
+### 0762.HK — intact / hold_tolerate (+5.5%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 90%
+- conviction 73%
 
-### 6862.HK — weakening / watch_review (+4.7%)
+### 1099.HK — weakening / watch_review (+6.3%)
+- research verdict neutral
+- still strong_buy
+- cheapness family still passes
+
+### 2313.HK — weakening / watch_review (+7.2%)
 - research verdict caution
 - still buy
 - cheapness family still passes
