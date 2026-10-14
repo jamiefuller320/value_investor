@@ -374,11 +374,14 @@ bind, and EPS-from-body onto reports → slim candidates → agree/veto cites
 shadow rollup missing**. Human **Sunday** scoreboard review is checklist
 `sunday-ai-path-scoreboard` (see
 [`llm-agree-veto-shadow.md`](llm-agree-veto-shadow.md#sunday-ai-path-scoreboard)
-+ Project store `docs/ai-path-roadmap.md`). Intended later finding title
-**AI path scoreboard — Sunday review** (`auto_fixable=False`) once a committed
-rollup freshness flag exists — do not invent rememo/ingest/eng spray from it.
-Beachhead / ecosystem parks (**N209** / **L606** / **L605**) surface via
-**Deferred idea triggers met**, not a second daily ritual.
++ Project store `docs/ai-path-roadmap.md`). Phase-1 LLM judge
+(`LLM_AGREE_VETO_BACKEND=auto|llm`, `judge_spec_id=llm.v1`) stays observe-only —
+rollup still required; LLM failures fail closed to heuristic and must not block
+fills. Intended later finding title **AI path scoreboard — Sunday review**
+(`auto_fixable=False`) once a committed rollup freshness flag exists — do not
+invent rememo/ingest/eng spray from it. Beachhead / ecosystem parks (**N209** /
+**L606** / **L605**) surface via **Deferred idea triggers met**, not a second
+daily ritual.
 
 Weekday paper findings before **10:00 UTC** defer alert email (same ready time
 as `paper-auto.yml` workflow freshness). The 13:15 catch-up is the actionable

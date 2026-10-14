@@ -1,58 +1,67 @@
 {
-  "run_at": "2026-10-14T16:51:35.804954+00:00",
+  "run_at": "2026-10-14T20:24:17.241656+00:00",
   "market_id": "sp500",
   "targets": [
-    "EME"
+    "ACN",
+    "PGR"
   ],
   "target_details": [
     {
-      "ticker": "EME",
-      "priority_score": 14.7635,
-      "filings_total": 68,
-      "filings_with_body": 67,
+      "ticker": "ACN",
+      "priority_score": 17.162000000000003,
+      "filings_total": 21,
+      "filings_with_body": 20,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "PGR",
+      "priority_score": 15.0069,
+      "filings_total": 22,
+      "filings_with_body": 21,
       "indexed_without_body": 1,
       "reason": "indexed_without_body"
     }
   ],
   "results": [
     {
-      "ticker": "EME",
+      "ticker": "ACN",
       "reason": "indexed_without_body",
       "before": {
-        "filings_total": 68,
-        "filings_with_body": 67,
+        "filings_total": 21,
+        "filings_with_body": 20,
         "indexed_without_body": 1
       },
       "after": {
-        "filings_total": 68,
-        "filings_with_body": 67,
-        "indexed_without_body": 1
+        "filings_total": 21,
+        "filings_with_body": 21,
+        "indexed_without_body": 0
       },
-      "improved": false,
+      "improved": true,
       "regime": "sec_edgar",
       "filings_summary": {
-        "total": 67,
-        "annual": 4,
-        "interim": 8,
-        "trading_update": 5,
-        "other": 50,
-        "with_body": 66,
+        "total": 21,
+        "annual": 2,
+        "interim": 7,
+        "trading_update": 0,
+        "other": 12,
+        "with_body": 21,
         "period_coverage": {
           "annual": {
-            "total": 4,
-            "with_body": 4
+            "total": 2,
+            "with_body": 2
           },
           "interim": {
-            "total": 8,
-            "with_body": 8
+            "total": 7,
+            "with_body": 7
           },
           "trading_update": {
-            "total": 5,
-            "with_body": 5
+            "total": 0,
+            "with_body": 0
           },
           "other": {
-            "total": 38,
-            "with_body": 37
+            "total": 12,
+            "with_body": 12
           }
         }
       },
@@ -62,8 +71,70 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 67,
-        "with_body_after": 67,
+        "with_body_before": 21,
+        "with_body_after": 21,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    },
+    {
+      "ticker": "PGR",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 22,
+        "filings_with_body": 21,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 22,
+        "filings_with_body": 22,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 22,
+        "annual": 2,
+        "interim": 7,
+        "trading_update": 0,
+        "other": 13,
+        "with_body": 22,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 7,
+            "with_body": 7
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 13,
+            "with_body": 13
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 22,
+        "with_body_after": 22,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
         "deadline_hit": false,
@@ -78,12 +149,15 @@
       }
     }
   ],
-  "improved": [],
+  "improved": [
+    "ACN",
+    "PGR"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-14T16:49:38.387152+00:00",
+    "snapshot_at": "2026-10-14T20:23:50.716283+00:00",
     "market_id": "sp500",
     "buy_tier_count": 148,
     "unmeasured_buy_tier": 0,
@@ -112,20 +186,19 @@
     },
     "parked_tickers": [
       "CRH",
+      "EME",
       "LH",
       "LMT"
     ],
-    "parked_count": 3,
+    "parked_count": 4,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
-      "EME"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-14T16:50:38.681442+00:00",
+    "snapshot_at": "2026-10-14T20:24:17.223107+00:00",
     "market_id": "sp500",
     "buy_tier_count": 148,
     "unmeasured_buy_tier": 0,
@@ -171,48 +244,39 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 148,
+    "hits": 0,
+    "new_rows_total": 0,
+    "curiosity_total": 0,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "CRH",
+      "EME",
+      "LH",
+      "LMT"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "advanced": true,
-    "parallel_stream": 1,
-    "from_market": "sp500",
-    "to_market": "omxs30",
-    "stream_markets_after": [
-      "omxs30"
-    ],
-    "parity_event": {
-      "recorded": false,
-      "reason": "ingest_exhausted_leftover_gaps",
-      "market_id": "sp500",
-      "ingest_exhausted": true,
-      "exhausted_maintenance_recorded": true,
-      "parked_tickers": [
-        "CRH",
-        "EME",
-        "LH",
-        "LMT"
-      ],
-      "learning_admitted_changed": false,
-      "learning_admitted": true
-    },
-    "screen_refresh": {
-      "refreshed": true,
-      "market_id": "omxs30",
-      "forced": true,
-      "prior_screen_at": "2026-10-14T06:52:20.691925+00:00",
-      "prior_age_days": 0,
-      "run_at": "2026-10-14T16:51:35.463661+00:00",
-      "shortlist_count": 12,
-      "ticker_count": 30
-    },
-    "at": "2026-10-14T16:50:50.348902+00:00",
-    "ingest_parity_recorded": false
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "sp500"
   },
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-10-14T16:49:44.801751+00:00",
+    "assessed_at": "2026-10-14T20:23:56.905061+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -263,9 +327,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 47.501099812999996,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2052.498900187,
+  "used_seconds": 14.13230782200003,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3585.8676921779997,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -273,9 +337,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-10-14T16:50:38.692155+00:00",
+    "updated_at": "2026-10-14T20:24:17.231918+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -318,8 +382,8 @@
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
         "parked_at": "2026-10-14T16:50:38.692155+00:00",
         "park_via": "straggler_soft_park",
-        "filings_total": 68,
-        "filings_with_body": 67,
+        "filings_total": 67,
+        "filings_with_body": 66,
         "indexed_without_body": 1,
         "thin": false,
         "source_surface": "sec_edgar"
@@ -328,7 +392,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "CRH",
       "EME",
