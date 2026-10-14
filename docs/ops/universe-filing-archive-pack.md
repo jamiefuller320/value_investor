@@ -1,11 +1,12 @@
 # Universe-wide filing archive / data-pack lane (cold store)
 
 **Status:** Isolation + miss-rate observe + fail-open hydrate + **thin quiet
-`--apply` writers** shipped (week-first plan, tiny `max_units`, archive budgets).
-Weekday 22:00 UTC cron runs bounded apply under `archive_lane_gate`. Do **not**
-add a second live crawler or a fourth equal sprint stream.
+`--apply` writers** shipped (week-first plan, archive budgets). **Stage-1 caps**
+live: `max_units=4`, `max_http_fetches=16` (tickers/bodies still 2/1). Weekday
+22:00 UTC cron runs bounded apply under `archive_lane_gate`. Do **not** add a
+second live crawler or a fourth equal sprint stream.
 **Deferred:** **N180** (live crawler / fourth stream); **N181** (eng self-improve);
-**L521** thin Ops status panel shipped (outcome / clash / next widen); full achievement metrics still later. **L499** writers pilot is live — scale cautiously.
+**L521** thin Ops status panel shipped (outcome / clash / next widen); full achievement metrics still later. **L499** writers on stage-1 thin widen — accumulate quiet isolation_ok nights before stage 2.
 **Source:** [Project conversation](https://cursor.com/agents/bc-01a0d034-3cd4-71bc-88ad-5088afa3424a)
 
 ## Learning question
@@ -70,7 +71,7 @@ This order must **not** drive `euro-ingest-loop` / sprint streams.
 |-------|------|
 | Workflow | `.github/workflows/universe-filing-archive-pack.yml` — cron `0 22 * * 1-5` |
 | Gate | `archive_lane_gate` — suspend on focus fat / stuck; `quiet_only` outside band; fail-open exit 0 |
-| Runner | `ftse-universe-archive-pack --apply --max-units 2 --max-http-fetches 8` |
+| Runner | `ftse-universe-archive-pack --apply --max-units 4 --max-http-fetches 16` |
 | Writers | `universe_filing_archive_writer` → cold root `docs/data/archive/universe_filings/` (gitignored) |
 | Last run | `docs/data/universe_filing_archive_pack_run.json` (includes `capacity_isolation`) |
 | Bottleneck review | `docs/data/universe_filing_archive_bottleneck_review.json` |
@@ -79,7 +80,7 @@ This order must **not** drive `euro-ingest-loop` / sprint streams.
 
 While `mode=sprint` ∧ ¬`ingest_sprint_complete`, the 22:00 UTC job **runs and no-ops** with `outcome=suspend`, still refreshing the bottleneck review.
 
-Apply caps (pilot): `max_units=2`, ≤2 tickers/unit, ≤1 body/ticker, ≤8 HTTP fetches/run, archive budget IDs only (`universe_filing_archive:*`), preemptible, `fourth_equal_sprint_stream=false`.
+Apply caps (stage 1): `max_units=4`, ≤2 tickers/unit, ≤1 body/ticker, ≤16 HTTP fetches/run, archive budget IDs only (`universe_filing_archive:*`), preemptible, `fourth_equal_sprint_stream=false`. Prior pilot was 2/8.
 
 ## Shipped scaffolds
 
@@ -110,15 +111,20 @@ Apply caps (pilot): `max_units=2`, ≤2 tickers/unit, ≤1 body/ticker, ≤8 HTT
 | Focus fat released (`sprint_ingest_complete`) | No steal of P2 fat slot — **met** for `euro_depth` as of 2026-10-01 |
 | `archive_lane_gate` allow | Quiet band + no focus-pressure suspend |
 | Capacity isolation | Archive budget IDs + hard HTTP fetch cap; recorded on each `pack_run` as `capacity_isolation` |
-| Thin writer pilot | **Shipped** — quiet apply with tiny caps |
+| Thin writer pilot → stage 1 | **Shipped** — quiet apply; stage-1 caps 4/16 |
 | **N180** | No second live crawler / fourth equal sprint stream |
 | **N181** | No eng-spray / self-improve authority from archive findings |
 
 Miss-rate observe stays wired for learning / dashboard attention — it does **not** block or unlock writers.
 
-## Scale / revisit (after pilot nights)
+## Scale / revisit
 
-Keep caps tiny until several quiet nights show `capacity_isolation.isolation_ok=true`
-and no shared 429 / runner collision with euro maintenance or spare sprints. Then
-raise `max_units` / fetch caps gradually. Keep **N180** / **N181** parked. Use
-bottleneck review to tune stages; use miss-rate to measure whether packs helped.
+**Stage 1 applied** (owner lock): `max_units=4`, `max_http_fetches=16`. Never
+auto-widen — human/eng raises workflow + code defaults only.
+
+Before **stage 2** (`max_units=8`, `max_http_fetches=32`): accumulate **5** quiet
+weekday apply nights with `capacity_isolation.isolation_ok=true` and no shared
+429 / runner collision vs euro maintenance or spare sprints. Rollback to prior
+stage (or pilot 2/8) on isolation fail, shared critical path, or focus-pressure
+suspend churn. Keep **N180** / **N181** parked. Use bottleneck review to tune
+stages; use miss-rate to measure whether packs helped (observe only).

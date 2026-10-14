@@ -169,7 +169,9 @@ def test_assemble_and_apply_pack_with_injectable_fetch(tmp_path: Path) -> None:
 def test_workflow_schedule_applies_with_tiny_caps() -> None:
     text = Path(".github/workflows/universe-filing-archive-pack.yml").read_text(encoding="utf-8")
     assert "--apply" in text
-    assert 'default: "2"' in text
+    # Stage-1 defaults (was pilot max_units=2 / max_http_fetches=8).
+    assert 'default: "4"' in text
+    assert 'default: "16"' in text
     assert "cancel-in-progress: true" in text
     assert "NOT a fourth" in text or "not a fourth" in text.lower()
     assert "universe_filings" in Path(".gitignore").read_text(encoding="utf-8")
