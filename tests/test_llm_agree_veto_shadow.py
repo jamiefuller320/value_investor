@@ -1,11 +1,18 @@
 """Tests for observe-only algo → LLM agree/veto shadow cards."""
 
+import json
+
 from value_investor.llm_agree_veto_shadow import (
+    DEFAULT_JUDGE_SPEC_ID,
+    LLM_JUDGE_BACKEND,
+    LLM_JUDGE_SPEC_ID,
     authorize_live_llm_influence,
     build_shadow_pass,
     extract_algo_proposals,
     has_justifying_evidence,
     judge_proposal,
+    parse_llm_agree_veto_response,
+    resolve_agree_veto_judge_backend,
     run_llm_agree_veto_shadow_pass,
 )
 
@@ -254,3 +261,150 @@ def test_build_shadow_pass_strips_live_influence():
     assert all(c["influences_live"] is False for c in payload["cards"])
     assert all(c["observe_only"] is True for c in payload["cards"])
     assert all(has_justifying_evidence(c) for c in payload["cards"])
+
+
+def test_resolve_agree_veto_judge_backend_modes(monkeypatch):
+    monkeypatch.delenv("LLM_AGREE_VETO_BACKEND", raising=False)
+    assert resolve_agree_veto_judge_backend(requested="heuristic") == "evidence_heuristic"
+    assert resolve_agree_veto_judge_backend(requested="llm") == LLM_JUDGE_BACKEND
+    assert (
+        resolve_agree_veto_judge_backend(requested="auto", api_key_present=False)
+        == "evidence_heuristic"
+    )
+    assert (
+        resolve_agree_veto_judge_backend(requested="auto", api_key_present=True)
+        == LLM_JUDGE_BACKEND
+    )
+
+
+def test_parse_llm_agree_veto_response_from_fenced_json():
+    text = """```json
+{"cards":[{"ticker":"PAF.L","algo_action":"sell","shadow_verdict":"agree","reasons":["Left cohort"]}]}
+```"""
+    cards = parse_llm_agree_veto_response(text)
+    assert len(cards) == 1
+    assert cards[0]["shadow_verdict"] == "agree"
+
+
+def test_llm_backend_merges_verdict_keeps_host_evidence_and_never_live():
+    def fake_llm(_prompt: str) -> str:
+        return json.dumps(
+            {
+                "cards": [
+                    {
+                        "ticker": "PAF.L",
+                        "algo_action": "sell",
+                        "shadow_verdict": "agree",
+                        "reasons": ["LLM sees decisive leave despite buyish label noise"],
+                        "cited_kinds": ["still_buyish", "rank_drop", "algo_reason"],
+                    }
+                ]
+            }
+        )
+
+    payload = build_shadow_pass(
+        track_id="rules",
+        plan={
+            "exits": [
+                {
+                    "ticker": "PAF.L",
+                    "name": "Pan African",
+                    "reason": "No longer in the top conviction target set",
+                }
+            ],
+            "holds": [],
+            "buys": [],
+        },
+        trades=[],
+        candidates=[
+            {
+                "ticker": "PAF.L",
+                "signal": "buy",
+                "conviction_score": 0.71,
+                "research_verdict": "accumulate",
+            }
+        ],
+        rebalance_state_before={"entry_candidate_rank": {"PAF.L": 7}},
+        judge_backend="llm",
+        llm_complete=fake_llm,
+    )
+    assert payload["judge_backend"] == LLM_JUDGE_BACKEND
+    assert payload["judge_spec_id"] == LLM_JUDGE_SPEC_ID
+    assert payload["parent_spec_id"] == DEFAULT_JUDGE_SPEC_ID
+    assert payload["llm_judge"]["ok"] is True
+    card = payload["cards"][0]
+    assert card["shadow_verdict"] == "agree"
+    assert card["influences_live"] is False
+    assert card["observe_only"] is True
+    assert card["judge_backend"] == LLM_JUDGE_BACKEND
+    assert card["parent_spec_id"] == DEFAULT_JUDGE_SPEC_ID
+    assert card["meta"]["heuristic_baseline"]["shadow_verdict"] == "veto"
+    assert has_justifying_evidence(card)
+    assert authorize_live_llm_influence(card) is False
+    assert payload["disagree_vs_heuristic_count"] == 1
+
+
+def test_llm_backend_fails_closed_to_heuristic_on_bad_json():
+    def broken_llm(_prompt: str) -> str:
+        return "not-json-at-all"
+
+    payload = build_shadow_pass(
+        track_id="rules",
+        plan={
+            "exits": [
+                {
+                    "ticker": "PAF.L",
+                    "name": "Pan African",
+                    "reason": "No longer in the top conviction target set",
+                }
+            ],
+            "holds": [],
+            "buys": [],
+        },
+        trades=[],
+        candidates=[
+            {
+                "ticker": "PAF.L",
+                "signal": "buy",
+                "conviction_score": 0.71,
+            }
+        ],
+        rebalance_state_before={"entry_candidate_rank": {"PAF.L": 7}},
+        judge_backend="llm",
+        llm_complete=broken_llm,
+    )
+    assert payload["judge_backend"] == "evidence_heuristic"
+    assert payload["judge_spec_id"] == DEFAULT_JUDGE_SPEC_ID
+    assert payload["llm_judge"]["ok"] is False
+    assert payload["cards"][0]["shadow_verdict"] == "veto"
+    assert payload["cards"][0]["influences_live"] is False
+
+
+def test_run_pass_forwards_llm_backend(tmp_path):
+    def fake_llm(_prompt: str) -> str:
+        return json.dumps(
+            {
+                "cards": [
+                    {
+                        "ticker": "MEGP.L",
+                        "algo_action": "sell",
+                        "shadow_verdict": "abstain",
+                        "reasons": ["Thin evidence — abstain"],
+                    }
+                ]
+            }
+        )
+
+    payload = run_llm_agree_veto_shadow_pass(
+        output_dir=tmp_path,
+        track_id="rules",
+        plan={"exits": [{"ticker": "MEGP.L", "reason": "left"}], "holds": [], "buys": []},
+        trades=[],
+        candidates=[{"ticker": "MEGP.L", "signal": "hold", "conviction_score": 0.1}],
+        judge_backend="llm",
+        llm_complete=fake_llm,
+    )
+    assert payload["judge_backend"] == LLM_JUDGE_BACKEND
+    assert payload["cards"][0]["shadow_verdict"] == "abstain"
+    assert payload["review"]["promotion_gate"]["ready_for_hard_veto"] is False
+    assert authorize_live_llm_influence(payload["cards"][0]) is False
