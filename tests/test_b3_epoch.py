@@ -6,7 +6,11 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
-from value_investor.assessment_model import ASSESSMENT_MODEL_FILENAME, frozen_tracks, load_assessment_model
+from value_investor.assessment_model import (
+    ASSESSMENT_MODEL_FILENAME,
+    frozen_tracks,
+    load_assessment_model,
+)
 from value_investor.b3_epoch import POLICY_ID, apply_b3_lock
 from value_investor.fair_cost_lab import (
     AI_JUDGMENT_FAIR_TRACK_ID,
@@ -19,7 +23,6 @@ from value_investor.paper_automation import (
     CONFIG_FILENAME,
     ensure_learning_track_configs,
 )
-
 
 WHEN = datetime(2026, 10, 15, 12, 0, tzinfo=UTC)
 
