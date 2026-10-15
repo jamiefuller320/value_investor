@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-15T02:35:42.772843+00:00",
+  "generated_at": "2026-10-15T07:39:50.326324+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -29,11 +29,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "1 attention-parked eng tasks",
-        "updated_at": "2026-10-15T02:35:39.514640+00:00",
+        "updated_at": "2026-10-15T07:39:47.003632+00:00",
         "fingerprint": "59a308ec112288b5",
         "bullets": [
           "Parked tasks: 1 (attention ~1)",
-          "Queue-clearing pause active: False — evaluated 2026-10-15T02:35:39.514640+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-10-15T07:39:47.003632+00:00",
           "Traffic pause active: False",
           "eng-20261013-04: Hunt fetchable IR source for parked aim leftover YNGN.L"
         ],
@@ -70,10 +70,10 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-10-14T21:31:03.556270+00:00",
-        "fingerprint": "23f5245efc6ab3ac",
+        "updated_at": "2026-10-15T05:56:14.438691+00:00",
+        "fingerprint": "93acd6363c2b7e3e",
         "bullets": [
-          "Occasions logged: 211",
+          "Occasions logged: 212",
           "PR mergeable=CONFLICTING against main: 7",
           "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
           "validate check failed: 4",
@@ -203,7 +203,7 @@
     {
       "id": "sunday-post-sell-cues",
       "title": "Scan post-sell cue digest (timing + selection; nest under AI-path / scoreboard)",
-      "summary": "Thin Sunday nest (package M): with the analysis bundle / AI-path scoreboard neighborhood, skim docs/data/post_sell_cue_digest.json (ops finding Post-sell cue digest (observe)). Note timing cues (N200 levers, exit-timing/shadow readiness, archive near-miss with L121 caveat) and selection cues / skeleton rows (control closed sells → N205 feed, not sealed). Park experiment ideas via ftse-defer; do not --apply knobs, seal N205, or invent a paper track from the digest alone. Hub Explore consumes hub_feed when sibling Status/Push/Explore lands.",
+      "summary": "Thin Sunday nest (package M): with the analysis bundle / AI-path scoreboard neighborhood, skim docs/data/post_sell_cue_digest.json (ops finding Post-sell cue digest (observe)). Prefer current-epoch selection cues only; note epoch_unknown / older_epoch counts (fail-closed join from rebalance_log). Timing cues: N200 levers (label population ≠ FTSE control + registration_id), exit-timing/shadow readiness, archive near-miss with L121 caveat. Selection skeleton: in_buy_set_at_exit vs in_buy_set_now (do not treat still_in_buy_set as exit-time). Widen beyond FTSE control buy_tier_level is gated until every cue/row carries epoch keys (fork F) — do not widen from this nest. Park via ftse-defer; no --apply / no N205 seal / no new track. Hub Explore consumes hub_feed when sibling Status/Push/Explore lands.",
       "automated": false,
       "cadence": "sunday",
       "section_id": "sunday",
@@ -463,7 +463,7 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary negative",
-        "updated_at": "2026-10-15T02:34:33.531717+00:00",
+        "updated_at": "2026-10-15T07:38:42.529821+00:00",
         "fingerprint": "782b2addb6782b0b",
         "bullets": [
           "ai_judgment_fair: total return -9.1% vs FTAL.L -1.8% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -7.9% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",

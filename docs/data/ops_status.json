@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-10-15T02:32:01.231531+00:00",
+  "run_at": "2026-10-15T07:36:10.066728+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
       "category": "ingest",
       "title": "New buy-tier not yet usable",
-      "summary": "11 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, hang_seng, nasdaq100, sp500, sti (+1 more): aim/YNGN.L (no_key_bodies, 482.53h since flip), asx200/BWP.AX (no_memo, 266.53h since flip), aim/PEBB.L (no_key_bodies, 242.53h since flip), sti/Y92.SI (no_key_bodies, 194.53h since flip), hang_seng/0001.HK (no_memo, 74.53h since flip), nasdaq100/NVDA (no_memo, 50.53h since flip), asx200/GMD.AX (no_key_bodies, 26.53h since flip), sp500/NUE (no_memo, 26.53h since flip), tsx60/ABX.TO (no_key_bodies, 26.53h since flip), tsx60/SAP.TO (no_key_bodies, 26.53h since flip) (+1 more). Blocking: no_key_bodies=7, no_memo=4.",
+      "summary": "11 recent buy-tier flip(s) still missing index / key bodies / first memo after ≥24h (path incomplete) across aim, asx200, hang_seng, nasdaq100, sp500, sti (+1 more): aim/YNGN.L (no_key_bodies, 487.6h since flip), asx200/BWP.AX (no_memo, 271.6h since flip), aim/PEBB.L (no_key_bodies, 247.6h since flip), sti/Y92.SI (no_key_bodies, 199.6h since flip), hang_seng/0001.HK (no_memo, 79.6h since flip), nasdaq100/NVDA (no_memo, 55.6h since flip), asx200/GMD.AX (no_key_bodies, 31.6h since flip), sp500/NUE (no_memo, 31.6h since flip), tsx60/ABX.TO (no_key_bodies, 31.6h since flip), tsx60/SAP.TO (no_key_bodies, 31.6h since flip) (+1 more). Blocking: no_key_bodies=7, no_memo=4.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -42,7 +42,7 @@
       "severity": "info",
       "category": "research",
       "title": "Post-sell cue digest (observe)",
-      "summary": "Observe digest refreshed: 6 timing cues, 2 selection cues, 29 control closed sells (skeleton sample 12). Hub Explore feed via hub_feed; no auto-fix / no N205 seal.",
+      "summary": "Observe digest refreshed: 4 timing cues, 2 selection cues, 29 control closed sells (current-epoch cue n=29, skeleton 29, epoch_unknown=0). Hub Explore feed via hub_feed; no auto-fix / no N205 seal; widen gated on epoch keys.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -132,7 +132,7 @@
       "severity": "warn",
       "category": "engineering",
       "title": "Orphaned pr_open engineering tasks",
-      "summary": "Tasks without matching open PR: eng-20261014-01",
+      "summary": "Tasks without matching open PR: eng-20261014-02",
       "auto_fixable": true,
       "fixed": false,
       "action_taken": null
@@ -158,7 +158,7 @@
       "max_age_hours": 30,
       "last_success_at": "2026-10-14T17:39:25+00:00",
       "last_success_run_id": 38608500378,
-      "age_hours": 8.9,
+      "age_hours": 14.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -167,11 +167,11 @@
       "workflow": "automation-orchestrator.yml",
       "name": "Automation Orchestrator",
       "expected_today": true,
-      "past_email_ready": false,
+      "past_email_ready": true,
       "max_age_hours": 28,
       "last_success_at": "2026-10-14T15:52:11+00:00",
       "last_success_run_id": 38593116729,
-      "age_hours": 10.7,
+      "age_hours": 15.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -182,9 +182,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 3,
-      "last_success_at": "2026-10-15T02:15:28+00:00",
-      "last_success_run_id": 38670025754,
-      "age_hours": 0.3,
+      "last_success_at": "2026-10-15T07:15:28+00:00",
+      "last_success_run_id": 38697532677,
+      "age_hours": 0.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -195,8 +195,8 @@
       "expected_today": true,
       "past_email_ready": true,
       "max_age_hours": 1,
-      "last_success_at": "2026-10-15T02:30:58+00:00",
-      "last_success_run_id": 38671396267,
+      "last_success_at": "2026-10-15T07:30:57+00:00",
+      "last_success_run_id": 38699268843,
       "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
@@ -210,7 +210,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-10-14T12:57:37+00:00",
       "last_success_run_id": 38567858620,
-      "age_hours": 13.6,
+      "age_hours": 18.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -223,7 +223,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T14:58:24+00:00",
       "last_success_run_id": 38149345226,
-      "age_hours": 83.6,
+      "age_hours": 88.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -236,7 +236,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-14T06:51:44+00:00",
       "last_success_run_id": 38524715780,
-      "age_hours": 19.7,
+      "age_hours": 24.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -249,7 +249,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T07:27:28+00:00",
       "last_success_run_id": 38121428588,
-      "age_hours": 91.1,
+      "age_hours": 96.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -262,7 +262,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T07:27:30+00:00",
       "last_success_run_id": 38121429962,
-      "age_hours": 91.1,
+      "age_hours": 96.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -275,7 +275,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-10-11T17:43:12+00:00",
       "last_success_run_id": 38160816599,
-      "age_hours": 80.9,
+      "age_hours": 85.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -288,7 +288,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-10-14T09:17:13+00:00",
       "last_success_run_id": 38541229926,
-      "age_hours": 17.3,
+      "age_hours": 22.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -299,9 +299,9 @@
       "expected_today": true,
       "past_email_ready": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-10-14T17:59:31+00:00",
-      "last_success_run_id": 38611342461,
-      "age_hours": 8.6,
+      "last_success_at": "2026-10-15T02:30:44+00:00",
+      "last_success_run_id": 38671375438,
+      "age_hours": 5.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -311,11 +311,11 @@
     "open_count": 1,
     "pr_open_count": 1,
     "parked_count": 1,
-    "merged_count": 129,
+    "merged_count": 130,
     "failed_count": 0,
-    "next_task_id": "eng-20261014-02",
+    "next_task_id": "eng-20261015-01",
     "in_flight_branch": null,
-    "in_flight_pr": 1076,
+    "in_flight_pr": 1088,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
