@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-15T12:32:16.663892+00:00`
+Generated: `2026-10-15T17:16:57.688850+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,6 +33,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `human`/human PR #1093 `eng-20261015-03` — Seed IR allowlist for unmeasured/zero-body KGF.L — empty allowlist after 0-improve pin (igc-20261015-02)
 - `parked_hunter`/verified PR #1092 `eng-20261013-04` — Hunt fetchable IR source for parked aim leftover YNGN.L
 - `parked_hunter`/verified PR #1090 `eng-20261015-02` — Hunt fetchable IR source for parked sp500 leftover EME
 - `human`/human PR #1088 `eng-20261014-02` — Close stubborn ingest gaps for SHEL.L (chain 1/3: 0/0 bodies, run igc-20261014-03)
