@@ -68,7 +68,9 @@ def _seed_assessment_root(tmp_path: Path) -> Path:
             (base / AI_JUDGMENT_FAIR_TRACK_ID / CONFIG_FILENAME).read_text(encoding="utf-8")
         )
         parent_cfg["track_id"] = tid
-        (tdir / CONFIG_FILENAME).write_text(json.dumps(parent_cfg, indent=2) + "\n", encoding="utf-8")
+        (tdir / CONFIG_FILENAME).write_text(
+            json.dumps(parent_cfg, indent=2) + "\n", encoding="utf-8"
+        )
         (tdir / "automated_fund.json").write_text(
             json.dumps(
                 {
@@ -85,7 +87,9 @@ def _seed_assessment_root(tmp_path: Path) -> Path:
             ),
             encoding="utf-8",
         )
-    (base / ASSESSMENT_MODEL_FILENAME).write_text(json.dumps(model, indent=2) + "\n", encoding="utf-8")
+    (base / ASSESSMENT_MODEL_FILENAME).write_text(
+        json.dumps(model, indent=2) + "\n", encoding="utf-8"
+    )
     return base
 
 

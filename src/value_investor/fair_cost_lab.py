@@ -696,9 +696,7 @@ def spawn_matched30_twins(
         learning_question=AI_MATCHED30_LEARNING_QUESTION,
         readiness_gate=AI_MATCHED30_READINESS_GATE,
         provenance_filename=AI_MATCHED30_PROVENANCE_FILENAME,
-        spawn_reason=(
-            "B3 matched-30 AI/filter fund twin (cold start; shadow until volume gates)"
-        ),
+        spawn_reason=("B3 matched-30 AI/filter fund twin (cold start; shadow until volume gates)"),
         market_id=market_id,
         dry_run=dry_run,
         parent_track_id=AI_JUDGMENT_FAIR_TRACK_ID,
@@ -712,9 +710,7 @@ def spawn_matched30_twins(
         learning_question=BUY_TIER_MATCHED30_LEARNING_QUESTION,
         readiness_gate=BUY_TIER_MATCHED30_READINESS_GATE,
         provenance_filename=BUY_TIER_MATCHED30_PROVENANCE_FILENAME,
-        spawn_reason=(
-            "B3 matched top-30 buy-tier control twin (cold start; construction only)"
-        ),
+        spawn_reason=("B3 matched top-30 buy-tier control twin (cold start; construction only)"),
         market_id=market_id,
         dry_run=dry_run,
         parent_track_id=BUY_TIER_LEVEL_TRACK_ID,
