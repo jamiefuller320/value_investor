@@ -1,15 +1,91 @@
 {
-  "run_at": "2026-10-14T15:26:39.328064+00:00",
+  "run_at": "2026-10-15T15:18:46.170781+00:00",
   "market_id": "euro_stoxx50",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "TTE.PA"
+  ],
+  "target_details": [
+    {
+      "ticker": "TTE.PA",
+      "priority_score": 28.122400000000003,
+      "filings_total": 125,
+      "filings_with_body": 123,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "TTE.PA",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 125,
+        "filings_with_body": 123,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 126,
+        "filings_with_body": 126,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 126,
+        "annual": 8,
+        "interim": 59,
+        "trading_update": 5,
+        "other": 54,
+        "with_body": 126,
+        "period_coverage": {
+          "annual": {
+            "total": 8,
+            "with_body": 8
+          },
+          "interim": {
+            "total": 59,
+            "with_body": 59
+          },
+          "trading_update": {
+            "total": 5,
+            "with_body": 5
+          },
+          "other": {
+            "total": 54,
+            "with_body": 54
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 126,
+        "with_body_after": 126,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "TTE.PA"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-14T15:25:46.426488+00:00",
+    "snapshot_at": "2026-10-15T15:14:51.032531+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 15,
     "unmeasured_buy_tier": 0,
@@ -48,7 +124,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-14T15:26:39.307481+00:00",
+    "snapshot_at": "2026-10-15T15:18:42.504000+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 15,
     "unmeasured_buy_tier": 0,
@@ -57,7 +133,7 @@
     "indexed_without_body": 1,
     "bodies_min": 1,
     "bodies_median": 5,
-    "bodies_max": 123,
+    "bodies_max": 126,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -95,7 +171,7 @@
   "discovery_scan": {
     "scanned": 15,
     "hits": 14,
-    "new_rows_total": 0,
+    "new_rows_total": 1,
     "curiosity_total": 15,
     "errors": 0,
     "prioritization_weights": {
@@ -124,7 +200,7 @@
   },
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-10-14T15:25:47.305163+00:00",
+    "assessed_at": "2026-10-15T15:14:51.649496+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -160,9 +236,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 51.169665691000034,
+  "used_seconds": 230.213921815,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3548.830334309,
+  "leftover_seconds": 3369.786078185,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -170,9 +246,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-10-14T15:26:39.314336+00:00",
+    "updated_at": "2026-10-15T15:18:42.510337+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 3,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -224,7 +300,7 @@
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "BAS.DE",
       "IFX.DE",
@@ -266,7 +342,15 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261014-01"
+    "task_ids": [],
+    "task_count": 169,
+    "market_id": "nasdaq100",
+    "hunter_ticker": "PDD",
+    "hunter_tickers": [
+      "PDD"
+    ],
+    "priority_score": 12.0,
+    "wait_behind_task_id": "",
+    "leftover_key_bodies": false
   }
 }
