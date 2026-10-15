@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-15T13:56:17.522041+00:00",
+  "run_at": "2026-10-15T15:26:40.613222+00:00",
   "market_id": "ftse_smallcap",
   "targets": [
     "TPT.L"
@@ -8,8 +8,8 @@
     {
       "ticker": "TPT.L",
       "priority_score": 16.0897,
-      "filings_total": 59,
-      "filings_with_body": 54,
+      "filings_total": 58,
+      "filings_with_body": 53,
       "indexed_without_body": 5,
       "reason": "indexed_without_body"
     }
@@ -19,8 +19,8 @@
       "ticker": "TPT.L",
       "reason": "indexed_without_body",
       "before": {
-        "filings_total": 59,
-        "filings_with_body": 54,
+        "filings_total": 58,
+        "filings_with_body": 53,
         "indexed_without_body": 5
       },
       "after": {
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-15T13:55:15.345246+00:00",
+    "snapshot_at": "2026-10-15T15:23:36.756585+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -134,7 +134,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-15T13:56:12.620612+00:00",
+    "snapshot_at": "2026-10-15T15:24:38.812739+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 11,
     "unmeasured_buy_tier": 0,
@@ -173,30 +173,56 @@
       "FOXT.L",
       "MER.L",
       "REC.L",
+      "TPT.L",
       "ULTP.L"
     ],
-    "parked_count": 6,
+    "parked_count": 7,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 5,
-    "effective_indexed_without_body_tickers": [
-      "TPT.L"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "ftse_smallcap",
+    "to_market": null,
+    "stream_markets_after": [],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "ftse_smallcap",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "APTD.L",
+        "DFS.L",
+        "FOXT.L",
+        "MER.L",
+        "REC.L",
+        "TPT.L",
+        "ULTP.L"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": null,
+    "at": "2026-10-15T15:25:04.289871+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "ftse_smallcap",
-    "assessed_at": "2026-10-15T13:55:16.587890+00:00",
+    "assessed_at": "2026-10-15T15:23:38.004062+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -233,8 +259,8 @@
       {
         "ticker": "TPT.L",
         "indexed_without_body": 5,
-        "filings_total": 59,
-        "filings_with_body": 54
+        "filings_total": 58,
+        "filings_with_body": 53
       },
       {
         "ticker": "ULTP.L",
@@ -268,21 +294,19 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 54.789134167000014,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2045.210865833,
+  "used_seconds": 59.512385223999985,
+  "budget_seconds": 1050.0,
+  "leftover_seconds": 990.487614776,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "TPT.L"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_smallcap",
-    "updated_at": "2026-10-15T13:56:12.626211+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-10-15T15:24:38.819172+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -355,6 +379,18 @@
         "indexed_without_body": 5,
         "thin": false,
         "source_surface": "uk_rns"
+      },
+      {
+        "ticker": "TPT.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-10-15T15:24:38.819172+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 58,
+        "filings_with_body": 53,
+        "indexed_without_body": 5,
+        "thin": false,
+        "source_surface": "uk_rns"
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
@@ -370,16 +406,38 @@
       "TPT.L",
       "ULTP.L"
     ],
-    "unparked_leftover": [
-      "TPT.L"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/ftse_smallcap/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "ftse_smallcap"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "ftse_smallcap",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
