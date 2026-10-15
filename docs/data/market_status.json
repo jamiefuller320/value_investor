@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-15T13:43:07.226803+00:00",
+  "generated_at": "2026-10-15T13:51:57.625189+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -72,7 +72,7 @@
       "1": "ftse_smallcap",
       "2": "asx200"
     },
-    "equal_support_generated_at": "2026-10-15T08:46:34.548323+00:00"
+    "equal_support_generated_at": "2026-10-15T13:43:01.594766+00:00"
   },
   "markets": [
     {
@@ -1286,7 +1286,7 @@
         "hold_near_buy_count": 14,
         "not_buy_tier_count": 66,
         "never_buy_tier_count": 61,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
@@ -1304,13 +1304,13 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 3,
-        "targets": 1,
+        "run_count": 4,
+        "targets": 2,
         "improved": 1,
         "improved_tickers": [
           "TPT.L"
         ],
-        "last_run_at": "2026-10-15T13:02:34.456769+00:00",
+        "last_run_at": "2026-10-15T13:50:22.682179+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -1915,7 +1915,7 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 53,
         "not_buy_tier_count": 168,
         "never_buy_tier_count": 146,
@@ -1924,17 +1924,15 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 53,
         "not_buy_tier_count": 168,
         "never_buy_tier_count": 146,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "ANN.AX"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "NEM.AX",
           "GQG.AX",
@@ -2902,7 +2900,7 @@
         "hold_near_buy_count": 11,
         "not_buy_tier_count": 42,
         "never_buy_tier_count": 37,
-        "rememo_eligible_count": 0,
+        "rememo_eligible_count": 1,
         "first_time_memo_count": 1,
         "exclusion_ready_for_priors": null
       },
@@ -7390,7 +7388,7 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 14,
         "not_buy_tier_count": 59,
         "never_buy_tier_count": 53,
@@ -7399,17 +7397,15 @@
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 1,
+        "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 14,
         "not_buy_tier_count": 59,
         "never_buy_tier_count": 53,
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
-        "buy_tier_not_now_sample": [
-          "ADSK"
-        ],
+        "buy_tier_not_now_sample": [],
         "hold_near_buy_sample": [
           "HON",
           "EXC",
@@ -7417,8 +7413,8 @@
           "STX",
           "LRCX",
           "META",
-          "KLAC",
-          "TER"
+          "TXN",
+          "KLAC"
         ]
       },
       "sprint_progress": null,
@@ -7884,7 +7880,7 @@
         "hold_near_buy_count": 3,
         "not_buy_tier_count": 18,
         "never_buy_tier_count": 18,
-        "rememo_eligible_count": 1,
+        "rememo_eligible_count": 0,
         "first_time_memo_count": 0,
         "exclusion_ready_for_priors": null
       },
@@ -8659,7 +8655,7 @@
         "hold_near_buy_count": 114,
         "not_buy_tier_count": 354,
         "never_buy_tier_count": 318,
-        "rememo_eligible_count": 2,
+        "rememo_eligible_count": 0,
         "first_time_memo_count": 1,
         "exclusion_ready_for_priors": null
       },
