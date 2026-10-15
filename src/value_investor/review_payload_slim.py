@@ -326,10 +326,21 @@ def slim_post_sell_cue_digest(payload: dict[str, Any] | None) -> dict[str, Any] 
         "selection_cues": (selection[:4] if isinstance(selection, list) else []),
         "control_closed_sells": {
             "closed_sell_count": sells.get("closed_sell_count"),
+            "cue_closed_sell_count": sells.get("cue_closed_sell_count"),
             "realized_pct_buckets": sells.get("realized_pct_buckets"),
+            "in_buy_set_at_exit_count": sells.get("in_buy_set_at_exit_count"),
+            "left_buy_set_at_exit_count": sells.get("left_buy_set_at_exit_count"),
+            "in_buy_set_now_count": sells.get("in_buy_set_now_count"),
             "still_in_buy_set_count": sells.get("still_in_buy_set_count"),
             "left_buy_set_count": sells.get("left_buy_set_count"),
         },
+        "epoch": {
+            "epoch_unknown_count": (payload.get("epoch") or {}).get("epoch_unknown_count"),
+            "current_epoch_count": (payload.get("epoch") or {}).get("current_epoch_count"),
+            "older_epoch_count": (payload.get("epoch") or {}).get("older_epoch_count"),
+            "cue_population": (payload.get("epoch") or {}).get("cue_population"),
+        },
+        "widen_gate": payload.get("widen_gate"),
         "selection_postmortem_skeleton": {
             "feeds": skeleton.get("feeds"),
             "sealed": skeleton.get("sealed"),
