@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-14T20:24:34.368813+00:00",
+  "run_at": "2026-10-15T07:51:26.680314+00:00",
   "market_id": "omxs30",
   "targets": [
     "NIBE-B.ST"
@@ -83,7 +83,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-14T20:24:19.176330+00:00",
+    "snapshot_at": "2026-10-15T07:50:03.590933+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
@@ -113,7 +113,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-14T20:24:34.360382+00:00",
+    "snapshot_at": "2026-10-15T07:50:17.730789+00:00",
     "market_id": "omxs30",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 0,
@@ -132,15 +132,15 @@
     ],
     "indexed_without_body_tickers": [],
     "indexed_without_body_by_ticker": {},
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
+    "parked_tickers": [
       "NIBE-B.ST"
     ],
+    "parked_count": 1,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -151,10 +151,31 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "omxs30",
+    "to_market": null,
+    "stream_markets_after": [],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "omxs30",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "NIBE-B.ST"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": null,
+    "at": "2026-10-15T07:50:30.258029+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "omxs30",
-    "assessed_at": "2026-10-14T20:24:19.594851+00:00",
+    "assessed_at": "2026-10-15T07:50:03.904957+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
@@ -178,9 +199,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 14.344701520000001,
+  "used_seconds": 13.544619144999984,
   "budget_seconds": 2100.0,
-  "leftover_seconds": 2085.65529848,
+  "leftover_seconds": 2086.455380855,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -188,11 +209,24 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "omxs30",
-    "updated_at": "2026-10-14T20:24:34.363014+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "updated_at": "2026-10-15T07:50:17.732349+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "NIBE-B.ST",
+        "reason": "awaiting_periodic_report",
+        "revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "parked_at": "2026-10-15T07:50:17.732349+00:00",
+        "park_via": "straggler_soft_park",
+        "filings_total": 1,
+        "filings_with_body": 1,
+        "indexed_without_body": 0,
+        "thin": true,
+        "source_surface": "euro_filings"
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints, or via straggler soft-park when a few leftovers starve the market-wide streak while peers still improve. Unmeasured and zero-body names are never parked.",
     "straggler_max_leftovers": 3,
     "straggler_zero_runs": 2,
@@ -200,20 +234,42 @@
     "leftover_tickers": [
       "NIBE-B.ST"
     ],
-    "unparked_leftover": [
-      "NIBE-B.ST"
-    ],
+    "unparked_leftover": [],
     "surface_released": [],
     "path": "docs/data/library/markets/omxs30/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "omxs30"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "omxs30",
+    "ingest_exhausted_markets": [
+      "aex",
+      "asx200",
+      "atx",
+      "bel20",
+      "cac40",
+      "dax",
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_mib",
+      "ftse_smallcap",
+      "hang_seng",
+      "ibex35",
+      "nasdaq100",
+      "omxs30",
+      "psi20",
+      "smi",
+      "sp500",
+      "sti",
+      "tsx60",
+      "us_adr_asia"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261014-01"
+    "task_id": "eng-20261015-01"
   }
 }
