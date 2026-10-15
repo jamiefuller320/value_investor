@@ -93,6 +93,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         # Q1 2026 trading update — ad-revenue cyclicality when Yahoo quarterlies are empty.
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/2026-IR/ITV%20Plc%20Q1%202026%20Trading%20Update.pdf",
     ],
+    # eng-20261015-03: ftse350 KGF.L gap-closure had 0/0 refetch (empty IR allowlist); kingfisher.com PDFs.
+    "KGF.L": [
+        "https://www.kingfisher.com/~/media/Files/K/Kingfisher-Plc/Universal/investors/result-reports-presentation/2026/2526-annual-report-and-accounts.pdf",
+        "https://www.kingfisher.com/~/media/Files/K/Kingfisher-Plc/Universal/investors/result-reports-presentation/2026/2026-half-year-results.pdf",
+        "https://www.kingfisher.com/~/media/Files/K/Kingfisher-Plc/Universal/investors/result-reports-presentation/2026/2026-27-half-year-results-presentation.pdf",
+    ],
     # eng-20261009-03: ftse350 JD.L gap-closure 0/3 refetch (empty IR allowlist; Investegate href <br> junk).
     "JD.L": [
         "https://www.jdplc.com/wp-content/uploads/2026/07/2026-Annual-Report-and-Accounts.pdf",
