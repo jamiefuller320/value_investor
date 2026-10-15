@@ -1116,12 +1116,16 @@ _NON_RESULTS_RNS_PATTERNS = (
 )
 
 # Headlines that must stay ``other`` / ``trading_update`` even when body text looks like results.
-_HEADLINE_BODY_PERIOD_BLOCK_PATTERNS = _NON_RESULTS_RNS_PATTERNS + (
-    r"^svm\b",
-    r"\brio collab\b",
-    r"\b(?:first|second|third|fourth|1st|2nd|3rd|4th)\s+quarter\s+"
-    r"(?:production|operations?)\b",
-    r"\bdrilling/?production\s+report\b",
+_HEADLINE_BODY_PERIOD_BLOCK_PATTERNS = (
+    _NON_RESULTS_RNS_PATTERNS
+    + _CORPORATE_ACTION_PATTERNS
+    + (
+        r"^svm\b",
+        r"\brio collab\b",
+        r"\b(?:first|second|third|fourth|1st|2nd|3rd|4th)\s+quarter\s+"
+        r"(?:production|operations?)\b",
+        r"\bdrilling/?production\s+report\b",
+    )
 )
 
 _OPERATIONS_PRODUCTION_UPDATE_PATTERNS = (
@@ -1878,7 +1882,9 @@ def filing_lacks_material_body(row: dict[str, Any]) -> bool:
 
     Excludes index-noise wrappers and routine own-shares / PDMR rows so names
     like IMB.L (statutory covered; leftover TVR buybacks) do not keep minting
-    stubborn gap-closure engineering tasks.
+    stubborn gap-closure engineering tasks. M&A completion RNS (``period=other``)
+    is indexed for corporate-action extraction but must not block gap closure
+    when Investegate body fetch fails (SHEL.L ARC Resources).
     """
     if row.get("has_body"):
         return False
@@ -1887,6 +1893,8 @@ def filing_lacks_material_body(row: dict[str, Any]) -> bool:
     if _is_routine_own_share_or_pdmr_row(row):
         return False
     if _is_holding_disclosure_row(row):
+        return False
+    if str(row.get("period") or "") == "other" and _is_material_corporate_action_row(row):
         return False
     return True
 

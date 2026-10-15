@@ -9300,6 +9300,26 @@ def test_classify_rns_headline_shel_equivalent_dividend_payment_is_other():
     assert classify_filing_period(headline) == "other"
 
 
+def test_apply_headline_period_shel_acquisition_completion_stays_other_with_body_snippet():
+    """eng-20261014-02: M&A completion must not inherit annual period from body OCR."""
+    from value_investor.research.filings import filing_lacks_material_body
+
+    headline = "Shell completes acquisition of ARC Resources"
+    row = {
+        "headline": headline,
+        "source": "investegate_direct",
+        "period": "other",
+        "url": "https://www.investegate.co.uk/announcement/gnw/shell--shel/shell-completes-acquisition-of-arc-resources-/9752764",
+    }
+    body_snippet = (
+        "Shell plc consolidated financial statements and full year results "
+        "for the year ended 31 December 2025." + (" revenue " * 200)
+    )
+    refreshed = _apply_headline_period(dict(row), body_snippet=body_snippet)
+    assert refreshed["period"] == "other"
+    assert filing_lacks_material_body({**refreshed, "has_body": False}) is False
+
+
 def test_fetch_filings_ir_allowlist_shel_l_includes_q1_6k(tmp_path: Path):
     """SHEL.L built-in allowlist includes Q1 2026 6-K for interim gap-fill."""
     allowlist_path = tmp_path / "empty_ir.json"
