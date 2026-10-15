@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-14T08:52:21.965037+00:00",
+  "generated_at": "2026-10-15T07:38:28.735481+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 2,
+    "closed_total": 3,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,7 +27,14 @@
         }
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 0.0,
+        "sold_underwater_rate": 1.0,
+        "mean_peak_unrealized_pct": -0.0026,
+        "mean_trough_unrealized_pct": -0.0026,
+        "outcome_labels": {
+          "sold_underwater": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -55,11 +62,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 2,
+    "hold_closed_with_thesis": 3,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=2 (target >=8)",
-      "hold thesis buckets thin (weakening=2; target >=3 each)",
+      "hold closed with thesis=3 (target >=8)",
+      "hold thesis buckets thin (weakening=2, broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -157,7 +164,7 @@
           "trough_unrealized_pct": -0.0256
         }
       ],
-      "peak_unrealized_pct": 0.0205,
+      "peak_unrealized_pct": 0.0256,
       "trough_unrealized_pct": -0.0256,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -257,7 +264,7 @@
       "ticker": "EG7.IR",
       "name": "FBD Holdings plc",
       "started_at": "2026-10-14T09:52:21.886414+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -289,9 +296,9 @@
       "peak_unrealized_pct": -0.0026,
       "trough_unrealized_pct": -0.0026,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-15T08:38:28.629875+01:00",
+      "linked_sell_trade_id": "c7d59d09-563a-497b-8911-e9ca04bb1a62"
     }
   ],
   "swap_rotations": [
@@ -362,12 +369,12 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "MIO.IR": 0.1696
+        "MIO.IR": 0.1579
       },
       "buy_returns_since_rotation": {
         "C5H.IR": 0.0038,
         "EG7.IR": -0.0026,
-        "OIZ.IR": 0.0205
+        "OIZ.IR": 0.0256
       },
       "verdict": null,
       "closed_at": null
@@ -428,12 +435,70 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "MIO.IR": -0.0196
+        "MIO.IR": -0.0294
       },
       "buy_returns_since_rotation": {
         "C5H.IR": 0.0153,
         "EG7.IR": -0.0026,
-        "OIZ.IR": 0.0474
+        "OIZ.IR": 0.0526
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-15T08:38:28.629875+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-15T08:38:28.629875+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "EG7.IR",
+          "price": 18.95,
+          "shares": 17.658016,
+          "gross": 334.62,
+          "cost": 0.59,
+          "avg_cost_at_exit": 19.0,
+          "realized_pct": -0.0026,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0026
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "C5H.IR",
+          "price": 2.65,
+          "shares": 65.267802,
+          "gross": 172.96,
+          "cost": 0.3
+        },
+        {
+          "ticker": "OIZ.IR",
+          "price": 4.0,
+          "shares": 40.122652,
+          "gross": 160.49,
+          "cost": 0.28
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "EG7.IR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "C5H.IR": 0.0,
+        "OIZ.IR": 0.0
       },
       "verdict": null,
       "closed_at": null

@@ -1,79 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-14T09:52:21.176780+01:00",
+    "local_time": "2026-10-15T08:38:09.605544+01:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-10-14T08:00:00+01:00",
-    "settle_at": "2026-10-14T09:15:00+01:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-10-15T08:00:00+01:00",
+    "settle_at": "2026-10-15T09:15:00+01:00",
+    "can_act": false,
+    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
-  "trades": [
-    {
-      "id": "34eb8f59-93a0-432e-9536-5c4b9dedb131",
-      "fund_id": "e27da3c3-a0f6-40cb-9a73-a08e7cce46cd",
-      "acted_at": "2026-10-14T09:52:21.176780+01:00",
-      "ticker": "NOVN.SW",
-      "side": "sell",
-      "sizing_mode": "cash",
-      "shares": 0.653595,
-      "price": 120.2,
-      "gross": 78.56,
-      "cost": 0.02,
-      "net_cash": 78.54,
-      "note": "Automated trim",
-      "name": "Novartis AG",
-      "avg_cost_at_exit": 117.26
-    },
-    {
-      "id": "181ad0cb-250f-4bb3-9fd7-6ff31926e5dd",
-      "fund_id": "e27da3c3-a0f6-40cb-9a73-a08e7cce46cd",
-      "acted_at": "2026-10-14T09:52:21.176780+01:00",
-      "ticker": "LOGN.SW",
-      "side": "sell",
-      "sizing_mode": "cash",
-      "shares": 1.067601,
-      "price": 86.08,
-      "gross": 91.9,
-      "cost": 0.02,
-      "net_cash": 91.88,
-      "note": "Automated trim",
-      "name": "Logitech International S.A.",
-      "avg_cost_at_exit": 86.1255
-    },
-    {
-      "id": "d0ba4758-cbd2-4fc8-b0d8-f83c2d555c99",
-      "fund_id": "e27da3c3-a0f6-40cb-9a73-a08e7cce46cd",
-      "acted_at": "2026-10-14T09:52:21.176780+01:00",
-      "ticker": "AMRZ.SW",
-      "side": "sell",
-      "sizing_mode": "cash",
-      "shares": 2.611367,
-      "price": 30.58,
-      "gross": 79.86,
-      "cost": 0.02,
-      "net_cash": 79.84,
-      "note": "Automated trim",
-      "name": "Amrize AG",
-      "avg_cost_at_exit": 30.76
-    },
-    {
-      "id": "5c3e09a0-2ad2-4b8c-80ef-9434f24dd09e",
-      "fund_id": "e27da3c3-a0f6-40cb-9a73-a08e7cce46cd",
-      "acted_at": "2026-10-14T09:52:21.176780+01:00",
-      "ticker": "ALC.SW",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 4.70085,
-      "price": 53.48,
-      "gross": 251.4,
-      "cost": 0.06,
-      "net_cash": -251.46,
-      "note": "Automated buy",
-      "name": "Alcon Inc."
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -87,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1005.73,
+    "nav": 1012.37,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -100,35 +36,35 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 251.43,
+    "target_sleeve_value": 253.09,
     "targets": [
       {
         "ticker": "NOVN.SW",
         "name": "Novartis AG",
         "signal": "strong_buy",
         "conviction_score": 0.6100000000000001,
-        "price": 120.2
+        "price": 124.38
       },
       {
         "ticker": "LOGN.SW",
         "name": "Logitech International S.A.",
         "signal": "buy",
-        "conviction_score": 0.5207,
-        "price": 86.08
+        "conviction_score": 0.5307000000000001,
+        "price": 84.94
       },
       {
         "ticker": "AMRZ.SW",
         "name": "Amrize AG",
         "signal": "buy",
         "conviction_score": 0.345,
-        "price": 30.58
+        "price": 30.42
       },
       {
         "ticker": "ALC.SW",
         "name": "Alcon Inc.",
         "signal": "buy",
-        "conviction_score": 0.21649499999999997,
-        "price": 53.48
+        "conviction_score": 0.25976,
+        "price": 54.02
       }
     ],
     "anticipated_exits": [],
@@ -138,48 +74,35 @@
     "anticipated_holds": [
       {
         "action": "hold",
-        "ticker": "NOVN.SW",
-        "name": "Novartis AG",
-        "reason": "Already near equal-weight target",
-        "value": 251.44,
-        "target_value": 251.43,
-        "conviction_score": 0.6100000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "LOGN.SW",
-        "name": "Logitech International S.A.",
-        "reason": "Already near equal-weight target",
-        "value": 251.44,
-        "target_value": 251.43,
-        "conviction_score": 0.5207,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "AMRZ.SW",
-        "name": "Amrize AG",
-        "reason": "Already near equal-weight target",
-        "value": 251.44,
-        "target_value": 251.43,
-        "conviction_score": 0.345,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
         "ticker": "ALC.SW",
         "name": "Alcon Inc.",
         "reason": "Already near equal-weight target",
-        "value": 251.4,
-        "target_value": 251.43,
-        "conviction_score": 0.21649499999999997,
+        "value": 253.94,
+        "target_value": 253.09,
+        "conviction_score": 0.25976,
         "signal": "buy"
       }
     ],
-    "skipped": [],
+    "skipped": [
+      {
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 253.09,
+        "conviction_score": 0.5307000000000001,
+        "signal": "buy"
+      },
+      {
+        "ticker": "AMRZ.SW",
+        "name": "Amrize AG",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 253.09,
+        "conviction_score": 0.345,
+        "signal": "buy"
+      }
+    ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
+    "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -188,7 +111,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 120.2,
+      "mark": 124.38,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -199,7 +122,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 86.08,
+      "mark": 84.94,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -210,7 +133,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 30.58,
+      "mark": 30.42,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "accumulate"
@@ -221,7 +144,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 53.48,
+      "mark": 54.02,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -616,9 +539,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-15T08:38:09.605544+01:00",
+        "portfolio_value": 1012.37,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "CHF",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "CHF": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-14T09:52:21.176780+01:00",
+    "last_mark_at": "2026-10-15T08:38:09.605544+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -626,12 +565,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (4 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "smi",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-14T08:52:21.179142+00:00",
+    "generated_at": "2026-10-15T07:38:09.609472+00:00",
     "observe_only": true,
     "open_count": 0,
     "closed_count": 0,
@@ -710,7 +649,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-14T08:52:21.179840+00:00",
+    "generated_at": "2026-10-15T07:38:09.610265+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -798,11 +737,11 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
-      "swap_rotations": 1
+      "hold_episodes": 0,
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 2,
+      "hold_episodes": 0,
       "swap_rotations": 0
     }
   },
@@ -811,8 +750,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-10-14T08:52:21.180559+00:00",
-    "as_of": "2026-10-14T09:52:21.176780+01:00",
+    "updated_at": "2026-10-15T07:38:09.611254+00:00",
+    "as_of": "2026-10-15T08:38:09.605544+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -863,14 +802,55 @@
     },
     "holdings": [
       {
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0138,
+        "mark": 84.94,
+        "avg_cost": 86.1255,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.5307,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "dividend"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 53%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 53%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "AMRZ.SW",
         "name": "Amrize AG",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0059,
-        "mark": 30.58,
+        "unrealized_pct": -0.0111,
+        "mark": 30.42,
         "avg_cost": 30.76,
         "signal": "buy",
         "timing_signal": "accumulate",
@@ -903,59 +883,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "LOGN.SW",
-        "name": "Logitech International S.A.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0005,
-        "mark": 86.08,
-        "avg_cost": 86.1255,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5207,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "dividend"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 52%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 52%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "ALC.SW",
         "name": "Alcon Inc.",
         "thesis_status": "weakening",
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 53.48,
+        "unrealized_pct": 0.0101,
+        "mark": 54.02,
         "avg_cost": 53.48,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.2165,
+        "conviction_score": 0.2598,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -969,7 +908,7 @@
         "research_verdict": "caution",
         "reasons": [
           "research verdict caution",
-          "conviction 22% below intact floor",
+          "conviction 26% below intact floor",
           "still buy",
           "cheapness family still passes"
         ],
@@ -980,7 +919,7 @@
         ],
         "weaken_reasons": [
           "research verdict caution",
-          "conviction 22% below intact floor"
+          "conviction 26% below intact floor"
         ],
         "broken_reasons": []
       },
@@ -991,8 +930,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0251,
-        "mark": 120.2,
+        "unrealized_pct": 0.0607,
+        "mark": 124.38,
         "avg_cost": 117.26,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -1033,7 +972,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-14T08:52:21.181553+00:00",
+    "generated_at": "2026-10-15T07:38:09.612555+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1093,7 +1032,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-10-14T08:52:21.182758+00:00",
+    "generated_at": "2026-10-15T07:38:09.614254+00:00",
     "open_count": 4,
     "closed_count": 0,
     "scored_count": 0,
@@ -1150,14 +1089,14 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
-    "marked_this_pass": 3,
+    "ingested_this_pass": 0,
+    "marked_this_pass": 4,
     "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-14T09:52:21.176780+01:00",
+    "generated_at": "2026-10-15T08:38:09.605544+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1205,70 +1144,73 @@
     },
     "note": "Observe-only \u2014 does not change paper capital allocation. Stratify sleeve returns by capital_status; do not mix into NAV vs ^FTSE.",
     "ingested_this_pass": {
-      "opened": 1,
+      "opened": 0,
       "closed": 0,
-      "tagged_on_book": 1,
+      "tagged_on_book": 0,
       "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-14T09:52:21.176780+01:00",
+    "generated_at": "2026-10-15T08:38:09.605544+01:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "evidence_heuristic",
-    "judge_spec_id": "heuristic.v1",
-    "parent_spec_id": null,
+    "judge_backend": "llm",
+    "judge_spec_id": "llm.v1",
+    "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 1,
-    "card_count": 1,
+    "proposal_count": 2,
+    "card_count": 2,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 2,
       "veto": 0,
-      "abstain": 1
+      "abstain": 0
     },
     "by_algo_action": {
-      "buy": {
-        "agree": 0,
+      "rebuy_skip": {
+        "agree": 2,
         "veto": 0,
-        "abstain": 1
+        "abstain": 0
       }
     },
+    "disagree_vs_heuristic_count": 0,
     "cards": [
       {
-        "ticker": "ALC.SW",
-        "name": "Alcon Inc.",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "abstain",
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
         "reasons": [
-          "Buy while not buyish \u2014 abstain."
+          "Explicit rebuy_skip due to insufficient cash after higher-conviction fills is a portfolio constraint, not a sell or leave-buy-cohort call.",
+          "still_buyish true with rank_drop 0 and entry_rank equal to conviction_rank 2 \u2014 well inside hold gate, no rank deterioration.",
+          "screen_signal buy and research_verdict accumulate with overlay_bound true \u2014 thesis remains buyish; deferring rebuy is low-churn consistent with baseline."
         ],
         "evidence": [
           {
             "kind": "algo_reason",
             "source": "plan_or_trade",
-            "detail": "Automated buy"
+            "detail": "Insufficient cash after higher-conviction fills"
           },
           {
             "kind": "screen_signal",
             "source": "candidates",
             "detail": "Effective signal at decision time",
-            "value": "hold"
+            "value": "buy"
           },
           {
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 4
+            "value": 2
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 4
+            "value": 2
           },
           {
             "kind": "rank_drop",
@@ -1280,25 +1222,13 @@
             "kind": "research_verdict",
             "source": "candidates",
             "detail": "Research overlay verdict at decision time",
-            "value": "caution"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.21649499999999997
+            "value": "accumulate"
           },
           {
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
+            "value": true
           },
           {
             "kind": "overlay_bound",
@@ -1307,18 +1237,18 @@
             "value": true
           }
         ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level_native",
-        "logged_at": "2026-10-14T09:52:21.176780+01:00",
-        "proposal_id": "buy_tier_level_native:ALC.SW:buy:2026-10-14T09:52:21.176780+01:00",
+        "logged_at": "2026-10-15T08:38:09.605544+01:00",
+        "proposal_id": "buy_tier_level_native:LOGN.SW:rebuy_skip:2026-10-15T08:38:09.605544+01:00",
         "meta": {
-          "still_buyish": false,
+          "still_buyish": true,
           "rank_drop": 0,
           "rank_drop_exit_min": 3,
-          "research_verdict": "caution",
+          "research_verdict": "accumulate",
           "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
           "judge_spec_id": "heuristic.v1",
           "p1_live_inputs": {
@@ -1328,33 +1258,142 @@
             "overlay_bound": true,
             "interim_eps_decline_pct": null,
             "adjusted_eps_growth_pct": null
-          }
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
         },
-        "schema_version": 1
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "AMRZ.SW",
+        "name": "Amrize AG",
+        "algo_action": "rebuy_skip",
+        "algo_reason": "Insufficient cash after higher-conviction fills",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "rebuy_skip driven by algo_reason insufficient cash \u2014 agree with capital prioritization over forced rebuy.",
+          "still_buyish true and rank_drop 0 with stable rank 3 vs entry_rank 3 \u2014 no decisive leave-buy-cohort signal.",
+          "Effective buy screen_signal and accumulate research_verdict; skip preserves intent without capacity-bump sell veto pattern."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Insufficient cash after higher-conviction fills"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 3
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 3
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level_native",
+        "logged_at": "2026-10-15T08:38:09.605544+01:00",
+        "proposal_id": "buy_tier_level_native:AMRZ.SW:rebuy_skip:2026-10-15T08:38:09.605544+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
       }
     ],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
+    "llm_judge": {
+      "attempted": true,
+      "ok": true,
+      "fallback": null,
+      "llm_card_count": 2
+    },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-10-14T09:52:21.176780+01:00",
+      "generated_at": "2026-10-15T08:38:09.605544+01:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "evidence_heuristic",
-      "judge_spec_id": "heuristic.v1",
-      "parent_spec_id": null,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 1,
+      "card_count": 2,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 2,
         "veto": 0,
-        "abstain": 1
+        "abstain": 0
       },
       "by_algo_action": {
-        "buy": {
-          "agree": 0,
+        "rebuy_skip": {
+          "agree": 2,
           "veto": 0,
-          "abstain": 1
+          "abstain": 0
         }
       },
       "veto_sell_count": 0,
@@ -1369,10 +1408,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-14T08:52:21.184793+00:00",
+  "generated_at": "2026-10-15T07:38:18.051605+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (CHF reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

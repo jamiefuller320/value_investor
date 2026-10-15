@@ -1,15 +1,89 @@
 {
-  "run_at": "2026-10-15T07:40:45.900251+00:00",
+  "run_at": "2026-10-14T17:20:30.709263+00:00",
   "market_id": "sti",
-  "targets": [],
-  "target_details": [],
-  "results": [],
+  "targets": [
+    "N2IU.SI"
+  ],
+  "target_details": [
+    {
+      "ticker": "N2IU.SI",
+      "priority_score": 15.0375,
+      "filings_total": 7,
+      "filings_with_body": 5,
+      "indexed_without_body": 2,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "N2IU.SI",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 7,
+        "filings_with_body": 5,
+        "indexed_without_body": 2
+      },
+      "after": {
+        "filings_total": 7,
+        "filings_with_body": 5,
+        "indexed_without_body": 2
+      },
+      "improved": false,
+      "regime": "asia_filings",
+      "filings_summary": {
+        "total": 7,
+        "annual": 2,
+        "interim": 1,
+        "trading_update": 0,
+        "other": 4,
+        "with_body": 5,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 1,
+            "with_body": 1
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 4,
+            "with_body": 2
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 5,
+        "with_body_after": 5,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "shared_body_propagated": 0,
+        "ir_metadata_reconciled": 0,
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
   "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-15T07:40:44.827388+00:00",
+    "snapshot_at": "2026-10-14T17:18:42.905036+00:00",
     "market_id": "sti",
     "buy_tier_count": 7,
     "unmeasured_buy_tier": 0,
@@ -41,18 +115,19 @@
     "parked_tickers": [
       "A17U.SI",
       "BS6.SI",
-      "J36.SI",
-      "N2IU.SI"
+      "J36.SI"
     ],
-    "parked_count": 4,
+    "parked_count": 3,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 2,
+    "effective_indexed_without_body_tickers": [
+      "N2IU.SI"
+    ],
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-10-15T07:40:45.869438+00:00",
+    "snapshot_at": "2026-10-14T17:18:48.400697+00:00",
     "market_id": "sti",
     "buy_tier_count": 7,
     "unmeasured_buy_tier": 0,
@@ -97,20 +172,40 @@
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "sti"
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "sti",
+    "to_market": null,
+    "stream_markets_after": [],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "sti",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "A17U.SI",
+        "BS6.SI",
+        "J36.SI",
+        "N2IU.SI"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "screen_refresh": null,
+    "at": "2026-10-14T17:19:10.997778+00:00",
+    "ingest_parity_recorded": false
   },
   "critical_path": {
     "market_id": "sti",
-    "assessed_at": "2026-10-15T07:40:45.330774+00:00",
+    "assessed_at": "2026-10-14T17:18:43.381229+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -158,21 +253,19 @@
       "thin_need_bodies": 2
     }
   },
-  "used_seconds": 0.0017625099999918348,
+  "used_seconds": 4.600958965999979,
   "budget_seconds": 2100.0,
-  "leftover_seconds": 2099.99823749,
+  "leftover_seconds": 2095.399041034,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "N2IU.SI"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sti",
-    "updated_at": "2026-10-15T07:40:45.872020+00:00",
+    "updated_at": "2026-10-14T17:18:48.403028+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 14,
+    "complete_zero_improve_runs": 13,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -270,6 +363,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20261015-01"
+    "task_id": "eng-20261014-01"
   }
 }

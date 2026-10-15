@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-14T09:52:17.083622+01:00",
+    "local_time": "2026-10-15T08:36:28.447527+01:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-10-14T08:00:00+01:00",
-    "settle_at": "2026-10-14T09:15:00+01:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-10-15T08:00:00+01:00",
+    "settle_at": "2026-10-15T09:15:00+01:00",
+    "can_act": false,
+    "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
   "trades": [],
   "plan": {
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1018.65,
+    "nav": 1015.4,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -36,55 +36,66 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 203.73,
+    "target_sleeve_value": 203.08,
     "targets": [
       {
         "ticker": "AENA.MC",
         "name": "Aena S.M.E., S.A.",
         "signal": "buy",
         "conviction_score": 0.6345000000000001,
-        "price": 25.42
+        "price": 25.22
       },
       {
         "ticker": "REP.MC",
         "name": "Repsol, S.A.",
         "signal": "buy",
-        "conviction_score": 0.54043,
-        "price": 30.04
+        "conviction_score": 0.520625,
+        "price": 30.08
+      },
+      {
+        "ticker": "NTGY.MC",
+        "name": "Naturgy Energy Group, S.A.",
+        "signal": "buy",
+        "conviction_score": 0.5196,
+        "price": 30.54
+      },
+      {
+        "ticker": "GRF.MC",
+        "name": "Grifols, S.A.",
+        "signal": "strong_buy",
+        "conviction_score": 0.4808,
+        "price": 9.81
       },
       {
         "ticker": "SCYR.MC",
         "name": "Sacyr, S.A.",
         "signal": "buy",
         "conviction_score": 0.43877,
-        "price": 3.934
-      },
-      {
-        "ticker": "NTGY.MC",
-        "name": "Naturgy Energy Group, S.A.",
-        "signal": "buy",
-        "conviction_score": 0.433,
-        "price": 30.46
-      },
-      {
-        "ticker": "GRF.MC",
-        "name": "Grifols, S.A.",
-        "signal": "strong_buy",
-        "conviction_score": 0.409,
-        "price": 9.848
+        "price": 3.9
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
-    "anticipated_holds": [],
+    "anticipated_holds": [
+      {
+        "action": "hold",
+        "ticker": "GRF.MC",
+        "name": "Grifols, S.A.",
+        "reason": "Already near equal-weight target",
+        "value": 205.07,
+        "target_value": 203.08,
+        "conviction_score": 0.4808,
+        "signal": "strong_buy"
+      }
+    ],
     "skipped": [
       {
         "ticker": "AENA.MC",
         "name": "Aena S.M.E., S.A.",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 203.73,
+        "target_value": 203.08,
         "conviction_score": 0.6345000000000001,
         "signal": "buy"
       },
@@ -92,13 +103,13 @@
         "ticker": "SCYR.MC",
         "name": "Sacyr, S.A.",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 203.73,
+        "target_value": 203.08,
         "conviction_score": 0.43877,
         "signal": "buy"
       }
     ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s)."
+    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -107,7 +118,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 9.848,
+      "mark": 9.81,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -118,7 +129,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3.934,
+      "mark": 3.9,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "accumulate"
@@ -129,7 +140,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 25.42,
+      "mark": 25.22,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -140,7 +151,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 30.46,
+      "mark": 30.54,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -151,7 +162,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 30.04,
+      "mark": 30.08,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -701,9 +712,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-15T08:36:28.447527+01:00",
+        "portfolio_value": 1015.4,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-14T09:52:17.083622+01:00",
+    "last_mark_at": "2026-10-15T08:36:28.447527+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -716,7 +743,7 @@
     "schema_version": 2,
     "market_id": "ibex35",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-14T08:52:17.086979+00:00",
+    "generated_at": "2026-10-15T07:36:28.453652+00:00",
     "observe_only": true,
     "open_count": 0,
     "closed_count": 0,
@@ -795,7 +822,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-14T08:52:17.087596+00:00",
+    "generated_at": "2026-10-15T07:36:28.454472+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -896,8 +923,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-10-14T08:52:17.088367+00:00",
-    "as_of": "2026-10-14T09:52:17.083622+01:00",
+    "updated_at": "2026-10-15T07:36:28.455526+00:00",
+    "as_of": "2026-10-15T08:36:28.447527+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -954,8 +981,8 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0262,
-        "mark": 3.934,
+        "unrealized_pct": -0.0347,
+        "mark": 3.9,
         "avg_cost": 4.04,
         "signal": "buy",
         "timing_signal": "accumulate",
@@ -994,8 +1021,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.007,
-        "mark": 25.42,
+        "unrealized_pct": -0.0148,
+        "mark": 25.22,
         "avg_cost": 25.6,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -1034,12 +1061,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0265,
-        "mark": 9.848,
+        "unrealized_pct": 0.0225,
+        "mark": 9.81,
         "avg_cost": 9.594,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.409,
+        "conviction_score": 0.4808,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1056,14 +1083,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 41%"
+          "conviction 48%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 41%"
+          "conviction 48%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1075,12 +1102,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0318,
-        "mark": 30.46,
+        "unrealized_pct": 0.0346,
+        "mark": 30.54,
         "avg_cost": 29.52,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.433,
+        "conviction_score": 0.5196,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1100,7 +1127,7 @@
           "still buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 43%"
+          "conviction 52%"
         ],
         "weaken_reasons": [
           "research verdict neutral"
@@ -1114,12 +1141,12 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0489,
-        "mark": 30.04,
+        "unrealized_pct": 0.0503,
+        "mark": 30.08,
         "avg_cost": 28.64,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5404,
+        "conviction_score": 0.5206,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1139,7 +1166,7 @@
           "still buy",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 54%"
+          "conviction 52%"
         ],
         "weaken_reasons": [
           "research verdict caution"
@@ -1154,7 +1181,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-14T08:52:17.089426+00:00",
+    "generated_at": "2026-10-15T07:36:28.456935+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1214,7 +1241,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-10-14T08:52:17.090708+00:00",
+    "generated_at": "2026-10-15T07:36:28.458743+00:00",
     "open_count": 5,
     "closed_count": 0,
     "scored_count": 0,
@@ -1278,7 +1305,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-14T09:52:17.083622+01:00",
+    "generated_at": "2026-10-15T08:36:28.447527+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1335,12 +1362,12 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-14T09:52:17.083622+01:00",
+    "generated_at": "2026-10-15T08:36:28.447527+01:00",
     "observe_only": true,
     "influences_live": false,
-    "judge_backend": "evidence_heuristic",
-    "judge_spec_id": "heuristic.v1",
-    "parent_spec_id": null,
+    "judge_backend": "llm",
+    "judge_spec_id": "llm.v1",
+    "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
     "proposal_count": 2,
@@ -1357,6 +1384,7 @@
         "abstain": 0
       }
     },
+    "disagree_vs_heuristic_count": 0,
     "cards": [
       {
         "ticker": "AENA.MC",
@@ -1365,7 +1393,8 @@
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+          "rebuy_skip is driven by algo_reason (insufficient cash), not a thesis exit; screen_signal buy, still_buyish true, rank_drop 0, and entry_rank equals conviction_rank at 1 show no leave-buy-cohort case",
+          "research_verdict accumulate with overlay_bound supports retaining exposure without forcing a cash-funded add"
         ],
         "evidence": [
           {
@@ -1404,22 +1433,10 @@
             "value": "accumulate"
           },
           {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.6345000000000001
-          },
-          {
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
             "value": true
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
-            "value": false
           },
           {
             "kind": "overlay_bound",
@@ -1428,13 +1445,13 @@
             "value": true
           }
         ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level_native",
-        "logged_at": "2026-10-14T09:52:17.083622+01:00",
-        "proposal_id": "buy_tier_level_native:AENA.MC:rebuy_skip:2026-10-14T09:52:17.083622+01:00",
+        "logged_at": "2026-10-15T08:36:28.447527+01:00",
+        "proposal_id": "buy_tier_level_native:AENA.MC:rebuy_skip:2026-10-15T08:36:28.447527+01:00",
         "meta": {
           "still_buyish": true,
           "rank_drop": 0,
@@ -1449,9 +1466,18 @@
             "overlay_bound": true,
             "interim_eps_decline_pct": null,
             "adjusted_eps_growth_pct": null
-          }
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
         },
-        "schema_version": 1
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
       },
       {
         "ticker": "SCYR.MC",
@@ -1460,7 +1486,8 @@
         "algo_reason": "Insufficient cash after higher-conviction fills",
         "shadow_verdict": "agree",
         "reasons": [
-          "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+          "rebuy_skip matches algo_reason cash constraint; screen_signal hold and still_buyish false mean rebuy is not required to stay aligned with the screen",
+          "research_verdict caution with stable rank_drop 0 favors deferring adds when cash is allocated to higher-conviction fills"
         ],
         "evidence": [
           {
@@ -1478,13 +1505,13 @@
             "kind": "conviction_rank",
             "source": "candidates",
             "detail": "1-based conviction rank among buyish names",
-            "value": 3
+            "value": 5
           },
           {
             "kind": "entry_rank",
             "source": "rebalance_state",
             "detail": "Conviction rank recorded at sleeve entry",
-            "value": 3
+            "value": 5
           },
           {
             "kind": "rank_drop",
@@ -1499,21 +1526,9 @@
             "value": "caution"
           },
           {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.43877
-          },
-          {
             "kind": "still_buyish",
             "source": "derived",
             "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          },
-          {
-            "kind": "fcf_basis_overlay",
-            "source": "candidates",
-            "detail": "FCF basis overlay flag bound on the live report at decision time",
             "value": false
           },
           {
@@ -1523,13 +1538,13 @@
             "value": true
           }
         ],
-        "judge_backend": "evidence_heuristic",
-        "judge_spec_id": "heuristic.v1",
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
         "influences_live": false,
         "observe_only": true,
         "track_id": "buy_tier_level_native",
-        "logged_at": "2026-10-14T09:52:17.083622+01:00",
-        "proposal_id": "buy_tier_level_native:SCYR.MC:rebuy_skip:2026-10-14T09:52:17.083622+01:00",
+        "logged_at": "2026-10-15T08:36:28.447527+01:00",
+        "proposal_id": "buy_tier_level_native:SCYR.MC:rebuy_skip:2026-10-15T08:36:28.447527+01:00",
         "meta": {
           "still_buyish": false,
           "rank_drop": 0,
@@ -1544,21 +1559,36 @@
             "overlay_bound": true,
             "interim_eps_decline_pct": null,
             "adjusted_eps_growth_pct": null
-          }
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
         },
-        "schema_version": 1
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
       }
     ],
-    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
+    "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
+    "llm_judge": {
+      "attempted": true,
+      "ok": true,
+      "fallback": null,
+      "llm_card_count": 2
+    },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-10-14T09:52:17.083622+01:00",
+      "generated_at": "2026-10-15T08:36:28.447527+01:00",
       "observe_only": true,
       "influences_live": false,
-      "judge_backend": "evidence_heuristic",
-      "judge_spec_id": "heuristic.v1",
-      "parent_spec_id": null,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
       "card_count": 2,
       "verdict_counts": {
@@ -1585,10 +1615,10 @@
         ],
         "note": "Hard veto stays parked (N173) until disagreement marks justify it. Shadow cards never change fills."
       },
-      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
+      "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-14T08:52:17.093239+00:00",
+  "generated_at": "2026-10-15T07:36:33.441574+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

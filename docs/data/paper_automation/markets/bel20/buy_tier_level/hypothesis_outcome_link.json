@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-14T08:52:18.248952+00:00",
+  "generated_at": "2026-10-15T07:36:56.754213+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 2,
+    "closed_total": 3,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -27,7 +27,14 @@
         }
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.079,
+        "mean_trough_unrealized_pct": 0.0747,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -55,11 +62,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 2,
+    "hold_closed_with_thesis": 3,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=2 (target >=8)",
-      "hold thesis buckets thin (weakening=2; target >=3 each)",
+      "hold closed with thesis=3 (target >=8)",
+      "hold thesis buckets thin (weakening=2, broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -157,7 +164,7 @@
           "trough_unrealized_pct": -0.0513
         }
       ],
-      "peak_unrealized_pct": -0.0256,
+      "peak_unrealized_pct": -0.0225,
       "trough_unrealized_pct": -0.0513,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -210,7 +217,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0057,
-      "trough_unrealized_pct": -0.0322,
+      "trough_unrealized_pct": -0.0493,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -266,7 +273,7 @@
       "ticker": "ABI.BR",
       "name": "Anheuser-Busch InBev SA/NV",
       "started_at": "2026-10-14T09:52:18.215313+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -295,12 +302,12 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": 0.0747,
+      "peak_unrealized_pct": 0.079,
       "trough_unrealized_pct": 0.0747,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-15T08:36:56.683589+01:00",
+      "linked_sell_trade_id": "25a161f8-7411-4160-ad70-cc44783cd2d8"
     }
   ],
   "swap_rotations": [
@@ -381,8 +388,8 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "UMI.BR": -0.0123,
-        "AED.BR": -0.0272
+        "UMI.BR": -0.0493,
+        "AED.BR": -0.0241
       },
       "buy_returns_since_rotation": {
         "SOLB.BR": 0.0
@@ -450,8 +457,8 @@
         "SOLB.BR": 0.0
       },
       "buy_returns_since_rotation": {
-        "AED.BR": 0.0229,
-        "ABI.BR": 0.0903
+        "AED.BR": 0.0261,
+        "ABI.BR": 0.0946
       },
       "verdict": null,
       "closed_at": null
@@ -550,9 +557,9 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "UMI.BR": -0.0067,
-        "ABI.BR": 0.0303,
-        "AED.BR": 0.0271
+        "UMI.BR": -0.0439,
+        "ABI.BR": 0.0344,
+        "AED.BR": 0.0304
       },
       "buy_returns_since_rotation": {
         "SOLB.BR": -0.0184
@@ -619,9 +626,67 @@
         "SOLB.BR": -0.0184
       },
       "buy_returns_since_rotation": {
-        "UMI.BR": -0.0067,
-        "ABI.BR": 0.0303,
-        "AED.BR": 0.0271
+        "UMI.BR": -0.0439,
+        "ABI.BR": 0.0344,
+        "AED.BR": 0.0304
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-15T08:36:56.683589+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-15T08:36:56.683589+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "ABI.BR",
+          "price": 71.02,
+          "shares": 4.822481,
+          "gross": 342.49,
+          "cost": 0.6,
+          "avg_cost_at_exit": 65.8218,
+          "realized_pct": 0.079,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.079
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "UMI.BR",
+          "price": 20.06,
+          "shares": 9.118216,
+          "gross": 182.91,
+          "cost": 0.32
+        },
+        {
+          "ticker": "AED.BR",
+          "price": 62.8,
+          "shares": 2.522047,
+          "gross": 158.38,
+          "cost": 0.28
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "ABI.BR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "UMI.BR": 0.0,
+        "AED.BR": 0.0
       },
       "verdict": null,
       "closed_at": null

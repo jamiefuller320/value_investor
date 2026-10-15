@@ -3,21 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-14T08:52:17.563174+00:00",
+  "generated_at": "2026-10-15T07:36:34.313518+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 2,
+    "closed_total": 3,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.1256,
+        "mean_trough_unrealized_pct": 0.0114,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "broken": {
         "closed_count": 2,
@@ -55,11 +62,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 2,
+    "hold_closed_with_thesis": 3,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=2 (target >=8)",
-      "hold thesis buckets thin (broken=2; target >=3 each)",
+      "hold closed with thesis=3 (target >=8)",
+      "hold thesis buckets thin (weakening=1, broken=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -74,7 +81,7 @@
       "ticker": "AMP.MI",
       "name": "Amplifon S.p.A.",
       "started_at": "2026-09-28T08:31:07.603712+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -117,9 +124,9 @@
       "peak_unrealized_pct": 0.1256,
       "trough_unrealized_pct": 0.0114,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-15T08:36:34.247019+01:00",
+      "linked_sell_trade_id": "14837b90-a36e-4a2e-8d05-4ca5fbb5f184"
     },
     {
       "episode_id": "buy_tier_level:REC.MI:2026-10-05T08:38:11.562071+01:00",
@@ -166,9 +173,9 @@
           "trough_unrealized_pct": -0.0123
         }
       ],
-      "peak_unrealized_pct": -0.0009,
+      "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": -0.0123,
-      "recovered_to_breakeven": null,
+      "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
@@ -412,12 +419,12 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "ENI.MI": 0.0612,
-        "REC.MI": 0.0076,
-        "AMP.MI": 0.0974
+        "ENI.MI": 0.0639,
+        "REC.MI": 0.0086,
+        "AMP.MI": 0.0645
       },
       "buy_returns_since_rotation": {
-        "BZU.MI": -0.0203
+        "BZU.MI": -0.0333
       },
       "verdict": null,
       "closed_at": null
@@ -532,12 +539,12 @@
         }
       ],
       "sell_returns_since_rotation": {
-        "REC.MI": 0.0115,
-        "ENI.MI": 0.0612,
-        "AMP.MI": 0.0819
+        "REC.MI": 0.0124,
+        "ENI.MI": 0.0639,
+        "AMP.MI": 0.0495
       },
       "buy_returns_since_rotation": {
-        "BZU.MI": -0.0175,
+        "BZU.MI": -0.0305,
         "TEN.MI": 0.0
       },
       "verdict": null,
@@ -617,10 +624,10 @@
         "TEN.MI": 0.0
       },
       "buy_returns_since_rotation": {
-        "BZU.MI": 0.0008,
-        "REC.MI": 0.0,
-        "ENI.MI": 0.0592,
-        "AMP.MI": 0.0471
+        "BZU.MI": -0.0124,
+        "REC.MI": 0.0009,
+        "ENI.MI": 0.0619,
+        "AMP.MI": 0.0157
       },
       "verdict": null,
       "closed_at": null
@@ -745,10 +752,10 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "BZU.MI": 0.0062,
-        "REC.MI": 0.0,
-        "ENI.MI": 0.0182,
-        "AMP.MI": -0.014
+        "BZU.MI": -0.0071,
+        "REC.MI": 0.0009,
+        "ENI.MI": 0.0208,
+        "AMP.MI": -0.0435
       },
       "buy_returns_since_rotation": {
         "LTMC.MI": 0.0
@@ -808,8 +815,66 @@
         "LTMC.MI": 0.0
       },
       "buy_returns_since_rotation": {
-        "REC.MI": 0.0,
-        "ENI.MI": 0.0
+        "REC.MI": 0.0009,
+        "ENI.MI": 0.0025
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-15T08:36:34.247019+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-15T08:36:34.247019+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "AMP.MI",
+          "price": 12.3,
+          "shares": 16.031933,
+          "gross": 197.19,
+          "cost": 0.35,
+          "avg_cost_at_exit": 11.5464,
+          "realized_pct": 0.0653,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": 0.0653
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "ENI.MI",
+          "price": 25.735,
+          "shares": 4.444529,
+          "gross": 114.38,
+          "cost": 0.2
+        },
+        {
+          "ticker": "BZU.MI",
+          "price": 36.6,
+          "shares": 2.243821,
+          "gross": 82.12,
+          "cost": 0.14
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "AMP.MI": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "ENI.MI": 0.0,
+        "BZU.MI": 0.0
       },
       "verdict": null,
       "closed_at": null

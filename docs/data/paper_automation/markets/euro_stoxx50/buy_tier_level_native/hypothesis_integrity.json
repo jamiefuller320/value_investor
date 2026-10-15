@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level_native",
-  "updated_at": "2026-10-14T08:52:13.284962+00:00",
-  "as_of": "2026-10-14T10:52:13.277943+02:00",
+  "updated_at": "2026-10-15T07:35:29.612802+00:00",
+  "as_of": "2026-10-15T09:35:29.600556+02:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -20,15 +20,15 @@
   "underwater_count": 1,
   "thesis_status_counts": {
     "intact": 11,
-    "weakening": 1,
-    "broken": 0,
+    "weakening": 0,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
     "holding_count": 12,
     "loser_count": 1,
     "loser_share": 0.0833,
-    "loser_nav_share": 0.0794,
+    "loser_nav_share": 0.0796,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": true,
@@ -45,17 +45,49 @@
     "family_fail_rate_non_losers": {
       "cheapness": 0.0909,
       "quality": 0.1818,
-      "dividend": 0.0909,
-      "garp": 0.5455,
-      "risk": 0.0
+      "dividend": 0.1818,
+      "garp": 0.6364,
+      "risk": 0.0909
     },
     "selection_feedback_flags": [
-      "garp fails more often among losers (100% vs 55%)"
+      "garp fails more often among losers (100% vs 64%)"
     ],
     "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
+    {
+      "ticker": "IFX.DE",
+      "name": "IFX.DE",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 56.0,
+      "avg_cost": 56.0,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
     {
       "ticker": "DTE.DE",
       "name": "Deutsche Telekom AG",
@@ -63,8 +95,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0697,
-      "mark": 25.11,
+      "unrealized_pct": -0.0634,
+      "mark": 25.28,
       "avg_cost": 26.99,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -99,54 +131,14 @@
       "broken_reasons": []
     },
     {
-      "ticker": "DG.PA",
-      "name": "Vinci SA",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0308,
-      "mark": 106.6,
-      "avg_cost": 109.9881,
-      "signal": "strong_buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.9225,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 92%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 92%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "VOW.DE",
       "name": "Volkswagen AG",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0179,
-      "mark": 69.1,
+      "unrealized_pct": -0.0371,
+      "mark": 67.75,
       "avg_cost": 70.3611,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -180,14 +172,54 @@
       "broken_reasons": []
     },
     {
+      "ticker": "DG.PA",
+      "name": "Vinci SA",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0326,
+      "mark": 106.4,
+      "avg_cost": 109.9881,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.9225,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 92%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 92%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "SGO.PA",
       "name": "Compagnie de Saint-Gobain S.A.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0155,
-      "mark": 65.32,
+      "unrealized_pct": -0.0107,
+      "mark": 65.64,
       "avg_cost": 66.3517,
       "signal": "strong_buy",
       "timing_signal": "accumulate",
@@ -227,8 +259,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0015,
-      "mark": 56.42,
+      "unrealized_pct": 0.0049,
+      "mark": 56.78,
       "avg_cost": 56.5051,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -267,11 +299,11 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.001,
-      "mark": 70.74,
+      "unrealized_pct": 0.0143,
+      "mark": 71.82,
       "avg_cost": 70.81,
       "signal": "strong_buy",
-      "timing_signal": "accumulate",
+      "timing_signal": "neutral",
       "conviction_score": 0.67,
       "data_quality_score": 1.0,
       "passed_families": [
@@ -302,60 +334,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "IFX.DE",
-      "name": "Infineon Technologies AG",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 56.0,
-      "avg_cost": 56.0,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.1873,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "cheapness",
-        "quality"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "cheapness family no longer passes",
-        "conviction 19% below intact floor",
-        "still buy",
-        "data_quality 1.00"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "research verdict caution",
-        "cheapness family no longer passes",
-        "conviction 19% below intact floor"
-      ],
-      "broken_reasons": []
-    },
-    {
       "ticker": "AD.AS",
       "name": "Koninklijke Ahold Delhaize N.V.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0007,
-      "mark": 31.61,
+      "unrealized_pct": 0.0203,
+      "mark": 32.23,
       "avg_cost": 31.5889,
-      "signal": "strong_buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.715,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4656,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -368,18 +358,18 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 72%"
+        "conviction 47%"
       ],
       "intact_reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 72%"
+        "conviction 47%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -391,8 +381,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0145,
-      "mark": 384.05,
+      "unrealized_pct": 0.0291,
+      "mark": 389.55,
       "avg_cost": 378.55,
       "signal": "buy",
       "timing_signal": "accumulate",
@@ -432,8 +422,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0437,
-      "mark": 70.74,
+      "unrealized_pct": 0.0479,
+      "mark": 71.02,
       "avg_cost": 67.7762,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -473,12 +463,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0729,
-      "mark": 79.89,
+      "unrealized_pct": 0.0767,
+      "mark": 80.17,
       "avg_cost": 74.46,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.8176,
+      "conviction_score": 0.8224,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -513,8 +503,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.1476,
-      "mark": 78.84,
+      "unrealized_pct": 0.1363,
+      "mark": 78.06,
       "avg_cost": 68.6985,
       "signal": "buy",
       "timing_signal": "neutral",
