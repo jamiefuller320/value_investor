@@ -303,6 +303,44 @@ def slim_hypothesis_outcomes(payload: dict[str, Any] | None) -> dict[str, Any] |
     }
 
 
+def slim_post_sell_cue_digest(payload: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Thin Sunday nest: post-sell timing + selection cues (package M)."""
+    if not isinstance(payload, dict):
+        return None
+    timing = payload.get("timing_cues") or []
+    selection = payload.get("selection_cues") or []
+    skeleton = payload.get("selection_postmortem_skeleton") or {}
+    sells = payload.get("control_closed_sells") or {}
+    sunday = payload.get("sunday_nest") or {}
+    return {
+        "purpose": (
+            "Post-sell cue digest (observe) — nest under Sunday AI-path / scoreboard "
+            "neighborhood; timing + selection experiment cues; N205 skeleton feed only"
+        ),
+        "observe_only": True,
+        "influences_live": False,
+        "generated_at": payload.get("generated_at"),
+        "timing_cue_count": len(timing) if isinstance(timing, list) else 0,
+        "selection_cue_count": len(selection) if isinstance(selection, list) else 0,
+        "timing_cues": (timing[:6] if isinstance(timing, list) else []),
+        "selection_cues": (selection[:4] if isinstance(selection, list) else []),
+        "control_closed_sells": {
+            "closed_sell_count": sells.get("closed_sell_count"),
+            "realized_pct_buckets": sells.get("realized_pct_buckets"),
+            "still_in_buy_set_count": sells.get("still_in_buy_set_count"),
+            "left_buy_set_count": sells.get("left_buy_set_count"),
+        },
+        "selection_postmortem_skeleton": {
+            "feeds": skeleton.get("feeds"),
+            "sealed": skeleton.get("sealed"),
+            "row_count": skeleton.get("row_count"),
+        },
+        "sunday_nest": sunday,
+        "artifact": "docs/data/post_sell_cue_digest.json",
+        "non_goals": payload.get("non_goals"),
+    }
+
+
 def slim_entry_dca(payload: dict[str, Any] | None) -> dict[str, Any] | None:
     """Compact model-independent entry-DCA overlay for weekly reviews."""
     if not isinstance(payload, dict):
@@ -358,5 +396,6 @@ __all__ = [
     "slim_hypothesis_integrity",
     "slim_hypothesis_outcomes",
     "slim_loser_snapshot_cards",
+    "slim_post_sell_cue_digest",
     "slim_simulation",
 ]

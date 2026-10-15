@@ -51,7 +51,11 @@ BLOCKED_PATHS = (
 )
 
 # Allowlist expansions and queue status writes must not fail the PR path guard.
-PATH_GUARD_ALWAYS_ALLOWED = ("docs/data/engineering_tasks.json",)
+# PR fix-occasion logging on eng-* branches must also pass (L432).
+PATH_GUARD_ALWAYS_ALLOWED = (
+    "docs/data/engineering_tasks.json",
+    "docs/data/pr_fix_occasions.json",
+)
 
 AREA_ALLOWED_PATHS: dict[str, list[str]] = {
     "ingest": [

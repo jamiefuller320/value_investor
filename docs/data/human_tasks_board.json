@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-14T07:50:02.861408+00:00",
+  "generated_at": "2026-10-15T02:35:42.772843+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "checklist_updated_at": "2026-10-14",
   "counts": {
-    "new_info": 2,
-    "unacked": 2,
-    "acked": 32,
+    "new_info": 3,
+    "unacked": 4,
+    "acked": 31,
     "automated": 20,
-    "human": 36
+    "human": 38
   },
   "tasks": [
     {
@@ -29,11 +29,11 @@
       "approval_label": null,
       "analysis": {
         "headline": "1 attention-parked eng tasks",
-        "updated_at": "2026-10-14T07:49:55.541746+00:00",
+        "updated_at": "2026-10-15T02:35:39.514640+00:00",
         "fingerprint": "59a308ec112288b5",
         "bullets": [
           "Parked tasks: 1 (attention ~1)",
-          "Queue-clearing pause active: False — evaluated 2026-10-14T07:49:55.541746+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-10-15T02:35:39.514640+00:00",
           "Traffic pause active: False",
           "eng-20261013-04: Hunt fetchable IR source for parked aim leftover YNGN.L"
         ],
@@ -70,10 +70,10 @@
       "approval_label": null,
       "analysis": {
         "headline": "PR fix common issues",
-        "updated_at": "2026-10-14T07:08:59.724022+00:00",
-        "fingerprint": "e9065ae66cf97f9d",
+        "updated_at": "2026-10-14T21:31:03.556270+00:00",
+        "fingerprint": "23f5245efc6ab3ac",
         "bullets": [
-          "Occasions logged: 203",
+          "Occasions logged: 211",
           "PR mergeable=CONFLICTING against main: 7",
           "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main: 5",
           "validate check failed: 4",
@@ -97,6 +97,48 @@
       "ack_sufficient": false
     },
     {
+      "id": "sunday-shard-epoch0-watch",
+      "title": "Watch shard epoch-0 and near-miss before forking AI",
+      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/market-sharded-learning.md",
+      "doc_anchor": "what-enter-learning-means",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "Admitted shard epoch-0 watch · 22",
+        "updated_at": "2026-10-14T20:26:44.208166+00:00",
+        "fingerprint": "ca170625378ce0e4",
+        "bullets": [
+          "euro_depth: phase=3 ai=False knob=False holdings=37",
+          "omxs30: phase=0 ai=False knob=False holdings=12",
+          "aex: phase=0 ai=False knob=False holdings=8",
+          "aim: phase=0 ai=False knob=False holdings=16",
+          "atx: phase=0 ai=False knob=False holdings=2",
+          "bel20: phase=0 ai=False knob=False holdings=3",
+          "cac40: phase=1 ai=False knob=False holdings=14",
+          "dax: phase=1 ai=False knob=False holdings=1"
+        ],
+        "source_keys": [
+          "market_status"
+        ]
+      },
+      "ack": {
+        "acked": true,
+        "stale": true,
+        "acked_at": "2026-10-09T15:43:43.165559+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "445acb0f9a3f9032"
+      },
+      "sort_bucket": "new_info",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
       "id": "adhoc-n200-n201-volume-gate-review",
       "title": "Review N200/N201 volume gates when ops-monitor marks ready (no auto-promote)",
       "summary": "When ops-monitor info findings say N200 and/or N201 volume gate ready for review, open the matching Observe switcher tab (or observe JSON), read fair-cost path/lever brackets, and decide only whether a deliberate promotion design is warranted later. Do not promote, do not decision-review --apply, and do not open a second live capital path (F8).",
@@ -113,6 +155,68 @@
         "headline": "See runbook for analysis inputs",
         "updated_at": null,
         "fingerprint": "455bb8413eaaf99b",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-ai-path-scoreboard",
+      "title": "Review AI path scoreboard (agree/veto shadow; no per-name chat)",
+      "summary": "With the Sunday analysis bundle, read the observe-only llm_agree_veto_shadow rollup (learning_tracks_llm_agree_veto.json + per-track llm_agree_veto_shadow_review.json): disagreement / abstain rates vs heuristic and vs still_in_buy_set marks; Phase status per Project store docs/ai-path-roadmap.md (shadow judge → filing evidence cards → later L605/N209/L606 beachhead). Meta-first checklist/scoreboard only — not per-ticker AI chat. Do not flip influences_live or promote hard veto (N173 parked). Weekday surface stays the ops-monitor warn LLM agree/veto shadow rollup missing; intended later finding title AI path scoreboard — Sunday review (auto_fixable=False) once a committed freshness flag exists. Nest neighbor: sunday-post-sell-cues (package M digest).",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/llm-agree-veto-shadow.md",
+      "doc_anchor": "sunday-ai-path-scoreboard",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/llm-agree-veto-shadow.md#sunday-ai-path-scoreboard",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "0ef8200a7b8202ee",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": false,
+        "stale": false,
+        "acked_at": null,
+        "decision": null,
+        "finding_fingerprint": null
+      },
+      "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "sunday-post-sell-cues",
+      "title": "Scan post-sell cue digest (timing + selection; nest under AI-path / scoreboard)",
+      "summary": "Thin Sunday nest (package M): with the analysis bundle / AI-path scoreboard neighborhood, skim docs/data/post_sell_cue_digest.json (ops finding Post-sell cue digest (observe)). Note timing cues (N200 levers, exit-timing/shadow readiness, archive near-miss with L121 caveat) and selection cues / skeleton rows (control closed sells → N205 feed, not sealed). Park experiment ideas via ftse-defer; do not --apply knobs, seal N205, or invent a paper track from the digest alone. Hub Explore consumes hub_feed when sibling Status/Push/Explore lands.",
+      "automated": false,
+      "cadence": "sunday",
+      "section_id": "sunday",
+      "section_title": "Sunday",
+      "doc_path": "docs/ops/post-sell-cue-digest.md",
+      "doc_anchor": null,
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/post-sell-cue-digest.md",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "7e163237c38b436a",
         "bullets": [],
         "source_keys": []
       },
@@ -192,11 +296,11 @@
     {
       "id": "sunday-hold-buffer-twin",
       "title": "Hold-buffer twin vs primary (L541)",
-      "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_hold5_fair (exit_confirm_screens 5) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote the longer buffer only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Never edit either book mid-flight.",
+      "summary": "Triggered / nested under sunday-assessment-scoreboard (D4 collapse): Read the twins row in assessment_scoreboard.json: ai_judgment_hold5_fair (exit_confirm_screens 5) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote the longer buffer only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Never edit either book mid-flight.",
       "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
       "doc_path": "docs/ops/assessment-scoreboard.md",
       "doc_anchor": "twins",
       "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#twins",
@@ -223,11 +327,11 @@
     {
       "id": "sunday-graduated-twin",
       "title": "Graduated-allocation twin vs primary",
-      "summary": "Read the twins row in assessment_scoreboard.json: ai_judgment_graduated_fair (use_graduated_allocation on) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote graduated sizing only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Do not read the 3% stress graduated_allocation book as evidence. Never edit either book mid-flight.",
+      "summary": "Triggered / nested under sunday-assessment-scoreboard (D4 collapse): Read the twins row in assessment_scoreboard.json: ai_judgment_graduated_fair (use_graduated_allocation on) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote graduated sizing only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Do not read the 3% stress graduated_allocation book as evidence. Never edit either book mid-flight.",
       "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
       "doc_path": "docs/ops/assessment-scoreboard.md",
       "doc_anchor": "graduated-allocation-twin",
       "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/assessment-scoreboard.md#graduated-allocation-twin",
@@ -347,7 +451,7 @@
     {
       "id": "sunday-assessment-scoreboard",
       "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
-      "summary": "Read docs/data/assessment_scoreboard.json (Analysis → Observe model switcher defaults to Strand A · live): primary ai_judgment_fair vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also twins, frozen books' final records and policy_changes (e.g. significance_gate_v1). Approve a promotion (knob prior, twin or primary/control switch) only when the primary verdict is positive on fair costs; 'AI beats the screen' stays unproven while the accumulate gate never binds (N189). Calibrated, exclusion and Suite A books are frozen: no spawns from them, never edit them. Survivors are starting priors — never auto-apply. N200/N201 tabs are sealed observe-only alone scoreboards — never a second live capital path and never a promote gate.",
+      "summary": "Read docs/data/assessment_scoreboard.json (Analysis → Observe model switcher defaults to Strand A · live): primary ai_judgment_fair vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also twins (hold-buffer + graduated — readiness gate ≥26 screens / interval excludes zero; freeze if confounded parent_knobs_changed), knob_calibration_priors readiness (Acknowledge-and-stop when confidence low and score_gap <0.005), buy_cross_archive_review (observe-only; do not spawn live cross), frozen books' final records and policy_changes (e.g. significance_gate_v1), and nest sunday-ai-path-scoreboard (agree/veto rollup) as a subsection — not a peer essay. Approve a promotion (knob prior, twin or primary/control switch) only when the primary verdict is positive on fair costs; 'AI beats the screen' stays unproven while the accumulate gate never binds (N189). Calibrated, exclusion and Suite A books are frozen: no spawns from them, never edit them. Survivors are starting priors — never auto-apply. N200/N201 tabs are sealed observe-only alone scoreboards — never a second live capital path and never a promote gate.",
       "automated": false,
       "cadence": "sunday",
       "section_id": "sunday",
@@ -359,15 +463,15 @@
       "approval_label": "Approve promotion",
       "analysis": {
         "headline": "Assessment scoreboard · primary negative",
-        "updated_at": "2026-10-14T07:48:39.935335+00:00",
+        "updated_at": "2026-10-15T02:34:33.531717+00:00",
         "fingerprint": "782b2addb6782b0b",
         "bullets": [
-          "ai_judgment_fair: total return -6.6% vs FTAL.L -1.8% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -5.3% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
-          "Primary verdict: negative · 90% interval [-1.6542, -0.1159] · excess at 3% stress -0.2397",
-          "vs control buy_tier_level: difference -0.0527 (common window, not significance)",
+          "ai_judgment_fair: total return -9.1% vs FTAL.L -1.8% since 2026-08-26 — behind the market with 90% confidence. vs buy_tier_level: -7.9% on the common window. Published hurdle, not this book: UK high earnings/price +2.72%/yr (t=2.55), cash earnings/price +3.24%/yr (t=2.73).",
+          "Primary verdict: negative · 90% interval [-1.8592, -0.2019] · excess at 3% stress -0.264",
+          "vs control buy_tier_level: difference -0.079 (common window, not significance)",
           "AI gate binds: False (N189 while it never binds)",
-          "twin ai_judgment_graduated_fair: difference 0.0067 over 5 days",
-          "twin ai_judgment_hold5_fair: difference 0.0144 over 5 days",
+          "twin ai_judgment_graduated_fair: difference 0.0169 over 6 days",
+          "twin ai_judgment_hold5_fair: difference 0.0142 over 6 days",
           "Policy changes: significance_gate_v1 (2026-10-06)"
         ],
         "source_keys": [
@@ -400,7 +504,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Ingest deviations · 1 open",
-        "updated_at": "2026-10-14T07:36:58.188920+00:00",
+        "updated_at": "2026-10-14T20:25:38.943109+00:00",
         "fingerprint": "f765d60144146672",
         "bullets": [
           "Open deviations: 1",
@@ -422,48 +526,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "sunday-shard-epoch0-watch",
-      "title": "Watch shard epoch-0 and near-miss before forking AI",
-      "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support. The AI-fork watch cut is buy-not-now (timing wait on buy-tier) and hold-near-buy (hold at or above 0.28). not-buy-tier and never-buy-tier are census/persistence inventories, not the sample. Do not spawn shard AI-judgment or decision-review --apply until epoch-0 and the tight groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
-      "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
-      "doc_path": "docs/ops/market-sharded-learning.md",
-      "doc_anchor": "what-enter-learning-means",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/market-sharded-learning.md#what-enter-learning-means",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "Admitted shard epoch-0 watch · 22",
-        "updated_at": "2026-10-14T07:38:08.951825+00:00",
-        "fingerprint": "445acb0f9a3f9032",
-        "bullets": [
-          "euro_depth: phase=3 ai=False knob=False holdings=36",
-          "aex: phase=0 ai=False knob=False holdings=8",
-          "aim: phase=0 ai=False knob=False holdings=16",
-          "atx: phase=0 ai=False knob=False holdings=2",
-          "bel20: phase=0 ai=False knob=False holdings=3",
-          "cac40: phase=1 ai=False knob=False holdings=14",
-          "dax: phase=1 ai=False knob=False holdings=1",
-          "euro_stoxx50: phase=1 ai=False knob=False holdings=11"
-        ],
-        "source_keys": [
-          "market_status"
-        ]
-      },
-      "ack": {
-        "acked": true,
-        "stale": false,
-        "acked_at": "2026-10-09T15:43:43.165559+00:00",
-        "decision": "ack_observe",
-        "finding_fingerprint": "445acb0f9a3f9032"
-      },
-      "sort_bucket": "acked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "sunday-shadow-endurance",
       "title": "Review unified experiment assessment",
       "summary": "Read fail/continue/recommend only — recommend ≠ do-now. Failed calibration/exclusion shadows close the promote path. Already-acked recommends (e.g. entry_dca_overlay) do not inflate urgency. Remaining ana-* recommends are eng/manual capacity, not this Sunday gate. Acknowledge when blocking unacked promote/overlay recommends are empty; never auto-promote. Do not reopen N58/N59. Verify live board; 2026-09-03 emptied then-open task recommends.",
@@ -478,7 +540,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Experiment assessment · review ok (0 blocking)",
-        "updated_at": "2026-10-13T08:28:32.176276+00:00",
+        "updated_at": "2026-10-14T09:19:50.236083+00:00",
         "fingerprint": "1d374ee9ad0e2d3b",
         "bullets": [
           "Sunday gate = read fail / continue / recommend. Recommend ≠ do-now spray; failed shadows close promote; acked overlays do not inflate urgency.",
@@ -819,11 +881,11 @@
     {
       "id": "sunday-buy-cross-archive",
       "title": "Read buy-cross archive review",
-      "summary": "After analysis-review, read buy_cross_archive_review.json: cross-book vs level comparison, week-0 cash, names that never entered because they stayed buy-tier. Observe-only — do not spawn a live cross book from sparse historic crossings.",
+      "summary": "Triggered / nested under sunday-assessment-scoreboard (D4 collapse): After analysis-review, read buy_cross_archive_review.json: cross-book vs level comparison, week-0 cash, names that never entered because they stayed buy-tier. Observe-only — do not spawn a live cross book from sparse historic crossings.",
       "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
       "doc_path": "docs/ops/buy-tier-cohort-labs.md",
       "doc_anchor": "cross-book-archive-only",
       "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/buy-tier-cohort-labs.md#cross-book-archive-only",
@@ -864,7 +926,7 @@
       "approval_label": null,
       "analysis": {
         "headline": "Entry DCA adoption · —",
-        "updated_at": "2026-10-13T08:28:32.174158+00:00",
+        "updated_at": "2026-10-14T09:19:50.233738+00:00",
         "fingerprint": "fb1236bc044750bb",
         "bullets": [
           "Adoption stage: —",
@@ -1090,7 +1152,7 @@
     {
       "id": "weekday-daily-hub-glance",
       "title": "Glance Daily hub before acting on chat todos",
-      "summary": "Before acting on chat or Project notes todos, open Automation → Daily (#automation/daily). Prefer top focus lines (P1 live-path bind + P2 offline ingest maintenance) + market warning triage (deepen/dismiss/park on open admission flags — zero_body/unmeasured are not dismissable; spare stall → park; do not ritual-clear health=warn or divert offline ingest / maintenance capacity) + new_info human tasks; check History for yesterday’s Accept followed vs Discuss resolved. Hub should be fresh before 04:00 Europe/London (early ops-monitor ~02:30 UTC). Do not treat Suite A stress green or graduated badges as adoption. Accept runs safe observe-acks only; Discuss queues Project pickup for deepen / capacity judgment. Accept-streak hints are observe-only — never auto-flip automated:true.",
+      "summary": "Before acting on chat or Project notes todos, open Automation → Daily (#automation/daily). Prefer a grounded status skim (ops warns/fails, scoreboard headline, eng queue head, defer triggers, post-run clearance) plus two labeled lanes: (1) Push — at most 1–3 execution suggestions that cite those facts and respect P1/P2 for what to do today (fail-closed empty over padding); (2) Explore — may sit outside North Star / AGENTS spend priorities (new levers, process/AI ideas, post-sell cues) but must be labeled not-today, meet a quality bar (concrete claim + why it might matter + what would falsify or promote), and route durable items to ftse-defer add/fragment — never displace Push or become unbounded brainstorm. Focus P1/P2 lines are north-star chips (relevance-gated); do not ritual-Accept them. Act on market warning triage only when deepen/dismiss/park is decision-relevant (zero_body/unmeasured not dismissable; spare stall → park; bare health=warn stays email/monitor — do not divert offline ingest / maintenance capacity). Prefer new_info / triggered human gates (saturated knobs, volume-ready, parked backlog when pause still fires) over quiet ack theater. Check History for yesterday’s Accept followed vs Discuss resolved. Hub fresh before 04:00 Europe/London (early ops-monitor ~02:30 UTC). Suite A stress green / graduated badges ≠ adoption. Accept = observe-ack only; Discuss → Project pickup for deepen / capacity. Accept-streak hints observe-only — never auto-flip automated:true. Redesign forks D1–D7: Project store docs/daily-hub-attention-redesign.md.",
       "automated": false,
       "cadence": "weekday",
       "section_id": "weekday",
@@ -1223,11 +1285,11 @@
     {
       "id": "sunday-knob-calibration-priors",
       "title": "Review knob calibration priors",
-      "summary": "Confirm readiness signals in knob_calibration_priors.json for the primary book (ai_judgment_fair; frozen books are listed under excluded_frozen_tracks) — confidence, score_gap_vs_runner_up, ready_for_*. If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop — do not promote. Promotion is a separate gate (sunday-assessment-scoreboard).",
+      "summary": "Triggered / nested under sunday-assessment-scoreboard (D4 collapse): Confirm readiness signals in knob_calibration_priors.json for the primary book (ai_judgment_fair; frozen books are listed under excluded_frozen_tracks) — confidence, score_gap_vs_runner_up, ready_for_*. If confidence is low/insufficient and score gap shows no discrimination (<0.005), Acknowledge (observe-only) and stop — do not promote. Promotion is a separate gate (sunday-assessment-scoreboard).",
       "automated": false,
-      "cadence": "sunday",
-      "section_id": "sunday",
-      "section_title": "Sunday",
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
       "doc_path": "docs/ops/knob-calibration.md",
       "doc_anchor": "promoting-a-prior-human-gate",
       "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/knob-calibration.md#promoting-a-prior-human-gate",

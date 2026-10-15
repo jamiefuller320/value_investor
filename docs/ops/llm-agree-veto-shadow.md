@@ -22,12 +22,19 @@ On every `ftse-paper-auto` track pass (after fills are already decided):
 3. Persist cards; attach a slim copy onto the **rebalance log** entry.
 4. **Never** change sells, holds, or buys — `influences_live=false`.
 
-Default judge backend: `evidence_heuristic` (deterministic, cites trail inputs).
-Every card carries **`judge_spec_id`** (default `heuristic.v1`) so a later
-observe A/B challenger can set a new id + optional `parent_spec_id` without
-live influence. Schema is LLM-ready (`judge_backend=llm`) but paper-auto does
-**not** call an LLM (N24). A future LLM backend must emit the same evidence
-fields. See [`refinement-learning-loops.md`](refinement-learning-loops.md).
+**Judge backends (Phase 1):**
+
+| Backend | When | Spec ids |
+|---------|------|----------|
+| `evidence_heuristic` | Default / fail-closed fallback | `judge_spec_id=heuristic.v1` |
+| `llm` | `LLM_AGREE_VETO_BACKEND=auto` (default) **and** Cursor API key present, or `=llm` | `judge_spec_id=llm.v1`, `parent_spec_id=heuristic.v1` |
+
+Set `LLM_AGREE_VETO_BACKEND=heuristic` to force the deterministic baseline. Optional
+`LLM_AGREE_VETO_MODEL` (default `composer-2.5`). LLM path is **observe-only** —
+same evidence card schema, host-built citations (no invented metrics), heuristic
+baseline kept in `card.meta.heuristic_baseline` for A/B. API / parse failures
+fail closed to heuristic (N24 = no live routing; **N173** hard veto still parked).
+See [`refinement-learning-loops.md`](refinement-learning-loops.md).
 
 ## Artifacts
 
@@ -50,7 +57,9 @@ fields. See [`refinement-learning-loops.md`](refinement-learning-loops.md).
   live sell authority.
 
 Primary comparison: disagreement rate on `rules` / `ai_judgment` vs holds the
-`still_in_buy_set` twin already takes. Do not back-label prior NAV.
+`still_in_buy_set` twin already takes. With LLM active, also read
+`disagree_vs_heuristic_count` / per-card `meta.heuristic_baseline` on the Sunday
+AI path scoreboard. Do not back-label prior NAV.
 
 ## Promotion gate → hard veto (later)
 
@@ -73,3 +82,27 @@ Until then: observe marks only; algo twin owns any capital-path churn experiment
 | CLI | Optional — cards are on the rebalance trail; no sole-path CLI required |
 
 Finding title: **LLM agree/veto shadow rollup missing** (`auto_fixable=False`).
+
+## Sunday AI path scoreboard
+
+Human gate (with the Sunday analysis bundle): read the rollup + per-track review
+JSON as a **checklist/scoreboard** — disagreement / abstain rates, heuristic
+baseline vs any later LLM `judge_spec_id`, comparison to `still_in_buy_set`
+marks. Ordered phases and attention budget live in the Project store
+`docs/ai-path-roadmap.md` (shadow judge first; beachhead / ecosystem later under
+**L605** / **N209** / **L606**).
+
+| Do | Don't |
+|----|-------|
+| Scoreboard marks only | Per-ticker AI chat as the weekly ritual |
+| Keep `influences_live=false` | Promote hard veto (**N173**) from thin marks |
+| Surface via human checklist `sunday-ai-path-scoreboard` | Invent a Daily Hub per-name todo |
+
+**Sunday nest neighbor (package M):** human checklist `sunday-post-sell-cues`
+sits in the same scoreboard neighborhood — thin pointer to
+`docs/data/post_sell_cue_digest.json` (timing + selection cues; N205 skeleton
+feed). Not a second AI ritual; see [post-sell-cue-digest.md](post-sell-cue-digest.md).
+
+Weekday automation stays the rollup-missing warn above. Intended later
+ops-monitor finding (not wired until a committed freshness flag exists):
+**AI path scoreboard — Sunday review** (`auto_fixable=False`).

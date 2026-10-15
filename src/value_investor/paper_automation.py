@@ -36,6 +36,7 @@ from value_investor.hypothesis_outcome_linker import (
     summarize_learning_tracks_hypothesis_outcomes,
 )
 from value_investor.llm_agree_veto_shadow import (
+    resolve_agree_veto_judge_backend,
     run_llm_agree_veto_shadow_pass,
     summarize_learning_tracks_llm_agree_veto,
 )
@@ -1361,6 +1362,8 @@ def run_daily_automation(
         ),
     )
     # Observe-only: algo propose → evidence-citing agree/veto. Never blocks fills.
+    # Phase 1: LLM backend when LLM_AGREE_VETO_BACKEND=auto|llm and API key present;
+    # fail-closed to heuristic. influences_live always false (N24 / N173).
     llm_agree_veto_shadow = run_llm_agree_veto_shadow_pass(
         output_dir=output_dir,
         track_id=str(config.track_id or "rules"),
@@ -1375,6 +1378,7 @@ def run_daily_automation(
             or DEFAULT_RANK_DROP_EXIT_MIN
         ),
         as_of=gate.get("local_time"),
+        judge_backend=resolve_agree_veto_judge_backend(),
     )
 
     result = AutomationRunResult(

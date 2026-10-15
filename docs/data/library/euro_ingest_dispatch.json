@@ -1,11 +1,11 @@
 {
   "market_id": "euro_depth",
   "focus_market": "euro_depth",
-  "mode": "sprint",
-  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=9, indexed_without_body=15)",
+  "mode": "exhausted",
+  "reason": "Ingest avenues exhausted — parked 10 leftover thin/IWB name(s) (ABI.BR, ACKB.BR, APAM.AS, BAS.DE, DQ7A.IR, EVN.VI, MUV2.DE, PRX.AS); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
   "ingest_parity_met": false,
-  "ingest_exhausted": false,
-  "ingest_sprint_complete": false,
+  "ingest_exhausted": true,
+  "ingest_sprint_complete": true,
   "parked_tickers": [
     "ABI.BR",
     "ACKB.BR",
@@ -14,6 +14,7 @@
     "DQ7A.IR",
     "EVN.VI",
     "MUV2.DE",
+    "PRX.AS",
     "UCB.BR",
     "WIE.VI"
   ],
@@ -24,7 +25,7 @@
     "need 8 closed exit-shadow episodes (have 0)"
   ],
   "filing_health": {
-    "snapshot_at": "2026-10-14T13:52:58.454373+00:00",
+    "snapshot_at": "2026-10-14T20:26:00.665820+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -69,31 +70,30 @@
       "DQ7A.IR",
       "EVN.VI",
       "MUV2.DE",
+      "PRX.AS",
       "UCB.BR",
       "WIE.VI"
     ],
-    "parked_count": 9,
-    "effective_thin_body_buy_tier": 1,
-    "effective_thin_body_tickers": [
-      "PRX.AS"
-    ],
+    "parked_count": 10,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
     "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": false
+    "ingest_exhausted": true
   },
   "filing_gaps": 0,
-  "max_daily_successes": 4,
-  "max_targets": 24,
-  "cron_morning": true,
-  "cron_afternoon": true,
-  "cron_midafternoon": true,
-  "cron_evening": true,
+  "max_daily_successes": 8,
+  "max_targets": 62,
+  "cron_morning": false,
+  "cron_afternoon": false,
+  "cron_midafternoon": false,
+  "cron_evening": false,
   "cron_ladder_weekday": true,
   "cron_maintenance": true,
-  "should_run_sprint_ingest": true,
-  "should_run_maintenance_ingest": false,
-  "should_run_ingest": true,
-  "evaluated_at": "2026-10-14T13:52:58.458689+00:00",
+  "should_run_sprint_ingest": false,
+  "should_run_maintenance_ingest": true,
+  "should_run_ingest": false,
+  "evaluated_at": "2026-10-14T20:26:00.669618+00:00",
   "maintenance_markets": [
     "aex",
     "aim",
@@ -102,6 +102,7 @@
     "bel20",
     "cac40",
     "dax",
+    "euro_depth",
     "euro_stoxx50",
     "ftse_mib",
     "ftse_smallcap",
@@ -140,144 +141,49 @@
     "us_adr_asia"
   ],
   "parallel_sprint_markets": [
-    "sp500"
+    "omxs30"
   ],
   "parallel_sprint_status": [
     {
-      "market_id": "sp500",
+      "market_id": "omxs30",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=5)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=1, indexed_without_body=0)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
-      "parked_tickers": [
-        "CRH",
-        "LH",
-        "LMT"
-      ],
+      "parked_tickers": [],
       "phase3_ready": false,
-      "current_phase": 1,
+      "current_phase": 0,
       "next_phase": 1,
       "phase_blockers": [
-        "sp500 not in ladder.weekly_paper_shard_markets"
+        "no benchmark configured for omxs30"
       ],
       "filing_health": {
-        "snapshot_at": "2026-10-14T13:53:38.805877+00:00",
-        "market_id": "sp500",
-        "buy_tier_count": 148,
+        "snapshot_at": "2026-10-14T20:26:22.689231+00:00",
+        "market_id": "omxs30",
+        "buy_tier_count": 12,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 5,
-        "bodies_min": 17,
-        "bodies_median": 21.0,
-        "bodies_max": 88,
-        "coverage_scope": "canonical",
-        "ftse_equivalent": true,
-        "unmeasured_tickers": [],
-        "zero_body_tickers": [],
-        "thin_body_tickers": [],
-        "indexed_without_body_tickers": [
-          "LMT",
-          "EME",
-          "CRH",
-          "LH"
-        ],
-        "indexed_without_body_by_ticker": {
-          "LMT": 1,
-          "EME": 1,
-          "CRH": 2,
-          "LH": 1
-        },
-        "parked_tickers": [
-          "CRH",
-          "LH",
-          "LMT"
-        ],
-        "parked_count": 3,
-        "effective_thin_body_buy_tier": 0,
-        "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 1,
-        "effective_indexed_without_body_tickers": [
-          "EME"
-        ],
-        "ingest_exhausted": false
-      },
-      "filing_gaps": 0,
-      "max_daily_successes": 4,
-      "max_targets": 24,
-      "cron_morning": true,
-      "cron_afternoon": true,
-      "cron_midafternoon": true,
-      "cron_evening": true,
-      "cron_ladder_weekday": true,
-      "cron_maintenance": false,
-      "should_run_sprint_ingest": true,
-      "should_run_maintenance_ingest": false,
-      "should_run_ingest": true,
-      "evaluated_at": "2026-10-14T13:53:38.811157+00:00",
-      "should_run_parallel_ingest": true
-    }
-  ],
-  "parallel_sprint_2_markets": [
-    "euro_stoxx50"
-  ],
-  "parallel_sprint_2_status": [
-    {
-      "market_id": "euro_stoxx50",
-      "focus_market": "euro_depth",
-      "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=3, indexed_without_body=1)",
-      "ingest_parity_met": false,
-      "ingest_exhausted": false,
-      "ingest_sprint_complete": false,
-      "parked_tickers": [
-        "BAS.DE",
-        "MUV2.DE",
-        "SAP.DE"
-      ],
-      "phase3_ready": false,
-      "current_phase": 1,
-      "next_phase": 1,
-      "phase_blockers": [
-        "euro_stoxx50 not in ladder.weekly_paper_shard_markets"
-      ],
-      "filing_health": {
-        "snapshot_at": "2026-10-14T13:53:39.704867+00:00",
-        "market_id": "euro_stoxx50",
-        "buy_tier_count": 15,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 3,
-        "indexed_without_body": 1,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 0,
         "bodies_min": 1,
-        "bodies_median": 5,
-        "bodies_max": 123,
+        "bodies_median": 10.0,
+        "bodies_max": 16,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [
-          "MUV2.DE",
-          "BAS.DE",
-          "IFX.DE"
+          "NIBE-B.ST"
         ],
-        "indexed_without_body_tickers": [
-          "SAP.DE"
-        ],
-        "indexed_without_body_by_ticker": {
-          "SAP.DE": 1
-        },
-        "parked_tickers": [
-          "BAS.DE",
-          "MUV2.DE",
-          "SAP.DE"
-        ],
-        "parked_count": 3,
+        "indexed_without_body_tickers": [],
+        "indexed_without_body_by_ticker": {},
+        "parked_tickers": [],
+        "parked_count": 0,
         "effective_thin_body_buy_tier": 1,
         "effective_thin_body_tickers": [
-          "IFX.DE"
+          "NIBE-B.ST"
         ],
         "effective_indexed_without_body": 0,
         "effective_indexed_without_body_tickers": [],
@@ -295,14 +201,14 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-10-14T13:53:39.706386+00:00",
+      "evaluated_at": "2026-10-14T20:26:22.689862+00:00",
       "should_run_parallel_ingest": true
     }
   ],
+  "parallel_sprint_2_markets": [],
+  "parallel_sprint_2_status": [],
   "sprint_markets": [
-    "euro_depth",
-    "sp500",
-    "euro_stoxx50"
+    "omxs30"
   ],
   "market_queue": [
     "sp500",
@@ -330,13 +236,13 @@
   "ingest_cascade": {
     "enabled": true,
     "head_market": "euro_depth",
-    "head_at_parity": false,
-    "head_needs_fat_slot": true,
-    "hour_utc": 13,
+    "head_at_parity": true,
+    "head_needs_fat_slot": false,
+    "hour_utc": 20,
     "skip_stream_2_now": false,
-    "stream_1_mode": "spare",
-    "stream_2_mode": "spare",
-    "reason": "Head euro_depth still has filing gaps; stream 1/2 run spare fractions (0.50/0.25).",
+    "stream_1_mode": "full",
+    "stream_2_mode": "full",
+    "reason": "Head euro_depth is at ingest parity — spare streams return to full caps (fat slot may shift on the next focus advance).",
     "config": {
       "enabled": true,
       "stream_1_target_fraction": 0.5,
@@ -355,10 +261,8 @@
     }
   },
   "scheduler_stream_1_markets": [
-    "sp500"
+    "omxs30"
   ],
-  "scheduler_stream_2_markets": [
-    "euro_stoxx50"
-  ],
+  "scheduler_stream_2_markets": [],
   "should_run_library_maintenance": true
 }

@@ -1,18 +1,18 @@
 {
   "ticker": "CNA.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-15T13:37:51.203146+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-10-11T07:28:40.155686+00:00",
+  "attached_at": "2026-10-14T14:37:13.134990+00:00",
+  "history_run_path": "docs/data/history/run_20261011_072840.json.gz",
+  "history_models_path": "docs/data/history/models_20261011_072840.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
-      "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "strong_buy": 14,
+      "buy": 41,
+      "hold": 141,
+      "avoid": 52
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 14,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 21,
+      "buy": 26,
+      "hold": 45,
+      "avoid": 10
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -30,45 +33,68 @@
   "ticker_signal": {
     "ticker": "CNA.L",
     "signal": "buy",
-    "conviction_score": 0.387838,
+    "conviction_score": 0.16483115,
     "data_quality_score": 1.0,
     "name": "Centrica plc",
     "sector": "Utilities",
-    "timing_signal": "neutral",
-    "timing_score": 0.625,
-    "action_note": "Buy — neutral timing",
-    "models_passed": 10.0,
-    "weighted_model_score": 0.5901863636363637,
-    "research_verdict": null,
+    "timing_signal": "accumulate",
+    "timing_score": 0.75,
+    "action_note": "Buy — favourable entry timing | FCF basis mismatch: filing £141M | screen TTM £2141.9M | company-adj £167M | FCF definition divergence",
+    "models_passed": 8.0,
+    "weighted_model_score": 0.5926772727272728,
+    "research_verdict": "accumulate",
     "adjusted_signal": "hold",
-    "research_as_of": null,
-    "research_confidence": null,
+    "research_as_of": "2026-10-04T08:03:11.635320+00:00",
+    "research_confidence": 0.71,
     "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": true,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": -0.6986773313845183,
+    "adjusted_eps_growth_pct": null,
+    "yahoo_normalized_income_growth_pct": -0.6986773313845183,
     "signal_trend": "stable",
-    "weeks_at_signal": 17,
-    "passed_families": "cheapness,dividend,garp,risk",
-    "price_vs_sma200_pct": -0.19435534532957927,
+    "weeks_at_signal": 25,
+    "passed_families": "cheapness,risk",
+    "price_vs_sma200_pct": -0.18202247019316173,
     "core_order": "limit",
-    "core_limit": 145.18,
-    "core_allocation_pct": 0.6,
-    "tactical_limit": 139.32,
-    "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 130.87,
-    "tactical_take_profit": 159.04,
-    "trade_plan_summary": "Trade plan: core 60% limit £145.18; tactical 40% limit £139.32; tactical stop £130.87, target £159.04.",
-    "atr_14": 3.7029,
-    "volume_ratio_20": 0.0275,
+    "core_limit": 145.88,
+    "core_allocation_pct": 0.65,
+    "tactical_limit": 139.98,
+    "tactical_allocation_pct": 0.35,
+    "tactical_stop_loss": 131.5,
+    "tactical_take_profit": 159.14,
+    "trade_plan_summary": "Trade plan: core 65% limit £145.88; tactical 35% limit £139.98; tactical stop £131.50, target £159.14.",
+    "atr_14": 3.5497,
+    "volume_ratio_20": 0.8473,
     "operating_cashflow": 695000000.0,
     "operating_cashflow_gross": null,
     "fcf_dividend_coverage_gross": null,
     "fcf_dividend_coverage_net": 0.5949367088607594,
-    "fcf_definition_divergence": false,
+    "fcf_definition_divergence": true,
     "fcf_divergence_flagged": true,
-    "fcf_dividend_coverage": null
+    "fcf_dividend_coverage": {
+      "statutory_ocf_minus_capex": {
+        "label": "Statutory OCF−CapEx",
+        "ratio": 0.5949367088607594
+      },
+      "management_cash_generated_minus_capex": {
+        "label": "Management cash-generated−CapEx",
+        "ratio": null
+      }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Screen baseline: statutory 0.59×."
+    ],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -105,13 +131,13 @@
       "ticker": "CNA.L",
       "model_id": "earnings_yield",
       "passed": true,
-      "score": 0.8527
+      "score": 0.8483
     },
     {
       "ticker": "CNA.L",
       "model_id": "fcf_yield",
       "passed": false,
-      "score": 0.2466
+      "score": 0.2502
     },
     {
       "ticker": "CNA.L",
@@ -128,8 +154,8 @@
     {
       "ticker": "CNA.L",
       "model_id": "neff_pegy",
-      "passed": true,
-      "score": 0.9681
+      "passed": false,
+      "score": 0.9648
     },
     {
       "ticker": "CNA.L",
@@ -153,31 +179,31 @@
       "ticker": "CNA.L",
       "model_id": "high_dividend",
       "passed": false,
-      "score": 0.6435
+      "score": 0.7016
     },
     {
       "ticker": "CNA.L",
       "model_id": "dividend_growth",
-      "passed": true,
+      "passed": false,
       "score": 0.6667
     },
     {
       "ticker": "CNA.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.6208
+      "score": 0.6176
     },
     {
       "ticker": "CNA.L",
       "model_id": "acquirers_multiple",
       "passed": true,
-      "score": 0.785
+      "score": 0.7757
     },
     {
       "ticker": "CNA.L",
       "model_id": "dreman_contrarian",
       "passed": true,
-      "score": 0.6951
+      "score": 0.7084
     },
     {
       "ticker": "CNA.L",
@@ -204,6 +230,6 @@
       "score": 1.0
     }
   ],
-  "models_passed": 10,
+  "models_passed": 8,
   "models_total": 22
 }

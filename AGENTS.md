@@ -5,7 +5,7 @@
 Ultimate goal: a **self-improving automated global value portfolio**.  
 Interim goal: **high-quality prompts / decision packs** for manual verification and trade actions.
 
-North-star stages and the “richness before breadth on the live path” rule are in [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md). Pipeline and data-model reference: [`docs/architecture.md`](docs/architecture.md). Keep the live screener on FTSE 350 until stage 4; grow other markets via `ftse-library` offline.
+North-star stages and the “richness before breadth on the live path” rule are in [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md). Pipeline and data-model reference: [`docs/architecture.md`](docs/architecture.md). Keep the live *screener* on FTSE 350 until stage 4; grow other markets via `ftse-library` offline. **Investment capital/decision eligibility** is quality-threshold-driven (**F9-B**): named stocks need filings body, FCF basis, overlay bind, and memo freshness (plus market `sprint_ingest_complete` / `filing_ready` when opening or extending a book) — not FTSE membership. Offline library growth and cascade serialization stay separate from that eligibility gate.
 
 ## Spend priorities (now)
 
