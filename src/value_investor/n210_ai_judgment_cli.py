@@ -1,4 +1,4 @@
-"""CLI for sealed N210 observe-only fixed-stake AI/filter judgment (B3 stub)."""
+"""CLI for sealed N210 observe-only fixed-stake AI/filter judgment (B3)."""
 
 from __future__ import annotations
 
@@ -19,15 +19,15 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=(
             "N210 sealed observe-only (B3): fixed-stake AI/filter judgment; "
-            "fair-cost episode % primary. Registration stub until episode walker "
-            "lands. Never writes live books."
+            "progressive episode walker; fair-cost episode % primary. "
+            "Never writes live books (influences_live=false)."
         )
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
         default=DEFAULT_OUTPUT_DIR,
-        help="Data root (reserved for future walker)",
+        help="Data root with archived weekly screens (default: docs/data)",
     )
     parser.add_argument(
         "--store",
