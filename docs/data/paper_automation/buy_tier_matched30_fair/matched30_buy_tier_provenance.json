@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "spawned_at": "2026-10-15T10:03:40.608168+00:00",
+  "track_id": "buy_tier_matched30_fair",
+  "parent_track_id": "buy_tier_level",
+  "market_id": "ftse350",
+  "spawn_reason": "B3 matched top-30 buy-tier control twin (cold start; construction only)",
+  "fair_costs": {
+    "trade_cost_pct": 0.0027500000000000003,
+    "buy_cost_pct": 0.00525,
+    "sell_cost_pct": 0.00025
+  },
+  "varied": {
+    "max_positions": {
+      "parent": 120,
+      "twin": 30
+    },
+    "sector_cap": {
+      "parent": 1.0,
+      "twin": 0.2
+    }
+  },
+  "parent_knobs_at_spawn": {
+    "min_conviction": 0.0,
+    "exit_confirm_screens": 2,
+    "reentry_cooldown_screens": 1,
+    "max_positions": 120,
+    "sector_cap": 1.0,
+    "skip_timing_wait": true,
+    "require_research_accumulate": false,
+    "use_adjusted_signal": false,
+    "min_rebalance_notional_gbp": 10.0,
+    "use_graduated_allocation": false
+  },
+  "learning_question": "Matched construction control: unfiltered buy-tier top-30 sleeve at fair costs (same max_positions/sector_cap as ai_judgment_matched30_fair).",
+  "readiness_gate": "Construction twin only — never a filter-skill primary. Keep as matched control for ai_judgment_matched30_fair NAV comparisons.",
+  "note": "Knobs are fixed (churn-policy twin; decision-review --apply skips it). Do not edit mid-flight; freeze it and start a new twin instead."
+}

@@ -474,6 +474,31 @@ GRADUATED_READINESS_GATE = (
     "excludes zero; otherwise freeze the twin."
 )
 
+MATCHED30_MAX_POSITIONS = 30
+MATCHED30_SECTOR_CAP = 0.2
+AI_MATCHED30_TRACK_ID = "ai_judgment_matched30_fair"
+BUY_TIER_MATCHED30_TRACK_ID = "buy_tier_matched30_fair"
+AI_MATCHED30_PROVENANCE_FILENAME = "matched30_ai_judgment_provenance.json"
+BUY_TIER_MATCHED30_PROVENANCE_FILENAME = "matched30_buy_tier_provenance.json"
+AI_MATCHED30_LEARNING_QUESTION = (
+    "Does the AI/filter identity, run as a fair-cost ~30-name fund (max_positions=30, "
+    "sector_cap=0.2), beat a matched top-30 unfiltered buy-tier sleeve on total return? "
+    "Compare only to buy_tier_matched30_fair — not to full buy_tier_level (55/120)."
+)
+AI_MATCHED30_READINESS_GATE = (
+    "Shadow until ≥48 closed episodes or ≥26 weekly marks with a usable "
+    "years_to_detect bar vs buy_tier_matched30_fair on the common window. "
+    "Do not crown assessment primary from this book alone (B3 / F8)."
+)
+BUY_TIER_MATCHED30_LEARNING_QUESTION = (
+    "Matched construction control: unfiltered buy-tier top-30 sleeve at fair costs "
+    "(same max_positions/sector_cap as ai_judgment_matched30_fair)."
+)
+BUY_TIER_MATCHED30_READINESS_GATE = (
+    "Construction twin only — never a filter-skill primary. Keep as matched control "
+    "for ai_judgment_matched30_fair NAV comparisons."
+)
+
 
 def _comparable_knobs(cfg: AutomationConfig) -> dict[str, Any]:
     return {
@@ -502,17 +527,24 @@ def _spawn_primary_twin(
     spawn_reason: str,
     market_id: str,
     dry_run: bool,
+    parent_track_id: str | None = None,
+    config_overrides: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Cold-start a fixed-knob, fair-cost twin of the assessment-model primary.
+    """Cold-start a fixed-knob, fair-cost twin of an active parent book.
 
-    The twin copies the primary's config, overrides only ``knobs``, starts from
-    fresh capital and is a churn-policy twin, so decision-review never tunes it.
-    Idempotent: an existing twin is left untouched.
+    Defaults to the assessment-model primary when ``parent_track_id`` is omitted.
+    The twin copies the parent's config, overrides ``knobs`` (and optional
+    ``config_overrides``), starts from fresh capital and is a churn-policy twin,
+    so decision-review never tunes it. Idempotent: an existing twin is left untouched.
     """
-    from value_investor.assessment_model import is_track_frozen, primary_track_id, register_twin
+    from value_investor.assessment_model import (
+        is_track_frozen,
+        primary_track_id,
+        register_twin,
+    )
 
     paper_root = Path(paper_root)
-    parent_id = primary_track_id(paper_root)
+    parent_id = str(parent_track_id or primary_track_id(paper_root))
     twin_dir = paper_root / twin_id
     config_path = twin_dir / CONFIG_FILENAME
     result: dict[str, Any] = {
@@ -549,6 +581,8 @@ def _spawn_primary_twin(
     cfg.is_churn_policy_twin = True
     cfg.churn_policy_parent_track = parent_id
     for key, value in knobs.items():
+        setattr(cfg, key, value)
+    for key, value in (config_overrides or {}).items():
         setattr(cfg, key, value)
     stamp_fair_costs(cfg, market_id=market_id)
 
@@ -636,6 +670,71 @@ def spawn_graduated_allocation_twin(
         market_id=market_id,
         dry_run=dry_run,
     )
+
+
+def spawn_matched30_twins(
+    paper_root: Path,
+    *,
+    market_id: str = LIVE_PAPER_MARKET_ID,
+    dry_run: bool = False,
+    max_positions: int = MATCHED30_MAX_POSITIONS,
+    sector_cap: float = MATCHED30_SECTOR_CAP,
+) -> dict[str, Any]:
+    """B3: cold-start matched-30 AI filter fund + matched top-30 buy-tier control.
+
+    Both are churn-policy shadow paper twins (not assessment primary). Fund NAV
+    comparisons are only meaningful between the pair — not vs full ``buy_tier_level``.
+    Idempotent.
+    """
+    n = int(max_positions)
+    cap = float(sector_cap)
+    ai = _spawn_primary_twin(
+        paper_root,
+        twin_id=AI_MATCHED30_TRACK_ID,
+        track_label=f"AI judgment matched-{n} fund twin (B3 shadow)",
+        knobs={"max_positions": n, "sector_cap": cap},
+        learning_question=AI_MATCHED30_LEARNING_QUESTION,
+        readiness_gate=AI_MATCHED30_READINESS_GATE,
+        provenance_filename=AI_MATCHED30_PROVENANCE_FILENAME,
+        spawn_reason=("B3 matched-30 AI/filter fund twin (cold start; shadow until volume gates)"),
+        market_id=market_id,
+        dry_run=dry_run,
+        parent_track_id=AI_JUDGMENT_FAIR_TRACK_ID,
+        config_overrides={"fair_cost_parent_track": AI_JUDGMENT_FAIR_TRACK_ID},
+    )
+    control = _spawn_primary_twin(
+        paper_root,
+        twin_id=BUY_TIER_MATCHED30_TRACK_ID,
+        track_label=f"Buy-tier matched-{n} construction control (B3 shadow)",
+        knobs={"max_positions": n, "sector_cap": cap},
+        learning_question=BUY_TIER_MATCHED30_LEARNING_QUESTION,
+        readiness_gate=BUY_TIER_MATCHED30_READINESS_GATE,
+        provenance_filename=BUY_TIER_MATCHED30_PROVENANCE_FILENAME,
+        spawn_reason=("B3 matched top-30 buy-tier control twin (cold start; construction only)"),
+        market_id=market_id,
+        dry_run=dry_run,
+        parent_track_id=BUY_TIER_LEVEL_TRACK_ID,
+        config_overrides={
+            "fair_cost_parent_track": BUY_TIER_LEVEL_TRACK_ID,
+            "is_cohort_lab": True,
+            "use_adjusted_signal": False,
+            "require_research_accumulate": False,
+            "min_conviction": 0.0,
+            "use_momentum_grace": False,
+            "use_graduated_allocation": False,
+            "skip_timing_wait": True,
+        },
+    )
+    return {
+        "ai_judgment_matched30_fair": ai,
+        "buy_tier_matched30_fair": control,
+        "max_positions": n,
+        "sector_cap": cap,
+        "note": (
+            "Shadow paper twins — not assessment primary. Compare NAV only within "
+            "this matched pair. Judgment evidence primary is N210 fair-cost episode %."
+        ),
+    }
 
 
 def recommend_rows_for_fair_twins(assessment: dict[str, Any]) -> list[dict[str, Any]]:

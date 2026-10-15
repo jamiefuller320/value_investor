@@ -117,6 +117,23 @@ def main(argv: list[str] | None = None) -> int:
     grad_p.add_argument("--json", action="store_true")
     grad_p.set_defaults(func=_cmd_spawn_graduated_twin)
 
+    m30_p = sub.add_parser(
+        "spawn-matched30-twins",
+        help=(
+            "B3: cold-start matched-30 AI judgment fund twin + matched top-30 "
+            "buy-tier control (shadow paper; not assessment primary)"
+        ),
+    )
+    m30_p.add_argument(
+        "--paper-root",
+        type=Path,
+        default=DEFAULT_PAPER_ROOT,
+        help="Paper automation root (default: docs/data/paper_automation)",
+    )
+    m30_p.add_argument("--dry-run", action="store_true")
+    m30_p.add_argument("--json", action="store_true")
+    m30_p.set_defaults(func=_cmd_spawn_matched30_twins)
+
     warm_p = sub.add_parser(
         "warm-start-fair-lab",
         help="PIT warm-start Suite B tracks from Suite A parent rebalance logs",
@@ -321,6 +338,30 @@ def _cmd_spawn_graduated_twin(args: argparse.Namespace) -> int:
             f"{payload.get('reason') or ''}".rstrip()
         )
     return 0 if payload.get("spawned") or payload.get("dry_run") else 1
+
+
+def _cmd_spawn_matched30_twins(args: argparse.Namespace) -> int:
+    from value_investor.fair_cost_lab import spawn_matched30_twins
+
+    payload = spawn_matched30_twins(args.paper_root, dry_run=bool(args.dry_run))
+    if args.json:
+        print(json.dumps(payload, indent=2))
+    else:
+        for tid, row in payload.items():
+            if not isinstance(row, dict):
+                continue
+            print(
+                f"{tid}: spawned={row.get('spawned')} created={row.get('created')} "
+                f"reason={row.get('reason')}"
+            )
+        if payload.get("note"):
+            print(payload["note"])
+    spawned_ok = all(
+        (row.get("spawned") or row.get("dry_run"))
+        for row in payload.values()
+        if isinstance(row, dict)
+    )
+    return 0 if spawned_ok else 1
 
 
 def _cmd_warm_start_fair_lab(args: argparse.Namespace) -> int:

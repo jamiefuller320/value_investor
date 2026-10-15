@@ -2158,6 +2158,55 @@ def check_n201_value_mom_observe(
     ]
 
 
+def check_n210_ai_judgment_observe(
+    *,
+    output_dir: Path | None = None,
+    store_path: Path | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only N210: B3 fixed-stake AI/filter judgment (registration stub).
+
+    Writes ``docs/data/n210_ai_judgment_observe.json`` (+ registration).
+    Never changes books or knobs (``auto_fixable=False``).
+    See docs/ops/n210-ai-judgment-observe.md.
+    """
+    from value_investor.n210_ai_judgment_observe import (
+        DEFAULT_OUTPUT_DIR,
+        DEFAULT_STORE_PATH,
+        STORE_FAILED_TITLE,
+        ops_findings_from_n210_observe,
+        refresh_n210_ai_judgment_observe,
+    )
+
+    data_dir = Path(output_dir) if output_dir is not None else DEFAULT_OUTPUT_DIR
+    try:
+        payload = refresh_n210_ai_judgment_observe(
+            output_dir=data_dir,
+            store_path=Path(store_path) if store_path is not None else DEFAULT_STORE_PATH,
+            persist=persist,
+        )
+    except (OSError, ValueError, TypeError, KeyError, ZeroDivisionError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title=STORE_FAILED_TITLE,
+                summary=str(exc),
+                auto_fixable=False,
+            )
+        ]
+    return [
+        OpsFinding(
+            severity=str(finding.get("severity") or "info"),
+            category=str(finding.get("category") or "research"),
+            title=str(finding.get("title") or "N210 AI-judgment observe"),
+            summary=str(finding.get("summary") or ""),
+            auto_fixable=bool(finding.get("auto_fixable")),
+        )
+        for finding in ops_findings_from_n210_observe(payload)
+    ]
+
+
 def check_post_sell_cue_digest(
     *,
     data_dir: Path | None = None,
@@ -3870,6 +3919,7 @@ def collect_ops_findings(
     findings.extend(check_post_sell_cue_digest())
     findings.extend(check_n200_tech_timing_observe())
     findings.extend(check_n201_value_mom_observe())
+    findings.extend(check_n210_ai_judgment_observe())
     findings.extend(check_two_lot_replay())
     findings.extend(check_sec_companyfacts_coverage())
     findings.extend(check_hkex_direct_coverage())
