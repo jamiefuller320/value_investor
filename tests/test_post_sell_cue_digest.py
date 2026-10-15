@@ -390,7 +390,9 @@ def test_epoch_join_fail_closed_excludes_unknown_from_cues(tmp_path: Path) -> No
     assert payload["epoch"]["epoch_unknown_count"] == 1
     assert payload["control_closed_sells"]["cue_closed_sell_count"] == 1
     # Orphan must not appear in cue sample / buckets population count.
-    bucket_cue = next(c for c in payload["selection_cues"] if c["cue_id"] == "selection_realized_buckets")
+    bucket_cue = next(
+        c for c in payload["selection_cues"] if c["cue_id"] == "selection_realized_buckets"
+    )
     assert bucket_cue["evidence"]["closed_sell_count_cue"] == 1
     assert bucket_cue["evidence"]["epoch_unknown_excluded"] == 1
     assert "ORPH.L" not in bucket_cue["evidence"].get("sample_tickers", [])

@@ -149,9 +149,7 @@ def _selection_fingerprint(
     *,
     trade_cost_pct: Any = None,
 ) -> str:
-    payload: dict[str, Any] = {
-        key: (selection or {}).get(key) for key in _SELECTION_FP_KEYS
-    }
+    payload: dict[str, Any] = {key: (selection or {}).get(key) for key in _SELECTION_FP_KEYS}
     if trade_cost_pct is not None:
         payload["trade_cost_pct"] = trade_cost_pct
     raw = json.dumps(payload, sort_keys=True, default=str)
@@ -174,9 +172,7 @@ def _epoch_key_from_pass(
     fund_created_at: str | None,
 ) -> dict[str, Any]:
     selection = entry.get("selection") if isinstance(entry.get("selection"), dict) else {}
-    screen = (
-        entry.get("screen_source") if isinstance(entry.get("screen_source"), dict) else {}
-    )
+    screen = entry.get("screen_source") if isinstance(entry.get("screen_source"), dict) else {}
     # knob_epoch_started_at may be null but the field must be present (fail-closed
     # invents nothing — null is an honest cold-start stamp).
     knob_epoch = entry.get("knob_epoch_started_at", None)
@@ -493,9 +489,7 @@ def _exit_timing_cues(rollup: dict[str, Any] | None) -> list[dict[str, Any]]:
         }
     if not gaps_by_track:
         return []
-    ready_n = sum(
-        1 for v in gaps_by_track.values() if v.get("ready_for_probability_analysis")
-    )
+    ready_n = sum(1 for v in gaps_by_track.values() if v.get("ready_for_probability_analysis"))
     return [
         {
             "cue_id": "exit_timing_ready_ftse",
@@ -603,9 +597,7 @@ def _control_closed_sells(
     fund_cfg = (fund or {}).get("config") if isinstance((fund or {}).get("config"), dict) else {}
     fund_created_at = str(fund_cfg.get("created_at") or "") or None
     by_trade_id = _index_rebalance_passes_by_trade_id(rebalance_entries)
-    current_epoch = _current_epoch_from_log(
-        rebalance_entries, fund_created_at=fund_created_at
-    )
+    current_epoch = _current_epoch_from_log(rebalance_entries, fund_created_at=fund_created_at)
     shadow_index = _exit_shadow_index(exit_shadow)
 
     closed_sells: list[dict[str, Any]] = []
@@ -629,9 +621,7 @@ def _control_closed_sells(
         trade_id = str(trade.get("id") or "").strip()
         entry_at = _entry_at_for_sell(trades, ticker=ticker, exit_at=acted)
         hold_days = _hold_days(entry_at, acted)
-        exit_pass = _join_exit_pass(
-            trade=trade, by_trade_id=by_trade_id, entries=rebalance_entries
-        )
+        exit_pass = _join_exit_pass(trade=trade, by_trade_id=by_trade_id, entries=rebalance_entries)
         epoch: dict[str, Any] | None = None
         epoch_join_ok = False
         if exit_pass is not None:
@@ -1005,7 +995,7 @@ def ops_findings_from_digest(payload: dict[str, Any]) -> list[dict[str, Any]]:
     timing_n = len(payload.get("timing_cues") or [])
     selection_n = len(payload.get("selection_cues") or [])
     closed = ((payload.get("control_closed_sells") or {}).get("closed_sell_count")) or 0
-    cue_n = ((payload.get("control_closed_sells") or {}).get("cue_closed_sell_count"))
+    cue_n = (payload.get("control_closed_sells") or {}).get("cue_closed_sell_count")
     if cue_n is None:
         cue_n = closed
     skeleton_n = ((payload.get("selection_postmortem_skeleton") or {}).get("row_count")) or 0
