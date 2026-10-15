@@ -226,6 +226,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.thepebblegroup.com/application/files/3417/4587/6836/270065_Pebble_ARA_2024_INTERACTIVE3_FINAL.pdf",
         "https://www.thepebblegroup.com/application/files/1717/8880/8359/The_Pebble_Group_-_HY_26_Results_Statement_-_07.09.2026.pdf",
     ],
+    # aim buy-tier no_key_bodies — YNGN.L has memo but RNS index misses statutory annual/interim PDF bodies; youngs.co.uk IR PDFs fetch.
+    "YNGN.L": [
+        "https://www.youngs.co.uk/wp-content/uploads/2026/04/2025-Annual-Reports-and-Accounts.pdf",
+        "https://www.youngs.co.uk/wp-content/uploads/2024/09/2024-annual-report-website-01-04-2024.pdf",
+        "https://www.youngs.co.uk/wp-content/uploads/2026/04/HY26-Interim-Accounts.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
@@ -5545,6 +5551,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.thepebblegroup.com/application/files/7117/7505/8006/272947_Pebble_Group_AR_Interactive.pdf": "annual",
     "https://www.thepebblegroup.com/application/files/3417/4587/6836/270065_Pebble_ARA_2024_INTERACTIVE3_FINAL.pdf": "annual",
     "https://www.thepebblegroup.com/application/files/1717/8880/8359/The_Pebble_Group_-_HY_26_Results_Statement_-_07.09.2026.pdf": "interim",
+    # eng-20261013-04: YNGN.L — HY26-Interim-Accounts slug contains accounts token (would classify annual).
+    "https://www.youngs.co.uk/wp-content/uploads/2026/04/HY26-Interim-Accounts.pdf": "interim",
 }
 
 

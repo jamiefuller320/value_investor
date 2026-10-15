@@ -12004,6 +12004,33 @@ def test_parked_source_hunter_pebb_l_aim_has_fetchable_ir():
     _first_fetchable_allowlist_body(urls)
 
 
+def test_fetch_filings_ir_allowlist_aim_yngn_l_builtins(tmp_path: Path):
+    """Regression: YNGN.L buy-tier no_key_bodies — youngs.co.uk FY2025/2024 AR + HY26 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("YNGN.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("2025-Annual-Reports-and-Accounts.pdf" in url for url in urls)
+    assert any("2024-annual-report-website-01-04-2024.pdf" in url for url in urls)
+    assert any("HY26-Interim-Accounts.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+
+
+def test_parked_source_hunter_yngn_l_aim_has_fetchable_ir():
+    """eng-20261013-04: YNGN.L has live youngs.co.uk FY2025/2024 AR + HY26 statutory PDFs."""
+    assert "YNGN.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("YNGN.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("youngs.co.uk/wp-content/uploads" in url for url in urls)
+    assert any("2025-Annual-Reports-and-Accounts.pdf" in url for url in urls)
+    _first_fetchable_allowlist_body(urls)
+
+
 def test_fetch_filings_ir_allowlist_tsx60_cnq_to_builtins(tmp_path: Path):
     """Regression: CNQ.TO parked IWB — cnrl.com AIF PDF that live-fetches."""
     allowlist_path = tmp_path / "ir.json"
