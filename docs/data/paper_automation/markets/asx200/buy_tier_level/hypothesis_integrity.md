@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-14T08:52:08.473773+00:00
+Track: `buy_tier_level` · updated 2026-10-15T00:46:37.598135+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **14** / 28 (50% count, 48% NAV)
+- Losers: **13** / 26 (50% count, 47% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -96,12 +96,6 @@ Track: `buy_tier_level` · updated 2026-10-14T08:52:08.473773+00:00
 - data_quality 0.95
 - conviction 49%
 
-### BSL.AX — weakening / watch_review (-5.2%)
-- left buy tier (hold)
-- conviction 24% below intact floor
-- research accumulate
-- cheapness family still passes
-
 ### AMC.AX — intact / hold_tolerate (-5.0%)
 - price drawdown alone does not invalidate value thesis
 - still buy
@@ -109,12 +103,6 @@ Track: `buy_tier_level` · updated 2026-10-14T08:52:08.473773+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 52%
-
-### PRN.AX — weakening / watch_review (-4.5%)
-- left buy tier (hold)
-- conviction 24% below intact floor
-- research accumulate
-- cheapness family still passes
 
 ### HVN.AX — intact / hold_tolerate (-4.4%)
 - still strong_buy
@@ -141,9 +129,15 @@ Track: `buy_tier_level` · updated 2026-10-14T08:52:08.473773+00:00
 - still buy
 - cheapness family still passes
 
-### NWS.AX — weakening / watch_review (+0.0%)
+### NWS.AX — weakening / watch_review (-0.0%)
 - research verdict caution
 - conviction 18% below intact floor
+- still buy
+- cheapness family still passes
+
+### SMR.AX — weakening / watch_review (+0.0%)
+- research verdict caution
+- conviction 14% below intact floor
 - still buy
 - cheapness family still passes
 
@@ -153,12 +147,6 @@ Track: `buy_tier_level` · updated 2026-10-14T08:52:08.473773+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 44%
-
-### DNL.AX — weakening / watch_review (+0.8%)
-- left buy tier (hold)
-- conviction 30% below intact floor
-- research accumulate
-- cheapness family still passes
 
 ### BWP.AX — intact / hold_tolerate (+1.1%)
 - still buy

@@ -3,38 +3,39 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-10-14T08:52:08.476505+00:00",
+  "generated_at": "2026-10-15T00:46:37.602467+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 22,
+    "closed_total": 25,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 27,
+    "open_with_thesis": 25,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 20,
-        "recovery_rate": 0.65,
-        "sold_underwater_rate": 0.35,
-        "mean_peak_unrealized_pct": 0.005,
-        "mean_trough_unrealized_pct": -0.0252,
+        "closed_count": 22,
+        "recovery_rate": 0.6364,
+        "sold_underwater_rate": 0.3636,
+        "mean_peak_unrealized_pct": 0.0052,
+        "mean_trough_unrealized_pct": -0.0284,
         "outcome_labels": {
-          "recovered": 13,
-          "sold_underwater": 7
+          "recovered": 14,
+          "sold_underwater": 8
         }
       },
       "broken": {
-        "closed_count": 2,
-        "recovery_rate": 1.0,
-        "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0019,
-        "mean_trough_unrealized_pct": 0.0019,
+        "closed_count": 3,
+        "recovery_rate": 0.6667,
+        "sold_underwater_rate": 0.3333,
+        "mean_peak_unrealized_pct": -0.0139,
+        "mean_trough_unrealized_pct": -0.0139,
         "outcome_labels": {
-          "recovered": 2
+          "recovered": 2,
+          "sold_underwater": 1
         }
       },
       "insufficient_data": {
@@ -63,10 +64,9 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 22,
+    "hold_closed_with_thesis": 25,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold thesis buckets thin (broken=2; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -906,7 +906,7 @@
       "ticker": "BSL.AX",
       "name": "BlueScope Steel Limited",
       "started_at": "2026-09-10T15:14:27.513769+10:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -956,9 +956,9 @@
       "peak_unrealized_pct": -0.0442,
       "trough_unrealized_pct": -0.09,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-15T11:46:37.040682+11:00",
+      "linked_sell_trade_id": "c2087f97-7703-4b9a-bf52-32e866f1dfa5"
     },
     {
       "episode_id": "buy_tier_level:PXA.AX:2026-09-10T15:14:27.513769+10:00",
@@ -1363,7 +1363,7 @@
       "ticker": "DNL.AX",
       "name": "Dyno Nobel Limited",
       "started_at": "2026-09-13T16:49:53.453726+10:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -1413,9 +1413,9 @@
       "peak_unrealized_pct": 0.0585,
       "trough_unrealized_pct": -0.0305,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-10-15T11:46:37.040682+11:00",
+      "linked_sell_trade_id": "2aa0893f-60fe-4aea-a32e-1de0f2191ded"
     },
     {
       "episode_id": "buy_tier_level:YAL.AX:2026-09-13T16:49:53.453726+10:00",
@@ -2398,7 +2398,16 @@
       "conviction_score": 0.277185,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-15T11:46:37.040682+11:00",
+          "days_after": 7,
+          "price": 6.12,
+          "unrealized_pct": 0.0534,
+          "peak_unrealized_pct": 0.0534,
+          "trough_unrealized_pct": 0.0034
+        }
+      ],
       "peak_unrealized_pct": 0.0534,
       "trough_unrealized_pct": 0.0034,
       "recovered_to_breakeven": true,
@@ -2498,7 +2507,7 @@
       "ticker": "PRN.AX",
       "name": "Perenti Limited",
       "started_at": "2026-10-14T19:52:08.220923+11:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater",
         "exit_streak",
@@ -2531,9 +2540,9 @@
       "peak_unrealized_pct": -0.0455,
       "trough_unrealized_pct": -0.0455,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-10-15T11:46:37.040682+11:00",
+      "linked_sell_trade_id": "710089d2-61bc-454b-bd72-72e4ff05d02f"
     },
     {
       "episode_id": "buy_tier_level:GMD.AX:2026-10-14T19:52:08.220923+11:00",
@@ -2613,6 +2622,50 @@
       "effective_signal": "hold",
       "data_quality_score": 1.0,
       "conviction_score": 0.183005,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level:SMR.AX:2026-10-15T11:46:37.040682+11:00",
+      "track_id": "buy_tier_level",
+      "ticker": "SMR.AX",
+      "name": "Stanmore Resources Limited",
+      "started_at": "2026-10-15T11:46:37.040682+11:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 2.65,
+      "avg_cost": 2.65,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "research verdict caution",
+        "cheapness family no longer passes",
+        "conviction 14% below intact floor",
+        "still buy"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "caution",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.13838,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
@@ -2854,12 +2907,126 @@
           "cost": 0.07
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-10-15T11:46:37.040682+11:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0088,
+          "avg_buy_return": 0.0534,
+          "replacement_delta": 0.0446
+        }
+      ],
       "sell_returns_since_rotation": {
         "ARB.AX": 0.0088
       },
       "buy_returns_since_rotation": {
         "YAL.AX": 0.0534
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-10-15T11:46:37.040682+11:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-10-15T11:46:37.040682+11:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "DNL.AX",
+          "price": 3.96,
+          "shares": 8.758911,
+          "gross": 34.69,
+          "cost": 0.06,
+          "avg_cost_at_exit": 3.93,
+          "realized_pct": 0.0076,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0076
+        },
+        {
+          "ticker": "BSL.AX",
+          "price": 30.85,
+          "shares": 1.057203,
+          "gross": 32.61,
+          "cost": 0.06,
+          "avg_cost_at_exit": 32.56,
+          "realized_pct": -0.0525,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0525
+        },
+        {
+          "ticker": "PRN.AX",
+          "price": 2.1,
+          "shares": 17.233021,
+          "gross": 36.19,
+          "cost": 0.06,
+          "avg_cost_at_exit": 2.2,
+          "realized_pct": -0.0455,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0455
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "NWS.AX",
+          "price": 46.51,
+          "shares": 0.409429,
+          "gross": 19.04,
+          "cost": 0.03
+        },
+        {
+          "ticker": "SMR.AX",
+          "price": 2.65,
+          "shares": 13.701752,
+          "gross": 36.31,
+          "cost": 0.06
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "DNL.AX": 0.0,
+        "BSL.AX": 0.0,
+        "PRN.AX": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "NWS.AX": 0.0,
+        "SMR.AX": 0.0
       },
       "verdict": null,
       "closed_at": null
