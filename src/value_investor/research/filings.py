@@ -1123,8 +1123,17 @@ _BUYBACK_PROGRAMME_PATTERNS = (
     r"\b(?:buyback|repurchase) programme\b",
 )
 
-_NON_RESULTS_RNS_PATTERNS = (
+_LEADERSHIP_CHANGE_PATTERNS = (
     r"\bdirectorate change\b",
+    r"\bappoints new ceo\b",
+    r"\bappointment of (?:group )?chief executive\b",
+    r"\bchief executive (?:officer )?appointment\b",
+    r"\bappointment of chief financial officer\b",
+    r"\bchief financial officer appointment\b",
+    r"\b(?:resignation|retirement) of (?:chief executive|ceo|cfo)\b",
+)
+
+_NON_RESULTS_RNS_PATTERNS = _LEADERSHIP_CHANGE_PATTERNS + (
     r"\bholding\(s\)? in company\b",
     r"\btotal voting rights\b",
     r"\bblock listing\b",
@@ -1893,6 +1902,12 @@ def _is_routine_own_share_or_pdmr_row(row: dict[str, Any]) -> bool:
     return "transaction in own shares" in headline or "director/pdmr" in headline
 
 
+def _is_leadership_change_row(row: dict[str, Any]) -> bool:
+    """CEO/CFO/directorate RNS — indexed for events, not statutory ingest ROI."""
+    headline = _headline_blob(row)
+    return any(re.search(pat, headline) for pat in _LEADERSHIP_CHANGE_PATTERNS)
+
+
 def _is_holding_disclosure_row(row: dict[str, Any]) -> bool:
     """Form 8.3/8.5 and major-holding RNS — indexed for audit, not ingest ROI."""
     if str(row.get("entity_type") or "") == "holding_disclosure":
@@ -1916,6 +1931,8 @@ def filing_lacks_material_body(row: dict[str, Any]) -> bool:
         return False
     if _is_routine_own_share_or_pdmr_row(row):
         return False
+    if _is_leadership_change_row(row):
+        return False
     if _is_holding_disclosure_row(row):
         return False
     if str(row.get("period") or "") == "other" and _is_material_corporate_action_row(row):
@@ -1934,6 +1951,8 @@ def filing_counts_toward_body_penetration(row: dict[str, Any]) -> bool:
     if _is_index_noise_row(row):
         return False
     if _is_routine_own_share_or_pdmr_row(row):
+        return False
+    if _is_leadership_change_row(row):
         return False
     if _is_holding_disclosure_row(row):
         return False

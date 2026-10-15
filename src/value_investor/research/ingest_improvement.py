@@ -23,7 +23,6 @@ from value_investor.research.filings import (
     memo_quality_body_fields,
     period_body_coverage,
     refetch_euro_filings_primary_bodies,
-    refetch_ir_allowlist_filing_bodies,
     refetch_uk_primary_filing_bodies,
     sanitize_filings_index,
     thin_zero_body_memo_needs_ingest,
@@ -1146,6 +1145,36 @@ def _execute_ingest_improvement_pass(
                 company_name=target.name,
                 ticker=target.ticker,
             )
+            # eng-20261015-04: intensive KGF.L pins must refetch RNS/IR bodies before
+            # Yahoo/news deepen burns the per-ticker budget (0/0 refetch, gaps remain).
+            if intensive_gap_closure and int(coverage.get("indexed_without_body") or 0) > 0:
+                from value_investor.research.filings import (
+                    refetch_investegate_filing_bodies,
+                    refetch_ir_allowlist_filing_bodies,
+                )
+
+                if _is_uk_listed(market=market, ticker=target.ticker):
+                    _invoke_with_transient_fetch_retry(
+                        refetch_investegate_filing_bodies,
+                        sources_dir / "filings",
+                        ticker=target.ticker,
+                        company_name=target.name,
+                        max_bodies=target_max_bodies,
+                    )
+                pre_ir_rows = fetch_filings_ir_allowlist(target.ticker)
+                if pre_ir_rows:
+                    _invoke_with_transient_fetch_retry(
+                        refetch_ir_allowlist_filing_bodies,
+                        sources_dir / "filings",
+                        target.ticker,
+                        company_name=target.name,
+                        max_bodies=target_max_bodies,
+                    )
+                reconcile_filings_index_body_flags(
+                    sources_dir / "filings",
+                    company_name=target.name,
+                    ticker=target.ticker,
+                )
             source_meta = ingest_research_sources(
                 ticker=target.ticker,
                 company_name=target.name,
@@ -1153,7 +1182,7 @@ def _execute_ingest_improvement_pass(
                 sources_dir=sources_dir,
                 since=None,
                 market=market,
-                deepen_history=True,
+                deepen_history=not intensive_gap_closure,
             )
             inventory = inspect_local_sources(sources_dir)
             ingest_suggestions = suggestions_by_ticker.get(target.ticker.upper(), [])

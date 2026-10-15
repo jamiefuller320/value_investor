@@ -9397,6 +9397,88 @@ def test_filing_lacks_material_body_excludes_routine_own_shares():
     )
 
 
+def test_filing_lacks_material_body_excludes_kgf_leadership_ceo_rns():
+    """eng-20261015-04: KGF.L CEO appointment must not block gap closure after IR allowlist."""
+    from value_investor.research.filings import (
+        filing_counts_toward_body_penetration,
+        filing_lacks_material_body,
+    )
+
+    row = {
+        "id": "c684d8498b936644",
+        "source": "investegate_direct",
+        "headline": "Kingfisher Appoints New CEO",
+        "url": (
+            "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/"
+            "kingfisher-appoints-new-ceo/9819911"
+        ),
+        "period": "other",
+        "has_body": False,
+    }
+    assert filing_lacks_material_body(row) is False
+    assert filing_counts_toward_body_penetration(row) is False
+
+
+def test_refetch_investegate_filing_bodies_kgf_ceo_appointment(tmp_path, monkeypatch):
+    """eng-20261015-04: Investegate refetch can persist KGF.L CEO appointment body."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    row_id = "c684d8498b936644"
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "KGF.L",
+                "filings": [
+                    {
+                        "id": row_id,
+                        "source": "investegate_direct",
+                        "headline": "Kingfisher Appoints New CEO",
+                        "url": (
+                            "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/"
+                            "kingfisher-appoints-new-ceo/9819911"
+                        ),
+                        "period": "other",
+                        "has_body": False,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+
+    def _fake_fetch(url: str):
+        assert "kingfisher-appoints-new-ceo" in url
+        return (
+            "Kingfisher plc announces the appointment of Thierry Garnier as Chief Executive Officer "
+            "with effect from March 2027 following a comprehensive search process. "
+            + ("Board succession planning detail. " * 40),
+            None,
+        )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        _fake_fetch,
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="KGF.L",
+        company_name="Kingfisher plc",
+        max_bodies=2,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ceo = next(row for row in saved["filings"] if row["id"] == row_id)
+    assert ceo["has_body"] is True
+    assert (bodies_dir / f"{row_id}.txt").is_file()
+
+
 def test_filing_counts_toward_body_penetration_excludes_rathbones_form_83():
     """eng-20260923-02: RAT.L Form 8.3 stubs must not inflate low-penetration scoring."""
     from value_investor.research.filings import filing_counts_toward_body_penetration
