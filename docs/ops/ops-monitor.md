@@ -565,11 +565,11 @@ Locked two-lane redesign (Project store `docs/daily-hub-attention-redesign.md` D
 
 | Layer | Behavior |
 |-------|----------|
-| Status | Deterministic `build_daily_status_report` from ops / scoreboard / eng / defer / post-run / optional post-sell digest |
-| Push | `build_daily_push_suggestions` ≤3; cites mapped ops findings + eng head + defer met; fail-closed empty OK; optional Push source `docs/data/post_sell_cue_digest.json` when present |
+| Status | Deterministic `build_daily_status_report` from ops / scoreboard / eng / defer / post-run / optional post-sell digest; eng strip only `open`/`parked`/`pr_open`/`in_progress` (never merged/cancelled) |
+| Push | `build_daily_push_suggestions` ≤3; cites mapped ops findings + eng head + defer met; fail-closed empty OK; optional Push source `docs/data/post_sell_cue_digest.json` when present. **Close-loop:** eng Push only for live `open`/`parked`; terminal `merged`/`cancelled`/`completed`/`failed` never suggested. Stale ops **Parked engineering…** / **Orphaned pr_open…** findings are re-checked against live `engineering_tasks.json` (attention-parked + queue-clearing pause; any remaining `pr_open`) — drop from Push/Status when healed, even if `ops_status.json` has not refreshed yet. No new manual dismiss. |
 | Explore | `build_daily_explore_suggestions` ≤2; seed `explore_lines` or quality-barred defaults; badge not-today; Accept = park later (defer/fragment), never eng |
-| Finding | **Daily push suggestions empty while mapped warns open** — observe-only |
-| Non-goals | No LLM brainstorm dump; no inventing post-sell digest / N205 (sibling package M) |
+| Finding | **Daily push suggestions empty while mapped warns open** — observe-only (mapped warns also re-validate parked-eng against live queue) |
+| Non-goals | No LLM brainstorm dump; no inventing post-sell digest / N205 (sibling package M); no forever-dismiss chrome |
 
 ## Daily hub Focus relevance {#daily-hub-focus-relevance}
 

@@ -58,6 +58,15 @@ _PUSH_FINDING_MAP: tuple[tuple[str, str, str, str], ...] = (
     ),
 )
 
+# Terminal eng statuses — never Push / never Status "open" strip.
+ENG_TERMINAL_STATUSES = frozenset({"merged", "cancelled", "completed", "failed"})
+# Eng head eligible for Push (human confirm / parked triage).
+ENG_PUSH_STATUSES = frozenset({"open", "parked"})
+# Status strip may also show in-flight PR work.
+ENG_STATUS_OPEN_STATUSES = frozenset({"open", "parked", "pr_open", "in_progress"})
+PARKED_ENG_FINDING_TITLE = "Parked engineering tasks need manual review"
+ORPHANED_PR_OPEN_FINDING_PREFIX = "Orphaned pr_open engineering tasks"
+
 # Ritual market-warn flag ids excluded from hub (D2) — stay ops-email / status.
 RITUAL_MARKET_WARN_FLAG_IDS = frozenset({"health_warn", "health_warn_rollup"})
 
@@ -78,6 +87,73 @@ def _safe_read(path: Path) -> dict[str, Any] | None:
 def _stable_id(*parts: str) -> str:
     raw = "|".join(str(p or "").strip() for p in parts)
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:12]
+
+
+def _eng_tasks(eng: dict[str, Any] | None) -> list[dict[str, Any]]:
+    if not isinstance(eng, dict):
+        return []
+    return [t for t in (eng.get("tasks") or []) if isinstance(t, dict)]
+
+
+def eng_task_is_terminal(status: Any) -> bool:
+    """True when eng status means done / non-actionable for Push."""
+    return str(status or "").strip().lower() in ENG_TERMINAL_STATUSES
+
+
+def parked_eng_still_actionable(eng: dict[str, Any] | None) -> bool:
+    """True when live eng queue still has attention-parked work or a clearing pause.
+
+    Fail-closed for Push: stale ops findings about parked eng must not linger
+    after merge/cancel/housekeep left the gate quiet.
+    """
+    eng = eng if isinstance(eng, dict) else {}
+    queue_clearing = (
+        eng.get("queue_clearing") if isinstance(eng.get("queue_clearing"), dict) else {}
+    )
+    parked = [t for t in _eng_tasks(eng) if str(t.get("status") or "") == "parked"]
+    attention_rows = [
+        t
+        for t in parked
+        if str(t.get("park_kind") or t.get("attention") or "attention") != "ignore"
+    ]
+    raw_count = queue_clearing.get("attention_parked_count")
+    try:
+        attention_count = int(raw_count) if raw_count is not None else len(attention_rows)
+    except (TypeError, ValueError):
+        attention_count = len(attention_rows)
+    pause_active = bool(queue_clearing.get("pause_active"))
+    return attention_count > 0 or pause_active
+
+
+def orphaned_pr_open_still_actionable(eng: dict[str, Any] | None) -> bool:
+    """True when any live eng row is still ``pr_open`` (orphan finding may apply)."""
+    return any(str(t.get("status") or "") == "pr_open" for t in _eng_tasks(eng))
+
+
+def push_finding_still_actionable(
+    title: str,
+    finding: dict[str, Any],
+    *,
+    eng: dict[str, Any] | None = None,
+) -> bool:
+    """Drop Push/Status rows when the mapped finding is healed or eng gate is quiet.
+
+    Prefer live eng status over stale ``ops_status.json`` rows so merged /
+    cancelled parks (and orphaned pr_open after merge) do not linger as theater.
+    """
+    if not isinstance(finding, dict):
+        return False
+    if finding.get("fixed") is True:
+        return False
+    title_l = str(title or finding.get("title") or "").strip()
+    if title_l == PARKED_ENG_FINDING_TITLE or PARKED_ENG_FINDING_TITLE.lower() in title_l.lower():
+        return parked_eng_still_actionable(eng)
+    if (
+        title_l.startswith(ORPHANED_PR_OPEN_FINDING_PREFIX)
+        or ORPHANED_PR_OPEN_FINDING_PREFIX.lower() in title_l.lower()
+    ):
+        return orphaned_pr_open_still_actionable(eng)
+    return True
 
 
 def filter_actionable_market_warn_tasks(
@@ -132,15 +208,25 @@ def build_daily_status_report(
         key=lambda r: {"fail": 0, "warn": 1, "info": 2}.get(str(r.get("severity")), 9),
     )
 
-    tasks = eng.get("tasks") if isinstance(eng.get("tasks"), list) else []
     eng_open = [
         {
             "id": t.get("id"),
             "status": t.get("status"),
             "title": t.get("title"),
         }
-        for t in tasks
-        if isinstance(t, dict) and t.get("status") in {"open", "parked", "pr_open", "in_progress"}
+        for t in _eng_tasks(eng)
+        if str(t.get("status") or "") in ENG_STATUS_OPEN_STATUSES
+        and not eng_task_is_terminal(t.get("status"))
+    ]
+    # Status strip: drop eng-healable ops rows when live queue already quiet.
+    warn_fail_sorted = [
+        row
+        for row in warn_fail_sorted
+        if push_finding_still_actionable(
+            str(row.get("title") or ""),
+            row,
+            eng=eng,
+        )
     ]
     queue_health = (
         automation.get("queue_health") if isinstance(automation.get("queue_health"), dict) else {}
@@ -343,6 +429,8 @@ def build_daily_push_suggestions(
         sev = str(finding.get("severity") or "")
         if sev not in {"warn", "fail", "info"}:
             continue
+        if not push_finding_still_actionable(title, finding, eng=eng):
+            continue
         pid = f"push:{_stable_id(title, checklist_id)}"
         if pid in closed_ids:
             continue
@@ -367,11 +455,10 @@ def build_daily_push_suggestions(
         )
 
     # Eng queue head when open/parked after self-heal context (status strip already notes).
-    tasks = eng.get("tasks") if isinstance(eng.get("tasks"), list) else []
-    for t in tasks:
-        if not isinstance(t, dict):
-            continue
-        if t.get("status") not in {"open", "parked"}:
+    # Terminal statuses (merged/cancelled/completed/failed) never enter Push.
+    for t in _eng_tasks(eng):
+        status = str(t.get("status") or "")
+        if eng_task_is_terminal(status) or status not in ENG_PUSH_STATUSES:
             continue
         tid = str(t.get("id") or "")
         if not tid:
@@ -384,11 +471,11 @@ def build_daily_push_suggestions(
                 "id": pid,
                 "lane": "push",
                 "priority": 3,
-                "title": f"Confirm eng {t.get('status')} still P1-aligned: {tid}",
+                "title": f"Confirm eng {status} still P1-aligned: {tid}",
                 "why_now": str(t.get("title") or tid),
-                "cite": {"kind": "engineering_task", "ref": tid, "status": t.get("status")},
+                "cite": {"kind": "engineering_task", "ref": tid, "status": status},
                 "checklist_task_id": "weekday-engineering-parked-backlog-clear"
-                if t.get("status") == "parked"
+                if status == "parked"
                 else "",
                 "href": "#automation/queue",
                 "leverage": "Clash-aware eng head — cancel/merge/unpark; no spray",
@@ -430,6 +517,7 @@ def build_daily_push_suggestions(
             seen_checklist.add(cid)
         deduped.append(s)
     capped = deduped[: max(0, int(cap))]
+    mapped = _mapped_warns_open(findings, eng=eng)
     return {
         "schema_version": SCHEMA_VERSION,
         "lane": "push",
@@ -440,19 +528,24 @@ def build_daily_push_suggestions(
         if not capped
         else "",
         "suggestions": capped,
-        "mapped_warns_open": _mapped_warns_open(findings),
-        "push_empty_while_mapped_warns": bool(not capped and _mapped_warns_open(findings)),
+        "mapped_warns_open": mapped,
+        "push_empty_while_mapped_warns": bool(not capped and mapped),
     }
 
 
-def _mapped_warns_open(findings: list[dict[str, Any]]) -> list[str]:
+def _mapped_warns_open(
+    findings: list[dict[str, Any]],
+    *,
+    eng: dict[str, Any] | None = None,
+) -> list[str]:
     titles = []
     for title, *_rest in _PUSH_FINDING_MAP:
         for f in findings:
             ft = str(f.get("title") or "")
             if ft == title or title.lower() in ft.lower():
                 if str(f.get("severity") or "") in {"warn", "fail"}:
-                    titles.append(ft)
+                    if push_finding_still_actionable(title, f, eng=eng):
+                        titles.append(ft)
                 break
     return titles
 
@@ -577,7 +670,12 @@ def check_daily_push_empty_while_mapped_warns(
 
 
 __all__ = [
+    "ENG_PUSH_STATUSES",
+    "ENG_STATUS_OPEN_STATUSES",
+    "ENG_TERMINAL_STATUSES",
     "EXPLORE_CAP",
+    "ORPHANED_PR_OPEN_FINDING_PREFIX",
+    "PARKED_ENG_FINDING_TITLE",
     "POST_SELL_CUE_DIGEST_FILENAME",
     "PUSH_CAP",
     "RITUAL_MARKET_WARN_FLAG_IDS",
@@ -585,5 +683,9 @@ __all__ = [
     "build_daily_push_suggestions",
     "build_daily_status_report",
     "check_daily_push_empty_while_mapped_warns",
+    "eng_task_is_terminal",
     "filter_actionable_market_warn_tasks",
+    "orphaned_pr_open_still_actionable",
+    "parked_eng_still_actionable",
+    "push_finding_still_actionable",
 ]
