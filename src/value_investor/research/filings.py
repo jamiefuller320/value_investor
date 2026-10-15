@@ -804,6 +804,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "below the substantiveness gate; SEC complete-submission .txt is fetchable but not "
         "the indexed URL and 10-K/10-Q are already bodied."
     ),
+    "EME": (
+        "sp500 leftover IWB: indexed-without-body row is Item 1.04 MSHA mine-safety 8-K iXBRL "
+        "primary below the substantiveness gate; SEC complete-submission .txt is fetchable but "
+        "not the indexed URL and 10-K/10-Q are already bodied; emcorgroup.com IR only lists "
+        "Form SD/sustainability PDFs."
+    ),
     "FICO": (
         "Leftover indexed-without-body rows are Item 2.02 earnings-release 8-K cover HTML; "
         "primary fails the substantiveness gate and EX-99.1 exhibits fetch but are not the "

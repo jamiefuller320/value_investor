@@ -11341,6 +11341,20 @@ def test_parked_source_hunter_skip_crh_sp500():
     assert fetch_filings_ir_allowlist("CRH") == []
 
 
+def test_parked_source_hunter_skip_eme_sp500():
+    """eng-20261015-02: EME leftover IWB is Item 1.04 MSHA 8-K, not missing 10-K/10-Q."""
+    assert "EME" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["EME"]
+    assert "MSHA" in reason
+    assert "mine-safety" in reason
+    assert "8-K" in reason
+    assert "substantiveness" in reason
+    assert "10-K/10-Q" in reason
+    assert fetch_filings_ir_allowlist("EME") == []
+    msha_8k = "https://www.sec.gov/Archives/edgar/data/105634/000010563426000115/eme-20260728.htm"
+    assert fetch_filing_body(msha_8k) is None
+
+
 def test_parked_source_hunter_skip_fico_sp500():
     """eng-20260907-04: FICO leftover IWB is Item 2.02 earnings-release 8-K cover HTML."""
     assert "FICO" in PARKED_SOURCE_HUNTER_SKIP
