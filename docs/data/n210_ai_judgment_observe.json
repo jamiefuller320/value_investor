@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-15T10:03:39.502160+00:00",
+  "registration_id": "strand-e-ai-judgment-fixed-stake-v0",
+  "deferred_id": "N210",
+  "status": "sealed_observe_only",
+  "observe_only": true,
+  "influences_live": false,
+  "independent_of_fund_nav": true,
+  "b3_epoch": true,
+  "pipeline_status": "stub_awaiting_episode_walker",
+  "learning_question": "On threshold-eligible FTSE names, does the AI/filter identity (adjusted_signal + research_verdict=accumulate, min_conviction=0.6) improve fair-cost episode % vs an unfiltered buy-tier draw of the same eligible set, sized as a fixed-stake mechanical test?",
+  "identity_id": "ai_filter_accumulate_min_conviction_0_6",
+  "success_metric_id": "smooth_ret_cohort_median",
+  "sizing": {
+    "mode": "fixed_stake",
+    "stake_units": 100.0,
+    "stake_currency": "local_market",
+    "cash_fund_nav": "parked",
+    "scoreboard_unit": "fair_cost_episode_pct",
+    "dca": "not_on_v0"
+  },
+  "completed_entry_episodes": 0,
+  "calendar_weeks_spanned": 0,
+  "volume_gate": {
+    "min_episodes": 48,
+    "min_weeks": 8,
+    "met": false,
+    "rule": "both_required"
+  },
+  "phase": {
+    "entries_per_week": 0.0,
+    "floor": 8.0,
+    "floor_met": false
+  },
+  "path_scoreboard": {
+    "primary": "absolute_smoothed_return_fair_costs",
+    "scoreboard_unit": "fair_cost_episode_pct",
+    "smooth_ret_cohort_median": null,
+    "completed_entry_episodes": 0,
+    "companions": {
+      "volume_toward_gate": "0/48",
+      "calendar_weeks_spanned": 0,
+      "weeks_toward_gate": "0/8",
+      "years_to_detect": null,
+      "ci90": null,
+      "stress_cost": "report_only"
+    },
+    "note": "Stub store \u2014 episode walker not yet wired. Do not read null median as evidence. Judgment primary remains fair-cost episode % once volume exists."
+  },
+  "launch_queue": {
+    "enqueued": true,
+    "rank_note": "B3 judgment observe \u2014 Data deepen / shortlist demand waits behind holdings and already-running sealed units (N200). Do not steal P1.",
+    "doc": "docs/ops/data-pillar-priorities.md"
+  },
+  "change_markers": [
+    {
+      "id": "n210-seal-v0",
+      "at": "2026-10-15",
+      "summary": "B3 lock: seal fixed-stake AI/filter judgment observe as evidentiary primary for filter LQ (shadow until volume gates)."
+    }
+  ],
+  "soft_gaps": [
+    "Episode walker not yet wired \u2014 refresh persists registration + empty scoreboard so automation can run without half-wired capital.",
+    "Do not crown assessment_model primary from this stub (F8)."
+  ]
+}

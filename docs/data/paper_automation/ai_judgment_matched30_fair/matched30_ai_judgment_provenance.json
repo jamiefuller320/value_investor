@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "spawned_at": "2026-10-15T10:03:40.483227+00:00",
+  "track_id": "ai_judgment_matched30_fair",
+  "parent_track_id": "ai_judgment_fair",
+  "market_id": "ftse350",
+  "spawn_reason": "B3 matched-30 AI/filter fund twin (cold start; shadow until volume gates)",
+  "fair_costs": {
+    "trade_cost_pct": 0.0027500000000000003,
+    "buy_cost_pct": 0.00525,
+    "sell_cost_pct": 0.00025
+  },
+  "varied": {
+    "max_positions": {
+      "parent": 3,
+      "twin": 30
+    }
+  },
+  "parent_knobs_at_spawn": {
+    "min_conviction": 0.6,
+    "exit_confirm_screens": 2,
+    "reentry_cooldown_screens": 1,
+    "max_positions": 3,
+    "sector_cap": 0.2,
+    "skip_timing_wait": true,
+    "require_research_accumulate": true,
+    "use_adjusted_signal": true,
+    "min_rebalance_notional_gbp": 10.0,
+    "use_graduated_allocation": false
+  },
+  "learning_question": "Does the AI/filter identity, run as a fair-cost ~30-name fund (max_positions=30, sector_cap=0.2), beat a matched top-30 unfiltered buy-tier sleeve on total return? Compare only to buy_tier_matched30_fair — not to full buy_tier_level (55/120).",
+  "readiness_gate": "Shadow until ≥48 closed episodes or ≥26 weekly marks with a usable years_to_detect bar vs buy_tier_matched30_fair on the common window. Do not crown assessment primary from this book alone (B3 / F8).",
+  "note": "Knobs are fixed (churn-policy twin; decision-review --apply skips it). Do not edit mid-flight; freeze it and start a new twin instead."
+}

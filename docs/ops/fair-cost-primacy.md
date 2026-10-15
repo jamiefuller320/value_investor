@@ -43,8 +43,17 @@ N200 (`strand-b-plain-value-tech-timing-v0`) scores episode returns with
 change marker `n200-fair-cost-primary-v1` (same `registration_id`; see
 [n200-tech-timing-observe.md](n200-tech-timing-observe.md)).
 
+## N210 / B3 judgment observe
+
+N210 (`strand-e-ai-judgment-fixed-stake-v0`) is the B3 cold-start for
+AI/filter judgment evidence: fixed-stake v0 + fair-cost episode % primary.
+Matched-30 fund NAV is a separate twin pair — not the judgment headline.
+See [n210-ai-judgment-observe.md](n210-ai-judgment-observe.md) and
+[b3-scoreboard-epoch.md](b3-scoreboard-epoch.md).
+
 ## Related
 
 - [market-trading-costs.md](market-trading-costs.md) — fair tables vs 3% stress
 - [assessment-scoreboard.md](assessment-scoreboard.md) — fair-cost learning table
 - [n200-tech-timing-observe.md](n200-tech-timing-observe.md) — sealed observe scoreboard
+- [n210-ai-judgment-observe.md](n210-ai-judgment-observe.md) — B3 judgment observe

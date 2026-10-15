@@ -6,11 +6,20 @@ reading Suite A (3% stress) and Suite B (fair T212) side by side.
 Learning question: **is the primary book beating the market, and is its
 filter adding anything over the unfiltered buy tier?**
 
+**B3 (2026-10-15):** `ai_judgment_fair` remains the assessment-model
+`primary_track` for product continuity but is **evidentiary-demoted**
+(`policy_changes.evidentiary_demotion_ai_judgment_fair_v1`) — do **not**
+treat its 3-name NAV / primary−control gap as filter skill or adoption
+truth. Judgment evidence primary is **N210** fair-cost episode %; portfolio
+continuity is the **matched-30** twin pair (NAV only vs each other). See
+[b3-scoreboard-epoch.md](b3-scoreboard-epoch.md).
+
 The tracks it ranks come from the assessment model
 (`docs/data/paper_automation/assessment_model.json`, see
 [`experiment-assessment.md`](experiment-assessment.md)): one **primary**
-(`ai_judgment_fair`), one **control** (`buy_tier_level`), any other active
-tracks, and the frozen books with their final record.
+(`ai_judgment_fair`, demoted for evidence), one **control**
+(`buy_tier_level`), active/shadow twins (including matched-30), and the
+frozen books with their final record.
 
 ## Columns
 
@@ -93,3 +102,6 @@ other knob, including `max_positions` 3 and the AI gates, matches the primary.
 - Do not read a `positive` verdict on a few months of 3-name marks as
   adoption truth; check `years_to_detect_3pct_edge` and the cross-sectional
   [`screen-premise-backtest.md`](screen-premise-backtest.md) first.
+- Under B3, do not enlarge the live 3-name book mid-flight; do not back-label
+  its NAV as evidence for N210 / matched-30; do not crown those shadows as
+  assessment primary until volume gates.

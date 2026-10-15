@@ -13,12 +13,17 @@ Since **2026-10-06** the live FTSE paper root is judged by **one assessment
 model** on a single fair (T212-shaped) cost basis instead of two suites. The
 committed file `docs/data/paper_automation/assessment_model.json` records:
 
-- `primary_track` = **`ai_judgment_fair`** — the book judged against the market;
+- `primary_track` = **`ai_judgment_fair`** — continuity primary (B3
+  **evidentiary demotion**: not adoption / filter-skill truth; see
+  `policy_changes.evidentiary_demotion_ai_judgment_fair_v1` and
+  [b3-scoreboard-epoch.md](b3-scoreboard-epoch.md));
 - `control_track` = **`buy_tier_level`** — the unfiltered buy-tier book the
   primary must beat (does the AI/conviction filter add value over the screen?);
 - `switches` — every primary/control change with its date and reason;
 - `frozen_tracks` — books that stopped trading, each with `frozen_at`, `reason`,
   `superseded_by` and its final NAV, contributed capital, holdings and trade count.
+  B3 also freezes the underpowered 3-name twins `ai_judgment_hold5_fair` and
+  `ai_judgment_graduated_fair`.
 
 Frozen on 2026-10-06 (history kept, nothing rewritten):
 
@@ -35,10 +40,17 @@ Frozen on 2026-10-07:
 |--------------|-----|---------------|
 | `graduated_allocation` | 3% stress-cost book on the rules screen, outside the assessment model | `ai_judgment_graduated_fair` |
 
-Still trading: `ai_judgment_fair` (primary), `buy_tier_level` (control),
-`buy_tier_level_dca` (deposit realism) and the primary's fair-cost twins
-`ai_judgment_hold5_fair` and `ai_judgment_graduated_fair`
-([assessment-scoreboard.md](assessment-scoreboard.md#twins)).
+Still trading: `ai_judgment_fair` (continuity primary; evidentiary-demoted),
+`buy_tier_level` (control), `buy_tier_level_dca` (deposit realism), and B3
+shadow matched-30 twins `ai_judgment_matched30_fair` /
+`buy_tier_matched30_fair` ([b3-scoreboard-epoch.md](b3-scoreboard-epoch.md)).
+Judgment observe: N210 ([n210-ai-judgment-observe.md](n210-ai-judgment-observe.md)).
+
+Frozen on 2026-10-15 (B3):
+
+| Frozen track | Why | Superseded by |
+|--------------|-----|---------------|
+| `ai_judgment_hold5_fair`, `ai_judgment_graduated_fair` | 3-name twins inherit underpowered parent sleeve | `ai_judgment_matched30_fair` |
 
 What freezing does:
 

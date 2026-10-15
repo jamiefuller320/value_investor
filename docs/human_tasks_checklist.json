@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-14",
+  "updated_at": "2026-10-15",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -173,10 +173,18 @@
         {
           "id": "sunday-assessment-scoreboard",
           "title": "Read the assessment scoreboard (primary vs control; promotion gate)",
-          "summary": "Read docs/data/assessment_scoreboard.json (Analysis \u2192 Observe model switcher defaults to Strand A \u00b7 live): primary ai_judgment_fair vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also twins (hold-buffer + graduated \u2014 readiness gate \u226526 screens / interval excludes zero; freeze if confounded parent_knobs_changed), knob_calibration_priors readiness (Acknowledge-and-stop when confidence low and score_gap <0.005), buy_cross_archive_review (observe-only; do not spawn live cross), frozen books' final records and policy_changes (e.g. significance_gate_v1), and nest sunday-ai-path-scoreboard (agree/veto rollup) as a subsection \u2014 not a peer essay. Approve a promotion (knob prior, twin or primary/control switch) only when the primary verdict is positive on fair costs; 'AI beats the screen' stays unproven while the accumulate gate never binds (N189). Calibrated, exclusion and Suite A books are frozen: no spawns from them, never edit them. Survivors are starting priors \u2014 never auto-apply. N200/N201 tabs are sealed observe-only alone scoreboards \u2014 never a second live capital path and never a promote gate.",
+          "summary": "Read docs/data/assessment_scoreboard.json (Analysis \u2192 Observe model switcher defaults to Strand A \u00b7 live): continuity primary ai_judgment_fair (B3 evidentiary-demoted \u2014 not adoption/filter-skill truth; see policy_changes.evidentiary_demotion_ai_judgment_fair_v1) vs control buy_tier_level and FTAL.L on total return, the 90% interval, the 3% stress-cost column and whether the AI gate binds; also matched-30 shadow twins (NAV only vs each other), frozen hold5/graduated final records, knob_calibration_priors readiness (Acknowledge-and-stop when confidence low and score_gap <0.005), buy_cross_archive_review (observe-only), policy_changes, and nest sunday-ai-path-scoreboard as a subsection. Judgment evidence primary is N210 fair-cost episode % (shadow until volume gates). Approve a promotion only when fair-cost evidence clears gates; do not enlarge the live 3-name book mid-flight; do not back-label its NAV. Calibrated/exclusion/Suite A frozen. N200/N201/N210 are sealed observe-only alone scoreboards \u2014 never a second live capital path and never a promote gate from trailing alone (F8).",
           "automated": false,
           "doc_path": "docs/ops/assessment-scoreboard.md",
           "doc_anchor": "assessment-scoreboard"
+        },
+        {
+          "id": "sunday-matched30-twins",
+          "title": "Matched-30 fund twin vs matched buy-tier control (B3 shadow)",
+          "summary": "Triggered / nested under sunday-assessment-scoreboard (D4): Read ai_judgment_matched30_fair vs buy_tier_matched30_fair on common marked days (fair-cost fund NAV). Construction-matched filter LQ only \u2014 do not treat unmatched gaps vs full buy_tier_level as skill. Shadow until volume/mark gates; do not crown assessment primary; do not decision-review --apply (churn-policy twins). Judgment evidence primary remains N210 episode %.",
+          "automated": false,
+          "doc_path": "docs/ops/b3-scoreboard-epoch.md",
+          "doc_anchor": "matched-30-pair"
         },
         {
           "id": "sunday-saturated-knobs-judgment",
@@ -345,18 +353,18 @@
         {
           "id": "sunday-hold-buffer-twin",
           "title": "Hold-buffer twin vs primary (L541)",
-          "summary": "Triggered / nested under sunday-assessment-scoreboard (D4 collapse): Read the twins row in assessment_scoreboard.json: ai_judgment_hold5_fair (exit_confirm_screens 5) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote the longer buffer only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Never edit either book mid-flight.",
+          "summary": "B3 frozen (2026-10-15): ai_judgment_hold5_fair is frozen with underpowered 3-name parent \u2014 final record only; do not promote or unfreeze. Re-spawn from matched-30 epoch later if the exit-buffer LQ reopens. Nested under sunday-assessment-scoreboard for archival read only.",
           "automated": false,
-          "doc_path": "docs/ops/assessment-scoreboard.md",
-          "doc_anchor": "twins"
+          "doc_path": "docs/ops/b3-scoreboard-epoch.md",
+          "doc_anchor": "assessment-model-stamps"
         },
         {
           "id": "sunday-graduated-twin",
           "title": "Graduated-allocation twin vs primary",
-          "summary": "Triggered / nested under sunday-assessment-scoreboard (D4 collapse): Read the twins row in assessment_scoreboard.json: ai_judgment_graduated_fair (use_graduated_allocation on) vs ai_judgment_fair on common marked days. If parent_knobs_changed is non-empty the comparison is confounded. Promote graduated sizing only per the readiness gate (>=26 weekly screens, interval excludes zero); otherwise freeze the twin. Do not read the 3% stress graduated_allocation book as evidence. Never edit either book mid-flight.",
+          "summary": "B3 frozen (2026-10-15): ai_judgment_graduated_fair is frozen with underpowered 3-name parent \u2014 final record only; do not promote or unfreeze. Do not read the 3% stress graduated_allocation book as evidence. Re-spawn from matched-30 epoch later if graduated sizing LQ reopens.",
           "automated": false,
-          "doc_path": "docs/ops/assessment-scoreboard.md",
-          "doc_anchor": "graduated-allocation-twin"
+          "doc_path": "docs/ops/b3-scoreboard-epoch.md",
+          "doc_anchor": "assessment-model-stamps"
         },
         {
           "id": "adhoc-decision-recording-plan",
@@ -383,6 +391,14 @@
           "doc_anchor": "human-volume-gate-review"
         },
         {
+          "id": "adhoc-n210-volume-gate-review",
+          "title": "Review N210 AI-judgment volume gate when ops-monitor marks ready (no auto-promote)",
+          "summary": "When ops-monitor says N210 volume gate ready for review (or stub registered awaiting episode pipeline), open docs/data/n210_ai_judgment_observe.json, read fair-cost episode % + companions, and decide only whether a deliberate assessment-primary design is warranted later. Do not promote, do not decision-review --apply, do not crown matched-30 as primary from this card (F8 / B3).",
+          "automated": false,
+          "doc_path": "docs/ops/n210-ai-judgment-observe.md",
+          "doc_anchor": "human-volume-gate-review"
+        },
+        {
           "id": "adhoc-live-capital-pack",
           "title": "Verify decision packs before live capital",
           "summary": "For real-money trades, use decision-pack verify checklist and primary sources \u2014 separate from the automated learning loop.",
@@ -401,10 +417,10 @@
         {
           "id": "adhoc-assessment-model-change",
           "title": "Change primary/control or freeze a learning track",
-          "summary": "Human decision. Record it with apply_assessment_model() (src/value_investor/assessment_model.py) so the switch or freeze lands in paper_automation/assessment_model.json with date, reason, superseded_by and final NAV. Never edit or unfreeze a frozen book to test an idea \u2014 start a twin with its own cold start. Market shards keep the legacy ai_judgment/rules pair.",
+          "summary": "Human decision. Record it with apply_assessment_model() (src/value_investor/assessment_model.py) so the switch or freeze lands in paper_automation/assessment_model.json with date, reason, superseded_by and final NAV. B3 evidentiary demotion of ai_judgment_fair is stamped via policy_changes (evidentiary_demotion_ai_judgment_fair_v1) + apply_b3_lock(); do not enlarge the live 3-name book mid-flight; do not crown N210/matched-30 as primary until volume gates. Never edit or unfreeze a frozen book \u2014 start a twin. Market shards keep the legacy ai_judgment/rules pair.",
           "automated": false,
-          "doc_path": "docs/ops/primary-learning-track.md",
-          "doc_anchor": "assessment-model-and-frozen-tracks"
+          "doc_path": "docs/ops/b3-scoreboard-epoch.md",
+          "doc_anchor": "assessment-model-stamps"
         },
         {
           "id": "adhoc-epoch0-cron-unmapped-timezone",

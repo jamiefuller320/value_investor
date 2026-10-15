@@ -94,6 +94,34 @@
       ],
       "trade_count": 39
     },
+    "ai_judgment_graduated_fair": {
+      "frozen_at": "2026-10-15T10:03:39.502160+00:00",
+      "reason": "B3: 3-name graduated twin inherits underpowered parent sleeve; freeze with parent evidentiary demotion. Re-spawn from matched-30 epoch later if graduated sizing LQ is still open.",
+      "superseded_by": "ai_judgment_matched30_fair",
+      "final_mark_at": "2026-10-15T09:36:18.018559+01:00",
+      "final_nav": 968.63,
+      "final_contributed_capital": 1000.0,
+      "final_holdings": [
+        "FRES.L",
+        "KLR.L",
+        "PPH.L"
+      ],
+      "trade_count": 7
+    },
+    "ai_judgment_hold5_fair": {
+      "frozen_at": "2026-10-15T10:03:39.502160+00:00",
+      "reason": "B3: 3-name hold-buffer twin inherits underpowered parent sleeve; freeze with parent evidentiary demotion. Re-spawn from matched-30 epoch later if the exit-buffer LQ is still open.",
+      "superseded_by": "ai_judgment_matched30_fair",
+      "final_mark_at": "2026-10-15T09:36:26.884348+01:00",
+      "final_nav": 954.56,
+      "final_contributed_capital": 1000.0,
+      "final_holdings": [
+        "FRES.L",
+        "KLR.L",
+        "PPH.L"
+      ],
+      "trade_count": 5
+    },
     "graduated_allocation": {
       "frozen_at": "2026-10-07T05:53:45.290906+00:00",
       "reason": "Suite A stress-cost book (3% round trip) on the rules screen, outside the assessment model; graduated sizing is now judged by the fair-cost twin ai_judgment_graduated_fair",
@@ -227,6 +255,58 @@
       },
       "learning_question": "Does holding through 5 confirming screens (vs the primary's 2) beat the primary on total return at fair costs, as the L531 replay suggested (+5.8pp over 19 passes)?",
       "readiness_gate": "Promote only if the twin leads its parent on total return over >=26 weekly screens with parent knobs unchanged since start, and the twin-minus-parent 90% interval excludes zero; otherwise freeze the twin."
+    },
+    "ai_judgment_matched30_fair": {
+      "started_at": "2026-10-15T10:03:40.483227+00:00",
+      "parent_track": "ai_judgment_fair",
+      "varied": {
+        "max_positions": {
+          "parent": 3,
+          "twin": 30
+        }
+      },
+      "parent_knobs_at_start": {
+        "min_conviction": 0.6,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "max_positions": 3,
+        "sector_cap": 0.2,
+        "skip_timing_wait": true,
+        "require_research_accumulate": true,
+        "use_adjusted_signal": true,
+        "min_rebalance_notional_gbp": 10.0,
+        "use_graduated_allocation": false
+      },
+      "learning_question": "Does the AI/filter identity, run as a fair-cost ~30-name fund (max_positions=30, sector_cap=0.2), beat a matched top-30 unfiltered buy-tier sleeve on total return? Compare only to buy_tier_matched30_fair \u2014 not to full buy_tier_level (55/120).",
+      "readiness_gate": "Shadow until \u226548 closed episodes or \u226526 weekly marks with a usable years_to_detect bar vs buy_tier_matched30_fair on the common window. Do not crown assessment primary from this book alone (B3 / F8)."
+    },
+    "buy_tier_matched30_fair": {
+      "started_at": "2026-10-15T10:03:40.608168+00:00",
+      "parent_track": "buy_tier_level",
+      "varied": {
+        "max_positions": {
+          "parent": 120,
+          "twin": 30
+        },
+        "sector_cap": {
+          "parent": 1.0,
+          "twin": 0.2
+        }
+      },
+      "parent_knobs_at_start": {
+        "min_conviction": 0.0,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "max_positions": 120,
+        "sector_cap": 1.0,
+        "skip_timing_wait": true,
+        "require_research_accumulate": false,
+        "use_adjusted_signal": false,
+        "min_rebalance_notional_gbp": 10.0,
+        "use_graduated_allocation": false
+      },
+      "learning_question": "Matched construction control: unfiltered buy-tier top-30 sleeve at fair costs (same max_positions/sector_cap as ai_judgment_matched30_fair).",
+      "readiness_gate": "Construction twin only \u2014 never a filter-skill primary. Keep as matched control for ai_judgment_matched30_fair NAV comparisons."
     }
   },
   "policy_changes": [
@@ -341,6 +421,25 @@
           "last_applied_at": "2026-10-02T08:29:49.290490+00:00",
           "frozen": true
         }
+      }
+    },
+    {
+      "id": "evidentiary_demotion_ai_judgment_fair_v1",
+      "effective_at": "2026-10-15T10:03:39.502160+00:00",
+      "summary": "B3 evidentiary demotion: ai_judgment_fair (3-name sleeve) is no longer adoption / filter-skill truth. Judgment evidence moves to N210 fixed-stake fair-cost episode %; portfolio continuity via matched-30 fund twin pair. Do not enlarge live max_positions/sector_cap mid-flight. Do not back-label prior 3-name NAV as evidence for the new epoch. F8: trailing primary-vs-control gap never alone applies knobs or fills.",
+      "history_note": "Marks and NAV on ai_judgment_fair before and after effective_at remain continuity / observe history. They are underpowered and confounded (sleeve N=3 vs control ~55) and must not be read as filter skill or as evidence for matched-30 / N210 skill. assessment_model.primary_track may still name ai_judgment_fair for product continuity until volume gates; policy_changes.evidentiary_demotion_ai_judgment_fair_v1 is the demotion stamp.",
+      "audit": {
+        "fork": "B3",
+        "demoted_track": "ai_judgment_fair",
+        "judgment_observe": "strand-e-ai-judgment-fixed-stake-v0",
+        "matched30": [
+          "ai_judgment_matched30_fair",
+          "buy_tier_matched30_fair"
+        ],
+        "frozen_twins": [
+          "ai_judgment_hold5_fair",
+          "ai_judgment_graduated_fair"
+        ]
       }
     }
   ],
