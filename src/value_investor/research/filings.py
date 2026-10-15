@@ -316,6 +316,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjU2NjkxLCJ0aW1lc3RhbXAiOjE3NDEzNDgzNDEsInZlcnNpb24iOjE3NDEzNDgyMDV9:adyen:kj44Bpqibw5DHCvRHFCwtnzOuM88_WWzAKJ1odHfCfY/download",
         "https://brand.adyen.com/api/asset/eyJjbGllbnRJZCI6bnVsbCwiaWQiOjEzNjc2OSwidGltZXN0YW1wIjoxNzg2NjAzNzE2LCJ2ZXJzaW9uIjoxNzg2NjAzNzExfQ:adyen:XGlhBkieVPoOb5QUYl1kHKT87C66iBYXjr2Pk52kHIE/download",
     ],
+    # eng-20261015-01: euro_depth PRX.AS awaiting_periodic_report — ESEF through FY2024; prosus.com PDFs.
+    "PRX.AS": [
+        "https://www.prosus.com/~/media/Files/P/prosus-corp-v2/results-reports-and-events-archive/annual-report/2026/fy2026-annual-report.pdf",
+        "https://www.prosus.com/~/media/Files/P/prosus-corp-v2/results-reports-and-events-archive/annual-report/2025/fy2025-annual-report.pdf",
+        "https://www.prosus.com/~/media/Files/P/prosus-corp-v2/results-reports-and-events-archive/latest-results/hy2026/hy2026-summary-consolidated-financial-statements.pdf",
+    ],
     # aex leftover awaiting_periodic_report — KPN.AS ESEF lag; ir.kpn.com Q4 CDN statutory PDFs.
     "KPN.AS": [
         "https://s202.q4cdn.com/886546970/files/doc_downloads/2026/03/6-KPN-Integrated-Annual-Report-2025.pdf",
@@ -5527,6 +5533,8 @@ _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://www.jdplc.com/wp-content/uploads/2026/09/HY27-Results-Statement.pdf": "interim",
     # eng-20261010-02: Tenaris TEN.MI Q1 2026 FS 6-K slug (f6k_*fs.htm) has no interim token.
     "https://www.sec.gov/Archives/edgar/data/1190723/000117184326003164/f6k_050626fs.htm": "interim",
+    # eng-20261015-01: PRX.AS hy2026 condensed FS slug has no half-year token (would classify other).
+    "https://www.prosus.com/~/media/Files/P/prosus-corp-v2/results-reports-and-events-archive/latest-results/hy2026/hy2026-summary-consolidated-financial-statements.pdf": "interim",
     # eng-20261013-08: PEBB.L — Concrete5 IR filenames (AR_Interactive / ARA_2024 / HY_26) lack annual/interim tokens.
     "https://www.thepebblegroup.com/application/files/7117/7505/8006/272947_Pebble_Group_AR_Interactive.pdf": "annual",
     "https://www.thepebblegroup.com/application/files/3417/4587/6836/270065_Pebble_ARA_2024_INTERACTIVE3_FINAL.pdf": "annual",

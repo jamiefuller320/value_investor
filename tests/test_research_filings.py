@@ -7088,6 +7088,38 @@ def test_parked_source_hunter_adyen_as_euro_depth_h1_2026_interim_live():
     assert valid, reason
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_prx_as_builtins(tmp_path: Path):
+    """eng-20261015-01: PRX.AS awaiting_periodic_report — prosus.com FY2025/FY2026 annual + HY2026 FS."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("PRX.AS", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all("prosus.com" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 2
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+    assert any("fy2026-annual-report.pdf" in url for url in urls)
+    assert any("hy2026-summary-consolidated-financial-statements.pdf" in url for url in urls)
+
+
+def test_parked_source_hunter_prx_as_euro_depth_has_fetchable_ir():
+    """eng-20261015-01: PRX.AS has live prosus.com FY2026 statutory annual report PDF."""
+    assert "PRX.AS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("PRX.AS")
+    annual_fy26 = next(
+        row
+        for row in rows
+        if row["period"] == "annual" and "fy2026-annual-report.pdf" in row["url"]
+    )
+    body = fetch_filing_body(annual_fy26["url"])
+    assert body and len(body) > 5000
+    assert "Annual" in body
+    valid, reason = _validate_ir_allowlist_body_content(annual_fy26, body, ticker="PRX.AS")
+    assert valid, reason
+
+
 def test_fetch_filings_ir_allowlist_aex_kpn_as_builtins(tmp_path: Path):
     """eng-20261002-01: KPN.AS awaiting_periodic_report — ir.kpn.com FY2025 IAR + H1 interim PDFs."""
     allowlist_path = tmp_path / "ir.json"
