@@ -1,7 +1,9 @@
 {
   "market_id": "nasdaq100",
-  "assessed_at": "2026-10-14T18:12:36.941140+00:00",
-  "unmeasured": [],
+  "assessed_at": "2026-10-15T13:25:38.380055+00:00",
+  "unmeasured": [
+    "AMAT"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
@@ -19,17 +21,20 @@
   ],
   "thin_need_discovery": [],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
+    "AMAT",
     "TRI",
     "PDD"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (2 tickers, top: TRI(8), PDD(1))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (2 tickers, top: TRI(8), PDD(1))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
     "indexed_without_body_tickers": 2,
     "indexed_without_body_rows": 9,
