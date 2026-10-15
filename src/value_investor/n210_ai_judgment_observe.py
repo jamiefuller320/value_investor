@@ -1112,13 +1112,9 @@ def build_n210_pipeline_health_projection(
     episodes = int((payload or {}).get("completed_entry_episodes") or 0) if present else 0
     open_episodes = int((payload or {}).get("open_entry_episodes") or 0) if present else 0
     weeks = int((payload or {}).get("calendar_weeks_spanned") or 0) if present else 0
-    pipeline_status = (
-        str((payload or {}).get("pipeline_status") or "") if present else ""
-    ) or None
+    pipeline_status = (str((payload or {}).get("pipeline_status") or "") if present else "") or None
     stub_gone = bool(
-        present
-        and pipeline_status != STUB_PIPELINE_STATUS
-        and pipeline_status == PIPELINE_STATUS
+        present and pipeline_status != STUB_PIPELINE_STATUS and pipeline_status == PIPELINE_STATUS
     )
     walker_active = bool(present and pipeline_status == PIPELINE_STATUS)
 
@@ -1196,7 +1192,8 @@ def build_n210_pipeline_health_projection(
             "open_entry_episodes": path.get("open_entry_episodes", open_episodes),
             "n": path.get("n", episodes),
             "independent_of_fund_nav": True,
-            "companions": companions or {
+            "companions": companions
+            or {
                 "volume_toward_gate": f"{episodes}/{VOLUME_MIN_EPISODES}",
                 "open_episodes": open_episodes,
                 "calendar_weeks_spanned": weeks,
