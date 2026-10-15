@@ -819,6 +819,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "primary below the substantiveness gate; EX-99.1 press release fetches but is not the "
         "indexed URL and 10-K/10-Q are already bodied."
     ),
+    "LH": (
+        "sp500 leftover IWB: indexed-without-body row is Item 7.01 Regulation FD PAMA/CMS "
+        "8-K iXBRL primary below the substantiveness gate; narrative extraction trims at a "
+        "forward-looking Management's Discussion cross-reference and the submission has no "
+        "EX-99 exhibits; ir.labcorp.com is bot-gated and 10-K/10-Q are already bodied."
+    ),
     "LMT": (
         "Leftover indexed-without-body row is Item 8.01 pension buy-out 8-K iXBRL primary "
         "below the substantiveness gate; narrative extraction trims at a forward-looking "
