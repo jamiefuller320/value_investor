@@ -387,8 +387,11 @@ def test_n200_pipeline_health_on_queue_and_analysis() -> None:
     assert "n200_pipeline_health" in queue_fn
     assert "renderN201PipelineHealthSection(" in queue_fn
     assert "n201_pipeline_health" in queue_fn
+    assert "renderN210PipelineHealthSection(" in queue_fn
+    assert "n210_pipeline_health" in queue_fn
     assert "function renderAnalysisObserveForModel(" in text
     assert "renderN200PipelineHealthSection(data, { compact: false })" in text
+    assert "renderN210PipelineHealthSection(data, { compact: false })" in text
     assert "INVESTMENT_MODELS" in text
     assert "function renderInvestmentModelSwitcher(" in text
     assert "not alpha" in text.lower() or "not a promote" in text.lower()
@@ -399,10 +402,12 @@ def test_n200_pipeline_health_on_queue_and_analysis() -> None:
     assert ".n200-lever-verdict" in css
     assert ".investment-model-switcher" in css
     assert ".n201-pipeline-health-section" in css
+    assert ".n210-pipeline-health-section" in css
     ops = OPS_MONITOR.read_text(encoding="utf-8")
     assert "N200 pipeline health" in ops
     assert "per-lever" in ops
     assert "model switcher" in ops
+    assert "n210_pipeline_health" in ops
     n200_doc = Path("docs/ops/n200-tech-timing-observe.md").read_text(encoding="utf-8")
     assert "## Dashboard" in n200_doc
     assert "build_n200_pipeline_health_projection" in n200_doc
@@ -412,14 +417,20 @@ def test_n200_pipeline_health_on_queue_and_analysis() -> None:
     n201_doc = Path("docs/ops/n201-value-mom-observe.md").read_text(encoding="utf-8")
     assert "## Dashboard" in n201_doc
     assert "model switcher" in n201_doc
+    n210_doc = Path("docs/ops/n210-ai-judgment-observe.md").read_text(encoding="utf-8")
+    assert "## Dashboard" in n210_doc
+    assert "build_n210_pipeline_health_projection" in n210_doc
+    assert "model switcher" in n210_doc
+    assert "not assessment primary" in n210_doc.lower()
 
 
 def test_investment_model_switcher_catalog_and_hash() -> None:
-    """Model switcher exposes A/N200/N201 with live vs observe labels and hash wiring."""
+    """Model switcher exposes A/N200/N201/N210 with live vs observe labels and hash wiring."""
     text = APP_JS.read_text(encoding="utf-8")
     assert 'id: "strand-a"' in text
     assert 'id: "n200"' in text
     assert 'id: "n201"' in text
+    assert 'id: "n210"' in text
     assert 'mode: "live"' in text
     assert 'mode: "observe"' in text
     assert "function normalizeInvestmentModel(" in text
@@ -428,16 +439,20 @@ def test_investment_model_switcher_catalog_and_hash() -> None:
     assert "function renderInvestmentModelCompanionStrip(" in text
     assert "function renderN201PipelineHealthSection(" in text
     assert "function resolveN201PipelineHealth(" in text
+    assert "function renderN210PipelineHealthSection(" in text
+    assert "function resolveN210PipelineHealth(" in text
+    assert '["n210_ai_judgment_observe", "data/n210_ai_judgment_observe.json"]' in text
     assert "#analysis/observe/" in text
     assert "one live capital path" in text.lower() or "Sole live" in text
     assert "launch-queue waiter" in text
+    assert "not assessment primary" in text.lower()
     html = Path("docs/index.html").read_text(encoding="utf-8")
     assert "system-map-20261014" in html
     assert "function renderObservePathScoreboardPanel(" in text
 
 
 def test_per_model_lifecycle_monitor_bound_to_own_stores() -> None:
-    """N200/N201 lifecycle monitors bind sealed stores; Strand A points at live Lifecycle tab."""
+    """N200/N201/N210 lifecycle monitors bind sealed stores; Strand A points at live Lifecycle tab."""
     text = APP_JS.read_text(encoding="utf-8")
     assert "function renderModelLifecycleMonitor(" in text
     assert "function renderStrandALifecycleMonitor(" in text
@@ -451,14 +466,17 @@ def test_per_model_lifecycle_monitor_bound_to_own_stores() -> None:
     )[0]
     assert 'renderModelLifecycleMonitor(data, "n200")' in observe_fn
     assert 'renderModelLifecycleMonitor(data, "n201")' in observe_fn
+    assert 'renderModelLifecycleMonitor(data, "n210")' in observe_fn
     assert 'renderModelLifecycleMonitor(data, "strand-a")' in observe_fn
     # Own-store binding — not a shared A board with a label swap.
     assert "n200_tech_timing_observe" in text
     assert "n201_value_mom_observe" in text
+    assert "n210_ai_judgment_observe" in text
     assert "data-lifecycle-model=" in text
     assert "not Strand A" in text or "not Strand A’s" in text or "not Strand A's" in text
     assert "never auto-promote" in text.lower() or "Never auto" in text
     assert "launch-queue waiter" in text
+    assert "open_episodes_sample" in text
     css = STYLES.read_text(encoding="utf-8")
     assert ".model-lifecycle-monitor" in css
     assert ".model-lifecycle-stage-grid" in css
@@ -466,6 +484,8 @@ def test_per_model_lifecycle_monitor_bound_to_own_stores() -> None:
     assert "lifecycle monitor" in n200_doc.lower()
     n201_doc = Path("docs/ops/n201-value-mom-observe.md").read_text(encoding="utf-8")
     assert "lifecycle monitor" in n201_doc.lower()
+    n210_doc = Path("docs/ops/n210-ai-judgment-observe.md").read_text(encoding="utf-8")
+    assert "lifecycle monitor" in n210_doc.lower()
 
 
 def test_ops_runbook_documents_daily_hub() -> None:

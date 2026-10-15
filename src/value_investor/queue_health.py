@@ -185,6 +185,7 @@ def build_queue_health_snapshot(
     lifecycle_maturity: dict[str, Any] | None = None,
     n200_pipeline_health: dict[str, Any] | None = None,
     n201_pipeline_health: dict[str, Any] | None = None,
+    n210_pipeline_health: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Roll up merge lane, agent lane, and ops monitor into one dashboard snapshot."""
     from value_investor.engineering_preflight import clash_report_for_queue
@@ -266,6 +267,18 @@ def build_queue_health_snapshot(
             ops_status=ops_status,
             now=clock,
         )
+    if n210_pipeline_health is None:
+        from value_investor.n210_ai_judgment_observe import (
+            build_n210_pipeline_health_projection,
+        )
+
+        n210_store = Path(ops_status_path).parent / "n210_ai_judgment_observe.json"
+        n210_pipeline_health = build_n210_pipeline_health_projection(
+            store_path=n210_store,
+            ops_status_path=ops_status_path,
+            ops_status=ops_status,
+            now=clock,
+        )
 
     overall = "ok"
     if agent_lane["blocked"] or merge_lane["blocked"]:
@@ -324,6 +337,8 @@ def build_queue_health_snapshot(
         "n200_pipeline_health": n200_pipeline_health,
         # N201 — launch-queue waiter; fixed-stake mechanism only (F8).
         "n201_pipeline_health": n201_pipeline_health,
+        # N210 — B3 fixed-stake AI/filter judgment observe; not assessment primary.
+        "n210_pipeline_health": n210_pipeline_health,
     }
 
 
@@ -350,6 +365,9 @@ def refresh_queue_health_ui(
     )
     from value_investor.n201_value_mom_observe import (
         build_n201_pipeline_health_projection,
+    )
+    from value_investor.n210_ai_judgment_observe import (
+        build_n210_pipeline_health_projection,
     )
     from value_investor.observe_utilization import refresh_observe_utilization
 
@@ -379,6 +397,10 @@ def refresh_queue_health_ui(
         store_path=data_dir / "n201_value_mom_observe.json",
         ops_status_path=ops_status_path,
     )
+    n210_health = build_n210_pipeline_health_projection(
+        store_path=data_dir / "n210_ai_judgment_observe.json",
+        ops_status_path=ops_status_path,
+    )
     snapshot = build_queue_health_snapshot(
         tasks_path=tasks_path,
         ops_status_path=ops_status_path,
@@ -387,6 +409,7 @@ def refresh_queue_health_ui(
         lifecycle_maturity=maturity,
         n200_pipeline_health=n200_health,
         n201_pipeline_health=n201_health,
+        n210_pipeline_health=n210_health,
     )
     now = snapshot["generated_at"]
     queue_health_path = Path(queue_health_path)

@@ -135,3 +135,49 @@ def test_queue_health_embeds_n200_pipeline_health(tmp_path: Path, monkeypatch):
     assert n200["volume_gate"]["met"] is True
     assert n200["not_capital_ready"] is True
     assert n200["pipeline"]["functioning"] is True
+
+
+def test_queue_health_embeds_n210_pipeline_health(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    _write_tasks(tasks_path, {"tasks": []})
+    ops_path = tmp_path / "ops_status.json"
+    write_json(
+        ops_path,
+        {
+            "run_at": "2026-10-15T12:30:00+00:00",
+            "overall": "ok",
+            "findings": [{"title": "N210 AI-judgment observe refreshed"}],
+        },
+    )
+    write_json(
+        tmp_path / "n210_ai_judgment_observe.json",
+        {
+            "registration_id": "strand-e-ai-judgment-fixed-stake-v0",
+            "generated_at": "2026-10-15T12:00:00+00:00",
+            "pipeline_status": "episode_walker_active",
+            "completed_entry_episodes": 0,
+            "open_entry_episodes": 3,
+            "calendar_weeks_spanned": 9,
+            "phase": {"entries_per_week": 0.0, "floor": 8.0, "floor_met": False},
+            "volume_gate": {"met": False, "min_episodes": 48, "min_weeks": 8},
+            "path_scoreboard": {"smooth_ret_cohort_median": None},
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.queue_health.COMMITTED_TASKS_PATH",
+        tasks_path,
+    )
+    snapshot = build_queue_health_snapshot(
+        tasks_path=tasks_path,
+        ops_status_path=ops_path,
+        open_prs=[],
+        now=datetime(2026, 10, 15, 13, 0, tzinfo=UTC),
+    )
+    n210 = snapshot["n210_pipeline_health"]
+    assert n210["walker_active"] is True
+    assert n210["stub_gone"] is True
+    assert n210["volume_gate"]["open_episodes"] == 3
+    assert n210["volume_gate"]["episodes"] == 0
+    assert n210["not_assessment_primary"] is True
+    assert n210["not_capital_ready"] is True
+    assert n210["pipeline"]["functioning"] is True

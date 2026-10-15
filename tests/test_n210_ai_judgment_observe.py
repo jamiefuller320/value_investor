@@ -25,6 +25,7 @@ from value_investor.n210_ai_judgment_observe import (
     N210Config,
     _entry_filter_state,
     build_n210_observe,
+    build_n210_pipeline_health_projection,
     build_registration_payload,
     episode_return,
     fixed_stake_pnl,
@@ -416,3 +417,64 @@ def test_ops_volume_gate_finding_when_met():
     findings = ops_findings_from_n210_observe(payload)
     assert any(f["title"] == "N210 volume gate ready for review" for f in findings)
     assert all(f["auto_fixable"] is False for f in findings)
+
+
+def test_pipeline_health_projection_thin_marks_walker_alive():
+    """0 completed + open > 0 is honest functioning — not assessment primary."""
+    from datetime import UTC, datetime
+
+    store = {
+        "registration_id": REGISTRATION_ID,
+        "deferred_id": DEFERRED_ID,
+        "generated_at": "2026-10-15T12:00:00+00:00",
+        "pipeline_status": PIPELINE_STATUS,
+        "completed_entry_episodes": 0,
+        "open_entry_episodes": 3,
+        "calendar_weeks_spanned": 9,
+        "phase": {"entries_per_week": 0.0, "floor": 8.0, "floor_met": False},
+        "volume_gate": {"met": False, "min_episodes": 48, "min_weeks": 8},
+        "path_scoreboard": {
+            "smooth_ret_cohort_median": None,
+            "open_entry_episodes": 3,
+            "completed_entry_episodes": 0,
+            "companions": {"volume_toward_gate": "0/48", "open_episodes": 3},
+        },
+    }
+    proj = build_n210_pipeline_health_projection(
+        store,
+        ops_status={
+            "run_at": "2026-10-15T12:30:00+00:00",
+            "findings": [{"title": FINDING_TITLE}],
+        },
+        now=datetime(2026, 10, 15, 13, 0, tzinfo=UTC),
+    )
+    assert proj["observe_only"] is True
+    assert proj["influences_live"] is False
+    assert proj["not_assessment_primary"] is True
+    assert proj["not_capital_ready"] is True
+    assert proj["launch_queue_waiter"] is True
+    assert proj["independent_of_fund_nav"] is True
+    assert proj["walker_active"] is True
+    assert proj["stub_gone"] is True
+    assert proj["pipeline_status"] == PIPELINE_STATUS
+    assert proj["volume_gate"]["episodes"] == 0
+    assert proj["volume_gate"]["open_episodes"] == 3
+    assert proj["volume_gate"]["min_episodes"] == 48
+    assert proj["pipeline"]["functioning"] is True
+    assert "thin marks" in proj["headline"].lower() or "0 completed" in proj["headline"]
+    assert proj["path_scoreboard"]["smooth_ret_cohort_median"] is None
+
+
+def test_pipeline_health_projection_missing_store():
+    from datetime import UTC, datetime
+
+    proj = build_n210_pipeline_health_projection(
+        None,
+        store_path=Path("/nonexistent/n210_ai_judgment_observe.json"),
+        ops_status={"run_at": "2026-10-15T12:00:00+00:00", "findings": []},
+        now=datetime(2026, 10, 15, 13, 0, tzinfo=UTC),
+    )
+    assert proj["store_present"] is False
+    assert proj["pipeline"]["functioning"] is False
+    assert proj["not_assessment_primary"] is True
+    assert "missing" in proj["headline"].lower()

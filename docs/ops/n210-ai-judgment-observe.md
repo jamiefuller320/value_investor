@@ -44,11 +44,36 @@ marks. Do **not** promote or apply knobs from thin medians (**F8**).
 - **Trigger:** daily ops-monitor `check_n210_ai_judgment_observe`
 - **Store:** `docs/data/n210_ai_judgment_observe.json` +
   `docs/data/n210_ai_judgment_registration.json`
+- **Queue-health refresh:** projects phase/volume/open/freshness into
+  `queue_health.n210_pipeline_health` (no re-score)
 - **Findings** (`auto_fixable=False`):
   - **N210 AI-judgment observe refreshed**
   - **N210 volume gate ready for review** (when gate met)
   - **N210 AI-judgment observe failed**
 - **CLI:** `ftse-n210-ai-judgment` (ad-hoc drill-down)
+
+## Dashboard
+
+**Analysis → Observe** investment model switcher → **N210 · observe**
+(`#analysis/observe/n210`) shows companion diagnostics (time running, volume
+toward gate, fair-cost cohort median, open vs completed), its **own**
+lifecycle monitor (phase / volume / path + open-or-completed episodes sample +
+markers from `n210_ai_judgment_observe.json`), pipeline health, and the alone
+path scoreboard. Thin marks (0 completed + open &gt; 0 while walker active)
+are honest — not a fail. Not assessment primary; never auto-promote (F8 / B3).
+
+**Automation → Queue & hunter** shows a compact N210 pipeline-health strip
+(walker-active + launch-queue waiter badges). Projection helper:
+`build_n210_pipeline_health_projection` → `queue_health.n210_pipeline_health`.
+
+## Artifacts
+
+| Path | Role |
+|---|---|
+| `docs/data/n210_ai_judgment_registration.json` | Frozen seal record |
+| `docs/data/n210_ai_judgment_observe.json` | Episode scoreboard + markers + phase/volume |
+| `docs/data/queue_health.json` → `n210_pipeline_health` | Dashboard projection (mechanism only) |
+| This doc | Runbook |
 
 ## Human volume-gate review
 
