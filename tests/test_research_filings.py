@@ -6441,6 +6441,23 @@ def test_refetch_investegate_filing_bodies_jd_l_br_suffix_url(tmp_path, monkeypa
     assert "%3Cbr%3E" not in saved["filings"][0]["url"]
 
 
+def test_builtin_ir_allowlist_includes_kgf_l():
+    """eng-20261015-03: ftse350 KGF.L intensive pin had empty IR allowlist (0 refetch)."""
+    from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
+
+    urls = _BUILTIN_IR_URLS.get("KGF.L") or []
+    assert any("2526-annual-report-and-accounts.pdf" in url for url in urls)
+    assert any("2026-half-year-results.pdf" in url for url in urls)
+    assert any("half-year-results-presentation.pdf" in url for url in urls)
+    assert all("kingfisher.com" in url for url in urls)
+    rows = fetch_filings_ir_allowlist("KGF.L")
+    assert len(rows) >= 3
+    assert all(row.get("source") == "ir_allowlist" for row in rows)
+    periods = {row.get("period") for row in rows}
+    assert "annual" in periods
+    assert "interim" in periods
+
+
 def test_builtin_ir_allowlist_includes_jd_l():
     """eng-20261009-03: ftse350 JD.L intensive pin had empty IR allowlist (0 refetch)."""
     from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
