@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-10-14T20:53:01.830376+00:00`
+Generated: `2026-10-15T02:35:44.262546+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -33,15 +33,10 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `parked_hunter`/verified PR #1074 `eng-20261013-09` — Hunt fetchable IR source for parked sti leftover Y92.SI
-- `human`/human PR #1073 `eng-20261013-08` — Hunt fetchable IR source for parked aim leftover PEBB.L
-- `human`/human PR #1068 `eng-20261013-07` — Hunt fetchable IR source for parked aim leftover CAML.L
-- `parked_hunter`/verified PR #1067 `eng-20261013-06` — Hunt fetchable IR source for parked aim leftover DOTD.L
-- `parked_hunter`/verified PR #1065 `eng-20261013-05` — Hunt fetchable IR source for parked ibex35 leftover REP.MC
-- `parked_hunter`/verified PR #1064 `eng-20261013-03` — Hunt fetchable IR source for parked aim leftover MPE.L
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 210
+- Occasion count: 211
 - `PR mergeable=CONFLICTING against main` — 7×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 5×
 - `validate check failed` — 4×
@@ -50,6 +45,20 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `merge_conflict:dirty` — 3×
 - `Merge conflicts in deferred-ideas.json with main` — 2×
 - `validate job failed` — 2×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 10 (open=9, resolved=1)
+- [open] WARN New buy-tier not yet usable — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Universe archive body-miss rate elevated — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Price-only excess misstates track performance — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Longer holds beat live exit buffer in replay — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN SEC filed FCF diverges from Yahoo basis on US buy-tier — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Primary book trails its control on total return — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Decision-review knobs saturated at bounds — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Paper book would halt on drawdown or concentration — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [resolved] WARN Orphaned pr_open engineering tasks — planned: `remediate_queue_merge_sync` (PM v1: recover/mark-merged engineering queue reconciliation; cleared lag=['none'])
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
