@@ -2164,9 +2164,10 @@ def check_n210_ai_judgment_observe(
     store_path: Path | None = None,
     persist: bool = True,
 ) -> list[OpsFinding]:
-    """Observe-only N210: B3 fixed-stake AI/filter judgment (registration stub).
+    """Observe-only N210: B3 fixed-stake AI/filter judgment episode walker.
 
     Writes ``docs/data/n210_ai_judgment_observe.json`` (+ registration).
+    Progressive fixed-stake entries on AI/filter clear; fair-cost episode %.
     Never changes books or knobs (``auto_fixable=False``).
     See docs/ops/n210-ai-judgment-observe.md.
     """

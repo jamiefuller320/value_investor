@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "registration_id": "strand-e-ai-judgment-fixed-stake-v0",
   "deferred_id": "N210",
   "status": "sealed_observe_only",
@@ -7,7 +7,7 @@
   "observe_only": true,
   "influences_live": false,
   "b3_epoch": true,
-  "pipeline_status": "stub_awaiting_episode_walker",
+  "pipeline_status": "episode_walker_active",
   "learning_question": "On threshold-eligible FTSE names, does the AI/filter identity (adjusted_signal + research_verdict=accumulate, min_conviction=0.6) improve fair-cost episode % vs an unfiltered buy-tier draw of the same eligible set, sized as a fixed-stake mechanical test?",
   "identity_id": "ai_filter_accumulate_min_conviction_0_6",
   "success_metric_id": "smooth_ret_cohort_median",
@@ -16,8 +16,16 @@
     "use_adjusted_signal": true,
     "require_research_accumulate": true,
     "min_conviction": 0.6,
+    "skip_timing_wait": true,
     "source": "ai_judgment_fair_gate_identity",
     "note": "Reuse existing AI/filter gates (F4) \u2014 no new screen extras. Known limit: gate may not bind at 0.6 (same as parent; N189)."
+  },
+  "buy_trigger": "next_eligible_weekly_refresh_after_filters_clear",
+  "exit": {
+    "hold_trading_days": 63,
+    "or_identity_break": true,
+    "whichever_first": true,
+    "archive_trading_day_proxy": "busday_uk_holidays"
   },
   "sizing": {
     "mode": "fixed_stake",
@@ -31,6 +39,17 @@
     "markets": "ftse350",
     "returns": "market_native",
     "fx_conversion": false
+  },
+  "buy_tier_baseline": {
+    "id": "unfiltered_buy_tier_fixed_stake_v0",
+    "definition": "Same universe and market-native returns; raw screen buy/strong_buy (no adjusted_signal / accumulate / conviction floor); same 63 trading-day or leave-buy-tier exit; same fixed 100 local stake; fair per-market costs. Excess vs strategy is report-only.",
+    "identity_id": "raw_buy_tier",
+    "use_adjusted_signal": false,
+    "require_research_accumulate": false,
+    "min_conviction": 0.0,
+    "hold_trading_days": 63,
+    "fixed_stake_units": 100.0,
+    "role": "report_only"
   },
   "o3_volume_gate": {
     "completed_entry_episodes_min": 48,
@@ -53,16 +72,17 @@
     "market_id": "ftse350",
     "buy_cost_pct": 0.00525,
     "sell_cost_pct": 0.00025,
-    "round_trip_pct": 0.0055000000000000005,
-    "trade_cost_pct_symmetric_proxy": 0.0027500000000000003,
+    "round_trip_pct": 0.0055,
+    "trade_cost_pct_symmetric_proxy": 0.00275,
     "source": "t212_invest_fair_v1",
     "stress_trade_cost_pct": 0.03,
     "stress_role": "report_only"
   },
-  "trade_cost_pct": 0.0027500000000000003,
+  "trade_cost_pct": 0.00275,
   "buy_cost_pct": 0.00525,
   "sell_cost_pct": 0.00025,
   "stress_trade_cost_pct": 0.03,
+  "eligibility_mode": "entry_fields_required_f9_or_pass",
   "launch_queue": {
     "enqueued": true,
     "rank_note": "B3 judgment observe \u2014 Data deepen / shortlist demand waits behind holdings and already-running sealed units (N200). Do not steal P1.",
@@ -79,6 +99,7 @@
     "stress_cost_report_only",
     "o3_alone_first",
     "b3_dual_shadow",
+    "no_matched30_touch",
     "logged_change_markers"
   ],
   "ops_doc": "docs/ops/n210-ai-judgment-observe.md",

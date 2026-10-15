@@ -187,6 +187,7 @@ def apply_b3_lock(
         "primary_track": model.get("primary_track"),
         "note": (
             "ai_judgment_fair remains primary_track for continuity but is "
-            "evidentiary-demoted; matched-30 twins are shadow paper; N210 is observe stub."
+            "evidentiary-demoted; matched-30 twins are shadow paper; "
+            "N210 is observe-only fixed-stake episode walker."
         ),
     }

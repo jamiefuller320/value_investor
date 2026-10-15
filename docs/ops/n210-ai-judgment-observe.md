@@ -1,13 +1,14 @@
 # N210 — fixed-stake AI/filter judgment observe (B3)
 
-**Status:** sealed observe-only **registration stub** (2026-10-15).  
+**Status:** sealed observe-only **episode walker active** (2026-10-15).  
 **registration_id:** `strand-e-ai-judgment-fixed-stake-v0`  
 **deferred_id:** `N210`
 
-Owner lock **B3**: judgment evidence for filter-vs-buy-tier moves here as
+Owner lock **B3**: judgment evidence for filter-vs-buy-tier lives here as
 **fair-cost episode %** (cohort median), not the underpowered 3-name
 `ai_judgment_fair` fund NAV. Matched-30 fund twin is a **separate** portfolio
-instrument — see [b3-scoreboard-epoch.md](b3-scoreboard-epoch.md).
+instrument — see [b3-scoreboard-epoch.md](b3-scoreboard-epoch.md). This walker
+does **not** freeze, delete, or rewrite matched-30 pots.
 
 ## Learning question
 
@@ -22,7 +23,10 @@ eligible set, sized as a fixed-stake mechanical test?
 |------|-------|
 | Stake | Fixed **100** local |
 | Cash / fund NAV | Parked |
+| Entry | Progressive — name **newly** clears AI/filter gates (first sighting / re-clear after leave) |
+| Exit | **63** trading days **or** identity break (whichever first) |
 | Primary metric | Fair-cost episode % (`smooth_ret_cohort_median`) |
+| Control | Unfiltered buy-tier cohort median — **report-only** |
 | Volume gate | ≥**48** completed **and** ≥**8** calendar weeks |
 | Live influence | `influences_live=false` until readiness (**F8**) |
 | Competition | **O3 alone-first** — no pairwise crown vs N200/N201 until gates |
@@ -31,9 +35,9 @@ eligible set, sized as a fixed-stake mechanical test?
 
 ## Pipeline status
 
-`pipeline_status: stub_awaiting_episode_walker` — daily refresh persists
-registration + empty scoreboard so automation can run. Episode walker is a
-follow-up; do **not** promote or apply knobs from null medians.
+`pipeline_status: episode_walker_active` — daily refresh walks archived weekly
+screens, opens progressive fixed-stake episodes, and persists fair-cost cohort
+marks. Do **not** promote or apply knobs from thin medians (**F8**).
 
 ## Automation
 
@@ -42,7 +46,6 @@ follow-up; do **not** promote or apply knobs from null medians.
   `docs/data/n210_ai_judgment_registration.json`
 - **Findings** (`auto_fixable=False`):
   - **N210 AI-judgment observe refreshed**
-  - **N210 AI-judgment observe registered (awaiting episode pipeline)**
   - **N210 volume gate ready for review** (when gate met)
   - **N210 AI-judgment observe failed**
 - **CLI:** `ftse-n210-ai-judgment` (ad-hoc drill-down)
@@ -50,9 +53,10 @@ follow-up; do **not** promote or apply knobs from null medians.
 ## Human volume-gate review
 
 When ops marks the volume gate ready: open the observe JSON, read fair-cost
-episode % + companions (N toward gate, weeks), and decide only whether a
-deliberate promotion design is warranted later. Do **not** promote, do not
-`decision-review --apply`, and do not open a second live capital path (**F8**).
+episode % + companions (N toward gate, weeks, buy-tier excess report-only),
+and decide only whether a deliberate promotion design is warranted later. Do
+**not** promote, do not `decision-review --apply`, and do not open a second
+live capital path (**F8**). Do not crown matched-30 from this card.
 
 Checklist: `adhoc-n210-volume-gate-review`.
 

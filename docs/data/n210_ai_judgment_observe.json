@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "generated_at": "2026-10-15T10:03:39.502160+00:00",
+  "schema_version": 2,
+  "generated_at": "2026-10-15T18:53:33.466006+00:00",
   "registration_id": "strand-e-ai-judgment-fixed-stake-v0",
   "deferred_id": "N210",
   "status": "sealed_observe_only",
@@ -8,20 +8,48 @@
   "influences_live": false,
   "independent_of_fund_nav": true,
   "b3_epoch": true,
-  "pipeline_status": "stub_awaiting_episode_walker",
+  "pipeline_status": "episode_walker_active",
   "learning_question": "On threshold-eligible FTSE names, does the AI/filter identity (adjusted_signal + research_verdict=accumulate, min_conviction=0.6) improve fair-cost episode % vs an unfiltered buy-tier draw of the same eligible set, sized as a fixed-stake mechanical test?",
   "identity_id": "ai_filter_accumulate_min_conviction_0_6",
   "success_metric_id": "smooth_ret_cohort_median",
+  "eligibility_mode": "entry_fields_required_f9_or_pass",
   "sizing": {
     "mode": "fixed_stake",
     "stake_units": 100.0,
-    "stake_currency": "local_market",
     "cash_fund_nav": "parked",
     "scoreboard_unit": "fair_cost_episode_pct",
-    "dca": "not_on_v0"
+    "independent_of_fund_nav": true
   },
+  "buy_tier_baseline": {
+    "id": "unfiltered_buy_tier_fixed_stake_v0",
+    "definition": "Same universe and market-native returns; raw screen buy/strong_buy (no adjusted_signal / accumulate / conviction floor); same 63 trading-day or leave-buy-tier exit; same fixed 100 local stake; fair per-market costs. Excess vs strategy is report-only.",
+    "identity_id": "raw_buy_tier",
+    "use_adjusted_signal": false,
+    "require_research_accumulate": false,
+    "min_conviction": 0.0,
+    "hold_trading_days": 63,
+    "fixed_stake_units": 100.0,
+    "role": "report_only"
+  },
+  "cost_basis": {
+    "primary": "fair_market_table",
+    "market_id": "ftse350",
+    "buy_cost_pct": 0.00525,
+    "sell_cost_pct": 0.00025,
+    "round_trip_pct": 0.0055,
+    "trade_cost_pct_symmetric_proxy": 0.00275,
+    "source": "t212_invest_fair_v1",
+    "stress_trade_cost_pct": 0.03,
+    "stress_role": "report_only"
+  },
+  "snapshot_count": 25,
   "completed_entry_episodes": 0,
-  "calendar_weeks_spanned": 0,
+  "open_entry_episodes": 3,
+  "control_completed_entry_episodes_report_only": 100,
+  "skipped_missing_entry_fields": 863,
+  "skipped_ineligible": 0,
+  "skipped_filters": 0,
+  "calendar_weeks_spanned": 9,
   "volume_gate": {
     "min_episodes": 48,
     "min_weeks": 8,
@@ -35,22 +63,35 @@
   },
   "path_scoreboard": {
     "primary": "absolute_smoothed_return_fair_costs",
+    "success_metric_id": "smooth_ret_cohort_median",
     "scoreboard_unit": "fair_cost_episode_pct",
     "smooth_ret_cohort_median": null,
+    "smooth_ret_cohort_median_stress_report_only": null,
+    "unfiltered_buy_tier_smooth_ret_cohort_median_report_only": 0.015114,
+    "unfiltered_buy_tier_excess_report_only": null,
     "completed_entry_episodes": 0,
+    "open_entry_episodes": 3,
+    "n": 0,
+    "independent_of_fund_nav": true,
     "companions": {
       "volume_toward_gate": "0/48",
-      "calendar_weeks_spanned": 0,
-      "weeks_toward_gate": "0/8",
-      "years_to_detect": null,
-      "ci90": null,
+      "open_episodes": 3,
+      "calendar_weeks_spanned": 9,
+      "weeks_toward_gate": "9/8",
+      "control_episodes_report_only": 100,
       "stress_cost": "report_only"
     },
-    "note": "Stub store \u2014 episode walker not yet wired. Do not read null median as evidence. Judgment primary remains fair-cost episode % once volume exists."
+    "note": "Primary is fair-cost episode % cohort median on fixed-stake AI/filter entries. Fund NAV / cash drag not used. Unfiltered buy-tier excess and stress 3%/side are report-only (F8). Matched-30 fund twins are a separate B3 instrument."
+  },
+  "stress_scoreboard_report_only": {
+    "trade_cost_pct_per_side": 0.03,
+    "smooth_ret_cohort_median": null,
+    "n": 0,
+    "role": "report_only"
   },
   "launch_queue": {
     "enqueued": true,
-    "rank_note": "B3 judgment observe \u2014 Data deepen / shortlist demand waits behind holdings and already-running sealed units (N200). Do not steal P1.",
+    "rank_note": "Waiter behind holdings + running sealed units (N200). Do not divert P1 deepen until launch-queue head.",
     "doc": "docs/ops/data-pillar-priorities.md"
   },
   "change_markers": [
@@ -58,10 +99,78 @@
       "id": "n210-seal-v0",
       "at": "2026-10-15",
       "summary": "B3 lock: seal fixed-stake AI/filter judgment observe as evidentiary primary for filter LQ (shadow until volume gates)."
+    },
+    {
+      "id": "n210-episode-walker-v0",
+      "marker_id": "n210-episode-walker-v0",
+      "at": "2026-10-15T18:51:47.839328+00:00",
+      "summary": "Episode walker active: progressive fixed-stake entries on AI/filter clear; 63d or identity-break exit; fair-cost episode % primary; unfiltered buy-tier excess report-only; influences_live=false."
+    }
+  ],
+  "episodes_sample": [],
+  "open_episodes_sample": [
+    {
+      "ticker": "PPH.L",
+      "market_id": "ftse350",
+      "cohort": "ai_filter",
+      "entry_run_at": "2026-10-07T10:11:36.589913+00:00",
+      "status": "open",
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "entry_detail": {
+        "signal": "buy",
+        "use_adjusted_signal": true,
+        "research_verdict": "accumulate",
+        "conviction_score": 0.6702,
+        "min_conviction": 0.6,
+        "require_research_accumulate": true,
+        "timing_signal": "neutral"
+      },
+      "fixed_stake_units": 100.0,
+      "influences_live": false
+    },
+    {
+      "ticker": "COST.L",
+      "market_id": "ftse350",
+      "cohort": "ai_filter",
+      "entry_run_at": "2026-10-11T07:28:40.155686+00:00",
+      "status": "open",
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "entry_detail": {
+        "signal": "buy",
+        "use_adjusted_signal": true,
+        "research_verdict": "accumulate",
+        "conviction_score": 0.6442,
+        "min_conviction": 0.6,
+        "require_research_accumulate": true,
+        "timing_signal": "neutral"
+      },
+      "fixed_stake_units": 100.0,
+      "influences_live": false
+    },
+    {
+      "ticker": "KLR.L",
+      "market_id": "ftse350",
+      "cohort": "ai_filter",
+      "entry_run_at": "2026-10-11T07:28:40.155686+00:00",
+      "status": "open",
+      "eligibility": "eligibility_mode=row_fields_or_pass",
+      "entry_detail": {
+        "signal": "buy",
+        "use_adjusted_signal": true,
+        "research_verdict": "accumulate",
+        "conviction_score": 0.6511,
+        "min_conviction": 0.6,
+        "require_research_accumulate": true,
+        "timing_signal": "neutral"
+      },
+      "fixed_stake_units": 100.0,
+      "influences_live": false
     }
   ],
   "soft_gaps": [
-    "Episode walker not yet wired \u2014 refresh persists registration + empty scoreboard so automation can run without half-wired capital.",
-    "Do not crown assessment_model primary from this stub (F8)."
-  ]
+    "AI overlay fields (adjusted_signal / research_verdict / conviction_score) may be sparse on older archive rows \u2014 fail-closed soft-gap skip (F8).",
+    "Do not crown assessment_model primary from this observe (F8 / B3).",
+    "Matched-30 pots are untouched \u2014 separate portfolio-shape twin."
+  ],
+  "ops_doc": "docs/ops/n210-ai-judgment-observe.md"
 }
