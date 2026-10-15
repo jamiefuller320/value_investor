@@ -1,18 +1,18 @@
 {
   "ticker": "DSCV.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-15T13:29:24.470461+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-10-11T07:28:40.155686+00:00",
+  "attached_at": "2026-10-15T09:59:14.001308+00:00",
+  "history_run_path": "docs/data/history/run_20261011_072840.json.gz",
+  "history_models_path": "docs/data/history/models_20261011_072840.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
-      "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "strong_buy": 14,
+      "buy": 41,
+      "hold": 141,
+      "avoid": 52
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 14,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 21,
+      "buy": 26,
+      "hold": 45,
+      "avoid": 10
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -30,45 +33,57 @@
   "ticker_signal": {
     "ticker": "DSCV.L",
     "signal": "buy",
-    "conviction_score": 0.6542,
+    "conviction_score": 0.3562,
     "data_quality_score": 1.0,
     "name": "discoverIE Group plc",
     "sector": "Technology",
     "timing_signal": "neutral",
-    "timing_score": 0.625,
+    "timing_score": 0.5,
     "action_note": "Buy — neutral timing",
-    "models_passed": 7.0,
-    "weighted_model_score": 0.4159590909090909,
-    "research_verdict": null,
+    "models_passed": 4.0,
+    "weighted_model_score": 0.4031318181818182,
+    "research_verdict": "accumulate",
     "adjusted_signal": "buy",
-    "research_as_of": null,
-    "research_confidence": null,
+    "research_as_of": "2026-10-04T07:47:46.711247+00:00",
+    "research_confidence": 0.72,
     "fcf_basis_overlay": false,
+    "media_cyclical_thin_fcf_overlay": false,
+    "advertising_revenue_share": NaN,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": false,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": 0.17886178861788618,
+    "adjusted_eps_growth_pct": 0.05,
+    "yahoo_normalized_income_growth_pct": 0.17886178861788618,
     "signal_trend": "stable",
-    "weeks_at_signal": 17,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": 0.1402504752653586,
+    "weeks_at_signal": 25,
+    "passed_families": "quality,dividend,risk",
+    "price_vs_sma200_pct": 0.27270936236929577,
     "core_order": "limit",
-    "core_limit": 751.25,
+    "core_limit": 804.02,
     "core_allocation_pct": 0.6,
-    "tactical_limit": 665.5,
+    "tactical_limit": 686.72,
     "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 645.53,
-    "tactical_take_profit": 796.78,
-    "trade_plan_summary": "Trade plan: core 60% limit £751.25; tactical 40% limit £665.50; tactical stop £645.53, target £796.78.",
-    "atr_14": 26.3468,
-    "volume_ratio_20": 0.0279,
+    "tactical_stop_loss": 666.12,
+    "tactical_take_profit": 943.92,
+    "trade_plan_summary": "Trade plan: core 60% limit £804.02; tactical 40% limit £686.72; tactical stop £666.12, target £943.92.",
+    "atr_14": 34.1474,
+    "volume_ratio_20": 1.8913,
     "operating_cashflow": 45300000.0,
     "operating_cashflow_gross": null,
     "fcf_dividend_coverage_gross": null,
     "fcf_dividend_coverage_net": 3.1721311475409837,
     "fcf_definition_divergence": false,
     "fcf_divergence_flagged": false,
-    "fcf_dividend_coverage": null
+    "fcf_dividend_coverage": null,
+    "research_prompts": [],
+    "fcf_three_way_conviction_overlay": false,
+    "profit_to_cash_current_pct": NaN,
+    "profit_to_cash_prior_pct": NaN,
+    "profit_to_cash_yoy_decline_pp": NaN
   },
   "ticker_models": [
     {
@@ -105,13 +120,13 @@
       "ticker": "DSCV.L",
       "model_id": "earnings_yield",
       "passed": false,
-      "score": 0.3192
+      "score": 0.2765
     },
     {
       "ticker": "DSCV.L",
       "model_id": "fcf_yield",
-      "passed": true,
-      "score": 0.5552
+      "passed": false,
+      "score": 0.4356
     },
     {
       "ticker": "DSCV.L",
@@ -128,8 +143,8 @@
     {
       "ticker": "DSCV.L",
       "model_id": "neff_pegy",
-      "passed": true,
-      "score": 0.8573
+      "passed": false,
+      "score": 0.8043
     },
     {
       "ticker": "DSCV.L",
@@ -153,7 +168,7 @@
       "ticker": "DSCV.L",
       "model_id": "high_dividend",
       "passed": false,
-      "score": 0.1713
+      "score": 0.2581
     },
     {
       "ticker": "DSCV.L",
@@ -165,19 +180,19 @@
       "ticker": "DSCV.L",
       "model_id": "magic_formula",
       "passed": false,
-      "score": 0.3426
+      "score": 0.3137
     },
     {
       "ticker": "DSCV.L",
       "model_id": "acquirers_multiple",
       "passed": false,
-      "score": 0.2336
+      "score": 0.1729
     },
     {
       "ticker": "DSCV.L",
       "model_id": "dreman_contrarian",
       "passed": false,
-      "score": 0.3007
+      "score": 0.2964
     },
     {
       "ticker": "DSCV.L",
@@ -188,8 +203,8 @@
     {
       "ticker": "DSCV.L",
       "model_id": "composite_value",
-      "passed": true,
-      "score": 0.6656
+      "passed": false,
+      "score": 0.6058
     },
     {
       "ticker": "DSCV.L",
@@ -204,6 +219,6 @@
       "score": 1.0
     }
   ],
-  "models_passed": 7,
+  "models_passed": 4,
   "models_total": 22
 }
