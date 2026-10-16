@@ -1125,6 +1125,8 @@ _BUYBACK_PROGRAMME_PATTERNS = (
 
 _NON_RESULTS_RNS_PATTERNS = (
     r"\bdirectorate change\b",
+    r"\bappoints new ceo\b",
+    r"\bappointment of (?:chief executive|ceo)\b",
     r"\bholding\(s\)? in company\b",
     r"\btotal voting rights\b",
     r"\bblock listing\b",
@@ -1893,6 +1895,12 @@ def _is_routine_own_share_or_pdmr_row(row: dict[str, Any]) -> bool:
     return "transaction in own shares" in headline or "director/pdmr" in headline
 
 
+def _is_non_results_rns_row(row: dict[str, Any]) -> bool:
+    """Governance / TVR / AGM headlines indexed for audit, not ingest gap closure."""
+    headline = _headline_blob(row)
+    return any(re.search(pat, headline) for pat in _NON_RESULTS_RNS_PATTERNS)
+
+
 def _is_holding_disclosure_row(row: dict[str, Any]) -> bool:
     """Form 8.3/8.5 and major-holding RNS — indexed for audit, not ingest ROI."""
     if str(row.get("entity_type") or "") == "holding_disclosure":
@@ -1915,6 +1923,8 @@ def filing_lacks_material_body(row: dict[str, Any]) -> bool:
     if _is_index_noise_row(row):
         return False
     if _is_routine_own_share_or_pdmr_row(row):
+        return False
+    if _is_non_results_rns_row(row):
         return False
     if _is_holding_disclosure_row(row):
         return False
@@ -9422,10 +9432,17 @@ def reconcile_filing_body_flags(
     restored = 0
     for row in filings:
         item = dict(row)
+        row_id = str(item.get("id") or "").strip()
         if item.get("has_body"):
+            resolved = _resolve_filing_body_path_for_row(item, bodies_dir)
+            if resolved is not None:
+                item["body_path"] = str(resolved)
+            else:
+                item["has_body"] = False
+                item.pop("body_path", None)
+                item.pop("body_content_hash", None)
             reconciled.append(item)
             continue
-        row_id = str(item.get("id") or "").strip()
         if not row_id:
             reconciled.append(item)
             continue
@@ -9489,7 +9506,11 @@ def reconcile_filings_index_body_flags(
     )
     after = sum(1 for row in reconciled if row.get("has_body"))
     restored = after - before
-    if restored > 0:
+    paths_changed = any(
+        str(before_row.get("body_path") or "") != str(after_row.get("body_path") or "")
+        for before_row, after_row in zip(filings, reconciled, strict=False)
+    )
+    if restored > 0 or paths_changed:
         payload["filings"] = reconciled
         payload["summary"] = summarize_filings(reconciled)
         payload["reconciled_at"] = datetime.now(UTC).isoformat()

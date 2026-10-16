@@ -568,6 +568,91 @@ def test_filing_coverage_kgf_missing_interim_listing_flags_gap(tmp_path: Path):
     assert _has_outstanding_ingest_gap(coverage, ticker="KGF.L")
 
 
+def test_filing_coverage_kgf_ceo_appointment_does_not_false_gap(tmp_path: Path):
+    """eng-20261016-01: leftover CEO appointment RNS must not block gap closure."""
+    from value_investor.research.ingest_improvement import (
+        _filing_coverage,
+        _has_outstanding_ingest_gap,
+    )
+    from value_investor.research.store import ResearchStore
+
+    output_dir = tmp_path / "output"
+    filings_dir = output_dir / "research" / "KGF.L" / "sources" / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    annual_id = "9ad87b6b08ec41b6"
+    (bodies_dir / f"{annual_id}.txt").write_text(
+        "Kingfisher plc final results with revenue and profit commentary. "
+        + ("Statutory results detail. " * 30),
+        encoding="utf-8",
+    )
+    interim_id = "0041639123b0a2b0"
+    (bodies_dir / f"{interim_id}.txt").write_text(
+        "Kingfisher plc half year results with revenue and cash flow commentary. "
+        + ("Interim results detail. " * 30),
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {
+                    "total": 4,
+                    "annual": 1,
+                    "interim": 1,
+                    "with_body": 2,
+                    "period_coverage": {
+                        "annual": {"total": 1, "with_body": 1},
+                        "interim": {"total": 1, "with_body": 1},
+                    },
+                },
+                "filings": [
+                    {
+                        "id": annual_id,
+                        "source": "investegate_direct",
+                        "headline": "Final Results",
+                        "period": "annual",
+                        "entity_type": "consolidated",
+                        "has_body": True,
+                        "body_path": str(bodies_dir / f"{annual_id}.txt"),
+                    },
+                    {
+                        "id": interim_id,
+                        "source": "investegate_direct",
+                        "headline": "Half Year Results",
+                        "period": "interim",
+                        "entity_type": "consolidated",
+                        "has_body": True,
+                        "body_path": str(bodies_dir / f"{interim_id}.txt"),
+                    },
+                    {
+                        "id": "ir_hy",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — 2026-half-year-results.pdf",
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(bodies_dir / f"{interim_id}.txt"),
+                    },
+                    {
+                        "id": "c684d8498b936644",
+                        "source": "investegate_direct",
+                        "headline": "Kingfisher Appoints New CEO",
+                        "period": "other",
+                        "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911",
+                        "has_body": False,
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    store = ResearchStore(output_dir)
+    coverage = _filing_coverage(store, "KGF.L", output_dir)
+    assert coverage["indexed_without_body"] == 0
+    assert coverage["filings_annual"] == coverage["annual_with_body"]
+    assert coverage["filings_interim"] == coverage["interim_with_body"]
+    assert not _has_outstanding_ingest_gap(coverage, ticker="KGF.L")
+
+
 def test_select_ingest_improvement_targets_prioritises_thin_filings(tmp_path: Path):
     output_dir = tmp_path / "output"
     suggestions_path = tmp_path / "suggestions.json"

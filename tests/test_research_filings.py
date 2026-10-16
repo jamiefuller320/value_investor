@@ -9397,6 +9397,110 @@ def test_filing_lacks_material_body_excludes_routine_own_shares():
     )
 
 
+def test_filing_lacks_material_body_excludes_kgf_ceo_appointment():
+    """eng-20261016-01: CEO appointment RNS is governance noise, not an ingest gap."""
+    from value_investor.research.filings import filing_lacks_material_body
+
+    assert (
+        filing_lacks_material_body(
+            {
+                "headline": "Kingfisher Appoints New CEO",
+                "source": "investegate_direct",
+                "period": "other",
+                "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911",
+                "has_body": False,
+            }
+        )
+        is False
+    )
+
+
+def test_reconcile_filing_body_flags_normalizes_stale_output_mirror_path(tmp_path: Path):
+    """eng-20261016-01: reconcile relinks bodies when index still points at output/research."""
+    bodies_dir = tmp_path / "bodies"
+    bodies_dir.mkdir()
+    row_id = "c684d8498b936644"
+    body_path = bodies_dir / f"{row_id}.txt"
+    body_path.write_text(
+        "Kingfisher plc announces the appointment of Thierry Garnier as Chief Executive Officer. "
+        "The board confirmed the succession plan with effect from November 2026. "
+        + ("Governance and strategy commentary. " * 20),
+        encoding="utf-8",
+    )
+    filings = [
+        {
+            "id": row_id,
+            "headline": "Kingfisher Appoints New CEO",
+            "has_body": True,
+            "body_path": "output/research/KGF.L/sources/filings/bodies/c684d8498b936644.txt",
+        }
+    ]
+    reconciled = reconcile_filing_body_flags(
+        filings,
+        bodies_dir,
+        company_name="Kingfisher plc",
+        ticker="KGF.L",
+    )
+    assert reconciled[0]["has_body"] is True
+    assert reconciled[0]["body_path"] == str(body_path)
+
+
+def test_refetch_investegate_filing_bodies_fetches_kgf_ceo_announcement(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20261016-01: indexed CEO RNS without body must enter Investegate refetch."""
+    from value_investor.research.filings import refetch_investegate_filing_bodies
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    row_id = "c684d8498b936644"
+    url = "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911"
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": row_id,
+                        "source": "investegate_direct",
+                        "headline": "Kingfisher Appoints New CEO",
+                        "published_at": "2026-10-13T00:00:00+00:00",
+                        "url": url,
+                        "period": "other",
+                        "has_body": False,
+                    }
+                ],
+                "summary": {"total": 1, "with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    body_text = (
+        "Kingfisher plc announces the appointment of Thierry Garnier as Chief Executive Officer. "
+        + ("Board and governance details. " * 40)
+    )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda fetch_url: (body_text, None) if fetch_url == url else (None, None),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="KGF.L",
+        company_name="Kingfisher plc",
+        max_bodies=2,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ceo = next(row for row in saved["filings"] if row["id"] == row_id)
+    assert ceo["has_body"] is True
+
+
 def test_filing_counts_toward_body_penetration_excludes_rathbones_form_83():
     """eng-20260923-02: RAT.L Form 8.3 stubs must not inflate low-penetration scoring."""
     from value_investor.research.filings import filing_counts_toward_body_penetration
