@@ -13,6 +13,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-3.md` (FTSE ranks 21–30)
 - `docs/ftse350-batch-4.md` (FTSE ranks 31–40)
 - `docs/ftse350-batch-5.md` (FTSE ranks 41–50)
+- `docs/ftse350-batch-6.md` (FTSE ranks 51–60)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -279,3 +280,11 @@ HSBC and AstraZeneca did not need an HKD or SEK rate. Their London prices and th
 **Where.** The trust screen key metrics are Discount 17.7%, P/E 8.2, P/B 0.82, and Yield 5.6%. ROE is missing. There is no free-cash-flow object. The `HMSO.IR` metrics row, stored under `euro_depth` and `iseq20`, has trailing P/E 8.75, price-to-book 0.883, dividend yield 0.0521, `return_on_equity` 0.1056, and free cash flow 10,037,500. None of those is the London screen figure. `last_price` 3.5 times `shares_outstanding` 529,736,620 is 1,854,078,170, not the market cap 2,041,640,448.
 
 **What to change.** Do not treat the trust-screen discount, P/E, P/B, or yield as the euro metrics row, and do not copy one onto the other without naming the source. Do not store a market cap that is not last price times shares on that same row. Leave the London multiples unchecked until a statement exists under `HMSO.L` or `HMSO.IR`.
+
+## 22. Bodycote, Atalaya, and Ashmore store a screen TTM and mark it verified
+
+**What is wrong.** `BOY.L`, `ATYM.L`, and `ASHM.L` have the same missing statement TTM and empty `quarterly_cashflow` as Greggs. The screen still stores a TTM, and sets both `screen_ttm_unverified` and `ttm_suppressed_screen_filing_mismatch` to false. Greggs sets both flags true.
+
+**Where.** `docs/data/research/BOY.L`: statement TTM missing, `quarterly_cashflow` empty, screen TTM 96,062,496, both flags false. `docs/data/research/ATYM.L`: statement TTM missing, `quarterly_cashflow` empty, screen TTM 127,294,496, the same number as the AIM metrics `free_cashflow`, both flags false. `docs/data/research/ASHM.L`: statement TTM missing, `quarterly_cashflow` empty, screen TTM 23,087,500, both flags false.
+
+**What to change.** When the statement TTM is missing and the quarterly cash-flow file is empty, do not set `screen_ttm_unverified` or `ttm_suppressed_screen_filing_mismatch` to false. Keep both true, as on Greggs, and do not present 96,062,496, 127,294,496, or 23,087,500 as a filing trailing twelve months. On Atalaya, label 127,294,496 as the AIM `free_cashflow` if that figure is kept.
