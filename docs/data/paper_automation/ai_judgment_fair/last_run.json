@@ -1,15 +1,47 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-15T09:36:04.262749+01:00",
+    "local_time": "2026-10-16T09:27:33.907941+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-10-15T08:00:00+01:00",
-    "settle_at": "2026-10-15T09:15:00+01:00",
+    "market_open_at": "2026-10-16T08:00:00+01:00",
+    "settle_at": "2026-10-16T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "058634a0-0b62-49e8-82f8-4bc326013af7",
+      "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
+      "acted_at": "2026-10-16T09:27:33.907941+01:00",
+      "ticker": "PPH.L",
+      "side": "sell",
+      "sizing_mode": "cash",
+      "shares": 0.00704,
+      "price": 1442.0,
+      "gross": 10.15,
+      "cost": 0.0,
+      "net_cash": 10.15,
+      "note": "Automated trim",
+      "name": "PPHE Hotel Group Limited",
+      "avg_cost_at_exit": 1547.6251
+    },
+    {
+      "id": "824c0f0d-0479-4e3b-b3e0-1d1e96fcfc54",
+      "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
+      "acted_at": "2026-10-16T09:27:33.907941+01:00",
+      "ticker": "KLR.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.004516,
+      "price": 3044.0,
+      "gross": 13.75,
+      "cost": 0.07,
+      "net_cash": -13.82,
+      "note": "Automated buy",
+      "name": "Keller Group plc"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +55,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 799.66,
-    "cash": 6.63,
+    "nav": 808.51,
+    "cash": 2.96,
     "max_positions": 3,
     "min_conviction": 0.6,
     "sector_cap": 0.2,
@@ -36,28 +68,28 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 266.55,
+    "target_sleeve_value": 269.5,
     "targets": [
       {
         "ticker": "PPH.L",
         "name": "PPHE Hotel Group Limited",
         "signal": "buy",
         "conviction_score": 1.0,
-        "price": 1417.0233
+        "price": 1442.0
       },
       {
         "ticker": "KLR.L",
         "name": "Keller Group plc",
         "signal": "buy",
         "conviction_score": 1.0,
-        "price": 3066.0
+        "price": 3044.0
       },
       {
         "ticker": "FRES.L",
         "name": "Fresnillo plc",
         "signal": "buy",
-        "conviction_score": 0.8137400000000002,
-        "price": 2636.0
+        "conviction_score": 0.8637400000000003,
+        "price": 2696.0
       }
     ],
     "anticipated_exits": [],
@@ -67,11 +99,21 @@
     "anticipated_holds": [
       {
         "action": "hold",
+        "ticker": "PPH.L",
+        "name": "PPHE Hotel Group Limited",
+        "reason": "Already near equal-weight target",
+        "value": 269.53,
+        "target_value": 269.5,
+        "conviction_score": 1.0,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
         "ticker": "KLR.L",
         "name": "Keller Group plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 257.56,
-        "target_value": 266.55,
+        "reason": "Already near equal-weight target",
+        "value": 269.46,
+        "target_value": 269.5,
         "conviction_score": 1.0,
         "signal": "buy"
       },
@@ -80,15 +122,15 @@
         "ticker": "FRES.L",
         "name": "Fresnillo plc",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 260.64,
-        "target_value": 266.55,
-        "conviction_score": 0.8137400000000002,
+        "value": 266.57,
+        "target_value": 269.5,
+        "conviction_score": 0.8637400000000003,
         "signal": "buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
   },
   "alerts": [
     {
@@ -97,9 +139,9 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3066.0,
-      "stop_loss": null,
-      "take_profit": null,
+      "mark": 3044.0,
+      "stop_loss": 2405.98,
+      "take_profit": 3525.12,
       "timing_signal": "insufficient_data"
     },
     {
@@ -108,7 +150,7 @@
       "source": "paper",
       "severity": "info",
       "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 1417.0233154296875,
+      "mark": 1442.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -118,8 +160,8 @@
       "name": "Fresnillo plc",
       "source": "paper",
       "severity": "info",
-      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 2636.0,
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 2696.0,
       "stop_loss": 2407.7,
       "take_profit": 2913.84,
       "timing_signal": "insufficient_data"
@@ -140,24 +182,24 @@
       "id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
       "created_at": "2026-09-01T14:23:57.454226+00:00"
     },
-    "cash": 6.63,
+    "cash": 2.96,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
       "KLR.L": {
         "ticker": "KLR.L",
-        "shares": 0.084004,
-        "avg_cost": 2980.0,
+        "shares": 0.08852,
+        "avg_cost": 2983.2654,
         "name": "Keller Group plc",
         "sector": "Industrials",
         "currency": "GBP",
-        "stop_loss": null,
-        "take_profit": null,
+        "stop_loss": 2405.98,
+        "take_profit": 3525.12,
         "opened_at": "2026-09-10T09:29:13.404510+01:00"
       },
       "PPH.L": {
         "ticker": "PPH.L",
-        "shares": 0.193951,
+        "shares": 0.186911,
         "avg_cost": 1547.6251,
         "name": "PPHE Hotel Group Limited",
         "sector": "Consumer Cyclical",
@@ -750,6 +792,37 @@
         "net_cash": -276.34,
         "note": "Automated buy",
         "name": "Fresnillo plc"
+      },
+      {
+        "id": "058634a0-0b62-49e8-82f8-4bc326013af7",
+        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
+        "acted_at": "2026-10-16T09:27:33.907941+01:00",
+        "ticker": "PPH.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.00704,
+        "price": 1442.0,
+        "gross": 10.15,
+        "cost": 0.0,
+        "net_cash": 10.15,
+        "note": "Automated trim",
+        "name": "PPHE Hotel Group Limited",
+        "avg_cost_at_exit": 1547.6251
+      },
+      {
+        "id": "824c0f0d-0479-4e3b-b3e0-1d1e96fcfc54",
+        "fund_id": "dc973fcc-07b9-47e0-b457-f9f01aeff266",
+        "acted_at": "2026-10-16T09:27:33.907941+01:00",
+        "ticker": "KLR.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.004516,
+        "price": 3044.0,
+        "gross": 13.75,
+        "cost": 0.07,
+        "net_cash": -13.82,
+        "note": "Automated buy",
+        "name": "Keller Group plc"
       }
     ],
     "equity_curve": [
@@ -1424,9 +1497,25 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-16T09:27:33.907941+01:00",
+        "portfolio_value": 808.51,
+        "cash": 2.96,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-15T09:36:04.262749+01:00",
+    "last_mark_at": "2026-10-16T09:27:33.907941+01:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -1434,12 +1523,12 @@
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "ftse350",
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-15T08:36:17.911463+00:00",
+    "generated_at": "2026-10-16T08:27:55.294874+00:00",
     "observe_only": true,
     "open_count": 14,
     "closed_count": 0,
@@ -1513,12 +1602,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 0
+    "checkpoints_added_this_pass": 2
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-15T08:36:17.912779+00:00",
+    "generated_at": "2026-10-16T08:27:55.296086+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1600,9 +1689,9 @@
     },
     "swap_rotation": {
       "open": {
-        "count": 7,
+        "count": 8,
         "verdicts": {
-          "open": 7
+          "open": 8
         }
       },
       "closed": {
@@ -1612,11 +1701,11 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     }
   },
   "hypothesis_integrity": {
@@ -1624,8 +1713,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment_fair",
-    "updated_at": "2026-10-15T08:36:17.914495+00:00",
-    "as_of": "2026-10-15T09:36:04.262749+01:00",
+    "updated_at": "2026-10-16T08:27:55.297555+00:00",
+    "as_of": "2026-10-16T09:27:33.907941+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1638,7 +1727,7 @@
       "skip_underwater_urgency_when_intact": true
     },
     "holding_count": 3,
-    "underwater_count": 2,
+    "underwater_count": 1,
     "thesis_status_counts": {
       "intact": 3,
       "weakening": 0,
@@ -1647,13 +1736,13 @@
     },
     "portfolio_feedback": {
       "holding_count": 3,
-      "loser_count": 2,
-      "loser_share": 0.6667,
-      "loser_nav_share": 0.6752,
+      "loser_count": 1,
+      "loser_share": 0.3333,
+      "loser_nav_share": 0.3346,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
-      "within_tolerance": false,
-      "intact_loser_count": 2,
+      "within_tolerance": true,
+      "intact_loser_count": 1,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
@@ -1671,7 +1760,7 @@
         "risk": 0.0
       },
       "selection_feedback_flags": [],
-      "balancing_hint": "hold_intact_review_selection",
+      "balancing_hint": "tolerate_intact_losers",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
@@ -1682,8 +1771,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": true,
         "deep_underwater": false,
-        "unrealized_pct": -0.0844,
-        "mark": 1417.0233,
+        "unrealized_pct": -0.0682,
+        "mark": 1442.0,
         "avg_cost": 1547.6251,
         "signal": "buy",
         "timing_signal": "insufficient_data",
@@ -1721,14 +1810,14 @@
         "name": "Fresnillo plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
-        "underwater": true,
+        "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0519,
-        "mark": 2636.0,
+        "unrealized_pct": -0.0303,
+        "mark": 2696.0,
         "avg_cost": 2780.189,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8137,
+        "conviction_score": 0.8637,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1740,19 +1829,18 @@
         "failed_families": [],
         "research_verdict": "accumulate",
         "reasons": [
-          "price drawdown alone does not invalidate value thesis",
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 81%"
+          "conviction 86%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 81%"
+          "conviction 86%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1764,9 +1852,9 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0289,
-        "mark": 3066.0,
-        "avg_cost": 2980.0,
+        "unrealized_pct": 0.0204,
+        "mark": 3044.0,
+        "avg_cost": 2983.2654,
         "signal": "buy",
         "timing_signal": "insufficient_data",
         "conviction_score": 1.0,
@@ -1805,7 +1893,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-15T08:36:17.916518+00:00",
+    "generated_at": "2026-10-16T08:27:55.299254+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1872,7 +1960,7 @@
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
     "observe_only": true,
-    "generated_at": "2026-10-15T08:36:17.920671+00:00",
+    "generated_at": "2026-10-16T08:27:55.302466+00:00",
     "open_count": 1,
     "closed_count": 10,
     "scored_count": 8,
@@ -1939,7 +2027,7 @@
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-15T09:36:04.262749+01:00",
+    "generated_at": "2026-10-16T09:27:33.907941+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1996,7 +2084,7 @@
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-10-15T09:36:04.262749+01:00",
+    "generated_at": "2026-10-16T09:27:33.907941+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "evidence_heuristic",
@@ -2004,34 +2092,152 @@
     "parent_spec_id": null,
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 1,
+    "card_count": 1,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 1,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Buy into buyish target set \u2014 agree with algo selection."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 1
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 1
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "conviction_score",
+            "source": "candidates",
+            "detail": "Conviction score at decision time",
+            "value": 1.0
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "fcf_basis_overlay",
+            "source": "candidates",
+            "detail": "FCF basis overlay flag bound on the live report at decision time",
+            "value": false
+          },
+          {
+            "kind": "filing_presence",
+            "source": "candidates",
+            "detail": "Key filing bodies / body count on disk at decision time",
+            "value": {
+              "key_filing_bodies": true,
+              "filings_with_body": 72,
+              "has_index": true
+            }
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "evidence_heuristic",
+        "judge_spec_id": "heuristic.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "ai_judgment_fair",
+        "logged_at": "2026-10-16T09:27:33.907941+01:00",
+        "proposal_id": "ai_judgment_fair:KLR.L:buy:2026-10-16T09:27:33.907941+01:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": true,
+            "filings_with_body": 72,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          }
+        },
+        "schema_version": 1
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B.",
     "review": {
       "schema_version": 1,
       "track_id": "ai_judgment_fair",
-      "generated_at": "2026-10-15T09:36:04.262749+01:00",
+      "generated_at": "2026-10-16T09:27:33.907941+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "evidence_heuristic",
       "judge_spec_id": "heuristic.v1",
       "parent_spec_id": null,
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 1,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 1,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -2047,7 +2253,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B."
     }
   },
-  "generated_at": "2026-10-15T08:36:17.923552+00:00",
+  "generated_at": "2026-10-16T08:27:55.305061+00:00",
   "track_id": "ai_judgment_fair",
   "track_label": "AI judgment fair-cost lab (Suite B)",
   "is_primary_learning_track": true,
