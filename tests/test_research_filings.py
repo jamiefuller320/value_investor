@@ -7667,6 +7667,73 @@ def test_ir_allowlist_period_classifies_y92_si_1hfy25_slug():
     )
 
 
+def test_fetch_filings_ir_allowlist_sti_n2iu_si_builtins_eng_20261016_02(tmp_path: Path):
+    """eng-20261016-02: sti parked N2IU.SI — SGX annual/interim statutory PDF seeds."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("N2IU.SI", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 2
+    urls = [row["url"] for row in rows]
+    assert any("Annual%20Report%202024_25.pdf" in url for url in urls)
+    assert any("2QFY2526%20SGXNet.pdf" in url for url in urls)
+    assert any("2QFY2425%20SGXNet.pdf" in url for url in urls)
+    assert all("links.sgx.com" in url for url in urls)
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_n2iu_si_index(tmp_path: Path):
+    """Empty N2IU.SI filings_index.json must gain IR rows for library sti measurability."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("N2IU.SI", filings_dir)
+    assert meta["added"] >= 1
+    assert meta["total_allowlist"] == 3
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) == 3
+    assert "ir_allowlist" in payload["sources_used"]
+
+
+def test_parked_source_hunter_n2iu_si_sti_has_fetchable_ir():
+    """eng-20261016-02: N2IU.SI (MPACT) has live-fetchable SGX statutory PDF filings."""
+    assert "N2IU.SI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("N2IU.SI")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("links.sgx.com" in url for url in urls)
+    annual_url = next(url for url in urls if "Annual%20Report%202024_25.pdf" in url)
+    body = _live_fetch_filing_body(annual_url)
+    if not body:
+        pytest.skip("SGX PDF body fetch unavailable (network) — retry later")
+    assert len(body) >= 50000
+
+
+def test_ir_allowlist_period_classifies_n2iu_si_2qfy_sgxnet_slugs():
+    """eng-20261016-02: 2QFY* SGXNet slugs must map to interim (not annual fy token)."""
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/1.0.0/corporate-announcements/RSO9M5FJCQ0PWK0I/864566_20251022_MPACT%202QFY2526%20SGXNet.pdf"
+        )
+        == "interim"
+    )
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://links.sgx.com/1.0.0/corporate-announcements/CFWDF8Y9LG5KO2LJ/822876_20241024_MPACT%202QFY2425%20SGXNet.pdf"
+        )
+        == "interim"
+    )
+
+
 def test_fetch_filings_ir_allowlist_smi_unmeasured_builtins_eng_20261003_02(tmp_path: Path):
     """eng-20261003-02: smi buy-tier unmeasured — IR PDF seeds when ESEF/news discovery is empty."""
     allowlist_path = tmp_path / "ir.json"
