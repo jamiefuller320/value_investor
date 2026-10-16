@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-15T15:14:03.705631+00:00",
+  "run_at": "2026-10-16T15:01:25.982560+00:00",
   "market_id": "dax",
   "targets": [],
   "target_details": [],
@@ -9,15 +9,15 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-10-15T15:13:08.061861+00:00",
+    "snapshot_at": "2026-10-16T15:00:37.649113+00:00",
     "market_id": "dax",
-    "buy_tier_count": 11,
+    "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 10,
+    "thin_body_buy_tier": 9,
     "indexed_without_body": 1,
     "bodies_min": 1,
-    "bodies_median": 1,
+    "bodies_median": 1.5,
     "bodies_max": 50,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -31,7 +31,6 @@
       "MUV2.DE",
       "FRE.DE",
       "HNR1.DE",
-      "HEN3.DE",
       "DTG.DE",
       "DTE.DE"
     ],
@@ -61,15 +60,15 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-10-15T15:13:59.902541+00:00",
+    "snapshot_at": "2026-10-16T15:01:21.927396+00:00",
     "market_id": "dax",
-    "buy_tier_count": 11,
+    "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 10,
+    "thin_body_buy_tier": 9,
     "indexed_without_body": 1,
     "bodies_min": 1,
-    "bodies_median": 1,
+    "bodies_median": 1.5,
     "bodies_max": 50,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -83,7 +82,6 @@
       "MUV2.DE",
       "FRE.DE",
       "HNR1.DE",
-      "HEN3.DE",
       "DTG.DE",
       "DTE.DE"
     ],
@@ -100,12 +98,11 @@
       "DTG.DE",
       "FRE.DE",
       "HEI.DE",
-      "HEN3.DE",
       "HNR1.DE",
       "MUV2.DE",
       "VOW3.DE"
     ],
-    "parked_count": 10,
+    "parked_count": 9,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
     "effective_indexed_without_body": 0,
@@ -119,10 +116,10 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 11,
-    "hits": 10,
+    "scanned": 10,
+    "hits": 9,
     "new_rows_total": 0,
-    "curiosity_total": 11,
+    "curiosity_total": 10,
     "errors": 0,
     "prioritization_weights": {
       "new_index_rows": 8.0,
@@ -140,7 +137,6 @@
       "MUV2.DE",
       "FRE.DE",
       "HNR1.DE",
-      "HEN3.DE",
       "DTG.DE",
       "DTE.DE",
       "HEI.DE"
@@ -156,7 +152,7 @@
   },
   "critical_path": {
     "market_id": "dax",
-    "assessed_at": "2026-10-15T15:13:08.578436+00:00",
+    "assessed_at": "2026-10-16T15:00:38.099132+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -174,7 +170,6 @@
       "MUV2.DE",
       "FRE.DE",
       "HNR1.DE",
-      "HEN3.DE",
       "DTG.DE",
       "DTE.DE"
     ],
@@ -188,7 +183,7 @@
     ],
     "recommended_actions": [
       "Prefer indexed-without-body body refetch (1 tickers, top: HEI.DE(1))",
-      "Discovery/IR seed for 9 thin ticker(s) that already have bodies for every indexed filing",
+      "Discovery/IR seed for 8 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
@@ -196,13 +191,13 @@
       "zero_body": 0,
       "indexed_without_body_tickers": 1,
       "indexed_without_body_rows": 1,
-      "thin_need_discovery": 9,
+      "thin_need_discovery": 8,
       "thin_need_bodies": 1
     }
   },
-  "used_seconds": 50.84271315800001,
+  "used_seconds": 43.369083580999984,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3549.157286842,
+  "leftover_seconds": 3556.630916419,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -210,9 +205,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "dax",
-    "updated_at": "2026-10-15T15:13:59.909357+00:00",
+    "updated_at": "2026-10-16T15:01:21.934010+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 19,
+    "complete_zero_improve_runs": 20,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -250,17 +245,6 @@
       },
       {
         "ticker": "FRE.DE",
-        "reason": "awaiting_periodic_report",
-        "revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "parked_at": "2026-09-24T16:52:44.438531+00:00",
-        "filings_total": 1,
-        "filings_with_body": 1,
-        "indexed_without_body": 0,
-        "thin": true,
-        "source_surface": "euro_filings"
-      },
-      {
-        "ticker": "HEN3.DE",
         "reason": "awaiting_periodic_report",
         "revisit_when": "Next statutory annual or interim report is issued and indexed",
         "parked_at": "2026-09-24T16:52:44.438531+00:00",
@@ -338,7 +322,6 @@
       "DTG.DE",
       "FRE.DE",
       "HEI.DE",
-      "HEN3.DE",
       "HNR1.DE",
       "MUV2.DE",
       "VOW3.DE"
@@ -379,7 +362,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 169,
+    "task_count": 173,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "hunter_tickers": [
