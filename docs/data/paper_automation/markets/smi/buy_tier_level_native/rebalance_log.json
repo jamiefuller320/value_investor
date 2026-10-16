@@ -4651,5 +4651,563 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-16T07:29:10.101206+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (CHF reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/smi/screen_latest.json",
+      "run_at": "2026-10-16T06:52:34.814290+00:00",
+      "generated_at": "2026-10-16T07:29:02.162402+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-16T08:29:05.768598+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-10-16T08:00:00+01:00",
+      "settle_at": "2026-10-16T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (0 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0003,
+    "candidates": [
+      {
+        "ticker": "NOVN.SW",
+        "name": "Novartis AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6100000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 125.9,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "AMRZ.SW",
+        "name": "Amrize AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.345,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Basic Materials",
+        "price": 30.84,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ALC.SW",
+        "name": "Alcon Inc.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.30311,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 55.12,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5307000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Technology",
+        "price": 86.08,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "NOVN.SW",
+        "name": "Novartis AG",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6100000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 125.9,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "AMRZ.SW",
+        "name": "Amrize AG",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.345,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Basic Materials",
+        "price": 30.84,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ALC.SW",
+        "name": "Alcon Inc.",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.30311,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 55.12,
+        "research_verdict": "caution",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "LOGN.SW",
+        "name": "Logitech International S.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.5307000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Technology",
+        "price": 86.08,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1027.5,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 256.88,
+      "targets": [
+        {
+          "ticker": "NOVN.SW",
+          "name": "Novartis AG",
+          "signal": "strong_buy",
+          "conviction_score": 0.6100000000000001,
+          "price": 125.9
+        },
+        {
+          "ticker": "LOGN.SW",
+          "name": "Logitech International S.A.",
+          "signal": "buy",
+          "conviction_score": 0.5307000000000001,
+          "price": 86.08
+        },
+        {
+          "ticker": "AMRZ.SW",
+          "name": "Amrize AG",
+          "signal": "buy",
+          "conviction_score": 0.345,
+          "price": 30.84
+        },
+        {
+          "ticker": "ALC.SW",
+          "name": "Alcon Inc.",
+          "signal": "buy",
+          "conviction_score": 0.30311,
+          "price": 55.12
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "ALC.SW",
+          "name": "Alcon Inc.",
+          "reason": "Already near equal-weight target",
+          "value": 259.11,
+          "target_value": 256.88,
+          "conviction_score": 0.30311,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [
+        {
+          "ticker": "LOGN.SW",
+          "name": "Logitech International S.A.",
+          "reason": "Insufficient cash after higher-conviction fills",
+          "target_value": 256.88,
+          "conviction_score": 0.5307000000000001,
+          "signal": "buy"
+        },
+        {
+          "ticker": "AMRZ.SW",
+          "name": "Amrize AG",
+          "reason": "Insufficient cash after higher-conviction fills",
+          "target_value": 256.88,
+          "conviction_score": 0.345,
+          "signal": "buy"
+        }
+      ],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    },
+    "trades": [],
+    "nav_before": 1027.5,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "NOVN.SW",
+        "shares": 2.091886,
+        "avg_cost": 117.26,
+        "sector": "Healthcare",
+        "name": "Novartis AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "LOGN.SW",
+        "shares": 2.921019,
+        "avg_cost": 86.1255,
+        "sector": "Technology",
+        "name": "Logitech International S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AMRZ.SW",
+        "shares": 8.222509,
+        "avg_cost": 30.76,
+        "sector": "Basic Materials",
+        "name": "Amrize AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ALC.SW",
+        "shares": 4.70085,
+        "avg_cost": 53.48,
+        "sector": "Healthcare",
+        "name": "Alcon Inc.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 1027.5,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "NOVN.SW",
+        "shares": 2.091886,
+        "avg_cost": 117.26,
+        "sector": "Healthcare",
+        "name": "Novartis AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "LOGN.SW",
+        "shares": 2.921019,
+        "avg_cost": 86.1255,
+        "sector": "Technology",
+        "name": "Logitech International S.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "AMRZ.SW",
+        "shares": 8.222509,
+        "avg_cost": 30.76,
+        "sector": "Basic Materials",
+        "name": "Amrize AG",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "ALC.SW",
+        "shares": 4.70085,
+        "avg_cost": 53.48,
+        "sector": "Healthcare",
+        "name": "Alcon Inc.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
+      "verdict_counts": {
+        "agree": 2,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": [
+        {
+          "ticker": "LOGN.SW",
+          "name": "Logitech International S.A.",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "rebuy_skip follows explicit insufficient-cash reason after higher-conviction fills, not a discretionary exit",
+            "still_buyish with screen_signal buy, rank_drop 0 vs entry_rank 2, and research_verdict accumulate \u2014 no leave-buy-cohort case to second-guess",
+            "Skipping rebuy under cash constraint preserves low churn while rank stability supports eventual refill when capital allows"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 2
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 2
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-16T08:29:05.768598+01:00",
+          "proposal_id": "buy_tier_level_native:LOGN.SW:rebuy_skip:2026-10-16T08:29:05.768598+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        },
+        {
+          "ticker": "AMRZ.SW",
+          "name": "Amrize AG",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Insufficient cash after higher-conviction fills",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Same capital-priority rebuy_skip: algo_reason cites insufficient cash after higher-conviction fills",
+            "still_buyish, buy signal, rank_drop 0 at conviction_rank 3 matching entry_rank \u2014 not a sell/hold downgrade",
+            "Lower conviction_score vs peers is consistent with deprioritizing refill; agree avoids vetoing a non-sell liquidity ordering"
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Insufficient cash after higher-conviction fills"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 3
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 3
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "conviction_score",
+              "source": "candidates",
+              "detail": "Conviction score at decision time",
+              "value": 0.345
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "buy_tier_level_native",
+          "logged_at": "2026-10-16T08:29:05.768598+01:00",
+          "proposal_id": "buy_tier_level_native:AMRZ.SW:rebuy_skip:2026-10-16T08:29:05.768598+01:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    }
   }
 ]

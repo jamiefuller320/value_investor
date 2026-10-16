@@ -1,63 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-15T08:36:34.247019+01:00",
+    "local_time": "2026-10-16T08:28:23.093219+01:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-10-15T08:00:00+01:00",
-    "settle_at": "2026-10-15T09:15:00+01:00",
+    "market_open_at": "2026-10-16T08:00:00+01:00",
+    "settle_at": "2026-10-16T09:15:00+01:00",
     "can_act": false,
     "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
   },
-  "trades": [
-    {
-      "id": "14837b90-a36e-4a2e-8d05-4ca5fbb5f184",
-      "fund_id": "a187fed1-ecd1-4d67-8b84-0a45ed945b56",
-      "acted_at": "2026-10-15T08:36:34.247019+01:00",
-      "ticker": "AMP.MI",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 16.031933,
-      "price": 12.3,
-      "gross": 197.19,
-      "cost": 0.35,
-      "net_cash": 196.85,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Amplifon S.p.A.",
-      "avg_cost_at_exit": 11.5464,
-      "position_closed": true
-    },
-    {
-      "id": "a4cc3ffe-6285-425c-b61a-45508c86496a",
-      "fund_id": "a187fed1-ecd1-4d67-8b84-0a45ed945b56",
-      "acted_at": "2026-10-15T08:36:34.247019+01:00",
-      "ticker": "ENI.MI",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 4.444529,
-      "price": 25.735,
-      "gross": 114.38,
-      "cost": 0.2,
-      "net_cash": -114.58,
-      "note": "Automated buy",
-      "name": "Eni S.p.A."
-    },
-    {
-      "id": "1038378d-f7f5-4049-b242-262c181003cd",
-      "fund_id": "a187fed1-ecd1-4d67-8b84-0a45ed945b56",
-      "acted_at": "2026-10-15T08:36:34.247019+01:00",
-      "ticker": "BZU.MI",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 2.243821,
-      "price": 36.6,
-      "gross": 82.12,
-      "cost": 0.14,
-      "net_cash": -82.27,
-      "note": "Automated buy",
-      "name": "Buzzi S.p.A."
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -71,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1023.33,
+    "nav": 1023.82,
     "cash": 0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
@@ -84,81 +36,84 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 341.11,
+    "target_sleeve_value": 511.61,
     "targets": [
       {
-        "ticker": "ENI.MI",
-        "name": "Eni S.p.A.",
-        "signal": "buy",
-        "conviction_score": 0.675,
-        "price": 25.735
-      },
-      {
         "ticker": "REC.MI",
         "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
         "signal": "buy",
         "conviction_score": 0.6667000000000001,
-        "price": 53.05
+        "price": 53.0
       },
       {
         "ticker": "BZU.MI",
         "name": "Buzzi S.p.A.",
         "signal": "buy",
         "conviction_score": 0.4522,
-        "price": 36.6
+        "price": 36.63
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "reason": "No longer in the top conviction target set",
+        "shares": 13.251452,
+        "price": 25.775,
+        "value": 341.56
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
-    "anticipated_holds": [
+    "anticipated_buys": [
       {
-        "action": "hold",
-        "ticker": "ENI.MI",
-        "name": "Eni S.p.A.",
-        "reason": "Already near equal-weight target",
-        "value": 341.03,
-        "target_value": 341.11,
-        "conviction_score": 0.675,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
+        "action": "buy",
         "ticker": "REC.MI",
         "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
-        "reason": "Already near equal-weight target",
-        "value": 344.4,
-        "target_value": 341.11,
+        "reason": "Top-up to equal weight",
+        "value": 167.54,
+        "price": 53.0,
+        "target_value": 511.61,
         "conviction_score": 0.6667000000000001,
         "signal": "buy"
       },
       {
-        "action": "hold",
+        "action": "buy",
         "ticker": "BZU.MI",
         "name": "Buzzi S.p.A.",
-        "reason": "Already near equal-weight target",
-        "value": 337.91,
-        "target_value": 341.11,
+        "reason": "Top-up to equal weight",
+        "value": 173.42,
+        "price": 36.63,
+        "target_value": 511.61,
         "conviction_score": 0.4522,
         "signal": "buy"
       }
     ],
+    "anticipated_holds": [],
     "skipped": [],
-    "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    "waitlisted": [
+      {
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "signal": "buy",
+        "conviction_score": 0.675,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      }
+    ],
+    "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s)."
   },
   "alerts": [
     {
       "ticker": "ENI.MI",
       "name": "Eni S.p.A.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 25.735,
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
+      "mark": 25.775,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "wait"
     },
     {
       "ticker": "REC.MI",
@@ -166,7 +121,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 53.05,
+      "mark": 53.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -177,10 +132,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 36.6,
+      "mark": 36.63,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     }
   ],
   "fund": {
@@ -1033,24 +988,41 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-16T08:28:23.093219+01:00",
+        "portfolio_value": 864.23,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.84413
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-15T08:36:34.247019+01:00",
+    "last_mark_at": "2026-10-16T08:28:23.093219+01:00",
     "rebalance_state": {
-      "exit_streak": {},
-      "reentry_cooldown": {
-        "AMP.MI": 1
-      }
+      "exit_streak": {
+        "ENI.MI": 1
+      },
+      "reentry_cooldown": {}
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (3 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "ftse_mib",
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-15T07:36:34.309111+00:00",
+    "generated_at": "2026-10-16T07:28:23.154989+00:00",
     "observe_only": true,
     "open_count": 3,
     "closed_count": 0,
@@ -1123,13 +1095,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-15T07:36:34.310220+00:00",
+    "generated_at": "2026-10-16T07:28:23.156092+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1185,7 +1157,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 3,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 3,
+      "hold_with_data_quality_count": 4,
       "gaps": [
         "hold_recovery closed episodes=3 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -1194,10 +1166,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 2,
-        "recovered_to_breakeven": 1,
+        "count": 3,
+        "recovered_to_breakeven": 2,
         "close_reasons": {
-          "open": 2
+          "open": 3
         }
       },
       "closed": {
@@ -1221,8 +1193,8 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 1
+      "hold_episodes": 1,
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -1234,8 +1206,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-10-15T07:36:34.311681+00:00",
-    "as_of": "2026-10-15T08:36:34.247019+01:00",
+    "updated_at": "2026-10-16T07:28:23.157600+00:00",
+    "as_of": "2026-10-16T08:28:23.093219+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1292,11 +1264,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.018,
-        "mark": 36.6,
+        "unrealized_pct": -0.0172,
+        "mark": 36.63,
         "avg_cost": 37.2692,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.4522,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -1333,8 +1305,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0005,
-        "mark": 53.05,
+        "unrealized_pct": -0.0005,
+        "mark": 53.0,
         "avg_cost": 53.0241,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -1373,11 +1345,11 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0404,
-        "mark": 25.735,
+        "unrealized_pct": 0.0421,
+        "mark": 25.775,
         "avg_cost": 24.7347,
         "signal": "buy",
-        "timing_signal": "neutral",
+        "timing_signal": "wait",
         "conviction_score": 0.675,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -1414,7 +1386,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-15T07:36:34.313518+00:00",
+    "generated_at": "2026-10-16T07:28:23.159505+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1422,7 +1394,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 3,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 2,
+      "open_with_thesis": 3,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -1489,7 +1461,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-10-15T07:36:34.316710+00:00",
+    "generated_at": "2026-10-16T07:28:23.162612+00:00",
     "open_count": 3,
     "closed_count": 3,
     "scored_count": 3,
@@ -1549,13 +1521,13 @@
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
-    "marked_this_pass": 4,
-    "closed_this_pass": 1
+    "marked_this_pass": 3,
+    "closed_this_pass": 0
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-15T08:36:34.247019+01:00",
+    "generated_at": "2026-10-16T08:28:23.093219+01:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -1606,13 +1578,13 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 1
+      "tagged_off_book": 0
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-10-15T08:36:34.247019+01:00",
+    "generated_at": "2026-10-16T08:28:23.093219+01:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -1620,345 +1592,39 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 3,
-    "card_count": 3,
+    "proposal_count": 0,
+    "card_count": 0,
     "verdict_counts": {
-      "agree": 3,
+      "agree": 0,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {
-      "sell": {
-        "agree": 1,
-        "veto": 0,
-        "abstain": 0
-      },
-      "buy": {
-        "agree": 2,
-        "veto": 0,
-        "abstain": 0
-      }
-    },
+    "by_algo_action": {},
     "disagree_vs_heuristic_count": 0,
-    "cards": [
-      {
-        "ticker": "AMP.MI",
-        "name": "Amplifon S.p.A.",
-        "algo_action": "sell",
-        "algo_reason": "Automated exit \u2014 left target set",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "still_buyish is false \u2014 name no longer in buy/strong_buy cohort; exit aligns with leaving target set.",
-          "Effective screen_signal is hold, not buyish, supporting a decisive leave-buy-cohort sell.",
-          "Research verdict caution and low conviction_score are consistent with exit rather than capacity-bump hold."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated exit \u2014 left target set"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "hold"
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "caution"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.2295
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": false
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-15T08:36:34.247019+01:00",
-        "proposal_id": "buy_tier_level:AMP.MI:sell:2026-10-15T08:36:34.247019+01:00",
-        "meta": {
-          "still_buyish": false,
-          "rank_drop": null,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "caution",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "ENI.MI",
-        "name": "Eni S.p.A.",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Effective screen_signal is buy and still_buyish is true.",
-          "conviction_rank 1 with rank_drop 0 meets hold-gate posture for a fresh/top-tier entry.",
-          "Research verdict accumulate with overlay_bound supports aligned automated buy."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 1
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 1
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.675
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-15T08:36:34.247019+01:00",
-        "proposal_id": "buy_tier_level:ENI.MI:buy:2026-10-15T08:36:34.247019+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Buy into buyish target set \u2014 agree with algo selection."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      },
-      {
-        "ticker": "BZU.MI",
-        "name": "Buzzi S.p.A.",
-        "algo_action": "buy",
-        "algo_reason": "Automated buy",
-        "shadow_verdict": "agree",
-        "reasons": [
-          "Effective screen_signal is buy and still_buyish is true.",
-          "conviction_rank matches entry_rank with rank_drop 0 \u2014 no rank deterioration vs sleeve entry.",
-          "Research verdict accumulate with overlay_bound supports buy into buyish target set."
-        ],
-        "evidence": [
-          {
-            "kind": "algo_reason",
-            "source": "plan_or_trade",
-            "detail": "Automated buy"
-          },
-          {
-            "kind": "screen_signal",
-            "source": "candidates",
-            "detail": "Effective signal at decision time",
-            "value": "buy"
-          },
-          {
-            "kind": "conviction_rank",
-            "source": "candidates",
-            "detail": "1-based conviction rank among buyish names",
-            "value": 3
-          },
-          {
-            "kind": "entry_rank",
-            "source": "rebalance_state",
-            "detail": "Conviction rank recorded at sleeve entry",
-            "value": 3
-          },
-          {
-            "kind": "rank_drop",
-            "source": "derived",
-            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
-            "value": 0
-          },
-          {
-            "kind": "research_verdict",
-            "source": "candidates",
-            "detail": "Research overlay verdict at decision time",
-            "value": "accumulate"
-          },
-          {
-            "kind": "conviction_score",
-            "source": "candidates",
-            "detail": "Conviction score at decision time",
-            "value": 0.4522
-          },
-          {
-            "kind": "still_buyish",
-            "source": "derived",
-            "detail": "Name remains buy/strong_buy on the decision screen",
-            "value": true
-          },
-          {
-            "kind": "overlay_bound",
-            "source": "candidates",
-            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
-            "value": true
-          }
-        ],
-        "judge_backend": "llm",
-        "judge_spec_id": "llm.v1",
-        "influences_live": false,
-        "observe_only": true,
-        "track_id": "buy_tier_level",
-        "logged_at": "2026-10-15T08:36:34.247019+01:00",
-        "proposal_id": "buy_tier_level:BZU.MI:buy:2026-10-15T08:36:34.247019+01:00",
-        "meta": {
-          "still_buyish": true,
-          "rank_drop": 0,
-          "rank_drop_exit_min": 3,
-          "research_verdict": "accumulate",
-          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-          "judge_spec_id": "heuristic.v1",
-          "p1_live_inputs": {
-            "fcf_basis_overlay": false,
-            "key_filing_bodies": null,
-            "filings_with_body": null,
-            "overlay_bound": true,
-            "interim_eps_decline_pct": null,
-            "adjusted_eps_growth_pct": null
-          },
-          "heuristic_baseline": {
-            "shadow_verdict": "agree",
-            "reasons": [
-              "Buy into buyish target set \u2014 agree with algo selection."
-            ],
-            "judge_spec_id": "heuristic.v1"
-          },
-          "llm_merge": "ok"
-        },
-        "schema_version": 1,
-        "parent_spec_id": "heuristic.v1"
-      }
-    ],
+    "cards": [],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null,
-      "llm_card_count": 3
+      "fallback": null
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level",
-      "generated_at": "2026-10-15T08:36:34.247019+01:00",
+      "generated_at": "2026-10-16T08:28:23.093219+01:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 3,
+      "card_count": 0,
       "verdict_counts": {
-        "agree": 3,
+        "agree": 0,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {
-        "sell": {
-          "agree": 1,
-          "veto": 0,
-          "abstain": 0
-        },
-        "buy": {
-          "agree": 2,
-          "veto": 0,
-          "abstain": 0
-        }
-      },
+      "by_algo_action": {},
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -1974,7 +1640,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-15T07:36:39.188705+00:00",
+  "generated_at": "2026-10-16T07:28:23.167327+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

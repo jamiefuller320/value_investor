@@ -1,15 +1,48 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-10-15T09:35:29.600556+02:00",
+    "local_time": "2026-10-16T09:27:38.000596+02:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-10-15T09:00:00+02:00",
-    "settle_at": "2026-10-15T09:30:00+02:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-10-16T09:00:00+02:00",
+    "settle_at": "2026-10-16T09:30:00+02:00",
+    "can_act": false,
+    "reason": "waiting for open settle (30 min after 09:00 Europe/Paris)"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "b80cfaba-2294-469a-ba60-ab814444096b",
+      "fund_id": "12df324e-40e8-40f1-9542-31341f0255d4",
+      "acted_at": "2026-10-16T09:27:38.000596+02:00",
+      "ticker": "IFX.DE",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.808616,
+      "price": 56.0,
+      "gross": 45.28,
+      "cost": 0.01,
+      "net_cash": 45.27,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Infineon Technologies AG",
+      "avg_cost_at_exit": 56.0,
+      "position_closed": true
+    },
+    {
+      "id": "ffca0aaa-45ac-4cbd-af18-9bb734c13da7",
+      "fund_id": "12df324e-40e8-40f1-9542-31341f0255d4",
+      "acted_at": "2026-10-16T09:27:38.000596+02:00",
+      "ticker": "DTE.DE",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.450261,
+      "price": 25.59,
+      "gross": 11.52,
+      "cost": 0.0,
+      "net_cash": -11.53,
+      "note": "Automated buy",
+      "name": "Deutsche Telekom AG"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +56,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1009.11,
-    "cash": 0.0,
+    "nav": 1021.16,
+    "cash": 33.75,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -36,120 +69,98 @@
     "rank_drop_exit_min": 3,
     "block_rebuy_while_in_candidates": false,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 91.74,
+    "target_sleeve_value": 92.83,
     "targets": [
       {
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "signal": "strong_buy",
         "conviction_score": 0.9225000000000001,
-        "price": 106.4
+        "price": 107.65
       },
       {
         "ticker": "TTE.PA",
         "name": "TotalEnergies SE",
         "signal": "strong_buy",
         "conviction_score": 0.8224,
-        "price": 80.17
+        "price": 80.21
       },
       {
         "ticker": "DHL.DE",
         "name": "DHL AG",
         "signal": "buy",
         "conviction_score": 0.745,
-        "price": 56.78
+        "price": 57.7
       },
       {
         "ticker": "SGO.PA",
         "name": "Compagnie de Saint-Gobain S.A.",
         "signal": "strong_buy",
         "conviction_score": 0.7160000000000001,
-        "price": 65.64
+        "price": 66.54
       },
       {
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "signal": "strong_buy",
-        "conviction_score": 0.67,
-        "price": 71.82
+        "conviction_score": 0.645,
+        "price": 72.16
       },
       {
         "ticker": "DTE.DE",
         "name": "Deutsche Telekom AG",
         "signal": "buy",
         "conviction_score": 0.5806,
-        "price": 25.28
+        "price": 25.59
       },
       {
         "ticker": "MC.PA",
         "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
         "signal": "buy",
         "conviction_score": 0.5278,
-        "price": 389.55
+        "price": 398.3
       },
       {
         "ticker": "VOW.DE",
         "name": "Volkswagen AG",
         "signal": "strong_buy",
         "conviction_score": 0.51,
-        "price": 67.75
+        "price": 67.0
       },
       {
         "ticker": "WKL.AS",
         "name": "Wolters Kluwer N.V.",
         "signal": "buy",
         "conviction_score": 0.498,
-        "price": 78.06
+        "price": 81.42
       },
       {
         "ticker": "ABI.BR",
         "name": "Anheuser-Busch InBev SA/NV",
         "signal": "buy",
         "conviction_score": 0.49,
-        "price": 71.02
+        "price": 72.92
       },
       {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
-        "signal": "buy",
+        "signal": "strong_buy",
         "conviction_score": 0.4656,
-        "price": 32.23
+        "price": 32.22
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "IFX.DE",
-        "name": "Infineon Technologies AG",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.808616,
-        "price": 56.0,
-        "value": 45.28
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
-      {
-        "action": "buy",
-        "ticker": "DTE.DE",
-        "name": "Deutsche Telekom AG",
-        "reason": "Top-up to equal weight",
-        "value": 11.41,
-        "price": 25.28,
-        "target_value": 91.74,
-        "conviction_score": 0.5806,
-        "signal": "buy"
-      }
-    ],
+    "anticipated_buys": [],
     "anticipated_holds": [
       {
         "action": "hold",
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 88.86,
-        "target_value": 91.74,
+        "value": 89.9,
+        "target_value": 92.83,
         "conviction_score": 0.9225000000000001,
         "signal": "strong_buy"
       },
@@ -158,8 +169,8 @@
         "ticker": "TTE.PA",
         "name": "TotalEnergies SE",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 84.07,
-        "target_value": 91.74,
+        "value": 84.11,
+        "target_value": 92.83,
         "conviction_score": 0.8224,
         "signal": "strong_buy"
       },
@@ -168,8 +179,8 @@
         "ticker": "DHL.DE",
         "name": "DHL AG",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 89.29,
-        "target_value": 91.74,
+        "value": 90.73,
+        "target_value": 92.83,
         "conviction_score": 0.745,
         "signal": "buy"
       },
@@ -178,8 +189,8 @@
         "ticker": "SGO.PA",
         "name": "Compagnie de Saint-Gobain S.A.",
         "reason": "Already near equal-weight target",
-        "value": 91.61,
-        "target_value": 91.74,
+        "value": 92.87,
+        "target_value": 92.83,
         "conviction_score": 0.7160000000000001,
         "signal": "strong_buy"
       },
@@ -188,19 +199,19 @@
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 90.46,
-        "target_value": 91.74,
-        "conviction_score": 0.67,
+        "value": 90.89,
+        "target_value": 92.83,
+        "conviction_score": 0.645,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "MC.PA",
-        "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
+        "ticker": "DTE.DE",
+        "name": "Deutsche Telekom AG",
         "reason": "Already near equal-weight target",
-        "value": 91.77,
-        "target_value": 91.74,
-        "conviction_score": 0.5278,
+        "value": 92.83,
+        "target_value": 92.83,
+        "conviction_score": 0.5806,
         "signal": "buy"
       },
       {
@@ -208,8 +219,8 @@
         "ticker": "VOW.DE",
         "name": "Volkswagen AG",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 89.13,
-        "target_value": 91.74,
+        "value": 88.14,
+        "target_value": 92.83,
         "conviction_score": 0.51,
         "signal": "strong_buy"
       },
@@ -218,8 +229,8 @@
         "ticker": "WKL.AS",
         "name": "Wolters Kluwer N.V.",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 82.94,
-        "target_value": 91.74,
+        "value": 86.51,
+        "target_value": 92.83,
         "conviction_score": 0.498,
         "signal": "buy"
       },
@@ -228,8 +239,8 @@
         "ticker": "ABI.BR",
         "name": "Anheuser-Busch InBev SA/NV",
         "reason": "Top-up below min trade size (\u00a310)",
-        "value": 84.1,
-        "target_value": 91.74,
+        "value": 86.35,
+        "target_value": 92.83,
         "conviction_score": 0.49,
         "signal": "buy"
       },
@@ -237,16 +248,16 @@
         "action": "hold",
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
-        "reason": "Already near equal-weight target",
-        "value": 91.26,
-        "target_value": 91.74,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 91.23,
+        "target_value": 92.83,
         "conviction_score": 0.4656,
-        "signal": "buy"
+        "signal": "strong_buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 11 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 10 near-target holding(s)."
+    "summary": "Next rebalance would target 11 equal-weight sleeve(s); leave 10 near-target holding(s)."
   },
   "alerts": [
     {
@@ -255,10 +266,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 106.4,
+      "mark": 107.65,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "AD.AS",
@@ -266,10 +277,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 32.23,
+      "mark": 32.22,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "WKL.AS",
@@ -277,7 +288,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 78.06,
+      "mark": 81.42,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -288,7 +299,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 67.75,
+      "mark": 67.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -299,7 +310,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 71.02,
+      "mark": 72.92,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -310,7 +321,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 56.78,
+      "mark": 57.7,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -321,10 +332,10 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 71.82,
+      "mark": 72.16,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "neutral"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "TTE.PA",
@@ -332,7 +343,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 80.17,
+      "mark": 80.21,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -343,7 +354,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 65.64,
+      "mark": 66.54,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "accumulate"
@@ -354,32 +365,21 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 389.55,
+      "mark": 398.3,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "accumulate"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DTE.DE",
       "name": "Deutsche Telekom AG",
       "source": "paper",
       "severity": "info",
-      "message": "Underwater but thesis intact \u2014 tolerate within loser band: price drawdown alone does not invalidate value thesis; still buy",
-      "mark": 25.28,
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 25.59,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
-    },
-    {
-      "ticker": "IFX.DE",
-      "name": "Infineon Technologies AG",
-      "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 56.0,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": null
     }
   ],
   "fund": {
@@ -397,7 +397,7 @@
       "id": "12df324e-40e8-40f1-9542-31341f0255d4",
       "created_at": "2026-09-25T07:28:41.080611+00:00"
     },
-    "cash": 0.0,
+    "cash": 33.75,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -513,25 +513,14 @@
       },
       "DTE.DE": {
         "ticker": "DTE.DE",
-        "shares": 3.177331,
-        "avg_cost": 26.99,
+        "shares": 3.627592,
+        "avg_cost": 26.8162,
         "name": "Deutsche Telekom AG",
         "sector": "Communication Services",
         "currency": "EUR",
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-10-07T18:34:40.619427+02:00"
-      },
-      "IFX.DE": {
-        "ticker": "IFX.DE",
-        "shares": 0.808616,
-        "avg_cost": 56.0,
-        "name": "Infineon Technologies AG",
-        "sector": "Technology",
-        "currency": "EUR",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-10-14T10:52:13.277943+02:00"
       }
     },
     "trades": [
@@ -1073,6 +1062,38 @@
         "net_cash": -45.29,
         "note": "Automated buy",
         "name": "Infineon Technologies AG"
+      },
+      {
+        "id": "b80cfaba-2294-469a-ba60-ab814444096b",
+        "fund_id": "12df324e-40e8-40f1-9542-31341f0255d4",
+        "acted_at": "2026-10-16T09:27:38.000596+02:00",
+        "ticker": "IFX.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.808616,
+        "price": 56.0,
+        "gross": 45.28,
+        "cost": 0.01,
+        "net_cash": 45.27,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Infineon Technologies AG",
+        "avg_cost_at_exit": 56.0,
+        "position_closed": true
+      },
+      {
+        "id": "ffca0aaa-45ac-4cbd-af18-9bb734c13da7",
+        "fund_id": "12df324e-40e8-40f1-9542-31341f0255d4",
+        "acted_at": "2026-10-16T09:27:38.000596+02:00",
+        "ticker": "DTE.DE",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.450261,
+        "price": 25.59,
+        "gross": 11.52,
+        "cost": 0.0,
+        "net_cash": -11.53,
+        "note": "Automated buy",
+        "name": "Deutsche Telekom AG"
       }
     ],
     "equity_curve": [
@@ -1403,26 +1424,42 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-10-16T09:27:38.000596+02:00",
+        "portfolio_value": 1021.16,
+        "cash": 33.75,
+        "contributed_capital": 1000.0,
+        "positions": 11,
+        "reporting_currency": "EUR",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "EUR": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-10-15T09:35:29.600556+02:00",
+    "last_mark_at": "2026-10-16T09:27:38.000596+02:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "IFX.DE": 1
-      },
-      "reentry_cooldown": {}
+      }
     },
     "settled_corporate_actions": [],
     "unsettled_corporate_actions": []
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 2,
     "market_id": "euro_stoxx50",
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-15T07:35:29.610478+00:00",
+    "generated_at": "2026-10-16T07:27:38.009808+00:00",
     "observe_only": true,
-    "open_count": 2,
+    "open_count": 3,
     "closed_count": 0,
     "by_exit_kind": {
       "grace": {
@@ -1457,7 +1494,7 @@
       }
     },
     "first_episode": {
-      "open_count": 2,
+      "open_count": 3,
       "closed_count": 0,
       "by_exit_kind": {
         "grace": {
@@ -1493,13 +1530,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Tagged by market_id; first-episode strip excludes buy-sell-buy fragments from later stats. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-15T07:35:29.611463+00:00",
+    "generated_at": "2026-10-16T07:27:38.010818+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1553,36 +1590,36 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 1,
+      "hold_closed_count": 2,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 9,
       "gaps": [
-        "hold_recovery closed episodes=1 (target >=15)",
+        "hold_recovery closed episodes=2 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 8,
+        "count": 7,
         "recovered_to_breakeven": 4,
         "close_reasons": {
-          "open": 8
+          "open": 7
         }
       },
       "closed": {
-        "count": 1,
-        "recovered_to_breakeven": 1,
+        "count": 2,
+        "recovered_to_breakeven": 2,
         "close_reasons": {
-          "sold_while_recovered": 1
+          "sold_while_recovered": 2
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 2,
+        "count": 3,
         "verdicts": {
-          "open": 2
+          "open": 3
         }
       },
       "closed": {
@@ -1592,7 +1629,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 0
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -1604,8 +1641,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "updated_at": "2026-10-15T07:35:29.612802+00:00",
-    "as_of": "2026-10-15T09:35:29.600556+02:00",
+    "updated_at": "2026-10-16T07:27:38.012156+00:00",
+    "as_of": "2026-10-16T09:27:38.000596+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1617,120 +1654,44 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 12,
-    "underwater_count": 1,
+    "holding_count": 11,
+    "underwater_count": 0,
     "thesis_status_counts": {
       "intact": 11,
       "weakening": 0,
-      "broken": 1,
+      "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 12,
-      "loser_count": 1,
-      "loser_share": 0.0833,
-      "loser_nav_share": 0.0796,
+      "holding_count": 11,
+      "loser_count": 0,
+      "loser_share": 0.0,
+      "loser_nav_share": 0.0,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": true,
-      "intact_loser_count": 1,
+      "intact_loser_count": 0,
       "weakening_loser_count": 0,
       "broken_loser_count": 0,
       "family_fail_rate_losers": {
         "cheapness": 0.0,
         "quality": 0.0,
         "dividend": 0.0,
-        "garp": 1.0,
+        "garp": 0.0,
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.0909,
-        "quality": 0.1818,
-        "dividend": 0.1818,
+        "cheapness": 0.0,
+        "quality": 0.0909,
+        "dividend": 0.0909,
         "garp": 0.6364,
-        "risk": 0.0909
+        "risk": 0.0
       },
-      "selection_feedback_flags": [
-        "garp fails more often among losers (100% vs 64%)"
-      ],
-      "balancing_hint": "tolerate_intact_losers",
+      "selection_feedback_flags": [],
+      "balancing_hint": "maintain",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
-      {
-        "ticker": "IFX.DE",
-        "name": "IFX.DE",
-        "thesis_status": "broken",
-        "recommended_action": "exit_candidate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 56.0,
-        "avg_cost": 56.0,
-        "signal": null,
-        "timing_signal": null,
-        "conviction_score": null,
-        "data_quality_score": null,
-        "passed_families": [],
-        "failed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "research_verdict": null,
-        "reasons": [
-          "cheapness lost and not in buy tier"
-        ],
-        "intact_reasons": [],
-        "weaken_reasons": [],
-        "broken_reasons": [
-          "cheapness lost and not in buy tier"
-        ]
-      },
-      {
-        "ticker": "DTE.DE",
-        "name": "Deutsche Telekom AG",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": true,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0634,
-        "mark": 25.28,
-        "avg_cost": 26.99,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.5806,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "price drawdown alone does not invalidate value thesis",
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 58%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 58%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
       {
         "ticker": "VOW.DE",
         "name": "Volkswagen AG",
@@ -1738,8 +1699,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0371,
-        "mark": 67.75,
+        "unrealized_pct": -0.0478,
+        "mark": 67.0,
         "avg_cost": 70.3611,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -1773,17 +1734,58 @@
         "broken_reasons": []
       },
       {
+        "ticker": "DTE.DE",
+        "name": "Deutsche Telekom AG",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0457,
+        "mark": 25.59,
+        "avg_cost": 26.8162,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.5806,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 58%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 58%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "DG.PA",
         "name": "Vinci SA",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0326,
-        "mark": 106.4,
+        "unrealized_pct": -0.0213,
+        "mark": 107.65,
         "avg_cost": 109.9881,
         "signal": "strong_buy",
-        "timing_signal": "neutral",
+        "timing_signal": "accumulate",
         "conviction_score": 0.9225,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -1819,8 +1821,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0107,
-        "mark": 65.64,
+        "unrealized_pct": 0.0028,
+        "mark": 66.54,
         "avg_cost": 66.3517,
         "signal": "strong_buy",
         "timing_signal": "accumulate",
@@ -1854,14 +1856,96 @@
         "broken_reasons": []
       },
       {
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0191,
+        "mark": 72.16,
+        "avg_cost": 70.81,
+        "signal": "strong_buy",
+        "timing_signal": "accumulate",
+        "conviction_score": 0.645,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 64%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 64%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "AD.AS",
+        "name": "Koninklijke Ahold Delhaize N.V.",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.02,
+        "mark": 32.22,
+        "avg_cost": 31.5889,
+        "signal": "strong_buy",
+        "timing_signal": "accumulate",
+        "conviction_score": 0.4656,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "risk"
+        ],
+        "failed_families": [
+          "garp"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 47%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 47%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "DHL.DE",
         "name": "DHL AG",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0049,
-        "mark": 56.78,
+        "unrealized_pct": 0.0211,
+        "mark": 57.7,
         "avg_cost": 56.5051,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -1894,99 +1978,17 @@
         "broken_reasons": []
       },
       {
-        "ticker": "SAN.PA",
-        "name": "Sanofi",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0143,
-        "mark": 71.82,
-        "avg_cost": 70.81,
-        "signal": "strong_buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.67,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 67%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 67%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0203,
-        "mark": 32.23,
-        "avg_cost": 31.5889,
-        "signal": "buy",
-        "timing_signal": "neutral",
-        "conviction_score": 0.4656,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "risk"
-        ],
-        "failed_families": [
-          "garp"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 47%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 47%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "MC.PA",
         "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0291,
-        "mark": 389.55,
+        "unrealized_pct": 0.0522,
+        "mark": 398.3,
         "avg_cost": 378.55,
         "signal": "buy",
-        "timing_signal": "accumulate",
+        "timing_signal": "neutral",
         "conviction_score": 0.5278,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2023,8 +2025,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0479,
-        "mark": 71.02,
+        "unrealized_pct": 0.0759,
+        "mark": 72.92,
         "avg_cost": 67.7762,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2064,8 +2066,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0767,
-        "mark": 80.17,
+        "unrealized_pct": 0.0772,
+        "mark": 80.21,
         "avg_cost": 74.46,
         "signal": "strong_buy",
         "timing_signal": "neutral",
@@ -2104,8 +2106,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.1363,
-        "mark": 78.06,
+        "unrealized_pct": 0.1852,
+        "mark": 81.42,
         "avg_cost": 68.6985,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2146,27 +2148,27 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-15T07:35:29.614684+00:00",
+    "generated_at": "2026-10-16T07:27:38.013963+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 1,
+      "closed_total": 2,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 8,
+      "open_with_thesis": 7,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 1,
+          "closed_count": 2,
           "recovery_rate": 1.0,
           "sold_underwater_rate": 0.0,
-          "mean_peak_unrealized_pct": 0.0084,
-          "mean_trough_unrealized_pct": -0.0117,
+          "mean_peak_unrealized_pct": 0.0042,
+          "mean_trough_unrealized_pct": -0.0059,
           "outcome_labels": {
-            "recovered": 1
+            "recovered": 2
           }
         },
         "broken": {
@@ -2198,11 +2200,11 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 1,
+      "hold_closed_with_thesis": 2,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=1 (target >=8)",
-        "hold thesis buckets thin (weakening=1; target >=3 each)",
+        "hold closed with thesis=2 (target >=8)",
+        "hold thesis buckets thin (weakening=2; target >=3 each)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -2214,74 +2216,76 @@
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
     "observe_only": true,
-    "generated_at": "2026-10-15T07:35:29.617757+00:00",
-    "open_count": 9,
-    "closed_count": 2,
-    "scored_count": 2,
-    "scored_count_all": 2,
+    "generated_at": "2026-10-16T07:27:38.019988+00:00",
+    "open_count": 2,
+    "closed_count": 9,
+    "scored_count": 9,
+    "scored_count_all": 9,
     "recommit_scored_count": 0,
     "entry_kind_counts": {
-      "first_entry": 2,
+      "first_entry": 9,
       "recommit": 0
     },
-    "any_de_risk_count": 2,
+    "any_de_risk_count": 8,
     "winning_cadence_counts": {
-      "dca_2x_biweekly": 1,
+      "dca_4x_weekly": 2,
+      "dca_2x_weekly": 4,
+      "dca_2x_biweekly": 2,
       "dca_5x_weekday": 1
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 2,
-        "mean_end_value_delta": 0.22,
-        "mean_de_risk_gbp": 0.235,
-        "de_risk_rate": 0.5,
-        "win_count": 0
+        "scored_episodes": 9,
+        "mean_end_value_delta": 1.0667,
+        "mean_de_risk_gbp": 1.0167,
+        "de_risk_rate": 0.6667,
+        "win_count": 4
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 2,
-        "mean_end_value_delta": 0.29,
-        "mean_de_risk_gbp": 0.685,
-        "de_risk_rate": 1.0,
-        "win_count": 0
+        "scored_episodes": 9,
+        "mean_end_value_delta": -0.0056,
+        "mean_de_risk_gbp": 0.2278,
+        "de_risk_rate": 0.5556,
+        "win_count": 2
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 2,
-        "mean_end_value_delta": 0.18,
-        "mean_de_risk_gbp": 0.565,
-        "de_risk_rate": 1.0,
-        "win_count": 1
+        "scored_episodes": 9,
+        "mean_end_value_delta": 0.3644,
+        "mean_de_risk_gbp": 0.5122,
+        "de_risk_rate": 0.5556,
+        "win_count": 2
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 2,
-        "mean_end_value_delta": 0.285,
-        "mean_de_risk_gbp": 0.305,
-        "de_risk_rate": 0.5,
+        "scored_episodes": 9,
+        "mean_end_value_delta": -0.18,
+        "mean_de_risk_gbp": -0.1789,
+        "de_risk_rate": 0.3333,
         "win_count": 1
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 2,
+      "closed_episodes": 9,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 2,
+      "first_entry_scored": 9,
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
     "ingested_this_pass": 0,
     "marked_this_pass": 9,
-    "closed_this_pass": 0
+    "closed_this_pass": 7
   },
   "sleeve_episodes_review": {
     "schema_version": 2,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-15T09:35:29.600556+02:00",
+    "generated_at": "2026-10-16T09:27:38.000596+02:00",
     "observe_only": true,
     "framework": {
       "purpose": "Observe-only dual-path sleeve lab: widest earliest/latest markers with capital_status tags (on_book / off_book / never_funded). NAV vs ^FTSE stays on the capital book; sleeve metrics stratify by tag.",
@@ -2308,8 +2312,8 @@
     "open_count": 13,
     "closed_count": 0,
     "open_by_capital_status": {
-      "on_book": 12,
-      "off_book": 1,
+      "on_book": 11,
+      "off_book": 2,
       "never_funded": 0
     },
     "closed_by_capital_status": {
@@ -2332,13 +2336,13 @@
       "opened": 0,
       "closed": 0,
       "tagged_on_book": 0,
-      "tagged_off_book": 0
+      "tagged_off_book": 1
     }
   },
   "llm_agree_veto_shadow": {
     "schema_version": 1,
     "track_id": "buy_tier_level_native",
-    "generated_at": "2026-10-15T09:35:29.600556+02:00",
+    "generated_at": "2026-10-16T09:27:38.000596+02:00",
     "observe_only": true,
     "influences_live": false,
     "judge_backend": "llm",
@@ -2346,39 +2350,214 @@
     "parent_spec_id": "heuristic.v1",
     "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
     "principle": "Any LLM influence on a live capital/decision path must record durable justifying evidence in the decision trail; no silent LLM discretion. This shadow is observe-only (influences_live=false) until a promotion gate.",
-    "proposal_count": 0,
-    "card_count": 0,
+    "proposal_count": 2,
+    "card_count": 2,
     "verdict_counts": {
-      "agree": 0,
+      "agree": 2,
       "veto": 0,
       "abstain": 0
     },
-    "by_algo_action": {},
+    "by_algo_action": {
+      "sell": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      },
+      "buy": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      }
+    },
     "disagree_vs_heuristic_count": 0,
-    "cards": [],
+    "cards": [
+      {
+        "ticker": "IFX.DE",
+        "name": "Infineon Technologies AG",
+        "algo_action": "sell",
+        "algo_reason": "Automated exit \u2014 left target set",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "still_buyish is false \u2014 name no longer buy/strong_buy on the decision screen, so leaving the buy cohort supports the sell.",
+          "Algo reason is automated exit after leaving the target set, consistent with a decisive exit rather than a capacity-bump sell."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated exit \u2014 left target set"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": false
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level_native",
+        "logged_at": "2026-10-16T09:27:38.000596+02:00",
+        "proposal_id": "buy_tier_level_native:IFX.DE:sell:2026-10-16T09:27:38.000596+02:00",
+        "meta": {
+          "still_buyish": false,
+          "rank_drop": null,
+          "rank_drop_exit_min": 3,
+          "research_verdict": null,
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": null,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": null,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Left buy cohort (signal not buy/strong_buy) \u2014 sell looks decisive."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      },
+      {
+        "ticker": "DTE.DE",
+        "name": "Deutsche Telekom AG",
+        "algo_action": "buy",
+        "algo_reason": "Automated buy",
+        "shadow_verdict": "agree",
+        "reasons": [
+          "Effective screen signal is buy and still_buyish is true \u2014 selection fits the buyish target set.",
+          "conviction_rank equals entry_rank with rank_drop 0 \u2014 no rank deterioration versus sleeve entry.",
+          "Research verdict accumulate with overlay_bound true supports proceeding with the automated buy."
+        ],
+        "evidence": [
+          {
+            "kind": "algo_reason",
+            "source": "plan_or_trade",
+            "detail": "Automated buy"
+          },
+          {
+            "kind": "screen_signal",
+            "source": "candidates",
+            "detail": "Effective signal at decision time",
+            "value": "buy"
+          },
+          {
+            "kind": "conviction_rank",
+            "source": "candidates",
+            "detail": "1-based conviction rank among buyish names",
+            "value": 6
+          },
+          {
+            "kind": "entry_rank",
+            "source": "rebalance_state",
+            "detail": "Conviction rank recorded at sleeve entry",
+            "value": 6
+          },
+          {
+            "kind": "rank_drop",
+            "source": "derived",
+            "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+            "value": 0
+          },
+          {
+            "kind": "research_verdict",
+            "source": "candidates",
+            "detail": "Research overlay verdict at decision time",
+            "value": "accumulate"
+          },
+          {
+            "kind": "still_buyish",
+            "source": "derived",
+            "detail": "Name remains buy/strong_buy on the decision screen",
+            "value": true
+          },
+          {
+            "kind": "overlay_bound",
+            "source": "candidates",
+            "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+            "value": true
+          }
+        ],
+        "judge_backend": "llm",
+        "judge_spec_id": "llm.v1",
+        "influences_live": false,
+        "observe_only": true,
+        "track_id": "buy_tier_level_native",
+        "logged_at": "2026-10-16T09:27:38.000596+02:00",
+        "proposal_id": "buy_tier_level_native:DTE.DE:buy:2026-10-16T09:27:38.000596+02:00",
+        "meta": {
+          "still_buyish": true,
+          "rank_drop": 0,
+          "rank_drop_exit_min": 3,
+          "research_verdict": "accumulate",
+          "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+          "judge_spec_id": "heuristic.v1",
+          "p1_live_inputs": {
+            "fcf_basis_overlay": false,
+            "key_filing_bodies": null,
+            "filings_with_body": null,
+            "overlay_bound": true,
+            "interim_eps_decline_pct": null,
+            "adjusted_eps_growth_pct": null
+          },
+          "heuristic_baseline": {
+            "shadow_verdict": "agree",
+            "reasons": [
+              "Buy into buyish target set \u2014 agree with algo selection."
+            ],
+            "judge_spec_id": "heuristic.v1"
+          },
+          "llm_merge": "ok"
+        },
+        "schema_version": 1,
+        "parent_spec_id": "heuristic.v1"
+      }
+    ],
     "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline.",
     "llm_judge": {
       "attempted": true,
       "ok": true,
-      "fallback": null
+      "fallback": null,
+      "llm_card_count": 2
     },
     "review": {
       "schema_version": 1,
       "track_id": "buy_tier_level_native",
-      "generated_at": "2026-10-15T09:35:29.600556+02:00",
+      "generated_at": "2026-10-16T09:27:38.000596+02:00",
       "observe_only": true,
       "influences_live": false,
       "judge_backend": "llm",
       "judge_spec_id": "llm.v1",
       "parent_spec_id": "heuristic.v1",
       "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
-      "card_count": 0,
+      "card_count": 2,
       "verdict_counts": {
-        "agree": 0,
+        "agree": 2,
         "veto": 0,
         "abstain": 0
       },
-      "by_algo_action": {},
+      "by_algo_action": {
+        "sell": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        },
+        "buy": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
       "veto_sell_count": 0,
       "veto_sell_tickers": [],
       "promotion_gate": {
@@ -2394,7 +2573,7 @@
       "note": "Observe-only agree/veto shadow \u2014 never blocks fills. still_in_buy_set remains the algo capital-path twin; this is a parallel review layer. Cards carry judge_spec_id for later A/B. Phase-1 LLM judge active (llm.v1, parent heuristic.v1); heuristic baseline retained in card.meta.heuristic_baseline."
     }
   },
-  "generated_at": "2026-10-15T07:35:29.623248+00:00",
+  "generated_at": "2026-10-16T07:27:41.626503+00:00",
   "track_id": "buy_tier_level_native",
   "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
   "is_primary_learning_track": false,

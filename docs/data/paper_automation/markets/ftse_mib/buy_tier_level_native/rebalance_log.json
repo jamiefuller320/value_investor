@@ -8422,5 +8422,323 @@
         }
       ]
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-10-16T07:28:23.205924+00:00",
+    "track_id": "buy_tier_level_native",
+    "track_label": "Buy-tier level native (EUR reporting, no FX friction, cold-start capital epoch)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_mib/screen_latest.json",
+      "run_at": "2026-10-16T06:52:34.814290+00:00",
+      "generated_at": "2026-10-16T07:28:23.080701+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-10-16T08:28:23.184673+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-10-16T08:00:00+01:00",
+      "settle_at": "2026-10-16T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (0 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.0003,
+    "candidates": [
+      {
+        "ticker": "BZU.MI",
+        "name": "Buzzi S.p.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4522,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 36.63,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.675,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Energy",
+        "price": 25.775,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "REC.MI",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6667000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 53.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "BZU.MI",
+        "name": "Buzzi S.p.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4522,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 36.63,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "ENI.MI",
+        "name": "Eni S.p.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.675,
+        "data_quality_score": 1.0,
+        "timing_signal": "wait",
+        "sector": "Energy",
+        "price": 25.775,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      },
+      {
+        "ticker": "REC.MI",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.6667000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Healthcare",
+        "price": 53.0,
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": false,
+        "overlay_bound": true
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.03% / sell 0.03% (legacy symmetric slot 0.03%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1028.84,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "still_in_buy_set_hold": false,
+      "rank_drop_exit_min": 3,
+      "block_rebuy_while_in_candidates": false,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 514.38,
+      "targets": [
+        {
+          "ticker": "REC.MI",
+          "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+          "signal": "buy",
+          "conviction_score": 0.6667000000000001,
+          "price": 53.0
+        },
+        {
+          "ticker": "BZU.MI",
+          "name": "Buzzi S.p.A.",
+          "signal": "buy",
+          "conviction_score": 0.4522,
+          "price": 36.63
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "ENI.MI",
+          "name": "Eni S.p.A.",
+          "reason": "No longer in the top conviction target set",
+          "shares": 13.319327,
+          "price": 25.775,
+          "value": 343.31
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "REC.MI",
+          "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+          "reason": "Top-up to equal weight",
+          "value": 168.7,
+          "price": 53.0,
+          "target_value": 514.38,
+          "conviction_score": 0.6667000000000001,
+          "signal": "buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "BZU.MI",
+          "name": "Buzzi S.p.A.",
+          "reason": "Top-up to equal weight",
+          "value": 174.52,
+          "price": 36.63,
+          "target_value": 514.38,
+          "conviction_score": 0.4522,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [],
+      "skipped": [],
+      "waitlisted": [
+        {
+          "ticker": "ENI.MI",
+          "name": "Eni S.p.A.",
+          "signal": "buy",
+          "conviction_score": 0.675,
+          "reason": "timing_signal=wait \u2014 skipped until timing improves"
+        }
+      ],
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s)."
+    },
+    "trades": [],
+    "nav_before": 1028.84,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "ENI.MI",
+        "shares": 13.319327,
+        "avg_cost": 24.7361,
+        "sector": "Energy",
+        "name": "Eni S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "REC.MI",
+        "shares": 6.522304,
+        "avg_cost": 53.024,
+        "sector": "Healthcare",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BZU.MI",
+        "shares": 9.27799,
+        "avg_cost": 37.2683,
+        "sector": "Basic Materials",
+        "name": "Buzzi S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "AMP.MI": 1
+      }
+    },
+    "nav_after": 1028.84,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "ENI.MI",
+        "shares": 13.319327,
+        "avg_cost": 24.7361,
+        "sector": "Energy",
+        "name": "Eni S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "REC.MI",
+        "shares": 6.522304,
+        "avg_cost": 53.024,
+        "sector": "Healthcare",
+        "name": "Recordati Industria Chimica e Farmaceutica S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "BZU.MI",
+        "shares": 9.27799,
+        "avg_cost": 37.2683,
+        "sector": "Basic Materials",
+        "name": "Buzzi S.p.A.",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {
+        "ENI.MI": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "llm_agree_veto_shadow": {
+      "observe_only": true,
+      "influences_live": false,
+      "judge_backend": "llm",
+      "judge_spec_id": "llm.v1",
+      "parent_spec_id": "heuristic.v1",
+      "verdict_counts": {
+        "agree": 0,
+        "veto": 0,
+        "abstain": 0
+      },
+      "cards": []
+    }
   }
 ]

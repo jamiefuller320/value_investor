@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-15T07:36:50.901174+00:00
+Track: `buy_tier_level_native` · updated 2026-10-16T07:28:24.008466+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level_native` · updated 2026-10-15T07:36:50.901174+00:00
 
 ## Holding reviews
 
-### RAND.AS — intact / hold_tolerate (+0.3%)
+### RAND.AS — intact / hold_tolerate (-3.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
@@ -24,21 +24,21 @@ Track: `buy_tier_level_native` · updated 2026-10-15T07:36:50.901174+00:00
 - data_quality 1.00
 - conviction 72%
 
-### AKZA.AS — intact / hold_tolerate (+1.1%)
+### AKZA.AS — intact / hold_tolerate (+3.4%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 77%
+- conviction 62%
 
-### SHELL.AS — intact / hold_tolerate (+6.5%)
+### SHELL.AS — intact / hold_tolerate (+6.3%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 75%
+- conviction 76%
 
-### WKL.AS — intact / hold_tolerate (+8.9%)
+### WKL.AS — intact / hold_tolerate (+13.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

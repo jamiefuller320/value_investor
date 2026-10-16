@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level_native` · updated 2026-10-15T07:37:55.122719+00:00
+Track: `buy_tier_level_native` · updated 2026-10-16T07:29:01.709608+00:00
 
 ## Portfolio loser feedback
 
@@ -10,7 +10,7 @@ Track: `buy_tier_level_native` · updated 2026-10-15T07:37:55.122719+00:00
 
 ## Holding reviews
 
-### COR.LS — weakening / watch_review (-0.5%)
+### COR.LS — weakening / watch_review (-1.6%)
 - research verdict caution
 - conviction 32% below intact floor
 - still buy

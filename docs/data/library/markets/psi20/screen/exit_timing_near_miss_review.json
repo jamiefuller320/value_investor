@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "track_id": "archive_near_miss",
-  "generated_at": "2026-10-15T07:33:59.032148+00:00",
+  "generated_at": "2026-10-16T07:26:01.560239+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -69,20 +69,24 @@
     "ready_for_probability_analysis": true,
     "hold_closed_count": 88,
     "swap_closed_count": 59,
-    "hold_with_data_quality_count": 88,
+    "hold_with_data_quality_count": 95,
     "gaps": [],
     "note": "Closed cohorts reached initial targets; probability strand analysis can begin."
   },
   "hold_recovery": {
     "open": {
-      "count": 0
+      "count": 7,
+      "recovered_to_breakeven": 0,
+      "close_reasons": {
+        "open": 7
+      }
     },
     "closed": {
       "count": 88,
-      "recovered_to_breakeven": 74,
+      "recovered_to_breakeven": 75,
       "close_reasons": {
-        "recovered_archive_end": 74,
-        "underwater_archive_end": 14
+        "recovered_archive_end": 75,
+        "underwater_archive_end": 13
       }
     }
   },
@@ -101,10 +105,10 @@
   },
   "note": "Archive near-miss + held-book observe sim \u2014 priors only; pair with live learning_tracks_exit_timing.json for paper-track evidence. Wider gate: min_conviction=0.28, max_episodes_per_week=25.",
   "scope": "archive_near_miss",
-  "snapshot_count": 12,
+  "snapshot_count": 13,
   "episodes_opened": {
-    "hold_recovery": 88,
-    "hold_recovery_near_miss": 88,
+    "hold_recovery": 95,
+    "hold_recovery_near_miss": 95,
     "hold_recovery_held_book": 0,
     "swap_rotation": 59,
     "swap_rotation_near_miss": 59,
@@ -113,8 +117,8 @@
   "by_conviction_band": {
     "high_ge_0.45": {
       "closed_count": 21,
-      "recovered_to_breakeven_count": 16,
-      "recovery_rate": 0.7619
+      "recovered_to_breakeven_count": 17,
+      "recovery_rate": 0.8095
     },
     "pre_buy_0.28_0.45": {
       "closed_count": 67,

@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-10-15T07:35:18.268079+00:00",
-  "as_of": "2026-10-15T03:35:18.134085-04:00",
+  "updated_at": "2026-10-16T07:27:21.371845+00:00",
+  "as_of": "2026-10-16T03:27:21.250264-04:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -17,7 +17,7 @@
     "skip_underwater_urgency_when_intact": true
   },
   "holding_count": 14,
-  "underwater_count": 5,
+  "underwater_count": 3,
   "thesis_status_counts": {
     "intact": 9,
     "weakening": 5,
@@ -26,31 +26,31 @@
   },
   "portfolio_feedback": {
     "holding_count": 14,
-    "loser_count": 5,
-    "loser_share": 0.3571,
-    "loser_nav_share": 0.3693,
+    "loser_count": 3,
+    "loser_share": 0.2143,
+    "loser_nav_share": 0.2138,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
-    "within_tolerance": false,
-    "intact_loser_count": 3,
+    "within_tolerance": true,
+    "intact_loser_count": 1,
     "weakening_loser_count": 2,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
       "quality": 0.0,
-      "dividend": 0.2,
-      "garp": 0.4,
-      "risk": 0.0
-    },
-    "family_fail_rate_non_losers": {
-      "cheapness": 0.1111,
-      "quality": 0.0,
-      "dividend": 0.2222,
+      "dividend": 0.0,
       "garp": 0.3333,
       "risk": 0.0
     },
+    "family_fail_rate_non_losers": {
+      "cheapness": 0.0909,
+      "quality": 0.0,
+      "dividend": 0.2727,
+      "garp": 0.3636,
+      "risk": 0.0
+    },
     "selection_feedback_flags": [],
-    "balancing_hint": "trim_weakening_losers",
+    "balancing_hint": "tolerate_intact_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
@@ -60,9 +60,9 @@
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": true,
-      "deep_underwater": true,
-      "unrealized_pct": -0.2001,
-      "mark": 31.64,
+      "deep_underwater": false,
+      "unrealized_pct": -0.145,
+      "mark": 33.82,
       "avg_cost": 39.5558,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -100,8 +100,8 @@
       "recommended_action": "watch_review",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.1237,
-      "mark": 44.15,
+      "unrealized_pct": -0.1019,
+      "mark": 45.25,
       "avg_cost": 50.3846,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -140,8 +140,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0885,
-      "mark": 161.64,
+      "unrealized_pct": -0.0669,
+      "mark": 165.48,
       "avg_cost": 177.3437,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -179,14 +179,14 @@
       "name": "Barrick Mining Corporation",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": true,
+      "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0689,
-      "mark": 55.35,
+      "unrealized_pct": -0.0317,
+      "mark": 57.56,
       "avg_cost": 59.445,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4355,
+      "conviction_score": 0.4997,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -199,61 +199,18 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "price drawdown alone does not invalidate value thesis",
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 44%"
+        "conviction 50%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 44%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "IFC.TO",
-      "name": "Intact Financial Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0512,
-      "mark": 244.29,
-      "avg_cost": 257.4816,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.5227,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 52%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 52%"
+        "conviction 50%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -265,12 +222,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0338,
-      "mark": 92.23,
+      "unrealized_pct": -0.0219,
+      "mark": 93.37,
       "avg_cost": 95.46,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4913,
+      "conviction_score": 0.5648,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -286,14 +243,55 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 49%"
+        "conviction 56%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 49%"
+        "conviction 56%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "IFC.TO",
+      "name": "Intact Financial Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0216,
+      "mark": 251.93,
+      "avg_cost": 257.4816,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5227,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 52%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 52%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -305,12 +303,12 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0131,
-      "mark": 39.49,
+      "unrealized_pct": -0.0033,
+      "mark": 39.88,
       "avg_cost": 40.0136,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.3519,
+      "conviction_score": 0.4105,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -331,89 +329,10 @@
         "still buy",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 35%"
+        "conviction 41%"
       ],
       "weaken_reasons": [
         "research verdict caution"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "L.TO",
-      "name": "Loblaw Companies Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0021,
-      "mark": 65.72,
-      "avg_cost": 65.5842,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4775,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 48%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 48%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "MG.TO",
-      "name": "Magna International Inc.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0059,
-      "mark": 91.7,
-      "avg_cost": 91.1603,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6625,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "neutral",
-      "reasons": [
-        "research verdict neutral",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 66%"
-      ],
-      "weaken_reasons": [
-        "research verdict neutral"
       ],
       "broken_reasons": []
     },
@@ -424,8 +343,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0145,
-      "mark": 170.78,
+      "unrealized_pct": 0.0192,
+      "mark": 171.56,
       "avg_cost": 168.3315,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -459,14 +378,134 @@
       "broken_reasons": []
     },
     {
+      "ticker": "MG.TO",
+      "name": "Magna International Inc.",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0321,
+      "mark": 94.09,
+      "avg_cost": 91.1603,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6625,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "neutral",
+      "reasons": [
+        "research verdict neutral",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 66%"
+      ],
+      "weaken_reasons": [
+        "research verdict neutral"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CVE.TO",
+      "name": "Cenovus Energy Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0364,
+      "mark": 45.42,
+      "avg_cost": 43.8253,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6634,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 66%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 66%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "L.TO",
+      "name": "Loblaw Companies Limited",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0415,
+      "mark": 69.0,
+      "avg_cost": 66.2507,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5488,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 55%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 55%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "MRU.TO",
       "name": "Metro Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0286,
-      "mark": 92.83,
+      "unrealized_pct": 0.0536,
+      "mark": 95.09,
       "avg_cost": 90.253,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -500,55 +539,14 @@
       "broken_reasons": []
     },
     {
-      "ticker": "CVE.TO",
-      "name": "Cenovus Energy Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0606,
-      "mark": 46.48,
-      "avg_cost": 43.8253,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6478,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 65%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 65%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "CNQ.TO",
       "name": "Canadian Natural Resources Limited",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0649,
-      "mark": 73.83,
+      "unrealized_pct": 0.0637,
+      "mark": 73.75,
       "avg_cost": 69.333,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -587,8 +585,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0945,
-      "mark": 35.55,
+      "unrealized_pct": 0.1278,
+      "mark": 36.63,
       "avg_cost": 32.4798,
       "signal": "strong_buy",
       "timing_signal": "neutral",

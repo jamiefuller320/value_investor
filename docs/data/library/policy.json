@@ -549,7 +549,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-10-16T07:44:25.955726+00:00",
+  "updated_at": "2026-10-16T07:34:20.354788+00:00",
   "ingest_parity_markets": [
     "aex",
     "aim",
@@ -561,7 +561,9 @@
     "omxs30",
     "psi20"
   ],
-  "ingest_parallel_sprint": [],
+  "ingest_parallel_sprint": [
+    "sp500"
+  ],
   "ingest_parallel_sprint_2": [],
   "ladder": {
     "enabled": true,
@@ -575,10 +577,10 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-10-15T06:52:45.745596+00:00",
+      "run_at": "2026-10-16T06:52:34.814290+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 49,
+      "screen_shortlist": 47,
       "research": {
         "model": "composer-2.5",
         "research_cap": 100,
@@ -613,17 +615,17 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 84.5,
-        "estimated_spend_weekly_ops_usd_this_week": 7.6,
+        "estimated_spend_weekly_ops_usd_this_week": 9.2,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 77.3,
+        "remaining_usd_before": 75.7,
         "dedupe": {
-          "already_researched_count": 495,
-          "fresh_skipped_count": 495,
+          "already_researched_count": 496,
+          "fresh_skipped_count": 496,
           "rememo_eligible_count": 0,
           "rememo_eligible_sample": [],
-          "skipped_count": 417,
+          "skipped_count": 411,
           "skipped_sample": [
             {
               "market": "euro_depth",
@@ -647,17 +649,17 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "DHL.DE",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "PHIA.AS",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
               "ticker": "C5H.IR",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "DHL.DE",
               "reason": "fresh_memo"
             },
             {
@@ -682,6 +684,11 @@
             },
             {
               "market": "euro_depth",
+              "ticker": "UCB.BR",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
               "ticker": "EVN.VI",
               "reason": "fresh_memo"
             },
@@ -692,17 +699,7 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "AED.BR",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "ACKB.BR",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "UCB.BR",
               "reason": "fresh_memo"
             },
             {
@@ -712,12 +709,17 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "AKZA.AS",
+              "ticker": "ANDR.VI",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
-              "ticker": "SHELL.AS",
+              "ticker": "RAND.AS",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "AD.AS",
               "reason": "fresh_memo"
             },
             {
@@ -732,10 +734,10 @@
         "targets": [
           {
             "market": "sp500",
-            "ticker": "URI",
-            "name": "United Rentals, Inc.",
+            "ticker": "BRO",
+            "name": "Brown & Brown, Inc.",
             "signal": "buy",
-            "conviction_score": 0.3445
+            "conviction_score": 0.2935
           }
         ],
         "executed": 1,
@@ -743,7 +745,7 @@
         "updated": 0,
         "errors": [],
         "estimated_spend_usd": 0.4,
-        "remaining_usd_after": 76.9
+        "remaining_usd_after": 75.3
       },
       "graduation": {
         "graduated": false,
@@ -841,16 +843,6 @@
   },
   "parallel_sprint_graduation": {
     "history": [
-      {
-        "at": "2026-10-05T14:19:56.841091+00:00",
-        "parallel_stream": 2,
-        "from_market": "asx200",
-        "to_market": "nasdaq100",
-        "stream_markets_after": [
-          "nasdaq100"
-        ],
-        "ingest_parity_recorded": false
-      },
       {
         "at": "2026-10-05T16:52:40.850559+00:00",
         "parallel_stream": 1,
@@ -1466,6 +1458,28 @@
         "to_market": null,
         "stream_markets_after": [],
         "ingest_parity_recorded": false
+      },
+      {
+        "reseeded": true,
+        "market_queue_appended": false,
+        "at": "2026-10-16T07:31:28.499053+00:00",
+        "parallel_stream": 1,
+        "from_market": null,
+        "to_market": "sp500",
+        "stream_markets_after": [
+          "sp500"
+        ],
+        "ingest_parity_recorded": false,
+        "screen_refresh": {
+          "refreshed": true,
+          "market_id": "sp500",
+          "forced": true,
+          "prior_screen_at": "2026-10-16T06:52:34.814290+00:00",
+          "prior_age_days": 0,
+          "run_at": "2026-10-16T07:31:28.499069+00:00",
+          "shortlist_count": 147,
+          "ticker_count": 503
+        }
       }
     ]
   },

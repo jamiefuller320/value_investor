@@ -3252,13 +3252,228 @@
           "parent_spec_id": "heuristic.v1"
         }
       ]
+    },
+    {
+      "logged_at": "2026-10-16T09:18:30.871743+02:00",
+      "verdict_counts": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "cards": [
+        {
+          "ticker": "EG7.IR",
+          "name": "FBD Holdings plc",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Still-in-candidates rebuy block matches evidence: still_buyish with strong_buy screen and zero rank_drop since entry (8\u21928).",
+            "Skipping rebuy avoids churn while the name never left the buy cohort; accumulate research overlay supports continued buyish stance."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 8
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 8
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "still_in_buy_set",
+          "logged_at": "2026-10-16T09:18:30.871743+02:00",
+          "proposal_id": "still_in_buy_set:EG7.IR:rebuy_skip:2026-10-16T09:18:30.871743+02:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
+    },
+    {
+      "logged_at": "2026-10-16T09:30:08.132944+02:00",
+      "verdict_counts": {
+        "agree": 1,
+        "veto": 0,
+        "abstain": 0
+      },
+      "by_algo_action": {
+        "rebuy_skip": {
+          "agree": 1,
+          "veto": 0,
+          "abstain": 0
+        }
+      },
+      "cards": [
+        {
+          "ticker": "EG7.IR",
+          "name": "FBD Holdings plc",
+          "algo_action": "rebuy_skip",
+          "algo_reason": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit",
+          "shadow_verdict": "agree",
+          "reasons": [
+            "Explicit still-in-candidates rebuy block matches algo_reason; skipping rebuy while the name remains in the buy pool is consistent with low-churn intent.",
+            "still_buyish with strong_buy screen signal, entry_rank 8 and conviction_rank 8 imply rank_drop 0, below the hold gate threshold for material deterioration.",
+            "research_verdict accumulate with overlay_bound true supports sustained buy-cohort membership; rebuy_skip avoids redundant re-entry while conviction remains intact."
+          ],
+          "evidence": [
+            {
+              "kind": "algo_reason",
+              "source": "plan_or_trade",
+              "detail": "Still-in-candidates rebuy block \u2014 name never left the buy candidate pool since exit"
+            },
+            {
+              "kind": "screen_signal",
+              "source": "candidates",
+              "detail": "Effective signal at decision time",
+              "value": "strong_buy"
+            },
+            {
+              "kind": "conviction_rank",
+              "source": "candidates",
+              "detail": "1-based conviction rank among buyish names",
+              "value": 8
+            },
+            {
+              "kind": "entry_rank",
+              "source": "rebalance_state",
+              "detail": "Conviction rank recorded at sleeve entry",
+              "value": 8
+            },
+            {
+              "kind": "rank_drop",
+              "source": "derived",
+              "detail": "current_rank \u2212 entry_rank (hold gate < 3)",
+              "value": 0
+            },
+            {
+              "kind": "research_verdict",
+              "source": "candidates",
+              "detail": "Research overlay verdict at decision time",
+              "value": "accumulate"
+            },
+            {
+              "kind": "still_buyish",
+              "source": "derived",
+              "detail": "Name remains buy/strong_buy on the decision screen",
+              "value": true
+            },
+            {
+              "kind": "overlay_bound",
+              "source": "candidates",
+              "detail": "Research overlay bound (verdict + adjusted_signal) at decision time",
+              "value": true
+            }
+          ],
+          "judge_backend": "llm",
+          "judge_spec_id": "llm.v1",
+          "influences_live": false,
+          "observe_only": true,
+          "track_id": "still_in_buy_set",
+          "logged_at": "2026-10-16T09:30:08.132944+02:00",
+          "proposal_id": "still_in_buy_set:EG7.IR:rebuy_skip:2026-10-16T09:30:08.132944+02:00",
+          "meta": {
+            "still_buyish": true,
+            "rank_drop": 0,
+            "rank_drop_exit_min": 3,
+            "research_verdict": "accumulate",
+            "learning_question": "When the algo proposes sell/hold/rebuy, would an evidence-citing agree/veto disagree often enough to justify a later hard veto on the live capital path?",
+            "judge_spec_id": "heuristic.v1",
+            "p1_live_inputs": {
+              "fcf_basis_overlay": false,
+              "key_filing_bodies": null,
+              "filings_with_body": null,
+              "overlay_bound": true,
+              "interim_eps_decline_pct": null,
+              "adjusted_eps_growth_pct": null
+            },
+            "heuristic_baseline": {
+              "shadow_verdict": "agree",
+              "reasons": [
+                "Hold/skip aligned with still-buyish or explicit rebuy block \u2014 consistent with low-churn sell meaning."
+              ],
+              "judge_spec_id": "heuristic.v1"
+            },
+            "llm_merge": "ok"
+          },
+          "schema_version": 1,
+          "parent_spec_id": "heuristic.v1"
+        }
+      ]
     }
   ],
   "observe_only": true,
   "influences_live": false,
   "track_id": "still_in_buy_set",
   "last_pass": {
-    "logged_at": "2026-10-15T09:39:23.519319+02:00",
+    "logged_at": "2026-10-16T09:30:08.132944+02:00",
     "card_count": 1,
     "verdict_counts": {
       "agree": 1,
@@ -3266,5 +3481,5 @@
       "abstain": 0
     }
   },
-  "updated_at": "2026-10-15T07:39:33.982899+00:00"
+  "updated_at": "2026-10-16T07:30:21.019750+00:00"
 }
