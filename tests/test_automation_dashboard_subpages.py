@@ -389,6 +389,8 @@ def test_n200_pipeline_health_on_queue_and_analysis() -> None:
     assert "n201_pipeline_health" in queue_fn
     assert "renderN210PipelineHealthSection(" in queue_fn
     assert "n210_pipeline_health" in queue_fn
+    assert "renderN206PipelineHealthSection(" in queue_fn
+    assert "n206_pipeline_health" in queue_fn
     assert "function renderAnalysisObserveForModel(" in text
     assert "renderN200PipelineHealthSection(data, { compact: false })" in text
     assert "renderN210PipelineHealthSection(data, { compact: false })" in text
@@ -422,6 +424,11 @@ def test_n200_pipeline_health_on_queue_and_analysis() -> None:
     assert "build_n210_pipeline_health_projection" in n210_doc
     assert "model switcher" in n210_doc
     assert "not assessment primary" in n210_doc.lower()
+    n206_doc = Path("docs/ops/n206-plain-ey-observe.md").read_text(encoding="utf-8")
+    assert "## Dashboard" in n206_doc
+    assert "model switcher" in n206_doc
+    assert "influences_live" in n206_doc
+    assert ".n206-pipeline-health-section" in css
 
 
 def test_investment_model_switcher_catalog_and_hash() -> None:
@@ -430,6 +437,7 @@ def test_investment_model_switcher_catalog_and_hash() -> None:
     assert 'id: "strand-a"' in text
     assert 'id: "n200"' in text
     assert 'id: "n201"' in text
+    assert 'id: "n206"' in text
     assert 'id: "n210"' in text
     assert 'mode: "live"' in text
     assert 'mode: "observe"' in text
@@ -439,8 +447,11 @@ def test_investment_model_switcher_catalog_and_hash() -> None:
     assert "function renderInvestmentModelCompanionStrip(" in text
     assert "function renderN201PipelineHealthSection(" in text
     assert "function resolveN201PipelineHealth(" in text
+    assert "function renderN206PipelineHealthSection(" in text
+    assert "function resolveN206PipelineHealth(" in text
     assert "function renderN210PipelineHealthSection(" in text
     assert "function resolveN210PipelineHealth(" in text
+    assert '["n206_plain_ey_observe", "data/n206_plain_ey_observe.json"]' in text
     assert '["n210_ai_judgment_observe", "data/n210_ai_judgment_observe.json"]' in text
     assert "#analysis/observe/" in text
     assert "one live capital path" in text.lower() or "Sole live" in text

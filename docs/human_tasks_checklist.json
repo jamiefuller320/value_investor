@@ -377,7 +377,7 @@
         {
           "id": "adhoc-post-hsr-alternate-strand",
           "title": "Pin learning question before registering a post-hsr alternate strand",
-          "summary": "After freeze-extras is in force (docs/ops/post-hsr-freeze-extras.md), keep strand A as the sole live/capital path. N200 and N201 are sealed observe-only independently (dual observe OK). Before opening any further observe/capital alternate, pin one learning question and registration_id, answer the four freeze questions, and respect the sealed-strategy launch queue (do not steal P1 from holdings/running units). Prefer P1/P2 spend until that pin is deliberate. At most one live promotion path.",
+          "summary": "After freeze-extras is in force (docs/ops/post-hsr-freeze-extras.md), keep strand A as the sole live/capital path. N200, N201, N206, and N210 are sealed observe-only independently (dual observe OK). Before opening any further observe/capital alternate, pin one learning question and registration_id, answer the four freeze questions, and respect the sealed-strategy launch queue (do not steal P1 from holdings/running units). Prefer P1/P2 spend until that pin is deliberate. At most one live promotion path.",
           "automated": false,
           "doc_path": "docs/ops/post-hsr-freeze-extras.md",
           "doc_anchor": "next-engineering-steps"
@@ -388,6 +388,14 @@
           "summary": "When ops-monitor info findings say N200 and/or N201 volume gate ready for review, open the matching Observe switcher tab (or observe JSON), read fair-cost path/lever brackets, and decide only whether a deliberate promotion design is warranted later. Do not promote, do not decision-review --apply, and do not open a second live capital path (F8).",
           "automated": false,
           "doc_path": "docs/ops/n200-tech-timing-observe.md",
+          "doc_anchor": "human-volume-gate-review"
+        },
+        {
+          "id": "adhoc-n206-volume-gate-review",
+          "title": "Review N206 plain-EY volume gate when ops-monitor marks ready (no auto-promote)",
+          "summary": "When ops-monitor says N206 volume gate ready for review, open the N206 Observe tab or docs/data/n206_plain_ey_observe.json, read the fair-cost episode % alone, and decide only whether a deliberate promotion design is warranted later. Do not promote, do not decision-review --apply, and do not crown an assessment primary or promote N200, N201, or N210 from this card (F8 / O3).",
+          "automated": false,
+          "doc_path": "docs/ops/n206-plain-ey-observe.md",
           "doc_anchor": "human-volume-gate-review"
         },
         {

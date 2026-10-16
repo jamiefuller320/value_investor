@@ -603,6 +603,7 @@ const DASHBOARD_SIDECARS = [
   ["lifecycle_maturity_trajectory", "data/lifecycle_maturity_trajectory.json"],
   ["n200_tech_timing_observe", "data/n200_tech_timing_observe.json"],
   ["n201_value_mom_observe", "data/n201_value_mom_observe.json"],
+  ["n206_plain_ey_observe", "data/n206_plain_ey_observe.json"],
   ["n210_ai_judgment_observe", "data/n210_ai_judgment_observe.json"],
   ["chart_outcome_review", "data/chart_outcome_review.json"],
   ["engineering_tasks", "data/engineering_tasks.json"],
@@ -4317,6 +4318,19 @@ const INVESTMENT_MODELS = [
       "Sealed observe (launch-queue waiter): plain EY + 12–1 mom + financial_health, fixed stake. Alone scoreboards — never auto-promotes (F8).",
   },
   {
+    id: "n206",
+    label: "N206 plain EY",
+    shortLabel: "N206 · observe",
+    mode: "observe",
+    modeLabel: "Observe-only",
+    registrationId: "strand-d-plain-ey-identity-v0",
+    deferredId: "N206",
+    opsDoc: "docs/ops/n206-plain-ey-observe.md",
+    emptyHint: "N206 observe store not published yet (check_n206_plain_ey_observe).",
+    blurb:
+      "Sealed observe: patient plain EY top-30% + financial_health, fixed stake, no momentum filter. Alone-first — influences_live false; never auto-promotes or crowns an assessment primary (F8).",
+  },
+  {
     id: "n210",
     label: "N210 AI judgment",
     shortLabel: "N210 · observe",
@@ -4341,6 +4355,15 @@ function normalizeInvestmentModel(value) {
   if (key === "a" || key === "strand-a" || key === "live" || key === "strand_a") return "strand-a";
   if (key === "b" || key === "n200" || key === "strand-b" || key === "tech-timing") return "n200";
   if (key === "c" || key === "n201" || key === "strand-c" || key === "value-mom") return "n201";
+  if (
+    key === "d" ||
+    key === "n206" ||
+    key === "strand-d" ||
+    key === "plain-ey" ||
+    key === "plain_ey"
+  ) {
+    return "n206";
+  }
   if (
     key === "e" ||
     key === "n210" ||
@@ -4372,6 +4395,10 @@ function isInvestmentModelHashToken(value) {
     key === "c" ||
     key === "strand-c" ||
     key === "value-mom" ||
+    key === "d" ||
+    key === "strand-d" ||
+    key === "plain-ey" ||
+    key === "plain_ey" ||
     key === "e" ||
     key === "strand-e" ||
     key === "ai-judgment" ||
@@ -4520,7 +4547,7 @@ function renderInvestmentModelSwitcher(activeModelId) {
         <h3 class="investment-model-switcher-title">Investment model</h3>
         <p class="small muted" style="margin:0">
           Switch scoreboards — <strong>one live capital path</strong> (Strand A);
-          N200 / N201 / N210 are sealed observe-only (alone-first; never auto-promote).
+          N200 / N201 / N206 / N210 are sealed observe-only (alone-first; never auto-promote).
         </p>
       </div>
       <nav class="paper-subnav investment-model-subnav" aria-label="Investment models">
@@ -4564,6 +4591,17 @@ function renderAnalysisObserveForModel(data, modelId) {
       ${renderModelLifecycleMonitor(data, "n201")}
       ${renderN201PipelineHealthSection(data, { compact: false })}
       ${renderObservePathScoreboardPanel(data, "n201")}
+      <p class="small muted">
+        Compact Automation strip remains on
+        <button type="button" class="link-btn" data-tab-jump="automation">Automation → Queue &amp; hunter</button>.
+      </p>`;
+  }
+  if (id === "n206") {
+    return `
+      ${renderInvestmentModelCompanionStrip(data, "n206")}
+      ${renderModelLifecycleMonitor(data, "n206")}
+      ${renderN206PipelineHealthSection(data, { compact: false })}
+      ${renderObservePathScoreboardPanel(data, "n206")}
       <p class="small muted">
         Compact Automation strip remains on
         <button type="button" class="link-btn" data-tab-jump="automation">Automation → Queue &amp; hunter</button>.
@@ -5638,6 +5676,176 @@ function renderN200PipelineHealthSection(data, { compact = false } = {}) {
     </section>`;
 }
 
+function resolveN206PipelineHealth(data) {
+  if (data.n206_pipeline_health) return data.n206_pipeline_health;
+  const health = resolveQueueHealth(data);
+  if (health?.n206_pipeline_health) return health.n206_pipeline_health;
+  const store = data.n206_plain_ey_observe;
+  if (!store || typeof store !== "object") return null;
+  const phase = store.phase || {};
+  const volume = store.volume_gate || {};
+  const path = store.path_scoreboard || {};
+  return {
+    observe_only: true,
+    influences_live: false,
+    not_alpha_signal: true,
+    not_capital_ready: true,
+    not_assessment_primary: true,
+    alone_first: true,
+    independent_of_fund_nav: true,
+    launch_queue_waiter: true,
+    data_deepen_requested: false,
+    registration_id: store.registration_id,
+    deferred_id: store.deferred_id || "N206",
+    headline: "N206 observe store loaded (client projection).",
+    disclaimer:
+      "Phase floor and volume gate measure factory mechanism throughput — not alpha or capital readiness (F8). Fixed-stake episode % is independent of fund NAV. Alone-first. Observe-only; not assessment primary.",
+    store_present: true,
+    store_generated_at: store.generated_at || null,
+    phase: {
+      entries_per_week: phase.entries_per_week,
+      floor: phase.floor,
+      floor_met: !!phase.floor_met,
+    },
+    volume_gate: {
+      met: !!volume.met,
+      episodes: store.completed_entry_episodes ?? 0,
+      weeks: store.calendar_weeks_spanned ?? 0,
+      min_episodes: volume.min_episodes,
+      min_weeks: volume.min_weeks,
+    },
+    path_scoreboard: path,
+    freshness: { state: "unknown", detail: "Awaiting queue-health embed for freshness." },
+    pipeline: {
+      functioning: null,
+      ops_check_ok: null,
+      ops_run_at: null,
+      detail: "Refresh with ops-monitor / queue health for full pipeline status.",
+    },
+    ops_doc: store.ops_doc || "docs/ops/n206-plain-ey-observe.md",
+  };
+}
+
+function renderN206PipelineHealthSection(data, { compact = false } = {}) {
+  const payload = resolveN206PipelineHealth(data);
+  const runbookUrl = githubOpsDocUrl("docs/ops/n206-plain-ey-observe.md");
+  const sectionAttrs = compact
+    ? ' class="automation-section automation-section-full n206-pipeline-health-section analysis-observe-compact"'
+    : ' class="automation-section automation-section-full n206-pipeline-health-section"';
+  if (!payload) {
+    return `
+      <section${sectionAttrs}>
+        <h2>N206 pipeline health</h2>
+        <p class="muted small">Observe store not published yet. Refreshes with daily ops-monitor (<code>check_n206_plain_ey_observe</code>).</p>
+      </section>`;
+  }
+  const phase = payload.phase || {};
+  const volume = payload.volume_gate || {};
+  const freshness = payload.freshness || {};
+  const pipeline = payload.pipeline || {};
+  const path = payload.path_scoreboard || {};
+  const entriesPw =
+    phase.entries_per_week == null || !Number.isFinite(Number(phase.entries_per_week))
+      ? "—"
+      : String(Number(phase.entries_per_week));
+  const floor =
+    phase.floor == null || !Number.isFinite(Number(phase.floor))
+      ? "—"
+      : String(Number(phase.floor));
+  const functioningBadge =
+    pipeline.functioning === true
+      ? `<span class="badge badge-ii-yes">functioning</span>`
+      : pipeline.functioning === false
+        ? `<span class="badge badge-ii-no">attention</span>`
+        : `<span class="badge">unknown</span>`;
+  const waiterBadge = payload.launch_queue_waiter
+    ? `<span class="badge badge-hold">existing panels</span>`
+    : "";
+  const disclaimer = esc(
+    payload.disclaimer ||
+      "Phase floor = mechanism throughput, not alpha or capital readiness (F8)."
+  );
+  const metaLine = `<p class="small muted">Store ${esc(fmtDate(payload.store_generated_at))}
+        · projection ${esc(fmtDate(payload.generated_at))}
+        · ops ${esc(fmtDate(pipeline.ops_run_at))}
+        · ${esc(payload.registration_id || "strand-d-plain-ey-identity-v0")}
+      </p>`;
+  const pathMedian = path.smooth_ret_cohort_median;
+  if (compact) {
+    return `
+      <section${sectionAttrs}>
+        <h2>N206 pipeline health ${observeFreshnessBadge(freshness.state)} ${functioningBadge} ${waiterBadge}</h2>
+        <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
+        ${metaLine}
+        <p class="small muted" style="margin:0.35rem 0 0">
+          Phase ${esc(entriesPw)}/${esc(floor)} ${n200GateBadge(!!phase.floor_met)}
+          · volume ${n200GateBadge(!!volume.met)}
+          (${esc(String(volume.episodes ?? "—"))} ep / ${esc(String(volume.weeks ?? "—"))} wk)
+          · path median ${pctOrDash(pathMedian)}
+        </p>
+        <p class="small muted" style="margin-bottom:0">
+          Compact strip — full readout on Analysis model switcher (N206). Not a promote signal and not assessment primary (F8).
+        </p>
+      </section>`;
+  }
+  return `
+    <section${sectionAttrs}>
+      <h2>N206 / plain earnings yield ${observeFreshnessBadge(freshness.state)} ${functioningBadge} ${waiterBadge}</h2>
+      <p class="small" style="margin-top:0">${esc(payload.headline || "—")}</p>
+      ${metaLine}
+      <p class="small muted">${disclaimer}
+        ${runbookUrl ? ` <a href="${esc(runbookUrl)}" target="_blank" rel="noopener">N206 runbook</a>` : ""}
+      </p>
+      <div class="grid n200-pipeline-grid n206-pipeline-grid" style="margin-top:0.75rem">
+        <div class="card n200-pipeline-card">
+          <h3>Phase floor ${n200GateBadge(!!phase.floor_met)}</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value">${esc(entriesPw)}<span class="n200-floor-den">/${esc(floor)}</span></div>
+          </div>
+          <p class="small muted">Entries/week vs sealed floor. Throughput health only.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Volume gate ${n200GateBadge(!!volume.met)}</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value">${esc(String(volume.episodes ?? "—"))}<span class="n200-floor-den"> ep</span></div>
+          </div>
+          ${settingRow("Weeks", esc(String(volume.weeks ?? "—")))}
+          ${settingRow(
+            "Minimums",
+            `≥${esc(String(volume.min_episodes ?? 48))} ep and ≥${esc(String(volume.min_weeks ?? 8))} wk`
+          )}
+          <p class="small muted">Review gate — not auto-promote.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Path median (fair)</h3>
+          <div class="observe-primary-row">
+            <div class="observe-primary-value">${pctOrDash(pathMedian)}</div>
+          </div>
+          ${settingRow("n episodes", esc(String(path.n ?? volume.episodes ?? "—")))}
+          ${settingRow("Stress median (report-only)", pctOrDash(path.smooth_ret_cohort_median_stress_report_only))}
+          <p class="small muted">Fixed-stake episode %; independent of fund NAV.</p>
+        </div>
+        <div class="card n200-pipeline-card">
+          <h3>Pipeline ${functioningBadge}</h3>
+          ${settingRow("Store freshness", `${observeFreshnessBadge(freshness.state)} · ${esc(freshness.detail || "")}`)}
+          ${settingRow(
+            "Ops check",
+            pipeline.ops_check_ok === true
+              ? n200GateBadge(true, { yes: "ok" })
+              : pipeline.ops_check_ok === false
+                ? n200GateBadge(false, { no: pipeline.ops_finding_present ? "failed" : "absent" })
+                : "—"
+          )}
+          ${settingRow("Last store refresh", esc(fmtDate(payload.store_generated_at)))}
+          <p class="small muted">${esc(pipeline.detail || "")}</p>
+        </div>
+      </div>
+      <p class="small muted" style="margin-top:0.75rem;margin-bottom:0">
+        Observe-only strand D (patient plain EY). influences_live false. Phase green ≠ alpha or capital-ready. Not assessment primary. Never writes books/knobs (F8).
+      </p>
+    </section>`;
+}
+
 function resolveN201PipelineHealth(data) {
   if (data.n201_pipeline_health) return data.n201_pipeline_health;
   const health = resolveQueueHealth(data);
@@ -5997,7 +6205,7 @@ function renderN210PipelineHealthSection(data, { compact = false } = {}) {
 /**
  * Per-model lifecycle monitor on Analysis → Observe.
  * Strand A → live Lifecycle tab pointer (+ maturity snapshot).
- * N200 / N201 / N210 → each model’s own sealed store (phase / volume / path / episodes / markers).
+ * N200 / N201 / N206 / N210 → each model’s own sealed store (phase / volume / path / episodes / markers).
  * Never swaps Strand A’s board under an observe label (F5 / F8).
  */
 function renderModelLifecycleMonitor(data, modelId) {
@@ -6028,7 +6236,7 @@ function renderStrandALifecycleMonitor(data) {
       <p class="small muted" style="margin-top:0">
         Sole live capital path (F5). Position board and maturity mix live on the
         <button type="button" class="link-btn" data-tab-jump="lifecycle">Lifecycle</button> tab —
-        not an observe seal. N200 / N201 / N210 each have their own sealed stores under this switcher.
+        not an observe seal. N200 / N201 / N206 / N210 each have their own sealed stores under this switcher.
       </p>
       <div class="grid n200-pipeline-grid model-lifecycle-stage-grid" style="margin-top:0.75rem">
         <div class="card n200-pipeline-card">
@@ -6070,6 +6278,16 @@ function _observeLifecycleStore(data, modelId) {
       registrationFallback: "strand-c-short-horizon-value-mom-v0",
       emptyHint:
         "N201 observe store not published yet (check_n201_value_mom_observe). Launch-queue waiter — thin data is expected until P1 capacity allows deepen.",
+    };
+  }
+  if (modelId === "n206") {
+    return {
+      store: data.n206_plain_ey_observe || null,
+      health: resolveN206PipelineHealth(data),
+      label: "N206",
+      registrationFallback: "strand-d-plain-ey-identity-v0",
+      emptyHint:
+        "N206 observe store not published yet (check_n206_plain_ey_observe). Existing panels only — no filing sprint.",
     };
   }
   if (modelId === "n210") {
@@ -6120,7 +6338,7 @@ function renderObserveLifecycleEpisodeRows(store, modelId) {
     .slice(0, 12)
     .map((ep) => {
       if (!ep || typeof ep !== "object") return "";
-      if (modelId === "n201" || modelId === "n210") {
+      if (modelId === "n201" || modelId === "n206" || modelId === "n210") {
         const statusNote = openOnly
           ? ep.status || "open"
           : ep.exit_reason || ep.eligibility || ep.status || "—";
@@ -6198,13 +6416,13 @@ function renderObserveLifecycleMonitor(data, modelId) {
       ? "—"
       : String(Number(phase.floor));
   const pathPrimary =
-    id === "n201" || id === "n210"
+    id === "n201" || id === "n206" || id === "n210"
       ? path.smooth_ret_cohort_median
       : path.control_smooth_ret_cohort_median ?? path.smooth_ret_cohort_median;
   const registration =
     store?.registration_id || health?.registration_id || pack.registrationFallback;
   const waiter =
-    (id === "n201" || id === "n210") &&
+    (id === "n201" || id === "n206" || id === "n210") &&
     (health?.launch_queue_waiter || store?.launch_queue?.enqueued)
       ? `<span class="badge badge-hold">launch-queue waiter</span>`
       : "";
@@ -6280,7 +6498,7 @@ function renderObserveLifecycleMonitor(data, modelId) {
           ${settingRow("Weeks", esc(String(weeks ?? "—")))}
           ${settingRow(
             "Gate",
-            `≥${esc(String(volume.min_episodes ?? (id === "n201" || id === "n210" ? 48 : 24)))} ep · ≥${esc(
+            `≥${esc(String(volume.min_episodes ?? (id === "n201" || id === "n206" || id === "n210" ? 48 : 24)))} ep · ≥${esc(
               String(volume.min_weeks ?? 8)
             )} wk`
           )}
@@ -6352,7 +6570,7 @@ function _meanEpisodeCloseDelta(store, modelId) {
   for (const ep of sample) {
     if (!ep || typeof ep !== "object") continue;
     const raw =
-      modelId === "n201" || modelId === "n210"
+      modelId === "n201" || modelId === "n206" || modelId === "n210"
         ? ep.return_pct
         : ep.control_return ?? ep.return_pct ?? ep.smooth_ret;
     if (raw == null || !Number.isFinite(Number(raw))) continue;
@@ -6410,12 +6628,16 @@ function renderInvestmentModelCompanionStrip(data, modelId) {
   const store =
     id === "n210"
       ? data.n210_ai_judgment_observe
+      : id === "n206"
+        ? data.n206_plain_ey_observe
       : id === "n201"
         ? data.n201_value_mom_observe
         : data.n200_tech_timing_observe;
   const health =
     id === "n210"
       ? resolveN210PipelineHealth(data)
+      : id === "n206"
+        ? resolveN206PipelineHealth(data)
       : id === "n201"
         ? resolveN201PipelineHealth(data)
         : resolveN200PipelineHealth(data);
@@ -6437,7 +6659,7 @@ function renderInvestmentModelCompanionStrip(data, modelId) {
   const running = _formatRunningDuration(started, store?.generated_at);
   const path = (health && health.path_scoreboard) || store?.path_scoreboard || {};
   const cohortMedian =
-    id === "n201" || id === "n210"
+    id === "n201" || id === "n206" || id === "n210"
       ? path.smooth_ret_cohort_median
       : path.control_smooth_ret_cohort_median ?? path.smooth_ret_cohort_median;
   const sampleMean = _meanEpisodeCloseDelta(store, id);
@@ -6508,6 +6730,8 @@ function renderObservePathScoreboardPanel(data, modelId) {
   const store =
     id === "n210"
       ? data.n210_ai_judgment_observe
+      : id === "n206"
+        ? data.n206_plain_ey_observe
       : id === "n201"
         ? data.n201_value_mom_observe
         : data.n200_tech_timing_observe;
@@ -6548,6 +6772,35 @@ function renderObservePathScoreboardPanel(data, modelId) {
               <tr><td>Completed / open</td><td>${esc(
                 String(path.completed_entry_episodes ?? path.n ?? "—")
               )} / ${esc(String(path.open_entry_episodes ?? "—"))}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>`;
+  }
+  if (id === "n206") {
+    return `
+      <section class="automation-section observe-path-scoreboard-section">
+        <h3>Path scoreboard (N206 · alone)</h3>
+        <p class="small muted" style="margin-top:0">${esc(path.note || "")}</p>
+        <div class="table-wrap">
+          <table class="learning-tracks-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Fair-cost cohort median</td><td class="${signedReturnClass(
+                path.smooth_ret_cohort_median
+              )}">${pctOrDash(path.smooth_ret_cohort_median)}</td></tr>
+              <tr><td>Cash excess (report-only)</td><td class="${signedReturnClass(
+                path.cash_excess_report_only
+              )}">${pctOrDash(path.cash_excess_report_only)}</td></tr>
+              <tr><td>Stress 3%/side median (report-only)</td><td>${pctOrDash(
+                path.smooth_ret_cohort_median_stress_report_only
+              )}</td></tr>
+              <tr><td>n</td><td>${esc(String(path.n ?? "—"))}</td></tr>
             </tbody>
           </table>
         </div>
@@ -7137,6 +7390,11 @@ function renderQueueHealthMonitor(data) {
         queue_health: health,
         n201_pipeline_health: health.n201_pipeline_health,
         n201_value_mom_observe: data.n201_value_mom_observe,
+      }, { compact: true })}
+      ${renderN206PipelineHealthSection({
+        queue_health: health,
+        n206_pipeline_health: health.n206_pipeline_health,
+        n206_plain_ey_observe: data.n206_plain_ey_observe,
       }, { compact: true })}
       ${renderN210PipelineHealthSection({
         queue_health: health,
