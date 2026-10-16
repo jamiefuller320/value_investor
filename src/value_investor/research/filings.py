@@ -1136,6 +1136,13 @@ _BUYBACK_PROGRAMME_PATTERNS = (
     r"\b(?:buyback|repurchase) programme\b",
 )
 
+# Leadership RNS (e.g. KGF.L CEO appointment) — material for gap closure, not routine PDMR.
+_LEADERSHIP_APPOINTMENT_PATTERNS = (
+    r"\bappoints new ceo\b",
+    r"\bappointment of .* chief executive\b",
+    r"\bnew chief executive officer\b",
+)
+
 _NON_RESULTS_RNS_PATTERNS = (
     r"\bdirectorate change\b",
     r"\bholding\(s\)? in company\b",
@@ -2272,6 +2279,20 @@ def _rns_row_needs_body_refetch(row: dict[str, Any], filings_dir: Path) -> bool:
     return bool(snippet and _is_investegate_ai_summary_body(snippet))
 
 
+def _investegate_refetch_candidate(row: dict[str, Any], filings_dir: Path) -> bool:
+    """Investegate refetch targets material IWB gaps plus AI-summary re-downloads."""
+    if not _rns_row_needs_body_refetch(row, filings_dir):
+        return False
+    if row.get("has_body"):
+        return True
+    return filing_lacks_material_body(row)
+
+
+def _is_leadership_appointment_rns_row(row: dict[str, Any]) -> bool:
+    headline = _headline_blob(row)
+    return any(re.search(pat, headline) for pat in _LEADERSHIP_APPOINTMENT_PATTERNS)
+
+
 def _headline_blob(row: dict[str, Any] | str) -> str:
     if isinstance(row, str):
         return (row or "").lower()
@@ -2303,6 +2324,8 @@ def _material_other_rns_refetch_priority(row: dict[str, Any]) -> int:
     """Rank non-results RNS for Investegate refetch (ITV Sky sale, consent, buyback, TU)."""
     if _is_material_corporate_action_row(row):
         return 130
+    if _is_leadership_appointment_rns_row(row):
+        return 128
     headline = _headline_blob(row)
     if any(re.search(pat, headline) for pat in _MATERIAL_FINANCING_PATTERNS):
         return 125
@@ -10017,7 +10040,7 @@ def refetch_investegate_filing_bodies(
         for row in enriched
         if not row.get("has_body") and "news.google.com" in str(row.get("url") or "")
     )
-    missing = [row for row in enriched if _rns_row_needs_body_refetch(row, filings_dir)]
+    missing = [row for row in enriched if _investegate_refetch_candidate(row, filings_dir)]
     missing.sort(key=_investegate_refetch_rank_key)
     other_results_candidates = sum(1 for row in missing if _is_other_results_rns_row(row))
     index_changed = enriched != filings or misattributed_pruned > 0 or rns_doc_deduped > 0
@@ -10033,7 +10056,7 @@ def refetch_investegate_filing_bodies(
             "with_body_after": before,
             "google_news_rejected": google_news_rejected,
             "misattributed_pruned": misattributed_pruned,
-            "note": "no missing Investegate/LSE bodies",
+            "note": "no missing material Investegate/LSE bodies",
         }
 
     bodies_dir.mkdir(parents=True, exist_ok=True)

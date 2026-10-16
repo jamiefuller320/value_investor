@@ -6458,6 +6458,95 @@ def test_builtin_ir_allowlist_includes_kgf_l():
     assert "interim" in periods
 
 
+def test_filing_lacks_material_body_kgf_ceo_appointment():
+    """eng-20261016-04: KGF.L CEO RNS is a material IWB gap (not routine PDMR noise)."""
+    from value_investor.research.filings import filing_lacks_material_body
+
+    assert filing_lacks_material_body(
+        {
+            "headline": "Kingfisher Appoints New CEO",
+            "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911",
+            "source": "investegate_direct",
+            "period": "other",
+            "has_body": False,
+        }
+    )
+
+
+def test_refetch_investegate_kgf_l_skips_routine_pdmr_targets_material_ceo(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20261016-04: gap-closure refetch must attempt CEO RNS, not routine PDMR stubs."""
+    from value_investor.research.filings import refetch_investegate_filing_bodies
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    ceo_id = "c684d8498b936644"
+    ceo_body = (
+        "Kingfisher plc today announces the appointment of Sebastian Gundel as Chief Executive Officer. "
+        + ("Group trading and strategy commentary. " * 40)
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": ceo_id,
+                        "source": "investegate_direct",
+                        "headline": "Kingfisher Appoints New CEO",
+                        "published_at": "2026-10-13T00:00:00+00:00",
+                        "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/kingfisher-appoints-new-ceo/9819911",
+                        "period": "other",
+                        "has_body": False,
+                        "priority": 0,
+                    },
+                    {
+                        "id": "ad6154e5a8b52569",
+                        "source": "investegate_direct",
+                        "headline": "Director/PDMR Shareholding",
+                        "published_at": "2026-09-28T00:00:00+00:00",
+                        "url": "https://www.investegate.co.uk/announcement/rns/kingfisher--kgf/director-pdmr-shareholding/9794627",
+                        "period": "other",
+                        "has_body": False,
+                        "priority": -50,
+                    },
+                ],
+                "summary": {"total": 2, "with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(url: str):
+        if "kingfisher-appoints-new-ceo" in url:
+            return ceo_body, None
+        return None, None
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        fake_fetch,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda filings, **kwargs: list(filings),
+    )
+
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="KGF.L",
+        company_name="Kingfisher plc",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ceo_row = next(row for row in saved["filings"] if row["id"] == ceo_id)
+    assert ceo_row["has_body"] is True
+    pdmr_row = next(row for row in saved["filings"] if row["id"] == "ad6154e5a8b52569")
+    assert pdmr_row["has_body"] is False
+
+
 def test_builtin_ir_allowlist_includes_jd_l():
     """eng-20261009-03: ftse350 JD.L intensive pin had empty IR allowlist (0 refetch)."""
     from value_investor.research.filings import _BUILTIN_IR_URLS, fetch_filings_ir_allowlist
