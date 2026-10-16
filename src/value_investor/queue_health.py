@@ -174,6 +174,19 @@ def _agent_lane_snapshot(
     }
 
 
+def _ingest_occupancy_row(ops_status_path: Path) -> dict[str, Any]:
+    """Occupancy beside this ops-status file. Missing inputs stay a quiet row."""
+    from value_investor.ingest_occupancy import build_ingest_occupancy
+
+    data_dir = Path(ops_status_path).parent
+    return build_ingest_occupancy(
+        dispatch_path=data_dir / "library" / "euro_ingest_dispatch.json",
+        market_status_path=data_dir / "market_status.json",
+        pack_run_path=data_dir / "universe_filing_archive_pack_run.json",
+        tasks_path=data_dir / "engineering_tasks.json",
+    )
+
+
 def build_queue_health_snapshot(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
@@ -339,6 +352,7 @@ def build_queue_health_snapshot(
         "n201_pipeline_health": n201_pipeline_health,
         # N210 — B3 fixed-stake AI/filter judgment observe; not assessment primary.
         "n210_pipeline_health": n210_pipeline_health,
+        "ingest_occupancy": _ingest_occupancy_row(ops_status_path),
     }
 
 

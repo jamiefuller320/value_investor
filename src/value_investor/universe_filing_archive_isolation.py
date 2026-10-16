@@ -120,11 +120,16 @@ def focus_pressure_reasons(
     if zero_body > 0:
         reasons.append(f"focus_zero_body_buy_tier={zero_body}")
 
-    mode = str(dispatch.get("mode") or "").strip()
-    sprint_complete = bool(dispatch.get("ingest_sprint_complete"))
-    if mode == "sprint" and not sprint_complete:
-        # Fat slot still active — archive must not compete for shared runners/sources.
-        reasons.append("focus_fat_slot_sprint_active")
+    cascade = _as_dict(dispatch.get("ingest_cascade"))
+    if "head_needs_fat_slot" in cascade:
+        # Occupancy bit, not the market-status sprint badge or a stale mode.
+        if bool(cascade.get("head_needs_fat_slot")):
+            reasons.append("focus_fat_slot_sprint_active")
+    else:
+        mode = str(dispatch.get("mode") or "").strip()
+        sprint_complete = bool(dispatch.get("ingest_sprint_complete"))
+        if mode == "sprint" and not sprint_complete:
+            reasons.append("focus_fat_slot_sprint_active")
 
     status = market_status or {}
     markets = _as_dict(status.get("markets")) or _as_dict(status.get("by_market"))

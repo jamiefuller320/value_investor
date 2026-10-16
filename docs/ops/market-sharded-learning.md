@@ -88,7 +88,7 @@ Independence answers *how books are kept apart*. **Gates + capacity** answer *wh
 2. The graduated market joins **steady-state maintenance** at FTSE volume on unparked names (`library-ingest-maintenance.yml`).
 3. It is **admitted** to the learning set and should receive **equivalent resource** — same maintenance ingest, screen cadence, paper instrument, and buy-tier rememo as every other admitted market (L321 / L322).
 
-Spare 50%/25% fractions apply only while a market is still *in front* of that threshold, so the head can finish. They are not the long-run treatment.
+While `head_needs_fat_slot` is true the head keeps host priority: each spare's width is its unfilled names, capped by host budget left and time left in the job (filing body, daily price, or memo). A strand with nothing to fetch has width 0. Fixed 50%/25% cuts are not applied, and they are not reapplied once the bit is false. The fat slot is an ingest-head rule for that bit, not a boss over non-ingest strands.
 
 **Straggler soft-park (do not demote the head).** If the fat-slot head briefly hits `sprint_ingest_complete` / maintenance and then a few names resurface as thin/IWB leftovers — or if peer deepen keeps resetting the market-wide 0-improve streak while one IR-exhausted straggler never moves — **soft-park** those leftovers (`awaiting_periodic_report` when fully bodied thin; `unfetchable_iwb` when IWB) so fat can release. Do **not** demote the market from cascade head policy, open a fourth equal sprint stream, or burn disproportionate deepen for limited gain.
 

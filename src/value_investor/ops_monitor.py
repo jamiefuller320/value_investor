@@ -1661,6 +1661,62 @@ def check_universe_filing_archive_pack_bottleneck(
     ]
 
 
+def check_ingest_occupancy_mismatch(
+    *,
+    dispatch_path: Path | None = None,
+    market_status_path: Path | None = None,
+    pack_run_path: Path | None = None,
+    tasks_path: Path | None = None,
+    store_path: Path | None = None,
+    dispatch: dict[str, Any] | None = None,
+    market_status: dict[str, Any] | None = None,
+    pack_run: dict[str, Any] | None = None,
+    tasks: dict[str, Any] | None = None,
+    persist: bool = True,
+) -> list[OpsFinding]:
+    """Observe-only: euro badge says sprint while head_needs_fat_slot is false.
+
+    Always writes ``docs/data/ingest_occupancy.json``. The finding fires only
+    on that badge/bit disagreement. It does not turn sprint back on.
+    """
+    from value_investor.ingest_occupancy import (
+        DEFAULT_OCCUPANCY_PATH,
+        MISMATCH_TITLE,
+        build_ingest_occupancy,
+        occupancy_finding_summary,
+        write_ingest_occupancy,
+    )
+    from value_investor.library_ingest_dispatch import DEFAULT_DISPATCH_PATH
+    from value_investor.market_status import DEFAULT_MARKET_STATUS_PATH
+    from value_investor.universe_filing_archive_status import DEFAULT_PACK_RUN_PATH
+
+    row = build_ingest_occupancy(
+        dispatch=dispatch,
+        market_status=market_status,
+        pack_run=pack_run,
+        tasks=tasks,
+        dispatch_path=dispatch_path or DEFAULT_DISPATCH_PATH,
+        market_status_path=market_status_path or DEFAULT_MARKET_STATUS_PATH,
+        pack_run_path=pack_run_path or DEFAULT_PACK_RUN_PATH,
+        tasks_path=tasks_path or COMMITTED_TASKS_PATH,
+    )
+    if persist:
+        write_ingest_occupancy(
+            row, Path(store_path) if store_path is not None else DEFAULT_OCCUPANCY_PATH
+        )
+    if not row.get("mismatch"):
+        return []
+    return [
+        OpsFinding(
+            severity="warn",
+            category="ingest",
+            title=MISMATCH_TITLE,
+            summary=occupancy_finding_summary(row),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_decision_input_inventory(
     *,
     latest_path: Path = DEFAULT_LATEST_PATH,
@@ -3911,6 +3967,7 @@ def collect_ops_findings(
     findings.extend(check_p1_first_run_pin(latest_path=latest_path))
     findings.extend(check_universe_filing_archive_miss_rate())
     findings.extend(check_universe_filing_archive_pack_bottleneck())
+    findings.extend(check_ingest_occupancy_mismatch())
     findings.extend(check_shard_nav_fx_warp())
     findings.extend(check_combined_tagged_learning())
     findings.extend(check_track_statistics())

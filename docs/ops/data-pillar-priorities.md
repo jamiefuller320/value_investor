@@ -46,7 +46,7 @@ or fills.
 
 ## P2 — Offline ingest cascade
 
-Unchanged: one fat-slot head to `sprint_ingest_complete`; spare auto-advance;
+Unchanged: one ingest head while `head_needs_fat_slot` is true, through `sprint_ingest_complete`; that bit is not a boss over replay, sealed observe, or the shadow judge. Spare auto-advance;
 equal-support after admission; no fourth equal sprint; no shard AI /
 `decision-review --apply` without marks.
 

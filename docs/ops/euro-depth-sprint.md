@@ -92,9 +92,14 @@ current head. Learning resource flips with maintenance graduation (L322):
 weekday epoch-0 / equal-support admit on ``sprint_ingest_complete``; the
 capacity-1 weekly paper slot stays on ``euro_depth`` under N94.
 
-**Scheduler (wired):** while focus still has FTSE-standard filing gaps,
-`ingest_effort_cascade` scales stream 1 to half targets/runtime and stream 2 to
-a quarter. Spare workflows **wait** on a live euro (and stream-1) run, then
+**Scheduler (wired):** while `head_needs_fat_slot` is true the head still has
+priority on the shared filing host. Spare width is `min(unfilled names for that
+strand, host budget left, names that fit in the time left)` — kind is filing
+body, daily price, or memo. A strand with nothing to fetch has width 0. Fixed
+50%/25% cuts are not applied. When the bit is false, spares are not held to
+those fractions. The fat slot is this ingest head only; it is not the boss of
+replay, sealed observe, or the shadow judge. Spare workflows **wait** on a live
+euro (and stream-1) run, then
 spend leftover minutes if the head finished early — leftover only **boosts**
 the spare slot, it never shrinks it. If the assigned stream market has no
 gaps, the scheduler **fills down** the next `market_queue` name that still

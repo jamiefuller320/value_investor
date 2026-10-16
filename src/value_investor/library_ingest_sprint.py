@@ -10,7 +10,10 @@ from typing import Any
 
 from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
-from value_investor.library_ingest_cascade import evaluate_ingest_cascade
+from value_investor.library_ingest_cascade import (
+    evaluate_ingest_cascade,
+    filing_names_unfilled,
+)
 from value_investor.library_ingest_dispatch import (
     ingest_parity_met,
     list_library_ingest_parallel_sprint_markets,
@@ -154,10 +157,17 @@ def run_library_ingest_sprint(
                 if not sprint_ingest_complete(health):
                     needing = list(dict.fromkeys([*needing, mid]))
     leftover_path = library_root / "ingest_cascade_runtime.json"
+    head_open = not sprint_ingest_complete(head_health)
+    unfilled_by_market: dict[str, int] = {}
+    for market_id in needing:
+        spare_health = snapshot_library_buy_tier_filing_health(
+            market_id, library_root=library_root, policy=policy
+        )
+        unfilled_by_market[market_id] = filing_names_unfilled(spare_health)
     decision = evaluate_scheduler(
         parallel_stream,
         policy=policy,
-        head_at_parity=sprint_ingest_complete(head_health),
+        head_at_parity=not head_open,
         needing_markets=needing,
         requested_targets=max_targets,
         requested_runtime=max_runtime_seconds,
@@ -166,6 +176,8 @@ def run_library_ingest_sprint(
         phase2_ready=phase2_ready,
         leftover_state=load_runtime_state(leftover_path),
         now=when,
+        head_unfilled_names=filing_names_unfilled(head_health) if head_open else 0,
+        unfilled_by_market=unfilled_by_market,
     )
     max_targets = decision.max_targets
     max_runtime_seconds = decision.max_runtime_seconds
@@ -181,14 +193,22 @@ def run_library_ingest_sprint(
         max_runtime_seconds=max_runtime_seconds,
     )
     if decision.action != "run":
-        outcome.skipped.append(
-            {
-                "reason": decision.code or decision.reason,
-                "detail": decision.reason,
-                "action": decision.action,
-                "head_market": head_id,
-            }
-        )
+        named = [str(mid) for mid in (decision.markets or []) if str(mid).strip()]
+        base = {
+            "reason": decision.code or decision.reason,
+            "detail": decision.reason,
+            "action": decision.action,
+            "head_market": head_id,
+        }
+        # Width 0 still names the markets that had nothing to fetch.
+        if decision.code == "empty_strand" and named:
+            for mid in named:
+                outcome.skipped.append({"market_id": mid, **base})
+        else:
+            row = dict(base)
+            if len(named) == 1:
+                row["market_id"] = named[0]
+            outcome.skipped.append(row)
         return outcome
     market_list = decision.markets
     outcome.markets = market_list

@@ -1,7 +1,10 @@
 """Runtime P2 ingest scheduler: wait on the head, spend leftover, fill down.
 
-Complements the static cascade fractions. Spare streams pass live workflow
-busyness in from GHA; leftover minutes are persisted after the head run.
+Spare width comes from ``dynamic_ingest_width`` (unfilled names, host budget
+left, time left). While ``head_needs_fat_slot`` is true the head's unfilled
+names are reserved from the host budget first. Leftover minutes still boost a
+spare clock that is shorter than the head's unused time. Spare streams pass
+live workflow busyness in from GHA.
 """
 
 from __future__ import annotations
@@ -13,6 +16,7 @@ from typing import Any
 
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
 from value_investor.library_ingest_cascade import (
+    KIND_FILING_BODY,
     IngestCascadeConfig,
     evaluate_ingest_cascade,
     head_market_id,
@@ -226,6 +230,11 @@ def evaluate_scheduler(
     leftover_state: dict[str, Any] | None = None,
     now: datetime | None = None,
     waited_seconds: float = 0.0,
+    unfilled_names: int | None = None,
+    head_unfilled_names: int | None = None,
+    unfilled_by_market: dict[str, int] | None = None,
+    kind: str = KIND_FILING_BODY,
+    host_budget_left: int | None = None,
 ) -> IngestSchedulerDecision:
     """Decide whether a spare stream should wait, skip, or run — and on what budget."""
     when = now or datetime.now(UTC)
@@ -237,6 +246,8 @@ def evaluate_scheduler(
         phase2_ready=phase2_ready,
     )
     markets = fill_down_markets(stream, policy=policy, needing=needing_markets)
+    if unfilled_by_market is not None:
+        unfilled_names = sum(int(unfilled_by_market.get(name, 0) or 0) for name in markets)
     if not config.enabled or not cascade.head_needs_fat_slot:
         targets, runtime, mode = scale_spare_budget(
             stream,
@@ -244,8 +255,12 @@ def evaluate_scheduler(
             requested_runtime,
             config=config,
             head_needs_fat=False,
+            unfilled=unfilled_names,
+            head_unfilled=head_unfilled_names,
+            kind=kind,
+            host_budget_left=host_budget_left,
         )
-        action = "run" if markets else "skip"
+        action = "run" if markets and targets > 0 else "skip"
         if not cascade.enabled:
             code = "cascade_off"
             reason = (
@@ -253,6 +268,9 @@ def evaluate_scheduler(
                 if action == "skip"
                 else "Cascade off — peer budgets."
             )
+        elif action == "skip" and unfilled_names is not None and int(unfilled_names) <= 0:
+            code = "empty_strand"
+            reason = "Strand has nothing to fetch this run — width 0."
         elif action == "skip":
             code = "no_gaps"
             reason = "No markets with filing gaps."
@@ -302,7 +320,23 @@ def evaluate_scheduler(
             requested_runtime,
             config=config,
             head_needs_fat=True,
+            unfilled=unfilled_names,
+            head_unfilled=head_unfilled_names,
+            kind=kind,
+            host_budget_left=host_budget_left,
         )
+        if spare_targets <= 0:
+            return IngestSchedulerDecision(
+                action="skip",
+                stream=stream,
+                markets=markets,
+                max_targets=0,
+                max_runtime_seconds=0.0,
+                reason="Strand has nothing to fetch this run — width 0.",
+                code="empty_strand",
+                cascade=cascade.to_dict(),
+                budget_mode="empty",
+            )
         # Leftover must not shrink the spare slot; it only boosts when larger.
         if leftover >= config.min_leftover_seconds and leftover > spare_runtime:
             runtime = min(float(requested_runtime), leftover)
@@ -326,7 +360,7 @@ def evaluate_scheduler(
                 cascade=cascade.to_dict(),
             )
 
-    # Static fractions. Hour skip is only a fallback when we could not observe
+    # Dynamic width. Hour skip is only a fallback when we could not observe
     # whether the head workflow is running (local CLI / no GHA wait).
     if head_in_progress is None and should_skip_spare_stream(
         stream,
@@ -340,6 +374,10 @@ def evaluate_scheduler(
             requested_runtime,
             config=config,
             head_needs_fat=True,
+            unfilled=unfilled_names,
+            head_unfilled=head_unfilled_names,
+            kind=kind,
+            host_budget_left=host_budget_left,
         )
         return IngestSchedulerDecision(
             action="skip",
@@ -358,7 +396,23 @@ def evaluate_scheduler(
         requested_runtime,
         config=config,
         head_needs_fat=True,
+        unfilled=unfilled_names,
+        head_unfilled=head_unfilled_names,
+        kind=kind,
+        host_budget_left=host_budget_left,
     )
+    if targets <= 0:
+        return IngestSchedulerDecision(
+            action="skip",
+            stream=stream,
+            markets=markets,
+            max_targets=0,
+            max_runtime_seconds=0.0,
+            budget_mode="empty",
+            reason="Strand has nothing to fetch this run — width 0.",
+            code="empty_strand",
+            cascade=cascade.to_dict(),
+        )
     action = "run" if markets else "skip"
     return IngestSchedulerDecision(
         action=action,
@@ -368,11 +422,11 @@ def evaluate_scheduler(
         max_runtime_seconds=runtime,
         budget_mode=mode,
         reason=(
-            f"No fresh leftover; spare fraction ({mode})."
+            "Spare width is min(unfilled, host budget left, time left)."
             if action == "run"
             else "No markets with filing gaps."
         ),
-        code="spare_fraction" if action == "run" else "no_gaps",
+        code="dynamic_width" if action == "run" else "no_gaps",
         cascade=cascade.to_dict(),
     )
 
