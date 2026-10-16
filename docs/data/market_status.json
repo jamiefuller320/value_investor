@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-16T15:17:21.831999+00:00",
+  "generated_at": "2026-10-16T16:46:34.347721+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -68,7 +68,7 @@
       "us_adr_asia"
     ],
     "spare_sprint": {},
-    "equal_support_generated_at": "2026-10-16T14:16:41.121841+00:00"
+    "equal_support_generated_at": "2026-10-16T15:16:38.846505+00:00"
   },
   "markets": [
     {
@@ -744,20 +744,18 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 3,
-        "targets": 1,
-        "improved": 1,
-        "improved_tickers": [
-          "SHELL.AS"
-        ],
+        "run_count": 2,
+        "targets": 0,
+        "improved": 0,
+        "improved_tickers": [],
         "last_run_at": "2026-10-16T15:13:08.508137+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 9,
-          "indexed_without_body": 15,
+          "thin": 10,
+          "indexed_without_body": 16,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -770,8 +768,8 @@
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 3,
+          "thin": -1,
+          "indexed_without_body": 2,
           "filing_gaps": 0
         },
         "remaining": {
@@ -783,7 +781,13 @@
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [],
+        "admission_warnings": [
+          {
+            "id": "zero_improve_stall",
+            "severity": "high",
+            "summary": "Last 2 days improved nobody while filing gaps remain"
+          }
+        ],
         "sprint_entered_at": null
       },
       "held_vs_market": {
