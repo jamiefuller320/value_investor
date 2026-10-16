@@ -382,3 +382,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** There is no `docs/data/research/BPT.L` folder. The displayed free cash flow is 446,562,496. The screen’s operating cash flow is 135,900,000. The free-cash-flow figure is stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/CCH.L` folder. The displayed free cash flow is 1,593,175,040. The screen’s operating cash flow is 1,513,500,000. That figure is also stored as `filing_aligned`, and there is no filing.
 
 **What to change.** Do not present 446,562,496 or 1,593,175,040 as free cash flow while each is larger than its screen operating cash flow and no filing exists. Leave both pairs unchecked. The notes do not give a cause.
+
+## 33. A London history print can be a dollar quote
+
+**What is wrong.** Section 2 treats London history prices as pence. The pound-cap fix labels Compass a USD quote. The handover does not say the history print itself can be a dollar quote rather than pence.
+
+**Where.** `CPG.L`. The 11 Oct stored price is 31.2. The batch note writes that path as pence. Section 6 says Compass (`CPG.L`) is a USD quote, in the share-count paragraph.
+
+**What to change.** Name the unit on the Compass history print before dividing 31.2 by 100. Do not invent a conversion between that print and pounds.
