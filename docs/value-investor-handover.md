@@ -17,6 +17,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-7.md` (FTSE ranks 61–70)
 - `docs/ftse350-batch-9.md` (FTSE ranks 81–90)
 - `docs/ftse350-batch-10.md` (FTSE ranks 91–100)
+- `docs/ftse350-batch-11.md` (FTSE ranks 101–110)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -142,7 +143,7 @@ HSBC and AstraZeneca did not need an HKD or SEK rate. Their London prices and th
 
 A ticker can also be missing from runs inside that 25-run archive. The span above is the archive’s dates, not a price path for every name.
 
-**Where.** `YNGA.L` is in 1 of the 25 runs: 996.0 pence on 11 Oct 2026 only. There is no 2 Aug price and no other print. `HFD.L` is absent from the 2 Aug run and present in the other 24. `ASC.L` is in 3 of the 25 runs: 498.0 pence on 4 Oct, 456.0 on 7 Oct, and 466.0 on 11 Oct. There is no 2 Aug price.
+**Where.** `YNGA.L` is in 1 of the 25 runs: 996.0 pence on 11 Oct 2026 only. There is no 2 Aug price and no other print. `HFD.L` is absent from the 2 Aug run and present in the other 24. `ASC.L` is in 3 of the 25 runs: 498.0 pence on 4 Oct, 456.0 on 7 Oct, and 466.0 on 11 Oct. There is no 2 Aug price. `AMRQ.L` is in 1 of the 25 runs: 117.0 pence on 11 Oct 2026 only.
 
 **What to change.** Do not treat the 2 Aug–11 Oct span as a stored path for a name that is missing from runs inside it. Record which of the 25 runs contain the ticker before using a 2 Aug print, a high, or a low.
 
@@ -337,3 +338,19 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** `docs/data/research/POLN.L`. Filing free cash flow is 46,660,000. The screen TTM is 35,976,876. The screen stores `fcf_divergence_flagged` true and `filing_screen_mismatch` false. `docs/data/research/BOWL.L`. Filing free cash flow is 37,017,000. The screen TTM is 43,811,376. The screen stores `fcf_divergence_flagged` true and `filing_screen_mismatch` false.
 
 **What to change.** Do not store `filing_screen_mismatch` false while `fcf_divergence_flagged` is true and the screen TTM is not the filing line. On these two names the object flag should agree with the report flag.
+
+## 28. An operating name can have a price and still no pound cap
+
+**What is wrong.** Six operating names have an 11 Oct 2026 London price and no ordinary-share count, so the pound cap is missing. The roster reason still says “no price, share count, or convertible cap”. Section 6’s list of 100 names with no pound cap is the trust names that have no 11 Oct price. It does not cover an operating name whose price is stored and whose share count is missing.
+
+**Where.** `3IN.L` 388.0 pence, `AAF.L` 290.2 pence, `AAL.L` 4,170.0 pence, `ADM.L` 3,624.0 pence, `AJB.L` 592.5 pence, and `AMRQ.L` 117.0 pence. Ordinary shares are missing on each. The roster cap is missing on each.
+
+**What to change.** Do not file these six with the trust names that have no price. The 11 Oct price is stored. The missing piece is the ordinary-share count. Until that count is stored, leave the pound cap missing rather than citing “no price”.
+
+## 29. AJ Bell has operating cash flow and no free-cash-flow figure
+
+**What is wrong.** `AJB.L` stores an operating-cash-flow figure and a free-cash-flow object that has no source, no canonical figure, and no screen TTM. Key metrics omit free cash flow. Both verification flags are false.
+
+**Where.** There is no `docs/data/research/AJB.L` folder. The screen’s operating cash flow is 86,485,000. The free-cash-flow object has source `none`. The canonical figure is missing. The screen TTM is missing. Free cash flow is missing from the key metrics. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false.
+
+**What to change.** Do not leave both verification flags false when the free-cash-flow object has source `none`, no canonical figure, and no screen TTM. Do not omit free cash flow from the key metrics while operating cash flow of 86,485,000 is stored, and do not present that operating-cash-flow figure as free cash flow.
