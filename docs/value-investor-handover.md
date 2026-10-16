@@ -391,3 +391,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** `CPG.L`. The 11 Oct stored price is 31.2. The batch note writes that path as pence. Section 6 says Compass (`CPG.L`) is a USD quote, in the share-count paragraph.
 
 **What to change.** Name the unit on the Compass history print before dividing 31.2 by 100. Do not invent a conversion between that print and pounds.
+
+## 34. An unchecked screen P/E can equal the London price in pence
+
+**What is wrong.** When there is no statement, the screen P/E is unchecked, and on these three names that P/E equals the 11 Oct London price in pence.
+
+**Where.** `AMRQ.L`: screen P/E 117.0 and price 117.0 pence. There is no statement. `BHMG.L`: screen P/E 419.0 and price 419.0 pence. There is no statement. `CSN.L`: screen P/E 322.0 and price 322.0 pence. There is no statement.
+
+**What to change.** Do not treat an unchecked screen P/E that equals the London price in pence as a multiple. Leave it unchecked until a statement EPS exists.
