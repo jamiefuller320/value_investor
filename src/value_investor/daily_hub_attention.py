@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -66,6 +67,13 @@ ENG_PUSH_STATUSES = frozenset({"open", "parked"})
 ENG_STATUS_OPEN_STATUSES = frozenset({"open", "parked", "pr_open", "in_progress"})
 PARKED_ENG_FINDING_TITLE = "Parked engineering tasks need manual review"
 ORPHANED_PR_OPEN_FINDING_PREFIX = "Orphaned pr_open engineering tasks"
+# B3 lock stamp (see b3_epoch.POLICY_ID). Present ⇒ continuity primary is
+# evidentiary-demoted and anti-C (no mid-flight enlarge) is already decided.
+B3_DEMOTION_POLICY_ID = "evidentiary_demotion_ai_judgment_fair_v1"
+B3_DEMOTED_TRACK = "ai_judgment_fair"
+SCOREBOARD_TRAIL_FINDING_TITLE = "Primary book trails its control on total return"
+SATURATED_KNOBS_FINDING_TITLE = "Decision-review knobs saturated at bounds"
+_SATURATED_TRACK_RE = re.compile(r"(?:^|;\s*)([A-Za-z][A-Za-z0-9_]*):\s")
 
 # Ritual market-warn flag ids excluded from hub (D2) — stay ops-email / status.
 RITUAL_MARKET_WARN_FLAG_IDS = frozenset({"health_warn", "health_warn_rollup"})
@@ -100,6 +108,15 @@ def eng_task_is_terminal(status: Any) -> bool:
     return str(status or "").strip().lower() in ENG_TERMINAL_STATUSES
 
 
+def eng_row_is_done(row: dict[str, Any] | None) -> bool:
+    """Terminal status or a merge stamp — not an open task."""
+    if not isinstance(row, dict):
+        return False
+    if eng_task_is_terminal(row.get("status")):
+        return True
+    return bool(row.get("merged_at"))
+
+
 def parked_eng_still_actionable(eng: dict[str, Any] | None) -> bool:
     """True when live eng queue still has attention-parked work or a clearing pause.
 
@@ -130,16 +147,188 @@ def orphaned_pr_open_still_actionable(eng: dict[str, Any] | None) -> bool:
     return any(str(t.get("status") or "") == "pr_open" for t in _eng_tasks(eng))
 
 
+def load_b3_push_disposition(data_dir: Path | None) -> dict[str, Any]:
+    """Committed B3 stamps that already dispose the continuity-book Push asks.
+
+    The observe warns may stay true. These stamps mean the owner decision
+    (demote evidentiary primary; do not enlarge mid-flight; matched-30 epoch
+    already spawned) is locked, so the warns are not a new Push action.
+    """
+    root = Path(data_dir or DEFAULT_DATA_DIR)
+    model = _safe_read(root / "paper_automation" / "assessment_model.json") or {}
+    epoch = _safe_read(root / "b3_scoreboard_epoch_registration.json") or {}
+    policies = model.get("policy_changes") if isinstance(model.get("policy_changes"), list) else []
+    policy_ids = {str(row.get("id") or "") for row in policies if isinstance(row, dict)}
+    epoch_policy = str(epoch.get("policy_change_id") or "")
+    policy_present = B3_DEMOTION_POLICY_ID in policy_ids or epoch_policy == B3_DEMOTION_POLICY_ID
+    demoted = str(epoch.get("demoted_evidentiary_primary") or B3_DEMOTED_TRACK)
+    primary = str(model.get("primary_track") or "")
+    if not primary and policy_present:
+        primary = demoted
+    explicit_primary = str(model.get("primary_track") or "")
+    continuity_primary_demoted = bool(
+        policy_present
+        and demoted == B3_DEMOTED_TRACK
+        and primary == B3_DEMOTED_TRACK
+        and (not explicit_primary or explicit_primary == B3_DEMOTED_TRACK)
+    )
+    return {
+        "policy_present": policy_present,
+        "continuity_primary_demoted": continuity_primary_demoted,
+        "anti_c": policy_present,
+        "demoted_track": B3_DEMOTED_TRACK if policy_present else "",
+        "primary_track": primary,
+    }
+
+
+def saturated_track_ids_from_finding(finding: dict[str, Any]) -> list[str] | None:
+    """Track ids named on a saturated-knobs finding, or None if unattributed.
+
+    Empty attribution does not suppress: another book's clamp may still be
+    an open judgment.
+    """
+    explicit = finding.get("saturated_tracks")
+    if isinstance(explicit, list):
+        ids = [str(track).strip() for track in explicit if str(track).strip()]
+        return ids or None
+    summary = str(finding.get("summary") or "").strip()
+    if not summary:
+        return None
+    axis = summary.split("—", 1)[1] if "—" in summary else summary
+    if ". Human review" in axis:
+        axis = axis.split(". Human review", 1)[0]
+    ids = _SATURATED_TRACK_RE.findall(axis.strip())
+    return ids or None
+
+
+def b3_push_block_reason(
+    title: str,
+    finding: dict[str, Any],
+    disposition: dict[str, Any] | None,
+) -> str | None:
+    """Why a still-true observe warn is not a Push / open-task card.
+
+    None means the finding stays actionable. Does not delete the warn.
+    """
+    if not disposition or not disposition.get("policy_present"):
+        return None
+    if not isinstance(finding, dict):
+        return None
+    title_l = str(title or finding.get("title") or "").strip()
+    trail = SCOREBOARD_TRAIL_FINDING_TITLE
+    saturated = SATURATED_KNOBS_FINDING_TITLE
+    if title_l == trail or trail.lower() in title_l.lower():
+        if disposition.get("continuity_primary_demoted"):
+            return "b3_evidentiary_demotion"
+        return None
+    if title_l == saturated or saturated.lower() in title_l.lower():
+        if not disposition.get("anti_c"):
+            return None
+        tracks = saturated_track_ids_from_finding(finding)
+        demoted = str(disposition.get("demoted_track") or "")
+        if tracks and demoted and set(tracks) <= {demoted}:
+            return "b3_anti_c_no_enlarge"
+        return None
+    return None
+
+
+def _saturation_clauses(finding: dict[str, Any]) -> dict[str, str]:
+    summary = str(finding.get("summary") or "").strip()
+    axis = summary.split("—", 1)[1] if "—" in summary else summary
+    if ". Human review" in axis:
+        axis = axis.split(". Human review", 1)[0]
+    clauses: dict[str, str] = {}
+    for part in axis.split(";"):
+        piece = part.strip().strip(".")
+        matched = re.match(r"([A-Za-z][A-Za-z0-9_]*):\s*(.+)", piece)
+        if matched:
+            clauses[matched.group(1)] = matched.group(2).strip()
+    return clauses
+
+
+def b3_partial_gap(
+    title: str,
+    finding: dict[str, Any],
+    disposition: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Outstanding half of a B3-touched warn, if any.
+
+    Full disposal returns None here (the block reason covers it). A mixed
+    saturation list keeps the books that are not the demoted continuity track.
+    The trail warn's outstanding half is later: do not crown a new primary.
+    """
+    if not disposition or not disposition.get("policy_present") or not isinstance(finding, dict):
+        return None
+    title_l = str(title or finding.get("title") or "").strip()
+    demoted = str(disposition.get("demoted_track") or "")
+    if (
+        title_l == SATURATED_KNOBS_FINDING_TITLE
+        or SATURATED_KNOBS_FINDING_TITLE.lower() in title_l.lower()
+    ):
+        if not disposition.get("anti_c") or not demoted:
+            return None
+        tracks = saturated_track_ids_from_finding(finding) or []
+        if demoted not in tracks:
+            return None
+        open_tracks = [track for track in tracks if track != demoted]
+        if not open_tracks:
+            return None
+        return {
+            "timing": "now",
+            "open_tracks": open_tracks,
+            "done_tracks": [demoted],
+            "clauses": _saturation_clauses(finding),
+        }
+    trail = SCOREBOARD_TRAIL_FINDING_TITLE
+    if title_l == trail or trail.lower() in title_l.lower():
+        if not disposition.get("continuity_primary_demoted"):
+            return None
+        return {
+            "timing": "later",
+            "open_tracks": [],
+            "done_tracks": [demoted or B3_DEMOTED_TRACK],
+            "clauses": {},
+        }
+    return None
+
+
+LATER_CROWN_ID = "later:b3-crown-after-volume-gates"
+
+
+def later_crown_gap_card() -> dict[str, Any]:
+    """One later chip: the unfinished B3 half. Not a Push card."""
+    return {
+        "id": LATER_CROWN_ID,
+        "lane": "later",
+        "timing": "later",
+        "title": "Crown assessment primary only after shadow volume gates",
+        "gap": (
+            "Outstanding: N210 fair-cost episode % and the matched-30 pair stay "
+            "shadow until their volume gates. Do not crown either from the continuity book."
+        ),
+        "done": (
+            "B3 already demoted ai_judgment_fair as evidentiary primary and spawned "
+            "those shadows. The total-return trail is not a new judgment."
+        ),
+        "not_push": True,
+        "checklist_task_id": "sunday-assessment-scoreboard",
+        "href": "docs/ops/b3-scoreboard-epoch.md",
+    }
+
+
 def push_finding_still_actionable(
     title: str,
     finding: dict[str, Any],
     *,
     eng: dict[str, Any] | None = None,
+    disposition: dict[str, Any] | None = None,
 ) -> bool:
     """Drop Push/Status rows when the mapped finding is healed or eng gate is quiet.
 
     Prefer live eng status over stale ``ops_status.json`` rows so merged /
     cancelled parks (and orphaned pr_open after merge) do not linger as theater.
+    B3 demotion / anti-C stamps likewise keep the observe warn but drop the
+    Push card: the disposition is already locked.
     """
     if not isinstance(finding, dict):
         return False
@@ -153,7 +342,22 @@ def push_finding_still_actionable(
         or ORPHANED_PR_OPEN_FINDING_PREFIX.lower() in title_l.lower()
     ):
         return orphaned_pr_open_still_actionable(eng)
+    if b3_push_block_reason(title_l, finding, disposition):
+        return False
     return True
+
+
+def _non_actionable_observe(
+    finding: dict[str, Any],
+    *,
+    reason: str,
+) -> dict[str, str]:
+    return {
+        "title": str(finding.get("title") or ""),
+        "severity": str(finding.get("severity") or ""),
+        "reason": reason,
+        "label": "non_actionable_not_push",
+    }
 
 
 def filter_actionable_market_warn_tasks(
@@ -190,18 +394,10 @@ def build_daily_status_report(
     relevance = _safe_read(data_dir / "daily_hub_relevance.json") or {}
     focus = _safe_read(data_dir / "daily_focus.json") or {}
     digest = _safe_read(data_dir / POST_SELL_CUE_DIGEST_FILENAME)
+    disposition = load_b3_push_disposition(data_dir)
 
     findings = [f for f in (ops.get("findings") or []) if isinstance(f, dict)]
-    warn_fail = [
-        {
-            "severity": f.get("severity"),
-            "title": f.get("title"),
-            "auto_fixable": f.get("auto_fixable"),
-            "category": f.get("category"),
-        }
-        for f in findings
-        if str(f.get("severity") or "") in {"warn", "fail", "info"}
-    ]
+    warn_fail = [f for f in findings if str(f.get("severity") or "") in {"warn", "fail", "info"}]
     # Prefer warn/fail first in the strip; keep a few info that are action-mapped.
     warn_fail_sorted = sorted(
         warn_fail,
@@ -215,18 +411,26 @@ def build_daily_status_report(
             "title": t.get("title"),
         }
         for t in _eng_tasks(eng)
-        if str(t.get("status") or "") in ENG_STATUS_OPEN_STATUSES
-        and not eng_task_is_terminal(t.get("status"))
+        if str(t.get("status") or "") in ENG_STATUS_OPEN_STATUSES and not eng_row_is_done(t)
     ]
-    # Status strip: drop eng-healable ops rows when live queue already quiet.
+    # Status strip: drop healed eng rows and B3-disposed observes (labeled, not deleted).
+    actionable_findings: list[dict[str, Any]] = []
+    non_actionable_observes: list[dict[str, str]] = []
+    for row in warn_fail_sorted:
+        reason = b3_push_block_reason(str(row.get("title") or ""), row, disposition)
+        if reason:
+            non_actionable_observes.append(_non_actionable_observe(row, reason=reason))
+            continue
+        if push_finding_still_actionable(str(row.get("title") or ""), row, eng=eng):
+            actionable_findings.append(row)
     warn_fail_sorted = [
-        row
-        for row in warn_fail_sorted
-        if push_finding_still_actionable(
-            str(row.get("title") or ""),
-            row,
-            eng=eng,
-        )
+        {
+            "severity": row.get("severity"),
+            "title": row.get("title"),
+            "auto_fixable": row.get("auto_fixable"),
+            "category": row.get("category"),
+        }
+        for row in actionable_findings
     ]
     queue_health = (
         automation.get("queue_health") if isinstance(automation.get("queue_health"), dict) else {}
@@ -251,6 +455,28 @@ def build_daily_status_report(
             ),
             "headline": digest.get("headline") or digest.get("summary") or "",
         }
+
+    rows = _status_rows(
+        ops_overall=ops.get("overall"),
+        findings=warn_fail_sorted,
+        scoreboard_headline=str(scoreboard.get("headline") or ""),
+        eng_open=eng_open,
+        queue_headline=str(queue_health.get("headline") or ""),
+        last_run=last_run,
+        met_count=len(met),
+        focus_relevant=focus_relevant,
+        digest_row=digest_row,
+    )
+    if non_actionable_observes:
+        rows.append(
+            {
+                "id": "non_actionable_observes",
+                "label": "Observe (not Push)",
+                "value": "; ".join(
+                    f"{item['title']} ({item['reason']})" for item in non_actionable_observes
+                ),
+            }
+        )
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -279,17 +505,8 @@ def build_daily_status_report(
         },
         "focus_relevant": focus_relevant,
         "post_sell_cue_digest": digest_row,
-        "rows": _status_rows(
-            ops_overall=ops.get("overall"),
-            findings=warn_fail_sorted,
-            scoreboard_headline=str(scoreboard.get("headline") or ""),
-            eng_open=eng_open,
-            queue_headline=str(queue_health.get("headline") or ""),
-            last_run=last_run,
-            met_count=len(met),
-            focus_relevant=focus_relevant,
-            digest_row=digest_row,
-        ),
+        "rows": rows,
+        "non_actionable_observes": non_actionable_observes,
     }
 
 
@@ -385,10 +602,13 @@ def build_daily_push_suggestions(
     eng = _safe_read(data_dir / "engineering_tasks.json") or {}
     defer = _safe_read(data_dir / "deferred_trigger_check.json") or {}
     digest = _safe_read(data_dir / POST_SELL_CUE_DIGEST_FILENAME)
+    disposition = load_b3_push_disposition(data_dir)
 
     findings = [f for f in (ops.get("findings") or []) if isinstance(f, dict)]
     by_title = {str(f.get("title") or ""): f for f in findings}
     suggestions: list[dict[str, Any]] = []
+    later_suggestions: list[dict[str, Any]] = []
+    non_actionable_observes: list[dict[str, str]] = []
 
     # Priority 0 (when present): sibling post-sell cue digest — do not invent it.
     if digest:
@@ -429,10 +649,51 @@ def build_daily_push_suggestions(
         sev = str(finding.get("severity") or "")
         if sev not in {"warn", "fail", "info"}:
             continue
-        if not push_finding_still_actionable(title, finding, eng=eng):
+        block_reason = b3_push_block_reason(title, finding, disposition)
+        partial = b3_partial_gap(title, finding, disposition)
+        if block_reason:
+            non_actionable_observes.append(_non_actionable_observe(finding, reason=block_reason))
+            if partial and partial.get("timing") == "later":
+                later_suggestions.append(later_crown_gap_card())
+            continue
+        if not push_finding_still_actionable(title, finding, eng=eng, disposition=disposition):
             continue
         pid = f"push:{_stable_id(title, checklist_id)}"
         if pid in closed_ids:
+            continue
+        if partial and partial.get("timing") == "now":
+            open_tracks = list(partial.get("open_tracks") or [])
+            clauses = partial.get("clauses") if isinstance(partial.get("clauses"), dict) else {}
+            outstanding = "; ".join(
+                f"{track}: {clauses.get(track) or 'saturated'}" for track in open_tracks
+            )
+            done_tracks = ", ".join(str(track) for track in (partial.get("done_tracks") or []))
+            suggestions.append(
+                {
+                    "id": f"{pid}:gap",
+                    "lane": "push",
+                    "timing": "now",
+                    "priority": 1 if sev in {"warn", "fail"} else 2,
+                    "title": "Judge saturated knobs still open on " + ", ".join(open_tracks),
+                    "why_now": (
+                        f"Outstanding ({sev}): {outstanding}. "
+                        f"Completed half omitted: {done_tracks} already locked (anti-C, no enlarge)."
+                    ),
+                    "gap_tracks": open_tracks,
+                    "done_tracks": list(partial.get("done_tracks") or []),
+                    "cite": {
+                        "kind": "ops_finding",
+                        "ref": finding.get("title"),
+                        "severity": sev,
+                        "category": finding.get("category"),
+                        "gap_tracks": open_tracks,
+                    },
+                    "checklist_task_id": checklist_id,
+                    "href": "#automation/human",
+                    "doc_path": href,
+                    "leverage": "Human judgment on the outstanding book only — not a new strand",
+                }
+            )
             continue
         suggestions.append(
             {
@@ -458,7 +719,7 @@ def build_daily_push_suggestions(
     # Terminal statuses (merged/cancelled/completed/failed) never enter Push.
     for t in _eng_tasks(eng):
         status = str(t.get("status") or "")
-        if eng_task_is_terminal(status) or status not in ENG_PUSH_STATUSES:
+        if eng_row_is_done(t) or status not in ENG_PUSH_STATUSES:
             continue
         tid = str(t.get("id") or "")
         if not tid:
@@ -517,7 +778,7 @@ def build_daily_push_suggestions(
             seen_checklist.add(cid)
         deduped.append(s)
     capped = deduped[: max(0, int(cap))]
-    mapped = _mapped_warns_open(findings, eng=eng)
+    mapped = _mapped_warns_open(findings, eng=eng, disposition=disposition)
     return {
         "schema_version": SCHEMA_VERSION,
         "lane": "push",
@@ -530,6 +791,8 @@ def build_daily_push_suggestions(
         "suggestions": capped,
         "mapped_warns_open": mapped,
         "push_empty_while_mapped_warns": bool(not capped and mapped),
+        "non_actionable_observes": non_actionable_observes,
+        "later_suggestions": later_suggestions,
     }
 
 
@@ -537,6 +800,7 @@ def _mapped_warns_open(
     findings: list[dict[str, Any]],
     *,
     eng: dict[str, Any] | None = None,
+    disposition: dict[str, Any] | None = None,
 ) -> list[str]:
     titles = []
     for title, *_rest in _PUSH_FINDING_MAP:
@@ -544,7 +808,7 @@ def _mapped_warns_open(
             ft = str(f.get("title") or "")
             if ft == title or title.lower() in ft.lower():
                 if str(f.get("severity") or "") in {"warn", "fail"}:
-                    if push_finding_still_actionable(title, f, eng=eng):
+                    if push_finding_still_actionable(title, f, eng=eng, disposition=disposition):
                         titles.append(ft)
                 break
     return titles
@@ -669,19 +933,204 @@ def check_daily_push_empty_while_mapped_warns(
     ]
 
 
+def _sha_values(row: dict[str, Any]) -> list[str]:
+    found: list[str] = []
+    for key in ("merge_sha", "head_sha", "merge_commit_sha"):
+        value = str(row.get(key) or "").strip()
+        if value:
+            found.append(value)
+    evidence = row.get("evidence") if isinstance(row.get("evidence"), dict) else {}
+    for key in ("merge_sha", "head_sha", "merge_commit_sha"):
+        value = str(evidence.get(key) or "").strip()
+        if value:
+            found.append(value)
+    return found
+
+
+def load_completion_index(data_dir: Path | None = None) -> dict[str, Any]:
+    """Live eng terminals, merged PR numbers, and merged fix SHAs.
+
+    Surfaces that list work consult this instead of stale finding prose alone.
+    """
+    root = Path(data_dir or DEFAULT_DATA_DIR)
+    eng = _safe_read(root / "engineering_tasks.json") or {}
+    disposition = load_b3_push_disposition(root)
+    terminal_ids: set[str] = set()
+    known_ids: set[str] = set()
+    merged_prs: set[int] = set()
+    merged_shas: set[str] = set()
+    for row in _eng_tasks(eng):
+        tid = str(row.get("id") or "").strip()
+        if tid:
+            known_ids.add(tid)
+        if not eng_row_is_done(row):
+            continue
+        if tid:
+            terminal_ids.add(tid)
+        raw_pr = row.get("pr_number")
+        try:
+            if raw_pr is not None and str(raw_pr).strip():
+                merged_prs.add(int(raw_pr))
+        except (TypeError, ValueError):
+            pass
+        merged_shas.update(_sha_values(row))
+    occasions = _safe_read(root / "pr_fix_occasions.json") or {}
+    for row in occasions.get("occasions") or []:
+        if not isinstance(row, dict):
+            continue
+        try:
+            number = int(row.get("pr_number")) if row.get("pr_number") is not None else None
+        except (TypeError, ValueError):
+            number = None
+        sha = str(row.get("head_sha") or "").strip()
+        if number is not None and number in merged_prs and sha:
+            merged_shas.add(sha)
+    return {
+        "terminal_eng_ids": terminal_ids,
+        "known_eng_ids": known_ids,
+        "merged_pr_numbers": merged_prs,
+        "merged_shas": merged_shas,
+        "disposition": disposition,
+    }
+
+
+def _structured_completion_refs(task: dict[str, Any]) -> dict[str, set[Any]]:
+    eng_ids: set[str] = set()
+    pr_numbers: set[int] = set()
+    shas: set[str] = set()
+    explicit_eng: set[str] = set()
+    task_ref = str(task.get("task_ref") or "")
+    if task_ref.startswith("push:eng:"):
+        explicit_eng.add(task_ref.split("push:eng:", 1)[1])
+    cite = task.get("cite") if isinstance(task.get("cite"), dict) else {}
+    push = task.get("push") if isinstance(task.get("push"), dict) else {}
+    push_cite = push.get("cite") if isinstance(push.get("cite"), dict) else {}
+    for blob in (cite, push_cite):
+        if str(blob.get("kind") or "") == "engineering_task":
+            ref = str(blob.get("ref") or "").strip()
+            if ref:
+                explicit_eng.add(ref)
+        raw_pr = blob.get("pr_number")
+        try:
+            if raw_pr is not None and str(raw_pr).strip():
+                pr_numbers.add(int(raw_pr))
+        except (TypeError, ValueError):
+            pass
+        sha = str(blob.get("sha") or blob.get("merge_sha") or "").strip()
+        if sha:
+            shas.add(sha)
+    for key in ("eng_id", "pr_number", "merge_sha"):
+        if key == "eng_id" and task.get(key):
+            explicit_eng.add(str(task.get(key)).strip())
+        if key == "pr_number" and task.get(key) is not None:
+            try:
+                pr_numbers.add(int(task.get(key)))
+            except (TypeError, ValueError):
+                pass
+        if key == "merge_sha" and task.get(key):
+            shas.add(str(task.get(key)).strip())
+    eng_ids.update(explicit_eng)
+    return {
+        "eng_ids": eng_ids,
+        "explicit_eng_ids": explicit_eng,
+        "pr_numbers": pr_numbers,
+        "shas": shas,
+    }
+
+
+def hub_task_drop_reason(
+    task: dict[str, Any],
+    index: dict[str, Any],
+    *,
+    disposed_checklist_ids: set[str] | None = None,
+) -> str | None:
+    """Drop a hub row whose cited work is already merged, locked, or absent."""
+    if not isinstance(task, dict) or task.get("closed"):
+        return None
+    disposed = disposed_checklist_ids or set()
+    human = task.get("human_task") if isinstance(task.get("human_task"), dict) else {}
+    human_id = str(human.get("id") or "")
+    if not human_id and str(task.get("source") or "") == "human_tasks":
+        ref = str(task.get("task_ref") or "")
+        if ref.startswith("human:"):
+            human_id = ref.split("human:", 1)[1]
+    if human_id and human_id in disposed:
+        return "disposition_locked"
+    refs = _structured_completion_refs(task)
+    terminal = index.get("terminal_eng_ids") or set()
+    known = index.get("known_eng_ids") or set()
+    for eng_id in refs["explicit_eng_ids"]:
+        if eng_id in terminal:
+            return "eng_terminal"
+        if known and eng_id not in known:
+            return "eng_absent"
+    merged_prs = index.get("merged_pr_numbers") or set()
+    for number in refs["pr_numbers"]:
+        if number in merged_prs:
+            return "merged_pr"
+    merged_shas = index.get("merged_shas") or set()
+    for sha in refs["shas"]:
+        if sha in merged_shas:
+            return "merged_sha"
+    return None
+
+
+def apply_hub_task_relevance(
+    tasks: list[dict[str, Any]],
+    *,
+    data_dir: Path | None = None,
+    disposed_checklist_ids: set[str] | None = None,
+    index: dict[str, Any] | None = None,
+) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
+    """Fully done hub rows leave the actionable list. Partials are rewritten upstream."""
+    completion = index if index is not None else load_completion_index(data_dir)
+    kept: list[dict[str, Any]] = []
+    dropped: list[dict[str, str]] = []
+    for task in tasks:
+        if not isinstance(task, dict):
+            continue
+        reason = hub_task_drop_reason(
+            task,
+            completion,
+            disposed_checklist_ids=disposed_checklist_ids,
+        )
+        if reason:
+            dropped.append(
+                {
+                    "task_ref": str(task.get("task_ref") or ""),
+                    "title": str(task.get("title") or ""),
+                    "reason": reason,
+                }
+            )
+            continue
+        kept.append(task)
+    return kept, dropped
+
+
 __all__ = [
     "ENG_PUSH_STATUSES",
     "ENG_STATUS_OPEN_STATUSES",
     "ENG_TERMINAL_STATUSES",
     "EXPLORE_CAP",
     "ORPHANED_PR_OPEN_FINDING_PREFIX",
+    "B3_DEMOTION_POLICY_ID",
+    "B3_DEMOTED_TRACK",
     "PARKED_ENG_FINDING_TITLE",
     "POST_SELL_CUE_DIGEST_FILENAME",
+    "SATURATED_KNOBS_FINDING_TITLE",
+    "SCOREBOARD_TRAIL_FINDING_TITLE",
     "PUSH_CAP",
     "RITUAL_MARKET_WARN_FLAG_IDS",
+    "LATER_CROWN_ID",
+    "apply_hub_task_relevance",
+    "b3_partial_gap",
     "build_daily_explore_suggestions",
     "build_daily_push_suggestions",
     "build_daily_status_report",
+    "eng_row_is_done",
+    "hub_task_drop_reason",
+    "later_crown_gap_card",
+    "load_completion_index",
     "check_daily_push_empty_while_mapped_warns",
     "eng_task_is_terminal",
     "filter_actionable_market_warn_tasks",

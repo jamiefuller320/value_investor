@@ -5,7 +5,9 @@ from __future__ import annotations
 from pathlib import Path
 
 from value_investor.daily_hub_attention import (
+    LATER_CROWN_ID,
     POST_SELL_CUE_DIGEST_FILENAME,
+    apply_hub_task_relevance,
     build_daily_explore_suggestions,
     build_daily_push_suggestions,
     build_daily_status_report,
@@ -403,3 +405,249 @@ def test_status_report_includes_digest_row(tmp_path: Path) -> None:
     assert report["scoreboard_headline"] == "primary behind"
     assert report["post_sell_cue_digest"]["present"] is True
     assert any(r["id"] == "post_sell_cue_digest" for r in report["rows"])
+
+
+def _write_b3_demotion(tmp_path: Path, *, primary: str = "ai_judgment_fair") -> None:
+    write_json(
+        tmp_path / "paper_automation" / "assessment_model.json",
+        {
+            "primary_track": primary,
+            "policy_changes": [{"id": "evidentiary_demotion_ai_judgment_fair_v1"}],
+        },
+        compact=False,
+    )
+    write_json(
+        tmp_path / "b3_scoreboard_epoch_registration.json",
+        {
+            "policy_change_id": "evidentiary_demotion_ai_judgment_fair_v1",
+            "demoted_evidentiary_primary": "ai_judgment_fair",
+            "owner_lock": {"anti_C": "no_mid_flight_enlarge_live_3_name_book"},
+        },
+        compact=False,
+    )
+
+
+def _quiet_eng(tmp_path: Path) -> None:
+    write_json(tmp_path / "engineering_tasks.json", {"tasks": []}, compact=False)
+    write_json(
+        tmp_path / "deferred_trigger_check.json",
+        {"met": [], "unmet": []},
+        compact=False,
+    )
+
+
+def test_b3_demotion_drops_trail_and_demoted_saturation_from_push(tmp_path: Path) -> None:
+    _write_b3_demotion(tmp_path)
+    _quiet_eng(tmp_path)
+    write_json(
+        tmp_path / "ops_status.json",
+        {
+            "overall": "warn",
+            "findings": [
+                {
+                    "severity": "warn",
+                    "title": "Primary book trails its control on total return",
+                    "summary": "ai_judgment_fair total return -10.0% vs buy_tier_level +0.1%",
+                    "auto_fixable": False,
+                },
+                {
+                    "severity": "warn",
+                    "title": "Decision-review knobs saturated at bounds",
+                    "summary": (
+                        "Proposal rules still fire — "
+                        "ai_judgment_fair: sector_cap lower at 0.2. "
+                        "Human review: policy change or no action."
+                    ),
+                    "auto_fixable": False,
+                },
+                {
+                    "severity": "info",
+                    "title": "N200 volume gate ready for review",
+                    "auto_fixable": False,
+                },
+            ],
+        },
+        compact=False,
+    )
+    push = build_daily_push_suggestions(data_dir=tmp_path)
+    titles = [s["title"] for s in push["suggestions"]]
+    assert not any("scoreboard" in t.lower() or "trails" in t.lower() for t in titles)
+    assert not any("saturated" in t.lower() for t in titles)
+    assert any("N200" in t for t in titles)
+    assert push["mapped_warns_open"] == []
+    reasons = {row["reason"] for row in push["non_actionable_observes"]}
+    assert reasons == {"b3_evidentiary_demotion", "b3_anti_c_no_enlarge"}
+    assert [row["id"] for row in push["later_suggestions"]] == [LATER_CROWN_ID]
+    assert push["later_suggestions"][0]["timing"] == "later"
+    assert "crown" in push["later_suggestions"][0]["gap"].lower()
+    report = build_daily_status_report(data_dir=tmp_path, local_date="2026-10-16")
+    status_titles = [str(row.get("title") or "") for row in report["ops_findings"]]
+    assert "Primary book trails its control on total return" not in status_titles
+    assert "Decision-review knobs saturated at bounds" not in status_titles
+    assert "N200 volume gate ready for review" in status_titles
+    observe = next(row for row in report["rows"] if row["id"] == "non_actionable_observes")
+    assert "not Push" in observe["label"] or observe["id"] == "non_actionable_observes"
+    assert "b3_evidentiary_demotion" in observe["value"]
+
+
+def test_mixed_saturation_keeps_one_now_gap_card(tmp_path: Path) -> None:
+    _write_b3_demotion(tmp_path)
+    _quiet_eng(tmp_path)
+    write_json(
+        tmp_path / "ops_status.json",
+        {
+            "overall": "warn",
+            "findings": [
+                {
+                    "severity": "warn",
+                    "title": "Decision-review knobs saturated at bounds",
+                    "summary": (
+                        "axis — ai_judgment_fair: sector_cap lower at 0.2; "
+                        "other_book: max_positions upper at 30. Human review: decide."
+                    ),
+                    "auto_fixable": False,
+                }
+            ],
+        },
+        compact=False,
+    )
+    push = build_daily_push_suggestions(data_dir=tmp_path)
+    assert len(push["suggestions"]) == 1
+    card = push["suggestions"][0]
+    assert card["timing"] == "now"
+    assert card["gap_tracks"] == ["other_book"]
+    assert "ai_judgment_fair" not in card["gap_tracks"]
+    assert "other_book" in card["why_now"]
+    assert "max_positions upper at 30" in card["why_now"]
+    assert "ai_judgment_fair" in card["why_now"]
+    assert "Completed half omitted" in card["why_now"]
+    assert push["later_suggestions"] == []
+    assert "Decision-review knobs saturated at bounds" in push["mapped_warns_open"]
+
+
+def test_without_demotion_stamp_both_findings_stay_push(tmp_path: Path) -> None:
+    _quiet_eng(tmp_path)
+    write_json(
+        tmp_path / "ops_status.json",
+        {
+            "overall": "warn",
+            "findings": [
+                {
+                    "severity": "warn",
+                    "title": "Primary book trails its control on total return",
+                    "summary": "ai_judgment_fair trails",
+                },
+                {
+                    "severity": "warn",
+                    "title": "Decision-review knobs saturated at bounds",
+                    "summary": "ai_judgment_fair: sector_cap lower at 0.2",
+                },
+            ],
+        },
+        compact=False,
+    )
+    push = build_daily_push_suggestions(data_dir=tmp_path)
+    titles = [s["title"] for s in push["suggestions"]]
+    assert any("scoreboard" in t.lower() for t in titles)
+    assert any("saturated" in t.lower() for t in titles)
+    assert push["later_suggestions"] == []
+
+
+def test_switched_primary_trail_stays_actionable(tmp_path: Path) -> None:
+    _write_b3_demotion(tmp_path, primary="n210_ai_judgment")
+    _quiet_eng(tmp_path)
+    write_json(
+        tmp_path / "ops_status.json",
+        {
+            "overall": "warn",
+            "findings": [
+                {
+                    "severity": "warn",
+                    "title": "Primary book trails its control on total return",
+                    "summary": "new primary trails",
+                }
+            ],
+        },
+        compact=False,
+    )
+    push = build_daily_push_suggestions(data_dir=tmp_path)
+    assert any("scoreboard" in s["title"].lower() for s in push["suggestions"])
+    assert push["later_suggestions"] == []
+
+
+def test_merged_pr_and_sha_drop_hub_task(tmp_path: Path) -> None:
+    write_json(
+        tmp_path / "engineering_tasks.json",
+        {
+            "tasks": [
+                {
+                    "id": "eng-done",
+                    "status": "merged",
+                    "pr_number": 1091,
+                    "evidence": {"merge_sha": "abc1234def"},
+                    "title": "B3 lock",
+                },
+                {
+                    "id": "eng-live",
+                    "status": "open",
+                    "title": "still open",
+                },
+            ]
+        },
+        compact=False,
+    )
+    write_json(
+        tmp_path / "pr_fix_occasions.json",
+        {"occasions": [{"pr_number": 1091, "head_sha": "abc1234def"}]},
+        compact=False,
+    )
+    tasks = [
+        {
+            "task_ref": "push:eng:eng-done",
+            "title": "Confirm eng merged still P1-aligned: eng-done",
+            "cite": {"kind": "engineering_task", "ref": "eng-done"},
+            "closed": False,
+        },
+        {
+            "task_ref": "push:eng:eng-missing",
+            "title": "Phantom eng",
+            "cite": {"kind": "engineering_task", "ref": "eng-missing"},
+            "closed": False,
+        },
+        {
+            "task_ref": "work:pr",
+            "title": "Finish PR",
+            "pr_number": 1091,
+            "closed": False,
+        },
+        {
+            "task_ref": "work:sha",
+            "title": "Finish sha",
+            "merge_sha": "abc1234def",
+            "closed": False,
+        },
+        {
+            "task_ref": "push:eng:eng-live",
+            "title": "Confirm eng open still P1-aligned: eng-live",
+            "cite": {"kind": "engineering_task", "ref": "eng-live"},
+            "closed": False,
+        },
+        {
+            "task_ref": "human:sunday-assessment-scoreboard",
+            "source": "human_tasks",
+            "title": "Read the assessment scoreboard",
+            "closed": False,
+        },
+    ]
+    kept, dropped = apply_hub_task_relevance(
+        tasks,
+        data_dir=tmp_path,
+        disposed_checklist_ids={"sunday-assessment-scoreboard"},
+    )
+    assert [row["task_ref"] for row in kept] == ["push:eng:eng-live"]
+    reasons = {row["task_ref"]: row["reason"] for row in dropped}
+    assert reasons["push:eng:eng-done"] == "eng_terminal"
+    assert reasons["push:eng:eng-missing"] == "eng_absent"
+    assert reasons["work:pr"] == "merged_pr"
+    assert reasons["work:sha"] == "merged_sha"
+    assert reasons["human:sunday-assessment-scoreboard"] == "disposition_locked"
