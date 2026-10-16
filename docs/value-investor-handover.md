@@ -20,6 +20,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-11.md` (FTSE ranks 101–110)
 - `docs/ftse350-batch-12.md` (FTSE ranks 111–120)
 - `docs/ftse350-batch-13.md` (FTSE ranks 121–130)
+- `docs/ftse350-batch-14.md` (FTSE ranks 131–140)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -372,3 +373,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** The stored prices are 199.0 on 2 Aug and 213.8 on 30 Aug, then 2.43 on 2 Sep and 2.352 on 11 Oct. The low is 2.05 and the high is 213.8.
 
 **What to change.** Do not use 213.8 and 2.352 as prints on one scale. Do not take a high of 213.8 and a low of 2.05 as a range until the scale of each print is named. The note does not give a cause.
+
+## 32. Bridgepoint’s free cash flow is larger than operating cash flow
+
+**What is wrong.** `BPT.L` displays a free-cash-flow figure larger than the screen’s operating cash flow. There is no filing. The note does not give a cause.
+
+**Where.** There is no `docs/data/research/BPT.L` folder. The displayed free cash flow is 446,562,496. The screen’s operating cash flow is 135,900,000. The free-cash-flow figure is stored as `filing_aligned`, and there is no filing.
+
+**What to change.** Do not present 446,562,496 as free cash flow while it is larger than operating cash flow of 135,900,000 and no filing exists. Leave the pair unchecked. The note does not give a cause.
