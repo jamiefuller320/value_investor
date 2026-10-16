@@ -15,6 +15,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-5.md` (FTSE ranks 41–50)
 - `docs/ftse350-batch-6.md` (FTSE ranks 51–60)
 - `docs/ftse350-batch-7.md` (FTSE ranks 61–70)
+- `docs/ftse350-batch-9.md` (FTSE ranks 81–90)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -137,6 +138,12 @@ HSBC and AstraZeneca did not need an HKD or SEK rate. Their London prices and th
 **Where.** That window is what the trailing-P/E bands in the global notes are built from (for example NVDA trailing P/E from 26.65 to 34.48, GOOGL from 26.85 on 18 July to a low of 15.95 with the price only moving from $346.77 to $349.22). The FTSE notes’ high and low prints are inside those 25 runs only.
 
 **What to change.** Keep history that starts before 18 Jul 2026 and that includes a print on the days the screen is dated. Do not describe a three-month snapshot band as a multi-year valuation range.
+
+A ticker can also be missing from runs inside that 25-run archive. The span above is the archive’s dates, not a price path for every name.
+
+**Where.** `YNGA.L` is in 1 of the 25 runs: 996.0 pence on 11 Oct 2026 only. There is no 2 Aug price and no other print. `HFD.L` is absent from the 2 Aug run and present in the other 24.
+
+**What to change.** Do not treat the 2 Aug–11 Oct span as a stored path for a name that is missing from runs inside it. Record which of the 25 runs contain the ticker before using a 2 Aug print, a high, or a low.
 
 ## 8. Enterprise value is missing or does not reconcile
 
@@ -305,3 +312,19 @@ HSBC and AstraZeneca did not need an HKD or SEK rate. Their London prices and th
 **Where.** `docs/data/research/GAMA.L`. Total Debt is missing on the 2025 balance sheet. The screen input `debt_to_equity` is 11.519. The AIM row stores `total_debt` 42 million. The review states FY2025 net debt of (£9.3m).
 
 **What to change.** Do not store `debt_to_equity` 11.519, AIM `total_debt` 42 million, or the review’s (£9.3m) as a statement Total Debt line when that field is missing. If any of those figures is kept, name its source. Leave leverage unchecked until the statement has a Total Debt field.
+
+## 25. A filing-body count can be short of the set
+
+**What is wrong.** A research folder can store filing bodies and still be short of the set. The handover already records names with no folder. It does not record a partial count.
+
+**Where.** `docs/data/research/COST.L`: 86 of 90 filing bodies are stored. `docs/data/research/BAG.L`: 60 of 61 filing bodies are stored.
+
+**What to change.** Do not treat “filing bodies are stored” as a complete set when the note gives a short count. Keep the stored count and the set size, 86 of 90 and 60 of 61. The notes do not name the missing bodies.
+
+## 26. Cash can be stored under a different field name
+
+**What is wrong.** `GCP.L` has no `Cash And Cash Equivalents` field. Cash is stored under another name, and net debt does not subtract it.
+
+**Where.** `docs/data/research/GCP.L`. `Cash And Cash Equivalents` is missing. Cash of 12.0 million is stored as `Cash Cash Equivalents And Federal Funds Sold`. Net debt is 19.3 million, equal to total debt, so that field does not subtract the stored cash.
+
+**What to change.** Read cash from `Cash Cash Equivalents And Federal Funds Sold` when `Cash And Cash Equivalents` is missing, and name that field. Do not treat net debt of 19.3 million as total debt minus that 12.0 million. On this statement those two figures are equal, so the stored cash was not subtracted.
