@@ -1,12 +1,17 @@
 """P2 ingest effort cascade: fat slot on the learning-phase head, spare on the tail.
 
-Doctrine (AGENTS.md): while the focus market still has FTSE-standard filing gaps,
-parallel sprint streams must not run as equal peers. Stream 1 (next queue market)
-keeps a reduced budget. Stream 2 yields the morning peak slots that overlap the
-head sprint unless a live wait already proved the head idle.
+Doctrine: while ``head_needs_fat_slot`` is true the focus market still has
+priority on the shared filing host. Spare width is not a fixed 50%/25% cut.
+Each strand's width is ``min(unfilled names, host budget left, names that fit
+in the time left)``. Kind matters (filing body, daily price, memo). A strand
+with nothing to fetch gets width 0. When the head bit is false, spares are not
+held to those fractions. The fat slot is an ingest-head rule, not a boss over
+non-ingest strands.
 
 Runtime wait / leftover / fill-down lives in ``library_ingest_scheduler``.
-This module is the static policy (fractions, hour-skip fallback, release gate).
+This module is the static policy (dynamic width, hour-skip fallback, release gate).
+``stream_*_fraction`` fields remain on the policy object so older JSON still
+loads; they are not applied.
 """
 
 from __future__ import annotations
@@ -19,6 +24,17 @@ DEFAULT_STREAM_1_TARGET_FRACTION = 0.5
 DEFAULT_STREAM_1_RUNTIME_FRACTION = 0.5
 DEFAULT_STREAM_2_TARGET_FRACTION = 0.25
 DEFAULT_STREAM_2_RUNTIME_FRACTION = 0.25
+# Legacy fraction fields stay loadable. Width no longer multiplies by them.
+KIND_FILING_BODY = "filing_body"
+KIND_DAILY_PRICE = "daily_price"
+KIND_MEMO = "memo"
+# Planning seconds for one name on this job's clock. Filing matches the spare
+# slot shape (24 names in 2100s). Daily prices and memos are cheaper kinds.
+KIND_SECONDS_PER_NAME: dict[str, float] = {
+    KIND_FILING_BODY: 87.5,
+    KIND_DAILY_PRICE: 5.0,
+    KIND_MEMO: 60.0,
+}
 # Stream 2 crons are focus+60m. Peak euro slots are 07:15 / 10:15; stream 2 is 08:15 / 11:15.
 DEFAULT_STREAM_2_YIELD_HOURS_UTC: tuple[int, ...] = (8, 11)
 MIN_SPARE_TARGETS = 1
@@ -63,8 +79,10 @@ def default_ingest_effort_cascade_policy() -> dict[str, Any]:
         "min_leftover_seconds": DEFAULT_MIN_LEFTOVER_SECONDS,
         "scheduler_enabled": True,
         "note": (
-            "While the head market still holds the fat slot, spare streams wait "
-            "for a live head run, spend leftover minutes, and fill down the queue. "
+            "While head_needs_fat_slot is true the head keeps host priority. "
+            "Spare width is min(unfilled names, host budget left, time left) "
+            "for that strand's kind — not a fixed 50%/25% cut. A strand with "
+            "nothing to fetch has width 0. Fractions below are legacy and unused. "
             "head_release_when=ingest_parity (default) or phase2_ready."
         ),
     }
@@ -158,6 +176,56 @@ def head_needs_fat_slot(
     return not bool(head_at_parity)
 
 
+def kind_seconds(kind: str | None) -> float:
+    """Seconds one name of this kind consumes on the job clock."""
+    key = str(kind or KIND_FILING_BODY).strip().lower()
+    return float(KIND_SECONDS_PER_NAME.get(key, KIND_SECONDS_PER_NAME[KIND_FILING_BODY]))
+
+
+def names_that_fit(time_left_seconds: float, kind: str | None) -> int:
+    """How many names of ``kind`` fit in the seconds still left on this job."""
+    remaining = float(time_left_seconds or 0.0)
+    per_name = kind_seconds(kind)
+    if remaining <= 0 or per_name <= 0:
+        return 0
+    return int(remaining / per_name)
+
+
+def dynamic_ingest_width(
+    *,
+    unfilled: int,
+    host_budget_left: int,
+    time_left_seconds: float,
+    kind: str = KIND_FILING_BODY,
+) -> int:
+    """Names this strand may fetch this run.
+
+    Width is ``min(unfilled, host budget left, names that fit in the time left)``.
+    A strand with nothing to fetch returns 0. No fixed spare fraction is applied.
+    """
+    count = max(0, int(unfilled))
+    if count <= 0:
+        return 0
+    host = max(0, int(host_budget_left))
+    if host <= 0:
+        return 0
+    return min(count, host, names_that_fit(time_left_seconds, kind))
+
+
+def filing_names_unfilled(health: dict[str, Any] | None) -> int:
+    """Unparked filing names still to fetch (unmeasured, zero-body, thin, IWB)."""
+    row = health or {}
+    unmeasured = int(row.get("unmeasured_buy_tier") or 0)
+    zero_body = int(row.get("zero_body_buy_tier") or 0)
+    if "effective_thin_body_buy_tier" in row or "effective_indexed_without_body" in row:
+        thin = int(row.get("effective_thin_body_buy_tier") or 0)
+        indexed = int(row.get("effective_indexed_without_body") or 0)
+    else:
+        thin = int(row.get("thin_body_buy_tier") or 0)
+        indexed = int(row.get("indexed_without_body") or 0)
+    return max(0, unmeasured + zero_body + thin + indexed)
+
+
 def scale_spare_budget(
     stream: int,
     max_targets: int,
@@ -165,21 +233,54 @@ def scale_spare_budget(
     *,
     config: IngestCascadeConfig,
     head_needs_fat: bool,
+    unfilled: int | None = None,
+    head_unfilled: int | None = None,
+    kind: str = KIND_FILING_BODY,
+    host_budget_left: int | None = None,
 ) -> tuple[int, float, str]:
-    """Return (targets, runtime, mode) for a parallel sprint stream."""
-    targets = max(1, int(max_targets))
+    """Return (targets, runtime, mode) for a parallel sprint stream.
+
+    ``config`` fractions are ignored. While the head needs the fat slot and
+    ``head_unfilled`` is set, those names are reserved from the host budget
+    first. When the head does not need the slot, the spare is not cut to
+    50%/25%. ``unfilled is None`` means the caller did not declare a count, so
+    the job cap is the demand. An explicit 0 is an empty strand.
+    """
+    del config  # fractions are legacy; signature kept for callers
+    cap = max(0, int(max_targets))
     runtime = max(0.0, float(max_runtime_seconds))
+    if unfilled is not None and int(unfilled) <= 0:
+        return 0, 0.0, "empty"
     if not head_needs_fat or stream not in (1, 2):
-        return targets, runtime, "full"
-    if stream == 1:
-        target_frac = config.stream_1_target_fraction
-        runtime_frac = config.stream_1_runtime_fraction
-    else:
-        target_frac = config.stream_2_target_fraction
-        runtime_frac = config.stream_2_runtime_fraction
-    scaled_targets = max(MIN_SPARE_TARGETS, int(targets * target_frac))
-    scaled_runtime = max(MIN_SPARE_RUNTIME_SECONDS, runtime * runtime_frac)
-    return scaled_targets, scaled_runtime, "spare"
+        if unfilled is None:
+            return max(cap, 0) or 0, runtime, "full"
+        host = cap if host_budget_left is None else max(0, int(host_budget_left))
+        width = dynamic_ingest_width(
+            unfilled=int(unfilled),
+            host_budget_left=host,
+            time_left_seconds=runtime,
+            kind=kind,
+        )
+        width = min(width, cap) if cap else width
+        if width <= 0:
+            return 0, 0.0, "empty"
+        return width, min(runtime, width * kind_seconds(kind)), "full"
+
+    demand = cap if unfilled is None else max(0, int(unfilled))
+    host = cap if host_budget_left is None else max(0, int(host_budget_left))
+    if head_unfilled is not None and int(head_unfilled) > 0 and host > 0:
+        host = max(0, host - min(int(head_unfilled), host))
+    width = dynamic_ingest_width(
+        unfilled=demand,
+        host_budget_left=host,
+        time_left_seconds=runtime,
+        kind=kind,
+    )
+    if cap:
+        width = min(width, cap)
+    if width <= 0:
+        return 0, 0.0, "empty"
+    return width, min(runtime, width * kind_seconds(kind)), "spare"
 
 
 def should_skip_spare_stream(
@@ -260,8 +361,8 @@ def evaluate_ingest_cascade(
         )
     else:
         reason = (
-            f"Head {head} still has filing gaps; stream 1/2 run spare fractions "
-            f"({config.stream_1_target_fraction:.2f}/{config.stream_2_target_fraction:.2f})."
+            f"Head {head} still has filing gaps; spare width is each strand's "
+            "unfilled names capped by host budget left and time left."
         )
     return IngestCascadeDecision(
         enabled=config.enabled,
@@ -292,10 +393,18 @@ __all__ = [
     "IngestCascadeConfig",
     "IngestCascadeDecision",
     "default_ingest_effort_cascade_policy",
+    "KIND_DAILY_PRICE",
+    "KIND_FILING_BODY",
+    "KIND_MEMO",
+    "KIND_SECONDS_PER_NAME",
+    "dynamic_ingest_width",
     "evaluate_ingest_cascade",
+    "filing_names_unfilled",
     "head_market_id",
     "head_needs_fat_slot",
+    "kind_seconds",
     "load_cascade_config",
+    "names_that_fit",
     "scale_spare_budget",
     "should_skip_spare_stream",
 ]

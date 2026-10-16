@@ -26,20 +26,78 @@ def test_scale_spare_budget_full_when_head_at_parity():
     assert (targets, runtime, mode) == (24, 2100.0, "full")
 
 
-def test_scale_spare_budget_halves_stream_1_while_head_open():
+def test_dynamic_width_reserves_host_while_head_needs_slot():
     cfg = load_cascade_config({})
-    targets, runtime, mode = scale_spare_budget(1, 24, 2100.0, config=cfg, head_needs_fat=True)
-    assert mode == "spare"
-    assert targets == 12
-    assert runtime == 1050.0
+    stream_1 = scale_spare_budget(
+        1,
+        24,
+        2100.0,
+        config=cfg,
+        head_needs_fat=True,
+        unfilled=14,
+        head_unfilled=14,
+    )
+    stream_2 = scale_spare_budget(
+        2,
+        24,
+        2100.0,
+        config=cfg,
+        head_needs_fat=True,
+        unfilled=14,
+        head_unfilled=14,
+    )
+    assert stream_1[2] == "spare"
+    assert stream_2[2] == "spare"
+    # Host budget 24, head keeps 14, spare gets the 10 left. Stream id is not a fraction.
+    assert stream_1[0] == stream_2[0] == 10
+    assert stream_1[1] == stream_2[1] == 875.0
 
 
-def test_scale_spare_budget_quarters_stream_2_while_head_open():
+def test_dynamic_width_does_not_cut_spares_when_head_released():
     cfg = load_cascade_config({})
-    targets, runtime, mode = scale_spare_budget(2, 24, 2100.0, config=cfg, head_needs_fat=True)
-    assert mode == "spare"
-    assert targets == 6
-    assert runtime == 525.0
+    targets, runtime, mode = scale_spare_budget(
+        1,
+        24,
+        2100.0,
+        config=cfg,
+        head_needs_fat=False,
+        unfilled=8,
+        head_unfilled=20,
+    )
+    assert mode == "full"
+    assert targets == 8
+    assert runtime == 700.0
+
+
+def test_empty_strand_width_is_zero():
+    cfg = load_cascade_config({})
+    for head_needs in (True, False):
+        targets, runtime, mode = scale_spare_budget(
+            1,
+            24,
+            2100.0,
+            config=cfg,
+            head_needs_fat=head_needs,
+            unfilled=0,
+        )
+        assert (targets, runtime, mode) == (0, 0.0, "empty")
+
+
+def test_kind_changes_names_that_fit_in_the_job():
+    from value_investor.library_ingest_cascade import dynamic_ingest_width
+
+    filing = dynamic_ingest_width(
+        unfilled=400, host_budget_left=400, time_left_seconds=100, kind="filing_body"
+    )
+    price = dynamic_ingest_width(
+        unfilled=400, host_budget_left=400, time_left_seconds=100, kind="daily_price"
+    )
+    memo = dynamic_ingest_width(
+        unfilled=400, host_budget_left=400, time_left_seconds=100, kind="memo"
+    )
+    assert filing == 1
+    assert price == 20
+    assert memo == 1
 
 
 def test_stream_2_skips_peak_overlap_hours_only():
@@ -107,7 +165,7 @@ def test_run_sprint_stream_2_yields_at_peak_when_head_has_gaps():
         )
     run_loop.assert_not_called()
     assert outcome.skipped[0]["reason"] == "peak_hour_fallback"
-    assert outcome.max_targets == 6
+    assert outcome.max_targets == 7
 
 
 def test_run_sprint_stream_2_runs_at_peak_when_head_idle():
@@ -154,9 +212,9 @@ def test_run_sprint_stream_2_runs_at_peak_when_head_idle():
             head_in_progress=False,
         )
     run_loop.assert_called_once()
-    assert outcome.max_targets == 6
-    assert outcome.max_runtime_seconds == 525.0
-    assert run_loop.call_args.kwargs["max_targets"] == 6
+    assert outcome.max_targets == 7
+    assert outcome.max_runtime_seconds == 612.5
+    assert run_loop.call_args.kwargs["max_targets"] == 7
 
 
 def test_run_sprint_stream_2_fills_down_when_assigned_has_no_gaps():
@@ -259,8 +317,8 @@ def test_run_sprint_stream_1_uses_spare_budget_when_head_has_gaps():
             parallel_stream=1,
             now=datetime(2026, 9, 4, 14, 15, tzinfo=UTC),
         )
-    assert outcome.max_targets == 12
-    assert outcome.max_runtime_seconds == 1050.0
+    assert outcome.max_targets == 10
+    assert outcome.max_runtime_seconds == 875.0
     run_loop.assert_called_once()
-    assert run_loop.call_args.kwargs["max_targets"] == 12
-    assert run_loop.call_args.kwargs["max_runtime_seconds"] == 1050.0
+    assert run_loop.call_args.kwargs["max_targets"] == 10
+    assert run_loop.call_args.kwargs["max_runtime_seconds"] == 875.0

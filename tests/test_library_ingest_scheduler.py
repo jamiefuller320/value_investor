@@ -120,9 +120,9 @@ def test_evaluate_scheduler_small_leftover_does_not_shrink_spare():
         now=AFTERNOON,
     )
     assert decision.action == "run"
-    assert decision.code == "spare_fraction"
+    assert decision.code == "dynamic_width"
     assert decision.budget_mode == "spare"
-    assert decision.max_runtime_seconds == 1050.0
+    assert decision.max_runtime_seconds == 2100.0
     assert decision.leftover_granted == 0.0
 
 
@@ -136,6 +136,8 @@ def test_evaluate_scheduler_large_leftover_boosts_spare():
         leftover_state=state,
         head_in_progress=False,
         now=AFTERNOON,
+        unfilled_names=2,
+        head_unfilled_names=0,
     )
     assert decision.action == "run"
     assert decision.code == "leftover"
@@ -166,8 +168,8 @@ def test_evaluate_scheduler_peak_hour_fallback_only_when_head_unknown():
         now=PEAK,
     )
     assert idle.action == "run"
-    assert idle.code == "spare_fraction"
-    assert idle.max_runtime_seconds == 525.0
+    assert idle.code == "dynamic_width"
+    assert idle.max_runtime_seconds == 2100.0
 
 
 def test_evaluate_scheduler_phase2_release():
@@ -204,7 +206,7 @@ def test_evaluate_scheduler_phase2_release():
     assert released.max_runtime_seconds == 2100.0
 
 
-def test_evaluate_scheduler_disabled_still_uses_static_fractions():
+def test_evaluate_scheduler_disabled_uses_dynamic_width_not_fractions():
     policy = {
         **POLICY,
         "ingest_effort_cascade": {"enabled": True, "scheduler_enabled": False},
@@ -218,8 +220,8 @@ def test_evaluate_scheduler_disabled_still_uses_static_fractions():
         head_in_progress=False,
         now=AFTERNOON,
     )
-    assert decision.code == "spare_fraction"
-    assert decision.max_runtime_seconds == 1050.0
+    assert decision.code == "dynamic_width"
+    assert decision.max_runtime_seconds == 2100.0
     assert decision.leftover_granted == 0.0
 
 

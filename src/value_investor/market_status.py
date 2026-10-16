@@ -25,6 +25,7 @@ from value_investor.held_vs_market import (
 from value_investor.library_equal_support import PACKAGE_FILENAME as EQUAL_SUPPORT_FILENAME
 from value_investor.library_ingest_dispatch import (
     DEFAULT_DISPATCH_PATH,
+    MODE_EXHAUSTED,
     MODE_MAINTENANCE,
     MODE_SPRINT,
     PARALLEL_SPRINT_POLICY_KEYS,
@@ -352,6 +353,13 @@ def _classify_ingest(
 ) -> tuple[str, int | None]:
     if market_id == LIVE_MARKET_ID:
         return INGEST_LIVE, None
+    # Occupancy is head_needs_fat_slot / should_run_sprint_ingest. A focus
+    # market in mode exhausted must not display as sprint, even when an older
+    # sprint_markets list still names it.
+    if market_id == focus:
+        mode = str(dispatch_mode or "").strip().lower()
+        if mode in {MODE_EXHAUSTED, INGEST_MAINTENANCE}:
+            return INGEST_MAINTENANCE, None
     if market_id in sprint_markets or market_id in sprint_streams:
         stream = sprint_streams.get(market_id)
         if market_id == focus:

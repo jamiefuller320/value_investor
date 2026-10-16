@@ -108,7 +108,7 @@ Apply caps (stage 1): `max_units=4`, ≤2 tickers/unit, ≤1 body/ticker, ≤16 
 
 | Required | Role |
 |----------|------|
-| Focus fat released (`sprint_ingest_complete`) | No steal of P2 fat slot — **met** for `euro_depth` as of 2026-10-01 |
+| Focus fat released (`head_needs_fat_slot` false; legacy dispatch without the bit still uses `mode=sprint` and not `sprint_ingest_complete`) | No steal of the P2 ingest head — occupancy is the fat-slot bit, not the market-status sprint badge |
 | `archive_lane_gate` allow | Quiet band + no focus-pressure suspend |
 | Capacity isolation | Archive budget IDs + hard HTTP fetch cap; recorded on each `pack_run` as `capacity_isolation` |
 | Thin writer pilot → stage 1 | **Shipped** — quiet apply; stage-1 caps 4/16 |

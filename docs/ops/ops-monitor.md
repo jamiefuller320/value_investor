@@ -107,6 +107,11 @@ lane change and readiness gate (see N152 / P1 pin rules).
   Selection skeleton feeds **N205** design only (not sealed). Hub Explore/Push
   consume `hub_feed` (sibling ship). See
   [post-sell-cue-digest.md](post-sell-cue-digest.md).
+- **Ingest occupancy mismatch** — `check_ingest_occupancy_mismatch` writes
+  `docs/data/ingest_occupancy.json` every ops-monitor run and warns only when
+  the euro badge says `sprint` and `head_needs_fat_slot` is false
+  (`auto_fixable=false`). The same row is on `queue_health.ingest_occupancy`.
+  Occupancy is that bit, not the badge. See the check table below.
 - **Missing-IR allowlist stall** — ops finding when focus **or spare sprint**
   `unmeasured_stuck` / `zero_body_stuck` tickers still have empty IR allowlist
   after ≥2 intensive 0-improve pins (`check_missing_ir_allowlist_stall`,
@@ -408,6 +413,7 @@ They do **not** deepen ingest or rememo.
 | `check_p1_first_run_pin` | **P1 first-run: EPS-from-body missing after Sunday screen** / **… slim freeze missing after Monday paper-auto** | After the relevant post-#953 run, EPS-from-body still 0/n on holdings ∪ buy-tier reports or `rebalance_log` slim. Auto-oks when a count lands. Empty/pre-Sunday is **not** a warn. Window 10d from #953 merge then expires (no forever babysit). Not a soak platform or utilization dashboard | `docs/data/p1_first_run_pin.json` | First-run pin |
 | `check_universe_filing_archive_miss_rate` | **Universe archive body-miss rate elevated** | Flip-lag proxy miss rate elevated with open body gaps — observe-only outcome (not a cold-store start gate; N180/N181) | `docs/data/universe_filing_archive_miss_rate.json` | Scaffold live |
 | `check_universe_filing_archive_pack_bottleneck` | **Universe archive pack bottleneck review stale** / **… processing bottleneck** | Bottleneck review missing/stale (>36h) or dominant stage / errors on an allowed dry pass; suspend/quiet_only while euro fat does **not** warn | `docs/data/universe_filing_archive_bottleneck_review.json` (owned by `universe-filing-archive-pack.yml` @ 22:00 UTC weekdays) | Gated dry lane live |
+| `check_ingest_occupancy_mismatch` | **Ingest occupancy mismatch** | Euro market-status `ingest` badge says `sprint` while dispatch `ingest_cascade.head_needs_fat_slot` is false. Observe-only (`auto_fixable=false`). Does not turn sprint back on, clear a park, or add a stream. The row also records dispatch mode, `should_run_sprint_ingest`, euro `ingest_reason`, cold-store gate time vs dispatch `evaluated_at`, spare `should_run_parallel_ingest`, and eng open count. | `docs/data/ingest_occupancy.json` (ops-monitor `GHA_COMMIT_OPTIONAL`); also `queue_health.ingest_occupancy` | Live |
 
 Thin **L521** Ops panel: `docs/data/universe_filing_archive_status.json` (last outcome,
 dry/apply, clash/`capacity_isolation` flags, next widen step). Written by the

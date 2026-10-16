@@ -281,6 +281,7 @@ def build_bottleneck_review(
         "gate": {
             "decision": gate.get("decision"),
             "allowed": gate.get("allowed"),
+            "evaluated_at": gate.get("evaluated_at"),
             "in_quiet_window": gate.get("in_quiet_window"),
             "focus_pressure_reasons": list(gate.get("focus_pressure_reasons") or []),
             "focus_market": gate.get("focus_market"),
@@ -473,6 +474,7 @@ def _finalize_and_persist(
         "gate": {
             "decision": gate.get("decision"),
             "allowed": gate.get("allowed"),
+            "evaluated_at": gate.get("evaluated_at"),
             "in_quiet_window": gate.get("in_quiet_window"),
             "focus_pressure_reasons": list(gate.get("focus_pressure_reasons") or []),
             "focus_market": gate.get("focus_market"),
@@ -630,6 +632,7 @@ def run_universe_filing_archive_pack(
             gate: dict[str, Any] = {
                 "decision": "allow",
                 "allowed": True,
+                "evaluated_at": clock.isoformat(),
                 "in_quiet_window": True,
                 "focus_pressure_reasons": [],
                 "focus_market": "test",

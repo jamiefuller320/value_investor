@@ -77,6 +77,30 @@ def test_focus_pressure_suspends_while_fat_slot_sprint_active() -> None:
     assert gate["fourth_equal_sprint_stream"] is False
 
 
+def test_cold_store_uses_fat_slot_bit_not_stale_sprint_mode() -> None:
+    released = focus_pressure_reasons(
+        dispatch={
+            "mode": "sprint",
+            "ingest_sprint_complete": False,
+            "focus_market": "euro_depth",
+            "ingest_cascade": {"head_needs_fat_slot": False},
+            "filing_health": {},
+        }
+    )
+    assert "focus_fat_slot_sprint_active" not in released
+
+    occupied = focus_pressure_reasons(
+        dispatch={
+            "mode": "exhausted",
+            "ingest_sprint_complete": True,
+            "focus_market": "euro_depth",
+            "ingest_cascade": {"head_needs_fat_slot": True},
+            "filing_health": {},
+        }
+    )
+    assert "focus_fat_slot_sprint_active" in occupied
+
+
 def test_archive_lane_allows_only_when_quiet_and_no_pressure() -> None:
     gate = archive_lane_gate(
         now=datetime(2026, 10, 3, 12, 0, tzinfo=UTC),
