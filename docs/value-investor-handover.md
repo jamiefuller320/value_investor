@@ -18,6 +18,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-9.md` (FTSE ranks 81–90)
 - `docs/ftse350-batch-10.md` (FTSE ranks 91–100)
 - `docs/ftse350-batch-11.md` (FTSE ranks 101–110)
+- `docs/ftse350-batch-12.md` (FTSE ranks 111–120)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -354,3 +355,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** There is no `docs/data/research/AJB.L` folder. The screen’s operating cash flow is 86,485,000. The free-cash-flow object has source `none`. The canonical figure is missing. The screen TTM is missing. Free cash flow is missing from the key metrics. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false.
 
 **What to change.** Do not leave both verification flags false when the free-cash-flow object has source `none`, no canonical figure, and no screen TTM. Do not omit free cash flow from the key metrics while operating cash flow of 86,485,000 is stored, and do not present that operating-cash-flow figure as free cash flow.
+
+## 30. AstraZeneca’s Stockholm row is stored twice
+
+**What is wrong.** `AZN.ST` is stored twice, in `omxs30` and in `euro_depth`. The two rows have different market caps and different last prices, the same share count, and the same enterprise value. Price times shares matches neither cap.
+
+**Where.** The `omxs30` row stores `market_cap` 2,565,198,053,376 and `last_price` 1,654.0. The `euro_depth` row stores `market_cap` 2,598,542,508,032 and `last_price` 1,675.5. Both store `shares_outstanding` 1,550,760,380 and enterprise value 2,626,157,543,424. On the `omxs30` row, that price times those shares is 2,564,957,668,520, not the stored market cap. On the `euro_depth` row, that price times those shares is 2,598,299,016,690, not the stored market cap.
+
+**What to change.** Keep one `AZN.ST` row, or name which market the other copy belongs to. Do not store two market caps and two last prices against one share count and one enterprise value. Do not store a market cap that is not last price times shares on that same row.
