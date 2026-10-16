@@ -1,6 +1,6 @@
 {
   "schema": "paper_halt.v1",
-  "generated_at": "2026-10-15T07:38:42.565571+00:00",
+  "generated_at": "2026-10-16T02:33:42.710038+00:00",
   "observe_only": true,
   "books_unchanged": true,
   "thresholds": {
@@ -103,7 +103,7 @@
     {
       "track_id": "buy_tier_level",
       "weight_basis": "marks_unavailable",
-      "drawdown": 0.0069,
+      "drawdown": 0.007,
       "max_name": null,
       "max_name_weight": null,
       "max_sector": null,
@@ -120,7 +120,7 @@
     {
       "track_id": "buy_tier_level_dca",
       "weight_basis": "marks_unavailable",
-      "drawdown": 0.0,
+      "drawdown": 0.0005,
       "max_name": null,
       "max_name_weight": null,
       "max_sector": null,
@@ -230,7 +230,7 @@
     {
       "track_id": "ai_judgment_fair",
       "weight_basis": "marks_unavailable",
-      "drawdown": 0.1803,
+      "drawdown": 0.2003,
       "max_name": null,
       "max_name_weight": null,
       "max_sector": null,
@@ -240,8 +240,10 @@
       "max_currency": "GBP",
       "max_currency_weight": null,
       "multi_currency": false,
-      "breaches": [],
-      "would_halt": false,
+      "breaches": [
+        "drawdown 20% \u2265 20%"
+      ],
+      "would_halt": true,
       "action_if_promoted": "freeze new buys or flatten to cash, then wait for a human"
     },
     {
@@ -264,7 +266,7 @@
     {
       "track_id": "ai_judgment_graduated_fair",
       "weight_basis": "marks_unavailable",
-      "drawdown": 0.0169,
+      "drawdown": 0.0314,
       "max_name": null,
       "max_name_weight": null,
       "max_sector": null,
@@ -281,7 +283,7 @@
     {
       "track_id": "ai_judgment_hold5_fair",
       "weight_basis": "marks_unavailable",
-      "drawdown": 0.0263,
+      "drawdown": 0.0519,
       "max_name": null,
       "max_name_weight": null,
       "max_sector": null,
@@ -290,6 +292,40 @@
       "non_reporting_currency_weight": null,
       "max_currency": "GBP",
       "max_currency_weight": null,
+      "multi_currency": false,
+      "breaches": [],
+      "would_halt": false,
+      "action_if_promoted": "freeze new buys or flatten to cash, then wait for a human"
+    },
+    {
+      "track_id": "ai_judgment_matched30_fair",
+      "weight_basis": "marked_prices",
+      "drawdown": null,
+      "max_name": null,
+      "max_name_weight": 0.0,
+      "max_sector": null,
+      "max_sector_weight": 0.0,
+      "reporting_currency": "GBP",
+      "non_reporting_currency_weight": 0.0,
+      "max_currency": "GBP",
+      "max_currency_weight": 1.0,
+      "multi_currency": false,
+      "breaches": [],
+      "would_halt": false,
+      "action_if_promoted": "freeze new buys or flatten to cash, then wait for a human"
+    },
+    {
+      "track_id": "buy_tier_matched30_fair",
+      "weight_basis": "marked_prices",
+      "drawdown": null,
+      "max_name": null,
+      "max_name_weight": 0.0,
+      "max_sector": null,
+      "max_sector_weight": 0.0,
+      "reporting_currency": "GBP",
+      "non_reporting_currency_weight": 0.0,
+      "max_currency": "GBP",
+      "max_currency_weight": 1.0,
       "multi_currency": false,
       "breaches": [],
       "would_halt": false,

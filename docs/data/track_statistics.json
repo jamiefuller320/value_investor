@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-15T07:36:44.773629+00:00",
+  "updated_at": "2026-10-16T02:32:10.601553+00:00",
   "observe_only": true,
   "benchmark_ticker": "^FTSE",
   "method": {
@@ -20,6 +20,8 @@
     "ai_judgment_calibrated_r2",
     "ai_judgment_calibrated_r3",
     "ai_judgment_exclusion_u4",
+    "ai_judgment_graduated_fair",
+    "ai_judgment_hold5_fair",
     "graduated_allocation",
     "momentum_grace",
     "rules",
@@ -32,63 +34,51 @@
   "tracks": {
     "ai_judgment_fair": {
       "status": "ok",
-      "periods": 40,
+      "periods": 41,
       "first_date": "2026-08-10",
-      "last_date": "2026-10-14",
-      "span_days": 65,
-      "periods_per_year": 224.8,
-      "annualized_active_return": -1.0528,
-      "tracking_error": 0.2249,
-      "information_ratio": -4.681,
-      "t_stat": -1.975,
+      "last_date": "2026-10-15",
+      "span_days": 66,
+      "periods_per_year": 226.9,
+      "annualized_active_return": -1.2111,
+      "tracking_error": 0.2319,
+      "information_ratio": -5.224,
+      "t_stat": -2.221,
       "ci_level": 0.9,
       "ci_annualized_active_return": [
-        -1.8592,
-        -0.2019
+        -2.1617,
+        -0.2658
       ],
       "verdict": "negative",
       "significant_after_correction": false,
-      "min_detectable_annual_edge": 1.0662,
-      "years_to_detect_target_edge": 224.77,
-      "vs": "^FTSE"
-    },
-    "ai_judgment_graduated_fair": {
-      "status": "insufficient_data",
-      "periods": 6,
-      "min_periods": 20,
-      "vs": "^FTSE"
-    },
-    "ai_judgment_hold5_fair": {
-      "status": "insufficient_data",
-      "periods": 6,
-      "min_periods": 20,
+      "min_detectable_annual_edge": 1.0908,
+      "years_to_detect_target_edge": 238.91,
       "vs": "^FTSE"
     },
     "buy_tier_level": {
       "status": "ok",
-      "periods": 25,
+      "periods": 26,
       "first_date": "2026-09-08",
-      "last_date": "2026-10-14",
-      "span_days": 36,
-      "periods_per_year": 253.6,
-      "annualized_active_return": 0.1073,
-      "tracking_error": 0.1775,
-      "information_ratio": 0.604,
-      "t_stat": 0.19,
+      "last_date": "2026-10-15",
+      "span_days": 37,
+      "periods_per_year": 256.7,
+      "annualized_active_return": 0.0338,
+      "tracking_error": 0.1765,
+      "information_ratio": 0.192,
+      "t_stat": 0.061,
       "ci_level": 0.9,
       "ci_annualized_active_return": [
-        -0.4385,
-        0.5799
+        -0.5961,
+        0.5797
       ],
       "verdict": "indistinguishable_from_noise",
       "significant_after_correction": false,
-      "min_detectable_annual_edge": 1.1306,
-      "years_to_detect_target_edge": 140.0,
+      "min_detectable_annual_edge": 1.1093,
+      "years_to_detect_target_edge": 138.51,
       "vs": "^FTSE"
     },
     "buy_tier_level_dca": {
       "status": "insufficient_data",
-      "periods": 14,
+      "periods": 15,
       "min_periods": 20,
       "vs": "^FTSE"
     }
@@ -96,24 +86,24 @@
   "pairs": {
     "primary_vs_control": {
       "status": "ok",
-      "periods": 25,
+      "periods": 26,
       "first_date": "2026-09-08",
-      "last_date": "2026-10-14",
-      "span_days": 36,
-      "periods_per_year": 253.6,
-      "annualized_active_return": -0.8755,
-      "tracking_error": 0.147,
-      "information_ratio": -5.957,
-      "t_stat": -1.87,
+      "last_date": "2026-10-15",
+      "span_days": 37,
+      "periods_per_year": 256.7,
+      "annualized_active_return": -1.0922,
+      "tracking_error": 0.159,
+      "information_ratio": -6.868,
+      "t_stat": -2.186,
       "ci_level": 0.9,
       "ci_annualized_active_return": [
-        -1.5424,
-        -0.2097
+        -1.9056,
+        -0.2715
       ],
       "verdict": "negative",
       "significant_after_correction": false,
-      "min_detectable_annual_edge": 0.9362,
-      "years_to_detect_target_edge": 95.99,
+      "min_detectable_annual_edge": 0.9994,
+      "years_to_detect_target_edge": 112.42,
       "left": "ai_judgment_fair",
       "right": "buy_tier_level"
     }
