@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-10-15T20:14:09.534853+00:00",
+  "generated_at": "2026-10-16T07:28:10.351402+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. learning_gate is an observe-only Start → Bodies → Sprint → Admit → Epoch-0 → Parity → live-ready stepper with next-gate criteria and timeframe; live FTSE shows live-path status, not self catch-up. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied. Do not blend NAV into the gate graphic.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -68,7 +68,7 @@
       "us_adr_asia"
     ],
     "spare_sprint": {},
-    "equal_support_generated_at": "2026-10-15T19:12:52.272482+00:00"
+    "equal_support_generated_at": "2026-10-16T04:59:07.612412+00:00"
   },
   "markets": [
     {
@@ -663,7 +663,7 @@
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
-        "parked_count": 10,
+        "parked_count": 9,
         "zero_body_tickers": [],
         "thin_body_tickers": [
           "EVN.VI",
@@ -684,7 +684,7 @@
           "DQ7A.IR",
           "EVN.VI",
           "MUV2.DE",
-          "PRX.AS"
+          "UCB.BR"
         ]
       },
       "filing_gaps": 0,
@@ -742,14 +742,14 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 5,
-        "targets": 7,
-        "improved": 5,
+        "run_count": 6,
+        "targets": 10,
+        "improved": 6,
         "improved_tickers": [
           "PRX.AS",
           "SHELL.AS"
         ],
-        "last_run_at": "2026-10-15T12:56:29.899620+00:00",
+        "last_run_at": "2026-10-16T07:23:35.389857+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -763,14 +763,14 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 10,
-          "indexed_without_body": 16,
+          "indexed_without_body": 19,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 1,
-          "indexed_without_body": 1,
+          "indexed_without_body": 4,
           "filing_gaps": 0
         },
         "remaining": {
@@ -8517,11 +8517,11 @@
         "acted": true,
         "last_run_at": "2026-10-15T07:34:48.574685+00:00",
         "holdings": 27,
-        "nav": 496.46,
-        "cash": 11.78,
+        "nav": 493.81,
+        "cash": 10.97,
         "contributed_capital": 1000.0,
         "weekday_batch_count": 52,
-        "epoch0_batch_count": 27
+        "epoch0_batch_count": 26
       },
       "equal_support": {
         "present": true,
@@ -8806,6 +8806,19 @@
               "buy_tier_level_gbp_fx_warped": 484.68
             },
             "market": 991.53
+          },
+          {
+            "date": "2026-10-16",
+            "held": 977.76,
+            "nav": 977.76,
+            "held_stock": 977.76,
+            "cash": 0.0,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {
+              "buy_tier_level_gbp_fx_warped": 482.84
+            },
+            "market": 991.53
           }
         ],
         "series": [
@@ -8845,16 +8858,16 @@
               "capital_epoch": "contaminated_gbp_unit_mismatch",
               "note": "Do not treat as adoption-truth NAV; compare only with FX disclaimer."
             },
-            "point_count": 33
+            "point_count": 34
           }
         ],
         "last": {
-          "date": "2026-10-15",
-          "held": 977.8,
+          "date": "2026-10-16",
+          "held": 977.76,
           "market": 991.53,
-          "nav": 977.8,
-          "positions": 26,
-          "excess_pct": -0.013847
+          "nav": 977.76,
+          "positions": 27,
+          "excess_pct": -0.013888
         }
       },
       "learning_depth": null,
