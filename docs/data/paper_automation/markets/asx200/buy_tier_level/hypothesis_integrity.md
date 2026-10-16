@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-10-15T07:34:44.005637+00:00
+Track: `buy_tier_level` · updated 2026-10-16T00:47:22.366118+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **13** / 27 (48% count, 46% NAV)
+- Losers: **12** / 27 (44% count, 42% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -73,12 +73,6 @@ Track: `buy_tier_level` · updated 2026-10-15T07:34:44.005637+00:00
 - data_quality 0.95
 - conviction 59%
 
-### CLW.AX — weakening / watch_review (-6.3%)
-- left buy tier (hold)
-- conviction 30% below intact floor
-- cheapness family still passes
-- data_quality 0.90
-
 ### ARB.AX — weakening / watch_review (-6.0%)
 - research verdict caution
 - still buy
@@ -105,7 +99,7 @@ Track: `buy_tier_level` · updated 2026-10-15T07:34:44.005637+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 46%
+- conviction 53%
 
 ### EBO.AX — intact / hold_tolerate (-2.7%)
 - still buy
@@ -123,28 +117,32 @@ Track: `buy_tier_level` · updated 2026-10-15T07:34:44.005637+00:00
 
 ### GMD.AX — weakening / watch_review (-2.3%)
 - research verdict caution
-- conviction 35% below intact floor
 - still buy
 - cheapness family still passes
 
 ### SMR.AX — weakening / watch_review (+0.0%)
 - research verdict caution
-- conviction 16% below intact floor
+- conviction 19% below intact floor
 - still buy
 - cheapness family still passes
 
 ### TUA.AX — weakening / watch_review (+0.0%)
 - research verdict caution
-- conviction 19% below intact floor
+- conviction 23% below intact floor
 - still buy
 - cheapness family still passes
 
-### NWS.AX — weakening / watch_review (+0.5%)
-- left buy tier (hold)
-- research verdict caution
-- conviction 17% below intact floor
+### FMG.AX — intact / hold_tolerate (+0.0%)
+- still strong_buy
+- research accumulate
 - cheapness family still passes
-- data_quality 1.00
+- data_quality 0.95
+- conviction 61%
+
+### PRN.AX — weakening / watch_review (+0.0%)
+- conviction 29% below intact floor
+- still buy
+- research accumulate
 
 ### BPT.AX — intact / hold_tolerate (+0.6%)
 - still buy
