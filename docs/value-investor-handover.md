@@ -24,6 +24,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-15.md` (FTSE ranks 141–150)
 - `docs/ftse350-batch-16.md` (FTSE ranks 151–160)
 - `docs/ftse350-batch-17.md` (FTSE ranks 161–170)
+- `docs/ftse350-batch-18.md` (FTSE ranks 171–180)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -349,7 +350,7 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 **What is wrong.** Operating names have an 11 Oct 2026 London price and no ordinary-share count, so the pound cap is missing. For the first six, the roster reason still says “no price, share count, or convertible cap”. Section 6’s list of 100 names with no pound cap is the trust names that have no 11 Oct price. It does not cover an operating name whose price is stored and whose share count is missing.
 
-**Where.** `3IN.L` 388.0 pence, `AAF.L` 290.2 pence, `AAL.L` 4,170.0 pence, `ADM.L` 3,624.0 pence, `AJB.L` 592.5 pence, and `AMRQ.L` 117.0 pence. Also `ANTO.L` 3,770.0 pence, `APN.L` 273.5 pence, `ATG.L` 472.8 pence, `AUTO.L` 488.7 pence, `AV.L` 677.0 pence, `AVON.L` 2,330.0 pence, and `AZN.L` 11,998.0 pence. Also `ELM.L` 182.2 pence, `ENOG.L` 730.5 pence, `ENT.L` 426.9 pence, `EXPN.L` 2,682.0 pence, `EZJ.L` 680.0 pence, and `FAN.L` 665.0 pence. Ordinary shares are missing on each. The roster cap is missing on each. On `AZN.L` the roster line points at the `AZN.ST` market cap, and the repo macro file has no SEK rate, so the pound figure is missing for that reason as well.
+**Where.** `3IN.L` 388.0 pence, `AAF.L` 290.2 pence, `AAL.L` 4,170.0 pence, `ADM.L` 3,624.0 pence, `AJB.L` 592.5 pence, and `AMRQ.L` 117.0 pence. Also `ANTO.L` 3,770.0 pence, `APN.L` 273.5 pence, `ATG.L` 472.8 pence, `AUTO.L` 488.7 pence, `AV.L` 677.0 pence, `AVON.L` 2,330.0 pence, and `AZN.L` 11,998.0 pence. Also `ELM.L` 182.2 pence, `ENOG.L` 730.5 pence, `ENT.L` 426.9 pence, `EXPN.L` 2,682.0 pence, `EZJ.L` 680.0 pence, and `FAN.L` 665.0 pence. Also `FCH.L` 189.2 pence, `FRAS.L` 838.5 pence, and `FSG.L` 444.5 pence. Ordinary shares are missing on each. The roster cap is missing on each. On `AZN.L` the roster line points at the `AZN.ST` market cap, and the repo macro file has no SEK rate, so the pound figure is missing for that reason as well.
 
 **What to change.** Do not file these names with the trust names that have no price. The 11 Oct price is stored. The missing piece is the ordinary-share count. Until that count is stored, leave the pound cap missing rather than citing “no price”. On `AZN.L`, do not treat the `AZN.ST` market cap as a pound cap while the macro file has no SEK rate.
 
