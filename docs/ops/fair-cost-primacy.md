@@ -43,6 +43,12 @@ N200 (`strand-b-plain-value-tech-timing-v0`) scores episode returns with
 change marker `n200-fair-cost-primary-v1` (same `registration_id`; see
 [n200-tech-timing-observe.md](n200-tech-timing-observe.md)).
 
+## N206 plain earnings-yield identity
+
+N206 (`strand-d-plain-ey-identity-v0`) is the patient-hold plain EY observe:
+fixed-stake v0, fair-cost episode % primary, cash excess and stress report-only.
+It scores panels already on disk. See [n206-plain-ey-observe.md](n206-plain-ey-observe.md).
+
 ## N210 / B3 judgment observe
 
 N210 (`strand-e-ai-judgment-fixed-stake-v0`) is the B3 cold-start for
@@ -56,4 +62,5 @@ See [n210-ai-judgment-observe.md](n210-ai-judgment-observe.md) and
 - [market-trading-costs.md](market-trading-costs.md) — fair tables vs 3% stress
 - [assessment-scoreboard.md](assessment-scoreboard.md) — fair-cost learning table
 - [n200-tech-timing-observe.md](n200-tech-timing-observe.md) — sealed observe scoreboard
+- [n206-plain-ey-observe.md](n206-plain-ey-observe.md) — patient plain-EY observe
 - [n210-ai-judgment-observe.md](n210-ai-judgment-observe.md) — B3 judgment observe

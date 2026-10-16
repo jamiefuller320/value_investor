@@ -32,6 +32,9 @@ demands do **not starve running units**.
 - **N201 sealed 2026-10-12** as observe-only — enqueued as a **waiter** (rank 5
   until it becomes launch-queue head). Do not deepen its shortlist ahead of
   holdings / N200 / accepted F3 repairs.
+- **N206 sealed 2026-10-16** (`strand-d-plain-ey-identity-v0`) scores existing
+  FTSE history and library screen panels. It does **not** request a filing
+  ingest sprint and is not a deepen-queue head ahead of holdings or N200.
 - Newly sealed strategies wait their turn unless Investment + Data **explicitly**
   re-prioritize the queue head.
 - Aligns with: deepen only sealed shortlists, F3 as priority feed, no preemptive

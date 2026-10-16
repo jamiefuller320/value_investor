@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "registration_id": "strand-d-plain-ey-identity-v0",
+  "deferred_id": "N206",
+  "status": "sealed_observe_only",
+  "sealed_at": "2026-10-16",
+  "observe_only": true,
+  "influences_live": false,
+  "alone_first": true,
+  "identity_id": "plain_ey_top30_financial_health",
+  "baseline_promoted_from": "patient_plain_ey_hold_v0",
+  "success_metric_id": "smooth_ret_cohort_median",
+  "learning_question": "Across live and admitted markets, does a patient plain earnings-yield top-30% local book (financial_health pass, no momentum filter), sized as a fixed 100 local-currency stake, earn a positive fair-cost episode cohort median?",
+  "entry_filters": {
+    "plain_ey_top_share_local": 0.3,
+    "momentum_filter": false,
+    "financial_health": "pass",
+    "all_required": true
+  },
+  "sizing": {
+    "mode": "fixed_stake",
+    "stake_units": 100.0,
+    "stake_currency": "local_market",
+    "cash_fund_nav": "parked",
+    "scoreboard_unit": "fair_cost_episode_pct",
+    "dca": "not_on_v0"
+  },
+  "universe": {
+    "markets": "ftse350_plus_admitted",
+    "returns": "market_native",
+    "fx_conversion": false,
+    "panels": "existing_ftse_history_and_library_screen"
+  },
+  "buy_trigger": "next_eligible_weekly_refresh_after_filters_clear",
+  "exit": {
+    "hold_trading_days": 63,
+    "or_identity_quality_break": true,
+    "whichever_first": true,
+    "archive_trading_day_proxy": "busday_with_market_holidays"
+  },
+  "o3_volume_gate": {
+    "completed_entry_episodes_min": 48,
+    "calendar_weeks_spanned_min": 8,
+    "rule": "both_required",
+    "alone_first": true,
+    "pairwise": false
+  },
+  "o4_smoother": "smooth_ret_cohort_median",
+  "o5_primacy": {
+    "primary": "absolute_smoothed_return_fair_costs",
+    "cash_excess": "report_only",
+    "stress_cost": "report_only",
+    "market_index": "omitted_no_index_series_on_panels"
+  },
+  "o6_phase_floor": {
+    "entries_per_week_target": 8.0,
+    "note": "mechanism floor only \u2014 not alpha"
+  },
+  "cost_basis": {
+    "primary": "fair_market_table",
+    "market_id": "ftse350",
+    "buy_cost_pct": 0.00525,
+    "sell_cost_pct": 0.00025,
+    "round_trip_pct": 0.0055,
+    "trade_cost_pct_symmetric_proxy": 0.00275,
+    "source": "t212_invest_fair_v1",
+    "stress_trade_cost_pct": 0.03,
+    "stress_role": "report_only",
+    "per_market_tables": true,
+    "fx_conversion": false
+  },
+  "trade_cost_pct": 0.00275,
+  "buy_cost_pct": 0.00525,
+  "sell_cost_pct": 0.00025,
+  "stress_trade_cost_pct": 0.03,
+  "eligibility_mode": "entry_fields_required_f9_or_pass",
+  "panels_used": [
+    "docs/data/history run snapshots (FTSE)",
+    "library signals_*.csv earnings yield / trailing P/E",
+    "library screen/history models_*.json.gz financial_health"
+  ],
+  "filing_ingest_sprint": false,
+  "momentum_price_fetch": false,
+  "launch_queue": {
+    "enqueued": true,
+    "data_deepen_requested": false,
+    "rank_note": "Scores panels the repo already has. No filing ingest sprint ahead of holdings or N200. Not a deepen-queue head.",
+    "doc": "docs/ops/data-pillar-priorities.md"
+  },
+  "does_not": [
+    "widen_max_positions",
+    "widen_sector_cap",
+    "promote_n200",
+    "promote_n201",
+    "promote_n210",
+    "crown_assessment_primary",
+    "pairwise_compete",
+    "fourth_equal_ingest_sprint",
+    "live_llm_influence"
+  ],
+  "shrink_policy": "new_twins_failure_mode_ladder_not_mid_flight_prune",
+  "constraints": [
+    "observe_only",
+    "influences_live_false",
+    "alone_first",
+    "no_live_strand_a_writes",
+    "no_decision_review_apply",
+    "no_new_screen_extras",
+    "no_momentum_price_fetch",
+    "no_filing_ingest_sprint",
+    "f9_eligibility",
+    "f8_fail_closed",
+    "fixed_stake_not_fund_nav",
+    "fair_costs_primary",
+    "stress_cost_report_only",
+    "cash_excess_report_only",
+    "no_pairwise",
+    "logged_change_markers",
+    "no_fx_conversion"
+  ],
+  "ops_doc": "docs/ops/n206-plain-ey-observe.md",
+  "observe_store": "docs/data/n206_plain_ey_observe.json"
+}
