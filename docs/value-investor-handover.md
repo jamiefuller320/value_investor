@@ -19,6 +19,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-10.md` (FTSE ranks 91–100)
 - `docs/ftse350-batch-11.md` (FTSE ranks 101–110)
 - `docs/ftse350-batch-12.md` (FTSE ranks 111–120)
+- `docs/ftse350-batch-13.md` (FTSE ranks 121–130)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -363,3 +364,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** The `omxs30` row stores `market_cap` 2,565,198,053,376 and `last_price` 1,654.0. The `euro_depth` row stores `market_cap` 2,598,542,508,032 and `last_price` 1,675.5. Both store `shares_outstanding` 1,550,760,380 and enterprise value 2,626,157,543,424. On the `omxs30` row, that price times those shares is 2,564,957,668,520, not the stored market cap. On the `euro_depth` row, that price times those shares is 2,598,299,016,690, not the stored market cap.
 
 **What to change.** Keep one `AZN.ST` row, or name which market the other copy belongs to. Do not store two market caps and two last prices against one share count and one enterprise value. Do not store a market cap that is not last price times shares on that same row.
+
+## 31. Baltic Classifieds prices are not on one scale
+
+**What is wrong.** `BCG.L` is in all 25 history runs, and the stored prices are not on one scale. Section 2 says London history prices are in pence. It does not cover one ticker whose prints change scale inside that archive.
+
+**Where.** The stored prices are 199.0 on 2 Aug and 213.8 on 30 Aug, then 2.43 on 2 Sep and 2.352 on 11 Oct. The low is 2.05 and the high is 213.8.
+
+**What to change.** Do not use 213.8 and 2.352 as prints on one scale. Do not take a high of 213.8 and a low of 2.05 as a range until the scale of each print is named. The note does not give a cause.
