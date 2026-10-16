@@ -40,6 +40,12 @@ _PUSH_FINDING_MAP: tuple[tuple[str, str, str, str], ...] = (
         "docs/ops/n201-value-mom-observe.md#human-volume-gate-review",
     ),
     (
+        "N206 volume gate ready for review",
+        "adhoc-n206-volume-gate-review",
+        "Review N206 plain-EY volume gate (no auto-promote)",
+        "docs/ops/n206-plain-ey-observe.md#human-volume-gate-review",
+    ),
+    (
         "Parked engineering tasks need manual review",
         "weekday-engineering-parked-backlog-clear",
         "Clear engineering parked backlog when pause still fires",
