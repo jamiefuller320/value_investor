@@ -25,6 +25,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-16.md` (FTSE ranks 151–160)
 - `docs/ftse350-batch-17.md` (FTSE ranks 161–170)
 - `docs/ftse350-batch-18.md` (FTSE ranks 171–180)
+- `docs/ftse350-batch-19.md` (FTSE ranks 181–190)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -68,6 +69,7 @@ Those notes are the source. Do not treat this handover as a new pass over the fi
 - Close but not the filing ratio: `HLN.L` cash dividends 612 million are 1.97% of the cap, screen yield 2.1%, and `Common Stock Dividend Paid` is missing. `GSK.L` pound dividend/cap 3.65% vs screen 3.9%. `BT-A.L` 4.25% vs raw 4.32, displayed 4.3%. `CNA.L` 3.56% if pounds vs raw 3.85, displayed 3.9%. `SGE.L` 2.02% vs raw 2.1.
 - `Common Stock Dividend Paid` is missing, and only `Cash Dividends Paid` is present, for `FRES.L`, `HLN.L`, and `EDV.L`.
 - `IAG.L` has no filing dividend. Screen raw 2.05 displays as 2.0%, and the Madrid metrics yield is the fraction 0.02.
+- `HAS.L` stores `dividend_yield_raw` 0.68 and displays 68.0%. There is no statement.
 
 **What to change.** Store yield as a decimal fraction, and format percent only at display. Do not treat “raw > 1” as the only rescale. Recompute the screen yield from the dividend line actually present (`Common Stock Dividend Paid`, else `Cash Dividends Paid`) and a market cap in the same currency. If the currency is missing, leave the yield unchecked instead of printing a percent.
 
@@ -350,7 +352,7 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 **What is wrong.** Operating names have an 11 Oct 2026 London price and no ordinary-share count, so the pound cap is missing. For the first six, the roster reason still says “no price, share count, or convertible cap”. Section 6’s list of 100 names with no pound cap is the trust names that have no 11 Oct price. It does not cover an operating name whose price is stored and whose share count is missing.
 
-**Where.** `3IN.L` 388.0 pence, `AAF.L` 290.2 pence, `AAL.L` 4,170.0 pence, `ADM.L` 3,624.0 pence, `AJB.L` 592.5 pence, and `AMRQ.L` 117.0 pence. Also `ANTO.L` 3,770.0 pence, `APN.L` 273.5 pence, `ATG.L` 472.8 pence, `AUTO.L` 488.7 pence, `AV.L` 677.0 pence, `AVON.L` 2,330.0 pence, and `AZN.L` 11,998.0 pence. Also `ELM.L` 182.2 pence, `ENOG.L` 730.5 pence, `ENT.L` 426.9 pence, `EXPN.L` 2,682.0 pence, `EZJ.L` 680.0 pence, and `FAN.L` 665.0 pence. Also `FCH.L` 189.2 pence, `FRAS.L` 838.5 pence, and `FSG.L` 444.5 pence. Ordinary shares are missing on each. The roster cap is missing on each. On `AZN.L` the roster line points at the `AZN.ST` market cap, and the repo macro file has no SEK rate, so the pound figure is missing for that reason as well.
+**Where.** `3IN.L` 388.0 pence, `AAF.L` 290.2 pence, `AAL.L` 4,170.0 pence, `ADM.L` 3,624.0 pence, `AJB.L` 592.5 pence, and `AMRQ.L` 117.0 pence. Also `ANTO.L` 3,770.0 pence, `APN.L` 273.5 pence, `ATG.L` 472.8 pence, `AUTO.L` 488.7 pence, `AV.L` 677.0 pence, `AVON.L` 2,330.0 pence, and `AZN.L` 11,998.0 pence. Also `ELM.L` 182.2 pence, `ENOG.L` 730.5 pence, `ENT.L` 426.9 pence, `EXPN.L` 2,682.0 pence, `EZJ.L` 680.0 pence, and `FAN.L` 665.0 pence. Also `FCH.L` 189.2 pence, `FRAS.L` 838.5 pence, and `FSG.L` 444.5 pence. Also `GAW.L` 16,390.0 pence, `GDWN.L` 14,220.0 pence, `GLEN.L` 584.6 pence, `GNC.L` 255.4 pence, `GRI.L` 162.0 pence, `HAS.L` 64.25 pence, and `HBR.L` 281.4 pence. Ordinary shares are missing on each. The roster cap is missing on each. On `AZN.L` the roster line points at the `AZN.ST` market cap, and the repo macro file has no SEK rate, so the pound figure is missing for that reason as well.
 
 **What to change.** Do not file these names with the trust names that have no price. The 11 Oct price is stored. The missing piece is the ordinary-share count. Until that count is stored, leave the pound cap missing rather than citing “no price”. On `AZN.L`, do not treat the `AZN.ST` market cap as a pound cap while the macro file has no SEK rate.
 
@@ -380,11 +382,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 32. Free cash flow is larger than operating cash flow, and there is no filing
 
-**What is wrong.** `BPT.L`, `CCH.L`, and `DCC.L` each display a free-cash-flow figure larger than the screen’s operating cash flow. There is no filing. The notes do not give a cause.
+**What is wrong.** `BPT.L`, `CCH.L`, `DCC.L`, `HBR.L`, and `HAS.L` each display a free-cash-flow figure larger than the screen’s operating cash flow. There is no filing. The notes do not give a cause.
 
-**Where.** There is no `docs/data/research/BPT.L` folder. The displayed free cash flow is 446,562,496. The screen’s operating cash flow is 135,900,000. The free-cash-flow figure is stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/CCH.L` folder. The displayed free cash flow is 1,593,175,040. The screen’s operating cash flow is 1,513,500,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/DCC.L` folder. The displayed free cash flow is 1,308,650,880. The screen’s operating cash flow is 672,501,000. That figure is also stored as `filing_aligned`, and there is no filing.
+**Where.** There is no `docs/data/research/BPT.L` folder. The displayed free cash flow is 446,562,496. The screen’s operating cash flow is 135,900,000. The free-cash-flow figure is stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/CCH.L` folder. The displayed free cash flow is 1,593,175,040. The screen’s operating cash flow is 1,513,500,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/DCC.L` folder. The displayed free cash flow is 1,308,650,880. The screen’s operating cash flow is 672,501,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/HBR.L` folder. The displayed free cash flow is 4,791,499,776. The screen’s operating cash flow is 3,386,000,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/HAS.L` folder. The displayed free cash flow is 111,587,504. The screen’s operating cash flow is 74,000,000. That figure is also stored as `filing_aligned`, and there is no filing.
 
-**What to change.** Do not present 446,562,496, 1,593,175,040, or 1,308,650,880 as free cash flow while each is larger than its screen operating cash flow and no filing exists. Leave the pairs unchecked. The notes do not give a cause.
+**What to change.** Do not present 446,562,496, 1,593,175,040, 1,308,650,880, 4,791,499,776, or 111,587,504 as free cash flow while each is larger than its screen operating cash flow and no filing exists. Leave the pairs unchecked. The notes do not give a cause.
 
 ## 33. A London history print can be a dollar quote
 
