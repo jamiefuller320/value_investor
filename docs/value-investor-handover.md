@@ -10,8 +10,9 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/value-investor-batch-1.md` (global roster ranks 1–10, none of them on the live FTSE 350 screen)
 - `docs/ftse350-batch-1.md` (FTSE ranks 1–10)
 - `docs/ftse350-batch-2.md` (FTSE ranks 11–20)
+- `docs/ftse350-batch-3.md` (FTSE ranks 21–30)
 
-Those three notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
+Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
 ## 1. Statement files do not label their currency
 
@@ -180,3 +181,39 @@ HSBC and AstraZeneca did not need an HKD or SEK rate. Their London prices and th
 - `MSFT` and `AVGO`: the stored research rationale is cut off at the end.
 
 **What to change.** Keep both index signals when they differ. Do not collapse them to one composite. Give `SPCX` one sector, and do not screen it as if a filing had been ingested. Store the full rationale, or store that it was truncated.
+
+## 11. The statement field called TTM free cash flow is the latest quarter
+
+**What is wrong.** On these names the statement field called TTM free cash flow equals the latest quarterly free-cash-flow line. It is not a trailing twelve months. Section 4 already records one case of that equality, on `CNA.L`. Batch 3 shows the same identity on seven more names, including one where the annual filing line and that field are far apart.
+
+**Where.** `BTRW.L` annual filing free cash flow is 8.7 million. The statement’s own TTM free cash flow is 422.7 million, the same number as free cash flow on the 2026-06-30 quarterly cash-flow statement. The same identity, statement TTM equal to the latest quarterly free-cash-flow line, is on `KGF.L` (810 million, quarter 2026-07-31), `ABDN.L` (297 million, quarter 2026-06-30), `BBY.L` (565 million, quarter 2026-06-30), `JD.L` (1,032 million, quarter 2026-07-31), `SCT.L` (184,612,000, quarter 2026-01-31), and `HIK.L` (191 million, quarter 2026-06-30).
+
+**What to change.** Do not label that statement field as trailing twelve months when it is the latest quarterly free-cash-flow line. Keep it separate from the annual filing line. On `BTRW.L`, do not let 422.7 million stand in for the annual 8.7 million.
+
+## 12. Computacenter’s divergence flag is false while the displayed figure is not the filing
+
+**What is wrong.** `CCC.L` stores `fcf_divergence_flagged` false. The displayed free cash flow is the screen TTM, 287,937,504. The filing free cash flow and the statement’s own TTM are both 257.6 million.
+
+**Where.** `docs/data/research/CCC.L`. The canonical figure is the filing line, tagged `auto_majority_filing_aligned`. The displayed figure is the screen TTM, not that canonical figure. The flag does not mark the difference.
+
+**What to change.** Set `fcf_divergence_flagged` when the displayed free cash flow is the screen TTM and that number is not the filing line. Do not display 287,937,504 as if it were the 257.6 million filing figure.
+
+## 13. Memos cite a cash-flow figure that is not on the statement
+
+**What is wrong.** Three memos state a cash-flow amount that is not a line in the statement file. One of them also names a fiscal year the statement year key does not use.
+
+**Where.**
+
+- `CCC.L`: the memo states filing free cash flow of £206.9m. The statement line is 257.6 million. The prior-year free-cash-flow line is 385.6 million, which is also not £206.9m.
+- `KGF.L`: the memo states H1 free cash flow of £339m. That figure is not the annual line (1,032 million) and not the statement TTM (810 million).
+- `SCT.L`: the memo says FY2025 statutory operating cash flow of £140.7m. The statement’s latest operating-cash-flow line is 115,608,000. The 2026-01-31 quarterly operating-cash-flow line is 195,891,000. Neither is £140.7m. The statement year key is 2024. The memo calls the accounts FY2025.
+
+**What to change.** Do not treat a memo cash-flow sentence as the statement line when the numbers differ. Point the memo at the statement field it is quoting, or drop the figure. For `SCT.L`, do not call the statement FY2025 while its year key is 2024.
+
+## 14. Batch 3 has no library metrics row, and IG Group’s screen ROE is missing
+
+**What is wrong.** No library metrics row is stored for the ten names in `docs/ftse350-batch-3.md`. `IGG.L` also has no screen ROE, while net income and equity are in the statement.
+
+**Where.** The ten are `CCC.L`, `KGF.L`, `ABDN.L`, `BBY.L`, `JD.L`, `BTRW.L`, `SCT.L`, `RS1.L`, `HIK.L`, and `IGG.L`. On `IGG.L`, net income is 380.4 million and equity is 1,842.4 million. Net income over that equity is 20.6%. The screen ROE is missing.
+
+**What to change.** Do not read a missing library metrics row as a stored zero. For `IGG.L`, do not leave screen ROE empty when the statement has both net income and equity. Store the ratio from those lines, or store that the screen left it unchecked.
