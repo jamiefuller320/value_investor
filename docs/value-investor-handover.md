@@ -16,6 +16,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-6.md` (FTSE ranks 51–60)
 - `docs/ftse350-batch-7.md` (FTSE ranks 61–70)
 - `docs/ftse350-batch-9.md` (FTSE ranks 81–90)
+- `docs/ftse350-batch-10.md` (FTSE ranks 91–100)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -141,7 +142,7 @@ HSBC and AstraZeneca did not need an HKD or SEK rate. Their London prices and th
 
 A ticker can also be missing from runs inside that 25-run archive. The span above is the archive’s dates, not a price path for every name.
 
-**Where.** `YNGA.L` is in 1 of the 25 runs: 996.0 pence on 11 Oct 2026 only. There is no 2 Aug price and no other print. `HFD.L` is absent from the 2 Aug run and present in the other 24.
+**Where.** `YNGA.L` is in 1 of the 25 runs: 996.0 pence on 11 Oct 2026 only. There is no 2 Aug price and no other print. `HFD.L` is absent from the 2 Aug run and present in the other 24. `ASC.L` is in 3 of the 25 runs: 498.0 pence on 4 Oct, 456.0 on 7 Oct, and 466.0 on 11 Oct. There is no 2 Aug price.
 
 **What to change.** Do not treat the 2 Aug–11 Oct span as a stored path for a name that is missing from runs inside it. Record which of the 25 runs contain the ticker before using a 2 Aug print, a high, or a low.
 
@@ -328,3 +329,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** `docs/data/research/GCP.L`. `Cash And Cash Equivalents` is missing. Cash of 12.0 million is stored as `Cash Cash Equivalents And Federal Funds Sold`. Net debt is 19.3 million, equal to total debt, so that field does not subtract the stored cash.
 
 **What to change.** Read cash from `Cash Cash Equivalents And Federal Funds Sold` when `Cash And Cash Equivalents` is missing, and name that field. Do not treat net debt of 19.3 million as total debt minus that 12.0 million. On this statement those two figures are equal, so the stored cash was not subtracted.
+
+## 27. The report flag and the object flag disagree
+
+**What is wrong.** On `POLN.L` and `BOWL.L`, `fcf_divergence_flagged` is true while the free-cash-flow object’s `filing_screen_mismatch` is false. The screen TTM is not the filing line. Section 12 covers a report flag that stays false. It does not cover these two stored flags disagreeing.
+
+**Where.** `docs/data/research/POLN.L`. Filing free cash flow is 46,660,000. The screen TTM is 35,976,876. The screen stores `fcf_divergence_flagged` true and `filing_screen_mismatch` false. `docs/data/research/BOWL.L`. Filing free cash flow is 37,017,000. The screen TTM is 43,811,376. The screen stores `fcf_divergence_flagged` true and `filing_screen_mismatch` false.
+
+**What to change.** Do not store `filing_screen_mismatch` false while `fcf_divergence_flagged` is true and the screen TTM is not the filing line. On these two names the object flag should agree with the report flag.
