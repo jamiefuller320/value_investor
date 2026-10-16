@@ -11,6 +11,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-1.md` (FTSE ranks 1–10)
 - `docs/ftse350-batch-2.md` (FTSE ranks 11–20)
 - `docs/ftse350-batch-3.md` (FTSE ranks 21–30)
+- `docs/ftse350-batch-4.md` (FTSE ranks 31–40)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -192,21 +193,25 @@ HSBC and AstraZeneca did not need an HKD or SEK rate. Their London prices and th
 
 ## 12. Computacenter’s divergence flag is false while the displayed figure is not the filing
 
-**What is wrong.** `CCC.L` stores `fcf_divergence_flagged` false. The displayed free cash flow is the screen TTM, 287,937,504. The filing free cash flow and the statement’s own TTM are both 257.6 million.
+**What is wrong.** `CCC.L` stores `fcf_divergence_flagged` false. The displayed free cash flow is the screen TTM, 287,937,504. The filing free cash flow and the statement’s own TTM are both 257.6 million. `PAF.L` is the other way around: the flag is also false, and the displayed figure is the filing line.
 
-**Where.** `docs/data/research/CCC.L`. The canonical figure is the filing line, tagged `auto_majority_filing_aligned`. The displayed figure is the screen TTM, not that canonical figure. The flag does not mark the difference.
+**Where.**
 
-**What to change.** Set `fcf_divergence_flagged` when the displayed free cash flow is the screen TTM and that number is not the filing line. Do not display 287,937,504 as if it were the 257.6 million filing figure.
+- `docs/data/research/CCC.L`. The canonical figure is the filing line, tagged `auto_majority_filing_aligned`. The displayed figure is the screen TTM, not that canonical figure. The flag does not mark the difference.
+- `PAF.L`. Filing free cash flow 340,848,000 is the displayed figure. The statement’s own TTM is the same 340,848,000. The screen TTM is 327,180,512, the same number as the AIM metrics `free_cashflow`. The flag does not mark that difference.
+
+**What to change.** Set `fcf_divergence_flagged` when the screen TTM is not the filing line, whether or not the displayed figure is the screen TTM. Do not display Computacenter’s 287,937,504 as if it were the 257.6 million filing figure. On `PAF.L`, do not treat a false flag as agreement between the filing line and the screen TTM.
 
 ## 13. Memos cite a cash-flow figure that is not on the statement
 
-**What is wrong.** Three memos state a cash-flow amount that is not a line in the statement file. One of them also names a fiscal year the statement year key does not use.
+**What is wrong.** Memos state a cash-flow amount that is not a line in the statement file. One of them also names a fiscal year the statement year key does not use.
 
 **Where.**
 
 - `CCC.L`: the memo states filing free cash flow of £206.9m. The statement line is 257.6 million. The prior-year free-cash-flow line is 385.6 million, which is also not £206.9m.
 - `KGF.L`: the memo states H1 free cash flow of £339m. That figure is not the annual line (1,032 million) and not the statement TTM (810 million).
 - `SCT.L`: the memo says FY2025 statutory operating cash flow of £140.7m. The statement’s latest operating-cash-flow line is 115,608,000. The 2026-01-31 quarterly operating-cash-flow line is 195,891,000. Neither is £140.7m. The statement year key is 2024. The memo calls the accounts FY2025.
+- `BWY.L`: the memo states FY26 statutory operating cash of £337m and net cash of £158m. Neither is a line in the statement file. The year split on that file is in section 15.
 
 **What to change.** Do not treat a memo cash-flow sentence as the statement line when the numbers differ. Point the memo at the statement field it is quoting, or drop the figure. For `SCT.L`, do not call the statement FY2025 while its year key is 2024.
 
@@ -217,3 +222,35 @@ HSBC and AstraZeneca did not need an HKD or SEK rate. Their London prices and th
 **Where.** The ten are `CCC.L`, `KGF.L`, `ABDN.L`, `BBY.L`, `JD.L`, `BTRW.L`, `SCT.L`, `RS1.L`, `HIK.L`, and `IGG.L`. On `IGG.L`, net income is 380.4 million and equity is 1,842.4 million. Net income over that equity is 20.6%. The screen ROE is missing.
 
 **What to change.** Do not read a missing library metrics row as a stored zero. For `IGG.L`, do not leave screen ROE empty when the statement has both net income and equity. Store the ratio from those lines, or store that the screen left it unchecked.
+
+## 15. Bellway’s 2025 statement does not cover a full set of accounts
+
+**What is wrong.** `BWY.L`’s 2025 income statement has only EPS and share counts. The balance sheet and the cash flow stop at 2024. The screen P/E uses the 2025 EPS. The screen free cash flow is the 2024 line.
+
+**Where.** `docs/data/research/BWY.L`. The 2025 income-statement key has diluted EPS 1.318, basic EPS 1.328, diluted average shares 119,533,715, and basic average shares 118,644,063. Revenue, net income, and operating income are missing on that year. The balance sheet and the cash flow have no 2025 key. Their latest year is 2024. Price £19.48 over the 2025 diluted EPS of 1.318 is 14.8, and the screen P/E is 14.8. The 2024 free-cash-flow line is −66.9 million, and that is the displayed screen free cash flow. The memo’s £337m operating cash and £158m net cash are not on the statement. That memo gap is also listed in section 13.
+
+**What to change.** Do not pair a 2025 EPS with a 2024 cash-flow line and present both as one year’s screen. Leave revenue, net income, and operating income missing on 2025 until those lines exist. Do not treat the 2024 free-cash-flow line as a 2025 or FY26 figure.
+
+## 16. Inchcape stores leverage figures that disagree
+
+**What is wrong.** `INCH.L` stores several leverage figures that are not the same ratio. None of the screen leverage fields is total debt over equity.
+
+**Where.** `docs/data/research/INCH.L`. Total debt 1,264 million over equity 1,257 million is 100.6%. Total debt minus cash of 635 million is 629 million. The screen input `debt_to_equity` is 0.080. The key metrics store `D/E (Yahoo)` 273%, `D/E (screen)` 0%, and `Leverage (filing)` £1.0m adjusted net debt.
+
+**What to change.** Store one named leverage figure, with the debt and cash lines it uses. Do not show 273%, 0%, £1.0m, and 0.080 as if they were the same ratio. Total debt over equity on this statement is 100.6%, and debt minus cash is 629 million.
+
+## 17. Berkeley has no capital-expenditure line
+
+**What is wrong.** `BKG.L` has no capital-expenditure line. Free cash flow equals operating cash flow. Purchase of PPE is 0.
+
+**Where.** `docs/data/research/BKG.L`. Filing free cash flow 260.3 million equals the screen canonical figure and equals operating cash flow. Purchase of PPE is 0. The capital-expenditure line is missing.
+
+**What to change.** Do not treat free cash flow as operating cash flow minus capital expenditure when the capital-expenditure line is absent. Store that the line is missing, and do not read Purchase of PPE of 0 as a researched capex figure unless the filing says so.
+
+## 18. B&M’s screen yield is a per-share dividend, not the cash-dividend line
+
+**What is wrong.** `BME.L`’s screen yield equals the memo’s ordinary dividend of 9.6p over the 264.6 pence price, which is 3.63%. The cash-dividend line over the cap is 5.00%.
+
+**Where.** `docs/data/research/BME.L`. The dividend of 133 million is 5.00% of the cap. Screen `dividend_yield_raw` is 3.63 and the displayed yield is 3.6%. The financial review’s ordinary dividend of 9.6p over the 264.6 pence price is 3.63%.
+
+**What to change.** Do not present the per-share ordinary dividend over the London price as the same yield as cash dividends over the market cap. If the screen uses 9.6p, label that basis. The cash-dividend line on this statement is 5.00% of the cap.
