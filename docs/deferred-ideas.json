@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-16T16:32:44+00:00",
+  "updated_at": "2026-10-16T11:07:08+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -14367,6 +14367,22 @@
     },
     {
       "id": "L608",
+      "category": "later",
+      "section": "learning",
+      "title": "N201 observe store freezes FTSE momentum frame count",
+      "summary": "The observe refresh fetches 12-1 bars for later markets into a shared cache, but momentum_price_frames_used is taken from the FTSE payload before those frames are added. A 182-frame run on 2026-10-16 still stored 25. Do not read that field as the fetch total.",
+      "revisit_when": "Next time N201 skipped_missing_entry_fields is treated as a price-fetch gap",
+      "tags": [
+        "n201",
+        "momentum",
+        "observe"
+      ],
+      "status": "open",
+      "source": "bwy-n201 fetch 2026-10-16",
+      "added_at": "2026-10-16T11:07:08+00:00"
+    },
+    {
+      "id": "L609",
       "category": "later",
       "section": "ops",
       "title": "Refresh cold-store Ops badge from the live fat-slot bit",
