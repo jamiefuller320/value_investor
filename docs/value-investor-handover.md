@@ -12,6 +12,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-2.md` (FTSE ranks 11–20)
 - `docs/ftse350-batch-3.md` (FTSE ranks 21–30)
 - `docs/ftse350-batch-4.md` (FTSE ranks 31–40)
+- `docs/ftse350-batch-5.md` (FTSE ranks 41–50)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -254,3 +255,27 @@ HSBC and AstraZeneca did not need an HKD or SEK rate. Their London prices and th
 **Where.** `docs/data/research/BME.L`. The dividend of 133 million is 5.00% of the cap. Screen `dividend_yield_raw` is 3.63 and the displayed yield is 3.6%. The financial review’s ordinary dividend of 9.6p over the 264.6 pence price is 3.63%.
 
 **What to change.** Do not present the per-share ordinary dividend over the London price as the same yield as cash dividends over the market cap. If the screen uses 9.6p, label that basis. The cash-dividend line on this statement is 5.00% of the cap.
+
+## 19. Greggs has no statement TTM, and the screen still stores one
+
+**What is wrong.** `GRG.L` has no statement TTM free cash flow, and `quarterly_cashflow` is empty. The screen still stores a TTM figure, marked unverified, and also marked as a suppressed filing mismatch.
+
+**Where.** `docs/data/research/GRG.L`. The statement’s own TTM free cash flow is missing. `quarterly_cashflow` is empty. The screen TTM is 101,225,000. The screen stores `screen_ttm_unverified` true and `ttm_suppressed_screen_filing_mismatch` true.
+
+**What to change.** Do not store a screen TTM when the statement TTM is missing and the quarterly cash-flow file is empty. If a figure is kept, keep `screen_ttm_unverified` and `ttm_suppressed_screen_filing_mismatch` on it, and do not present 101,225,000 as a filing trailing twelve months.
+
+## 20. Grafton and Clarkson reviews say the quarterly file is empty, and it is not
+
+**What is wrong.** The financial reviews for `GFTU.L` and `CKN.L` say the quarterly cash-flow file is empty and TTM is suppressed. Both statement files have a quarterly free-cash-flow line, and that line is the statement TTM. Both screens store `ttm_suppressed_screen_filing_mismatch` false.
+
+**Where.** `docs/data/research/GFTU.L`: the statement TTM is 198,154,000, the same number as free cash flow on the 2026-06-30 quarterly cash-flow statement. The review says the Yahoo quarterly cash flow is empty and TTM is suppressed. `docs/data/research/CKN.L`: the statement TTM is 112.2 million, the same number as free cash flow on the 2026-06-30 quarterly cash-flow statement. The review says the quarterly cash-flow series is empty and TTM cash flow is suppressed. Both screens store `ttm_suppressed_screen_filing_mismatch` false.
+
+**What to change.** Do not write that the quarterly file is empty, or that TTM is suppressed, when the statement has a quarterly free-cash-flow line. Set `ttm_suppressed_screen_filing_mismatch` only when that line is actually missing. On these two names the quarterly line is the statement TTM.
+
+## 21. Hammerson’s trust screen is not the euro metrics row
+
+**What is wrong.** `HMSO.L` is on the trust screen. That screen is not the `HMSO.IR` metrics row. On that euro row, last price times shares is not the stored market cap. There is no statement under `HMSO.L` or `HMSO.IR`.
+
+**Where.** The trust screen key metrics are Discount 17.7%, P/E 8.2, P/B 0.82, and Yield 5.6%. ROE is missing. There is no free-cash-flow object. The `HMSO.IR` metrics row, stored under `euro_depth` and `iseq20`, has trailing P/E 8.75, price-to-book 0.883, dividend yield 0.0521, `return_on_equity` 0.1056, and free cash flow 10,037,500. None of those is the London screen figure. `last_price` 3.5 times `shares_outstanding` 529,736,620 is 1,854,078,170, not the market cap 2,041,640,448.
+
+**What to change.** Do not treat the trust-screen discount, P/E, P/B, or yield as the euro metrics row, and do not copy one onto the other without naming the source. Do not store a market cap that is not last price times shares on that same row. Leave the London multiples unchecked until a statement exists under `HMSO.L` or `HMSO.IR`.
