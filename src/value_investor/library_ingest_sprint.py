@@ -193,14 +193,22 @@ def run_library_ingest_sprint(
         max_runtime_seconds=max_runtime_seconds,
     )
     if decision.action != "run":
-        outcome.skipped.append(
-            {
-                "reason": decision.code or decision.reason,
-                "detail": decision.reason,
-                "action": decision.action,
-                "head_market": head_id,
-            }
-        )
+        named = [str(mid) for mid in (decision.markets or []) if str(mid).strip()]
+        base = {
+            "reason": decision.code or decision.reason,
+            "detail": decision.reason,
+            "action": decision.action,
+            "head_market": head_id,
+        }
+        # Width 0 still names the markets that had nothing to fetch.
+        if decision.code == "empty_strand" and named:
+            for mid in named:
+                outcome.skipped.append({"market_id": mid, **base})
+        else:
+            row = dict(base)
+            if len(named) == 1:
+                row["market_id"] = named[0]
+            outcome.skipped.append(row)
         return outcome
     market_list = decision.markets
     outcome.markets = market_list
