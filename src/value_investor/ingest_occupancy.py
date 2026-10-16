@@ -109,9 +109,12 @@ def build_ingest_occupancy(
     tasks_row = tasks if tasks is not None else _read(tasks_path)
 
     cascade = _as_dict(dispatch_row.get("ingest_cascade"))
-    focus = str(
-        dispatch_row.get("focus_market") or dispatch_row.get("market_id") or "euro_depth"
-    ).strip() or "euro_depth"
+    focus = (
+        str(
+            dispatch_row.get("focus_market") or dispatch_row.get("market_id") or "euro_depth"
+        ).strip()
+        or "euro_depth"
+    )
     badge, badge_reason = _euro_badge(status_row, focus)
     bit_known = "head_needs_fat_slot" in cascade
     head_needs = bool(cascade.get("head_needs_fat_slot")) if bit_known else None

@@ -49,9 +49,7 @@ def _row(*, badge: str, bit: bool) -> dict:
             "evaluated_at": "2026-10-16T07:33:09+00:00",
             "ingest_cascade": {"head_needs_fat_slot": bit},
             "parallel_sprint_markets": ["sp500"],
-            "parallel_sprint_status": [
-                {"market_id": "sp500", "should_run_parallel_ingest": True}
-            ],
+            "parallel_sprint_status": [{"market_id": "sp500", "should_run_parallel_ingest": True}],
         },
         market_status={
             "markets": [
@@ -91,7 +89,9 @@ def test_mismatch_finding_only_when_badge_and_bit_disagree() -> None:
 def test_check_fires_only_on_disagreement(tmp_path: Path) -> None:
     store = tmp_path / "ingest_occupancy.json"
     common = {
-        "pack_run": {"gate": {"evaluated_at": "2026-10-16T00:04:29+00:00", "focus_pressure_reasons": []}},
+        "pack_run": {
+            "gate": {"evaluated_at": "2026-10-16T00:04:29+00:00", "focus_pressure_reasons": []}
+        },
         "tasks": {"tasks": [{"status": "open"}]},
         "store_path": store,
         "persist": True,
@@ -106,7 +106,9 @@ def test_check_fires_only_on_disagreement(tmp_path: Path) -> None:
     }
 
     def status(badge: str) -> dict:
-        return {"markets": [{"market_id": "euro_depth", "ingest": badge, "ingest_reason": "thin=10"}]}
+        return {
+            "markets": [{"market_id": "euro_depth", "ingest": badge, "ingest_reason": "thin=10"}]
+        }
 
     agree = check_ingest_occupancy_mismatch(
         dispatch={**dispatch_base, "ingest_cascade": {"head_needs_fat_slot": True}},

@@ -1701,7 +1701,9 @@ def check_ingest_occupancy_mismatch(
         tasks_path=tasks_path or COMMITTED_TASKS_PATH,
     )
     if persist:
-        write_ingest_occupancy(row, Path(store_path) if store_path is not None else DEFAULT_OCCUPANCY_PATH)
+        write_ingest_occupancy(
+            row, Path(store_path) if store_path is not None else DEFAULT_OCCUPANCY_PATH
+        )
     if not row.get("mismatch"):
         return []
     return [
