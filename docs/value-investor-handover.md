@@ -22,6 +22,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-13.md` (FTSE ranks 121–130)
 - `docs/ftse350-batch-14.md` (FTSE ranks 131–140)
 - `docs/ftse350-batch-15.md` (FTSE ranks 141–150)
+- `docs/ftse350-batch-16.md` (FTSE ranks 151–160)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -377,11 +378,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 32. Free cash flow is larger than operating cash flow, and there is no filing
 
-**What is wrong.** `BPT.L` and `CCH.L` each display a free-cash-flow figure larger than the screen’s operating cash flow. There is no filing. The notes do not give a cause.
+**What is wrong.** `BPT.L`, `CCH.L`, and `DCC.L` each display a free-cash-flow figure larger than the screen’s operating cash flow. There is no filing. The notes do not give a cause.
 
-**Where.** There is no `docs/data/research/BPT.L` folder. The displayed free cash flow is 446,562,496. The screen’s operating cash flow is 135,900,000. The free-cash-flow figure is stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/CCH.L` folder. The displayed free cash flow is 1,593,175,040. The screen’s operating cash flow is 1,513,500,000. That figure is also stored as `filing_aligned`, and there is no filing.
+**Where.** There is no `docs/data/research/BPT.L` folder. The displayed free cash flow is 446,562,496. The screen’s operating cash flow is 135,900,000. The free-cash-flow figure is stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/CCH.L` folder. The displayed free cash flow is 1,593,175,040. The screen’s operating cash flow is 1,513,500,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/DCC.L` folder. The displayed free cash flow is 1,308,650,880. The screen’s operating cash flow is 672,501,000. That figure is also stored as `filing_aligned`, and there is no filing.
 
-**What to change.** Do not present 446,562,496 or 1,593,175,040 as free cash flow while each is larger than its screen operating cash flow and no filing exists. Leave both pairs unchecked. The notes do not give a cause.
+**What to change.** Do not present 446,562,496, 1,593,175,040, or 1,308,650,880 as free cash flow while each is larger than its screen operating cash flow and no filing exists. Leave the pairs unchecked. The notes do not give a cause.
 
 ## 33. A London history print can be a dollar quote
 
