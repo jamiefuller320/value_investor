@@ -401,3 +401,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** `AMRQ.L`: screen P/E 117.0 and price 117.0 pence. There is no statement. `BHMG.L`: screen P/E 419.0 and price 419.0 pence. There is no statement. `CSN.L`: screen P/E 322.0 and price 322.0 pence. There is no statement.
 
 **What to change.** Do not treat an unchecked screen P/E that equals the London price in pence as a multiple. Leave it unchecked until a statement EPS exists.
+
+## 35. A trust row can show only a P/E
+
+**What is wrong.** `FCSS.L` is on the trust screen. Its key metrics are a P/E of 8.5 only. Discount, premium, P/B, and yield are missing. Metrics present are 7 of 11. There is no history price and no free-cash-flow object. The note does not name the other metrics inside that 7.
+
+**Where.** There is no `docs/data/research/FCSS.L` folder. There is no `FCSS.L` price in the 25 history runs. Key metrics are P/E 8.5. Discount, premium, P/B, and yield are missing. Metrics present are 7 of 11. There is no free-cash-flow object.
+
+**What to change.** Do not treat that row as a full trust screen while discount, P/B, and yield are missing.
