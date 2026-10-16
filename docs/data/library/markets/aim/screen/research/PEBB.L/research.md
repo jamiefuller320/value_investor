@@ -1,13 +1,13 @@
 # The Pebble Group plc (PEBB.L) — Research memo
 
-_Version 1 · Updated 2026-10-06T07:44:52.801497+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-10-16T10:43:02.240199+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
-Verdict: neutral
+Verdict: accumulate
 Risk: medium
-Confidence: 0.58
-Rationale: Filings show HY26 revenue and adjusted EBITDA ahead of HY25 and FY26 in line with expectations, but H1 operating cash (~£1.1m) lagged £7.9m distributions and Yahoo TTM FCF (~£8.4m, FY25) is not filing-aligned to HY26; the screen carries...
-RiskTags: cyclical, customer_concentration, liquidity, leverage
+Confidence: 0.68
+Rationale: Filings align FY25 free cash flow (~£8.4m, Yahoo TTM matches audited FY25) with comfortable final-dividend cover, but HY26 net debt after ~£10m returns, halved H1 statutory EPS and seasonal H1 cash weaken full corroboration of the screen...
+RiskTags: cyclical, customer_concentration, liquidity, leverage, accounting
