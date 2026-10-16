@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-16T02:35:53.799756+00:00",
+  "generated_at": "2026-10-16T06:32:58.057998+00:00",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
@@ -8,8 +8,8 @@
   "checklist_updated_at": "2026-10-15",
   "counts": {
     "new_info": 1,
-    "unacked": 2,
-    "acked": 37,
+    "unacked": 1,
+    "acked": 38,
     "automated": 20,
     "human": 40
   },
@@ -56,37 +56,6 @@
       "ack_sufficient": false
     },
     {
-      "id": "adhoc-n210-volume-gate-review",
-      "title": "Review N210 AI-judgment volume gate when ops-monitor marks ready (no auto-promote)",
-      "summary": "When ops-monitor says N210 volume gate ready for review, open docs/data/n210_ai_judgment_observe.json, read fair-cost episode % + companions (N toward gate, weeks, buy-tier excess report-only), and decide only whether a deliberate assessment-primary design is warranted later. Do not promote, do not decision-review --apply, do not crown matched-30 as primary from this card (F8 / B3).",
-      "automated": false,
-      "cadence": "ad_hoc",
-      "section_id": "ad_hoc",
-      "section_title": "Ad hoc (when triggered)",
-      "doc_path": "docs/ops/n210-ai-judgment-observe.md",
-      "doc_anchor": "human-volume-gate-review",
-      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/n210-ai-judgment-observe.md#human-volume-gate-review",
-      "approval_gate": false,
-      "approval_label": null,
-      "analysis": {
-        "headline": "See runbook for analysis inputs",
-        "updated_at": null,
-        "fingerprint": "12c19d13ac6e32e2",
-        "bullets": [],
-        "source_keys": []
-      },
-      "ack": {
-        "acked": false,
-        "stale": false,
-        "acked_at": null,
-        "decision": null,
-        "finding_fingerprint": null
-      },
-      "sort_bucket": "unacked",
-      "auto_ackable": false,
-      "ack_sufficient": false
-    },
-    {
       "id": "sunday-matched30-twins",
       "title": "Matched-30 fund twin vs matched buy-tier control (B3 shadow)",
       "summary": "Triggered / nested under sunday-assessment-scoreboard (D4): Read ai_judgment_matched30_fair vs buy_tier_matched30_fair on common marked days (fair-cost fund NAV). Construction-matched filter LQ only — do not treat unmatched gaps vs full buy_tier_level as skill. Shadow until volume/mark gates; do not crown assessment primary; do not decision-review --apply (churn-policy twins). Judgment evidence primary remains N210 episode %.",
@@ -114,6 +83,37 @@
         "finding_fingerprint": null
       },
       "sort_bucket": "unacked",
+      "auto_ackable": false,
+      "ack_sufficient": false
+    },
+    {
+      "id": "adhoc-n210-volume-gate-review",
+      "title": "Review N210 AI-judgment volume gate when ops-monitor marks ready (no auto-promote)",
+      "summary": "When ops-monitor says N210 volume gate ready for review, open docs/data/n210_ai_judgment_observe.json, read fair-cost episode % + companions (N toward gate, weeks, buy-tier excess report-only), and decide only whether a deliberate assessment-primary design is warranted later. Do not promote, do not decision-review --apply, do not crown matched-30 as primary from this card (F8 / B3).",
+      "automated": false,
+      "cadence": "ad_hoc",
+      "section_id": "ad_hoc",
+      "section_title": "Ad hoc (when triggered)",
+      "doc_path": "docs/ops/n210-ai-judgment-observe.md",
+      "doc_anchor": "human-volume-gate-review",
+      "doc_url": "https://github.com/jamiefuller320/value_investor/blob/main/docs/ops/n210-ai-judgment-observe.md#human-volume-gate-review",
+      "approval_gate": false,
+      "approval_label": null,
+      "analysis": {
+        "headline": "See runbook for analysis inputs",
+        "updated_at": null,
+        "fingerprint": "12c19d13ac6e32e2",
+        "bullets": [],
+        "source_keys": []
+      },
+      "ack": {
+        "acked": true,
+        "stale": false,
+        "acked_at": "2026-10-16T06:32:58.011246+00:00",
+        "decision": "ack_observe",
+        "finding_fingerprint": "12c19d13ac6e32e2"
+      },
+      "sort_bucket": "acked",
       "auto_ackable": false,
       "ack_sufficient": false
     },
@@ -339,12 +339,12 @@
       "approval_label": null,
       "analysis": {
         "headline": "0 attention-parked eng tasks · quiet (auto-ackable)",
-        "updated_at": "2026-10-16T02:35:34.375355+00:00",
+        "updated_at": "2026-10-16T06:20:57.754476+00:00",
         "fingerprint": "c0c3ee56f97eb146",
         "bullets": [
           "Quiet after recover-queue — observe Acknowledge is sufficient (no list-parked triage).",
           "Parked tasks: 0 (attention ~0)",
-          "Queue-clearing pause active: False — evaluated 2026-10-16T02:35:34.375355+00:00",
+          "Queue-clearing pause active: False — evaluated 2026-10-16T06:20:57.754476+00:00",
           "Traffic pause active: False"
         ],
         "source_keys": [
