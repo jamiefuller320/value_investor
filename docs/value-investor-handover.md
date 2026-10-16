@@ -14,6 +14,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-4.md` (FTSE ranks 31–40)
 - `docs/ftse350-batch-5.md` (FTSE ranks 41–50)
 - `docs/ftse350-batch-6.md` (FTSE ranks 51–60)
+- `docs/ftse350-batch-7.md` (FTSE ranks 61–70)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -288,3 +289,19 @@ HSBC and AstraZeneca did not need an HKD or SEK rate. Their London prices and th
 **Where.** `docs/data/research/BOY.L`: statement TTM missing, `quarterly_cashflow` empty, screen TTM 96,062,496, both flags false. `docs/data/research/ATYM.L`: statement TTM missing, `quarterly_cashflow` empty, screen TTM 127,294,496, the same number as the AIM metrics `free_cashflow`, both flags false. `docs/data/research/ASHM.L`: statement TTM missing, `quarterly_cashflow` empty, screen TTM 23,087,500, both flags false.
 
 **What to change.** When the statement TTM is missing and the quarterly cash-flow file is empty, do not set `screen_ttm_unverified` or `ttm_suppressed_screen_filing_mismatch` to false. Keep both true, as on Greggs, and do not present 96,062,496, 127,294,496, or 23,087,500 as a filing trailing twelve months. On Atalaya, label 127,294,496 as the AIM `free_cashflow` if that figure is kept.
+
+## 23. FirstGroup shows three free-cash-flow figures
+
+**What is wrong.** `FGP.L` stores a filing line, a displayed company-adjusted figure marked stale, and a different canonical figure. The auto policy lists `company_adjusted` as discarded, and the key metric still shows that discarded figure.
+
+**Where.** `docs/data/research/FGP.L`. The filing free-cash-flow line is 362.6 million. That equals `filing_aligned` and `cashflow_metrics_free_cashflow`. The screen object stores `company_adjusted` 73.8 million, `company_adjusted_stale_year` true, and `company_adjusted_snapshot` 113.5 million. The canonical figure is 113.5 million, tagged `policy_company_adjusted`. The displayed free cash flow is 73.8 million, which is `policy_fcf` and `primary_fcf`. The auto policy lists `company_adjusted` as discarded.
+
+**What to change.** Keep the filing line, the stale `company_adjusted`, and the snapshot as three named figures. Do not show 73.8 million as the key metric when the policy discards `company_adjusted` and the canonical figure is the snapshot, 113.5 million. Do not present either company-adjusted figure as the filing line of 362.6 million.
+
+## 24. Gamma has no Total Debt line, and the screen still stores leverage
+
+**What is wrong.** The 2025 balance sheet for `GAMA.L` has no Total Debt field. The screen still stores a debt-to-equity input. The AIM row stores a total-debt figure. The review states a net-debt figure. None of those is a statement line.
+
+**Where.** `docs/data/research/GAMA.L`. Total Debt is missing on the 2025 balance sheet. The screen input `debt_to_equity` is 11.519. The AIM row stores `total_debt` 42 million. The review states FY2025 net debt of (£9.3m).
+
+**What to change.** Do not store `debt_to_equity` 11.519, AIM `total_debt` 42 million, or the review’s (£9.3m) as a statement Total Debt line when that field is missing. If any of those figures is kept, name its source. Leave leverage unchecked until the statement has a Total Debt field.
