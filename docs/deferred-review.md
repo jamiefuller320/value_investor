@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-15T10:05:48+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-10-16T16:32:44+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -636,6 +636,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L595 | **Automate sealed-strategy Data launch queue** | Policy is docs-only: newly sealed strategies enqueue incremental Data deepen/threshold/shortlist work so they do not starve holdings or running sealed units. Later eng: committed queue JSON + ops-monitor observe finding + optional accept/advance CLI; fail-closed; no 4th sprint; do not auto-divert P1. | A second strategy seals (e.g. N201) and needs a distinct shortlist / threshold readiness pack beyond N200+holdings SLA, or F3 repair volume makes manual queue ordering error-prone |
 | L598 | **N200 per-lever episode drilldown UI** | Dashboard shows cohort entry/exit verdicts; optional episode-level lever win/lose table can wait. | Cohort per-lever strip is in use and humans ask for episode drilldown. |
 | L599 | **Preserve cancelled eng tasks across library-ladder queue rewrites** | eng-20261004-06 was cancelled via #965 then resurrected to parked when chore: run offline library ladder rewrote docs/data/engineering_tasks.json (a9d7a9bf87). Queue writers should not flip cancelled→parked unless explicitly re-opened. | Next eng cancel is overwritten by a non-cancel queue commit, or when hardening engineering_tasks merge/write helpers |
+| L608 | **Refresh cold-store Ops badge from the live fat-slot bit** | The Automation Ops cold-store card copies the last pack_run gate. After head_needs_fat_slot goes false, that card can keep saying suspend until the next 22:00 pack even though archive_lane_gate would allow. Do not treat the card as the live stop, and do not let the archive run while the bit is true. | head_needs_fat_slot is false and the Ops cold-store card still shows gate suspend with focus_fat_slot_sprint_active from an older pack_run |
 
 ---
 

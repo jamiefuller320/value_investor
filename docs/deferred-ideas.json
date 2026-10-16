@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-15T10:05:48+00:00",
+  "updated_at": "2026-10-16T16:32:44+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -14364,6 +14364,23 @@
           }
         ]
       }
+    },
+    {
+      "id": "L608",
+      "category": "later",
+      "section": "ops",
+      "title": "Refresh cold-store Ops badge from the live fat-slot bit",
+      "summary": "The Automation Ops cold-store card copies the last pack_run gate. After head_needs_fat_slot goes false, that card can keep saying suspend until the next 22:00 pack even though archive_lane_gate would allow. Do not treat the card as the live stop, and do not let the archive run while the bit is true.",
+      "revisit_when": "head_needs_fat_slot is false and the Ops cold-store card still shows gate suspend with focus_fat_slot_sprint_active from an older pack_run",
+      "tags": [
+        "cold-store",
+        "archive",
+        "occupancy",
+        "dashboard"
+      ],
+      "status": "open",
+      "source": "bc-d9d26ded-164e-5f36-b08d-f540eff7cd3e",
+      "added_at": "2026-10-16T16:32:44+00:00"
     }
   ],
   "fragments": [
