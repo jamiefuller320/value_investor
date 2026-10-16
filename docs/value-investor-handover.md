@@ -101,23 +101,29 @@ Those three notes are the source. Do not treat this handover as a new pass over 
 
 **What to change.** If a `.L` field is copied from another ticker, store that ticker as the source and convert into the London currency before display. Do not label a copied euro or dollar metrics figure as GBP. Do not score a London P/E off another listing’s trailing P/E. Ingest a `.L` statement for Unilever, RELX, Coca-Cola Europacific Partners, and IAG, or mark the London screen as using the foreign statement. Keep GOOGL and GOOG as separate rows and do not sum the caps. Store the TSM ADR ratio next to the share count.
 
-## 6. Share counts and FX rates are missing
+## 6. Share counts, FX rates, and the pound-cap fix
 
-**What is wrong.** A pound cap in these notes is either pence × ordinary shares / 100, or a same-name foreign market cap converted with a rate the repo actually stores. The notes use GBPUSD 1.3317 and EURUSD 1.124. They state that the repo has no HKD rate and no SEK rate. Without shares, or without a rate, the notes leave the pound figure missing or substitute a foreign cap.
+**What is wrong.** A pound cap in the batch notes is either pence × ordinary shares / 100, or a same-name foreign market cap converted with a rate the repo actually stores. Those notes use GBPUSD 1.3317 and EURUSD 1.124. They state that the repo has no HKD rate and no SEK rate. Without shares, or without a rate, they leave the pound figure missing or substitute a foreign cap.
 
-**Where.**
+**Where the batch notes still stand.**
 
-- `HSBA.L`: `0005.HK` cap 2.553 trillion HKD. No HKD rate, so no pound cap. Not in the FTSE ten.
-- `AZN.L`: `AZN.ST` cap 2.599 trillion SEK. No SEK rate, so no pound cap. Not in the FTSE ten.
-- `IAG.L`: London prices exist (415.9 pence on 11 Oct 2026). Ordinary shares are missing, so there is no pound cap from the London price. The roster cap is the `IAG.MC` market cap 21,306,484,736 converted at the repo euro and pound rates, £17.98B.
-- `ULVR.L`, `REL.L`, and `CCEP.L` have no `.L` share count. Shares are taken from `UNA.AS` (2,179,482,192), `REN.AS` (1,819,061,446), and `CCEP` (448,645,963).
+- `IAG.L`: London prices exist (415.9 pence on 11 Oct 2026). Ordinary shares are missing in those notes, so there is no pound cap from the London price. The roster cap is the `IAG.MC` market cap 21,306,484,736 converted at the repo euro and pound rates, £17.98B. The pound-cap fix left that method in the original 100.
+- `ULVR.L`, `REL.L`, and `CCEP.L` have no `.L` share count in the batch notes. Shares are taken from `UNA.AS` (2,179,482,192), `REN.AS` (1,819,061,446), and `CCEP` (448,645,963).
 - `HLN.L`: diluted EPS is missing, so the screen P/E of 19.4 is unchecked.
 - `BT-A.L`: the income statement has no EPS line, so the screen P/E of 17.5 is unchecked.
 - `AMZN`, `META`, `TSM`, and `SPCX` have no research folder and no filing. `GOOGL` has no folder of its own. `RTO.L` has a statement and filing bodies, and `research.json` is missing. `IAG.L` has no folder, no statement, and no memo.
 
-**What to change.** Ingest ordinary shares for `IAG.L`, `HSBA.L`, and `AZN.L` if the pound cap is going to be pence × shares. Add HKD and SEK to the macro file the notes used, or leave those pound caps null. Do not borrow a share count from `UNA.AS`, `REN.AS`, or `CCEP` without recording the source ticker. Leave P/E blank when the statement has no EPS (`HLN.L`, `BT-A.L`). Ingest filings for `AMZN`, `META`, `TSM`, `SPCX`, and `IAG.L` before a screen multiple is treated as checked.
+**Pound-cap fix.** The follow-up write-up says 250 of 350 pound caps are now computable, up from 100. 150 ordinary-share counts were added for names that already had an 11 Oct 2026 London price and no share count. Those counts are in `docs/data/ftse350_ordinary_shares.json`. Of them, 144 are Yahoo Finance `quoteSummary` `sharesOutstanding`, fetched 2026-10-16. `III.L` and `VEIL.L` are Yahoo `marketCap` divided by the Yahoo GBp price (Financial Times displayed 1.02bn and 121.38m). `CRDA.L`, `HLMA.L`, and `ITRK.L` are from the Financial Times tearsheet, because Yahoo had neither a share count nor a market cap. Compass (`CPG.L`) and IHG (`IHG.L`) are USD quotes. Baltic Classifieds (`BCG.L`) and Metlen (`MTLN.L`) are EUR quotes. The other 146 new counts are pence quotes.
 
-The three notes do not count how many other FTSE 350 names lack a pound cap. Do not fill that count from this handover. The change is the rule: no pound cap unless the share count is in the repo and any non-pound cap has a rate in the repo macro file.
+`PNN.L` is the Pennon exception. The count is the Pennon RNS of 1 Oct 2026 (capital as at 30 Sep 2026): 471,987,051 issued ordinary shares minus 5,628 treasury shares. The 11 Oct price is before the rights-issue admission expected on 12 Oct. Yahoo’s 521,463,945 matched neither the pre-issue count nor the post-issue count.
+
+HSBC and AstraZeneca did not need an HKD or SEK rate. Their London prices and the new share counts give £238.68bn (`HSBA.L`) and £186.08bn (`AZN.L`).
+
+100 names still have no pound cap. They have no price in the 11 Oct 2026 history run and no library cap in GBP, USD, EUR, AUD, or CAD. A share count alone cannot price them. They are the trust-screen names other than `GROW.L` and `HMSO.L`, which already had a convertible cap:
+
+`AAS.L`, `AGT.L`, `AIE.L`, `ALW.L`, `ASL.L`, `ATR.L`, `ATT.L`, `BBOX.L`, `BGFD.L`, `BNKR.L`, `BPCR.L`, `BRGE.L`, `BRSC.L`, `BRWM.L`, `BUT.L`, `BYG.L`, `CGT.L`, `CLDN.L`, `CORD.L`, `CTY.L`, `DLN.L`, `EDIN.L`, `EMG.L`, `ESCT.L`, `EWI.L`, `FCIT.L`, `FCSS.L`, `FEML.L`, `FEV.L`, `FGEN.L`, `FGT.L`, `FSV.L`, `GPE.L`, `GSCT.L`, `HANA.L`, `HFEL.L`, `HGT.L`, `HICL.L`, `HRI.L`, `HSL.L`, `HVPE.L`, `IAD.L`, `ICGT.L`, `JAM.L`, `JCH.L`, `JEDT.L`, `JEGI.L`, `JEMI.L`, `JFJ.L`, `JGGI.L`, `JMGI.L`, `LAND.L`, `LMP.L`, `LWDB.L`, `MNKS.L`, `MNTN.L`, `MRC.L`, `MRCH.L`, `MUT.L`, `MYI.L`, `NAIT.L`, `NAS.L`, `NBPE.L`, `OCI.L`, `PCGH.L`, `PCT.L`, `PEY.L`, `PHI.L`, `PHP.L`, `PIN.L`, `PINT.L`, `PNL.L`, `PPET.L`, `RCP.L`, `RICA.L`, `RTW.L`, `SAFE.L`, `SAIN.L`, `SDP.L`, `SEIT.L`, `SEQI.L`, `SGRO.L`, `SHC.L`, `SMT.L`, `SOI.L`, `SSIT.L`, `SUPR.L`, `TEM.L`, `TFIF.L`, `THRL.L`, `TMPL.L`, `TRIG.L`, `TRY.L`, `UEM.L`, `UKW.L`, `USA.L`, `UTG.L`, `VOF.L`, `WKP.L`, `WWH.L`.
+
+**What to change.** Do not add an HKD or SEK rate in order to price HSBC or AstraZeneca. Those two caps now use the London price and the new share count. For the 100 tickers above, do not invent a pound cap from a share count alone. They need a stored 11 Oct 2026 London price, or a library cap in GBP, USD, EUR, AUD, or CAD. Keep recording the source ticker when a share count is borrowed (`UNA.AS`, `REN.AS`, `CCEP`). Leave P/E blank when the statement has no EPS (`HLN.L`, `BT-A.L`). Ingest filings for `AMZN`, `META`, `TSM`, `SPCX`, and `IAG.L` before a screen multiple is treated as checked.
 
 ## 7. Price history is only a short window
 
