@@ -342,11 +342,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 28. An operating name can have a price and still no pound cap
 
-**What is wrong.** Six operating names have an 11 Oct 2026 London price and no ordinary-share count, so the pound cap is missing. The roster reason still says “no price, share count, or convertible cap”. Section 6’s list of 100 names with no pound cap is the trust names that have no 11 Oct price. It does not cover an operating name whose price is stored and whose share count is missing.
+**What is wrong.** Operating names have an 11 Oct 2026 London price and no ordinary-share count, so the pound cap is missing. For the first six, the roster reason still says “no price, share count, or convertible cap”. Section 6’s list of 100 names with no pound cap is the trust names that have no 11 Oct price. It does not cover an operating name whose price is stored and whose share count is missing.
 
-**Where.** `3IN.L` 388.0 pence, `AAF.L` 290.2 pence, `AAL.L` 4,170.0 pence, `ADM.L` 3,624.0 pence, `AJB.L` 592.5 pence, and `AMRQ.L` 117.0 pence. Ordinary shares are missing on each. The roster cap is missing on each.
+**Where.** `3IN.L` 388.0 pence, `AAF.L` 290.2 pence, `AAL.L` 4,170.0 pence, `ADM.L` 3,624.0 pence, `AJB.L` 592.5 pence, and `AMRQ.L` 117.0 pence. Also `ANTO.L` 3,770.0 pence, `APN.L` 273.5 pence, `ATG.L` 472.8 pence, `AUTO.L` 488.7 pence, `AV.L` 677.0 pence, `AVON.L` 2,330.0 pence, and `AZN.L` 11,998.0 pence. Ordinary shares are missing on each. The roster cap is missing on each. On `AZN.L` the roster line points at the `AZN.ST` market cap, and the repo macro file has no SEK rate, so the pound figure is missing for that reason as well.
 
-**What to change.** Do not file these six with the trust names that have no price. The 11 Oct price is stored. The missing piece is the ordinary-share count. Until that count is stored, leave the pound cap missing rather than citing “no price”.
+**What to change.** Do not file these names with the trust names that have no price. The 11 Oct price is stored. The missing piece is the ordinary-share count. Until that count is stored, leave the pound cap missing rather than citing “no price”. On `AZN.L`, do not treat the `AZN.ST` market cap as a pound cap while the macro file has no SEK rate.
 
 ## 29. AJ Bell has operating cash flow and no free-cash-flow figure
 
