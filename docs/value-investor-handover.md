@@ -28,6 +28,7 @@ Maintainer note for `jamiefuller320/value_investor`. This file only records gaps
 - `docs/ftse350-batch-19.md` (FTSE ranks 181–190)
 - `docs/ftse350-batch-20.md` (FTSE ranks 191–200)
 - `docs/ftse350-batch-21.md` (FTSE ranks 201–210)
+- `docs/ftse350-batch-22.md` (FTSE ranks 211–220)
 
 Those notes are the source. Do not treat this handover as a new pass over the filings. Every figure below is taken from them. Where those notes do not give a count, this file does not invent one.
 
@@ -75,6 +76,7 @@ Those notes are the source. Do not treat this handover as a new pass over the fi
 - `HLMA.L` stores `dividend_yield_raw` 0.7 and displays 70.0%. There is no statement.
 - `HTWS.L` stores `dividend_yield_raw` 0.56 and displays 56.0%. There is no statement.
 - `HWG.L` stores `dividend_yield_raw` 0.98 and displays 98.0%. There is no statement.
+- `IWG.L` stores `dividend_yield_raw` 0.57 and displays 57.0%. There is no statement.
 
 **What to change.** Store yield as a decimal fraction, and format percent only at display. Do not treat “raw > 1” as the only rescale. Recompute the screen yield from the dividend line actually present (`Common Stock Dividend Paid`, else `Cash Dividends Paid`) and a market cap in the same currency. If the currency is missing, leave the yield unchecked instead of printing a percent.
 
@@ -359,17 +361,17 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 **What is wrong.** Operating names have an 11 Oct 2026 London price and no ordinary-share count, so the pound cap is missing. For the first six, the roster reason still says “no price, share count, or convertible cap”. Section 6’s list of 100 names with no pound cap is the trust names that have no 11 Oct price. It does not cover an operating name whose price is stored and whose share count is missing.
 
-**Where.** `3IN.L` 388.0 pence, `AAF.L` 290.2 pence, `AAL.L` 4,170.0 pence, `ADM.L` 3,624.0 pence, `AJB.L` 592.5 pence, and `AMRQ.L` 117.0 pence. Also `ANTO.L` 3,770.0 pence, `APN.L` 273.5 pence, `ATG.L` 472.8 pence, `AUTO.L` 488.7 pence, `AV.L` 677.0 pence, `AVON.L` 2,330.0 pence, and `AZN.L` 11,998.0 pence. Also `ELM.L` 182.2 pence, `ENOG.L` 730.5 pence, `ENT.L` 426.9 pence, `EXPN.L` 2,682.0 pence, `EZJ.L` 680.0 pence, and `FAN.L` 665.0 pence. Also `FCH.L` 189.2 pence, `FRAS.L` 838.5 pence, and `FSG.L` 444.5 pence. Also `GAW.L` 16,390.0 pence, `GDWN.L` 14,220.0 pence, `GLEN.L` 584.6 pence, `GNC.L` 255.4 pence, `GRI.L` 162.0 pence, `HAS.L` 64.25 pence, and `HBR.L` 281.4 pence. Also `HFG.L` 713.5 pence, `HILS.L` 3,050.0 pence, `HLMA.L` 3,528.0 pence, and `HSX.L` 1,847.0 pence. Also `HTG.L` 396.0 pence, `HTWS.L` 216.0 pence, `HWDN.L` 762.5 pence, `HWG.L` 187.0 pence, `ICG.L` 1,808.0 pence, and `IHP.L` 378.5 pence. Ordinary shares are missing on each. The roster cap is missing on each. On `AZN.L` the roster line points at the `AZN.ST` market cap, and the repo macro file has no SEK rate, so the pound figure is missing for that reason as well.
+**Where.** `3IN.L` 388.0 pence, `AAF.L` 290.2 pence, `AAL.L` 4,170.0 pence, `ADM.L` 3,624.0 pence, `AJB.L` 592.5 pence, and `AMRQ.L` 117.0 pence. Also `ANTO.L` 3,770.0 pence, `APN.L` 273.5 pence, `ATG.L` 472.8 pence, `AUTO.L` 488.7 pence, `AV.L` 677.0 pence, `AVON.L` 2,330.0 pence, and `AZN.L` 11,998.0 pence. Also `ELM.L` 182.2 pence, `ENOG.L` 730.5 pence, `ENT.L` 426.9 pence, `EXPN.L` 2,682.0 pence, `EZJ.L` 680.0 pence, and `FAN.L` 665.0 pence. Also `FCH.L` 189.2 pence, `FRAS.L` 838.5 pence, and `FSG.L` 444.5 pence. Also `GAW.L` 16,390.0 pence, `GDWN.L` 14,220.0 pence, `GLEN.L` 584.6 pence, `GNC.L` 255.4 pence, `GRI.L` 162.0 pence, `HAS.L` 64.25 pence, and `HBR.L` 281.4 pence. Also `HFG.L` 713.5 pence, `HILS.L` 3,050.0 pence, `HLMA.L` 3,528.0 pence, and `HSX.L` 1,847.0 pence. Also `HTG.L` 396.0 pence, `HTWS.L` 216.0 pence, `HWDN.L` 762.5 pence, `HWG.L` 187.0 pence, `ICG.L` 1,808.0 pence, and `IHP.L` 378.5 pence. Also `III.L` 2,402.0 pence, `IMI.L` 3,092.0 pence, `INF.L` 895.6 pence, `INPP.L` 135.4 pence, `INVP.L` 593.0 pence, `IPO.L` 71.0 pence, `ITH.L` 285.4 pence, `ITRK.L` 5,890.0 pence, and `IWG.L` 183.7 pence. Ordinary shares are missing on each. The roster cap is missing on each. On `AZN.L` the roster line points at the `AZN.ST` market cap, and the repo macro file has no SEK rate, so the pound figure is missing for that reason as well.
 
 **What to change.** Do not file these names with the trust names that have no price. The 11 Oct price is stored. The missing piece is the ordinary-share count. Until that count is stored, leave the pound cap missing rather than citing “no price”. On `AZN.L`, do not treat the `AZN.ST` market cap as a pound cap while the macro file has no SEK rate.
 
 ## 29. AJ Bell has operating cash flow and no free-cash-flow figure
 
-**What is wrong.** `AJB.L`, `HSBA.L`, and `ICG.L` each store an operating-cash-flow figure and a free-cash-flow object that has no source, no canonical figure, and no screen TTM. Key metrics omit free cash flow. Both verification flags are false.
+**What is wrong.** `AJB.L`, `HSBA.L`, `ICG.L`, and `INVP.L` each store an operating-cash-flow figure and a free-cash-flow object that has no source, no canonical figure, and no screen TTM. Key metrics omit free cash flow. Both verification flags are false.
 
-**Where.** There is no `docs/data/research/AJB.L` folder. The screen’s operating cash flow is 86,485,000. The free-cash-flow object has source `none`. The canonical figure is missing. The screen TTM is missing. Free cash flow is missing from the key metrics. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false. There is no `docs/data/research/HSBA.L` folder. The screen’s operating cash flow is 29,766,000,000. The free-cash-flow object has source `none`. The canonical figure is missing. The screen TTM is missing. Free cash flow is missing from the key metrics. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false. There is no `docs/data/research/ICG.L` folder. The screen’s operating cash flow is 846,100,000. The free-cash-flow object has source `none`. The canonical figure is missing. The screen TTM is missing. Free cash flow is missing from the key metrics. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false.
+**Where.** There is no `docs/data/research/AJB.L` folder. The screen’s operating cash flow is 86,485,000. The free-cash-flow object has source `none`. The canonical figure is missing. The screen TTM is missing. Free cash flow is missing from the key metrics. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false. There is no `docs/data/research/HSBA.L` folder. The screen’s operating cash flow is 29,766,000,000. The free-cash-flow object has source `none`. The canonical figure is missing. The screen TTM is missing. Free cash flow is missing from the key metrics. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false. There is no `docs/data/research/ICG.L` folder. The screen’s operating cash flow is 846,100,000. The free-cash-flow object has source `none`. The canonical figure is missing. The screen TTM is missing. Free cash flow is missing from the key metrics. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false. There is no `docs/data/research/INVP.L` folder. The screen’s operating cash flow is −312,227,000. The free-cash-flow object has source `none`. The canonical figure is missing. The screen TTM is missing. Free cash flow is missing from the key metrics. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false.
 
-**What to change.** Do not leave both verification flags false when the free-cash-flow object has source `none`, no canonical figure, and no screen TTM. Do not omit free cash flow from the key metrics while operating cash flow of 86,485,000, 29,766,000,000, or 846,100,000 is stored, and do not present that operating-cash-flow figure as free cash flow.
+**What to change.** Do not leave both verification flags false when the free-cash-flow object has source `none`, no canonical figure, and no screen TTM. Do not omit free cash flow from the key metrics while operating cash flow of 86,485,000, 29,766,000,000, 846,100,000, or −312,227,000 is stored, and do not present that operating-cash-flow figure as free cash flow.
 
 ## 30. AstraZeneca’s Stockholm row is stored twice
 
@@ -389,11 +391,11 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 32. Free cash flow is larger than operating cash flow, and there is no filing
 
-**What is wrong.** `BPT.L`, `CCH.L`, `DCC.L`, `HBR.L`, `HAS.L`, `HSX.L`, `HWG.L`, and `IHG.L` each display a free-cash-flow figure larger than the screen’s operating cash flow. There is no filing. The notes do not give a cause.
+**What is wrong.** `BPT.L`, `CCH.L`, `DCC.L`, `HBR.L`, `HAS.L`, `HSX.L`, `HWG.L`, `IHG.L`, `INF.L`, and `IPO.L` each display a free-cash-flow figure larger than the screen’s operating cash flow. There is no filing. The notes do not give a cause.
 
-**Where.** There is no `docs/data/research/BPT.L` folder. The displayed free cash flow is 446,562,496. The screen’s operating cash flow is 135,900,000. The free-cash-flow figure is stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/CCH.L` folder. The displayed free cash flow is 1,593,175,040. The screen’s operating cash flow is 1,513,500,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/DCC.L` folder. The displayed free cash flow is 1,308,650,880. The screen’s operating cash flow is 672,501,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/HBR.L` folder. The displayed free cash flow is 4,791,499,776. The screen’s operating cash flow is 3,386,000,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/HAS.L` folder. The displayed free cash flow is 111,587,504. The screen’s operating cash flow is 74,000,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/HSX.L` folder. The displayed free cash flow is 448,912,512. The screen’s operating cash flow is 72,800,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/HWG.L` folder. The displayed free cash flow is 6,438,125. The screen’s operating cash flow is −52,046,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/IHG.L` folder. The displayed free cash flow is 913,875,008. The screen’s operating cash flow is 898,000,000. That figure is also stored as `filing_aligned`, and there is no filing.
+**Where.** There is no `docs/data/research/BPT.L` folder. The displayed free cash flow is 446,562,496. The screen’s operating cash flow is 135,900,000. The free-cash-flow figure is stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/CCH.L` folder. The displayed free cash flow is 1,593,175,040. The screen’s operating cash flow is 1,513,500,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/DCC.L` folder. The displayed free cash flow is 1,308,650,880. The screen’s operating cash flow is 672,501,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/HBR.L` folder. The displayed free cash flow is 4,791,499,776. The screen’s operating cash flow is 3,386,000,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/HAS.L` folder. The displayed free cash flow is 111,587,504. The screen’s operating cash flow is 74,000,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/HSX.L` folder. The displayed free cash flow is 448,912,512. The screen’s operating cash flow is 72,800,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/HWG.L` folder. The displayed free cash flow is 6,438,125. The screen’s operating cash flow is −52,046,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/IHG.L` folder. The displayed free cash flow is 913,875,008. The screen’s operating cash flow is 898,000,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/INF.L` folder. The displayed free cash flow is 902,200,000. The screen’s operating cash flow is 876,300,000. That figure is also stored as `filing_aligned`, and there is no filing. There is no `docs/data/research/IPO.L` folder. The displayed free cash flow is 92,500,000. The screen’s operating cash flow is −19,500,000. That figure is also stored as `filing_aligned`, and there is no filing.
 
-**What to change.** Do not present 446,562,496, 1,593,175,040, 1,308,650,880, 4,791,499,776, 111,587,504, 448,912,512, 6,438,125, or 913,875,008 as free cash flow while each is larger than its screen operating cash flow and no filing exists. Leave the pairs unchecked. The notes do not give a cause.
+**What to change.** Do not present 446,562,496, 1,593,175,040, 1,308,650,880, 4,791,499,776, 111,587,504, 448,912,512, 6,438,125, 913,875,008, 902,200,000, or 92,500,000 as free cash flow while each is larger than its screen operating cash flow and no filing exists. Leave the pairs unchecked. The notes do not give a cause.
 
 ## 33. A London history print can be a dollar quote
 
@@ -405,9 +407,9 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 
 ## 34. An unchecked screen P/E can equal the London price in pence
 
-**What is wrong.** When there is no statement, the screen P/E is unchecked, and on these three names that P/E equals the 11 Oct London price in pence.
+**What is wrong.** When there is no statement, the screen P/E is unchecked, and on these names that P/E equals the 11 Oct London price in pence.
 
-**Where.** `AMRQ.L`: screen P/E 117.0 and price 117.0 pence. There is no statement. `BHMG.L`: screen P/E 419.0 and price 419.0 pence. There is no statement. `CSN.L`: screen P/E 322.0 and price 322.0 pence. There is no statement.
+**Where.** `AMRQ.L`: screen P/E 117.0 and price 117.0 pence. There is no statement. `BHMG.L`: screen P/E 419.0 and price 419.0 pence. There is no statement. `CSN.L`: screen P/E 322.0 and price 322.0 pence. There is no statement. `IWG.L`: screen P/E 183.7 and price 183.7 pence. There is no statement.
 
 **What to change.** Do not treat an unchecked screen P/E that equals the London price in pence as a multiple. Leave it unchecked until a statement EPS exists.
 
@@ -426,3 +428,19 @@ A ticker can also be missing from runs inside that 25-run archive. The span abov
 **Where.** There is no `docs/data/research/HILS.L` folder. The screen’s operating cash flow is 183,000,727.155207. There is no statement.
 
 **What to change.** Do not store that field with a fractional tail while the other screen cash figures in this batch are whole numbers. Do not round 183,000,727.155207.
+
+## 37. Free cash flow can be stored while operating cash flow is missing
+
+**What is wrong.** `III.L` stores a displayed free-cash-flow figure while operating cash flow is missing. There is no filing. Both verification flags are false.
+
+**Where.** There is no `docs/data/research/III.L` folder. The displayed free cash flow is 3,390,374,912, stored as `filing_aligned`, and there is no filing. Operating cash flow is missing. The screen stores `screen_ttm_unverified` false and `ttm_suppressed_screen_filing_mismatch` false.
+
+**What to change.** Do not compare 3,390,374,912 with operating cash flow while that field is missing. Do not round 3,390,374,912.
+
+## 38. An unchecked screen P/B can be negative
+
+**What is wrong.** When there is no statement, the screen P/B is unchecked, and on these two names that P/B is negative.
+
+**Where.** `IWG.L`: screen P/B is −5.7. There is no statement. `IHG.L`: screen P/B is −8.0. There is no statement.
+
+**What to change.** Do not treat a negative unchecked screen P/B as a multiple. Do not invent an equity figure.
